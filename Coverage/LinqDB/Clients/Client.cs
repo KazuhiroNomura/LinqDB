@@ -13,6 +13,7 @@ using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using static LinqDB.Helpers.Configulation;
 using LinqDB.Helpers;
+using LinqDB.Optimizers;
 using LinqDB.Remote.Clients;
 using LinqDB.Remote.Servers;
 
@@ -388,6 +389,19 @@ public class Test_Client {
             Assert.IsTrue(expected.SequenceEqual(actual));
         }
     }
+    private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
+    private static void シリアライズ<T>(T expected)where T:Expression{
+        using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
+        var actual = R.SerializeSendReceive(expected);
+        //var actual = R.Expression(()=>expected);
+        //Debug.Assert(expected!=null,nameof(expected)+" != null");
+        //Assert.IsTrue(expected.Equals(actual));
+        Assert.IsTrue(ExpressionEqualityComparer.Equals(expected,actual));
+    }
+    [TestMethod]
+    public void シリアライズConstant()=>シリアライズ(Expression.Constant("abc"));
+    //[TestMethod]
+    //public void シリアライズstring()=>シリアライズ("abc");
     private void シリアライズを送信(int a) {
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
         var expected = new byte[a];

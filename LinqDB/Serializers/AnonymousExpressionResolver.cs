@@ -13,6 +13,7 @@ using Utf8Json;
 namespace LinqDB.Serializers;
 public sealed class AnonymousExpressionResolver:IJsonFormatterResolver, IFormatterResolver {
     //public static readonly IJsonFormatterResolver Instance=new Resolver();
+    private readonly AbstractFormatter AbstractFormatter= new();
     private readonly ExpressionFormatter ExpressionFormatter = new();
     //private readonly AbstractFormatter AbstractFormatter = new();
     private readonly Dictionary<Type,IJsonFormatter> Dictionary_Type_IJsonFormatter = new();
@@ -41,14 +42,20 @@ public sealed class AnonymousExpressionResolver:IJsonFormatterResolver, IFormatt
         //else if(typeof(T)==typeof(DefaultExpression))
         //    Formatter=(IJsonFormatter<T>)new DefaultFormatter();
         //else if(typeof(T)==typeof(NewArrayExpression))Formatter=(IJsonFormatter<T>)new NewArrayFormatter();
+        //else if(typeof(T).IsAnonymous())
+        //    Formatter=new AbstractFormatter<T>();
         else if(typeof(T).IsAnonymous())
-            Formatter=new AbstractFormatter<T>();
-        else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
-            Formatter=new AbstractFormatter<T>();
-        else if(global::Utf8Json.Resolvers.StandardResolver.Default.GetFormatterDynamic(typeof(T))is not null)
+            Formatter=new AnonymousFormatter<T>();
+        else if(typeof(T).IsValueType||typeof(T).IsSealed)
             return null!;
         else
-            throw new NotSupportedException(typeof(T).FullName);
+            Formatter=this.AbstractFormatter;
+        //else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
+        //    Formatter=new AbstractFormatter<T>();
+        //else if(global::Utf8Json.Resolvers.StandardResolver.Default.GetFormatterDynamic(typeof(T))is not null)
+        //    return null!;
+        //else
+        //    throw new NotSupportedException(typeof(T).FullName);
         //else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
         //    Formatter=new AbstractFormatter<T>();
         //else if(typeof(T).IsAnonymous()) 
@@ -85,17 +92,20 @@ public sealed class AnonymousExpressionResolver:IJsonFormatterResolver, IFormatt
         //else if(typeof(T)==typeof(DefaultExpression))
         //    Formatter=(IMessagePackFormatter<T>)new DefaultFormatter();
         //else if(typeof(T)==typeof(NewArrayExpression))Formatter=(IMessagePackFormatter<T>)new NewArrayFormatter();
+        //else if(typeof(T).IsAnonymous())
+        //    Formatter=new AbstractFormatter<T>();
         else if(typeof(T).IsAnonymous())
-            Formatter=new AbstractFormatter<T>();
-        else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
-            Formatter=new AbstractFormatter<T>();
-        else if(global::MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(typeof(T))is not null)
+            Formatter=new AnonymousFormatter<T>();
+        else if(typeof(T).IsValueType||typeof(T).IsSealed)
             return null!;
+        else
+            Formatter=this.AbstractFormatter;
+        //else if(global::MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(typeof(T))is not null)
+        //    return null!;
         //else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
           //  Formatter=new AbstractFormatter<T>();
         //Formatter=global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<T>();// new AbstractFormatter<T>();
-        else
-            throw new NotSupportedException(typeof(T).FullName);
+        //else//  throw new NotSupportedException(typeof(T).FullName);
             //return null!;//MessagePack.Resolver.Instance.GetFormatter<T>();
         this.Dictionary_Type_IMessagePackFormatter.Add(typeof(T),Formatter);
         return (IMessagePackFormatter<T>)Formatter;

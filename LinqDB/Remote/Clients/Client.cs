@@ -629,7 +629,7 @@ public class Client:IDisposable {
     /// <param name="送信">送信したオブジェクト。</param>
     /// <typeparam name="T"></typeparam>
     /// <returns>受信したオブジェクト。</returns>
-    public T XmlSendReceive<T>(T 送信)=>this.XmlSendReceive(送信,XmlType.Utf8Json);
+    public T XmlSendReceive<T>(T 送信)=>this.XmlSendReceive(送信,XmlType.MessagePack);
     private void サーバーに送信(Request Request,XmlType XmlType,object Object) {
         this.BufferにUserとPasswordHashを設定(Request);
         var MemoryStream = this.MemoryStream;

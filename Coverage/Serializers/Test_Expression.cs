@@ -40,8 +40,8 @@ public class Test_Expression:ATest{
     private static readonly SerializerSet SerializerSet=new();
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     [TestMethod]
-    public void Anonymous00(){
-        共通object2(new{
+    public void Anonymous000(){
+        共通objectT2(new{
             a=1,
             b=2.0,
             c=3m,
@@ -49,9 +49,25 @@ public class Test_Expression:ATest{
             e="e"
         });
     }
+    private static void 共通object(object input){
+        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+    }
+    [TestMethod]
+    public void Anonymous001(){
+        共通object((object)new{
+            a=(object)new{aa=11}
+        });
+    }
+    [TestMethod]
+    public void Anonymous002(){
+        共通objectT2(new{
+            a=(object)new{aa=1}
+        });
+    }
     [TestMethod]
     public void Anonymous01(){
-        共通(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
+        共通Expression(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
     }
     [TestMethod]
     public void Anonymous02(){
@@ -81,8 +97,15 @@ public class Test_Expression:ATest{
         );
     }
     [TestMethod]
-    public void Anonymous04(){
-        共通object2(new{
+    public void Anonymous040(){
+        共通objectT2(new{
+            a=new{aa=1},
+            b=new{aa=1}
+        });
+    }
+    [TestMethod]
+    public void Anonymous041(){
+        共通objectT2(new{
             a=new{aa=1},
             b=(object)new{aa=1}
         });
@@ -148,7 +171,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous10(){
-        共通object(
+        共通object<object>(
             (object)new{
                 a=1111
             }
@@ -156,7 +179,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous11(){
-        共通object2(new{
+        共通objectT2(new{
             a=(object)new{aa=1}
         });
     }
@@ -188,7 +211,7 @@ public class Test_Expression:ATest{
     [TestMethod]
     public void 独自Class1(){
         var t=Tuple.Create(new 独自Class());
-        共通object2(t);
+        共通objectT2(t);
     }
     [TestMethod]
     public void 独自Class2(){
@@ -198,7 +221,7 @@ public class Test_Expression:ATest{
     private static readonly ParameterExpression @decimal = Expression.Parameter(typeof(decimal),"p");
     [TestMethod]
     public void Block(){
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { @decimal },
                 Expression.TryCatchFinally(
@@ -207,7 +230,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { @decimal },
                 Expression.TryCatchFinally(
@@ -216,7 +239,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { @decimal },
                 Expression.TryCatchFinally(
@@ -225,7 +248,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { @decimal },
                 Expression.TryCatchFinally(
@@ -235,7 +258,7 @@ public class Test_Expression:ATest{
                 @decimal
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { @decimal },
                 Expression.TryCatchFinally(
@@ -244,7 +267,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 Expression.Switch(
                     Expression.Constant(123),
@@ -256,7 +279,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 Expression.Switch(
                     Expression.Constant(123),
@@ -271,24 +294,24 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Constant(){
-        共通(
+        共通Expression(
             Expression.Constant(null,typeof(string))
         );
-        共通(Expression.Constant(1111m));
-        共通(Expression.Constant(1111m));
+        共通Expression(Expression.Constant(1111m));
+        共通Expression(Expression.Constant(1111m));
     }
     static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
     [TestMethod]
     public void Lambda0(){
-        共通(Lambda(()=>1));
+        共通Expression(Lambda(()=>1));
 
     }
     [TestMethod]
     public void Lambda1(){
         //Expression<Func<>>をExpressionで呼び出した場合Expressionでデシリアライズするとtypeが復元できない()
-        共通<LambdaExpression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
-        共通<Expression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
-        共通(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+        共通Expression<LambdaExpression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+        共通Expression<Expression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+        共通Expression(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
         //const decimal Catch値 = 40, Finally値 = 30;
         //Expression.TryCatchFinally(
         //    //Expression.PostIncrementAssign(@decimal),
@@ -299,7 +322,7 @@ public class Test_Expression:ATest{
         //        Expression.Constant(Catch値)
         //    )
         //);
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -315,7 +338,7 @@ public class Test_Expression:ATest{
             )
         );
 
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     @decimal,
@@ -324,7 +347,7 @@ public class Test_Expression:ATest{
                 @decimal
             )
         );
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -336,7 +359,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -351,7 +374,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -370,7 +393,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -390,7 +413,7 @@ public class Test_Expression:ATest{
             )
         );
         var Exception=Expression.Parameter(typeof(Exception));
-        共通(
+        共通Expression(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     @decimal,
@@ -401,7 +424,7 @@ public class Test_Expression:ATest{
             )
         );
         var Array2=Expression.Parameter(typeof(int[,]));
-        共通(
+        共通Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -412,7 +435,7 @@ public class Test_Expression:ATest{
             )
         );
         var Array1=Expression.Parameter(typeof(int[]));
-        共通(
+        共通Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,
@@ -424,7 +447,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void NewArrayInit(){
-        共通(
+        共通Expression(
             Expression.NewArrayInit(
                 typeof(int),
                 Expression.Constant(0),
@@ -434,7 +457,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void NewArrayBounds(){
-        共通(
+        共通Expression(
             Expression.NewArrayBounds(
                 typeof(int),
                 Expression.Constant(0),
@@ -444,8 +467,8 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Default(){
-        共通(Expression.Default(typeof(int)));
-        共通(Expression.Default(typeof(decimal)));
+        共通Expression(Expression.Default(typeof(int)));
+        共通Expression(Expression.Default(typeof(decimal)));
     }
     [TestMethod]
     public void MemberInit(){
@@ -464,7 +487,7 @@ public class Test_Expression:ATest{
             ctor,
             Constant_1
         );
-        共通(
+        共通Expression(
             Expression.MemberInit(
                 New,
                 Expression.Bind(
@@ -473,7 +496,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(
@@ -488,7 +511,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void TypeEqual(){
-        共通(
+        共通Expression(
             Expression.TypeEqual(
                 Expression.Constant(1m),
                 typeof(decimal)
@@ -497,7 +520,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void TypeIs(){
-        共通(
+        共通Expression(
             Expression.TypeIs(
                 Expression.Constant(1m),
                 typeof(decimal)
@@ -508,7 +531,7 @@ public class Test_Expression:ATest{
     private static readonly LabelTarget Label_void=Expression.Label("Label");
     [TestMethod]
     public void Loop(){
-        共通(
+        共通Expression(
             Expression.Loop(
                 Expression.Block(
                     Expression.Break(Label_decimal,Expression.Constant(1m)),
@@ -518,7 +541,7 @@ public class Test_Expression:ATest{
                 Label_void
             )
         );
-        共通(
+        共通Expression(
             Expression.Loop(
                 Expression.Block(
                     Expression.Break(Label_decimal,Expression.Constant(1m))
@@ -529,12 +552,12 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Negate(){
-        共通(Expression.Negate(Expression.Constant(1m)));
+        共通Expression(Expression.Negate(Expression.Constant(1m)));
     }
     [TestMethod]
     public void ArrayIndex(){
         var List=Expression.Parameter(typeof(List<int>));
-        共通(
+        共通Expression(
             Expression.Block(
                 new[] { List },
                 Expression.MakeIndex(
@@ -545,7 +568,7 @@ public class Test_Expression:ATest{
             )
         );
         var Array1=Expression.Parameter(typeof(int[]));
-        共通(
+        共通Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,
@@ -555,7 +578,7 @@ public class Test_Expression:ATest{
             )
         );
         var Array2=Expression.Parameter(typeof(int[,]));
-        共通(
+        共通Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -568,8 +591,8 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Condition(){
-        共通(Expression.Add(Expression.Constant(1m),Expression.Constant(1m)));
-        共通(
+        共通Expression(Expression.Add(Expression.Constant(1m),Expression.Constant(1m)));
+        共通Expression(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(1m),
@@ -580,7 +603,7 @@ public class Test_Expression:ATest{
     [TestMethod]
     public void Goto(){
         var target=Expression.Label(typeof(int),"target");
-        共通(
+        共通Expression(
             Expression.Block(
                 Expression.Label(
                     target,
@@ -594,7 +617,7 @@ public class Test_Expression:ATest{
                 )
             )
         );
-        共通(
+        共通Expression(
             Expression.Block(
                 Expression.Label(
                     target,
@@ -629,7 +652,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void ListInit(){
-        共通(
+        共通Expression(
             Expression.ListInit(
                 Expression.New(typeof(List<int>)),
                 Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expression.Constant(1))
@@ -639,25 +662,25 @@ public class Test_Expression:ATest{
     [TestMethod]
     public void MemberExpression(){
         var Point=Expression.Parameter(typeof(Point));
-        共通(Expression.Block(new[]{Point},Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+        共通Expression(Expression.Block(new[]{Point},Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
     [TestMethod]
     public void Null(){
-        共通<Expression?>(null);
+        共通Expression<Expression?>(null);
     }
     [TestMethod]
     public void GreaterThan(){
-        共通(Expression.GreaterThan(Expression.Constant(1m),Expression.Constant(1m)));
+        共通Expression(Expression.GreaterThan(Expression.Constant(1m),Expression.Constant(1m)));
     }
     private static readonly ParameterExpression @string=Expression.Parameter(typeof(string),"p");
 
     [TestMethod]
     public void Assign(){
-        共通(Expression.Block(new[]{@string},Expression.Assign(@string,@string)));
+        共通Expression(Expression.Block(new[]{@string},Expression.Assign(@string,@string)));
     }
     [TestMethod]
     public void Invoke(){
-        共通(
+        共通Expression(
             Expression.Invoke(
                 Expression.Lambda(@string,@string),
                 Expression.Constant("B")
@@ -666,7 +689,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void New(){
-        共通(
+        共通Expression(
             Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
                 Expression.Constant(1),
@@ -680,7 +703,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Call(){
-        共通(
+        共通Expression(
             Expression.Call(
                 M(()=>string.Concat("","")),
                 Expression.Constant("A"),
@@ -764,11 +787,11 @@ public class Test_Expression:ATest{
     private static void 共通object<T>(T input){
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
-    private static void 共通object2<T>(T input){
-        Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+    private static void 共通objectT2<T>(T input){
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
-    private static void 共通<T>(T input)where T:Expression?{
+    private static void 共通Expression<T>(T input)where T:Expression?{
         Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(output,input)));
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
