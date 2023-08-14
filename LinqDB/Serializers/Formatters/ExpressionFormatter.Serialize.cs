@@ -5,7 +5,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 
-partial class ExpressionFormatter{
+partial class ExpressionJsonFormatter{
     public void Serialize(ref JsonWriter writer,Expression? value,IJsonFormatterResolver Resolver) {
         if(value is null){
             writer.WriteNull();
@@ -129,6 +129,9 @@ partial class ExpressionFormatter{
         };
         writer.WriteEndArray();
     }
+}
+
+partial class ExpressionMessagePackFormatter{
     public void Serialize(ref MessagePackWriter writer,Expression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
@@ -245,4 +248,4 @@ partial class ExpressionFormatter{
         };
     }
 }
-//220 2022/06/07
+

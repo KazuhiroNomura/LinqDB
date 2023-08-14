@@ -143,14 +143,7 @@ using static Common;
 //        //return value1;
 //    }
 //}
-public class AbstractFormatter:IJsonFormatter<object>,IMessagePackFormatter<object>{
-    //private static readonly MessagePackSerializerOptions 再帰しないoptions=
-    //    MessagePackSerializerOptions.Standard.WithResolver(
-    //        MessagePack.Resolvers.CompositeResolver.Create(
-    //            MessagePack.Resolvers.DynamicGenericResolver.Instance,
-    //            MessagePack.Resolvers.StandardResolverAllowPrivate.Instance
-    //        )
-    //    );
+public class AbstractJsonFormatter:IJsonFormatter<object>{
     public void Serialize(ref JsonWriter writer,object? value,IJsonFormatterResolver formatterResolver){
         if(value is null){
             writer.WriteNull();
@@ -163,17 +156,6 @@ public class AbstractFormatter:IJsonFormatter<object>,IMessagePackFormatter<obje
         Utf8Json.Resolvers.StandardResolver.Default.GetFormatter<object>().Serialize(ref writer,value,formatterResolver);
         writer.WriteEndArray();
     }
-    //private static readonly MessagePackSerializerOptions 再帰しないoptions=MessagePackSerializerOptions.Standard.WithResolver(
-    //    global::MessagePack.Resolvers.CompositeResolver.Create(
-    //        new IFormatterResolver[]{
-    //            //global::MessagePack.Resolvers.DynamicObjectResolver.Instance,
-    //            global::MessagePack.Resolvers.DynamicGenericResolver.Instance,
-    //            //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,
-    //            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-    //            //global::MessagePack.Resolvers.StandardResolver.Instance,
-    //        }
-    //    )
-    //);
     private readonly object[] Objects2=new object[2];
     public object Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
         if(reader.ReadIsNull())return default!;
@@ -193,11 +175,8 @@ public class AbstractFormatter:IJsonFormatter<object>,IMessagePackFormatter<obje
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public delegate void DelegateX<in T>(ref MessagePackWriter writer,T? value);
-    public static void MethodX(ref MessagePackWriter writer,int value){
-
-    }
-    private delegate void SerializeDelegate<in T>(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options);
+}
+public class AbstractMessagePackFormatter:IMessagePackFormatter<object>{
     public void Serialize(ref MessagePackWriter writer,object? value,MessagePackSerializerOptions options){
         if(value is null){
             writer.WriteNil();
@@ -206,6 +185,7 @@ public class AbstractFormatter:IJsonFormatter<object>,IMessagePackFormatter<obje
         //var MethodX=typeof(AbstractFormatter).GetMethod("MethodX")!;
         //var DelX=Delegate.CreateDelegate(typeof(DelegateX<>).MakeGenericType(MethodX.GetParameters()[0].ParameterType),MethodX);
         //DelX.DynamicInvoke(1);
+        writer.WriteArrayHeader(2);
         var type=value.GetType();
         Serialize_Type(ref writer,type,options);
         var Formatter = MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(type);
@@ -218,11 +198,13 @@ public class AbstractFormatter:IJsonFormatter<object>,IMessagePackFormatter<obje
         //MessagePack.Resolvers.StandardResolver.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
         //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
     }
-    private delegate object DeserializeDelegate(ref MessagePackReader reader,MessagePackSerializerOptions options);
+    //private delegate object DeserializeDelegate(ref MessagePackReader reader,MessagePackSerializerOptions options);
     public object Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
+        var ArrayHeader=reader.ReadArrayHeader();
+        Debug.Assert(ArrayHeader==2);
         var type=Deserialize_Type(ref reader,options);
-        var Formatter = MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(type);
+        //var Formatter = MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(type);
         //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
         //Debug.Assert(Deserialize!=null,nameof(Deserialize)+" != null");
         //var Delegate0=(DeserializeDelegate)Delegate.CreateDelegate(typeof(DeserializeDelegate),Formatter,Deserialize);

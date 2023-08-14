@@ -5,8 +5,7 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<MemberBinding>,IMessagePackFormatter<MemberBinding>{
-    private IJsonFormatter<MemberBinding> MemberBinding=>this;
+partial class ExpressionJsonFormatter:IJsonFormatter<MemberBinding>{
     public void Serialize(ref JsonWriter writer,MemberBinding value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         writer.WriteString(value.BindingType.ToString());
@@ -44,6 +43,8 @@ partial class ExpressionFormatter:IJsonFormatter<MemberBinding>,IMessagePackForm
         reader.ReadIsEndArrayWithVerify();
         return MemberBinding;
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<MemberBinding>{
     public void Serialize(ref MessagePackWriter writer,MemberBinding value,MessagePackSerializerOptions Resolver){
         writer.Write((byte)value.BindingType);
         Serialize_T(ref writer,value.Member,Resolver);

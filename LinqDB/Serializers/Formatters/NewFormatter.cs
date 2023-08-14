@@ -4,9 +4,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<NewExpression>,IMessagePackFormatter<NewExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<NewExpression>{
     private IJsonFormatter<NewExpression> New=>this;
-    private IMessagePackFormatter<NewExpression> MSNew=>this;
     public void Serialize(ref JsonWriter writer,NewExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -36,6 +35,9 @@ partial class ExpressionFormatter:IJsonFormatter<NewExpression>,IMessagePackForm
             arguments
         );
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<NewExpression>{
+    private IMessagePackFormatter<NewExpression> MSNew=>this;
     public void Serialize(ref MessagePackWriter writer,NewExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
@@ -46,7 +48,7 @@ partial class ExpressionFormatter:IJsonFormatter<NewExpression>,IMessagePackForm
     }
     NewExpression IMessagePackFormatter<NewExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
-        var constructor= this.MSConstructorInfo.Deserialize(ref reader,Resolver);
+        var constructor= this.ConstructorInfo.Deserialize(ref reader,Resolver);
         var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
         return Expression.New(
             constructor,

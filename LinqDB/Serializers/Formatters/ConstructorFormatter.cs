@@ -6,9 +6,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<ConstructorInfo>,IMessagePackFormatter<ConstructorInfo>{
+partial class ExpressionJsonFormatter:IJsonFormatter<ConstructorInfo>{
     private IJsonFormatter<ConstructorInfo> ConstructorInfo=>this;
-    private IMessagePackFormatter<ConstructorInfo> MSConstructorInfo=>this;
     public void Serialize(ref JsonWriter writer,ConstructorInfo value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         //this.Serialize(ref writer,value.ReflectedType!,Resolver);
@@ -25,6 +24,9 @@ partial class ExpressionFormatter:IJsonFormatter<ConstructorInfo>,IMessagePackFo
         reader.ReadIsEndArrayWithVerify();
         return ReflectedType.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.MetadataToken==MetadataToken);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConstructorInfo>{
+    private IMessagePackFormatter<ConstructorInfo> ConstructorInfo=>this;
     public void Serialize(ref MessagePackWriter writer,ConstructorInfo value,MessagePackSerializerOptions Resolver){
         Serialize_Type(ref writer,value.ReflectedType!,Resolver);
         writer.WriteInt32(value.MetadataToken);

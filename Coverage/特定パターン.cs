@@ -22,7 +22,7 @@ public class Test_特定パターン
         Expression e=Expression.Constant(3);
         SerializerSet SerializerSet=new();
 
-        SerializerSet.AnonymousExpressionResolver.Clear();
+        SerializerSet.Clear();
         var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
         JsonSerializer.Serialize(JsonStream,e,SerializerSet.JsonFormatterResolver);
         JsonStream.Close();

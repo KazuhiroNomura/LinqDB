@@ -5,9 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<LabelTarget>,IMessagePackFormatter<LabelTarget>{
+partial class ExpressionJsonFormatter:IJsonFormatter<LabelTarget>{
     private IJsonFormatter<LabelTarget> LabelTarget=>this;
-    private IMessagePackFormatter<LabelTarget> MSLabelTarget=>this;
     public void Serialize(ref JsonWriter writer,LabelTarget? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -62,6 +61,9 @@ partial class ExpressionFormatter:IJsonFormatter<LabelTarget>,IMessagePackFormat
         reader.ReadIsEndArrayWithVerify();
         return target;
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LabelTarget>{
+    private IMessagePackFormatter<LabelTarget> MSLabelTarget=>this;
     public void Serialize(ref MessagePackWriter writer,LabelTarget? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
@@ -97,11 +99,20 @@ partial class ExpressionFormatter:IJsonFormatter<LabelTarget>,IMessagePackFormat
         return target;
     }
 }
-class MessagePackFormatter<T>:IMessagePackFormatter<T>{
-    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
-        throw new NotImplementedException();
-    }
-    T IMessagePackFormatter<T>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
-        throw new NotImplementedException();
-    }
-}
+//class MessagePackFormatter<T>:IMessagePackFormatter<T>{
+//    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
+//        throw new NotImplementedException();
+//    }
+//    T IMessagePackFormatter<T>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+//        throw new NotImplementedException();
+//    }
+//}
+//class MessagePackFormatter<T>:IMessagePackFormatter<T>{
+//    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
+//        throw new NotImplementedException();
+//    }
+//    T IMessagePackFormatter<T>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+//        throw new NotImplementedException();
+//    }
+//}
+

@@ -3,23 +3,21 @@ using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-partial class ExpressionFormatter:IJsonFormatter<ConditionalExpression>,IMessagePackFormatter<ConditionalExpression>{
-    //public static readonly ConditionalFormatter Instance=new();
+partial class ExpressionJsonFormatter:IJsonFormatter<ConditionalExpression>{
     private IJsonFormatter<ConditionalExpression> Conditional=>this;
-    private IMessagePackFormatter<ConditionalExpression> MSConditional=>this;
     public void Serialize(ref JsonWriter writer,ConditionalExpression? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
-        writer.WriteBeginArray();
-        this.Serialize(ref writer,value.Test,Resolver);
-        writer.WriteValueSeparator();
-        this.Serialize(ref writer,value.IfTrue,Resolver);
-        writer.WriteValueSeparator();
-        this.Serialize(ref writer,value.IfFalse,Resolver);
-        writer.WriteEndArray();
+    if(value is null){
+        writer.WriteNull();
+        return;
     }
+    writer.WriteBeginArray();
+    this.Serialize(ref writer,value.Test,Resolver);
+    writer.WriteValueSeparator();
+    this.Serialize(ref writer,value.IfTrue,Resolver);
+    writer.WriteValueSeparator();
+    this.Serialize(ref writer,value.IfFalse,Resolver);
+    writer.WriteEndArray();
+}
     ConditionalExpression IJsonFormatter<ConditionalExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
@@ -35,6 +33,10 @@ partial class ExpressionFormatter:IJsonFormatter<ConditionalExpression>,IMessage
             ifFalse
         );
     }
+}
+
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConditionalExpression>{
+    private IMessagePackFormatter<ConditionalExpression> Conditional=>this;
     public void Serialize(ref MessagePackWriter writer,ConditionalExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

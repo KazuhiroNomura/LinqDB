@@ -4,9 +4,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<LabelExpression>,IMessagePackFormatter<LabelExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<LabelExpression>{
     private IJsonFormatter<LabelExpression> LabelExpression=>this;
-    private IMessagePackFormatter<LabelExpression> MSLabelExpression=>this;
     public void Serialize(ref JsonWriter writer,LabelExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -27,6 +26,9 @@ partial class ExpressionFormatter:IJsonFormatter<LabelExpression>,IMessagePackFo
         reader.ReadIsEndArrayWithVerify();
         return Expression.Label(target,defaultValue);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LabelExpression>{
+    private IMessagePackFormatter<LabelExpression> LabelExpression=>this;
     public void Serialize(ref MessagePackWriter writer,LabelExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

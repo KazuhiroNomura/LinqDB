@@ -6,7 +6,7 @@ using MessagePack;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter{//}:IJsonFormatter<ReadOnlyCollection<ParameterExpression>> {
+partial class ExpressionJsonFormatter{//}:IJsonFormatter<ReadOnlyCollection<ParameterExpression>> {
     //private IJsonFormatter<ReadOnlyCollection<ParameterExpression>> Parameters=>this;
     //internal static DeclareParameterFormatter Instance{get;set;}
     //private readonly List<ParameterExpression> ListParameter;
@@ -60,6 +60,8 @@ partial class ExpressionFormatter{//}:IJsonFormatter<ReadOnlyCollection<Paramete
         reader.ReadIsEndArrayWithVerify();
         return List;
     }
+}
+partial class ExpressionMessagePackFormatter{
     public void Serialize宣言Parameters(ref MessagePackWriter writer,ReadOnlyCollection<ParameterExpression>value,MessagePackSerializerOptions Resolver) {
         var Count=value.Count;
         writer.WriteArrayHeader(Count);

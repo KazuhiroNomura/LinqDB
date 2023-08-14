@@ -581,7 +581,7 @@ internal class SingleReceiveSend:IDisposable{
                         object Object;
                         switch(XmlType) {
                             case XmlType.Utf8Json:{
-                                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                                this.SerializerSet.AnonymousExpressionJsonFormatterResolver.Clear();
                                 try{
                                     string s=Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
                                         (int)(this.MemoryStream.Length-this.MemoryStream.Position));
@@ -596,7 +596,7 @@ internal class SingleReceiveSend:IDisposable{
                                 break;
                             }
                             case XmlType.MessagePack: {
-                                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                                this.SerializerSet.AnonymousExpressionFormatterResolver.Clear();
                                 var Lambda=MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerSet.MessagePackSerializerOptions,CancellationToken);
                                 Object=Lambda;
                                 break;

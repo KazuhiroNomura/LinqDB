@@ -4,9 +4,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<MethodCallExpression>,IMessagePackFormatter<MethodCallExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<MethodCallExpression>{
     private IJsonFormatter<MethodCallExpression> MethodCall=>this;
-    private IMessagePackFormatter<MethodCallExpression> MSMethodCall=>this;
     public void Serialize(ref JsonWriter writer,MethodCallExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -47,6 +46,9 @@ partial class ExpressionFormatter:IJsonFormatter<MethodCallExpression>,IMessageP
             );
         }
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<MethodCallExpression>{
+    private IMessagePackFormatter<MethodCallExpression> MSMethodCall=>this;
     public void Serialize(ref MessagePackWriter writer,MethodCallExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

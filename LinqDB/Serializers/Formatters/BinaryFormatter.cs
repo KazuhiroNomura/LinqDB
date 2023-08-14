@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq.Expressions;
 using System.Reflection;
 using MessagePack;
@@ -6,11 +7,7 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<BinaryExpression>,IMessagePackFormatter<BinaryExpression>{
-    //public static readonly BinaryFormatter Instance=new();
-    private IJsonFormatter<BinaryExpression> Binary=>this;
-    //private IJsonFormatter<T> I<T>()=>this;
-
+partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
     public void Serialize(ref JsonWriter writer,BinaryExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -83,17 +80,11 @@ partial class ExpressionFormatter:IJsonFormatter<BinaryExpression>,IMessagePackF
         }
         writer.WriteEndArray();
     }
-    //private readonly object[] Objects2=new object[2];
     private (Expression Left,Expression Right)Deserialize_Binary(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Right= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return(Left,Right);
-    }
-    private (Expression Left,Expression Right)Deserialize_Binary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Left= this.Deserialize(ref reader,Resolver);
-        var Right= this.Deserialize(ref reader,Resolver);
         return(Left,Right);
     }
     private (Expression Left,Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -105,12 +96,6 @@ partial class ExpressionFormatter:IJsonFormatter<BinaryExpression>,IMessagePackF
         reader.ReadIsEndArrayWithVerify();
         return(Left,Right,Method);
     }
-    private (Expression Left,Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Left= this.Deserialize(ref reader,Resolver);
-        var Right= this.Deserialize(ref reader,Resolver);
-        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
-        return(Left,Right,Method);
-    }
     private (Expression Left,Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -120,13 +105,6 @@ partial class ExpressionFormatter:IJsonFormatter<BinaryExpression>,IMessagePackF
         reader.ReadIsValueSeparatorWithVerify();
         var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return(Left,Right,IsLiftedToNull,Method);
-    }
-    private (Expression Left,Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Left= this.Deserialize(ref reader,Resolver);
-        var Right= this.Deserialize(ref reader,Resolver);
-        var IsLiftedToNull=reader.ReadBoolean();
-        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         return(Left,Right,IsLiftedToNull,Method);
     }
     BinaryExpression IJsonFormatter<BinaryExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -295,7 +273,26 @@ partial class ExpressionFormatter:IJsonFormatter<BinaryExpression>,IMessagePackF
         }
         throw new NotSupportedException(NodeTypeName);
     }
-    private IMessagePackFormatter<BinaryExpression> MSBinary=>this;
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BinaryExpression>{
+    private (Expression Left,Expression Right)Deserialize_Binary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Left= this.Deserialize(ref reader,Resolver);
+        var Right= this.Deserialize(ref reader,Resolver);
+        return(Left,Right);
+    }
+    private (Expression Left,Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Left= this.Deserialize(ref reader,Resolver);
+        var Right= this.Deserialize(ref reader,Resolver);
+        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
+        return(Left,Right,Method);
+    }
+    private (Expression Left,Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Left= this.Deserialize(ref reader,Resolver);
+        var Right= this.Deserialize(ref reader,Resolver);
+        var IsLiftedToNull=reader.ReadBoolean();
+        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
+        return(Left,Right,IsLiftedToNull,Method);
+    }
     public void Serialize(ref MessagePackWriter writer,BinaryExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

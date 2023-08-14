@@ -5,9 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<NewArrayExpression>,IMessagePackFormatter<NewArrayExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<NewArrayExpression>{
     private IJsonFormatter<NewArrayExpression> NewArray=>this;
-    private IMessagePackFormatter<NewArrayExpression> MSNewArray=>this;
     public void Serialize(ref JsonWriter writer,NewArrayExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -37,6 +36,9 @@ partial class ExpressionFormatter:IJsonFormatter<NewArrayExpression>,IMessagePac
             _=>throw new NotImplementedException(NodeTypeName)
         };
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<NewArrayExpression>{
+    private IMessagePackFormatter<NewArrayExpression> MSNewArray=>this;
     public void Serialize(ref MessagePackWriter writer,NewArrayExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
@@ -58,26 +60,26 @@ partial class ExpressionFormatter:IJsonFormatter<NewArrayExpression>,IMessagePac
         };
     }
 }
-class NewArrayFormatter:IMessagePackFormatter<NewArrayExpression>{
-    private IMessagePackFormatter<NewArrayExpression> MSNewArray=>this;
-    public void Serialize(ref MessagePackWriter writer,NewArrayExpression? value,MessagePackSerializerOptions options){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        writer.Write((byte)value.NodeType);
-        Serialize_Type(ref writer,value.Type.GetElementType(),options);
-        Serialize_T(ref writer,value.Expressions,options);
-    }
-    NewArrayExpression IMessagePackFormatter<NewArrayExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
-        if(reader.TryReadNil()) return null!;
-        var NodeType=(ExpressionType)reader.ReadByte();
-        var type=Deserialize_Type(ref reader,options);
-        var expressions= Deserialize_T<Expression[]>(ref reader,options);
-        return NodeType switch{
-            ExpressionType.NewArrayBounds=>Expression.NewArrayBounds(type,expressions),
-            ExpressionType.NewArrayInit=>Expression.NewArrayInit(type,expressions),
-            _=>throw new NotImplementedException(options.ToString())
-        };
-    }
-}
+//class NewArrayFormatter:IMessagePackFormatter<NewArrayExpression>{
+//    private IMessagePackFormatter<NewArrayExpression> MSNewArray=>this;
+//    public void Serialize(ref MessagePackWriter writer,NewArrayExpression? value,MessagePackSerializerOptions options){
+//        if(value is null){
+//            writer.WriteNil();
+//            return;
+//        }
+//        writer.Write((byte)value.NodeType);
+//        Serialize_Type(ref writer,value.Type.GetElementType(),options);
+//        Serialize_T(ref writer,value.Expressions,options);
+//    }
+//    NewArrayExpression IMessagePackFormatter<NewArrayExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+//        if(reader.TryReadNil()) return null!;
+//        var NodeType=(ExpressionType)reader.ReadByte();
+//        var type=Deserialize_Type(ref reader,options);
+//        var expressions= Deserialize_T<Expression[]>(ref reader,options);
+//        return NodeType switch{
+//            ExpressionType.NewArrayBounds=>Expression.NewArrayBounds(type,expressions),
+//            ExpressionType.NewArrayInit=>Expression.NewArrayInit(type,expressions),
+//            _=>throw new NotImplementedException(options.ToString())
+//        };
+//    }
+//}

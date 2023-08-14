@@ -6,14 +6,9 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFormatter<UnaryExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<UnaryExpression>{
     private IJsonFormatter<UnaryExpression> Unary=>this;
-    private IMessagePackFormatter<UnaryExpression> MSUnary=>this;
     private void Serialize_Unary(ref JsonWriter writer,Expression value,IJsonFormatterResolver Resolver){
-        var Unary=(UnaryExpression)value;
-        this.Serialize(ref writer,Unary.Operand,Resolver);
-    }
-    private void Serialize_Unary(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
         var Unary=(UnaryExpression)value;
         this.Serialize(ref writer,Unary.Operand,Resolver);
     }
@@ -23,20 +18,10 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
         writer.WriteValueSeparator();
         Serialize_Type(ref writer,Unary.Type,Resolver);
     }
-    private void Serialize_Unary_Type(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(UnaryExpression)value;
-        this.Serialize(ref writer,Unary.Operand,Resolver);
-        Serialize_Type(ref writer,Unary.Type,Resolver);
-    }
     private void Serialize_Unary_MethodInfo(ref JsonWriter writer,Expression value,IJsonFormatterResolver Resolver){
         var Unary=(UnaryExpression)value;
         this.Serialize(ref writer,Unary.Operand,Resolver);
         writer.WriteValueSeparator();
-        this.Serialize(ref writer,Unary.Method,Resolver);
-    }
-    private void Serialize_Unary_MethodInfo(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(UnaryExpression)value;
-        this.Serialize(ref writer,Unary.Operand,Resolver);
         this.Serialize(ref writer,Unary.Method,Resolver);
     }
     private void Serialize_Unary_Type_MethodInfo(ref JsonWriter writer,Expression value,IJsonFormatterResolver Resolver){
@@ -45,12 +30,6 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
         writer.WriteValueSeparator();
         Serialize_Type(ref writer,Unary.Type,Resolver);
         writer.WriteValueSeparator();
-        this.Serialize(ref writer,Unary.Method,Resolver);
-    }
-    private void Serialize_Unary_Type_MethodInfo(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(UnaryExpression)value;
-        this.Serialize(ref writer,Unary.Operand,Resolver);
-        Serialize_Type(ref writer,Unary.Type,Resolver);
         this.Serialize(ref writer,Unary.Method,Resolver);
     }
     public void Serialize(ref JsonWriter writer,UnaryExpression? value,IJsonFormatterResolver Resolver){
@@ -87,14 +66,9 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
         }
         writer.WriteEndArray();
     }
-    //private readonly object[] Objects2=new object[2];
     private Expression Deserialize_Unary(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Operand= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Operand;
-    }
-    private Expression Deserialize_Unary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Operand= this.Deserialize(ref reader,Resolver);
         return Operand;
     }
     private (Expression Operand,Type Type)Deserialize_Unary_Type(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -104,21 +78,11 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
         reader.ReadIsEndArrayWithVerify();
         return(Operand,Type);
     }
-    private (Expression Operand,Type Type)Deserialize_Unary_Type(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Operand= this.Deserialize(ref reader,Resolver);
-        var Type=Deserialize_Type(ref reader,Resolver);
-        return(Operand,Type);
-    }
     private (Expression Operand,MethodInfo Method)Deserialize_Unary_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Operand= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Method=this.MethodInfo.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return(Operand,Method);
-    }
-    private (Expression Operand,MethodInfo Method)Deserialize_Unary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Operand= this.Deserialize(ref reader,Resolver);
-        var Method=this.MSMethodInfo.Deserialize(ref reader,Resolver);
         return(Operand,Method);
     }
     private (Expression Operand,Type Type,MethodInfo Method)Deserialize_Unary_Type_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -128,12 +92,6 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
         reader.ReadIsValueSeparatorWithVerify();
         var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return(Operand,Type,Method);
-    }
-    private (Expression Operand,Type Type,MethodInfo Method)Deserialize_Unary_Type_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var Operand= this.Deserialize(ref reader,Resolver);
-        var Type=Deserialize_Type(ref reader,Resolver);
-        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         return(Operand,Type,Method);
     }
     UnaryExpression IJsonFormatter<UnaryExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -226,6 +184,50 @@ partial class ExpressionFormatter:IJsonFormatter<UnaryExpression>,IMessagePackFo
             }
         }
         throw new NotSupportedException(NodeTypeName);
+    }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<UnaryExpression>{
+    private IMessagePackFormatter<UnaryExpression> MSUnary=>this;
+    private void Serialize_Unary(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
+        var Unary=(UnaryExpression)value;
+        this.Serialize(ref writer,Unary.Operand,Resolver);
+    }
+    private void Serialize_Unary_Type(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
+        var Unary=(UnaryExpression)value;
+        this.Serialize(ref writer,Unary.Operand,Resolver);
+        Serialize_Type(ref writer,Unary.Type,Resolver);
+    }
+    private void Serialize_Unary_MethodInfo(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
+        var Unary=(UnaryExpression)value;
+        this.Serialize(ref writer,Unary.Operand,Resolver);
+        this.Serialize(ref writer,Unary.Method,Resolver);
+    }
+    private void Serialize_Unary_Type_MethodInfo(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
+        var Unary=(UnaryExpression)value;
+        this.Serialize(ref writer,Unary.Operand,Resolver);
+        Serialize_Type(ref writer,Unary.Type,Resolver);
+        this.Serialize(ref writer,Unary.Method,Resolver);
+    }
+    //private readonly object[] Objects2=new object[2];
+    private Expression Deserialize_Unary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Operand= this.Deserialize(ref reader,Resolver);
+        return Operand;
+    }
+    private (Expression Operand,Type Type)Deserialize_Unary_Type(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Operand= this.Deserialize(ref reader,Resolver);
+        var Type=Deserialize_Type(ref reader,Resolver);
+        return(Operand,Type);
+    }
+    private (Expression Operand,MethodInfo Method)Deserialize_Unary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Operand= this.Deserialize(ref reader,Resolver);
+        var Method=this.MSMethodInfo.Deserialize(ref reader,Resolver);
+        return(Operand,Method);
+    }
+    private (Expression Operand,Type Type,MethodInfo Method)Deserialize_Unary_Type_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var Operand= this.Deserialize(ref reader,Resolver);
+        var Type=Deserialize_Type(ref reader,Resolver);
+        var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
+        return(Operand,Type,Method);
     }
     public void Serialize(ref MessagePackWriter writer,UnaryExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){

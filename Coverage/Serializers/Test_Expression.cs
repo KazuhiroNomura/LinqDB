@@ -55,12 +55,24 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous001(){
+        共通object(new{
+            a=1
+        });
+    }
+    [TestMethod]
+    public void Anonymous002(){
+        共通object((object)new{
+            a=(object)1
+        });
+    }
+    [TestMethod]
+    public void Anonymous003(){
         共通object((object)new{
             a=(object)new{aa=11}
         });
     }
     [TestMethod]
-    public void Anonymous002(){
+    public void Anonymous004(){
         共通objectT2(new{
             a=(object)new{aa=1}
         });
@@ -743,10 +755,10 @@ public class Test_Expression:ATest{
     const string Jsonファイル名="Json.txt";
     const string 整形済みJsonファイル名="整形済みJson.txt";
     private static void Private共通object<T>(T input,Action<T> AssertAction){
-        SerializerSet.AnonymousExpressionResolver.Clear();
+        SerializerSet.Clear();
         //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
         {
-            SerializerSet.AnonymousExpressionResolver.Clear();
+            SerializerSet.Clear();
             var JsonStream = new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             JsonSerializer.Serialize(JsonStream,input,SerializerSet.JsonFormatterResolver);
             JsonStream.Close();
@@ -754,13 +766,13 @@ public class Test_Expression:ATest{
             File.WriteAllText(整形済みJsonファイル名,format_json(Json));
         }
         {
-            SerializerSet.AnonymousExpressionResolver.Clear();
+            SerializerSet.Clear();
             var json0=File.ReadAllText(Jsonファイル名);
             var json1=File.ReadAllText(整形済みJsonファイル名);
             //var o0=JsonSerializer.Deserialize<object>(json0,SerializerSet.JsonFormatterResolver);
             //var O0=(T)o0;
             var T0=JsonSerializer.Deserialize<T>(json0,SerializerSet.JsonFormatterResolver);
-            SerializerSet.AnonymousExpressionResolver.Clear();
+            SerializerSet.Clear();
             //var o1=JsonSerializer.Deserialize<object>(json1,SerializerSet.JsonFormatterResolver);
             //var O1=(T)o1;
             //var T1=JsonSerializer.Deserialize<T>(json1,SerializerSet.JsonFormatterResolver);
@@ -768,13 +780,13 @@ public class Test_Expression:ATest{
             //AssertAction(T1);
         }
         {
-            SerializerSet.AnonymousExpressionResolver.Clear();
+            SerializerSet.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             MessagePackSerializer.Serialize(MessagepackStream,input,SerializerSet.MessagePackSerializerOptions);
             MessagepackStream.Close();
         }
         {
-            SerializerSet.AnonymousExpressionResolver.Clear();
+            SerializerSet.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Open,FileAccess.ReadWrite,FileShare.ReadWrite);
             var output = MessagePackSerializer.Deserialize<T>(MessagepackStream,SerializerSet.MessagePackSerializerOptions);
             MessagepackStream.Close();

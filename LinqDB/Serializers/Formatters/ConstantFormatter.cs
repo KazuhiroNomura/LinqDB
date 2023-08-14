@@ -7,9 +7,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<ConstantExpression>,IMessagePackFormatter<ConstantExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<ConstantExpression>{
     private IJsonFormatter<ConstantExpression> Constant=>this;
-    private IMessagePackFormatter<ConstantExpression> MSConstant=>this;
     public void Serialize(ref JsonWriter writer,ConstantExpression value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         Serialize_Type(ref writer,value.Type,Resolver);
@@ -56,6 +55,9 @@ partial class ExpressionFormatter:IJsonFormatter<ConstantExpression>,IMessagePac
         //reader.ReadIsEndArrayWithVerify();
         return Expression.Constant(value,type);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConstantExpression>{
+    private IMessagePackFormatter<ConstantExpression> Constant=>this;
     public void Serialize(ref MessagePackWriter writer,ConstantExpression value,MessagePackSerializerOptions Resolver){
         Serialize_Type(ref writer,value.Type,Resolver);
         var type=value.Type;

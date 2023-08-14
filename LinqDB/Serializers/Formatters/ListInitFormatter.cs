@@ -4,9 +4,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<ListInitExpression>,IMessagePackFormatter<ListInitExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<ListInitExpression>{
     private IJsonFormatter<ListInitExpression> ListInit=>this;
-    private IMessagePackFormatter<ListInitExpression> MSListInit=>this;
     public void Serialize(ref JsonWriter writer,ListInitExpression value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         this.Serialize(ref writer,value.NewExpression,Resolver);
@@ -22,6 +21,9 @@ partial class ExpressionFormatter:IJsonFormatter<ListInitExpression>,IMessagePac
         reader.ReadIsEndArrayWithVerify();
         return Expression.ListInit(New,Initializers);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ListInitExpression>{
+    private IMessagePackFormatter<ListInitExpression> MSListInit=>this;
     public void Serialize(ref MessagePackWriter writer,ListInitExpression value,MessagePackSerializerOptions Resolver){
         this.Serialize(ref writer,value.NewExpression,Resolver);
         Serialize_T(ref writer,value.Initializers,Resolver);

@@ -6,9 +6,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<MethodInfo>,IMessagePackFormatter<MethodInfo>{
+partial class ExpressionJsonFormatter:IJsonFormatter<MethodInfo>{
     private IJsonFormatter<MethodInfo> MethodInfo=>this;
-    private IMessagePackFormatter<MethodInfo> MSMethodInfo=>this;
     public void Serialize(ref JsonWriter writer,MethodInfo? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -35,6 +34,9 @@ partial class ExpressionFormatter:IJsonFormatter<MethodInfo>,IMessagePackFormatt
         reader.ReadIsEndArrayWithVerify();
         return ReflectedType.GetMethods(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.Name==Name&&p.MetadataToken==MetadataToken);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<MethodInfo>{
+    private IMessagePackFormatter<MethodInfo> MSMethodInfo=>this;
     public void Serialize(ref MessagePackWriter writer,MethodInfo? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

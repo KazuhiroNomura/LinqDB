@@ -636,11 +636,11 @@ public class Client:IDisposable {
         MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
             case XmlType.Utf8Json:
-                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                this.SerializerSet.Clear();
                 JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerSet.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:
-                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                this.SerializerSet.Clear();
                 MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerSet.MessagePackSerializerOptions);
                 break;
             default:throw new NotSupportedException(XmlType.ToString());
@@ -655,16 +655,16 @@ public class Client:IDisposable {
         MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
             case XmlType.Utf8Json:
-                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                this.SerializerSet.Clear();
                 var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
                 JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerSet.JsonFormatterResolver);
                 JsonStream.Close();
 
-                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                this.SerializerSet.Clear();
                 JsonSerializer.Serialize(MemoryStream,Expression,this.SerializerSet.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:{
-                this.SerializerSet.AnonymousExpressionResolver.Clear();
+                this.SerializerSet.Clear();
                 MessagePackSerializer.Serialize(MemoryStream,Expression,this.SerializerSet.MessagePackSerializerOptions);
                 //var Lambda_Parameters = Lambda.Parameters;
                 //var ParameterName = Lambda_Parameters.Count==0 ? "" : Lambda_Parameters[0].Name;

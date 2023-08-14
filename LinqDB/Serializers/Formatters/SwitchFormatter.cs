@@ -5,9 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<SwitchExpression>,IMessagePackFormatter<SwitchExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<SwitchExpression>{
     private IJsonFormatter<SwitchExpression> Switch=>this;
-    private IMessagePackFormatter<SwitchExpression> MSSwitch=>this;
     public void Serialize(ref JsonWriter writer,SwitchExpression value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         Serialize_Type(ref writer,value.Type,Resolver);
@@ -37,6 +36,9 @@ partial class ExpressionFormatter:IJsonFormatter<SwitchExpression>,IMessagePackF
         reader.ReadIsEndArrayWithVerify();
         return Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<SwitchExpression>{
+    private IMessagePackFormatter<SwitchExpression> MSSwitch=>this;
     public void Serialize(ref MessagePackWriter writer,SwitchExpression value,MessagePackSerializerOptions Resolver){
         Serialize_Type(ref writer,value.Type,Resolver);
         this.Serialize(ref writer,value.SwitchValue,Resolver);

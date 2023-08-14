@@ -5,9 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<GotoExpression>,IMessagePackFormatter<GotoExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<GotoExpression>{
     private IJsonFormatter<GotoExpression> Goto=>this;
-    private IMessagePackFormatter<GotoExpression> MSGoto=>this;
     public void Serialize(ref JsonWriter writer,GotoExpression value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         writer.WriteInt32((int)value.Kind);
@@ -34,6 +33,9 @@ partial class ExpressionFormatter:IJsonFormatter<GotoExpression>,IMessagePackFor
         reader.ReadIsEndArrayWithVerify();
         return Expression.MakeGoto(kind,target,value,type);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<GotoExpression>{
+    private IMessagePackFormatter<GotoExpression> Goto=>this;
     public void Serialize(ref MessagePackWriter writer,GotoExpression value,MessagePackSerializerOptions Resolver){
         writer.Write((byte)value.Kind);
         this.Serialize(ref writer,value.Target,Resolver);

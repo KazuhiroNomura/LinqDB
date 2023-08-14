@@ -3,10 +3,8 @@ using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-partial class ExpressionFormatter:IJsonFormatter<ParameterExpression>,IMessagePackFormatter<ParameterExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<ParameterExpression>{
     private IJsonFormatter<ParameterExpression> Parameter=>this;
-    private IMessagePackFormatter<ParameterExpression> MSParameter=>this;
-
     public void Serialize(ref JsonWriter writer,ParameterExpression value,IJsonFormatterResolver Resolver) {
         writer.WriteInt32(this.ListParameter.LastIndexOf(value));
     }
@@ -15,6 +13,9 @@ partial class ExpressionFormatter:IJsonFormatter<ParameterExpression>,IMessagePa
         var Parameter= this.ListParameter[index];
         return Parameter;
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ParameterExpression>{
+    private IMessagePackFormatter<ParameterExpression> MSParameter=>this;
     public void Serialize(ref MessagePackWriter writer,ParameterExpression value,MessagePackSerializerOptions Resolver){
         writer.WriteInt32(this.ListParameter.LastIndexOf(value));
     }

@@ -3,9 +3,8 @@ using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-partial class ExpressionFormatter:IJsonFormatter<LoopExpression>,IMessagePackFormatter<LoopExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<LoopExpression>{
     private IJsonFormatter<LoopExpression> Loop=>this;
-    private IMessagePackFormatter<LoopExpression> MSLoop=>this;
     public void Serialize(ref JsonWriter writer,LoopExpression value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         //writer.WriteString(nameof(ExpressionType.Loop));
@@ -28,6 +27,9 @@ partial class ExpressionFormatter:IJsonFormatter<LoopExpression>,IMessagePackFor
         reader.ReadIsEndArrayWithVerify();
         return Expression.Loop(body,breakLabel,continueLabel);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LoopExpression>{
+    private IMessagePackFormatter<LoopExpression> MSLoop=>this;
     public void Serialize(ref MessagePackWriter writer,LoopExpression value,MessagePackSerializerOptions Resolver){
         this.Serialize(ref writer,value.Body,Resolver);
         this.Serialize(ref writer,value.BreakLabel,Resolver);

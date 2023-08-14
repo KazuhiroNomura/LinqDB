@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Reflection.PortableExecutable;
 using System.Runtime.Serialization;
-
+using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
 using Microsoft.CodeAnalysis;
@@ -12,7 +14,7 @@ using Microsoft.CodeAnalysis;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-public class AnonymousFormatter{
+public abstract class AnonymousFormatter{
     protected static readonly IJsonFormatterResolver 再帰しないFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
         //順序が大事
         //global::Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
@@ -30,10 +32,26 @@ public class AnonymousFormatter{
             //global::MessagePack.Resolvers.StandardResolver.Instance,
         )
     );
+    private delegate object DeserializeDelegate(object Formatter,ref MessagePackReader reader,MessagePackSerializerOptions options);
+    private static readonly Type[] ParameterTypes={typeof(object),typeof(MessagePackReader).MakeByRefType(),typeof(MessagePackSerializerOptions)};
+    protected static object Deserialize(object Formatter,ref MessagePackReader reader,MessagePackSerializerOptions options){
+        var Method=Formatter.GetType().GetMethod("Deserialize")!;
+        var D=new DynamicMethod("",typeof(object),ParameterTypes){
+            InitLocals=false
+        };
+        var I=D.GetILGenerator();
+        I.Ldarg_0();
+        I.Ldarga_S(1);
+        I.Ldarg_2();
+        I.Callvirt(Method);
+        I.Box(Method.ReturnType);
+        I.Ret();
+        var Del=(DeserializeDelegate)D.CreateDelegate(typeof(DeserializeDelegate));
+        var Result=Del(Formatter,ref reader,options);
+        return Result;
+    }
 }
-public class AnonymousFormatter<T>:AnonymousFormatter,IJsonFormatter<T>,IMessagePackFormatter<T>{
-    private IJsonFormatter<T> JAbstract=>this;
-    private IMessagePackFormatter<T> MAbstract=>this;
+public class AnonymousJsonFormatter<T>:AnonymousFormatter,IJsonFormatter<T>{
     private readonly object[] Objects3=new object[3];
     public void Serialize(ref JsonWriter writer,T? value,IJsonFormatterResolver formatterResolver){
         if(value is null){
@@ -89,9 +107,8 @@ public class AnonymousFormatter<T>:AnonymousFormatter,IJsonFormatter<T>,IMessage
         }
         return (T)ctor.Invoke(args);
     }
-    //enum EType:sbyte{
-    //    AnonymousType
-    //};
+}
+public class AnonymousMessagePackFormatter<T>:AnonymousFormatter,IMessagePackFormatter<T>{
     public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
         if(value is null){
             writer.WriteNil();
@@ -105,11 +122,12 @@ public class AnonymousFormatter<T>:AnonymousFormatter,IJsonFormatter<T>,IMessage
             var Key = Parameter.Name;
             var Value=typeof(T).GetProperty(Key)!.GetMethod.Invoke(value,Array.Empty<object>());
             writer.Write(Key);
+            //writer.Write(a);
             MessagePackSerializer.Serialize(ref writer,Value,options);
         }
         //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<T>().Serialize(ref writer,value,options);
     }
-    private delegate U DeserializeDelegate<out U>(ref MessagePackReader reader,MessagePackSerializerOptions options);
+    //private delegate U DeserializeDelegate<U>(ref MessagePackReader reader,MessagePackSerializerOptions options);
     public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         //var value=MessagePackSerializer.Deserialize(typeof(T),ref reader,再帰しないoptions);
@@ -121,20 +139,25 @@ public class AnonymousFormatter<T>:AnonymousFormatter,IJsonFormatter<T>,IMessage
         for(var a = 0;a<Length;a++) {
             var Key = reader.ReadString();
             Debug.Assert(Parameters[a].Name==Key);
+            //var v=reader.ReadInt32();
             //var type=Parameters[a].ParameterType;
-            //var Formatter = Utf8Json.Resolvers.StandardResolver.Default.GetFormatterDynamic(type);
-            //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
-            //var d=(DeserializeDelegate)Delegate.CreateDelegate()
+            //var Formatter = options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType);
+            //var Formatter2 = options.Resolver.GetFormatter<double>();
+            //Formatter2.Deserialize()
+            //var Deserialize=Delegate.CreateDelegate(typeof(DeserializeDelegate<>).MakeGenericType(type),Formatter,Formatter.GetType().GetMethod("Deserialize")!);
+            //var Deserialize=Formatter.GetType().GetMethod("Deserialize");
             //Debug.Assert(Deserialize is not null);
             //var Objects2 = this.Objects2;
             //Objects2[0]=reader;
             //Objects2[1]=formatterResolver;
             //var value = Deserialize.Invoke(Formatter,Objects2);
             //reader=(JsonReader)Objects2[0];
+            //匿名型のプロパティはプロパティの型はobjectやインターフェースでその値は具体的な場合デリゲート呼び出しではバインドできない
+            //Invoke呼び出しの場合ref reader私ができない
+            //var Value=Deserialize.DynamicInvoke().Invoke(Formatter,).(ref reader,options)!;
             
-            
-            var Value=MessagePackSerializer.Deserialize(Parameters[a].ParameterType,ref reader,options);
-            args[a]=Value;
+            //var Value=MessagePackSerializer.Deserialize(Parameters[a].ParameterType,ref reader,options);
+            args[a]=Deserialize(options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType),ref reader,options);
         }
         var value=ctor.Invoke(args);
         //var Dictionary=(Dictionary<string,object>)MessagePackSerializer.Deserialize(typeof(T),ref reader,再帰しないoptions);

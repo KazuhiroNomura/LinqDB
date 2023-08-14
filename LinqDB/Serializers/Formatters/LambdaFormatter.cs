@@ -5,9 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<LambdaExpression>,IMessagePackFormatter<LambdaExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<LambdaExpression>{
     private IJsonFormatter<LambdaExpression> Lambda=>this;
-    private IMessagePackFormatter<LambdaExpression> MSLambda=>this;
     public void Serialize(ref JsonWriter writer,LambdaExpression value,IJsonFormatterResolver Resolver) {
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
@@ -51,6 +50,9 @@ partial class ExpressionFormatter:IJsonFormatter<LambdaExpression>,IMessagePackF
             parameters
         );
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LambdaExpression>{
+    private IMessagePackFormatter<LambdaExpression> MSLambda=>this;
     public void Serialize(ref MessagePackWriter writer,LambdaExpression value,MessagePackSerializerOptions Resolver){
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;

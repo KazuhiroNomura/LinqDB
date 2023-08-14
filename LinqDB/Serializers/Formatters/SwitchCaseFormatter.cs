@@ -4,7 +4,7 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<SwitchCase>,IMessagePackFormatter<SwitchCase>{
+partial class ExpressionJsonFormatter:IJsonFormatter<SwitchCase>{
     private IJsonFormatter<SwitchCase> SwitchCase=>this;
     public void Serialize(ref JsonWriter writer,SwitchCase value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
@@ -21,6 +21,8 @@ partial class ExpressionFormatter:IJsonFormatter<SwitchCase>,IMessagePackFormatt
         reader.ReadIsEndArrayWithVerify();
         return Expression.SwitchCase(body,testValues);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<SwitchCase>{
     public void Serialize(ref MessagePackWriter writer,SwitchCase value,MessagePackSerializerOptions Resolver){
         Serialize_T(ref writer,value.TestValues,Resolver);
         this.Serialize(ref writer,value.Body,Resolver);

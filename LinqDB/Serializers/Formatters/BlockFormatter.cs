@@ -5,9 +5,8 @@ using Utf8Json;
 using System;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<BlockExpression>,IMessagePackFormatter<BlockExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<BlockExpression>{
     private IJsonFormatter<BlockExpression> Block=>this;
-    private IMessagePackFormatter<BlockExpression> MSBlock=>this;
     public void Serialize(ref JsonWriter writer,BlockExpression value,IJsonFormatterResolver Resolver) {
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
@@ -37,6 +36,9 @@ partial class ExpressionFormatter:IJsonFormatter<BlockExpression>,IMessagePackFo
         ListParameter.RemoveRange(ListParameter_Count,variables.Count);
         return Expression.Block(type,variables,expressions);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BlockExpression>{
+    private IMessagePackFormatter<BlockExpression> Block=>this;
     public void Serialize(ref MessagePackWriter writer,BlockExpression value,MessagePackSerializerOptions Resolver){
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;

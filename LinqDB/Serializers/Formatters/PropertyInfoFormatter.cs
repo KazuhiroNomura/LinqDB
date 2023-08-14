@@ -6,9 +6,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<PropertyInfo>,IMessagePackFormatter<PropertyInfo>{
+partial class ExpressionJsonFormatter:IJsonFormatter<PropertyInfo>{
     private IJsonFormatter<PropertyInfo> PropertyInfo=>this;
-    private IMessagePackFormatter<PropertyInfo> MSPropertyInfo=>this;
     public void Serialize(ref JsonWriter writer,PropertyInfo? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -33,6 +32,9 @@ partial class ExpressionFormatter:IJsonFormatter<PropertyInfo>,IMessagePackForma
         reader.ReadIsEndArrayWithVerify();
         return ReflectedType.GetProperties(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.Name==Name&&p.MetadataToken==MetadataToken);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<PropertyInfo>{
+    private IMessagePackFormatter<PropertyInfo> MSPropertyInfo=>this;
     public void Serialize(ref MessagePackWriter writer,PropertyInfo? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

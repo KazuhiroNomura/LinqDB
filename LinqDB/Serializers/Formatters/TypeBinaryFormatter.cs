@@ -5,10 +5,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<TypeBinaryExpression>,IMessagePackFormatter<TypeBinaryExpression>{
-    //public static readonly UnaryFormatter Instance=new();
+partial class ExpressionJsonFormatter:IJsonFormatter<TypeBinaryExpression>{
     private IJsonFormatter<TypeBinaryExpression> TypeBinary=>this;
-    private IMessagePackFormatter<TypeBinaryExpression> MSTypeBinary=>this;
     public void Serialize(ref JsonWriter writer,TypeBinaryExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -38,6 +36,9 @@ partial class ExpressionFormatter:IJsonFormatter<TypeBinaryExpression>,IMessageP
             _=>throw new NotSupportedException(NodeTypeName)
         };
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<TypeBinaryExpression>{
+    private IMessagePackFormatter<TypeBinaryExpression> MSTypeBinary=>this;
     public void Serialize(ref MessagePackWriter writer,TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

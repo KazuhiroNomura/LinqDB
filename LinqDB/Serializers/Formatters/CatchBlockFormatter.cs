@@ -5,8 +5,7 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<CatchBlock>,IMessagePackFormatter<CatchBlock>{
-    private IJsonFormatter<CatchBlock> CatchBlock=>this;
+partial class ExpressionJsonFormatter:IJsonFormatter<CatchBlock>{
     public void Serialize(ref JsonWriter writer,CatchBlock value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         //this.Serialize(ref writer,value.Test,Resolver);
@@ -45,6 +44,8 @@ partial class ExpressionFormatter:IJsonFormatter<CatchBlock>,IMessagePackFormatt
         reader.ReadIsEndArrayWithVerify();
         return name is null?Expression.Catch(test,body,@filter):Expression.Catch(Expression.Parameter(test,name),body,@filter);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<CatchBlock>{
     public void Serialize(ref MessagePackWriter writer,CatchBlock value,MessagePackSerializerOptions Resolver){
         Serialize_T(ref writer,value.Test,Resolver);
         if(value.Variable is null){

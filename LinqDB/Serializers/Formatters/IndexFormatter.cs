@@ -4,9 +4,8 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionFormatter:IJsonFormatter<IndexExpression>,IMessagePackFormatter<IndexExpression>{
+partial class ExpressionJsonFormatter:IJsonFormatter<IndexExpression>{
     private IJsonFormatter<IndexExpression> Index=>this;
-    private IMessagePackFormatter<IndexExpression> MSIndex=>this;
     public void Serialize(ref JsonWriter writer,IndexExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
@@ -31,6 +30,9 @@ partial class ExpressionFormatter:IJsonFormatter<IndexExpression>,IMessagePackFo
         reader.ReadIsEndArrayWithVerify();
         return Expression.MakeIndex(instance,indexer,arguments);
     }
+}
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<IndexExpression>{
+    private IMessagePackFormatter<IndexExpression> Index=>this;
     public void Serialize(ref MessagePackWriter writer,IndexExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
