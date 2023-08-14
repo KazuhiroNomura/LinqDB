@@ -1,0 +1,2319 @@
+﻿2022/06/11
+IOutputSet
+ IOutputSet<T>
+  ImmutableSet<T>
+   SetGrouping<TKey, TValue, TGrouping>
+    SetGroupingSet<TKey, TValue>
+   Set<T>
+    Set<T,TKey>
+     Set<T,TKey,TContainer>:ISet<TContainer>
+
+2022/05/08
+public class 動的{
+	public static class Impl{
+		public static int Impl_Method0(int i){
+			return i;
+		}
+		public static <>f__AnonymousType3<int, int> Impl_Method1(動的 Disp, int i){
+			return new{
+				o = Disp..o,
+				i = i
+			};
+		}
+		public static IEnumerable<<>f__AnonymousType3<int, int>> Impl_Method2(動的 Disp, int o){
+			Disp..o = o;
+			return Enumerable.Select(Disp.大域0.GetTKeyValue(o), Disp.Disp_Lambda1);
+		}
+		public static IEnumerable<<>f__AnonymousType3<int, int>> Impl_Method3(動的 Disp){
+			int[] array = new int[1] { 1 };
+			int[] source = array;
+			Disp.大域0 = array.Lookup(Disp.Disp_Lambda0);
+			return Enumerable.SelectMany(source, Disp.Disp_Lambda2);
+		}
+	}
+	public LookupList<int, int> 大域0;
+	public int .o;
+	public Func<IEnumerable<<>f__AnonymousType3<int, int>>> Disp_Lambda3;
+	public Func<int, int> Disp_Lambda0;
+	public Func<int, IEnumerable<<>f__AnonymousType3<int, int>>> Disp_Lambda2;
+	public Func<int, <>f__AnonymousType3<int, int>> Disp_Lambda1;
+	public object Container;
+	public 動的(object Container){
+		this.Container = Container;
+		Disp_Lambda0 = Disp_Method0;
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Evaluate3(){
+		return Disp_Lambda3();
+	}
+	public int Disp_Method0(int i){
+		return Impl.Impl_Method0(i);
+	}
+	public <>f__AnonymousType3<int, int> Disp_Method1(int i){
+		return Impl.Impl_Method1(this, i);
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Disp_Method2(int o){
+		return Impl.Impl_Method2(this, o);
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Disp_Method3(){
+		return Impl.Impl_Method3(this);
+	}
+}
+Dictionary_Constant
+Dictionary_ラムダ跨ぎ
+Dictionary_Lambda
+を連結して走査してValueTupleを作る
+
+public class ValueTuple{
+	public static class Impl{
+		public static int Impl_Method0(int i){
+			return i;
+		}
+		public static <>f__AnonymousType3<int, int> Impl_Method1(動的 Disp, int i){
+			return new{
+				o = Disp.Item2,
+				i = i
+			};
+		}
+		public static IEnumerable<<>f__AnonymousType3<int, int>> Impl_Method2(動的 Disp, int o){
+			Disp.Item2 = o;
+			return Enumerable.Select(Disp.Item1.GetTKeyValue(o), Disp.Item4);
+		}
+		public static IEnumerable<<>f__AnonymousType3<int, int>> Impl_Method3(動的 Disp){
+			int[] array = new int[1] { 1 };
+			int[] source = array;
+			Disp.Item1 = array.Lookup(Disp.Item4);
+			return Enumerable.SelectMany(source, Disp.Item5);
+		}
+	}
+	public LookupList<int, int> Item1;
+	public int Item2;
+	public Func<IEnumerable<<>f__AnonymousType3<int, int>>> Item3;
+	public Func<int, int> Item4;
+	public Func<int, IEnumerable<<>f__AnonymousType3<int, int>>> Item5;
+	public Func<int, <>f__AnonymousType3<int, int>> Item6;
+	public object Container;
+	public 動的(object Container){
+		this.Container = Container;
+		Item4 = Disp_Method0;
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Evaluate3(){
+		return Item3();
+	}
+	public int Disp_Method0(int i){
+		return Impl.Impl_Method0(i);
+	}
+	public <>f__AnonymousType3<int, int> Disp_Method1(int i){
+		return Impl.Impl_Method1(this, i);
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Disp_Method2(int o){
+		return Impl.Impl_Method2(this, o);
+	}
+	public IEnumerable<<>f__AnonymousType3<int, int>> Disp_Method3(){
+		return Impl.Impl_Method3(this);
+	}
+}
+
+
+2022/05/06 vSalesPerson
+.Call SelectMany(
+    .Call Select(
+        .Call (.Call Lookup(
+            ($Container1.Person).CountryRegion,
+			.Lambda #Lambda1<Func`2[CountryRegion,String]>(CountryRegion $cr)
+			{
+			    $cr.CountryRegionCode
+			}
+        ,
+		.Lambda #Lambda2<Func`2[CountryRegion,[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion]]>(CountryRegion $cr)
+		{
+		    .New [[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion](
+		        $.j24,
+		        $cr)
+		}
+    ,
+	.Lambda #Lambda3<Func`2[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],ImmutableSet`1[Views.Sales.vSalesPerson]]>([[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion] $j25)
+	{
+	    .Block() {
+	        $.j25 = $j25;
+	        .Call SelectMany(
+	            .Call Select(
+	                .Call (.Call Lookup(
+	                    .Call DefaultIfEmpty(($Container1.Sales).SalesTerritory),
+						.Lambda #Lambda4<Func`2[Sales.SalesTerritory,Int32]>(Sales.SalesTerritory $st)
+						{
+						    $st.TerritoryID
+						}
+	                ),
+	                .Lambda #Lambda5<Func`2[Sales.SalesTerritory,[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory]]>)
+					.Lambda #Lambda5<Func`2[Sales.SalesTerritory,[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory]]>(Sales.SalesTerritory $st)
+					{
+					    .New [[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory](
+					        $.j25,
+					        $st)
+					}
+	            ,
+				.Lambda #Lambda6<Func`2[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],ImmutableSet`1[Views.Sales.vSalesPerson]]>([[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory] $j26)
+				{
+				    .Block() {
+				        $.j26 = $j26;
+				        .Call SelectMany(
+				            .Call Select(
+				                .Call (.Call Lookup(
+									.Lambda #Lambda7<Func`2[EmailAddress,Int32]>(EmailAddress $ea)
+									{
+									    $ea.BusinessEntityID
+									}
+				                ,
+								.Lambda #Lambda8<Func`2[EmailAddress,[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress]]>(EmailAddress $ea)
+								{
+								    .New [[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress](
+								        $.j26,
+								        $ea)
+								}
+				            ,
+							.Lambda #Lambda9<Func`2[[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress],ImmutableSet`1[Views.Sales.vSalesPerson]]>([[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress] $j27)
+							{
+							    .Block() {
+							        $.j27 = $j27;
+							        .Call SelectMany(
+							            .Call Select(
+							                .Call (.Call Lookup(
+							                    .Call DefaultIfEmpty(($Container1.Person).PersonPhone),
+												.Lambda #Lambda10<Func`2[PersonPhone,Int32]>(PersonPhone $pp)
+												{
+												    $pp.BusinessEntityID
+												}
+							                ,
+											.Lambda #Lambda11<Func`2[PersonPhone,[[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress],PersonPhone]]>(PersonPhone $pp)
+											{
+											    .New [[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress],PersonPhone](
+											        $.j27,
+											        $pp)
+											}
+							            ,
+										.Lambda #Lambda12<Func`2[[[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress],PersonPhone],ImmutableSet`1[Views.Sales.vSalesPerson]]>([[[[[[[[[Sales.SalesPerson,HumanResources.Employee],Person],BusinessEntityAddress],Address],StateProvince],CountryRegion],Sales.SalesTerritory],EmailAddress],PersonPhone] $j28)
+										{
+										    .Block() {
+										        $大域0 = ((((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).BusinessEntityID;
+										        $大域1 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).Title;
+										        $大域2 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).FirstName;
+										        $大域3 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).MiddleName;
+										        $大域4 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).LastName;
+										        $大域5 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).Suffix;
+										        $大域6 = ((((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).JobTitle;
+										        $大域7 = ($j28.Item2).PhoneNumber;
+										        $大域8 = (($j28.Item1).Item2).EmailAddress;
+										        $大域9 = (((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item2).EmailPromotion;
+										        $大域10 = (((((($j28.Item1).Item1).Item1).Item1).Item1).Item2).AddressLine1;
+										        $大域11 = (((((($j28.Item1).Item1).Item1).Item1).Item1).Item2).AddressLine2;
+										        $大域12 = (((((($j28.Item1).Item1).Item1).Item1).Item1).Item2).City;
+										        $大域13 = ((((($j28.Item1).Item1).Item1).Item1).Item2).Name;
+										        $大域14 = (((((($j28.Item1).Item1).Item1).Item1).Item1).Item2).PostalCode;
+										        $大域15 = (((($j28.Item1).Item1).Item1).Item2).Name;
+										        $大域16 = ((($j28.Item1).Item1).Item2).Name;
+										        $大域17 = ((($j28.Item1).Item1).Item2).Group;
+										        $大域18 = ((((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).SalesQuota;
+										        $大域19 = ((((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).SalesYTD;
+										        $大域20 = ((((((((($j28.Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).Item1).SalesLastYear;
+										        .Call Select(
+										            .Call (.Call Lookup(
+										                .Call DefaultIfEmpty(($Container1.Person).PhoneNumberType),
+														.Lambda #Lambda13<Func`2[PhoneNumberType,Int32]>(PhoneNumberType $pnt)
+														{
+														    $pnt.PhoneNumberTypeID
+														}
+										            ,
+													.Lambda #Lambda14<Func`2[PhoneNumberType,Views.Sales.vSalesPerson]>(PhoneNumberType $pnt)
+													{
+													    .New Views.Sales.vSalesPerson(
+													        $大域0,
+													        $大域1,
+													        $大域2,
+													        $大域3,
+													        $大域4,
+													        $大域5,
+													        $大域6,
+													        $大域7,
+													        .If ($pnt != null) {
+													            $pnt.Name
+													        } .Else {
+													            .Default(String)
+													        },
+													        $大域8,
+													        $大域9,
+													        $大域10,
+													        $大域11,
+													        $大域12,
+													        $大域13,
+													        $大域14,
+													        $大域15,
+													        $大域16,
+													        $大域17,
+													        $大域18,
+													        $大域19,
+													        $大域20)
+													}
+										    }
+										}
+							    }
+							}
+				    }
+				}
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+2022/04/30
+private class dbo{
+	private class AssemblyBuilder#View0{
+		private class Impl{
+			private View0 Disp#;
+			public Impl(View0 Disp){
+				Disp# = Disp;
+			}
+			public unsafe static ImmutableSet<単純.Views.dbo.View0> Evaluate1(View0 Disp){
+				Disp.大域0 = new 単純.Views.dbo.View0(new ValueTuple<int>(1).Item1);
+				return LinqDB.Databases.Container.TABLE_DUM.Select(Disp.Lambda0);
+			}
+			public static 単純.Views.dbo.View0 Impl0(View0 Disp,AttributeEmpty ss){
+				return Disp.大域0;
+			}
+		}
+		private 単純.Container Container#;
+		private 単純.Views.dbo.View0 大域0;
+		private Func<AttributeEmpty, 単純.Views.dbo.View0> Lambda0;
+		public View0(単純.Container Container){
+			this.Container# = Container;
+            this.Lambda0=new Func<AttributeEmpty, 単純.Views.dbo.View0>(this,(nint)(delegate*<AttributeEmpty, 単純.Views.dbo.View0>)(&Disp0));
+		}
+		public View0(単純.Container Container,DynamicMethod Method0){
+			this.Container# = Container;
+            this.Lambda0=Delegate.CreateDelegate(typeof(Func<AttributeEmpty, 単純.Views.dbo.View0>),Method0);
+		}
+		public ImmutableSet<単純.Views.dbo.View0> Evaluate0(){
+			return Impl.Evaluate1(this);
+		}
+		public static 単純.Views.dbo.View0 Disp0(AttributeEmpty ss){
+			return Impl.Disp0(this,ss);
+		}
+	}
+	private class DynamicMethod#View0{
+		private 単純.Container Container#;
+		private 単純.Views.dbo.View0 大域0;
+		private Func<AttributeEmpty, 単純.Views.dbo.View0> Lambda0;
+		public View0(単純.Container Container,DynamicMethod Disp0){
+			this.Container# = Container;
+            this.Lambda0=new Func<AttributeEmpty, 単純.Views.dbo.View0>(this,(nint)(delegate*<AttributeEmpty, 単純.Views.dbo.View0>)(&Disp0));
+		}
+		public ImmutableSet<単純.Views.dbo.View0> Evaluate0(){
+			return Impl.Evaluate1(this);
+		}
+	}
+
+2022/04/26
+Optimizer
+    Dictionary_ラムダ跨ぎParameter_FieldBuilder
+    Dictionary_Lambda_FieldBuilder
+Information
+    Dictionary_ラムダ跨ぎParameter_FieldBuilder
+    Dictionary_Lambda_FieldBuilder
+
+2022/03/14
+namespace Database0
+    class Container
+        dbo dbo
+        sys sys
+    Schemas
+        class Schema0
+            property Set<Tables.ATable>ATables
+            class AViews
+                field int p
+                property Set<Views.AView>Display(Container)=>Impl.Get(Container)
+                class static Impl
+                    method static Get(Container)=>Container.dbo.ATables.Select(p=>p)
+            field AViews AViews
+            property Set<Views.AView>AViews=>this.AViews.Display(this.Container)
+    Tables
+    Views
+        class AView
+2022/03/04
+    SQLでPush,Popするところ
+    FromClause->NamedTableReferenceはやらない。FROM下の式のエリアスをそのまま使う
+    FromClause->TableReferenceWithAlias         SELECT X.* FROM .... AS X
+                JoinTableReference              SELECT X.* FROM .... AS X
+                JoinParenthesisTableReference   SELECT X.* FROM ().... AS X)
+                OdbcQualifiedJoinTableReference 
+    FROM()TableReferenceWithAliasAndColumnsがあればPushする。)を抜けた時にRefPeek.Dictionary_DatabaseSchemaTable_ColumnExpressionでスコープの式
+
+
+2022/02/28
+class クエリが書いてあるクラス
+    [Serializable,CompilerGenerated]
+    //staticなclass
+    private sealed class <>c
+        public static readonly <>c <>9 = new <>c();
+        public static Func<int, int> <>9__0_0;
+        //staticなDelegate
+        internal int <Query0>b__0_0(int a){
+            return a + a;
+        }
+    [CompilerGenerated]
+    private sealed class <>c__DisplayClass1_0
+        public IEnumerable<int> i;
+        internal (int a, IEnumerable<int> i) <Query1>b__0(int a){
+            return (a, i);
+        }
+        internal (IEnumerable<int> i, int a) <Query1>b__1(int a){
+            return (i, a);
+        }
+    public void クエリが書いてあるstatic(){
+        <>c.<>9__0_0=<>c.
+        a.Select(b__0_0)
+    }
+    public void クエリが書いてあるinstance(){
+        var a=new <>c__DisplayClass1_0()
+        a.i=i
+        return (i.Select((Func<Int32,Object)a.<Query1>b__0,i.Select((Func<Int32,Object)a.<Query1>b__1));
+        return (i.Select((int a) => (a, i)), i.Select((int a) => (i, a)));
+    }
+}
+ 
+ 2022/02/19
+Dictionary_DatabaseSchemaTable_ColumnExpression
+Dictionary_GroupBy_代入元_代入先
+Dictionary_GroupBy集約関数内部_Expression
+Dictionary_With名_Expression
+Dictionary_SelectStar_ColumnAliases
+Dictionary_SelectStar_Expressions
+↓4つは常に同じ行数であるべきか？
+List_SelectStar_ColumnAliases
+List_SelectStar_Expression
+List_Select_ColumnAlias
+List_Select_Expression
+
+Dictionary2020/10/06
+オブジェクトデータベース
+継承をエンティティに導入する
+人は複数のペットを保有する
+ペット
+ 犬
+  シェパード
+  柴犬
+ 猫
+  三毛猫
+  アメリカンショートヘア
+Set<人>人
+Set<ペット>ペット
+ペット
+    人 人
+人
+    Set<ペット>ペット
+2020/08/14
+ディスクベースに拡張する方法を考える
+IOutoutSet<>
+    ImmutableSet<>      メモリ
+        Set<>
+            Set<,>
+                Set<,,>
+        DiskSet<>
+            DiskSet<,>
+                DiskSet<,,>
+ImmutableSet<>をImmutableMemorySet<>コピーして
+ImmutableMemorySet<>:ImmutableSet<>
+Set<>:ImmutableSet<>→Set<>:ImmutableMemorySet<>
+にする。
+ImmutableDiskSet<>:ImmutableSet<>
+DiskSet<>:ImmutableDiskSet<>
+Add(value)
+    value.HashCodeで格納する大まかな位置を決める
+    1ファイルでの大まかな位置を決める
+    ストライドはヘッダ+structのサイズになる
+    ヘッダにそのstruct領域が使われているかその他の情報が格納される
+    1つのハッシュコードに対応するブロックがある。
+    ブロックサイズをstructサイズで割ったものがそのシノニムを格納できる要素数になる。
+マネージメントスタジオで作ったアセンブリでエンティティはBlittableになるように定義する
+[LayoutKind.Sequential]
+struct Entity1{
+    private fixed Char <F>[10]
+    public String F=>new String(<F>)
+TreeNode<T>
+    private TreeNode<T>L,R
+    private LinkedListNode<T>Node{
+        get{
+            if(this.GCHandle.Target is LinkedListNode<T> LinkedListNode)return LinkedListNode
+        }}
+    private GCHandle GCHandle
+LinkedListNode<T>
+    private T Item{
+        get{
+            if(this.GCHandle.Target is T Item)return Item
+
+        }
+    }
+2020/06/29
+LINQ クエリ式から変換すべきもの
+SelectMany_resultSelector→SelectMany_selector 内部をDictionary化して外出しできるため
+Join                     →SelectMany_selector(O,I.Select(i=>))
+GroupJoin                →SelectMany_selector(O,I.Select(i=>))
+2020/05/20
+ImmutableSet<T>
+    ADictionary<TKey,T>
+        DictionarySet
+        DictionaryAscList
+    SetGrouping<TKey,TValue,T>
+
+2020/05/14 クエリでデコンパイルする方法。dnSpyを使うとする。
+private global::System.Collections.Generic.IEnumerable<int> LINQ(global::System.Collections.Generic.IEnumerable<int> source){
+    return from p in source
+    join q in source on p equals q
+    select p + q;
+}
+private global::System.Collections.Generic.IEnumerable<int> LINQ(global::System.Collections.Generic.IEnumerable<int> source){
+    return source.Join(source, new global::System.Func<int, int>(global::インラインラムダIL検証.Program.<>c.<>9.<LINQ>b__1_0), new global::System.Func<int, int>(global::インラインラムダIL検証.Program.<>c.<>9.<LINQ>b__1_1), new global::System.Func<int, int, int>(global::インラインラムダIL検証.Program.<>c.<>9.<LINQ>b__1_2));
+}
+        [global::System.Runtime.CompilerServices.CompilerGenerated]
+        [global::System.Serializable]
+        private sealed class <>c{
+            static <>c(){}
+            public <>c(){}
+            internal int <LINQ>b__1_0(int p){
+                return p;
+            }
+            internal int <LINQ>b__1_1(int q){
+                return q;
+            }
+            internal int <LINQ>b__1_2(int p, int q){
+                return p + q;
+            }
+            internal global::<>f__AnonymousType0<decimal, decimal> <Main>b__8_1(decimal p, decimal q){
+                return new{
+                    p,
+                    q
+                };
+            }
+            internal decimal <Main>b__8_2(global::<>f__AnonymousType0<decimal, decimal> <>h__TransparentIdentifier0){
+                return <>h__TransparentIdentifier0.q;
+            }
+            internal decimal <Main>b__8_3(decimal s){
+                return s;
+            }
+            internal global::<>f__AnonymousType1<decimal, decimal, decimal> <Main>b__8_4(global::<>f__AnonymousType0<decimal, decimal> <>h__TransparentIdentifier0, decimal s){
+                return new{
+                    p = <>h__TransparentIdentifier0.p,
+                    q = <>h__TransparentIdentifier0.q,
+                    s = s + 1m
+                };
+            }
+            public static readonly global::インラインラムダIL検証.Program.<>c <>9 = new global::インラインラムダIL検証.Program.<>c();
+            public static global::System.Func<int, int> <>9__1_0;
+            public static global::System.Func<int, int> <>9__1_1;
+            public static global::System.Func<int, int, int> <>9__1_2;
+            public static global::System.Func<decimal, decimal, global::<>f__AnonymousType0<decimal, decimal>> <>9__8_1;
+            public static global::System.Func<global::<>f__AnonymousType0<decimal, decimal>, decimal> <>9__8_2;
+            public static global::System.Func<decimal, decimal> <>9__8_3;
+            public static global::System.Func<global::<>f__AnonymousType0<decimal, decimal>, decimal, global::<>f__AnonymousType1<decimal, decimal, decimal>> <>9__8_4;
+        }
+キャプチャー変数フィールドとラムダ本体インスタンスメソッド
+ラムダのメソッド本体はネステッドClassに入れる
+
+2020/05/08
+.method private hidebysig static bool NullableEquals (
+            valuetype [mscorlib]System.Nullable`1<int32> a,
+            valuetype [mscorlib]System.Nullable`1<int32> b
+        ) cil managed 
+    {
+        IL_0000: ldarga.s a
+        IL_0002: ldarg.1
+        IL_0003: box valuetype [mscorlib]System.Nullable`1<int32>
+        IL_0008: constrained. valuetype [mscorlib]System.Nullable`1<int32>
+        IL_000e: callvirt instance bool [mscorlib]System.Object::Equals(object)
+        IL_0013: ret
+    }
+
+    .method private hidebysig static bool NullableEquals (
+            int32 a,
+            valuetype [mscorlib]System.Nullable`1<int32> b
+        ) cil managed 
+    {
+        IL_0000: ldarga.s a
+        IL_0002: ldarg.1
+        IL_0003: box valuetype [mscorlib]System.Nullable`1<int32>
+        IL_0008: call instance bool [mscorlib]System.Int32::Equals(object)
+        IL_000d: ret
+    }
+
+    .method private hidebysig static bool NullableEquals (
+            valuetype [mscorlib]System.Nullable`1<int32> a,
+            int32 b
+        ) cil managed 
+    {
+        IL_0000: ldarga.s a
+        IL_0002: ldarg.1
+        IL_0003: box [mscorlib]System.Int32
+        IL_0008: constrained. valuetype [mscorlib]System.Nullable`1<int32>
+        IL_000e: callvirt instance bool [mscorlib]System.Object::Equals(object)
+        IL_0013: ret
+    }
+
+2020/04/30                                                                                                                                                                                                                                   
+Javascriptのマーメイドで実行計画を
+amChartsのサンキーダイアグラムはデータの流れ
+グラフの右側に同一参照を罫線で接続してある。
+LambdaでParameterが可視。抜けたら非可視。
+Parameterの縦線の列番号は重複しないようになる。
+
+表示アルゴリズムは
+LINQ02のツリーの変数参照                                                                                                                                                                                                                      
+Lambda                                                                                                                                                                                                                                       
+└Block ローカル$0                                                                                                                                                                                                                          
+ └Block ループ跨$0,ループ跨$1,ループ跨$2,ループ跨$3,ループ跨$4,ループ跨$5                                                                                                                                                                 
+  ├Assign                                                                                                                                                                                                                                
+  │├Parameter ループ跨$0──────────────────────────────────────────────────────────────────────┐                                                                    
+  │└New System.Text.RegularExpressions.Regex                                                                                                                        │                                                                  
+  │　├Constant ".*BRASS"                                                                                                                                            │                                                                 
+  │　└Constant Compiled                                                                                                                                             │                                                                 
+  ├Assign                                                                                                                                                            │                                                                   
+  │├Parameter ループ跨$1──────────────────────────────────────────────────────────────────────┼┐                                                                
+  │└Block Dictionary$0$                                                                                                                                             ││                                                                
+  │　├Assign                                                                                                                                                        ││                                                               
+  │　│├Parameter Dictionary$0$ ────────────────────────┐                                                                                  ││                                                                 
+  │　│└New LinqDB.Sets.DictionarySet`2[TPC_H.Tables.dbo.PARTSUPP,System.Int32] │                                                                                  ││                                                                 
+  │　├Block Set$1$Enumerator                                                    │                                                                                  ││                                                                  
+  │　│├Assign                                                                  │                                                                                  ││                                                                 
+  │　││├Parameter Set$1$Enumerator──────┐                              │                                                                                  ││                                                                 
+  │　││└Call Enumerator GetEnumerator()       │                              │                                                                                  ││                                                               
+  │　││　└MemberAccess PARTSUPP               │                              │                                                                                  ││                                                                  
+  │　││　　└Assign                            │                              │                                                                                  ││                                                                 
+  │　││　　　├Parameter ローカル$0──────┼───────────────┼─────────────────────────────────────────┼┼┐                                                              
+  │　││　　　└MemberAccess dbo                │                              │                                                                                  │││                                                             
+  │　││　　　　└MemberAccess e                │                              │                                                                                  │││                                                                
+  │　││　　　　　└Constant [Object]           │                              │                                                                                  │││                                                               
+  │　│└Loop                                    │                              │                                                                                  │││                                                             
+  │　│　├Block                                 │                              │                                                                                  │││                                                                
+  │　│　│├Conditional                         │                              │                                                                                  │││                                                               
+  │　│　││├Call Boolean MoveNext()           │                              │                                                                                  │││                                                              
+  │　│　│││└Parameter Set$1$Enumerator───┤                              │                                                                                  │││                                                              
+  │　│　││├default Void                      │                              │                                                                                  │││                                                              
+  │　│　││└Break Set$1$                      │                              │                                                                                  │││                                                              
+  │　│　│└Block Dictionary$0$argument         │                              │                                                                                  │││                                                               
+  │　│　│　├Assign                            │                              │                                                                                  │││                                                              
+  │　│　│　│├Parameter Dictionary$0$argument ┼──────────┐        │                                                                                  │││                                                              
+  │　│　│　│└MemberAccess Current            │                    │        │                                                                                  │││                                                                
+  │　│　│　│　└Parameter Set$1$Enumerator──┘                    │        │                                                                                  │││                                                             
+  │　│　│　└Call Void AddKeyValue(Int32, TPC_H.Tables.dbo.PARTSUPP) │        │                                                                                  │││                                                              
+  │　│　│　　├Parameter Dictionary$0$ ───────────────┼────┤                                                                                  │││                                                              
+  │　│　│　　├MemberAccess PS_PARTKEY                               │        │                                                                                  │││                                                             
+  │　│　│　　│└Parameter Dictionary$0$argument ──────────┤        │                                                                                  │││                                                              
+  │　│　│　　└Parameter Dictionary$0$argument ───────────┘        │                                                                                  │││                                                              
+  │　│　└BreakLabel Set$1$                                                     │                                                                                  │││                                                             
+  │　└Parameter Dictionary$0$ ─────────────────────────┘                                                                                  │││                                                              
+  ├Assign                                                                                                                                                            │││                                                              
+  │├Parameter ループ跨$2──────────────────────────────────────────────────────────────────────┼┼┼┐                                                              
+  │└Constant 0M                                                                                                                                                     ││││                                                           
+  ├Assign                                                                                                                                                            ││││                                                            
+  │├Parameter ループ跨$3──────────────────────────────────────────────────────────────────────┼┼┼┼┐                                                            
+  │└Block Dictionary$2$                                                                                                                                             │││││                                                         
+  │　├Assign                                                                                                                                                        │││││                                                            
+  │　│├Parameter Dictionary$2$ ────────────────────────┐                                                                                  │││││                                                          
+  │　│└New LinqDB.Sets.DictionarySet`2[TPC_H.Tables.dbo.SUPPLIER,System.Int32] │                                                                                  │││││                                                          
+  │　├Block Set$3$Enumerator                                                    │                                                                                  │││││                                                           
+  │　│├Assign                                                                  │                                                                                  │││││                                                          
+  │　││├Parameter Set$3$Enumerator──────────────────┐      │                                                                                  │││││                                                          
+  │　││└Call Enumerator GetEnumerator()                               │      │                                                                                  │││││                                                            
+  │　││　└MemberAccess SUPPLIER                                       │      │                                                                                  │││││                                                           
+  │　││　　└Parameter ローカル$0───────────────────┼───┼─────────────────────────────────────────┼┼┤││                                                          
+  │　│└Loop                                                            │      │                                                                                  │││││                                                         
+  │　│　├Block                                                         │      │                                                                                  │││││                                                            
+  │　│　│├Conditional                                                 │      │                                                                                  │││││                                                           
+  │　│　││├Call Boolean MoveNext()                                   │      │                                                                                  │││││                                                          
+  │　│　│││└Parameter Set$3$Enumerator───────────────┤      │                                                                                  │││││                                                         
+  │　│　││├default Void                                              │      │                                                                                  │││││                                                          
+  │　│　││└Break Set$3$                                              │      │                                                                                  │││││                                                          
+  │　│　│└Block Dictionary$2$argument                                 │      │                                                                                  │││││                                                           
+  │　│　│　├Assign                                                    │      │                                                                                  │││││                                                          
+  │　│　│　│├Parameter Dictionary$2$argument ───────────┐│      │                                                                                  │││││                                                         
+  │　│　│　│└MemberAccess Current                                  ││      │                                                                                  │││││                                                            
+  │　│　│　│　└Parameter Set$3$Enumerator─────────────┼┘      │                                                                                  │││││                                                          
+  │　│　│　└Call Void AddKeyValue(Int32, TPC_H.Tables.dbo.SUPPLIER) │        │                                                                                  │││││                                                          
+  │　│　│　　├Parameter Dictionary$2$ ───────────────┼────┤                                                                                  │││││                                                          
+  │　│　│　　├MemberAccess S_SUPPKEY                                │        │                                                                                  │││││                                                         
+  │　│　│　　│└Parameter Dictionary$2$argument ──────────┤        │                                                                                  │││││                                                          
+  │　│　│　　└Parameter Dictionary$2$argument ───────────┘        │                                                                                  │││││                                                          
+  │　│　└BreakLabel Set$3$                                                     │                                                                                  │││││                                                         
+  │　└Parameter Dictionary$2$ ─────────────────────────┘                                                                                  │││││                                                          
+  ├Assign                                                                                                                                                            │││││                                                          
+  │├Parameter ループ跨$4──────────────────────────────────────────────────────────────────────┼┼┼┼┼┐                                                         
+  │└Block Dictionary$4$                                                                                                                                             ││││││                                                       
+  │　├Assign                                                                                                                                                        ││││││                                                          
+  │　│├Parameter Dictionary$4$ ───────────────────────┐                                                                                    ││││││                                                         
+  │　│└New LinqDB.Sets.DictionarySet`2[TPC_H.Tables.dbo.NATION,System.Int32] │                                                                                    ││││││                                                        
+  │　├Block Set$5$Enumerator                                                  │                                                                                    ││││││                                                         
+  │　│├Assign                                                                │                                                                                    ││││││                                                        
+  │　││├Parameter Set$5$Enumerator──────┐                            │                                                                                    ││││││                                                        
+  │　││└Call Enumerator GetEnumerator()       │                            │                                                                                    ││││││                                                          
+  │　││　└MemberAccess NATION                 │                            │                                                                                    ││││││                                                         
+  │　││　　└Parameter ローカル$0───────┼──────────────┼──────────────────────────────────────────┼┼┤│││                                                        
+  │　│└Loop                                    │                            │                                                                                    ││││││                                                       
+  │　│　├Block                                 │                            │                                                                                    ││││││                                                          
+  │　│　│├Conditional                         │                            │                                                                                    ││││││                                                         
+  │　│　││├Call Boolean MoveNext()           │                            │                                                                                    ││││││                                                        
+  │　│　│││└Parameter Set$5$Enumerator───┤                            │                                                                                    ││││││                                                        
+  │　│　││├default Void                      │                            │                                                                                    ││││││                                                        
+  │　│　││└Break Set$5$                      │                            │                                                                                    ││││││                                                        
+  │　│　│└Block Dictionary$4$argument         │                            │                                                                                    ││││││                                                         
+  │　│　│　├Assign                            │                            │                                                                                    ││││││                                                        
+  │　│　│　│├Parameter Dictionary$4$argument ┼──────────────┤                                                                                    ││││││                                                         
+  │　│　│　│└MemberAccess Current            │                            │                                                                                    ││││││                                                       
+  │　│　│　│　└Parameter Set$5$Enumerator──┘                            │                                                                                    ││││││                                                        
+  │　│　│　└Call Void AddKeyValue(Int32, TPC_H.Tables.dbo.NATION)           │                                                                                    ││││││                                                         
+  │　│　│　　├Parameter Dictionary$4$ ───────────────────┤                                                                                    ││││││                                                         
+  │　│　│　　├MemberAccess N_NATIONKEY                                      │                                                                                    ││││││                                                        
+  │　│　│　　│└Parameter Dictionary$4$argument ──────────────┤                                                                                    ││││││                                                         
+  │　│　│　　└Parameter Dictionary$4$argument ───────────────┤                                                                                    ││││││                                                         
+  │　│　└BreakLabel Set$5$                                                   │                                                                                    ││││││                                                       
+  │　└Parameter Dictionary$4$ ────────────────────────┘                                                                                    ││││││                                                         
+  ├Assign                                                                                                                                                            ││││││                                                        
+  │├Parameter ループ跨$5────────────────────────────                                                                                    ││││││                                                       
+  │└Block Dictionary$6$                                                                                                                                             ││││││                                                       
+  │　├Assign                                                                                                                                                        ││││││                                                          
+  │　│├Parameter Dictionary$6$ ───────────────────────┐                                                                                    ││││││                                                         
+  │　│└New LinqDB.Sets.DictionarySet`2[TPC_H.Tables.dbo.REGION,System.Int32] │                                                                                    ││││││                                                        
+  │　├Block Set$7$Enumerator                                                  │                                                                                    ││││││                                                         
+  │　│├Assign                                                                │                                                                                    ││││││                                                        
+  │　││├Parameter Set$7$Enumerator──────┐                            │                                                                                    ││││││                                                        
+  │　││└Call Enumerator GetEnumerator()       │                            │                                                                                    ││││││                                                          
+  │　││　└MemberAccess REGION                 │                            │                                                                                    ││││││                                                         
+  │　││　　└Parameter ローカル$0───────┼──────────────┼──────────────────────────────────────────┼┼┤│││                                                        
+  │　│└Loop                                    │                            │                                                                                    ││││││                                                       
+  │　│　├Block                                 │                            │                                                                                    ││││││                                                          
+  │　│　│├Conditional                         │                            │                                                                                    ││││││                                                         
+  │　│　││├Call Boolean MoveNext()           │                            │                                                                                    ││││││                                                        
+  │　│　│││└Parameter Set$7$Enumerator───┤                            │                                                                                    ││││││                                                        
+  │　│　││├default Void                      │                            │                                                                                    ││││││                                                        
+  │　│　││└Break Set$7$                      │                            │                                                                                    ││││││                                                        
+  │　│　│└Block Dictionary$6$argument         │                            │                                                                                    ││││││                                                         
+  │　│　│　├Assign                            │                            │                                                                                    ││││││                                                        
+  │　│　│　│├Parameter Dictionary$6$argument ┼─────────┐        │                                                                                    ││││││                                                         
+  │　│　│　│└MemberAccess Current            │                  │        │                                                                                    ││││││                                                          
+  │　│　│　│　└Parameter Set$7$Enumerator──┘                  │        │                                                                                    ││││││                                                       
+  │　│　│　└Call Void AddKeyValue(Int32, TPC_H.Tables.dbo.REGION) │        │                                                                                    ││││││                                                        
+  │　│　│　　├Parameter Dictionary$6$ ──────────────┼────┤                                                                                    ││││││                                                         
+  │　│　│　　├MemberAccess R_REGIONKEY                            │        │                                                                                    ││││││                                                       
+  │　│　│　　│└Parameter Dictionary$6$argument ─────────┤        │                                                                                    ││││││                                                         
+  │　│　│　　└Parameter Dictionary$6$argument ──────────┘        │                                                                                    ││││││                                                         
+  │　│　└BreakLabel Set$7$                                                   │                                                                                    ││││││                                                       
+  │　└Parameter Dictionary$6$ ────────────────────────┘                                                                                    ││││││                                                         
+  └Block Set`1$Select$8$                                                                                                                                             ││││││                                                        
+   ├Assign                                                                                                                                                          ││││││                                                       
+   │├Parameter Set`1$Select$8$ ──────────────────────────────────────────────────────────────────┼┼┼┼┼┼───────────────────────────────┐
+   │└New LinqDB.Sets.Set`1[<>f__AnonymousType3`8[System.Decimal,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String]] ││││││                                                              │
+   ├Block Set$15$Enumerator                                                                                                                                         ││││││                                                              │
+   │├Assign                                                                                                                                                        ││││││                                                              │
+   ││├Parameter Set$15$Enumerator ────────────────────────────────────────────────────────────────┼┼┼┼┼┼───────────────────────────┐      │
+   ││└Call Enumerator GetEnumerator()                                                                                                                             ││││││                                                      │      │
+   ││　└MemberAccess PART                                                                                                                                         ││││││                                                      │      │
+   ││　　└Parameter ローカル$0──────────────────────────────────────────────────────────────────┼┼┘│││                                                      │      │
+   │└Loop                                                                                                                                                          ││  │││                                                      │      │
+   │　├Block                                                                                                                                                       ││  │││                                                      │      │
+   │　│├Conditional                                                                                                                                               ││  │││                                                      │      │
+   │　││├Call Boolean MoveNext()                                                                                                                                 ││  │││                                                      │      │
+   │　│││└Parameter Set$15$Enumerator ─────────────────────────────────────────────────────────────┼┼─┼┼┼───────────────────────────┤      │
+   │　││├default Void                                                                                                                                            ││  │││                                                      │      │
+   │　││└Break Set$15$                                                                                                                                           ││  │││                                                      │      │
+   │　│└Conditional                                                                                                                                               ││  │││                                                      │      │
+   │　│　├AndAlso                                                                                                                                                 ││  │││                                                      │      │
+   │　│　│├Equal                                                                                                                                                 ││  │││                                                      │      │
+   │　│　││├MemberAccess P_SIZE                                                                                                                                 ││  │││                                                      │      │
+   │　│　│││└MemberAccess Current                                                                                                                              ││  │││                                                      │      │
+   │　│　│││　└Parameter Set$15$Enumerator ──────────────────────────────────────────────────────────┼┼─┼┼┼───────────────────────────┤      │
+   │　│　││└Constant 35                                                                                                                                         ││  │││                                                      │      │
+   │　│　│└Call Boolean IsMatch(System.String)                                                                                                                   ││  │││                                                      │      │
+   │　│　│　├Parameter ループ跨$0────────────────────────────────────────────────────────────────┘│  │││                                                      │      │
+   │　│　│　└MemberAccess P_TYPE                                                                                                                                   │  │││                                                      │      │
+   │　│　│　　└MemberAccess Current                                                                                                                                │  │││                                                      │      │
+   │　│　│　　　└Parameter Set$15$Enumerator ───────────────────────────────────────────────────────────┼─┼┼┼───────────────────────────┤      │
+   │　│　├Block Set$26$Enumerator                                                                                                                                   │  │││                                                      │      │
+   │　│　│├Assign                                                                                                                                                  │  │││                                                      │      │
+   │　│　││├Parameter Set$26$Enumerator ─────────────────────────────────────────────────────────────┼─┼┼┼───────────────────────────┼┐    │
+   │　│　││└Call Enumerator GetEnumerator()                                                                                                                       │  │││                                                      ││    │
+   │　│　││　└Block Set`1$Where$17$                                                                                                                               │  │││                                                      ││    │
+   │　│　││　　├Assign                                                                                                                                            │  │││                                                      ││    │
+   │　│　││　　│├Parameter Set`1$Where$17$ ─────────────────────────────┐                                                          │  │││                                                      ││    │
+   │　│　││　　│└New LinqDB.Sets.Set`1[TPC_H.Tables.dbo.PARTSUPP]                                    │                                                          │  │││                                                      ││    │
+   │　│　││　　├Block Set$21$Enumerator                                                               │                                                          │  │││                                                      ││    │
+   │　│　││　　│├Assign                                                                              │                                                          │  │││                                                      ││    │
+   │　│　││　　││├Parameter Set$21$Enumerator ──────────────────────────┐│                                                          │  │││                                                      ││    │
+   │　│　││　　││└Call Enumerator GetEnumerator()                                                 ││                                                          │  │││                                                      ││    │
+   │　│　││　　││　└Call LinqDB.Sets.ImmutableSet`1[TPC_H.Tables.dbo.PARTSUPP] GetTKeyValue(Int32)││                                                          │  │││                                                      ││    │
+   │　│　││　　││　　├Parameter ループ跨$1────────────────────────────┼┼─────────────────────────────┘  │││                                                      ││    │
+   │　│　││　　││　　└MemberAccess P_PARTKEY                                                      ││                                                              │││                                                      ││    │
+   │　│　││　　││　　　└MemberAccess Current                                                      ││                                                              │││                                                      ││    │
+   │　│　││　　││　　　　└Parameter Set$15$Enumerator ──────────────────────┼┼───────────────────────────────┼┼┼───────────────────────────┤│    │
+   │　│　││　　│└Loop                                                                              ││                                                              │││                                                      ││    │
+   │　│　││　　│　├Block                                                                           ││                                                              │││                                                      ││    │
+   │　│　││　　│　│├Conditional                                                                   ││                                                              │││                                                      ││    │
+   │　│　││　　│　││├Call Boolean MoveNext()                                                     ││                                                              │││                                                      ││    │
+   │　│　││　　│　│││└Parameter Set$21$Enumerator ───────────────────────┤│                                                              │││                                                      ││    │
+   │　│　││　　│　││├default Void                                                                ││                                                              │││                                                      ││    │
+   │　│　││　　│　││└Break Set$21$                                                               ││                                                              │││                                                      ││    │
+   │　│　││　　│　│└Conditional                                                                   ││                                                              │││                                                      ││    │
+   │　│　││　　│　│　├Equal                                                                       ││                                                              │││                                                      ││    │
+   │　│　││　　│　│　│├MemberAccess PS_SUPPLYCOST                                                ││                                                              │││                                                      ││    │
+   │　│　││　　│　│　││└MemberAccess Current                                                    ││                                                              │││                                                      ││    │
+   │　│　││　　│　│　││　└Parameter Set$21$Enumerator ─────────────────────┤│                                                              │││                                                      ││    │
+   │　│　││　　│　│　│└Parameter ループ跨$2───────────────────────────┼┼───────────────────────────────┘││                                                      ││    │
+   │　│　││　　│　│　├Call Boolean Add(TPC_H.Tables.dbo.PARTSUPP)                                 ││                                                                ││                                                      ││    │
+   │　│　││　　│　│　│├Parameter Set`1$Where$17$                                                 ││                                                                ││                                                      ││    │
+   │　│　││　　│　│　│└MemberAccess Current                                                      ││                                                                ││                                                      ││    │
+   │　│　││　　│　│　│　└Parameter Set$21$Enumerator ──────────────────────┘│                                                                ││                                                      ││    │
+   │　│　││　　│　│　└default Void                                                                  │                                                                ││                                                      ││    │
+   │　│　││　　│　└BreakLabel Set$21$                                                                │                                                                ││                                                      ││    │
+   │　│　││　　└Parameter Set`1$Where$17$ ──────────────────────────────┘                                                                ││                                                      ││    │
+   │　│　│└Loop                                                                                                                                                          ││                                                      ││    │
+   │　│　│　├Block                                                                                                                                                       ││                                                      ││    │
+   │　│　│　│├Conditional                                                                                                                                               ││                                                      ││    │
+   │　│　│　││├Call Boolean MoveNext()                                                                                                                                 ││                                                      ││    │
+   │　│　│　│││└Parameter Set$26$Enumerator ─────────────────────────────────────────────────────────────┼┼───────────────────────────┼┤    │
+   │　│　│　││├default Void                                                                                                                                            ││                                                      ││    │
+   │　│　│　││└Break Set$26$                                                                                                                                           ││                                                      ││    │
+   │　│　│　│└Block Set$30$Enumerator                                                                                                                                   ││                                                      ││    │
+   │　│　│　│　├Assign                                                                                                                                                  ││                                                      ││    │
+   │　│　│　│　│├Parameter Set$30$Enumerator ─────────────────────────────────────────────────────────────┼┼───────────────────────────┼┼┐  │
+   │　│　│　│　│└Call Enumerator GetEnumerator()                                                                                                                       ││                                                      │││  │
+   │　│　│　│　│　└Call LinqDB.Sets.ImmutableSet`1[TPC_H.Tables.dbo.SUPPLIER] GetTKeyValue(Int32)                                                                      ││                                                      │││  │
+   │　│　│　│　│　　├Parameter ループ跨$3───────────────────────────────────────────────────────────────┘│                                                      │││  │
+   │　│　│　│　│　　└MemberAccess PS_SUPPKEY                                                                                                                             │                                                      │││  │
+   │　│　│　│　│　　　└MemberAccess Current                                                                                                                              │                                                      │││  │
+   │　│　│　│　│　　　　└Parameter Set$26$Enumerator ──────────────────────────────────────────────────────────┼───────────────────────────┼┤│  │
+   │　│　│　│　└Loop                                                                                                                                                      │                                                      │││  │
+   │　│　│　│　　├Block                                                                                                                                                   │                                                      │││  │
+   │　│　│　│　　│├Conditional                                                                                                                                           │                                                      │││  │
+   │　│　│　│　　││├Call Boolean MoveNext()                                                                                                                             │                                                      │││  │
+   │　│　│　│　　│││└Parameter Set$30$Enumerator ───────────────────────────────────────────────────────────┼───────────────────────────┼┼┤  │
+   │　│　│　│　　││├default Void                                                                                                                                        │                                                      │││  │
+   │　│　│　│　　││└Break Set$30$                                                                                                                                       │                                                      │││  │
+   │　│　│　│　　│└Block Set$34$Enumerator                                                                                                                               │                                                      │││  │
+   │　│　│　│　　│　├Assign                                                                                                                                              │                                                      │││  │
+   │　│　│　│　　│　│├Parameter Set$34$Enumerator ───────────────────────────────────────────────────────────┼───────────────────────────┼┼┼┐│
+   │　│　│　│　　│　│└Call Enumerator GetEnumerator()                                                                                                                   │                                                      │││││
+   │　│　│　│　　│　│　└Call LinqDB.Sets.ImmutableSet`1[TPC_H.Tables.dbo.NATION] GetTKeyValue(Int32)                                                                    │                                                      │││││
+   │　│　│　│　　│　│　　├Parameter ループ跨$4─────────────────────────────────────────────────────────────┘                                                      │││││
+   │　│　│　│　　│　│　　└MemberAccess S_NATIONKEY                                                                                                                                                                              │││││
+   │　│　│　│　　│　│　　　└MemberAccess Current                                                                                                                                                                                │││││
+   │　│　│　│　　│　│　　　　└Parameter Set$30$Enumerator ───────────────────────────────────────────────────────────────────────────────────┼┼┤││
+   │　│　│　│　　│　└Loop                                                                                                                                                                                                        │││││
+   │　│　│　│　　│　　├Block                                                                                                                                                                                                     │││││
+   │　│　│　│　　│　　│├Conditional                                                                                                                                                                                             │││││
+   │　│　│　│　　│　　││├Call Boolean MoveNext()                                                                                                                                                                               │││││
+   │　│　│　│　　│　　│││└Parameter Set$34$Enumerator ────────────────────────────────────────────────────────────────────────────────────┼┼┼┤│
+   │　│　│　│　　│　　││├default Void                                                                                                                                                                                          │││││
+   │　│　│　│　　│　　││└Break Set$34$                                                                                                                                                                                         │││││
+   │　│　│　│　　│　　│└Block Set$44$Enumerator                                                                                                                                                                                 │││││
+   │　│　│　│　　│　　│　├Assign                                                                                                                                                                                                │││││
+   │　│　│　│　　│　　│　│├Parameter Set$44$Enumerator ───────────────────────────────┐                                                                                                        │││││
+   │　│　│　│　　│　　│　│└Call Enumerator GetEnumerator()                                                           │                                                                                                        │││││
+   │　│　│　│　　│　　│　│　└Block Set`1$Where$35$                                                                   │                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　├Assign                                                                                │                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│├Parameter Set`1$Where$35$ ────────────────────────────┐│                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│└New LinqDB.Sets.Set`1[TPC_H.Tables.dbo.REGION]                                    ││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　├Block Set$39$Enumerator                                                             ││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│├Assign                                                                            ││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││├Parameter Set$39$Enumerator ─────────────────────────┐││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││└Call Enumerator GetEnumerator()                                               │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││　└Call LinqDB.Sets.ImmutableSet`1[TPC_H.Tables.dbo.REGION] GetTKeyValue(Int32)│││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││　　├Parameter ループ跨$5                                                      │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││　　└MemberAccess N_REGIONKEY                                                  │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││　　　└MemberAccess Current                                                    │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　││　　　　└Parameter Set$34$Enumerator ─────────────────────┼┼┼────────────────────────────────────────────────────┼┼┼┤│
+   │　│　│　│　　│　　│　│　　│└Loop                                                                            │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　├Block                                                                         │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│├Conditional                                                                 │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　││├Call Boolean MoveNext()                                                   │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│││└Parameter Set$39$Enumerator ──────────────────────┤││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　││├default Void                                                              │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　││└Break Set$39$                                                             │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│└Conditional                                                                 │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　├Equal                                                                     │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　│├MemberAccess R_NAME                                                     │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　││└MemberAccess Current                                                  │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　││　└Parameter Set$39$Enumerator ────────────────────┤││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　│└Constant "EUROPE"                                                       │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　├Call Boolean Add(TPC_H.Tables.dbo.REGION)                                 │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　│├Parameter Set`1$Where$35$                                               │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　│└MemberAccess Current                                                    │││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　│　└Parameter Set$39$Enumerator ─────────────────────┘││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　│　└default Void                                                                ││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　│　└BreakLabel Set$39$                                                              ││                                                                                                        │││││
+   │　│　│　│　　│　　│　│　　└Parameter Set`1$Where$35$ ─────────────────────────────┘│                                                                                                        │││││
+   │　│　│　│　　│　　│　└Loop                                                                                        │                                                                                                        │││││
+   │　│　│　│　　│　　│　　├Block                                                                                     │                                                                                                        │││││
+   │　│　│　│　　│　　│　　│├Conditional                                                                             │                                                                                                        │││││
+   │　│　│　│　　│　　│　　││├Call Boolean MoveNext()                                                               │                                                                                                        │││││
+   │　│　│　│　　│　　│　　│││└Parameter Set$44$Enumerator ────────────────────────────┘                                                                                                        │││││
+   │　│　│　│　　│　　│　　││├default Void                                                                                                                                                                                    │││││
+   │　│　│　│　　│　　│　　││└Break Set$44$                                                                                                                                                                                   │││││
+   │　│　│　│　　│　　│　　│└Call Boolean Add(<>f__AnonymousType3`8[System.Decimal,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String])                                          │││││
+   │　│　│　│　　│　　│　　│　├Parameter Set`1$Select$8$                                                                                                                                                                       │││││
+   │　│　│　│　　│　　│　　│　└Block ローカル$1,ローカル$2,ローカル$3,ローカル$4                                                                                                                                               │││││
+   │　│　│　│　　│　　│　　│　　└New <>f__AnonymousType3`8[System.Decimal,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String]                                                    │││││
+   │　│　│　│　　│　　│　　│　　　├MemberAccess S_ACCTBAL                                                                                                                                                                      │││││
+   │　│　│　│　　│　　│　　│　　　│└Assign                                                                                                                                                                                    │││││
+   │　│　│　│　　│　　│　　│　　　│　├Parameter ローカル$1─────────────────────────────────────────────────────────────────────────────────┐│││││
+   │　│　│　│　　│　　│　　│　　　│　└MemberAccess SUPPLIER                                                                                                                                                                 ││││││
+   │　│　│　│　　│　　│　　│　　　│　　└Assign                                                                                                                                                                              ││││││
+   │　│　│　│　　│　　│　　│　　　│　　　├Parameter ローカル$3──────────────────────────────────────────────────────────────────────────────┐││││││
+   │　│　│　│　　│　　│　　│　　　│　　　└MemberAccess <>h__TransparentIdentifier1                                                                                                                                        │││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　└Assign                                                                                                                                                                        │││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　├Parameter ローカル$2───────────────────────────────────────────────────────────────────────────┐│││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　└New <>f__AnonymousType2`2[<>f__AnonymousType1`2[<>f__AnonymousType0`2[TPC_H.Tables.dbo.PART,TPC_H.Tables.dbo.PARTSUPP],TPC_H.Tables.dbo.SUPPLIER],TPC_H.Tables.dbo.NATION]││││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　├New <>f__AnonymousType1`2[<>f__AnonymousType0`2[TPC_H.Tables.dbo.PART,TPC_H.Tables.dbo.PARTSUPP],TPC_H.Tables.dbo.SUPPLIER]                                             ││││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　│├New <>f__AnonymousType0`2[TPC_H.Tables.dbo.PART,TPC_H.Tables.dbo.PARTSUPP]                                                                                            ││││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　││├MemberAccess Current                                                                                                                                                ││││││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　│││└Parameter Set$15$Enumerator ───────────────────────────────────────────────────────────────────┼┼┼┘││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　││└MemberAccess Current                                                                                                                                                │││  ││││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　││　└Parameter Set$26$Enumerator ───────────────────────────────────────────────────────────────────┼┼┼─┘│││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　│└MemberAccess Current                                                                                                                                                  │││    │││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　│　└Parameter Set$30$Enumerator ────────────────────────────────────────────────────────────────────┼┼┼──┘││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　└MemberAccess Current                                                                                                                                                    │││      ││
+   │　│　│　│　　│　　│　　│　　　│　　　　　　　└Parameter Set$34$Enumerator ─────────────────────────────────────────────────────────────────────┼┼┼───┘│
+   │　│　│　│　　│　　│　　│　　　├MemberAccess S_NAME                                                                                                                                                                   │││        │
+   │　│　│　│　　│　　│　　│　　　│└Parameter ローカル$1────────────────────────────────────────────────────────────────────────────────┼┼┤        │
+   │　│　│　│　　│　　│　　│　　　├MemberAccess N_NAME                                                                                                                                                                   │││        │
+   │　│　│　│　　│　　│　　│　　　│└MemberAccess NATION                                                                                                                                                                 │││        │
+   │　│　│　│　　│　　│　　│　　　│　└Parameter ローカル$2───────────────────────────────────────────────────────────────────────────────┘││        │
+   │　│　│　│　　│　　│　　│　　　├MemberAccess P_PARTKEY                                                                                                                                                                  ││        │
+   │　│　│　│　　│　　│　　│　　　│└Assign                                                                                                                                                                                ││        │
+   │　│　│　│　　│　　│　　│　　　│　├Parameter ローカル$4───────────┐                                                                                                                                        ││        │
+   │　│　│　│　　│　　│　　│　　　│　└MemberAccess PART                         │                                                                                                                                        ││        │
+   │　│　│　│　　│　　│　　│　　　│　　└MemberAccess <>h__TransparentIdentifier0│                                                                                                                                        ││        │
+   │　│　│　│　　│　　│　　│　　　│　　　└Parameter ローカル$3─────────┼────────────────────────────────────────────────────────────────────┘│        │
+   │　│　│　│　　│　　│　　│　　　├MemberAccess P_MFGR                           │                                                                                                                                          │        │
+   │　│　│　│　　│　　│　　│　　　│└Parameter ローカル$4────────────┘                                                                                                                                          │        │
+   │　│　│　│　　│　　│　　│　　　├MemberAccess S_ADDRESS                                                                                                                                                                    │        │
+   │　│　│　│　　│　　│　　│　　　│└Parameter ローカル$1──────────────────────────────────────────────────────────────────────────────────┤        │
+   │　│　│　│　　│　　│　　│　　　├MemberAccess S_PHONE                                                                                                                                                                      │        │
+   │　│　│　│　　│　　│　　│　　　│└Parameter ローカル$1──────────────────────────────────────────────────────────────────────────────────┤        │
+   │　│　│　│　　│　　│　　│　　　└MemberAccess S_COMMENT                                                                                                                                                                    │        │
+   │　│　│　│　　│　　│　　│　　　　└Parameter ローカル$1──────────────────────────────────────────────────────────────────────────────────┘        │
+   │　│　│　│　　│　　│　　└BreakLabel Set$44$                                                                                                                                                                                          │
+   │　│　│　│　　│　　└BreakLabel Set$34$                                                                                                                                                                                                │
+   │　│　│　│　　└BreakLabel Set$30$                                                                                                                                                                                                      │
+   │　│　│　└BreakLabel Set$26$                                                                                                                                                                                                            │
+   │　│　└default Void                                                                                                                                                                                                                      │
+   │　└BreakLabel Set$15$                                                                                                                                                                                                                    │
+   └Parameter Set`1$Select$8$ ────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+2020/04/28
+正規化について
+SelectManyは色々な形がある
+Where(SelectMany)
+①
+Where
+    SelectMany
+        A
+        a=>SelectMany
+            B
+            b=>C
+            c=>{b,c}
+        bc=>{a,bc}
+    p=>p.a==0&&p.bc.b==1&&p.bc.c==2
+と
+②
+Where
+    SelectMany
+        A
+        a=>Select
+            SelectMany
+                B
+                b=>Select
+                    C
+                    c=>{b,c}
+            bc=>{a,bc}
+    p=>p.a==0&&p.bc.b==1&&p.bc.c==2
+と
+③
+Where
+    SelectMany
+        A
+        a=>Select
+            SelectMany
+                B
+                b=>Where
+                    Select
+                        C
+                        c=>{a,b,c}
+                    p=>p.a==0&&p.b==1&&p.c==2
+があり得るが①を選択する。理由はJoinと合わせるため
+①はSelectMany_collectionSelector_resultSelectorでresultSelectorがJoinと同じだから
+②はSelectMany_selectorとSelectを組み合わせたもの。
+③は最も内側のSelectManyの最外側にWhereを入れる。かなり複雑。
+①を実現するためSelectMany_selectorを変形する
+SelectMany
+    O
+    o=>I
+SelectMany
+    O
+    o=>I
+    (o,i)=>i
+1⃣Whereを含む場合
+SelectMany
+    O
+    o=>Where
+        I
+        i=>o==i
+Where
+    SelectMany
+        O
+        o=>I
+        (o,i)=>{o,i}
+    oi=>oi.o==oi.i
+2⃣Whereを含む場合
+SelectMany
+    Where
+        O
+        o=>o==0
+    o=>I
+    (o,i)=>{o,i}
+これはWhereの位置が理想なのでそのまま
+つまりcollectionSelectorのWhereは移動するということ
+SelectMany
+    O
+    o=>Where
+        I
+        i=>o==i
+    (o,i)=>{o,i}
+oi=>oi.o==oi.i
+二重SelectMany
+SelectMany
+    A
+    a=>SelectMany
+        B
+        b=>C
+        (b,c)=>{b,c}
+    (a,bc)=>{a,bc}
+大事なのはこれらは「正規化」であって、Whereの移動はその後に行うこと。
+
+valuetype [mscorlib]System.Nullable`1<int32> Add (
+        int32 a,
+        int32 b
+    IL_0000: ldarg.0
+    IL_0001: ldarg.1
+    IL_0002: add
+    IL_0003: newobj instance void valuetype [mscorlib]System.Nullable`1<int32>::.ctor(!0)
+    valuetype [mscorlib]System.Nullable`1<int32> Add (
+        int32 a,
+        valuetype [mscorlib]System.Nullable`1<int32> b
+    ) cil managed 
+    .locals init (
+        [0] int32,
+        [1] valuetype [mscorlib]System.Nullable`1<int32>,
+        [2] valuetype [mscorlib]System.Nullable`1<int32>
+    )
+    IL_0000: ldarg.0
+    IL_0001: stloc.0
+    IL_0002: ldarg.1
+    IL_0003: stloc.1
+    // (no C# code)
+    IL_0004: ldloca.s 1
+    IL_0006: call instance bool valuetype [mscorlib]System.Nullable`1<int32>::get_HasValue()
+    IL_000b: brtrue.s IL_0018
+
+    IL_000d: ldloca.s 2
+    IL_000f: initobj valuetype [mscorlib]System.Nullable`1<int32>
+    IL_0015: ldloc.2
+    IL_0016: br.s IL_0026
+
+    IL_0018: ldloc.0
+    IL_0019: ldloca.s 1
+    IL_001b: call instance !0 valuetype [mscorlib]System.Nullable`1<int32>::GetValueOrDefault()
+    IL_0020: add
+    IL_0021: newobj instance void valuetype [mscorlib]System.Nullable`1<int32>::.ctor(!0)
+    valuetype [mscorlib]System.Nullable`1<int32> Add (
+        valuetype [mscorlib]System.Nullable`1<int32> a,
+        int32 b
+    .locals init (
+        [0] valuetype [mscorlib]System.Nullable`1<int32>,
+        [1] int32,
+        [2] valuetype [mscorlib]System.Nullable`1<int32>
+    )
+    IL_0000: ldarg.0
+    IL_0001: stloc.0
+    IL_0002: ldarg.1
+    IL_0003: stloc.1
+    // (no C# code)
+    IL_0004: ldloca.s 0
+    IL_0006: call instance bool valuetype [mscorlib]System.Nullable`1<int32>::get_HasValue()
+    IL_000b: brtrue.s IL_0018
+
+    IL_000d: ldloca.s 2
+    IL_000f: initobj valuetype [mscorlib]System.Nullable`1<int32>
+    IL_0015: ldloc.2
+    IL_0016: br.s IL_0026
+
+    IL_0018: ldloca.s 0
+    IL_001a: call instance !0 valuetype [mscorlib]System.Nullable`1<int32>::GetValueOrDefault()
+    IL_001f: ldloc.1
+    IL_0020: add
+    IL_0021: newobj instance void valuetype [mscorlib]System.Nullable`1<int32>::.ctor(!0)
+    valuetype [mscorlib]System.Nullable`1<int32> Add (
+        valuetype [mscorlib]System.Nullable`1<int32> a,
+        valuetype [mscorlib]System.Nullable`1<int32> b
+    .locals init (
+        [0] valuetype [mscorlib]System.Nullable`1<int32>,
+        [1] valuetype [mscorlib]System.Nullable`1<int32>,
+        [2] valuetype [mscorlib]System.Nullable`1<int32>
+    IL_0000: ldarg.0
+    IL_0001: stloc.0
+    IL_0002: ldarg.1
+    IL_0003: stloc.1
+    // (no C# code)
+    IL_0004: ldloca.s 0
+    IL_0006: call instance bool valuetype [mscorlib]System.Nullable`1<int32>::get_HasValue()
+    IL_000b: ldloca.s 1
+    IL_000d: call instance bool valuetype [mscorlib]System.Nullable`1<int32>::get_HasValue()
+    IL_0012: and
+    IL_0013: brtrue.s IL_0020
+
+    IL_0015: ldloca.s 2
+    IL_0017: initobj valuetype [mscorlib]System.Nullable`1<int32>
+    IL_001d: ldloc.2
+    IL_001e: br.s IL_0034
+
+    IL_0020: ldloca.s 0
+    IL_0022: call instance !0 valuetype [mscorlib]System.Nullable`1<int32>::GetValueOrDefault()
+    IL_0027: ldloca.s 1
+    IL_0029: call instance !0 valuetype [mscorlib]System.Nullable`1<int32>::GetValueOrDefault()
+    IL_002e: add
+    IL_002f: newobj instance void valuetype [mscorlib]System.Nullable`1<int32>::.ctor(!0)
+bool 比較 (
+        int32 a,
+        int32 b
+    IL_0000: ldarga.s a
+    IL_0002: ldarg.1
+    IL_0003: call instance bool [mscorlib]System.Int32::Equals(int32)
+    bool 比較 (
+        int32 a,
+        valuetype [mscorlib]System.Nullable`1<int32> b
+    IL_0000: ldarga.s a
+    IL_0002: ldarg.1
+    IL_0003: box valuetype [mscorlib]System.Nullable`1<int32>
+    IL_0008: call instance bool [mscorlib]System.Int32::Equals(object)
+    bool 比較 (
+        valuetype [mscorlib]System.Nullable`1<int32> a,
+        int32 b
+    IL_0000: ldarga.s a
+    IL_0002: ldarg.1
+    IL_0003: box [mscorlib]System.Int32
+    IL_0008: constrained. valuetype [mscorlib]System.Nullable`1<int32>
+    IL_000e: callvirt instance bool [mscorlib]System.Object::Equals(object)
+    bool 比較 (
+        valuetype [mscorlib]System.Nullable`1<int32> a,
+        valuetype [mscorlib]System.Nullable`1<int32> b
+    IL_0000: ldarga.s a
+    IL_0002: ldarg.1
+    IL_0003: box valuetype [mscorlib]System.Nullable`1<int32>
+    IL_0008: constrained. valuetype [mscorlib]System.Nullable`1<int32>
+    IL_000e: callvirt instance bool [mscorlib]System.Object::Equals(object)
+
+
+クエリ式でコンパイラでこのような拡張メソッドに変換される
+from a in A
+from b in B
+select a,b
+↓
+SelectMany
+    SelectMany
+        A
+        a=>B
+        a,b=>a,b
+    ab=>C
+    ab,c=>ab.a,ab.b,c
+from a in A
+from b in B
+where a==b
+select a,b
+↓
+Where
+    SelectMany
+        A
+        a=>B
+        a,b=>a,b
+    ab=>ab.a==ab.b
+from a in A
+join b in B or a equals b
+select a,b
+↓
+Join
+    A
+    B
+    a=>a
+    b=>b
+    a,b=>a,b
+from a in A
+join b in B or a equals b
+from c in C
+where b==c
+select a,b,c
+↓
+Select
+    Where
+        SelectMany
+            Join
+                A
+                B
+                a=>a
+                b=>b
+                a,b=>a,b
+            ab=>C
+            ab,c=>ab,c
+        abc=>abc.ab.b==abc.c
+    abc=>abc.ab.a,abc.ab.b,abc.c
+ここからわかることは拡張メソッドはselectorラムダ引数の多いメソッドに変換される。
+これは外出しできないと思っていたがよく考えるとどちらでも外出しできることが分かった
+これ以外のselectorラムダ引数のないメソッドは手動ならできるのでそれらは
+"変換_SelectMany正規化"で定義する
+SelectMany<(A a,B b),(A a,B b,C c)>
+    A
+    a=>Select<B,(A a,B b)>
+        B
+        b=>a,b
+↓
+SelectMany<A,B,(A a,B b)>
+    A
+    a=>B
+    a,b=>a,b
+SelectMany<(A a,B b),(A a,B b,C c)>
+    A
+    a=>Select<B,(A a,B b)>
+        B
+        selector
+↓
+SelectMany<A,(A a,B b)>
+    A
+    a=>B
+    a,b=>selector(b)
+SelectMany<(A a,B b),(A a,B b,C c)>
+    SelectMany<A,(A a,B b)>
+        A
+        a=>Select<B,(A a,B b)>
+            B
+            selector0
+    ab=>Select<C,(A a,B b,C c)>
+        C
+        selector1
+↓
+SelectMany<(A a,B b),(A a,B b,C c)>
+    SelectMany<A,(A a,B b)>
+        A
+        a=>B
+        a,b=>selector0(b)
+    ab=>C
+    ab,c=>selector1(c)
+解説するとSelectMany_selectorのselectorのBodyがSelectであればそれをSelectMany_collectionSelectorのCollectionに移動する
+SelectMany
+    SelectMany
+        A
+        a=>Select
+            B
+            b=>a+b
+        a,ab=>a*ab
+    ab=>Select
+        C
+        c=>ab.a-ab.b-c
+    ab,c=>ab/c
+↓
+SelectMany
+    SelectMany
+        A
+        a=>B
+        a,b=>a*(a+b)
+    ab=>C
+    ab,c=>(ab.a-ab.b-c)/c
+解説するとSelectMany_collectionSelectorのresultSelectorもBodyがSelectであればそれをSelectMany_collectionSelectorのCollectionに移動する
+
+Whereの葉への移動
+from a in A
+from b in B
+where a==1&&b==2
+select a,b
+↓
+Where
+    SelectMany
+        A
+        a=>B
+        a,b=>a,b
+    ab=>ab.a==1&&ab.b==2
+↓[]に注目点。このパターンにハマったら
+[Where]
+    [SelectMany]
+        A
+        a=>B
+        a,b=>[a],b
+    ab=>[ab.a==1]&&ab.b==2
+↓このように変換する
+Where
+    SelectMany
+        A.Where(a=>a==1)
+        a=>B
+        a,b=>a,b
+    ab=>[ab.b==2]
+↓このように変換する
+SelectMany
+    A.Where(a=>a==1)
+    a=>B.Where(b=>b==2)
+    a,b=>a,b
+
+create view view1 as
+IL生成は
+1,式木からILつくってDelegate作る。
+2,式木からILつくってAssemblyBuilderを作る。
+それに次を追加する
+3,式木からILつくってTypeBuilderにメソッド(ストアド)を追加する。
+
+JoinとSelectManyの対応を考える
+
+2つのテーブルを結合-------------------------------------------------------------------------------------------------------------------------------------------------
+Join
+    A
+    B
+    a=>a
+    b=>b
+    a,b=>a,b
+AB
+SelectMany
+    A
+    a=>Where
+        B
+        b=>a.Equals(b)
+    a,b=>a,b
+BC
+SelectMany
+    B
+    b=>Where
+        A
+        a=>a.Equals(b)
+    b,a=>a,b
+
+3つのテーブルを結合-------------------------------------------------------------------------------------------------------------------------------------------------
+Join
+    A
+    Join
+        B
+        C
+        b=>b
+        c=>c
+    a=>a
+    bc=>bc.b
+    a,bc=>a,bc
+A(BC)
+SelectMany①
+    A     ①
+    a=>Where
+        SelectMany
+            Where             ②
+                B             ②
+                b=>a.Equals(b)②
+            b=>Where
+                C             ③
+                c=>b.Equals(c)③
+            b,c=>b,c
+        bc=>a.Equals(bc.b)③
+    a,bc=>a,bc
+(AB)C
+SelectMany
+    SelectMany①
+        A     ①
+        a=>Where          ②
+            B             ②
+            b=>a.Equals(b)②
+        b=>a,b
+    ab=>Where
+        C                ③
+        c=>ab.b.Equals(c)③
+    ab,c=>ab,c
+A(BC)→A(CB)
+SelectMany
+    A
+    a=>Where
+        SelectMany
+            C
+            c=>Where
+                B
+                b=>b.Equals(c)
+            c,b=>b,c
+        bc=>a.Equals(bc.b)
+    a,bc=>a,bc
+A(BC)→(BC)A
+SelectMany
+    SelectMany
+        B
+        b=>Where
+            C
+            c=>b.Equals(c)
+        b,c=>b,c
+    bc=>Where
+        A
+        a=>a.Equals(bc.b)
+    bc,a=>a,bc
+(BC)A→(CB)A
+SelectMany
+    SelectMany
+        C
+        c=>Where
+            B
+            b=>b.Equals(c)
+        c,b=>b,c
+    bc=>Where
+        A
+        a=>a.Equals(bc.b)
+    bc,a=>a,bc
+4つのテーブルを結合-------------------------------------------------------------------------------------------------------------------------------------------------
+a=b b=c c=d
+(ab)(cd)
+Join
+    Join
+        A
+        B
+        a=>a
+        b=>b
+        a,b=>a,b
+    Join
+        C
+        D
+        c=>c
+        d=>d
+        c,d=>c,d
+    ab=>ab.b
+    cd=>cd.c
+    ab,cd=>ab,cd
+SelectMany
+    SelectMany
+        A
+        a=>Where
+            B
+            b=>a.Equals(b)
+        a,b=>a,b
+    ab=>Where
+        SelectMany
+            C
+            c=>Where
+                D
+                d=>c.Equals(d)
+            c,d=>c,d
+        cd=>ab.b.Equals(cd.c)
+    ab,cd=>ab,cd
+
+a(b(cd))
+Join
+    A
+    Join
+        B
+        Join
+            C
+            D
+            c=>c
+            d=>d
+            c,d=>c,d
+        b=>b
+        cd=>cd.c
+    a=>a
+    bcd=>bcd.b
+    a,bcd=>a,bcd
+SelectMany
+    A
+    a=>Where
+        SelectMany
+            B
+            b=>Where
+                SelectMany
+                    C
+                    c=>Where
+                        D
+                        d=>c.Equals(d)
+                    c,d=>c,d
+                cd=>b.Equals(cd.c)
+            b,cd=>b,cd
+        bcd=>a.Equals(bcd.b)
+    a,bcd=>a,bcd
+    
+a((bc)d)
+Join
+    A
+    Join
+        Join
+            B
+            C
+            b=>b
+            c=>c
+            b,c=>b,c
+        D
+        bc=>bc.c
+        d=>d
+        bc,d=>bc,d
+    a=>a
+    bcd=>bcd.bc.b
+    a,bcd=>a,bcd
+)
+SelectMany
+    A
+    a=>Where
+        SelectMany
+            SelectMany
+                B
+                b=>Where
+                    C
+                    c=>b.Equals(c)
+                b,c=>b,c
+            bc=>Where
+                D
+                d=>bc.c.Equals(d)
+            bc,d=>bc,d
+        bcd=>a.Equals(bcd.bc.b)
+    a,bcd=>a,bcd
+
+(a(bc))d
+Join(
+    Join(
+        A
+        Join(
+            B
+            C
+            b=>b
+            c=>c
+        )
+        a=>a
+        bc=>bc.b
+    )
+    D
+    abc=>abc.c
+    d=>d
+    abc,d=>abc.d
+)
+SelectMany
+    SelectMany
+        A
+        a=>Where
+            SelectMany
+                B
+                b=>Where
+                    C
+                    c=>b.Equals(c)
+                b,c=>b,c
+            bc=>a.Equals(bc.b)
+        a,bc=>a,bc
+    abc=>Where
+        D
+        d=>abc.c.Equals(d)
+    abc,d=>abc,d
+
+
+
+SELECT 
+FROM REGION region,(NATION nation JOIN CUSTOMER customer ON nation.N_NATIONKEY=customer.C_NATIONKEY
+WHERE region.R_REGIONKEY==nation.N_REGIONKEY && customer.C_CUSTKEY==orders.O_CUSTKEY
+from region in e.REGION
+from nation in e.NATION join customer in e.CUSTOMER on nation.N_NATIONKEY equals customer.C_NATIONKEY
+from orders in e.ORDERS
+where region.R_REGIONKEY==nation.N_REGIONKEY && customer.C_CUSTKEY==orders.O_CUSTKEY
+select new { region.R_REGIONKEY,region.R_NAME,nation.N_NATIONKEY,customer.C_CUSTKEY,orders.O_ORDERKEY }
+e.REGION.SelectMany(
+    region=>e.NATION.Join(
+        e.CUSTOMER,
+        nation=>nation.N_NATIONKEY,
+        customer=>customer.C_NATIONKEY,
+        (nation,customer)=>(nation,customer)
+    ).SelectMany(
+        nation_customer=>e.ORDERS.Where(
+            orders=>region.R_REGIONKEY==nation_customer.Item1.N_REGIONKEY && nation_customer.Item2.C_CUSTKEY==orders.O_CUSTKEY
+        ).Select(
+            orders=>new { region.R_REGIONKEY,region.R_NAME,nation.N_NATIONKEY,customer.C_CUSTKEY,orders.O_ORDERKEY }
+        )
+    )
+)
+
+SELECT sector.sc_id,industry.in_id,company.co_id,security.s_symb
+FROM sector,
+(industry LEFT JOIN company ON industry.in_id=company.co_in_id),
+security
+
+WHERE sector.sc_id=industry.in_sc_id and company.co_id=security.s_co_id
+SECTOR.SelectMany(
+    sector=>INDUSTRY.Join(
+        COMPANY,
+        industry=>industry.in_id,
+        company=>company.co_in_id,
+        (industry,company)=>(industry,company)
+    ).SelectMany(
+        industry_company=>SECURITY.Select(
+            security=>(sector.sc_id,industry_company.Item1.in_id,industry_company.Item2.co_id,security.s_symb)
+        )
+    )
+)
+Param_0.NATION.SelectMany(
+    nation => Param_0.CUSTOMER.SelectMany(
+        customer => Param_0.REGION.Where(
+            region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+        ).Select(
+            region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+        )
+    )
+).SelectMany(
+    Param_1 => Param_0.CUSTOMER.SelectMany(
+        customer => Param_0.REGION.Where(
+            region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+        ).Select(
+            region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+        )
+    )
+)
+Param_0.ORDERS.SelectMany(
+    orders => Param_0.NATION.SelectMany(
+        nation => Param_0.CUSTOMER.SelectMany(
+            customer => Param_0.REGION.Where(
+                region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+            ).Select(
+                region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)))
+            ).SelectMany(
+                Param_1 => Param_0.CUSTOMER.SelectMany(
+                    customer => Param_0.REGION.Where(
+                        region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+                    ).Select(
+                        region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+            )
+        )
+    )
+)
+Param_0.CUSTOMER.SelectMany(
+    customer => Param_0.REGION.Where(
+        region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+    ).Select(
+        region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+    )
+)
+Param_0.NATION.SelectMany(
+    nation => Param_0.CUSTOMER.SelectMany(
+        customer => Param_0.REGION.Where(
+            region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+        ).Select(
+            region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+        )
+    )
+)
+Param_0.ORDERS.SelectMany(
+    orders => Param_0.NATION.SelectMany(
+        nation => Param_0.CUSTOMER.SelectMany(
+            customer => Param_0.REGION.Where(
+                region => ((region.R_REGIONKEY == nation.N_REGIONKEY) And (customer.C_CUSTKEY == orders.O_CUSTKEY))
+            ).Select(
+                region => new ValueTuple`5(region.R_REGIONKEY, region.R_NAME, nation.N_NATIONKEY, customer.C_CUSTKEY, orders.O_ORDERKEY)
+            )
+        )
+    )
+)
+
+FROM A,(B JOIN C),D
+A.SelectMany(
+    a=>B.Join(
+        C,
+        (b,c)=>(b,c)
+    ).SelectMany(
+        bc=>D.Select(
+            d=>(a,bc.b,bc.c,d)
+        )
+    )
+)
+O.Join(I,(o,i)=>(o,i)).Where
+
+FROM A,B 
+JOIN C ON
+EntitySet<,,>はContainerに属している。
+InternalAddは追加後にContainerに属する。
+7ノードあったら
+   4
+ 2   6
+1 3 5 7
+それぞれのノードが2リストだとしたら
+7
+if(this.L!=null) {
+    3
+    return this.L;
+}
+var TreeNode = this;
+右に移動:
+3
+if(TreeNode.R!=null) {
+    3
+    return TreeNode.R;
+}
+//上に移動
+while(TreeNode.P!=null) {
+    var P = TreeNode.P;
+    if(P.L==TreeNode) {
+        //右上に移動
+        TreeNode=P;
+        goto 右に移動;
+    }
+    TreeNode=P;
+}
+return null;
+
+
+for(var a = s.RootNode;a!=null;a=a.Next) {
+    for(var b = a.LinkedNodeItem;b!=null;b=b.LinkedNodeItem) {
+        count+=b.Item;
+    }
+}
+
+Console.WriteLine("TreeNode "+m.ElapsedMilliseconds.ToString()+"ms");
+
+1,元の式
+.set.Where(func0).Select(selector0)
+.set.Where(func0).Select(selector1)
+1,先行評価
+(t0=.set.Where(func0)).Select(selector0)
+t0.Select(selector1)
+1,集約先行評価
+.set.Where(func0).Aggregates(p=>
+    (
+        p.Select(selector0),
+        p.Select(selector1)
+    )
+).Item1
+.set.Where(func0).Aggregates(p=>
+    (
+        p.Select(selector0),
+        p.Select(selector1)
+    )
+).Item2
+1,集約先行評価,先行評価
+(
+    t0=.set.Where(func0).Aggregates(p=>
+        (
+            p.Select(selector0),
+            p.Select(selector1)
+        )
+    )
+).Item1
+t0.Item2
+2,元の式
+.set0.Select(selector0)
+.set0.Select(selector1)
+.set1.Select(selector2)
+.set1.Select(selector3)
+2,先行評価
+(t0=.set0.Where(func0)).Select(selector0)
+t0.Select(selector1)
+(t1=.set0.Where(func1)).Select(selector2)
+t1.Select(selector3)
+2,集約先行評価
+.set0.Aggregates(p=>
+    (
+        Item1=p.Select(selector0),
+        Item2=p.Select(selector1)
+    )
+).Item1
+.set0.Aggregates(p=>
+    (
+        Item1=p.Select(selector0),
+        Item2=p.Select(selector1)
+    )
+).Item2
+.set1.Aggregates(p=>
+    (
+        Item1=p.Select(selector2),
+        Item2=p.Select(selector3)
+    )
+).Item1
+.set1.Aggregates(p=>
+    (
+        Item1=p.Select(selector2),
+        Item2=p.Select(selector3)
+    )
+).Item2
+2,集約先行評価を上位に再帰的に
+.set0.Aggregates(q=>
+    (
+        Item1=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector0),
+                Item2=p.Select(selector1)
+            )
+        ).Item1
+        Item2=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector0),
+                Item2=p.Select(selector1)
+            )
+        ).Item2
+    )
+).Item1
+.set0.Aggregates(q=>
+    (
+        Item1=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector0),
+                Item2=p.Select(selector1)
+            )
+        ).Item1
+        Item2=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector0),
+                Item2=p.Select(selector1)
+            )
+        ).Item2
+    )
+).Item2
+.set1.Aggregates(q=>
+    (
+        Item1=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector2),
+                Item2=p.Select(selector3)
+            )
+        ).Item1
+        Item2=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector2),
+                Item2=p.Select(selector3)
+            )
+        ).Item2
+    )
+).Item1
+.set1.Aggregates(q=>
+    (
+        Item1=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector2),
+                Item2=p.Select(selector3)
+            )
+        ).Item1
+        Item2=q.Aggregates(p=>
+            (
+                Item1=p.Select(selector2),
+                Item2=p.Select(selector3)
+            )
+        ).Item2
+    )
+).Item2
+2,集約先行評価,先行評価
+.set0.Aggregates(q=>
+    (
+        Item1=(
+            t0=q.Aggregates(p=>
+                (
+                    Item1=p.Select(selector0),
+                    Item2=p.Select(selector1)
+                )
+            )
+        ).Item1
+        Item2=t0.Item2
+    )
+).Item1
+.set0.Aggregates(q=>
+    (
+        Item1=(
+            t0=q.Aggregates(p=>
+                (
+                    Item1=p.Select(selector0),
+                    Item2=p.Select(selector1)
+                )
+            )
+        ).Item1
+        Item2=t0.Item2
+    )
+).Item2
+.set1.Aggregates(q=>
+    (
+        t2=(
+            Item1=(
+                t0=q.Aggregates(p=>
+                    (
+                        Item1=p.Select(selector2),
+                        Item2=p.Select(selector3)
+                    )
+                )
+            ).Item1
+            Item2=t0.Item2
+        )
+    ).Item1
+    t2.Item2
+).Item1
+.set1.Aggregates(q=>
+    (
+        t2=(
+            Item1=(
+                t0=q.Aggregates(p=>
+                    (
+                        Item1=p.Select(selector2),
+                        Item2=p.Select(selector3)
+                    )
+                )
+            ).Item1
+            Item2=t0.Item2
+        )
+    ).Item1
+    t2.Item2
+).Item2
+2,集約先行評価,先行評価,先行評価
+(
+    t1=.set0.Aggregates(q=>
+        (
+            Item1=(
+                t0=q.Aggregates(p=>
+                    (
+                        Item1=p.Select(selector0),
+                        Item2=p.Select(selector1)
+                    )
+                )
+            ).Item1
+            Item2=t0.Item2
+        )
+    )
+).Item1
+t1.Item2
+(
+    t3=.set1.Aggregates(q=>
+        (
+            Item1=(
+                t2=q.Aggregates(p=>
+                    (
+                        Item1=p.Select(selector0),
+                        Item2=p.Select(selector1)
+                    )
+                )
+            ).Item1
+            Item2=t2.Item2
+        )
+    )
+).Item1
+t3.Item2
+
+3,元の式
+.set0.Select(selector0)
+.set0
+.set1.Select(selector1)
+.set1
+3,先行評価
+(t0=.set0).Select(selector0)
+t0
+(t1=.set1).Select(selector1)
+t1
+3,集約先行評価
+.set0.Aggregates(p=>
+    (
+        Item1=p.Select(selector0),
+        Item2=p
+    )
+).Item1
+.set0.Aggregates(p=>
+    (
+        Item1=p.Select(selector0),
+        Item2=p
+    )
+).Item2
+.set1.Aggregates(p=>
+    (
+        Item1=p.Select(selector1),
+        Item2=p
+    )
+).Item1
+.set1.Aggregates(p=>
+    (
+        Item1=p.Select(selector1),
+        Item2=p
+    )
+).Item2
+3,集約先行評価,線公表っか
+(
+    t0=.set0.Aggregates(p=>
+        (
+            Item1=p.Select(selector0),
+            Item2=p
+        )
+    )
+).Item1
+t0.Item2
+(
+    t1=.set1.Aggregates(p=>
+        (
+            Item1=p.Select(selector1),
+            Item2=p
+        )
+    )
+).Item1
+t1.Item2
+
+set.Where(func0)
+set.Where(func0).Any()
+set.Select(selector0)
+set.Where(func1).Select(selector1)
+set.Where(func1).Select(selector2)
+ set
+*├Where(func0)
+*│└Any
+*├Select(selector0)
+ └Where(func0)
+*  ├Select(selector1)
+*  └Select(selector2)
+*は結果を必要とする計算
+根がループするもの。これはMethodCall以外とMethodCallの非ループメソッド
+
+根の子が1つだけだった場合
+set.Where(func0)
+set.Where(func0).Any()
+set.Where(func0).Select(selector1)
+set.Where(func0).Select(selector2)
+ set
+*└Where(func0)
+*  ├Any
+*  ├Select(selector1)
+*  └Select(selector2)
+
+以下のような根が別だった場合
+set0.Where(func0).Select(selector0)
+set1.Where(func0).Select(selector0)
+*set0─Where(func0)─Select(selector0)
+*set1─Where(func0)─Select(selector0)
+ループ融合は行わない。
+
+データがスルーせずに一旦加工して中間データを作るタイプのメソッドはそこの中間データ作る部分が葉
+中間データが根になる
+set0.Join(set1,outerKeySelector,innerKeySelector,resultSelector0).Select(selector0)
+set0.Join(set1,outerKeySelector,innerKeySelector,resultSelector0).Select(selector1)
+ set0─Join(set1,outerKeySelector,innerKeySelector,resultSelector0)
+*        ├Select(selector0)
+*        └Select(selector1)
+
+中間データを生成するメソッドは
+Enumerable_Union
+GroupBy
+Intersect
+
+ExtendSetの集約関数は.集約関数(func)と.Select(func).集約関数()の2種類ある。後者に変形を行うものとそうでないものがある。
+結果が変わるものは行わない。変わらないものは行う。
+Sum      行わない
+Avedev   行わない
+Stdev    行わない
+Average  行わない
+Geomean  行わない
+Harmean  行わない
+Max      行う
+Min      行う
+Count    行わない
+があるが
+
++        $exception    {"by-ref 型の引数を持つため、TryExpression はメソッド 'System.Nullable`1[System.Int32] Assign(Int32, System.Nullable`1[System.Int32] ByRef, Int32, System.Nullable`1[System.Int32])' への引数としてはサポートされていません。TryExpression がこの式の内部で入れ子にならないようにツリーを構築してください。"}    System.NotSupportedException
+{
+    var thisParameter = Expression.Parameter(typeof(計測するAssign<Int32?>),"thisParameter");
+    var 代入先Parameter = Expression.Parameter(typeof(Int32?),"代入先Parameter");
+    var M= Expression.Lambda<Action<計測するAssign<Int32?>>>(
+        Expression.Block(
+            new[] { 代入先Parameter },
+            Expression.Call(
+                thisParameter,
+                typeof(計測するAssign<Int32?>).GetMethod("Assign"),
+                Expression.Constant(1),
+                代入先Parameter,
+                Expression.Constant(2),
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Throw(
+                        Expression.New(
+                            typeof(Exception).GetConstructor(Type.EmptyTypes)
+                        ),
+                        typeof(Int32?)
+                    ),
+                    代入先Parameter,
+                    typeof(Int32?)
+                )
+            )
+        ),
+        thisParameter
+    ).Compile();
+    M(new 計測するAssign<Int32?>());
+}
+
+取得_APrimaryKeyの等価式とその他を取得
+を削除
+9ms
+4ms
+736ms
+59ms
+8363ms
+1455ms
+8309ms
+74533ms
+00,93476,0
+01,53284,TestTPC_H.TPC_HEntities2+Result01[4]
+02,6103,TestTPC_H.TPC_HEntities2+Result02[456]
+03,92830,TestTPC_H.TPC_HEntities2+Result03[11620]
+04,40052,TestTPC_H.TPC_HEntities2+Result04[5]
+05,55002,TestTPC_H.TPC_HEntities2+Result05[5]
+06,3859,123141078.2283
+07,65845,TestTPC_H.TPC_HEntities2+Result07[9]
+08,23376,TestTPC_H.TPC_HEntities2+Result08[2]
+09,73794,TestTPC_H.TPC_HEntities2+Result09[175]
+10,89956,TestTPC_H.TPC_HEntities2+Result10[37642]
+11,19982,TestTPC_H.TPC_HEntities2+Result11[29818]
+12,10728,TestTPC_H.TPC_HEntities2+Result12[2]
+13,35832,TestTPC_H.TPC_HEntities2+Result13[42]
+14,5136,16.380778626395540147992741463
+15,5577,TestTPC_H.TPC_HEntities2+Result15[1]
+16,2176,TestTPC_H.TPC_HEntities2+Result16[532]
+17,50163,348406.05428571428571428571442
+18,119941,TestTPC_H.TPC_HEntities2+Result18[57]
+19,17756,6740263.5158
+20,555489,TestTPC_H.TPC_HEntities2+Result20[20]
+21,142204,TestTPC_H.TPC_HEntities2+Result21[411]
+22,14924,TestTPC_H.TPC_HEntities2+Result22[7]
+
+8ms
+4ms
+760ms
+72ms
+8368ms
+1462ms
+9557ms
+73166ms
+00,93405,0
+01,46134,TestTPC_H.TPC_HEntities2+Result01[4]
+02,5988,TestTPC_H.TPC_HEntities2+Result02[456]
+03,36578,TestTPC_H.TPC_HEntities2+Result03[11620]
+04,40828,TestTPC_H.TPC_HEntities2+Result04[5]
+05,68074,TestTPC_H.TPC_HEntities2+Result05[5]
+06,3993,123141078.2283
+07,63071,TestTPC_H.TPC_HEntities2+Result07[9]
+08,24614,TestTPC_H.TPC_HEntities2+Result08[2]
+09,72842,TestTPC_H.TPC_HEntities2+Result09[175]
+10,85874,TestTPC_H.TPC_HEntities2+Result10[37642]
+11,19369,TestTPC_H.TPC_HEntities2+Result11[29818]
+12,10482,TestTPC_H.TPC_HEntities2+Result12[2]
+13,34238,TestTPC_H.TPC_HEntities2+Result13[42]
+14,5137,16.380778626395540147992741463
+15,5447,TestTPC_H.TPC_HEntities2+Result15[1]
+16,2144,TestTPC_H.TPC_HEntities2+Result16[532]
+17,59184,348406.05428571428571428571442
+18,119653,TestTPC_H.TPC_HEntities2+Result18[57]
+19,16618,6740263.5158
+Arr変数<Int32>().Select(Func((Int32 p) => p*2)).Select(Func((Int32 p) => (Double)p))
+Enumerable.Select(
+    Enumerable.Select(
+        Arr変数<Int32>(),
+        Func((Int32 p) => p*2)
+    ),
+    Func((Int32 p) => (Double)p)
+)
++        [0]    {Name = "Func`2" FullName = "Func`2[[Int32],[Int32]]"}    Type {RuntimeType}
++        [1]    {Name = "Func`2" FullName = "Func`2[[Int32],[Double]]"}    Type {RuntimeType}
+
+            protected override void Lambda(LambdaExpression Lambda) {
+                if(this.LambdaとしてAddするか) {
+                    this.Traverse(Lambda.Body);
+                    this.ListDelegateType.Add(Lambda.Type);
+                    int,double
+                } else {
+                    this.LambdaとしてAddするか = true;
+                    this.Traverse(Lambda.Body);
+                    this.LambdaとしてAddするか = false;
+                }
+            }
+            protected override void Lambda(LambdaExpression Lambda){
+                var 旧I=this.I;
+                var 旧DictionaryNameLabel=this.DictionaryNameLabel;
+                this.DictionaryNameLabel=new Dictionary<LabelTarget,Label>();
+                var 旧Parameters=this.Parameters;
+                var(RootParametereが含まれている,D)=this.共通Lambda(Lambda);
+                Contract.Assert(this.I==D.GetILGenerator());
+                this.I.Ret();
+                var Delegate番号 = this.Delegate番号++;
+                this.Target[Delegate番号]=RootParametereが含まれている
+                    ?D.CreateDelegate(Lambda.Type,this.Target)
+                    :D.CreateDelegate(Lambda.Type);
+                var Field1=this.TargetFields[Delegate番号];
+                this.DictionaryLambdaField.Add(Lambda,Field1);
+                this.I=旧I;
+                this.Parameters=旧Parameters;
+                this.DictionaryNameLabel=旧DictionaryNameLabel;
+                旧I.Ldarg_0();
+                旧I.Ldfld(Field1);
+            }
+
+
+.Call $Result0.Add(
+    .Invoke (
+        .Call Func(
+            .Lambda Lラムダ1<Func`2[Int32,Double]>
+        )
+    )
+    (
+        .Invoke (
+            .Call Func(
+                .Lambda Lラムダ0<Func`2[Int32,Int32]>
+            )
+        )
+        (
+            $Enumerator変数1.Current
+        )
+    )
+);
+
+CurrentRemove
+Add,ms   ,衝突率,List数    ,Node数    ,空Node数  ,有Node数  ,Count     ,容量      ,Type
+Add,141593,01.000,  40000000,  40000015,        15,  40000000,  40000000, 1562500KB,Set`1
+1  ,138874,01.000,  40000000,  40000015,        15,  40000000,  40000000, 1562500KB,Set`1
+2  ,129174,01.000,  40000000,  40000015,        15,  40000000,  40000000, 1562500KB,Set`1
+3  ,119263,01.000,  40000000,  40000015,        15,  40000000,  40000000, 1562500KB,Set`1
+4  ,116676,01.000,  40000000,  40000015,        15,  40000000,  40000000, 1562500KB,Set`1
+Add,128742,02.000,  40000000,  20000016,        16,  20000000,  40000000, 1093750KB,Set`1
+1  ,130388,02.000,  40000000,  20000016,        16,  20000000,  40000000, 1093750KB,Set`1
+2  ,119818,02.000,  40000000,  20000016,        16,  20000000,  40000000, 1093750KB,Set`1
+3  ,118500,02.000,  40000000,  20000016,        16,  20000000,  40000000, 1093750KB,Set`1
+4  ,116495,02.000,  40000000,  20000016,        16,  20000000,  40000000, 1093750KB,Set`1
+Add,115247,04.000,  40000000,  10000017,        17,  10000000,  40000000,  859375KB,Set`1
+1  ,109276,04.000,  40000000,  10000017,        17,  10000000,  40000000,  859375KB,Set`1
+2  ,92173,04.000,  40000000,  10000017,        17,  10000000,  40000000,  859375KB,Set`1
+3  ,89256,04.000,  40000000,  10000017,        17,  10000000,  40000000,  859375KB,Set`1
+4  ,88400,04.000,  40000000,  10000017,        17,  10000000,  40000000,  859375KB,Set`1
+Add,104350,08.000,  40000000,   5000018,        18,   5000000,  40000000,  742187KB,Set`1
+1  ,101606,08.000,  40000000,   5000018,        18,   5000000,  40000000,  742187KB,Set`1
+2  ,77203,08.000,  40000000,   5000018,        18,   5000000,  40000000,  742187KB,Set`1
+3  ,72207,08.000,  40000000,   5000018,        18,   5000000,  40000000,  742187KB,Set`1
+4  ,74003,08.000,  40000000,   5000018,        18,   5000000,  40000000,  742187KB,Set`1
+Add,99181,16.000,  40000000,   2500019,        19,   2500000,  40000000,  683594KB,Set`1
+1  ,113223,16.000,  40000000,   2500019,        19,   2500000,  40000000,  683594KB,Set`1
+2  ,75482,16.000,  40000000,   2500019,        19,   2500000,  40000000,  683594KB,Set`1
+3  ,62512,16.000,  40000000,   2500019,        19,   2500000,  40000000,  683594KB,Set`1
+4  ,65657,16.000,  40000000,   2500019,        19,   2500000,  40000000,  683594KB,Set`1
+Remove,ms   ,衝突率,List数    ,Node数    ,空Node数  ,有Node数  ,Count     ,容量      ,Type
+Remove,48228,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+1     ,55096,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+2     ,31795,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+3     ,22610,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+4     ,19210,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+Remove,46109,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+1     ,53033,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+2     ,32307,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+3     ,23861,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+4     ,20532,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+Remove,36746,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+1     ,47874,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+2     ,27318,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+3     ,17727,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+4     ,14215,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+Remove,33274,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+1     ,40286,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+2     ,25034,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+3     ,18039,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+4     ,14397,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+Remove,29983,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+1     ,36798,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+2     ,25413,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+3     ,18690,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+4     ,15281,00.000,         0,         1,         1,         0,         0,       0KB,Set`1
+R
+Avedev
+
+トランザクションの方法
+Setプロパティに代入した場合1ファイルにシリアライズする。そのFileStreamはSetに保持する。
+Set.Addした場合タプルをシリアライズする。Removeした場合キーだけをシリアライズする。
+シリアライズの最適化。
+Entity型がsealedはタプルの構造が決まっている。プロパティ型がsealedの場合シリアライズをカスタム出来ないか。
+
+Remote
+    Transaction
+        Entity
+Transaction
+    Entity
+Entity
+Exceptions
+Entity系
+    AEntities
+    Attribute
+    AttributeEmpty
+通信系
+    AEncodeDecodeStream
+    ADecodeStream
+    AEncodeStream
+    AnonymousTypeSurrogateSelectors
+Sets
+    ADictionary`3
+    APrimaryKey
+    Set`1
+    Set`2
+    SetExtensions
+    SetGroupingList
+    SetGroupingSet
+    SetQuery
+    SetQuery`1
+    SetQueryProvider
+    葉
+    ISet
+    ISet`1
+    ISetExtensions
+    ISetQuery
+    ISetQuery`1
+    ISetQueyProvider
+Optimizer
+    Optimizer
+    Target
+Transactions
+
+チャートについて
+Setのツリーを3Dで表示したい。
+セットのデータの流れを太さと移動の光で表現したい。
+    2Dの場合太さが2倍になると2倍のデータ量である。
+    3Dの場合2乗になる。
+本当のデータの流れをコールバックでアニメーションに反映させるのはどうか？
+実際にクエリ解析が占めているもの、実行に占めているもの。
+行はスレッド、タスクで分割する。
+複数のクエリを切り替えて結合がどのように変わるかアニメーションで表現
+https://piratepeel.github.io/proximitynetwork.html
+クエリでノード間のデータの流れ
+http://bl.ocks.org/wvengen/cab9b01816490edb7083
+
+
+1,メソッドチェーンをループに展開した
+Select,Where等Enumerable,Setの拡張メソッドの多くをメソッドチェーンではなく可能な限り少ないループに展開。
+
+2,dynamicの初期化を静的に。
+dynamic型の呼び出しは既定では
+dynamic func(dynamic a,dynamic b)=>a+b
+は
+Object func(Object a,Object b){
+    if(CallSite==null){
+        CallSite=.....
+    }
+    return CallSite.Target(CallSite,a,b);
+}
+としているが
+CallSite=.....
+Object func(Object a,Object b){
+    return CallSite.Target(CallSite,a,b);
+}
+にするようにした。
+
+3,共通部分式の除去した
+ループ展開できる内部の共通部分式をループの外側に移動した。
+ラムダ式内部の共通部分式をラムダの外に移動した。
+
+4,実行計画
+式の変形は段階的に行うがその中で適切なレベルの式木を実行計画として罫線を使ったテキストで表現した。
+出来ればd3.jsなどのビジュアライゼーションで表現したい。
+
+5,匿名class型を匿名struct型に置換してGCを減らす。
+Join,GroupJoinのkey指定が匿名型の場合代替の匿名struct型に置換する。
+言語機能として匿名struct型は存在しないので独自のジェネリックstructを使う。
+
+6,因数分解
+

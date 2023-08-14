@@ -1,0 +1,87 @@
+public static ASet<(string, string, decimal, decimal, decimal, decimal, decimal, decimal, decimal, long)> Start(Target<(TPC_HEntities2, decimal, List<Optimizer.A計測>)> @this)
+{
+    DateTime t = new DateTime(1998, 12, 1).Subtract(new TimeSpan(3, 0, 0, 0));
+    decimal item = @this.ValueTuple.Item2;
+    Set<(string, string, decimal, decimal, decimal, decimal, decimal, decimal, decimal, long)> set = new Set<TPC_HEntities2.Result01>();
+    var setGroupingSet = new SetGroupingSet<(string, string), LINEITEM>();
+    ASet<LINEITEM>.Enumerator enumerator = @this.ValueTuple.Item1.dbo.LINEITEM.GetEnumerator();
+    while (enumerator.MoveNext())
+    {
+        if (enumerator.Current.L_SHIPDATE <= t)
+        {
+            LINEITEM current = enumerator.Current;
+            setGroupingSet.AddKeyValue(new
+            {
+                current.item,
+                current.item2
+            }, current);
+        }
+    }
+    var enumerator2 = setGroupingSet.GetEnumerator();
+    while (enumerator2.MoveNext())
+    {
+        Set<(string, string, decimal, decimal, decimal, decimal, decimal, decimal, decimal, long)> set2 = set;
+        var key = enumerator2.Current.Key;
+        string item = key.L_RETURNFLAG;
+        string item2 = key.L_LINESTATUS;
+        decimal num = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator3 = enumerator2.Current.GetEnumerator();
+        while (enumerator3.MoveNext())
+        {
+            num += enumerator3.Current.L_QUANTITY;
+        }
+        decimal item3 = num;
+        decimal num2 = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator4 = enumerator2.Current.GetEnumerator();
+        while (enumerator4.MoveNext())
+        {
+            num2 += enumerator4.Current.L_EXTENDEDPRICE;
+        }
+        decimal item4 = num2;
+        decimal num3 = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator5 = enumerator2.Current.GetEnumerator();
+        while (enumerator5.MoveNext())
+        {
+            num3 += enumerator5.Current.L_EXTENDEDPRICE * (item - enumerator5.Current.L_DISCOUNT);
+        }
+        decimal sUM_DISC_CHARGE = num3;
+        decimal num4 = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator6 = enumerator2.Current.GetEnumerator();
+        while (enumerator6.MoveNext())
+        {
+            num4 += enumerator6.Current.L_EXTENDEDPRICE * (item - enumerator6.Current.L_DISCOUNT) * (item + enumerator6.Current.L_TAX);
+        }
+        decimal item6 = num4;
+        long num5 = 0L;
+        decimal d = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator7 = enumerator2.Current.GetEnumerator();
+        while (enumerator7.MoveNext())
+        {
+            decimal l_QUANTITY = enumerator7.Current.L_QUANTITY;
+            num5++;
+            d += l_QUANTITY;
+        }
+        decimal item7 = (num5 != 0L) ? (d / (decimal)num5) : default(decimal);
+        long num6 = 0L;
+        decimal d3 = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator8 = enumerator2.Current.GetEnumerator();
+        while (enumerator8.MoveNext())
+        {
+            decimal l_EXTENDEDPRICE = enumerator8.Current.L_EXTENDEDPRICE;
+            num6++;
+            d3 += l_EXTENDEDPRICE;
+        }
+        decimal item8 = (num6 != 0L) ? (d3 / (decimal)num6) : default(decimal);
+        long num7 = 0L;
+        decimal d4 = default(decimal);
+        ASet<LINEITEM>.Enumerator enumerator9 = enumerator2.Current.GetEnumerator();
+        while (enumerator9.MoveNext())
+        {
+            decimal l_DISCOUNT = enumerator9.Current.L_DISCOUNT;
+            num7++;
+            d4 += l_DISCOUNT;
+        }
+        set2.Add(new (string, string, decimal, decimal, decimal, decimal, decimal, decimal, decimal, long)(item, item2, item3, item4, sUM_DISC_CHARGE, item6, item7, item8, (num7 != 0L) ? (d4 / (decimal)num7) : default(decimal), enumerator2.Current.LongCount()));
+    }
+    return set;
+}

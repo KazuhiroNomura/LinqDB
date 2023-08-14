@@ -1,0 +1,58 @@
+﻿LambdaExpression.CompileToMethod メソッドを実行する前に作成しようとする型 (以下’’対象型’’と呼称) の (外観的な) 定義を終了してしまう。
+対象型 (のメソッド及びコンストラクタ) の実際の定義は、対象型のネストされた型に static メソッドとして定義し、対象型のメソッドは実際の定義を呼び出すスタブ コードを (ILGenerator を用いて) emit する。
+フィールドの初期化も内部型に用意した static メソッドによって行う。
+namespace 名前空間
+    internal partial class Impl
+        ImmutableSet<dbo.V>dbo.V(Container Container)=>
+        ImmutableSet<guest.V>guest.V(Container Container)=>
+        ImmutableSet<sys.V>sys.V(Container Container)=>
+    public class Container:Database.Container
+        dbo dbo=new(this)
+        guest guest=new(this)
+        sys sys=new(this)
+    namespace PrimaryKeys
+        namespace dbo
+            struct T
+        namespace guest
+            struct T
+        namespace sys
+            struct T
+    namespace Schemas
+        class dbo(Container Container)
+            Container Container=Container Schema.FieldBuilder
+            ImmutableSet<Tables.dbo.T>T
+            ImmutableSet<Tables.dbo.V>V=>Impl.dbo.V(this.Container)
+        class guest(Container Container)
+            Container Container=Container
+            ImmutableSet<Tables.guest.T>T
+            ImmutableSet<Tables.guest.V>V=>Impl.guest.V(this.Container)
+        class sys(Container Container)
+            Container Container=Container
+            ImmutableSet<Tables.sys.T>T
+            ImmutableSet<Tables.sys.V>V=>Impl.guest.V(this.Container)
+    namespace Tables
+        namespace dbo
+            class T
+                int F
+        namespace guest
+            class T
+                int F
+        namespace sys
+            class T
+                int F
+    namespace Views
+        namespace dbo
+            class V
+                int F
+        namespace guest
+            class V
+                int F
+        namespace sys
+            class V
+                int F
+    ここでCreateTypeする
+
+    internal partial class Impl
+        dbo.V(Container Container)=>from a in Container.dbo.T join b in Container.guest.T select a+b
+        guest.V(Container Container)=>from a in Container.dbo.T join b in Container.sys.T select a+b
+        sys.V(Container Container)=>from a in Container.sys.T join b in Container.guest.T select a+b

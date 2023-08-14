@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lite.Sets", "Lite\Lite.Sets.csproj", "{30A83D28-A7BF-4941-85FE-539786BDD675}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		DebugTrace|Any CPU = DebugTrace|Any CPU
+		DebugTrace|x86 = DebugTrace|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		ReleaseTrace|Any CPU = ReleaseTrace|Any CPU
+		ReleaseTrace|x86 = ReleaseTrace|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Debug|x86.Build.0 = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.DebugTrace|Any CPU.ActiveCfg = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.DebugTrace|Any CPU.Build.0 = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.DebugTrace|x86.ActiveCfg = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.DebugTrace|x86.Build.0 = Debug|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Release|x86.ActiveCfg = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.Release|x86.Build.0 = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.ReleaseTrace|Any CPU.ActiveCfg = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.ReleaseTrace|Any CPU.Build.0 = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.ReleaseTrace|x86.ActiveCfg = Release|Any CPU
+		{30A83D28-A7BF-4941-85FE-539786BDD675}.ReleaseTrace|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {81697054-357F-4079-8AC7-01073156D0DD}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://kazuhiro.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Lite\\Lite.Sets.csproj
+		SccProjectName1 = Lite
+		SccLocalPath1 = Lite
+	EndGlobalSection
+EndGlobal

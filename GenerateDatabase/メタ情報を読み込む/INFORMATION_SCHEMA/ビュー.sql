@@ -1,0 +1,19 @@
+DECLARE @CATALOG NVARCHAR(MAX),@SCHEMA NVARCHAR(MAX)
+--SELECT @CATALOG='TPC-H',@SCHEMA='dbo'
+
+SELECT 
+	   [TABLE_CATALOG]
+      ,[TABLE_SCHEMA]
+      ,[TABLE_NAME]
+      ,[VIEW_DEFINITION]
+      ,[CHECK_OPTION]
+      ,[IS_UPDATABLE]
+  FROM INFORMATION_SCHEMA.VIEWS
+  --WHERE TABLE_SCHEMA=@SCHEMA
+
+SELECT V.name TABLE_NAME,SQL.definition VIEW_DEFINITION
+FROM sys.all_views V
+JOIN sys.all_sql_modules SQL ON V.object_id=SQL.object_id
+JOIN sys.schemas S ON V.schema_id=S.schema_id
+--WHERE S.name=@TABLE_SCHEMA
+ORDER BY V.name

@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="GUI.TableSchemaControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:System_Xml_Linq="clr-namespace:System.Xml.Linq;assembly=System.Xml.Linq"
+             xmlns:Microsoft_SqlServer_Types="clr-namespace:Microsoft.SqlServer.Types;assembly=Microsoft.SqlServer.Types"
+             xmlns:VM="clr-namespace:GUI.VM"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             d:DataContext="{d:DesignInstance {x:Type VM:Table}, IsDesignTimeCreatable=True}"
+             BorderThickness="1" 
+             BorderBrush="Black">
+    <UserControl.Resources>
+        <x:Array x:Key="Types" Type="{x:Type System:Type}">
+            <x:Type TypeName="System:SByte" />
+            <x:Type TypeName="System:Int16" />
+            <x:Type TypeName="System:Int32" />
+            <x:Type TypeName="System:Int64" />
+            <x:Type TypeName="System:Byte" />
+            <x:Type TypeName="System:UInt16" />
+            <x:Type TypeName="System:UInt32" />
+            <x:Type TypeName="System:UInt64" />
+            <x:Type TypeName="System:Single" />
+            <x:Type TypeName="System:Double" />
+            <x:Type TypeName="System:Boolean" />
+            <x:Type TypeName="System:Char" />
+            <x:Type TypeName="System:Decimal" />
+            <x:Type TypeName="System:String" />
+            <x:Type TypeName="System:DateTime" />
+            <x:Type TypeName="System:Guid" />
+            <x:Type TypeName="System_Xml_Linq:XDocument" />
+            <x:Type TypeName="Microsoft_SqlServer_Types:SqlGeography" />
+        </x:Array>
+    </UserControl.Resources>
+    <DataGrid 
+        Name="DataGrid" 
+        ItemsSource="{Binding Columns}" 
+        AutoGenerateColumns="False" 
+        HeadersVisibility="All" 
+        RowHeaderWidth="36" 
+        RowHeight="{Binding RowHeight}"
+        CanUserResizeRows="False"
+        ColumnHeaderHeight="{Binding ColumnHeaderHeight}"
+    >
+        <!--ColumnHeaderHeight="48"-->
+        <!--RowHeight="44"-->
+        <DataGrid.Resources>
+            <Style TargetType="DataGridCell">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type DataGridCell}">
+                            <Grid Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center" Margin="0" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid>
+
+                                <ContentPresenter x:Name="contentPresenter"
+                                         Margin="{TemplateBinding Padding}"
+                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                         Content="{TemplateBinding Content}"
+                                         ContentTemplate="{TemplateBinding ContentTemplate}" />
+                                <Path x:Name="DefaultPath"
+                             VerticalAlignment="Top"
+                             Data="M0,0 14,7 0,14 Z"
+                             Fill="Gray"
+                             Stretch="Fill" />
+                                <Path x:Name="CheckedPath"
+                             VerticalAlignment="Top"
+                             Data="M0,0 14,0 7,14 Z"
+                             Fill="LightGray"
+                             Stretch="Fill"
+                             Visibility="Collapsed" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </DataGrid.Resources>
+        <DataGrid.RowHeaderTemplate>
+            <DataTemplate>
+                <ToggleButton x:Name="RowHeaderToggleButton" Cursor="Hand" />
+            </DataTemplate>
+        </DataGrid.RowHeaderTemplate>
+        <DataGrid.Columns>
+            <DataGridCheckBoxColumn Header="🔑" Binding="{Binding IsPrimaryKey}">
+            </DataGridCheckBoxColumn>
+            <DataGridTextColumn Header="名前" Binding="{Binding Name}">
+            </DataGridTextColumn>
+            <DataGridComboBoxColumn Header="データ型" SelectedValueBinding="{Binding Type}" SelectedValuePath="{Binding}" DisplayMemberPath="FullName" ItemsSource="{Binding Source={StaticResource ResourceKey=Types}}">
+            </DataGridComboBoxColumn>
+            <DataGridCheckBoxColumn Header="NULLを許容" Binding="{Binding IsNullable}">
+            </DataGridCheckBoxColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>

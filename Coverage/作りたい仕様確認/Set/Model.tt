@@ -1,0 +1,2 @@
+﻿<#const string inputFile="Model.edmx";#>
+<#@ include file="$(ProjectDir)DatabaseGenerator.txt"#>

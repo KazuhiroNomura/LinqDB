@@ -1,0 +1,340 @@
+﻿<Application x:Class="GUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GUI"
+             StartupUri="テーブルスキーマ編集.xaml"
+               xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             >
+    <!--<Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Cyan.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Cyan.xaml" />
+                <ResourceDictionary Source="Simple Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            --><!--#region MaterialDesign Brush-->
+            <!--#region Primary / Secondary--><!--
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="{DynamicResource Primary200}"/>
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="{DynamicResource Primary200Foreground}"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="{DynamicResource Primary500}"/>
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="{DynamicResource Primary500Foreground}"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{DynamicResource Primary700}"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{DynamicResource Primary700Foreground}"/>
+            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{DynamicResource Accent700}"/>
+            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="{DynamicResource Accent700Foreground}"/>
+            --><!--#endregion-->
+            <!--#region MaterialDesign--><!--
+            <SolidColorBrush x:Key="MaterialDesignBackground" Color="#FF000000"/>
+            <SolidColorBrush x:Key="MaterialDesignPaper" Color="#FF303030"/>
+            <SolidColorBrush x:Key="MaterialDesignCardBackground" Color="#FF424242"/>
+            <SolidColorBrush x:Key="MaterialDesignToolBarBackground" Color="#FF212121"/>
+            <SolidColorBrush x:Key="MaterialDesignBody" Color="#DDFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignBodyLight" Color="#89FFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignColumnHeader" Color="#BCFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignCheckBoxOff" Color="#89FFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignCheckBoxDisabled" Color="#FF647076"/>
+            <SolidColorBrush x:Key="MaterialDesignTextBoxBorder" Color="#89FFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignDivider" Color="#1FFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignSelection" Color="#757575"/>
+            <SolidColorBrush x:Key="MaterialDesignToolForeground" Color="#616161"/>
+            <SolidColorBrush x:Key="MaterialDesignToolBackground" Color="#e0e0e0"/>
+            <SolidColorBrush x:Key="MaterialDesignFlatButtonClick" Color="#19757575"/>
+            <SolidColorBrush x:Key="MaterialDesignFlatButtonRipple" Color="#FFB6B6B6"/>
+            <SolidColorBrush x:Key="MaterialDesignToolTipBackground" Color="#eeeeee"/>
+            <SolidColorBrush x:Key="MaterialDesignChipBackground" Color="#FF2E3C43"/>
+            <SolidColorBrush x:Key="MaterialDesignSnackbarBackground" Color="#FFCDCDCD"/>
+            <SolidColorBrush x:Key="MaterialDesignSnackbarMouseOver" Color="#FFB9B9BD"/>
+            <SolidColorBrush x:Key="MaterialDesignSnackbarRipple" Color="#FF494949"/>
+            <SolidColorBrush x:Key="MaterialDesignTextFieldBoxBackground" Color="#1AFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignTextFieldBoxHoverBackground" Color="#1FFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignTextFieldBoxDisabledBackground" Color="#0DFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignTextAreaBorder" Color="#BCFFFFFF"/>
+            <SolidColorBrush x:Key="MaterialDesignTextAreaInactiveBorder" Color="#1AFFFFFF"/>
+            --><!--#endregion-->
+            <!--#endregion-->
+
+            <!--#region MaterialDesign Button--><!--
+            <Style x:Key="MaterialDesignRaisedButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}"/>
+            <Style x:Key="MaterialDesignRaisedLightButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedLightButton}"/>
+            <Style x:Key="MaterialDesignRaisedDarkButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}"/>
+            <Style x:Key="MaterialDesignRaisedAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedAccentButton}"/>
+            <Style x:Key="MaterialDesignFlatButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatButton}"/>
+            <Style x:Key="MaterialDesignFlatAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatAccentButton}"/>
+            <Style x:Key="MaterialDesignFlatAccentBgButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}"/>
+            <Style x:Key="MaterialDesignFlatLightBgButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatLightBgButton}"/>
+            <Style x:Key="MaterialDesignFlatMidBgButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatMidBgButton}"/>
+            <Style x:Key="MaterialDesignFlatDarkBgButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}"/>
+            <Style x:Key="MaterialDesignOutlinedButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignOutlinedButton}"/>
+            <Style x:Key="MaterialDesignToolButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}"/>
+            <Style x:Key="MaterialDesignToolForegroundButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignToolForegroundButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionMiniButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionMiniLightButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionMiniDarkButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionMiniAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionLightButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionLightButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionDarkButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionDarkButton}"/>
+            <Style x:Key="MaterialDesignFloatingActionAccentButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionAccentButton}"/>
+            <Style x:Key="MaterialDesignIconButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconButton}"/>
+            <Style x:Key="MaterialDesignIconForegroundButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignIconForegroundButton}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Calendar--><!--
+            <Style x:Key="MaterialDesignCalendarPortraitStyle" TargetType="Calendar" BasedOn="{StaticResource MaterialDesignCalendarPortrait}"/>
+            <Style x:Key="MaterialDesignCalendarButtonStyle" TargetType="CalendarButton" BasedOn="{StaticResource MaterialDesignCalendarButton}"/>
+            <Style x:Key="MaterialDesignCalendarDayButtonStyle" TargetType="CalendarDayButton" BasedOn="{StaticResource MaterialDesignCalendarDayButton}"/>
+            <Style x:Key="MaterialDesignCalendarItemPortraitStyle" TargetType="CalendarItem" BasedOn="{StaticResource MaterialDesignCalendarItemPortrait}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign CheckButton--><!--
+            <Style x:Key="MaterialDesignActionCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignActionCheckBox}"/>
+            <Style x:Key="MaterialDesignActionLightCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignActionLightCheckBox}"/>
+            <Style x:Key="MaterialDesignActionDarkCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignActionDarkCheckBox}"/>
+            <Style x:Key="MaterialDesignActionAccentCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignActionAccentCheckBox}"/>
+            <Style x:Key="MaterialDesignCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignCheckBox}"/>
+            <Style x:Key="MaterialDesignLightCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignLightCheckBox}"/>
+            <Style x:Key="MaterialDesignDarkCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDarkCheckBox}"/>
+            <Style x:Key="MaterialDesignAccentCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignAccentCheckBox}"/>
+            <Style x:Key="MaterialDesignUserForegroundCheckBoxStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignUserForegroundCheckBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ComboBox--><!--
+            <Style x:Key="MaterialDesignComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignComboBox}"/>
+            <Style x:Key="MaterialDesignFloatingHintComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign DataGrid--><!--
+            <Style x:Key="MaterialDesignDataGridCheckBoxColumnStyleStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridCheckBoxColumnEditingStyle}"/>
+            <Style x:Key="MaterialDesignDataGridTextColumnEditingStyleStyle" TargetType="CheckBox" BasedOn="{StaticResource MaterialDesignDataGridTextColumnEditingStyle}"/>
+            <Style x:Key="MaterialDesignDataGridTextColumnPopupEditingStyleStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"/>
+            <Style x:Key="MaterialDesignDataGridCellStyle" TargetType="DataGridCell" BasedOn="{StaticResource MaterialDesignDataGridCell}"/>
+            <Style x:Key="MaterialDesignDataGridColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}"/>
+            <Style x:Key="MaterialDesignDataGridRowHeaderStyle" TargetType="DataGridRowHeader" BasedOn="{StaticResource MaterialDesignDataGridRowHeader}"/>
+            <Style x:Key="MaterialDesignDataGridRowStyle" TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}"/>
+            <Style x:Key="MaterialDesignDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign DatePicker--><!--
+            <Style x:Key="MaterialDesignDatePickerTextBoxStyle" TargetType="DatePickerTextBox" BasedOn="{StaticResource MaterialDesignDatePickerTextBox}"/>
+            <Style x:Key="MaterialDesignDatePickerCalendarPortraitStyle" TargetType="Calendar" BasedOn="{StaticResource MaterialDesignDatePickerCalendarPortrait}"/>
+            <Style x:Key="MaterialDesignDatePickerStyle" TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignDatePicker}"/>
+            <Style x:Key="MaterialDesignFloatingHintDatePickerStyle" TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign DialogHost--><!--
+            <Style x:Key="MaterialDesignEmbeddedDialogHostStyle" TargetType="md:DialogHost" BasedOn="{StaticResource MaterialDesignEmbeddedDialogHost}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Expander--><!--
+            <Style x:Key="MaterialDesignExpanderRightHeaderStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignExpanderRightHeaderStyle}"/>
+            <Style x:Key="MaterialDesignExpanderLeftHeaderStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignExpanderLeftHeaderStyle}"/>
+            <Style x:Key="MaterialDesignExpanderDownHeaderStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignExpanderDownHeaderStyle}"/>
+            <Style x:Key="MaterialDesignExpanderUpHeaderStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignExpanderUpHeaderStyle}"/>
+            <Style x:Key="MaterialDesignExpanderStyle" TargetType="Expander" BasedOn="{StaticResource MaterialDesignExpander}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign GridSplitter--><!--
+            <Style x:Key="MaterialDesignGridSplitterStyle" TargetType="GridSplitter" BasedOn="{StaticResource MaterialDesignGridSplitter}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign GroupBox--><!--
+            <Style x:Key="MaterialDesignGroupBoxStyle" TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignGroupBox}"/>
+            <Style x:Key="MaterialDesignCardGroupBoxStyle" TargetType="GroupBox" BasedOn="{StaticResource MaterialDesignCardGroupBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Hyperlink--><!--
+            <Style x:Key="MaterialDesignBody1HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignBody1Hyperlink}"/>
+            <Style x:Key="MaterialDesignBody2HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignBody2Hyperlink}"/>
+            <Style x:Key="MaterialDesignCaptionHyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignCaptionHyperlink}"/>
+            <Style x:Key="MaterialDesignOverlineHyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignOverlineHyperlink}"/>
+            <Style x:Key="MaterialDesignSubtitle1HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignSubtitle1Hyperlink}"/>
+            <Style x:Key="MaterialDesignSubtitle2HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignSubtitle2Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline6HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline6Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline5HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline5Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline4HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline4Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline3HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline3Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline2HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline2Hyperlink}"/>
+            <Style x:Key="MaterialDesignHeadline1HyperlinkStyle" TargetType="Hyperlink" BasedOn="{StaticResource MaterialDesignHeadline1Hyperlink}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Label--><!--
+            <Style x:Key="MaterialDesignLabelStyle" TargetType="Label" BasedOn="{StaticResource MaterialDesignLabel}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ListBox--><!--
+            <Style x:Key="MaterialDesignToolToggleListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignToolToggleListBoxItem}"/>
+            <Style x:Key="MaterialDesignListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}"/>
+            <Style x:Key="MaterialDesignCardsListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignCardsListBoxItem}"/>
+            <Style x:Key="MaterialDesignToolToggleListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource MaterialDesignToolToggleListBox}"/>
+            <Style x:Key="MaterialDesignToolToggleFlatListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource MaterialDesignToolToggleFlatListBox}"/>
+            <Style x:Key="MaterialDesignListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource MaterialDesignListBox}"/>
+            <Style x:Key="MaterialDesignCardsListBoxStyle" TargetType="ListBox" BasedOn="{StaticResource MaterialDesignCardsListBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ListView--><!--
+            <Style x:Key="MaterialDesignGridViewItemStyle" TargetType="ListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}"/>
+            <Style x:Key="MaterialDesignListViewStyle" TargetType="ListView" BasedOn="{StaticResource MaterialDesignListView}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Menu--><!--
+            <Style x:Key="MaterialDesignSeparatorStyle" TargetType="Separator" BasedOn="{StaticResource MaterialDesignSeparator}"/>
+            <Style x:Key="MaterialDesignMenuStyle" TargetType="MenuBase" BasedOn="{StaticResource MaterialDesignMenu}"/>
+            <Style x:Key="MaterialDesignContextMenuStyle" TargetType="ContextMenu" BasedOn="{StaticResource MaterialDesignContextMenu}"/>
+            <Style x:Key="MaterialDesignMenuItemStyle" TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign PasswordBox--><!--
+            <Style x:Key="MaterialDesignPasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignPasswordBox}"/>
+            <Style x:Key="MaterialDesignFloatingHintPasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+            <Style x:Key="MaterialDesignFilledPasswordFieldPasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignFilledPasswordFieldPasswordBox}"/>
+            <Style x:Key="MaterialDesignOutlinedPasswordFieldPasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignOutlinedPasswordFieldPasswordBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign PopupBox--><!--
+            <Style x:Key="MaterialDesignPopupBoxButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignPopupBoxButton}"/>
+            <Style x:Key="MaterialDesignPopupBoxToggleContentStyle" TargetType="md:PackIcon" BasedOn="{StaticResource MaterialDesignPopupBoxToggleContent}"/>
+            <Style x:Key="MaterialDesignPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignPopupBox}"/>
+            <Style x:Key="MaterialDesignToolPopupBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource MaterialDesignToolPopupBox}"/>
+            <Style x:Key="MaterialDesignToolForegroundPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignToolForegroundPopupBox}"/>
+            <Style x:Key="MaterialDesignMultiFloatingActionPopupBoxIconStyle" TargetType="md:PackIcon" BasedOn="{StaticResource MaterialDesignMultiFloatingActionPopupBoxIcon}"/>
+            <Style x:Key="MaterialDesignMultiFloatingActionPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"/>
+            <Style x:Key="MaterialDesignMultiFloatingActionLightPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignMultiFloatingActionLightPopupBox}"/>
+            <Style x:Key="MaterialDesignMultiFloatingActionDarkPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignMultiFloatingActionDarkPopupBox}"/>
+            <Style x:Key="MaterialDesignMultiFloatingActionAccentPopupBoxStyle" TargetType="md:PopupBox" BasedOn="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ProgressBar--><!--
+            <Style x:Key="MaterialDesignLinearProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignLinearProgressBar}"/>
+            <Style x:Key="MaterialDesignCircularProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource MaterialDesignCircularProgressBar}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign RadioButton--><!--
+            <Style x:Key="MaterialDesignRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignRadioButton}"/>
+            <Style x:Key="MaterialDesignLightRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignLightRadioButton}"/>
+            <Style x:Key="MaterialDesignDarkRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignDarkRadioButton}"/>
+            <Style x:Key="MaterialDesignAccentRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignAccentRadioButton}"/>
+            <Style x:Key="MaterialDesignUserForegroundRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignUserForegroundRadioButton}"/>
+            <Style x:Key="MaterialDesignTabRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignTabRadioButton}"/>
+            <Style x:Key="MaterialDesignToolRadioButtonStyle" TargetType="RadioButton" BasedOn="{StaticResource MaterialDesignToolRadioButton}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign RichTextBox--><!--
+            <Style x:Key="MaterialDesignRichTextBoxStyle" TargetType="RichTextBox" BasedOn="{StaticResource MaterialDesignRichTextBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ScrollBar--><!--
+            <Style x:Key="MaterialDesignScrollBarButtonStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignScrollBarButton}"/>
+            <Style x:Key="MaterialDesignRepeatButtonTransparentStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignRepeatButtonTransparent}"/>
+            <Style x:Key="MaterialDesignScrollBarThumbStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignScrollBarThumb}"/>
+            <Style x:Key="MaterialDesignScrollBarThumbVerticalStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignScrollBarThumbVertical}"/>
+            <Style x:Key="MaterialDesignScrollBarThumbHorizontalStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignScrollBarThumbHorizontal}"/>
+            <Style x:Key="MaterialDesignScrollBarStyle" TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBar}"/>
+            <Style x:Key="MaterialDesignScrollBarMinimalStyle" TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ScrollViewer--><!--
+            <Style x:Key="MaterialDesignScrollViewerStyle" TargetType="ScrollViewer" BasedOn="{StaticResource MaterialDesignScrollViewer}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Slider--><!--
+            <Style x:Key="MaterialDesignHorizontalTrackRepeatButtonStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignHorizontalTrackRepeatButton}"/>
+            <Style x:Key="MaterialDesignHorizontalTrackDiscreteRepeatButtonStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignHorizontalTrackDiscreteRepeatButton}"/>
+            <Style x:Key="MaterialDesignVerticalTrackRepeatButtonStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignVerticalTrackRepeatButton}"/>
+            <Style x:Key="MaterialDesignVerticalTrackDiscreteRepeatButtonStyle" TargetType="RepeatButton" BasedOn="{StaticResource MaterialDesignVerticalTrackDiscreteRepeatButton}"/>
+            <Style x:Key="MaterialDesignSliderThumbStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignSliderThumb}"/>
+            <Style x:Key="MaterialDesignDiscreteSliderThumbStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignDiscreteSliderThumb}"/>
+            <Style x:Key="MaterialDesignLeftDiscreteSliderThumbStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignLeftDiscreteSliderThumb}"/>
+            <Style x:Key="MaterialDesignSliderHorizontalStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignSliderHorizontal}"/>
+            <Style x:Key="MaterialDesignSliderVerticalStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignSliderVertical}"/>
+            <Style x:Key="MaterialDesignDiscreteSliderHorizontalStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteSliderHorizontal}"/>
+            <Style x:Key="MaterialDesignDiscreteSliderVerticalStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteSliderVertical}"/>
+            <Style x:Key="MaterialDesignSliderStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignSlider}"/>
+            <Style x:Key="MaterialDesignDiscreteHorizontalSliderStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteHorizontalSlider}"/>
+            <Style x:Key="MaterialDesignDiscreteVerticalSliderStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteVerticalSlider}"/>
+            <Style x:Key="MaterialDesignDiscreteSliderStyle" TargetType="Slider" BasedOn="{StaticResource MaterialDesignDiscreteSlider}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign SnackBar--><!--
+            <Style x:Key="MaterialDesignSnackbarActionButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignSnackbarActionButton}"/>
+            <Style x:Key="MaterialDesignSnackbarActionLightButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignSnackbarActionLightButton}"/>
+            <Style x:Key="MaterialDesignSnackbarActionMidButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignSnackbarActionMidButton}"/>
+            <Style x:Key="MaterialDesignSnackbarActionDarkButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignSnackbarActionDarkButton}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign TextBlock--><!--
+            <Style x:Key="MaterialDesignTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTextBlock}"/>
+            <Style x:Key="MaterialDesignCaptionTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignCaptionTextBlock}"/>
+            <Style x:Key="MaterialDesignBody1TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignBody1TextBlock}"/>
+            <Style x:Key="MaterialDesignBody2TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignBody2TextBlock}"/>
+            <Style x:Key="MaterialDesignOverlineTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignOverlineTextBlock}"/>
+            <Style x:Key="MaterialDesignSubtitle1TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignSubtitle1TextBlock}"/>
+            <Style x:Key="MaterialDesignSubtitle2TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline6TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline6TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline5TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline5TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline4TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline4TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline3TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline3TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline2TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline2TextBlock}"/>
+            <Style x:Key="MaterialDesignHeadline1TextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignHeadline1TextBlock}"/>
+            <Style x:Key="MaterialDesignButtonTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignButtonTextBlock}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign TextBox--><!--
+            <Style x:Key="MaterialDesignTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}"/>
+            <Style x:Key="MaterialDesignFloatingHintTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+            <Style x:Key="MaterialDesignFilledTextFieldTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFilledTextFieldTextBox}"/>
+            <Style x:Key="MaterialDesignOutlinedTextFieldTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign Thumb--><!--
+            <Style x:Key="MaterialDesignThumbStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignThumb}"/>
+            <Style x:Key="MaterialDesignGridRowHeaderGripperStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignGridRowHeaderGripper}"/>
+            <Style x:Key="MaterialDesignGridColumnHeaderGripperStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignGridColumnHeaderGripper}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign TimePicker--><!--
+            <Style x:Key="MaterialDesignTimePickerStyle" TargetType="md:TimePicker" BasedOn="{StaticResource MaterialDesignTimePicker}"/>
+            <Style x:Key="MaterialDesignFloatingHintTimePickerStyle" TargetType="md:TimePicker" BasedOn="{StaticResource MaterialDesignFloatingHintTimePicker}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ToggleButton--><!--
+            <Style x:Key="MaterialDesignActionToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionToggleButton}"/>
+            <Style x:Key="MaterialDesignActionLightToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionLightToggleButton}"/>
+            <Style x:Key="MaterialDesignActionDarkToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionDarkToggleButton}"/>
+            <Style x:Key="MaterialDesignActionAccentToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignActionAccentToggleButton}"/>
+            <Style x:Key="MaterialDesignFlatToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignFlatToggleButton}"/>
+            <Style x:Key="MaterialDesignFlatPrimaryToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignFlatPrimaryToggleButton}"/>
+            <Style x:Key="MaterialDesignSwitchToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignSwitchToggleButton}"/>
+            <Style x:Key="MaterialDesignSwitchLightToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignSwitchLightToggleButton}"/>
+            <Style x:Key="MaterialDesignSwitchDarkToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignSwitchDarkToggleButton}"/>
+            <Style x:Key="MaterialDesignSwitchAccentToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignSwitchAccentToggleButton}"/>
+            <Style x:Key="MaterialDesignHamburgerToggleButtonStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignHamburgerToggleButton}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ToolBar--><!--
+            <Style x:Key="MaterialDesignToolBarVerticalOverflowButtonStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignToolBarVerticalOverflowButtonStyle}"/>
+            <Style x:Key="MaterialDesignToolBarHorizontalOverflowButtonStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignToolBarHorizontalOverflowButtonStyle}"/>
+            <Style x:Key="MaterialDesignToolBarThumbStyleStyle" TargetType="Thumb" BasedOn="{StaticResource MaterialDesignToolBarThumbStyle}"/>
+            <Style x:Key="MaterialDesignToolBarMainPanelBorderStyleStyle" TargetType="Border" BasedOn="{StaticResource MaterialDesignToolBarMainPanelBorderStyle}"/>
+            <Style x:Key="MaterialDesignToolBarStyle" TargetType="ToolBar" BasedOn="{StaticResource MaterialDesignToolBar}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ToolBarTray--><!--
+            <Style x:Key="MaterialDesignToolBarTrayStyle" TargetType="ToolBarTray" BasedOn="{StaticResource MaterialDesignToolBarTray}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign ToolTip--><!--
+            <Style x:Key="MaterialDesignToolTipStyle" TargetType="ToolTip" BasedOn="{StaticResource MaterialDesignToolTip}"/>
+            --><!--#endregion-->
+
+            <!--#region MaterialDesign TreeView--><!--
+            <Style x:Key="MaterialDesignTreeViewStyle" TargetType="TreeView" BasedOn="{StaticResource MaterialDesignTreeView}"/>
+            <Style x:Key="MaterialDesignExpandCollapseToggleStyleStyle" TargetType="ToggleButton" BasedOn="{StaticResource MaterialDesignExpandCollapseToggleStyle}"/>
+            <Style x:Key="MaterialDesignTreeViewItemStyle" TargetType="TreeViewItem" BasedOn="{StaticResource MaterialDesignTreeViewItem}"/>
+            --><!--#endregion--><!--
+
+        </ResourceDictionary>
+    </Application.Resources>-->
+</Application>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Interface Name="LinqDB.Databases.ViewModels.IColumn">
+    <Position X="12" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAECAAAABAAAAAAAQAAAAAAIAA=</HashCode>
+      <FileName>Databases\ViewModels\IColumns.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IContainer" Collapsed="true">
+    <Position X="7.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAQAAgAA=</HashCode>
+      <FileName>Databases\ViewModels\IContainer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IForeignKey" Collapsed="true">
+    <Position X="14.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAACAEAAAAAAAAAAAABAAAAAAAIQA=</HashCode>
+      <FileName>Databases\ViewModels\IForeignKey.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IRelation" Collapsed="true">
+    <Position X="21" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAQgAAAAAAAAAAAAAAAAAAAAAQAgAIAA=</HashCode>
+      <FileName>Databases\ViewModels\IRelation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.ISchema" Collapsed="true">
+    <Position X="9.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AggAAAQAAQAAAAAAAAAAQAAAAAAAAAAAAQAAgAAAgAA=</HashCode>
+      <FileName>Databases\ViewModels\ISchema.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.ITable" Collapsed="true">
+    <Position X="16.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAAAAAAAAAAAAAAAAAAAEAAQIACAAKAAQAAggACA=</HashCode>
+      <FileName>Databases\ViewModels\ITable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IView" Collapsed="true">
+    <Position X="23.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAAEAQgAAAA=</HashCode>
+      <FileName>Databases\ViewModels\IView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IName" Collapsed="true">
+    <Position X="16.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Databases\ViewModels\IViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.I親子" Collapsed="true">
+    <Position X="18.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Databases\ViewModels\IViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.ViewModels.IProcedure" Collapsed="true">
+    <Position X="25.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Databases\ViewModels\IViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

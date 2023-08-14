@@ -1,0 +1,293 @@
+﻿<Window x:Class="GUI.テーブルスキーマ編集"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GUI"
+        xmlns:VM="clr-namespace:GUI.VM"
+        mc:Ignorable="d"
+        Title="テーブルスキーマ編集" Height="450" Width="800" 
+        x:Name="Window"
+        d:DataContext="{d:DesignInstance {x:Type VM:Container}, IsDesignTimeCreatable=True}"
+    >
+    <Window.DataContext>
+        <VM:Container />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+            <Button Name="保存" Content="保存" Click="保存_Click" />
+            <TextBox Text="{Binding Name}" />
+            <TextBlock Text="SQL Server" />
+            <ComboBox Name="SQLServer" VerticalAlignment="Stretch" Width="120" IsEditable="False" SelectionChanged="SQLServer_SelectionChanged"/>
+            <TextBlock Text="MySQL" />
+            <ComboBox Name="MySQL" VerticalAlignment="Stretch" Width="120" IsEditable="False" SelectionChanged="MySQL_SelectionChanged"/>
+            <TextBlock Text="DLL" />
+            <ComboBox 
+                Name="DLL" VerticalAlignment="Stretch" Width="120" IsEditable="False" ItemsSource="{Binding Files}"
+                SelectionChanged="DLL_SelectionChanged"
+            />
+            <Button Name="CreateTable" Content="CreateTable" DockPanel.Dock="Top"
+                HorizontalAlignment="Center"
+                Click="CreateTable_Click" />
+        </StackPanel>
+        <TabControl Grid.Row="1" TabStripPlacement="Left" VerticalAlignment="Stretch">
+            <TabItem Header="ダイアグラム0">
+                <DockPanel>
+                    <local:DiagramControl x:Name="DiagramControl" />
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="ダイアグラム">
+                <DockPanel>
+                    <ListBox ItemsSource="{Binding DiagramObjects}" x:Name="DiagramListBox" >
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                                <Setter Property="Canvas.Top" Value="{Binding Top}" />
+                                <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <HeaderedContentControl>
+                                                <HeaderedContentControl.Header>
+                                                    <Thumb DragDelta="DragDelta" HorizontalAlignment="Stretch">
+                                                        <Thumb.Template>
+                                                            <ControlTemplate>
+                                                                <Border 
+                                                                    Visibility="{Binding DataGridVisibility}"
+                                                                    BorderThickness="1,1,1,0" 
+                                                                    BorderBrush="Black"
+                                                                >
+                                                                    <StackPanel Orientation="Horizontal" Visibility="{Binding DataGridVisibility}" PreviewMouseLeftButtonDown="つまみMouseLeftButtonDown">
+                                                                        <Border 
+                                                                            Width="48" 
+                                                                            Height="48" 
+                                                                            Visibility="{Binding DataGridVisibility}" 
+                                                                        >
+                                                                            <Border.Background>
+                                                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                                                                                    <GradientStop Color="White" Offset="0"/>
+                                                                                    <GradientStop Color="Black" Offset="1"/>
+                                                                                </LinearGradientBrush>
+                                                                            </Border.Background>
+                                                                        </Border>
+                                                                        <TextBox Text="{Binding Name}" Height="48" HorizontalAlignment="Stretch" VerticalAlignment="Top" MinWidth="32" FontSize="24" Background="LightGray" Foreground="Black">
+                                                                        </TextBox>
+                                                                        <Button Name="RemoveTable" Content="×" Click="RemoveTable_Click" FontSize="24" Height="32" Width="32" >
+                                                                        </Button>
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Thumb.Template>
+                                                    </Thumb>
+                                                </HeaderedContentControl.Header>
+                                                <ContentPresenter />
+                                            </HeaderedContentControl>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Thumb x:Name="Thumb" Canvas.Left="{Binding Left}" Canvas.Top="{Binding Top}" DragDelta="DragDelta" HorizontalAlignment="Stretch" PreviewMouseLeftButtonDown="つまみMouseLeftButtonDown">
+                                    <Thumb.Template>
+                                        <ControlTemplate>
+                                            <Canvas x:Name="Canvas">
+                                                <local:RelationConnecter ToolTipService.ShowDuration="10000000" ToolTip="{Binding ToolTip}" Visibility="{Binding LineVisibility}" />
+                                                <local:TableSchemaControl Visibility="{Binding DataGridVisibility}" />
+                                            </Canvas>
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="スキーマ">
+                <TabControl ItemsSource="{Binding Schemas}" Name="Schemas" SelectedIndex="{Binding SelectedIndex}">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="Background" Value="Yellow" />
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Name="Header" Text="{Binding Name}" IsReadOnly="{Binding TableNameTextBox_IsReadOnly}" MinWidth="32">
+                                </TextBox>
+                                <Button Name="Close" Content="×" Click="CloseSchema_Click" FontSize="24" Height="32" Width="32" >
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="False">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <TabControl ItemsSource="{Binding Tables}" SelectedIndex="{Binding SelectedIndex}">
+                                <TabControl.ItemContainerStyle>
+                                    <Style TargetType="TabItem">
+                                        <Setter Property="Background" Value="Green" />
+                                        <Setter Property="ContextMenu">
+                                            <Setter.Value>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Test"/>
+                                                </ContextMenu>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </TabControl.ItemContainerStyle>
+                                <TabControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBox Name="Header" Text="{Binding Name}" IsReadOnly="{Binding SchemaNameTextBox_IsReadOnly}" MinWidth="32">
+                                            </TextBox>
+                                            <Button Name="Close" Content="×" FontSize="24" Click="CloseTable_Click" Height="32" Width="32">
+                                                <Button.Style>
+                                                    <Style TargetType="{x:Type Button}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="False">
+                                                                <Setter Property="Visibility" Value="Hidden" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </TabControl.ItemTemplate>
+                                <TabControl.ContentTemplate>
+                                    <DataTemplate>
+                                        <local:TableSchemaControl />
+                                    </DataTemplate>
+                                </TabControl.ContentTemplate>
+                            </TabControl>
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="テーブル">
+                <TabControl ItemsSource="{Binding Tables}" Name="Tables" SelectedIndex="{Binding SelectedIndex}">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="TabItem">
+                            <Setter Property="Background" Value="Green" />
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu>
+                                        <MenuItem Header="Test"/>
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel.Resources>
+                                    <VM:Schemas x:Key="Schemas"  />
+                                </StackPanel.Resources>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Text="{Binding Name}" IsReadOnly="{Binding SchemaNameTextBox_IsReadOnly}" MinWidth="32" />
+                                    <ComboBox
+                                        ItemsSource="{Binding Schemas}"
+                                        SelectedValue="{Binding Schema}"
+                                        SelectedValuePath=""
+                                        DisplayMemberPath="Name"
+                                        SelectionChanged="Schemas_SelectionChanged"
+                                    />
+                                </StackPanel>
+                                <Button Name="Close" Content="×" FontSize="24" Click="CloseTable_Click" Height="32" Width="32">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="False">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <local:TableSchemaControl />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </TabItem>
+            <TabItem Header="テーブルデータ">
+                <TabControl ItemsSource="{Binding Tables}" SelectedIndex="{Binding SelectedIndex}">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel.Resources>
+                                    <VM:Schemas x:Key="Schemas"  />
+                                </StackPanel.Resources>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBox Text="{Binding Name}" IsReadOnly="{Binding SchemaNameTextBox_IsReadOnly}" MinWidth="32" />
+                                    <ComboBox
+                                        ItemsSource="{Binding Schemas}"
+                                        SelectedValue="{Binding Schema}"
+                                        SelectedValuePath=""
+                                        DisplayMemberPath="Name"
+                                        SelectionChanged="Schemas_SelectionChanged"
+                                    />
+                                </StackPanel>
+                                <Button Name="Close" Content="×" FontSize="24" Click="CloseTable_Click" Height="32" Width="32">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TabItem},Path=IsSelected}" Value="False">
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <local:TableDataControl>
+                                <local:TableDataControl.DataContext>
+                                    <VM:TestRecords />
+                                </local:TableDataControl.DataContext>
+                            </local:TableDataControl>
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

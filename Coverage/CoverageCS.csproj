@@ -1,0 +1,117 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName></SccProjectName>
+    <SccProvider></SccProvider>
+    <SccAuxPath></SccAuxPath>
+    <SccLocalPath></SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>NET60-windows</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon />
+    <StartupObject />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;659;661</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;659;661</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="LinqDB\Sets\Test_AssociationSet`1.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Model.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Model1.Designer.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Test_Check.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Test_Relationship_Add.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Test_Relationship_Assign.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Test_Set.cs" />
+    <Compile Remove="作りたい仕様確認\Set\Test_Transaction_Add.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="AssemblyInfo.fs" />
+    <None Remove="AssertExecute.fs" />
+    <None Remove="CoverageCS.csproj.vspscc" />
+    <None Remove="CoverageCS.Lite.CRC.csproj.vspscc" />
+    <None Remove="CoverageFS.fsproj.vspscc" />
+    <None Remove="CoverageVB.vbproj.vspscc" />
+    <None Remove="Enumerable_Set.fs" />
+    <None Remove="LinqDB\Optimizers\ExpressionEqualityComparer.vb" />
+    <None Remove="Program.fs" />
+    <None Remove="作りたい仕様確認\Set\Model.edmx" />
+    <None Remove="作りたい仕様確認\Set\Model.tt" />
+    <None Remove="作成_DynamicMethodによるDelegate作成.fs" />
+    <None Remove="固有.fs" />
+    <None Remove="基礎.fs" />
+    <None Remove="変換_KeySelectorの匿名型をValueTupleに書き換え.fs" />
+    <None Remove="変換_単一メソッドの書き換え.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="LinqDB\Sets\Test_AssociationSet`1.cs" />
+    <Content Include="作りたい仕様確認\Set\Model.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Content>
+    <Content Include="作りたい仕様確認\Set\Model.edmx" />
+    <Content Include="作りたい仕様確認\Set\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.cs</LastGenOutput>
+    </Content>
+    <Content Include="作りたい仕様確認\Set\Model1.Designer.cs" />
+    <Content Include="作りたい仕様確認\Set\Test_Check.cs" />
+    <Content Include="作りたい仕様確認\Set\Test_Relationship_Add.cs" />
+    <Content Include="作りたい仕様確認\Set\Test_Relationship_Assign.cs" />
+    <Content Include="作りたい仕様確認\Set\Test_Set.cs" />
+    <Content Include="作りたい仕様確認\Set\Test_Transaction_Add.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MessagePack" Version="2.3.112" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="My Project\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="localhost.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+</Project>

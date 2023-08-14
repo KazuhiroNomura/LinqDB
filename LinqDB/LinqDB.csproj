@@ -1,0 +1,94 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup Label="Globals">
+    <SccProjectName></SccProjectName>
+    <SccProvider></SccProvider>
+    <SccAuxPath></SccAuxPath>
+    <SccLocalPath></SccLocalPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <ApplicationIcon>logo128.ico</ApplicationIcon>
+    <StartupObject />
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn />
+    <WarningsAsErrors />
+    <DocumentationFile>C:\Team\kazuhiro.visualstudio.com\Lite\LinqDB\LinqDB.xml</DocumentationFile>
+    <WarningLevel>3</WarningLevel>
+    <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn />
+    <WarningsAsErrors />
+    <DocumentationFile>C:\Team\kazuhiro.visualstudio.com\Lite\LinqDB\LinqDB.xml</DocumentationFile>
+    <WarningLevel>3</WarningLevel>
+    <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Databases\ImportDatabase - コピー.cs" />
+    <Compile Remove="Databases\ImportDatabase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="5.0.0" />
+    <PackageReference Include="IndexRange" Version="1.0.0" />
+    <PackageReference Include="Lokad.ILPack" Version="0.1.7" />
+    <PackageReference Include="MessagePack" Version="2.3.112" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="3.8.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.SqlServer.DacFx" Version="160.5400.1" />
+    <PackageReference Include="MySqlConnector" Version="2.1.8" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Spatial" Version="5.8.4" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0" />
+    <PackageReference Include="Utf8Json" Version="1.3.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.en-us.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.en-us.resx</DependentUpon>
+    </Compile>
+    <Compile Update="System.Data.LinqDBClient\LinqDBCommandBuilder.cs" />
+    <Compile Update="System.Data.LinqDBClient\LinqDBCommand.cs" />
+    <Compile Update="System.Data.LinqDBClient\LinqDBConnection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.en-us.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.en-us.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Serializers\Utf8Json\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+  </PropertyGroup>
+</Project>

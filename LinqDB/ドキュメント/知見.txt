@@ -1,0 +1,11 @@
+﻿System.TypeLoadException
+  HResult=0x80131522
+  Message=Access is denied
+呼び出し側のprivate例えば匿名型をMethodBuilderでアクセスした場合に発生する
+privateクラスを型引数に使ったデリゲートもインスタンス化できない
+System.Reflection.AmbiguousMatchException: 'Ambiguous match found.'
+FieldBuilderで同一名Fieldを定義した場合
+
+System.NotSupportedException: 'The invoked member is not supported in a dynamic module.'
+Disp_LambdaFieldが動的アセンブリだった場合
+Disp_LambdaField.GetValue(Tuple);

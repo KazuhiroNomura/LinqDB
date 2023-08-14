@@ -1,0 +1,281 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="LinqDB.Sets.AscList&lt;T&gt;" Collapsed="true">
+    <Position X="3.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\AscList`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.DescList&lt;T&gt;" Collapsed="true">
+    <Position X="2" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\DescList`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Entity" Collapsed="true">
+    <Position X="12" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAggAAAAAEAAAAAAAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Sets\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Entity&lt;TContainer&gt;" Collapsed="true">
+    <Position X="12" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Sets\Entity`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Entity&lt;TKey, TContainer&gt;" Collapsed="true">
+    <Position X="12" Y="9.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAACAAAAAAgAA=</HashCode>
+      <FileName>Sets\Entity`2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.ExtensionEnumerable" Collapsed="true">
+    <Position X="23.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\ExtensionEnumerable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.ExtensionSet" Collapsed="true">
+    <Position X="25.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IKREAEiEAFCACAgEECCMJACQAEFAAABAAIAAQQZQAAQ=</HashCode>
+      <FileName>Sets\ExtensionSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.ExtensionSet2">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\ExtensionSet2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.GroupingAscList&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="4.25" Y="10.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\GroupingAscList`2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.GroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="2.75" Y="4.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\GroupingSet`2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.HashSet_VoidAdd&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\HashSet_VoidAdd.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LinqDB.Sets.Helpers" Collapsed="true">
+    <Position X="25.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAIAAgAAAAAAAAAAAAAAQAABAAAAAAAA=</HashCode>
+      <FileName>Sets\Helpers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.ImmutableGroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="2.75" Y="3.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\ImmutableGroupingSet`2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.ImmutableSet" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAABEAEAAIAAAAAAAA=</HashCode>
+      <FileName>Sets\ImmutableSet.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.ImmutableSet&lt;T&gt;" Collapsed="true">
+    <Position X="12" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgiIABQABCBQABPsgAFAAQAgQIACBpAEAgAQABBQIQI=</HashCode>
+      <FileName>Sets\ImmutableSet`1.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.List64_VoidAdd&lt;T&gt;" Collapsed="true">
+    <Position X="3.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAABAAAAAAAAQAAAAAAAAUAAAAAAACAQA=</HashCode>
+      <FileName>Sets\List64_VoidAdd`1.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.Lookup&lt;TValue, TKey, TCollection&gt;" Collapsed="true">
+    <Position X="18.25" Y="3.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>CACAAAAAIBAEAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Sets\Lookup`3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.LookupList&lt;TValue, TKey&gt;" Collapsed="true">
+    <Position X="17.25" Y="4.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Sets\LookupList`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.LookupSet&lt;TValue, TKey&gt;" Collapsed="true">
+    <Position X="20.5" Y="4.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Sets\LookupSet`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.ReadOnlyMultiSequence&lt;T&gt;" Collapsed="true">
+    <Position X="29" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Sets\ReadOnlyMultiSequence`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.ReadOnlySingleSequence&lt;T&gt;" Collapsed="true">
+    <Position X="23.75" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAAAAAABAAAAA=</HashCode>
+      <FileName>Sets\ReadOnlySingleSequence`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Schema" Collapsed="true">
+    <Position X="25.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\Schema.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Set&lt;T&gt;" Collapsed="true">
+    <Position X="6.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CA4AAiRAQAAAQAAAAEAABAAAAAKAACAgAAAQAABEAAA=</HashCode>
+      <FileName>Sets\Set`1.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.Set&lt;TValue, TKey&gt;" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAEAACACAAEAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\Set`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.Set&lt;TValue, TKey, TContainer&gt;" Collapsed="true">
+    <Position X="6" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAQAAAEAAAAgAEAAAAAAAigAQAAAAEAAAAAQAAA=</HashCode>
+      <FileName>Sets\Set`3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Sets.SetDebugView&lt;T&gt;" Collapsed="true">
+    <Position X="27.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\SetDebugView`1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.SetGrouping&lt;TKey, TValue, TGrouping&gt;" Collapsed="true">
+    <Position X="11.5" Y="3.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <FileName>Sets\SetGrouping`3.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.SetGroupingAscList&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="13" Y="4.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\SetGroupingAscList`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Sets.SetGroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="9" Y="4.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\SetGroupingSet`2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="LinqDB.Sets.KeyValueCollection&lt;TValue, TKey, TCollection&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="3.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAQBQAgAAAAAAAAAAAAIAEAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\KeyValueCollection`3.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Struct>
+  <Interface Name="LinqDB.Sets.IGroupingSet&lt;TKey, TElement&gt;" Collapsed="true">
+    <Position X="8" Y="10.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\IGroupingSet`2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IOutputGroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+    <Position X="23.75" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\ImmutableGroupingSet`2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IOutputSet" Collapsed="true">
+    <Position X="8.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\IOutputSet.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IOutputSet&lt;T&gt;" Collapsed="true">
+    <Position X="8.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\IOutputSet`1.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IPrimaryKey&lt;TKey&gt;" Collapsed="true">
+    <Position X="25.5" Y="5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Sets\IPrimaryKey`1.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.ISet&lt;TContainer&gt;" Collapsed="true">
+    <Position X="27.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\ISet`2.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IVoidAdd&lt;T&gt;" Collapsed="true">
+    <Position X="23.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\IVoidAdd`1.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Sets.IWriteRead&lt;TEntity&gt;" Collapsed="true">
+    <Position X="25.5" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sets\IWriteRead`1.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

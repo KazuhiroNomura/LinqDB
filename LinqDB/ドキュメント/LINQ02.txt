@@ -1,0 +1,20 @@
+    // (FK_district_warehouse = Container.dbo.warehouse.GetReference(new TPC_C.PrimaryKeys.dbo.warehouse(d_w_id))).FK_district_warehouse.VoidAdd(this);
+    IL_0000: ldarg.1
+    IL_0001: ldfld class TPC_C.Schemas.dbo TPC_C.Container::dbo
+    IL_0006: ldfld class [LinqDB]LinqDB.Sets.Set`3<class TPC_C.Tables.dbo.warehouse, valuetype TPC_C.PrimaryKeys.dbo.warehouse, class TPC_C.Container> TPC_C.Schemas.dbo::warehouse
+    IL_000b: ldarg.0
+    IL_000c: call instance int32 TPC_C.Tables.dbo.district::d_w_id()
+    IL_0011: newobj instance void TPC_C.PrimaryKeys.dbo.warehouse::.ctor(int32)
+    IL_0016: call instance !0 class [LinqDB]LinqDB.Sets.Set`2<class TPC_C.Tables.dbo.warehouse, valuetype TPC_C.PrimaryKeys.dbo.warehouse>::GetReference(!1)
+    // (no C# code)
+    IL_001b: stloc.0
+    IL_001c: ldarg.0
+    IL_001d: ldloc.0
+    IL_001e: stfld class TPC_C.Tables.dbo.warehouse TPC_C.Tables.dbo.district::FK_district_warehouse
+    IL_0023: ldloc.0
+    IL_0024: ldfld class [LinqDB]LinqDB.Sets.Set`1<class TPC_C.Tables.dbo.district> TPC_C.Tables.dbo.warehouse::FK_district_warehouse
+    IL_0029: ldarg.0
+    IL_002a: call instance void class [LinqDB]LinqDB.Sets.Set`1<class TPC_C.Tables.dbo.district>::VoidAdd(!0)
+    // }
+    IL_002f: ret
+} // end of method district::AddRelationship

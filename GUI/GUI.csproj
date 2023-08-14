@@ -1,0 +1,95 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup Label="Globals">
+    <SccProjectName></SccProjectName>
+    <SccProvider></SccProvider>
+    <SccAuxPath></SccAuxPath>
+    <SccLocalPath></SccLocalPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>NET60-windows</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <nullable>enable</nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ベクターアイコン\**" />
+    <EmbeddedResource Remove="ベクターアイコン\**" />
+    <None Remove="ベクターアイコン\**" />
+    <Page Remove="ベクターアイコン\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MarshalByRef.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="BooleanVisiblityConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="DataGridを編集.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Update="ListBoxにBoxとLine.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="列編集.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="DataGridを編集.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ListBoxにBoxとLine.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="TableDataControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="列編集.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="3.1.3" />
+    <PackageReference Include="Microsoft.SqlServer.TransactSql.ScriptDom" Version="150.4897.1" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="App.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

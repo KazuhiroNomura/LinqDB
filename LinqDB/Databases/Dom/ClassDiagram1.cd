@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LinqDB.Databases.Dom.MetaAttribute" Collapsed="true">
+    <Position X="19.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\MetaAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Databases.Dom.ParentAttribute" Collapsed="true">
+    <Position X="5.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\ParentAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Databases.Dom.RelationAttribute" Collapsed="true">
+    <Position X="4.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\RelationAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Databases.Dom.ChildAttribute" Collapsed="true">
+    <Position X="3.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\ChildAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="LinqDB.Databases.Dom.IName" Collapsed="true">
+    <Position X="10.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\IName.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.IProcedure" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Databases\Dom\IProcedure.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.IRelation" Collapsed="true">
+    <Position X="17.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAQgAAAAAAAAAAAAAAAAAAAAAQAgAIAA=</HashCode>
+      <FileName>Databases\Dom\IRelation.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.ISchema" Collapsed="true">
+    <Position X="12.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAQAAQAAAAAAAAAAQAAAAAAEAAAAAQAAgAAAgAA=</HashCode>
+      <FileName>Databases\Dom\ISchema.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.ITable" Collapsed="true">
+    <Position X="15" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAAAAAAAAAAAAAAAAAAAEAAQIACAAKAAQAAggACA=</HashCode>
+      <FileName>Databases\Dom\ITable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.IView" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAAAAAAAAEAAAAAAAAQAAEAAgAAAA=</HashCode>
+      <FileName>Databases\Dom\IView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.IContainer" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAQAAgAA=</HashCode>
+      <FileName>Databases\Dom\IContainer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LinqDB.Databases.Dom.IColumn" Collapsed="true">
+    <Position X="3.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAECAAAABAAAAAAAQAAAAAAIAA=</HashCode>
+      <FileName>Databases\Dom\IColumns.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

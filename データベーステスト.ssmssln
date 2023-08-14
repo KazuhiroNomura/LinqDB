@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Solution File, Format Version 18.00
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "テストクエリ", "テストクエリ\テストクエリ.ssmssqlproj", "{3C6C0EFC-1607-4C09-AD7E-5F794C97CBC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Default|Default = Default|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FC84EE64-5A69-4793-8368-14DDACFDC0D3}.Default|Default.ActiveCfg = Default
+		{3C6C0EFC-1607-4C09-AD7E-5F794C97CBC0}.Default|Default.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {17374FDA-155F-4A5F-A55A-0CD5935F7635}
+	EndGlobalSection
+EndGlobal

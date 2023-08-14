@@ -1,0 +1,49 @@
+﻿SQLServerのデータベースを SQLServerから読み,DLLに書き,DLから読み,MYSQLに書き,SQLServerVSMySQLスキーマ比較,MySQL実行結果をSQLServerと比較
+    msdb
+    AdventureWorks
+    AdventureWorks2019
+    AdventureWorksDW2019
+    DWConfiguration
+    DWDiagnostics
+    DWQueue
+    TPC_C
+    TPC_E
+    TPC_H
+    WideWorldImporters
+    WideWorldImportersDW
+ハッシュコード
+    CRC32手動実装
+    System.HashCodeの利用
+AssemblyDataContext
+AssemblyGenerator(standard2.1)
+NumberFormatInfoによる桁数指定のデコード
+非同期処理のCountdown.Waitによる一括終了待ち
+Disposeパターンそこそこ習熟
+オブジェクトプーリング
+LINQ to Objectの全メソッドの習熟
+Hash Joinの実装
+Entity Frameworkのmsdxからt4テンプレートを利用してソースコード生成
+LINQ to Object,LINQ to Setを共通ルーチンで式木の最適化
+    ループ展開
+    ループ融合
+    ラムダ式内部の不変式の外だし
+    先行評価
+作業配列を使って使いまわし。
+式木の最適化でGCを減らすために可能な限り使いまわしオブジェクトを使う
+    Expression.Blockのオーバーロードは固定パラメーターでいくつかありそれを最適化することでGCを減らしている。
+関係代数の一部を実装したSet
+リモートプロシージャの実行
+    なんでもできるストアドプロシージャ
+    あらゆるバッチを組み込める
+すべてシリアライザブル。並列度は低く、メモリの使用量は少ない。
+1個のサーバーN個のListener→N×M個のSendReceive
+コネクションを接続→リクエスト→レスポンス→切断というステートレス方式。コネクションを削減してたくさんリクエストを受け付けるようにする。ポート番号がTIME_WAITで不足する欠点がある。
+IO完了ポート版のSocket通信→AcceptAsyncだけでそれ以外はSslStreamを実現する方法がわからないので同期。
+DynamicAssembly生成は複数のインターフェース継承,インターフェースを重ねて継承と明示的実装。
+IL生成でGenericで型がsealed classやstructの場合仮想呼び出ししない最適化
+IL生成で標準コンパイルではthisのNullチェックをするCallvirt→Callの最適化
+ILでループの開始はジャンプで内部に入りwhile判定は末尾で行う最適化
+il.projのビルドプロジェクト作った今は使用していない
+NuGetでLiteを公開する方針。
+    dll追加にする。
+TSQLを構文解析→LINQに変換

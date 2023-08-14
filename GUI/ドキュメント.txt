@@ -1,0 +1,91 @@
+﻿Management Studioライクなデザイナ
+行ヘッダはシフトで範囲選択Ctrlでマウスダウンで部分選択
+ドラッグはshift,ctrlを押していないときに出来る。
+２つの四角形を接続するコネクタは角が少ないほど良い
+四角形が平行に並ぶところは１つの直線でよい。
+接続されているコネクタが選択されていれば四角の属性が選択される。
+属性のヘッダを選択すると同時にコネクタと接続先属性も関連しているものとして例えば枠線ピンクなどでアピールする。
+接続アイコンをクリックしたらsql serverのサーバーへの接続ダイアグラム
+dll一覧を選択する。「開く」「キャンセル」
+└-c:\dll\AdventureWorks2017.dll
+　└AdventureWorks
+　　├Tables
+　　│├dbo
+　　││├AWBuildVersion
+　　││└DatabaseLog
+　　│└HumanResources
+　　├Views
+　　│├Person
+　　││├vAdditionalContactInfo
+　　││└vStateProvinceCountryRegion
+　　│├HumanResources
+　　││├vEmployee
+　　││└vEmployeeDepartment
+　　│└Person
+　　│　├vAdditionalContactInfo
+　　│　└vStateProvinceCountryRegion
+　　└Procedure
+　　　├dbo
+　　　│├uspGetBillOfMaterials
+　　　│└uspGetEmployeeManagers
+　　　└HumanResources
+　　　　├uspUpdateEmployeeHireInfo
+　　　　└uspUpdateEmployeeLogin
+SQL Server ManagementStudioの左のパネル
+Application
+ MainWindow
+ FloatingWindow
+  WindowContentPresenter
+   Grid(RootGrid)
+    VsToolBarHostControl(PART_ToolBarHost)
+     Grid
+      AdornetDecorator
+       ContentPresenter
+        ContentControl
+         ContentPresenter
+          ContentControl
+           ContentPresenter
+            AutoHideRootControl
+             Grid
+              ContentPresenter
+               DockRootControl
+                DockTarget
+                 Grid
+                  ContentPresenter
+                   DockGroupControl
+                    SplitterPanel
+                     SplitterItem
+                      DockPanel
+                       SplitterGrip(Splitter)
+                       ContentPresenter
+                        ContentControl(Content)
+                         ContentPresenter
+                          TabGroupControl
+                           DockTarget
+                            DockTarget
+                             Grid(TabGroupControlPanel)
+                              Border(PART_ContentPanel)
+                               Grid
+                                DockTarget
+                                Border(ToolWindowBorder)
+                                 ContentPresenter(PART_SelectedContentHost)
+                                  ViewPresenter
+                                   ContentPresenter
+                                    ContentHostingPanel
+                                     GenericPanelClientHwndHost
+                                     AdornmentHostingPanel
+                                      ToolbarTrayAndSearchHostingPanel
+                                       VsToolWindowToolBarTray
+                                        VsToolBar
+                                         Grid(Grid)
+                                          Grid(OverflowGrid)
+                                           VsToolBarOverflowToggle(OverflowButton)
+                                            Border(Bd)
+                                             Grid
+                                              Grid(Overflow)
+                                               Path ▶
+                                               Path ▶
+                                              Grid(OPtions)
+                                               Rectangle ■
+                                               Path ▼
+                                               

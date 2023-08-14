@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GUI.VM.Column" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAABAAgAAAAAAEAAQAABAAAgAAAQAAAAAAIAA=</HashCode>
+      <FileName>VM\Column.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.Common" Collapsed="true">
+    <Position X="2.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAIAAABAAAAAACABAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>VM\Common.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GUI.VM.Container" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAECAEARAQAAAgAAgAEBIAEAYBAwAA=</HashCode>
+      <FileName>VM\Container.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.DllWatcher" Collapsed="true">
+    <Position X="5.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAgABAAAEAAAAAAAAAQAAAAAAAAAAIA=</HashCode>
+      <FileName>VM\DllWatcher.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GUI.VM.Procedure" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAgAAQAAAAAAAAAA=</HashCode>
+      <FileName>VM\Procedure.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.Relation" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIEAANkAAAACmQgACIAEAUwAAAgAAgAQgAAAQAgAIAA=</HashCode>
+      <FileName>VM\Relation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.Schema" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBAAAwAAQAAAIAADAEAYAQAAAAkhgAAA4AEgAAAgAA=</HashCode>
+      <FileName>VM\Schema.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.Schemas">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VM\Schema.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GUI.VM.Table" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAQAEAAAAAgAAEiAQASQQFQAQIGiAEKAAQEAkgCCQ=</HashCode>
+      <FileName>VM\Table.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.Trigger" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAQAAQAAAgBAAAAAAAAAAAA=</HashCode>
+      <FileName>VM\Trigger.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="GUI.VM.View" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACEAAAAAAAAAAAQAAQQEQgAACgAAQQAEAAkAgCA=</HashCode>
+      <FileName>VM\View.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="GUI.VM.IDiagramObject" Collapsed="true">
+    <Position X="0.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>VM\IDiagramObject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,188 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{9C61CB9E-D532-44E7-8439-0920FE442ADE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoverageCS", "Coverage\CoverageCS.csproj", "{11ED51F8-D6A9-4840-9708-41EFEBC3C953}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LinqDB", "LinqDB\LinqDB.csproj", "{D3CA8754-57E7-45BE-A760-87E53266A8E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5B1746B2-A936-4F71-AAAD-2E563EFA0A70}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test共通", "Test共通\Test共通.csproj", "{0BBD6BEA-EC59-4829-AA3A-1EF35EDAFA41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAdventureWorksDW2019", "TestAdventureWorksDW2019\TestAdventureWorksDW2019.csproj", "{01A366EF-A8FA-4883-885A-B515B3FF2685}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAdventureWorks2019", "TestAdventureWorks2019\TestAdventureWorks2019.csproj", "{B350DBB9-BA40-4059-BF67-EF77BABF41E6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWideWorldImporters", "TestWideWorldImporters\TestWideWorldImporters.csproj", "{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWideWorldImportersDW", "TestWideWorldImportersDW\TestWideWorldImportersDW.csproj", "{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAdventureWorksDW2017", "TestAdventureWorksDW2017\TestAdventureWorksDW2017.csproj", "{8B6FC332-64A6-42BB-B1C2-1555235128F1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAdventureWorks2017", "TestAdventureWorks2017\TestAdventureWorks2017.csproj", "{F0DA499A-4D50-431F-9382-7BEF942A0925}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestNorthwind", "TestNorthwind\TestNorthwind.csproj", "{92B5479E-0B26-4DC0-9283-1039A88996EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11ED51F8-D6A9-4840-9708-41EFEBC3C953}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11ED51F8-D6A9-4840-9708-41EFEBC3C953}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11ED51F8-D6A9-4840-9708-41EFEBC3C953}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11ED51F8-D6A9-4840-9708-41EFEBC3C953}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3CA8754-57E7-45BE-A760-87E53266A8E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3CA8754-57E7-45BE-A760-87E53266A8E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3CA8754-57E7-45BE-A760-87E53266A8E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3CA8754-57E7-45BE-A760-87E53266A8E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BBD6BEA-EC59-4829-AA3A-1EF35EDAFA41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BBD6BEA-EC59-4829-AA3A-1EF35EDAFA41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BBD6BEA-EC59-4829-AA3A-1EF35EDAFA41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BBD6BEA-EC59-4829-AA3A-1EF35EDAFA41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01A366EF-A8FA-4883-885A-B515B3FF2685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01A366EF-A8FA-4883-885A-B515B3FF2685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01A366EF-A8FA-4883-885A-B515B3FF2685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01A366EF-A8FA-4883-885A-B515B3FF2685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B350DBB9-BA40-4059-BF67-EF77BABF41E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B350DBB9-BA40-4059-BF67-EF77BABF41E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B350DBB9-BA40-4059-BF67-EF77BABF41E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B350DBB9-BA40-4059-BF67-EF77BABF41E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B6FC332-64A6-42BB-B1C2-1555235128F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B6FC332-64A6-42BB-B1C2-1555235128F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B6FC332-64A6-42BB-B1C2-1555235128F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B6FC332-64A6-42BB-B1C2-1555235128F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0DA499A-4D50-431F-9382-7BEF942A0925}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0DA499A-4D50-431F-9382-7BEF942A0925}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0DA499A-4D50-431F-9382-7BEF942A0925}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0DA499A-4D50-431F-9382-7BEF942A0925}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B5479E-0B26-4DC0-9283-1039A88996EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B5479E-0B26-4DC0-9283-1039A88996EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B5479E-0B26-4DC0-9283-1039A88996EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B5479E-0B26-4DC0-9283-1039A88996EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F37002B4-F64C-4305-A9E2-566AE741C128}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 1
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://kazuhiro.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+EndGlobal
