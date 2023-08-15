@@ -19,7 +19,8 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
     private readonly ExpressionJsonFormatter ExpressionFormatter = new();
     //private readonly AbstractFormatter AbstractFormatter = new();
     private readonly Dictionary<Type,IJsonFormatter> Dictionary_Type_IJsonFormatter = new();
-    public IJsonFormatter<T> GetFormatter<T>() {
+    public IJsonFormatter<T> GetFormatter<T>(){
+        if(typeof(T).IsSerializable) return null!;
         if(this.Dictionary_Type_IJsonFormatter.TryGetValue(typeof(T),out var IJsonFormatter))
             return (IJsonFormatter<T>)IJsonFormatter;
         IJsonFormatter Formatter;
@@ -73,12 +74,13 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
         this.Dictionary_Type_IJsonFormatter.Clear();
     }
 }
-public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
+public sealed class AnonymousExpressionMessagePackFormatterResolver:IFormatterResolver {
     //public static readonly IJsonFormatterResolver Instance=new Resolver();
     private readonly AbstractMessagePackFormatter AbstractFormatter= new();
     private readonly ExpressionMessagePackFormatter ExpressionFormatter=new();
     private readonly Dictionary<Type,IMessagePackFormatter> Dictionary_Type_IMessagePackFormatter = new();
     public IMessagePackFormatter<T> GetFormatter<T>() {
+        if(typeof(T).IsSerializable) return null!;
         if(this.Dictionary_Type_IMessagePackFormatter.TryGetValue(typeof(T),out var IMessagePackFormatter))
             return (IMessagePackFormatter<T>)IMessagePackFormatter;
         IMessagePackFormatter Formatter;

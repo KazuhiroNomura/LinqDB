@@ -103,7 +103,13 @@ public class Test_Expression:ATest{
         共通object(t);
     }
     [TestMethod]
-    public void Anonymous03(){
+    public void Anonymous030(){
+        共通object(
+            Tuple.Create(1)
+        );
+    }
+    [TestMethod]
+    public void Anonymous031(){
         共通object(
             Tuple.Create(
                 new{
