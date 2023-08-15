@@ -122,6 +122,7 @@ public class AnonymousJsonFormatter<T>:AnonymousFormatter,IJsonFormatter<T>{
             if(a<Parameters_Length-1)
                 reader.ReadIsValueSeparatorWithVerify();
         }
+        reader.ReadIsEndObjectWithVerify();
         return (T)ctor.Invoke(args);
     }
 }

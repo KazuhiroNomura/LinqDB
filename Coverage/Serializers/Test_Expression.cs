@@ -41,7 +41,7 @@ public class Test_Expression:ATest{
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     [TestMethod]
     public void Anonymous000(){
-        共通objectT2(new{
+        共通object(new{
             a=1,
             b=2.0,
             c=3m,
@@ -55,7 +55,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous001(){
-        共通objectT2(new{
+        共通object(new{
             a=1
         });
     }
@@ -73,7 +73,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous004(){
-        共通objectT2(new{
+        共通object(new{
             a=(object)new{aa=1}
         });
     }
@@ -90,17 +90,36 @@ public class Test_Expression:ATest{
         共通Expression(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
     }
     [TestMethod]
-    public void Anonymous02(){
-        var t=new{
-            x=new{
-                a=111,
-                b=222.0,
-                c=333m,
-                d=444f,
-                e="eee"
+    public void Anonymous021(){
+        共通object(
+            new{
+                x=1
             }
-        };
-        共通object(t);
+        );
+    }
+    [TestMethod]
+    public void Anonymous022(){
+        共通object(
+            new{
+                x=new{
+                    a=111
+                }
+            }
+        );
+    }
+    [TestMethod]
+    public void Anonymous023(){
+        共通object(
+            new{
+                x=new{
+                    a=111,
+                    b=222.0,
+                    c=333m,
+                    d=444f,
+                    e="eee"
+                }
+            }
+        );
     }
     [TestMethod]
     public void Anonymous030(){
@@ -124,14 +143,14 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous040(){
-        共通objectT2(new{
+        共通object(new{
             a=new{aa=1},
             b=new{aa=1}
         });
     }
     [TestMethod]
     public void Anonymous041(){
-        共通objectT2(new{
+        共通object(new{
             a=new{aa=1},
             b=(object)new{aa=1}
         });
@@ -205,7 +224,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous11(){
-        共通objectT2(new{
+        共通object(new{
             a=(object)new{aa=1}
         });
     }
@@ -237,7 +256,7 @@ public class Test_Expression:ATest{
     [TestMethod]
     public void 独自Class1(){
         var t=Tuple.Create(new 独自Class());
-        共通objectT2(t);
+        共通object(t);
     }
     [TestMethod]
     public void 独自Class2(){
@@ -811,9 +830,6 @@ public class Test_Expression:ATest{
         Private共通object(input,output=>Assert.IsTrue(output.SequenceEqual(input)));
     }
     private static void 共通object<T>(T input){
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
-    }
-    private static void 共通objectT2<T>(T input){
         Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
