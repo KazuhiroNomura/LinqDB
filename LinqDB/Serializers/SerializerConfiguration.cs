@@ -8,7 +8,7 @@ using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
     public readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver;
-    public readonly AnonymousExpressionMessagePackFormatterResolver AnonymousExpressionMessagePackFormatterResolver;
+    public readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver;
     public void Clear(){
         this.AnonymousExpressionJsonFormatterResolver.Clear();
         this.AnonymousExpressionMessagePackFormatterResolver.Clear();
@@ -21,9 +21,9 @@ public readonly struct SerializerConfiguration{
         this.JsonFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
             //順序が大事
             Utf8Json.Resolvers.BuiltinResolver.Instance,
+            Utf8Json.Resolvers.DynamicGenericResolver.Instance,
             this.AnonymousExpressionJsonFormatterResolver,
             //global::Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
-            Utf8Json.Resolvers.DynamicGenericResolver.Instance,
             //global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//これが存在するとTypeがシリアライズできない
             Utf8Json.Resolvers.StandardResolver.AllowPrivate
             //global::Utf8Json.Resolvers.StandardResolver.Default,
@@ -31,10 +31,10 @@ public readonly struct SerializerConfiguration{
         this.AnonymousExpressionMessagePackFormatterResolver=new();
         this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
             MessagePack.Resolvers.CompositeResolver.Create(
-                this.AnonymousExpressionMessagePackFormatterResolver,
                 MessagePack.Resolvers.BuiltinResolver.Instance,
-                //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                 MessagePack.Resolvers.DynamicGenericResolver.Instance,
+                this.AnonymousExpressionMessagePackFormatterResolver,
+                //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                 //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
                 MessagePack.Resolvers.StandardResolverAllowPrivate.Instance
                 //MessagePack.Resolvers.StandardResolver.Instance,//

@@ -66,7 +66,7 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
         this.Dictionary_Type_IJsonFormatter.Clear();
     }
 }
-public sealed class AnonymousExpressionMessagePackFormatterResolver:IFormatterResolver {
+public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
     //public static readonly IJsonFormatterResolver Instance=new Resolver();
     //private readonly AbstractMessagePackFormatter AbstractFormatter= new();
     private readonly ExpressionMessagePackFormatter ExpressionFormatter=new();
