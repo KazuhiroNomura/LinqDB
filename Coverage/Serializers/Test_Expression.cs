@@ -55,7 +55,7 @@ public class Test_Expression:ATest{
     }
     [TestMethod]
     public void Anonymous001(){
-        共通object(new{
+        共通objectT2(new{
             a=1
         });
     }
@@ -814,8 +814,8 @@ public class Test_Expression:ATest{
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     private static void 共通objectT2<T>(T input){
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
         Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     private static void 共通Expression<T>(T input)where T:Expression?{
         Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(output,input)));
