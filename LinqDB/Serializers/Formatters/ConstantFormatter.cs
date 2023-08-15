@@ -17,27 +17,26 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConstantExpression>{
         Serialize_T(ref writer,value.Value,Resolver);
         writer.WriteEndArray();
     }
-    private readonly object[] Objects2=new object[2];
-    private readonly Type[] Types={typeof(JsonReader).MakeByRefType(),typeof(IJsonFormatterResolver)};
+    //private readonly object[] Objects2=new object[2];
     ConstantExpression IJsonFormatter<ConstantExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var type=Deserialize_Type(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
 
-        //var value=Deserialize_T<object>(ref reader,Resolver);
+        var value=Deserialize_T<object>(ref reader,Resolver);
 
-        var Formatter = Resolver.GetFormatterDynamic(type);
-        //var Types=this.Types;
-        //Types[0]=typeof(JsonWriter).MakeByRefType();
-        //Types[1]=type;
-        //Types[2]=typeof(IJsonFormatterResolver);
-        var Deserialize = Formatter.GetType().GetMethod("Deserialize",this.Types);
-        Debug.Assert(Deserialize is not null);
-        var Objects2 = this.Objects2;
-        Objects2[0]=reader;
-        Objects2[1]=Resolver;
-        var value = Deserialize.Invoke(Formatter,Objects2);
-        reader=(JsonReader)Objects2[0];
+        //var Formatter = Resolver.GetFormatterDynamic(type);
+        ////var Types=this.Types;
+        ////Types[0]=typeof(JsonWriter).MakeByRefType();
+        ////Types[1]=type;
+        ////Types[2]=typeof(IJsonFormatterResolver);
+        //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
+        //Debug.Assert(Deserialize is not null);
+        //var Objects2 = this.Objects2;
+        //Objects2[0]=reader;
+        //Objects2[1]=Resolver;
+        //var value = Deserialize.Invoke(Formatter,Objects2);
+        //reader=(JsonReader)Objects2[0];
         reader.ReadIsEndArrayWithVerify();
 
 

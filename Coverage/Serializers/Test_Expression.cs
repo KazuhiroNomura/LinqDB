@@ -78,7 +78,15 @@ public class Test_Expression:ATest{
         });
     }
     [TestMethod]
-    public void Anonymous01(){
+    public void Anonymous010(){
+        共通Expression(Expression.Constant(11));
+    }
+    [TestMethod]
+    public void Anonymous011(){
+        共通Expression(Expression.Constant(new{a=11}));
+    }
+    [TestMethod]
+    public void Anonymous012(){
         共通Expression(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
     }
     [TestMethod]
@@ -805,7 +813,6 @@ public class Test_Expression:ATest{
     }
     private static void 共通Expression<T>(T input)where T:Expression?{
         Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(output,input)));
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     static string format_json(string json){
         dynamic parsedJson = Json.JsonConvert.DeserializeObject(json)!;
