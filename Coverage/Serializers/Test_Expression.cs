@@ -229,7 +229,7 @@ public class Test_Expression:ATest{
         });
     }
     [MessagePackObject(true)]
-    public class 独自Class:IEquatable<独自Class>{
+    public sealed class 独自Class:IEquatable<独自Class>{
         public int a=3;
         public string b="b";
         public bool Equals(独自Class? other){
@@ -265,7 +265,16 @@ public class Test_Expression:ATest{
     }
     private static readonly ParameterExpression @decimal = Expression.Parameter(typeof(decimal),"p");
     [TestMethod]
-    public void Block(){
+    public void Block0(){
+        共通Expression(
+            Expression.Block(
+                new[] { @decimal },
+                @decimal
+            )
+        );
+    }
+    [TestMethod]
+    public void Block4(){
         共通Expression(
             Expression.Block(
                 new[] { @decimal },
@@ -334,6 +343,15 @@ public class Test_Expression:ATest{
                         Expression.Constant(124)
                     )
                 )
+            )
+        );
+    }
+    [TestMethod]
+    public void Binary(){
+        共通Expression(
+            Expression.Add(
+                Expression.Constant(1),
+                Expression.Constant(2)
             )
         );
     }
@@ -805,15 +823,9 @@ public class Test_Expression:ATest{
             SerializerConfiguration.Clear();
             var json0=File.ReadAllText(Jsonファイル名);
             var json1=File.ReadAllText(整形済みJsonファイル名);
-            //var o0=JsonSerializer.Deserialize<object>(json0,SerializerSet.JsonFormatterResolver);
-            //var O0=(T)o0;
             var T0=JsonSerializer.Deserialize<T>(json0,SerializerConfiguration.JsonFormatterResolver);
             SerializerConfiguration.Clear();
-            //var o1=JsonSerializer.Deserialize<object>(json1,SerializerSet.JsonFormatterResolver);
-            //var O1=(T)o1;
-            //var T1=JsonSerializer.Deserialize<T>(json1,SerializerSet.JsonFormatterResolver);
             AssertAction(T0);
-            //AssertAction(T1);
         }
         {
             SerializerConfiguration.Clear();
@@ -822,6 +834,11 @@ public class Test_Expression:ATest{
             MessagepackStream.Close();
         }
         {
+            SerializerConfiguration.Clear();
+            var MessagepackAllBytes=File.ReadAllBytes(Messagepackファイル名);
+            //var json0=MessagePackSerializer.(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
+            //var json1=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
+            //var json2=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
             SerializerConfiguration.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Open,FileAccess.ReadWrite,FileShare.ReadWrite);
             var output = MessagePackSerializer.Deserialize<T>(MessagepackStream,SerializerConfiguration.MessagePackSerializerOptions);
