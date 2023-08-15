@@ -20,11 +20,11 @@ public class Test_特定パターン
     public void 特定パターン0()
     {
         Expression e=Expression.Constant(3);
-        SerializerSet SerializerSet=new();
+        SerializerConfiguration SerializerConfiguration=new();
 
-        SerializerSet.Clear();
+        SerializerConfiguration.Clear();
         var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-        JsonSerializer.Serialize(JsonStream,e,SerializerSet.JsonFormatterResolver);
+        JsonSerializer.Serialize(JsonStream,e,SerializerConfiguration.JsonFormatterResolver);
         JsonStream.Close();
     }
     [TestMethod]

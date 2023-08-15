@@ -71,7 +71,7 @@ public class 標準ライブラリ
         const double value1=2.2;
         const string value2="ABC";
         const double value3=3.3;
-        var SerializerSet=new SerializerSet();
+        var SerializerSet=new SerializerConfiguration();
         Expression<Func<int>> e=()=>1;
         var Buffer=new byte[1000];
         var w=new JsonWriter(Buffer);
@@ -129,7 +129,7 @@ public class 標準ライブラリ
         const double expected2_2=2.2;
         const string expected_ABC="ABC";
         const double expected3_3=3.3;
-        var SerializerSet=new SerializerSet();
+        var SerializerSet=new SerializerConfiguration();
         Expression<Func<int>> e=()=>1;
         var Buffer=new ArrayBufferWriter<byte>(1000);
         var w=new MessagePackWriter(Buffer);

@@ -73,7 +73,7 @@
     <Content Include="作りたい仕様確認\Set\Test_Transaction_Add.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.3.112" />
+    <PackageReference Include="MessagePack" Version="2.5.124" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

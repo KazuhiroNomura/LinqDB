@@ -191,7 +191,7 @@ public class Client:IDisposable {
     /// 既定コンストラクタ。
     /// </summary>
     public Client():this(既定のタイムアウト,既定のタイムアウト,null!) {}
-    private readonly SerializerSet SerializerSet;
+    private readonly SerializerConfiguration SerializerConfiguration;
     //private readonly Serializers.Utf8Json.Resolver Utf8Json_Resolver=new Serializers.Utf8Json.Resolver();
     //private readonly IJsonFormatterResolver JsonFormatterResolver;
     //private readonly Serializers.MessagePack.Resolver MessagePack_Resolver=new Serializers.MessagePack.Resolver();
@@ -208,7 +208,7 @@ public class Client:IDisposable {
         this.WriteTimeout=WriteTimeout;
         this.ReadTimeout=ReadTimeout;
         this.DnsEndPoint=DnsEndPoint;
-        this.SerializerSet=new();
+        this.SerializerConfiguration=new();
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
         //    this.Utf8Json_Resolver,
@@ -636,12 +636,12 @@ public class Client:IDisposable {
         MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
             case XmlType.Utf8Json:
-                this.SerializerSet.Clear();
-                JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerSet.JsonFormatterResolver);
+                this.SerializerConfiguration.Clear();
+                JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:
-                this.SerializerSet.Clear();
-                MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerSet.MessagePackSerializerOptions);
+                this.SerializerConfiguration.Clear();
+                MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.MessagePackSerializerOptions);
                 break;
             default:throw new NotSupportedException(XmlType.ToString());
         }
@@ -655,17 +655,17 @@ public class Client:IDisposable {
         MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
             case XmlType.Utf8Json:
-                this.SerializerSet.Clear();
+                this.SerializerConfiguration.Clear();
                 var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-                JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerSet.JsonFormatterResolver);
+                JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
                 JsonStream.Close();
 
-                this.SerializerSet.Clear();
-                JsonSerializer.Serialize(MemoryStream,Expression,this.SerializerSet.JsonFormatterResolver);
+                this.SerializerConfiguration.Clear();
+                JsonSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:{
-                this.SerializerSet.Clear();
-                MessagePackSerializer.Serialize(MemoryStream,Expression,this.SerializerSet.MessagePackSerializerOptions);
+                this.SerializerConfiguration.Clear();
+                MessagePackSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.MessagePackSerializerOptions);
                 //var Lambda_Parameters = Lambda.Parameters;
                 //var ParameterName = Lambda_Parameters.Count==0 ? "" : Lambda_Parameters[0].Name;
                 //var Statement = this.取得_CSharp.実行(Lambda);

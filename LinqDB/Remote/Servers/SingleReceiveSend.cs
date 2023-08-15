@@ -52,7 +52,7 @@ internal class SingleReceiveSend:IDisposable{
     //private readonly Action<Object> Delegate送信;
     //private readonly AsyncCallback Delegate送信終了;
     private readonly int Index;
-    private readonly SerializerSet SerializerSet;
+    private readonly SerializerConfiguration SerializerConfiguration;
     //private readonly Serializers.Utf8Json.Resolver Utf8Json_Resolver=new();
     //private readonly IJsonFormatterResolver JsonFormatterResolver;
     //private readonly Serializers.MessagePack.Resolver MessagePack_Resolver=new();
@@ -67,7 +67,7 @@ internal class SingleReceiveSend:IDisposable{
         this.MultiReceiveSend=MultiReceiveSend;
         this.Index=Index;
         this.MemoryStream=new MemoryStream(this.Buffer);
-        this.SerializerSet=new();
+        this.SerializerConfiguration=new();
 
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
@@ -291,12 +291,12 @@ internal class SingleReceiveSend:IDisposable{
                         object Object;
                         switch(XmlType) {
                             case XmlType.Utf8Json: {
-                                var Lambda = JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerSet.JsonFormatterResolver);
+                                var Lambda = JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
                                 Object=Lambda;
                                 break;
                             }
                             case XmlType.MessagePack: {
-                                var Lambda = MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerSet.MessagePackSerializerOptions,CancellationToken);
+                                var Lambda = MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.MessagePackSerializerOptions,CancellationToken);
                                 Object=Lambda;
                                 break;
                                 ////パラメーター_ステートメント パラメーター_ステートメント;
@@ -581,13 +581,13 @@ internal class SingleReceiveSend:IDisposable{
                         object Object;
                         switch(XmlType) {
                             case XmlType.Utf8Json:{
-                                this.SerializerSet.AnonymousExpressionJsonFormatterResolver.Clear();
+                                this.SerializerConfiguration.AnonymousExpressionJsonFormatterResolver.Clear();
                                 try{
                                     string s=Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
                                         (int)(this.MemoryStream.Length-this.MemoryStream.Position));
                                     var s1=format_json(s);
                                     var Lambda=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,
-                                        this.SerializerSet.JsonFormatterResolver);
+                                        this.SerializerConfiguration.JsonFormatterResolver);
                                     Object=Lambda;
                                 } catch(Exception e1x){
                                     Trace.WriteLine(e1x.Message);
@@ -596,8 +596,8 @@ internal class SingleReceiveSend:IDisposable{
                                 break;
                             }
                             case XmlType.MessagePack: {
-                                this.SerializerSet.AnonymousExpressionMessagePackFormatterResolver.Clear();
-                                var Lambda=MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerSet.MessagePackSerializerOptions,CancellationToken);
+                                this.SerializerConfiguration.AnonymousExpressionMessagePackFormatterResolver.Clear();
+                                var Lambda=MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.MessagePackSerializerOptions,CancellationToken);
                                 Object=Lambda;
                                 break;
                                 ////パラメーター_ステートメント パラメーター_ステートメント;
@@ -723,9 +723,9 @@ internal class SingleReceiveSend:IDisposable{
                         case XmlType.Utf8Json:
                         case XmlType.MessagePack: {
                             if(XmlType==XmlType.Utf8Json) {
-                                Utf8Json.JsonSerializer.Serialize(MemoryStream,シリアライズしたい.Object,this.SerializerSet.JsonFormatterResolver);
+                                Utf8Json.JsonSerializer.Serialize(MemoryStream,シリアライズしたい.Object,this.SerializerConfiguration.JsonFormatterResolver);
                             } else {
-                                MessagePack.MessagePackSerializer.Serialize(MemoryStream,シリアライズしたい.Object,this.SerializerSet.MessagePackSerializerOptions);
+                                MessagePack.MessagePackSerializer.Serialize(MemoryStream,シリアライズしたい.Object,this.SerializerConfiguration.MessagePackSerializerOptions);
                             }
                             break;
                         }
@@ -754,7 +754,7 @@ internal class SingleReceiveSend:IDisposable{
             //        ex
             //    );
             //}
-            Utf8Json.JsonSerializer.Serialize<object>(MemoryStream,ex,this.SerializerSet.JsonFormatterResolver);
+            Utf8Json.JsonSerializer.Serialize<object>(MemoryStream,ex,this.SerializerConfiguration.JsonFormatterResolver);
             BufferにLengthとSHA256を設定してStreamにWrite();
         } catch(ObjectDisposedException) {
             Trace_WriteLine(5,"Server.Function送信 catch(ObjectDisposedException)");

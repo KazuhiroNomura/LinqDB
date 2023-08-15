@@ -12,11 +12,11 @@ public static class Common{
         var AssemblyQualifiedName=reader.ReadString();
         return Type.GetType(AssemblyQualifiedName)!;
     }
-    public static void Serialize_T<T>(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>().Serialize(ref writer,value,options);
+    public static void Serialize_T<T>(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
     public static void Serialize_Type(ref MessagePackWriter writer,Type value,MessagePackSerializerOptions options){
         writer.Write(value.AssemblyQualifiedName);
     }
-    public static T Deserialize_T<T>(ref MessagePackReader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>().Deserialize(ref reader,options);
+    public static T Deserialize_T<T>(ref MessagePackReader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
     public static Type Deserialize_Type(ref MessagePackReader reader,MessagePackSerializerOptions options){
         var AssemblyQualifiedName=reader.ReadString();
         return Type.GetType(AssemblyQualifiedName)!;

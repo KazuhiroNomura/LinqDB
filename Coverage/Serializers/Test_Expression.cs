@@ -37,7 +37,7 @@ public class Test_Expression:ATest{
     //        Utf8Json.Resolvers.StandardResolver.Default,
     //        global::LinqDB.Serializers.Utf8Json.Resolver.Instance
     //    });
-    private static readonly SerializerSet SerializerSet=new();
+    private static readonly SerializerConfiguration SerializerConfiguration=new();
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     [TestMethod]
     public void Anonymous000(){
@@ -600,7 +600,7 @@ public class Test_Expression:ATest{
         共通Expression(Expression.Negate(Expression.Constant(1m)));
     }
     [TestMethod]
-    public void ArrayIndex(){
+    public void ArrayIndex0(){
         var List=Expression.Parameter(typeof(List<int>));
         共通Expression(
             Expression.Block(
@@ -622,6 +622,9 @@ public class Test_Expression:ATest{
                 Array1
             )
         );
+    }
+    [TestMethod]
+    public void ArrayIndex1(){
         var Array2=Expression.Parameter(typeof(int[,]));
         共通Expression(
             Expression.Lambda(
@@ -788,24 +791,24 @@ public class Test_Expression:ATest{
     const string Jsonファイル名="Json.txt";
     const string 整形済みJsonファイル名="整形済みJson.txt";
     private static void Private共通object<T>(T input,Action<T> AssertAction){
-        SerializerSet.Clear();
+        SerializerConfiguration.Clear();
         //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
         {
-            SerializerSet.Clear();
+            SerializerConfiguration.Clear();
             var JsonStream = new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-            JsonSerializer.Serialize(JsonStream,input,SerializerSet.JsonFormatterResolver);
+            JsonSerializer.Serialize(JsonStream,input,SerializerConfiguration.JsonFormatterResolver);
             JsonStream.Close();
             var Json=File.ReadAllText(Jsonファイル名);
             File.WriteAllText(整形済みJsonファイル名,format_json(Json));
         }
         {
-            SerializerSet.Clear();
+            SerializerConfiguration.Clear();
             var json0=File.ReadAllText(Jsonファイル名);
             var json1=File.ReadAllText(整形済みJsonファイル名);
             //var o0=JsonSerializer.Deserialize<object>(json0,SerializerSet.JsonFormatterResolver);
             //var O0=(T)o0;
-            var T0=JsonSerializer.Deserialize<T>(json0,SerializerSet.JsonFormatterResolver);
-            SerializerSet.Clear();
+            var T0=JsonSerializer.Deserialize<T>(json0,SerializerConfiguration.JsonFormatterResolver);
+            SerializerConfiguration.Clear();
             //var o1=JsonSerializer.Deserialize<object>(json1,SerializerSet.JsonFormatterResolver);
             //var O1=(T)o1;
             //var T1=JsonSerializer.Deserialize<T>(json1,SerializerSet.JsonFormatterResolver);
@@ -813,15 +816,15 @@ public class Test_Expression:ATest{
             //AssertAction(T1);
         }
         {
-            SerializerSet.Clear();
+            SerializerConfiguration.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-            MessagePackSerializer.Serialize(MessagepackStream,input,SerializerSet.MessagePackSerializerOptions);
+            MessagePackSerializer.Serialize(MessagepackStream,input,SerializerConfiguration.MessagePackSerializerOptions);
             MessagepackStream.Close();
         }
         {
-            SerializerSet.Clear();
+            SerializerConfiguration.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Open,FileAccess.ReadWrite,FileShare.ReadWrite);
-            var output = MessagePackSerializer.Deserialize<T>(MessagepackStream,SerializerSet.MessagePackSerializerOptions);
+            var output = MessagePackSerializer.Deserialize<T>(MessagepackStream,SerializerConfiguration.MessagePackSerializerOptions);
             MessagepackStream.Close();
             AssertAction(output);
         }
