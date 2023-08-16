@@ -211,7 +211,7 @@ public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
         //Delegate0(ref writer,value,options);
         //再帰してしまう MessagePackSerializer.Serialize(type,ref writer,value,options);
         //MessagePackSerializer.Serialize(type,ref writer,value,options);
-        SerializerConfiguration.Serialize(options.Resolver.GetFormatterDynamic(type)!,ref writer,value,options);
+        SerializerConfiguration.DynamicSerialize(options.Resolver.GetFormatterDynamic(type)!,ref writer,value,options);
         //Serialize_T(ref writer,value,options);
         //MessagePack.Resolvers.StandardResolver.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
         //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
@@ -230,7 +230,7 @@ public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
         ////Debug.Assert(Deserialize is not null);
         //var value = Delegate0(ref reader,options);
         //var value=MessagePackSerializer.Deserialize(type,ref reader,options);
-        var value=(T)SerializerConfiguration.Deserialize(options.Resolver.GetFormatterDynamic(type)!,ref reader,options);
+        var value=(T)SerializerConfiguration.DynamicDeserialize(options.Resolver.GetFormatterDynamic(type)!,ref reader,options);
         //var value = MessagePackSerializer.Serialize(type,ref writer,value,options);
         return value;
         //var reader0=reader;

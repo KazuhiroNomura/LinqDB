@@ -142,7 +142,7 @@ public class AnonymousMessagePackFormatter<T>:AnonymousFormatter,IMessagePackFor
             writer.Write(Key);
             //writer.Write(a);
             //var Formatter = options.Resolver.GetFormatterDynamic(Parameter.ParameterType);
-            SerializerConfiguration.Serialize(options.Resolver.GetFormatterDynamic(Parameter.ParameterType),ref writer,typeof(T).GetProperty(Key)!.GetMethod.Invoke(value,Array.Empty<object>()),options);
+            SerializerConfiguration.DynamicSerialize(options.Resolver.GetFormatterDynamic(Parameter.ParameterType),ref writer,typeof(T).GetProperty(Key)!.GetMethod.Invoke(value,Array.Empty<object>()),options);
             //Deserialize()
             //Serialize_T();
             //MessagePackSerializer.Serialize(ref writer,Value,options);
@@ -179,7 +179,7 @@ public class AnonymousMessagePackFormatter<T>:AnonymousFormatter,IMessagePackFor
             //var Value=Deserialize.DynamicInvoke().Invoke(Formatter,).(ref reader,options)!;
             
             //var Value=MessagePackSerializer.Deserialize(Parameters[a].ParameterType,ref reader,options);
-            args[a]=SerializerConfiguration.Deserialize(options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType),ref reader,options);
+            args[a]=SerializerConfiguration.DynamicDeserialize(options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType),ref reader,options);
         }
         var value=ctor.Invoke(args);
         //var Dictionary=(Dictionary<string,object>)MessagePackSerializer.Deserialize(typeof(T),ref reader,再帰しないoptions);

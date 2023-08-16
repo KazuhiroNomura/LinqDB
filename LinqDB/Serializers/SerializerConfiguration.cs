@@ -137,14 +137,20 @@ public readonly struct SerializerConfiguration{
             //IReadOnlyDictionary<, >
             //ConcurrentDictionary<, >
             //Lazy<>
+            //Utf8Json.Resolvers.EnumResolver.Default,
             Utf8Json.Resolvers.DynamicGenericResolver.Instance,
+            //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
             this.AnonymousExpressionJsonFormatterResolver,
             //Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
             //Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//これが存在するとTypeがシリアライズできない
+
             //BuiltinResolver.Instance,
             //EnumResolver.Default,
             //DynamicGenericResolver.Instance,
             //AttributeFormatterResolver.Instance
+            //Utf8Json.Resolvers.EnumResolver.Default,
+            //Utf8Json.Resolvers.DynamicGenericResolver.Instance,
+            //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
             Utf8Json.Resolvers.StandardResolver.AllowPrivate,//いくつかのリゾルバをまとめてある
             //Utf8Json.Resolvers.StandardResolver.Default,
             this.AnonymousExpressionJsonFormatterResolver
@@ -212,7 +218,7 @@ public readonly struct SerializerConfiguration{
     }
     private delegate void SerializeDelegate(object Formatter,ref MessagePackWriter writer,object value,MessagePackSerializerOptions options);
     private static readonly Type[] SerializeTypes={typeof(object),typeof(MessagePackWriter).MakeByRefType(),typeof(object),typeof(MessagePackSerializerOptions)};
-    public static void Serialize(object Formatter,ref MessagePackWriter writer,object value,MessagePackSerializerOptions options){
+    public static void DynamicSerialize(object Formatter,ref MessagePackWriter writer,object value,MessagePackSerializerOptions options){
         var Formatter_Serialize = Formatter.GetType().GetMethod("Serialize")!;
         var D = new DynamicMethod("",typeof(void),SerializeTypes) {
             InitLocals=false
@@ -229,7 +235,7 @@ public readonly struct SerializerConfiguration{
     }
     private delegate object DeserializeDelegate            (object Formatter,ref MessagePackReader reader          ,       MessagePackSerializerOptions options);
     private static readonly Type[] DeserializeTypes={typeof(object),      typeof(MessagePackReader).MakeByRefType(),typeof(MessagePackSerializerOptions)};
-    public static object Deserialize(object Formatter,ref MessagePackReader reader,MessagePackSerializerOptions options){
+    public static object DynamicDeserialize(object Formatter,ref MessagePackReader reader,MessagePackSerializerOptions options){
         var Method=Formatter.GetType().GetMethod("Deserialize")!;
         var D=new DynamicMethod("",typeof(object),DeserializeTypes){
             InitLocals=false
