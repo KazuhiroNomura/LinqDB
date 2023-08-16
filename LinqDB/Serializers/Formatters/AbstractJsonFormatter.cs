@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.PortableExecutable;
@@ -147,6 +148,16 @@ using static Common;
 //}
 public class AbstractJsonFormatter<T>:IJsonFormatter<T>{
     private readonly object[] Objects3=new object[3];
+    private static object GetFormatter(IJsonFormatterResolver formatterResolver,Type type){
+        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        var Formatter= formatterResolver.GetFormatterDynamic(type);
+        var Foramtter_Type=Formatter.GetType();
+        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
+            Type?Interface;
+            if((Interface=type.GetInterface(typeof(System.Linq.ILookup<,>).FullName)) is not null)Formatter= formatterResolver.GetFormatterDynamic(Interface);
+        }
+        return Formatter;
+    }
     public void Serialize(ref JsonWriter writer,T? value,IJsonFormatterResolver formatterResolver){
         if(value is null){
             writer.WriteNull();
@@ -157,8 +168,24 @@ public class AbstractJsonFormatter<T>:IJsonFormatter<T>{
         Serialize_Type(ref writer,type,formatterResolver);
         writer.WriteValueSeparator();
         //再帰してしまう Serialize_T(ref writer,value,formatterResolver);
-        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
-        var Formatter = formatterResolver.GetFormatterDynamic(type);
+        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        var Formatter=GetFormatter(formatterResolver,type);// formatterResolver.GetFormatterDynamic(type);
+        //var Foramtter_Type=Formatter.GetType();
+        //if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
+        //    Type?Interface;
+        //    if((Interface=type.GetInterface(typeof(System.Linq.ILookup<,>).FullName)) is not null)Formatter= formatterResolver.GetFormatterDynamic(Interface);
+        //} 
+        //formatterResolver.
+        //while(true){
+        //    Formatter = formatterResolver.GetFormatterDynamic(type);
+        //    var Foramtter_Type=Formatter.GetType();
+        //    if(Foramtter_Type.IsGenericType&&
+        //       Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
+        //        type=type.BaseType!;
+        //    } else
+        //        break;
+        //}
+        //var Formatter = formatterResolver.GetFormatterDynamic(type);
         var Serialize = Formatter.GetType().GetMethod("Serialize");
         Debug.Assert(Serialize is not null);
         var Objects3 = this.Objects3;
@@ -177,9 +204,9 @@ public class AbstractJsonFormatter<T>:IJsonFormatter<T>{
         reader.ReadIsBeginArrayWithVerify();
         var type=Deserialize_Type(ref reader,formatterResolver);
         reader.ReadIsValueSeparatorWithVerify();
-
-        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
-        var Formatter = formatterResolver.GetFormatterDynamic(type);
+        var Formatter=GetFormatter(formatterResolver,type);
+        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        //var Formatter = formatterResolver.GetFormatterDynamic(type);
         var Deserialize = Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
         var Objects2 = this.Objects2;
@@ -192,6 +219,16 @@ public class AbstractJsonFormatter<T>:IJsonFormatter<T>{
     }
 }
 public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
+    private static object GetFormatter(MessagePackSerializerOptions options,Type type){
+        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        var Formatter= options.Resolver.GetFormatterDynamic(type)!;
+        var Foramtter_Type=Formatter.GetType();
+        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractMessagePackFormatter<>)){
+            Type?Interface;
+            if((Interface=type.GetInterface(typeof(System.Linq.ILookup<,>).FullName)) is not null)Formatter= options.Resolver.GetFormatterDynamic(Interface)!;
+        }
+        return Formatter;
+    }
     public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
         if(value is null){
             writer.WriteNil();
@@ -203,7 +240,7 @@ public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
         writer.WriteArrayHeader(2);
         var type=value.GetType();
         Serialize_Type(ref writer,type,options);
-        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         //var Formatter = options.Resolver.GetFormatterDynamic(type)!;
         //var Serialize = Formatter.GetType().GetMethod("Serialize");
         //Debug.Assert(Serialize!=null,nameof(Serialize)+" != null");
@@ -211,18 +248,18 @@ public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
         //Delegate0(ref writer,value,options);
         //再帰してしまう MessagePackSerializer.Serialize(type,ref writer,value,options);
         //MessagePackSerializer.Serialize(type,ref writer,value,options);
-        SerializerConfiguration.DynamicSerialize(options.Resolver.GetFormatterDynamic(type)!,ref writer,value,options);
+        SerializerConfiguration.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
         //Serialize_T(ref writer,value,options);
-        //MessagePack.Resolvers.StandardResolver.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
-        //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<object>().Serialize(ref writer,value,options);
+        //MessagePack.Resolvers.StandardResolver.Instance.GetFormatter<T>().Serialize(ref writer,value,options);
+        //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<T>().Serialize(ref writer,value,options);
     }
-    //private delegate object DeserializeDelegate(ref MessagePackReader reader,MessagePackSerializerOptions options);
+    //private delegate T DeserializeDelegate(ref MessagePackReader reader,MessagePackSerializerOptions options);
     public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         var ArrayHeader=reader.ReadArrayHeader();
         Debug.Assert(ArrayHeader==2);
         var type=Deserialize_Type(ref reader,options);
-        if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         //var Formatter = MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(type);
         //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
         //Debug.Assert(Deserialize!=null,nameof(Deserialize)+" != null");
@@ -230,16 +267,16 @@ public class AbstractMessagePackFormatter<T>:IMessagePackFormatter<T>{
         ////Debug.Assert(Deserialize is not null);
         //var value = Delegate0(ref reader,options);
         //var value=MessagePackSerializer.Deserialize(type,ref reader,options);
-        var value=(T)SerializerConfiguration.DynamicDeserialize(options.Resolver.GetFormatterDynamic(type)!,ref reader,options);
+        var value=(T)SerializerConfiguration.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
         //var value = MessagePackSerializer.Serialize(type,ref writer,value,options);
         return value;
         //var reader0=reader;
         //var reader1=reader;
         //reader=reader0;
-        //todo Anonymousはtypeヘッダーを入れることで型を指定するのだが内部のobjectフィールドには対応できない方法を考案する必要がある
-       //var value1=(object)MessagePackSerializer.Deserialize(type,ref reader1,options);
+        //todo Anonymousはtypeヘッダーを入れることで型を指定するのだが内部のTフィールドには対応できない方法を考案する必要がある
+       //var value1=(T)MessagePackSerializer.Deserialize(type,ref reader1,options);
         //reader=reader1;
-        //return (object)value;
+        //return (T)value;
         //return value1;
     }
 }

@@ -4,6 +4,7 @@ using MessagePack;
 using System.Reflection.Emit;
 using System;
 using LinqDB.Helpers;
+using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
@@ -20,140 +21,149 @@ public readonly struct SerializerConfiguration{
         this.AnonymousExpressionJsonFormatterResolver=new();
         //順序が大事
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
-            //this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
-            //short
-            //int
-            //long
-            //ushort
-            //uint
-            //ulong
-            //float
-            //double
-            //bool
-            //byte
-            //sbyte
-            //DateTime
-            //DateOnly
-            //TimeOnly
-            //char
-            //short?
-            //int?
-            //long?
-            //ushort?
-            //uint?
-            //ulong?
-            //float?
-            //double?
-            //bool?
-            //byte?
-            //sbyte?
-            //DateTime?
-            //char?
-            //string
-            //decimal
-            //decimal?
-            //TimeSpan
-            //TimeSpan?
-            //DateTimeOffset
-            //DateTimeOffset?
-            //Guid
-            //Guid?
-            //Uri
-            //Version
-            //StringBuilder
-            //BitArray
-            //Type
-            //byte[]
-            //Nil
-            //Nil?
-            //short[]
-            //int[]
-            //long[]
-            //ushort[]
-            //uint[]
-            //ulong[]
-            //float[]
-            //double[]
-            //bool[]
-            //sbyte[]
-            //DateTime[]
-            //char[]
-            //string[]
-            //List<short>
-            //List<int>
-            //List<long>
-            //List<ushort>
-            //List<uint>
-            //List<ulong>
-            //List<float>
-            //List<double>
-            //List<bool>
-            //List<byte>
-            //List<sbyte>
-            //List<DateTime>
-            //List<char>
-            //List<string>
-            //object[]
-            //List<object>
-            //Memory<byte>
-            //Memory<byte>?
-            //ReadOnlyMemory<byte>
-            //ReadOnlyMemory<byte>?
-            //ReadOnlySequence<byte>
-            //ReadOnlySequence<byte>?
-            //ArraySegment<byte>
-            //ArraySegment<byte>?
-            //BigInteger
-            //BigInteger?
-            //Complex
-            //Complex?
-            //Half
-            Utf8Json.Resolvers.BuiltinResolver.Instance,
-            //List<>
-            //LinkedList<>
-            //Queue<>
-            //Stack<>
-            //HashSet<>
-            //ReadOnlyCollection<>
-            //IList<>
-            //ICollection<>
-            //IEnumerable<>
-            //Dictionary<, >
-            //IDictionary<, >
-            //SortedDictionary<, >
-            //SortedList<, >
-            //ILookup<, >
-            //IGrouping<, >
-            //ObservableCollection<>
-            //ReadOnlyObservableCollection<>
-            //IReadOnlyList<>
-            //IReadOnlyCollection<>
-            //ISet<>
-            //IReadOnlySet<>
-            //ConcurrentBag<>
-            //ConcurrentQueue<>
-            //ConcurrentStack<>
-            //ReadOnlyDictionary<, >
-            //IReadOnlyDictionary<, >
-            //ConcurrentDictionary<, >
-            //Lazy<>
-            //Utf8Json.Resolvers.EnumResolver.Default,
-            Utf8Json.Resolvers.DynamicGenericResolver.Instance,
-            //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
-            this.AnonymousExpressionJsonFormatterResolver,
-            //Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
-            //Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//これが存在するとTypeがシリアライズできない
+            new IJsonFormatterResolver[]{
+                //this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
+                //short
+                //int
+                //long
+                //ushort
+                //uint
+                //ulong
+                //float
+                //double
+                //bool
+                //byte
+                //sbyte
+                //DateTime
+                //DateOnly
+                //TimeOnly
+                //char
+                //short?
+                //int?
+                //long?
+                //ushort?
+                //uint?
+                //ulong?
+                //float?
+                //double?
+                //bool?
+                //byte?
+                //sbyte?
+                //DateTime?
+                //char?
+                //string
+                //decimal
+                //decimal?
+                //TimeSpan
+                //TimeSpan?
+                //DateTimeOffset
+                //DateTimeOffset?
+                //Guid
+                //Guid?
+                //Uri
+                //Version
+                //StringBuilder
+                //BitArray
+                //Type
+                //byte[]
+                //Nil
+                //Nil?
+                //short[]
+                //int[]
+                //long[]
+                //ushort[]
+                //uint[]
+                //ulong[]
+                //float[]
+                //double[]
+                //bool[]
+                //sbyte[]
+                //DateTime[]
+                //char[]
+                //string[]
+                //List<short>
+                //List<int>
+                //List<long>
+                //List<ushort>
+                //List<uint>
+                //List<ulong>
+                //List<float>
+                //List<double>
+                //List<bool>
+                //List<byte>
+                //List<sbyte>
+                //List<DateTime>
+                //List<char>
+                //List<string>
+                //object[]
+                //List<object>
+                //Memory<byte>
+                //Memory<byte>?
+                //ReadOnlyMemory<byte>
+                //ReadOnlyMemory<byte>?
+                //ReadOnlySequence<byte>
+                //ReadOnlySequence<byte>?
+                //ArraySegment<byte>
+                //ArraySegment<byte>?
+                //BigInteger
+                //BigInteger?
+                //Complex
+                //Complex?
+                //Half
+                Utf8Json.Resolvers.BuiltinResolver.Instance,
+                //List<>
+                //LinkedList<>
+                //Queue<>
+                //Stack<>
+                //HashSet<>
+                //ReadOnlyCollection<>
+                //IList<>
+                //ICollection<>
+                //IEnumerable<>
+                //Dictionary<, >
+                //IDictionary<, >
+                //SortedDictionary<, >
+                //SortedList<, >
+                //ILookup<, >
+                //IGrouping<, >
+                //ObservableCollection<>
+                //ReadOnlyObservableCollection<>
+                //IReadOnlyList<>
+                //IReadOnlyCollection<>
+                //ISet<>
+                //IReadOnlySet<>
+                //ConcurrentBag<>
+                //ConcurrentQueue<>
+                //ConcurrentStack<>
+                //ReadOnlyDictionary<, >
+                //IReadOnlyDictionary<, >
+                //ConcurrentDictionary<, >
+                //Lazy<>
+                //Utf8Json.Resolvers.EnumResolver.Default,
+                Utf8Json.Resolvers.DynamicGenericResolver.Instance,
+                //Utf8Json.Resolvers.DynamicObjectResolver.Default,
+                //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
 
-            //BuiltinResolver.Instance,
-            //EnumResolver.Default,
-            //DynamicGenericResolver.Instance,
-            //AttributeFormatterResolver.Instance
-            //Utf8Json.Resolvers.EnumResolver.Default,
-            //Utf8Json.Resolvers.DynamicGenericResolver.Instance,
-            //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
-            Utf8Json.Resolvers.StandardResolver.AllowPrivate,//いくつかのリゾルバをまとめてある
-            //Utf8Json.Resolvers.StandardResolver.Default,
-            this.AnonymousExpressionJsonFormatterResolver
+
+
+                this.AnonymousExpressionJsonFormatterResolver,
+
+
+
+                //Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
+                //Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//これが存在するとTypeがシリアライズできない
+
+                //BuiltinResolver.Instance,
+                //EnumResolver.Default,
+                //DynamicGenericResolver.Instance,
+                //AttributeFormatterResolver.Instance
+                //Utf8Json.Resolvers.EnumResolver.Default,
+                //Utf8Json.Resolvers.DynamicGenericResolver.Instance,
+                //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
+                //Utf8Json.Resolvers.StandardResolver.AllowPrivate,//いくつかのリゾルバをまとめてある
+                //Utf8Json.Resolvers.StandardResolver.Default,
+                //this.AnonymousExpressionJsonFormatterResolver,
+            }
         );
         //this.JsonFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
@@ -168,15 +178,18 @@ public readonly struct SerializerConfiguration{
         this.AnonymousExpressionMessagePackFormatterResolver=new();
         this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
             MessagePack.Resolvers.CompositeResolver.Create(
-                //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
-                MessagePack.Resolvers.BuiltinResolver.Instance,
-                MessagePack.Resolvers.DynamicGenericResolver.Instance,
-                this.AnonymousExpressionMessagePackFormatterResolver,
-                //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
-                //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
-                MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-                //MessagePack.Resolvers.StandardResolver.Instance,//
-                this.AnonymousExpressionMessagePackFormatterResolver
+                new IFormatterResolver[]{
+                    //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
+                    MessagePack.Resolvers.BuiltinResolver.Instance,
+                    MessagePack.Resolvers.DynamicGenericResolver.Instance,
+                    this.AnonymousExpressionMessagePackFormatterResolver,
+                    //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
+                    //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
+                    //MessagePack.Resolvers.StandardResolver.Instance,
+                    //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
+                    //MessagePack.Resolvers.StandardResolver.Instance,//
+                    //this.AnonymousExpressionMessagePackFormatterResolver,
+                }
             )
         );
         //this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
