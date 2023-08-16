@@ -18,18 +18,28 @@ using Utf8Json;
 namespace LinqDB.Serializers;
 public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResolver{
     private readonly ExpressionJsonFormatter ExpressionFormatter = new();
-    private readonly Dictionary<Type,IJsonFormatter> Dictionary_Type_IJsonFormatter = new();
+    private readonly Dictionary<Type,IJsonFormatter> Dictionary_Type_Formatter = new();
+    private readonly Type[] GenericArguments=new Type[1];
     public IJsonFormatter<T> GetFormatter<T>(){
-        if(this.Dictionary_Type_IJsonFormatter.TryGetValue(typeof(T),out var IJsonFormatter))
-            return (IJsonFormatter<T>)IJsonFormatter;
+        if(this.Dictionary_Type_Formatter.TryGetValue(typeof(T),out var IJsonFormatter))return (IJsonFormatter<T>)IJsonFormatter;
         //if(typeof(Type).IsAssignableFrom(typeof(T))) return (IJsonFormatter<T>)(IJsonFormatter)Utf8Json.Formatters.TypeFormatter.Default;
         //if(typeof(Type).IsAssignableFrom(typeof(T))) return null!;
-        if(typeof(Expression).IsAssignableFrom(typeof(T)))
-            if(typeof(T).IsSubclassOf(typeof(LambdaExpression)))
-                return Return(Activator.CreateInstance(typeof(ExpressionJsonFormatter<>).MakeGenericType(typeof(T)),this.ExpressionFormatter)!);
-            else
-                return Return(this.ExpressionFormatter);
-        else if(
+        if(typeof(Expression).IsAssignableFrom(typeof(T))){
+            if(!typeof(T).IsSubclassOf(typeof(LambdaExpression))) return Return(this.ExpressionFormatter);
+            var GenericArguments=this.GenericArguments;
+            GenericArguments[0]=typeof(T);
+            return Return(Activator.CreateInstance(typeof(ExpressionJsonFormatter<>).MakeGenericType(GenericArguments),this.ExpressionFormatter)!);
+            //if(typeof(T).IsSubclassOf(typeof(LambdaExpression))){
+            //    return Return(Activator.CreateInstance(typeof(ExpressionJsonFormatter<>).MakeGenericType(typeof(T)),this.ExpressionFormatter)!);
+            //} else{
+            //    return Return(this.ExpressionFormatter);
+            //}
+            //return Return(typeof(T).IsSubclassOf(typeof(LambdaExpression))
+            //    ?Activator.CreateInstance(typeof(ExpressionJsonFormatter<>).MakeGenericType(typeof(T)),
+            //        this.ExpressionFormatter)!
+            //    :this.ExpressionFormatter);
+        }
+        if(
             typeof(MemberBinding).IsAssignableFrom(typeof(T))||
             typeof(T)==typeof(MethodInfo)||
             typeof(T)==typeof(MemberInfo)||
@@ -45,15 +55,12 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
         //else if(typeof(T)==typeof(NewArrayExpression))Formatter=(IJsonFormatter<T>)new NewArrayFormatter();
         //else if(typeof(T).IsAnonymous())
         //    Formatter=new AbstractFormatter<T>();
-        else if(typeof(T).IsAnonymous())
-            return Return(new AnonymousJsonFormatter<T>());
-        else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
-            return Return(new AbstractJsonFormatter<T>());
-        else
-            return null!;
+        if(typeof(T).IsAnonymous())return Return(new AnonymousJsonFormatter<T>());
+        if(!typeof(T).IsValueType&&!typeof(T).IsSealed)return Return(new AbstractJsonFormatter<T>());
+        return null!;
         IJsonFormatter<T> Return(object Formatter){
             var result=(IJsonFormatter<T>)Formatter;
-            this.Dictionary_Type_IJsonFormatter.Add(typeof(T),result);
+            this.Dictionary_Type_Formatter.Add(typeof(T),result);
             return result;
         }
         //else if(typeof(T).IsValueType||typeof(T).IsSealed||typeof(ITuple).IsAssignableFrom(typeof(T)))
@@ -63,30 +70,35 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
     }
     public void Clear() {
         this.ExpressionFormatter.Clear();
-        this.Dictionary_Type_IJsonFormatter.Clear();
+        this.Dictionary_Type_Formatter.Clear();
     }
 }
 public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
     //public static readonly IJsonFormatterResolver Instance=new Resolver();
     //private readonly AbstractMessagePackFormatter AbstractFormatter= new();
     private readonly ExpressionMessagePackFormatter ExpressionFormatter=new();
-    private readonly Dictionary<Type,IMessagePackFormatter> Dictionary_Type_IMessagePackFormatter = new();
-    private static IMessagePackFormatter<U>GetTypeFormatter<U>(){
-        return (IMessagePackFormatter<U>)typeof(TypeFormatter<>).MakeGenericType(typeof(U)).GetField("Instance").GetValue(null);
-    }
+    private readonly Dictionary<Type,IMessagePackFormatter> Dictionary_Type_Formatter = new();
+    private readonly Type[] GenericArguments=new Type[1];
     public IMessagePackFormatter<T> GetFormatter<T>() {
         //if(typeof(T).IsSerializable) return null!;
-        if(this.Dictionary_Type_IMessagePackFormatter.TryGetValue(typeof(T),out var IMessagePackFormatter))
-            return (IMessagePackFormatter<T>)IMessagePackFormatter;
-        if(typeof(Type).IsAssignableFrom(typeof(T))) return GetTypeFormatter<T>();
-        if(typeof(Expression).IsAssignableFrom(typeof(T)))
+        if(this.Dictionary_Type_Formatter.TryGetValue(typeof(T),out var IMessagePackFormatter))return (IMessagePackFormatter<T>)IMessagePackFormatter;
+        if(typeof(Type).IsAssignableFrom(typeof(T))){
+            var GenericArguments=this.GenericArguments;
+            GenericArguments[0]=typeof(T);
+            return (IMessagePackFormatter<T>)typeof(TypeFormatter<>).MakeGenericType(GenericArguments).GetField("Instance").GetValue(null);
+        }
+        if(typeof(Expression).IsAssignableFrom(typeof(T))){
             //if(typeof(LambdaExpression).IsAssignableFrom(typeof(T)))
             //    Formatter=(IMessagePackFormatter<T>)Activator.CreateInstance(typeof(ExpressionFormatter<>).MakeGenericType(typeof(T)),ExpressionFormatter.Instance)!;
-            if(typeof(T).IsSubclassOf(typeof(LambdaExpression)))
-                return Return(Activator.CreateInstance(typeof(ExpressionMessagePackFormatter<>).MakeGenericType(typeof(T)),this.ExpressionFormatter)!);
-            else
-                return Return(this.ExpressionFormatter);
-        else if(
+            if(!typeof(T).IsSubclassOf(typeof(LambdaExpression))) return Return(this.ExpressionFormatter);
+            var GenericArguments=this.GenericArguments;
+            GenericArguments[0]=typeof(T);
+            return Return(Activator.CreateInstance(typeof(ExpressionMessagePackFormatter<>).MakeGenericType(GenericArguments),this.ExpressionFormatter)!);
+        }
+        if(typeof(Expression).IsAssignableFrom(typeof(T))){
+            return Return(typeof(T).IsSubclassOf(typeof(LambdaExpression))?Activator.CreateInstance(typeof(ExpressionMessagePackFormatter<>).MakeGenericType(typeof(T)),this.ExpressionFormatter)!:this.ExpressionFormatter);
+        }
+        if(
             typeof(MemberBinding).IsAssignableFrom(typeof(T))||
             typeof(T)==typeof(MethodInfo)||
             typeof(T)==typeof(MemberInfo)||
@@ -94,20 +106,9 @@ public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
             typeof(T)==typeof(SwitchCase)||
             typeof(T)==typeof(ElementInit))
             return Return(this.ExpressionFormatter);
-        //else if(typeof(T)==typeof(ConstantExpression))Formatter=(IMessagePackFormatter<T>)new ConstantFormatter();
-        //else if(typeof(T)==typeof(DefaultExpression ))Formatter=(IMessagePackFormatter<T>)new DefaultFormatter();
-        //else if(typeof(T).IsSubclassOf(typeof(LambdaExpression)))Formatter=(IMessagePackFormatter<T>)Activator.CreateInstance(typeof(ExpressionFormatter<>).MakeGenericType(typeof(T)),ExpressionFormatter.Instance)!;
-        //else if(typeof(T)==typeof(DefaultExpression))
-        //    Formatter=(IMessagePackFormatter<T>)new DefaultFormatter();
-        //else if(typeof(T)==typeof(NewArrayExpression))Formatter=(IMessagePackFormatter<T>)new NewArrayFormatter();
-        //else if(typeof(T).IsAnonymous())
-        //    Formatter=new AbstractFormatter<T>();
-        else if(typeof(T).IsAnonymous())
-            return Return(new AnonymousMessagePackFormatter<T>());
-        else if(!typeof(T).IsValueType&&!typeof(T).IsSealed)
-            return Return(new AbstractMessagePackFormatter<T>());
-        else
-            return null!;
+        if(typeof(T).IsAnonymous())return Return(new AnonymousMessagePackFormatter<T>());
+        if(!typeof(T).IsValueType&&!typeof(T).IsSealed)return Return(new AbstractMessagePackFormatter<T>());
+        return null!;
         //else if(typeof(T).IsValueType||typeof(T).IsSealed||typeof(ITuple).IsAssignableFrom(typeof(T)))
         //    return null!;
         //else
@@ -123,13 +124,13 @@ public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
         //return (IMessagePackFormatter<T>)Formatter;
         IMessagePackFormatter<T> Return(object Formatter){
             var result=(IMessagePackFormatter<T>)Formatter;
-            this.Dictionary_Type_IMessagePackFormatter.Add(typeof(T),result);
+            this.Dictionary_Type_Formatter.Add(typeof(T),result);
             return result;
         }
     }
     public void Clear() {
         this.ExpressionFormatter.Clear();
-        this.Dictionary_Type_IMessagePackFormatter.Clear();
+        this.Dictionary_Type_Formatter.Clear();
     }
     //public IJsonFormatter<T> GetFormatter<T>(){
     //    //if(typeof(LambdaExpression).IsSubclassOf(typeof(T))){
