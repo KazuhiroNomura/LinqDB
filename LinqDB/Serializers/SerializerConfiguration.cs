@@ -110,7 +110,7 @@ public readonly struct SerializerConfiguration{
                 //Complex
                 //Complex?
                 //Half
-                Utf8Json.Resolvers.BuiltinResolver.Instance,
+                Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
                 //List<>
                 //LinkedList<>
                 //Queue<>
@@ -139,9 +139,11 @@ public readonly struct SerializerConfiguration{
                 //IReadOnlyDictionary<, >
                 //ConcurrentDictionary<, >
                 //Lazy<>
-                //Utf8Json.Resolvers.EnumResolver.Default,
-                Utf8Json.Resolvers.DynamicGenericResolver.Instance,
+                Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
+                Utf8Json.Resolvers.EnumResolver.Default,
                 //Utf8Json.Resolvers.DynamicObjectResolver.Default,
+                //Utf8Json.Resolvers.StandardResolver.Default,
+                //Utf8Json.Resolvers.CompositeResolver.Instance,
                 //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
 
 
@@ -182,6 +184,8 @@ public readonly struct SerializerConfiguration{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
                     MessagePack.Resolvers.BuiltinResolver.Instance,
                     MessagePack.Resolvers.DynamicGenericResolver.Instance,
+                    //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
+                    //MessagePack.Resolvers.DynamicEnumResolver.Instance,
                     this.AnonymousExpressionMessagePackFormatterResolver,
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                     //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//

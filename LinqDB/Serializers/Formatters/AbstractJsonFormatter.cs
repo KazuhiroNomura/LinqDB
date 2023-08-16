@@ -27,6 +27,7 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
     private static object GetFormatter(IJsonFormatterResolver formatterResolver,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         var Formatter=formatterResolver.GetFormatterDynamic(type);
+        Debug.Assert(Formatter is not null,"Formatterが見つからない");
         var Foramtter_Type=Formatter.GetType();
         if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)&&GetInterface(type,out var Interface))
             Formatter=formatterResolver.GetFormatterDynamic(Interface);

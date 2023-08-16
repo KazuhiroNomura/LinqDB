@@ -41,13 +41,15 @@ public class ATest_シリアライズ:ATest{
     private static void Private共通object<T>(T input,Action<T> AssertAction){
         SerializerConfiguration.Clear();
         //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
-        {
+        try{
             SerializerConfiguration.Clear();
-            var JsonStream = new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+            var JsonStream=new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             JsonSerializer.Serialize(JsonStream,input,SerializerConfiguration.JsonFormatterResolver);
             JsonStream.Close();
             var Json=File.ReadAllText(Jsonファイル名);
             File.WriteAllText(整形済みJsonファイル名,format_json(Json));
+        } catch(Exception ex){
+
         }
         {
             SerializerConfiguration.Clear();
@@ -67,7 +69,7 @@ public class ATest_シリアライズ:ATest{
             SerializerConfiguration.Clear();
             var MessagepackAllBytes=File.ReadAllBytes(Messagepackファイル名);
             //var json0=MessagePackSerializer.(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
-            //var json1=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
+            var json1=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
             //var json2=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
             SerializerConfiguration.Clear();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Open,FileAccess.ReadWrite,FileShare.ReadWrite);
