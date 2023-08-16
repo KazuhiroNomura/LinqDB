@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -40,7 +41,8 @@ public class Test_Collection:ATest_シリアライズ{
     [TestMethod]public void ReadOnlyCollection()=>共通object(new ReadOnlyCollection<int>(new[]{1}));
     [TestMethod]public void IList()=>共通object((IList<int>)new[]{1});
     [TestMethod]public void ICollection()=>共通object((ICollection<int>)new[]{1});
-    [TestMethod]public void IEnumerable()=>共通object((IEnumerable<int>)new[]{1});
+    [TestMethod]public void IEnumerable0()=>共通object((IEnumerable<int>)new[]{1});
+    [TestMethod]public void IEnumerable1()=>共通object((IEnumerable<int>)new List<int>{1});
     [TestMethod]public void Dictionary()=>共通object(new Dictionary<int,int>{{1,1}});
     [TestMethod]public void IDictionary()=>共通object((IDictionary<int,int>)new Dictionary<int,int>{{1,1}});
     [TestMethod]public void SortedDictionary()=>共通object(new SortedDictionary<int,int>{{1,1}});
@@ -50,6 +52,20 @@ public class Test_Collection:ATest_シリアライズ{
     //[TestMethod]public void SortedDictionary()=>共通object(new SortedDictionary<int,int>{{1,1}});
     //[TestMethod]public void SortedList()=>共通object(new SortedList<int,int>{{1,1}});
     //[TestMethod]public void ILookup()=>共通object((ILookup<int,int>)new[]{1}.GroupBy);
+    class GroupingEn:IGrouping<int,int>{
+        public IEnumerator<int> GetEnumerator(){
+            throw new NotImplementedException();
+        }
+        IEnumerator IEnumerable.GetEnumerator(){
+            return this.GetEnumerator();
+        }
+        public int Key{get;}
+    }
+    [TestMethod]
+    public void Grouping(){
+        var x=new[]{1}.GroupBy(p=>p);
+        共通object(new GroupingEn());
+    }
     [TestMethod]public void IGrouping()=>共通object(new[]{1}.GroupBy(p=>p));
     [TestMethod]public void ObservableCollection()=>共通object(new ObservableCollection<int>(new[]{1}));
     [TestMethod]public void ReadOnlyObservableCollection()=>共通object(new ReadOnlyObservableCollection<int>(new ObservableCollection<int>(new[]{1})));

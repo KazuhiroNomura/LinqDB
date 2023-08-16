@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -79,10 +80,6 @@ public class ATest_シリアライズ:ATest{
         Private共通object(input,output=>Assert.IsTrue(output.SequenceEqual(input)));
     }
     protected static void 共通object<T>(T input){
-        var a=SerializerConfiguration.JsonFormatterResolver.GetFormatter<Lookup<int,int>>();
-        var b=SerializerConfiguration.JsonFormatterResolver.GetFormatter<ILookup<int,int>>();
-        var c=SerializerConfiguration.JsonFormatterResolver.GetFormatterDynamic(typeof(Lookup<int,int>));
-        var d=SerializerConfiguration.JsonFormatterResolver.GetFormatterDynamic(typeof(ILookup<int,int>));
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
         Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
