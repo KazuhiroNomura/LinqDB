@@ -8,17 +8,17 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
-    public readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver;
-    public readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver;
-    public void Clear(){
-        this.AnonymousExpressionJsonFormatterResolver.Clear();
-        this.AnonymousExpressionMessagePackFormatterResolver.Clear();
-    }
+    //public readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver;
+    //public readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver;
+    //public void Clear(){
+    //    this.AnonymousExpressionJsonFormatterResolver.Clear();
+    //    this.AnonymousExpressionMessagePackFormatterResolver.Clear();
+    //}
     public readonly IJsonFormatterResolver JsonFormatterResolver;
     //public readonly MessagePack.Resolver MessagePack_Resolver;
     public readonly MessagePackSerializerOptions MessagePackSerializerOptions;
     public SerializerConfiguration(){
-        this.AnonymousExpressionJsonFormatterResolver=new();
+        //this.AnonymousExpressionJsonFormatterResolver=new();
         //順序が大事
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatterResolver[]{
@@ -148,7 +148,7 @@ public readonly struct SerializerConfiguration{
 
 
 
-                this.AnonymousExpressionJsonFormatterResolver,
+                AnonymousExpressionJsonFormatterResolver.Instance,
 
 
 
@@ -177,7 +177,7 @@ public readonly struct SerializerConfiguration{
         //    Utf8Json.Resolvers.StandardResolver.AllowPrivate
         //    //global::Utf8Json.Resolvers.StandardResolver.Default,
         //);
-        this.AnonymousExpressionMessagePackFormatterResolver=new();
+        //this.AnonymousExpressionMessagePackFormatterResolver=new();
         this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
             MessagePack.Resolvers.CompositeResolver.Create(
                 new IFormatterResolver[]{
@@ -186,7 +186,7 @@ public readonly struct SerializerConfiguration{
                     MessagePack.Resolvers.DynamicGenericResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumResolver.Instance,
-                    this.AnonymousExpressionMessagePackFormatterResolver,
+                    AnonymousExpressionFormatterResolver.Instance,
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                     //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
                     //MessagePack.Resolvers.StandardResolver.Instance,
@@ -196,42 +196,6 @@ public readonly struct SerializerConfiguration{
                 }
             )
         );
-        //this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
-        //    MessagePack.Resolvers.CompositeResolver.Create(
-        //        MessagePack.Resolvers.BuiltinResolver.Instance,
-        //        MessagePack.Resolvers.DynamicGenericResolver.Instance,
-        //        this.AnonymousExpressionMessagePackFormatterResolver,
-        //        //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
-        //        //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
-        //        MessagePack.Resolvers.StandardResolverAllowPrivate.Instance
-        //        //MessagePack.Resolvers.StandardResolver.Instance,//
-        //    )
-        //);
-        //this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
-        //    MessagePack.Resolvers.CompositeResolver.Create(
-        //        new IFormatterResolver[]{
-        //            AnonymousExpressionResolver,
-        //            //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
-        //            MessagePack.Resolvers.DynamicGenericResolver.Instance,
-        //            //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
-        //            MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-        //            //MessagePack.Resolvers.StandardResolver.Instance,//
-        //        }
-        //    )
-        //);
-        //var MessagePack_Resolver=this.MessagePack_Resolver=new MessagePack.Resolver();
-        //this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
-        //    MessagePack.Resolvers.CompositeResolver.Create(
-        //        new IFormatterResolver[]{
-        //            AnonymousExpressionResolver,
-        //            //global::MessagePack.Resolvers.DynamicObjectResolver.Instance,
-        //            MessagePack.Resolvers.DynamicGenericResolver.Instance,
-        //            //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,
-        //            MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-        //            //global::MessagePack.Resolvers.StandardResolver.Instance,
-        //        }
-        //    )
-        //);
     }
     private delegate void SerializeDelegate(object Formatter,ref MessagePackWriter writer,object value,MessagePackSerializerOptions options);
     private static readonly Type[] SerializeTypes={typeof(object),typeof(MessagePackWriter).MakeByRefType(),typeof(object),typeof(MessagePackSerializerOptions)};

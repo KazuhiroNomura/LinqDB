@@ -38,7 +38,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<TypeBinaryExpression>{
     }
 }
 partial class ExpressionMessagePackFormatter:IMessagePackFormatter<TypeBinaryExpression>{
-    private IMessagePackFormatter<TypeBinaryExpression> MSTypeBinary=>this;
+    private IMessagePackFormatter<TypeBinaryExpression> TypeBinary=>this;
     public void Serialize(ref MessagePackWriter writer,TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();

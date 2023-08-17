@@ -7,7 +7,6 @@ using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 partial class ExpressionJsonFormatter:IJsonFormatter<UnaryExpression>{
-    private IJsonFormatter<UnaryExpression> Unary=>this;
     private void Serialize_Unary(ref JsonWriter writer,Expression value,IJsonFormatterResolver Resolver){
         var Unary=(UnaryExpression)value;
         this.Serialize(ref writer,Unary.Operand,Resolver);
@@ -187,7 +186,6 @@ partial class ExpressionJsonFormatter:IJsonFormatter<UnaryExpression>{
     }
 }
 partial class ExpressionMessagePackFormatter:IMessagePackFormatter<UnaryExpression>{
-    private IMessagePackFormatter<UnaryExpression> MSUnary=>this;
     private void Serialize_Unary(ref MessagePackWriter writer,Expression value,MessagePackSerializerOptions Resolver){
         var Unary=(UnaryExpression)value;
         this.Serialize(ref writer,Unary.Operand,Resolver);

@@ -15,6 +15,7 @@ using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.MessagePack;
 using MessagePack;
+using MessagePack.Formatters;
 //using MessagePack.Resolvers;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -185,24 +186,12 @@ public class Test_色んなデータ型:ATest_シリアライズ{
             a=(object)new{aa=1}
         });
     }
-    [MessagePackObject(true)]private class classキーあり{
-        public int a=3;
-        public string b="b";
-        public int property{get;set;}=4;
-
-    }
-    private static void ジェネリック0<T>()where T:new()=>共通object(Expression.Constant(new T()));
+    private static void ジェネリック0<T>()where T:new()=>共通Expression(Expression.Constant(new T()));
     private static void ジェネリック1<T>()where T:new()=>共通object(Tuple.Create(new T()));
     private static void ジェネリック2<T>()where T:new()=>共通object(new T());
     [TestMethod]public void classキーあり0()=>ジェネリック0<classキーあり>();
     [TestMethod]public void classキーあり1()=>ジェネリック1<classキーあり>();
     [TestMethod]public void classキーあり2()=>ジェネリック2<classキーあり>();
-    [MessagePackObject(true)]private sealed class sealed_classキーあり{
-        public int a=3;
-        public string b="b";
-        public int property{get;set;}=4;
-
-    }
     [TestMethod]public void sealed_classキーあり0()=>ジェネリック0<sealed_classキーあり>();
     [TestMethod]public void sealed_classキーあり1()=>ジェネリック1<sealed_classキーあり>();
     [TestMethod]public void sealed_classキーあり2()=>ジェネリック2<sealed_classキーあり>();

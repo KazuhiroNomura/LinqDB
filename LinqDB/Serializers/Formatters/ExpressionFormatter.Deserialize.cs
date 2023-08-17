@@ -611,7 +611,7 @@ partial class ExpressionMessagePackFormatter{
                 return Expression.Unbox(Operand,Type);
             }
 
-            case ExpressionType.TypeEqual or ExpressionType.TypeIs:return this.MSTypeBinary.Deserialize(ref reader,Resolver);
+            case ExpressionType.TypeEqual or ExpressionType.TypeIs:return this.TypeBinary.Deserialize(ref reader,Resolver);
 
             case ExpressionType.Conditional        :return this.Conditional.Deserialize(ref reader,Resolver);
             case ExpressionType.Constant:return this.Constant.Deserialize(ref reader,Resolver);

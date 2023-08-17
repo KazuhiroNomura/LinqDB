@@ -22,36 +22,8 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConstantExpression>{
         reader.ReadIsBeginArrayWithVerify();
         var type=Deserialize_Type(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-
         var value=Deserialize_T<object>(ref reader,Resolver);
-
-        //var Formatter = Resolver.GetFormatterDynamic(type);
-        ////var Types=this.Types;
-        ////Types[0]=typeof(JsonWriter).MakeByRefType();
-        ////Types[1]=type;
-        ////Types[2]=typeof(IJsonFormatterResolver);
-        //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
-        //Debug.Assert(Deserialize is not null);
-        //var Objects2 = this.Objects2;
-        //Objects2[0]=reader;
-        //Objects2[1]=Resolver;
-        //var value = Deserialize.Invoke(Formatter,Objects2);
-        //reader=(JsonReader)Objects2[0];
         reader.ReadIsEndArrayWithVerify();
-
-
-        //reader.ReadIsBeginArrayWithVerify();
-        //var s = reader.ReadString();
-        //reader.ReadIsValueSeparatorWithVerify();
-        //var Formatter = Resolver.GetFormatterDynamic(type);
-        //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
-        //Debug.Assert(Deserialize is not null);
-        //var Objects2 = this.Objects2;
-        //Objects2[0]=reader;
-        //Objects2[1]=Resolver;
-        //var value = Deserialize.Invoke(Formatter,Objects2);
-        //reader=(JsonReader)Objects2[0];
-        //reader.ReadIsEndArrayWithVerify();
         return Expression.Constant(value,type);
     }
 }
