@@ -14,6 +14,7 @@ using LinqDB.Optimizers;
 using LinqDB.Remote.Clients;
 using LinqDB.Serializers;
 using LinqDB.Serializers.Formatters;
+using LinqDB.Sets;
 //using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.MessagePack;
 using MessagePack;
@@ -34,6 +35,9 @@ public class ATest_シリアライズ:ATest{
     private static readonly IJsonFormatterResolver JsonFormatterResolver;
     //public readonly MessagePack.Resolver MessagePack_Resolver;
     private static readonly MessagePackSerializerOptions MessagePackSerializerOptions;
+    //private static readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver=new();
+    //private static readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver=new();
+    private static readonly SerializerConfiguration SerializerConfiguration=new();
     static ATest_シリアライズ(){
         JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatter[]{
@@ -41,11 +45,15 @@ public class ATest_シリアライズ:ATest{
                 sealed_classキーあり.JsonFormatter.Instance,
             },
             new IJsonFormatterResolver[]{
-                Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
-                Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
-                Utf8Json.Resolvers.EnumResolver.Default,
-                AnonymousExpressionJsonFormatterResolver.Instance,
+                SerializerConfiguration.JsonFormatterResolver
             }
+
+            //new IJsonFormatterResolver[]{
+            //    Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
+            //    Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
+            //    Utf8Json.Resolvers.EnumResolver.Default,
+            //    AnonymousExpressionJsonFormatterResolver,
+            //}
         );
         MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
             MessagePack.Resolvers.CompositeResolver.Create(
@@ -54,9 +62,7 @@ public class ATest_シリアライズ:ATest{
                     sealed_classキーあり.MessagePackFormatter.Instance,
                 },
                 new IFormatterResolver[]{
-                    MessagePack.Resolvers.BuiltinResolver.Instance,
-                    MessagePack.Resolvers.DynamicGenericResolver.Instance,
-                    AnonymousExpressionFormatterResolver.Instance,
+                    SerializerConfiguration.MessagePackSerializerOptions.Resolver
                 }
             )
         );
@@ -175,6 +181,7 @@ public class ATest_シリアライズ:ATest{
     private static void Private共通object<T>(T input,Action<T> AssertAction){
         //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
         try{
+            SerializerConfiguration.ClearJson();
             var JsonStream=new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             JsonSerializer.Serialize(JsonStream,input,JsonFormatterResolver);
             JsonStream.Close();
@@ -184,17 +191,20 @@ public class ATest_シリアライズ:ATest{
 
         }
         {
+            SerializerConfiguration.ClearJson();
             var json0=File.ReadAllText(Jsonファイル名);
             var json1=File.ReadAllText(整形済みJsonファイル名);
             var T0=JsonSerializer.Deserialize<T>(json0,JsonFormatterResolver);
             AssertAction(T0);
         }
         {
+            SerializerConfiguration.ClearMessagePack();
             var MessagepackStream = new FileStream(Messagepackファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             MessagePackSerializer.Serialize(MessagepackStream,input,MessagePackSerializerOptions);
             MessagepackStream.Close();
         }
         {
+            SerializerConfiguration.ClearMessagePack();
             var MessagepackAllBytes=File.ReadAllBytes(Messagepackファイル名);
             //var json0=MessagePackSerializer.(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
             var json1=MessagePackSerializer.ConvertToJson(MessagepackAllBytes,MessagePackSerializerOptions);
@@ -210,12 +220,12 @@ public class ATest_シリアライズ:ATest{
     }
     protected static void 共通object<T>(T input){
         Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
         Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     protected static void 共通Expression<T>(T input)where T:Expression?{
-        Debug.Assert(input!=null,nameof(input)+" != null");
-        Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
+        //Debug.Assert(input!=null,nameof(input)+" != null");
+        Private共通object(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
+        //Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
     }
     private static string format_json(string json){
         dynamic parsedJson = Json.JsonConvert.DeserializeObject(json)!;

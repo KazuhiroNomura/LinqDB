@@ -8,8 +8,10 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
-    //public readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver;
-    //public readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver;
+    private readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver=new();
+    private readonly AnonymousExpressionMessagePackFormatterResolver AnonymousExpressionMessagePackFormatterResolver=new();
+    public void ClearJson()=>this.AnonymousExpressionJsonFormatterResolver.Clear();
+    public void ClearMessagePack()=>this.AnonymousExpressionMessagePackFormatterResolver.Clear();
     //public void Clear(){
     //    this.AnonymousExpressionJsonFormatterResolver.Clear();
     //    this.AnonymousExpressionMessagePackFormatterResolver.Clear();
@@ -148,7 +150,7 @@ public readonly struct SerializerConfiguration{
 
 
 
-                AnonymousExpressionJsonFormatterResolver.Instance,
+                this.AnonymousExpressionJsonFormatterResolver,
 
 
 
@@ -186,7 +188,7 @@ public readonly struct SerializerConfiguration{
                     MessagePack.Resolvers.DynamicGenericResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumResolver.Instance,
-                    AnonymousExpressionFormatterResolver.Instance,
+                    this.AnonymousExpressionMessagePackFormatterResolver,
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                     //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
                     //MessagePack.Resolvers.StandardResolver.Instance,

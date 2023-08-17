@@ -3,7 +3,11 @@ using MessagePack;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 public static class Common{
-    public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+    //public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+    public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver){
+        var f=Resolver.GetFormatter<T>();
+        f.Serialize(ref writer,value,Resolver);
+    }
     public static void Serialize_Type(ref JsonWriter writer,Type value,IJsonFormatterResolver Resolver){
         writer.WriteString(value.AssemblyQualifiedName);
     }

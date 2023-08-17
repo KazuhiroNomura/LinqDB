@@ -7,16 +7,7 @@ using MessagePack;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter{//}:IJsonFormatter<ReadOnlyCollection<ParameterExpression>> {
-    //private IJsonFormatter<ReadOnlyCollection<ParameterExpression>> Parameters=>this;
-    //internal static DeclareParameterFormatter Instance{get;set;}
-    //private readonly List<ParameterExpression> ListParameter;
-    //internal static void Create(List<ParameterExpression> ListParameter){
-    //    Instance=new(ListParameter);
-    //}
-    //private DeclareParameterFormatter(List<ParameterExpression> ListParameter){
-    //    this.ListParameter=ListParameter;
-    //}
+partial class ExpressionJsonFormatter{
     public void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<ParameterExpression>value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         var Count=value.Count;

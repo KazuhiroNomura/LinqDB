@@ -17,7 +17,7 @@ using Utf8Json;
 //using Utf8Json.Formatters;
 namespace LinqDB.Serializers;
 public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResolver{
-    public static readonly AnonymousExpressionJsonFormatterResolver Instance=new();
+    //public static readonly AnonymousExpressionJsonFormatterResolver Instance=new();
     private readonly ExpressionJsonFormatter ExpressionFormatter = new();
     private readonly Dictionary<Type,IJsonFormatter> Dictionary_Type_Formatter = new();
     private readonly Type[] GenericArguments=new Type[1];
@@ -71,11 +71,11 @@ public sealed class AnonymousExpressionJsonFormatterResolver:IJsonFormatterResol
     }
     public void Clear() {
         this.ExpressionFormatter.Clear();
-        this.Dictionary_Type_Formatter.Clear();
+        //this.Dictionary_Type_Formatter.Clear();
     }
 }
-public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
-    public static readonly AnonymousExpressionFormatterResolver Instance=new();
+public sealed class AnonymousExpressionMessagePackFormatterResolver:IFormatterResolver {
+    //public static readonly AnonymousExpressionMessagePackFormatterResolver Instance=new();
     //public static readonly IJsonFormatterResolver Instance=new Resolver();
     //private readonly AbstractMessagePackFormatter AbstractFormatter= new();
     private readonly ExpressionMessagePackFormatter ExpressionFormatter=new();
@@ -132,7 +132,7 @@ public sealed class AnonymousExpressionFormatterResolver:IFormatterResolver {
     }
     public void Clear() {
         this.ExpressionFormatter.Clear();
-        this.Dictionary_Type_Formatter.Clear();
+        //this.Dictionary_Type_Formatter.Clear();
     }
     //public IJsonFormatter<T> GetFormatter<T>(){
     //    //if(typeof(LambdaExpression).IsSubclassOf(typeof(T))){
