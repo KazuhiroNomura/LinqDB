@@ -437,7 +437,7 @@ partial class Optimizer {
                                                         argument,
                                                         index
                                                     ),
-                                                    argument0 => Expression.Break(
+                                                    _ => Expression.Break(
                                                         Break,
                                                         Constant_true
                                                     )
@@ -468,7 +468,7 @@ partial class Optimizer {
                                                         this.Traverse(MethodCall0_MethodCall_Arguments[1]),
                                                         argument1
                                                     ),
-                                                    argument2 => Expression.Break(
+                                                    _ => Expression.Break(
                                                         Break,
                                                         Constant_true
                                                     )
@@ -494,14 +494,14 @@ partial class Optimizer {
                                     return Expression.Block(
                                         this.ループ展開(
                                             MethodCall0_MethodCall_Arguments[0],
-                                            argument => Expression.Break(
+                                            _ => Expression.Break(
                                                 Break,
                                                 Constant_true
                                             )
                                         ),
                                         this.ループ展開(
                                             MethodCall0_MethodCall_Arguments[1],
-                                            argument => Expression.Break(
+                                            _ => Expression.Break(
                                                 Break,
                                                 Constant_true
                                             )
@@ -961,7 +961,7 @@ partial class Optimizer {
                                 );
                                 var Expression1ループ = this.ループ展開(
                                     MethodCall0_Arguments_0,
-                                    argument => IncrementAssign(Result)
+                                    _ => IncrementAssign(Result)
                                 );
                                 return Expression.Block(
                                     作業配列.Parameters設定(Result),

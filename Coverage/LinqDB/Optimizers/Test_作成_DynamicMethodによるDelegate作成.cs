@@ -1316,7 +1316,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         Struct キャスト();
     }
-    private struct Struct : IStruct, IEquatable<Struct>
+    private readonly struct Struct : IStruct, IEquatable<Struct>
     {
         private readonly int 内部の値;
         public Struct(int 内部の値)

@@ -242,7 +242,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             Debug.Assert(this._Count==0);
             this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItem(default!);
         } else {
-            var HashCode = (long)(uint)Item!.GetHashCode();
+            var HashCode = (long)(uint)Item.GetHashCode();
             if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
                 var Comparer = this.Comparer;
                 LinkedNode LinkedNode = TreeNode;
@@ -269,7 +269,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <param name="Value">集合内で検索する値。</param>
     internal bool InternalContains(T Value) {
         Debug.Assert(Value is not null);
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Value!.GetHashCode());
+        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Value.GetHashCode());
         if(TreeNode is not null) {
             var Comparer = this.Comparer;
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
@@ -394,7 +394,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         //走査順はthis,L,R
         internal LinkedNodeItem? LinkedNodeItem;
         internal TreeNode TreeNode;
-        /// <inheritdoc />
         public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
         /// <summary>
         /// 要素が存在するかどうかの判定に使う
@@ -431,11 +430,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             }
             return false;
         }
-        /// <inheritdoc />
         public void Dispose() {
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
@@ -462,7 +459,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             this.終了=false;
             this.InternalCurrent=default!;
             //バッファに書き込む
-            ThreadPool.QueueUserWorkItem(state => {
+            ThreadPool.QueueUserWorkItem(_ => {
                 var BlockingCollection=this.BlockingCollection;
                 //var CancellationToken = this.CancellationToken;
                 var TreeNode=this.TreeNode;
@@ -497,7 +494,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 this.終了=true;
             },this);
         }
-        /// <inheritdoc />
         public void Reset() {
             var BlockingCollection=this.BlockingCollection;
             while(BlockingCollection.TryTake(out var _)) { }
@@ -520,14 +516,12 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 return false;
             }
         }
-        /// <inheritdoc />
 #pragma warning disable CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
         public void Dispose() {
 #pragma warning restore CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
             this.BlockingCollection.Dispose();
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
@@ -547,7 +541,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             this.LinkedNodeItem=Enumerator.LinkedNodeItem;
             this.InternalCurrent=default!;
         }
-        /// <inheritdoc />
         public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
         /// <summary>
         /// 要素が存在するかどうかの判定に使う
@@ -660,7 +653,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             return false;
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
@@ -710,7 +702,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 }
             }
         }
-        /// <inheritdoc />
         public void Reset() {
             this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
         }
@@ -749,11 +740,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             }
             return false;
         }
-        /// <inheritdoc />
         public void Dispose() {
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
@@ -1642,7 +1631,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> と等しい場合は true。それ以外の場合は false。</returns>
     /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
     public bool Equals(ImmutableSet<T>? other) => this.SetEquals(other);
-    /// <inheritdoc />
     public override bool Equals(object? obj) => obj is ImmutableSet<T> other&&this.Equals(other);
     /// <summary>
     /// 配列に変換する。

@@ -772,7 +772,7 @@ public class Client:IDisposable {
     /// <returns>送信した値が返ってくる。</returns>
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
-    public T SerializeSendReceive<T>(T 送信,XmlType XmlType=XmlType.Utf8Json) {
+    public T SerializeSendReceive<T>(T 送信,XmlType XmlType) {
         this.サーバーに送信(Request.Object_Object,XmlType,送信!);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();

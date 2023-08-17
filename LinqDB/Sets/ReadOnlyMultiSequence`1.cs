@@ -51,11 +51,9 @@ public sealed class ReadOnlyMultiSequence<T>{
             this.Index++;
             return true;
         }
-        /// <inheritdoc />
         public void Dispose() {
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;

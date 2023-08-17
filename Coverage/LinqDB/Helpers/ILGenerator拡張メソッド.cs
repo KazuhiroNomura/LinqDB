@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -736,13 +737,13 @@ public class Test_ILGenerator拡張メソッド
     [TestMethod]
     public void Call()
     {
-        Call(I => I.Call(typeof(string).GetMethod(nameof(string.ToString), Type.EmptyTypes)));
+        Call(I => I.Call(typeof(string).GetMethod(nameof(string.ToString), Type.EmptyTypes)!));
     }
 
     [TestMethod]
     public void Callvirt()
     {
-        Call(I => I.Callvirt(typeof(string).GetMethod(nameof(string.ToString), Type.EmptyTypes)));
+        Call(I => I.Callvirt(typeof(string).GetMethod(nameof(string.ToString), Type.EmptyTypes)!));
     }
 
     [TestMethod]
@@ -888,7 +889,7 @@ public class Test_ILGenerator拡張メソッド
         var I = D.GetILGenerator();
         I.Ldarga_S(0);
         I.Constrained(typeof(int));
-        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes));
+        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes)!);
         I.Ret();
         var M = (Func<int, string>)D.CreateDelegate(typeof(Func<int, string>));
         Assert.AreEqual("2", M(2));
@@ -1246,25 +1247,7 @@ public class Test_ILGenerator拡張メソッド
         Assert.AreEqual(コピー先, コピー元);
     }
     private delegate void void_TT<in T>(T コピー先, T コピー元);
-    private static void class型をCpobj<T>(T コピー元) where T : class
-    {
-        var D = new DynamicMethod("", typeof(void), new[]{
-            typeof(T),typeof(T)
-        }, typeof(ILGenerator拡張メソッド), true)
-        {
-            InitLocals = false
-        };
-        var I = D.GetILGenerator();
-        I.Ldarg_0();
-        I.Ldarg_1();
-        I.Cpobj(typeof(T));
-        I.Ret();
-        var M = (void_TT<T>)D.CreateDelegate(typeof(void_TT<T>));
-        var コピー先 = Activator.CreateInstance<T>();
-        M(コピー先, コピー元);
-        Assert.AreEqual(コピー先, コピー元);
-    }
-    private struct SCpobj : IEquatable<SCpobj>
+    private readonly struct SCpobj : IEquatable<SCpobj>
     {
         private readonly int a;
         private readonly string b;
@@ -1274,22 +1257,7 @@ public class Test_ILGenerator拡張メソッド
             this.b = b;
         }
         public bool Equals(SCpobj other) => this.a == other.a && this.b == other.b;
-        public override bool Equals(object obj) => obj is SCpobj cpobj && this.Equals(cpobj);
-        public override int GetHashCode() => this.a;
-    }
-    private class CCpobj : IEquatable<CCpobj>
-    {
-        private readonly int a;
-        public CCpobj()
-        {
-            this.a = 0;
-        }
-        public CCpobj(int a)
-        {
-            this.a = a;
-        }
-        public bool Equals(CCpobj other) => !(other is null) && this.a == other.a;
-        public override bool Equals(object obj) => obj is CCpobj cpobj && this.Equals(cpobj);
+        public override bool Equals(object? obj) => obj is SCpobj cpobj && this.Equals(cpobj);
         public override int GetHashCode() => this.a;
     }
     [TestMethod]
@@ -1449,9 +1417,7 @@ public class Test_ILGenerator拡張メソッド
             InitLocals = false
         };
         var I = D.GetILGenerator();
-        //            I.Ldarg_0();
-        I.Jmp(typeof(Test_ILGenerator拡張メソッド).GetMethod(nameof(Jmpで呼び出されるメソッド),
-            BindingFlags.Static | BindingFlags.NonPublic));
+        I.Jmp(typeof(Test_ILGenerator拡張メソッド).GetMethod(nameof(Jmpで呼び出されるメソッド),BindingFlags.Static | BindingFlags.NonPublic)!);
         I.Ret();
         Assert.AreEqual(((Func<int, int>)D.CreateDelegate(typeof(Func<int, int>)))(10), 10);
     }
@@ -1504,7 +1470,7 @@ public class Test_ILGenerator拡張メソッド
         var I = D.GetILGenerator();
         ILメソッド(I);
         I.Constrained(typeof(int));
-        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes));
+        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes)!);
         I.Ret();
         var parameters = new object[index + 1];
         parameters[index] = 1;
@@ -1650,7 +1616,11 @@ public class Test_ILGenerator拡張メソッド
         Assert.AreEqual(expected, 配列[0]);
     }
 
-    private static FieldInfo Field取得(string Name) => typeof(Test_ILGenerator拡張メソッド).GetField(Name, ConstBindingFlags);
+    private static FieldInfo Field取得(string Name){
+        var Field=typeof(Test_ILGenerator拡張メソッド).GetField(Name,ConstBindingFlags);
+        Debug.Assert(Field!=null,nameof(Field)+" != null");
+        return Field;
+    }
     private static void Ld<TInput, TResult>(Action<ILGenerator> ILメソッド, TInput 入力, TResult expected)
     {
         var D = new DynamicMethod("", typeof(TResult), new[] { typeof(TInput) }, typeof(Test_ILGenerator拡張メソッド), true)
@@ -1751,10 +1721,10 @@ public class Test_ILGenerator拡張メソッド
         Assert.AreEqual(expected, ((Func<int, int>)D.CreateDelegate(typeof(Func<int, int>)))(expected));
     }
     [TestMethod] public void Ldloc() => Ldloc((I, L) => I.Ldloc(L), 0);
-    [TestMethod] public void Ldloc_0() => Ldloc((I, L) => I.Ldloc_0(), 0);
-    [TestMethod] public void Ldloc_1() => Ldloc((I, L) => I.Ldloc_1(), 1);
-    [TestMethod] public void Ldloc_2() => Ldloc((I, L) => I.Ldloc_2(), 2);
-    [TestMethod] public void Ldloc_3() => Ldloc((I, L) => I.Ldloc_3(), 3);
+    [TestMethod] public void Ldloc_0() => Ldloc((I, _) => I.Ldloc_0(), 0);
+    [TestMethod] public void Ldloc_1() => Ldloc((I, _) => I.Ldloc_1(), 1);
+    [TestMethod] public void Ldloc_2() => Ldloc((I, _) => I.Ldloc_2(), 2);
+    [TestMethod] public void Ldloc_3() => Ldloc((I, _) => I.Ldloc_3(), 3);
     [TestMethod] public void Ldloc_S() => Ldloc((I, L) => I.Ldloc_S(L), 4);
     private static void Ldloca(Action<ILGenerator, LocalBuilder> ILメソッド, int index)
     {
@@ -1773,7 +1743,7 @@ public class Test_ILGenerator拡張メソッド
         I.Stloc(L);
         ILメソッド(I, L);
         I.Constrained(typeof(int));
-        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes));
+        I.Callvirt(typeof(int).GetMethod(nameof(int.ToString), Type.EmptyTypes)!);
         I.Ret();
         const int expected = 2;
         Assert.AreEqual(expected.ToString(), ((Func<int, string>)D.CreateDelegate(typeof(Func<int, string>)))(expected));
@@ -1928,7 +1898,7 @@ public class Test_ILGenerator拡張メソッド
         this.Ldtoken(I => I.M_Metadata(Constructor), Constructor);
         var Method = typeof(string).GetMethods()[0];
         this.Ldtoken(I => I.M_Metadata(Method), Method);
-        var Field = typeof(Test_ILGenerator拡張メソッド).GetField(nameof(this.Ldfld用Field), ConstBindingFlags);
+        var Field = Field取得(nameof(this.Ldfld用Field));
         this.Ldtoken(I => I.M_Metadata(Field), Field);
     }
     [TestMethod]
@@ -1943,9 +1913,6 @@ public class Test_ILGenerator拡張メソッド
         I.Localloc();
         I.Ret();
         Assert.IsNotNull(((Func<IntPtr>)D.CreateDelegate(typeof(Func<IntPtr>)))());
-    }
-    private class TClass
-    {
     }
     [TestMethod] public void Mkrefany() => this.Refanyval();
     [TestMethod]
@@ -1978,7 +1945,7 @@ public class Test_ILGenerator拡張メソッド
                 {
                     try
                     {
-                        var actual = M(a, b);
+                        M(a, b);
                         Assert.Fail("OverflowExceptionが発生するべき");
                     }
                     catch (OverflowException) { }
@@ -2044,7 +2011,7 @@ public class Test_ILGenerator拡張メソッド
     [TestMethod]
     public void Newobj()
     {
-        var M = 単項演算子<char[], byte[]>(I => I.Newobj(typeof(string).GetConstructor(new[] { typeof(char[]) })));
+        var M = 単項演算子<char[], byte[]>(I => I.Newobj(typeof(string).GetConstructor(new[] { typeof(char[]) })!));
         Assert.AreEqual(M(new[] { 'a', 'b', 'c' }), "abc");
     }
     [TestMethod]
@@ -2418,10 +2385,10 @@ public class Test_ILGenerator拡張メソッド
         Assert.AreEqual(expected, ((Func<int, int>)D.CreateDelegate(typeof(Func<int, int>)))(expected));
     }
     [TestMethod] public void Stloc() => Stloc((I, L) => I.Stloc(L), 0);
-    [TestMethod] public void Stloc_0() => Stloc((I, L) => I.Stloc_0(), 0);
-    [TestMethod] public void Stloc_1() => Stloc((I, L) => I.Stloc_1(), 1);
-    [TestMethod] public void Stloc_2() => Stloc((I, L) => I.Stloc_2(), 2);
-    [TestMethod] public void Stloc_3() => Stloc((I, L) => I.Stloc_3(), 3);
+    [TestMethod] public void Stloc_0() => Stloc((I, _) => I.Stloc_0(), 0);
+    [TestMethod] public void Stloc_1() => Stloc((I, _) => I.Stloc_1(), 1);
+    [TestMethod] public void Stloc_2() => Stloc((I, _) => I.Stloc_2(), 2);
+    [TestMethod] public void Stloc_3() => Stloc((I, _) => I.Stloc_3(), 3);
     [TestMethod] public void Stloc_S() => Stloc((I, L) => I.Stloc_S(L), 4);
     private delegate void void_TrefT<T>(T expected, ref T actual);
     private static void Stobj<T>(T expected)

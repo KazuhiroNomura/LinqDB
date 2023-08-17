@@ -170,7 +170,6 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
     //private static readonly PropertyInfo Length = typeof(ITuple).GetProperty("Length");
     //private static readonly PropertyInfo Item = typeof(ITuple).GetProperty("Item");
     //private readonly Object[] Objects1= new Object[1];
-    /// <inheritdoc />
     public override bool Equals(object? x,object? y){
         if(x==y) return true;
         if(x is null||y is null) return false;

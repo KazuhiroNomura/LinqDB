@@ -70,7 +70,7 @@ public class Test_Set1
             Assert.IsTrue(s.Add(a));
         Assert.AreEqual(s.Count, 要素数);
     }
-    private struct EntityKey : IEquatable<EntityKey>
+    private readonly struct EntityKey : IEquatable<EntityKey>
     {
         public readonly long ID;
         public EntityKey(long ID)

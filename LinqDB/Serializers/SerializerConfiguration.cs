@@ -23,129 +23,130 @@ public readonly struct SerializerConfiguration{
         //順序が大事
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatterResolver[]{
-                //this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
-                //short
-                //int
-                //long
-                //ushort
-                //uint
-                //ulong
-                //float
-                //double
-                //bool
-                //byte
-                //sbyte
-                //DateTime
-                //DateOnly
-                //TimeOnly
-                //char
-                //short?
-                //int?
-                //long?
-                //ushort?
-                //uint?
-                //ulong?
-                //float?
-                //double?
-                //bool?
-                //byte?
-                //sbyte?
-                //DateTime?
-                //char?
-                //string
-                //decimal
-                //decimal?
-                //TimeSpan
-                //TimeSpan?
-                //DateTimeOffset
-                //DateTimeOffset?
-                //Guid
-                //Guid?
-                //Uri
-                //Version
-                //StringBuilder
-                //BitArray
-                //Type
-                //byte[]
-                //Nil
-                //Nil?
-                //short[]
-                //int[]
-                //long[]
-                //ushort[]
-                //uint[]
-                //ulong[]
-                //float[]
-                //double[]
-                //bool[]
-                //sbyte[]
-                //DateTime[]
-                //char[]
-                //string[]
-                //List<short>
-                //List<int>
-                //List<long>
-                //List<ushort>
-                //List<uint>
-                //List<ulong>
-                //List<float>
-                //List<double>
-                //List<bool>
-                //List<byte>
-                //List<sbyte>
-                //List<DateTime>
-                //List<char>
-                //List<string>
-                //object[]
-                //List<object>
-                //Memory<byte>
-                //Memory<byte>?
-                //ReadOnlyMemory<byte>
-                //ReadOnlyMemory<byte>?
-                //ReadOnlySequence<byte>
-                //ReadOnlySequence<byte>?
-                //ArraySegment<byte>
-                //ArraySegment<byte>?
-                //BigInteger
-                //BigInteger?
-                //Complex
-                //Complex?
-                //Half
+                //    this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
+                //    short
+                //    int
+                //    long
+                //    ushort
+                //    uint
+                //    ulong
+                //    float
+                //    double
+                //    bool
+                //    byte
+                //    sbyte
+                //    DateTime
+                //    DateOnly
+                //    TimeOnly
+                //    char
+                //    short?
+                //    int?
+                //    long?
+                //    ushort?
+                //    uint?
+                //    ulong?
+                //    float?
+                //    double?
+                //    bool?
+                //    byte?
+                //    sbyte?
+                //    DateTime?
+                //    char?
+                //    string
+                //    decimal
+                //    decimal?
+                //    TimeSpan
+                //    TimeSpan?
+                //    DateTimeOffset
+                //    DateTimeOffset?
+                //    Guid
+                //    Guid?
+                //    Uri
+                //    Version
+                //    StringBuilder
+                //    BitArray
+                //    Type
+                //    byte[]
+                //    Nil
+                //    Nil?
+                //    short[]
+                //    int[]
+                //    long[]
+                //    ushort[]
+                //    uint[]
+                //    ulong[]
+                //    float[]
+                //    double[]
+                //    bool[]
+                //    sbyte[]
+                //    DateTime[]
+                //    char[]
+                //    string[]
+                //    List<short>
+                //    List<int>
+                //    List<long>
+                //    List<ushort>
+                //    List<uint>
+                //    List<ulong>
+                //    List<float>
+                //    List<double>
+                //    List<bool>
+                //    List<byte>
+                //    List<sbyte>
+                //    List<DateTime>
+                //    List<char>
+                //    List<string>
+                //    object[]
+                //    List<object>
+                //    Memory<byte>
+                //    Memory<byte>?
+                //    ReadOnlyMemory<byte>
+                //    ReadOnlyMemory<byte>?
+                //    ReadOnlySequence<byte>
+                //    ReadOnlySequence<byte>?
+                //    ArraySegment<byte>
+                //    ArraySegment<byte>?
+                //    BigInteger
+                //    BigInteger?
+                //    Complex
+                //    Complex?
+                //    Half
                 Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
-                //List<>
-                //LinkedList<>
-                //Queue<>
-                //Stack<>
-                //HashSet<>
-                //ReadOnlyCollection<>
-                //IList<>
-                //ICollection<>
-                //IEnumerable<>
-                //Dictionary<, >
-                //IDictionary<, >
-                //SortedDictionary<, >
-                //SortedList<, >
-                //ILookup<, >
-                //IGrouping<, >
-                //ObservableCollection<>
-                //ReadOnlyObservableCollection<>
-                //IReadOnlyList<>
-                //IReadOnlyCollection<>
-                //ISet<>
-                //IReadOnlySet<>
-                //ConcurrentBag<>
-                //ConcurrentQueue<>
-                //ConcurrentStack<>
-                //ReadOnlyDictionary<, >
-                //IReadOnlyDictionary<, >
-                //ConcurrentDictionary<, >
-                //Lazy<>
+                //    List<>
+                //    LinkedList<>
+                //    Queue<>
+                //    Stack<>
+                //    HashSet<>
+                //    ReadOnlyCollection<>
+                //    IList<>
+                //    ICollection<>
+                //    IEnumerable<>
+                //    Dictionary<, >
+                //    IDictionary<, >
+                //    SortedDictionary<, >
+                //    SortedList<, >
+                //    ILookup<, >
+                //    IGrouping<, >
+                //    ObservableCollection<>
+                //    ReadOnlyObservableCollection<>
+                //    IReadOnlyList<>
+                //    IReadOnlyCollection<>
+                //    ISet<>
+                //    IReadOnlySet<>
+                //    ConcurrentBag<>
+                //    ConcurrentQueue<>
+                //    ConcurrentStack<>
+                //    ReadOnlyDictionary<, >
+                //    IReadOnlyDictionary<, >
+                //    ConcurrentDictionary<, >
+                //    Lazy<>
                 Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
                 Utf8Json.Resolvers.EnumResolver.Default,
-                //Utf8Json.Resolvers.DynamicObjectResolver.Default,
+                //Utf8Json.Resolvers.AttributeFormatterResolver.Default,
                 //Utf8Json.Resolvers.StandardResolver.Default,
+
+                //Utf8Json.Resolvers.DynamicObjectResolver.Default,
                 //Utf8Json.Resolvers.CompositeResolver.Instance,
-                //Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
 
 
 

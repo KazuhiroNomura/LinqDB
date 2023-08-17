@@ -64,7 +64,6 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     /// </summary>
     /// <param name="To">コピー先</param>
     protected virtual void Copy(TContainer To) {}
-    /// <inheritdoc />
     public sealed override void Commit() {
         this.UpdateRelationship();
         if(this.Parent is null) {

@@ -568,7 +568,7 @@ abstract class Program:共通 {
                         People,
                         c => E(
                             People,
-                            d => E(
+                            _ => E(
                                 DeliveryMethods,
                                 e => E(
                                     People,
@@ -672,7 +672,7 @@ abstract class Program:共通 {
                     Customers,
                     b => E(
                         Customers,
-                        c => E(
+                        _ => E(
                             Orders,
                             d => E(
                                 DeliveryMethods,
@@ -680,13 +680,13 @@ abstract class Program:共通 {
                                     People,
                                     f => E(
                                         People,
-                                        g => E(
+                                        _ => E(
                                             People,
-                                            h => E(
+                                            _ => E(
                                                 People,
-                                                i => E(
+                                                _ => E(
                                                     People,
-                                                    j => E(
+                                                    _ => E(
                                                         People,
                                                         k => {
                                                             if(InvoiceID==10000000) return;
@@ -2244,7 +2244,7 @@ abstract class Program:共通 {
                     ).Min(cc2 => (DateTime?)cc2.Valid_From)??EndOfTime;
                     return cc;
                 },
-                cc => true);
+                _ => true);
         }
         比較(
             () =>

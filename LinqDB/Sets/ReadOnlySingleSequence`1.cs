@@ -51,11 +51,9 @@ public sealed class ReadOnlySingleSequence<T> {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Reset() => this.CurrentNode=this.FirstNode;
         */
-        /// <inheritdoc />
         public void Dispose() {
         }
         internal T InternalCurrent;
-        /// <inheritdoc />
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;

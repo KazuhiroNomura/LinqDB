@@ -367,7 +367,7 @@ abstract class Program :共通{
                 DimCustomer,
                 Customer=>E(
                     DimProductCategory,
-                    ProductCategory=>E(
+                    _=>E(
                         DimProductCategory,
                         ProductCategory=>E(
                             DimProductSubcategory,
@@ -436,7 +436,7 @@ abstract class Program :共通{
         var FinanceKey=1;
         E(
             DimDate,
-            Date => E(
+            _ => E(
                 DimDate,
                 Date => E(
                     DimOrganization,

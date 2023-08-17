@@ -1438,6 +1438,14 @@ public class Test_ExpressionEqualityComparer : ATest
     public void TryFinally()
     {
         //if(!this.PrivateEquals(a.Finally,b.Finally)) return false;
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryFinally(
+                    Expression.Constant(0),
+                    Expression.Default(typeof(int))
+                )
+            )
+        );
         IsFalse(
             Expression.TryFinally(
                 Expression.Constant(0),
@@ -1461,8 +1469,7 @@ public class Test_ExpressionEqualityComparer : ATest
     }
 
     [TestMethod]
-    public void TryCatch_Handlers()
-    {
+    public void TryCatch_Handlers(){
         //if(a_Handlers_Count!=b_Handlers.Count) return false;
         IsFalse(
             Expression.TryCatch(
@@ -1528,9 +1535,27 @@ public class Test_ExpressionEqualityComparer : ATest
             )
         );
     }
-
     [TestMethod, ExpectedException(typeof(NotSupportedException))]
     public void TryCatch_Filter0()
+    {
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Constant(0),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(0),
+                        Expression.Constant(true)
+
+                    )
+                )
+            )
+        );
+        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        //}
+    }
+    [TestMethod, ExpectedException(typeof(NotSupportedException))]
+    public void TryCatch_Filter1()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
         this.Execute2(
@@ -1560,7 +1585,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //}
     }
     [TestMethod]
-    public void TryCatch_Filter1(){
+    public void TryCatch_Filter2(){
         var Variable=Expression.Parameter(typeof(Exception));
         this.Execute2(
             Expression.Lambda<Func<int>>(
@@ -1578,8 +1603,14 @@ public class Test_ExpressionEqualityComparer : ATest
                         Expression.Constant(0),
                         Expression.Catch(
                             Variable,
-                            Expression.Constant(0),
-                            Expression.Equal(Variable,Expression.Default(Variable.Type))
+                            Expression.Constant(1),
+                            Expression.Equal(
+                                Expression.Property(
+                                    Variable,
+                                    "Message"
+                                ),
+                                Expression.Default(typeof(string))
+                            )
                         )
                     )
                 )
@@ -1628,7 +1659,6 @@ public class Test_ExpressionEqualityComparer : ATest
                         Expression.Catch(
                             typeof(Exception),
                             Expression.Constant(0)
-
                         )
                     ),
                     Expression.TryCatch(
@@ -1639,6 +1669,70 @@ public class Test_ExpressionEqualityComparer : ATest
                         )
                     )
                 )
+            )
+        );
+        this.Execute2(
+            Expression.Lambda<Action>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void TryCatchFinally(){
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatchFinally(
+                    Expression.Constant(0),
+                    Expression.Default(typeof(int)),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(1)
+                    )
+                )
+            )
+        );
+        //if(!this.PrivateEquals(a.Finally,b.Finally)) return false;
+        IsFalse(
+            Expression.TryCatchFinally(
+                Expression.Constant(0),
+                Expression.Default(typeof(void)),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(0)
+                )
+            ),
+            Expression.TryCatchFinally(
+                Expression.Constant(0),
+                Expression.Default(typeof(int)),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(1)
+                )
+            )
+        );
+        IsTrue(
+            Expression.TryFinally(
+                Expression.Constant(0),
+                Expression.Default(typeof(void))
+            ),
+            Expression.TryFinally(
+                Expression.Constant(0),
+                Expression.Default(typeof(void))
             )
         );
     }
@@ -2244,7 +2338,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //}
         //return true;
     }
-    private struct A : IEquatable<A>
+    private readonly struct A : IEquatable<A>
     {
         public static A operator +(A a, A b) => new(a.v + b.v);
         public static A Add1(A a, A b) => new(a.v + b.v);

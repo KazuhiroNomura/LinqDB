@@ -693,41 +693,44 @@ public abstract class ATest
             Assert.IsTrue(Comparer.Equals(R1,R2));
         }
     }
-    protected TResult Execute2<TResult>(Expression<Func<TResult>> Lambda) {
-        var M2=Lambda.Compile();
-        var R2=M2();
+    protected void Execute2(Expression<Action> Lambda) {
+        Lambda.Compile()();
         var Optimizer = this.Optimizer;
         Optimizer.IsGenerateAssembly=false;
         {
             Optimizer.IsInline=false;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1();
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
+            Optimizer.CreateDelegate(Lambda)();
             Optimizer.IsInline=true;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1();
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
+            Optimizer.CreateDelegate(Lambda)();
         }
         Optimizer.IsGenerateAssembly=true;
         {
             Optimizer.IsInline=false;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1();
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
+            Optimizer.CreateDelegate(Lambda)();
             Optimizer.IsInline=true;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1();
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
+            Optimizer.CreateDelegate(Lambda)();
         }
+    }
+    protected TResult Execute2<TResult>(Expression<Func<TResult>> Lambda) {
+        var M2=Lambda.Compile();
+        var R2=M2();
+        var Optimizer = this.Optimizer;
+        Optimizer.IsGenerateAssembly=true;
+        共通1();
+        Optimizer.IsGenerateAssembly=false;
+        共通1();
         return R2;
+        void 共通1(){
+            Optimizer.IsInline=false;
+            共通0();
+            Optimizer.IsInline=true;
+            共通0();
+        }
+        void 共通0(){
+            var M1=Optimizer.CreateDelegate(Lambda);
+            var R1=M1();
+            Assert.IsTrue(Comparer.Equals(R1,R2));
+        }
     }
     protected TResult Execute2<T,TResult>(Expression<Func<T,TResult>> Lambda,T a) {
         var Optimizer = this.Optimizer;

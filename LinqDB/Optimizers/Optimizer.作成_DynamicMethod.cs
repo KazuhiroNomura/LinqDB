@@ -122,36 +122,99 @@ partial class Optimizer{
             if(旧I is not null)
                 this.Traverse(Member);
         }
-        private void PrivateFilter(CatchBlock Try_Handler){
+        protected override void Block(BlockExpression Block) {
+            var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
+            Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
+            var Block_Expressions = Block.Expressions;
             var I = this.I!;
-            I.Dup();
-            var Isinst = I.DefineLabel();
-            I.Brtrue(Isinst);
-            I.Pop();     //理由不明
-            I.Ldc_I4_0();//理由不明
-            var endfilter = I.DefineLabel();
-            I.Br(endfilter);
-            I.MarkLabel(Isinst);
-            this.Traverse(Try_Handler.Filter);
-            I.MarkLabel(endfilter);
-            I.Endfilter();
-            I.BeginCatchBlock(null);
-            I.Pop();     //理由不明
+            foreach(var Block_Variable in Block.Variables)
+                Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
+            var Block_Expressions_Count_1 = Block_Expressions.Count-1;
+            for(var a = 0;a<Block_Expressions_Count_1;a++)
+                this.VoidTraverse(Block_Expressions[a]);
+            //Blockは最後の式の型を返す。それを有効にする。
+            this.Traverse(Block_Expressions[Block_Expressions_Count_1]);
+            foreach(var Block_Variable in Block.Variables)
+                Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
         }
-        protected override void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable) {
-            //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
-            var I = this.I!;
-            I.BeginExceptFilterBlock();
-            I.Isinst(Try_Handler.Test);
-            this.PrivateFilter(Try_Handler);
-        }
-        protected override void ProtectedFilter(CatchBlock Try_Handler) {
-            //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
-            var I = this.I!;
-            I.BeginExceptFilterBlock();
-            I.Isinst(Try_Handler.Test);
-            this.PrivateFilter(Try_Handler);
-        }
+        //private void PrivateFilter(CatchBlock Try_Handler){
+        //    var I = this.I!;
+        //    var Isinst = I.DefineLabel();
+        //    I.Brtrue(Isinst);
+        //    I.Ldc_I4_0();
+        //    var endfilter = I.DefineLabel();
+        //    I.Br(endfilter);
+        //    I.MarkLabel(Isinst);
+        //    this.Traverse(Try_Handler.Filter);
+        //    I.MarkLabel(endfilter);
+        //    //I.Endfilter();
+        //    I.BeginCatchBlock(null);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable) {
+        //    //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    //I.Isinst(Try_Handler.Test);
+        //    I.Stloc(Variable);
+        //    I.Ldloc(Variable);
+        //    this.PrivateFilter(Try_Handler);
+        //    //var Isinst = I.DefineLabel();
+        //    //I.Brtrue(Isinst);
+        //    //I.Ldc_I4_0();//理由不明
+        //    //var endfilter = I.DefineLabel();
+        //    //I.Br(endfilter);
+        //    //I.MarkLabel(Isinst);
+        //    //this.Traverse(Try_Handler.Filter);
+        //    //I.MarkLabel(endfilter);
+        //    //I.Endfilter();
+        //    ////filterがある場合はcatch変数がなくpushされない
+        //    //I.BeginCatchBlock(null);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler) {
+        //    //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    this.PrivateFilter(Try_Handler);
+        //}
+        //private void PrivateFilter(CatchBlock Try_Handler){
+        //    var I = this.I!;
+        //    var Isinst = I.DefineLabel();
+        //    I.Brtrue(Isinst);
+        //    I.Ldc_I4_0();
+        //    var endfilter = I.DefineLabel();
+        //    I.Br(endfilter);
+        //    I.MarkLabel(Isinst);
+        //    this.Traverse(Try_Handler.Filter);
+        //    I.MarkLabel(endfilter);
+        //    //I.Endfilter();
+        //    I.BeginCatchBlock(null);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable) {
+        //    //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    //I.Isinst(Try_Handler.Test);
+        //    I.Stloc(Variable);
+        //    I.Ldloc(Variable);
+        //    this.PrivateFilter(Try_Handler);
+        //    //var Isinst = I.DefineLabel();
+        //    //I.Brtrue(Isinst);
+        //    //I.Ldc_I4_0();//理由不明
+        //    //var endfilter = I.DefineLabel();
+        //    //I.Br(endfilter);
+        //    //I.MarkLabel(Isinst);
+        //    //this.Traverse(Try_Handler.Filter);
+        //    //I.MarkLabel(endfilter);
+        //    //I.Endfilter();
+        //    ////filterがある場合はcatch変数がなくpushされない
+        //    //I.BeginCatchBlock(null);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler) {
+        //    //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    this.PrivateFilter(Try_Handler);
+        //}
         protected override void ProtectedFault(Expression? Fault) {
             //throw new NotSupportedException(Properties.Resources.DynamicMethodでFaultはサポートされていない);
             if(Fault is null) return;

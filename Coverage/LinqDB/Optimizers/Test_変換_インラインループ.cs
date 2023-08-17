@@ -1828,7 +1828,7 @@ public class Test_変換_インラインループ:ATest {
             this.Execute標準ラムダループ(() => a.HasValue&&b.HasValue ? a.Value+b.Value : default(decimal?));
         }
     }
-    public struct Nullable2<T> where T : struct {
+    public readonly struct Nullable2<T> where T : struct {
         private readonly bool hasValue;
         internal readonly T value;
         public bool HasValue => this.hasValue;

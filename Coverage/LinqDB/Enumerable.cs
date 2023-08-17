@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using LinqDB.Helpers;
 using LinqDB.Sets;
@@ -31,8 +32,8 @@ public class Enumerable2 : ATest
     public void EnumerableAll()
     {
         var A = new[] { 1, 2, 3, 4 };
-        A.All(p => true);
-        A.All(p => false);
+        A.All(_ => true);
+        A.All(_ => false);
     }
     [TestMethod]
     public void EnumerableAny0()
@@ -47,8 +48,8 @@ public class Enumerable2 : ATest
     public void EnumerableAny1()
     {
         var A = new[] { 1, 2, 3, 4 };
-        A.Any(p => true);
-        A.Any(p => false);
+        A.Any(_ => true);
+        A.Any(_ => false);
     }
     [TestMethod]
     public void EnumerableAsEnumerable()
@@ -267,8 +268,8 @@ public class Enumerable2 : ATest
     public void EnumerableThenByDescending0()
     {
         var A = new[] { 1, 2, 3, 4 };
-        A.OrderByDescending(p => 0).ThenByDescending(p => +p);
-        A.OrderByDescending(p => 0).ThenByDescending(this.ThenByNeg);
+        A.OrderByDescending(_ => 0).ThenByDescending(p => +p);
+        A.OrderByDescending(_ => 0).ThenByDescending(this.ThenByNeg);
     }
     [TestMethod]
     public void EnumerableOrderBy最適化()
@@ -323,19 +324,19 @@ public class Enumerable2 : ATest
         var A = new[] { 1, 2, 3, 4 };
         // ReSharper disable once ConvertToLocalFunction
         Func<int, int, int> d = (a, b) => a + b;
-        A.SelectMany(p => A, d);
+        A.SelectMany(_ => A, d);
     }
     [TestMethod]
     public void EnumerableSelectMany2()
     {
         var A = new[] { 1, 2, 3, 4 };
-        A.SelectMany(p => A, (a, b) => a + b);
+        A.SelectMany(_ => A, (a, b) => a + b);
     }
     [TestMethod]
     public void EnumerableSelectMany3()
     {
         var A = new[] { 1, 2, 3, 4 };
-        A.SelectMany(a => A.Select(b => b));
+        A.SelectMany(_ => A.Select(b => b));
     }
     [TestMethod]
     public void EnumerableSequenceEqual0_0()

@@ -146,7 +146,7 @@ public class Test_Client1{
         for(var b = 0;b<expected.Length;b++) {
             expected[b]=(byte)b;
         }
-        var actual = R.SerializeSendReceive(expected);
+        var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
         Assert.IsTrue(expected.SequenceEqual(actual));
     }
     [TestMethod]

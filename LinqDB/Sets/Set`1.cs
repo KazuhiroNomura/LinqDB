@@ -51,7 +51,6 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
     public Set(ImmutableSet<T> source,IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
-    /// <inheritdoc />
     protected Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext):base(SerializationInfo,StreamingContext) {
     }
     /// <summary>

@@ -25,7 +25,7 @@ public class Test_ジェネリックEqualsの速度差
         public override bool Equals(object obj) => this.Equals((TestClassIEqutable)obj);
         public override int GetHashCode() => this.a;
     }
-    private struct TestStruct
+    private readonly struct TestStruct
     {
         private readonly int a;
         public TestStruct(int a) => this.a = a;
@@ -37,7 +37,7 @@ public class Test_ジェネリックEqualsの速度差
         }
         public override int GetHashCode() => this.a;
     }
-    private struct TestStructIEqutable : IEquatable<TestStructIEqutable>
+    private readonly struct TestStructIEqutable : IEquatable<TestStructIEqutable>
     {
         private readonly int a;
         public TestStructIEqutable(int a) => this.a = a;

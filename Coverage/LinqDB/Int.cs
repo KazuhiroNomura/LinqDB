@@ -3,7 +3,7 @@ namespace CoverageCS.LinqDB;
 #pragma warning disable IDE0009 // Member access should be qualified.
 [DebuggerDisplay("{" + nameof(v) + "}")]
 #pragma warning restore IDE0009 // Member access should be qualified.
-public struct Int : IEquatable<Int>
+public readonly struct Int : IEquatable<Int>
 {
     private readonly long v;
     public Int(long v) => this.v = v;

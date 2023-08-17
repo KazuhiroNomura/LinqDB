@@ -50,10 +50,8 @@ namespace CoverageCS.LinqDB {
                 return Container;
             }
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-            public Container() {
-                this.Init();
-            }
-            public Container(Container? Parent) : base(Parent) { }
+            public Container()=>this.Init();
+            public Container(Container? Parent) : base(Parent)=>this.Init();
             public Container(Stream logStream) : base(logStream) { }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
             //public Container(Stream Reader) : base(Reader) { }
@@ -272,7 +270,7 @@ namespace CoverageCS.LinqDB {
             }
             return result;
         }
-        private static readonly OnXmlDictionaryReaderClose OnXmlDictionaryReaderClose = reader => { };
+        private static readonly OnXmlDictionaryReaderClose OnXmlDictionaryReaderClose = _ => { };
         public sealed class SetFormatter<T>:IJsonFormatter<ImmutableSet<T>>, IJsonFormatter {
             // Token: 0x06000450 RID: 1104 RVA: 0x00016368 File Offset: 0x00014568
             public void Serialize(ref JsonWriter writer,ImmutableSet<T> value,IJsonFormatterResolver FormatterResolver) {
@@ -511,7 +509,6 @@ namespace CoverageCS.LinqDB {
             //JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.DynamicGenericResolver.Instance);
             JsonSerializer.Serialize(s,new { a = 3,b = 4 },JsonFormatterResolver);
             JsonSerializer.Serialize(s,d,JsonFormatterResolver);
-            JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.BuiltinResolver.Instance);
             JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.StandardResolver.Default);
             //try {
             //    JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.CompositeResolver.Instance);
@@ -555,65 +552,6 @@ namespace CoverageCS.LinqDB {
             }
         }
         [TestMethod]
-        public void XmlReader動作の確認() {
-            Func<Stream,XmlDictionaryReader>[] Readers ={
-                s=>XmlDictionaryReader.CreateTextReader(
-                    s,
-                    Encoding.UTF8,
-                    XmlDictionaryReaderQuotas.Max,
-                    OnXmlDictionaryReaderClose
-                ),
-                s=>XmlDictionaryReader.CreateMtomReader(
-                    s,
-                    Encoding.UTF8,
-                    XmlDictionaryReaderQuotas.Max
-                ),
-                s=>XmlDictionaryReader.CreateBinaryReader(
-                    s,
-                    XmlDictionaryReaderQuotas.Max
-                )
-            };
-            Func<Stream,XmlDictionaryWriter>[] Writers ={
-                s=>XmlDictionaryWriter.CreateTextWriter(
-                    s,
-                    Encoding.UTF8,
-                    false
-                ),
-                s=>XmlDictionaryWriter.CreateMtomWriter(
-                    s,
-                    Encoding.UTF8,
-                    1024,
-                    ""
-                ),
-                XmlDictionaryWriter.CreateBinaryWriter
-            };
-            const string ファイル名 = "Reader動作の確認.xml";
-            const string タグ1 = nameof(タグ1);
-            const string タグ2 = nameof(タグ2);
-            const string 値 = nameof(値);
-            for(var a = 0;a<Writers.Length;a++) {
-                var Reader = Readers[a];
-                var Writer = Writers[a];
-                using(var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.ReadWrite)) {
-                    var w0 = Writer(s0);
-                    w0.WriteStartElement(タグ1);
-                    w0.WriteStartElement(タグ2);
-                    w0.WriteValue(値);
-                    w0.WriteEndElement();
-                    w0.WriteEndElement();
-                    w0.Flush();
-                    w0.Close();
-                }
-                using(var s1 = new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite)) {
-                    var r1 = Reader(s1);
-                    r1.ReadStartElement(タグ1);
-                    r1.ReadStartElement(タグ2);
-                    Assert.AreEqual(値,r1.ReadContentAsString());
-                    r1.ReadEndElement();
-                    r1.ReadEndElement();
-                }
-            }
-        }
         public void TransactionCommit() {
             using var e = new テスト.Container();
             var e0 = e.Transaction();

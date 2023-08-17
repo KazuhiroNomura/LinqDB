@@ -401,14 +401,14 @@ public class Tables{
                 1
             },Enumerable.Where(new Set<int>{
                 1
-            },p=>false),o=>o,i=>i,(o,i)=>new{
+            },_=>false),o=>o,i=>i,(o,i)=>new{
                 o,i
             }).Count()>0);
             Assert.IsTrue(k1.GroupJoin(k1,o=>o.PrimaryKey,i=>i.PrimaryKey,(outer,inner)=>new{
                 outer,inner
             }).Count()>0);
-            Assert.IsTrue(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(outer,inner)=>inner).Count()>0);
-            Assert.IsTrue(k3.GroupJoin(k3,o=>o.PrimaryKey,i=>i.PrimaryKey,(outer,inner)=>inner).Count()>0);
+            Assert.IsTrue(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(_,inner)=>inner).Count()>0);
+            Assert.IsTrue(k3.GroupJoin(k3,o=>o.PrimaryKey,i=>i.PrimaryKey,(_,inner)=>inner).Count()>0);
         }
         var expected=Set作成(
             new{
@@ -718,19 +718,19 @@ public class Tables{
             }),(entity,collection)=>new{
                 entity,collection
             });
-            data1.SelectMany(p=>data2,(entity,collection)=>entity);
-            enu1.SelectMany(p=>enu2,(entity,collection)=>collection);
-            data1.SelectMany(p=>data2,(entity,collection)=>collection);
+            data1.SelectMany(_=>data2,(entity,_)=>entity);
+            enu1.SelectMany(_=>enu2,(_,collection)=>collection);
+            data1.SelectMany(_=>data2,(_,collection)=>collection);
             {
-                var 正解=data1.SelectMany(p=>data2).Distinct().ToSet();
-                var 回答=set1.SelectMany(p=>set2);
+                var 正解=data1.SelectMany(_=>data2).Distinct().ToSet();
+                var 回答=set1.SelectMany(_=>set2);
                 Assert.AreEqual(正解,回答);
             }
             {
-                var 正解=data1.SelectMany(p=>data2,(entity,collection)=>new{
+                var 正解=data1.SelectMany(_=>data2,(entity,collection)=>new{
                     entity,collection
                 }).Distinct().ToSet();
-                var 回答=set1.SelectMany(p=>set2,(entity,collection)=>new{
+                var 回答=set1.SelectMany(_=>set2,(entity,collection)=>new{
                     entity,collection
                 });
                 Assert.AreEqual(正解,回答);
@@ -1054,7 +1054,7 @@ public class Tables{
                 p=>new Set<Int>{
                     10+p,11+p,12+p
                 },
-                (p,q)=>q
+                (_,q)=>q
             )
         );
     }

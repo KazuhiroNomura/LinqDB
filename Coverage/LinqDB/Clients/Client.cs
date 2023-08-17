@@ -64,7 +64,7 @@ public class Test_Client {
     [TestMethod]
     public void Expression0() {
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
-        R.Expression(() => 1,XmlType.Utf8Json);
+        R.Expression(() => 1);
     }
     [TestMethod]
     public void Expression1() {
@@ -141,7 +141,7 @@ public class Test_Client {
         Assert.AreEqual(R.XmlSendReceive("F",XmlType.Utf8Json),"F");
     }
     private void メソッド名() {
-        Trace.WriteLine(new StackTrace(1).GetFrame(0).GetMethod().Name);
+        Trace.WriteLine(new StackTrace(1).GetFrame(0)!.GetMethod()!.Name);
     }
     private void Byte1を送信(int a) {
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
@@ -198,7 +198,7 @@ public class Test_Client {
         var b = 1;
         Client.SaveRequest(
             s,
-            (Func<Server,int>)(Server => b));
+            (Func<Server,int>)(_ => b));
     }
     [TestMethod]
     public void Utf8Jsonをファイルに書き込む() {
@@ -267,7 +267,7 @@ public class Test_Client {
                   ListenerSocketポート番号)) {
             Assert.AreEqual(
                 1,
-                R.SerializeSendReceive(1));
+                R.SerializeSendReceive(1,XmlType.Utf8Json));
         }
         this.Close();
         this.Open();
@@ -280,7 +280,7 @@ public class Test_Client {
                   ListenerSocketポート番号)) {
             Assert.AreEqual(
                 1,
-                R.SerializeSendReceive(1));
+                R.SerializeSendReceive(1,XmlType.Utf8Json));
         }
         this.Close();
         this.Open();
@@ -373,7 +373,7 @@ public class Test_Client {
             for(var b = 0;b<expected.Length;b++) {
                 expected[b]=(byte)b;
             }
-            var actual = R.SerializeSendReceive(expected);
+            var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
             Assert.IsTrue(expected.SequenceEqual(actual));
         }
         {
@@ -381,14 +381,14 @@ public class Test_Client {
             for(var b = 0;b<expected.Length;b++) {
                 expected[b]=(byte)b;
             }
-            var actual = R.SerializeSendReceive(expected);
+            var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
             Assert.IsTrue(expected.SequenceEqual(actual));
         }
     }
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     private static void シリアライズ<T>(T expected)where T:Expression{
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
-        var actual = R.SerializeSendReceive(expected);
+        var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
         //var actual = R.Expression(()=>expected);
         //Debug.Assert(expected!=null,nameof(expected)+" != null");
         //Assert.IsTrue(expected.Equals(actual));
@@ -404,7 +404,7 @@ public class Test_Client {
         for(var b = 0;b<a;b++) {
             expected[b]=(byte)b;
         }
-        var actual = R.SerializeSendReceive(expected);
+        var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
         Assert.IsTrue(expected.SequenceEqual(actual));
     }
     [TestMethod]
@@ -499,7 +499,7 @@ public class Test_Client {
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
         for(var a = 0;a<100;a++) {
             var expected = (a/2).ToString();
-            var actual = R.SerializeSendReceive(expected);
+            var actual = R.SerializeSendReceive(expected,XmlType.Utf8Json);
             Assert.AreEqual(expected,actual);
         }
     }
@@ -709,7 +709,7 @@ public class Test_Client {
     [TestMethod]
     public void Set2のシリアライズとでシリアライズ() {
         this.メソッド名();
-        var expected = new Set<Tables.Entity,PrimaryKeys.Entity,Container>(null) {
+        var expected = new Set<Tables.Entity,PrimaryKeys.Entity,Container>(default!) {
             new(1,1,1),new(2,2,2),new(3,3,3)
         };
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
@@ -771,7 +771,7 @@ public class Test_Client {
         );
         //var Type=T.GetType();
         //Type = typeof(Target<Expression, Object>);
-        var actual = R.SerializeSendReceive(Type.GetFields(BindingFlags.Instance|BindingFlags.Public));
+        var actual = R.SerializeSendReceive(Type.GetFields(BindingFlags.Instance|BindingFlags.Public),XmlType.Utf8Json);
     }
 }
 [Serializable]

@@ -74,7 +74,7 @@ public sealed class Client<TContainer>:Client, IClient {
     /// </summary>
     /// <param name="SQL">SQL文</param>
     /// <param name="XmlType"></param>
-    public object Expression(string SQL,XmlType XmlType = XmlType.Utf8Json) {
+    public object Expression(string SQL,XmlType XmlType) {
         var Optimizer = this.Optimizer;
         Optimizer.Context=typeof(Client<TContainer>);
         var Container_Parameter=System.Linq.Expressions.Expression.Parameter(typeof(TContainer),"this");

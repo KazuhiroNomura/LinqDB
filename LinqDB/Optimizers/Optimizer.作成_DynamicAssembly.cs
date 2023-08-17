@@ -111,36 +111,33 @@ partial class Optimizer{
             base.DebugInfo(DebugInfo);
         }
 #endif
-        private void PrivateFilter(CatchBlock Try_Handler){
-            var I = this.I!;
-            I.Dup();
-            var Isinst = I.DefineLabel();
-            I.Brtrue(Isinst);
-            I.Pop();     //理由不明
-            I.Ldc_I4_0();//理由不明
-            var endfilter = I.DefineLabel();
-            I.Br(endfilter);
-            I.MarkLabel(Isinst);
-            this.Traverse(Try_Handler.Filter);
-            I.MarkLabel(endfilter);
-            I.Endfilter();
-            I.BeginCatchBlock(null);
-            I.Pop();     //理由不明
-        }
-        protected override void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable){
-            var I = this.I!;
-            I.BeginExceptFilterBlock();
-            I.Isinst(Try_Handler.Test);
-            I.Stloc(Variable);
-            I.Ldloc(Variable);
-            this.PrivateFilter(Try_Handler);
-        }
-        protected override void ProtectedFilter(CatchBlock Try_Handler){
-            var I = this.I!;
-            I.BeginExceptFilterBlock();
-            I.Isinst(Try_Handler.Test);
-            this.PrivateFilter(Try_Handler);
-        }
+        //private void PrivateFilter(CatchBlock Try_Handler){
+        //    var I = this.I!;
+        //    var Isinst = I.DefineLabel();
+        //    I.Brtrue(Isinst);
+        //    I.Ldc_I4_0();
+        //    var endfilter = I.DefineLabel();
+        //    I.Br(endfilter);
+        //    I.MarkLabel(Isinst);
+        //    this.Traverse(Try_Handler.Filter);
+        //    I.MarkLabel(endfilter);
+        //    //I.Endfilter();
+        //    I.BeginCatchBlock(null);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable){
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    I.Isinst(Try_Handler.Test);
+        //    I.Stloc(Variable);
+        //    I.Ldloc(Variable);
+        //    this.PrivateFilter(Try_Handler);
+        //}
+        //protected override void ProtectedFilter(CatchBlock Try_Handler){
+        //    var I = this.I!;
+        //    I.BeginExceptFilterBlock();
+        //    I.Isinst(Try_Handler.Test);
+        //    this.PrivateFilter(Try_Handler);
+        //}
         protected override void ProtectedFault(Expression? Fault){
             if(Fault is null) return;
             this.I!.BeginFaultBlock();

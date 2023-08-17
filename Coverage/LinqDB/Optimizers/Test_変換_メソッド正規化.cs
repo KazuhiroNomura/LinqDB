@@ -395,10 +395,10 @@ public class Test_変換_メソッド正規化:ATest {
         //    )
         //);
         var s = ArrN<int>(2).SelectMany(
-            (o0) => ArrN<int>(2),
+            (_) => ArrN<int>(2),
             (o1,i1) => o1+i1
         ).Select(
-            (p,index) => index
+            (_,index) => index
         ).ToArray();
         this.Execute引数パターン標準ラムダループ((a,b) =>
             ArrN<int>(a).SelectMany(

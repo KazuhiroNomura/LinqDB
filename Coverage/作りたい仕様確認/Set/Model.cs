@@ -69,7 +69,6 @@ namespace CoverageCS.Lite.CRC.作りたい仕様確認.Set{
             this.リレーションシップの重ね合わせ2Set=new Set<リレーションシップの重ね合わせ2,Key.リレーションシップの重ね合わせ2,SetEntities>(this);
             this.Entity1Set=new Set<Entity1,Key.Entity1,SetEntities>(this);
         }
-        /// <inheritdoc/>
         protected override void Read(XmlDictionaryReader Reader){
             this.多1多2.Read(Reader);
             this.abstract_class.Read(Reader);
@@ -85,7 +84,6 @@ namespace CoverageCS.Lite.CRC.作りたい仕様確認.Set{
             this.リレーションシップの重ね合わせ2Set.Read(Reader);
             this.Entity1Set.Read(Reader);
         }
-        /// <inheritdoc/>
         protected override void Write(XmlDictionaryWriter Writer){
             this.多1多2.Write(Writer);
             this.abstract_class.Write(Writer);

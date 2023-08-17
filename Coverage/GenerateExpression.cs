@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 // ReSharper disable PossibleNullReferenceException
+// ReSharper disable UnusedParameter.Local
 
 namespace CoverageCS;
 

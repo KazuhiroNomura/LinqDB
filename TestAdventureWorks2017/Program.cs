@@ -467,7 +467,7 @@ namespace TestAdventureWorks2019 {
             Int16 DocumentLevel=0;
             E(
                 Employee,
-                a=>{
+                _=>{
                     for(var b=0;b<2;b++){
                         var DocumentNode=new SqlHierarchyId();
                         Document.AddOrThrow(

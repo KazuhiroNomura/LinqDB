@@ -53,24 +53,17 @@ public static class CommonLibrary {
         public MemoryStream(byte[] Buffer) {
             this.Buffer=Buffer;
         }
-        /// <inheritdoc/>
         public override bool CanRead => true;
-        /// <inheritdoc/>
         public override bool CanSeek => true;
-        /// <inheritdoc/>
         public override bool CanWrite => true;
         private long _Length;
-        /// <inheritdoc/>
         public override long Length => this._Length;
-        /// <inheritdoc/>
         public override long Position {
             get;
             set;
         }
-        /// <inheritdoc/>
         public override void Flush() {
         }
-        /// <inheritdoc/>
         public override int Read(byte[] buffer,int offset,int count) {
             //Debug.Assert(offset+count<=buffer.Length);
             //Debug.Assert(this.Position+count<=this.Buffer.Length);
@@ -85,7 +78,6 @@ public static class CommonLibrary {
             }
             return count;
         }
-        /// <inheritdoc/>
         public override int ReadByte() {
             var Position = this.Position;
             if(Position<this._Length) {
@@ -95,7 +87,6 @@ public static class CommonLibrary {
                 return -1;
             }
         }
-        /// <inheritdoc/>
         public override long Seek(long offset,SeekOrigin origin) {
             switch(origin) {
                 case SeekOrigin.Begin:
@@ -112,7 +103,6 @@ public static class CommonLibrary {
             return this.Position;
         }
         internal long 必要なLength;
-        /// <inheritdoc/>
         public override void SetLength(long value) {
             if(value>this.Buffer.Length) {
                 var Buffer_Length = this.Buffer.Length;
@@ -124,7 +114,6 @@ public static class CommonLibrary {
             this._Length=value;
             this.必要なLength=0;
         }
-        /// <inheritdoc/>
         public override void Write(byte[] buffer,int offset,int count) {
             Debug.Assert(offset+count<=buffer.Length);
             //Debug.Assert(this.Position+count<=this.Buffer.Length);
@@ -141,7 +130,6 @@ public static class CommonLibrary {
                 this.必要なLength+=count;
             }
         }
-        /// <inheritdoc/>
         public override void WriteByte(byte value) {
             this.必要なLength++;
             var Position = this.Position;

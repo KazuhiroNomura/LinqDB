@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable AssignNullToNotNullAttribute
@@ -36,12 +37,13 @@ public class Database : ATest
     }
     private static int Quote(Expression<Func<int>> e) => e.Compile()();
     [TestMethod]
-    public void Quoteを生成()
-    {
+    public void Quoteを生成(){
+        var QuoteMethod=typeof(Database).GetMethod(nameof(Quote),BindingFlags.Static|BindingFlags.NonPublic);
+        Debug.Assert(QuoteMethod!=null,nameof(QuoteMethod)+" != null");
         {
             var Tree = Expression.Lambda<Func<int>>(
                 Expression.Call(
-                    typeof(Database).GetMethod(nameof(Quote), BindingFlags.Static | BindingFlags.NonPublic),
+                    QuoteMethod,
                     Expression.Quote(
                         Expression.Lambda<Func<int>>(
                             Expression.Constant(3)
@@ -60,7 +62,7 @@ public class Database : ATest
             );
             var Tree = Expression.Lambda<Func<int>>(
                 Expression.Call(
-                    typeof(Database).GetMethod(nameof(Quote), BindingFlags.Static | BindingFlags.NonPublic),
+                    QuoteMethod,
                     Quote
                 )
             );

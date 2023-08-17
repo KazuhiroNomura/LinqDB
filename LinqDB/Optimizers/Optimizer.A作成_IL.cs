@@ -1704,21 +1704,21 @@ partial class Optimizer{
                 I.Br(ContinueLabel);
             }
         }
-        protected override void Block(BlockExpression Block) {
-            var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
-            Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
-            var Block_Expressions = Block.Expressions;
-            var I = this.I!;
-            foreach(var Block_Variable in Block.Variables)
-                Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
-            var Block_Expressions_Count_1 = Block_Expressions.Count-1;
-            for(var a = 0;a<Block_Expressions_Count_1;a++)
-                this.VoidTraverse(Block_Expressions[a]);
-            //Blockは最後の式の型を返す。それを有効にする。
-            this.Traverse(Block_Expressions[Block_Expressions_Count_1]);
-            foreach(var Block_Variable in Block.Variables)
-                Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
-        }
+        //protected override void Block(BlockExpression Block) {
+        //    var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
+        //    Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
+        //    var Block_Expressions = Block.Expressions;
+        //    var I = this.I!;
+        //    foreach(var Block_Variable in Block.Variables)
+        //        Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
+        //    var Block_Expressions_Count_1 = Block_Expressions.Count-1;
+        //    for(var a = 0;a<Block_Expressions_Count_1;a++)
+        //        this.VoidTraverse(Block_Expressions[a]);
+        //    //Blockは最後の式の型を返す。それを有効にする。
+        //    this.Traverse(Block_Expressions[Block_Expressions_Count_1]);
+        //    foreach(var Block_Variable in Block.Variables)
+        //        Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
+        //}
         protected override void Parameter(ParameterExpression Parameter) {
             var I = this.I!;
             var index = this.Parameters!.IndexOf(Parameter);
@@ -2107,8 +2107,48 @@ partial class Optimizer{
             this.Traverse(Switch.DefaultBody);
             I.MarkLabel(EndSwitch);
         }
-        protected abstract void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable);
-        protected abstract void ProtectedFilter(CatchBlock Try_Handler);
+        private void PrivateFilter(CatchBlock Try_Handler){
+            var I = this.I!;
+            var Isinst = I.DefineLabel();
+            I.Brtrue(Isinst);
+            I.Ldc_I4_0();
+            var endfilter = I.DefineLabel();
+            I.Br(endfilter);
+            I.MarkLabel(Isinst);
+            this.Traverse(Try_Handler.Filter);
+            I.MarkLabel(endfilter);
+            //I.Endfilter();
+            I.BeginCatchBlock(null);
+        }
+        private void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable) {
+            //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+            var I = this.I!;
+            I.BeginExceptFilterBlock();
+            I.Stloc(Variable);
+            I.Ldloc(Variable);
+            I.Isinst(Try_Handler.Test);
+            I.Dup();
+            this.PrivateFilter(Try_Handler);
+            //var Isinst = I.DefineLabel();
+            //I.Brtrue(Isinst);
+            //I.Ldc_I4_0();//理由不明
+            //var endfilter = I.DefineLabel();
+            //I.Br(endfilter);
+            //I.MarkLabel(Isinst);
+            //this.Traverse(Try_Handler.Filter);
+            //I.MarkLabel(endfilter);
+            //I.Endfilter();
+            ////filterがある場合はcatch変数がなくpushされない
+            //I.BeginCatchBlock(null);
+        }
+        private void ProtectedFilter(CatchBlock Try_Handler) {
+            //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+            var I = this.I!;
+            I.BeginExceptFilterBlock();
+            I.Isinst(Try_Handler.Test);
+            I.Dup();
+            this.PrivateFilter(Try_Handler);
+        }
         protected abstract void ProtectedFault(Expression? Fault);
         /// <summary>
         /// Filter,Catchブロック
@@ -2130,21 +2170,151 @@ partial class Optimizer{
                 this.Traverse(Try_Handler.Body);
                 Dictionary_Parameter_LocalBuilder.Remove(Try_Handler_Variable);
             } else{
+                //if(Try_Handler.Filter is null){
+                //    I.BeginCatchBlock(Try_Handler.Test);
+                //    I.Pop();
+                //} else
+                //    this.ProtectedFilter(Try_Handler);
+                //この時点で例外オブジェクトがpushされている。変数はないのでポップする
                 if(Try_Handler.Filter is null){
                     I.BeginCatchBlock(Try_Handler.Test);
                     I.Pop();
                 } else
                     this.ProtectedFilter(Try_Handler);
-                //I.BeginCatchBlock(Try_Handler.Test);
-                //I.Pop();
                 this.Traverse(Try_Handler.Body);
             }
         }
         private LocalBuilder PrivateTry値を代入した変数(TryExpression Try){
             Debug.Assert(Try.Type!=typeof(void));
             var I=this.I!;
-            //if(Try.Finally is not null)
-            //    I.BeginExceptionBlock();
+            var 変数 =I.DeclareLocal(Try.Type);
+            var Leave先0=I.DefineLabel();
+            I.BeginExceptionBlock();
+            //if(Try.Handlers.Count>0){
+            //    if(Try.Finally is not null){
+            //        I.BeginExceptionBlock();
+            //        this.Traverse(Try.Body);
+            //        I.Stloc(変数);
+            //        var Leave先1=I.DefineLabel();
+            //        I.Leave(Leave先1);
+            //        foreach(var Try_Handler in Try.Handlers){
+            //            this.PrivateTryFilterCatch(Try_Handler);
+            //            I.Pop();
+            //            I.Leave(Leave先1);
+            //        }
+            //        I.EndExceptionBlock();
+            //        I.MarkLabel(Leave先1);
+            //        I.Leave(Leave先0);
+            //        I.BeginFinallyBlock();
+            //        this.VoidTraverse(Try.Finally);
+            //        I.Endfinally();
+            //    } else{
+            //        this.Traverse(Try.Body);
+            //        I.Stloc(変数);
+            //        I.Leave(Leave先0);
+            //        foreach(var Try_Handler in Try.Handlers){
+            //            this.PrivateTryFilterCatch(Try_Handler);
+            //            I.Pop();
+            //            I.Leave(Leave先0);
+            //        }
+            //    }
+            //} else{
+            //    Debug.Assert(Try.Finally is not null);
+            //    this.Traverse(Try.Body);
+            //    I.Stloc(変数);
+            //    I.Leave(Leave先0);
+            //    I.BeginFinallyBlock();
+            //    this.VoidTraverse(Try.Finally);
+            //    I.Endfinally();
+            //}
+            if(Try.Finally is not null) {
+                if(Try.Handlers.Count>0) {
+                    I.BeginExceptionBlock();
+                    this.Traverse(Try.Body);
+                    I.Stloc(変数);
+                    var Leave先1 = I.DefineLabel();
+                    I.Leave(Leave先1);
+                    foreach(var Try_Handler in Try.Handlers) {
+                        this.PrivateTryFilterCatch(Try_Handler);
+                        I.Pop();
+                        I.Leave(Leave先1);
+                    }
+                    I.EndExceptionBlock();
+                    I.MarkLabel(Leave先1);
+                } else {
+                    this.Traverse(Try.Body);
+                    I.Stloc(変数);
+                }
+                I.Leave(Leave先0);
+                I.BeginFinallyBlock();
+                this.VoidTraverse(Try.Finally);
+                I.Endfinally();
+            } else {
+                Debug.Assert(Try.Handlers.Count>0);
+                this.Traverse(Try.Body);
+                I.Stloc(変数);
+                foreach(var Try_Handler in Try.Handlers) {
+                    this.PrivateTryFilterCatch(Try_Handler);
+                    I.Pop();
+                    //I.Leave(Leave先0);
+                }
+            }
+            I.EndExceptionBlock();
+            I.MarkLabel(Leave先0);
+            //if(Try.Finally is not null){
+            //    if(Try.Handlers.Count>0){
+            //        I.BeginExceptionBlock();
+            //        var Leave先0=I.DefineLabel();
+            //        {
+            //            I.BeginExceptionBlock();
+            //            this.Traverse(Try.Body);
+            //            I.Stloc(変数);
+            //            var Leave先1=I.DefineLabel();
+            //            I.Leave(Leave先1);
+            //            foreach(var Try_Handler in Try.Handlers){
+            //                this.PrivateTryFilterCatch(Try_Handler);
+            //                I.Pop();
+            //                I.Leave(Leave先1);
+            //            }
+            //            I.EndExceptionBlock();
+            //            I.MarkLabel(Leave先1);
+            //        }
+            //        I.BeginFinallyBlock();
+            //        this.VoidTraverse(Try.Finally);
+            //        I.Endfinally();
+            //        I.EndExceptionBlock();
+            //        I.MarkLabel(Leave先0);
+            //    } else{
+            //        I.BeginExceptionBlock();
+            //        this.Traverse(Try.Body);
+            //        I.Stloc(変数);
+            //        var Leave先0=I.DefineLabel();
+            //        I.Leave(Leave先0);
+            //        I.BeginFinallyBlock();
+            //        this.VoidTraverse(Try.Finally);
+            //        I.Endfinally();
+            //        I.EndExceptionBlock();
+            //        I.MarkLabel(Leave先0);
+            //    }
+            //} else{
+            //    Debug.Assert(Try.Handlers.Count>0);
+            //    {
+            //        I.BeginExceptionBlock();
+            //        this.Traverse(Try.Body);
+            //        I.Stloc(変数);
+            //        var Leave先0=I.DefineLabel();
+            //        I.Leave(Leave先0);
+            //        foreach(var Try_Handler in Try.Handlers){
+            //            this.PrivateTryFilterCatch(Try_Handler);
+            //            I.Pop();
+            //            I.Leave(Leave先0);
+            //        }
+            //        I.EndExceptionBlock();
+            //        I.MarkLabel(Leave先0);
+            //    }
+            //}
+            return 変数;
+            /*
             var 変数 =I.DeclareLocal(Try.Type);
             I.BeginExceptionBlock();
             this.Traverse(Try.Body);
@@ -2161,17 +2331,26 @@ partial class Optimizer{
             if(Try.Finally is not null){
                 I.BeginFinallyBlock();
                 this.VoidTraverse(Try.Finally);//戻り値はfinallyにない。
+                I.Endfinally();
                 //I.EndExceptionBlock();
             }
             I.EndExceptionBlock();
             I.MarkLabel(Leave先);
             return 変数;
+            */
         }
         protected override void Try(TryExpression Try){
+            //ILレベルではtry～catch,catch,catch
+            //try～finallyしかない
+            //try～catch～finallyはtry{try～catch}finallにネストする
+            //tryのleeaveはcatchの後ろかfinallyの後ろ
             var I =this.I!;
             if(Try.Type!=typeof(void)){
                 I.Ldloc(this.PrivateTry値を代入した変数(Try));
             } else{
+                //if(Try.Finally is not null){
+                //    I.BeginExceptionBlock();
+                //}
                 //if(Try.Finally is not null)
                 //    I.BeginExceptionBlock();
                 I.BeginExceptionBlock();
@@ -2179,8 +2358,6 @@ partial class Optimizer{
                 I.Pop();
                 var Leave先=I.DefineLabel();
                 I.Leave(Leave先);
-                var Dictionary_Parameter_LocalBuilder =this.Dictionary_Parameter_LocalBuilder;
-                Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
                 foreach(var Try_Handler in Try.Handlers){
                     this.PrivateTryFilterCatch(Try_Handler);
                     I.Pop();
@@ -2278,7 +2455,7 @@ partial class Optimizer{
             this.I!.Throw();
             this.Default(Unary.Type);
         }
-        private static readonly Action<ILGenerator> I_Empty=I=>{};
+        private static readonly Action<ILGenerator> I_Empty=_=>{};
         protected override void UnaryPlus(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,I_Empty);
         protected override void Unbox(UnaryExpression Unary){
             Debug.Assert(Unary.Method is null);
