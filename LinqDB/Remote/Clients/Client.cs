@@ -804,7 +804,7 @@ public class Client:IDisposable {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,Optimizer.Lambda最適化初期化付き(Lambda));
+        this.サーバーに送信(Request.Expression_Invoke,XmlType,Optimizer.Lambda最適化(Lambda));
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{

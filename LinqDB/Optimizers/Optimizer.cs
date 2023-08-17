@@ -1116,6 +1116,10 @@ public sealed partial class Optimizer:IDisposable{
     //private readonly 作成_DynamicAssemblyによるループ _作成_DynamicAssemblyによるループ;
     //private 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
+    private readonly Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant1度;
+    private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic1度;
+    private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda1度;
+    private Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter1度;
     /// <summary>
     /// IL生成時に使う。変換_Lambda_Quote_ラムダ跨ぎParameter、
     /// </summary>
@@ -1185,6 +1189,11 @@ public sealed partial class Optimizer:IDisposable{
         var 変換_旧Parameterを新Expression1                              =new 変換_旧Parameterを新Expression1(作業配列);
         var ListスコープParameter                                        =this.ListスコープParameter;
         var ExpressionEqualityComparer=this._ExpressionEqualityComparer  =new ExpressionEqualityComparer(ListスコープParameter);
+        //TSQLでは1度だけnewすればいいが
+        this.DictionaryConstant1度=new(ExpressionEqualityComparer);
+        this.DictionaryDynamic1度=new();
+        this.DictionaryLambda1度=new(ExpressionEqualityComparer);
+        this.Dictionaryラムダ跨ぎParameter1度=new();
         var 判定_InstanceMethodか=this.判定InstanceMethodか              =new(ExpressionEqualityComparer);
         this._変換_TSqlFragment正規化                                    =new(ScriptGenerator);
         var ブローブビルドExpressionEqualityComparer                     =new ブローブビルドExpressionEqualityComparer(ExpressionEqualityComparer);
@@ -1303,7 +1312,8 @@ public sealed partial class Optimizer:IDisposable{
         var DictionaryDynamic= this.DictionaryDynamic=Information.DictionaryDynamic;
         var DictionaryLambda = this.DictionaryLambda=Information.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=Information.Dictionaryラムダ跨ぎParameter;
-        var Lambda1 = Information.Lambda=this.Lambda最適化初期化なし(Lambda0);
+        var Lambda1 = Information.Lambda=this.Lambda最適化(Lambda0);
+        //Information.Lambda=Lambda0;
         var Disp_ctor_I = Information.Disp_ctor_I;
         {
             var Field番号 = 0;
@@ -1471,7 +1481,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Expression"></param>
     /// <returns></returns>
     public Expression CreateExpression(Expression Expression) =>
-        this.Lambda最適化初期化付き(Expression);
+        this.Lambda最適化(Expression);
     /// <summary>
     /// 最適化した式木を返す
     /// </summary>
@@ -1590,7 +1600,8 @@ public sealed partial class Optimizer:IDisposable{
         var DictionaryDynamic= this.DictionaryDynamic=new();
         var DictionaryLambda=this.DictionaryLambda=new(ExpressionEqualityComparer);
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=new();
-        var Lambda1=this.Lambda最適化初期化なし(Lambda0);
+        //var Lambda1=this.Lambda最適化初期化なし(Lambda0);
+        var Lambda1=this.Lambda最適化(Lambda0);
         var Name = Lambda0.Name??"Disp";
         var AssemblyName = new AssemblyName { Name=Name };
         var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
@@ -1735,19 +1746,19 @@ public sealed partial class Optimizer:IDisposable{
         return Delegate1;
     }
     /// <summary>
-    /// 動的ラムダ
+    /// 動的ラムダ。
     /// </summary>
     /// <param name="ContainerType"></param>
     /// <param name="Lambda"></param>
     /// <returns></returns>
     private Delegate DynamicMethod(Type ContainerType,LambdaExpression Lambda){
-        var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        var DictionaryConstant = this.DictionaryConstant=new(ExpressionEqualityComparer);
-        var DictionaryDynamic=this.DictionaryDynamic=new();
-        var DictionaryLambda=this.DictionaryLambda=new(ExpressionEqualityComparer);
-        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=new();
+        //var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
+        var DictionaryConstant = this.DictionaryConstant= this.DictionaryConstant1度;
+        var DictionaryDynamic=this.DictionaryDynamic=this.DictionaryDynamic1度;
+        var DictionaryLambda=this.DictionaryLambda=this.DictionaryLambda1度;
+        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter= this.Dictionaryラムダ跨ぎParameter1度;
         //var Lambda1=this.Compile情報ラムダ最適化(Lambda);
-        var Lambda1=this.Lambda最適化初期化なし(Lambda);
+        var Lambda1=this.Lambda最適化(Lambda);
         //Disp作成
         var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
         //var Container_Field=Tuple_Type.GetField("Item1",Instance_NonPublic_Public)!;
@@ -2240,8 +2251,8 @@ public sealed partial class Optimizer:IDisposable{
         get => this._Context;
         set => this._Context=value;
     }
-    private LambdaExpression Lambda最適化初期化なし(Expression Lambda00){
-       // var OptimizeLevel = this.OptimizeLevel;
+    internal LambdaExpression Lambda最適化(Expression Lambda00) {
+        // var OptimizeLevel = this.OptimizeLevel;
         this.ListスコープParameter.Clear();
         var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);
         var Lambda02=this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda01);
@@ -2263,14 +2274,6 @@ public sealed partial class Optimizer:IDisposable{
         var Lambda08=this._変換_Lambda_Quote_ラムダ跨ぎParameter.実行(Lambda07);
         //this._検証_Parameterの使用状態.実行(Lambda08);
         return (LambdaExpression)Lambda08;
-    }
-    internal LambdaExpression Lambda最適化初期化付き(Expression Lambda00) {
-        var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        this.DictionaryConstant=new(ExpressionEqualityComparer);
-        this.DictionaryDynamic=new();
-        this.DictionaryLambda=new(ExpressionEqualityComparer);
-        this.Dictionaryラムダ跨ぎParameter=new();
-        return this.Lambda最適化初期化なし(Lambda00);
     }
     private static bool equals(object obj) => obj is string&&obj.Equals("ABC");
 }
