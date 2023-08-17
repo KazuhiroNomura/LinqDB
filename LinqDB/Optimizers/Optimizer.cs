@@ -767,7 +767,6 @@ public sealed partial class Optimizer:IDisposable{
             b_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             return r;
         }
-        private int count;
         private bool T(LambdaExpression a,LambdaExpression b) {
             var a_Variables = a.Parameters;
             var b_Variables = b.Parameters;
@@ -847,16 +846,12 @@ public sealed partial class Optimizer:IDisposable{
             if(a_Count!=b.Count)
                 return false;
             for(var i=0;i<a_Count;i++){
-                var count=this.count++;
                 if(!this.PrivateEquals(a[i],b[i])){
                     Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
                     return false;
                 }
                 Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
             }
-            //for(var i = 0;i<a_Count;i++)
-            //    if(!this.PrivateEquals(a[i],b[i]))
-            //        return false;
             return true;
         }
         private bool T(ParameterExpression a,ParameterExpression b) {

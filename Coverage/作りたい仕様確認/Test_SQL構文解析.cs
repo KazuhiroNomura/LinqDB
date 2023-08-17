@@ -1,10 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using CoverageCS.LinqDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
-using System.IO;
 namespace CoverageCS.作りたい仕様確認;
 
 [TestClass]

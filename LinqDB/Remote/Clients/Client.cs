@@ -15,7 +15,6 @@ using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Properties;
 using LinqDB.Serializers;
-using LinqDB.Serializers.Formatters;
 using MessagePack;
 using Utf8Json;
 using static LinqDB.Helpers.CommonLibrary;

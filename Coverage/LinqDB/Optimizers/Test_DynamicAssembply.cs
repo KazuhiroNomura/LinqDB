@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LinqDB.Sets;
+﻿using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable ConvertClosureToMethodGroup
 

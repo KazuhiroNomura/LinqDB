@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Spatial;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;

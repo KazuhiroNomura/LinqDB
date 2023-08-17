@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.LinqDB.Optimizers;
 

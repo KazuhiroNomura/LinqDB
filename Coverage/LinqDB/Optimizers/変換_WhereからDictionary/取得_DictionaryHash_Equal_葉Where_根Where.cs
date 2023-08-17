@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using CoverageCS.LinqDB.Sets;
 using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

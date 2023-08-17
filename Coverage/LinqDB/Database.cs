@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using LinqDB.Optimizers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace CoverageCS.LinqDB;

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq.Expressions;
-using Microsoft.FSharp.Quotations;
 namespace LinqDB.Optimizers;
 
 partial class Optimizer {

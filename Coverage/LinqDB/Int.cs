@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 namespace CoverageCS.LinqDB;
 #pragma warning disable IDE0009 // Member access should be qualified.
 [DebuggerDisplay("{" + nameof(v) + "}")]

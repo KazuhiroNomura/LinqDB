@@ -1,20 +1,10 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Reflection.PortableExecutable;
-using System.Runtime.Serialization;
-using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
-using Microsoft.CodeAnalysis;
-
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-using static Common;
 //public abstract class AnonymousFormatter{
 //    protected static readonly IJsonFormatterResolver 再帰しないFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
 //        //順序が大事

@@ -13,7 +13,6 @@ using AdventureWorks2017.Tables.Purchasing;
 using AdventureWorks2017.Tables.Sales;
 using AdventureWorks2017;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using System.Xml.XPath;
 using System.Xml;

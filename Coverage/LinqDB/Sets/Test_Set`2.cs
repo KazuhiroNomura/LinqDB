@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;

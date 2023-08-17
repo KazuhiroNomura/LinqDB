@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.作りたい仕様確認;
 

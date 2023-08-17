@@ -1,11 +1,7 @@
 ﻿#define テキスト
-using System;
 using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -13,8 +9,6 @@ using System.Xml;
 using LinqDB.CRC;
 using LinqDB.Databases;
 using LinqDB.Sets;
-using MessagePack;
-using MessagePack.Formatters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Utf8Json;
 using Utf8Json.Resolvers;

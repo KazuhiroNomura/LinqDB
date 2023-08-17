@@ -2,7 +2,6 @@
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
-using System;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 partial class ExpressionJsonFormatter:IJsonFormatter<BlockExpression>{

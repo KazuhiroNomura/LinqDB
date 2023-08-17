@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
@@ -185,7 +183,7 @@ public abstract class ATest
         public static class_演算子オーバーロード operator ~(class_演算子オーバーロード a) => new(~a.内部の値, a.内部のBoolean);
         public static class_演算子オーバーロード operator !(class_演算子オーバーロード a) => new(-1 ^ a.内部の値, !a.内部のBoolean);
         public static bool operator false(class_演算子オーバーロード a) => !a.内部のBoolean;
-        public static bool operator true(class_演算子オーバーロード a) => a != null && a.内部のBoolean;
+        public static bool operator true(class_演算子オーバーロード a) => a is{内部のBoolean: true};
         public static class_演算子オーバーロード operator ++(class_演算子オーバーロード a) => new(a.内部の値 + 1);
         public static class_演算子オーバーロード operator --(class_演算子オーバーロード a) => new(a.内部の値 - 1);
         public static class_演算子オーバーロード operator -(class_演算子オーバーロード a) => new(-a.内部の値, a.内部のBoolean);
@@ -198,7 +196,7 @@ public abstract class ATest
         [SuppressMessage("ReSharper", "ConvertIfStatementToReturnStatement")]
         public static class_演算子オーバーロード operator |(class_演算子オーバーロード? a, class_演算子オーバーロード? b)
         {
-            if (a == null) return b;
+            if (a == null) return b!;
             if (b == null) return a;
             return new class_演算子オーバーロード(a.内部の値 | b.内部の値);
         }
@@ -215,7 +213,7 @@ public abstract class ATest
             if (other is null) return false;
             return this.内部の値 == other.内部の値 && this.内部のBoolean == other.内部のBoolean;
         }
-        public override bool Equals(object obj) => this.Equals((class_演算子オーバーロード)obj);
+        public override bool Equals(object? obj) => obj is not null&&this.Equals((class_演算子オーバーロード)obj);
         public override int GetHashCode() => this.内部の値;
     }
 
@@ -242,7 +240,7 @@ public abstract class ATest
         {
             this.Int32フィールド = Int32フィールド;
             this.Booleanフィールド = Booleanフィールド;
-            this.Stringフィールド = null;
+            this.Stringフィールド = "";
             this.Int32プロパティ = 0;
         }
         private struct_演算子オーバーロード(int Int32フィールド, bool Booleanフィールド, string Stringフィールド, int Int32プロパティ)
@@ -336,13 +334,9 @@ public abstract class ATest
         public static struct_ショートカット検証 operator !(struct_ショートカット検証 a) => new(!a.Booleanフィールド, "!(" + a.結果 + ")");
         public bool Equals(struct_ショートカット検証 other) => this.Int32フィールド == other.Int32フィールド;
         public static implicit operator struct_ショートカット検証(bool a) => new(1, a);
-        public override bool Equals(object obj)
-        {
-            if (!(obj is struct_ショートカット検証))
-                return false;
-            var o = (struct_ショートカット検証)obj;
-            return this.Booleanフィールド == o.Booleanフィールド && this.Int32フィールド == o.Int32フィールド;
-        }
+        public override bool Equals(object? obj)=>
+            obj is struct_ショートカット検証 other&&
+            (this.Booleanフィールド==other.Booleanフィールド&&this.Int32フィールド==other.Int32フィールド);
         public override string ToString() => this.結果;
     }
     [DebuggerDisplay("{Int32フィールド.ToString()+\":\"+Booleanフィールド.ToString()}")]
@@ -409,19 +403,12 @@ public abstract class ATest
         public static class_ショートカット検証 operator ~(class_ショートカット検証 a) => new(~a.Int32フィールド, "~(" + a.結果 + ")");
         public static class_ショートカット検証 operator !(class_ショートカット検証 a) => new(!a.Booleanフィールド, "!(" + a.結果 + ")");
         public static implicit operator class_ショートカット検証(bool a) => new(1, a);
-        public override bool Equals(object obj)
-        {
-            if (!(obj is class_ショートカット検証))
-                return false;
-            var o = (class_ショートカット検証)obj;
-            return this.Booleanフィールド == o.Booleanフィールド && this.Int32フィールド == o.Int32フィールド;
-        }
-        public bool Equals(class_ショートカット検証 other)
-        {
-            if (ReferenceEquals(this, other)) return true;
-            if (other is null) return false;
-            return this.Int32フィールド == other.Int32フィールド && this.Booleanフィールド == other.Booleanフィールド;
-        }
+        public override bool Equals(object? obj)=>
+            obj is class_ショートカット検証 other&&
+            (this.Booleanフィールド==other.Booleanフィールド&&this.Int32フィールド==other.Int32フィールド);
+        public bool Equals(class_ショートカット検証? other)=>
+            other!=null&&(ReferenceEquals(this,other)||
+                          this.Int32フィールド==other.Int32フィールド&&this.Booleanフィールド==other.Booleanフィールド);
         public override int GetHashCode()
         {
             unchecked
@@ -923,9 +910,8 @@ public abstract class ATest
             }
         }
     }
-    protected static TResult Lambda<TInput, TResult>(Func<TInput, TResult> e)
-    {
-        return e(default);
+    protected static TResult Lambda<TInput, TResult>(Func<TInput, TResult> e){
+        return e(default!);
     }
     public static TResult Lambda<TResult>(Func<int, TResult> e)
     {

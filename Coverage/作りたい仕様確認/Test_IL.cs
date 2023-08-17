@@ -1,5 +1,4 @@
 ﻿//using System.Linq;
-using System;
 using System.Linq.Expressions;
 using CoverageCS.LinqDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

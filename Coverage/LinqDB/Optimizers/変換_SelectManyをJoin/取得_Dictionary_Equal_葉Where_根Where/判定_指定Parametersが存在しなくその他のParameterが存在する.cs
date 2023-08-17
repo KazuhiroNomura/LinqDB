@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.LinqDB.Optimizers.変換_SelectManyをJoin.取得_Dictionary_Equal_葉Where_根Where;
 
 [TestClass]

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
-using static System.Diagnostics.Contracts.Contract;
 // ReSharper disable PossibleNullReferenceException
 
 namespace CoverageCS;
@@ -227,13 +224,14 @@ public class GenerateExpression
             case ExpressionType.ExclusiveOrAssign:
             case ExpressionType.OrAssign:
             {
-                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(深さ, ResultType), this.Typeに対応するExpression(深さ, ResultType));
+                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(ResultType), this.Typeに対応するExpression(深さ, ResultType));
             }
             case ExpressionType.MemberAccess:
             {
                 var Type2 = typeof(MemberClass<>).MakeGenericType(ResultType);
                 var expression = this.Typeに対応するExpression(深さ, Type2);
                 var field = Type2.GetField(nameof(MemberClass<object>.Member));
+                Debug.Assert(field!=null,nameof(field)+" != null");
                 return Expression.Field(
                     expression,
                     field
@@ -283,6 +281,7 @@ public class GenerateExpression
                 }
                 else
                 {
+                    Debug.Assert(Method.DeclaringType!=null,"Method.DeclaringType != null");
                     var Object = this.Typeに対応するExpression(深さ, Method.DeclaringType);
                     var Parameters = Method.GetParameters();
                     var Arguments = new Expression[Parameters.Length];
@@ -389,13 +388,14 @@ public class GenerateExpression
             case ExpressionType.PreIncrementAssign:
             case ExpressionType.PowerAssign:
             {
-                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(深さ, ResultType), this.Typeに対応するExpression(深さ, ResultType));
+                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(ResultType), this.Typeに対応するExpression(深さ, ResultType));
             }
             case ExpressionType.MemberAccess:
             {
                 var Type2 = typeof(MemberClass<decimal>);
                 var expression = this.Typeに対応するExpression(深さ, Type2);
                 var field = Type2.GetField(nameof(MemberClass<object>.Member));
+                Debug.Assert(field!=null,nameof(field)+" != null");
                 return Expression.Field(
                     expression,
                     field
@@ -430,6 +430,7 @@ public class GenerateExpression
                 }
                 else
                 {
+                    Debug.Assert(Method.DeclaringType!=null,"Method.DeclaringType != null");
                     var Object = this.Typeに対応するExpression(深さ, Method.DeclaringType);
                     var Parameters = Method.GetParameters();
                     var Arguments = new Expression[Parameters.Length];
@@ -519,13 +520,14 @@ public class GenerateExpression
             case ExpressionType.AddAssign:
             case ExpressionType.SubtractAssign:
             {
-                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(深さ, ResultType), this.Typeに対応するExpression(深さ, ResultType));
+                return Expression.MakeBinary(NodeType, Typeに対応するAssignの左辺Expression(ResultType), this.Typeに対応するExpression(深さ, ResultType));
             }
             case ExpressionType.MemberAccess:
             {
                 var Type2 = typeof(MemberClass<>).MakeGenericType(ResultType);
                 var expression = this.Typeに対応するExpression(深さ, Type2);
                 var field = Type2.GetField(nameof(MemberClass<object>.Member));
+                Debug.Assert(field!=null,nameof(field)+" != null");
                 return Expression.Field(
                     expression,
                     field
@@ -552,6 +554,7 @@ public class GenerateExpression
                 }
                 else
                 {
+                    Debug.Assert(Method.DeclaringType!=null,"Method.DeclaringType != null");
                     var Object = this.Typeに対応するExpression(深さ, Method.DeclaringType);
                     var Parameters = Method.GetParameters();
                     var Arguments = new Expression[Parameters.Length];
@@ -617,12 +620,11 @@ public class GenerateExpression
                 goto 再試行;
         }
     }
-    private class 左辺<T>
-    {
-        public T value;
+    private class 左辺<T>{
+        public T value=default!;
     }
 
-    private static Expression Typeに対応するAssignの左辺Expression(int 深さ, Type Type)
+    private static Expression Typeに対応するAssignの左辺Expression(Type Type)
     {
         return Expression.Field(
             Expression.New(typeof(左辺<>).MakeGenericType(Type)),

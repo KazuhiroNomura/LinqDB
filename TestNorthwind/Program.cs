@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics;
-using LinqDB.Sets;
 using Northwind.Tables.dbo;
 using Northwind;
 using System.Data.SqlClient;

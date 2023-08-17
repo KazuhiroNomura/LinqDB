@@ -9,11 +9,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using Microsoft.CodeAnalysis.Scripting;
 using static LinqDB.Helpers.Configulation;
 using static LinqDB.Helpers.CommonLibrary;
-using System.Threading.Tasks;
-
 namespace LinqDB.Remote.Servers;
 
 /// <summary>

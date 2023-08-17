@@ -1,5 +1,4 @@
-﻿using System;
-using LinqDB.Sets;
+﻿using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.LinqDB.Sets.Exceptions;

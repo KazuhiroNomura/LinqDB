@@ -438,15 +438,6 @@ partial class Optimizer{
             get=>this._取得_先行評価式.Dictionaryラムダ跨ぎParameter;
             set=>this._取得_先行評価式.Dictionaryラムダ跨ぎParameter=value;
         }
-        //private Information _Information=default!;
-
-        //internal Information Information{
-        //    get=>this._Information;
-        //    set{
-        //        this._Information=value;
-        //        this._取得_先行評価式.Dictionaryラムダ跨ぎParameter=value.Dictionaryラムダ跨ぎParameter;
-        //    }
-        //}
         protected override Expression Block(BlockExpression Block0) {
             var Block0_Variables = Block0.Variables;
             var List束縛Parameter情報 = this.List束縛Parameter情報;

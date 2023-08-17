@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Threading.Tasks;
 using static LinqDB.Helpers.Configulation;
 namespace LinqDB.Remote.Servers;
 

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using LinqDB.Sets;
+﻿using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.LinqDB.Optimizers;
 

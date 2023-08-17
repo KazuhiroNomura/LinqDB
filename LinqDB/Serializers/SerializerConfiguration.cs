@@ -4,7 +4,6 @@ using MessagePack;
 using System.Reflection.Emit;
 using System;
 using LinqDB.Helpers;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{

@@ -10,7 +10,6 @@ using AdventureWorksDW2017;
 //using Views=AdventureWorksDW2017.Views;
 using LinqDB.Sets;
 namespace TestAdventureWorksDW2017;
-using Tables=AdventureWorksDW2017.Tables;
 //using Views=AdventureWorksDW2017.Views;
 using AdventureWorksDW2017.Tables.dbo;
 using AdventureWorksDW2017.Views.dbo;
