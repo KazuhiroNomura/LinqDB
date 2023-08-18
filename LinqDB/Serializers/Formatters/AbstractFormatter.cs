@@ -101,49 +101,17 @@ public class AbstractMessagePackFormatter<T>:AbstractFormatter,IMessagePackForma
             writer.WriteNil();
             return;
         }
-        //var MethodX=typeof(AbstractFormatter).GetMethod("MethodX")!;
-        //var DelX=Delegate.CreateDelegate(typeof(DelegateX<>).MakeGenericType(MethodX.GetParameters()[0].ParameterType),MethodX);
-        //DelX.DynamicInvoke(1);
         writer.WriteArrayHeader(2);
         var type=value.GetType();
         Serialize_Type(ref writer,type,options);
-        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
-        //var Formatter = options.Resolver.GetFormatterDynamic(type)!;
-        //var Serialize = Formatter.GetType().GetMethod("Serialize");
-        //Debug.Assert(Serialize!=null,nameof(Serialize)+" != null");
-        //var Delegate0=(SerializeDelegate)Delegate.CreateDelegate(typeof(SerializeDelegate<>).MakeGenericType(Serialize.GetParameters()[1].ParameterType),Formatter,Serialize);
-        //Delegate0(ref writer,value,options);
-        //再帰してしまう MessagePackSerializer.Serialize(type,ref writer,value,options);
-        //MessagePackSerializer.Serialize(type,ref writer,value,options);
         SerializerConfiguration.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
-        //Serialize_T(ref writer,value,options);
-        //MessagePack.Resolvers.StandardResolver.Instance.GetFormatter<T>().Serialize(ref writer,value,options);
-        //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance.GetFormatter<T>().Serialize(ref writer,value,options);
     }
-    //private delegate T DeserializeDelegate(ref MessagePackReader reader,MessagePackSerializerOptions options);
     public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         var ArrayHeader=reader.ReadArrayHeader();
         Debug.Assert(ArrayHeader==2);
         var type=Deserialize_Type(ref reader,options);
-        //if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
-        //var Formatter = MessagePack.Resolvers.StandardResolver.Instance.GetFormatterDynamic(type);
-        //var Deserialize = Formatter.GetType().GetMethod("Deserialize");
-        //Debug.Assert(Deserialize!=null,nameof(Deserialize)+" != null");
-        //var Delegate0=(DeserializeDelegate)Delegate.CreateDelegate(typeof(DeserializeDelegate),Formatter,Deserialize);
-        ////Debug.Assert(Deserialize is not null);
-        //var value = Delegate0(ref reader,options);
-        //var value=MessagePackSerializer.Deserialize(type,ref reader,options);
         var value=(T)SerializerConfiguration.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
-        //var value = MessagePackSerializer.Serialize(type,ref writer,value,options);
         return value;
-        //var reader0=reader;
-        //var reader1=reader;
-        //reader=reader0;
-        //todo Anonymousはtypeヘッダーを入れることで型を指定するのだが内部のTフィールドには対応できない方法を考案する必要がある
-       //var value1=(T)MessagePackSerializer.Deserialize(type,ref reader1,options);
-        //reader=reader1;
-        //return (T)value;
-        //return value1;
     }
 }

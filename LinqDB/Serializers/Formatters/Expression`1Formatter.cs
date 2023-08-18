@@ -4,8 +4,7 @@ using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-
-partial class ExpressionJsonFormatter<TLambdaExpression>:IJsonFormatter<TLambdaExpression>where TLambdaExpression:LambdaExpression{
+class ExpressionJsonFormatter<TLambdaExpression>:IJsonFormatter<TLambdaExpression>where TLambdaExpression:LambdaExpression{
     private readonly ExpressionJsonFormatter Instance;
     //private readonly List<ParameterExpression> ListParameter;
     public ExpressionJsonFormatter(ExpressionJsonFormatter Instance)=>this.Instance=Instance;
@@ -53,7 +52,7 @@ partial class ExpressionJsonFormatter<TLambdaExpression>:IJsonFormatter<TLambdaE
         );
     }
 }
-partial class ExpressionMessagePackFormatter<TLambdaExpression>:IMessagePackFormatter<TLambdaExpression>where TLambdaExpression:LambdaExpression{
+class ExpressionMessagePackFormatter<TLambdaExpression>:IMessagePackFormatter<TLambdaExpression>where TLambdaExpression:LambdaExpression{
     private readonly ExpressionMessagePackFormatter Instance;
     public ExpressionMessagePackFormatter(ExpressionMessagePackFormatter Instance)=>this.Instance=Instance;
     public void Serialize(ref MessagePackWriter writer,TLambdaExpression value,MessagePackSerializerOptions Resolver){

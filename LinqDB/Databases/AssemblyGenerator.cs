@@ -23,21 +23,6 @@ using AssemblyName=System.Reflection.AssemblyName;
 namespace LinqDB.Databases;
 public partial class AssemblyGenerator {
     //private const bool すべて実行=true;
-    private static bool 実行しない(ISchema Schema,IName Object) { 
-        return 実行しない(Schema,Object.Name);
-    }
-    private static bool 実行しない(ISchema Schema,string Name) {
-
-        //return "availability_replicas2"!=Name;
-        //if(Name=="bit") {
-        //return true;
-        //}
-        return false;
-        //return !これ以外実行しない.Contains((Schema.Name,Object.Name));
-    }
-    //private static (string Schema, string Object)[] これ以外実行しない = {
-    //    ("dbo","QueryDerivedTable"),
-    //};
     private static readonly Type[] static_Types1 = new Type[1];
     private static Type[] Types(Type Type0) {
         static_Types1[0]=Type0;
@@ -595,10 +580,10 @@ public partial class AssemblyGenerator {
         var 親Table = Relation.親ITable!;
         var Dictionary_Table=this.Dictionary_Table;
         var 親Table_Information = Dictionary_Table[親Table];
-        var 親Table_TypeBuilder = 親Table_Information.TypeBuilder!;
+        var 親Table_TypeBuilder = 親Table_Information.TypeBuilder;
         var 子Table = Relation.子ITable!;
         var 子Table_Information = Dictionary_Table[子Table];
-        var 子Table_TypeBuilder = 子Table_Information.TypeBuilder!;
+        var 子Table_TypeBuilder = 子Table_Information.TypeBuilder;
         var 子Table_親One_FieldBuilder = Relation.I.子Table_親One_FieldBuilder=子Table_TypeBuilder.DefineField("親"+Name,親Table_TypeBuilder,FieldAttributes.Assembly);
         子Table_親One_FieldBuilder.SetCustomAttribute(NonSerialized_CustomAttributeBuilder);
         Types1[0]=子Table_TypeBuilder;
@@ -732,15 +717,15 @@ public partial class AssemblyGenerator {
         Container_RelationValidate_I.Ldstr($"{子Table.Schema.Name}.{子Table.Name}に対応する{親Table.Name}がなかった。");
         Container_RelationValidate_I.Newobj(Reflection.Exception.RelationshipException_ctor);
         Container_RelationValidate_I.Throw();
-        var 親Schema_FieldBuilder =親Table_ISchema_Information.Containerに定義されるSchema_FieldBuilder!;
+        var 親Schema_FieldBuilder =親Table_ISchema_Information.Containerに定義されるSchema_FieldBuilder;
         Types2[0]=親Table_TypeBuilder;
         Types2[1]=親Table_Information.Key_TypeBuilder!;
         var Set2_TryGetValue = TypeBuilder.GetMethod(typeof(Set<,>).MakeGenericType(Types2),AssemblyGenerator.Set2_TryGetValue);
         Types1[0]=子Table_TypeBuilder;
         var Set1 = typeof(Set<>).MakeGenericType(Types1);
         var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,AssemblyGenerator.Set1_VoidRemove);
-        var AddRelationship_I = 子Table_Information.AddRelationship_I!;
-        var RemoveRelationship_I = 子Table_Information.RemoveRelationship_I!;
+        var AddRelationship_I = 子Table_Information.AddRelationship_I;
+        var RemoveRelationship_I = 子Table_Information.RemoveRelationship_I;
         var AddRelationship_親タプル = this.共通AddRelationship0(
             Relation,
             Entity2_ProtectedPrimaryKey,
@@ -751,7 +736,7 @@ public partial class AssemblyGenerator {
             Set2_TryGetValue,
             Set1_VoidRemove
         );
-        Types1[0]=子Table_Information.TypeBuilder!;
+        Types1[0]=子Table_Information.TypeBuilder;
         var Set = typeof(Set<>).MakeGenericType(Types1);
         var VoidAdd = TypeBuilder.GetMethod(
             Set,

@@ -1734,12 +1734,17 @@ public sealed partial class Optimizer:IDisposable{
         //var Delegate=Disp_Method0.CreateDelegate(DispObject);
         //var r=Disp_Method0.Invoke(DispObject,Array.Empty<object>());
         var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
-        new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
+        //todo AssemblyGenerater.GenerateAssembly()の後GC.Collect()とGC.WaitForPendingFinalizers()することでファイルハンドルをファイナライザで解放させることを期待したがだダメだった
+        var t=Stopwatch.StartNew();
+        Console.Write("GenerateAssembly,");
+        this.AssemblyGenerator.GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
+        Console.WriteLine($"GenerateAssembly {t.ElapsedMilliseconds}ms");
         this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter,Tuple);
         var Value= Get_ValueTuple(DictionaryLambda[Lambda1].Member,Tuple);
         var Delegate1 = (Delegate)Value;
         return Delegate1;
     }
+    private readonly AssemblyGenerator AssemblyGenerator=new();
     /// <summary>
     /// 動的ラムダ。
     /// </summary>

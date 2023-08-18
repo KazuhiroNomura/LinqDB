@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Utf8Json;
+
 namespace LinqDB.Sets;
 
 /// <summary>
@@ -51,6 +53,63 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
     public Set(ImmutableSet<T> source,IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
+        public sealed class JsonFormatter:IJsonFormatter<Set<T>>{
+            public static readonly JsonFormatter Instance=new();
+            public void Serialize(ref JsonWriter writer,Set<T> value,IJsonFormatterResolver formatterResolver){
+                var Formatter=formatterResolver.GetFormatter<T>();
+                writer.WriteBeginArray();
+                var 二度目以降の出力か=false;
+                var TreeNode = value.TreeRoot;
+            LinkedNodeItem走査:
+                for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
+                    if(二度目以降の出力か)writer.WriteValueSeparator();
+                    二度目以降の出力か=true;
+                    Formatter.Serialize(ref writer,LinkedNodeItem.Item,formatterResolver);
+                }
+                if(TreeNode.L is not null) {
+                    TreeNode=TreeNode.L;
+                    goto LinkedNodeItem走査;
+                }
+                右に移動:
+                if(TreeNode.R is not null) {
+                    TreeNode=TreeNode.R;
+                    goto LinkedNodeItem走査;
+                }
+                //上に移動
+                while(!(TreeNode.P is null)) {
+                    var 旧TreeNode_P = TreeNode.P;
+                    if(旧TreeNode_P.L==TreeNode) {
+                        TreeNode=旧TreeNode_P;
+                        goto 右に移動;
+                    }
+                    TreeNode=旧TreeNode_P;
+                }
+                writer.WriteEndArray();
+            }
+            public Set<T> Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
+                var result=new Set<T>();
+                var Formatter=formatterResolver.GetFormatter<T>();
+                reader.ReadIsBeginArrayWithVerify();
+                while(true){
+                    var value=(T)Formatter.Deserialize(ref reader,formatterResolver);
+                    result.Add(value);
+                    var s=reader.ReadIsValueSeparator();
+                    if(!s) break;
+                }
+                return result;
+            }
+        }
+        //public sealed class MessagePackFormatter:IMessagePackFormatter<T>{
+        //    public static readonly MessagePackFormatter Instance=new();
+        //    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
+        //        Debug.Assert(value!=null,nameof(value)+" != null");
+        //        writer.Write(value.a);
+        //        writer.Write(value.b);
+        //    }
+        //    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+        //        return new sealed_classキーあり{a=reader.ReadInt32(),b=reader.ReadString()};
+        //    }
+        //}
     protected Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext):base(SerializationInfo,StreamingContext) {
     }
     /// <summary>

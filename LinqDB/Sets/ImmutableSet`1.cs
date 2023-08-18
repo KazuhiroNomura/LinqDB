@@ -10,6 +10,9 @@ using System.Runtime.Serialization;
 using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
+using MessagePack;
+using MessagePack.Formatters;
+using Utf8Json;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ArrangeStaticMemberQualifier
 namespace LinqDB.Sets;
@@ -1227,7 +1230,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///   <see cref="ImmutableSet{T}" /> オブジェクトをシリアル化するために必要な情報を格納している <see cref="SerializationInfo" /> オブジェクト。</param>
     /// <param name="StreamingContext">
     ///   <see cref="ImmutableSet{T}" /> オブジェクトに関連付けられているシリアル化ストリームの転送元および転送先を格納する <see cref="StreamingContext" /> 構造体。</param>
-    protected ImmutableSet(SerializationInfo SerializationInfo,StreamingContext StreamingContext) {
+    /// 
+        protected ImmutableSet(SerializationInfo SerializationInfo,StreamingContext StreamingContext) {
         this.Comparer=(IEqualityComparer<T>)SerializationInfo.GetValue(
             nameof(this.Comparer),
             typeof(IEqualityComparer<T>)

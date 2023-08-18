@@ -268,6 +268,10 @@ public static class CommonLibrary {
         }
         return false;
     }
+    public static bool IsConstructedGenericType(this TypeInfo type)
+    {
+        return type.AsType().IsConstructedGenericType;
+    }
     //public static bool IsAnonymous(this Type Type)=>Type.IsClass&&Type.IsGenericType&&(Type.Name.IndexOf(
     //    CS匿名型名,
     //    StringComparison.Ordinal)==0||Type.Name.IndexOf(

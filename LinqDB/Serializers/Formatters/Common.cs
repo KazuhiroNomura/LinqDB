@@ -3,11 +3,7 @@ using MessagePack;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 public static class Common{
-    //public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-    public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver){
-        var f=Resolver.GetFormatter<T>();
-        f.Serialize(ref writer,value,Resolver);
-    }
+    public static void Serialize_T<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static void Serialize_Type(ref JsonWriter writer,Type value,IJsonFormatterResolver Resolver){
         writer.WriteString(value.AssemblyQualifiedName);
     }
@@ -21,8 +17,5 @@ public static class Common{
         writer.Write(value.AssemblyQualifiedName);
     }
     public static T Deserialize_T<T>(ref MessagePackReader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
-    public static Type Deserialize_Type(ref MessagePackReader reader,MessagePackSerializerOptions options){
-        var AssemblyQualifiedName=reader.ReadString();
-        return Type.GetType(AssemblyQualifiedName)!;
-    }
+    public static Type Deserialize_Type(ref MessagePackReader reader,MessagePackSerializerOptions options)=>Type.GetType(reader.ReadString()!)!;
 }

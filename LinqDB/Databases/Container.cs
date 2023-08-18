@@ -5,6 +5,7 @@ using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Diagnostics;
 using LinqDB.Helpers;
+// ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
 /// <summary>
 /// エンティティの基底クラス

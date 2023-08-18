@@ -98,7 +98,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     /// <param name="Default"></param>
     /// <returns></returns>
     protected TCollection GetValue(object Key,TCollection Default) {
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key!.GetHashCode());
+        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
                 if(a.Item.Key!.Equals(Key)) {

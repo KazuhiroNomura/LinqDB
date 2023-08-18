@@ -269,13 +269,17 @@
     <Node Category="Trait" Data="1.000000" DataType="Float" Id="Microsoft.VisualStudio.DSD.PixelShaderTerminal[32].Alpha" Label="Alpha" LabelResId="3101" PortType="Input" />
     <Node Category="Element" Group="Expanded" Id="Microsoft.VisualStudio.DSD.PointColor[33]" Label="ポイントの色" LabelResId="3401" TypeId="Microsoft.VisualStudio.DSD.PointColor" />
     <Node Category="Trait" Data="False" DataType="Bool" Id="Microsoft.VisualStudio.DSD.PointColor[33].PropertyWindowShowElementName" Label="PropertyWindowShowElementName" LabelResId="PropertyWindowShowElementName" />
-    <Node Category="Trait" Data="1.622840 -0.000002 0.023930" DataType="Float3" Id="Microsoft.VisualStudio.DSD.PointColor[33].Position" Label="Position" LabelResId="Position" />
+    <Node Category="Trait" Data="1.733083 -0.000004 0.263191" DataType="Float3" Id="Microsoft.VisualStudio.DSD.PointColor[33].Position" Label="Position" LabelResId="Position" />
     <Node Category="Trait" Data="1.000000 1.000000 1.000000 1.000000" DataType="Float4" Id="Microsoft.VisualStudio.DSD.PointColor[33].Point Color" Label="Point Color" LabelResId="Point Color" PortType="Output" />
     <Node Category="Trait" Data="1.000000 1.000000 1.000000" DataType="Float3" Id="Microsoft.VisualStudio.DSD.PointColor[33].rgb" Label="rgb" LabelResId="3210" PortType="Output" />
     <Node Category="Trait" Data="1.000000" DataType="Float" Id="Microsoft.VisualStudio.DSD.PointColor[33].r" Label="r" LabelResId="3211" PortType="Output" />
     <Node Category="Trait" Data="1.000000" DataType="Float" Id="Microsoft.VisualStudio.DSD.PointColor[33].g" Label="g" LabelResId="3212" PortType="Output" />
     <Node Category="Trait" Data="1.000000" DataType="Float" Id="Microsoft.VisualStudio.DSD.PointColor[33].b" Label="b" LabelResId="3213" PortType="Output" />
     <Node Category="Trait" Data="1.000000" DataType="Float" Id="Microsoft.VisualStudio.DSD.PointColor[33].a" Label="a" LabelResId="3214" PortType="Output" />
+    <Node Category="Element" Group="Expanded" Id="Microsoft.VisualStudio.DSD.Constant[34]" Label="定数" LabelResId="3407" TypeId="Microsoft.VisualStudio.DSD.Constant" />
+    <Node Category="Trait" Data="False" DataType="Bool" Id="Microsoft.VisualStudio.DSD.Constant[34].PropertyWindowShowElementName" Label="PropertyWindowShowElementName" LabelResId="PropertyWindowShowElementName" />
+    <Node Category="Trait" Data="2.252312 0.000000 2.396166" DataType="Float3" Id="Microsoft.VisualStudio.DSD.Constant[34].Position" Label="Position" LabelResId="Position" />
+    <Node Category="Trait" Data="1.000000" DataType="Float" Desc="4003" Id="Microsoft.VisualStudio.DSD.Constant[34].Constant" Label="Constant" LabelResId="3201" PortType="Output" ShowInPropertyWindow="True" />
   </Nodes>
   <Links>
     <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.Root[1]" Target="Microsoft.VisualStudio.DSD.Root[1].PropertyWindowShowElementName" />
@@ -554,5 +558,9 @@
     <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.PointColor[33]" Target="Microsoft.VisualStudio.DSD.PointColor[33].b" />
     <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.PointColor[33]" Target="Microsoft.VisualStudio.DSD.PointColor[33].a" />
     <Link Source="Microsoft.VisualStudio.DSD.PointColor[33].a" Target="Microsoft.VisualStudio.DSD.PixelShaderTerminal[32].Alpha" />
+    <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.PixelShader[2]" Target="Microsoft.VisualStudio.DSD.Constant[34]" />
+    <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.Constant[34]" Target="Microsoft.VisualStudio.DSD.Constant[34].PropertyWindowShowElementName" />
+    <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.Constant[34]" Target="Microsoft.VisualStudio.DSD.Constant[34].Position" />
+    <Link Category="Contains" Source="Microsoft.VisualStudio.DSD.Constant[34]" Target="Microsoft.VisualStudio.DSD.Constant[34].Constant" />
   </Links>
 </DirectedGraph>

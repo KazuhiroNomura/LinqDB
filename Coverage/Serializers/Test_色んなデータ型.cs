@@ -1,6 +1,9 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Collections;
+using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Remote.Clients;
+using LinqDB.Sets;
 //using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.MessagePack;
 //using MessagePack.Resolvers;
@@ -204,5 +207,72 @@ public class Test_色んなデータ型:ATest_シリアライズ{
     [TestMethod]
     public void MemberInfo(){
         共通object(typeof(string).GetMembers(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic));
+    }
+    class Enumerable1<T>:IEnumerable<T>,ICollection<T>, IEquatable<Enumerable1<T>>{
+        private readonly LinkedList<T> data=new();
+        //public Enumerable1(IEnumerable<T> input){
+        //    foreach(var a in input) this.data.AddLast(a);
+        //}
+        //public Enumerable1(IEnumerable<T> input){
+        //    foreach(var a in input) this.data.AddLast(a);
+        //}
+        public IEnumerator<T> GetEnumerator(){
+            foreach(var a in this.data) yield return a;
+        }
+        IEnumerator IEnumerable.GetEnumerator(){
+            foreach(var a in this.data) yield return a;
+        }
+        public bool Equals(Enumerable1<T>? other){
+            if(ReferenceEquals(null,other)) return false;
+            if(ReferenceEquals(this,other)) return true;
+            return this.data.SequenceEqual(other.data);
+        }
+        public override bool Equals(object? obj){
+            if(ReferenceEquals(null,obj)) return false;
+            if(ReferenceEquals(this,obj)) return true;
+            if(obj.GetType()!=this.GetType()) return false;
+            return this.Equals((Enumerable1<T>)obj);
+        }
+        public override int GetHashCode(){
+            return this.data.GetHashCode();
+        }
+        public static bool operator==(Enumerable1<T>? left,Enumerable1<T>? right){
+            return Equals(left,right);
+        }
+        public static bool operator!=(Enumerable1<T>? left,Enumerable1<T>? right){
+            return!Equals(left,right);
+        }
+        public void Add(T item){
+            this.data.AddLast(item);
+        }
+        public void Clear(){
+            this.data.Clear();
+        }
+        public bool Contains(T item){
+            return this.data.Contains(item);
+        }
+        public void CopyTo(T[] array,int arrayIndex){
+            this.data.CopyTo(array,arrayIndex);
+        }
+        public bool Remove(T item){
+            return this.data.Remove(item);
+        }
+        public int Count=>this.data.Count;
+        public bool IsReadOnly=>false;
+    }
+    [TestMethod]
+    public void IEnumerable0(){
+        var s=new LinkedList<int>(new[]{1,2,3});
+        共通object(s);
+    }
+    [TestMethod]
+    public void IEnumerable1(){
+        var s=new Enumerable1<int>{1,2,3};
+        共通object(s);
+    }
+    [TestMethod]
+    public void Set1(){
+        var s=new Set<int>{1,2,3};
+        共通object(s);
     }
 }

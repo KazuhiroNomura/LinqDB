@@ -167,15 +167,13 @@ public class ATest_シリアライズ:ATest{
     const string 整形済みJsonファイル名="整形済みJson.txt";
     private static void Private共通object<T>(T input,Action<T> AssertAction){
         //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
-        try{
+        {
             SerializerConfiguration.ClearJson();
             var JsonStream=new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
             JsonSerializer.Serialize(JsonStream,input,JsonFormatterResolver);
             JsonStream.Close();
             var Json=File.ReadAllText(Jsonファイル名);
             File.WriteAllText(整形済みJsonファイル名,format_json(Json));
-        } catch(Exception ex){
-
         }
         {
             SerializerConfiguration.ClearJson();
@@ -206,8 +204,8 @@ public class ATest_シリアライズ:ATest{
         Private共通object(input,output=>Assert.IsTrue(output.SequenceEqual(input)));
     }
     protected static void 共通object<T>(T input){
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
         Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     protected static void 共通Expression<T>(T input)where T:Expression?{
         //Debug.Assert(input!=null,nameof(input)+" != null");

@@ -29,7 +29,8 @@ public class ExpressionFormatter{
         this.Dictionary_int_LabelTarget.Clear();
     }
 }
-partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Expression>{
+public partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Expression>{
+    public IJsonFormatter<Expression> _Expression=>this;
     public void Serialize(ref JsonWriter writer,Expression? value,IJsonFormatterResolver Resolver) {
         if(value is null){
             writer.WriteNull();
@@ -150,7 +151,7 @@ partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Express
             case ExpressionType.Try: this.Serialize(ref writer,(TryExpression)value,Resolver);break;
             default:
                 throw new ArgumentOutOfRangeException(value.NodeType.ToString());
-        };
+        }
         writer.WriteEndArray();
     }
     public Expression Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
@@ -514,7 +515,8 @@ partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Express
         throw new NotSupportedException(TypeName);
     }
 }
-partial class ExpressionMessagePackFormatter:ExpressionFormatter,IMessagePackFormatter<Expression>{
+public partial class ExpressionMessagePackFormatter:ExpressionFormatter,IMessagePackFormatter<Expression>{
+    public IMessagePackFormatter<Expression> _Expression=>this;
     public void Serialize(ref MessagePackWriter writer,Expression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
@@ -628,7 +630,7 @@ partial class ExpressionMessagePackFormatter:ExpressionFormatter,IMessagePackFor
             case ExpressionType.Try: this.Serialize(ref writer,(TryExpression)value,Resolver);break;
             default:
                 throw new ArgumentOutOfRangeException(value.NodeType.ToString());
-        };
+        }
     }
     public Expression Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil())return null!;

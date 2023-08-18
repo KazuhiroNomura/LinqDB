@@ -4,6 +4,7 @@ using MessagePack;
 using System.Reflection.Emit;
 using System;
 using LinqDB.Helpers;
+using LinqDB.Serializers.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
@@ -22,6 +23,9 @@ public readonly struct SerializerConfiguration{
         //this.AnonymousExpressionJsonFormatterResolver=new();
         //順序が大事
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
+            new IJsonFormatter[]{
+                this.AnonymousExpressionJsonFormatterResolver.ExpressionFormatter, 
+            },
             new IJsonFormatterResolver[]{
                 //    this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
                 //    short
@@ -185,7 +189,7 @@ public readonly struct SerializerConfiguration{
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
                     MessagePack.Resolvers.BuiltinResolver.Instance,
-                    MessagePack.Resolvers.DynamicGenericResolver.Instance,
+                    MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumResolver.Instance,
                     this.AnonymousExpressionMessagePackFormatterResolver,

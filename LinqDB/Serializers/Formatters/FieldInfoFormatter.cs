@@ -13,7 +13,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<FieldInfo>{
             return;
         }
         writer.WriteBeginArray();
-        Serialize_Type(ref writer,value.ReflectedType,Resolver);
+        Serialize_Type(ref writer,value.ReflectedType!,Resolver);
         //this.Serialize(ref writer,value.ReflectedType!,Resolver);
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
