@@ -1535,7 +1535,7 @@ public class Test_ExpressionEqualityComparer : ATest
             )
         );
     }
-    [TestMethod, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod]
     public void TryCatch_Filter0()
     {
         this.Execute2(
@@ -1554,7 +1554,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
     }
-    [TestMethod, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod]
     public void TryCatch_Filter1()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;

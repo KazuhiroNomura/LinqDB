@@ -15,90 +15,98 @@ namespace CoverageCS.LinqDB.Optimizers.変換_跨ぎ変数の先行評価;
 public class Test_変換_跨ぎ変数の先行評価: ATest
 {
     [TestMethod]
-    public void 跨ぎ変数パターン() {
-        this.Execute引数パターン(a =>
-            new {
-                A = SetN<int>(a).Join(SetN<int>(a),o => o+3,i => i+2,(o,i) => o+i),
-                B = SetN<int>(a).Join(SetN<int>(a),o => o*3,i => i*2,(o,i) => o*i)
+    public void 跨ぎ変数パターン(){
+        this.Execute引数パターン(a=>
+            new{
+                A=SetN<int>(a).Join(SetN<int>(a),o=>o+3,i=>i+2,(o,i)=>o+i),
+                B=SetN<int>(a).Join(SetN<int>(a),o=>o*3,i=>i*2,(o,i)=>o*i)
             }
         );
-        this.Execute引数パターン(a =>
-            new {
-                A = SetN<int>(a).Join(SetN<int>(a),o => o+1,i => i+1,(o,i) => o+i),
-                B = SetN<int>(a).Join(SetN<int>(a),o => o+1,i => i+1,(o,i) => o*i)
+        this.Execute引数パターン(a=>
+            new{
+                A=SetN<int>(a).Join(SetN<int>(a),o=>o+1,i=>i+1,(o,i)=>o+i),
+                B=SetN<int>(a).Join(SetN<int>(a),o=>o+1,i=>i+1,(o,i)=>o*i)
             }
         );
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a),o => o+1,i => i+1,(o,i) => o+i));
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).GroupJoin(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }));
-        this.Execute引数パターン標準ラムダループ((a,b) => EnuN<int>(a).GroupJoin(EnuN<int>(b),o => o,i => i,(o,i) => new { o,i }));
-        this.Execute引数パターン標準ラムダループ((a,b) => SetN<int>(a).GroupJoin(SetN<int>(b),o => o,i => i,(o,i) => new { o,i }));
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).GroupJoin(ArrN<int>(b),o => o,i => i,(o,i) => new { o = o*o,i },AnonymousComparer.Create<int>((x,y) => x==y,p => p.GetHashCode())));
-        this.Execute引数パターン標準ラムダループ((a,b) => EnuN<int>(a).GroupJoin(EnuN<int>(b),o => o,i => i,(o,i) => new { o,i },AnonymousComparer.Create<int>((x,y) => x==y,p => p.GetHashCode())));
-        this.Execute引数パターン標準ラムダループ((a,b) => SetN<int>(a).GroupJoin(SetN<int>(b),o => o,i => i,(o,i) => new { o,i },AnonymousComparer.Create<int>((x,y) => x==y,p => p.GetHashCode())));
-        this.Execute引数パターン標準ラムダループ((a,b) => new {
-            A = ArrN<int>(a).GroupJoin(ArrN<int>(b),o => o,i => i,(o,i) => new { o = o+o,i },AnonymousComparer.Create<int>((x,y) => x==y,p => p.GetHashCode())),
-            B = ArrN<int>(a).GroupJoin(ArrN<int>(b),o => o,i => i,(o,i) => new { o = o*o,i },AnonymousComparer.Create<int>((x,y) => x==y,p => p.GetHashCode()))
+        this.Execute引数パターン(a=>SetN<int>(a).Join(SetN<int>(a),o=>o+1,i=>i+1,(o,i)=>o+i));
+        this.Execute引数パターン標準ラムダループ((a,b)=>ArrN<int>(a).GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.Execute引数パターン標準ラムダループ((a,b)=>EnuN<int>(a).GroupJoin(EnuN<int>(b),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.Execute引数パターン標準ラムダループ((a,b)=>SetN<int>(a).GroupJoin(SetN<int>(b),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.Execute引数パターン標準ラムダループ((a,b)=>ArrN<int>(a).GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o*o,i},
+            AnonymousComparer.Create<int>((x,y)=>x==y,p=>p.GetHashCode())));
+        this.Execute引数パターン標準ラムダループ((a,b)=>EnuN<int>(a).GroupJoin(EnuN<int>(b),o=>o,i=>i,(o,i)=>new{o,i},
+            AnonymousComparer.Create<int>((x,y)=>x==y,p=>p.GetHashCode())));
+        this.Execute引数パターン標準ラムダループ((a,b)=>SetN<int>(a).GroupJoin(SetN<int>(b),o=>o,i=>i,(o,i)=>new{o,i},
+            AnonymousComparer.Create<int>((x,y)=>x==y,p=>p.GetHashCode())));
+        this.Execute引数パターン標準ラムダループ((a,b)=>new{
+            A=ArrN<int>(a).GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o+o,i},
+                AnonymousComparer.Create<int>((x,y)=>x==y,p=>p.GetHashCode())),
+            B=ArrN<int>(a).GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o*o,i},
+                AnonymousComparer.Create<int>((x,y)=>x==y,p=>p.GetHashCode()))
         });
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                new {
-                    x = SetN<int>(a).Lookup(c => c).GetTKeyValue(b).Select(d => d+1),
-                    y = SetN<int>(a).Lookup(c => c).GetTKeyValue(b).Select(d => d+2)
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                new{
+                    x=SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).Select(d=>d+1),
+                    y=SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).Select(d=>d+2)
                 }
             )
         );
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b).Select(d =>d+1)
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).Select(d=>d+1)
             )
         );
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b).SelectMany(d =>
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).SelectMany(d=>
                     SetN<int>(a)
                 )
             )
         );
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b).SelectMany(d => 
-                    SetN<int>(a).Where(f => f==5)
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).SelectMany(d=>
+                    SetN<int>(a).Where(f=>f==5)
                 )
             )
         );
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b).SelectMany(d => b==6
-                    ? SetN<int>(a).Where(f => f==5)
-                    : ImmutableSet<int>.EmptySet
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).SelectMany(d=>b==6
+                    ?SetN<int>(a).Where(f=>f==5)
+                    :ImmutableSet<int>.EmptySet
                 )
             )
         );
-        this.Execute引数パターン(a =>
-            SetN<int>(a).SelectMany(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b).SelectMany(d => b==6
-                    ? SetN<int>(a).Where(f => f==5)
-                    : ImmutableSet<int>.EmptySet
+        this.Execute引数パターン(a=>
+            SetN<int>(a).SelectMany(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b).SelectMany(d=>b==6
+                    ?SetN<int>(a).Where(f=>f==5)
+                    :ImmutableSet<int>.EmptySet
                 )
             )
         );
-        this.Execute引数パターン(_ =>
-            (1).Let(a =>
-                (2).Let(b => a)
+        this.Execute引数パターン(_=>
+            (1).Let(a=>
+                (2).Let(b=>a)
             )
         );
-        this.Execute引数パターン(a =>
-            ArrN<int>(a).Select(b =>
-                Inline(() =>
-                    Inline(() =>b)
+        this.Execute引数パターン(a=>
+            ArrN<int>(a).Select(b=>
+                Inline(()=>
+                    Inline(()=>b)
                 )
             )
         );
-        this.Execute引数パターン(a =>
-            a.Let(b =>
-                SetN<int>(a).Lookup(c => c).GetTKeyValue(b)
+        this.Execute引数パターン(a=>
+            a.Let(b=>
+                SetN<int>(a).Lookup(c=>c).GetTKeyValue(b)
             )
         );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン1() {
         this.Execute引数パターン(_ =>
             (1).Let(a =>
                 Inline(() => a*2)
