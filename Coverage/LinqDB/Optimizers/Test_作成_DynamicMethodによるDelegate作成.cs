@@ -2952,7 +2952,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             Assert.AreEqual(M(Exception変数), 4);
         }
     }
-    [TestMethod, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod]
     public void TryFilter()
     {
         var ex = Expression.Parameter(typeof(Exception));
@@ -3039,7 +3039,27 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void TryCatchFinally値がBinaryLeftの評価スタックを跨ぐ()
+    public void TryCatchFinally0()
+    {
+        const int Catch値 = 40,Finally値=30;
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatchFinally(
+                    Expression.Throw(
+                        Expression.New(typeof(Exception)),
+                        typeof(int)
+                    ),
+                    Expression.Constant(Finally値),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(Catch値)
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void TryCatchFinally1()
     {
         const int Left値 = 2, Catch値 = 40,Finally値=30;
         this.Execute2(
@@ -3062,7 +3082,26 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void TryThrow値がBinaryLeftの評価スタックを跨ぐ()
+    public void TryThrow値がBinaryLeftの評価スタックを跨ぐ0()
+    {
+        const int Catch値 = 4;
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Throw(
+                        Expression.New(typeof(Exception)),
+                        typeof(int)
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(Catch値)
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void TryThrow値がBinaryLeftの評価スタックを跨ぐ1()
     {
         const int Left値 = 2, Catch値 = 4;
         this.Execute2(
@@ -4714,7 +4753,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         )
     );
-    [TestMethod, ExpectedException(typeof(NotSupportedException))]
+    [TestMethod]
     public void Try_TryCatchFilter_Exception() => this.Execute2(
         Expression.Lambda<Func<int>>(
             Expression.TryCatch(
@@ -4757,8 +4796,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             Console.Write("finally");
         }
     }
-    [TestMethod, ExpectedException(typeof(NotSupportedException), "try catchにFilterをサポートしない")]
-    public void TryCatch_Filter()
+    [TestMethod]public void TryAdd()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
         this.Execute2(
@@ -4770,7 +4808,6 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                             typeof(Exception),
                             Expression.Constant(0),
                             Expression.Constant(true)
-
                         )
                     ),
                     Expression.TryCatch(
@@ -4784,40 +4821,139 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
+    }
+    [TestMethod]public void TryCatchFilter無変数()
+    {
+        //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Constant(0),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(0),
+                        Expression.Constant(false)
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]public void TryCatchFilter有変数()
+    {
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
         var ex = Expression.Parameter(typeof(Exception));
         this.Execute2(
             Expression.Lambda<Func<int>>(
-                Expression.Add(
-                    Expression.TryCatch(
-                        Expression.Throw(
-                            Expression.New(
-                                typeof(Exception)
-                            )
+                Expression.TryCatch(
+                    Expression.Throw(
+                        Expression.New(
+                            typeof(Exception)
                         ),
-                        Expression.Catch(
+                        typeof(int)
+                    ),
+                    Expression.Catch(
+                        ex,
+                        Expression.Constant(0),
+                        Expression.NotEqual(
                             ex,
-                            Expression.Constant(0),
-                            Expression.Equal(
-                                ex,
-                                Expression.Default(typeof(Exception))
-                            )
+                            Expression.Default(typeof(Exception))
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]public void TryCatchFilter無変数CatchFilter有変数()
+    {
+        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        //}
+        var ex = Expression.Parameter(typeof(Exception));
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Throw(
+                        Expression.New(
+                            typeof(Exception)
+                        ),
+                        typeof(int)
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(0),
+                        Expression.Constant(true)
+                    ),
+                    Expression.Catch(
+                        ex,
+                        Expression.Constant(0),
+                        Expression.Equal(
+                            ex,
+                            Expression.Default(typeof(Exception))
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]public void TryCatchFilter有変数CatchFilter無変数()
+    {
+        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        //}
+        var ex = Expression.Parameter(typeof(Exception));
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Throw(
+                        Expression.New(
+                            typeof(Exception)
+                        ),
+                        typeof(int)
+                    ),
+                    Expression.Catch(
+                        ex,
+                        Expression.Constant(0),
+                        Expression.Equal(
+                            ex,
+                            Expression.Default(typeof(Exception))
                         )
                     ),
-                    Expression.TryCatch(
-                        Expression.Throw(
-                            Expression.New(
-                                typeof(Exception)
-                            )
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(0),
+                        Expression.Constant(true)
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]public void TryCatchFilter有変数CatchFilter有変数()
+    {
+        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        //}
+        var ex = Expression.Parameter(typeof(Exception));
+        this.Execute2(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Throw(
+                        Expression.New(
+                            typeof(Exception)
                         ),
-                        Expression.Catch(
+                        typeof(int)
+                    ),
+                    Expression.Catch(
+                        ex,
+                        Expression.Constant(0),
+                        Expression.Equal(
                             ex,
-                            Expression.Constant(0),
-                            Expression.Equal(
-                                ex,
-                                Expression.Default(typeof(Exception))
-                            )
+                            Expression.Default(typeof(Exception))
+                        )
+                    ),
+                    Expression.Catch(
+                        ex,
+                        Expression.Constant(0),
+                        Expression.NotEqual(
+                            ex,
+                            Expression.Default(typeof(Exception))
                         )
                     )
                 )

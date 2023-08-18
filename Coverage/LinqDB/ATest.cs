@@ -455,10 +455,10 @@ public abstract class ATest
     protected void Execute引数パターン<TResult>(Expression<Func<int,TResult>> Lambda) {
         var 標準 = Lambda.Compile();
         var Optimizer = this.Optimizer;
-        Optimizer.IsInline=false;
-        var ラムダ = Optimizer.CreateDelegate(Lambda);
         Optimizer.IsInline=true;
         var ループ = Optimizer.CreateDelegate(Lambda);
+        Optimizer.IsInline=false;
+        var ラムダ = Optimizer.CreateDelegate(Lambda);
         for(var a = 0;a<N;a++) {
             var expected = 標準(a)!;
             var actualラムダ = ラムダ(a)!;

@@ -36,27 +36,29 @@ partial class Optimizer {
         }
         private readonly 判定_内部LambdaにParameterが存在するか _判定_内部LambdaにParameterが存在するか=new();
         private readonly IEnumerable<ParameterExpression> ループ跨ぎParameters;
-        private readonly List<ParameterExpression> Block_Variables=new();
+        //private readonly List<ParameterExpression> Block_Variables=new();
         public 変換_Lambda_Quote_ラムダ跨ぎParameter(作業配列 作業配列,IEnumerable<ParameterExpression> ループ跨ぎParameters) : base(作業配列) {
             this.ループ跨ぎParameters=ループ跨ぎParameters;
         }
         internal Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic=default!;
         internal Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
         internal Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)>DictionaryLambda=default!;
+        private List<ParameterExpression> Block_Variables=default!;
         public Expression 実行(Expression Lambda0) {
             this.DictionaryDynamic.Clear();
-            var Block_Variables=this.Block_Variables;
-            Block_Variables.Clear();
-            var Lambda=(LambdaExpression)Lambda0;
-            var Lambda1_Body=this.Traverse(Lambda.Body);
-            //var Lambda1 = (LambdaExpression)base.Lambda(Lambda0);
-            var Block1=Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1_Body));
-            var Lambda1=Expression.Lambda(Lambda.Type,Block1,Lambda.Name,Lambda.TailCall,Lambda.Parameters);
-            if(!this.DictionaryLambda.ContainsKey(Lambda1)) this.DictionaryLambda.Add(Lambda1,default!);
-            return Lambda1;
-            //var Lambda1=(LambdaExpression)this.Lambda((LambdaExpression)Lambda0);
-            //var Block1=Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1.Body));
+            //var Block_Variables=this.Block_Variables;
+            //Block_Variables.Clear();
+            //var Lambda=(LambdaExpression)Lambda0;
+            //var Lambda1_Body=this.Traverse(Lambda.Body);
+            ////var Lambda1 = (LambdaExpression)base.Lambda(Lambda0);
+            //var Block1=Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1_Body));
+            //var Lambda1=Expression.Lambda(Lambda.Type,Block1,Lambda.Name,Lambda.TailCall,Lambda.Parameters);
+            //if(!this.DictionaryLambda.ContainsKey(Lambda1)) this.DictionaryLambda.Add(Lambda1,default!);
+            //return Lambda1;
+            //var Lambda1 = (LambdaExpression)this.Lambda((LambdaExpression)Lambda0);
+            //var Block1 = Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1.Body));
             //return Expression.Lambda(Lambda1.Type,Block1,Lambda1.Name,Lambda1.TailCall,Lambda1.Parameters);
+            return(LambdaExpression)this.Lambda((LambdaExpression)Lambda0);
         }
         //private static CallSite<T> CallSite_Unary<T>(ExpressionType NodeType) where T:class=>CallSite<T>.Create(RuntimeBinder.Binder.UnaryOperation(RuntimeBinder.CSharpBinderFlags.None,NodeType,typeof(DynamicReflection),CSharpArgumentInfoArray1));
         //private static CallSite<Func<CallSite,object,object>> CallSite_Unary(ExpressionType NodeType)=> CallSite_Unary<Func<CallSite,object,object>>(NodeType);
@@ -196,11 +198,23 @@ partial class Optimizer {
         }
 
         protected override Expression Lambda(LambdaExpression Lambda0) {
-            var Lambda1 = (LambdaExpression)base.Lambda(Lambda0);
-            if(!this.DictionaryLambda.ContainsKey(Lambda1)) this.DictionaryLambda.Add(Lambda1,default!);
-            return Lambda1;
+            var 旧Block_Variables = this.Block_Variables;
+            var 新Block_Variables = this.Block_Variables=new();
+            var Lambda0_Body=Lambda0.Body;
+            var Lambda1_Body = this.Traverse(Lambda0.Body);
+            if(新Block_Variables.Count>0){
+                var Block1 = Expression.Block(新Block_Variables,this._作業配列.Expressions設定(Lambda1_Body));
+                Lambda0 = Expression.Lambda(Lambda0.Type,Block1,Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters);
+            } else if(Lambda0_Body!=Lambda1_Body){
+                Lambda0 = Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters);
+            }
+            if(!this.DictionaryLambda.ContainsKey(Lambda0)) this.DictionaryLambda.Add(Lambda0,default!);
+            this.Block_Variables=旧Block_Variables;
+            return Lambda0;
         }
         protected override Expression Assign(BinaryExpression Binary0) {
+            //if(Binary0.Left is ParameterExpression Parameter&& Parameter.Name == null && this.ループ跨ぎParameters.Contains(Parameter) && !this.Block_Variables!.Contains(Parameter))
+            //if(Binary0.Left is ParameterExpression{Name: null} Parameter&&this.ループ跨ぎParameters.Contains(Parameter)&&!this.Block_Variables!.Contains(Parameter))
             //if(Binary0.Left is ParameterExpression Parameter&& Parameter.Name != null && this.ループ跨ぎParameters.Contains(Parameter) && !this.Block_Variables!.Contains(Parameter))
             if(Binary0.Left is ParameterExpression { Name: { } } Parameter&&this.ループ跨ぎParameters.Contains(Parameter)&&!this.Block_Variables!.Contains(Parameter))
                 this.Block_Variables!.Add(Parameter);

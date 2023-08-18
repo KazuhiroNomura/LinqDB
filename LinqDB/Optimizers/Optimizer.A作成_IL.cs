@@ -2107,7 +2107,7 @@ partial class Optimizer{
             this.Traverse(Switch.DefaultBody);
             I.MarkLabel(EndSwitch);
         }
-        private void PrivateFilter(CatchBlock Try_Handler){
+        private void PrivateFilter1(CatchBlock Try_Handler){
             var I = this.I!;
             var Isinst = I.DefineLabel();
             I.Brtrue(Isinst);
@@ -2120,15 +2120,28 @@ partial class Optimizer{
             //I.Endfilter();
             I.BeginCatchBlock(null);
         }
-        private void ProtectedFilter(CatchBlock Try_Handler,LocalBuilder Variable) {
+        private void PrivateFilter0(CatchBlock Try_Handler,LocalBuilder Variable) {
             //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
             var I = this.I!;
             I.BeginExceptFilterBlock();
-            I.Stloc(Variable);
-            I.Ldloc(Variable);
+            //I.Stloc(Variable);
+            //I.Ldloc(Variable);
             I.Isinst(Try_Handler.Test);
             I.Dup();
-            this.PrivateFilter(Try_Handler);
+            //this.PrivateFilter1(Try_Handler);
+            var Isinst = I.DefineLabel();
+            I.Brtrue(Isinst);
+            I.Pop();//Dup,Popは不要では？
+            I.Ldc_I4_0();
+            var endfilter = I.DefineLabel();
+            I.Br(endfilter);
+            I.MarkLabel(Isinst);
+            I.Stloc(Variable);
+            //I.Ldloc(Variable);
+            this.Traverse(Try_Handler.Filter);
+            I.MarkLabel(endfilter);
+            //I.Endfilter();
+            I.BeginCatchBlock(null);
             //var Isinst = I.DefineLabel();
             //I.Brtrue(Isinst);
             //I.Ldc_I4_0();//理由不明
@@ -2141,13 +2154,24 @@ partial class Optimizer{
             ////filterがある場合はcatch変数がなくpushされない
             //I.BeginCatchBlock(null);
         }
-        private void ProtectedFilter(CatchBlock Try_Handler) {
+        private void PrivateFilter0(CatchBlock Try_Handler) {
             //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
             var I = this.I!;
             I.BeginExceptFilterBlock();
             I.Isinst(Try_Handler.Test);
             I.Dup();
-            this.PrivateFilter(Try_Handler);
+            //this.PrivateFilter1(Try_Handler);
+            var Isinst = I.DefineLabel();
+            I.Brtrue(Isinst);
+            I.Ldc_I4_0();
+            var endfilter = I.DefineLabel();
+            I.Br(endfilter);
+            I.MarkLabel(Isinst);
+            I.Pop();
+            this.Traverse(Try_Handler.Filter);
+            I.MarkLabel(endfilter);
+            //I.Endfilter();
+            I.BeginCatchBlock(null);
         }
         protected abstract void ProtectedFault(Expression? Fault);
         /// <summary>
@@ -2165,8 +2189,10 @@ partial class Optimizer{
                 if(Try_Handler.Filter is null){
                     I.BeginCatchBlock(Try_Handler.Test);
                     I.Stloc(Variable);
-                } else
-                    this.ProtectedFilter(Try_Handler,Variable);
+                } else{
+                    this.PrivateFilter0(Try_Handler,Variable);
+                    I.Pop();
+                }
                 this.Traverse(Try_Handler.Body);
                 Dictionary_Parameter_LocalBuilder.Remove(Try_Handler_Variable);
             } else{
@@ -2180,7 +2206,7 @@ partial class Optimizer{
                     I.BeginCatchBlock(Try_Handler.Test);
                     I.Pop();
                 } else
-                    this.ProtectedFilter(Try_Handler);
+                    this.PrivateFilter0(Try_Handler);
                 this.Traverse(Try_Handler.Body);
             }
         }
@@ -2190,54 +2216,17 @@ partial class Optimizer{
             var 変数 =I.DeclareLocal(Try.Type);
             var Leave先0=I.DefineLabel();
             I.BeginExceptionBlock();
-            //if(Try.Handlers.Count>0){
-            //    if(Try.Finally is not null){
-            //        I.BeginExceptionBlock();
-            //        this.Traverse(Try.Body);
-            //        I.Stloc(変数);
-            //        var Leave先1=I.DefineLabel();
-            //        I.Leave(Leave先1);
-            //        foreach(var Try_Handler in Try.Handlers){
-            //            this.PrivateTryFilterCatch(Try_Handler);
-            //            I.Pop();
-            //            I.Leave(Leave先1);
-            //        }
-            //        I.EndExceptionBlock();
-            //        I.MarkLabel(Leave先1);
-            //        I.Leave(Leave先0);
-            //        I.BeginFinallyBlock();
-            //        this.VoidTraverse(Try.Finally);
-            //        I.Endfinally();
-            //    } else{
-            //        this.Traverse(Try.Body);
-            //        I.Stloc(変数);
-            //        I.Leave(Leave先0);
-            //        foreach(var Try_Handler in Try.Handlers){
-            //            this.PrivateTryFilterCatch(Try_Handler);
-            //            I.Pop();
-            //            I.Leave(Leave先0);
-            //        }
-            //    }
-            //} else{
-            //    Debug.Assert(Try.Finally is not null);
-            //    this.Traverse(Try.Body);
-            //    I.Stloc(変数);
-            //    I.Leave(Leave先0);
-            //    I.BeginFinallyBlock();
-            //    this.VoidTraverse(Try.Finally);
-            //    I.Endfinally();
-            //}
             if(Try.Finally is not null) {
                 if(Try.Handlers.Count>0) {
                     I.BeginExceptionBlock();
                     this.Traverse(Try.Body);
                     I.Stloc(変数);
                     var Leave先1 = I.DefineLabel();
-                    I.Leave(Leave先1);
+                    //I.Leave(Leave先1);
                     foreach(var Try_Handler in Try.Handlers) {
                         this.PrivateTryFilterCatch(Try_Handler);
-                        I.Pop();
-                        I.Leave(Leave先1);
+                        I.Stloc(変数);
+                        //I.Leave(Leave先1);
                     }
                     I.EndExceptionBlock();
                     I.MarkLabel(Leave先1);
@@ -2245,18 +2234,17 @@ partial class Optimizer{
                     this.Traverse(Try.Body);
                     I.Stloc(変数);
                 }
-                I.Leave(Leave先0);
+                //I.Leave(Leave先0);
                 I.BeginFinallyBlock();
                 this.VoidTraverse(Try.Finally);
-                I.Endfinally();
+                //I.Endfinally();
             } else {
                 Debug.Assert(Try.Handlers.Count>0);
                 this.Traverse(Try.Body);
                 I.Stloc(変数);
-                foreach(var Try_Handler in Try.Handlers) {
+                foreach(var Try_Handler in Try.Handlers){
                     this.PrivateTryFilterCatch(Try_Handler);
-                    I.Pop();
-                    //I.Leave(Leave先0);
+                    I.Stloc(変数);
                 }
             }
             I.EndExceptionBlock();

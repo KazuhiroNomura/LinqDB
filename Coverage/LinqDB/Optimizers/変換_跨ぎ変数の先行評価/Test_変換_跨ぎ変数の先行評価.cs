@@ -15,7 +15,7 @@ namespace CoverageCS.LinqDB.Optimizers.変換_跨ぎ変数の先行評価;
 public class Test_変換_跨ぎ変数の先行評価: ATest
 {
     [TestMethod]
-    public void 跨ぎ変数パターン(){
+    public void 跨ぎ変数パターン0(){
         this.Execute引数パターン(a=>
             new{
                 A=SetN<int>(a).Join(SetN<int>(a),o=>o+3,i=>i+2,(o,i)=>o+i),
