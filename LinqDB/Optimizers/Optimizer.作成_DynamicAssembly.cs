@@ -91,7 +91,8 @@ partial class Optimizer{
             var I = this.I!;
             foreach(var Block_Variable in Block.Variables) {
                 Debug.Assert(!this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable));
-                Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
+                //if(this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
+                    Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
             }
             var Block_Expressions_Count_1 = Block_Expressions.Count-1;
             for(var a = 0;a<Block_Expressions_Count_1;a++)
@@ -99,10 +100,11 @@ partial class Optimizer{
             //Blockは最後の式の型を返す。それを有効にする。
             this.Traverse(Block_Expressions[Block_Expressions_Count_1]);
             foreach(var Block_Variable in Block.Variables)
-                if(this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
-                    Dictionaryラムダ跨ぎParameter.Remove(Block_Variable);
-                else
-                    Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
+                Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
+                //if(this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
+                //    Dictionaryラムダ跨ぎParameter.Remove(Block_Variable);
+                //else
+                //    Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
         }
 #if NETFRAMEWORK
         protected override void DebugInfo(DebugInfoExpression DebugInfo){

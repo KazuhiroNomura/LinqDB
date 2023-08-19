@@ -324,143 +324,191 @@ public static class CommonLibrary {
         }
         return sb.ToString();
     }
-    internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> Arguments,int Offset) {
-        var 残りType数 = Arguments.Count-Offset;
+    //internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> 旧Arguments) {
+    //    var 旧Arguments_Count = 旧Arguments.Count;
+    //    var Switch=旧Arguments_Count%7;
+    //    var Offset=旧Arguments_Count-Switch;
+    //    NewExpression New;
+    //    if(旧Arguments_Count<8){
+    //        New=Switch switch{
+    //            1=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple1,旧Arguments[Offset+0].Type),作業配列.Expressions設定(旧Arguments[Offset+0])),
+    //            2=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple2,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1])),
+    //            3=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple3,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2])),
+    //            4=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple4,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3])),
+    //            5=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple5,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4])),
+    //            6=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple6,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type,旧Arguments[Offset+5].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4],旧Arguments[Offset+5])),
+    //            _=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple7,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type,旧Arguments[Offset+5].Type,旧Arguments[Offset+6].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4],旧Arguments[Offset+5],旧Arguments[Offset+6]))
+    //        };
+    //    } else{
+    //        New=Switch switch{
+    //            1=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple1,旧Arguments[Offset+0].Type),作業配列.Expressions設定(旧Arguments[Offset+0])),
+    //            2=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple2,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1])),
+    //            3=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple3,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2])),
+    //            4=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple4,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3])),
+    //            5=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple5,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4])),
+    //            6=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple6,旧Arguments[Offset+0].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type,旧Arguments[Offset+5].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4],旧Arguments[Offset+5])),
+    //            _=>Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple7,旧Arguments[Offset-=7].Type,旧Arguments[Offset+1].Type,旧Arguments[Offset+2].Type,旧Arguments[Offset+3].Type,旧Arguments[Offset+4].Type,旧Arguments[Offset+5].Type,旧Arguments[Offset+6].Type),作業配列.Expressions設定(旧Arguments[Offset+0],旧Arguments[Offset+1],旧Arguments[Offset+2],旧Arguments[Offset+3],旧Arguments[Offset+4],旧Arguments[Offset+5],旧Arguments[Offset+6]))
+    //        };
+    //        var 新Arguments=作業配列.Expressions8;
+    //        while((Offset-=7)>=0){
+    //            Debug.Assert(Offset%7==0);
+    //            var Argument0=新Arguments[0]=旧Arguments[Offset+0];
+    //            var Argument1=新Arguments[1]=旧Arguments[Offset+1];
+    //            var Argument2=新Arguments[2]=旧Arguments[Offset+2];
+    //            var Argument3=新Arguments[3]=旧Arguments[Offset+3];
+    //            var Argument4=新Arguments[4]=旧Arguments[Offset+4];
+    //            var Argument5=新Arguments[5]=旧Arguments[Offset+5];
+    //            var Argument6=新Arguments[6]=旧Arguments[Offset+6];
+    //            新Arguments[7]=New;
+    //            New=Expression.New(作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple7,
+    //                    Argument0.Type,Argument1.Type,Argument2.Type,Argument3.Type,Argument4.Type,Argument5.Type,Argument6.Type
+    //                    ),
+    //                新Arguments);
+    //        }
+    //    }
+    //    return New;
+    //}
+    internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> 旧Arguments)=>
+        旧Arguments.Count==0
+            ?Expression.New(Reflection.ValueTuple.ValueTuple0)
+            :ValueTupleでNewする(作業配列,旧Arguments,0);
+    private static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> 旧Arguments,int Offset) {
+        var 残りType数 = 旧Arguments.Count-Offset;
         switch(残りType数) {
             case 1:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple1,
-                        Arguments[Offset+0].Type
+                        旧Arguments[Offset+0].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0]
+                        旧Arguments[Offset+0]
                     )
                 );
             case 2:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple2,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1]
                     )
                 );
             case 3:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple3,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2]
                     )
                 );
             case 4:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple4,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type,
-                        Arguments[Offset+3].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type,
+                        旧Arguments[Offset+3].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2],
-                        Arguments[Offset+3]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2],
+                        旧Arguments[Offset+3]
                     )
                 );
             case 5:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple5,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type,
-                        Arguments[Offset+3].Type,
-                        Arguments[Offset+4].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type,
+                        旧Arguments[Offset+3].Type,
+                        旧Arguments[Offset+4].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2],
-                        Arguments[Offset+3],
-                        Arguments[Offset+4]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2],
+                        旧Arguments[Offset+3],
+                        旧Arguments[Offset+4]
                     )
                 );
             case 6:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple6,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type,
-                        Arguments[Offset+3].Type,
-                        Arguments[Offset+4].Type,
-                        Arguments[Offset+5].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type,
+                        旧Arguments[Offset+3].Type,
+                        旧Arguments[Offset+4].Type,
+                        旧Arguments[Offset+5].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2],
-                        Arguments[Offset+3],
-                        Arguments[Offset+4],
-                        Arguments[Offset+5]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2],
+                        旧Arguments[Offset+3],
+                        旧Arguments[Offset+4],
+                        旧Arguments[Offset+5]
                     )
                 );
             case 7:
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple7,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type,
-                        Arguments[Offset+3].Type,
-                        Arguments[Offset+4].Type,
-                        Arguments[Offset+5].Type,
-                        Arguments[Offset+6].Type
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type,
+                        旧Arguments[Offset+3].Type,
+                        旧Arguments[Offset+4].Type,
+                        旧Arguments[Offset+5].Type,
+                        旧Arguments[Offset+6].Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2],
-                        Arguments[Offset+3],
-                        Arguments[Offset+4],
-                        Arguments[Offset+5],
-                        Arguments[Offset+6]
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2],
+                        旧Arguments[Offset+3],
+                        旧Arguments[Offset+4],
+                        旧Arguments[Offset+5],
+                        旧Arguments[Offset+6]
                     )
                 );
             default: {
-                var Arguments7 = ValueTupleでNewする(作業配列,Arguments,Offset+7);
+                var Arguments7 = ValueTupleでNewする(作業配列,旧Arguments,Offset+7);
                 return Expression.New(
                     作業配列.MakeValueTuple_ctor(
                         Reflection.ValueTuple.ValueTuple8,
-                        Arguments[Offset+0].Type,
-                        Arguments[Offset+1].Type,
-                        Arguments[Offset+2].Type,
-                        Arguments[Offset+3].Type,
-                        Arguments[Offset+4].Type,
-                        Arguments[Offset+5].Type,
-                        Arguments[Offset+6].Type,
+                        旧Arguments[Offset+0].Type,
+                        旧Arguments[Offset+1].Type,
+                        旧Arguments[Offset+2].Type,
+                        旧Arguments[Offset+3].Type,
+                        旧Arguments[Offset+4].Type,
+                        旧Arguments[Offset+5].Type,
+                        旧Arguments[Offset+6].Type,
                         Arguments7.Type
                     ),
                     作業配列.Expressions設定(
-                        Arguments[Offset+0],
-                        Arguments[Offset+1],
-                        Arguments[Offset+2],
-                        Arguments[Offset+3],
-                        Arguments[Offset+4],
-                        Arguments[Offset+5],
-                        Arguments[Offset+6],
+                        旧Arguments[Offset+0],
+                        旧Arguments[Offset+1],
+                        旧Arguments[Offset+2],
+                        旧Arguments[Offset+3],
+                        旧Arguments[Offset+4],
+                        旧Arguments[Offset+5],
+                        旧Arguments[Offset+6],
                         Arguments7
                     )
                 );

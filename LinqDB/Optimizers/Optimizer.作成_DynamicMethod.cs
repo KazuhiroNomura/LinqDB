@@ -128,7 +128,8 @@ partial class Optimizer{
             var Block_Expressions = Block.Expressions;
             var I = this.I!;
             foreach(var Block_Variable in Block.Variables)
-                Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
+                //if(!this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
+                    Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
             var Block_Expressions_Count_1 = Block_Expressions.Count-1;
             for(var a = 0;a<Block_Expressions_Count_1;a++)
                 this.VoidTraverse(Block_Expressions[a]);

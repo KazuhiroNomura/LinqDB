@@ -79,8 +79,8 @@ partial class Optimizer {
                                     innerKeySelector2_Body=((NewExpression)innerKeySelector1_Body).Arguments[0];
                                     新keyType=keyType_GetGenericArguments[0];
                                 } else {
-                                    outerKeySelector2_Body=ValueTupleでNewする(作業配列,((NewExpression)outerKeySelector1_Body).Arguments,0);
-                                    innerKeySelector2_Body=ValueTupleでNewする(作業配列,((NewExpression)innerKeySelector1_Body).Arguments,0);
+                                    outerKeySelector2_Body=ValueTupleでNewする(作業配列,((NewExpression)outerKeySelector1_Body).Arguments);
+                                    innerKeySelector2_Body=ValueTupleでNewする(作業配列,((NewExpression)innerKeySelector1_Body).Arguments);
                                     新keyType=innerKeySelector2_Body.Type;
                                 }
                                 typeArguments[2]=新keyType;

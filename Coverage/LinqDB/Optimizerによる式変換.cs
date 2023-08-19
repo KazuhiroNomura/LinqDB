@@ -818,7 +818,46 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]
-    public void ラムダループ跨ぎ04(){
+    public void ラムダループ跨ぎ040(){
+        //Let(
+        //    $Pラムダ引数0v,
+        //    $Pラムダ引数1a0=>
+        //        ($Cラムダ局所0) {
+        //            {
+        //                $Cラムダ跨ぎ1= $Pラムダ引数1a0;
+        //                Let(
+        //                    $Cラムダ局所0= $Cラムダ跨ぎ0,
+        //                    $Pラムダ引数2b0=>$Cラムダ跨ぎ1+$Pラムダ引数2b0
+        //                )
+        //            }
+        //}
+        this.共通Assert(1,v=>
+            v.Let(a0=>
+                v.Let(b0=>
+                    a0
+                    +
+                    b0
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void ラムダループ跨ぎ041(){
+        this.共通Assert(3,v=>
+            v.Let(a0=>
+                v.Let(b0=>
+                    a0
+                    +
+                    b0
+                )
+                +
+                Inline(()=>
+                    a0
+                    //+
+                    //v
+                )
+            )
+        );
         //Let(
         //    $Pラムダ引数0v,
         //    $Pラムダ引数1a0=>

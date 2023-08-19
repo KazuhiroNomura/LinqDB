@@ -5834,14 +5834,14 @@ public sealed partial class Optimizer{
             Debug.Assert(ColumnValues_Count == ColumnValues0.Count);
             for(var b = 0;b < ColumnValues_Count;b++)
                 Arguments0[b] = this.ScalarExpression(ColumnValues0[b]);
-            var ValueTuple0= CommonLibrary.ValueTupleでNewする(作業配列,Arguments0,0);
+            var ValueTuple0= CommonLibrary.ValueTupleでNewする(作業配列,Arguments0);
             ValueTuples[0] = ValueTuple0;
             for(var a=1;a < RowValues_Count;a++) { 
                 var ColumnValues=RowValues[a].ColumnValues;
                 Debug.Assert(ColumnValues_Count== ColumnValues.Count);
                 for(var b=0;b<ColumnValues_Count;b++)
                     Arguments0[b]=this.ScalarExpression(ColumnValues[b]);
-                ValueTuples[a]= CommonLibrary.ValueTupleでNewする(作業配列,Arguments0,0);
+                ValueTuples[a]= CommonLibrary.ValueTupleでNewする(作業配列,Arguments0);
             }
             return e.Expression.NewArrayInit(ValueTuple0.Type,ValueTuples);
         }
@@ -6879,7 +6879,7 @@ public sealed partial class Optimizer{
                 List_GroupByExpression.Add(GroupingSpecification);
                 GroupingExpressions[a]=GroupingSpecification;
             }
-            return ValueTupleでNewする(this.作業配列,GroupingExpressions,0);
+            return ValueTupleでNewする(this.作業配列,GroupingExpressions);
         }
         private e.Expression GroupingSpecification(GroupingSpecification x)=>x switch{
             ExpressionGroupingSpecification y=>this.ExpressionGroupingSpecification(y),
@@ -6969,7 +6969,7 @@ public sealed partial class Optimizer{
                 List_Expression1.Add(外Item1);List_Expression2.Add(外Item2);
             }
             var 作業配列=this.作業配列;
-            e.NewExpression New1=ValueTupleでNewする(作業配列,List_Expression1,0),New2=ValueTupleでNewする(作業配列,List_Expression2,0);
+            e.NewExpression New1=ValueTupleでNewする(作業配列,List_Expression1),New2=ValueTupleでNewする(作業配列,List_Expression2);
             var 外ElementType=New1.Type;
             Debug.Assert(外ElementType==New2.Type);
             var Call1=e.Expression.Call(作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,内ElementType1,外ElementType),QueryExpression1,e.Expression.Lambda(New1,作業配列.Parameters設定(内Element1)));

@@ -46,7 +46,7 @@ partial class Optimizer{
                 this.判定_InstanceMethodか.Lambdas=value.Keys;
             }
         }
-        internal Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
+        internal IReadOnlyDictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
             get=>this.判定_InstanceMethodか.Dictionaryラムダ跨ぎParameter;
             set=>this.判定_InstanceMethodか.Dictionaryラムダ跨ぎParameter=value;
         }

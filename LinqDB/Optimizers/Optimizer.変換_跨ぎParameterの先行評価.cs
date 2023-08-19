@@ -10,7 +10,7 @@ namespace LinqDB.Optimizers;
 partial class Optimizer{
     private sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTraverser_Quoteを処理しない{
         [Flags]
-        private enum 場所{None=0b000,ループ跨ぎ=0b001,ラムダ跨ぎ=0b011}
+        private enum 場所{None=0b000,ループ跨ぎ=0b001,ラムダ跨ぎ=0b010}
         private sealed class 取得_先行評価式:VoidExpressionTraverser_Quoteを処理しない {
             private readonly List<(IEnumerable<ParameterExpression>Parameters,List<IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報;
             private sealed class 判定_移動できるか:VoidExpressionTraverser_Quoteを処理しない {
@@ -408,7 +408,7 @@ partial class Optimizer{
         private readonly 変換_先行評価式 _変換_先行評価式;
         private readonly List<(IEnumerable<ParameterExpression>Parameters,List<IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報 = new();
         private readonly ICollection<ParameterExpression> ループ跨ぎParameters;
-        private readonly Dictionary<Expression,ParameterExpression> Dictionary_Expression_ラムダ跨ぎParameter;
+        private readonly Dictionary<Expression,ParameterExpression> Dictionary_Expression_ループラムダ跨ぎParameter;
         /// <summary>
         /// 既定コンストラクタ
         /// </summary>
@@ -419,7 +419,7 @@ partial class Optimizer{
             this._取得_先行評価式=new(this.List束縛Parameter情報,ループ跨ぎParameters);
             this._変換_先行評価式=new(作業配列,ExpressionEqualityComparer);
             this.ループ跨ぎParameters=ループ跨ぎParameters;
-            this.Dictionary_Expression_ラムダ跨ぎParameter=new(ExpressionEqualityComparer);
+            this.Dictionary_Expression_ループラムダ跨ぎParameter=new(ExpressionEqualityComparer);
         }
 
         private int 番号;
@@ -430,7 +430,7 @@ partial class Optimizer{
         public Expression 実行(Expression Lambda0){
             this.番号=0;
             this.List束縛Parameter情報.Clear();
-            this.Dictionary_Expression_ラムダ跨ぎParameter.Clear();
+            this.Dictionary_Expression_ループラムダ跨ぎParameter.Clear();
             return this.Traverse(Lambda0);
         }
 
@@ -442,7 +442,6 @@ partial class Optimizer{
             var Block0_Variables = Block0.Variables;
             var List束縛Parameter情報 = this.List束縛Parameter情報;
             var ListVariables = List束縛Parameter情報[^1].ListVariables;
-            var ListVariables_Count = ListVariables.Count;
             ListVariables.Add(Block0_Variables);
             var LinkedList = new LinkedList<Expression>(Block0.Expressions);
             this.外だし(LinkedList);
@@ -496,14 +495,19 @@ partial class Optimizer{
                     LinkedListNode=LinkedListNode.Next;
                 } else {
                     Debug.Assert(旧.Type!=typeof(void));
-                    if(!this.Dictionary_Expression_ラムダ跨ぎParameter.TryGetValue(旧,out var 新)){
-                        新=Expression.Parameter(旧.Type,(旧 is ParameterExpression Parameter?Parameter.Name:string.Empty)+$".{this.番号++}");
-                        this.Dictionary_Expression_ラムダ跨ぎParameter.Add(旧,新);
-                        if(分離Expressionの場所==場所.ラムダ跨ぎ)
-                            this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
-                        else
-                            this.ループ跨ぎParameters.Add(新);
-                    }
+                    //if(!this.Dictionary_Expression_ループラムダ跨ぎParameter.TryGetValue(旧,out var 新)){
+                    //    新=Expression.Parameter(旧.Type,(旧 is ParameterExpression Parameter?Parameter.Name:string.Empty)+$".{this.番号++}");
+                    //    this.Dictionary_Expression_ループラムダ跨ぎParameter.Add(旧,新);
+                    //    if(分離Expressionの場所==場所.ラムダ跨ぎ)
+                    //        this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
+                    //    else
+                    //        this.ループ跨ぎParameters.Add(新);
+                    //}
+                    var 新=Expression.Parameter(旧.Type,(旧 is ParameterExpression Parameter?Parameter.Name:string.Empty)+$".{this.番号++}");
+                    if(分離Expressionの場所==場所.ラムダ跨ぎ)
+                        this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
+                    else
+                        this.ループ跨ぎParameters.Add(新);
                     var LinkedListNode0 = LinkedListNode;
                     var 読み込みがあるか = false;
                     var 書き込みがあるか = false;

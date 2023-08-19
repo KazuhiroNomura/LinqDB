@@ -289,8 +289,8 @@ public sealed partial class Optimizer:IDisposable{
             }
         }
     }
-    private static NewExpression ValueTupleでNewする(作業配列 作業配列,IList<Expression> Arguments,int Offset) {
-        return CommonLibrary.ValueTupleでNewする(作業配列,Arguments,Offset);
+    private static NewExpression ValueTupleでNewする(作業配列 作業配列,IList<Expression> Arguments) {
+        return CommonLibrary.ValueTupleでNewする(作業配列,Arguments);
     }
     private static bool ILで直接埋め込めるか(Type Type) =>
         Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
@@ -1111,14 +1111,15 @@ public sealed partial class Optimizer:IDisposable{
     //private readonly 作成_DynamicAssemblyによるループ _作成_DynamicAssemblyによるループ;
     //private 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
-    private readonly Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant1度;
-    private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic1度;
-    private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda1度;
-    private Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter1度;
+    //private readonly Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant1度;
+    //private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic1度;
+    //private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda1度;
+    //private Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter1度;
     /// <summary>
     /// IL生成時に使う。変換_Lambda_Quote_ラムダ跨ぎParameter、
     /// </summary>
     private Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
+        get=>this.判定InstanceMethodか.DictionaryConstant;
         set{
             this.判定InstanceMethodか.DictionaryConstant=value;
             this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant=value;
@@ -1135,6 +1136,7 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
+        get=>this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryLambda;
         set{
             this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryLambda=value;
             this._作成_DynamicMethod.DictionaryLambda=value;
@@ -1142,6 +1144,7 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private Dictionary<ParameterExpression, (FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
+        get=>this._変換_Lambda_Quote_ラムダ跨ぎParameter.Dictionaryラムダ跨ぎParameter;
         set{
             this._変換_Lambda_Quote_ラムダ跨ぎParameter.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
@@ -1185,10 +1188,6 @@ public sealed partial class Optimizer:IDisposable{
         var ListスコープParameter                                        =this.ListスコープParameter;
         var ExpressionEqualityComparer=this._ExpressionEqualityComparer  =new ExpressionEqualityComparer(ListスコープParameter);
         //TSQLでは1度だけnewすればいいが
-        this.DictionaryConstant1度=new(ExpressionEqualityComparer);
-        this.DictionaryDynamic1度=new();
-        this.DictionaryLambda1度=new(ExpressionEqualityComparer);
-        this.Dictionaryラムダ跨ぎParameter1度=new();
         var 判定_InstanceMethodか=this.判定InstanceMethodか              =new(ExpressionEqualityComparer);
         this._変換_TSqlFragment正規化                                    =new(ScriptGenerator);
         var ブローブビルドExpressionEqualityComparer                     =new ブローブビルドExpressionEqualityComparer(ExpressionEqualityComparer);
@@ -1214,6 +1213,10 @@ public sealed partial class Optimizer:IDisposable{
         this._変換_Stopwatchに埋め込む                                   =new(作業配列);
         this._作成_DynamicMethod                                         =new(判定_InstanceMethodか);
         this._作成_DynamicAssembly                                       =new(判定_InstanceMethodか);
+        this.DictionaryConstant=new(ExpressionEqualityComparer);
+        this.DictionaryDynamic=new();
+        this.DictionaryLambda=new(ExpressionEqualityComparer);
+        this.Dictionaryラムダ跨ぎParameter=new();
     }
     /// <summary>アンマネージ リソースの解放またはリセットに関連付けられているアプリケーション定義のタスクを実行します。</summary>
     /// <filterpriority>2</filterpriority>
@@ -1483,14 +1486,14 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Delegate CreateDelegate(LambdaExpression Lambda) =>
-        this.PrivateDelegate(typeof(object),Lambda);
+        this.PrivateDelegate(Lambda);
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Action CreateDelegate(Expression<Action> Lambda) =>
-        (Action)this.PrivateDelegate(typeof(object),Lambda);
+        (Action)this.PrivateDelegate(Lambda);
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
@@ -1498,9 +1501,9 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Func<TResult> CreateDelegate<TResult>(Expression<Func<TResult>> Lambda) =>
-        (Func<TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<TResult>)this.PrivateDelegate(Lambda);
 
-    private Delegate PrivateDelegate(Type Type,LambdaExpression Lambda)=>this.IsGenerateAssembly?this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda):this.DynamicMethod(typeof(object),Lambda);
+    private Delegate PrivateDelegate(LambdaExpression Lambda)=>this.IsGenerateAssembly?this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda):this.DynamicMethod(typeof(object),Lambda);
 
     public bool IsInline{
         get=>this._変換_局所Parameterの先行評価.IsInline;
@@ -1518,11 +1521,11 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Func<T,TResult> CreateDelegate<T, TResult>(Expression<Func<T,TResult>> Lambda)=>
-        (Func<T,TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<T,TResult>)this.PrivateDelegate(Lambda);
     public Func<TContainer,TResult> CreateContainerDelegate<TContainer, TResult>(Expression<Func<TContainer,TResult>> Lambda)where TContainer:Container =>
-        (Func<TContainer,TResult>)this.PrivateDelegate(typeof(TContainer),Lambda);
-    public Func<TContainer,T1,TResult> CreateDelegate2<TContainer,T1,TResult>(Expression<Func<TContainer,T1,TResult>> Lambda) =>
-        (Func<TContainer,T1,TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<TContainer,TResult>)this.PrivateDelegate(Lambda);
+    //public Func<TContainer,T1,TResult> CreateDelegate<TContainer,T1,TResult>(Expression<Func<TContainer,T1,TResult>> Lambda)where TContainer:Container=>
+    //    (Func<TContainer,T1,TResult>)this.PrivateDelegate(typeof(object),Lambda);
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
@@ -1532,7 +1535,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Func<T1,T2,TResult> CreateDelegate<T1, T2, TResult>(Expression<Func<T1,T2,TResult>> Lambda) =>
-        (Func<T1,T2,TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<T1,T2,TResult>)this.PrivateDelegate(Lambda);
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
@@ -1543,7 +1546,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Func<T1,T2,T3,TResult> CreateDelegate<T1, T2, T3, TResult>(Expression<Func<T1,T2,T3,TResult>> Lambda) =>
-        (Func<T1,T2,T3,TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<T1,T2,T3,TResult>)this.PrivateDelegate(Lambda);
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
@@ -1555,7 +1558,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     public Func<T1,T2,T3,T4,TResult> CreateDelegate<T1, T2, T3, T4, TResult>(Expression<Func<T1,T2,T3,T4,TResult>> Lambda) =>
-        (Func<T1,T2,T3,T4,TResult>)this.PrivateDelegate(typeof(object),Lambda);
+        (Func<T1,T2,T3,T4,TResult>)this.PrivateDelegate(Lambda);
     ///// <summary>
     ///// F#式木を最適化してコンパイルしてデリゲートを作る。
     ///// </summary>
@@ -1590,13 +1593,17 @@ public sealed partial class Optimizer:IDisposable{
     }
     private Type Dynamicに対応するCallSite(DynamicExpression Dynamic)=>this._作業配列.MakeGenericType(typeof(CallSite<>),this.Dynamicに対応するFunc(Dynamic));
     private Delegate DynamicAssemblyとDynamicMethod(Type ContainerType,LambdaExpression Lambda0){
-        var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        var DictionaryConstant = this.DictionaryConstant=new(ExpressionEqualityComparer);
-        var DictionaryDynamic= this.DictionaryDynamic=new();
-        var DictionaryLambda=this.DictionaryLambda=new(ExpressionEqualityComparer);
-        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=new();
+        //var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
+        //var DictionaryConstant = this.DictionaryConstant=new(ExpressionEqualityComparer);
+        //var DictionaryDynamic= this.DictionaryDynamic=new();
+        //var DictionaryLambda=this.DictionaryLambda=new(ExpressionEqualityComparer);
+        //var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=new();
         //var Lambda1=this.Lambda最適化初期化なし(Lambda0);
         var Lambda1=this.Lambda最適化(Lambda0);
+        var DictionaryConstant = this.DictionaryConstant;
+        var DictionaryDynamic=this.DictionaryDynamic;
+        var DictionaryLambda=this.DictionaryLambda;
+        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
         var Name = Lambda0.Name??"Disp";
         var AssemblyName = new AssemblyName { Name=Name };
         var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
@@ -1753,18 +1760,27 @@ public sealed partial class Optimizer:IDisposable{
     /// <returns></returns>
     private Delegate DynamicMethod(Type ContainerType,LambdaExpression Lambda){
         //var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        var DictionaryConstant = this.DictionaryConstant= this.DictionaryConstant1度;
-        var DictionaryDynamic=this.DictionaryDynamic=this.DictionaryDynamic1度;
-        var DictionaryLambda=this.DictionaryLambda=this.DictionaryLambda1度;
-        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter= this.Dictionaryラムダ跨ぎParameter1度;
+        //DictionaryConstant.Clear();
+        //DictionaryDynamic.Clear();
+        //DictionaryLambda.Clear();
+        //Dictionaryラムダ跨ぎParameter.Clear();
+
         //var Lambda1=this.Compile情報ラムダ最適化(Lambda);
         var Lambda1=this.Lambda最適化(Lambda);
+        var DictionaryConstant1度=this.DictionaryConstant;
+        var DictionaryDynamic1度=this.DictionaryDynamic;
+        var DictionaryLambda1度=this.DictionaryLambda;
+        var Dictionaryラムダ跨ぎParameter1度 = this.Dictionaryラムダ跨ぎParameter;
+        //Debug.Assert(this.DictionaryConstant== this.DictionaryConstant1度);
+        //Debug.Assert(this.DictionaryDynamic== this.DictionaryDynamic1度);
+        //Debug.Assert(this.DictionaryLambda== this.DictionaryLambda1度);
+        //Debug.Assert(this.Dictionaryラムダ跨ぎParameter== this.Dictionaryラムダ跨ぎParameter1度);
         //Disp作成
-        var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
+        var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant1度,DictionaryDynamic1度,DictionaryLambda1度,Dictionaryラムダ跨ぎParameter1度);
         //var Container_Field=Tuple_Type.GetField("Item1",Instance_NonPublic_Public)!;
         //this._作成_DynamicMethodによるDelegate.Impl作成(Lambda1,Container_Field,Tuple);
-        this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter,Tuple);
-        var Value= Get_ValueTuple(DictionaryLambda[Lambda1].Member,Tuple);
+        this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant1度,DictionaryDynamic1度,DictionaryLambda1度,Dictionaryラムダ跨ぎParameter1度,Tuple);
+        var Value= Get_ValueTuple(DictionaryLambda1度[Lambda1].Member,Tuple);
         var Delegate1 = (Delegate)Value;
         return Delegate1;
     }
@@ -2252,6 +2268,14 @@ public sealed partial class Optimizer:IDisposable{
         set => this._Context=value;
     }
     internal LambdaExpression Lambda最適化(Expression Lambda00) {
+        var DictionaryConstant = this.DictionaryConstant;
+        var DictionaryDynamic=this.DictionaryDynamic;
+        var DictionaryLambda=this.DictionaryLambda;
+        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
+        DictionaryConstant.Clear();
+        DictionaryDynamic.Clear();
+        DictionaryLambda.Clear();
+        Dictionaryラムダ跨ぎParameter.Clear();
         // var OptimizeLevel = this.OptimizeLevel;
         this.ListスコープParameter.Clear();
         var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);

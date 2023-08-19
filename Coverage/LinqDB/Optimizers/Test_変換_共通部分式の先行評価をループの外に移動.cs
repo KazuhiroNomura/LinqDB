@@ -360,12 +360,29 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         this.Execute2(() => A.Let(a => B.Let(b => a)));
         //}
     }
+    private static int Let(Func<int,int>d)=>d(1);
     [TestMethod]
     public void 先行評価式からBlock作成1()
     {
         var A1 = 1;
         var B2 = 2;
         var C3 = 3;
+        this.Execute2(() =>
+            Inline(() =>
+                B2
+            ) + Let(d =>
+                B2 
+            )
+        );
+        this.Execute2(() =>
+            B2.Let(a =>
+                Inline(() =>
+                    B2
+                ) + a.Let(d =>
+                    B2 
+                )
+            )
+        );
         this.Execute2(() =>
             B2.Let(a =>
                 Inline(() =>

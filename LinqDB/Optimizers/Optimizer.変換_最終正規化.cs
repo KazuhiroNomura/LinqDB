@@ -67,6 +67,7 @@ partial class Optimizer {
             var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
             foreach(var Variable in Block0.Variables)
                 if(判定_内部LambdaにParameterが存在するか.実行(Block0,Variable)){
+                    //内部ラムダでアクセスしてるのでローカル変数ではない
                     Block1_Variables.Remove(Variable);
                     Dictionaryラムダ跨ぎParameter.Add(Variable,default!);
                 }

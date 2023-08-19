@@ -717,12 +717,12 @@ public abstract class ATest
         var Optimizer = this.Optimizer;
         Optimizer.IsGenerateAssembly=true;
         共通1();
-        Optimizer.IsGenerateAssembly=false;
-        共通1();
+        //Optimizer.IsGenerateAssembly=false;
+        //共通1();
         return R2;
         void 共通1(){
-            Optimizer.IsInline=false;
-            共通0();
+            //Optimizer.IsInline=false;
+            //共通0();
             Optimizer.IsInline=true;
             共通0();
         }

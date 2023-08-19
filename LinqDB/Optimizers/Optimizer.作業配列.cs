@@ -959,7 +959,7 @@ public sealed partial class Optimizer {
             Expressions[6]=Expression6;
             return Expressions;
         }
-        private readonly Expression[] Expressions8=new Expression[8];
+        public readonly Expression[] Expressions8=new Expression[8];
         /// <summary>
         /// Expression配列を作る。
         /// </summary>

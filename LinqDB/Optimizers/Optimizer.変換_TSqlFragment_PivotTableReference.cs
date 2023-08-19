@@ -91,7 +91,7 @@ public sealed partial class Optimizer{
                 }
             }
             var 作業配列 = this.作業配列;
-            var keySelector_Body = ValueTupleでNewする(作業配列,keySelector_Expressions,0);
+            var keySelector_Body = ValueTupleでNewする(作業配列,keySelector_Expressions);
             var Key = Expressions.Expression.Parameter(keySelector_Body.Type,"Key");
             var Group = Expressions.Expression.Parameter(作業配列.MakeGenericType(typeof(ImmutableSet<>),Element_Type),"Group");
             var x_InColumns=x.InColumns;
@@ -129,7 +129,7 @@ public sealed partial class Optimizer{
                 var Sum_Lambd_Body = this.AggregateFunction(x_ValueColumns_0,FunctionName);
                 RefPeek0_List_アスタリスクColumnExpression.Add(Sum_Lambd_Body);
             }
-            var resultSelector_Body = ValueTupleでNewする(作業配列,RefPeek0_List_アスタリスクColumnExpression,0);
+            var resultSelector_Body = ValueTupleでNewする(作業配列,RefPeek0_List_アスタリスクColumnExpression);
             var Result = Expressions.Expression.Call(
                 作業配列.MakeGenericMethod(
                     Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,

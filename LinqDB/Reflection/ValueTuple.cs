@@ -2,6 +2,7 @@
 namespace LinqDB.Reflection;
 
 internal static class ValueTuple {
+    public static readonly Type ValueTuple0 = typeof(LinqDB.Helpers.ValueTuple);
     public static readonly Type ValueTuple1 = typeof(ValueTuple<>);
     public static readonly Type ValueTuple2 = typeof(ValueTuple<,>);
     public static readonly Type ValueTuple3 = typeof(ValueTuple<,,>);

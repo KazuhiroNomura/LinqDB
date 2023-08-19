@@ -77,7 +77,7 @@ public sealed partial class Optimizer {
                 Debug.Assert(RefPeek_List_ColumnExpression.Count==0);                
                 foreach(var SelectElement in x_SelectElements)
                     this.SelectElement(SelectElement);
-                Expressions.Expression resultSelector_Body= ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression,0);
+                Expressions.Expression resultSelector_Body= ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression);
                 Expressions.Expression ValueTuple = Key;
                 //Expressions.Expression keySelector_Body1= keySelector_Body;
                 var Item番号 = 1;
@@ -176,7 +176,7 @@ public sealed partial class Optimizer {
                 //    );
                 //    return Result;
                 //}
-                var selector_Body = ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression,0);
+                var selector_Body = ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression);
                 var Result=Expressions.Expression.Call(
                     作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,Element_Type,selector_Body.Type),
                     Source,
