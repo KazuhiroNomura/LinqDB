@@ -148,7 +148,7 @@ public class Tables{
         }
         var d=new Set<int>();
         Assert.IsFalse(d.Any());
-        d.Add(0);
+        d.IsAdded(0);
         Assert.IsTrue(d.Any());
     }
     [TestMethod]
@@ -389,7 +389,7 @@ public class Tables{
             for(var b=0;b<要素数;b++){
                 var v=b+1;
                 var item=new Entity(v,v,v);
-                k1.Add(item);
+                k1.IsAdded(item);
                 k3[b]=item;
             }
             //A.GroupJoin(B.Where(b=>false),o=>o,i=>i,(o,i)=>new{o,i})
@@ -840,7 +840,7 @@ public class Tables{
     public void AssertValidate(){
         for(var a=1;a<10000;a*=2){
             var d=new Set<int>();
-            for(var b=0;b<=a;b++) d.Add(b);
+            for(var b=0;b<=a;b++) d.IsAdded(b);
             d.Assert();
         }
     }
@@ -876,7 +876,7 @@ public class Tables{
         var expected=new Set<int>();
         for(var b=0;b<1000;b++){
             expected.Clear();
-            for(var a=0;a<b;a++) expected.Add(a);
+            for(var a=0;a<b;a++) expected.IsAdded(a);
             var c=0;
             foreach(var _ in expected){
                 c++;
@@ -968,19 +968,19 @@ public class Tables{
         for(var a=1;a<=6;a++){
             var G=new SetGroupingSet<int,double>();
             AddKeyValue(G,a,a);
-            expected.Add(G);
+            expected.IsAdded(G);
         }
         var actual0=new Set<SetGroupingSet<int,double>>();
         for(var a=1;a<=3;a++){
             var G=new SetGroupingSet<int,double>();
             AddKeyValue(G,a,a);
-            actual0.Add(G);
+            actual0.IsAdded(G);
         }
         var actual1=new Set<SetGroupingSet<int,double>>();
         for(var a=4;a<=6;a++){
             var G=new SetGroupingSet<int,double>();
             AddKeyValue(G,a,a);
-            actual1.Add(G);
+            actual1.IsAdded(G);
         }
         var actual=actual0.Union(actual1);
         Assert.AreEqual(expected,actual);

@@ -12,7 +12,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TValue">値のType</typeparam>
 /// <typeparam name="TGrouping"></typeparam>
 [Serializable]
-public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGrouping>where TGrouping : IGrouping<TKey,TValue>, IVoidAdd<TValue> {
+public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGrouping>where TGrouping : IGrouping<TKey,TValue>, ICollection<TValue> {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
@@ -48,7 +48,7 @@ public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGroupin
                     return;
                 }
                 if(KeyComparer.Equals(LinkedNode_LinkedNodeItem.Item.Key,Key)) {
-                    LinkedNode_LinkedNodeItem.Item.VoidAdd(Value);
+                    LinkedNode_LinkedNodeItem.Item.Add(Value);
                     return;
                 }
                 LinkedNode=LinkedNode_LinkedNodeItem;

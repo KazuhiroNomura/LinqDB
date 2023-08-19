@@ -116,7 +116,7 @@ public class Test_Set2 {
                 w.Write(DateTimeOffset.Now.Ticks);
                 Entity1.Clear();
                 for(var b = 0;b<要素数;b++) {
-                    Entity1.VoidAdd(new Entity1(b));
+                    Entity1.Add(new Entity1(b));
                 }
                 Entity1.BinaryWrite(w);
             }

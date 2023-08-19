@@ -498,7 +498,7 @@ partial class Optimizer {
                         argument => Expression.IfThenElse(
                             Expression.Call(
                                 Item,
-                                Item_Type.GetMethod(nameof(HashSet<int>.Add),Instance_NonPublic_Public)!,
+                                Item_Type.GetMethod(nameof(Set<int>.IsAdded),Instance_NonPublic_Public)!,
                                 argument
                             ),
                             ループの内部処理(argument),
@@ -1077,7 +1077,7 @@ partial class Optimizer {
                         Arguments_0,
                         argument => Expression.Call(
                             DescList,
-                            DescList_Type.GetMethod(nameof(IVoidAdd<int>.VoidAdd)),
+                            DescList_Type.GetMethod(nameof(ICollection<int>.Add)),
                             argument
                         )
                     );

@@ -68,7 +68,7 @@ public abstract class Container:IDisposable {
                 var OneCatalog = Catalog取得(OneTableType.FullName!);
                 var ManyTableType = Method.GetParameters()[0].ParameterType;
                 var ManyCatalog = Catalog取得(ManyTableType.FullName!);
-                referential_constraints.Add(
+                referential_constraints.IsAdded(
                     new referential_constraints(
                         ManyCatalog,
                         "constraint_schema",
@@ -87,7 +87,7 @@ public abstract class Container:IDisposable {
             if(!typeof(Sets.Schema).IsAssignableFrom(Schema_Property.PropertyType)) {
                 continue;
             }
-            Schemas.Add(system_Schema);
+            Schemas.IsAdded(system_Schema);
             foreach(var TableView_Property in Schema_Property.PropertyType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
                 var TableView_Type=TableView_Property.PropertyType;
                 var ElementType = TableView_Type.GetGenericArguments()[0];
@@ -98,16 +98,16 @@ public abstract class Container:IDisposable {
                 var Category = TableView_FullName[CategoryIndex..SchemaIndex];
                 if(Category==".Tables") {
                     var Table = new Tables.Table(TableView_Property,system_Schema);
-                    Tables.Add(Table);
+                    Tables.IsAdded(Table);
                     foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        TableColumns.Add(new Tables.TableColumn(TableColumn_Property,Table));
+                        TableColumns.IsAdded(new Tables.TableColumn(TableColumn_Property,Table));
                     }
                 } else {
                     Debug.Assert(Category==".Views");
                     var View=new Tables.View(TableView_Property,system_Schema);
-                    Views.Add(View);
+                    Views.IsAdded(View);
                     foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        ViewColumns.Add(new Tables.ViewColumn(ViewColumn_Property,View));
+                        ViewColumns.IsAdded(new Tables.ViewColumn(ViewColumn_Property,View));
                     }
                 }
             }
@@ -119,7 +119,7 @@ public abstract class Container:IDisposable {
         }
         static void Schema処理(string catalog,Set<tables> tables,Set<columns> columns,Type Schema) {
             foreach(var Table in Schema.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                tables.Add(
+                tables.IsAdded(
                     new tables(
                         catalog,
                         Schema.Name,
@@ -135,7 +135,7 @@ public abstract class Container:IDisposable {
         }
         static void Table処理(string catalog,Set<tables> tables,Set<columns> columns,Type Table) {
             foreach(var Column in Table.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                columns.Add(
+                columns.IsAdded(
                     new columns(
                         catalog,
                         Table.Name,

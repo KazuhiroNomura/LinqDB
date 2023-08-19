@@ -263,11 +263,11 @@
       <FileName>Sets\ISet`2.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="LinqDB.Sets.IVoidAdd&lt;T&gt;" Collapsed="true">
+  <Interface Name="LinqDB.Sets.ICollection&lt;T&gt;" Collapsed="true">
     <Position X="23.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Sets\IVoidAdd`1.cs</FileName>
+      <FileName>Sets\ICollection`1.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="LinqDB.Sets.IWriteRead&lt;TEntity&gt;" Collapsed="true">

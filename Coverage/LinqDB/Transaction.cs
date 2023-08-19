@@ -266,7 +266,7 @@ namespace CoverageCS.LinqDB {
             var result = new Set<テスト.Tables.dbo.Entity1,テスト.PrimaryKeys.dbo.Entity1,テスト.Container>(e);
             for(var a = 0;a<タプル濃度;a++) {
                 var value = new テスト.Tables.dbo.Entity1(a,a.ToString());
-                result.Add(value);
+                result.IsAdded(value);
             }
             return result;
         }
@@ -294,7 +294,7 @@ namespace CoverageCS.LinqDB {
                 reader.ReadIsBeginArrayWithVerify();
                 var num = 0;
                 while(!reader.ReadIsEndArrayWithSkipValueSeparator(ref num)) {
-                    Result.Add(Formatter.Deserialize(ref reader,FormatterResolver));
+                    Result.IsAdded(Formatter.Deserialize(ref reader,FormatterResolver));
                 }
                 return Result;
             }
@@ -336,7 +336,7 @@ namespace CoverageCS.LinqDB {
                 var 新規Container = new テスト.Container(s0);
                 var 新規Container0 = 新規Container.Transaction();
                 for(var b = 0;b<回数;b++) {
-                    新規Container0.dbo.Entity1.Add(new テスト.Tables.dbo.Entity1(b));
+                    新規Container0.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
                 }
                 Assert.AreEqual(0,新規Container.dbo.Entity1.Count);
                 var expected=新規Container0.dbo.Entity1.Count;

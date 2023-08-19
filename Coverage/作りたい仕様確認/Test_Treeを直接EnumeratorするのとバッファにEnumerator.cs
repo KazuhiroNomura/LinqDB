@@ -10,7 +10,7 @@ public class Test_Treeを直接EnumeratorするのとバッファにEnumerator {
     public void MyTestInitialize() {
         var データ = this.データ;
         for(var a = 0;a<データ数;a++) {
-            データ.VoidAdd(a);
+            データ.Add(a);
         }
     }
     [TestMethod]

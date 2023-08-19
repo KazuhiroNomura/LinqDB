@@ -120,7 +120,7 @@ public static class ExtensionEnumerable{
     //    foreach(var outerValue in outer) {
     //        if(inner.TryGetValue(outerKeySelector(outerValue),ref Collection)) {
     //            foreach(var innerValue in Collection) {
-    //                r.VoidAdd(resultSelector(outerValue,innerValue));
+    //                r.Add(resultSelector(outerValue,innerValue));
     //            }
     //        }
     //    }

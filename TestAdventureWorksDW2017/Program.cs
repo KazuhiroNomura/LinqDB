@@ -589,7 +589,7 @@ abstract class Program :共通{
                                             DimSalesTerritory,
                                             SalesTerritory=>{
                                                 for(var SalesOrderLineNumber=1;SalesOrderLineNumber<=2;SalesOrderLineNumber++){
-                                                    FactResellerSales.Add(
+                                                    FactResellerSales.IsAdded(
                                                         new FactResellerSales(
                                                             Product.ProductKey,
                                                             OrderDate.DateKey,
@@ -636,7 +636,7 @@ abstract class Program :共通{
             DimEmployee,
             Employee=>E(
                 DimDate,
-                Date=>FactSalesQuota.Add(
+                Date=>FactSalesQuota.IsAdded(
                     new FactSalesQuota(
                         SalesQuotaKey++,
                         Employee.EmployeeKey,

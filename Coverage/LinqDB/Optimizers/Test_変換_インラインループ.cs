@@ -241,34 +241,38 @@ public class Test_変換_インラインループ:ATest {
         public S(int v) => this.v=v;
     }
     [TestMethod]
-    public void Cast() {
+    public void Cast00(){
         {
-            this.Execute標準ラムダループ(() => (I)(I)(I)new S(3));
-            this.Execute標準ラムダループ(() => (I)(I)(S)new S(3));
-            this.Execute標準ラムダループ(() => (I)(I)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S)(I)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S)(S)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S?)(I)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S?)(S)new S(3));
-            this.Execute標準ラムダループ(() => (I)(S?)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S)(I)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S)(I)(S)new S(3));
-            this.Execute標準ラムダループ(() => (S)(I)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S)(S)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S?)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S?)(S)new S(3));
-            this.Execute標準ラムダループ(() => (S)(S?)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(I)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(I)(S)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(I)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(S)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(S)(S)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(S)(S?)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(S?)(I)new S(3));
-            this.Execute標準ラムダループ(() => (S?)(S?)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(I)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(I)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(I)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S?)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S?)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(I)(S?)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(I)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(I)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(I)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S?)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S?)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(S)(S?)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(I)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(I)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(I)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(S)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(S)(S)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(S)(S?)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(S?)(I)new S(3));
+            this.Execute標準ラムダループ(()=>(S?)(S?)(S)new S(3));
+        }
+    }
+    [TestMethod]public void Cast10() {
+        {
             this.Execute標準ラムダループ(() => (S?)(S?)(S?)new S(3));
 
             this.Execute標準ラムダループ(() => (object)(object)(object)new S(3));
@@ -347,6 +351,8 @@ public class Test_変換_インラインループ:ATest {
             Assert.IsTrue(Comparer.Equals(expected10,actual10));
             Assert.IsTrue(Comparer.Equals(expected11,actual11));
         }
+    }
+    [TestMethod]public void Cast20() {
         {
             object[] array1 = { (int?)1,(int?)null,2 };
             //var expected1 = array1.Cast<Int32>().ToArray();
@@ -965,7 +971,8 @@ public class Test_変換_インラインループ:ATest {
     public void ループに展開() {
         //if(e.NodeType == ExpressionType.Call) {
         //    if(Reflection.ExtendSet.Cast == MethodCall0_GenericMethodDefinition || Reflection.ExtendEnumerable.Cast == MethodCall0_GenericMethodDefinition)
-        this.Cast();
+        this.Cast00();
+        this.Cast10();
         //    if(Reflection.ExtendEnumerable.Distinct0 == MethodCall0_GenericMethodDefinition)
         this.Distinct();
         //    if((Setか = Reflection.ExtendSet.Except == MethodCall0_GenericMethodDefinition) || Reflection.ExtendEnumerable.Except == MethodCall0_GenericMethodDefinition)
@@ -1715,6 +1722,9 @@ public class Test_変換_インラインループ:ATest {
         //    if(MethodCall0_Method.DeclaringType==typeof(Set)) {
         this.Execute引数パターン(a => SetN<int>(a).Select(p => p+2));
         //    } else {
+    }
+    [TestMethod]
+    public void Call1() {
         this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Intersect(ArrN<int>(b)));
         this.Execute引数パターン(a => ArrN<int>(a).Select(p => p+2));
         //    }

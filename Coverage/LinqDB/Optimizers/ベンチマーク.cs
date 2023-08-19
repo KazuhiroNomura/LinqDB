@@ -64,7 +64,7 @@ public class ベンチマーク:ATest {
         foreach(var 要素数 in 要素数Array) {
             var Set = new Set<int>();
             for(var a = 0;a<要素数;a++) {
-                Set.Add(a);
+                Set.IsAdded(a);
             }
             {
                 var Setの速度 = Stopwatch.StartNew();
@@ -108,7 +108,7 @@ public class ベンチマーク:ATest {
         const int 要素数 = 10000000;
         var Set = new Set<int>();
         for(var a = 0;a<要素数;a++) {
-            Set.Add(a);
+            Set.IsAdded(a);
         }
         {
             var Setの速度 = Stopwatch.StartNew();
@@ -153,7 +153,7 @@ public class ベンチマーク:ATest {
         Trace.WriteLine($"{nameof(要素数)}{要素数}");
         var Set = new Set<int>();
         for(var a = 0;a<要素数;a++) {
-            Set.Add(a);
+            Set.IsAdded(a);
         }
         {
             var Setの速度 = Stopwatch.StartNew();

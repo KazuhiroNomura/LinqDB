@@ -28,8 +28,7 @@ public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,AscList<TValue>>
     /// <param name="Key"></param>
     public IEnumerable<TValue> GetObjectValue(object Key) => this.GetValue(Key,EmptyCollection);
     internal override KeyValueCollection<TValue,TKey,AscList<TValue>> InternalKeyValue(TKey Key,TValue Value) {
-        var AscList = new AscList<TValue>();
-        AscList.VoidAdd(Value);
+        var AscList = new AscList<TValue>{Value};
         return new KeyValueCollection<TValue,TKey,AscList<TValue>>(Key,AscList);
     }
 }

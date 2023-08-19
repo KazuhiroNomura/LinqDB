@@ -140,7 +140,7 @@ public abstract class 共通 {
     protected static void Add<T>(ref AddDel情報 情報,Set<T> Set,T Value) {
         情報.名前=typeof(T).Name;
         try {
-            if(Set.Add(Value)) {
+            if(Set.IsAdded(Value)) {
                 情報.Add.成功++;
             } else {
                 情報.Add.重複++;

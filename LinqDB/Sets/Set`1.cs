@@ -17,7 +17,7 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [Serializable]
-public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
+public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。
     /// </summary>
@@ -92,7 +92,7 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
                 reader.ReadIsBeginArrayWithVerify();
                 while(true){
                     var value=(T)Formatter.Deserialize(ref reader,formatterResolver);
-                    result.Add(value);
+                    result.IsAdded(value);
                     var s=reader.ReadIsValueSeparator();
                     if(!s) break;
                 }
@@ -207,6 +207,27 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
     //    ExpressionSurrogateSelector.serializer.WriteObject(Writer,削除Item);
     //    ExpressionSurrogateSelector.serializer.WriteObject(Writer,追加Item);
     //}
+    public void Add(T item){
+        if(this.InternalAdd(item)) this._Count++;
+    }
+    public bool Contains(T Item){
+        if(Item is null) return false;
+        var HashCode = (long)(uint)Item.GetHashCode();
+        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+            var Comparer = this.Comparer;
+            LinkedNode LinkedNode = TreeNode;
+            while(true) {
+                var LinkedNodeItem = LinkedNode._LinkedNodeItem;
+                if(LinkedNodeItem is null)return false;
+                if(Comparer.Equals(LinkedNodeItem.Item,Item))return true;
+                LinkedNode=LinkedNodeItem;
+            }
+        }
+        return false;
+    }
+    public void CopyTo(T[] array,int arrayIndex){
+        throw new NotImplementedException();
+    }
     /// <summary>
     /// 全要素削除します。
     /// </summary>
@@ -235,7 +256,7 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
     /// <param name="Item">値</param>
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool Add(T Item) {
+    public bool IsAdded(T Item) {
         if(this.InternalAdd(Item)) {
             this._Count++;
             return true;
@@ -282,36 +303,25 @@ public class Set<T>:ImmutableSet<T>, IVoidAdd<T>{
         this._Count+=source.Count;
     }
     /// <summary>
-    /// 要素の追加処理。失敗は無視する。
-    /// </summary>
-    /// <param name="Item">値</param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void VoidAdd(T Item) {
-        if(this.InternalAdd(Item)) {
-            this._Count++;
-        }
-    }
-    /// <summary>
     /// 要素を削除する。
     /// </summary>
     /// <param name="Item">削除したい値</param>
     /// <returns>要素がなければfalse、あればtrue</returns>
-    public bool Remove(T Item) {
+    public bool Remove(T Item){
         if(this.InternalRemove(Item)) {
             this._Count--;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
+    int ICollection<T>.Count=>(int)base.Count;
+    public bool IsReadOnly=>false;
     /// <summary>
     /// 要素を削除する。失敗は無視する。
     /// </summary>
     /// <param name="Item">削除したい値</param>
     public void VoidRemove(T Item) {
-        if(this.InternalRemove(Item)) {
-            this._Count--;
-        }
+        if(this.InternalRemove(Item))this._Count--;
     }
     /// <summary>
     /// 要素を削除する。ConcurrentRemoveで並列化できる失敗は無視する。

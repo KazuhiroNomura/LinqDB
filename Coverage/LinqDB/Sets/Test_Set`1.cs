@@ -22,7 +22,7 @@ public class Test_Set1
         var s = new Set<int>();
         for (var a = 0; a < 要素数; a++)
         {
-            s.VoidAdd(a);
+            s.Add(a);
         }
         {
             var count = 0;
@@ -67,7 +67,7 @@ public class Test_Set1
     {
         var s = new Set<int>();
         for (var a = 0; a < 要素数; a++)
-            Assert.IsTrue(s.Add(a));
+            Assert.IsTrue(s.IsAdded(a));
         Assert.AreEqual(s.Count, 要素数);
     }
     private readonly struct EntityKey : IEquatable<EntityKey>
@@ -106,20 +106,20 @@ public class Test_Set1
         {
             long L = 0, R = 0x1FFFFFFFE;
             var M = (L + R) / 2;
-            本体.Add(new Entity(M));
+            本体.IsAdded(new Entity(M));
             R = M - 1;
             M = (L + R) / 2;
-            本体.Add(new Entity(M));
+            本体.IsAdded(new Entity(M));
         }
         {
             long L = 0, R = 0x1FFFFFFFE;
             var M = (L + R) / 2;
-            履歴.Add(new Entity(M));
+            履歴.IsAdded(new Entity(M));
             R = M - 1;
             M = (L + R) / 2;
             R = M - 1;
             M = (L + R) / 2;
-            履歴.Add(new Entity(M));
+            履歴.IsAdded(new Entity(M));
         }
         本体.Assign(履歴);
         var (元衝突数, 元LinkedNode数) = 本体.衝突数;
@@ -136,11 +136,11 @@ public class Test_Set1
         var 履歴 = new Set<Entity, EntityKey, Container2>(Container);
         for (var a = 0; a < 要素数; a++)
         {
-            履歴.Add(new Entity(a));
+            履歴.IsAdded(new Entity(a));
         }
         for (var a = 0; a < 要素数; a++)
         {
-            本体.Add(new Entity(a + 要素数 / 2));
+            本体.IsAdded(new Entity(a + 要素数 / 2));
         }
         本体.Assign(履歴);
         var (元衝突数, 元LinkedNode数) = 履歴.衝突数;
@@ -159,12 +159,12 @@ public class Test_Set1
         for (var a = 0; a < 要素数; a++)
         {
             var 履歴Value = r.Next(要素数);
-            履歴.Add(new Entity(履歴Value));
+            履歴.IsAdded(new Entity(履歴Value));
         }
         for (var a = 0; a < 要素数; a++)
         {
             var 本体Value = r.Next(要素数);
-            本体.Add(new Entity(本体Value));
+            本体.IsAdded(new Entity(本体Value));
         }
         本体.Assign(履歴);
         var (元衝突数, 元LinkedNode数) = 履歴.衝突数;
@@ -225,7 +225,7 @@ public class Test_Set1
         var d = new Set<int>();
         for (var a = 0; a < 100; a++)
         {
-            d.Add(a);
+            d.IsAdded(a);
         }
         b.Serialize(m, d);
     }
@@ -237,7 +237,7 @@ public class Test_Set1
         var d0 = new Set<int>();
         for (var a = 0; a < 500; a++)
         {
-            d0.Add(a);
+            d0.IsAdded(a);
         }
         //            d0.Add(0x7FFFFFFF);
         //          d0.Add(0xBFFFFFFF);
@@ -393,12 +393,12 @@ public class Test_Set1
             var e = new Set<int>();
             for (var i = 0; i < Count; i++)
             {
-                e.Add(i);
+                e.IsAdded(i);
             }
             var a = new Set<int>();
             for (var i = 0; i < Count; i++)
             {
-                a.Add(i);
+                a.IsAdded(i);
             }
             Assert.AreEqual(e, a);
         }
@@ -559,7 +559,7 @@ public class Test_Set1
     {
         var s = new Set<int>();
         for (var a = 0; a < 要素数; a++)
-            Assert.IsTrue(s.Add(a));
+            Assert.IsTrue(s.IsAdded(a));
         for (var a = 0; a < 要素数; a++)
             Assert.IsTrue(s.Remove(a));
         Assert.AreEqual(s.Count, 0);
@@ -571,7 +571,7 @@ public class Test_Set1
         const int MAX = 3;
         for (var a = 0; a < MAX; a++)
         {
-            Assert.IsTrue(s.Add(a));
+            Assert.IsTrue(s.IsAdded(a));
         }
         for (var a = 0; a < MAX; a++)
         {
@@ -585,7 +585,7 @@ public class Test_Set1
         var s = new Set<int>();
         for (var a = 0; a < 10000; a++)
         {
-            Assert.IsTrue(s.Add(a));
+            Assert.IsTrue(s.IsAdded(a));
         }
         for (var a = 9999; a >= 0; a--)
         {
@@ -599,7 +599,7 @@ public class Test_Set1
         var s = new Set<int>();
         for (var a = 0; a < 10000; a += 2)
         {
-            Assert.IsTrue(s.Add(a));
+            Assert.IsTrue(s.IsAdded(a));
         }
         for (var a = 0; a < 10000; a++)
         {
@@ -626,7 +626,7 @@ public class Test_Set1
         const int MAX = 10000;
         for (var a = 0; a < MAX; a++)
         {
-            s.Add(r.Next(MAX));
+            s.IsAdded(r.Next(MAX));
         }
         for (var a = 0; a < 10000; a += 2)
         {
@@ -643,7 +643,7 @@ public class Test_Set1
             var Set = new Set<int>();
             for (var b = 0; b < a; b++)
             {
-                Set.Add(r.Next(a));
+                Set.IsAdded(r.Next(a));
                 Set.Remove(r.Next(a));
                 Set.Assert();
             }

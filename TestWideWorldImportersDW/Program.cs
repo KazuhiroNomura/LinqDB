@@ -1686,7 +1686,7 @@ namespace TestWideWorldImportersDW{
                 Integration.PopulateDateDimensionForYear(e,2012);
                 var ReturnValue= Configuration_ApplyPartitionedColumnstoreIndexing(e);
                 var LineageKey = e.Sequences2.LineageKey.Current;
-                e.Integration.Lineage.Add(
+                e.Integration.Lineage.IsAdded(
                     new Lineage(
                         LineageKey,
                         DateTime.Now,
@@ -1770,13 +1770,13 @@ namespace TestWideWorldImportersDW{
                 e.Dimension.Stock_Item.Clear();
                 e.Dimension.Supplier.Clear();
                 e.Dimension.Transaction_Type.Clear();
-                e.Dimension.City.Add(new City(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A","N/A",null,0,StartOfTime,EndOfTime,0));
-                e.Dimension.Customer.Add(new Customer(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A",StartOfTime,EndOfTime,0));
-                e.Dimension.Employee.Add(new Employee(0,0,"Unknown","N/A",false,null,StartOfTime,EndOfTime,0));
-                e.Dimension.Payment_Method.Add(new Payment_Method(0,0,"Unknown",StartOfTime,EndOfTime,0));
-                e.Dimension.Stock_Item.Add(new Stock_Item(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A",0,0,false,"N/A",0,0,0,0,null,StartOfTime,EndOfTime,0));
-                e.Dimension.Supplier.Add(new Supplier(0,0,"Unknown","N/A","N/A","N/A",0,"N/A",StartOfTime,EndOfTime,0));
-                e.Dimension.Transaction_Type.Add(new Transaction_Type(0,0,"Unknown",StartOfTime,EndOfTime,0));
+                e.Dimension.City.IsAdded(new City(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A","N/A",null,0,StartOfTime,EndOfTime,0));
+                e.Dimension.Customer.IsAdded(new Customer(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A",StartOfTime,EndOfTime,0));
+                e.Dimension.Employee.IsAdded(new Employee(0,0,"Unknown","N/A",false,null,StartOfTime,EndOfTime,0));
+                e.Dimension.Payment_Method.IsAdded(new Payment_Method(0,0,"Unknown",StartOfTime,EndOfTime,0));
+                e.Dimension.Stock_Item.IsAdded(new Stock_Item(0,0,"Unknown","N/A","N/A","N/A","N/A","N/A",0,0,false,"N/A",0,0,0,0,null,StartOfTime,EndOfTime,0));
+                e.Dimension.Supplier.IsAdded(new Supplier(0,0,"Unknown","N/A","N/A","N/A",0,"N/A",StartOfTime,EndOfTime,0));
+                e.Dimension.Transaction_Type.IsAdded(new Transaction_Type(0,0,"Unknown",StartOfTime,EndOfTime,0));
             }
         }
         private static class Integration{
@@ -1792,7 +1792,7 @@ namespace TestWideWorldImportersDW{
             public static void GetLineageKey(Container2 e,String TableName,DateTime NewCutoffTime){
                 var DataLoadStartedWhen=DateTime.Now;
                 var Transaction=e.Transaction();
-                Transaction.Integration.Lineage.Add(
+                Transaction.Integration.Lineage.IsAdded(
                     new Lineage(
                         (Int32)e.Integration.Lineage.Count,
                         DataLoadStartedWhen,

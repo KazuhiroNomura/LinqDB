@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
 namespace LinqDB.Sets;
 
-public sealed class HashSet_VoidAdd<T>:HashSet<T>, IVoidAdd<T> {
+public sealed class HashSet_VoidAdd<T>:HashSet<T> {
     /// <summary>
-    /// 要素の追加処理。
+    /// DUnion,Intersectの2度目は戻り値のあるIsAddedメソッドを使う。本メソッドは戻り値は必要ないが"IsAdded"という名前を検索するのでこれにしている。
     /// </summary>
     /// <param name="Item"></param>
-    public void VoidAdd(T Item) => this.Add(Item);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public void IsAdded(T Item)=>this.Add(Item);
     public new long Count => base.Count;
 }

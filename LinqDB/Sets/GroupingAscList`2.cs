@@ -22,7 +22,7 @@ public sealed class GroupingAscList<TKey,TValue>:AscList<TValue>, System.Linq.IG
     /// <param name="Value">1つのタプル</param>
     public GroupingAscList(TKey Key,TValue Value) : this(Key) {
         this.Key=Key;
-        this.VoidAdd(Value);
+        this.Add(Value);
     }
     /// <summary>
     /// 文字列で表現する

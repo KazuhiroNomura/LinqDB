@@ -231,7 +231,7 @@ partial class Optimizer {
                                                 second,
                                                 argument1 => Expression.Call(
                                                     作業,
-                                                    作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                    作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                     argument1
                                                 )
                                             )
@@ -302,7 +302,7 @@ partial class Optimizer {
                                                     first,
                                                     argument => Expression.Call(
                                                         作業,
-                                                        作業_Type.GetMethod(nameof(IVoidAdd<int>.VoidAdd),Instance_NonPublic_Public),
+                                                        作業_Type.GetMethod(nameof(ICollection<int>.Add),Instance_NonPublic_Public),
                                                         argument
                                                     )
                                                 )
@@ -938,7 +938,7 @@ partial class Optimizer {
                                     MethodCall0_Arguments_0,
                                     argument => Expression.Call(
                                         作業,
-                                        作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                        作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                         argument
                                     )
                                 );
@@ -1077,7 +1077,7 @@ partial class Optimizer {
                                             argument => Expression.IfThenElse(
                                                 Expression.Call(
                                                     作業,
-                                                    作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                    作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                     argument
                                                 ),
                                                 ループ内部処理Block(argument),
@@ -1187,7 +1187,7 @@ partial class Optimizer {
                                         argument => Expression.IfThenElse(
                                             Expression.Call(
                                                 作業,
-                                                作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                 argument
                                             ),
                                             AddAssign(
@@ -1252,7 +1252,7 @@ partial class Optimizer {
                                         argument => Expression.IfThenElse(
                                             Expression.Call(
                                                 作業,
-                                                作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                 argument
                                             ),
                                             AddAssign(
@@ -1449,7 +1449,7 @@ partial class Optimizer {
                                                     Expression.Call(
                                                         作業,
                                                         // ReSharper disable once AssignNullToNotNullAttribute
-                                                        作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                        作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                         argument
                                                     ),
                                                     Expression.Block(
@@ -2334,7 +2334,7 @@ partial class Optimizer {
                                             argument => Expression.IfThenElse(
                                                 Expression.Call(
                                                     作業,
-                                                    作業_Type.GetMethod(nameof(Set<int>.Add)),
+                                                    作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                                     argument
                                                 ),
                                                 AddAssign(
@@ -2437,7 +2437,8 @@ partial class Optimizer {
                         MethodCall0,
                         argument => Expression.Call(
                             Result,
-                            Result_Type.GetMethod("Add")!,
+                            Result_Type.GetMethod(nameof(Set<int>.IsAdded))!,//boolを返す必要があるのはdunionの2度目
+                            //Result_Type.GetMethod(nameof(Set<int>.IsAdded))!,//AscList
                             argument
                         )
                     );

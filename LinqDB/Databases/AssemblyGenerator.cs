@@ -47,8 +47,8 @@ public partial class AssemblyGenerator {
     private static readonly FieldInfo Entity2_ProtectedPrimaryKey = typeof(Entity<,>).GetField("ProtectedPrimaryKey",BindingFlags.Instance|BindingFlags.NonPublic);
     private static readonly MethodInfo Set2_ContainsKey = typeof(Set<,>).GetMethod("ContainsKey");
     private static readonly MethodInfo Set2_TryGetValue = typeof(Set<,>).GetMethod("TryGetValue");
-    private static readonly MethodInfo Set1_VoidAdd = typeof(Set<>).GetMethod(nameof(Set<int>.VoidAdd));
-    private static readonly MethodInfo Set1_VoidRemove = typeof(Set<>).GetMethod(nameof(Set<int>.VoidRemove));
+    private static readonly MethodInfo Set1_Add = typeof(Set<>).GetMethod(nameof(Set<int>.Add));
+    private static readonly MethodInfo Set1_Remove = typeof(Set<>).GetMethod(nameof(Set<int>.Remove));
     private static readonly MethodInfo CRC32_GetHashCode = typeof(CRC32).GetMethod(nameof(CRC32.GetHashCode));
     private static readonly MethodInfo IEquatable_Equals = typeof(IEquatable<>).GetMethod(nameof(IEquatable<int>.Equals));
     private static readonly MethodInfo IWriteRead_BinaryWrite = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryWrite));
@@ -723,7 +723,7 @@ public partial class AssemblyGenerator {
         var Set2_TryGetValue = TypeBuilder.GetMethod(typeof(Set<,>).MakeGenericType(Types2),AssemblyGenerator.Set2_TryGetValue);
         Types1[0]=子Table_TypeBuilder;
         var Set1 = typeof(Set<>).MakeGenericType(Types1);
-        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,AssemblyGenerator.Set1_VoidRemove);
+        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,AssemblyGenerator.Set1_Remove);
         var AddRelationship_I = 子Table_Information.AddRelationship_I;
         var RemoveRelationship_I = 子Table_Information.RemoveRelationship_I;
         var AddRelationship_親タプル = this.共通AddRelationship0(
@@ -740,7 +740,7 @@ public partial class AssemblyGenerator {
         var Set = typeof(Set<>).MakeGenericType(Types1);
         var VoidAdd = TypeBuilder.GetMethod(
             Set,
-            Set1_VoidAdd
+            Set1_Add
         );
         if(Relation.IsNullable) {
             AddRelationship_I.Ldloc(AddRelationship_親タプル);

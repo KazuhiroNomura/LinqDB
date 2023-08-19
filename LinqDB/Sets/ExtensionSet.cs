@@ -621,7 +621,7 @@ public static class ExtensionSet{
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
         Debug.Assert(r.Count<=source.Count);
         var r0 = new Set<TResult>();
-        foreach(var a in r)r0.VoidAdd(resultSelector(a.Key,a));
+        foreach(var a in r)r0.Add(resultSelector(a.Key,a));
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化します。</summary>
@@ -643,7 +643,7 @@ public static class ExtensionSet{
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
         Debug.Assert(r.Count<=source.Count);
         var r0 = new Set<TResult>();
-        foreach(var a in r)r0.VoidAdd(resultSelector(a.Key,a));
+        foreach(var a in r)r0.Add(resultSelector(a.Key,a));
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従ってシーケンスの要素をグループ化し、各グループとそのキーから結果値を作成します。</summary>

@@ -9,7 +9,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TKey">ディクショナリ内のキーの型。</typeparam>
 /// <typeparam name="TCollection">TValueのIAddを継承した型</typeparam>
 [Serializable]
-public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>where TCollection:IVoidAdd<TValue> {
+public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>where TCollection:ICollection<TValue> {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
@@ -39,7 +39,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
                     return;
                 }
                 if(KeyComparer.Equals(LinkedNode_LinkedNodeItem.Item.Key,Key)) {
-                    LinkedNode_LinkedNodeItem.Item.VoidAdd(Value);
+                    LinkedNode_LinkedNodeItem.Item.Add(Value);
                     return;
                 }
                 LinkedNode=LinkedNode_LinkedNodeItem;
