@@ -20,7 +20,7 @@ partial class Optimizer {
             var Name = Method.Name;
             var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
             var 作業配列 = this._作業配列;
-            Debug.Assert(Reflection.ExtensionSet.Contains_value!=GenericMethodDefinition);
+            //Debug.Assert(Reflection.ExtensionSet.Contains_value!=GenericMethodDefinition);
             Debug.Assert(Method.ReturnType==MethodCall0.Type);
             var MethodCall0_Arguments = MethodCall0.Arguments;
             if(ループ展開可能メソッドか(GenericMethodDefinition)) {

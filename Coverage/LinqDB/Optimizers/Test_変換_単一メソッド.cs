@@ -72,11 +72,8 @@ public class Test_変換_単一メソッド : ATest
     private struct IEquatableでなくop_Equalityでない
     {
     }
-    [TestMethod]
-    public void Test(){
+    [TestMethod]public void Test0(){
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(b => SetN<int>(a).Where(c => c==1&&b==0)));
-        var IEquatableでなくop_Equality変数 = new Set<IEquatableでなくop_Equality>();
-        var IEquatableでなくop_Equalityでない変数 = new Set<IEquatableでなくop_Equalityでない>();
         this.Execute引数パターン(a => SetN<int>(a).Update(p => true, p => p));
         //SelectMany内部のメソッドチェーンをAny()が出来る最低限に変形
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(Get).Any());
@@ -94,6 +91,10 @@ public class Test_変換_単一メソッド : ATest
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == r)));
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == p)));
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => static_field)));
+    }
+    [TestMethod]public void Test1(){
+        var IEquatableでなくop_Equality変数 = new Set<IEquatableでなくop_Equality>();
+        var IEquatableでなくop_Equalityでない変数 = new Set<IEquatableでなくop_Equalityでない>();
         //()=>
         //    SetN<Int32>(a).Where(_Field=>
         //        ((_Field==0)AndAlso(_Field==1))
@@ -132,6 +133,7 @@ public class Test_変換_単一メソッド : ATest
         //        )
         //    )
         //にしたい。これはその後の最適化でWhereKeyに変形できるため。
+        //todo ImmutableSet<>のGetEnumerator()でthisがnullになっている
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(predicate)));
         this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Select(r => r)));
         //MethodCallExpression

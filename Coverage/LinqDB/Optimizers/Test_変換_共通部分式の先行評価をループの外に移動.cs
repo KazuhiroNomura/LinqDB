@@ -370,16 +370,16 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         this.Execute2(() =>
             Inline(() =>
                 B2
-            ) + Let(d =>
-                B2 
+            )+Let(d =>
+                B2
             )
         );
         this.Execute2(() =>
             B2.Let(a =>
                 Inline(() =>
                     B2
-                ) + a.Let(d =>
-                    B2 
+                )+a.Let(d =>
+                    B2
                 )
             )
         );

@@ -1743,15 +1743,17 @@ public sealed partial class Optimizer:IDisposable{
         var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
         //todo AssemblyGenerater.GenerateAssembly()の後GC.Collect()とGC.WaitForPendingFinalizers()することでファイルハンドルをファイナライザで解放させることを期待したがだダメだった
         var t=Stopwatch.StartNew();
-        Console.Write("GenerateAssembly,");
-        this.AssemblyGenerator.GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
-        Console.WriteLine($"GenerateAssembly {t.ElapsedMilliseconds}ms");
+        //Console.Write("GenerateAssembly,");
+        //new AssemblyGenerator()をフィールドに保存すると２度目以降前回のアセンブリ情報が残る
+        new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
+        //this.AssemblyGenerator.GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
+        //Console.WriteLine($"GenerateAssembly {t.ElapsedMilliseconds}ms");
         this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter,Tuple);
         var Value= Get_ValueTuple(DictionaryLambda[Lambda1].Member,Tuple);
         var Delegate1 = (Delegate)Value;
         return Delegate1;
     }
-    private readonly AssemblyGenerator AssemblyGenerator=new();
+    //private readonly AssemblyGenerator AssemblyGenerator=new();
     /// <summary>
     /// 動的ラムダ。
     /// </summary>
