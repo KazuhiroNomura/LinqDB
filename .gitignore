@@ -40,3 +40,5 @@ bin
 obj
 *.vspscc
 *.vssscc
+/LinqDB/Optimizers/Optimizer.変換_局所Parameterの先行評価.txt
+/LinqDB/Optimizers/Optimizer.変換_跨ぎParameterの先行評価.txt
