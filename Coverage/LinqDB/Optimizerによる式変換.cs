@@ -273,19 +273,18 @@ public class Optimizerによる式変換:ATest{
                 :a&a
         );
     }
-    [TestMethod]
-    public void Conditional4ラムダ局所(){
-        //.Block(
-        //    カバレッジCS.Lite.評価検証 $Cラムダ局所0,
-        //    カバレッジCS.Lite.評価検証 $Cラムダ局所1) {
-        //    .If (
-        //        ($Cラムダ局所1 = ($Cラムダ局所0 = $Pラムダ引数1a + $Pラムダ引数1a) + $Cラムダ局所0) == $Pラムダ引数1a
-        //    ) {
-        //        $Cラムダ局所1
-        //    } .Else {
-        //        $Cラムダ局所1 + $Pラムダ引数1a
-        //    }
-        //}
+    [TestMethod]public void Conditional4ラムダ局所0(){
+        {
+            var a=3;
+            //v.Let(a=>(a+a)+(a+a)==(a+a)+(a+a)
+            //↓
+            //v.Let(a=>t1==(t1=(t0=a+a)+t0)
+            this.Execute2(
+                ()=>(a+a)+(a+a)==(a+a)+(a+a)
+            );
+        }
+    }
+    [TestMethod]public void Conditional4ラムダ局所1(){
         {
             //v.Let(a=>
             //    (a+a)+(a+a)==a
@@ -295,7 +294,7 @@ public class Optimizerによる式変換:ATest{
             //v.Let(a=>
             //    (t1=(t0=a+a)+t0)==a
             //    ?t1
-            //    :t1+a
+            //    :t1+a←ここを評価
             this.共通Assert(
                 3,
                 v=>
@@ -303,11 +302,22 @@ public class Optimizerによる式変換:ATest{
                         a=>
                             (a+a)+(a+a)==a
                                 ?(a+a)+(a+a)
-                                :(a+a)+(a+a)+a
+                                :(a+a)+(a+a)+a//ここを評価するので4
                     )
             );
         }
+    }
+    [TestMethod]public void Conditional4ラムダ局21(){
         {
+            //v.Let(a=>
+            //    (a+a)+(a+a)==a
+            //    ?(a+a)+(a+a)+a
+            //    :(a+a)+(a+a)
+            //↓
+            //v.Let(a=>
+            //    (t1=(t0=a+a)+t0)==a
+            //    ?t1+a
+            //    :t1←ここを評価
             this.共通Assert(
                 2,
                 v=>
@@ -763,7 +773,20 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]
-    public void ラムダループ跨ぎ02(){
+    public void ラムダループ跨ぎ020(){
+        //.v=v
+        //v.Let(b0=>
+        //    .v+b0
+        this.共通Assert(1,v=>
+            Inline(()=>
+                v.Let(b0=>
+                    v+b0
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void ラムダループ跨ぎ021(){
         //$Cループ跨ぎ0=.v
         //$Cラムダ跨ぎ1a0=$Cループ跨ぎ0
         //(
@@ -843,48 +866,38 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]
     public void ラムダループ跨ぎ041(){
+        //.v=v
+        //v.Let(a0=>
+        //    .a0=a0
+        //    .v.Let(b0=>
+        //        .a0+b0
+        //    )+a0+.v
         this.共通Assert(3,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    b0
-                )
-                +
-                Inline(()=>
-                    a0
-                    //+
-                    //v
+                    a0+b0
+                )+Inline(()=>
+                    a0+v
                 )
             )
         );
-        //Let(
-        //    $Pラムダ引数0v,
-        //    $Pラムダ引数1a0=>
-        //        ($Cラムダ局所0) {
-        //            {
-        //                $Cラムダ跨ぎ1= $Pラムダ引数1a0;
-        //                Let(
-        //                    $Cラムダ局所0= $Cラムダ跨ぎ0,
-        //                    $Pラムダ引数2b0=>$Cラムダ跨ぎ1+$Pラムダ引数2b0
-        //                )+Inline(
-        //                    $Cラムダ局所0,
-        //                    $Pラムダ引数3b1=>$Cラムダ跨ぎ1+$Pラムダ引数3b1
-        //                )
-        //            }
-        //}
+    }
+    [TestMethod]
+    public void ラムダループ跨ぎ042(){
+        //.v=v
+        //v.Let(a0=>
+        //    .a0=a0
+        //    .v.Let(b0=>
+        //        .a0+b0
+        //    )+Inline(()=>
+        //        .a0+.v
+        //    )
         this.共通Assert(3,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    b0
-                )
-                +
-                Inline(()=>
-                    a0
-                    +
-                    v
+                    a0+b0
+                )+Inline(()=>
+                    a0+v
                 )
             )
         );
@@ -1090,20 +1103,26 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]
     public void ラムダループ跨ぎ19(){
+        //v=>
+        //    .v=v
+        //    ($1=v.Let(a0=>
+        //        $0=a0+.v
+        //        Inline(()=>
+        //            $0
+        //        )
+        //    )
+        //    +
+        //    $1
         this.共通Assert(2,v=>
             v.Let(a0=>
                 Inline(()=>
-                    a0
-                    +
-                    v
+                    a0+v
                 )
             )
             +
             v.Let(a1=>
                 Inline(()=>
-                    a1
-                    +
-                    v
+                    a1+v
                 )
             )
         );
@@ -1214,9 +1233,7 @@ public class Optimizerによる式変換:ATest{
         this.共通Assert(1,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    a0
+                    a0+a0
                 )
             )
         );
@@ -1240,15 +1257,11 @@ public class Optimizerによる式変換:ATest{
         this.共通Assert(2,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    a0
+                    a0+a0
                 )
                 +
                 v.Let(b1=>
-                    a0
-                    +
-                    a0
+                    a0+a0
                 )
             )
         );
@@ -1276,15 +1289,11 @@ public class Optimizerによる式変換:ATest{
         this.共通Assert(2,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    b0
+                    a0+b0
                 )
                 +
                 v.Let(b1=>
-                    a0
-                    +
-                    b1
+                    a0+b1
                 )
             )
         );
@@ -1307,17 +1316,13 @@ public class Optimizerによる式変換:ATest{
         this.共通Assert(2,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    b0
+                    a0+b0
                 )
             )
             +
             v.Let(a1=>
                 v.Let(b0=>
-                    a1
-                    +
-                    b0
+                    a1+b0
                 )
             )
         );
@@ -1329,122 +1334,64 @@ public class Optimizerによる式変換:ATest{
         //    (t2=v.Let(a0 =>
         //        .a0=a0
         //        (t1=.v.Let(b0 =>
-        //            b0
-        //1           +
-        //            .a0
-        //        ))
-        //2       +
-        //        t1
-        //    ))
-        //3   +
-        //    t2
-        //}
+        //            .a0+b0
+        //        +t1
+        //    ))+t2
         this.共通Assert(3,v=>
             v.Let(a0=>
                 v.Let(b0=>
-                    a0
-                    +
-                    b0
+                    a0+b0
+                )+v.Let(b1=>
+                    a0+b1
                 )
-                +
-                v.Let(b1=>
-                    a0
-                    +
-                    b1
-                )
-            )
-            +
-            v.Let(a1=>
+            )+v.Let(a1=>
                 v.Let(b0=>
-                    a1
-                    +
-                    b0
-                )
-                +
-                v.Let(b1=>
-                    a1
-                    +
-                    b1
+                    a1+b0
+                )+v.Let(b1=>
+                    a1+b1
                 )
             )
         );
     }
     [TestMethod]
     public void ラムダ跨ぎ評価回数09(){
-        //v=>{
+        //v=>
         //    .v=v
-        //    (t2=v.Let(a0 =>
+        //    (t2=v.Let(a0=>
         //        .a0=a0
-        //        (t1=.v.Let(b0 =>
-        //            (t0=.v.Let(c0 =>
-        //                c0
-        //1               +
-        //                .a0
-        //            ))
-        //2           +
-        //            t0
-        //        ))
-        //3       +
-        //        t1
-        //    ))
-        //4   +
-        //    t2
-        //);
+        //        (t1=.v.Let(b0=>
+        //            (t0=.v.Let(c0=>
+        //                c0+.a0
+        //            ))+t
+        //        ))+t1
+        //    ))+t2
         this.共通Assert(4,v=>
             v.Let(a0=>
                 v.Let(b0=>
                     v.Let(c0=>
-                        c0
-                        +
-                        a0
+                        c0+a0
+                    )+v.Let(c1=>
+                        c1+a0
                     )
-                    +
-                    v.Let(c1=>
-                        c1
-                        +
-                        a0
-                    )
-                )
-                +
-                v.Let(b1=>
+                )+v.Let(b1=>
                     v.Let(c2=>
-                        c2
-                        +
-                        a0
-                    )
-                    +
-                    v.Let(c3=>
-                        c3
-                        +
-                        a0
+                        c2+a0
+                    )+v.Let(c3=>
+                        c3+a0
                     )
                 )
-            )
-            +
-            v.Let(a1=>
+            )+v.Let(a1=>
                 v.Let(b2=>
                     v.Let(c4=>
-                        c4
-                        +
-                        a1
+                        c4+a1
+                    )+v.Let(c5=>
+                        c5+a1
                     )
-                    +
-                    v.Let(c5=>
-                        c5
-                        +
-                        a1
-                    )
-                )
-                +
-                v.Let(b3=>
+                )+v.Let(b3=>
                     v.Let(c6=>
-                        c6
-                        +
-                        a1
+                        c6+a1
                     )+v.Let(c7=>
-                        c7
-                        +
-                        a1
+                        c7+a1
                     )
                 )
             )
@@ -1564,6 +1511,17 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]
+    public void Letラムダ跨(){
+        //v =>
+        //    .v=v
+        //    v.Let(a=>
+        //        .v
+        //    )
+        this.共通Assert(0,v=>
+            v.Let(a=>v)
+        );
+    }
+    [TestMethod]
     public void LetLetラムダ跨(){
         //v =>
         //    .v=v
@@ -1597,8 +1555,158 @@ public class Optimizerによる式変換:ATest{
             )
         );
     }
-    [TestMethod]
-    public void LetInlineループ跨評価回数(){
+    [TestMethod]public void Letラムダ0(){
+        var v=Expression.Parameter(typeof(int),"v");
+        var a=Expression.Parameter(typeof(int),"a");
+        var Inline=typeof(ExtensionSet).GetMethods().Last(p=>p.Name=="Inline");
+        this.Execute2(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Call(
+                    typeof(global::LinqDB.Sets.Helpers).GetMethod("Let")!.MakeGenericMethod(typeof(int),typeof(int)),
+                    v,
+                    Expression.Lambda<Func<int,int>>(
+                        Expression.Call(
+                            Inline.MakeGenericMethod(typeof(int)),
+                            Expression.Lambda<Func<int>>(
+                                Expression.Add(v,a)
+                            )
+                        ),
+                        a
+                    )
+                ),
+                v
+            ),0
+        );
+    }
+    [TestMethod]public void Letラムダ1(){
+        var v=Expression.Parameter(typeof(評価検証),"v");
+        var a=Expression.Parameter(typeof(評価検証),"a");
+        var Inline=typeof(ExtensionSet).GetMethods().Last(p=>p.Name=="Inline");
+        this.Execute2(
+            Expression.Lambda<Func<評価検証,評価検証>>(
+                Expression.Call(
+                    typeof(global::LinqDB.Sets.Helpers).GetMethod("Let")!.MakeGenericMethod(typeof(評価検証),typeof(評価検証)),
+                    v,
+                    Expression.Lambda<Func<評価検証,評価検証>>(
+                        Expression.Call(
+                            Inline.MakeGenericMethod(typeof(評価検証)),
+                            Expression.Lambda<Func<評価検証>>(
+                                Expression.Add(v,a)
+                            )
+                        ),
+                        a
+                    )
+                ),
+                v
+            ),new 評価検証(0)
+        );
+    }
+    [TestMethod]public void Letラムダ30(){
+        this.Execute2(v=>
+            v.Let(a=>
+                v.Let(b=>
+                    a+b
+                )
+            ),0
+        );
+    }
+    [TestMethod]public void Letラムダ31(){
+        this.Execute2(v=>
+            v.Let(a=>
+                v.Inline(b=>
+                    a+b
+                )
+            ),0
+        );
+    }
+    [TestMethod]public void Letラムダ32(){
+        var v=1;
+        this.Execute2(()=>
+            v.Let(a=>
+                Inline(()=>
+                    v+a
+                )
+            )
+        );
+    }
+    [TestMethod]public void Letラムダ33(){
+        this.Execute2(v=>
+            v.Let(a=>
+                Inline(()=>
+                    v+a
+                )
+            ),0
+        );
+    }
+    [TestMethod]public void Letラムダ4(){
+        this.Execute2(v=>
+            v.Let(a=>
+                Inline(()=>
+                    v+a
+                )
+            ),new 評価検証(0)
+        );
+    }
+    [TestMethod]public void LetInlineループ跨評価回数00(){
+        //this.共通Assert(2,v=>
+        //    v.Let(a=>
+        //        v.Let(b=>
+        //            v+a
+        //        )
+        //    )
+        //);
+        var v=new[]{1,2,3};
+        this.Execute2(a=>
+            v.Let(b=>
+                b.Select(c=>
+                    new{b,a}
+                )
+            ),
+            v
+        );
+    }
+    [TestMethod]public void LetInlineループ跨評価回数01(){
+        //Lambda(評価検証 v)
+        //    └Block
+        //    ├Assign
+        //    │├Parameter ラムダv.0
+        //    │└Parameter v
+        //    └Call CoverageCS.LinqDB.評価検証 Let[評価検証,評価検証](CoverageCS.LinqDB.評価検証, System.Func`2[CoverageCS.LinqDB.評価検証,CoverageCS.LinqDB.評価検証])
+        //    ├Parameter v
+        //    └Lambda(評価検証 a)
+        //    └Block(評価検証 ループ.1)
+        //    └Block
+        //    ├Assign
+        //    │├Parameter ループ.1
+        //    │└Add
+        //    │　├Parameter ラムダv.0
+        //    │　└Parameter a
+        //    └Parameter ループ.1
+        this.共通Assert(1,v=>
+            v.Let(a=>
+                Inline(()=>
+                    v+a
+                )
+            )
+        );
+    }
+    [TestMethod]public void LetInlineループ跨評価回数1(){
+        //v =>
+        //    .v=v
+        //    v.Let(a=>
+        //        a+.v
+        //    )
+        this.共通Assert(1,v=>
+            v.Let(a=>
+                Inline(()=>
+                    Inline(()=>
+                        v+a
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]public void LetInlineループ跨評価回数2(){
         //v =>
         //    .v=v
         //    v.Let(a=>
@@ -1642,13 +1750,13 @@ public class Optimizerによる式変換:ATest{
         //    v.Let(a=>
         //        .a=a
         //        .v.Let(b=>
-        //            .a
+        //            .a+.v
         //        )
         //    )
-        this.共通Assert(0,v=>
+        this.共通Assert(1,v=>
             v.Let(a=>
                 v.Let(b=>
-                    a
+                    a+v
                 )
             )
         );
@@ -1725,13 +1833,14 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]
     public void ラムダループ跨ぎ評価回数06(){
-        //v =>
-        //    .v=v
-        //1   v+v
-        //2   +
-        //    v.Let(b0 =>
-        //3      .v+b0
-        this.共通Assert(3,v=>
+        //$ループ.1 = ($局所1 = $v + $v);
+        //$ラムダv.2 = $v;
+        //    $ラムダ.3 = $局所1;
+        //    $ループ.0 = $ループ.1 + .Call LinqDB.Sets.Helpers.Let(
+        //    $v,
+        //    .Lambda #Lambda2<System.Func`2[CoverageCS.LinqDB.評価検証,CoverageCS.LinqDB.評価検証]>);
+        //$ループ.0
+        this.共通Assert(2,v=>
             Inline(()=>
                 Inline(()=>
                     v+v
@@ -1743,101 +1852,95 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]
     public void ラムダループ跨ぎ評価回数09(){
-        //v =>
-        //    .v=v
-        //    v.Let(a0 =>
-        //        .a0=a0
-        //        .t0=(t0=.v).Let(c0 =>
-        //            c0+.a0
-        //        )
-        //        (t1=t0.Let(b0 =>
-        //            .t0+b0+.a0
-        //        ))+t1
-        //    ))
-        //    +
-        //    t0
+        //$ループ.1 = $v + $v;
+        //    $ラムダv.2 = $v;
+        //    $ラムダ.3 = ($局所0 = $ラムダv.2) + $局所0;
+        //    $ループ.0 = $ループ.1 + .Call LinqDB.Sets.Helpers.Let(
+        //    $v,
+        //    .Lambda #Lambda2<System.Func`2[CoverageCS.LinqDB.評価検証,CoverageCS.LinqDB.評価検証]>);
+        //$ループ.0
         this.共通Assert(4,v=>
             v.Let(a0=>
                 v.Let(b0=>
                     v.Let(c0=>
-                        c0
-                        +
-                        a0
-                    )
-                    +
+                        c0+a0
+                    )+
                     Inline(()=>
-                        a0
-                        +
-                        b0
+                        a0+b0
                     )
                 )
                 +
                 v.Let(b1=>
                     v.Let(c2=>
-                        c2
-                        +
-                        a0
+                        c2+a0
                     )
                     +
                     Inline(()=>
-                        a0
-                        +
-                        b1
+                        a0+b1
                     )
                 )
             )
         );
     }
     [TestMethod]
-    public void ラムダループ跨ぎ評価回数10(){
+    public void ラムダループ跨ぎ評価回数100(){
+        this.共通Assert(11,v=>
+            v.Let(a0=>
+                v.Let(b0=>
+                    v.Let(c0=>
+                        c0+a0
+                    )
+                    +
+                    Inline(()=>
+                        b0+a0
+                    )
+                )
+                +
+                v.Let(b1=>
+                    v.Let(c2=>
+                        c2+a0
+                    )
+                    +
+                    Inline(()=>
+                        b1+a0
+                    )
+                )
+            )
+        );
+    }
+    [TestMethod]
+    public void ラムダループ跨ぎ評価回数101(){
         //v =>
         //    .v=v
         //     (t1=v.Let(a0 =>
         //         .a0=a0
         //         (t0=.v.Let(b0 =>
         //             .v.Let(c0 =>
-        //                 c0
-        //1                +
-        //                 .a0
+        //                 c0+.a0
+        //             )+Inline(() =>
+        //                 c1+.a0
         //             )
-        //2            +
-        //             Inline(() =>
-        //                 c1
-        //                 +
-        //                 .a0
-        //             )
-        //         ))
-        //3        +t0
-        //     ))
-        //     +
-        //4    t1
+        //         ))+t0
+        //     ))+t1
         this.共通Assert(11,v=>
             v.Let(a0=>
                 v.Let(b0=>
                     v.Let(c0=>
-                        c0
-                        +
-                        a0
+                        c0+a0
                     )
                     +
                     Inline(()=>
-                        b0
-                        +
-                        a0
+                        b0+a0
                     )
                 )
                 +
                 v.Let(b1=>
                     v.Let(c2=>
-                        c2
-                        +
-                        a0
+                        c2+a0
                     )
                     +
                     Inline(()=>
-                        b1
-                        +
-                        a0
+                        b1+a0
                     )
                 )
             )
@@ -1845,29 +1948,21 @@ public class Optimizerによる式変換:ATest{
             v.Let(a1=>
                 v.Let(b2=>
                     v.Let(c4=>
-                        c4
-                        +
-                        a1
+                        c4+a1
                     )
                     +
                     Inline(()=>
-                        b2
-                        +
-                        a1
+                        b2+a1
                     )
                 )
                 +
                 v.Let(b3=>
                     Inline(()=>
-                        b3
-                        +
-                        a1
+                        b3+a1
                     )
                     +
                     v.Let(c7=>
-                        c7
-                        +
-                        a1
+                        c7+a1
                     )
                 )
             )
@@ -2020,7 +2115,7 @@ public sealed class 参照評価回数{
 public sealed class 評価検証:IEquatable<評価検証>{
     private 参照評価回数 参照評価回数;
     public int 評価回数=>this.参照評価回数.評価回数;
-    private readonly int 値;
+    public int 値;
     private 評価検証(参照評価回数 参照評価回数){
         this.参照評価回数=参照評価回数;
     }
@@ -2036,7 +2131,9 @@ public sealed class 評価検証:IEquatable<評価検証>{
         var 参照評価回数=a.参照評価回数;
         参照評価回数.評価回数++;
         b.参照評価回数=参照評価回数;
-        return new 評価検証(参照評価回数);
+        var r=new 評価検証(参照評価回数);
+        r.値=a.値+b.値;
+        return r;
     }
     public bool Equals(評価検証 other){
         return other!=null&&this.参照評価回数.評価回数==other.参照評価回数.評価回数;

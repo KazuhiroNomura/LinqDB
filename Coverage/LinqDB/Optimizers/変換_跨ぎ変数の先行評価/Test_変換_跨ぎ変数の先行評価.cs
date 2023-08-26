@@ -15,14 +15,20 @@ namespace CoverageCS.LinqDB.Optimizers.変換_跨ぎ変数の先行評価;
 public class Test_変換_跨ぎ変数の先行評価: ATest
 {
     [TestMethod]
-    public void 跨ぎ変数パターン0(){
+    public void 跨ぎ変数パターン00(){
+        this.Execute引数パターン(a=>
+            SetN<int>(a).Join(SetN<int>(a),o=>o+3,i=>i+2,(o,i)=>o+i)
+        );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン01(){
         this.Execute引数パターン(a=>
             new{
                 A=SetN<int>(a).Join(SetN<int>(a),o=>o+3,i=>i+2,(o,i)=>o+i),
                 B=SetN<int>(a).Join(SetN<int>(a),o=>o*3,i=>i*2,(o,i)=>o*i)
             }
         );
-        this.Execute引数パターン(a=>
+    this.Execute引数パターン(a=>
             new{
                 A=SetN<int>(a).Join(SetN<int>(a),o=>o+1,i=>i+1,(o,i)=>o+i),
                 B=SetN<int>(a).Join(SetN<int>(a),o=>o+1,i=>i+1,(o,i)=>o*i)
@@ -106,7 +112,7 @@ public class Test_変換_跨ぎ変数の先行評価: ATest
         );
     }
     [TestMethod]
-    public void 跨ぎ変数パターン1() {
+    public void 跨ぎ変数パターン05() {
         this.Execute引数パターン(_ =>
             (1).Let(a =>
                 Inline(() => a*2)
@@ -175,12 +181,42 @@ public class Test_変換_跨ぎ変数の先行評価: ATest
                 SetN<int>(2).Where(d => d>2&&c>d)
             )
         );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン10() {
         this.Execute引数パターン標準ラムダループ((a,b) =>
             SetN<int>(a).Union(SetN<int>(b).Select(c => c+1))
         );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン11() {
         this.Execute引数パターン標準ラムダループ((a,b) =>
             SetN<int>(1).SelectMany(c =>
                 SetN<int>(2).Where(d => d>2)
+            )
+        );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン12() {
+        this.Execute引数パターン標準ラムダループ((a,b) =>
+            SetN<int>(1).SelectMany(c =>
+                SetN<int>(2).Where(d => c>d)
+            )
+        );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン13() {
+        this.Execute引数パターン標準ラムダループ((a,b) =>
+            SetN<int>(a).SelectMany(c =>
+                SetN<int>(b).Where(d => c>d)
+            )
+        );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン14() {
+        this.Execute引数パターン標準ラムダループ((a,b) =>
+            SetN<int>(a).SelectMany(c =>
+                SetN<int>(b).Where(d => c>d)
             )
         );
         this.Execute引数パターン標準ラムダループ((a,b) =>
@@ -255,6 +291,9 @@ public class Test_変換_跨ぎ変数の先行評価: ATest
                 B = SetN<int>(a*a).Join(SetN<int>(a),o => o+1,i => i+1,(o,i) => o*i)
             }
         );
+    }
+    [TestMethod]
+    public void 跨ぎ変数パターン2() {
         this.Execute引数パターン(a =>
             a.Let(c =>
                 SetN<int>(a).Where(e => c==e).SelectMany(g =>

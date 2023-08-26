@@ -38,6 +38,10 @@
     <Compile Remove="Databases\ImportDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />
+    <None Remove="Optimizers\Optimizer.変換_跨ぎParameterの先行評価.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="5.0.0" />
     <PackageReference Include="IndexRange" Version="1.0.0" />
     <PackageReference Include="Lokad.ILPack" Version="0.1.7" />

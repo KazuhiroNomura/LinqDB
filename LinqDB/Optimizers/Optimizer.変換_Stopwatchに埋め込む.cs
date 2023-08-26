@@ -358,14 +358,14 @@ partial class Optimizer {
             return this.Traverse(Expression0);
         }
         private static readonly MethodInfo List計測する_Item= typeof(List<A計測>).GetProperty("Item",Instance_NonPublic_Public)!.GetMethod!;
-        protected override Expression Assign(BinaryExpression Binary0){
+        protected override Expression Assign(BinaryExpression Assign0){
             Debug.Assert(
-                Binary0.Left.NodeType==ExpressionType.Parameter||
-                Binary0.Left.NodeType==ExpressionType.MemberAccess||
-                Binary0.Left.NodeType==ExpressionType.ArrayIndex||
-                Binary0.Left.NodeType==ExpressionType.Index
+                Assign0.Left.NodeType==ExpressionType.Parameter||
+                Assign0.Left.NodeType==ExpressionType.MemberAccess||
+                Assign0.Left.NodeType==ExpressionType.ArrayIndex||
+                Assign0.Left.NodeType==ExpressionType.Index
             );
-            var Binary0_Left = Binary0.Left;
+            var Binary0_Left = Assign0.Left;
             var Binary0_Left_NodeType = Binary0_Left.NodeType;
             var 前データ=this.プロファイル前処理(nameof(ExpressionType.Assign));
             var Binary1_Left =Binary0_Left;
@@ -416,7 +416,7 @@ partial class Optimizer {
                 前データ,
                 Expression.Assign(
                     Binary1_Left,
-                    this.Traverse(Binary0.Right)
+                    this.Traverse(Assign0.Right)
                 )
             );
         }

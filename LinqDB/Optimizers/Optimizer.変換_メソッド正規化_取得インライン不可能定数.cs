@@ -292,6 +292,7 @@ partial class Optimizer {
         protected override Expression SubtractAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Subtract);
         protected override Expression SubtractAssignChecked(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.SubtractChecked);
         protected override Expression Try(TryExpression Try0){
+            Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
             var Try0_Handlers=Try0.Handlers;
             var Try0_Handlers_Count=Try0_Handlers.Count;
             var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
@@ -306,11 +307,13 @@ partial class Optimizer {
                 変化したか=true;
             for(var a=0;a<Try0_Handlers_Count;a++) {
                 var Try0_Handler=Try0_Handlers[a];
+                Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
                 var Try0_Handler_Variable=Try0_Handler.Variable;
                 CatchBlock Try1_Handler;
                 if(Try0_Handler_Variable is not null) {
                     var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
                     var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
+                    //Debug.Assert(Try1_Handler_Filter!=null,nameof(Try1_Handler_Filter)+" != null");
                     if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
                         変化したか=true;
                         Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
@@ -338,9 +341,19 @@ partial class Optimizer {
                 }
                 Try1_Handlers[a]=Try1_Handler;
             }
-            return 変化したか
-                ? Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers)
-                :Try0;
+            if(Try0.Fault is not null){
+                Debug.Assert(Try0_Finally is null);
+                var Try0_Fault=Try0.Fault;
+                var Try1_Fault=this.Traverse(Try0_Fault);
+                if(Try0_Fault!=Try1_Fault)変化したか=true;
+                return 変化したか
+                    ? Expression.TryFault(Try1_Body,Try1_Fault)
+                    :Try0;
+            } else{
+                return 変化したか
+                    ? Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers)
+                    :Try0;
+            }
         }
         private Expression 共通Pre(UnaryExpression Unary0, ExpressionType NodeType) {
             var Unary1_Operand=this.Traverse(Unary0.Operand);

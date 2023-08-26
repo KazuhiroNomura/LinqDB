@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
+// ReSharper disable All
 namespace LinqDB.Optimizers;
 partial class Optimizer{
     internal class 作成_DynamicAssembly:A作成_IL{

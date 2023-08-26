@@ -14,12 +14,28 @@ public class Test_判定_指定Parameters無: ATest
         this.Execute2(() => Lambda(a => Lambda(c => c == a)));
     }
     [TestMethod]
-    public void Parameter()
-    {
-        //if(this._指定Parameters.Contains(Parameter)) {
-        this.Execute引数パターン(p=> Inline(() => p + 1));
-        //}
-        this.Execute引数パターン(c => Lambda(a => Lambda(b => Inline(() => c == a))));
+    public void Parameter0(){
+        this.Execute引数パターン(p=> 
+            Inline(() => p + 1)
+        );
+    }
+    [TestMethod]public void Parameter1(){
+        //ループ変数が必要ないのに作られる
+        this.Execute引数パターン(c => 
+            Lambda(a => 
+                Inline(() => c == a)
+            )
+        );
+    }
+    [TestMethod]public void Parameter2(){
+        //ループ変数が必要ないのに作られる
+        this.Execute引数パターン(c => 
+            Lambda(a => 
+                Lambda(b => 
+                    Inline(() => c == a)
+                )
+            )
+        );
     }
     [TestMethod]
     public void MemberAccess()

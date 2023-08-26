@@ -708,9 +708,7 @@ public class Test_ExpressionEqualityComparer : ATest
     //}
 
     [TestMethod] public void Invoke() => this.Execute2(() => _Delegate(4) + _Delegate(4));
-    [TestMethod]
-    public void Lambda()
-    {
+    [TestMethod]public void Lambda0(){
         var p = Expression.Parameter(typeof(int));
         IsTrue(
             Expression.Lambda(
@@ -734,7 +732,76 @@ public class Test_ExpressionEqualityComparer : ATest
             )
         );
     }
-
+    [TestMethod]public void Lambda1(){
+        var v = Expression.Parameter(typeof(int),"v");
+        var a0 = Expression.Parameter(typeof(int),"a0");
+        var a1 = Expression.Parameter(typeof(int),"a1");
+        IsTrue(
+            Expression.Lambda<Func<int,int>>(
+                a0,
+                a0
+            ),
+            Expression.Lambda<Func<int,int>>(
+                a1,
+                a1
+            )
+        );
+    }
+    [TestMethod]public void Lambda2(){
+        var v0 = Expression.Parameter(typeof(int),"v0");
+        var v1 = Expression.Parameter(typeof(int),"v1");
+        var a0 = Expression.Parameter(typeof(int),"a0");
+        var a1 = Expression.Parameter(typeof(int),"a1");
+        IsTrue(
+            Expression.Block(
+                Expression.Lambda<Func<int,int>>(
+                    a0,
+                    a0
+                ),
+                v0
+            ),
+            Expression.Block(
+                Expression.Lambda<Func<int,int>>(
+                    a1,
+                    a1
+                ),
+                v0
+            )
+        );
+        IsFalse(
+            Expression.Block(
+                Expression.Lambda<Func<int,int>>(
+                    a0,
+                    a0
+                ),
+                v0
+            ),
+            Expression.Block(
+                Expression.Lambda<Func<int,int>>(
+                    a1,
+                    a1
+                ),
+                v1
+            )
+        );
+        IsFalse(
+            Expression.Block(
+                typeof(void),
+                Expression.Lambda<Func<int,int>>(
+                    a0,
+                    a0
+                ),
+                v0
+            ),
+            Expression.Block(
+                Expression.Lambda<Func<int,int>>(
+                    a1,
+                    a1
+                ),
+                v0
+            )
+        );
+    }
     [TestMethod]
     public void ListInit() => this.Execute2(() => new
     {

@@ -2222,110 +2222,36 @@ partial class Optimizer{
                     this.Traverse(Try.Body);
                     I.Stloc(変数);
                     var Leave先1 = I.DefineLabel();
-                    //I.Leave(Leave先1);
                     foreach(var Try_Handler in Try.Handlers) {
                         this.PrivateTryFilterCatch(Try_Handler);
                         I.Stloc(変数);
-                        //I.Leave(Leave先1);
                     }
-                    I.EndExceptionBlock();
+                    I.EndExceptionBlock();//leave Leave先1
                     I.MarkLabel(Leave先1);
                 } else {
                     this.Traverse(Try.Body);
                     I.Stloc(変数);
                 }
-                //I.Leave(Leave先0);
-                I.BeginFinallyBlock();
+                I.BeginFinallyBlock();//leave Leave先0
                 this.VoidTraverse(Try.Finally);
-                //I.Endfinally();
+                //endfinally
             } else {
-                Debug.Assert(Try.Handlers.Count>0);
                 this.Traverse(Try.Body);
                 I.Stloc(変数);
-                foreach(var Try_Handler in Try.Handlers){
-                    this.PrivateTryFilterCatch(Try_Handler);
-                    I.Stloc(変数);
+                if(Try.Fault is not null){
+                    Debug.Assert(Try.Handlers.Count==0,"faultならばHandlers.Count==0のはず");
+                    I.BeginFaultBlock();
+                    this.VoidTraverse(Try.Fault);
+                } else{
+                    foreach(var Try_Handler in Try.Handlers){
+                        this.PrivateTryFilterCatch(Try_Handler);
+                        I.Stloc(変数);
+                    }
                 }
             }
             I.EndExceptionBlock();
             I.MarkLabel(Leave先0);
-            //if(Try.Finally is not null){
-            //    if(Try.Handlers.Count>0){
-            //        I.BeginExceptionBlock();
-            //        var Leave先0=I.DefineLabel();
-            //        {
-            //            I.BeginExceptionBlock();
-            //            this.Traverse(Try.Body);
-            //            I.Stloc(変数);
-            //            var Leave先1=I.DefineLabel();
-            //            I.Leave(Leave先1);
-            //            foreach(var Try_Handler in Try.Handlers){
-            //                this.PrivateTryFilterCatch(Try_Handler);
-            //                I.Pop();
-            //                I.Leave(Leave先1);
-            //            }
-            //            I.EndExceptionBlock();
-            //            I.MarkLabel(Leave先1);
-            //        }
-            //        I.BeginFinallyBlock();
-            //        this.VoidTraverse(Try.Finally);
-            //        I.Endfinally();
-            //        I.EndExceptionBlock();
-            //        I.MarkLabel(Leave先0);
-            //    } else{
-            //        I.BeginExceptionBlock();
-            //        this.Traverse(Try.Body);
-            //        I.Stloc(変数);
-            //        var Leave先0=I.DefineLabel();
-            //        I.Leave(Leave先0);
-            //        I.BeginFinallyBlock();
-            //        this.VoidTraverse(Try.Finally);
-            //        I.Endfinally();
-            //        I.EndExceptionBlock();
-            //        I.MarkLabel(Leave先0);
-            //    }
-            //} else{
-            //    Debug.Assert(Try.Handlers.Count>0);
-            //    {
-            //        I.BeginExceptionBlock();
-            //        this.Traverse(Try.Body);
-            //        I.Stloc(変数);
-            //        var Leave先0=I.DefineLabel();
-            //        I.Leave(Leave先0);
-            //        foreach(var Try_Handler in Try.Handlers){
-            //            this.PrivateTryFilterCatch(Try_Handler);
-            //            I.Pop();
-            //            I.Leave(Leave先0);
-            //        }
-            //        I.EndExceptionBlock();
-            //        I.MarkLabel(Leave先0);
-            //    }
-            //}
             return 変数;
-            /*
-            var 変数 =I.DeclareLocal(Try.Type);
-            I.BeginExceptionBlock();
-            this.Traverse(Try.Body);
-            I.Stloc(変数);
-            var Leave先=I.DefineLabel();
-            I.Leave(Leave先);
-            foreach(var Try_Handler in Try.Handlers){
-                this.PrivateTryFilterCatch(Try_Handler);
-                I.Stloc(変数);
-                I.Leave(Leave先);
-            }
-            this.ProtectedFault(Try.Fault);
-            //I.EndExceptionBlock();
-            if(Try.Finally is not null){
-                I.BeginFinallyBlock();
-                this.VoidTraverse(Try.Finally);//戻り値はfinallyにない。
-                I.Endfinally();
-                //I.EndExceptionBlock();
-            }
-            I.EndExceptionBlock();
-            I.MarkLabel(Leave先);
-            return 変数;
-            */
         }
         protected override void Try(TryExpression Try){
             //ILレベルではtry～catch,catch,catch
@@ -2336,33 +2262,84 @@ partial class Optimizer{
             if(Try.Type!=typeof(void)){
                 I.Ldloc(this.PrivateTry値を代入した変数(Try));
             } else{
-                //if(Try.Finally is not null){
-                //    I.BeginExceptionBlock();
-                //}
-                //if(Try.Finally is not null)
-                //    I.BeginExceptionBlock();
+                var Leave先0=I.DefineLabel();
                 I.BeginExceptionBlock();
-                this.Traverse(Try.Body);
-                I.Pop();
-                var Leave先=I.DefineLabel();
-                I.Leave(Leave先);
-                foreach(var Try_Handler in Try.Handlers){
-                    this.PrivateTryFilterCatch(Try_Handler);
-                    I.Pop();
-                    I.Leave(Leave先);
-                }
-                this.ProtectedFault(Try.Fault);
-                //I.EndExceptionBlock();
-                if(Try.Finally is not null){
-                    //Debug.Assert(this.I is not null);
-                    I.BeginFinallyBlock();
+                if(Try.Finally is not null) {
+                    if(Try.Handlers.Count>0) {
+                        I.BeginExceptionBlock();
+                        this.VoidTraverse(Try.Body);
+                        var Leave先1 = I.DefineLabel();
+                        foreach(var Try_Handler in Try.Handlers) {
+                            this.PrivateTryFilterCatch(Try_Handler);
+                            if(Try_Handler.Body.Type==typeof(void))I.Pop();
+                        }
+                        I.EndExceptionBlock();//leave Leave先1
+                        I.MarkLabel(Leave先1);
+                    } else {
+                        this.VoidTraverse(Try.Body);
+                    }
+                    I.BeginFinallyBlock();//leave Leave先0
                     this.VoidTraverse(Try.Finally);
-                    I.Endfinally();
-                    //I.EndExceptionBlock();
+                    //endfinally
+                } else {
+                    this.VoidTraverse(Try.Body);
+                    if(Try.Fault is not null){
+                        //try{Body}fault{Fault}
+                        //    IL_008e: stfld class [System.Runtime]System.IO.StreamReader IL確認.Class1/'<ReadAllLines>d__11'::'<file>5__1'
+                        //    // return false;
+                        //    IL_0093: ldc.i4.0
+                        //    IL_0094: stloc.0
+                        //    // ((IDisposable)this).Dispose();
+                        //    IL_0095: leave.s IL_009f
+                        //} // end .try
+                        //fault
+                        //{
+                        //    IL_0097: ldarg.0
+                        //    IL_0098: call instance void IL確認.Class1/'<ReadAllLines>d__11'::System.IDisposable.Dispose()
+                        //    // }
+                        //    IL_009d: nop
+                        //    IL_009e: endfinally
+                        //} // end handler
+
+                        //// (no C# code)
+                        //IL_009f: ldloc.0
+                        //IL_00a0: ret
+                        Debug.Assert(Try.Handlers.Count==0,"faultならばHandlers.Count==0のはず");
+                        I.BeginFaultBlock();
+                        this.VoidTraverse(Try.Fault);
+                    } else{
+                        foreach(var Try_Handler in Try.Handlers){
+                            this.PrivateTryFilterCatch(Try_Handler);
+                            if(Try_Handler.Body.Type==typeof(void)) I.Pop();
+                        }
+                    }
                 }
                 I.EndExceptionBlock();
-                //Debug.Assert(this.I is not null);
-                I.MarkLabel(Leave先);
+                I.MarkLabel(Leave先0);
+                ////if(Try.Finally is not null){
+                ////    I.BeginExceptionBlock();
+                ////}
+                ////if(Try.Finally is not null)
+                ////    I.BeginExceptionBlock();
+                //I.BeginExceptionBlock();
+                //this.Traverse(Try.Body);
+                //Debug.Assert(Try.Body.Type==typeof(void));
+                //var Leave先=I.DefineLabel();
+                //I.Leave(Leave先);
+                //foreach(var Try_Handler in Try.Handlers){
+                //    this.PrivateTryFilterCatch(Try_Handler);
+                //    //I.Pop();
+                //    //I.Leave(Leave先);
+                //}
+                //this.ProtectedFault(Try.Fault);
+                //if(Try.Finally is not null){
+                //    I.BeginFinallyBlock();
+                //    this.VoidTraverse(Try.Finally);
+                //    //endfinally
+                //}
+                //I.EndExceptionBlock();
+                ////Debug.Assert(this.I is not null);
+                //I.MarkLabel(Leave先);
             }
         }
         protected override void Label(LabelExpression Label){
@@ -2439,7 +2416,10 @@ partial class Optimizer{
         );
         protected override void Throw(UnaryExpression Unary){
             Debug.Assert(Unary.Method is null);
-            this.Traverse(Unary.Operand);
+            if(Unary.Operand is not null)
+                this.Traverse(Unary.Operand);
+            else
+                this.I.Ldarg_0();
             this.I!.Throw();
             this.Default(Unary.Type);
         }

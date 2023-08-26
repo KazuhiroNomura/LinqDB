@@ -201,9 +201,9 @@ partial class Optimizer {
         /// <summary>
         /// a=b
         /// </summary>
-        /// <param name="Binary0"></param>
+        /// <param name="Assign0"></param>
         /// <returns></returns>
-        protected virtual Expression Assign(BinaryExpression Binary0)=> this.MakeAssign(Binary0, ExpressionType.Assign);
+        protected virtual Expression Assign(BinaryExpression Assign0)=> this.MakeAssign(Assign0, ExpressionType.Assign);
         /// <summary>
         /// a??b
         /// </summary>
@@ -754,7 +754,8 @@ partial class Optimizer {
                 var b = MethodCall0_Object==MethodCall1_Object;
                 if(MethodCall0_Arguments_Count>=4){
                     var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-                    return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
+                    return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
+                    //return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
                 }
                 if(MethodCall0_Arguments_Count==0)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method);
                 var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
@@ -1218,7 +1219,7 @@ partial class Optimizer {
         /// </summary>
         /// <param name="Unary0"></param>
         /// <returns></returns>
-        protected virtual Expression Throw(UnaryExpression Unary0)=> this.MakeUnary(Unary0);
+        protected virtual Expression Throw(UnaryExpression Unary0)=> Unary0.Operand is not null?this.MakeUnary(Unary0):Unary0;
         /// <summary>
         /// +a
         /// </summary>

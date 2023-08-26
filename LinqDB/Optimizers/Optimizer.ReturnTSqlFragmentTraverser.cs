@@ -40,218 +40,218 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TSqlFragment XmlNamespaces(TSqlFragment x) => x switch{
-            MultiPartIdentifier y => this.MultiPartIdentifier(y),
-            Identifier y => this.Identifier(y),
-            ScalarExpression y => this.ScalarExpression(y),
-            IdentifierOrValueExpression y => this.IdentifierOrValueExpression(y),
-            StatementList y => this.StatementList(y),
-            TSqlStatement y => this.TSqlStatement(y),
-            ExecuteOption y => this.ExecuteOption(y),
-            ResultSetDefinition y => this.ResultSetDefinition(y),
-            ResultColumnDefinition y => this.ResultColumnDefinition(y),
-            ExecuteSpecification y => this.ExecuteSpecification(y),
-            ExecuteContext y => this.ExecuteContext(y),
-            ExecuteParameter y => this.ExecuteParameter(y),
-            ExecutableEntity y => this.ExecutableEntity(y),
-            ProcedureReferenceName y => this.ProcedureReferenceName(y),
-            AdHocDataSource y => this.AdHocDataSource(y),
-            ViewOption y => this.ViewOption(y),
-            TriggerObject y => this.TriggerObject(y),
-            TriggerOption y => this.TriggerOption(y),
-            TriggerAction y => this.TriggerAction(y),
-            ProcedureReference y => this.ProcedureReference(y),
-            MethodSpecifier y => this.MethodSpecifier(y),
-            ProcedureOption y => this.ProcedureOption(y),
-            FunctionOption y => this.FunctionOption(y),
-            XmlNamespaces y => this.XmlNamespaces(y),
-            XmlNamespacesElement y => this.XmlNamespacesElement(y),
-            CommonTableExpression y => this.CommonTableExpression(y),
-            WithCtesAndXmlNamespaces y => this.WithCtesAndXmlNamespaces(y),
-            FunctionReturnType y => this.FunctionReturnType(y),
-            DataTypeReference y => this.DataTypeReference(y),
-            TableDefinition y => this.TableDefinition(y),
-            DeclareTableVariableBody y => this.DeclareTableVariableBody(y),
-            TableReference y => this.TableReference(y),
-            TableHint y => this.TableHint(y),
-            BooleanExpression y => this.BooleanExpression(y),
-            ForClause y => this.ForClause(y),
-            OptimizerHint y => this.OptimizerHint(y),
-            VariableValuePair y => this.VariableValuePair(y),
-            WhenClause y => this.WhenClause(y),
-            SchemaDeclarationItem y => this.SchemaDeclarationItem(y),
-            CallTarget y => this.CallTarget(y),
-            OverClause y => this.OverClause(y),
-            AtomicBlockOption y => this.AtomicBlockOption(y),
-            ColumnWithSortOrder y => this.ColumnWithSortOrder(y),
-            DeclareVariableElement y => this.DeclareVariableElement(y),
-            DataModificationSpecification y => this.DataModificationSpecification(y),
-            Permission y => this.Permission(y),
-            SecurityTargetObject y => this.SecurityTargetObject(y),
-            SecurityTargetObjectName y => this.SecurityTargetObjectName(y),
-            SecurityPrincipal y => this.SecurityPrincipal(y),
-            SecurityElement80 y => this.SecurityElement80(y),
-            Privilege80 y => this.Privilege80(y),
-            SecurityUserClause80 y => this.SecurityUserClause80(y),
-            SetClause y => this.SetClause(y),
-            InsertSource y => this.InsertSource(y),
-            RowValue y => this.RowValue(y),
-            LiteralRange y => this.LiteralRange(y),
-            OptionValue y => this.OptionValue(y),
-            IdentifierOrScalarExpression y => this.Traverse(y),
-            SchemaObjectNameOrValueExpression y => this.Traverse(y),
-            SequenceOption y => this.Traverse(y),
-            SecurityPredicateAction y => this.Traverse(y),
-            SecurityPolicyOption y => this.Traverse(y),
-            ColumnMasterKeyParameter y => this.Traverse(y),
-            ColumnEncryptionKeyValue y => this.Traverse(y),
-            ColumnEncryptionKeyValueParameter y => this.Traverse(y),
-            ExternalTableOption y => this.Traverse(y),
-            ExternalTableDistributionPolicy y => this.Traverse(y),
-            ExternalDataSourceOption y => this.Traverse(y),
-            ExternalFileFormatOption y => this.Traverse(y),
-            AssemblyOption y => this.Traverse(y),
-            AddFileSpec y => this.Traverse(y),
-            AssemblyName y => this.Traverse(y),
-            TableOption y => this.Traverse(y),
-            DatabaseOption y => this.Traverse(y),
-            RemoteDataArchiveDatabaseSetting y => this.Traverse(y),
-            RetentionPeriodDefinition y => this.Traverse(y),
-            TableSwitchOption y => this.Traverse(y),
-            DropClusteredConstraintOption y => this.Traverse(y),
-            AlterTableDropTableElement y => this.Traverse(y),
-            ExecuteAsClause y => this.Traverse(y),
-            QueueOption y => this.Traverse(y),
-            RouteOption y => this.Traverse(y),
-            SystemTimePeriodDefinition y => this.Traverse(y),
-            IndexType y => this.Traverse(y),
-            PartitionSpecifier y => this.Traverse(y),
-            FileGroupOrPartitionScheme y => this.Traverse(y),
-            IndexOption y => this.Traverse(y),
-            OnlineIndexLowPriorityLockWaitOption y => this.Traverse(y),
-            LowPriorityLockWaitOption y => this.Traverse(y),
-            FullTextIndexColumn y => this.Traverse(y),
-            FullTextIndexOption y => this.Traverse(y),
-            FullTextCatalogAndFileGroup y => this.Traverse(y),
-            EventTypeGroupContainer y => this.Traverse(y),
-            EventNotificationObjectScope y => this.Traverse(y),
-            ApplicationRoleOption y => this.Traverse(y),
-            AlterRoleAction y => this.Traverse(y),
-            UserLoginOption y => this.Traverse(y),
-            StatisticsOption y => this.Traverse(y),
-            StatisticsPartitionRange y => this.Traverse(y),
-            CursorDefinition y => this.Traverse(y),
-            CursorOption y => this.XmlNamespaces(y),
-            CursorId y => this.Traverse(y),
-            CryptoMechanism y => this.Traverse(y),
-            FetchType y => this.Traverse(y),
-            WhereClause y => this.Traverse(y),
-            DropIndexClauseBase y => this.Traverse(y),
-            SetCommand y => this.Traverse(y),
-            FileDeclaration y => this.Traverse(y),
-            FileDeclarationOption y => this.Traverse(y),
-            FileGroupDefinition y => this.Traverse(y),
-            DatabaseConfigurationClearOption y => this.Traverse(y),
-            DatabaseConfigurationSetOption y => this.Traverse(y),
-            AlterDatabaseTermination y => this.Traverse(y),
-            ChangeTrackingOptionDetail y => this.Traverse(y),
-            QueryStoreOption y => this.Traverse(y),
-            AutomaticTuningOption y => this.Traverse(y),
-            ColumnDefinitionBase y => this.Traverse(y),
-            ColumnEncryptionDefinition y => this.Traverse(y),
-            ColumnEncryptionDefinitionParameter y => this.Traverse(y),
-            IdentityOptions y => this.Traverse(y),
-            ColumnStorageOptions y => this.Traverse(y),
-            ConstraintDefinition y => this.Traverse(y),
-            FederationScheme y => this.Traverse(y),
-            TableDistributionPolicy y => this.Traverse(y),
-            TableIndexType y => this.Traverse(y),
-            PartitionSpecifications y => this.Traverse(y),
-            CompressionPartitionRange y => this.Traverse(y),
-            GraphConnectionBetweenNodes y => this.Traverse(y),
-            RestoreOption y => this.Traverse(y),
-            BackupOption y => this.Traverse(y),
-            DeviceInfo y => this.Traverse(y),
-            MirrorToClause y => this.Traverse(y),
-            BackupRestoreFileInfo y => this.Traverse(y),
-            BulkInsertOption y => this.Traverse(y),
-            ExternalTableColumnDefinition y => this.Traverse(y),
-            InsertBulkColumnDefinition y => this.Traverse(y),
-            DbccOption y => this.Traverse(y),
-            DbccNamedLiteral y => this.Traverse(y),
-            PartitionParameterType y => this.Traverse(y),
-            RemoteServiceBindingOption y => this.Traverse(y),
-            EncryptionSource y => this.Traverse(y),
-            CertificateOption y => this.Traverse(y),
-            ContractMessage y => this.Traverse(y),
-            EndpointAffinity y => this.Traverse(y),
-            EndpointProtocolOption y => this.Traverse(y),
-            IPv4 y => this.Traverse(y),
-            PayloadOption y => this.Traverse(y),
-            KeyOption y => this.Traverse(y),
-            FullTextCatalogOption y => this.Traverse(y),
-            ServiceContract y => this.Traverse(y),
-            ComputeClause y => this.Traverse(y),
-            ComputeFunction y => this.Traverse(y),
-            TableSampleClause y => this.Traverse(y),
-            ExpressionWithSortOrder y => this.Traverse(y),
-            GroupByClause y => this.Traverse(y),
-            GroupingSpecification y => this.Traverse(y),
-            OutputClause y => this.Traverse(y),
-            OutputIntoClause y => this.Traverse(y),
-            HavingClause y => this.Traverse(y),
-            OrderByClause y => this.Traverse(y),
-            QueryExpression y => this.QueryExpression(y),
-            FromClause y => this.Traverse(y),
-            SelectElement y => this.Traverse(y),
-            TopRowFilter y => this.Traverse(y),
-            OffsetClause y => this.Traverse(y),
-            AlterFullTextIndexAction y => this.Traverse(y),
-            SearchPropertyListAction y => this.Traverse(y),
-            CreateLoginSource y => this.Traverse(y),
-            PrincipalOption y => this.Traverse(y),
-            DialogOption y => this.Traverse(y),
-            TSqlFragmentSnippet y => this.Traverse(y),
-            TSqlScript y => this.Traverse(y),
-            TSqlBatch y => this.Traverse(y),
-            MergeActionClause y => this.Traverse(y),
-            MergeAction y => this.Traverse(y),
-            AuditSpecificationPart y => this.Traverse(y),
-            AuditSpecificationDetail y => this.Traverse(y),
-            DatabaseAuditAction y => this.Traverse(y),
-            AuditTarget y => this.XmlNamespaces(y),
-            AuditOption y => this.Traverse(y),
-            AuditTargetOption y => this.Traverse(y),
-            ResourcePoolParameter y => this.Traverse(y),
-            ResourcePoolAffinitySpecification y => this.Traverse(y),
-            ExternalResourcePoolParameter y => this.Traverse(y),
-            ExternalResourcePoolAffinitySpecification y => this.Traverse(y),
-            WorkloadGroupParameter y => this.Traverse(y),
-            BrokerPriorityParameter y => this.Traverse(y),
-            FullTextStopListAction y => this.Traverse(y),
-            EventSessionObjectName y => this.Traverse(y),
-            EventDeclaration y => this.Traverse(y),
-            EventDeclarationSetParameter y => this.Traverse(y),
-            TargetDeclaration y => this.Traverse(y),
-            SessionOption y => this.Traverse(y),
-            SpatialIndexOption y => this.Traverse(y),
-            BoundingBoxParameter y => this.Traverse(y),
-            GridParameter y => this.Traverse(y),
-            AlterServerConfigurationBufferPoolExtensionOption y => this.Traverse(y),
-            AlterServerConfigurationDiagnosticsLogOption y => this.Traverse(y),
+            MultiPartIdentifier                                   y => this.MultiPartIdentifier(y),
+            Identifier                                            y => this.Identifier(y),
+            ScalarExpression                                      y => this.ScalarExpression(y),
+            IdentifierOrValueExpression                           y => this.IdentifierOrValueExpression(y),
+            StatementList                                         y => this.StatementList(y),
+            TSqlStatement                                         y => this.TSqlStatement(y),
+            ExecuteOption                                         y => this.ExecuteOption(y),
+            ResultSetDefinition                                   y => this.ResultSetDefinition(y),
+            ResultColumnDefinition                                y => this.ResultColumnDefinition(y),
+            ExecuteSpecification                                  y => this.ExecuteSpecification(y),
+            ExecuteContext                                        y => this.ExecuteContext(y),
+            ExecuteParameter                                      y => this.ExecuteParameter(y),
+            ExecutableEntity                                      y => this.ExecutableEntity(y),
+            ProcedureReferenceName                                y => this.ProcedureReferenceName(y),
+            AdHocDataSource                                       y => this.AdHocDataSource(y),
+            ViewOption                                            y => this.ViewOption(y),
+            TriggerObject                                         y => this.TriggerObject(y),
+            TriggerOption                                         y => this.TriggerOption(y),
+            TriggerAction                                         y => this.TriggerAction(y),
+            ProcedureReference                                    y => this.ProcedureReference(y),
+            MethodSpecifier                                       y => this.MethodSpecifier(y),
+            ProcedureOption                                       y => this.ProcedureOption(y),
+            FunctionOption                                        y => this.FunctionOption(y),
+            XmlNamespaces                                         y => this.XmlNamespaces(y),
+            XmlNamespacesElement                                  y => this.XmlNamespacesElement(y),
+            CommonTableExpression                                 y => this.CommonTableExpression(y),
+            WithCtesAndXmlNamespaces                              y => this.WithCtesAndXmlNamespaces(y),
+            FunctionReturnType                                    y => this.FunctionReturnType(y),
+            DataTypeReference                                     y => this.DataTypeReference(y),
+            TableDefinition                                       y => this.TableDefinition(y),
+            DeclareTableVariableBody                              y => this.DeclareTableVariableBody(y),
+            TableReference                                        y => this.TableReference(y),
+            TableHint                                             y => this.TableHint(y),
+            BooleanExpression                                     y => this.BooleanExpression(y),
+            ForClause                                             y => this.ForClause(y),
+            OptimizerHint                                         y => this.OptimizerHint(y),
+            VariableValuePair                                     y => this.VariableValuePair(y),
+            WhenClause                                            y => this.WhenClause(y),
+            SchemaDeclarationItem                                 y => this.SchemaDeclarationItem(y),
+            CallTarget                                            y => this.CallTarget(y),
+            OverClause                                            y => this.OverClause(y),
+            AtomicBlockOption                                     y => this.AtomicBlockOption(y),
+            ColumnWithSortOrder                                   y => this.ColumnWithSortOrder(y),
+            DeclareVariableElement                                y => this.DeclareVariableElement(y),
+            DataModificationSpecification                         y => this.DataModificationSpecification(y),
+            Permission                                            y => this.Permission(y),
+            SecurityTargetObject                                  y => this.SecurityTargetObject(y),
+            SecurityTargetObjectName                              y => this.SecurityTargetObjectName(y),
+            SecurityPrincipal                                     y => this.SecurityPrincipal(y),
+            SecurityElement80                                     y => this.SecurityElement80(y),
+            Privilege80                                           y => this.Privilege80(y),
+            SecurityUserClause80                                  y => this.SecurityUserClause80(y),
+            SetClause                                             y => this.SetClause(y),
+            InsertSource                                          y => this.InsertSource(y),
+            RowValue                                              y => this.RowValue(y),
+            LiteralRange                                          y => this.LiteralRange(y),
+            OptionValue                                           y => this.OptionValue(y),
+            IdentifierOrScalarExpression                          y => this.Traverse(y),
+            SchemaObjectNameOrValueExpression                     y => this.Traverse(y),
+            SequenceOption                                        y => this.Traverse(y),
+            SecurityPredicateAction                               y => this.Traverse(y),
+            SecurityPolicyOption                                  y => this.Traverse(y),
+            ColumnMasterKeyParameter                              y => this.Traverse(y),
+            ColumnEncryptionKeyValue                              y => this.Traverse(y),
+            ColumnEncryptionKeyValueParameter                     y => this.Traverse(y),
+            ExternalTableOption                                   y => this.Traverse(y),
+            ExternalTableDistributionPolicy                       y => this.Traverse(y),
+            ExternalDataSourceOption                              y => this.Traverse(y),
+            ExternalFileFormatOption                              y => this.Traverse(y),
+            AssemblyOption                                        y => this.Traverse(y),
+            AddFileSpec                                           y => this.Traverse(y),
+            AssemblyName                                          y => this.Traverse(y),
+            TableOption                                           y => this.Traverse(y),
+            DatabaseOption                                        y => this.Traverse(y),
+            RemoteDataArchiveDatabaseSetting                      y => this.Traverse(y),
+            RetentionPeriodDefinition                             y => this.Traverse(y),
+            TableSwitchOption                                     y => this.Traverse(y),
+            DropClusteredConstraintOption                         y => this.Traverse(y),
+            AlterTableDropTableElement                            y => this.Traverse(y),
+            ExecuteAsClause                                       y => this.Traverse(y),
+            QueueOption                                           y => this.Traverse(y),
+            RouteOption                                           y => this.Traverse(y),
+            SystemTimePeriodDefinition                            y => this.Traverse(y),
+            IndexType                                             y => this.Traverse(y),
+            PartitionSpecifier                                    y => this.Traverse(y),
+            FileGroupOrPartitionScheme                            y => this.Traverse(y),
+            IndexOption                                           y => this.Traverse(y),
+            OnlineIndexLowPriorityLockWaitOption                  y => this.Traverse(y),
+            LowPriorityLockWaitOption                             y => this.Traverse(y),
+            FullTextIndexColumn                                   y => this.Traverse(y),
+            FullTextIndexOption                                   y => this.Traverse(y),
+            FullTextCatalogAndFileGroup                           y => this.Traverse(y),
+            EventTypeGroupContainer                               y => this.Traverse(y),
+            EventNotificationObjectScope                          y => this.Traverse(y),
+            ApplicationRoleOption                                 y => this.Traverse(y),
+            AlterRoleAction                                       y => this.Traverse(y),
+            UserLoginOption                                       y => this.Traverse(y),
+            StatisticsOption                                      y => this.Traverse(y),
+            StatisticsPartitionRange                              y => this.Traverse(y),
+            CursorDefinition                                      y => this.Traverse(y),
+            CursorOption                                          y => this.XmlNamespaces(y),
+            CursorId                                              y => this.Traverse(y),
+            CryptoMechanism                                       y => this.Traverse(y),
+            FetchType                                             y => this.Traverse(y),
+            WhereClause                                           y => this.Traverse(y),
+            DropIndexClauseBase                                   y => this.Traverse(y),
+            SetCommand                                            y => this.Traverse(y),
+            FileDeclaration                                       y => this.Traverse(y),
+            FileDeclarationOption                                 y => this.Traverse(y),
+            FileGroupDefinition                                   y => this.Traverse(y),
+            DatabaseConfigurationClearOption                      y => this.Traverse(y),
+            DatabaseConfigurationSetOption                        y => this.Traverse(y),
+            AlterDatabaseTermination                              y => this.Traverse(y),
+            ChangeTrackingOptionDetail                            y => this.Traverse(y),
+            QueryStoreOption                                      y => this.Traverse(y),
+            AutomaticTuningOption                                 y => this.Traverse(y),
+            ColumnDefinitionBase                                  y => this.Traverse(y),
+            ColumnEncryptionDefinition                            y => this.Traverse(y),
+            ColumnEncryptionDefinitionParameter                   y => this.Traverse(y),
+            IdentityOptions                                       y => this.Traverse(y),
+            ColumnStorageOptions                                  y => this.Traverse(y),
+            ConstraintDefinition                                  y => this.Traverse(y),
+            FederationScheme                                      y => this.Traverse(y),
+            TableDistributionPolicy                               y => this.Traverse(y),
+            TableIndexType                                        y => this.Traverse(y),
+            PartitionSpecifications                               y => this.Traverse(y),
+            CompressionPartitionRange                             y => this.Traverse(y),
+            GraphConnectionBetweenNodes                           y => this.Traverse(y),
+            RestoreOption                                         y => this.Traverse(y),
+            BackupOption                                          y => this.Traverse(y),
+            DeviceInfo                                            y => this.Traverse(y),
+            MirrorToClause                                        y => this.Traverse(y),
+            BackupRestoreFileInfo                                 y => this.Traverse(y),
+            BulkInsertOption                                      y => this.Traverse(y),
+            ExternalTableColumnDefinition                         y => this.Traverse(y),
+            InsertBulkColumnDefinition                            y => this.Traverse(y),
+            DbccOption                                            y => this.Traverse(y),
+            DbccNamedLiteral                                      y => this.Traverse(y),
+            PartitionParameterType                                y => this.Traverse(y),
+            RemoteServiceBindingOption                            y => this.Traverse(y),
+            EncryptionSource                                      y => this.Traverse(y),
+            CertificateOption                                     y => this.Traverse(y),
+            ContractMessage                                       y => this.Traverse(y),
+            EndpointAffinity                                      y => this.Traverse(y),
+            EndpointProtocolOption                                y => this.Traverse(y),
+            IPv4                                                  y => this.Traverse(y),
+            PayloadOption                                         y => this.Traverse(y),
+            KeyOption                                             y => this.Traverse(y),
+            FullTextCatalogOption                                 y => this.Traverse(y),
+            ServiceContract                                       y => this.Traverse(y),
+            ComputeClause                                         y => this.Traverse(y),
+            ComputeFunction                                       y => this.Traverse(y),
+            TableSampleClause                                     y => this.Traverse(y),
+            ExpressionWithSortOrder                               y => this.Traverse(y),
+            GroupByClause                                         y => this.Traverse(y),
+            GroupingSpecification                                 y => this.Traverse(y),
+            OutputClause                                          y => this.Traverse(y),
+            OutputIntoClause                                      y => this.Traverse(y),
+            HavingClause                                          y => this.Traverse(y),
+            OrderByClause                                         y => this.Traverse(y),
+            QueryExpression                                       y => this.QueryExpression(y),
+            FromClause                                            y => this.Traverse(y),
+            SelectElement                                         y => this.Traverse(y),
+            TopRowFilter                                          y => this.Traverse(y),
+            OffsetClause                                          y => this.Traverse(y),
+            AlterFullTextIndexAction                              y => this.Traverse(y),
+            SearchPropertyListAction                              y => this.Traverse(y),
+            CreateLoginSource                                     y => this.Traverse(y),
+            PrincipalOption                                       y => this.Traverse(y),
+            DialogOption                                          y => this.Traverse(y),
+            TSqlFragmentSnippet                                   y => this.Traverse(y),
+            TSqlScript                                            y => this.Traverse(y),
+            TSqlBatch                                             y => this.Traverse(y),
+            MergeActionClause                                     y => this.Traverse(y),
+            MergeAction                                           y => this.Traverse(y),
+            AuditSpecificationPart                                y => this.Traverse(y),
+            AuditSpecificationDetail                              y => this.Traverse(y),
+            DatabaseAuditAction                                   y => this.Traverse(y),
+            AuditTarget                                           y => this.XmlNamespaces(y),
+            AuditOption                                           y => this.Traverse(y),
+            AuditTargetOption                                     y => this.Traverse(y),
+            ResourcePoolParameter                                 y => this.Traverse(y),
+            ResourcePoolAffinitySpecification                     y => this.Traverse(y),
+            ExternalResourcePoolParameter                         y => this.Traverse(y),
+            ExternalResourcePoolAffinitySpecification             y => this.Traverse(y),
+            WorkloadGroupParameter                                y => this.Traverse(y),
+            BrokerPriorityParameter                               y => this.Traverse(y),
+            FullTextStopListAction                                y => this.Traverse(y),
+            EventSessionObjectName                                y => this.Traverse(y),
+            EventDeclaration                                      y => this.Traverse(y),
+            EventDeclarationSetParameter                          y => this.Traverse(y),
+            TargetDeclaration                                     y => this.Traverse(y),
+            SessionOption                                         y => this.Traverse(y),
+            SpatialIndexOption                                    y => this.Traverse(y),
+            BoundingBoxParameter                                  y => this.Traverse(y),
+            GridParameter                                         y => this.Traverse(y),
+            AlterServerConfigurationBufferPoolExtensionOption     y => this.Traverse(y),
+            AlterServerConfigurationDiagnosticsLogOption          y => this.Traverse(y),
             AlterServerConfigurationFailoverClusterPropertyOption y => this.Traverse(y),
-            AlterServerConfigurationHadrClusterOption y => this.Traverse(y),
-            AlterServerConfigurationSoftNumaOption y => this.Traverse(y),
-            AvailabilityReplica y => this.Traverse(y),
-            AvailabilityReplicaOption y => this.Traverse(y),
-            AvailabilityGroupOption y => this.Traverse(y),
-            AlterAvailabilityGroupAction y => this.Traverse(y),
-            AlterAvailabilityGroupFailoverOption y => this.Traverse(y),
-            DiskStatementOption y => this.Traverse(y),
-            WindowFrameClause y => this.Traverse(y),
-            WindowDelimiter y => this.Traverse(y),
-            WithinGroupClause y => this.Traverse(y),
-            SelectiveXmlIndexPromotedPath y => this.Traverse(y),
-            TemporalClause y => this.Traverse(y),
+            AlterServerConfigurationHadrClusterOption             y => this.Traverse(y),
+            AlterServerConfigurationSoftNumaOption                y => this.Traverse(y),
+            AvailabilityReplica                                   y => this.Traverse(y),
+            AvailabilityReplicaOption                             y => this.Traverse(y),
+            AvailabilityGroupOption                               y => this.Traverse(y),
+            AlterAvailabilityGroupAction                          y => this.Traverse(y),
+            AlterAvailabilityGroupFailoverOption                  y => this.Traverse(y),
+            DiskStatementOption                                   y => this.Traverse(y),
+            WindowFrameClause                                     y => this.Traverse(y),
+            WindowDelimiter                                       y => this.Traverse(y),
+            WithinGroupClause                                     y => this.Traverse(y),
+            SelectiveXmlIndexPromotedPath                         y => this.Traverse(y),
+            TemporalClause                                        y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -656,166 +656,166 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TSqlStatement TSqlStatement(TSqlStatement x) => x switch{
-            ExecuteStatement y => this.Statement(y),
-            ViewStatementBody y => this.Statement(y),
-            TriggerStatementBody y => this.Statement(y),
-            ProcedureStatementBodyBase y => this.Statement(y),
-            DeclareTableVariableStatement y => this.Statement(y),
-            StatementWithCtesAndXmlNamespaces y => this.Statement(y),
-            BeginEndBlockStatement y => this.Statement(y),
-            TransactionStatement y => this.Statement(y),
-            BreakStatement y => this.Statement(y),
-            ContinueStatement y => this.Statement(y),
-            CreateDefaultStatement y => this.Statement(y),
-            CreateRuleStatement y => this.Statement(y),
-            DeclareVariableStatement y => this.Statement(y),
-            GoToStatement y => this.Statement(y),
-            IfStatement y => this.Statement(y),
-            LabelStatement y => this.Statement(y),
-            WhileStatement y => this.Statement(y),
-            CreateSchemaStatement y => this.Statement(y),
-            WaitForStatement y => this.Statement(y),
-            ReadTextStatement y => this.Statement(y),
-            TextModificationStatement y => this.Statement(y),
-            LineNoStatement y => this.Statement(y),
-            SecurityStatement y => this.Statement(y),
-            AlterAuthorizationStatement y => this.Statement(y),
-            SecurityStatementBody80 y => this.Statement(y),
-            PrintStatement y => this.Statement(y),
-            SequenceStatement y => this.Statement(y),
-            DropObjectsStatement y => this.Statement(y),
-            SecurityPolicyStatement y => this.Statement(y),
-            CreateColumnMasterKeyStatement y => this.Statement(y),
-            DropUnownedObjectStatement y => this.Statement(y),
-            ColumnEncryptionKeyStatement y => this.Statement(y),
-            ExternalTableStatement y => this.Statement(y),
-            ExternalDataSourceStatement y => this.Statement(y),
-            ExternalFileFormatStatement y => this.Statement(y),
-            AssemblyStatement y => this.Statement(y),
-            CreateXmlSchemaCollectionStatement y => this.Statement(y),
-            AlterXmlSchemaCollectionStatement y => this.Statement(y),
-            DropXmlSchemaCollectionStatement y => this.Statement(y),
-            AlterTableStatement y => this.Statement(y),
-            EnableDisableTriggerStatement y => this.Statement(y),
-            TryCatchStatement y => this.Statement(y),
-            CreateTypeStatement y => this.Statement(y),
-            CreateSynonymStatement y => this.Statement(y),
-            RouteStatement y => this.Statement(y),
-            QueueStatement y => this.Statement(y),
-            IndexDefinition y => this.Statement(y),
-            IndexStatement y => this.Statement(y),
-            CreateFullTextIndexStatement y => this.Statement(y),
-            CreateEventNotificationStatement y => this.Statement(y),
-            MasterKeyStatement y => this.Statement(y),
-            ApplicationRoleStatement y => this.Statement(y),
-            RoleStatement y => this.Statement(y),
-            UserStatement y => this.Statement(y),
-            CreateStatisticsStatement y => this.Statement(y),
-            UpdateStatisticsStatement y => this.Statement(y),
-            ReturnStatement y => this.Statement(y),
-            DeclareCursorStatement y => this.Statement(y),
-            SetVariableStatement y => this.Statement(y),
-            CursorStatement y => this.Statement(y),
-            OpenSymmetricKeyStatement y => this.Statement(y),
-            CloseSymmetricKeyStatement y => this.Statement(y),
-            OpenMasterKeyStatement y => this.Statement(y),
-            CloseMasterKeyStatement y => this.Statement(y),
-            DropDatabaseStatement y => this.Statement(y),
-            DropChildObjectsStatement y => this.Statement(y),
-            DropIndexStatement y => this.Statement(y),
-            DropSchemaStatement y => this.Statement(y),
-            RaiseErrorLegacyStatement y => this.Statement(y),
-            RaiseErrorStatement y => this.Statement(y),
-            ThrowStatement y => this.Statement(y),
-            UseStatement y => this.Statement(y),
-            KillStatement y => this.Statement(y),
-            KillQueryNotificationSubscriptionStatement y => this.Statement(y),
-            KillStatsJobStatement y => this.Statement(y),
-            CheckpointStatement y => this.Statement(y),
-            ReconfigureStatement y => this.Statement(y),
-            ShutdownStatement y => this.Statement(y),
-            SetUserStatement y => this.Statement(y),
-            TruncateTableStatement y => this.Statement(y),
-            SetOnOffStatement y => this.Statement(y),
-            SetRowCountStatement y => this.Statement(y),
-            SetCommandStatement y => this.Statement(y),
-            SetTransactionIsolationLevelStatement y => this.Statement(y),
-            SetTextSizeStatement y => this.Statement(y),
-            SetErrorLevelStatement y => this.Statement(y),
-            CreateDatabaseStatement y => this.Statement(y),
-            AlterDatabaseStatement y => this.Statement(y),
-            AlterDatabaseScopedConfigurationStatement y => this.Statement(y),
-            CreateTableStatement y => this.Statement(y),
-            BackupStatement y => this.Statement(y),
-            RestoreStatement y => this.Statement(y),
-            BulkInsertBase y => this.Statement(y),
-            DbccStatement y => this.Statement(y),
-            CreateAsymmetricKeyStatement y => this.Statement(y),
-            CreatePartitionFunctionStatement y => this.Statement(y),
-            CreatePartitionSchemeStatement y => this.Statement(y),
-            RemoteServiceBindingStatementBase y => this.Statement(y),
-            CertificateStatementBase y => this.Statement(y),
-            CreateContractStatement y => this.Statement(y),
-            CredentialStatement y => this.Statement(y),
-            MessageTypeStatementBase y => this.Statement(y),
-            CreateAggregateStatement y => this.Statement(y),
-            AlterCreateEndpointStatementBase y => this.Statement(y),
-            SymmetricKeyStatement y => this.Statement(y),
-            FullTextCatalogStatement y => this.Statement(y),
-            AlterCreateServiceStatementBase y => this.Statement(y),
-            DropFullTextIndexStatement y => this.Statement(y),
-            DropTypeStatement y => this.DropTypeStatement(y),
-            DropMasterKeyStatement y => this.DropMasterKeyStatement(y),
-            AlterPartitionFunctionStatement y => this.AlterPartitionFunctionStatement(y),
-            AlterPartitionSchemeStatement y => this.AlterPartitionSchemeStatement(y),
-            AlterFullTextIndexStatement y => this.AlterFullTextIndexStatement(y),
-            CreateSearchPropertyListStatement y => this.CreateSearchPropertyListStatement(y),
-            AlterSearchPropertyListStatement y => this.AlterSearchPropertyListStatement(y),
-            CreateLoginStatement y => this.CreateLoginStatement(y),
-            AlterLoginStatement y => this.Statement(y),
-            RevertStatement y => this.RevertStatement(y),
-            DropQueueStatement y => this.DropQueueStatement(y),
-            SignatureStatementBase y => this.SignatureStatementBase(y),
-            DropEventNotificationStatement y => this.Statement(y),
-            ExecuteAsStatement y => this.Statement(y),
-            EndConversationStatement y => this.Statement(y),
-            MoveConversationStatement y => this.Statement(y),
-            WaitForSupportedStatement y => this.Statement(y),
-            SendStatement y => this.Statement(y),
-            AlterSchemaStatement y => this.Statement(y),
-            AlterAsymmetricKeyStatement y => this.Statement(y),
-            AlterServiceMasterKeyStatement y => this.Statement(y),
-            BeginConversationTimerStatement y => this.Statement(y),
-            BeginDialogStatement y => this.Statement(y),
-            BackupRestoreMasterKeyStatementBase y => this.Statement(y),
-            TSqlStatementSnippet y => this.Statement(y),
-            AuditSpecificationStatement y => this.Statement(y),
-            ServerAuditStatement y => this.Statement(y),
-            DatabaseEncryptionKeyStatement y => this.Statement(y),
-            DropDatabaseEncryptionKeyStatement y => this.Statement(y),
-            ResourcePoolStatement y => this.Statement(y),
-            ExternalResourcePoolStatement y => this.Statement(y),
-            WorkloadGroupStatement y => this.Statement(y),
-            BrokerPriorityStatement y => this.Statement(y),
-            CreateFullTextStopListStatement y => this.Statement(y),
-            AlterFullTextStopListStatement y => this.Statement(y),
-            CreateCryptographicProviderStatement y => this.Statement(y),
-            AlterCryptographicProviderStatement y=> this.Statement(y),
-            EventSessionStatement y => this.Statement(y),
-            AlterResourceGovernorStatement y => this.Statement(y),
-            CreateSpatialIndexStatement y => this.Statement(y),
-            AlterServerConfigurationStatement y => this.Statement(y),
-            AlterServerConfigurationSetBufferPoolExtensionStatement y => this.Statement(y),
-            AlterServerConfigurationSetDiagnosticsLogStatement y => this.Statement(y),
+            ExecuteStatement                                            y => this.Statement(y),
+            ViewStatementBody                                           y => this.Statement(y),
+            TriggerStatementBody                                        y => this.Statement(y),
+            ProcedureStatementBodyBase                                  y => this.Statement(y),
+            DeclareTableVariableStatement                               y => this.Statement(y),
+            StatementWithCtesAndXmlNamespaces                           y => this.Statement(y),
+            BeginEndBlockStatement                                      y => this.Statement(y),
+            TransactionStatement                                        y => this.Statement(y),
+            BreakStatement                                              y => this.Statement(y),
+            ContinueStatement                                           y => this.Statement(y),
+            CreateDefaultStatement                                      y => this.Statement(y),
+            CreateRuleStatement                                         y => this.Statement(y),
+            DeclareVariableStatement                                    y => this.Statement(y),
+            GoToStatement                                               y => this.Statement(y),
+            IfStatement                                                 y => this.Statement(y),
+            LabelStatement                                              y => this.Statement(y),
+            WhileStatement                                              y => this.Statement(y),
+            CreateSchemaStatement                                       y => this.Statement(y),
+            WaitForStatement                                            y => this.Statement(y),
+            ReadTextStatement                                           y => this.Statement(y),
+            TextModificationStatement                                   y => this.Statement(y),
+            LineNoStatement                                             y => this.Statement(y),
+            SecurityStatement                                           y => this.Statement(y),
+            AlterAuthorizationStatement                                 y => this.Statement(y),
+            SecurityStatementBody80                                     y => this.Statement(y),
+            PrintStatement                                              y => this.Statement(y),
+            SequenceStatement                                           y => this.Statement(y),
+            DropObjectsStatement                                        y => this.Statement(y),
+            SecurityPolicyStatement                                     y => this.Statement(y),
+            CreateColumnMasterKeyStatement                              y => this.Statement(y),
+            DropUnownedObjectStatement                                  y => this.Statement(y),
+            ColumnEncryptionKeyStatement                                y => this.Statement(y),
+            ExternalTableStatement                                      y => this.Statement(y),
+            ExternalDataSourceStatement                                 y => this.Statement(y),
+            ExternalFileFormatStatement                                 y => this.Statement(y),
+            AssemblyStatement                                           y => this.Statement(y),
+            CreateXmlSchemaCollectionStatement                          y => this.Statement(y),
+            AlterXmlSchemaCollectionStatement                           y => this.Statement(y),
+            DropXmlSchemaCollectionStatement                            y => this.Statement(y),
+            AlterTableStatement                                         y => this.Statement(y),
+            EnableDisableTriggerStatement                               y => this.Statement(y),
+            TryCatchStatement                                           y => this.Statement(y),
+            CreateTypeStatement                                         y => this.Statement(y),
+            CreateSynonymStatement                                      y => this.Statement(y),
+            RouteStatement                                              y => this.Statement(y),
+            QueueStatement                                              y => this.Statement(y),
+            IndexDefinition                                             y => this.Statement(y),
+            IndexStatement                                              y => this.Statement(y),
+            CreateFullTextIndexStatement                                y => this.Statement(y),
+            CreateEventNotificationStatement                            y => this.Statement(y),
+            MasterKeyStatement                                          y => this.Statement(y),
+            ApplicationRoleStatement                                    y => this.Statement(y),
+            RoleStatement                                               y => this.Statement(y),
+            UserStatement                                               y => this.Statement(y),
+            CreateStatisticsStatement                                   y => this.Statement(y),
+            UpdateStatisticsStatement                                   y => this.Statement(y),
+            ReturnStatement                                             y => this.Statement(y),
+            DeclareCursorStatement                                      y => this.Statement(y),
+            SetVariableStatement                                        y => this.Statement(y),
+            CursorStatement                                             y => this.Statement(y),
+            OpenSymmetricKeyStatement                                   y => this.Statement(y),
+            CloseSymmetricKeyStatement                                  y => this.Statement(y),
+            OpenMasterKeyStatement                                      y => this.Statement(y),
+            CloseMasterKeyStatement                                     y => this.Statement(y),
+            DropDatabaseStatement                                       y => this.Statement(y),
+            DropChildObjectsStatement                                   y => this.Statement(y),
+            DropIndexStatement                                          y => this.Statement(y),
+            DropSchemaStatement                                         y => this.Statement(y),
+            RaiseErrorLegacyStatement                                   y => this.Statement(y),
+            RaiseErrorStatement                                         y => this.Statement(y),
+            ThrowStatement                                              y => this.Statement(y),
+            UseStatement                                                y => this.Statement(y),
+            KillStatement                                               y => this.Statement(y),
+            KillQueryNotificationSubscriptionStatement                  y => this.Statement(y),
+            KillStatsJobStatement                                       y => this.Statement(y),
+            CheckpointStatement                                         y => this.Statement(y),
+            ReconfigureStatement                                        y => this.Statement(y),
+            ShutdownStatement                                           y => this.Statement(y),
+            SetUserStatement                                            y => this.Statement(y),
+            TruncateTableStatement                                      y => this.Statement(y),
+            SetOnOffStatement                                           y => this.Statement(y),
+            SetRowCountStatement                                        y => this.Statement(y),
+            SetCommandStatement                                         y => this.Statement(y),
+            SetTransactionIsolationLevelStatement                       y => this.Statement(y),
+            SetTextSizeStatement                                        y => this.Statement(y),
+            SetErrorLevelStatement                                      y => this.Statement(y),
+            CreateDatabaseStatement                                     y => this.Statement(y),
+            AlterDatabaseStatement                                      y => this.Statement(y),
+            AlterDatabaseScopedConfigurationStatement                   y => this.Statement(y),
+            CreateTableStatement                                        y => this.Statement(y),
+            BackupStatement                                             y => this.Statement(y),
+            RestoreStatement                                            y => this.Statement(y),
+            BulkInsertBase                                              y => this.Statement(y),
+            DbccStatement                                               y => this.Statement(y),
+            CreateAsymmetricKeyStatement                                y => this.Statement(y),
+            CreatePartitionFunctionStatement                            y => this.Statement(y),
+            CreatePartitionSchemeStatement                              y => this.Statement(y),
+            RemoteServiceBindingStatementBase                           y => this.Statement(y),
+            CertificateStatementBase                                    y => this.Statement(y),
+            CreateContractStatement                                     y => this.Statement(y),
+            CredentialStatement                                         y => this.Statement(y),
+            MessageTypeStatementBase                                    y => this.Statement(y),
+            CreateAggregateStatement                                    y => this.Statement(y),
+            AlterCreateEndpointStatementBase                            y => this.Statement(y),
+            SymmetricKeyStatement                                       y => this.Statement(y),
+            FullTextCatalogStatement                                    y => this.Statement(y),
+            AlterCreateServiceStatementBase                             y => this.Statement(y),
+            DropFullTextIndexStatement                                  y => this.Statement(y),
+            DropTypeStatement                                           y => this.DropTypeStatement(y),
+            DropMasterKeyStatement                                      y => this.DropMasterKeyStatement(y),
+            AlterPartitionFunctionStatement                             y => this.AlterPartitionFunctionStatement(y),
+            AlterPartitionSchemeStatement                               y => this.AlterPartitionSchemeStatement(y),
+            AlterFullTextIndexStatement                                 y => this.AlterFullTextIndexStatement(y),
+            CreateSearchPropertyListStatement                           y => this.CreateSearchPropertyListStatement(y),
+            AlterSearchPropertyListStatement                            y => this.AlterSearchPropertyListStatement(y),
+            CreateLoginStatement                                        y => this.CreateLoginStatement(y),
+            AlterLoginStatement                                         y => this.Statement(y),
+            RevertStatement                                             y => this.RevertStatement(y),
+            DropQueueStatement                                          y => this.DropQueueStatement(y),
+            SignatureStatementBase                                      y => this.SignatureStatementBase(y),
+            DropEventNotificationStatement                              y => this.Statement(y),
+            ExecuteAsStatement                                          y => this.Statement(y),
+            EndConversationStatement                                    y => this.Statement(y),
+            MoveConversationStatement                                   y => this.Statement(y),
+            WaitForSupportedStatement                                   y => this.Statement(y),
+            SendStatement                                               y => this.Statement(y),
+            AlterSchemaStatement                                        y => this.Statement(y),
+            AlterAsymmetricKeyStatement                                 y => this.Statement(y),
+            AlterServiceMasterKeyStatement                              y => this.Statement(y),
+            BeginConversationTimerStatement                             y => this.Statement(y),
+            BeginDialogStatement                                        y => this.Statement(y),
+            BackupRestoreMasterKeyStatementBase                         y => this.Statement(y),
+            TSqlStatementSnippet                                        y => this.Statement(y),
+            AuditSpecificationStatement                                 y => this.Statement(y),
+            ServerAuditStatement                                        y => this.Statement(y),
+            DatabaseEncryptionKeyStatement                              y => this.Statement(y),
+            DropDatabaseEncryptionKeyStatement                          y => this.Statement(y),
+            ResourcePoolStatement                                       y => this.Statement(y),
+            ExternalResourcePoolStatement                               y => this.Statement(y),
+            WorkloadGroupStatement                                      y => this.Statement(y),
+            BrokerPriorityStatement                                     y => this.Statement(y),
+            CreateFullTextStopListStatement                             y => this.Statement(y),
+            AlterFullTextStopListStatement                              y => this.Statement(y),
+            CreateCryptographicProviderStatement                        y => this.Statement(y),
+            AlterCryptographicProviderStatement                         y => this.Statement(y),
+            EventSessionStatement                                       y => this.Statement(y),
+            AlterResourceGovernorStatement                              y => this.Statement(y),
+            CreateSpatialIndexStatement                                 y => this.Statement(y),
+            AlterServerConfigurationStatement                           y => this.Statement(y),
+            AlterServerConfigurationSetBufferPoolExtensionStatement     y => this.Statement(y),
+            AlterServerConfigurationSetDiagnosticsLogStatement          y => this.Statement(y),
             AlterServerConfigurationSetFailoverClusterPropertyStatement y => this.Statement(y),
-            AlterServerConfigurationSetHadrClusterStatement y => this.Statement(y),
-            AlterServerConfigurationSetSoftNumaStatement y => this.Statement(y),
-            AvailabilityGroupStatement y => this.Statement(y),
-            CreateFederationStatement y => this.Statement(y),
-            AlterFederationStatement y => this.Statement(y),
-            UseFederationStatement y => this.Statement(y),
-            DiskStatement y => this.Statement(y),
-            CreateColumnStoreIndexStatement y => this.Statement(y),
+            AlterServerConfigurationSetHadrClusterStatement             y => this.Statement(y),
+            AlterServerConfigurationSetSoftNumaStatement                y => this.Statement(y),
+            AvailabilityGroupStatement                                  y => this.Statement(y),
+            CreateFederationStatement                                   y => this.Statement(y),
+            AlterFederationStatement                                    y => this.Statement(y),
+            UseFederationStatement                                      y => this.Statement(y),
+            DiskStatement                                               y => this.Statement(y),
+            CreateColumnStoreIndexStatement                             y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -830,8 +830,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ViewStatementBody Statement(ViewStatementBody x) => x switch{
-            AlterViewStatement y=>this.Statement(y),
-            CreateViewStatement y => this.Statement(y),
+            AlterViewStatement         y => this.Statement(y),
+            CreateViewStatement        y => this.Statement(y),
             CreateOrAlterViewStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -859,8 +859,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TriggerStatementBody Statement(TriggerStatementBody x) => x switch{
-            AlterTriggerStatement y=>this.Statement(y),
-            CreateTriggerStatement y => this.Statement(y),
+            AlterTriggerStatement         y => this.Statement(y),
+            CreateTriggerStatement        y => this.Statement(y),
             CreateOrAlterTriggerStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -888,8 +888,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ProcedureStatementBodyBase Statement(ProcedureStatementBodyBase x) => x switch{
-            ProcedureStatementBody y=>this.Statement(y),
-            FunctionStatementBody y => this.Statement(y),
+            ProcedureStatementBody y => this.Statement(y),
+            FunctionStatementBody  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -898,8 +898,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ProcedureStatementBody Statement(ProcedureStatementBody x) => x switch{
-            AlterProcedureStatement y=>this.Statement(y),
-            CreateProcedureStatement y => this.Statement(y),
+            AlterProcedureStatement         y => this.Statement(y),
+            CreateProcedureStatement        y => this.Statement(y),
             CreateOrAlterProcedureStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -923,8 +923,8 @@ public sealed partial class Optimizer{
         protected virtual CreateOrAlterProcedureStatement Statement(CreateOrAlterProcedureStatement x) => x;
         ///ProcedureStatementBodyBase:TriggerStatementBody:TSqlStatement:TSqlFragment
         protected virtual FunctionStatementBody Statement(FunctionStatementBody x) => x switch{
-            AlterFunctionStatement y=>this.Statement(y),
-            CreateFunctionStatement y => this.Statement(y),
+            AlterFunctionStatement         y => this.Statement(y),
+            CreateFunctionStatement        y => this.Statement(y),
             CreateOrAlterFunctionStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -958,7 +958,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual StatementWithCtesAndXmlNamespaces Statement(StatementWithCtesAndXmlNamespaces x) => x switch{
-            SelectStatement y=>this.Statement(y),
+            SelectStatement           y => this.Statement(y),
             DataModificationStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -986,7 +986,7 @@ public sealed partial class Optimizer{
             DeleteStatement y => this.Statement(y),
             InsertStatement y => this.Statement(y),
             UpdateStatement y => this.Statement(y),
-            MergeStatement y => this.Statement(y),
+            MergeStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1034,10 +1034,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TransactionStatement Statement(TransactionStatement x) => x switch{
-            BeginTransactionStatement y => this.Statement(y),
-            CommitTransactionStatement y => this.Statement(y),
+            BeginTransactionStatement    y => this.Statement(y),
+            CommitTransactionStatement   y => this.Statement(y),
             RollbackTransactionStatement y => this.Statement(y),
-            SaveTransactionStatement y => this.Statement(y),
+            SaveTransactionStatement     y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1143,7 +1143,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual TextModificationStatement Statement(TextModificationStatement x) => x switch{
             UpdateTextStatement y => this.Statement(y),
-            WriteTextStatement y => this.Statement(y),
+            WriteTextStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1170,8 +1170,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SecurityStatement Statement(SecurityStatement x) => x switch{
-            GrantStatement y => this.Statement(y),
-            DenyStatement y => this.Statement(y),
+            GrantStatement  y => this.Statement(y),
+            DenyStatement   y => this.Statement(y),
             RevokeStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -1205,8 +1205,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SecurityStatementBody80 Statement(SecurityStatementBody80 x) => x switch{
-            GrantStatement80 y => this.Statement(y),
-            DenyStatement80 y => this.Statement(y),
+            GrantStatement80  y => this.Statement(y),
+            DenyStatement80   y => this.Statement(y),
             RevokeStatement80 y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -1241,7 +1241,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual SequenceStatement Statement(SequenceStatement x) => x switch{
             CreateSequenceStatement y => this.Statement(y),
-            AlterSequenceStatement y => this.Statement(y),
+            AlterSequenceStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1262,19 +1262,19 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual DropObjectsStatement Statement(DropObjectsStatement x) => x switch{
-            DropSequenceStatement y => this.Statement(y),
+            DropSequenceStatement       y => this.Statement(y),
             DropSecurityPolicyStatement y => this.Statement(y),
-            DropExternalTableStatement y => this.Statement(y),
-            DropTableStatement y => this.Statement(y),
-            DropProcedureStatement y => this.Statement(y),
-            DropFunctionStatement y => this.Statement(y),
-            DropViewStatement y => this.Statement(y),
-            DropDefaultStatement y => this.Statement(y),
-            DropRuleStatement y => this.Statement(y),
-            DropTriggerStatement y => this.Statement(y),
-            DropSynonymStatement y => this.Statement(y),
-            DropAggregateStatement y => this.Statement(y),
-            DropAssemblyStatement y => this.Statement(y),
+            DropExternalTableStatement  y => this.Statement(y),
+            DropTableStatement          y => this.Statement(y),
+            DropProcedureStatement      y => this.Statement(y),
+            DropFunctionStatement       y => this.Statement(y),
+            DropViewStatement           y => this.Statement(y),
+            DropDefaultStatement        y => this.Statement(y),
+            DropRuleStatement           y => this.Statement(y),
+            DropTriggerStatement        y => this.Statement(y),
+            DropSynonymStatement        y => this.Statement(y),
+            DropAggregateStatement      y => this.Statement(y),
+            DropAssemblyStatement       y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1362,7 +1362,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual SecurityPolicyStatement Statement(SecurityPolicyStatement x) => x switch{
             CreateSecurityPolicyStatement y => this.Statement(y),
-            AlterSecurityPolicyStatement y => this.Statement(y),
+            AlterSecurityPolicyStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1389,41 +1389,41 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual DropUnownedObjectStatement Statement(DropUnownedObjectStatement x) => x switch{
-            DropColumnMasterKeyStatement y => this.Statement(y),
-            DropColumnEncryptionKeyStatement y => this.Statement(y),
-            DropExternalDataSourceStatement y => this.Statement(y),
-            DropExternalFileFormatStatement y => this.Statement(y),
-            DropServerRoleStatement y => this.Statement(y),
-            DropPartitionFunctionStatement y => this.Statement(y),
-            DropPartitionSchemeStatement y => this.Statement(y),
-            DropApplicationRoleStatement y => this.Statement(y),
-            DropFullTextCatalogStatement y => this.Statement(y),
-            DropLoginStatement y => this.Statement(y),
-            DropRoleStatement y => this.Statement(y),
-            DropUserStatement y => this.Statement(y),
-            DropSymmetricKeyStatement y => this.Statement(y),
-            DropAsymmetricKeyStatement y => this.Statement(y),
-            DropCertificateStatement y => this.Statement(y),
-            DropCredentialStatement y => this.Statement(y),
-            DropSearchPropertyListStatement y => this.Statement(y),
-            DropContractStatement y => this.Statement(y),
-            DropEndpointStatement y => this.Statement(y),
-            DropMessageTypeStatement y => this.Statement(y),
-            DropRemoteServiceBindingStatement y => this.Statement(y),
-            DropRouteStatement y => this.Statement(y),
-            DropServiceStatement y => this.Statement(y),
+            DropColumnMasterKeyStatement            y => this.Statement(y),
+            DropColumnEncryptionKeyStatement        y => this.Statement(y),
+            DropExternalDataSourceStatement         y => this.Statement(y),
+            DropExternalFileFormatStatement         y => this.Statement(y),
+            DropServerRoleStatement                 y => this.Statement(y),
+            DropPartitionFunctionStatement          y => this.Statement(y),
+            DropPartitionSchemeStatement            y => this.Statement(y),
+            DropApplicationRoleStatement            y => this.Statement(y),
+            DropFullTextCatalogStatement            y => this.Statement(y),
+            DropLoginStatement                      y => this.Statement(y),
+            DropRoleStatement                       y => this.Statement(y),
+            DropUserStatement                       y => this.Statement(y),
+            DropSymmetricKeyStatement               y => this.Statement(y),
+            DropAsymmetricKeyStatement              y => this.Statement(y),
+            DropCertificateStatement                y => this.Statement(y),
+            DropCredentialStatement                 y => this.Statement(y),
+            DropSearchPropertyListStatement         y => this.Statement(y),
+            DropContractStatement                   y => this.Statement(y),
+            DropEndpointStatement                   y => this.Statement(y),
+            DropMessageTypeStatement                y => this.Statement(y),
+            DropRemoteServiceBindingStatement       y => this.Statement(y),
+            DropRouteStatement                      y => this.Statement(y),
+            DropServiceStatement                    y => this.Statement(y),
             DropDatabaseAuditSpecificationStatement y => this.Statement(y),
-            DropServerAuditSpecificationStatement y => this.Statement(y),
-            DropServerAuditStatement y => this.Statement(y),
-            DropResourcePoolStatement y => this.Statement(y),
-            DropExternalResourcePoolStatement y => this.Statement(y),
-            DropWorkloadGroupStatement y => this.Statement(y),
-            DropBrokerPriorityStatement y => this.Statement(y),
-            DropFullTextStopListStatement y => this.Statement(y),
-            DropCryptographicProviderStatement y => this.Statement(y),
-            DropEventSessionStatement y => this.Statement(y),
-            DropAvailabilityGroupStatement y => this.Statement(y),
-            DropFederationStatement y => this.Statement(y),
+            DropServerAuditSpecificationStatement   y => this.Statement(y),
+            DropServerAuditStatement                y => this.Statement(y),
+            DropResourcePoolStatement               y => this.Statement(y),
+            DropExternalResourcePoolStatement       y => this.Statement(y),
+            DropWorkloadGroupStatement              y => this.Statement(y),
+            DropBrokerPriorityStatement             y => this.Statement(y),
+            DropFullTextStopListStatement           y => this.Statement(y),
+            DropCryptographicProviderStatement      y => this.Statement(y),
+            DropEventSessionStatement               y => this.Statement(y),
+            DropAvailabilityGroupStatement          y => this.Statement(y),
+            DropFederationStatement                 y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1756,17 +1756,17 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterTableStatement Statement(AlterTableStatement x) => x switch{
-            AlterTableRebuildStatement y => this.Statement(y),
+            AlterTableRebuildStatement                    y => this.Statement(y),
             AlterTableChangeTrackingModificationStatement y => this.Statement(y),
-            AlterTableFileTableNamespaceStatement y => this.Statement(y),
-            AlterTableSetStatement y => this.Statement(y),
-            AlterTableAddTableElementStatement y => this.Statement(y),
-            AlterTableConstraintModificationStatement y => this.Statement(y),
-            AlterTableSwitchStatement y => this.Statement(y),
-            AlterTableDropTableElementStatement y => this.Statement(y),
-            AlterTableTriggerModificationStatement y => this.Statement(y),
-            AlterTableAlterIndexStatement y => this.Statement(y),
-            AlterTableAlterColumnStatement y => this.Statement(y),
+            AlterTableFileTableNamespaceStatement         y => this.Statement(y),
+            AlterTableSetStatement                        y => this.Statement(y),
+            AlterTableAddTableElementStatement            y => this.Statement(y),
+            AlterTableConstraintModificationStatement     y => this.Statement(y),
+            AlterTableSwitchStatement                     y => this.Statement(y),
+            AlterTableDropTableElementStatement           y => this.Statement(y),
+            AlterTableTriggerModificationStatement        y => this.Statement(y),
+            AlterTableAlterIndexStatement                 y => this.Statement(y),
+            AlterTableAlterColumnStatement                y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1853,8 +1853,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual CreateTypeStatement Statement(CreateTypeStatement x) => x switch{
-            CreateTypeUdtStatement y => this.Statement(y),
-            CreateTypeUddtStatement y => this.Statement(y),
+            CreateTypeUdtStatement   y => this.Statement(y),
+            CreateTypeUddtStatement  y => this.Statement(y),
             CreateTypeTableStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -1889,7 +1889,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual RouteStatement Statement(RouteStatement x) => x switch{
             CreateRouteStatement y => this.Statement(y),
-            AlterRouteStatement y => this.Statement(y),
+            AlterRouteStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1911,7 +1911,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual QueueStatement Statement(QueueStatement x) => x switch{
             CreateQueueStatement y => this.Statement(y),
-            AlterQueueStatement y => this.Statement(y),
+            AlterQueueStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1938,10 +1938,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual IndexStatement Statement(IndexStatement x) => x switch{
-            AlterIndexStatement y => this.Statement(y),
-            CreateXmlIndexStatement y => this.Statement(y),
+            AlterIndexStatement              y => this.Statement(y),
+            CreateXmlIndexStatement          y => this.Statement(y),
             CreateSelectiveXmlIndexStatement y => this.Statement(y),
-            CreateIndexStatement y => this.Statement(y),
+            CreateIndexStatement             y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -1987,7 +1987,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual MasterKeyStatement Statement(MasterKeyStatement x) => x switch{
             CreateMasterKeyStatement y => this.Statement(y),
-            AlterMasterKeyStatement y => this.Statement(y),
+            AlterMasterKeyStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2015,7 +2015,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual RoleStatement Statement(RoleStatement x) => x switch{
             CreateRoleStatement y => this.Statement(y),
-            AlterRoleStatement y => this.Statement(y),
+            AlterRoleStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2055,7 +2055,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual UserStatement Statement(UserStatement x) => x switch{
             CreateUserStatement y => this.Statement(y),
-            AlterUserStatement y => this.Statement(y),
+            AlterUserStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2106,10 +2106,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual CursorStatement Statement(CursorStatement x) => x switch{
-            OpenCursorStatement y => this.Statement(y),
-            CloseCursorStatement y => this.Statement(y),
+            OpenCursorStatement       y => this.Statement(y),
+            CloseCursorStatement      y => this.Statement(y),
             DeallocateCursorStatement y => this.Statement(y),
-            FetchCursorStatement y => this.Statement(y),
+            FetchCursorStatement      y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2271,9 +2271,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SetOnOffStatement Statement(SetOnOffStatement x) => x switch{
-            PredicateSetStatement y => this.Statement(y),
-            SetStatisticsStatement y => this.Statement(y),
-            SetOffsetsStatement y => this.Statement(y),
+            PredicateSetStatement      y => this.Statement(y),
+            SetStatisticsStatement     y => this.Statement(y),
+            SetOffsetsStatement        y => this.Statement(y),
             SetIdentityInsertStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -2343,16 +2343,16 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterDatabaseStatement Statement(AlterDatabaseStatement x) => x switch{
-            AlterDatabaseCollateStatement y => this.Statement(y),
-            AlterDatabaseRebuildLogStatement y => this.Statement(y),
-            AlterDatabaseAddFileStatement y => this.Statement(y),
-            AlterDatabaseAddFileGroupStatement y => this.Statement(y),
+            AlterDatabaseCollateStatement         y => this.Statement(y),
+            AlterDatabaseRebuildLogStatement      y => this.Statement(y),
+            AlterDatabaseAddFileStatement         y => this.Statement(y),
+            AlterDatabaseAddFileGroupStatement    y => this.Statement(y),
             AlterDatabaseRemoveFileGroupStatement y => this.Statement(y),
-            AlterDatabaseRemoveFileStatement y => this.Statement(y),
-            AlterDatabaseModifyNameStatement y => this.Statement(y),
-            AlterDatabaseModifyFileStatement y => this.Statement(y),
+            AlterDatabaseRemoveFileStatement      y => this.Statement(y),
+            AlterDatabaseModifyNameStatement      y => this.Statement(y),
+            AlterDatabaseModifyFileStatement      y => this.Statement(y),
             AlterDatabaseModifyFileGroupStatement y => this.Statement(y),
-            AlterDatabaseSetStatement y => this.Statement(y),
+            AlterDatabaseSetStatement             y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2421,7 +2421,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterDatabaseScopedConfigurationStatement Statement(AlterDatabaseScopedConfigurationStatement x) => x switch{
-            AlterDatabaseScopedConfigurationSetStatement y => this.Statement(y),
+            AlterDatabaseScopedConfigurationSetStatement   y => this.Statement(y),
             AlterDatabaseScopedConfigurationClearStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -2524,7 +2524,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual RemoteServiceBindingStatementBase Statement(RemoteServiceBindingStatementBase x) => x switch{
             CreateRemoteServiceBindingStatement y => this.Statement(y),
-            AlterRemoteServiceBindingStatement y => this.Statement(y),
+            AlterRemoteServiceBindingStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2546,7 +2546,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual CertificateStatementBase Statement(CertificateStatementBase x) => x switch{
             CreateCertificateStatement y => this.Statement(y),
-            AlterCertificateStatement y => this.Statement(y),
+            AlterCertificateStatement  y => this.Statement(y),
             BackupCertificateStatement y => this.Statement(y),
             _ =>Throw(x)
         };
@@ -2581,7 +2581,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual CredentialStatement Statement(CredentialStatement x) => x switch{
             CreateCredentialStatement y => this.Statement(y),
-            AlterCredentialStatement y => this.Statement(y),
+            AlterCredentialStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2603,7 +2603,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual MessageTypeStatementBase Statement(MessageTypeStatementBase x) => x switch{
             CreateMessageTypeStatement y => this.Statement(y),
-            AlterMessageTypeStatement y => this.Statement(y),
+            AlterMessageTypeStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2631,7 +2631,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AlterCreateEndpointStatementBase Statement(AlterCreateEndpointStatementBase x) => x switch{
             CreateEndpointStatement y => this.Statement(y),
-            AlterEndpointStatement y => this.Statement(y),
+            AlterEndpointStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2653,7 +2653,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual SymmetricKeyStatement Statement(SymmetricKeyStatement x) => x switch{
             CreateSymmetricKeyStatement y => this.Statement(y),
-            AlterSymmetricKeyStatement y => this.Statement(y),
+            AlterSymmetricKeyStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2675,7 +2675,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual FullTextCatalogStatement Statement(FullTextCatalogStatement x) => x switch{
             CreateFullTextCatalogStatement y => this.Statement(y),
-            AlterFullTextCatalogStatement y => this.Statement(y),
+            AlterFullTextCatalogStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2697,7 +2697,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AlterCreateServiceStatementBase Statement(AlterCreateServiceStatementBase x) => x switch{
             CreateServiceStatement y => this.Statement(y),
-            AlterServiceStatement y => this.Statement(y),
+            AlterServiceStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2772,8 +2772,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterLoginStatement Statement(AlterLoginStatement x) => x switch{
-            AlterLoginOptionsStatement y => this.AlterLoginOptionsStatement(y),
-            AlterLoginEnableDisableStatement y => this.AlterLoginEnableDisableStatement(y),
+            AlterLoginOptionsStatement           y => this.AlterLoginOptionsStatement(y),
+            AlterLoginEnableDisableStatement     y => this.AlterLoginEnableDisableStatement(y),
             AlterLoginAddDropCredentialStatement y => this.AlterLoginAddDropCredentialStatement(y),
             _ =>Throw(x)
         };
@@ -2813,7 +2813,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SignatureStatementBase SignatureStatementBase(SignatureStatementBase x) => x switch{
-            AddSignatureStatement y => this.AddSignatureStatement(y),
+            AddSignatureStatement  y => this.AddSignatureStatement(y),
             DropSignatureStatement y => this.DropSignatureStatement(y),
             _ =>Throw(x)
         };
@@ -2860,7 +2860,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual WaitForSupportedStatement Statement(WaitForSupportedStatement x) => x switch{
             GetConversationGroupStatement y => this.Statement(y),
-            ReceiveStatement y => this.Statement(y),
+            ReceiveStatement              y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2917,10 +2917,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual BackupRestoreMasterKeyStatementBase Statement(BackupRestoreMasterKeyStatementBase x) => x switch{
-            BackupServiceMasterKeyStatement y => this.Statement(y),
+            BackupServiceMasterKeyStatement  y => this.Statement(y),
             RestoreServiceMasterKeyStatement y => this.Statement(y),
-            BackupMasterKeyStatement y => this.Statement(y),
-            RestoreMasterKeyStatement y => this.Statement(y),
+            BackupMasterKeyStatement         y => this.Statement(y),
+            RestoreMasterKeyStatement        y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2960,9 +2960,9 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AuditSpecificationStatement Statement(AuditSpecificationStatement x) => x switch{
             CreateDatabaseAuditSpecificationStatement y => this.Statement(y),
-            AlterDatabaseAuditSpecificationStatement y => this.Statement(y),
-            CreateServerAuditSpecificationStatement y => this.Statement(y),
-            AlterServerAuditSpecificationStatement y => this.Statement(y),
+            AlterDatabaseAuditSpecificationStatement  y => this.Statement(y),
+            CreateServerAuditSpecificationStatement   y => this.Statement(y),
+            AlterServerAuditSpecificationStatement    y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -2996,7 +2996,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ServerAuditStatement Statement(ServerAuditStatement x) => x switch{
             CreateServerAuditStatement y => this.Statement(y),
-            AlterServerAuditStatement y => this.Statement(y),
+            AlterServerAuditStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3046,7 +3046,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ResourcePoolStatement Statement(ResourcePoolStatement x) => x switch{
             CreateResourcePoolStatement y => this.Statement(y),
-            AlterResourcePoolStatement y => this.Statement(y),
+            AlterResourcePoolStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3068,7 +3068,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ExternalResourcePoolStatement Statement(ExternalResourcePoolStatement x) => x switch{
             CreateExternalResourcePoolStatement y => this.Statement(y),
-            AlterExternalResourcePoolStatement y => this.Statement(y),
+            AlterExternalResourcePoolStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3090,7 +3090,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual WorkloadGroupStatement Statement(WorkloadGroupStatement x) => x switch{
             CreateWorkloadGroupStatement y => this.Statement(y),
-            AlterWorkloadGroupStatement y => this.Statement(y),
+            AlterWorkloadGroupStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3112,7 +3112,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual BrokerPriorityStatement Statement(BrokerPriorityStatement x) => x switch{
             CreateBrokerPriorityStatement y => this.Statement(y),
-            AlterBrokerPriorityStatement y => this.Statement(y),
+            AlterBrokerPriorityStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3158,7 +3158,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual EventSessionStatement Statement(EventSessionStatement x) => x switch{
             CreateEventSessionStatement y => this.Statement(y),
-            AlterEventSessionStatement y => this.Statement(y),
+            AlterEventSessionStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3228,7 +3228,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AvailabilityGroupStatement Statement(AvailabilityGroupStatement x) => x switch{
             CreateAvailabilityGroupStatement y => this.Statement(y),
-            AlterAvailabilityGroupStatement y => this.Statement(y),
+            AlterAvailabilityGroupStatement  y => this.Statement(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3294,7 +3294,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ResultSetDefinition ResultSetDefinition(ResultSetDefinition x) => x switch{
-            InlineResultSetDefinition y => this.Traverse(y),
+            InlineResultSetDefinition       y => this.Traverse(y),
             SchemaObjectResultSetDefinition y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -3341,7 +3341,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ExecutableEntity ExecutableEntity(ExecutableEntity x) => x switch{
             ExecutableProcedureReference y => this.Traverse(y),
-            ExecutableStringList y => this.Traverse(y),
+            ExecutableStringList         y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3434,7 +3434,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual FunctionOption FunctionOption(FunctionOption x) => x switch{
-            InlineFunctionOption y => this.Traverse(y),
+            InlineFunctionOption    y => this.Traverse(y),
             ExecuteAsFunctionOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -3457,7 +3457,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual XmlNamespacesElement XmlNamespacesElement(XmlNamespacesElement x) => x switch{
             XmlNamespacesDefaultElement y => this.Traverse(y),
-            XmlNamespacesAliasElement y => this.Traverse(y),
+            XmlNamespacesAliasElement   y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3491,8 +3491,8 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual FunctionReturnType FunctionReturnType(FunctionReturnType x) => x switch{
             TableValuedFunctionReturnType y => this.Traverse(y),
-            ScalarFunctionReturnType y => this.Traverse(y),
-            SelectFunctionReturnType y => this.Traverse(y),
+            ScalarFunctionReturnType      y => this.Traverse(y),
+            SelectFunctionReturnType      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3520,7 +3520,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual DataTypeReference DataTypeReference(DataTypeReference x) => x switch{
             ParameterizedDataTypeReference y => this.Traverse(y),
-            XmlDataTypeReference y => this.Traverse(y),
+            XmlDataTypeReference           y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3529,7 +3529,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ParameterizedDataTypeReference Traverse(ParameterizedDataTypeReference x) => x switch{
-            SqlDataTypeReference y => this.Traverse(y),
+            SqlDataTypeReference  y => this.Traverse(y),
             UserDataTypeReference y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -3569,9 +3569,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableReference TableReference(TableReference x) => x switch{
-            TableReferenceWithAlias y => this.TableReference(y),
-            JoinTableReference y => this.TableReference(y),
-            JoinParenthesisTableReference y => this.TableReference(y),
+            TableReferenceWithAlias         y => this.TableReference(y),
+            JoinTableReference              y => this.TableReference(y),
+            JoinParenthesisTableReference   y => this.TableReference(y),
             OdbcQualifiedJoinTableReference y => this.TableReference(y),
             _ =>Throw(x)
         };
@@ -3581,21 +3581,21 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableReferenceWithAlias TableReference(TableReferenceWithAlias x) => x switch{
-            NamedTableReference y => this.TableReference(y),
+            NamedTableReference               y => this.TableReference(y),
             TableReferenceWithAliasAndColumns y => this.TableReference(y),
-            FullTextTableReference y => this.TableReference(y),
-            SemanticTableReference y => this.TableReference(y),
-            OpenXmlTableReference y => this.TableReference(y),
-            OpenJsonTableReference y => this.TableReference(y),
-            OpenRowsetTableReference y => this.TableReference(y),
-            InternalOpenRowset y => this.TableReference(y),
-            OpenQueryTableReference y => this.TableReference(y),
-            AdHocTableReference y => this.TableReference(y),
-            BuiltInFunctionTableReference y => this.TableReference(y),
-            GlobalFunctionTableReference y => this.TableReference(y),
-            PivotedTableReference y => this.TableReference(y),
-            UnpivotedTableReference y => this.TableReference(y),
-            VariableTableReference y => this.TableReference(y),
+            FullTextTableReference            y => this.TableReference(y),
+            SemanticTableReference            y => this.TableReference(y),
+            OpenXmlTableReference             y => this.TableReference(y),
+            OpenJsonTableReference            y => this.TableReference(y),
+            OpenRowsetTableReference          y => this.TableReference(y),
+            InternalOpenRowset                y => this.TableReference(y),
+            OpenQueryTableReference           y => this.TableReference(y),
+            AdHocTableReference               y => this.TableReference(y),
+            BuiltInFunctionTableReference     y => this.TableReference(y),
+            GlobalFunctionTableReference      y => this.TableReference(y),
+            PivotedTableReference             y => this.TableReference(y),
+            UnpivotedTableReference           y => this.TableReference(y),
+            VariableTableReference            y => this.TableReference(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3611,13 +3611,13 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual TableReferenceWithAliasAndColumns TableReference(TableReferenceWithAliasAndColumns x) => x switch{
             SchemaObjectFunctionTableReference y => this.TableReference(y),
-            QueryDerivedTable y => this.TableReference(y),
-            InlineDerivedTable y => this.TableReference(y),
-            BulkOpenRowset y => this.TableReference(y),
-            DataModificationTableReference y => this.TableReference(y),
-            ChangeTableChangesTableReference y => this.TableReference(y),
-            ChangeTableVersionTableReference y => this.TableReference(y),
-            VariableMethodCallTableReference y => this.TableReference(y),
+            QueryDerivedTable                  y => this.TableReference(y),
+            InlineDerivedTable                 y => this.TableReference(y),
+            BulkOpenRowset                     y => this.TableReference(y),
+            DataModificationTableReference     y => this.TableReference(y),
+            ChangeTableChangesTableReference   y => this.TableReference(y),
+            ChangeTableVersionTableReference   y => this.TableReference(y),
+            VariableMethodCallTableReference   y => this.TableReference(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3753,7 +3753,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual JoinTableReference TableReference(JoinTableReference x) => x switch{
             UnqualifiedJoin y => this.TableReference(y),
-            QualifiedJoin y => this.TableReference(y),
+            QualifiedJoin   y => this.TableReference(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -3787,8 +3787,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableHint TableHint(TableHint x) => x switch{
-            IndexTableHint y => this.TableHint(y),
-            LiteralTableHint y => this.TableHint(y),
+            IndexTableHint     y => this.TableHint(y),
+            LiteralTableHint   y => this.TableHint(y),
             ForceSeekTableHint y => this.TableHint(y),
             _ =>Throw(x)
         };
@@ -3816,22 +3816,22 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual BooleanExpression BooleanExpression(BooleanExpression x) => x switch{
-            SubqueryComparisonPredicate y => this.Traverse(y),
-            ExistsPredicate y => this.Traverse(y),
-            LikePredicate y => this.Traverse(y),
-            InPredicate y => this.Traverse(y),
-            FullTextPredicate y => this.Traverse(y),
-            UpdateCall y => this.Traverse(y),
-            TSEqualCall y => this.Traverse(y),
-            BooleanNotExpression y => this.Traverse(y),
-            BooleanParenthesisExpression y => this.Traverse(y),
-            BooleanComparisonExpression y => this.Traverse(y),
-            BooleanBinaryExpression y => this.Traverse(y),
-            BooleanIsNullExpression y => this.Traverse(y),
-            GraphMatchPredicate y => this.Traverse(y),
-            GraphMatchExpression y => this.Traverse(y),
-            BooleanTernaryExpression y => this.Traverse(y),
-            BooleanExpressionSnippet y => this.Traverse(y),
+            SubqueryComparisonPredicate              y => this.Traverse(y),
+            ExistsPredicate                          y => this.Traverse(y),
+            LikePredicate                            y => this.Traverse(y),
+            InPredicate                              y => this.Traverse(y),
+            FullTextPredicate                        y => this.Traverse(y),
+            UpdateCall                               y => this.Traverse(y),
+            TSEqualCall                              y => this.Traverse(y),
+            BooleanNotExpression                     y => this.Traverse(y),
+            BooleanParenthesisExpression             y => this.Traverse(y),
+            BooleanComparisonExpression              y => this.Traverse(y),
+            BooleanBinaryExpression                  y => this.Traverse(y),
+            BooleanIsNullExpression                  y => this.Traverse(y),
+            GraphMatchPredicate                      y => this.Traverse(y),
+            GraphMatchExpression                     y => this.Traverse(y),
+            BooleanTernaryExpression                 y => this.Traverse(y),
+            BooleanExpressionSnippet                 y => this.Traverse(y),
             EventDeclarationCompareFunctionParameter y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -3943,13 +3943,13 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ForClause ForClause(ForClause x) => x switch{
-            BrowseForClause y => this.Traverse(y),
-            ReadOnlyForClause y => this.Traverse(y),
-            XmlForClause y => this.Traverse(y),
-            XmlForClauseOption y => this.Traverse(y),
-            JsonForClause y => this.Traverse(y),
+            BrowseForClause     y => this.Traverse(y),
+            ReadOnlyForClause   y => this.Traverse(y),
+            XmlForClause        y => this.Traverse(y),
+            XmlForClauseOption  y => this.Traverse(y),
+            JsonForClause       y => this.Traverse(y),
             JsonForClauseOption y => this.Traverse(y),
-            UpdateForClause y => this.Traverse(y),
+            UpdateForClause     y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4000,8 +4000,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual OptimizerHint OptimizerHint(OptimizerHint x) => x switch{
-            LiteralOptimizerHint y => this.Traverse(y),
-            TableHintsOptimizerHint y => this.Traverse(y),
+            LiteralOptimizerHint     y => this.Traverse(y),
+            TableHintsOptimizerHint  y => this.Traverse(y),
             OptimizeForOptimizerHint y => this.Traverse(y),
             UseHintList y => this.Traverse(y),
             _ =>Throw(x)
@@ -4042,7 +4042,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual WhenClause WhenClause(WhenClause x) => x switch{
-            SimpleWhenClause y => this.Traverse(y),
+            SimpleWhenClause   y => this.Traverse(y),
             SearchedWhenClause y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4079,9 +4079,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual CallTarget CallTarget(CallTarget x) => x switch{
-            ExpressionCallTarget y => this.Traverse(y),
+            ExpressionCallTarget          y => this.Traverse(y),
             MultiPartIdentifierCallTarget y => this.Traverse(y),
-            UserDefinedTypeCallTarget y => this.Traverse(y),
+            UserDefinedTypeCallTarget     y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4114,9 +4114,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AtomicBlockOption AtomicBlockOption(AtomicBlockOption x) => x switch{
-            LiteralAtomicBlockOption y => this.Traverse(y),
+            LiteralAtomicBlockOption    y => this.Traverse(y),
             IdentifierAtomicBlockOption y => this.Traverse(y),
-            OnOffAtomicBlockOption y => this.Traverse(y),
+            OnOffAtomicBlockOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4166,7 +4166,7 @@ public sealed partial class Optimizer{
         protected virtual DataModificationSpecification DataModificationSpecification(DataModificationSpecification x) => x switch{
             UpdateDeleteSpecificationBase y => this.Traverse(y),
             InsertSpecification y => this.Traverse(y),
-            MergeSpecification y => this.Traverse(y),
+            MergeSpecification  y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4233,7 +4233,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SecurityElement80 SecurityElement80(SecurityElement80 x) => x switch{
-            CommandSecurityElement80 y => this.Traverse(y),
+            CommandSecurityElement80   y => this.Traverse(y),
             PrivilegeSecurityElement80 y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4267,7 +4267,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SetClause SetClause(SetClause x) => x switch{
-            AssignmentSetClause y => this.Traverse(y),
+            AssignmentSetClause   y => this.Traverse(y),
             FunctionCallSetClause y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4289,8 +4289,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual InsertSource InsertSource(InsertSource x) => x switch{
-            ValuesInsertSource y => this.Traverse(y),
-            SelectInsertSource y => this.Traverse(y),
+            ValuesInsertSource  y => this.Traverse(y),
+            SelectInsertSource  y => this.Traverse(y),
             ExecuteInsertSource y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4339,7 +4339,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual OptionValue OptionValue(OptionValue x) => x switch{
-            OnOffOptionValue y => this.Traverse(y),
+            OnOffOptionValue   y => this.Traverse(y),
             LiteralOptionValue y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4373,7 +4373,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SequenceOption Traverse(SequenceOption x) => x switch{
-            DataTypeSequenceOption y => this.Traverse(y),
+            DataTypeSequenceOption         y => this.Traverse(y),
             ScalarExpressionSequenceOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4408,7 +4408,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ColumnMasterKeyParameter Traverse(ColumnMasterKeyParameter x) => x switch{
             ColumnMasterKeyStoreProviderNameParameter y => this.Traverse(y),
-            ColumnMasterKeyPathParameter y => this.Traverse(y),
+            ColumnMasterKeyPathParameter              y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4435,9 +4435,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ColumnEncryptionKeyValueParameter Traverse(ColumnEncryptionKeyValueParameter x) => x switch{
-            ColumnMasterKeyNameParameter y => this.Traverse(y),
+            ColumnMasterKeyNameParameter           y => this.Traverse(y),
             ColumnEncryptionAlgorithmNameParameter y => this.Traverse(y),
-            EncryptedValueParameter y => this.Traverse(y),
+            EncryptedValueParameter                y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4465,8 +4465,8 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual ExternalTableOption Traverse(ExternalTableOption x) => x switch{
             ExternalTableLiteralOrIdentifierOption y => this.Traverse(y),
-            ExternalTableDistributionOption y => this.Traverse(y),
-            ExternalTableRejectTypeOption y => this.Traverse(y),
+            ExternalTableDistributionOption        y => this.Traverse(y),
+            ExternalTableRejectTypeOption          y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4495,7 +4495,7 @@ public sealed partial class Optimizer{
         protected virtual ExternalTableDistributionPolicy Traverse(ExternalTableDistributionPolicy x) => x switch{
             ExternalTableReplicatedDistributionPolicy y => this.Traverse(y),
             ExternalTableRoundRobinDistributionPolicy y => this.Traverse(y),
-            ExternalTableShardedDistributionPolicy y => this.Traverse(y),
+            ExternalTableShardedDistributionPolicy    y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4537,9 +4537,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ExternalFileFormatOption Traverse(ExternalFileFormatOption x) => x switch{
-            ExternalFileFormatLiteralOption y => this.Traverse(y),
+            ExternalFileFormatLiteralOption        y => this.Traverse(y),
             ExternalFileFormatUseDefaultTypeOption y => this.Traverse(y),
-            ExternalFileFormatContainerOption y => this.Traverse(y),
+            ExternalFileFormatContainerOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4566,7 +4566,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AssemblyOption Traverse(AssemblyOption x) => x switch{
-            OnOffAssemblyOption y => this.Traverse(y),
+            OnOffAssemblyOption         y => this.Traverse(y),
             PermissionSetAssemblyOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4600,20 +4600,20 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableOption Traverse(TableOption x) => x switch{
-            LockEscalationTableOption y => this.Traverse(y),
-            FileStreamOnTableOption y => this.Traverse(y),
-            FileTableDirectoryTableOption y => this.Traverse(y),
+            LockEscalationTableOption           y => this.Traverse(y),
+            FileStreamOnTableOption             y => this.Traverse(y),
+            FileTableDirectoryTableOption       y => this.Traverse(y),
             FileTableCollateFileNameTableOption y => this.Traverse(y),
-            FileTableConstraintNameTableOption y => this.Traverse(y),
-            MemoryOptimizedTableOption y => this.Traverse(y),
-            DurabilityTableOption y => this.Traverse(y),
-            RemoteDataArchiveTableOption y => this.Traverse(y),
-            RemoteDataArchiveAlterTableOption y => this.Traverse(y),
-            SystemVersioningTableOption y => this.Traverse(y),
-            TableDataCompressionOption y => this.Traverse(y),
-            TableDistributionOption y => this.Traverse(y),
-            TableIndexOption y => this.Traverse(y),
-            TablePartitionOption y => this.Traverse(y),
+            FileTableConstraintNameTableOption  y => this.Traverse(y),
+            MemoryOptimizedTableOption          y => this.Traverse(y),
+            DurabilityTableOption               y => this.Traverse(y),
+            RemoteDataArchiveTableOption        y => this.Traverse(y),
+            RemoteDataArchiveAlterTableOption   y => this.Traverse(y),
+            SystemVersioningTableOption         y => this.Traverse(y),
+            TableDataCompressionOption          y => this.Traverse(y),
+            TableDistributionOption             y => this.Traverse(y),
+            TableIndexOption                    y => this.Traverse(y),
+            TablePartitionOption                y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4706,26 +4706,26 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual DatabaseOption Traverse(DatabaseOption x) => x switch{
-            RemoteDataArchiveDatabaseOption y => this.Traverse(y),
-            OnOffDatabaseOption y => this.Traverse(y),
-            ContainmentDatabaseOption y => this.Traverse(y),
-            HadrDatabaseOption y => this.Traverse(y),
-            DelayedDurabilityDatabaseOption y => this.Traverse(y),
-            CursorDefaultDatabaseOption y=> this.Traverse(y),
-            RecoveryDatabaseOption y => this.Traverse(y),
+            RemoteDataArchiveDatabaseOption  y => this.Traverse(y),
+            OnOffDatabaseOption              y => this.Traverse(y),
+            ContainmentDatabaseOption        y => this.Traverse(y),
+            HadrDatabaseOption               y => this.Traverse(y),
+            DelayedDurabilityDatabaseOption  y => this.Traverse(y),
+            CursorDefaultDatabaseOption      y=> this.Traverse(y),
+            RecoveryDatabaseOption           y => this.Traverse(y),
             TargetRecoveryTimeDatabaseOption y => this.Traverse(y),
-            PageVerifyDatabaseOption y => this.Traverse(y),
-            PartnerDatabaseOption y => this.Traverse(y),
-            WitnessDatabaseOption y => this.Traverse(y),
-            ParameterizationDatabaseOption y => this.Traverse(y),
-            LiteralDatabaseOption y => this.Traverse(y),
-            IdentifierDatabaseOption y => this.Traverse(y),
-            ChangeTrackingDatabaseOption y => this.Traverse(y),
-            QueryStoreDatabaseOption y => this.Traverse(y),
-            AutomaticTuningDatabaseOption y => this.Traverse(y),
-            FileStreamDatabaseOption y => this.Traverse(y),
-            CatalogCollationOption y => this.Traverse(y),
-            MaxSizeDatabaseOption y => this.Traverse(y),
+            PageVerifyDatabaseOption         y => this.Traverse(y),
+            PartnerDatabaseOption            y => this.Traverse(y),
+            WitnessDatabaseOption            y => this.Traverse(y),
+            ParameterizationDatabaseOption   y => this.Traverse(y),
+            LiteralDatabaseOption            y => this.Traverse(y),
+            IdentifierDatabaseOption         y => this.Traverse(y),
+            ChangeTrackingDatabaseOption     y => this.Traverse(y),
+            QueryStoreDatabaseOption         y => this.Traverse(y),
+            AutomaticTuningDatabaseOption    y => this.Traverse(y),
+            FileStreamDatabaseOption         y => this.Traverse(y),
+            CatalogCollationOption           y => this.Traverse(y),
+            MaxSizeDatabaseOption            y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -4866,8 +4866,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual RemoteDataArchiveDatabaseSetting Traverse(RemoteDataArchiveDatabaseSetting x) => x switch{
-            RemoteDataArchiveDbServerSetting y => this.Traverse(y),
-            RemoteDataArchiveDbCredentialSetting y => this.Traverse(y),
+            RemoteDataArchiveDbServerSetting                  y => this.Traverse(y),
+            RemoteDataArchiveDbCredentialSetting              y => this.Traverse(y),
             RemoteDataArchiveDbFederatedServiceAccountSetting y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4916,9 +4916,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual DropClusteredConstraintOption Traverse(DropClusteredConstraintOption x) => x switch{
-            DropClusteredConstraintStateOption y => this.Traverse(y),
-            DropClusteredConstraintValueOption y => this.Traverse(y),
-            DropClusteredConstraintMoveOption y => this.Traverse(y),
+            DropClusteredConstraintStateOption                 y => this.Traverse(y),
+            DropClusteredConstraintValueOption                 y => this.Traverse(y),
+            DropClusteredConstraintMoveOption                  y => this.Traverse(y),
             DropClusteredConstraintWaitAtLowPriorityLockOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -4964,9 +4964,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual QueueOption Traverse(QueueOption x) => x switch{
-            QueueStateOption y => this.Traverse(y),
+            QueueStateOption     y => this.Traverse(y),
             QueueProcedureOption y => this.Traverse(y),
-            QueueValueOption y => this.Traverse(y),
+            QueueValueOption     y => this.Traverse(y),
             QueueExecuteAsOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5030,14 +5030,14 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual IndexOption Traverse(IndexOption x) => x switch{
-            IndexStateOption y => this.Traverse(y),
-            IndexExpressionOption y => this.Traverse(y),
-            MaxDurationOption y => this.Traverse(y),
-            WaitAtLowPriorityOption y => this.Traverse(y),
-            OrderIndexOption y => this.Traverse(y),
-            MoveToDropIndexOption y => this.Traverse(y),
+            IndexStateOption            y => this.Traverse(y),
+            IndexExpressionOption       y => this.Traverse(y),
+            MaxDurationOption           y => this.Traverse(y),
+            WaitAtLowPriorityOption     y => this.Traverse(y),
+            OrderIndexOption            y => this.Traverse(y),
+            MoveToDropIndexOption       y => this.Traverse(y),
             FileStreamOnDropIndexOption y => this.Traverse(y),
-            DataCompressionOption y => this.Traverse(y),
+            DataCompressionOption       y => this.Traverse(y),
             CompressionDelayIndexOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5047,7 +5047,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual IndexStateOption Traverse(IndexStateOption x) => x switch{
-            OnlineIndexOption y => this.Traverse(y),
+            OnlineIndexOption       y => this.Traverse(y),
             IgnoreDupKeyIndexOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5123,7 +5123,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual LowPriorityLockWaitOption Traverse(LowPriorityLockWaitOption x) => x switch{
-            LowPriorityLockWaitMaxDurationOption y => this.Traverse(y),
+            LowPriorityLockWaitMaxDurationOption    y => this.Traverse(y),
             LowPriorityLockWaitAbortAfterWaitOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5151,8 +5151,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual FullTextIndexOption Traverse(FullTextIndexOption x) => x switch{
-            ChangeTrackingFullTextIndexOption y => this.Traverse(y),
-            StopListFullTextIndexOption y => this.Traverse(y),
+            ChangeTrackingFullTextIndexOption     y => this.Traverse(y),
+            StopListFullTextIndexOption           y => this.Traverse(y),
             SearchPropertyListFullTextIndexOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5186,7 +5186,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual EventTypeGroupContainer Traverse(EventTypeGroupContainer x) => x switch{
-            EventTypeContainer y => this.Traverse(y),
+            EventTypeContainer  y => this.Traverse(y),
             EventGroupContainer y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5220,8 +5220,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterRoleAction Traverse(AlterRoleAction x) => x switch{
-            RenameAlterRoleAction y => this.Traverse(y),
-            AddMemberAlterRoleAction y => this.Traverse(y),
+            RenameAlterRoleAction     y => this.Traverse(y),
+            AddMemberAlterRoleAction  y => this.Traverse(y),
             DropMemberAlterRoleAction y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5256,8 +5256,8 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual StatisticsOption Traverse(StatisticsOption x) => x switch{
             ResampleStatisticsOption y => this.Traverse(y),
-            OnOffStatisticsOption y => this.Traverse(y),
-            LiteralStatisticsOption y => this.Traverse(y),
+            OnOffStatisticsOption    y => this.Traverse(y),
+            LiteralStatisticsOption  y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5321,7 +5321,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual DropIndexClauseBase Traverse(DropIndexClauseBase x) => x switch{
             BackwardsCompatibleDropIndexClause y => this.Traverse(y),
-            DropIndexClause y => this.Traverse(y),
+            DropIndexClause                    y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5342,7 +5342,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SetCommand Traverse(SetCommand x) => x switch{
-            GeneralSetCommand y => this.Traverse(y),
+            GeneralSetCommand     y => this.Traverse(y),
             SetFipsFlaggerCommand y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5370,10 +5370,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual FileDeclarationOption Traverse(FileDeclarationOption x) => x switch{
-            NameFileDeclarationOption y => this.Traverse(y),
-            FileNameFileDeclarationOption y => this.Traverse(y),
-            SizeFileDeclarationOption y => this.Traverse(y),
-            MaxSizeFileDeclarationOption y => this.Traverse(y),
+            NameFileDeclarationOption       y => this.Traverse(y),
+            FileNameFileDeclarationOption   y => this.Traverse(y),
+            SizeFileDeclarationOption       y => this.Traverse(y),
+            MaxSizeFileDeclarationOption    y => this.Traverse(y),
             FileGrowthFileDeclarationOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5426,8 +5426,8 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual DatabaseConfigurationSetOption Traverse(DatabaseConfigurationSetOption x) => x switch{
             OnOffPrimaryConfigurationOption y => this.Traverse(y),
-            MaxDopConfigurationOption y => this.Traverse(y),
-            GenericConfigurationOption y => this.Traverse(y),
+            MaxDopConfigurationOption       y => this.Traverse(y),
+            GenericConfigurationOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5460,7 +5460,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ChangeTrackingOptionDetail Traverse(ChangeTrackingOptionDetail x) => x switch{
-            AutoCleanupChangeTrackingOptionDetail y => this.Traverse(y),
+            AutoCleanupChangeTrackingOptionDetail     y => this.Traverse(y),
             ChangeRetentionChangeTrackingOptionDetail y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5482,13 +5482,13 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual QueryStoreOption Traverse(QueryStoreOption x) => x switch{
-            QueryStoreDesiredStateOption y => this.Traverse(y),
-            QueryStoreCapturePolicyOption y => this.Traverse(y),
+            QueryStoreDesiredStateOption      y => this.Traverse(y),
+            QueryStoreCapturePolicyOption     y => this.Traverse(y),
             QueryStoreSizeCleanupPolicyOption y => this.Traverse(y),
             QueryStoreDataFlushIntervalOption y => this.Traverse(y),
-            QueryStoreIntervalLengthOption y => this.Traverse(y),
-            QueryStoreMaxStorageSizeOption y => this.Traverse(y),
-            QueryStoreMaxPlansPerQueryOption y => this.Traverse(y),
+            QueryStoreIntervalLengthOption    y => this.Traverse(y),
+            QueryStoreMaxStorageSizeOption    y => this.Traverse(y),
+            QueryStoreMaxPlansPerQueryOption  y => this.Traverse(y),
             QueryStoreTimeCleanupPolicyOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5547,9 +5547,9 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AutomaticTuningOption Traverse(AutomaticTuningOption x) => x switch{
             AutomaticTuningForceLastGoodPlanOption y => this.Traverse(y),
-            AutomaticTuningCreateIndexOption y => this.Traverse(y),
-            AutomaticTuningDropIndexOption y => this.Traverse(y),
-            AutomaticTuningMaintainIndexOption y => this.Traverse(y),
+            AutomaticTuningCreateIndexOption       y => this.Traverse(y),
+            AutomaticTuningDropIndexOption         y => this.Traverse(y),
+            AutomaticTuningMaintainIndexOption     y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5603,8 +5603,8 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ColumnEncryptionDefinitionParameter Traverse(ColumnEncryptionDefinitionParameter x) => x switch{
-            ColumnEncryptionKeyNameParameter y => this.Traverse(y),
-            ColumnEncryptionTypeParameter y => this.Traverse(y),
+            ColumnEncryptionKeyNameParameter   y => this.Traverse(y),
+            ColumnEncryptionTypeParameter      y => this.Traverse(y),
             ColumnEncryptionAlgorithmParameter y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5644,12 +5644,12 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual ConstraintDefinition Traverse(ConstraintDefinition x) => x switch{
-            CheckConstraintDefinition y => this.Traverse(y),
-            DefaultConstraintDefinition y => this.Traverse(y),
-            ForeignKeyConstraintDefinition y => this.Traverse(y),
-            NullableConstraintDefinition y => this.Traverse(y),
+            CheckConstraintDefinition           y => this.Traverse(y),
+            DefaultConstraintDefinition         y => this.Traverse(y),
+            ForeignKeyConstraintDefinition      y => this.Traverse(y),
+            NullableConstraintDefinition        y => this.Traverse(y),
             GraphConnectionConstraintDefinition y => this.Traverse(y),
-            UniqueConstraintDefinition y => this.Traverse(y),
+            UniqueConstraintDefinition          y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5700,9 +5700,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableDistributionPolicy Traverse(TableDistributionPolicy x) => x switch{
-            TableReplicateDistributionPolicy y => this.Traverse(y),
+            TableReplicateDistributionPolicy  y => this.Traverse(y),
             TableRoundRobinDistributionPolicy y => this.Traverse(y),
-            TableHashDistributionPolicy y => this.Traverse(y),
+            TableHashDistributionPolicy       y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5729,7 +5729,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableIndexType Traverse(TableIndexType x) => x switch{
-            TableClusteredIndexType y => this.Traverse(y),
+            TableClusteredIndexType    y => this.Traverse(y),
             TableNonClusteredIndexType y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5779,9 +5779,9 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual RestoreOption Traverse(RestoreOption x) => x switch{
             ScalarExpressionRestoreOption y => this.Traverse(y),
-            MoveRestoreOption y => this.Traverse(y),
-            StopRestoreOption y => this.Traverse(y),
-            FileStreamRestoreOption y => this.Traverse(y),
+            MoveRestoreOption             y => this.Traverse(y),
+            StopRestoreOption             y => this.Traverse(y),
+            FileStreamRestoreOption       y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5848,7 +5848,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual BulkInsertOption Traverse(BulkInsertOption x) => x switch{
             LiteralBulkInsertOption y => this.Traverse(y),
-            OrderBulkInsertOption y => this.Traverse(y),
+            OrderBulkInsertOption   y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5900,7 +5900,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual RemoteServiceBindingOption Traverse(RemoteServiceBindingOption x) => x switch{
             OnOffRemoteServiceBindingOption y => this.Traverse(y),
-            UserRemoteServiceBindingOption y => this.Traverse(y),
+            UserRemoteServiceBindingOption  y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -5922,7 +5922,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual EncryptionSource Traverse(EncryptionSource x) => x switch{
             AssemblyEncryptionSource y => this.Traverse(y),
-            FileEncryptionSource y => this.Traverse(y),
+            FileEncryptionSource     y => this.Traverse(y),
             ProviderEncryptionSource y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -5968,11 +5968,11 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual EndpointProtocolOption Traverse(EndpointProtocolOption x) => x switch{
-            LiteralEndpointProtocolOption y => this.Traverse(y),
+            LiteralEndpointProtocolOption        y => this.Traverse(y),
             AuthenticationEndpointProtocolOption y => this.Traverse(y),
-            PortsEndpointProtocolOption y => this.Traverse(y),
-            CompressionEndpointProtocolOption y => this.Traverse(y),
-            ListenerIPEndpointProtocolOption y => this.Traverse(y),
+            PortsEndpointProtocolOption          y => this.Traverse(y),
+            CompressionEndpointProtocolOption    y => this.Traverse(y),
+            ListenerIPEndpointProtocolOption     y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6017,17 +6017,17 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual PayloadOption Traverse(PayloadOption x) => x switch{
-            SoapMethod y => this.Traverse(y),
+            SoapMethod                   y => this.Traverse(y),
             EnabledDisabledPayloadOption y => this.Traverse(y),
-            WsdlPayloadOption y => this.Traverse(y),
-            LoginTypePayloadOption y => this.Traverse(y),
-            LiteralPayloadOption y => this.Traverse(y),
-            SessionTimeoutPayloadOption y => this.Traverse(y),
-            SchemaPayloadOption y => this.Traverse(y),
-            CharacterSetPayloadOption y => this.Traverse(y),
-            RolePayloadOption y => this.Traverse(y),
-            AuthenticationPayloadOption y => this.Traverse(y),
-            EncryptionPayloadOption y => this.Traverse(y),
+            WsdlPayloadOption            y => this.Traverse(y),
+            LoginTypePayloadOption       y => this.Traverse(y),
+            LiteralPayloadOption         y => this.Traverse(y),
+            SessionTimeoutPayloadOption  y => this.Traverse(y),
+            SchemaPayloadOption          y => this.Traverse(y),
+            CharacterSetPayloadOption    y => this.Traverse(y),
+            RolePayloadOption            y => this.Traverse(y),
+            AuthenticationPayloadOption  y => this.Traverse(y),
+            EncryptionPayloadOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6102,10 +6102,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual KeyOption Traverse(KeyOption x) => x switch{
-            KeySourceKeyOption y => this.Traverse(y),
-            AlgorithmKeyOption y => this.Traverse(y),
-            IdentityValueKeyOption y => this.Traverse(y),
-            ProviderKeyNameKeyOption y => this.Traverse(y),
+            KeySourceKeyOption           y => this.Traverse(y),
+            AlgorithmKeyOption           y => this.Traverse(y),
+            IdentityValueKeyOption       y => this.Traverse(y),
+            ProviderKeyNameKeyOption     y => this.Traverse(y),
             CreationDispositionKeyOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6196,11 +6196,11 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual GroupingSpecification Traverse(GroupingSpecification x) => x switch{
-            ExpressionGroupingSpecification y => this.Traverse(y),
-            CompositeGroupingSpecification y => this.Traverse(y),
-            CubeGroupingSpecification y => this.Traverse(y),
-            RollupGroupingSpecification y => this.Traverse(y),
-            GrandTotalGroupingSpecification y => this.Traverse(y),
+            ExpressionGroupingSpecification   y => this.Traverse(y),
+            CompositeGroupingSpecification    y => this.Traverse(y),
+            CubeGroupingSpecification         y => this.Traverse(y),
+            RollupGroupingSpecification       y => this.Traverse(y),
+            GrandTotalGroupingSpecification   y => this.Traverse(y),
             GroupingSetsGroupingSpecification y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6271,8 +6271,8 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual QueryExpression QueryExpression(QueryExpression x) => x switch{
             QueryParenthesisExpression y => this.Traverse(y),
-            QuerySpecification y => this.Traverse(y),
-            BinaryQueryExpression y => this.Traverse(y),
+            QuerySpecification         y => this.Traverse(y),
+            BinaryQueryExpression      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6307,7 +6307,7 @@ public sealed partial class Optimizer{
         protected virtual SelectElement Traverse(SelectElement x) => x switch{
             SelectScalarExpression y => this.Traverse(y),
             SelectStarExpression y => this.Traverse(y),
-            SelectSetVariable y => this.Traverse(y),
+            SelectSetVariable    y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6346,12 +6346,12 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AlterFullTextIndexAction Traverse(AlterFullTextIndexAction x) => x switch{
-            SimpleAlterFullTextIndexAction y => this.Traverse(y),
-            SetStopListAlterFullTextIndexAction y => this.Traverse(y),
+            SimpleAlterFullTextIndexAction                y => this.Traverse(y),
+            SetStopListAlterFullTextIndexAction           y => this.Traverse(y),
             SetSearchPropertyListAlterFullTextIndexAction y => this.Traverse(y),
-            DropAlterFullTextIndexAction y => this.Traverse(y),
-            AddAlterFullTextIndexAction y => this.Traverse(y),
-            AlterColumnAlterFullTextIndexAction y => this.Traverse(y),
+            DropAlterFullTextIndexAction                  y => this.Traverse(y),
+            AddAlterFullTextIndexAction                   y => this.Traverse(y),
+            AlterColumnAlterFullTextIndexAction           y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6396,7 +6396,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SearchPropertyListAction Traverse(SearchPropertyListAction x) => x switch{
-            AddSearchPropertyListAction y => this.Traverse(y),
+            AddSearchPropertyListAction  y => this.Traverse(y),
             DropSearchPropertyListAction y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6418,9 +6418,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual CreateLoginSource Traverse(CreateLoginSource x) => x switch{
-            PasswordCreateLoginSource y => this.Traverse(y),
-            WindowsCreateLoginSource y => this.Traverse(y),
-            CertificateCreateLoginSource y => this.Traverse(y),
+            PasswordCreateLoginSource      y => this.Traverse(y),
+            WindowsCreateLoginSource       y => this.Traverse(y),
+            CertificateCreateLoginSource   y => this.Traverse(y),
             AsymmetricKeyCreateLoginSource y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6454,9 +6454,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual PrincipalOption Traverse(PrincipalOption x) => x switch{
-            OnOffPrincipalOption y => this.Traverse(y),
-            LiteralPrincipalOption y => this.Traverse(y),
-            IdentifierPrincipalOption y => this.Traverse(y),
+            OnOffPrincipalOption         y => this.Traverse(y),
+            LiteralPrincipalOption       y => this.Traverse(y),
+            IdentifierPrincipalOption    y => this.Traverse(y),
             PasswordAlterPrincipalOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6491,7 +6491,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual DialogOption Traverse(DialogOption x) => x switch{
             ScalarExpressionDialogOption y => this.Traverse(y),
-            OnOffDialogOption y => this.Traverse(y),
+            OnOffDialogOption            y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6571,7 +6571,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AuditSpecificationDetail Traverse(AuditSpecificationDetail x) => x switch{
-            AuditActionSpecification y => this.Traverse(y),
+            AuditActionSpecification  y => this.Traverse(y),
             AuditActionGroupReference y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6600,9 +6600,9 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AuditOption Traverse(AuditOption x) => x switch{
             QueueDelayAuditOption y => this.Traverse(y),
-            AuditGuidAuditOption y => this.Traverse(y),
-            OnFailureAuditOption y => this.Traverse(y),
-            StateAuditOption y => this.Traverse(y),
+            AuditGuidAuditOption  y => this.Traverse(y),
+            OnFailureAuditOption  y => this.Traverse(y),
+            StateAuditOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6635,10 +6635,10 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AuditTargetOption Traverse(AuditTargetOption x) => x switch{
-            MaxSizeAuditTargetOption y => this.Traverse(y),
+            MaxSizeAuditTargetOption          y => this.Traverse(y),
             MaxRolloverFilesAuditTargetOption y => this.Traverse(y),
-            LiteralAuditTargetOption y => this.Traverse(y),
-            OnOffAuditTargetOption y => this.Traverse(y),
+            LiteralAuditTargetOption          y => this.Traverse(y),
+            OnOffAuditTargetOption            y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6695,7 +6695,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual WorkloadGroupParameter Traverse(WorkloadGroupParameter x) => x switch{
-            WorkloadGroupResourceParameter y => this.Traverse(y),
+            WorkloadGroupResourceParameter   y => this.Traverse(y),
             WorkloadGroupImportanceParameter y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6753,11 +6753,11 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SessionOption Traverse(SessionOption x) => x switch{
-            EventRetentionSessionOption y => this.Traverse(y),
-            MemoryPartitionSessionOption y => this.Traverse(y),
-            LiteralSessionOption y => this.Traverse(y),
+            EventRetentionSessionOption     y => this.Traverse(y),
+            MemoryPartitionSessionOption    y => this.Traverse(y),
+            LiteralSessionOption            y => this.Traverse(y),
             MaxDispatchLatencySessionOption y => this.Traverse(y),
-            OnOffSessionOption y => this.Traverse(y),
+            OnOffSessionOption              y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6796,9 +6796,9 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual SpatialIndexOption Traverse(SpatialIndexOption x) => x switch{
-            SpatialIndexRegularOption y => this.Traverse(y),
-            BoundingBoxSpatialIndexOption y => this.Traverse(y),
-            GridsSpatialIndexOption y => this.Traverse(y),
+            SpatialIndexRegularOption        y => this.Traverse(y),
+            BoundingBoxSpatialIndexOption    y => this.Traverse(y),
+            GridsSpatialIndexOption          y => this.Traverse(y),
             CellsPerObjectSpatialIndexOption y => this.Traverse(y),
             _ =>Throw(x)
         };
@@ -6845,7 +6845,7 @@ public sealed partial class Optimizer{
         /// <returns></returns>
         protected virtual AlterServerConfigurationBufferPoolExtensionOption Traverse(AlterServerConfigurationBufferPoolExtensionOption x) => x switch{
             AlterServerConfigurationBufferPoolExtensionContainerOption y => this.Traverse(y),
-            AlterServerConfigurationBufferPoolExtensionSizeOption y => this.Traverse(y),
+            AlterServerConfigurationBufferPoolExtensionSizeOption      y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>
@@ -6905,11 +6905,11 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual AvailabilityReplicaOption Traverse(AvailabilityReplicaOption x) => x switch{
-            LiteralReplicaOption y => this.Traverse(y),
+            LiteralReplicaOption          y => this.Traverse(y),
             AvailabilityModeReplicaOption y => this.Traverse(y),
-            FailoverModeReplicaOption y => this.Traverse(y),
-            PrimaryRoleReplicaOption y => this.Traverse(y),
-            SecondaryRoleReplicaOption y => this.Traverse(y),
+            FailoverModeReplicaOption     y => this.Traverse(y),
+            PrimaryRoleReplicaOption      y => this.Traverse(y),
+            SecondaryRoleReplicaOption    y => this.Traverse(y),
             _ =>Throw(x)
         };
         /// <summary>

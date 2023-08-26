@@ -31,7 +31,7 @@
 *.out
 *.app
 
-#–³‹‚µ‚½‚¢V‚½‚É”­Œ©‚µ‚½ƒtƒ@ƒCƒ‹
+#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½É”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½@ï¿½Cï¿½ï¿½
 *.v2
 *.vsidx
 *.suo
@@ -42,3 +42,5 @@ obj
 *.vssscc
 /LinqDB/Optimizers/Optimizer.å¤‰æ›_å±€æ‰€Parameterã®å…ˆè¡Œè©•ä¾¡.txt
 /LinqDB/Optimizers/Optimizer.å¤‰æ›_è·¨ãParameterã®å…ˆè¡Œè©•ä¾¡.txt
+.vs/LinqDB/v17/TestStore/OutputMessages/7fc1d6e1-1065-0cce-c710-e97c1a322b94/StandardOutput.txt
+.vs/LinqDB/v17/TestStore/

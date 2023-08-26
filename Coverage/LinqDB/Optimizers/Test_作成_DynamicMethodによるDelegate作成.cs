@@ -2244,8 +2244,8 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Loop0(){
         //引数4なら4+3+2+1=10
         //if(Loop.ContinueLabel!=null) {
-        var 引数 = Expression.Parameter(typeof(int));
-        var 合計 = Expression.Parameter(typeof(int));
+        var 引数 = Expression.Parameter(typeof(int),"引数");
+        var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label();
         var Continue = Expression.Label();
         var R = this.Execute2(
@@ -2257,29 +2257,29 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                         Expression.Constant(0)
                     ),
                     Expression.Loop(
-                        Expression.IfThenElse(
-                            Expression.Equal(
-                                引数,
-                                Expression.Constant(0)
-                            ),
-                            Expression.Break(Break),
-                            Expression.Block(
-                                Expression.AddAssign(
-                                    合計,
-                                    引数
-                                ),
-                                Expression.PostDecrementAssign(
-                                    引数
-                                ),
-                                Expression.IfThen(
-                                    Expression.Equal(
-                                        引数,
-                                        Expression.Constant(0)
-                                    ),
-                                    Expression.Continue(Continue)
+#if false
+                        Expression.IfThen(
+                            Expression.Not(
+                                Expression.Equal(
+                                    引数,
+                                    Expression.Constant(0)
                                 )
+                            ),
+                            Expression.Block(
+                                Expression.AddAssign(合計,引数),
+                                Expression.PostDecrementAssign(引数)
                             )
                         ),
+#else
+                        Expression.IfThenElse(
+                            Expression.Equal(引数,Expression.Constant(0)),
+                            Expression.Break(Break),
+                            Expression.Block(
+                                Expression.AddAssign(合計,引数),
+                                Expression.PostDecrementAssign(引数)
+                            )
+                        ),
+#endif
                         Break,
                         Continue
                     ),
@@ -2866,91 +2866,125 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             }
         }
     }
-    [TestMethod]
-    public void Try()
-    {
-        var OverflowException変数 = new OverflowException();
-        var Exception変数 = new Exception();
-        var ex = Expression.Parameter(typeof(Exception));
+    private void PrivateTry(Expression<Action<Exception>>Lambda,Exception input){
+        var M = this.CreateDelegate(Lambda);
+        M(input);
+    }
+    [TestMethod,ExpectedException(typeof(OverflowException))]
+    public void Try_OverflowException(){
+        var input = Expression.Parameter(typeof(Exception));
         var OverflowException = Expression.Parameter(typeof(OverflowException), "OverflowException");
-        var Exception = Expression.Parameter(typeof(Exception), "Exception");
-        {
-            //Catchパラメーターあり
-            var M = this.CreateDelegate(
-                Expression.Lambda<Func<Exception, int>>(
-                    Expression.TryCatch(
-                        Expression.Block(
-                            Expression.Throw(ex, typeof(int)),
-                            Expression.Constant(1)
-                        ),
-                        Expression.Catch(
-                            OverflowException,
-                            Expression.Constant(2)
-                        ),
-                        Expression.Catch(
-                            Exception,
-                            Expression.Constant(3)
-                        )
+        var ApplicationException = Expression.Parameter(typeof(ApplicationException), "ApplicationException");
+        this.PrivateTry(
+            Expression.Lambda<Action<Exception>>(
+                Expression.TryCatch(
+                    Expression.Throw(input),
+                    Expression.Catch(OverflowException,Expression.Throw(OverflowException)),
+                    Expression.Catch(ApplicationException,Expression.Throw(ApplicationException))
+                ),
+                input
+            ),new OverflowException()
+        );
+    }
+    [TestMethod,ExpectedException(typeof(ApplicationException))]
+    public void Try_ApplicationException(){
+        var input = Expression.Parameter(typeof(Exception));
+        this.PrivateTry(
+            Expression.Lambda<Action<Exception>>(
+                Expression.TryCatch(
+                    Expression.Throw(input),
+                    Expression.Catch(
+                        typeof(OverflowException),
+                        Expression.Rethrow()
                     ),
-                    ex
+                    Expression.Catch(
+                        typeof(ApplicationException),
+                        Expression.Rethrow()
+                    )
+                ),
+                input
+            ),new ApplicationException()
+        );
+    }
+    [TestMethod]
+    public void Try_Fault0(){
+        //fault内部では例外が発生しないようだ
+        var input = Expression.Parameter(typeof(Exception),"input");
+        this.PrivateTry(
+            Expression.Lambda<Action<Exception>>(
+                Expression.TryFault(
+                    Expression.Constant(2),
+                    Expression.Throw(input)
+                ),
+                input
+            ),new ApplicationException()
+        );
+    }
+    [TestMethod,ExpectedException(typeof(ApplicationException))]
+    public void Try_Finally1(){
+        var input=Expression.Parameter(typeof(Exception),"input");
+        this.PrivateTry(
+            Expression.Lambda<Action<Exception>>(
+                Expression.TryFinally(
+                    Expression.Constant(2),
+                    Expression.Throw(input)
+                ),
+                input
+            ),new ApplicationException()
+        );
+    }
+    [TestMethod]
+    public void Try_Fault1(){
+        var M = this.CreateDelegate(
+            Expression.Lambda<Func<int>>(
+                Expression.TryFault(
+                    Expression.Constant(2),
+                    Expression.Constant(3)
                 )
-            );
-            Assert.AreEqual(M(OverflowException変数), 2);
-            Assert.AreEqual(M(Exception変数), 3);
+            )
+        );
+        var actual=M();
+        Assert.AreEqual(2,actual);
+    }
+    [TestMethod]
+    public void Try_Fault2(){
+        var 評価検証=new 評価検証(1);
+        var input=Expression.Parameter(typeof(評価検証),"評価検証");
+        var M = this.CreateDelegate(
+            Expression.Lambda<Action<評価検証>>(
+                Expression.TryFault(
+                    Expression.Throw(Expression.Constant(new ApplicationException())),
+                    Expression.Add(input,input)
+                ),
+                input
+            )
+        );
+        try{
+            M(評価検証);
+        } catch(ApplicationException){
+
         }
-        {
-            //Catchパラメーターなし
-            var M = this.CreateDelegate(
-                Expression.Lambda<Func<Exception, int>>(
-                    Expression.TryCatch(
-                        Expression.Block(
-                            Expression.Throw(ex, typeof(int)),
-                            Expression.Constant(1)
-                        ),
-                        Expression.Catch(
-                            typeof(OverflowException),
-                            Expression.Constant(2)
-                        ),
-                        Expression.Catch(
-                            typeof(Exception),
-                            Expression.Constant(3)
-                        )
-                    ),
-                    ex
+        Assert.AreEqual(1,評価検証.評価回数);
+    }
+    [TestMethod]
+    public void Try_Finally0(){
+        const int 評価検証値=4;
+        var 評価検証=new 評価検証(評価検証値);
+        var M = this.CreateDelegate(
+            Expression.Lambda<Func<int>>(
+                Expression.TryFinally(
+                    Expression.Constant(5),
+                    Expression.Add(
+                        Expression.Constant(評価検証),
+                        Expression.Constant(評価検証)
+                    )
                 )
-            );
-            Assert.AreEqual(M(OverflowException変数), 2);
-            Assert.AreEqual(M(Exception変数), 3);
-        }
-        {
-            var result = Expression.Parameter(typeof(int));
-            var M = this.CreateDelegate(
-                Expression.Lambda<Func<Exception, int>>(
-                    Expression.Block(
-                        new[] { result },
-                        Expression.TryCatchFinally(
-                            Expression.Block(
-                                Expression.Throw(ex, typeof(int)),
-                                Expression.Constant(1)
-                            ),
-                            Expression.Assign(result, Expression.Constant(4)),
-                            Expression.Catch(
-                                typeof(OverflowException),
-                                Expression.Assign(result, Expression.Constant(2))
-                            ),
-                            Expression.Catch(
-                                typeof(Exception),
-                                Expression.Assign(result, Expression.Constant(3))
-                            )
-                        ),
-                        result
-                    ),
-                    ex
-                )
-            );
-            Assert.AreEqual(M(OverflowException変数), 4);
-            Assert.AreEqual(M(Exception変数), 4);
-        }
+            )
+        );
+        var actual=M();
+        Assert.AreEqual(5,評価検証値,actual);
+        Assert.AreEqual(1,評価検証.評価回数);
+        Assert.AreEqual(評価検証値+評価検証値,評価検証.値+評価検証.値);
     }
     [TestMethod]
     public void TryFilter()
@@ -4769,15 +4803,15 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         )
     );
-    [TestMethod, ExpectedException(typeof(NotSupportedException))]
-    public void Try_Fault() => this.Execute2(
-        Expression.Lambda<Func<int>>(
-            Expression.TryFault(
-                Expression.Constant(0),
-                Expression.Constant(1)
-            )
-        )
-    );
+    //[TestMethod, ExpectedException(typeof(NotSupportedException))]
+    //public void Try_Fault() => this.Execute2(
+    //    Expression.Lambda<Func<int>>(
+    //        Expression.TryFault(
+    //            Expression.Constant(0),
+    //            Expression.Constant(1)
+    //        )
+    //    )
+    //);
 
     public static void 例外テスト()
     {

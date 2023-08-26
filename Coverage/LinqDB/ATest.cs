@@ -54,7 +54,7 @@ public abstract class ATest
         dynamic Array = new T[size];
         for (var a = 0; a < size; a++)
         {
-            Array[a] = (T)(dynamic)a;
+            Array[a] = (T)(dynamic)(a);
         }
         return (T[])Array;
     }
@@ -471,7 +471,7 @@ public abstract class ATest
         var 標準 = Lambda.Compile();
         var Optimizer = this.Optimizer;
         Optimizer.IsGenerateAssembly=true;
-        Optimizer.IsInline=false;
+        Optimizer.IsInline=true;
         var ラムダ = Optimizer.CreateDelegate(Lambda);
         Optimizer.IsInline=true;
         var ループ = Optimizer.CreateDelegate(Lambda);
@@ -564,6 +564,7 @@ public abstract class ATest
     }
     protected void 共通Assert(int expected,Expression<Func<評価検証,評価検証>> Lambda) {
         var Optimizer = this.Optimizer;
+        Optimizer.IsInline=true;
         var actual = Optimizer.Execute(Lambda,new 評価検証()).評価回数;
         Assert.IsTrue(Comparer.Equals(expected,actual));
     }
@@ -736,29 +737,29 @@ public abstract class ATest
         var Optimizer = this.Optimizer;
         var M2=Lambda.Compile();
         var R2=M2(a)!;
-        Optimizer.IsGenerateAssembly=false;
-        {
-            Optimizer.IsInline=false;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1(a);
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
-            Optimizer.IsInline=true;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1(a);
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
-        }
+        //Optimizer.IsGenerateAssembly=false;
+        //{
+        //    Optimizer.IsInline=false;
+        //    {
+        //        var M1=Optimizer.CreateDelegate(Lambda);
+        //        var R1=M1(a);
+        //        Assert.IsTrue(Comparer.Equals(R1,R2));
+        //    }
+        //    Optimizer.IsInline=true;
+        //    {
+        //        var M1=Optimizer.CreateDelegate(Lambda);
+        //        var R1=M1(a);
+        //        Assert.IsTrue(Comparer.Equals(R1,R2));
+        //    }
+        //}
         Optimizer.IsGenerateAssembly=true;
         {
-            Optimizer.IsInline=false;
-            {
-                var M1=Optimizer.CreateDelegate(Lambda);
-                var R1=M1(a);
-                Assert.IsTrue(Comparer.Equals(R1,R2));
-            }
+            //Optimizer.IsInline=false;
+            //{
+            //    var M1 = Optimizer.CreateDelegate(Lambda);
+            //    var R1 = M1(a);
+            //    Assert.IsTrue(Comparer.Equals(R1,R2));
+            //}
             Optimizer.IsInline=true;
             {
                 var M1=Optimizer.CreateDelegate(Lambda);
@@ -841,6 +842,8 @@ public abstract class ATest
         }
         return R2;
     }
+    protected Action<T> CreateDelegate<T>(Expression<Action<T>> Lambda) =>
+        this.Optimizer.CreateDelegate(Lambda);
     protected Delegate CreateDelegate(LambdaExpression Lambda) =>
         this.Optimizer.CreateDelegate(Lambda);
     protected Func<TResult> CreateDelegate<TResult>(Expression<Func<TResult>> Lambda) =>

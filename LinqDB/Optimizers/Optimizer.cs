@@ -26,6 +26,7 @@ using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex=System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
+// ReSharper disable All
 namespace LinqDB.Optimizers;
 /// <summary>
 /// Expressionを最適化する
@@ -413,7 +414,10 @@ public sealed partial class Optimizer:IDisposable{
             }
             return (int)e.NodeType+e.Type.MetadataToken.GetHashCode();
         }
-
+        //private readonly List<int> a_Indexes= new();
+        //private readonly List<int> b_Indexes= new();
+        private List<ParameterExpression> a_ラムダ跨ぎParameters= new();
+        private List<ParameterExpression> b_ラムダ跨ぎParameters= new();
         private readonly List<ParameterExpression> a_Parameters = new();
         private readonly List<ParameterExpression> b_Parameters = new();
         private readonly List<LabelTarget> a_LabelTargets = new();
@@ -425,10 +429,10 @@ public sealed partial class Optimizer:IDisposable{
         /// <param name="b"></param>
         /// <returns></returns>
         public bool Equals(Expression? a,Expression? b) {
-            var a_Parameters = this.a_Parameters;
-            var b_Parameters = this.b_Parameters;
-            a_Parameters.Clear();
-            b_Parameters.Clear();
+            this.a_ラムダ跨ぎParameters.Clear();
+            this.b_ラムダ跨ぎParameters.Clear();
+            this.a_Parameters.Clear();
+            this.b_Parameters.Clear();
             this.a_LabelTargets.Clear();
             this.b_LabelTargets.Clear();
             return this.PrivateEqualsNullable(a,b);
@@ -498,6 +502,41 @@ public sealed partial class Optimizer:IDisposable{
                     var b_Assign = (BinaryExpression)b1;
                     var a_Left = a_Assign.Left;
                     var b_Left = b_Assign.Left;
+                    if(a_Left.NodeType!=b_Left.NodeType) return false;
+                    if(a_Left.NodeType!=ExpressionType.Parameter) return this.T(a_Assign,b_Assign);
+                    if(!this.PrivateEquals(a_Assign.Right,b_Assign.Right))
+                        return false;
+                    if(!this.PrivateEqualsNullable(a_Assign.Conversion,b_Assign.Conversion))
+                        return false;
+                    var a_Parameter= (ParameterExpression)a_Left;
+                    var b_Parameter= (ParameterExpression)b_Left;
+                    var a_Index0 = this.a_Parameters.IndexOf(a_Parameter);
+                    var b_Index0 = this.b_Parameters.IndexOf(b_Parameter);
+                    if(a_Index0!=b_Index0) return false;
+                    if(a_Index0>=0) return true;
+                    var スコープParameters = this.スコープParameters;
+                    var a_Index1 = スコープParameters.IndexOf(a_Parameter);
+                    var b_Index1 = スコープParameters.IndexOf(b_Parameter);
+                    if(a_Index1!=b_Index1) return false;
+                    if(a_Index1>=0) return true;
+                    //if(a_Parameter==b_Parameter) return true;
+                    //Let(a=>.v),Let(b=>.w)は一致しない。
+                    //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
+                    var a_ラムダ跨ぎParameters = this.a_ラムダ跨ぎParameters;
+                    var b_ラムダ跨ぎParameters = this.b_ラムダ跨ぎParameters;
+                    Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||
+                                 a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
+                    if(a_ラムダ跨ぎParameters is null)return false;
+                    if(a_ラムダ跨ぎParameters.Contains(a_Parameter)) return b_ラムダ跨ぎParameters!.Contains(b_Parameter);
+                    if(b_ラムダ跨ぎParameters!.Contains(b_Parameter)) return false;
+                    a_ラムダ跨ぎParameters.Add(a_Parameter);
+                    b_ラムダ跨ぎParameters.Add(b_Parameter);
+                    return this.PrivateEquals(a_Assign.Right,b_Assign.Right);
+                    /*
+                    var a_Assign = (BinaryExpression)a1;
+                    var b_Assign = (BinaryExpression)b1;
+                    var a_Left = a_Assign.Left;
+                    var b_Left = b_Assign.Left;
                     if(a_Left.NodeType!=b_Left.NodeType)
                         return false;
                     if(a_Left.NodeType!=ExpressionType.Parameter)
@@ -515,7 +554,7 @@ public sealed partial class Optimizer:IDisposable{
                     if(a_Index>=0)
                         return true;
                     //Cラムダ跨ぎが代入元として出るなら初めてなら参照で等価比較
-                    //(x,y)=>{
+                    //(x,y) => {
                     //    Cラムダ跨ぎ=x+y
                     //}
                     //(x,y)=>{
@@ -524,6 +563,7 @@ public sealed partial class Optimizer:IDisposable{
                     this.a_Parameters.Add(a_Parameter);
                     this.b_Parameters.Add(b_Parameter);
                     return true;
+                    */
                 }
                 case ExpressionType.ArrayLength:
                 case ExpressionType.Convert:
@@ -599,20 +639,21 @@ public sealed partial class Optimizer:IDisposable{
             }
         }
         private bool T(BinaryExpression a,BinaryExpression b) => a.Method==b.Method&&this.PrivateEquals(a.Left,b.Left)&&this.PrivateEquals(a.Right,b.Right)&&this.PrivateEqualsNullable(a.Conversion,b.Conversion);
-        private bool T(BlockExpression a,BlockExpression b) {
+        private bool T(BlockExpression a,BlockExpression b){
+            //if(!this.T(a.Variables,b.Variables)) return false;
+            //return this.SequenceEqual(a.Expressions,b.Expressions);
+            if(a.Type!=b.Type) return false;
             var a_Variables = a.Variables;
             var b_Variables = b.Variables;
             var a_Variables_Count = a_Variables.Count;
             var b_Variables_Count = b_Variables.Count;
-            if(a_Variables_Count!=b_Variables_Count)
-                return false;
+            if(a_Variables_Count!=b_Variables_Count)return false;
             var a_Parameters = this.a_Parameters;
             var b_Parameters = this.b_Parameters;
             for(var i = 0;i<a_Variables_Count;i++) {
                 var a_Variable = a_Variables[i];
                 var b_Variable = b_Variables[i];
-                if(a_Variable.Type!=b_Variable.Type)
-                    return false;
+                if(a_Variable.Type!=b_Variable.Type)return false;
             }
             var a_Parameters_Count = a_Parameters.Count;
             Debug.Assert(a_Parameters_Count==b_Parameters.Count);
@@ -717,7 +758,7 @@ public sealed partial class Optimizer:IDisposable{
                         var b1 = (MemberAssignment)b;
                         if(a1.Member!=b1.Member)
                             return false;
-                        if(!this.Equals(a1.Expression,b1.Expression))
+                        if(!this.PrivateEquals(a1.Expression,b1.Expression))
                             return false;
                         break;
                     }
@@ -767,24 +808,52 @@ public sealed partial class Optimizer:IDisposable{
             b_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             return r;
         }
-        private bool T(LambdaExpression a,LambdaExpression b) {
-            var a_Variables = a.Parameters;
-            var b_Variables = b.Parameters;
-            var a_Variables_Count = a_Variables.Count;
-            Debug.Assert(a_Variables_Count==b_Variables.Count);
+        //private bool T(ReadOnlyCollection<ParameterExpression> a_Variables,ReadOnlyCollection<ParameterExpression> b_Variables){
+        //    var a_Parameters = this.a_Parameters;
+        //    var b_Parameters = this.b_Parameters;
+        //    var a_Variables_Count = a_Variables.Count;
+        //    if(a_Variables_Count!=b_Variables.Count) return false;
+        //    a_Parameters.AddRange(a_Variables);
+        //    b_Parameters.AddRange(b_Variables);
+        //    Debug.Assert(a_Parameters.Count==a_Parameters.ToHashSet().Count);
+        //    Debug.Assert(b_Parameters.Count==b_Parameters.ToHashSet().Count);
+        //    return true;
+        //}
+        private bool T(LambdaExpression Lambda_a,LambdaExpression Lambda_b){
+            if(Lambda_a.Type!=Lambda_b.Type||Lambda_a.TailCall!=Lambda_b.TailCall) return false;
+            var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
+            var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
+            this.a_ラムダ跨ぎParameters=new();
+            this.b_ラムダ跨ぎParameters=new();
+            var Lambda_a_Parameters = Lambda_a.Parameters;
+            var Lambda_b_Parameters = Lambda_b.Parameters;
+            var Lambda_a_Parameters_Count = Lambda_a_Parameters.Count;
+            if(Lambda_a_Parameters_Count!=Lambda_b_Parameters.Count) return false;
             var a_Parameters = this.a_Parameters;
             var b_Parameters = this.b_Parameters;
             var a_Parameters_Count = a_Parameters.Count;
             Debug.Assert(a_Parameters_Count==b_Parameters.Count);
-            a_Parameters.AddRange(a_Variables);
-            b_Parameters.AddRange(b_Variables);
+            a_Parameters.AddRange(Lambda_a_Parameters);
+            b_Parameters.AddRange(Lambda_b_Parameters);
             Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
             //var count=this.count++;
-            var r = this.PrivateEquals(a.Body,b.Body);
+            var r = this.PrivateEquals(Lambda_a.Body,Lambda_b.Body);
             Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
-            a_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
-            b_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
+            a_Parameters.RemoveRange(a_Parameters_Count,Lambda_a_Parameters_Count);
+            b_Parameters.RemoveRange(a_Parameters_Count,Lambda_a_Parameters_Count);
+            this.a_ラムダ跨ぎParameters=a_ラムダ跨ぎParameters;
+            this.b_ラムダ跨ぎParameters=b_ラムダ跨ぎParameters;
             return r;
+            //if(!this.T(a.Parameters,b.Parameters)) return false;
+
+
+            //Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
+            ////var count=this.count++;
+            //var r = this.PrivateEquals(a.Body,b.Body);
+            //Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
+            ////a_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
+            ////b_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
+            //return r;
         }
         private bool T(ListInitExpression a,ListInitExpression b) =>
             this.PrivateEquals(a.NewExpression,b.NewExpression)&&
@@ -855,28 +924,57 @@ public sealed partial class Optimizer:IDisposable{
             return true;
         }
         private bool T(ParameterExpression a,ParameterExpression b) {
-            //Cラムダ跨ぎが代入元として出るなら初めてなら参照で等価比較
-            //(x,y)=>{
-            //    Cラムダ跨ぎ+x+y
-            //}
-            //(x,y)=>{
-            //    Cラムダ跨ぎ+x+y
-            //}
-            var a_Index = this.a_Parameters.IndexOf(a);
-            var b_Index = this.b_Parameters.IndexOf(b);
-            if(a_Index!=b_Index) {
+            //var a_Parameters=this.a_Parameters;
+            //var b_Parameters=this.b_Parameters;
+            //var a_Index=a_Parameters.IndexOf(a);
+            //var b_Index=b_Parameters.IndexOf(b);
+            //if(a_Index!=b_Index) return false;
+            //if(a_Index>=0) return true;
+            ////a_Parameters.Add(a);
+            ////b_Parameters.Add(b);
+            ////var a_Indexes=this.a_Indexes;
+            ////var b_Indexes=this.b_Indexes;
+            ////a_Indexes.AddRange(a_Parameters.Select((p,i)=>(p,i)).Where(pi=>pi.p==a).Select(pi=>pi.i));
+            ////b_Indexes.AddRange(b_Parameters.Select((p,i)=>(p,i)).Where(pi=>pi.p==b).Select(pi=>pi.i));
+            ////if(!a_Indexes.SequenceEqual(b_Indexes)) return false;
+            //Lambda,BlockのParameter比較
+            var a_Index0 = this.a_Parameters.IndexOf(a);
+            var b_Index0 = this.b_Parameters.IndexOf(b);
+            if(a_Index0!=b_Index0)return false;
+            if(a_Index0>=0) return true;
+            //探索開始時点の
+            var スコープParameters = this.スコープParameters;
+            var a_Index1 = スコープParameters.IndexOf(a);
+            var b_Index1 = スコープParameters.IndexOf(b);
+            if(a_Index1!=b_Index1) return false;
+            if(a_Index1>=0) return true;
+            //Let(a=>.v),Let(b=>.w)は一致しない。
+            //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
+
+            var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
+            var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
+            Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
+            if(a_ラムダ跨ぎParameters is null){
                 return false;
             }
-            if(a_Index<0) {
-                var スコープParameters = this.スコープParameters;
-                var a_Index0 = スコープParameters.IndexOf(a);
-                var b_Index0 = スコープParameters.IndexOf(b);
-                if(a_Index0!=b_Index0) {
-                    return false;
-                }
-                return a==b;
-            }
-            return true;
+            if(a_ラムダ跨ぎParameters.Contains(a))return b_ラムダ跨ぎParameters!.Contains(b);
+            if(b_ラムダ跨ぎParameters!.Contains(b))return false;
+            a_ラムダ跨ぎParameters.Add(a);
+            b_ラムダ跨ぎParameters.Add(b);
+            return a==b;
+
+
+            //if(a==b) return true;
+            //{
+            //    var a_Index0 = this.a_ラムダ跨ぎParameters.IndexOf(a);
+            //    var b_Index0 = this.b_ラムダ跨ぎParameters.IndexOf(b);
+            //    if(a_Index0!=b_Index0) return false;
+            //    if(a_Index0<0){
+            //        this.a_ラムダ跨ぎParameters.Add(a);
+            //        this.b_ラムダ跨ぎParameters.Add(b);
+            //    }
+            //}
+            //return true;
         }
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {
@@ -930,18 +1028,21 @@ public sealed partial class Optimizer:IDisposable{
             a.TypeOperand==b.TypeOperand&&
             a.Type==b.Type;
         private bool T(UnaryExpression a,UnaryExpression b) =>
-            a.Method==b.Method&&
-            this.PrivateEquals(a.Operand,b.Operand)&&
-            a.Type==b.Type;
+            a.Method==b.Method&&a.Type==b.Type&&(
+                a.Operand is not null&&b.Operand is not null&&this.PrivateEquals(a.Operand,b.Operand)||
+                a.Operand is null&&b.Operand is null);
     }
     private class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualityComparer {
         internal ExpressionEqualityComparer_Assign_Leftで比較(List<ParameterExpression> スコープParameters) : base(スコープParameters) {
         }
-        protected override Expression Assignの比較対象(Expression Expression0)=>
-            Expression0.NodeType==ExpressionType.Assign&&
+        protected override Expression Assignの比較対象(Expression Expression0){
+            if(Expression0.NodeType==ExpressionType.Assign){
+            }
+            return Expression0.NodeType==ExpressionType.Assign&&
                    ((BinaryExpression)Expression0).Left is ParameterExpression Parameter
-                ?Parameter
-                :Expression0;
+                    ?Parameter
+                    :Expression0;
+        }
         public override int GetHashCode(Expression e) => base.GetHashCode(
             e.NodeType==ExpressionType.Assign
                 ? ((BinaryExpression)e).Left
@@ -1096,11 +1197,12 @@ public sealed partial class Optimizer:IDisposable{
     /// Listラムダ跨ぎParameter,Listループ跨ぎParameter設定
     /// </summary>
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
+    private readonly 変換_跨ぎParameterの不要置換復元 _変換_跨ぎParameterの不要置換復元;
     private readonly 変換_Anonymousをnewしてメンバーを参照している式の省略 _変換_Anonymousをnewしてメンバーを参照している式の省略;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
     private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
-    private readonly 変換_Lambda_Quote_ラムダ跨ぎParameter _変換_Lambda_Quote_ラムダ跨ぎParameter;
+    private readonly 変換_跨ぎParameterをBlock_Variablesに _変換_跨ぎParameterをBlock_Variablesに;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
     private readonly 取得_CSharp _取得_CSharp = new();
     private readonly 判定_InstanceMethodか 判定InstanceMethodか;
@@ -1116,7 +1218,7 @@ public sealed partial class Optimizer:IDisposable{
     //private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda1度;
     //private Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter1度;
     /// <summary>
-    /// IL生成時に使う。変換_Lambda_Quote_ラムダ跨ぎParameter、
+    /// IL生成時に使う。変換_跨ぎParameterをBlock_Variablesに、
     /// </summary>
     private Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
         get=>this.判定InstanceMethodか.DictionaryConstant;
@@ -1128,26 +1230,27 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic{
-        get=>this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryDynamic;
+        get=>this._変換_跨ぎParameterをBlock_Variablesに.DictionaryDynamic;
         set{
-            this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryDynamic=value;
+            this._変換_跨ぎParameterをBlock_Variablesに.DictionaryDynamic=value;
             this._作成_DynamicMethod.DictionaryDynamic=value;
             this._作成_DynamicAssembly.DictionaryDynamic=value;
         }
     }
     private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
-        get=>this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryLambda;
+        get=>this._変換_跨ぎParameterをBlock_Variablesに.DictionaryLambda;
         set{
-            this._変換_Lambda_Quote_ラムダ跨ぎParameter.DictionaryLambda=value;
+            this._変換_跨ぎParameterをBlock_Variablesに.DictionaryLambda=value;
             this._作成_DynamicMethod.DictionaryLambda=value;
             this._作成_DynamicAssembly.DictionaryLambda=value;
         }
     }
     private Dictionary<ParameterExpression, (FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
-        get=>this._変換_Lambda_Quote_ラムダ跨ぎParameter.Dictionaryラムダ跨ぎParameter;
+        get=>this._変換_跨ぎParameterをBlock_Variablesに.Dictionaryラムダ跨ぎParameter;
         set{
-            this._変換_Lambda_Quote_ラムダ跨ぎParameter.Dictionaryラムダ跨ぎParameter=value;
+            this._変換_跨ぎParameterをBlock_Variablesに.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
+            this._変換_跨ぎParameterの不要置換復元.Dictionaryラムダ跨ぎParameter=value;
             this._変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
             this._検証_Parameterの使用状態.ラムダ跨ぎParameters=value.Keys;
             this._作成_DynamicMethod.Dictionaryラムダ跨ぎParameter=value;
@@ -1204,9 +1307,10 @@ public sealed partial class Optimizer:IDisposable{
         this._変換_Anonymousをnewしてメンバーを参照している式の省略      =new(作業配列);
         var Listループ跨ぎParameter                                      =this.Listループ跨ぎParameter;
         this._変換_跨ぎParameterの先行評価                               =new(作業配列,ExpressionEqualityComparer,Listループ跨ぎParameter);
+        this._変換_跨ぎParameterの不要置換復元                         =new(作業配列);
         var ExpressionEqualityComparer_Assign_Leftで比較                 =new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
         this._変換_局所Parameterの先行評価                               =new(作業配列,ListスコープParameter,ExpressionEqualityComparer_Assign_Leftで比較);
-        this._変換_Lambda_Quote_ラムダ跨ぎParameter                      =new(作業配列,Listループ跨ぎParameter);
+        this._変換_跨ぎParameterをBlock_Variablesに                                       =new(作業配列,Listループ跨ぎParameter);
         this._検証_変形状態                                              =new();
         this._検証_Parameterの使用状態                                   =new(Listループ跨ぎParameter);
         this._変換_インラインループ独立                                  =new(作業配列,ExpressionEqualityComparer_Assign_Leftで比較,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
@@ -1492,6 +1596,13 @@ public sealed partial class Optimizer:IDisposable{
     /// </summary>
     /// <param name="Lambda"></param>
     /// <returns></returns>
+    public Action<T> CreateDelegate<T>(Expression<Action<T>> Lambda) =>
+        (Action<T>)this.PrivateDelegate(Lambda);
+    /// <summary>
+    /// 式木を最適化してコンパイルしてデリゲートを作る。
+    /// </summary>
+    /// <param name="Lambda"></param>
+    /// <returns></returns>
     public Action CreateDelegate(Expression<Action> Lambda) =>
         (Action)this.PrivateDelegate(Lambda);
     /// <summary>
@@ -1725,6 +1836,7 @@ public sealed partial class Optimizer:IDisposable{
                 Dictionaryラムダ跨ぎParameter[a.Key]=(Field,Expression.Field(DispParameter,Field));
             }
         }
+        var s=インラインラムダテキスト(Lambda1);
         //var Tuple=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理(ContainerType,DictionaryConstant,DictionaryLambda,Dictionaryラムダ跨ぎParameter,out var TupleParameter1);
         this._作成_DynamicAssembly.Impl作成(Lambda1,DispParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
         Debug.Assert(Disp_Type.GetField("Container",Instance_NonPublic_Public) is not null);
@@ -1742,7 +1854,7 @@ public sealed partial class Optimizer:IDisposable{
         //var r=Disp_Method0.Invoke(DispObject,Array.Empty<object>());
         var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
         //todo AssemblyGenerater.GenerateAssembly()の後GC.Collect()とGC.WaitForPendingFinalizers()することでファイルハンドルをファイナライザで解放させることを期待したがだダメだった
-        var t=Stopwatch.StartNew();
+        //var t=Stopwatch.StartNew();
         //Console.Write("GenerateAssembly,");
         //new AssemblyGenerator()をフィールドに保存すると２度目以降前回のアセンブリ情報が残る
         new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
@@ -1769,20 +1881,20 @@ public sealed partial class Optimizer:IDisposable{
 
         //var Lambda1=this.Compile情報ラムダ最適化(Lambda);
         var Lambda1=this.Lambda最適化(Lambda);
-        var DictionaryConstant1度=this.DictionaryConstant;
-        var DictionaryDynamic1度=this.DictionaryDynamic;
-        var DictionaryLambda1度=this.DictionaryLambda;
-        var Dictionaryラムダ跨ぎParameter1度 = this.Dictionaryラムダ跨ぎParameter;
+        var DictionaryConstant=this.DictionaryConstant;
+        var DictionaryDynamic=this.DictionaryDynamic;
+        var DictionaryLambda=this.DictionaryLambda;
+        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
         //Debug.Assert(this.DictionaryConstant== this.DictionaryConstant1度);
         //Debug.Assert(this.DictionaryDynamic== this.DictionaryDynamic1度);
         //Debug.Assert(this.DictionaryLambda== this.DictionaryLambda1度);
         //Debug.Assert(this.Dictionaryラムダ跨ぎParameter== this.Dictionaryラムダ跨ぎParameter1度);
         //Disp作成
-        var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant1度,DictionaryDynamic1度,DictionaryLambda1度,Dictionaryラムダ跨ぎParameter1度);
+        var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
         //var Container_Field=Tuple_Type.GetField("Item1",Instance_NonPublic_Public)!;
         //this._作成_DynamicMethodによるDelegate.Impl作成(Lambda1,Container_Field,Tuple);
-        this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant1度,DictionaryDynamic1度,DictionaryLambda1度,Dictionaryラムダ跨ぎParameter1度,Tuple);
-        var Value= Get_ValueTuple(DictionaryLambda1度[Lambda1].Member,Tuple);
+        this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter,Tuple);
+        var Value= Get_ValueTuple(DictionaryLambda[Lambda1].Member,Tuple);
         var Delegate1 = (Delegate)Value;
         return Delegate1;
     }
@@ -2138,18 +2250,21 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     public void Execute(Expression<Action> Lambda) =>
         this.CreateDelegate(Lambda)();
+    //private static readonly Regex RegexLambda=new("[#].*{",RegexOptions.Compiled);
+    private static readonly Regex Regex単純な識別子=new("[^ ,^$,^#,^<,^[,^>,^(]*[.]",RegexOptions.Compiled);
     /// <summary>
     /// 式木をわかりやすくテキストにする
     /// </summary>
     /// <param name="e"></param>
     /// <returns></returns>
     public static string インラインラムダテキスト(Expression e){
+        //[^ ]*[.]
         dynamic NonPublicAccessor = new NonPublicAccessor(typeof(Expression),e);
         var 変換前 = NonPublicAccessor.DebugView;
-        変換前=変換前.Replace("LinqDB.Sets.","");
-        変換前=変換前.Replace("System.Collections.Generic.","");
-        変換前=変換前.Replace("System.Collections.","");
-        変換前=変換前.Replace("System.","");
+        //変換前=変換前.Replace("LinqDB.Sets.","");
+        //変換前=変換前.Replace("System.Collections.Generic.","");
+        //変換前=変換前.Replace("System.Collections.","");
+        //変換前=変換前.Replace("System.","");
         変換前=変換前.Replace("\r\n{","{");
         var KeyValues = new List<(string Key, List<string> Values)>();
         {
@@ -2176,6 +2291,7 @@ public sealed partial class Optimizer:IDisposable{
                 } else if(string.Equals(Line,"}",StringComparison.Ordinal)) {
                     ラムダ式定義.Add(Line);
                 } else if(!string.Equals(Line,string.Empty,StringComparison.Ordinal)) {
+                    if(Line[^2]=='>'&&Line[^1]==')')Line=Line.Substring(0,Line.Length-1);
                     ラムダ式定義.Add(Line);
                 }
             }
@@ -2209,27 +2325,29 @@ public sealed partial class Optimizer:IDisposable{
                     }
                 }
                 var sb = new StringBuilder();
-                var RegxLambda = new Regex(@"\.Lambda #Lambda.*<",RegexOptions.Compiled);
-                foreach(var Value in KeyValues[0].Values) {
-                    var Value2 = RegxLambda.Replace(Value,"");
-                    if(Value2!=Value) {
-                        Value2=Value2.Replace(">(","(");
-                    }
-                    sb.AppendLine(Value2);
-                }
+                foreach(var Value in KeyValues[0].Values) sb.AppendLine(Value);
+                //var RegxLambda = new Regex(@"\.Lambda #Lambda.*<",RegexOptions.Compiled);
+                //foreach(var Value in KeyValues[0].Values) {
+                //    var Value2 = RegxLambda.Replace(Value,"");
+                //    if(Value2!=Value) {
+                //        Value2=Value2.Replace(">(","(");
+                //    }
+                //    sb.AppendLine(Value2);
+                //}
                 var Result1 = sb.ToString();
                 var Constant = new Regex(@"\.Constant<.*?>\(.*?\)",RegexOptions.Compiled);
                 var Result2 = Constant.Replace(Result1,"");
-                var Result3 = Result2.Replace("ExtensionSet","");
-                var Result4 = Result3.Replace("ExtensionEnumerable","");
+                //var Result3 = Result2.Replace("ExtensionSet","");
+                //var Result4 = Result3.Replace("ExtensionEnumerable","");
                 //var NodeType= new Regex(@"#Lambda.*\(",RegexOptions.Compiled);
                 //var Result5 = NodeType.Replace(Result4,"(");
                 var NodeTypeを除く = new Regex(@" \..*? ",RegexOptions.Compiled);
                 //var Regx5= new Regex(@"Lambda #Lambda.*<",RegexOptions.Compiled);
-                var Result5 = NodeTypeを除く.Replace(Result4," ");
+                var Result5 = NodeTypeを除く.Replace(Result2," ");
                 //var Result6 = Result5.Replace(" ."," ");
                 if(Result5[0]=='.') Result5=Result5[1..];
-                return Result5;
+                var Result6=Regex単純な識別子.Replace(Result5,"");
+                return Result6;
             }
         }
     }
@@ -2292,14 +2410,14 @@ public sealed partial class Optimizer:IDisposable{
         //if(プロファイル)HashSetConstant.Add(ConstantList計測);
         var Lambda04 = this._変換_WhereからLookup.実行(Lambda03);
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
-        var Lambda06 = this._変換_局所Parameterの先行評価.実行(Lambda05);
-        this._検証_変形状態.実行(Lambda06);
-        var Lambda065=Lambda06;
+        var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
+        var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
+        this._検証_変形状態.実行(Lambda07);
         //var Lambda065 =this._変換_Anonymousをnewしてメンバーを参照している式の省略.実行(Lambda06);
-        var Lambda07 =this.IsInline?this._変換_インラインループ独立.実行(Lambda065):Lambda065;
-        var Lambda08=this._変換_Lambda_Quote_ラムダ跨ぎParameter.実行(Lambda07);
+        var Lambda08 =this.IsInline?this._変換_インラインループ独立.実行(Lambda07):Lambda07;
+        var Lambda09=this._変換_跨ぎParameterをBlock_Variablesに.実行(Lambda08);
         //this._検証_Parameterの使用状態.実行(Lambda08);
-        return (LambdaExpression)Lambda08;
+        return (LambdaExpression)Lambda09;
     }
     private static bool equals(object obj) => obj is string&&obj.Equals("ABC");
 }

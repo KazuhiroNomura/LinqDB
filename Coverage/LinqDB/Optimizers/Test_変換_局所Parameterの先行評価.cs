@@ -408,6 +408,12 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //$b = 2;
         //$a = ($局所0 = $a + $b); 3
         //$b = $局所0
+        //↑はだめ。aが書き込まれているので
+        //$a = 1;
+        //$b = 2;
+        //$a = $a + $b;
+        //$b = $a + $b
+        //であるべき
         Assert.AreEqual(
             5,
             this.Execute2(

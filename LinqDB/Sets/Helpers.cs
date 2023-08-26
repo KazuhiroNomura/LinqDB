@@ -15,6 +15,7 @@ public static class Helpers {
     /// <typeparam name="TResult"></typeparam>
     /// <returns></returns>
     public static TResult Let<T,TResult>(this T input,Func<T,TResult> func)=>func(input);
+    public static TResult Let2<TResult>(Func<TResult> func)=>func();
     ///// <summary>
     ///// DictionarySet`2からキーが一致する集合を返す。
     ///// </summary>

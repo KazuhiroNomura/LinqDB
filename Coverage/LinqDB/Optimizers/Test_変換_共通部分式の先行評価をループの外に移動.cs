@@ -433,9 +433,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         this.Execute2(() => Inline(() => C3 + Inline(() => C3 + B2)));
         //}
     }
-    [TestMethod]
-    public void Assert1段1幅外出し()
-    {
+    [TestMethod]public void Assert1段1幅外出し0(){
         var p = Expression.Parameter(typeof(int));
         var Call0 = Expression.Call(
             typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.Let))!.MakeGenericMethod(typeof(int), typeof(decimal)),
@@ -488,6 +486,34 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"        }",
         //"    }",
         //"}"
+    }
+    private static readonly ParameterExpression Parameter_int = Expression.Parameter(typeof(int));
+    private static readonly MethodCallExpression Call0 = Expression.Call(
+        typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.Let))!.MakeGenericMethod(typeof(int), typeof(decimal)),
+        Expression.Constant(1),
+        Expression.Lambda<Func<int, decimal>>(
+            Expression.Constant(1m),
+            Parameter_int
+        )
+    );
+    private static readonly MethodCallExpression Call1 = Expression.Call(
+        typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.Let))!.MakeGenericMethod(typeof(int), typeof(decimal)),
+        Expression.Constant(1),
+        Expression.Lambda<Func<int, decimal>>(
+            Expression.Add(
+                Expression.Constant(1m),
+                Expression.Constant(1m)
+            ),
+            Parameter_int
+        )
+    );
+    [TestMethod]
+    public void Assert1段1幅外出し1(){
+        //let(_=>1m)+let(_=>1m+1m)
+        //t0=1m+1m
+        //t1=1m
+        //let(_=>t1)+let(_=>t2)
+        //は良くない
         this.Execute2(
             Expression.Lambda<Func<decimal>>(
                 Expression.Add(
@@ -496,6 +522,8 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
                 )
             )
         );
+    }
+    [TestMethod]public void Assert1段1幅外出し2(){
         //".Lambda LラムダR<Func`1[Decimal]>() {",
         //"    .Block(Decimal $Cラムダ局所0) {",
         //"        .Block() {",
@@ -521,6 +549,8 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
                 )
             )
         );
+    }
+    [TestMethod]public void Assert1段1幅外出し3(){
         //".Lambda LラムダR<Func`1[Decimal]>() {",
         //"    .Block(",
         //"        Decimal $Cラムダ局所0,",
