@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<NewExpression>{
-    private IJsonFormatter<NewExpression> New=>this;
-    public void Serialize(ref JsonWriter writer,NewExpression? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.NewExpression>{
+    private IJsonFormatter<Expressions.NewExpression> New=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.NewExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
             return;
@@ -23,22 +23,22 @@ partial class ExpressionJsonFormatter:IJsonFormatter<NewExpression>{
         //    _Expression.Serialize(ref writer,Arguments[a],Resolver);
         //writer.WriteEndArray();
     }
-    NewExpression IJsonFormatter<NewExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.NewExpression IJsonFormatter<Expressions.NewExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var constructor= this.ConstructorInfo.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
+        var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.New(
+        return Expressions.Expression.New(
             constructor,
             arguments
         );
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<NewExpression>{
-    private IMessagePackFormatter<NewExpression> MSNew=>this;
-    public void Serialize(ref MessagePackWriter writer,NewExpression? value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.NewExpression>{
+    private IMessagePackFormatter<Expressions.NewExpression> MSNew=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.NewExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
             return;
@@ -46,11 +46,11 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<NewExpression
         this.Serialize(ref writer,value.Constructor!,Resolver);
         Serialize_T(ref writer,value.Arguments,Resolver);
     }
-    NewExpression IMessagePackFormatter<NewExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.NewExpression IMessagePackFormatter<Expressions.NewExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         var constructor= this.ConstructorInfo.Deserialize(ref reader,Resolver);
-        var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
-        return Expression.New(
+        var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
+        return Expressions.Expression.New(
             constructor,
             arguments
         );

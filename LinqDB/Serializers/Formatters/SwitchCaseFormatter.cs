@@ -1,35 +1,35 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<SwitchCase>{
-    private IJsonFormatter<SwitchCase> SwitchCase=>this;
-    public void Serialize(ref JsonWriter writer,SwitchCase value,IJsonFormatterResolver Resolver) {
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.SwitchCase>{
+    private IJsonFormatter<Expressions.SwitchCase> SwitchCase=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.SwitchCase value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         Serialize_T(ref writer,value.TestValues,Resolver);
         writer.WriteValueSeparator();
         this.Serialize(ref writer,value.Body,Resolver);
         writer.WriteEndArray();
     }
-    SwitchCase IJsonFormatter<SwitchCase>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
+    Expressions.SwitchCase IJsonFormatter<Expressions.SwitchCase>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var testValues=Deserialize_T<Expression[]>(ref reader,Resolver);
+        var testValues=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var body= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.SwitchCase(body,testValues);
+        return Expressions.Expression.SwitchCase(body,testValues);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<SwitchCase>{
-    public void Serialize(ref MessagePackWriter writer,SwitchCase value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.SwitchCase>{
+    public void Serialize(ref MessagePackWriter writer,Expressions.SwitchCase value,MessagePackSerializerOptions Resolver){
         Serialize_T(ref writer,value.TestValues,Resolver);
         this.Serialize(ref writer,value.Body,Resolver);
     }
-    SwitchCase IMessagePackFormatter<SwitchCase>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        var testValues=Deserialize_T<Expression[]>(ref reader,Resolver);
+    Expressions.SwitchCase IMessagePackFormatter<Expressions.SwitchCase>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+        var testValues=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
         var body= this.Deserialize(ref reader,Resolver);
-        return Expression.SwitchCase(body,testValues);
+        return Expressions.Expression.SwitchCase(body,testValues);
     }
 }

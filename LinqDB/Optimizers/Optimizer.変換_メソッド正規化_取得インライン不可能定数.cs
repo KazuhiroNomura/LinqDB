@@ -328,15 +328,6 @@ partial class Optimizer {
                         Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
                     } else {
                         Try1_Handler=Try0_Handler;
-                        //Assert(Try0_Handler.Filter is null);
-                        //if(Try0_Handler.Body!=Try1_Handler_Body){
-                        //    変化したか=true;
-                        //    Try1_Handler=Expression.Catch(
-                        //        Try0_Handler.Test,
-                        //        Try1_Handler_Body
-                        //    );
-                        //} else
-                        //    Try1_Handler=Try0_Handler;
                     }
                 }
                 Try1_Handlers[a]=Try1_Handler;

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using MessagePack;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 partial class ExpressionJsonFormatter{
-    public void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<ParameterExpression>value,IJsonFormatterResolver Resolver) {
+    public void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         var Count=value.Count;
         if(Count>0) {
@@ -27,9 +27,9 @@ partial class ExpressionJsonFormatter{
         }
         writer.WriteEndArray();
     }
-    internal List<ParameterExpression>Deserialize宣言Parameters(ref JsonReader reader,IJsonFormatterResolver Resolver) {
+    internal List<Expressions.ParameterExpression>Deserialize宣言Parameters(ref JsonReader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var List=new List<ParameterExpression>();
+        var List=new List<Expressions.ParameterExpression>();
         var t=reader;
         if(!t.ReadIsEndArray()){
             while(true){
@@ -37,7 +37,7 @@ partial class ExpressionJsonFormatter{
                 var name=reader.ReadString();
                 reader.ReadIsNameSeparatorWithVerify();
                 var type= Deserialize_Type(ref reader,Resolver);
-                List.Add(Expression.Parameter(type,name));
+                List.Add(Expressions.Expression.Parameter(type,name));
                 reader.ReadIsEndObjectWithVerify();
                 t=reader;
                 if(!t.ReadIsValueSeparator()) break;
@@ -48,7 +48,7 @@ partial class ExpressionJsonFormatter{
     }
 }
 partial class ExpressionMessagePackFormatter{
-    public void Serialize宣言Parameters(ref MessagePackWriter writer,ReadOnlyCollection<ParameterExpression>value,MessagePackSerializerOptions Resolver) {
+    public void Serialize宣言Parameters(ref MessagePackWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,MessagePackSerializerOptions Resolver) {
         var Count=value.Count;
         writer.WriteArrayHeader(Count);
         for(var a=0;a<Count;a++){
@@ -57,13 +57,13 @@ partial class ExpressionMessagePackFormatter{
             Serialize_Type(ref writer,Parameter.Type,Resolver);
         }
     }
-    internal ParameterExpression[]Deserialize宣言Parameters(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    internal Expressions.ParameterExpression[]Deserialize宣言Parameters(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var Count=reader.ReadArrayHeader();
-        var Parameters=new ParameterExpression[Count];
+        var Parameters=new Expressions.ParameterExpression[Count];
         for(var a=0;a<Count;a++){
             var name=reader.ReadString();
             var type= Deserialize_Type(ref reader,Resolver);
-            Parameters[a]=Expression.Parameter(type,name);
+            Parameters[a]=Expressions.Expression.Parameter(type,name);
         }
         return Parameters;
     }

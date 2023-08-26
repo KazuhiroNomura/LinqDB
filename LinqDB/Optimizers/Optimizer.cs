@@ -111,7 +111,6 @@ public sealed partial class Optimizer:IDisposable{
     private static readonly ConstantExpression Constant_10D = Expression.Constant(10D);
     private static readonly ConstantExpression Constant_null = Expression.Constant(null);
     private static readonly DefaultExpression Default_void = Expression.Empty();
-    //internal static readonly ParameterExpression[] Parameters0 = new ParameterExpression[0];
     private static Expression Convert必要なら(Expression e,Type Type) => Type!=e.Type
         ? Expression.Convert(
             e,
@@ -519,7 +518,6 @@ public sealed partial class Optimizer:IDisposable{
                     var b_Index1 = スコープParameters.IndexOf(b_Parameter);
                     if(a_Index1!=b_Index1) return false;
                     if(a_Index1>=0) return true;
-                    //if(a_Parameter==b_Parameter) return true;
                     //Let(a=>.v),Let(b=>.w)は一致しない。
                     //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
                     var a_ラムダ跨ぎParameters = this.a_ラムダ跨ぎParameters;
@@ -532,38 +530,6 @@ public sealed partial class Optimizer:IDisposable{
                     a_ラムダ跨ぎParameters.Add(a_Parameter);
                     b_ラムダ跨ぎParameters.Add(b_Parameter);
                     return this.PrivateEquals(a_Assign.Right,b_Assign.Right);
-                    /*
-                    var a_Assign = (BinaryExpression)a1;
-                    var b_Assign = (BinaryExpression)b1;
-                    var a_Left = a_Assign.Left;
-                    var b_Left = b_Assign.Left;
-                    if(a_Left.NodeType!=b_Left.NodeType)
-                        return false;
-                    if(a_Left.NodeType!=ExpressionType.Parameter)
-                        return this.T(a_Assign,b_Assign);
-                    if(!this.PrivateEquals(a_Assign.Right,b_Assign.Right))
-                        return false;
-                    if(!this.PrivateEqualsNullable(a_Assign.Conversion,b_Assign.Conversion))
-                        return false;
-                    var a_Parameter = (ParameterExpression)a_Left;
-                    var b_Parameter = (ParameterExpression)b_Left;
-                    var a_Index = this.a_Parameters.IndexOf(a_Parameter);
-                    var b_Index = this.b_Parameters.IndexOf(b_Parameter);
-                    if(a_Index!=b_Index)
-                        return false;
-                    if(a_Index>=0)
-                        return true;
-                    //Cラムダ跨ぎが代入元として出るなら初めてなら参照で等価比較
-                    //(x,y) => {
-                    //    Cラムダ跨ぎ=x+y
-                    //}
-                    //(x,y)=>{
-                    //    Cラムダ跨ぎ=x+y
-                    //}
-                    this.a_Parameters.Add(a_Parameter);
-                    this.b_Parameters.Add(b_Parameter);
-                    return true;
-                    */
                 }
                 case ExpressionType.ArrayLength:
                 case ExpressionType.Convert:
@@ -808,17 +774,6 @@ public sealed partial class Optimizer:IDisposable{
             b_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             return r;
         }
-        //private bool T(ReadOnlyCollection<ParameterExpression> a_Variables,ReadOnlyCollection<ParameterExpression> b_Variables){
-        //    var a_Parameters = this.a_Parameters;
-        //    var b_Parameters = this.b_Parameters;
-        //    var a_Variables_Count = a_Variables.Count;
-        //    if(a_Variables_Count!=b_Variables.Count) return false;
-        //    a_Parameters.AddRange(a_Variables);
-        //    b_Parameters.AddRange(b_Variables);
-        //    Debug.Assert(a_Parameters.Count==a_Parameters.ToHashSet().Count);
-        //    Debug.Assert(b_Parameters.Count==b_Parameters.ToHashSet().Count);
-        //    return true;
-        //}
         private bool T(LambdaExpression Lambda_a,LambdaExpression Lambda_b){
             if(Lambda_a.Type!=Lambda_b.Type||Lambda_a.TailCall!=Lambda_b.TailCall) return false;
             var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
@@ -844,16 +799,6 @@ public sealed partial class Optimizer:IDisposable{
             this.a_ラムダ跨ぎParameters=a_ラムダ跨ぎParameters;
             this.b_ラムダ跨ぎParameters=b_ラムダ跨ぎParameters;
             return r;
-            //if(!this.T(a.Parameters,b.Parameters)) return false;
-
-
-            //Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
-            ////var count=this.count++;
-            //var r = this.PrivateEquals(a.Body,b.Body);
-            //Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
-            ////a_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
-            ////b_Parameters.RemoveRange(a_Parameters_Count,a_Variables_Count);
-            //return r;
         }
         private bool T(ListInitExpression a,ListInitExpression b) =>
             this.PrivateEquals(a.NewExpression,b.NewExpression)&&
@@ -924,20 +869,6 @@ public sealed partial class Optimizer:IDisposable{
             return true;
         }
         private bool T(ParameterExpression a,ParameterExpression b) {
-            //var a_Parameters=this.a_Parameters;
-            //var b_Parameters=this.b_Parameters;
-            //var a_Index=a_Parameters.IndexOf(a);
-            //var b_Index=b_Parameters.IndexOf(b);
-            //if(a_Index!=b_Index) return false;
-            //if(a_Index>=0) return true;
-            ////a_Parameters.Add(a);
-            ////b_Parameters.Add(b);
-            ////var a_Indexes=this.a_Indexes;
-            ////var b_Indexes=this.b_Indexes;
-            ////a_Indexes.AddRange(a_Parameters.Select((p,i)=>(p,i)).Where(pi=>pi.p==a).Select(pi=>pi.i));
-            ////b_Indexes.AddRange(b_Parameters.Select((p,i)=>(p,i)).Where(pi=>pi.p==b).Select(pi=>pi.i));
-            ////if(!a_Indexes.SequenceEqual(b_Indexes)) return false;
-            //Lambda,BlockのParameter比較
             var a_Index0 = this.a_Parameters.IndexOf(a);
             var b_Index0 = this.b_Parameters.IndexOf(b);
             if(a_Index0!=b_Index0)return false;
@@ -962,19 +893,6 @@ public sealed partial class Optimizer:IDisposable{
             a_ラムダ跨ぎParameters.Add(a);
             b_ラムダ跨ぎParameters.Add(b);
             return a==b;
-
-
-            //if(a==b) return true;
-            //{
-            //    var a_Index0 = this.a_ラムダ跨ぎParameters.IndexOf(a);
-            //    var b_Index0 = this.b_ラムダ跨ぎParameters.IndexOf(b);
-            //    if(a_Index0!=b_Index0) return false;
-            //    if(a_Index0<0){
-            //        this.a_ラムダ跨ぎParameters.Add(a);
-            //        this.b_ラムダ跨ぎParameters.Add(b);
-            //    }
-            //}
-            //return true;
         }
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {
@@ -1075,7 +993,6 @@ public sealed partial class Optimizer:IDisposable{
     private readonly 作業配列 _作業配列 = new();
 
     private static Type IEnumerable1(Type Type) {
-        //Debug.Assert(Type  is not null);
         var IEnumerable1 = typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()
             ? Type
             : Type.GetInterface(CommonLibrary.IEnumerable1_FullName);
@@ -1210,13 +1127,7 @@ public sealed partial class Optimizer:IDisposable{
     private readonly 検証_変形状態 _検証_変形状態;
     private readonly 作成_DynamicMethod _作成_DynamicMethod;
     private readonly 作成_DynamicAssembly _作成_DynamicAssembly;
-    //private readonly 作成_DynamicAssemblyによるループ _作成_DynamicAssemblyによるループ;
-    //private 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
-    //private readonly Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant1度;
-    //private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic1度;
-    //private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda1度;
-    //private Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter1度;
     /// <summary>
     /// IL生成時に使う。変換_跨ぎParameterをBlock_Variablesに、
     /// </summary>
@@ -1415,7 +1326,6 @@ public sealed partial class Optimizer:IDisposable{
         var DictionaryLambda = this.DictionaryLambda=Information.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=Information.Dictionaryラムダ跨ぎParameter;
         var Lambda1 = Information.Lambda=this.Lambda最適化(Lambda0);
-        //Information.Lambda=Lambda0;
         var Disp_ctor_I = Information.Disp_ctor_I;
         {
             var Field番号 = 0;
@@ -1501,7 +1411,6 @@ public sealed partial class Optimizer:IDisposable{
         }
 
         var DispType=Information.CreateDispType();
-        //var DispParameter=this.DispParameter;
         var DispParameter=this.DispParameter=Expression.Parameter(DispType,"Disp");
         Debug.Assert(Information.DispParameter is null);
         Information.DispParameter=DispParameter;
@@ -1545,7 +1454,6 @@ public sealed partial class Optimizer:IDisposable{
         var DictionaryDynamic=this.DictionaryDynamic=Information.DictionaryDynamic;
         var DictionaryLambda=this.DictionaryLambda= Information.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter = Information.Dictionaryラムダ跨ぎParameter;
-        //var ContainerField=Information.ContainerField;
         Debug.Assert(Information.Disp_Type is not null);
         var ContainerField=Information.Disp_Type.GetField("Container");
         Debug.Assert(ContainerField is not null);
@@ -1670,28 +1578,10 @@ public sealed partial class Optimizer:IDisposable{
     /// <returns></returns>
     public Func<T1,T2,T3,T4,TResult> CreateDelegate<T1, T2, T3, T4, TResult>(Expression<Func<T1,T2,T3,T4,TResult>> Lambda) =>
         (Func<T1,T2,T3,T4,TResult>)this.PrivateDelegate(Lambda);
-    ///// <summary>
-    ///// F#式木を最適化してコンパイルしてデリゲートを作る。
-    ///// </summary>
-    ///// <typeparam name="TResult"></typeparam>
-    ///// <param name="Expr"></param>
-    ///// <returns></returns>
-    //public Func<TResult> CreateDelegate<TResult>(FSharpExpr<TResult> Expr) =>
-    //    (Func<TResult>)this.InternalCompile(
-    //        Expression.Lambda<Func<TResult>>(
-    //            LeafExpressionConverter.QuotationToExpression(Expr),
-    //            Array.Empty<ParameterExpression>()
-    //        )
-    //    );
     /// <summary>
     /// コンパイルした時のアセンブリファイル名
     /// </summary>
     public string? AssemblyFileName { get; set; }
-    //internal Delegate InternalCompile(LambdaExpression Lambda) {
-    //    var コンパイルに必要な情報 = this.コンパイルに必要な情報を作成(Lambda);
-    //    return (this.OptimizeLevel&OptimizeLevels.独自のILGenerator)!=0 ? this._作成_DynamicMethodによるDelegate作成.CreateDelegate(コンパイルに必要な情報) : Lambda.Compile();
-    //}
-    //private static readonly Type[]DelegateCtorSignature = {typeof(object), typeof(IntPtr)};
     private Type Dynamicに対応するFunc(DynamicExpression Dynamic){
         var Dynamic_Arguments=Dynamic.Arguments;
         var Dynamic_Arguments_Count=Dynamic_Arguments.Count;
@@ -1704,12 +1594,6 @@ public sealed partial class Optimizer:IDisposable{
     }
     private Type Dynamicに対応するCallSite(DynamicExpression Dynamic)=>this._作業配列.MakeGenericType(typeof(CallSite<>),this.Dynamicに対応するFunc(Dynamic));
     private Delegate DynamicAssemblyとDynamicMethod(Type ContainerType,LambdaExpression Lambda0){
-        //var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        //var DictionaryConstant = this.DictionaryConstant=new(ExpressionEqualityComparer);
-        //var DictionaryDynamic= this.DictionaryDynamic=new();
-        //var DictionaryLambda=this.DictionaryLambda=new(ExpressionEqualityComparer);
-        //var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=new();
-        //var Lambda1=this.Lambda最適化初期化なし(Lambda0);
         var Lambda1=this.Lambda最適化(Lambda0);
         var DictionaryConstant = this.DictionaryConstant;
         var DictionaryDynamic=this.DictionaryDynamic;
@@ -1873,26 +1757,13 @@ public sealed partial class Optimizer:IDisposable{
     /// <param name="Lambda"></param>
     /// <returns></returns>
     private Delegate DynamicMethod(Type ContainerType,LambdaExpression Lambda){
-        //var ExpressionEqualityComparer=this._ExpressionEqualityComparer;
-        //DictionaryConstant.Clear();
-        //DictionaryDynamic.Clear();
-        //DictionaryLambda.Clear();
-        //Dictionaryラムダ跨ぎParameter.Clear();
-
-        //var Lambda1=this.Compile情報ラムダ最適化(Lambda);
         var Lambda1=this.Lambda最適化(Lambda);
         var DictionaryConstant=this.DictionaryConstant;
         var DictionaryDynamic=this.DictionaryDynamic;
         var DictionaryLambda=this.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
-        //Debug.Assert(this.DictionaryConstant== this.DictionaryConstant1度);
-        //Debug.Assert(this.DictionaryDynamic== this.DictionaryDynamic1度);
-        //Debug.Assert(this.DictionaryLambda== this.DictionaryLambda1度);
-        //Debug.Assert(this.Dictionaryラムダ跨ぎParameter== this.Dictionaryラムダ跨ぎParameter1度);
         //Disp作成
         var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
-        //var Container_Field=Tuple_Type.GetField("Item1",Instance_NonPublic_Public)!;
-        //this._作成_DynamicMethodによるDelegate.Impl作成(Lambda1,Container_Field,Tuple);
         this._作成_DynamicMethod.Impl作成(Lambda1,TupleParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter,Tuple);
         var Value= Get_ValueTuple(DictionaryLambda[Lambda1].Member,Tuple);
         var Delegate1 = (Delegate)Value;
@@ -1906,15 +1777,11 @@ public sealed partial class Optimizer:IDisposable{
         Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter){
         var TargetFieldType数 = 1+DictionaryConstant.Count+DictionaryDynamic.Count+DictionaryLambda.Count+Dictionaryラムダ跨ぎParameter.Count;
         var FieldTypes=new Type[TargetFieldType数];
-        //var Types1=作業配列.Types1;
-        //var Types3=作業配列.Types3;
-        //var Types4=作業配列.Types4;
         {
             FieldTypes[0]=ContainerType;
             var index=1;
             foreach(var a in DictionaryConstant.Keys)
                 FieldTypes[index++]=a.Type;
-            //Types3[0]=Types4[0]=typeof(CallSite);
             foreach(var a in DictionaryDynamic.AsEnumerable())
                 FieldTypes[index++]=this.Dynamicに対応するCallSite(a.Key);
             foreach(var a in DictionaryLambda.Keys)

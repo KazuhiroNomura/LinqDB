@@ -42,7 +42,7 @@ public sealed class Client<TContainer>:Client, IClient {
         var Response =(Response)MemoryStream.ReadByte();
         switch (Response) {
             case Response.Object:throw 受信ヘッダー_は不正だった(Response);
-            case Response.ThrowException:throw new InvalidOperationException(ReadObject<string>(MemoryStream));
+            case Response.ThrowException:throw new InvalidOperationException(this.ReadObject<string>(MemoryStream));
         }
     }
     /// <summary>
@@ -64,8 +64,8 @@ public sealed class Client<TContainer>:Client, IClient {
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
-            Response.Object=>ReadObject<TResult>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(ReadObject<string>(MemoryStream)),
+            Response.Object=>this.ReadObject<TResult>(MemoryStream),
+            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }
@@ -84,8 +84,8 @@ public sealed class Client<TContainer>:Client, IClient {
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
-            Response.Object=>ReadObject<object>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(ReadObject<string>(MemoryStream)),
+            Response.Object=>this.ReadObject<object>(MemoryStream),
+            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }

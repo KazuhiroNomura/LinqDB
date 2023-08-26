@@ -1146,9 +1146,7 @@ partial class Optimizer{
             this.Traverse(TypeBinary_Expression);
             if(TypeBinary_Expression_Type.IsValueType)
                 I.Box(TypeBinary_Expression_Type);
-            //I.Emit(OpCodes.Callvirt     ,Reflection.Object.GetType_);
             I.Call(Reflection.Object.GetType_);
-            //I.Ldtoken(TypeBinary.TypeOperand);
             I.M_Metadata(TypeBinary.TypeOperand);
             I.Ceq();
         }
@@ -1704,21 +1702,6 @@ partial class Optimizer{
                 I.Br(ContinueLabel);
             }
         }
-        //protected override void Block(BlockExpression Block) {
-        //    var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
-        //    Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
-        //    var Block_Expressions = Block.Expressions;
-        //    var I = this.I!;
-        //    foreach(var Block_Variable in Block.Variables)
-        //        Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
-        //    var Block_Expressions_Count_1 = Block_Expressions.Count-1;
-        //    for(var a = 0;a<Block_Expressions_Count_1;a++)
-        //        this.VoidTraverse(Block_Expressions[a]);
-        //    //Blockは最後の式の型を返す。それを有効にする。
-        //    this.Traverse(Block_Expressions[Block_Expressions_Count_1]);
-        //    foreach(var Block_Variable in Block.Variables)
-        //        Dictionary_Parameter_LocalBuilder.Remove(Block_Variable);
-        //}
         protected override void Parameter(ParameterExpression Parameter) {
             var I = this.I!;
             var index = this.Parameters!.IndexOf(Parameter);
@@ -1953,24 +1936,6 @@ partial class Optimizer{
                 }
                 case ExpressionType.Parameter:{
                     this.PointerParameterNulllable((ParameterExpression)e);
-                    //var Parameter=(ParameterExpression)e;
-                    //var index =this.Parameters!.IndexOf(Parameter);
-                    //if(index>=0) {
-                    //    if(this.RootConstant is not null) {
-                    //        index++;
-                    //    }
-                    //    if(Parameter.Type.IsValueType) {
-                    //        this.I!.Ldarga((UInt16)index);
-                    //    } else {
-                    //        this.I!.Ldarg((UInt16)index);
-                    //    }
-                    //} else {
-                    //    if(Parameter.Type.IsValueType) {
-                    //        this.I!.Ldloca(this.DictionaryParameterLocal[Parameter]);
-                    //    } else {
-                    //        this.I!.Ldloc(this.DictionaryParameterLocal[Parameter]);
-                    //    }
-                    //}
                     break;
                 }
                 case ExpressionType.Unbox:{
@@ -2117,18 +2082,14 @@ partial class Optimizer{
             I.MarkLabel(Isinst);
             this.Traverse(Try_Handler.Filter);
             I.MarkLabel(endfilter);
-            //I.Endfilter();
-            I.BeginCatchBlock(null);
+            I.BeginCatchBlock(null);//endfilter
         }
         private void PrivateFilter0(CatchBlock Try_Handler,LocalBuilder Variable) {
             //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
             var I = this.I!;
             I.BeginExceptFilterBlock();
-            //I.Stloc(Variable);
-            //I.Ldloc(Variable);
             I.Isinst(Try_Handler.Test);
             I.Dup();
-            //this.PrivateFilter1(Try_Handler);
             var Isinst = I.DefineLabel();
             I.Brtrue(Isinst);
             I.Pop();//Dup,Popは不要では？
@@ -2137,22 +2098,9 @@ partial class Optimizer{
             I.Br(endfilter);
             I.MarkLabel(Isinst);
             I.Stloc(Variable);
-            //I.Ldloc(Variable);
             this.Traverse(Try_Handler.Filter);
             I.MarkLabel(endfilter);
-            //I.Endfilter();
-            I.BeginCatchBlock(null);
-            //var Isinst = I.DefineLabel();
-            //I.Brtrue(Isinst);
-            //I.Ldc_I4_0();//理由不明
-            //var endfilter = I.DefineLabel();
-            //I.Br(endfilter);
-            //I.MarkLabel(Isinst);
-            //this.Traverse(Try_Handler.Filter);
-            //I.MarkLabel(endfilter);
-            //I.Endfilter();
-            ////filterがある場合はcatch変数がなくpushされない
-            //I.BeginCatchBlock(null);
+            I.BeginCatchBlock(null);//endfilter
         }
         private void PrivateFilter0(CatchBlock Try_Handler) {
             //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
@@ -2316,30 +2264,6 @@ partial class Optimizer{
                 }
                 I.EndExceptionBlock();
                 I.MarkLabel(Leave先0);
-                ////if(Try.Finally is not null){
-                ////    I.BeginExceptionBlock();
-                ////}
-                ////if(Try.Finally is not null)
-                ////    I.BeginExceptionBlock();
-                //I.BeginExceptionBlock();
-                //this.Traverse(Try.Body);
-                //Debug.Assert(Try.Body.Type==typeof(void));
-                //var Leave先=I.DefineLabel();
-                //I.Leave(Leave先);
-                //foreach(var Try_Handler in Try.Handlers){
-                //    this.PrivateTryFilterCatch(Try_Handler);
-                //    //I.Pop();
-                //    //I.Leave(Leave先);
-                //}
-                //this.ProtectedFault(Try.Fault);
-                //if(Try.Finally is not null){
-                //    I.BeginFinallyBlock();
-                //    this.VoidTraverse(Try.Finally);
-                //    //endfinally
-                //}
-                //I.EndExceptionBlock();
-                ////Debug.Assert(this.I is not null);
-                //I.MarkLabel(Leave先);
             }
         }
         protected override void Label(LabelExpression Label){

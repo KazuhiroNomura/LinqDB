@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<ConstantExpression>{
-    private IJsonFormatter<ConstantExpression> Constant=>this;
-    public void Serialize(ref JsonWriter writer,ConstantExpression value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.ConstantExpression>{
+    private IJsonFormatter<Expressions.ConstantExpression> Constant=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.ConstantExpression value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         Serialize_Type(ref writer,value.Type,Resolver);
         //this.Serialize(ref writer,value.Type,Resolver);
@@ -16,18 +16,18 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConstantExpression>{
         writer.WriteEndArray();
     }
     //private readonly object[] Objects2=new object[2];
-    ConstantExpression IJsonFormatter<ConstantExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.ConstantExpression IJsonFormatter<Expressions.ConstantExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var type=Deserialize_Type(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var value=Deserialize_T<object>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.Constant(value,type);
+        return Expressions.Expression.Constant(value,type);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConstantExpression>{
-    private IMessagePackFormatter<ConstantExpression> Constant=>this;
-    public void Serialize(ref MessagePackWriter writer,ConstantExpression value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.ConstantExpression>{
+    private IMessagePackFormatter<Expressions.ConstantExpression> Constant=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.ConstantExpression value,MessagePackSerializerOptions Resolver){
         Serialize_Type(ref writer,value.Type,Resolver);
         var type=value.Type;
         var Value=value.Value;
@@ -51,7 +51,7 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConstantExpre
         //MessagePackSerializer.Typeless.Serialize(ref writer,value.Value,Resolver);
             
     }
-    ConstantExpression IMessagePackFormatter<ConstantExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.ConstantExpression IMessagePackFormatter<Expressions.ConstantExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var type=Deserialize_Type(ref reader,Resolver);
         object? value;
         if(reader.TryReadNil()) value=null;
@@ -72,6 +72,6 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConstantExpre
         else value=MessagePackSerializer.Deserialize(type,ref reader,Resolver);
         //var Formatter = options.Resolver.GetFormatter<object>();
         //var value = Formatter.Deserialize(ref reader,options);
-        return Expression.Constant(value,type);
+        return Expressions.Expression.Constant(value,type);
     }
 }

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
+using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 #pragma warning disable CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
+/// <summary>
+/// sealedではないクラスをシリアライズする
+/// </summary>
 public class AbstractFormatter{
 #pragma warning restore CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
     protected static bool GetInterface(Type type,out Type Interface){
@@ -21,6 +26,7 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
     private readonly object[] Objects3=new object[3];
     private static object GetFormatter(IJsonFormatterResolver formatterResolver,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
+        else if(typeof(LambdaExpression).IsAssignableFrom(type)) type=typeof(LambdaExpression);
         var Formatter=formatterResolver.GetFormatterDynamic(type);
         Debug.Assert(Formatter is not null,"Formatterが見つからない");
         var Foramtter_Type=Formatter.GetType();
@@ -37,32 +43,27 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
         var type=value.GetType();
         Serialize_Type(ref writer,type,formatterResolver);
         writer.WriteValueSeparator();
-        var Formatter=GetFormatter(formatterResolver,type);//
-        //var Formatter=formatterResolver.GetFormatterDynamic(type);
-        //var Foramtter_Type=Formatter.GetType();
-        //if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
-        //    Type?Interface;
-        //    if((Interface=type.GetInterface(typeof(ILookup<,>).FullName)) is not null)Formatter= formatterResolver.GetFormatterDynamic(Interface);
-        //} 
-        //formatterResolver.
-        //while(true){
-        //    Formatter = formatterResolver.GetFormatterDynamic(type);
-        //    var Foramtter_Type=Formatter.GetType();
-        //    if(Foramtter_Type.IsGenericType&&
-        //       Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
-        //        type=type.BaseType!;
-        //    } else
-        //        break;
-        //}
-        //var Formatter = formatterResolver.GetFormatterDynamic(type);
-        var Serialize = Formatter.GetType().GetMethod("Serialize");
-        Debug.Assert(Serialize is not null);
-        var Objects3 = this.Objects3;
-        Objects3[0]=writer;
-        Objects3[1]=value;
-        Objects3[2]=formatterResolver;
-        Serialize.Invoke(Formatter,Objects3);
-        writer=(JsonWriter)Objects3[0];
+        if(typeof(Expression).IsAssignableFrom(type)){
+            var Formatter=formatterResolver.GetFormatter<Expression>();
+            //var Formatter = formatterResolver.GetFormatter<LambdaExpression>();
+            Formatter.Serialize(ref writer,(Expression)(object)value,formatterResolver);
+            //Formatter.Serialize(ref writer,(LambdaExpression)(object)value,formatterResolver);
+        //}else if(typeof(T).IsDisplay()){
+        //    return Return(new DisplayClassJsonFormatter<T>());
+        //}else  if(typeof(T).IsAnonymous()){
+        //    return Return(new AnonymousJsonFormatter<T>());
+        }else{
+            var Formatter=GetFormatter(formatterResolver,type);
+            Debug.Assert(this!=Formatter);
+            var Serialize=Formatter.GetType().GetMethod("Serialize");
+            Debug.Assert(Serialize is not null);
+            var Objects3=this.Objects3;
+            Objects3[0]=writer;
+            Objects3[1]=value;
+            Objects3[2]=formatterResolver;
+            Serialize.Invoke(Formatter,Objects3);
+            writer=(JsonWriter)Objects3[0];
+        }
         //Utf8Json.Resolvers.StandardResolver.Default.GetFormatter<T>().Serialize(ref writer,value,formatterResolver);
         writer.WriteEndArray();
     }

@@ -12,88 +12,45 @@ namespace CoverageCS.LinqDB.Optimizers;
 
 [TestClass]
 public class 任意のパターン : ATest{
-    private void Create<TResult>(Expression<Func<TResult>> Lambda) {
-        var Optimizer = this.Optimizer;
-        var M= Optimizer.CreateDelegate(Lambda);
-    }
     [TestMethod]
-    public void JoinにComparerがつくと例外が発生する(){
-        for(var a=0;a<1000;a++){
-            var Tuple=new ClassTuple<int>(3);
-            var Impl_DynamicMethod=new DynamicMethod("",typeof(int),new Type[]{typeof(ClassTuple<int>),typeof(int)},typeof(任意のパターン),true){
-                InitLocals=false
-            };
-            var I=Impl_DynamicMethod.GetILGenerator();
-            I.Ldarg_0();
-            I.Ldfld(typeof(ClassTuple<int>).GetField(nameof(ClassTuple<int>.Item1))!);
-            I.Ldarg_1();
-            I.Add();
-            I.Ret();
-            var Delegate=(Func<int,int>)Impl_DynamicMethod.CreateDelegate(typeof(Func<int,int>),Tuple);
-            var v=Delegate(4);
+    public void JoinにComparer(){
+        const int 回数=10;
+        for(var x=0;x<回数;x++){
+            var s0=ArrN<int>(x);
+            for(var y=0;y<回数;y++){
+                this.Execute2(
+                    (a,b)=>ArrN<int>(a).Join(ArrN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any(),x,
+                    y);
+                this.Execute2(
+                    (a,b)=>EnuN<int>(a).Join(EnuN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any(),x,
+                    y);
+                var s1=ArrN<int>(y);
+                //var v0=3;
+                //var v1=3;
+                var Default=EqualityComparer<int>.Default;
+                this.Execute2(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.Execute2(()=>(1).Let(o=>s1.Select(i=>Default.Equals(i,i))));
+                this.Execute2(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.Execute2(()=>s0.Select(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.Execute2(()=>s0.Select(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
+                this.Execute2(()=>s0.SelectMany(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
+                this.Execute2(()=>
+                    s0.SelectMany(o=>s1.Where(i=>EqualityComparer<int>.Default.Equals(o,i)).Select(i=>o+i)));
+                this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i));
+                this.Execute引数パターン標準ラムダループ((a,b)=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.Execute引数パターン標準ラムダループ((a,b)=>
+                    s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any());//
+                this.Execute標準ラムダループ(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.Execute引数パターン標準ラムダループ((a,b)=>
+                    SetN<int>(a).Join(SetN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                //this.AssertExecute((a,b) => ArrN<int>(a).AsEnumerable().Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i).Any());
+                //this.AssertExecute((a,b) => EnuN<int>(a).AsEnumerable().Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i).Any());
+                this.Execute引数パターン標準ラムダループ((a,b)=>
+                    SetN<int>(a).AsEnumerable().Join(SetN<int>(b),o=>o,i=>i,(o,i)=>o+i).Any());//
+            }
         }
-        //this.AssertExecute((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => EnuN<int>(a).Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => SetN<int>(a).Join(SetN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => EnuN<int>(a).Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => SetN<int>(a).Join(SetN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i,EqualityComparer<int>.Default).Any());
-        //this.AssertExecute((a,b) => EnuN<int>(a).Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i,EqualityComparer<int>.Default).Any());
-        var s0=new int[1];
-        var s1=new int[1];
-        var v0=3;
-        var v1=3;
-        var Default=EqualityComparer<int>.Default;
-        //for(var a=0;a<1000;a++){
-        //    this.Create(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-        //    Trace.WriteLine(a.ToString());
-        //}
-        //for(var a=0;a<1000;a++){
-        //    this.Execute(()=>(1).Let(o=>s1.Select(i=>Default.Equals(i,i))));
-        //    Trace.WriteLine(a.ToString());
-        //}
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-            Trace.WriteLine(a.ToString());
-        }
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>s0.Select(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-            Trace.WriteLine(a.ToString());
-        }
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>s0.Select(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
-            Trace.WriteLine(a.ToString());
-        }
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>s0.SelectMany(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
-            Trace.WriteLine(a.ToString());
-        }
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>s0.SelectMany(o=>s1.Where(i=>EqualityComparer<int>.Default.Equals(o,i)).Select(i=>o+i)));
-            Trace.WriteLine(a.ToString());
-        }
-        for(var a=0;a<1000;a++){
-            this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
-            //this.Execute(()=>EqualityComparer<int>.Default.Equals(v0,v1));
-        }
-        for(var a=0;a<1000;a++){
-            //2
-            this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i));
-        }
-        for(var a=0;a<1000;a++){
-            //2
-            this.Execute引数パターン標準ラムダループ((a,b)=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
-        }
-
-        this.Execute引数パターン標準ラムダループ((a,b) => s0.Join(s1,o => o,i => i,(o,i) => o+i,EqualityComparer<int>.Default).Any());//
-        this.Execute標準ラムダループ(() => s0.Join(s1,o => o,i => i,(o,i) => o+i,EqualityComparer<int>.Default));
-        this.Execute引数パターン標準ラムダループ((a,b) => SetN<int>(a).Join(SetN<int>(b),o => o,i => i,(o,i) => o+i,EqualityComparer<int>.Default));
-        //this.AssertExecute((a,b) => ArrN<int>(a).AsEnumerable().Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        //this.AssertExecute((a,b) => EnuN<int>(a).AsEnumerable().Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-        this.Execute引数パターン標準ラムダループ((a,b) => SetN<int>(a).AsEnumerable().Join(SetN<int>(b),o => o,i => i,(o,i) => o+i).Any());//
     }
-
     private static void Let(Action func)=>func();
     [TestMethod]
     public void LambdaとBlockのネストの外だし0(){

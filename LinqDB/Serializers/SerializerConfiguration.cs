@@ -8,10 +8,10 @@ using LinqDB.Serializers.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
-    private readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver=new();
-    private readonly AnonymousExpressionMessagePackFormatterResolver AnonymousExpressionMessagePackFormatterResolver=new();
-    public void ClearJson()=>this.AnonymousExpressionJsonFormatterResolver.Clear();
-    public void ClearMessagePack()=>this.AnonymousExpressionMessagePackFormatterResolver.Clear();
+    private readonly DispatchJsonFormatterResolver DispatchJsonFormatterResolver=new();
+    private readonly DispatchMessagePackFormatterResolver DispatchMessagePackFormatterResolver=new();
+    public void ClearJson()=>this.DispatchJsonFormatterResolver.Clear();
+    public void ClearMessagePack()=>this.DispatchMessagePackFormatterResolver.Clear();
     //public void Clear(){
     //    this.AnonymousExpressionJsonFormatterResolver.Clear();
     //    this.AnonymousExpressionMessagePackFormatterResolver.Clear();
@@ -23,9 +23,9 @@ public readonly struct SerializerConfiguration{
         //this.AnonymousExpressionJsonFormatterResolver=new();
         //順序が大事
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
-            new IJsonFormatter[]{
-                this.AnonymousExpressionJsonFormatterResolver.ExpressionFormatter, 
-            },
+            //new IJsonFormatter[]{
+            //    this.AnonymousExpressionJsonFormatterResolver.ExpressionFormatter, 
+            //},
             new IJsonFormatterResolver[]{
                 //    this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
                 //    short
@@ -154,7 +154,7 @@ public readonly struct SerializerConfiguration{
 
 
 
-                this.AnonymousExpressionJsonFormatterResolver,
+                this.DispatchJsonFormatterResolver,
 
 
 
@@ -192,7 +192,7 @@ public readonly struct SerializerConfiguration{
                     MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumResolver.Instance,
-                    this.AnonymousExpressionMessagePackFormatterResolver,
+                    this.DispatchMessagePackFormatterResolver,
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//
                     //MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//
                     //MessagePack.Resolvers.StandardResolver.Instance,

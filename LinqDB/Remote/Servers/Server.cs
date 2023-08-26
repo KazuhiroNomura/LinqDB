@@ -5,6 +5,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
@@ -56,6 +57,7 @@ public class Server:IDisposable{
         //[UIPermission(SecurityAction.PermitOnly)]
         //[UrlIdentityPermission(SecurityAction.PermitOnly)] //System.Security.Permissions.FileIOPermission
         //[ZoneIdentityPermission(SecurityAction.PermitOnly)]//例えばFileStream
+
         /// <summary>
         /// スレッド上で実行することでタイムアウトさせる
         /// </summary>
@@ -77,12 +79,13 @@ public class Server:IDisposable{
                 var args=Method.GetParameters().Length==Length
                     ?Array.Empty<object>()
                     :this.args1;
-                return (
+                var result=(
                     Method.ReturnType==typeof(void)
                         ? Response.Bytes0
                         : Response.Object,
                     MulticastDelegate.DynamicInvoke(args)!
                 );
+                return result;
                 //this.Result=Delegate.DynamicInvoke(
                 //    Method.GetParameters().Length==(Method.IsStatic&&Delegate.Target is not null
                 //        ? 1
@@ -320,8 +323,11 @@ public class Server:IDisposable{
                                     case Request.Delegate_Invoke:
                                     case Request.Expression_Invoke: {
                                         Debug.Assert(デシリアライズした.XmlType==XmlType.Utf8Json||デシリアライズした.XmlType==XmlType.MessagePack);
+                                        var Lambda=(LambdaExpression)デシリアライズした.Object!;
+                                        var Optimizer=new Optimizers.Optimizer();
+                                        var Delegate=Optimizer.CreateDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
-                                            デシリアライズした.Object!
+                                            Delegate
                                         );
                                         SingleReceiveSend.送信(
                                             ResponseType,

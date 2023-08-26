@@ -248,12 +248,12 @@ public sealed partial class Optimizer{
                 return this.集約関数があるか;
             }
             protected override void FunctionCall(FunctionCall x){
-                switch(x.FunctionName.Value.ToLower()){
-                    case "count":
-                    case "avg":
-                    case "max":
-                    case "min":
-                    case "sum":
+                switch(x.FunctionName.Value.ToUpperInvariant()){
+                    case "COUNT":
+                    case "AVG":
+                    case "MAX":
+                    case "MIN":
+                    case "SUM":
                         this.集約関数があるか=true;
                         break;
                     default:base.FunctionCall(x); break;
@@ -1369,7 +1369,7 @@ public sealed partial class Optimizer{
             throw this.単純NotSupportedException(x);
         }
         private e.Expression FunctionCall(FunctionCall x){
-            var FunctionName = x.FunctionName.Value.ToLower();
+            var FunctionName = x.FunctionName.Value.ToUpperInvariant();
             var x_Parameters = x.Parameters;
             switch(FunctionName) {
                 //構成関数	現在の構成についての情報を返します。
@@ -1383,20 +1383,20 @@ public sealed partial class Optimizer{
                     var number = this.ScalarExpression(x_Parameters[1]);
                     //dateadd(,,ここは日付型であってoffsetはいらない)
                     var date = this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[2]),typeof(DateTime));
-                    return datepart.MultiPartIdentifier.Identifiers[0].Value.ToLower()switch{
-                        "yyyy"or"yy"or"year"     =>dateadd_int(Reflection.DateTime.AddYear),
-                        "qq"  or"q" or"quarter"  =>dateadd_int(Reflection.DateTime.AddQuater),
-                        "mm"  or"m" or"month"    =>dateadd_int(Reflection.DateTime.AddMonths),
-                        "dy"  or"y" or"dayofyear"or
-                        "dd"or"d"or"day"         or
-                        "dw"  or"w" or"weekday"  =>dateadd_double(Reflection.DateTime.AddDays),
-                        "wk"  or"ww"or"week"     =>dateadd_double(Reflection.DateTime.AddWeek),
-                        "hh"  or"hour"           =>dateadd_double(Reflection.DateTime.AddHours),
-                        "mi"  or"n" or"minute"   =>dateadd_double(Reflection.DateTime.AddMinutes),
-                        "ss"  or"s" or"second"   =>dateadd_double(Reflection.DateTime.AddSeconds),
-                        "ms"  or"millisecond"    =>dateadd_double(Reflection.DateTime.AddMilliseconds),
-                        "mcs" or"microsecond"    =>dateadd_long(Reflection.DateTime.AddTicks,Constant_100000),
-                        "ns"  or"nanosecond"     =>dateadd_long(Reflection.DateTime.AddTicks,Constant_100),
+                    return datepart.MultiPartIdentifier.Identifiers[0].Value.ToUpperInvariant()switch{
+                        "YYYY"or"YY"or"YEAR"     =>dateadd_int(Reflection.DateTime.AddYear),
+                        "QQ"  or"Q" or"QUARTER"  =>dateadd_int(Reflection.DateTime.AddQuater),
+                        "MM"  or"M" or"MONTH"    =>dateadd_int(Reflection.DateTime.AddMonths),
+                        "DY"  or"Y" or"DAYOFYEAR"=>throw new NotSupportedException(datepart.MultiPartIdentifier.Identifiers[0].Value),
+                        "DD"  or"D" or"DAY"      =>throw new NotSupportedException(datepart.MultiPartIdentifier.Identifiers[0].Value),
+                        "DW"  or"W" or"WEEKDAY"  =>dateadd_double(Reflection.DateTime.AddDays),
+                        "WK"  or"WW"or"WEEK"     =>dateadd_double(Reflection.DateTime.AddWeek),
+                        "HH"  or"HOUR"           =>dateadd_double(Reflection.DateTime.AddHours),
+                        "MI"  or"N" or"MINUTE"   =>dateadd_double(Reflection.DateTime.AddMinutes),
+                        "SS"  or"S" or"SECOND"   =>dateadd_double(Reflection.DateTime.AddSeconds),
+                        "MS"  or"MILLISECOND"    =>dateadd_double(Reflection.DateTime.AddMilliseconds),
+                        "MCS" or"MICROSECOND"    =>dateadd_long(Reflection.DateTime.AddTicks,Constant_100000),
+                        "NS"  or"NANOSECOND"     =>dateadd_long(Reflection.DateTime.AddTicks,Constant_100),
                         _=>throw new NotSupportedException(datepart.MultiPartIdentifier.Identifiers[0].Value),
                     };
                     e.MethodCallExpression dateadd_int(MethodInfo Method) => dateadd(Method,typeof(int));
@@ -1411,20 +1411,20 @@ public sealed partial class Optimizer{
                     //datediff(mm,startdate,enddate)。enddate-startdate。小さな数値に切り捨てられる
                     Debug.Assert(x_Parameters.Count == 3);
                     var y = (ColumnReferenceExpression)x_Parameters[0];
-                    var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToLower()switch{
-                        "year" or"yy"   or"yyyy"     =>Product.SQLServer.Reflection.DATEPART.year,
-                        "qq"   or"q"    or"quarter"  =>Product.SQLServer.Reflection.DATEPART.quarter,
-                        "mm"   or"m"    or"month"    =>Product.SQLServer.Reflection.DATEPART.month,
-                        "dy"   or"y"    or"dayofyear"=>Product.SQLServer.Reflection.DATEPART.dayofyear,
-                        "dd"   or"d"    or"day"      =>Product.SQLServer.Reflection.DATEPART.day,
-                        "wk"   or"ww"   or"week"     =>Product.SQLServer.Reflection.DATEPART.week,//その年の何週目か
-                        "dw"   or"w"    or"weekday"  =>Product.SQLServer.Reflection.DATEPART.weekday,
-                        "hh"   or"hour"              =>Product.SQLServer.Reflection.DATEPART.hour,
-                        "mi"   or"n"    or"minute"   =>Product.SQLServer.Reflection.DATEPART.minute,
-                        "ss"   or"s"    or"second"   =>Product.SQLServer.Reflection.DATEPART.second,
-                        "ms"   or"millisecond"       =>Product.SQLServer.Reflection.DATEPART.millisecond,
-                        "mcs"  or"microsecond"       =>Product.SQLServer.Reflection.DATEPART.microsecond,
-                        "ns"   or"nanosecond"        =>Product.SQLServer.Reflection.DATEPART.nanosecond,
+                    var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToUpperInvariant()switch{
+                        "YEAR" or"YY"   or"YYYY"     =>Product.SQLServer.Reflection.DATEPART.year,
+                        "QQ"   or"Q"    or"QUARTER"  =>Product.SQLServer.Reflection.DATEPART.quarter,
+                        "MM"   or"M"    or"MONTH"    =>Product.SQLServer.Reflection.DATEPART.month,
+                        "DY"   or"Y"    or"DAYOFYEAR"=>Product.SQLServer.Reflection.DATEPART.dayofyear,
+                        "DD"   or"D"    or"DAY"      =>Product.SQLServer.Reflection.DATEPART.day,
+                        "WK"   or"WW"   or"WEEK"     =>Product.SQLServer.Reflection.DATEPART.week,//その年の何週目か
+                        "DW"   or"W"    or"WEEKDAY"  =>Product.SQLServer.Reflection.DATEPART.weekday,
+                        "HH"   or"HOUR"              =>Product.SQLServer.Reflection.DATEPART.hour,
+                        "MI"   or"N"    or"MINUTE"   =>Product.SQLServer.Reflection.DATEPART.minute,
+                        "SS"   or"S"    or"SECOND"   =>Product.SQLServer.Reflection.DATEPART.second,
+                        "MS"   or"MILLISECOND"       =>Product.SQLServer.Reflection.DATEPART.millisecond,
+                        "MCS"  or"MICROSECOND"       =>Product.SQLServer.Reflection.DATEPART.microsecond,
+                        "NS"   or"NANOSECOND"        =>Product.SQLServer.Reflection.DATEPART.nanosecond,
                         _=>throw new NotSupportedException(y.MultiPartIdentifier.Identifiers[0].Value)
                     };
                     // 2021/11/11-2021/10/11→11-10
@@ -1443,22 +1443,22 @@ public sealed partial class Optimizer{
                         this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[1]),typeof(DateTime?)),
                         arg0=>{
                             var y = (ColumnReferenceExpression)x_Parameters[0];
-                            var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToLower()switch{
-                                "year" or"yy"   or"yyyy"     =>Product.SQLServer.Reflection.DATEPART.year,
-                                "qq"   or"q"    or"quarter"  =>Product.SQLServer.Reflection.DATEPART.quarter,
-                                "mm"   or"m"    or"month"    =>Product.SQLServer.Reflection.DATEPART.month,
-                                "dy"   or"y"    or"dayofyear"=>Product.SQLServer.Reflection.DATEPART.dayofyear,
-                                "dd"   or"d"    or"day"      =>Product.SQLServer.Reflection.DATEPART.day,
-                                "wk"   or"ww"   or"week"     =>Product.SQLServer.Reflection.DATEPART.week,//その年の何週目か
-                                "dw"   or"w"    or"weekday"  =>Product.SQLServer.Reflection.DATEPART.weekday,
-                                "hh"   or"hour"              =>Product.SQLServer.Reflection.DATEPART.hour,
-                                "mi"   or"n"    or"minute"   =>Product.SQLServer.Reflection.DATEPART.minute,
-                                "ss"   or"s"    or"second"   =>Product.SQLServer.Reflection.DATEPART.second,
-                                "ms"   or"millisecond"       =>Product.SQLServer.Reflection.DATEPART.millisecond,
-                                "mcs"  or"microsecond"       =>Product.SQLServer.Reflection.DATEPART.microsecond,
-                                "ns"   or"nanosecond"        =>Product.SQLServer.Reflection.DATEPART.nanosecond,
-                                "isowk"or"isoww"or"iso_week" =>Product.SQLServer.Reflection.DATEPART.iso_week,
-                                "tz"   or"tzoffset"          =>Product.SQLServer.Reflection.DATEPART.tzoffset,
+                            var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToUpperInvariant()switch{
+                                "YEAR" or"YY"   or"YYYY"     =>Product.SQLServer.Reflection.DATEPART.year,
+                                "QQ"   or"Q"    or"QUARTER"  =>Product.SQLServer.Reflection.DATEPART.quarter,
+                                "MM"   or"M"    or"MONTH"    =>Product.SQLServer.Reflection.DATEPART.month,
+                                "DY"   or"Y"    or"DAYOFYEAR"=>Product.SQLServer.Reflection.DATEPART.dayofyear,
+                                "DD"   or"D"    or"DAY"      =>Product.SQLServer.Reflection.DATEPART.day,
+                                "WK"   or"WW"   or"WEEK"     =>Product.SQLServer.Reflection.DATEPART.week,//その年の何週目か
+                                "DW"   or"W"    or"WEEKDAY"  =>Product.SQLServer.Reflection.DATEPART.weekday,
+                                "HH"   or"HOUR"              =>Product.SQLServer.Reflection.DATEPART.hour,
+                                "MI"   or"N"    or"MINUTE"   =>Product.SQLServer.Reflection.DATEPART.minute,
+                                "SS"   or"S"    or"SECOND"   =>Product.SQLServer.Reflection.DATEPART.second,
+                                "MS"   or"MILLISECOND"       =>Product.SQLServer.Reflection.DATEPART.millisecond,
+                                "MCS"  or"MICROSECOND"       =>Product.SQLServer.Reflection.DATEPART.microsecond,
+                                "NS"   or"NANOSECOND"        =>Product.SQLServer.Reflection.DATEPART.nanosecond,
+                                "ISOWK"or"ISOWW"or"ISO_WEEK" =>Product.SQLServer.Reflection.DATEPART.iso_week,
+                                "TZ"   or"TZOFFSET"          =>Product.SQLServer.Reflection.DATEPART.tzoffset,
                                 _=>throw new NotSupportedException(y.MultiPartIdentifier.Identifiers[0].Value)
                             };
                             return e.Expression.Call(Method,arg0);
@@ -1468,20 +1468,20 @@ public sealed partial class Optimizer{
                 case "datename":{
                     Debug.Assert(x_Parameters.Count == 2);
                     var y = (ColumnReferenceExpression)x_Parameters[0];
-                    var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToLower()switch{
-                        "year"or"yy"or"yyyy"     =>Product.SQLServer.Reflection.DATENAME.year,
-                        "qq"  or"q" or"quarter"  =>Product.SQLServer.Reflection.DATENAME.quarter,
-                        "mm"  or"m" or"month"    =>Product.SQLServer.Reflection.DATENAME.month,
-                        "dy"  or"y" or"dayofyear"=>Product.SQLServer.Reflection.DATENAME.dayofyear,
-                        "dd"  or"d" or"day"      =>Product.SQLServer.Reflection.DATENAME.day,
-                        "wk"  or"ww"or"week"     =>Product.SQLServer.Reflection.DATENAME.week,//その年の何週目か
-                        "dw"  or"w" or"weekday"  =>Product.SQLServer.Reflection.DATENAME.weekday,
-                        "hh"  or"hour"           =>Product.SQLServer.Reflection.DATENAME.hour,
-                        "mi"  or"n" or"minute"   =>Product.SQLServer.Reflection.DATENAME.minute,
-                        "ss"  or"s" or"second"   =>Product.SQLServer.Reflection.DATENAME.second,
-                        "ms"  or"millisecond"    =>Product.SQLServer.Reflection.DATENAME.millisecond,
-                        "mcs" or"microsecond"    =>Product.SQLServer.Reflection.DATENAME.microsecond,
-                        "ns"  or"nanosecond"     =>Product.SQLServer.Reflection.DATENAME.nanosecond,
+                    var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToUpperInvariant()switch{
+                        "YEAR"or"YY"or"YYYY"     =>Product.SQLServer.Reflection.DATENAME.year,
+                        "QQ"  or"Q" or"QUARTER"  =>Product.SQLServer.Reflection.DATENAME.quarter,
+                        "MM"  or"M" or"MONTH"    =>Product.SQLServer.Reflection.DATENAME.month,
+                        "DY"  or"Y" or"DAYOFYEAR"=>Product.SQLServer.Reflection.DATENAME.dayofyear,
+                        "DD"  or"D" or"DAY"      =>Product.SQLServer.Reflection.DATENAME.day,
+                        "WK"  or"WW"or"WEEK"     =>Product.SQLServer.Reflection.DATENAME.week,//その年の何週目か
+                        "DW"  or"W" or"WEEKDAY"  =>Product.SQLServer.Reflection.DATENAME.weekday,
+                        "HH"  or"HOUR"           =>Product.SQLServer.Reflection.DATENAME.hour,
+                        "MI"  or"N" or"MINUTE"   =>Product.SQLServer.Reflection.DATENAME.minute,
+                        "SS"  or"S" or"SECOND"   =>Product.SQLServer.Reflection.DATENAME.second,
+                        "MS"  or"MILLISECOND"    =>Product.SQLServer.Reflection.DATENAME.millisecond,
+                        "MCS" or"MICROSECOND"    =>Product.SQLServer.Reflection.DATENAME.microsecond,
+                        "NS"  or"NANOSECOND"     =>Product.SQLServer.Reflection.DATENAME.nanosecond,
                         _=>throw new NotSupportedException(y.MultiPartIdentifier.Identifiers[0].Value)
                     };
                     //return e.Expression.Call(Method,this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[1]),typeof(DateTimeOffset?)));
@@ -5368,8 +5368,8 @@ public sealed partial class Optimizer{
             SecondExpression=SecondExpression1;
             ThirdExpression=ThirdExpression1;
             var FirstExpression_Type =FirstExpression.Type;
-            var SecondExpression_Type=SecondExpression.Type;
-            var ThirdExpression_Type=ThirdExpression.Type;
+            //var SecondExpression_Type=SecondExpression.Type;
+            //var ThirdExpression_Type=ThirdExpression.Type;
             //if(FirstExpression_Type==typeof(DateTimeOffset)){
             //    SecondExpression=this.Convertデータ型を合わせるNullableは想定しない(SecondExpression,typeof(DateTimeOffset));
             //    ThirdExpression=this.Convertデータ型を合わせるNullableは想定しない(ThirdExpression,typeof(DateTimeOffset));

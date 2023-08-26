@@ -3,6 +3,7 @@
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using IO = System.IO;
 using System.Text;
 using System.Threading;
@@ -566,7 +567,7 @@ public static class Methods {
     //    LEN
     public static int? len(string? character_expression)=>character_expression?.Length;
     //    LOWER
-    public static string? lower(string? character_expression)=>character_expression?.ToLower();
+    public static string? lower(string? character_expression)=>character_expression?.ToLower(CultureInfo.InvariantCulture);
     //    LTRIM
     public static string? ltrim(string? character_expression)=>character_expression?.TrimStart();
     //    NCHAR
@@ -617,7 +618,7 @@ public static class Methods {
     //    TRIM
     //    UNICODE
     //    UPPER
-    public static string? upper(string? character_expression)=>character_expression?.ToUpper();
+    public static string? upper(string? character_expression)=>character_expression?.ToUpperInvariant();
     //システム関数	メソッドのインスタンスで操作を実行し、値、オブジェクト、および設定に関する情報を返SQL Server。
     //    @@ERROR
     //    @@IDENTITY

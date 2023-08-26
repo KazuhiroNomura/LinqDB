@@ -1,11 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-partial class ExpressionJsonFormatter:IJsonFormatter<ConditionalExpression>{
-    private IJsonFormatter<ConditionalExpression> Conditional=>this;
-    public void Serialize(ref JsonWriter writer,ConditionalExpression? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.ConditionalExpression>{
+    private IJsonFormatter<Expressions.ConditionalExpression> Conditional=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.ConditionalExpression? value,IJsonFormatterResolver Resolver){
     if(value is null){
         writer.WriteNull();
         return;
@@ -18,7 +18,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConditionalExpression>{
     this.Serialize(ref writer,value.IfFalse,Resolver);
     writer.WriteEndArray();
 }
-    ConditionalExpression IJsonFormatter<ConditionalExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.ConditionalExpression IJsonFormatter<Expressions.ConditionalExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var test= this.Deserialize(ref reader,Resolver);
@@ -27,7 +27,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConditionalExpression>{
         reader.ReadIsValueSeparatorWithVerify();
         var ifFalse= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.Condition(
+        return Expressions.Expression.Condition(
             test,
             ifTrue,
             ifFalse
@@ -35,9 +35,9 @@ partial class ExpressionJsonFormatter:IJsonFormatter<ConditionalExpression>{
     }
 }
 
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConditionalExpression>{
-    private IMessagePackFormatter<ConditionalExpression> Conditional=>this;
-    public void Serialize(ref MessagePackWriter writer,ConditionalExpression? value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.ConditionalExpression>{
+    private IMessagePackFormatter<Expressions.ConditionalExpression> Conditional=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.ConditionalExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
             return;
@@ -46,12 +46,12 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ConditionalEx
         this.Serialize(ref writer,value.IfTrue,Resolver);
         this.Serialize(ref writer,value.IfFalse,Resolver);
     }
-    ConditionalExpression IMessagePackFormatter<ConditionalExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.ConditionalExpression IMessagePackFormatter<Expressions.ConditionalExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         var test= this.Deserialize(ref reader,Resolver);
         var ifTrue= this.Deserialize(ref reader,Resolver);
         var ifFalse= this.Deserialize(ref reader,Resolver);
-        return Expression.Condition(
+        return Expressions.Expression.Condition(
             test,
             ifTrue,
             ifFalse

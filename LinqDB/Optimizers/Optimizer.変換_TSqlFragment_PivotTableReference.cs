@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
+using System.Globalization;
 using System.Reflection;
 using LinqDB.Sets;
 using Expressions = System.Linq.Expressions;
@@ -112,7 +113,7 @@ public sealed partial class Optimizer{
             var WhereMethod=作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,Element_Type);
             var Where_Parameters = new []{ss};
             RefPeek1.集約関数のParameter=ss;
-            var FunctionName = x.AggregateFunctionIdentifier.Identifiers[0].Value.ToLower();
+            var FunctionName = x.AggregateFunctionIdentifier.Identifiers[0].Value.ToUpperInvariant();
             foreach(var x_InColumn in x_InColumns) {
                 RefPeek0_List_アスタリスクColumnAlias.Add(x_InColumn.Value);
                 var Right=Stringをキャスト(Key_Item1,x_InColumn.Value);

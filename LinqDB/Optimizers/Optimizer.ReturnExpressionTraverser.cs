@@ -26,90 +26,90 @@ partial class Optimizer {
         /// <param name="Expression0"></param>
         /// <returns></returns>
         protected virtual Expression Traverse(Expression Expression0) => Expression0.NodeType switch{
-            ExpressionType.Add => this.Add((BinaryExpression)Expression0),
-            ExpressionType.AddAssign => this.AddAssign((BinaryExpression)Expression0),
-            ExpressionType.AddAssignChecked => this.AddAssignChecked((BinaryExpression)Expression0),
-            ExpressionType.AddChecked => this.AddChecked((BinaryExpression)Expression0),
-            ExpressionType.And => this.And((BinaryExpression)Expression0),
-            ExpressionType.AndAssign => this.AndAssign((BinaryExpression)Expression0),
-            ExpressionType.AndAlso => this.AndAlso((BinaryExpression)Expression0),
-            ExpressionType.ArrayIndex => this.ArrayIndex((BinaryExpression)Expression0),
-            ExpressionType.Assign => this.Assign((BinaryExpression)Expression0),
-            ExpressionType.Coalesce => this.Coalesce((BinaryExpression)Expression0),
-            ExpressionType.Divide => this.Divide((BinaryExpression)Expression0),
-            ExpressionType.DivideAssign => this.DivideAssign((BinaryExpression)Expression0),
-            ExpressionType.Equal => this.Equal((BinaryExpression)Expression0),
-            ExpressionType.ExclusiveOr => this.ExclusiveOr((BinaryExpression)Expression0),
-            ExpressionType.ExclusiveOrAssign => this.ExclusiveOrAssign((BinaryExpression)Expression0),
-            ExpressionType.GreaterThan => this.GreaterThan((BinaryExpression)Expression0),
-            ExpressionType.GreaterThanOrEqual => this.GreaterThanOrEqual((BinaryExpression)Expression0),
-            ExpressionType.LeftShift => this.LeftShift((BinaryExpression)Expression0),
-            ExpressionType.LeftShiftAssign => this.LeftShiftAssign((BinaryExpression)Expression0),
-            ExpressionType.LessThan => this.LessThan((BinaryExpression)Expression0),
-            ExpressionType.LessThanOrEqual => this.LessThanOrEqual((BinaryExpression)Expression0),
-            ExpressionType.Modulo => this.Modulo((BinaryExpression)Expression0),
-            ExpressionType.ModuloAssign => this.ModuloAssign((BinaryExpression)Expression0),
-            ExpressionType.Multiply => this.Multiply((BinaryExpression)Expression0),
-            ExpressionType.MultiplyAssign => this.MultiplyAssign((BinaryExpression)Expression0),
-            ExpressionType.MultiplyAssignChecked => this.MultiplyAssignChecked((BinaryExpression)Expression0),
-            ExpressionType.MultiplyChecked => this.MultiplyChecked((BinaryExpression)Expression0),
-            ExpressionType.NotEqual => this.NotEqual((BinaryExpression)Expression0),
-            ExpressionType.Or => this.Or((BinaryExpression)Expression0),
-            ExpressionType.OrAssign => this.OrAssign((BinaryExpression)Expression0),
-            ExpressionType.OrElse => this.OrElse((BinaryExpression)Expression0),
-            ExpressionType.Power => this.Power((BinaryExpression)Expression0),
-            ExpressionType.PowerAssign => this.PowerAssign((BinaryExpression)Expression0),
-            ExpressionType.RightShift => this.RightShift((BinaryExpression)Expression0),
-            ExpressionType.RightShiftAssign => this.RightShiftAssign((BinaryExpression)Expression0),
-            ExpressionType.Subtract => this.Subtract((BinaryExpression)Expression0),
-            ExpressionType.SubtractAssign => this.SubtractAssign((BinaryExpression)Expression0),
-            ExpressionType.SubtractAssignChecked => this.SubtractAssignChecked((BinaryExpression)Expression0),
-            ExpressionType.SubtractChecked => this.SubtractChecked((BinaryExpression)Expression0),
-            ExpressionType.Block => this.Block((BlockExpression)Expression0),
-            ExpressionType.Conditional => this.Conditional((ConditionalExpression)Expression0),
-            ExpressionType.Constant => this.Constant((ConstantExpression)Expression0),
-            ExpressionType.DebugInfo => this.DebugInfo((DebugInfoExpression)Expression0),
-            ExpressionType.Default => this.Default((DefaultExpression)Expression0),
-            ExpressionType.Dynamic => this.Dynamic((DynamicExpression)Expression0),
-            ExpressionType.Goto => this.Goto((GotoExpression)Expression0),
-            ExpressionType.Index => this.Index((IndexExpression)Expression0),
-            ExpressionType.Invoke => this.Invoke((InvocationExpression)Expression0),
-            ExpressionType.Label => this.Label((LabelExpression)Expression0),
-            ExpressionType.Lambda => this.Lambda((LambdaExpression)Expression0),
-            ExpressionType.ListInit => this.ListInit((ListInitExpression)Expression0),
-            ExpressionType.Loop => this.Loop((LoopExpression)Expression0),
-            ExpressionType.MemberAccess => this.MemberAccess((MemberExpression)Expression0),
-            ExpressionType.MemberInit => this.MemberInit((MemberInitExpression)Expression0),
-            ExpressionType.Call => this.Call((MethodCallExpression)Expression0),
-            ExpressionType.NewArrayBounds => this.NewArrayBounds((NewArrayExpression)Expression0),
-            ExpressionType.NewArrayInit => this.NewArrayInit((NewArrayExpression)Expression0),
-            ExpressionType.New => this.New((NewExpression)Expression0),
-            ExpressionType.Parameter => this.Parameter((ParameterExpression)Expression0),
-            ExpressionType.RuntimeVariables => this.RuntimeVariables((RuntimeVariablesExpression)Expression0),
-            ExpressionType.Switch => this.Switch((SwitchExpression)Expression0),
-            ExpressionType.Try => this.Try((TryExpression)Expression0),
-            ExpressionType.TypeEqual => this.TypeEqual((TypeBinaryExpression)Expression0),
-            ExpressionType.TypeIs => this.TypeIs((TypeBinaryExpression)Expression0),
-            ExpressionType.ArrayLength => this.ArrayLength((UnaryExpression)Expression0),
-            ExpressionType.Convert => this.Convert((UnaryExpression)Expression0),
-            ExpressionType.ConvertChecked => this.ConvertChecked((UnaryExpression)Expression0),
-            ExpressionType.Decrement => this.Decrement((UnaryExpression)Expression0),
-            ExpressionType.Increment => this.Increment((UnaryExpression)Expression0),
-            ExpressionType.IsFalse => this.IsFalse((UnaryExpression)Expression0),
-            ExpressionType.IsTrue => this.IsTrue((UnaryExpression)Expression0),
-            ExpressionType.Negate => this.Negate((UnaryExpression)Expression0),
-            ExpressionType.NegateChecked => this.NegateChecked((UnaryExpression)Expression0),
-            ExpressionType.Not => this.Not((UnaryExpression)Expression0),
-            ExpressionType.OnesComplement => this.OnesComplement((UnaryExpression)Expression0),
-            ExpressionType.PostDecrementAssign => this.PostDecrementAssign((UnaryExpression)Expression0),
-            ExpressionType.PostIncrementAssign => this.PostIncrementAssign((UnaryExpression)Expression0),
-            ExpressionType.PreDecrementAssign => this.PreDecrementAssign((UnaryExpression)Expression0),
-            ExpressionType.PreIncrementAssign => this.PreIncrementAssign((UnaryExpression)Expression0),
-            ExpressionType.Quote => this.Quote((UnaryExpression)Expression0),
-            ExpressionType.Throw => this.Throw((UnaryExpression)Expression0),
-            ExpressionType.TypeAs => this.TypeAs((UnaryExpression)Expression0),
-            ExpressionType.UnaryPlus => this.UnaryPlus((UnaryExpression)Expression0),
-            ExpressionType.Unbox => this.Unbox((UnaryExpression)Expression0),
+            ExpressionType.Add                  => this.Add                  ((BinaryExpression)Expression0),
+            ExpressionType.AddAssign            => this.AddAssign            ((BinaryExpression)Expression0),
+            ExpressionType.AddAssignChecked     => this.AddAssignChecked     ((BinaryExpression)Expression0),
+            ExpressionType.AddChecked           => this.AddChecked           ((BinaryExpression)Expression0),
+            ExpressionType.And                  => this.And                  ((BinaryExpression)Expression0),
+            ExpressionType.AndAssign            => this.AndAssign            ((BinaryExpression)Expression0),
+            ExpressionType.AndAlso              => this.AndAlso              ((BinaryExpression)Expression0),
+            ExpressionType.ArrayIndex           => this.ArrayIndex           ((BinaryExpression)Expression0),
+            ExpressionType.Assign               => this.Assign               ((BinaryExpression)Expression0),
+            ExpressionType.Coalesce             => this.Coalesce             ((BinaryExpression)Expression0),
+            ExpressionType.Divide               => this.Divide               ((BinaryExpression)Expression0),
+            ExpressionType.DivideAssign         => this.DivideAssign         ((BinaryExpression)Expression0),
+            ExpressionType.Equal                => this.Equal                ((BinaryExpression)Expression0),
+            ExpressionType.ExclusiveOr          => this.ExclusiveOr          ((BinaryExpression)Expression0),
+            ExpressionType.ExclusiveOrAssign    => this.ExclusiveOrAssign    ((BinaryExpression)Expression0),
+            ExpressionType.GreaterThan          => this.GreaterThan          ((BinaryExpression)Expression0),
+            ExpressionType.GreaterThanOrEqual   => this.GreaterThanOrEqual   ((BinaryExpression)Expression0),
+            ExpressionType.LeftShift            => this.LeftShift            ((BinaryExpression)Expression0),
+            ExpressionType.LeftShiftAssign      => this.LeftShiftAssign      ((BinaryExpression)Expression0),
+            ExpressionType.LessThan             => this.LessThan             ((BinaryExpression)Expression0),
+            ExpressionType.LessThanOrEqual      => this.LessThanOrEqual      ((BinaryExpression)Expression0),
+            ExpressionType.Modulo               => this.Modulo               ((BinaryExpression)Expression0),
+            ExpressionType.ModuloAssign         => this.ModuloAssign         ((BinaryExpression)Expression0),
+            ExpressionType.Multiply             => this.Multiply             ((BinaryExpression)Expression0),
+            ExpressionType.MultiplyAssign       => this.MultiplyAssign       ((BinaryExpression)Expression0),
+            ExpressionType.MultiplyAssignChecked=> this.MultiplyAssignChecked((BinaryExpression)Expression0),
+            ExpressionType.MultiplyChecked      => this.MultiplyChecked      ((BinaryExpression)Expression0),
+            ExpressionType.NotEqual             => this.NotEqual             ((BinaryExpression)Expression0),
+            ExpressionType.Or                   => this.Or                   ((BinaryExpression)Expression0),
+            ExpressionType.OrAssign             => this.OrAssign             ((BinaryExpression)Expression0),
+            ExpressionType.OrElse               => this.OrElse               ((BinaryExpression)Expression0),
+            ExpressionType.Power                => this.Power                ((BinaryExpression)Expression0),
+            ExpressionType.PowerAssign          => this.PowerAssign          ((BinaryExpression)Expression0),
+            ExpressionType.RightShift           => this.RightShift           ((BinaryExpression)Expression0),
+            ExpressionType.RightShiftAssign     => this.RightShiftAssign     ((BinaryExpression)Expression0),
+            ExpressionType.Subtract             => this.Subtract             ((BinaryExpression)Expression0),
+            ExpressionType.SubtractAssign       => this.SubtractAssign       ((BinaryExpression)Expression0),
+            ExpressionType.SubtractAssignChecked=> this.SubtractAssignChecked((BinaryExpression)Expression0),
+            ExpressionType.SubtractChecked      => this.SubtractChecked      ((BinaryExpression)Expression0),
+            ExpressionType.Block                => this.Block                ((BlockExpression)Expression0),
+            ExpressionType.Conditional          => this.Conditional          ((ConditionalExpression)Expression0),
+            ExpressionType.Constant             => this.Constant             ((ConstantExpression)Expression0),
+            ExpressionType.DebugInfo            => this.DebugInfo            ((DebugInfoExpression)Expression0),
+            ExpressionType.Default              => this.Default              ((DefaultExpression)Expression0),
+            ExpressionType.Dynamic              => this.Dynamic              ((DynamicExpression)Expression0),
+            ExpressionType.Goto                 => this.Goto                 ((GotoExpression)Expression0),
+            ExpressionType.Index                => this.Index                ((IndexExpression)Expression0),
+            ExpressionType.Invoke               => this.Invoke               ((InvocationExpression)Expression0),
+            ExpressionType.Label                => this.Label                ((LabelExpression)Expression0),
+            ExpressionType.Lambda               => this.Lambda               ((LambdaExpression)Expression0),
+            ExpressionType.ListInit             => this.ListInit             ((ListInitExpression)Expression0),
+            ExpressionType.Loop                 => this.Loop                 ((LoopExpression)Expression0),
+            ExpressionType.MemberAccess         => this.MemberAccess         ((MemberExpression)Expression0),
+            ExpressionType.MemberInit           => this.MemberInit           ((MemberInitExpression)Expression0),
+            ExpressionType.Call                 => this.Call                 ((MethodCallExpression)Expression0),
+            ExpressionType.NewArrayBounds       => this.NewArrayBounds       ((NewArrayExpression)Expression0),
+            ExpressionType.NewArrayInit         => this.NewArrayInit         ((NewArrayExpression)Expression0),
+            ExpressionType.New                  => this.New                  ((NewExpression)Expression0),
+            ExpressionType.Parameter            => this.Parameter            ((ParameterExpression)Expression0),
+            ExpressionType.RuntimeVariables     => this.RuntimeVariables     ((RuntimeVariablesExpression)Expression0),
+            ExpressionType.Switch               => this.Switch               ((SwitchExpression)Expression0),
+            ExpressionType.Try                  => this.Try                  ((TryExpression)Expression0),
+            ExpressionType.TypeEqual            => this.TypeEqual            ((TypeBinaryExpression)Expression0),
+            ExpressionType.TypeIs               => this.TypeIs               ((TypeBinaryExpression)Expression0),
+            ExpressionType.ArrayLength          => this.ArrayLength          ((UnaryExpression)Expression0),
+            ExpressionType.Convert              => this.Convert              ((UnaryExpression)Expression0),
+            ExpressionType.ConvertChecked       => this.ConvertChecked       ((UnaryExpression)Expression0),
+            ExpressionType.Decrement            => this.Decrement            ((UnaryExpression)Expression0),
+            ExpressionType.Increment            => this.Increment            ((UnaryExpression)Expression0),
+            ExpressionType.IsFalse              => this.IsFalse              ((UnaryExpression)Expression0),
+            ExpressionType.IsTrue               => this.IsTrue               ((UnaryExpression)Expression0),
+            ExpressionType.Negate               => this.Negate               ((UnaryExpression)Expression0),
+            ExpressionType.NegateChecked        => this.NegateChecked        ((UnaryExpression)Expression0),
+            ExpressionType.Not                  => this.Not                  ((UnaryExpression)Expression0),
+            ExpressionType.OnesComplement       => this.OnesComplement       ((UnaryExpression)Expression0),
+            ExpressionType.PostDecrementAssign  => this.PostDecrementAssign  ((UnaryExpression)Expression0),
+            ExpressionType.PostIncrementAssign  => this.PostIncrementAssign  ((UnaryExpression)Expression0),
+            ExpressionType.PreDecrementAssign   => this.PreDecrementAssign   ((UnaryExpression)Expression0),
+            ExpressionType.PreIncrementAssign   => this.PreIncrementAssign   ((UnaryExpression)Expression0),
+            ExpressionType.Quote                => this.Quote                ((UnaryExpression)Expression0),
+            ExpressionType.Throw                => this.Throw                ((UnaryExpression)Expression0),
+            ExpressionType.TypeAs               => this.TypeAs               ((UnaryExpression)Expression0),
+            ExpressionType.UnaryPlus            => this.UnaryPlus            ((UnaryExpression)Expression0),
+            ExpressionType.Unbox                => this.Unbox                ((UnaryExpression)Expression0),
             _ => throw new NotSupportedException($"{Expression0.NodeType}はサポートされてない"),
         };
         protected IList<Expression> TraverseExpressions(ReadOnlyCollection<Expression> Expressions0) {
@@ -770,131 +770,7 @@ partial class Optimizer {
                 var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments_2);
                 b&=MethodCall0_Arguments_2==MethodCall1_Arguments_2;
                 return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
-                //        return Expression.Call(
-                //            MethodCall1_Object,
-                //            MethodCall0.Method,
-                //            this._作業配列.Expressions設定(MethodCall1_Arguments_0)
-                //        );
-                //    }
-                //}
-                //var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-                //b&=ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments);
-                //if(b)
-                //    return MethodCall0;
-                //return Expression.Call(
-                //    MethodCall1_Object,
-                //    MethodCall0.Method,
-                //    MethodCall1_Arguments
-                //);
             }
-            //var MethodCall0_Object = MethodCall0.Object;
-            //var MethodCall0_Arguments = MethodCall0.Arguments;
-            //var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
-            //if(MethodCall0_Object is null) {
-            //    if(MethodCall0_Arguments_Count<=5) {
-            //        if(MethodCall0_Arguments_Count==0)
-            //            return MethodCall0;
-            //        if(MethodCall0_Arguments_Count>=1) {
-            //            var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
-            //            var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
-            //            var b = MethodCall0_Arguments_0==MethodCall1_Arguments_0;
-            //            if(MethodCall0_Arguments_Count>=2) {
-            //                var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
-            //                var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments_1);
-            //                b&=MethodCall0_Arguments_1==MethodCall1_Arguments_1;
-            //                if(MethodCall0_Arguments_Count>=3) {
-            //                    var MethodCall0_Arguments_2 = MethodCall0_Arguments[2];
-            //                    var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments_2);
-            //                    b&=MethodCall0_Arguments_2==MethodCall1_Arguments_2;
-            //                    if(MethodCall0_Arguments_Count>=4) {
-            //                        var MethodCall0_Arguments_3 = MethodCall0_Arguments[3];
-            //                        var MethodCall1_Arguments_3 = this.Traverse(MethodCall0_Arguments_3);
-            //                        b&=MethodCall0_Arguments_3==MethodCall1_Arguments_3;
-            //                        if(MethodCall0_Arguments_Count==5) {
-            //                            var MethodCall0_Arguments_4 = MethodCall0_Arguments[4];
-            //                            var MethodCall1_Arguments_4 = this.Traverse(MethodCall0_Arguments_4);
-            //                            b&=MethodCall0_Arguments_4==MethodCall1_Arguments_4;
-            //                            if(b)return MethodCall0;
-            //                            return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
-            //                        }
-            //                        if(b)return MethodCall0;
-            //                        return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3);
-            //                    }
-            //                    if(b)return MethodCall0;
-            //                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
-            //                }
-            //                if(b)return MethodCall0;
-            //                return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
-            //            }
-            //            if(b)return MethodCall0;
-            //            return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0);
-            //        }
-            //    }
-            //    var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-            //    if(ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments))return MethodCall0;
-            //    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
-            //} else {
-            //    var MethodCall1_Object = this.Traverse(MethodCall0_Object);
-            //    var b = MethodCall0_Object==MethodCall1_Object;
-            //    if(MethodCall0_Arguments_Count<=3) {
-            //        if(MethodCall0_Arguments_Count==0) {
-            //            if(b)
-            //                return MethodCall0;
-            //            return Expression.Call(
-            //                MethodCall1_Object,
-            //                MethodCall0.Method
-            //            );
-            //        }
-            //        if(MethodCall0_Arguments_Count>=1) {
-            //            var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
-            //            var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
-            //            b&=MethodCall0_Arguments_0==MethodCall1_Arguments_0;
-            //            if(MethodCall0_Arguments_Count>=2) {
-            //                var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
-            //                var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments_1);
-            //                b&=MethodCall0_Arguments_1==MethodCall1_Arguments_1;
-            //                if(MethodCall0_Arguments_Count==3) {
-            //                    var MethodCall0_Arguments_2 = MethodCall0_Arguments[2];
-            //                    var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments_2);
-            //                    b&=MethodCall0_Arguments_2==MethodCall1_Arguments_2;
-            //                    if(b)
-            //                        return MethodCall0;
-            //                    return Expression.Call(
-            //                        MethodCall1_Object,
-            //                        MethodCall0.Method,
-            //                        MethodCall1_Arguments_0,
-            //                        MethodCall1_Arguments_1,
-            //                        MethodCall1_Arguments_2
-            //                    );
-            //                } 
-            //                if(b)
-            //                    return MethodCall0;
-            //                return Expression.Call(
-            //                    MethodCall1_Object,
-            //                    MethodCall0.Method,
-            //                    MethodCall1_Arguments_0,
-            //                    MethodCall1_Arguments_1
-            //                );
-            //            }
-            //            if(b)
-            //                return MethodCall0;
-            //            return Expression.Call(
-            //                MethodCall1_Object,
-            //                MethodCall0.Method,
-            //                this._作業配列.Expressions設定(MethodCall1_Arguments_0)
-            //            );
-            //        }
-            //    }
-            //    var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-            //    b&=ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments);
-            //    if(b)
-            //        return MethodCall0;
-            //    return Expression.Call(
-            //        MethodCall1_Object,
-            //        MethodCall0.Method,
-            //        MethodCall1_Arguments
-            //    );
-            //}
         }
         /// <summary>
         /// new Int32[3]
@@ -957,7 +833,7 @@ partial class Optimizer {
         protected virtual Expression Parameter(ParameterExpression Parameter0)=> Parameter0;
         protected virtual Expression RuntimeVariables(RuntimeVariablesExpression RuntimeVariables0)=> RuntimeVariables0;
         /// <summary>
-        /// swtich(a){
+        /// switch(a){
         ///     case 0:break;
         ///     case 1:break;
         ///     default:

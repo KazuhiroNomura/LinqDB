@@ -246,32 +246,41 @@ public static class CommonLibrary {
     internal static readonly string IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
     internal static readonly string IOutputSet1_FullName = typeof(IOutputSet<>).FullName!;
     internal static readonly string IGroupingSet2_FullName = typeof(IGroupingSet<,>).FullName!;
-    internal const int CS匿名型名_Length18= 18;
-    internal const string CS匿名型名="<>f__AnonymousType";
-    internal const int VB匿名型名_Length16 = 16;
-    internal const string VB匿名型名="VB$AnonymousType";
-    internal const int CSクロージャー_Length17 = 17;
-    internal const string CSクロージャー="<>c__DisplayClass";
-    internal const int VBクロージャー_Length11 = 11;
-    internal const string VBクロージャー="_Closure$__";
+    //internal const int CS匿名型名_Length18= 18;
+    //internal const string CS匿名型名="<>f__AnonymousType";
+    //internal const int VB匿名型名_Length16 = 16;
+    //internal const string VB匿名型名="VB$AnonymousType";
+    //internal const int CSクロージャー_Length17 = 17;
+    //internal const string CSクロージャー="<>c__DisplayClass";
+    //internal const int VBクロージャー_Length11 = 11;
+    //internal const string VBクロージャー="_Closure$__";
     internal static readonly string IEquatable_FullName = typeof(IEquatable<>).FullName!;
     internal static readonly string IEqualityComparer_FullName = typeof(IEqualityComparer<>).FullName!;
+    private const string CS匿名型名="<>f__AnonymousType";
+    private const string VB匿名型名="VB$AnonymousType";
+    private const string CSクロージャー="<>c__DisplayClass";
+    private const string VBクロージャー="_Closure$__";
     /// <summary>
     /// Typeが匿名型であるか判定する。
     /// </summary>
     /// <param name="Type"></param>
     /// <returns></returns>
-    public static bool IsAnonymous(this Type Type){
-        if (Type.Namespace == null && Type.IsSealed && (Type.Name.StartsWith("<>f__AnonymousType", StringComparison.Ordinal) || Type.Name.StartsWith("<>__AnonType", StringComparison.Ordinal) || Type.Name.StartsWith("VB$AnonymousType_", StringComparison.Ordinal)))
-        {
-            return Type.IsDefined(typeof(CompilerGeneratedAttribute), inherit: false);
-        }
-        return false;
-    }
-    public static bool IsConstructedGenericType(this TypeInfo type)
-    {
-        return type.AsType().IsConstructedGenericType;
-    }
+    public static bool IsAnonymous(this Type Type)=>
+        Type.Namespace==null&&Type.IsSealed&&Type.IsDefined(typeof(CompilerGeneratedAttribute),false)&&(
+            Type.Name.StartsWith(CS匿名型名,StringComparison.Ordinal)||
+            Type.Name.StartsWith(VB匿名型名,StringComparison.Ordinal)
+        );
+    /// <summary>
+    /// Typeがクロージャ型であるか判定する。
+    /// </summary>
+    /// <param name="Type"></param>
+    /// <returns></returns>
+    public static bool IsDisplay(this Type Type)=>
+        Type.IsSealed && Type.IsDefined(typeof(CompilerGeneratedAttribute),false)&&(
+            Type.Name.StartsWith(CSクロージャー,StringComparison.Ordinal) || 
+            Type.Name.StartsWith(VBクロージャー, StringComparison.Ordinal)
+        );
+    public static bool IsConstructedGenericType(this TypeInfo Type)=>Type.AsType().IsConstructedGenericType;
     //public static bool IsAnonymous(this Type Type)=>Type.IsClass&&Type.IsGenericType&&(Type.Name.IndexOf(
     //    CS匿名型名,
     //    StringComparison.Ordinal)==0||Type.Name.IndexOf(
@@ -523,29 +532,27 @@ public static class CommonLibrary {
         //            ?typeof(string)
         //            :throw new NotSupportedException(DBType)
         //};
-        return DBType.ToLower() switch {
-            "bit" => typeof(bool),
-            "tinyint" => typeof(byte),
-            "smallint" => typeof(short),
-            "int" or "integer" => typeof(int),
-            "bigint" => typeof(long),
-            "real" => typeof(float),
-            "float" => typeof(double),
-            "decimal" or "numeric" or "smallmoney" or "money" => typeof(decimal),
-            "date" or "datetime" or "datetime2" or "smalldatetime" => typeof(DateTime),
-            "datetimeoffset" => typeof(DateTimeOffset),
-            "timestamp" => typeof(DateTime),
-            //e "timestamp"=>typeof(DateTimeOffset),
-            "binary" or "varbinary" => typeof(byte[]),
-            "geography" => typeof(Microsoft.SqlServer.Types.SqlGeography),
-            "geometry" => typeof(Microsoft.SqlServer.Types.SqlGeometry),
-            "image" or "sql_variant" => typeof(object),
-            "xml" => typeof(XDocument),
-            "uniqueidentifier" => typeof(Guid),
-            "time" => typeof(TimeSpan),
-            "hierarchyid" => typeof(Microsoft.SqlServer.Types.SqlHierarchyId),
-            "char" or "varchar" or "nchar" or "nvarchar" or "text" or "ntext" or "sysname" or _ =>
-                DBType[..4]=="char"||DBType[..4]=="text"||DBType[..5]=="nchar"||DBType[..5]=="ntext"||DBType[..7]=="varchar"||DBType[..7]=="sysname"||DBType[..8]=="nvarchar"
+        return DBType.ToUpperInvariant() switch {
+            "BIT"                                                                               => typeof(bool),
+            "TINYINT"                                                                           => typeof(byte),
+            "SMALLINT"                                                                          => typeof(short),
+            "INT" or "INTEGER"                                                                  => typeof(int),
+            "BIGINT"                                                                            => typeof(long),
+            "REAL"                                                                              => typeof(float),
+            "FLOAT"                                                                             => typeof(double),
+            "DECIMAL" or "NUMERIC" or "SMALLMONEY" or "MONEY"                                   => typeof(decimal),
+            "DATE" or "DATETIME" or "DATETIME2" or "SMALLDATETIME"                              => typeof(DateTime),
+            "DATETIMEOFFSET"                                                                    => typeof(DateTimeOffset),
+            "TIMESTAMP"                                                                         => typeof(DateTime),
+            "BINARY" or "VARBINARY"                                                             => typeof(byte[]),
+            "GEOGRAPHY"                                                                         => typeof(Microsoft.SqlServer.Types.SqlGeography),
+            "GEOMETRY"                                                                          => typeof(Microsoft.SqlServer.Types.SqlGeometry),
+            "IMAGE" or "SQL_VARIANT"                                                            => typeof(object),
+            "XML"                                                                               => typeof(XDocument),
+            "UNIQUEIDENTIFIER"                                                                  => typeof(Guid),
+            "TIME"                                                                              => typeof(TimeSpan),
+            "HIERARCHYID"                                                                       => typeof(Microsoft.SqlServer.Types.SqlHierarchyId),
+            "CHAR" or "VARCHAR" or "NCHAR" or "NVARCHAR" or "TEXT" or "NTEXT" or "SYSNAME" or _ =>DBType[..4]=="char"||DBType[..4]=="text"||DBType[..5]=="nchar"||DBType[..5]=="ntext"||DBType[..7]=="varchar"||DBType[..7]=="sysname"||DBType[..8]=="nvarchar"
                     ? typeof(string)
                     : throw new NotSupportedException(DBType)
         };

@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<DefaultExpression>{
-    private IJsonFormatter<DefaultExpression> Default=>this;
-    public void Serialize(ref JsonWriter writer,DefaultExpression? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.DefaultExpression>{
+    private IJsonFormatter<Expressions.DefaultExpression> Default=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.DefaultExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
             return;
@@ -16,33 +16,24 @@ partial class ExpressionJsonFormatter:IJsonFormatter<DefaultExpression>{
         //this.Serialize(ref writer,value.Type,Resolver);
         writer.WriteEndArray();
     }
-    DefaultExpression IJsonFormatter<DefaultExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.DefaultExpression IJsonFormatter<Expressions.DefaultExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         //var type=this.Type.Deserialize(ref reader,Resolver);
         var type=Deserialize_Type(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.Default(type);
+        return Expressions.Expression.Default(type);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<DefaultExpression>{
-    private IMessagePackFormatter<DefaultExpression> Default=>this;
-    public void Serialize(ref MessagePackWriter writer,DefaultExpression value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.DefaultExpression>{
+    private IMessagePackFormatter<Expressions.DefaultExpression> Default=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.DefaultExpression value,MessagePackSerializerOptions Resolver){
         //options.Resolver.GetFormatter<Type>().Serialize(ref writer,value.Type,options);
         Serialize_Type(ref writer,value.Type,Resolver);
     }
-    DefaultExpression IMessagePackFormatter<DefaultExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.DefaultExpression IMessagePackFormatter<Expressions.DefaultExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var type=Deserialize_Type(ref reader,Resolver);
         //var type=options.Resolver.GetFormatter<Type>().Deserialize(ref reader,options);
-        return Expression.Default(type);
+        return Expressions.Expression.Default(type);
     }
 }
-//class DefaultFormatter:IMessagePackFormatter<DefaultExpression>{
-//    public void Serialize(ref MessagePackWriter writer,DefaultExpression value,MessagePackSerializerOptions options){
-//        options.Resolver.GetFormatter<Type>().Serialize(ref writer,value.Type,options);
-//    }
-//    public DefaultExpression Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
-//        var type=options.Resolver.GetFormatter<Type>().Deserialize(ref reader,options);
-//        return Expression.Default(type);
-//    }
-//}

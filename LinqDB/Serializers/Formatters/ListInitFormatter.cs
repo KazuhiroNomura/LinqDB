@@ -1,36 +1,36 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<ListInitExpression>{
-    private IJsonFormatter<ListInitExpression> ListInit=>this;
-    public void Serialize(ref JsonWriter writer,ListInitExpression value,IJsonFormatterResolver Resolver) {
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.ListInitExpression>{
+    private IJsonFormatter<Expressions.ListInitExpression> ListInit=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.ListInitExpression value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         this.Serialize(ref writer,value.NewExpression,Resolver);
         writer.WriteValueSeparator();
         Serialize_T(ref writer,value.Initializers,Resolver);
         writer.WriteEndArray();
     }
-    ListInitExpression IJsonFormatter<ListInitExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
+    Expressions.ListInitExpression IJsonFormatter<Expressions.ListInitExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
         var New=this.New.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var Initializers=Deserialize_T<ElementInit[]>(ref reader,Resolver);
+        var Initializers=Deserialize_T<Expressions.ElementInit[]>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.ListInit(New,Initializers);
+        return Expressions.Expression.ListInit(New,Initializers);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<ListInitExpression>{
-    private IMessagePackFormatter<ListInitExpression> MSListInit=>this;
-    public void Serialize(ref MessagePackWriter writer,ListInitExpression value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.ListInitExpression>{
+    private IMessagePackFormatter<Expressions.ListInitExpression> MSListInit=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.ListInitExpression value,MessagePackSerializerOptions Resolver){
         this.Serialize(ref writer,value.NewExpression,Resolver);
         Serialize_T(ref writer,value.Initializers,Resolver);
     }
-    ListInitExpression IMessagePackFormatter<ListInitExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.ListInitExpression IMessagePackFormatter<Expressions.ListInitExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var New=this.MSNew.Deserialize(ref reader,Resolver);
-        var Initializers=Deserialize_T<ElementInit[]>(ref reader,Resolver);
-        return Expression.ListInit(New,Initializers);
+        var Initializers=Deserialize_T<Expressions.ElementInit[]>(ref reader,Resolver);
+        return Expressions.Expression.ListInit(New,Initializers);
     }
 }

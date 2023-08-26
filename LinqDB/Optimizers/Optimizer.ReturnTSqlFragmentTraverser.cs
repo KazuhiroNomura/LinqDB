@@ -3,13 +3,6 @@
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
-//using Expression = System.Linq.Expressions.Expression;
-//using BinaryExpression = System.Linq.Expressions.BinaryExpression;
-//using MemberExpression = System.Linq.Expressions.MemberExpression;
-//using MethodCallExpression = System.Linq.Expressions.MethodCallExpression;
-//using Expressions.ExpressionType = System.Linq.Expressions.Expressions.ExpressionType;
-//using ParameterExpression = System.Linq.Expressions.ParameterExpression;
-//using Expressions.LambdaExpression = System.Linq.Expressions.Expressions.LambdaExpression;
 namespace LinqDB.Optimizers;
 
 /// <summary>

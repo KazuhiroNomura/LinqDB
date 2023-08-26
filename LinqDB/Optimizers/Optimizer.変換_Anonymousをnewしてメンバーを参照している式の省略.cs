@@ -37,7 +37,7 @@ partial class Optimizer {
                     var Parameters = New1.Constructor!.GetParameters();
                     var Parameters_Length = Parameters.Length;
                     for(var Index = 0;Index<Parameters_Length;Index++)
-                        if(Parameters[Index].Name==Member0_Member_Name.ToLower())return New1.Arguments[Index];
+                        if(Parameters[Index].Name==Member0_Member_Name.ToUpperInvariant())return New1.Arguments[Index];
                 } else
                     return Expression.MakeMemberAccess(Member1_Expression,Member0.Member);
             }

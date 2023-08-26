@@ -580,12 +580,14 @@ internal class SingleReceiveSend:IDisposable{
                             case XmlType.Utf8Json:{
                                 this.SerializerConfiguration.ClearJson();
                                 try{
-                                    string s=Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
-                                        (int)(this.MemoryStream.Length-this.MemoryStream.Position));
-                                    var s1=format_json(s);
-                                    var Lambda=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,
-                                        this.SerializerConfiguration.JsonFormatterResolver);
-                                    Object=Lambda;
+                                    //string s=Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
+                                    //    (int)(this.MemoryStream.Length-this.MemoryStream.Position));
+                                    //var s1=format_json(s);
+                                    //File.WriteAllText("受診Json.json",s1);
+                                    //var o=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,
+                                    //    this.SerializerConfiguration.JsonFormatterResolver);
+                                    //var Lambda=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
+                                    Object=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
                                 } catch(Exception e1x){
                                     Trace.WriteLine(e1x.Message);
                                     throw;
@@ -594,42 +596,8 @@ internal class SingleReceiveSend:IDisposable{
                             }
                             case XmlType.MessagePack: {
                                 this.SerializerConfiguration.ClearMessagePack();
-                                var Lambda=MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.MessagePackSerializerOptions,CancellationToken);
-                                Object=Lambda;
+                                Object=MessagePackSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.MessagePackSerializerOptions,CancellationToken);
                                 break;
-                                ////パラメーター_ステートメント パラメーター_ステートメント;
-                                ////String パラメーター,ステートメント;
-                                ////if(XmlType==XmlType.Utf8Json) {
-                                ////    パラメーター_ステートメント=Utf8Json.JsonSerializer.Deserialize<パラメーター_ステートメント>(MemoryStream);
-                                ////    //ParameterName =Utf8Json.JsonSerializer.Deserialize<String>(MemoryStream);
-                                ////    //ステートメント=Utf8Json.JsonSerializer.Deserialize<String>(MemoryStream);
-                                ////    パラメーター=パラメーター_ステートメント.パラメーター;
-                                ////    ステートメント=パラメーター_ステートメント.ステートメント;
-                                ////} else{
-                                ////    パラメーター=MessagePack.MessagePackSerializer.Deserialize<String>(MemoryStream);
-                                ////    ステートメント=MessagePack.MessagePackSerializer.Deserialize<String>(MemoryStream);
-                                ////}
-                                ////var ParameterName= Utf8Json.JsonSerializer.Deserialize<String>(MemoryStream);
-                                ////var ステートメント = Utf8Json.JsonSerializer.Deserialize<String>(MemoryStream);
-                                //using var r = new BinaryReader(MemoryStream);
-                                //var ParameterName = r.ReadString();
-                                //var Statement = r.ReadString();
-                                //Debug.Assert(Request==Request.Expression_Invoke);
-                                //var Proxy = this.MultiReceiveSend.Server.Proxy!;
-                                //if(ParameterName!="") {
-                                //    Statement=$"var {ParameterName}=Entities;\r\n{Statement}";
-                                //}
-                                //var Script = CSharpScript.Create(
-                                //    Statement,
-                                //    options,
-                                //    Proxy.GetType()
-                                //);
-                                ////var Compile=Script.Compile();
-                                //Object=Script.CreateDelegate(CancellationToken);
-                                ////var e = Script.CreateDelegate()("");
-                                ////e.Wait();
-                                ////var input = e.Result;
-                                //break;
                             }
                             default: {
                                 throw new NotSupportedException(XmlType.ToString());
@@ -1023,6 +991,7 @@ internal class SingleReceiveSend:IDisposable{
         //this.AsyncResult送信?.AsyncWaitHandle.WaitOne();
         //this.AsyncResult受信?.AsyncWaitHandle.WaitOne();
         this.Task送信?.Wait();
+        //await this.Task送信.ConfigureAwait(false);
         //this.Task受信?.Wait();
     }
     /// <summary>

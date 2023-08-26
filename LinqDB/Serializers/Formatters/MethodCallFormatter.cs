@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<MethodCallExpression>{
-    private IJsonFormatter<MethodCallExpression> MethodCall=>this;
-    public void Serialize(ref JsonWriter writer,MethodCallExpression? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.MethodCallExpression>{
+    private IJsonFormatter<Expressions.MethodCallExpression> MethodCall=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.MethodCallExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
             return;
@@ -22,24 +22,24 @@ partial class ExpressionJsonFormatter:IJsonFormatter<MethodCallExpression>{
         Serialize_T(ref writer,value.Arguments,Resolver);
         writer.WriteEndArray();
     }
-    MethodCallExpression IJsonFormatter<MethodCallExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.MethodCallExpression IJsonFormatter<Expressions.MethodCallExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var method= this.MethodInfo.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(method.IsStatic){
-            var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
+            var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
             reader.ReadIsEndArrayWithVerify();
-            return Expression.Call(
+            return Expressions.Expression.Call(
                 method,
                 arguments
             );
         } else{
             var instance= this.Deserialize(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
-            var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
+            var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
             reader.ReadIsEndArrayWithVerify();
-            return Expression.Call(
+            return Expressions.Expression.Call(
                 instance,
                 method,
                 arguments
@@ -47,9 +47,9 @@ partial class ExpressionJsonFormatter:IJsonFormatter<MethodCallExpression>{
         }
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<MethodCallExpression>{
-    private IMessagePackFormatter<MethodCallExpression> MSMethodCall=>this;
-    public void Serialize(ref MessagePackWriter writer,MethodCallExpression? value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.MethodCallExpression>{
+    private IMessagePackFormatter<Expressions.MethodCallExpression> MSMethodCall=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.MethodCallExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
             return;
@@ -61,19 +61,19 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<MethodCallExp
         }
         Serialize_T(ref writer,value.Arguments,Resolver);
     }
-    MethodCallExpression IMessagePackFormatter<MethodCallExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.MethodCallExpression IMessagePackFormatter<Expressions.MethodCallExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         var method= this.MSMethodInfo.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
-            var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
-            return Expression.Call(
+            var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
+            return Expressions.Expression.Call(
                 method,
                 arguments
             );
         } else{
             var instance= this.Deserialize(ref reader,Resolver);
-            var arguments=Deserialize_T<Expression[]>(ref reader,Resolver);
-            return Expression.Call(
+            var arguments=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
+            return Expressions.Expression.Call(
                 instance,
                 method,
                 arguments

@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<BlockExpression>{
-    private IJsonFormatter<BlockExpression> Block=>this;
-    public void Serialize(ref JsonWriter writer,BlockExpression value,IJsonFormatterResolver Resolver) {
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.BlockExpression>{
+    private IJsonFormatter<Expressions.BlockExpression> Block=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.BlockExpression value,IJsonFormatterResolver Resolver) {
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -21,7 +21,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BlockExpression>{
         writer.WriteEndArray();
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    BlockExpression IJsonFormatter<BlockExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
+    Expressions.BlockExpression IJsonFormatter<Expressions.BlockExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         reader.ReadIsBeginArrayWithVerify();
@@ -30,15 +30,15 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BlockExpression>{
         var variables= this.Deserialize宣言Parameters(ref reader,Resolver);
         ListParameter.AddRange(variables);
         reader.ReadIsValueSeparatorWithVerify();
-        var expressions=Deserialize_T<Expression[]>(ref reader,Resolver);
+        var expressions=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         ListParameter.RemoveRange(ListParameter_Count,variables.Count);
-        return Expression.Block(type,variables,expressions);
+        return Expressions.Expression.Block(type,variables,expressions);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BlockExpression>{
-    private IMessagePackFormatter<BlockExpression> Block=>this;
-    public void Serialize(ref MessagePackWriter writer,BlockExpression value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.BlockExpression>{
+    private IMessagePackFormatter<Expressions.BlockExpression> Block=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.BlockExpression value,MessagePackSerializerOptions Resolver){
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -48,14 +48,14 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BlockExpressi
         Serialize_T(ref writer,value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    BlockExpression IMessagePackFormatter<BlockExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.BlockExpression IMessagePackFormatter<Expressions.BlockExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var ListParameter=this.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=Deserialize_Type(ref reader,Resolver);
         var variables= this.Deserialize宣言Parameters(ref reader,Resolver);
         ListParameter.AddRange(variables);
-        var expressions=Deserialize_T<Expression[]>(ref reader,Resolver);
+        var expressions=Deserialize_T<Expressions.Expression[]>(ref reader,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,variables.Length);
-        return Expression.Block(type,variables,expressions);
+        return Expressions.Expression.Block(type,variables,expressions);
     }
 }

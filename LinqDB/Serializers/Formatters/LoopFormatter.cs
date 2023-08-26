@@ -1,11 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-partial class ExpressionJsonFormatter:IJsonFormatter<LoopExpression>{
-    private IJsonFormatter<LoopExpression> Loop=>this;
-    public void Serialize(ref JsonWriter writer,LoopExpression value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.LoopExpression>{
+    private IJsonFormatter<Expressions.LoopExpression> Loop=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.LoopExpression value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         //writer.WriteString(nameof(ExpressionType.Loop));
         //writer.WriteValueSeparator();
@@ -16,7 +16,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<LoopExpression>{
         this.Serialize(ref writer,value.Body,Resolver);
         writer.WriteEndArray();
     }
-    LoopExpression IJsonFormatter<LoopExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.LoopExpression IJsonFormatter<Expressions.LoopExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var breakLabel= this.LabelTarget.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -25,20 +25,20 @@ partial class ExpressionJsonFormatter:IJsonFormatter<LoopExpression>{
         var body= this.Deserialize(ref reader,Resolver);
         //var type=Deserialize_Type(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expression.Loop(body,breakLabel,continueLabel);
+        return Expressions.Expression.Loop(body,breakLabel,continueLabel);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LoopExpression>{
-    private IMessagePackFormatter<LoopExpression> MSLoop=>this;
-    public void Serialize(ref MessagePackWriter writer,LoopExpression value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.LoopExpression>{
+    private IMessagePackFormatter<Expressions.LoopExpression> MSLoop=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.LoopExpression value,MessagePackSerializerOptions Resolver){
         this.Serialize(ref writer,value.BreakLabel,Resolver);
         this.Serialize(ref writer,value.ContinueLabel,Resolver);
         this.Serialize(ref writer,value.Body,Resolver);
     }
-    LoopExpression IMessagePackFormatter<LoopExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.LoopExpression IMessagePackFormatter<Expressions.LoopExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var breakLabel= this.MSLabelTarget.Deserialize(ref reader,Resolver);
         var continueLabel= this.MSLabelTarget.Deserialize(ref reader,Resolver);
         var body= this.Deserialize(ref reader,Resolver);
-        return Expression.Loop(body,breakLabel,continueLabel);
+        return Expressions.Expression.Loop(body,breakLabel,continueLabel);
     }
 }

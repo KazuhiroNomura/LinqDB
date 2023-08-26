@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
-    public void Serialize(ref JsonWriter writer,BinaryExpression? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.BinaryExpression>{
+    public void Serialize(ref JsonWriter writer,Expressions.BinaryExpression? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
             return;
@@ -16,42 +16,42 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
         writer.WriteString(value.NodeType.ToString());
         writer.WriteValueSeparator();
         switch(value.NodeType){
-            case ExpressionType.Assign or ExpressionType.Coalesce or ExpressionType.ArrayIndex:{
+            case Expressions.ExpressionType.Assign or Expressions.ExpressionType.Coalesce or Expressions.ExpressionType.ArrayIndex:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 writer.WriteValueSeparator();
                 this.Serialize(ref writer,value.Right,Resolver);
                 break;
             }
-            case ExpressionType.Add:
-            case ExpressionType.AddAssign:
-            case ExpressionType.AddAssignChecked:
-            case ExpressionType.AddChecked:
-            case ExpressionType.And:
-            case ExpressionType.AndAssign:
-            case ExpressionType.AndAlso:
-            case ExpressionType.Divide:
-            case ExpressionType.DivideAssign:
-            case ExpressionType.ExclusiveOr:
-            case ExpressionType.ExclusiveOrAssign:
-            case ExpressionType.LeftShift:
-            case ExpressionType.LeftShiftAssign:
-            case ExpressionType.Modulo:
-            case ExpressionType.ModuloAssign:
-            case ExpressionType.Multiply:
-            case ExpressionType.MultiplyAssign:
-            case ExpressionType.MultiplyAssignChecked:
-            case ExpressionType.MultiplyChecked:
-            case ExpressionType.Or:
-            case ExpressionType.OrAssign:
-            case ExpressionType.OrElse:
-            case ExpressionType.Power:
-            case ExpressionType.PowerAssign:
-            case ExpressionType.RightShift:
-            case ExpressionType.RightShiftAssign:
-            case ExpressionType.Subtract:
-            case ExpressionType.SubtractAssign:
-            case ExpressionType.SubtractAssignChecked:
-            case ExpressionType.SubtractChecked:{
+            case Expressions.ExpressionType.Add:
+            case Expressions.ExpressionType.AddAssign:
+            case Expressions.ExpressionType.AddAssignChecked:
+            case Expressions.ExpressionType.AddChecked:
+            case Expressions.ExpressionType.And:
+            case Expressions.ExpressionType.AndAssign:
+            case Expressions.ExpressionType.AndAlso:
+            case Expressions.ExpressionType.Divide:
+            case Expressions.ExpressionType.DivideAssign:
+            case Expressions.ExpressionType.ExclusiveOr:
+            case Expressions.ExpressionType.ExclusiveOrAssign:
+            case Expressions.ExpressionType.LeftShift:
+            case Expressions.ExpressionType.LeftShiftAssign:
+            case Expressions.ExpressionType.Modulo:
+            case Expressions.ExpressionType.ModuloAssign:
+            case Expressions.ExpressionType.Multiply:
+            case Expressions.ExpressionType.MultiplyAssign:
+            case Expressions.ExpressionType.MultiplyAssignChecked:
+            case Expressions.ExpressionType.MultiplyChecked:
+            case Expressions.ExpressionType.Or:
+            case Expressions.ExpressionType.OrAssign:
+            case Expressions.ExpressionType.OrElse:
+            case Expressions.ExpressionType.Power:
+            case Expressions.ExpressionType.PowerAssign:
+            case Expressions.ExpressionType.RightShift:
+            case Expressions.ExpressionType.RightShiftAssign:
+            case Expressions.ExpressionType.Subtract:
+            case Expressions.ExpressionType.SubtractAssign:
+            case Expressions.ExpressionType.SubtractAssignChecked:
+            case Expressions.ExpressionType.SubtractChecked:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 writer.WriteValueSeparator();
                 this.Serialize(ref writer,value.Right,Resolver);
@@ -59,12 +59,12 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
                 this.Serialize(ref writer,value.Method,Resolver);
                 break;
             }
-            case ExpressionType.Equal:
-            case ExpressionType.GreaterThan:
-            case ExpressionType.GreaterThanOrEqual:
-            case ExpressionType.LessThan:
-            case ExpressionType.LessThanOrEqual:
-            case ExpressionType.NotEqual:{
+            case Expressions.ExpressionType.Equal:
+            case Expressions.ExpressionType.GreaterThan:
+            case Expressions.ExpressionType.GreaterThanOrEqual:
+            case Expressions.ExpressionType.LessThan:
+            case Expressions.ExpressionType.LessThanOrEqual:
+            case Expressions.ExpressionType.NotEqual:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 writer.WriteValueSeparator();
                 this.Serialize(ref writer,value.Right,Resolver);
@@ -79,14 +79,14 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
         }
         writer.WriteEndArray();
     }
-    private (Expression Left,Expression Right)Deserialize_Binary(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    private (Expressions.Expression Left,Expressions.Expression Right)Deserialize_Binary(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Right= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return(Left,Right);
     }
-    private (Expression Left,Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    private (Expressions.Expression Left,Expressions.Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Right= this.Deserialize(ref reader,Resolver);
@@ -95,7 +95,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
         reader.ReadIsEndArrayWithVerify();
         return(Left,Right,Method);
     }
-    private (Expression Left,Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    private (Expressions.Expression Left,Expressions.Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref JsonReader reader,IJsonFormatterResolver Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Right= this.Deserialize(ref reader,Resolver);
@@ -106,245 +106,245 @@ partial class ExpressionJsonFormatter:IJsonFormatter<BinaryExpression>{
         reader.ReadIsEndArrayWithVerify();
         return(Left,Right,IsLiftedToNull,Method);
     }
-    BinaryExpression IJsonFormatter<BinaryExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.BinaryExpression IJsonFormatter<Expressions.BinaryExpression>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeTypeName=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();
-        var NodeType=Enum.Parse<ExpressionType>(NodeTypeName);
+        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         switch(NodeType){
-            case ExpressionType.Assign:{
+            case Expressions.ExpressionType.Assign:{
                 var (Left,Right)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.Assign(Left,Right);
+                return Expressions.Expression.Assign(Left,Right);
             }
-            case ExpressionType.Coalesce:{
+            case Expressions.ExpressionType.Coalesce:{
                 var (Left,Right)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.Coalesce(Left,Right);
+                return Expressions.Expression.Coalesce(Left,Right);
             }
-            case ExpressionType.Add:{
+            case Expressions.ExpressionType.Add:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Add(Left,Right,Method);
+                return Expressions.Expression.Add(Left,Right,Method);
             }
-            case ExpressionType.AddAssign:{
+            case Expressions.ExpressionType.AddAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddAssign(Left,Right,Method);
+                return Expressions.Expression.AddAssign(Left,Right,Method);
             }
-            case ExpressionType.AddAssignChecked:{
+            case Expressions.ExpressionType.AddAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddAssignChecked(Left,Right,Method);
+                return Expressions.Expression.AddAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.AddChecked:{
+            case Expressions.ExpressionType.AddChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddChecked(Left,Right,Method);
+                return Expressions.Expression.AddChecked(Left,Right,Method);
             }
-            case ExpressionType.And:{
+            case Expressions.ExpressionType.And:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.And(Left,Right,Method);
+                return Expressions.Expression.And(Left,Right,Method);
             }
-            case ExpressionType.AndAssign:{
+            case Expressions.ExpressionType.AndAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AndAssign(Left,Right,Method);
+                return Expressions.Expression.AndAssign(Left,Right,Method);
             }
-            case ExpressionType.AndAlso:{
+            case Expressions.ExpressionType.AndAlso:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AndAlso(Left,Right,Method);
+                return Expressions.Expression.AndAlso(Left,Right,Method);
             }
-            case ExpressionType.Divide:{
+            case Expressions.ExpressionType.Divide:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Divide(Left,Right,Method);
+                return Expressions.Expression.Divide(Left,Right,Method);
             }
-            case ExpressionType.DivideAssign:{
+            case Expressions.ExpressionType.DivideAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.DivideAssign(Left,Right,Method);
+                return Expressions.Expression.DivideAssign(Left,Right,Method);
             }
-            case ExpressionType.ExclusiveOr:{
+            case Expressions.ExpressionType.ExclusiveOr:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ExclusiveOr(Left,Right,Method);
+                return Expressions.Expression.ExclusiveOr(Left,Right,Method);
             }
-            case ExpressionType.ExclusiveOrAssign:{
+            case Expressions.ExpressionType.ExclusiveOrAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ExclusiveOrAssign(Left,Right,Method);
+                return Expressions.Expression.ExclusiveOrAssign(Left,Right,Method);
             }
-            case ExpressionType.LeftShift:{
+            case Expressions.ExpressionType.LeftShift:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.LeftShift(Left,Right,Method);
+                return Expressions.Expression.LeftShift(Left,Right,Method);
             }
-            case ExpressionType.LeftShiftAssign:{
+            case Expressions.ExpressionType.LeftShiftAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.LeftShiftAssign(Left,Right,Method);
+                return Expressions.Expression.LeftShiftAssign(Left,Right,Method);
             }
-            case ExpressionType.Modulo:{
+            case Expressions.ExpressionType.Modulo:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Modulo(Left,Right,Method);
+                return Expressions.Expression.Modulo(Left,Right,Method);
             }
-            case ExpressionType.ModuloAssign:{
+            case Expressions.ExpressionType.ModuloAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ModuloAssign(Left,Right,Method);
+                return Expressions.Expression.ModuloAssign(Left,Right,Method);
             }
-            case ExpressionType.Multiply:{
+            case Expressions.ExpressionType.Multiply:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Multiply(Left,Right,Method);
+                return Expressions.Expression.Multiply(Left,Right,Method);
             }
-            case ExpressionType.MultiplyAssign:{
+            case Expressions.ExpressionType.MultiplyAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyAssign(Left,Right,Method);
+                return Expressions.Expression.MultiplyAssign(Left,Right,Method);
             }
-            case ExpressionType.MultiplyAssignChecked:{
+            case Expressions.ExpressionType.MultiplyAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyAssignChecked(Left,Right,Method);
+                return Expressions.Expression.MultiplyAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.MultiplyChecked:{
+            case Expressions.ExpressionType.MultiplyChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyChecked(Left,Right,Method);
+                return Expressions.Expression.MultiplyChecked(Left,Right,Method);
             }
-            case ExpressionType.Or:{
+            case Expressions.ExpressionType.Or:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Or(Left,Right,Method);
+                return Expressions.Expression.Or(Left,Right,Method);
             }
-            case ExpressionType.OrAssign:{
+            case Expressions.ExpressionType.OrAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.OrAssign(Left,Right,Method);
+                return Expressions.Expression.OrAssign(Left,Right,Method);
             }
-            case ExpressionType.OrElse:{
+            case Expressions.ExpressionType.OrElse:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.OrElse(Left,Right,Method);
+                return Expressions.Expression.OrElse(Left,Right,Method);
             }
-            case ExpressionType.Power:{
+            case Expressions.ExpressionType.Power:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Power(Left,Right,Method);
+                return Expressions.Expression.Power(Left,Right,Method);
             }
-            case ExpressionType.PowerAssign:{
+            case Expressions.ExpressionType.PowerAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.PowerAssign(Left,Right,Method);
+                return Expressions.Expression.PowerAssign(Left,Right,Method);
             }
-            case ExpressionType.RightShift:{
+            case Expressions.ExpressionType.RightShift:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.RightShift(Left,Right,Method);
+                return Expressions.Expression.RightShift(Left,Right,Method);
             }
-            case ExpressionType.RightShiftAssign:{
+            case Expressions.ExpressionType.RightShiftAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.RightShiftAssign(Left,Right,Method);
+                return Expressions.Expression.RightShiftAssign(Left,Right,Method);
             }
-            case ExpressionType.Subtract:{
+            case Expressions.ExpressionType.Subtract:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Subtract(Left,Right,Method);
+                return Expressions.Expression.Subtract(Left,Right,Method);
             }
-            case ExpressionType.SubtractAssign:{
+            case Expressions.ExpressionType.SubtractAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractAssign(Left,Right,Method);
+                return Expressions.Expression.SubtractAssign(Left,Right,Method);
             }
-            case ExpressionType.SubtractAssignChecked:{
+            case Expressions.ExpressionType.SubtractAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractAssignChecked(Left,Right,Method);
+                return Expressions.Expression.SubtractAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.SubtractChecked:{
+            case Expressions.ExpressionType.SubtractChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractChecked(Left,Right,Method);
+                return Expressions.Expression.SubtractChecked(Left,Right,Method);
             }
-            case ExpressionType.Equal:{
+            case Expressions.ExpressionType.Equal:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.Equal(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.Equal(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.GreaterThan:{
+            case Expressions.ExpressionType.GreaterThan:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.GreaterThan(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.GreaterThan(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.GreaterThanOrEqual:{
+            case Expressions.ExpressionType.GreaterThanOrEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.GreaterThanOrEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.GreaterThanOrEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.LessThan:{
+            case Expressions.ExpressionType.LessThan:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.LessThan(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.LessThan(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.LessThanOrEqual:{
+            case Expressions.ExpressionType.LessThanOrEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.LessThanOrEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.LessThanOrEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.NotEqual:{
+            case Expressions.ExpressionType.NotEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.NotEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.NotEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.ArrayIndex:{
+            case Expressions.ExpressionType.ArrayIndex:{
                 var (array,index)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.ArrayIndex(array,index);
+                return Expressions.Expression.ArrayIndex(array,index);
             }
         }
         throw new NotSupportedException(NodeTypeName);
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BinaryExpression>{
-    private (Expression Left,Expression Right)Deserialize_Binary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.BinaryExpression>{
+    private (Expressions.Expression Left,Expressions.Expression Right)Deserialize_Binary(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         var Right= this.Deserialize(ref reader,Resolver);
         return(Left,Right);
     }
-    private (Expression Left,Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    private (Expressions.Expression Left,Expressions.Expression Right,MethodInfo Method)Deserialize_Binary_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         var Right= this.Deserialize(ref reader,Resolver);
         var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         return(Left,Right,Method);
     }
-    private (Expression Left,Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    private (Expressions.Expression Left,Expressions.Expression Right,bool IsLiftedToNull,MethodInfo Method)Deserialize_Binary_bool_MethodInfo(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var Left= this.Deserialize(ref reader,Resolver);
         var Right= this.Deserialize(ref reader,Resolver);
         var IsLiftedToNull=reader.ReadBoolean();
         var Method=Deserialize_T<MethodInfo>(ref reader,Resolver);
         return(Left,Right,IsLiftedToNull,Method);
     }
-    public void Serialize(ref MessagePackWriter writer,BinaryExpression? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref MessagePackWriter writer,Expressions.BinaryExpression? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
             return;
         }
         writer.Write((byte)value.NodeType);
         switch(value.NodeType){
-            case ExpressionType.Assign or ExpressionType.Coalesce or ExpressionType.ArrayIndex:{
+            case Expressions.ExpressionType.Assign or Expressions.ExpressionType.Coalesce or Expressions.ExpressionType.ArrayIndex:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 this.Serialize(ref writer,value.Right,Resolver);
                 break;
             }
-            case ExpressionType.Add:
-            case ExpressionType.AddAssign:
-            case ExpressionType.AddAssignChecked:
-            case ExpressionType.AddChecked:
-            case ExpressionType.And:
-            case ExpressionType.AndAssign:
-            case ExpressionType.AndAlso:
-            case ExpressionType.Divide:
-            case ExpressionType.DivideAssign:
-            case ExpressionType.ExclusiveOr:
-            case ExpressionType.ExclusiveOrAssign:
-            case ExpressionType.LeftShift:
-            case ExpressionType.LeftShiftAssign:
-            case ExpressionType.Modulo:
-            case ExpressionType.ModuloAssign:
-            case ExpressionType.Multiply:
-            case ExpressionType.MultiplyAssign:
-            case ExpressionType.MultiplyAssignChecked:
-            case ExpressionType.MultiplyChecked:
-            case ExpressionType.Or:
-            case ExpressionType.OrAssign:
-            case ExpressionType.OrElse:
-            case ExpressionType.Power:
-            case ExpressionType.PowerAssign:
-            case ExpressionType.RightShift:
-            case ExpressionType.RightShiftAssign:
-            case ExpressionType.Subtract:
-            case ExpressionType.SubtractAssign:
-            case ExpressionType.SubtractAssignChecked:
-            case ExpressionType.SubtractChecked:{
+            case Expressions.ExpressionType.Add:
+            case Expressions.ExpressionType.AddAssign:
+            case Expressions.ExpressionType.AddAssignChecked:
+            case Expressions.ExpressionType.AddChecked:
+            case Expressions.ExpressionType.And:
+            case Expressions.ExpressionType.AndAssign:
+            case Expressions.ExpressionType.AndAlso:
+            case Expressions.ExpressionType.Divide:
+            case Expressions.ExpressionType.DivideAssign:
+            case Expressions.ExpressionType.ExclusiveOr:
+            case Expressions.ExpressionType.ExclusiveOrAssign:
+            case Expressions.ExpressionType.LeftShift:
+            case Expressions.ExpressionType.LeftShiftAssign:
+            case Expressions.ExpressionType.Modulo:
+            case Expressions.ExpressionType.ModuloAssign:
+            case Expressions.ExpressionType.Multiply:
+            case Expressions.ExpressionType.MultiplyAssign:
+            case Expressions.ExpressionType.MultiplyAssignChecked:
+            case Expressions.ExpressionType.MultiplyChecked:
+            case Expressions.ExpressionType.Or:
+            case Expressions.ExpressionType.OrAssign:
+            case Expressions.ExpressionType.OrElse:
+            case Expressions.ExpressionType.Power:
+            case Expressions.ExpressionType.PowerAssign:
+            case Expressions.ExpressionType.RightShift:
+            case Expressions.ExpressionType.RightShiftAssign:
+            case Expressions.ExpressionType.Subtract:
+            case Expressions.ExpressionType.SubtractAssign:
+            case Expressions.ExpressionType.SubtractAssignChecked:
+            case Expressions.ExpressionType.SubtractChecked:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 this.Serialize(ref writer,value.Right,Resolver);
                 this.Serialize(ref writer,value.Method,Resolver);
                 break;
             }
-            case ExpressionType.Equal:
-            case ExpressionType.GreaterThan:
-            case ExpressionType.GreaterThanOrEqual:
-            case ExpressionType.LessThan:
-            case ExpressionType.LessThanOrEqual:
-            case ExpressionType.NotEqual:{
+            case Expressions.ExpressionType.Equal:
+            case Expressions.ExpressionType.GreaterThan:
+            case Expressions.ExpressionType.GreaterThanOrEqual:
+            case Expressions.ExpressionType.LessThan:
+            case Expressions.ExpressionType.LessThanOrEqual:
+            case Expressions.ExpressionType.NotEqual:{
                 this.Serialize(ref writer,value.Left,Resolver);
                 this.Serialize(ref writer,value.Right,Resolver);
                 writer.Write(value.IsLiftedToNull);
@@ -355,165 +355,165 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<BinaryExpress
                 throw new NotSupportedException(value.NodeType.ToString());
         }
     }
-    BinaryExpression IMessagePackFormatter<BinaryExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.BinaryExpression IMessagePackFormatter<Expressions.BinaryExpression>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.IsNil) return null!;
-        var NodeType=(ExpressionType)reader.ReadByte();
+        var NodeType=(Expressions.ExpressionType)reader.ReadByte();
         switch(NodeType){
-            case ExpressionType.Assign:{
+            case Expressions.ExpressionType.Assign:{
                 var (Left,Right)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.Assign(Left,Right);
+                return Expressions.Expression.Assign(Left,Right);
             }
-            case ExpressionType.Coalesce:{
+            case Expressions.ExpressionType.Coalesce:{
                 var (Left,Right)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.Coalesce(Left,Right);
+                return Expressions.Expression.Coalesce(Left,Right);
             }
-            case ExpressionType.Add:{
+            case Expressions.ExpressionType.Add:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Add(Left,Right,Method);
+                return Expressions.Expression.Add(Left,Right,Method);
             }
-            case ExpressionType.AddAssign:{
+            case Expressions.ExpressionType.AddAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddAssign(Left,Right,Method);
+                return Expressions.Expression.AddAssign(Left,Right,Method);
             }
-            case ExpressionType.AddAssignChecked:{
+            case Expressions.ExpressionType.AddAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddAssignChecked(Left,Right,Method);
+                return Expressions.Expression.AddAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.AddChecked:{
+            case Expressions.ExpressionType.AddChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AddChecked(Left,Right,Method);
+                return Expressions.Expression.AddChecked(Left,Right,Method);
             }
-            case ExpressionType.And:{
+            case Expressions.ExpressionType.And:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.And(Left,Right,Method);
+                return Expressions.Expression.And(Left,Right,Method);
             }
-            case ExpressionType.AndAssign:{
+            case Expressions.ExpressionType.AndAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AndAssign(Left,Right,Method);
+                return Expressions.Expression.AndAssign(Left,Right,Method);
             }
-            case ExpressionType.AndAlso:{
+            case Expressions.ExpressionType.AndAlso:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.AndAlso(Left,Right,Method);
+                return Expressions.Expression.AndAlso(Left,Right,Method);
             }
-            case ExpressionType.Divide:{
+            case Expressions.ExpressionType.Divide:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Divide(Left,Right,Method);
+                return Expressions.Expression.Divide(Left,Right,Method);
             }
-            case ExpressionType.DivideAssign:{
+            case Expressions.ExpressionType.DivideAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.DivideAssign(Left,Right,Method);
+                return Expressions.Expression.DivideAssign(Left,Right,Method);
             }
-            case ExpressionType.ExclusiveOr:{
+            case Expressions.ExpressionType.ExclusiveOr:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ExclusiveOr(Left,Right,Method);
+                return Expressions.Expression.ExclusiveOr(Left,Right,Method);
             }
-            case ExpressionType.ExclusiveOrAssign:{
+            case Expressions.ExpressionType.ExclusiveOrAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ExclusiveOrAssign(Left,Right,Method);
+                return Expressions.Expression.ExclusiveOrAssign(Left,Right,Method);
             }
-            case ExpressionType.LeftShift:{
+            case Expressions.ExpressionType.LeftShift:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.LeftShift(Left,Right,Method);
+                return Expressions.Expression.LeftShift(Left,Right,Method);
             }
-            case ExpressionType.LeftShiftAssign:{
+            case Expressions.ExpressionType.LeftShiftAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.LeftShiftAssign(Left,Right,Method);
+                return Expressions.Expression.LeftShiftAssign(Left,Right,Method);
             }
-            case ExpressionType.Modulo:{
+            case Expressions.ExpressionType.Modulo:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Modulo(Left,Right,Method);
+                return Expressions.Expression.Modulo(Left,Right,Method);
             }
-            case ExpressionType.ModuloAssign:{
+            case Expressions.ExpressionType.ModuloAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.ModuloAssign(Left,Right,Method);
+                return Expressions.Expression.ModuloAssign(Left,Right,Method);
             }
-            case ExpressionType.Multiply:{
+            case Expressions.ExpressionType.Multiply:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Multiply(Left,Right,Method);
+                return Expressions.Expression.Multiply(Left,Right,Method);
             }
-            case ExpressionType.MultiplyAssign:{
+            case Expressions.ExpressionType.MultiplyAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyAssign(Left,Right,Method);
+                return Expressions.Expression.MultiplyAssign(Left,Right,Method);
             }
-            case ExpressionType.MultiplyAssignChecked:{
+            case Expressions.ExpressionType.MultiplyAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyAssignChecked(Left,Right,Method);
+                return Expressions.Expression.MultiplyAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.MultiplyChecked:{
+            case Expressions.ExpressionType.MultiplyChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.MultiplyChecked(Left,Right,Method);
+                return Expressions.Expression.MultiplyChecked(Left,Right,Method);
             }
-            case ExpressionType.Or:{
+            case Expressions.ExpressionType.Or:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Or(Left,Right,Method);
+                return Expressions.Expression.Or(Left,Right,Method);
             }
-            case ExpressionType.OrAssign:{
+            case Expressions.ExpressionType.OrAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.OrAssign(Left,Right,Method);
+                return Expressions.Expression.OrAssign(Left,Right,Method);
             }
-            case ExpressionType.OrElse:{
+            case Expressions.ExpressionType.OrElse:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.OrElse(Left,Right,Method);
+                return Expressions.Expression.OrElse(Left,Right,Method);
             }
-            case ExpressionType.Power:{
+            case Expressions.ExpressionType.Power:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Power(Left,Right,Method);
+                return Expressions.Expression.Power(Left,Right,Method);
             }
-            case ExpressionType.PowerAssign:{
+            case Expressions.ExpressionType.PowerAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.PowerAssign(Left,Right,Method);
+                return Expressions.Expression.PowerAssign(Left,Right,Method);
             }
-            case ExpressionType.RightShift:{
+            case Expressions.ExpressionType.RightShift:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.RightShift(Left,Right,Method);
+                return Expressions.Expression.RightShift(Left,Right,Method);
             }
-            case ExpressionType.RightShiftAssign:{
+            case Expressions.ExpressionType.RightShiftAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.RightShiftAssign(Left,Right,Method);
+                return Expressions.Expression.RightShiftAssign(Left,Right,Method);
             }
-            case ExpressionType.Subtract:{
+            case Expressions.ExpressionType.Subtract:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.Subtract(Left,Right,Method);
+                return Expressions.Expression.Subtract(Left,Right,Method);
             }
-            case ExpressionType.SubtractAssign:{
+            case Expressions.ExpressionType.SubtractAssign:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractAssign(Left,Right,Method);
+                return Expressions.Expression.SubtractAssign(Left,Right,Method);
             }
-            case ExpressionType.SubtractAssignChecked:{
+            case Expressions.ExpressionType.SubtractAssignChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractAssignChecked(Left,Right,Method);
+                return Expressions.Expression.SubtractAssignChecked(Left,Right,Method);
             }
-            case ExpressionType.SubtractChecked:{
+            case Expressions.ExpressionType.SubtractChecked:{
                 var (Left,Right,Method)=this.Deserialize_Binary_MethodInfo(ref reader,Resolver);
-                return Expression.SubtractChecked(Left,Right,Method);
+                return Expressions.Expression.SubtractChecked(Left,Right,Method);
             }
-            case ExpressionType.Equal:{
+            case Expressions.ExpressionType.Equal:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.Equal(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.Equal(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.GreaterThan:{
+            case Expressions.ExpressionType.GreaterThan:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.GreaterThan(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.GreaterThan(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.GreaterThanOrEqual:{
+            case Expressions.ExpressionType.GreaterThanOrEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.GreaterThanOrEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.GreaterThanOrEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.LessThan:{
+            case Expressions.ExpressionType.LessThan:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.LessThan(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.LessThan(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.LessThanOrEqual:{
+            case Expressions.ExpressionType.LessThanOrEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.LessThanOrEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.LessThanOrEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.NotEqual:{
+            case Expressions.ExpressionType.NotEqual:{
                 var (Left,Right,IsLiftedToNull,Method)=this.Deserialize_Binary_bool_MethodInfo(ref reader,Resolver);
-                return Expression.NotEqual(Left,Right,IsLiftedToNull,Method);
+                return Expressions.Expression.NotEqual(Left,Right,IsLiftedToNull,Method);
             }
-            case ExpressionType.ArrayIndex:{
+            case Expressions.ExpressionType.ArrayIndex:{
                 var (array,index)=this.Deserialize_Binary(ref reader,Resolver);
-                return Expression.ArrayIndex(array,index);
+                return Expressions.Expression.ArrayIndex(array,index);
             }
         }
         throw new NotSupportedException(NodeType.ToString());

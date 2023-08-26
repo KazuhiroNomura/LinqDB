@@ -5,25 +5,6 @@ using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
-//public abstract class AnonymousFormatter{
-//    protected static readonly IJsonFormatterResolver 再帰しないFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
-//        //順序が大事
-//        //global::Utf8Json.Resolvers.DynamicObjectResolver.Default,//これが存在するとStackOverflowする
-//        Utf8Json.Resolvers.DynamicGenericResolver.Instance,
-//        //global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//これが存在するとTypeがシリアライズできない
-//        Utf8Json.Resolvers.StandardResolver.AllowPrivate
-//        //global::Utf8Json.Resolvers.StandardResolver.Default,
-//        );
-//    protected static readonly MessagePackSerializerOptions 再帰しないoptions = MessagePackSerializerOptions.Standard.WithResolver(
-//        MessagePack.Resolvers.CompositeResolver.Create(
-//            //global::MessagePack.Resolvers.DynamicObjectResolver.Instance,
-//            MessagePack.Resolvers.DynamicGenericResolver.Instance,
-//            //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,
-//            MessagePack.Resolvers.StandardResolverAllowPrivate.Instance
-//            //global::MessagePack.Resolvers.StandardResolver.Instance,
-//        )
-//    );
-//}
 public class AnonymousJsonFormatter<T>:IJsonFormatter<T>{
     private readonly object[] Objects3=new object[3];
     public void Serialize(ref JsonWriter writer,T? value,IJsonFormatterResolver formatterResolver){

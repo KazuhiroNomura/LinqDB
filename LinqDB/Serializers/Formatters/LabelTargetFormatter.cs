@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
-partial class ExpressionJsonFormatter:IJsonFormatter<LabelTarget>{
-    private IJsonFormatter<LabelTarget> LabelTarget=>this;
-    public void Serialize(ref JsonWriter writer,LabelTarget? value,IJsonFormatterResolver Resolver){
+partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.LabelTarget>{
+    private IJsonFormatter<Expressions.LabelTarget> LabelTarget=>this;
+    public void Serialize(ref JsonWriter writer,Expressions.LabelTarget? value,IJsonFormatterResolver Resolver){
         if(value is null){
             writer.WriteNull();
             return;
@@ -27,11 +27,11 @@ partial class ExpressionJsonFormatter:IJsonFormatter<LabelTarget>{
         }
         writer.WriteEndArray();
     }
-    LabelTarget IJsonFormatter<LabelTarget>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    Expressions.LabelTarget IJsonFormatter<Expressions.LabelTarget>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var 番号=reader.ReadInt32();
-        LabelTarget target;
+        Expressions.LabelTarget target;
         if(番号>-1){
             target=this.Dictionary_int_LabelTarget[番号];
         } else{
@@ -39,7 +39,7 @@ partial class ExpressionJsonFormatter:IJsonFormatter<LabelTarget>{
             var type=Deserialize_Type(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
             var name=reader.ReadString();
-            target=Expression.Label(type,name);
+            target=Expressions.Expression.Label(type,name);
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
             var Dictionary_LabelTarget_int_Count=Dictionary_LabelTarget_int.Count;
             this.Dictionary_int_LabelTarget.Add(Dictionary_LabelTarget_int_Count,target);
@@ -49,9 +49,9 @@ partial class ExpressionJsonFormatter:IJsonFormatter<LabelTarget>{
         return target;
     }
 }
-partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LabelTarget>{
-    private IMessagePackFormatter<LabelTarget> MSLabelTarget=>this;
-    public void Serialize(ref MessagePackWriter writer,LabelTarget? value,MessagePackSerializerOptions Resolver){
+partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.LabelTarget>{
+    private IMessagePackFormatter<Expressions.LabelTarget> MSLabelTarget=>this;
+    public void Serialize(ref MessagePackWriter writer,Expressions.LabelTarget? value,MessagePackSerializerOptions Resolver){
         if(value is null){
             writer.WriteNil();
             return;
@@ -68,16 +68,16 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<LabelTarget>{
             writer.Write(value.Name);
         }
     }
-    LabelTarget IMessagePackFormatter<LabelTarget>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    Expressions.LabelTarget IMessagePackFormatter<Expressions.LabelTarget>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         var 番号=reader.ReadInt32();
-        LabelTarget target;
+        Expressions.LabelTarget target;
         if(番号>-1){
             target=this.Dictionary_int_LabelTarget[番号];
         } else{
             var type=Deserialize_Type(ref reader,Resolver);
             var name=reader.ReadString();
-            target=Expression.Label(type,name);
+            target=Expressions.Expression.Label(type,name);
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
             var Dictionary_LabelTarget_int_Count=Dictionary_LabelTarget_int.Count;
             this.Dictionary_int_LabelTarget.Add(Dictionary_LabelTarget_int_Count,target);

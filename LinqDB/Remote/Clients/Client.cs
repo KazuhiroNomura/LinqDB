@@ -470,7 +470,7 @@ public class Client:IDisposable {
         var actual = (Response)this.MemoryStream.ReadByte();
         if(response==actual)return;
         if(actual==Response.ThrowException){
-            var Message=ReadObject<string>(this.MemoryStream);
+            var Message=this.ReadObject<string>(this.MemoryStream);
             throw new InvalidDataException(Resources.リモート先で例外が発生した,new Exception(Message));
         }
         throw リモート先から_を受信することを期待したが_だった(response,actual);
@@ -490,21 +490,29 @@ public class Client:IDisposable {
     /// </summary>
     /// <param name="ReadStream"></param>
     /// <returns></returns>
-    internal static T ReadObject<T>(MemoryStream ReadStream) {
+    internal T ReadObject<T>(MemoryStream ReadStream) {
         var XmlType = (XmlType)ReadStream.ReadByte();
-        T Result;
-        switch(XmlType) {
-            case XmlType.Utf8Json: 
-                Result=JsonSerializer.Deserialize<T>(ReadStream); 
-                break;
-            case XmlType.MessagePack: 
-                Result=MessagePackSerializer.Deserialize<T>(ReadStream); 
-                break;
-            default: {
-                throw new NotSupportedException(XmlType.ToString());
-            }
-        }
-        return Result;
+        return XmlType switch{
+            XmlType.Utf8Json=>(T)JsonSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver),
+            XmlType.MessagePack=>(T)MessagePackSerializer.Deserialize<object>(ReadStream),
+            _=>throw new NotSupportedException(XmlType.ToString())
+        };
+        //object o;
+        //T Result;
+        //switch(XmlType) {
+        //    case XmlType.Utf8Json: 
+        //        o=JsonSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver); 
+        //        Result=(T)o;
+        //        break;
+        //    case XmlType.MessagePack: 
+        //        o=MessagePackSerializer.Deserialize<object>(ReadStream); 
+        //        Result=(T)o;
+        //        break;
+        //    default: {
+        //        throw new NotSupportedException(XmlType.ToString());
+        //    }
+        //}
+        //return Result;
     }
     /// <summary>
     /// 空を送信し例外をthrowする。
@@ -512,7 +520,7 @@ public class Client:IDisposable {
     public void BackendOutOfMemoryException() {
         this.BufferにUserとPasswordHashを設定(Request.リモート先でOutOfMemoryException);
         this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.ThrowException);
-        throw new OutOfMemoryException(ReadObject<string>(this.MemoryStream));
+        throw new OutOfMemoryException(this.ReadObject<string>(this.MemoryStream));
     }
     /// <summary>
     /// Byteを送信し同じByteを受信する。
@@ -543,7 +551,7 @@ public class Client:IDisposable {
         var MemoryStream=this.MemoryStream;
         MemoryStream.WriteByte((byte)WriteXmlの表現形式);
         this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.ThrowException);
-        throw new InvalidDataException(Resources.リモート先で例外が発生した,new TimeoutException(ReadObject<string>(MemoryStream)));
+        throw new InvalidDataException(Resources.リモート先で例外が発生した,new TimeoutException(this.ReadObject<string>(MemoryStream)));
     }
     /// <summary>
     /// 指定されたバイト数送信中にタイムアウトする。
@@ -657,10 +665,10 @@ public class Client:IDisposable {
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
             case XmlType.Utf8Json:
-                var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-                JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+                var JsonStream = new FileStream("送信Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+                JsonSerializer.Serialize<LambdaExpression>(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
                 JsonStream.Close();
-                JsonSerializer.Serialize(this.MemoryStream,Expression,this.SerializerConfiguration.JsonFormatterResolver);
+                JsonSerializer.Serialize<LambdaExpression>(this.MemoryStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:{
                 MessagePackSerializer.Serialize(this.MemoryStream,Expression,this.SerializerConfiguration.MessagePackSerializerOptions);
@@ -742,8 +750,8 @@ public class Client:IDisposable {
         var Response =(Response)MemoryStream.ReadByte();
         // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
         return Response switch{
-            Response.ThrowException => throw new Exception(ReadObject<string>(MemoryStream)),
-            Response.Object => ReadObject<T>(MemoryStream),
+            Response.ThrowException => throw new Exception(this.ReadObject<string>(MemoryStream)),
+            Response.Object => this.ReadObject<T>(MemoryStream),
             _ => throw 受信ヘッダー_は不正だった(Response)
         };
     }
@@ -777,7 +785,7 @@ public class Client:IDisposable {
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         if(Response!=Response.Object)throw 受信ヘッダー_は不正だった(Response);
-        return ReadObject<T>(MemoryStream);
+        return this.ReadObject<T>(MemoryStream);
     }
     /// <summary>
     /// 式木のデリゲート
@@ -807,8 +815,8 @@ public class Client:IDisposable {
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
-            Response.Object=>ReadObject<T>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(ReadObject<string>(MemoryStream)),
+            Response.Object=>this.ReadObject<T>(MemoryStream),
+            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }
