@@ -553,8 +553,8 @@ internal class SingleReceiveSend:IDisposable{
                     Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
                     try {
                         var Object=XmlType==XmlType.Utf8Json
-                            ?Utf8Json.JsonSerializer.Deserialize<string>(MemoryStream)
-                            :MessagePack.MessagePackSerializer.Deserialize<string>(MemoryStream,null,CancellationToken);
+                            ?JsonSerializer.Deserialize<object>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver)
+                            :MessagePackSerializer.Deserialize<object>(MemoryStream,this.SerializerConfiguration.MessagePackSerializerOptions,CancellationToken);
                         this.Privateデシリアライズした(
                             Request,
                             Object,

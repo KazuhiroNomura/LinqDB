@@ -494,7 +494,7 @@ public class Client:IDisposable {
         var XmlType = (XmlType)ReadStream.ReadByte();
         return XmlType switch{
             XmlType.Utf8Json=>(T)JsonSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver),
-            XmlType.MessagePack=>(T)MessagePackSerializer.Deserialize<object>(ReadStream),
+            XmlType.MessagePack=>(T)MessagePackSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.MessagePackSerializerOptions),
             _=>throw new NotSupportedException(XmlType.ToString())
         };
         //object o;
@@ -666,12 +666,25 @@ public class Client:IDisposable {
         switch(XmlType) {
             case XmlType.Utf8Json:
                 var JsonStream = new FileStream("送信Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-                JsonSerializer.Serialize<LambdaExpression>(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+                JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
                 JsonStream.Close();
-                JsonSerializer.Serialize<LambdaExpression>(this.MemoryStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+                JsonSerializer.Serialize(this.MemoryStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
                 break;
             case XmlType.MessagePack:{
-                MessagePackSerializer.Serialize(this.MemoryStream,Expression,this.SerializerConfiguration.MessagePackSerializerOptions);
+                {
+                    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Create,FileAccess.Write,
+                        FileShare.ReadWrite);
+                    MessagePackSerializer.Serialize(MessagePackStream,Lambda,
+                        this.SerializerConfiguration.MessagePackSerializerOptions);
+                    MessagePackStream.Close();
+                }
+                //{
+                //    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Open,FileAccess.Read,
+                //        FileShare.Read);
+                //    var r=MessagePackSerializer.Deserialize<LambdaExpression>(MessagePackStream,this.SerializerConfiguration.MessagePackSerializerOptions);
+                //    MessagePackStream.Close();
+                //}
+                MessagePackSerializer.Serialize(this.MemoryStream,Lambda,this.SerializerConfiguration.MessagePackSerializerOptions);
                 break;
             }
             default:
