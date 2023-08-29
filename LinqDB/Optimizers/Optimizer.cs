@@ -1119,7 +1119,6 @@ public sealed partial class Optimizer:IDisposable{
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
     private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
-    private readonly 変換_跨ぎParameterをBlock_Variablesに _変換_跨ぎParameterをBlock_Variablesに;
     private readonly 取得_Dictionary _取得_Dictionary;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
     private readonly 取得_CSharp _取得_CSharp = new();
@@ -1145,28 +1144,25 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic{
-        get=>this._変換_跨ぎParameterをBlock_Variablesに.DictionaryDynamic;
+        get=>this._取得_Dictionary.DictionaryDynamic;
         set{
             this._取得_Dictionary.DictionaryDynamic=value;
-            this._変換_跨ぎParameterをBlock_Variablesに.DictionaryDynamic=value;
             this._作成_DynamicMethod.DictionaryDynamic=value;
             this._作成_DynamicAssembly.DictionaryDynamic=value;
         }
     }
     private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
-        get=>this._変換_跨ぎParameterをBlock_Variablesに.DictionaryLambda;
+        get=>this._取得_Dictionary.DictionaryLambda;
         set{
             this._取得_Dictionary.DictionaryLambda=value;
-            this._変換_跨ぎParameterをBlock_Variablesに.DictionaryLambda=value;
             this._作成_DynamicMethod.DictionaryLambda=value;
             this._作成_DynamicAssembly.DictionaryLambda=value;
         }
     }
     private Dictionary<ParameterExpression, (FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
-        get=>this._変換_跨ぎParameterをBlock_Variablesに.Dictionaryラムダ跨ぎParameter;
+        get=>this._取得_Dictionary.Dictionaryラムダ跨ぎParameter;
         set{
             this._取得_Dictionary.Dictionaryラムダ跨ぎParameter=value;
-            this._変換_跨ぎParameterをBlock_Variablesに.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの不要置換復元.Dictionaryラムダ跨ぎParameter=value;
             this._変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
@@ -1228,7 +1224,6 @@ public sealed partial class Optimizer:IDisposable{
         this._変換_跨ぎParameterの不要置換復元                           =new(作業配列);
         var ExpressionEqualityComparer_Assign_Leftで比較                 =new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
         this._変換_局所Parameterの先行評価                               =new(作業配列,ListスコープParameter,ExpressionEqualityComparer_Assign_Leftで比較);
-        this._変換_跨ぎParameterをBlock_Variablesに                      =new(作業配列,Listループ跨ぎParameter);
         this._取得_Dictionary                                            =new();
         this._検証_変形状態                                              =new();
         this._検証_Parameterの使用状態                                   =new(Listループ跨ぎParameter);

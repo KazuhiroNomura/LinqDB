@@ -124,7 +124,7 @@ public class Test_Client {
     [TestMethod]
     public void SerializeSendReceive_カスタムデリゲート() {
         using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
-        var expected=typeof(Client.サーバーで実行する式木<Func<int>>);
+        var expected=typeof(Func<Func<int>>);
         var actual=R.SerializeSendReceive(expected,XmlType.Utf8Json);
         Assert.AreEqual(expected,actual);
     }

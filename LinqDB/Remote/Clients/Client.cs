@@ -800,12 +800,12 @@ public class Client:IDisposable {
         if(Response!=Response.Object)throw 受信ヘッダー_は不正だった(Response);
         return this.ReadObject<T>(MemoryStream);
     }
-    /// <summary>
-    /// 式木のデリゲート
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public delegate T サーバーで実行する式木<out T>();
+    ///// <summary>
+    ///// 式木のデリゲート
+    ///// </summary>
+    ///// <typeparam name="T"></typeparam>
+    ///// <returns></returns>
+    //public delegate T サーバーで実行する式木<out T>();
     /// <summary>
     /// Optimizerオブジェクト
     /// </summary>
@@ -820,11 +820,15 @@ public class Client:IDisposable {
     /// </summary>
     /// <param name="Lambda">戻り値のあるリモート処理を行うデリゲート。</param>
     /// <param name="XmlType"></param>
-    public T Expression<T>(Expression<サーバーで実行する式木<T>> Lambda,XmlType XmlType=XmlType.Utf8Json) {
+    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType=XmlType.Utf8Json) {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;
         var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
+        //var s=JsonSerializer.Serialize(最適化Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+        //var o=JsonSerializer.Deserialize<LambdaExpression>(s,this.SerializerConfiguration.JsonFormatterResolver);
+
+
         this.サーバーに送信(Request.Expression_Invoke,XmlType,最適化Lambda);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();

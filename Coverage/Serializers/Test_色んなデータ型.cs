@@ -194,7 +194,7 @@ public class Test_色んなデータ型:ATest_シリアライズ{
     }
     [TestMethod]
     public void Type_カスタムデリゲート(){
-        共通object(typeof(Client.サーバーで実行する式木<Func<int>>));
+        共通object(typeof(Func<Func<int>>));
     }
     [TestMethod]
     public void Type(){

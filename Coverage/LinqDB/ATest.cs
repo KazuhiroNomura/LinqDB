@@ -3,11 +3,18 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
+using System.Net;
+using static LinqDB.Helpers.Configulation;
 using CoverageCS.LinqDB.Sets;
+
+using LinqDB;
 using LinqDB.Databases;
 using LinqDB.Optimizers;
+using LinqDB.Remote.Clients;
+using LinqDB.Remote.Servers;
 using LinqDB.Sets;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static LinqDB.Remote.Clients.Client;
 #pragma warning disable 659
 namespace CoverageCS.LinqDB;
 
@@ -402,14 +409,19 @@ public abstract class ATest{
         this.Optimizer.CreateDelegate(Lambda);
     protected Func<T0,T1,TResult> CreateDelegate<T0,T1,TResult>(Expression<Func<T0,T1,TResult>> Lambda)=>
         this.Optimizer.CreateDelegate(Lambda);
+    protected Server<string> Server;
     [TestInitialize]
     public virtual void MyTestInitialize(){
-        // this.変数Cache.Clear();
+        const int ReceiveTimeout = 1000;
+        var Server = this.Server=new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
+        Server.Open();
     }
     //各テストを実行した後にコードを実行するには、TestCleanup を使用
     [TestCleanup]
     public virtual void MyTestCleanup(){
-        //GC.Collect();
+        var Server=this.Server;
+        Server.Close();
+        Server.Dispose();
     }
     protected void Equal<TInput,TResult>(TInput input,Expression<Func<TInput,TResult>> Lambda){
         var s=new StackFrame(1);
@@ -504,20 +516,37 @@ public abstract class ATest{
     /// <typeparam name="TResult"></typeparam>
     /// <param name="Lambda"></param>
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
-        var 標準=Lambda.Compile();
+        //var 標準=Lambda.Compile();
+        //var Optimizer=this.Optimizer;
+        //Optimizer.IsInline=false;
+        //var ラムダ=Optimizer.CreateDelegate(Lambda);
+        //Optimizer.IsInline=true;
+        //var ループ=Optimizer.CreateDelegate(Lambda);
+        //var expected=標準();
+        //{
+        //    var actual=ラムダ();
+        //    Assert.IsTrue(Comparer.Equals(expected,actual));
+        //}
+        //{
+        //    var actual=ループ();
+        //    Assert.IsTrue(Comparer.Equals(expected,actual));
+        //}
         var Optimizer=this.Optimizer;
-        Optimizer.IsInline=false;
-        var ラムダ=Optimizer.CreateDelegate(Lambda);
-        Optimizer.IsInline=true;
-        var ループ=Optimizer.CreateDelegate(Lambda);
+        var 標準=Lambda.Compile();
         var expected=標準();
-        {
-            var actual=ラムダ();
-            Assert.IsTrue(Comparer.Equals(expected,actual));
-        }
-        {
-            var actual=ループ();
-            Assert.IsTrue(Comparer.Equals(expected,actual));
+        Optimizer.IsInline=false;
+        var ラムダ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        Optimizer.IsInline=true;
+        var ループ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        using(var C = new Client<object>(Dns.GetHostName(),ListenerSocketポート番号)) {
+            {
+                var actual=C.Expression(ラムダ,XmlType.Utf8Json);
+                Assert.IsTrue(Comparer.Equals(expected,actual));
+            }
+            {
+                var actual=C.Expression(ループ,XmlType.MessagePack);
+                Assert.IsTrue(Comparer.Equals(expected,actual));
+            }
         }
         return expected;
     }

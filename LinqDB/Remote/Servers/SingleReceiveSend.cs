@@ -580,9 +580,9 @@ internal class SingleReceiveSend:IDisposable{
                             case XmlType.Utf8Json:{
                                 this.SerializerConfiguration.ClearJson();
                                 try{
-                                    //string s=Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
+                                    //string s = Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
                                     //    (int)(this.MemoryStream.Length-this.MemoryStream.Position));
-                                    //var s1=format_json(s);
+                                    //var s1 = format_json(s);
                                     //File.WriteAllText("受診Json.json",s1);
                                     //var o=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,
                                     //    this.SerializerConfiguration.JsonFormatterResolver);

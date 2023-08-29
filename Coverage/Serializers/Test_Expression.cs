@@ -7,6 +7,8 @@ using LinqDB.Serializers;
 //using LinqDB.Serializers.MessagePack;
 //using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Utf8Json;
+
 using Assert=Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
 // ReSharper disable PossibleNullReferenceException
 //具体的なAnonymousTypeをそのままSerialize,DeserializeするときはAnonymousExpressionResolverを通過しない。AnonymousTypeを返す。
@@ -33,8 +35,7 @@ public class Test_Expression:ATest_シリアライズ{
         共通Expression(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
     }
     private static readonly ParameterExpression @decimal = Expression.Parameter(typeof(decimal),"p");
-    [TestMethod]
-    public void Block0(){
+    [TestMethod]public void Block0(){
         共通Expression(
             Expression.Block(
                 new[] { @decimal },
@@ -42,8 +43,24 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
     }
-    [TestMethod]
-    public void Block4(){
+    [TestMethod]public void Block1(){
+        var q= Expression.Parameter(typeof(decimal),"q");
+        共通Expression(
+            Expression.Block(
+                new[] { @decimal,q },
+                @decimal
+            )
+        );
+    }
+    [TestMethod]public void Block2(){
+        共通Expression(
+            Expression.Block(
+                new[]{Expression.Parameter(typeof(decimal),"a"),Expression.Parameter(typeof(decimal),"b"),@decimal},
+                @decimal
+            )
+        );
+    }
+    [TestMethod]public void Block4(){
         共通Expression(
             Expression.Block(
                 new[] { @decimal },
@@ -90,6 +107,8 @@ public class Test_Expression:ATest_シリアライズ{
                 )
             )
         );
+    }
+    [TestMethod]public void Block10(){
         共通Expression(
             Expression.Block(
                 Expression.Switch(
@@ -136,14 +155,16 @@ public class Test_Expression:ATest_シリアライズ{
     [TestMethod]
     public void Lambda0(){
         共通Expression(Lambda(()=>1));
-
     }
-    [TestMethod]
-    public void Lambda1(){
+    [TestMethod]public void Lambda1(){
         //Expression<Func<>>をExpressionで呼び出した場合Expressionでデシリアライズするとtypeが復元できない()
         共通Expression<LambdaExpression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
         共通Expression<Expression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
-        共通Expression(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+    }
+    [TestMethod]public void Lambda2(){
+        共通Expression<LambdaExpression>(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+    }
+    [TestMethod]public void Lambda3(){
         //const decimal Catch値 = 40, Finally値 = 30;
         //Expression.TryCatchFinally(
         //    //Expression.PostIncrementAssign(@decimal),
@@ -154,7 +175,7 @@ public class Test_Expression:ATest_シリアライズ{
         //        Expression.Constant(Catch値)
         //    )
         //);
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -170,7 +191,7 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
 
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     @decimal,
@@ -179,7 +200,7 @@ public class Test_Expression:ATest_シリアライズ{
                 @decimal
             )
         );
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -191,7 +212,7 @@ public class Test_Expression:ATest_シリアライズ{
                 )
             )
         );
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -206,7 +227,7 @@ public class Test_Expression:ATest_シリアライズ{
                 )
             )
         );
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -225,7 +246,7 @@ public class Test_Expression:ATest_シリアライズ{
                 )
             )
         );
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { @decimal },
@@ -245,7 +266,7 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
         var Exception=Expression.Parameter(typeof(Exception));
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     @decimal,
@@ -256,7 +277,7 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
         var Array2=Expression.Parameter(typeof(int[,]));
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -267,7 +288,7 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
         var Array1=Expression.Parameter(typeof(int[]));
-        共通Expression(
+        共通Expression<LambdaExpression>(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,

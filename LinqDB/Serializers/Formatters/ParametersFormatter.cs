@@ -7,57 +7,50 @@ using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
 partial class ExpressionJsonFormatter{
-    public void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,IJsonFormatterResolver Resolver) {
+    private void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         var Count=value.Count;
-        if(Count>0) {
-            var a=0;
-            while(true){
+        if(Count>0){
+            for(var a=0;;a++){
                 var Parameter=value[a];
                 writer.WriteBeginObject();
                 writer.WriteString(Parameter.Name);
                 writer.WriteNameSeparator();
                 Serialize_Type(ref writer,Parameter.Type,Resolver);
                 writer.WriteEndObject();
-                Debug.Assert((a>=Count-1)==(a+1>=Count));
-                if(a>=Count-1)break;
+                if(a==Count-1) break;
                 writer.WriteValueSeparator();
-                a++;
             }
         }
         writer.WriteEndArray();
     }
-    internal List<Expressions.ParameterExpression>Deserialize宣言Parameters(ref JsonReader reader,IJsonFormatterResolver Resolver) {
-        reader.ReadIsBeginArrayWithVerify();
+    private List<Expressions.ParameterExpression>Deserialize宣言Parameters(ref JsonReader reader,IJsonFormatterResolver Resolver) {
         var List=new List<Expressions.ParameterExpression>();
-        var t=reader;
-        if(!t.ReadIsEndArray()){
-            while(true){
-                reader.ReadIsBeginObjectWithVerify();
-                var name=reader.ReadString();
-                reader.ReadIsNameSeparatorWithVerify();
-                var type= Deserialize_Type(ref reader,Resolver);
-                List.Add(Expressions.Expression.Parameter(type,name));
-                reader.ReadIsEndObjectWithVerify();
-                t=reader;
-                if(!t.ReadIsValueSeparator()) break;
-            }
+        //var t=reader;
+        reader.ReadIsBeginArrayWithVerify();
+        while(reader.ReadIsBeginObject()){
+            var name=reader.ReadString();
+            reader.ReadIsNameSeparatorWithVerify();
+            var type= Deserialize_Type(ref reader,Resolver);
+            List.Add(Expressions.Expression.Parameter(type,name));
+            reader.ReadIsEndObjectWithVerify();
+            //var count=0;
+            //if(!t.ReadIsEndObjectWithSkipValueSeparator(ref count)) break;
+            if(!reader.ReadIsValueSeparator()) break;
         }
         reader.ReadIsEndArrayWithVerify();
         return List;
     }
 }
 partial class ExpressionMessagePackFormatter{
-    public void Serialize宣言Parameters(ref MessagePackWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,MessagePackSerializerOptions Resolver) {
-        var Count=value.Count;
-        writer.WriteArrayHeader(Count);
-        for(var a=0;a<Count;a++){
-            var Parameter=value[a];
+    private void Serialize宣言Parameters(ref MessagePackWriter writer,ReadOnlyCollection<Expressions.ParameterExpression>value,MessagePackSerializerOptions Resolver) {
+        writer.WriteArrayHeader(value.Count);
+        foreach(var Parameter in value){
             writer.Write(Parameter.Name);
             Serialize_Type(ref writer,Parameter.Type,Resolver);
         }
     }
-    internal Expressions.ParameterExpression[]Deserialize宣言Parameters(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    private Expressions.ParameterExpression[]Deserialize宣言Parameters(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         var Count=reader.ReadArrayHeader();
         var Parameters=new Expressions.ParameterExpression[Count];
         for(var a=0;a<Count;a++){
