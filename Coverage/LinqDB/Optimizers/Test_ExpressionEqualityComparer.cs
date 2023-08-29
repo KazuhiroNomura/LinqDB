@@ -13,50 +13,50 @@ namespace CoverageCS.LinqDB.Optimizers;
 [TestClass]
 public class Test_ExpressionEqualityComparer : ATest
 {
-    [TestMethod] public void Add() => this.Execute2(() => _Int32 + _Int32);
-    [TestMethod] public void AddChecked() => this.Execute2(() => checked(_Int32 + _Int32));
-    [TestMethod] public void Subtract() => this.Execute2(() => _Int32 - _Int32);
-    [TestMethod] public void SubtractChecked() => this.Execute2(() => checked(_Int32 - _Int32));
-    [TestMethod] public void Multiply() => this.Execute2(() => _Int32 * _Int32);
-    [TestMethod] public void MultiplyChecked() => this.Execute2(() => checked(_Int32 * _Int32));
-    [TestMethod] public void Divide() => this.Execute2(() => _Int32 / _Int32);
-    [TestMethod] public void Modulo() => this.Execute2(() => _Int32 % _Int32);
-    [TestMethod] public void And() => this.Execute2(() => _Boolean & _Boolean);
-    [TestMethod] public void Or() => this.Execute2(() => _Boolean | _Boolean);
-    [TestMethod] public void AndChecked() => this.Execute2(() => _Boolean & _Boolean);
-    [TestMethod] public void ExclusiveOr() => this.Execute2(() => _Boolean ^ _Boolean);
-    [TestMethod] public void AndAlso() => this.Execute2(() => _Boolean && _Boolean);
-    [TestMethod] public void OrElse() => this.Execute2(() => _Boolean || _Boolean);
-    [TestMethod] public void Equal() => this.Execute2(() => _Int32 == 3);
-    [TestMethod] public void NotEqual() => this.Execute2(() => _Int32 != 3);
-    [TestMethod] public void GreaterThan() => this.Execute2(() => _Int32 > 3);
-    [TestMethod] public void GreaterThanOrEqual() => this.Execute2(() => _Int32 >= 3);
-    [TestMethod] public void LessThan() => this.Execute2(() => _Int32 < 3);
-    [TestMethod] public void LessThanOrEqual() => this.Execute2(() => _Int32 <= 3);
-    [TestMethod] public void LeftShift() => this.Execute2(() => _Int32 << 3);
-    [TestMethod] public void RightShift() => this.Execute2(() => _Int32 >> 3);
-    [TestMethod] public void ArrayIndex() => this.Execute2(() => Array[0]);
-    [TestMethod] public void ArrayLength() => this.Execute2(() => Array.Length);
-    [TestMethod] public void Convert() => this.Execute2(() => (double)_Int32 + (double)_Int32);
-    [TestMethod] public void ConvertChecked() => this.Execute2(() => (double)_Int32 + (double)_Int32);
+    [TestMethod] public void Add() => this.実行結果が一致するか確認(() => _Int32 + _Int32);
+    [TestMethod] public void AddChecked() => this.実行結果が一致するか確認(() => checked(_Int32 + _Int32));
+    [TestMethod] public void Subtract() => this.実行結果が一致するか確認(() => _Int32 - _Int32);
+    [TestMethod] public void SubtractChecked() => this.実行結果が一致するか確認(() => checked(_Int32 - _Int32));
+    [TestMethod] public void Multiply() => this.実行結果が一致するか確認(() => _Int32 * _Int32);
+    [TestMethod] public void MultiplyChecked() => this.実行結果が一致するか確認(() => checked(_Int32 * _Int32));
+    [TestMethod] public void Divide() => this.実行結果が一致するか確認(() => _Int32 / _Int32);
+    [TestMethod] public void Modulo() => this.実行結果が一致するか確認(() => _Int32 % _Int32);
+    [TestMethod] public void And() => this.実行結果が一致するか確認(() => _Boolean & _Boolean);
+    [TestMethod] public void Or() => this.実行結果が一致するか確認(() => _Boolean | _Boolean);
+    [TestMethod] public void AndChecked() => this.実行結果が一致するか確認(() => _Boolean & _Boolean);
+    [TestMethod] public void ExclusiveOr() => this.実行結果が一致するか確認(() => _Boolean ^ _Boolean);
+    [TestMethod] public void AndAlso() => this.実行結果が一致するか確認(() => _Boolean && _Boolean);
+    [TestMethod] public void OrElse() => this.実行結果が一致するか確認(() => _Boolean || _Boolean);
+    [TestMethod] public void Equal() => this.実行結果が一致するか確認(() => _Int32 == 3);
+    [TestMethod] public void NotEqual() => this.実行結果が一致するか確認(() => _Int32 != 3);
+    [TestMethod] public void GreaterThan() => this.実行結果が一致するか確認(() => _Int32 > 3);
+    [TestMethod] public void GreaterThanOrEqual() => this.実行結果が一致するか確認(() => _Int32 >= 3);
+    [TestMethod] public void LessThan() => this.実行結果が一致するか確認(() => _Int32 < 3);
+    [TestMethod] public void LessThanOrEqual() => this.実行結果が一致するか確認(() => _Int32 <= 3);
+    [TestMethod] public void LeftShift() => this.実行結果が一致するか確認(() => _Int32 << 3);
+    [TestMethod] public void RightShift() => this.実行結果が一致するか確認(() => _Int32 >> 3);
+    [TestMethod] public void ArrayIndex() => this.実行結果が一致するか確認(() => Array[0]);
+    [TestMethod] public void ArrayLength() => this.実行結果が一致するか確認(() => Array.Length);
+    [TestMethod] public void Convert() => this.実行結果が一致するか確認(() => (double)_Int32 + (double)_Int32);
+    [TestMethod] public void ConvertChecked() => this.実行結果が一致するか確認(() => (double)_Int32 + (double)_Int32);
     //[TestMethod] public void Increment         ()=>this._変数Cache.AssertExecute(()=>_Int32+1);
     //[TestMethod] public void Decrement         ()=>this._変数Cache.AssertExecute(()=>_Int32-1);
     //[TestMethod] public void IsFalse           ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2--);
     //[TestMethod] public void IsTrue            ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2++);
-    [TestMethod] public void Negate() => this.Execute2(() => -_Int32 + -_Int32);
-    [TestMethod] public void NegateChecked() => this.Execute2(() => checked(-_Int32) + checked(-_Int32));
-    [TestMethod] public void Not() => this.Execute2(() => !_Boolean && !_Boolean);
-    [TestMethod] public void OnesComplement() => this.Execute2(() => ~_Int32 + ~_Int32);
+    [TestMethod] public void Negate() => this.実行結果が一致するか確認(() => -_Int32 + -_Int32);
+    [TestMethod] public void NegateChecked() => this.実行結果が一致するか確認(() => checked(-_Int32) + checked(-_Int32));
+    [TestMethod] public void Not() => this.実行結果が一致するか確認(() => !_Boolean && !_Boolean);
+    [TestMethod] public void OnesComplement() => this.実行結果が一致するか確認(() => ~_Int32 + ~_Int32);
 
     [TestMethod]
     public void TypeAs()
-        => this.Execute2(() => (Object_String as string) + (Object_String as string));
+        => this.実行結果が一致するか確認(() => (Object_String as string) + (Object_String as string));
 
     [TestMethod]
     public void UnaryPlus()
-        => this.Execute2(() => +_Static_class_演算子オーバーロード1 - +_Static_class_演算子オーバーロード1);
+        => this.実行結果が一致するか確認(() => +_Static_class_演算子オーバーロード1 - +_Static_class_演算子オーバーロード1);
 
-    [TestMethod] public void Unbox() => this.Execute2(() => (int)Object_Int32 + (int)Object_Int32);
+    [TestMethod] public void Unbox() => this.実行結果が一致するか確認(() => (int)Object_Int32 + (int)Object_Int32);
 
     [TestMethod]
     public void Block()
@@ -113,9 +113,9 @@ public class Test_ExpressionEqualityComparer : ATest
 
     [TestMethod]
     public void Conditional()
-        => this.Execute2(() => (_Boolean ? _Int32 : 10) + (_Boolean ? _Int32 : 10));
+        => this.実行結果が一致するか確認(() => (_Boolean ? _Int32 : 10) + (_Boolean ? _Int32 : 10));
 
-    [TestMethod] public void Constant() => this.Execute2(() => _List[1] + _List[1]);
+    [TestMethod] public void Constant() => this.実行結果が一致するか確認(() => _List[1] + _List[1]);
 
     [TestMethod]
     public void DebugInfo()
@@ -522,7 +522,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //a.Target==b.Target&&this.Equals(a.Value,b.Value);
         var Label1 = Expression.Label(typeof(int),"Label1");
         var Label2 = Expression.Label(typeof(int),"Label2");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -541,7 +541,7 @@ public class Test_ExpressionEqualityComparer : ATest
     public void Goto1(){
         var Label1 = Expression.Label(typeof(int),"Label1");
         var Label2 = Expression.Label(typeof(int),"Label2");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -559,7 +559,7 @@ public class Test_ExpressionEqualityComparer : ATest
     [TestMethod]
     public void Goto2(){
         var Label1 = Expression.Label(typeof(int),"Label1");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     Expression.Goto(Label1, Expression.Constant(1)),
@@ -707,7 +707,7 @@ public class Test_ExpressionEqualityComparer : ATest
     //    }
     //}
 
-    [TestMethod] public void Invoke() => this.Execute2(() => _Delegate(4) + _Delegate(4));
+    [TestMethod] public void Invoke() => this.実行結果が一致するか確認(() => _Delegate(4) + _Delegate(4));
     [TestMethod]public void Lambda0(){
         var p = Expression.Parameter(typeof(int));
         IsTrue(
@@ -803,7 +803,7 @@ public class Test_ExpressionEqualityComparer : ATest
         );
     }
     [TestMethod]
-    public void ListInit() => this.Execute2(() => new
+    public void ListInit() => this.実行結果が一致するか確認(() => new
     {
         a = new List<int> {
             1,
@@ -1175,11 +1175,11 @@ public class Test_ExpressionEqualityComparer : ATest
     [TestMethod]
     public void MemberAccess()
         =>
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 () => _Static_class_演算子オーバーロード1.Int32フィールド + _Static_class_演算子オーバーロード1.Int32フィールド);
 
     [TestMethod]
-    public void MemberInit() => this.Execute2(() => new
+    public void MemberInit() => this.実行結果が一致するか確認(() => new
     {
         a = new class_演算子オーバーロード
         {
@@ -1191,17 +1191,17 @@ public class Test_ExpressionEqualityComparer : ATest
         }
     });
 
-    [TestMethod] public void Call() => this.Execute2(() => Function() + Function());
+    [TestMethod] public void Call() => this.実行結果が一致するか確認(() => Function() + Function());
 
     [TestMethod]
-    public void NewArrayBounds() => this.Execute2(() => new
+    public void NewArrayBounds() => this.実行結果が一致するか確認(() => new
     {
         a = new int[10],
         b = new int[10]
     });
 
     [TestMethod]
-    public void NewArrayInit() => this.Execute2(() => new
+    public void NewArrayInit() => this.実行結果が一致するか確認(() => new
     {
         a = new[] {
             1,2,3
@@ -1212,13 +1212,13 @@ public class Test_ExpressionEqualityComparer : ATest
     });
 
     [TestMethod]
-    public void New() => this.Execute2(() => new
+    public void New() => this.実行結果が一致するか確認(() => new
     {
         a = new class_演算子オーバーロード(),
         b = new class_演算子オーバーロード()
     });
 
-    [TestMethod] public void Calesce() => this.Execute2(() => (_NullableInt32 ?? 4) + (_NullableInt32 ?? 4));
+    [TestMethod] public void Calesce() => this.実行結果が一致するか確認(() => (_NullableInt32 ?? 4) + (_NullableInt32 ?? 4));
     //共通部分式でParameterは最速なので先行評価しないため、カバレッジが出来方法が思いつかない。
     [TestMethod]
     public void Parameter()
@@ -1258,7 +1258,7 @@ public class Test_ExpressionEqualityComparer : ATest
     [TestMethod]
     public void TypeEqual()
     {
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             // ReSharper disable once OperatorIsCanBeUsed
             Object_Int32.GetType() == typeof(int) &&
             // ReSharper disable once OperatorIsCanBeUsed
@@ -1268,14 +1268,14 @@ public class Test_ExpressionEqualityComparer : ATest
 
     [TestMethod]
     public void TypeIs()
-        => this.Execute2(() => Object_Int32 is int || Object_Int32 is int);
+        => this.実行結果が一致するか確認(() => Object_Int32 is int || Object_Int32 is int);
 
     private static double L(Func<double> f) => f();
 
     [TestMethod]
     public void Default()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Add(
                     Expression.Call(
@@ -1505,7 +1505,7 @@ public class Test_ExpressionEqualityComparer : ATest
     public void TryFinally()
     {
         //if(!this.PrivateEquals(a.Finally,b.Finally)) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryFinally(
                     Expression.Constant(0),
@@ -1581,7 +1581,7 @@ public class Test_ExpressionEqualityComparer : ATest
     {
         //for(var c=0;c<a_Handlers_Count;c++) {
         //    if(!this.PrivateEquals(a_Handler.Body  ,b_Handler.Body  )) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1605,7 +1605,7 @@ public class Test_ExpressionEqualityComparer : ATest
     [TestMethod]
     public void TryCatch_Filter0()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -1625,7 +1625,7 @@ public class Test_ExpressionEqualityComparer : ATest
     public void TryCatch_Filter1()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1654,7 +1654,7 @@ public class Test_ExpressionEqualityComparer : ATest
     [TestMethod]
     public void TryCatch_Filter2(){
         var Variable=Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1691,7 +1691,7 @@ public class Test_ExpressionEqualityComparer : ATest
     public void TryCatch_Test()
     {
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1718,7 +1718,7 @@ public class Test_ExpressionEqualityComparer : ATest
     public void TryCatch()
     {
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1738,7 +1738,7 @@ public class Test_ExpressionEqualityComparer : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1761,7 +1761,7 @@ public class Test_ExpressionEqualityComparer : ATest
     }
     [TestMethod]
     public void TryCatchFinally(){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatchFinally(
                     Expression.Constant(0),
@@ -1812,7 +1812,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant = Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsTrue(Constant),
@@ -1833,7 +1833,7 @@ public class Test_ExpressionEqualityComparer : ATest
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant = Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsFalse(Constant),

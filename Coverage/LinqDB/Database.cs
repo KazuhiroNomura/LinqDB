@@ -12,7 +12,7 @@ public class Database : ATest
     public void Executeのネスト1()
     {
         var local = 3;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             local
         );
     }
@@ -29,8 +29,8 @@ public class Database : ATest
                 () => local
             )
         );
-        this.Execute2(() =>
-            this.Execute2(
+        this.実行結果が一致するか確認(() =>
+            this.実行結果が一致するか確認(
                 () => local
             )
         );
@@ -70,7 +70,7 @@ public class Database : ATest
             M();
         }
         {
-            this.Execute2(() => Lambda(() => 3) + Quote(() => 3));
+            this.実行結果が一致するか確認(() => Lambda(() => 3) + Quote(() => 3));
             Expression<Func<int>> e = () => Quote(() => 3) + Quote(() => 3);
             e.Compile();
         }
@@ -78,7 +78,7 @@ public class Database : ATest
             //".Lambda LラムダR<Func`1[Int32]>() {",
             //"    3",
             //"}"
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 () => 3
             );
             var Lambda = Expression.Lambda<Func<int>>(

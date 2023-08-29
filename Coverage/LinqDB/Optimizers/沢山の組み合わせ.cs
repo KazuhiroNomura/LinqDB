@@ -2674,7 +2674,7 @@ public class 沢山の組み合わせ : ATest
     {
         var outer = new int[10];
         var inner = new int[20];
-        this.Execute2(() => from o in outer join i in inner on o equals i select new { o, i });
+        this.実行結果が一致するか確認(() => from o in outer join i in inner on o equals i select new { o, i });
     }
 }
 //public interface IEnumerable2<out T>:IEnumerable<T>{

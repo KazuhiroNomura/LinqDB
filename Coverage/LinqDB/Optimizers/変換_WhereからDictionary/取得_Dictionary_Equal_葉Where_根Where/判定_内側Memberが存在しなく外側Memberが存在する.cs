@@ -8,9 +8,9 @@ public class 判定_内側Memberが存在しなく外側Memberが存在する: A
     public void Parameter()
     {
         //if(this.ListParameter.Contains(Parameter)){
-        this.Execute引数パターン(a => ArrN<int>(a).Where(c => c * 2 == c + 1));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Where(c => c * 2 == c + 1));
         //} else{
-        this.Execute引数パターン(a => Lambda(b => ArrN<int>(a).Where(c => a == 0 && a == c)));
+        this.実行結果が一致するか確認(a => Lambda(b => ArrN<int>(a).Where(c => a == 0 && a == c)));
         //}
     }
     private static int Int32Lambda(int v, Func<int, int> func)
@@ -20,6 +20,6 @@ public class 判定_内側Memberが存在しなく外側Memberが存在する: A
     [TestMethod]
     public void Lambda()
     {
-        this.Execute引数パターン(a => ArrN<int>(a).Where(b => b == Int32Lambda(b, c => c + c)));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Where(b => b == Int32Lambda(b, c => c + c)));
     }
 }

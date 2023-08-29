@@ -59,8 +59,9 @@ public sealed class Client<TContainer>:Client, IClient {
     /// <param name="XmlType"></param>
     /// <typeparam name="TResult"></typeparam>
     /// <returns>戻り値</returns>
-    public TResult Expression<TResult>(Expression<サーバーで実行するEntities式木<TResult>> リモート先で実行させるLambda,XmlType XmlType=XmlType.Utf8Json) {
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,this.Optimizer.Lambda最適化(リモート先で実行させるLambda));
+    public TResult Expression<TResult>(Expression<サーバーで実行するEntities式木<TResult>> リモート先で実行させるLambda,XmlType XmlType=XmlType.Utf8Json){
+        var Lambda=this.Optimizer.Lambda最適化(リモート先で実行させるLambda);
+        this.サーバーに送信(Request.Expression_Invoke,XmlType,Lambda);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{

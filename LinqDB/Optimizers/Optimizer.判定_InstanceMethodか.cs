@@ -14,7 +14,7 @@ partial class Optimizer {
         public 判定_InstanceMethodか(ExpressionEqualityComparer ExpressionEqualityComparer){
             this.ExpressionEqualityComparer=ExpressionEqualityComparer;
         }
-        internal Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
+        internal IReadOnlyDictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
         internal IReadOnlyDictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
         internal IEnumerable<LambdaExpression> Lambdas=default!;
         private bool Quote内か;

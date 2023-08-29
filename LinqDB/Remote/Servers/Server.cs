@@ -325,7 +325,7 @@ public class Server:IDisposable{
                                         Debug.Assert(デシリアライズした.XmlType==XmlType.Utf8Json||デシリアライズした.XmlType==XmlType.MessagePack);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
                                         var Optimizer=new Optimizers.Optimizer();
-                                        var Delegate=Optimizer.CreateDelegate(Lambda);
+                                        var Delegate=Optimizer.CreateServerDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
                                             Delegate
                                         );

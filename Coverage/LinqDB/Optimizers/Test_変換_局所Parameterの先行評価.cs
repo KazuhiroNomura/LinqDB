@@ -20,7 +20,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var X=Expression.Label();
         var i = Expression.Parameter(typeof(bool),"i");
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool,decimal,decimal>>(
                 Expression.Condition(
                     i,
@@ -38,7 +38,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var X=Expression.Label();
         var i = Expression.Parameter(typeof(bool),"i");
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool,decimal,decimal>>(
                 Expression.Condition(
                     i,
@@ -54,7 +54,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //(i,a)=>(a*a)==0?(a*a)+(a*a):(a*a)-(a*a)
         //(i,a)=>(t=a*a)==0?t+t:t-t
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Condition(
                     Expression.Equal(Expression.Multiply(a,a),Expression.Constant(1m)),
@@ -78,7 +78,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
             //    (t1=(t0=a+a)+t0)==a 4
             //    ?t0-t0              0
             //    :t0+t0              4
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 v =>
                     v.Let(
                         a =>
@@ -98,7 +98,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var a = Expression.Parameter(typeof(int),"a");
         var Cラムダ局所1 = Expression.Parameter(typeof(int),"Cラムダ局所1");
         var Cラムダ局所0 = Expression.Parameter(typeof(Point),"Cラムダ局所0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<Point>>(
                 Expression.Block(
                     new[] { Point1,Point2,a,Cラムダ局所1,Cラムダ局所0 },
@@ -144,19 +144,19 @@ public class Test_変換_局所Parameterの先行評価:ATest {
     //$Cラムダ局所0 = .e;
     [TestMethod]
     public void 等価式() {
-        this.Execute2(() => (new[] { "A" } as IEnumerable<object>).Contains("A"));
-        this.Execute引数パターン(a => ArrN<object>(a).Contains(2));
-        this.Execute引数パターン(a => ArrN<int>(a).Contains(2));
+        this.実行結果が一致するか確認(() => (new[] { "A" } as IEnumerable<object>).Contains("A"));
+        this.実行結果が一致するか確認(a => ArrN<object>(a).Contains(2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Contains(2));
         //if(a_Type.IsPrimitive) {
-        this.Execute引数パターン(a => ArrN<int>(a).Where(p => p==1).Where(p => p==2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Where(p => p==1).Where(p => p==2));
         //} else if(IEquatableType.IsAssignableFrom(a_Type)) {
-        this.Execute引数パターン(a => ArrN<decimal>(a).Where(p => p==1).Where(p => p==2));
+        this.実行結果が一致するか確認(a => ArrN<decimal>(a).Where(p => p==1).Where(p => p==2));
         //} else {
         //    if(op_Equality!=null) {
         {
             var a = new Point(1,2);
             var b = new Point(2,3);
-            this.Execute2(() =>
+            this.実行結果が一致するか確認(() =>
                 new Point[]{
                     new(1,1),
                     new(1,2),
@@ -173,7 +173,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         {
             var b = new object();
             var c = new object();
-            this.Execute引数パターン(a => ArrN<object>(a).Where(p => p==b).Where(p => p==c));
+            this.実行結果が一致するか確認(a => ArrN<object>(a).Where(p => p==b).Where(p => p==c));
         }
         //    }
         //}
@@ -187,7 +187,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //}
         var X=Expression.Label();
         var a = Expression.Parameter(typeof(decimal),"変数");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.Goto(X),
@@ -215,7 +215,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var X=Expression.Label();
         var i = Expression.Parameter(typeof(bool),"i");
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool,decimal,decimal>>(
                 Expression.Block(
                     Expression.IfThen(
@@ -247,7 +247,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //  return (a*a)-(a*a)
         var X=Expression.Label();
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.IfThen(
@@ -281,7 +281,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //}
         var X=Expression.Label();
         var a = Expression.Parameter(typeof(decimal),"a");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.IfThen(
@@ -305,7 +305,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Break1 = Expression.Label(typeof(decimal),"Break1");
         var カウンタ0 = Expression.Parameter(typeof(decimal),"カウンタ0");
         var カウンタ1 = Expression.Parameter(typeof(decimal),"カウンタ1");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[]{
@@ -356,7 +356,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //Array[b+b]=a
         Assert.AreEqual(
             1,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b,Parameter配列 },
@@ -416,7 +416,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         //であるべき
         Assert.AreEqual(
             5,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -453,7 +453,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var b = Expression.Parameter(typeof(int),"b");
         Assert.AreEqual(
             4,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -486,7 +486,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var b = Expression.Parameter(typeof(int),"b");
         Assert.AreEqual(
             5,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -525,7 +525,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
     public void 並び替え05() {
         var a = Expression.Parameter(typeof(int),"a");
         var b = Expression.Parameter(typeof(int),"b");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { a,b },
@@ -549,7 +549,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
     public void 並び替え06() {
         var Parameter配列 = Expression.Parameter(typeof(int[]),"配列");
         var 配列 = new int[3];
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { Parameter配列 },
@@ -574,7 +574,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
     public void 並び替え07() {
         var a = Expression.Parameter(typeof(int),"a");
         var b = Expression.Parameter(typeof(int),"b");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { a,b },
@@ -611,7 +611,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var a = Expression.Parameter(typeof(int),"a");
         var b = Expression.Parameter(typeof(int),"b");
         var c = Expression.Parameter(typeof(int),"c");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { a,b,c },
@@ -642,7 +642,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var b = Expression.Parameter(typeof(int),"b");
         Assert.AreEqual(
             3,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -691,7 +691,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         );
         Assert.AreEqual(
             5,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -732,7 +732,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var b_plus_1 = Expression.Add(b,Constant1);
         Assert.AreEqual(
             9,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b,c },
@@ -789,7 +789,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         );
         Assert.AreEqual(
             6,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b},
@@ -856,7 +856,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         );
         Assert.AreEqual(
             9,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b,c,d },
@@ -918,7 +918,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         );
         Assert.AreEqual(
             5,
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a,b },
@@ -946,7 +946,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Continue1 = Expression.Label("Continue1");
         var カウンタ0 = Expression.Parameter(typeof(int),"カウンタ0");
         var カウンタ1 = Expression.Parameter(typeof(int),"カウンタ1");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { カウンタ0,カウンタ1 },
@@ -997,7 +997,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Continue0 = Expression.Label("Continue0");
         var Continue1 = Expression.Label("Continue1");
         var カウンタ0 = Expression.Parameter(typeof(int),"カウンタ0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { カウンタ0 },
@@ -1044,7 +1044,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Continue0 = Expression.Label("Continue0");
         var Continue1 = Expression.Label("Continue1");
         var カウンタ0 = Expression.Parameter(typeof(int),"カウンタ0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { カウンタ0 },
@@ -1091,7 +1091,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Continue0 = Expression.Label("Continue0");
         var Continue1 = Expression.Label("Continue1");
         var カウンタ0 = Expression.Parameter(typeof(int),"カウンタ0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { カウンタ0 },
@@ -1137,7 +1137,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var b = Expression.Parameter(typeof(decimal),"b");
         //パラ_a=1m
         //パラ_b=パラ_a*パラ_a
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { a,b },
@@ -1159,7 +1159,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
     [TestMethod]
     public void 並び替え20() {
         var カウンタ0 = Expression.Parameter(typeof(int),"カウンタ0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { カウンタ0 },
@@ -1178,7 +1178,7 @@ public class Test_変換_局所Parameterの先行評価:ATest {
         var Input1 = Expression.Parameter(typeof(int),"Input1");
         var Break = Expression.Label(typeof(int),"Break");
         var Continue = Expression.Label("Continue");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool,int,int>>(
                 Expression.Loop(
                     Expression.IfThenElse(

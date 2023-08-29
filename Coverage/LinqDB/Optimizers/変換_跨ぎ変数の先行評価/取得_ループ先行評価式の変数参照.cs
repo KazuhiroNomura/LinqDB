@@ -15,7 +15,7 @@ public class Test_取得_ループ先行評価式の変数参照 : ATest
         var B = 1;
         //if(e==null) return null;
         //if(this.Lループか&&this.変数_ExpressionEqualityComparer.Equals(e,this.旧Expression)) return this.新Parameter;
-        this.Execute2(() => Inline(() => B.Let(b => A + 1)));
+        this.実行結果が一致するか確認(() => Inline(() => B.Let(b => A + 1)));
         //switch(e.NodeType){
         //    case ExpressionType.Block:{
         //    }
@@ -23,6 +23,6 @@ public class Test_取得_ループ先行評価式の変数参照 : ATest
         //    }
         //    default:return base.Traverse(e);
         //}
-        this.Execute2(() => Inline(() => Inline(() => A + 1)));
+        this.実行結果が一致するか確認(() => Inline(() => Inline(() => A + 1)));
     }
 }

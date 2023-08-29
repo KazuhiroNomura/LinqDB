@@ -25,7 +25,7 @@ public class 変換_SelectManyをJoin:ATest {
         //    New.Arguments.Count==2
         //) {
         //    if(Select_selector.Body.Type.IsAnonymous()) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -39,7 +39,7 @@ public class 変換_SelectManyをJoin:ATest {
         //    if(Listビルド_Count>0) {
         //        if(Listビルド_Count==1) {
         //        } else {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -50,7 +50,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //        if(葉Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -61,7 +61,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //        if(根Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -72,7 +72,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //    } else if(葉Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -82,7 +82,7 @@ public class 変換_SelectManyをJoin:ATest {
             )
         );
         //    } else {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -116,7 +116,7 @@ public class 変換_SelectManyをJoin:ATest {
         //    New.Arguments.Count==2
         //) {
         //    if(Select_selector.Body.Type.IsAnonymous()) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -134,7 +134,7 @@ public class 変換_SelectManyをJoin:ATest {
         //    if(Listビルド_Count>0) {
         //        if(Listビルド_Count==1) {
         //        } else {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -149,7 +149,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //        if(葉Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -164,7 +164,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //        if(根Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -179,7 +179,7 @@ public class 変換_SelectManyをJoin:ATest {
         );
         //        }
         //    } else if(葉Where!=null) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -193,7 +193,7 @@ public class 変換_SelectManyをJoin:ATest {
             )
         );
         //    } else {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -215,7 +215,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
         var S2 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.SelectMany(
@@ -240,7 +240,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
         var S2 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.Where(
                     ExtensionSet.SelectMany(
@@ -274,7 +274,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S1 = new Set<int>();
         var S2 = new Set<int>();
         var S3 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.Join(
                     ExtensionSet.Join(
@@ -301,7 +301,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
         var S2 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 S0,
                 s0 => ExtensionSet.Where(
@@ -319,7 +319,7 @@ public class 変換_SelectManyをJoin:ATest {
     public void Select_Where_SelectMany1() {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 S0,
                 s0 => ExtensionSet.Where(
@@ -339,7 +339,7 @@ public class 変換_SelectManyをJoin:ATest {
     public void SelectMany2をSelectMany3にする() {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
-        var x=this.Execute2(
+        var x=this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 S0,
                 s0 => ExtensionSet.Select(
@@ -354,7 +354,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
         var S2 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 S0,
                 s0 => ExtensionSet.SelectMany(
@@ -376,7 +376,7 @@ public class 変換_SelectManyをJoin:ATest {
         var S0 = new Set<int>();
         var S1 = new Set<int>();
         var S2 = new Set<int>();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 S0,
                 s0 => ExtensionSet.SelectMany(
@@ -412,7 +412,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        s2=>{s01,s2}
         //    ).Where(s012=>)
         //)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 ExtensionSet.SelectMany(
                     S0,
@@ -453,7 +453,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        s2=>{s01,s2}
         //    ).Where(s012=>)
         //)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 ExtensionSet.SelectMany(
                     S0,
@@ -489,7 +489,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        s2=>{s01,s2}
         //    ).Where(s012=>)
         //)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.SelectMany(
                 ExtensionSet.SelectMany(
                     S0,
@@ -519,7 +519,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        s2=>{s01,s2}
         //    )
         //).Where(s012=>)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.SelectMany(
@@ -540,7 +540,7 @@ public class 変換_SelectManyをJoin:ATest {
                     s012.s01.s0!=s012.s01.s1&&s012.s01.s0!=s012.s2&&s012.s01.s1!=s012.s2
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 }).Where(
                     s01 =>
@@ -551,7 +551,7 @@ public class 変換_SelectManyをJoin:ATest {
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 })
             ).Where(
@@ -562,7 +562,7 @@ public class 変換_SelectManyをJoin:ATest {
                     s01.s0!=s01.s1&&s01.s1!=s01.s1
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.SelectMany(
@@ -583,7 +583,7 @@ public class 変換_SelectManyをJoin:ATest {
                     s012.s01.s0_0!=s012.s01.s1_0
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.SelectMany(
@@ -604,7 +604,7 @@ public class 変換_SelectManyをJoin:ATest {
                     s012.s01.s0_0!=s012.s01.s1_0&&s012.s01.s0_0!=s012.s2_0
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.SelectMany(
@@ -622,7 +622,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s012 => s012.s01.s0==s012.s01.s1&&s012.s01.s0==s012.s2&&s012.s01.s1==s012.s2
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     ExtensionSet.Where(
@@ -642,7 +642,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s012 => s012.s01.s0==s012.s2
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 }).Where(
                     w => 
@@ -653,7 +653,7 @@ public class 変換_SelectManyをJoin:ATest {
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 }).Where(w => w.s0==w.s1)
             )
@@ -681,7 +681,7 @@ public class 変換_SelectManyをJoin:ATest {
         //            //s012.s2==s012.s01.s1
         //    )
         //);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.Join(
                     ExtensionSet.Join(
@@ -741,7 +741,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        s01 => s01.s0==s01.s1&&s01.s1==s01.s0
         //    )
         //);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.SelectMany(
                     S0,
@@ -753,7 +753,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s012 => s012.s01.s0==s012.s01.s1&&s012.s01.s0==s012.s2&&s012.s01.s1==s012.s2
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => ExtensionSet.Where(
                 ExtensionSet.Join(
                     S0,
@@ -790,7 +790,7 @@ public class 変換_SelectManyをJoin:ATest {
         //        w => w.s0==0
         //    )
         //);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.Join(
                 S1,
                 s0 => s0,
@@ -808,7 +808,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s01 => new { s01.s0,s01.s1 }
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1,
                 (s0,s1) => new { s0,s1 }
@@ -818,7 +818,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s012 => new { s012.s01.s0,s012.s01.s1,s012.s2 }
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 })
             ).SelectMany(
@@ -828,26 +828,26 @@ public class 変換_SelectManyをJoin:ATest {
                 s012 => new { s012.s01.s0,s012.s01.s1,s012.s2 }
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Where(w1 => w1==s0).Select(s1 => new { s0,s1 })
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1=>S2.Where(w2 => w2==s1).Select(s2 => new { s0,s1,s2 })
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 })
             ).Where(
                 w => w.s0==w.s1
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             ()=>S0.Join(
                 S1,
                 s0 => s0,
@@ -855,7 +855,7 @@ public class 変換_SelectManyをJoin:ATest {
                 (s0,s1) => new { s0,s1 }
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1,
                 (s0,s1) => new { s0,s1 }
@@ -878,14 +878,14 @@ public class 変換_SelectManyをJoin:ATest {
         //    s1=>s1,
         //    (s0,s1)=>new{s0,s1}
         //)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(s1 => new { s0,s1 }).Where(w => w.s0==w.s1)
             ).Select(
                 s01 => new { s01.s0,s01.s1 }
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1,
                 (s0,s1) => new { s0,s1 }
@@ -895,7 +895,7 @@ public class 変換_SelectManyをJoin:ATest {
                 s01 => new { s01.s0,s01.s1}
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1,
                 (s0,s1) => new { s0,s1 }
@@ -922,14 +922,14 @@ public class 変換_SelectManyをJoin:ATest {
         //           join s2 in S2 on s1 equals s2
         //           select new { s0,s1,s2 })
         //);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => from s0 in S0
                 from s1 in S1
                 from s2 in S2
                 where s0==s2
                 select new { s0,s1,s2 }
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Where(
                     s1_w => s0==s1_w
@@ -938,7 +938,7 @@ public class 変換_SelectManyをJoin:ATest {
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Where(
                     s1_w => s0==s1_w
@@ -953,7 +953,7 @@ public class 変換_SelectManyをJoin:ATest {
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.Select(
                     s1 => new { s0,s1 }
@@ -996,7 +996,7 @@ public class 変換_SelectManyをJoin:ATest {
         //    s12=>s12.s1,
         //    (s0,s12)=>new{s0,s12}
         //)
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(
@@ -1011,7 +1011,7 @@ public class 変換_SelectManyをJoin:ATest {
                 lr => lr.s0==lr.s12.s1
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () => S0.SelectMany(
                 s0 => S1.SelectMany(
                     s1 => S2.Select(

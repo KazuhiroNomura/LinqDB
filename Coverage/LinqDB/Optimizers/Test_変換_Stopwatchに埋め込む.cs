@@ -8,7 +8,7 @@ public class Test_変換_Stopwatchに埋め込む : ATest{
         var p = Expression.Parameter(typeof(bool),"p");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -29,7 +29,7 @@ public class Test_変換_Stopwatchに埋め込む : ATest{
     [TestMethod]public void Loop1(){
         var p = Expression.Parameter(typeof(bool),"p");
         var Break = Expression.Label("Break");
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -49,7 +49,7 @@ public class Test_変換_Stopwatchに埋め込む : ATest{
         var p = Expression.Parameter(typeof(bool),"p");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },

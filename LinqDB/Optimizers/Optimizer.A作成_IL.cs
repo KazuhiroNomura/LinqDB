@@ -32,14 +32,14 @@ partial class Optimizer{
         protected A作成_IL(判定_InstanceMethodか 判定_InstanceMethodか) {
             this.判定_InstanceMethodか =判定_InstanceMethodか;
         }
-        internal Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
+        internal IReadOnlyDictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
             get=>this.判定_InstanceMethodか.DictionaryConstant;
             set=>this.判定_InstanceMethodか.DictionaryConstant=value;
         }
 
-        internal Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic=default!;
-        private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)>_DictionaryLambda_Fields=default!;
-        internal Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
+        internal IReadOnlyDictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic=default!;
+        private IReadOnlyDictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)>_DictionaryLambda_Fields=default!;
+        internal IReadOnlyDictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
             get=>this._DictionaryLambda_Fields;
             set{
                 this._DictionaryLambda_Fields=value;

@@ -18,35 +18,35 @@ public class 任意のパターン : ATest{
         for(var x=0;x<回数;x++){
             var s0=ArrN<int>(x);
             for(var y=0;y<回数;y++){
-                this.Execute2(
+                this.実行結果が一致するか確認(
                     (a,b)=>ArrN<int>(a).Join(ArrN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any(),x,
                     y);
-                this.Execute2(
+                this.実行結果が一致するか確認(
                     (a,b)=>EnuN<int>(a).Join(EnuN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any(),x,
                     y);
                 var s1=ArrN<int>(y);
                 //var v0=3;
                 //var v1=3;
                 var Default=EqualityComparer<int>.Default;
-                this.Execute2(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-                this.Execute2(()=>(1).Let(o=>s1.Select(i=>Default.Equals(i,i))));
-                this.Execute2(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-                this.Execute2(()=>s0.Select(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
-                this.Execute2(()=>s0.Select(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
-                this.Execute2(()=>s0.SelectMany(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
-                this.Execute2(()=>
+                this.実行結果が一致するか確認(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.実行結果が一致するか確認(()=>(1).Let(o=>s1.Select(i=>Default.Equals(i,i))));
+                this.実行結果が一致するか確認(()=>(1).Let(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.実行結果が一致するか確認(()=>s0.Select(o=>s1.Select(i=>o).Where(i=>Default.Equals(i,i))));
+                this.実行結果が一致するか確認(()=>s0.Select(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
+                this.実行結果が一致するか確認(()=>s0.SelectMany(o=>s1.Where(i=>Default.Equals(i,i)).Select(i=>o)));
+                this.実行結果が一致するか確認(()=>
                     s0.SelectMany(o=>s1.Where(i=>EqualityComparer<int>.Default.Equals(o,i)).Select(i=>o+i)));
-                this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
-                this.Execute2(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i));
-                this.Execute引数パターン標準ラムダループ((a,b)=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
-                this.Execute引数パターン標準ラムダループ((a,b)=>
+                this.実行結果が一致するか確認(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.実行結果が一致するか確認(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i));
+                this.実行結果が一致するか確認((a,b)=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.実行結果が一致するか確認((a,b)=>
                     s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default).Any());//
-                this.Execute標準ラムダループ(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
-                this.Execute引数パターン標準ラムダループ((a,b)=>
+                this.実行結果が一致するか確認(()=>s0.Join(s1,o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+                this.実行結果が一致するか確認((a,b)=>
                     SetN<int>(a).Join(SetN<int>(b),o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
                 //this.AssertExecute((a,b) => ArrN<int>(a).AsEnumerable().Join(ArrN<int>(b),o => o,i => i,(o,i) => o+i).Any());
                 //this.AssertExecute((a,b) => EnuN<int>(a).AsEnumerable().Join(EnuN<int>(b),o => o,i => i,(o,i) => o+i).Any());
-                this.Execute引数パターン標準ラムダループ((a,b)=>
+                this.実行結果が一致するか確認((a,b)=>
                     SetN<int>(a).AsEnumerable().Join(SetN<int>(b),o=>o,i=>i,(o,i)=>o+i).Any());//
             }
         }
@@ -135,7 +135,7 @@ public class 任意のパターン : ATest{
         var data = new[]{
             1,2,3
         };
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             3.Let(p => 1m)
         );
     }
@@ -144,7 +144,7 @@ public class 任意のパターン : ATest{
         var data = new[]{
             1,2,3
         };
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             3.Let(p => data.Select(q => 1m))
         );
     }
@@ -154,13 +154,13 @@ public class 任意のパターン : ATest{
         var data = new[]{
             1,2,3
         };
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             3.Let(p => data.Where(q => p == q))
         );
     }
     [TestMethod]
     public void Parameterが内部ラムダで読み取りされたらフィールドにより橋渡し0(){
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             3.Let(p => 3.Let(q =>p+q ))
         );
     }

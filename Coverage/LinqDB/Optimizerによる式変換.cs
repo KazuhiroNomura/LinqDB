@@ -22,7 +22,7 @@ public class Optimizerによる式変換:ATest{
     public void Conditional0(){
         {
             var x=(a:true,b:new 評価検証(10));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<評価検証>>(
                     Expression.Condition(
                         Expression.Field(
@@ -44,7 +44,7 @@ public class Optimizerによる式変換:ATest{
         {
             var a=true;
             var b=new 評価検証(10);
-            this.Execute2(()=>
+            this.実行結果が一致するか確認(()=>
                 a?b:b
             );
         }
@@ -54,97 +54,97 @@ public class Optimizerによる式変換:ATest{
         var a=true;
         var b=true;
         var c=new 評価検証(10);
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c
             :b?c+c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c
             :b?c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c
             :b?c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c
             :b?c+c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c+c
             :b?c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c+c
             :b?c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c+c
             :b?c+c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c
             :c+c
             :b?c+c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c
             :b?c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c
             :b?c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c
             :b?c+c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c
             :b?c+c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c+c
             :b?c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c+c
             :b?c
             :c+c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c+c
             :b?c+c
             :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a?b?c+c
             :c+c
             :b?c+c
@@ -156,7 +156,7 @@ public class Optimizerによる式変換:ATest{
         var a=true;
         var b=true;
         var c=new 評価検証(10);
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?b
                     ?c
@@ -165,7 +165,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?b
                     ?c
@@ -174,7 +174,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?b&b
                     ?c
@@ -183,7 +183,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?b&b
                     ?c
@@ -192,7 +192,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             b&b
                 ?b
                     ?c
@@ -201,7 +201,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             b&b
                 ?b
                     ?c
@@ -210,7 +210,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             b&b
                 ?b&b
                     ?c
@@ -219,7 +219,7 @@ public class Optimizerによる式変換:ATest{
                     ?c
                     :c
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             b&b
                 ?b&b
                     ?c
@@ -232,42 +232,42 @@ public class Optimizerによる式変換:ATest{
     [TestMethod]
     public void Conditional3(){
         var a=true;
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?a
                 :a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?a
                 :a&a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?a&a
                 :a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a
                 ?a&a
                 :a&a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a&a
                 ?a
                 :a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a&a
                 ?a
                 :a&a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a&a
                 ?a&a
                 :a
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             a&a
                 ?a&a
                 :a&a
@@ -279,7 +279,7 @@ public class Optimizerによる式変換:ATest{
             //v.Let(a=>(a+a)+(a+a)==(a+a)+(a+a)
             //↓
             //v.Let(a=>t1==(t1=(t0=a+a)+t0)
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 ()=>(a+a)+(a+a)==(a+a)+(a+a)
             );
         }
@@ -333,7 +333,7 @@ public class Optimizerによる式変換:ATest{
     [TestMethod]
     public void Blockネスト(){
         var a=new 評価検証(10);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<評価検証>>(
                 Expression.Block(
                     Expression.Add(
@@ -350,7 +350,7 @@ public class Optimizerによる式変換:ATest{
     public void Loopネスト0(){
         var a=new 評価検証(10);
         var Break0=Expression.Label(typeof(評価検証));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<評価検証>>(
                 Expression.Loop(
                     Expression.Break(
@@ -370,7 +370,7 @@ public class Optimizerによる式変換:ATest{
         var a=new 評価検証(10);
         var Break0=Expression.Label(typeof(評価検証));
         var Break1=Expression.Label(typeof(評価検証));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<評価検証>>(
                 Expression.Loop(
                     Expression.Break(
@@ -398,7 +398,7 @@ public class Optimizerによる式変換:ATest{
     public void ConditionalTrue1度False2度Expressionが出現(){
         {
             var x=(a:true,b:new 評価検証(10));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<評価検証>>(
                     Expression.Condition(
                         Expression.Field(
@@ -426,7 +426,7 @@ public class Optimizerによる式変換:ATest{
         {
             var a=true;
             var b=new 評価検証(10);
-            this.Execute2(()=>
+            this.実行結果が一致するか確認(()=>
                 a?b:b+b
             );
         }
@@ -435,7 +435,7 @@ public class Optimizerによる式変換:ATest{
     public void ConditionalTrue2度False1度Expressionが出現(){
         {
             var x=(a:true,b:new 評価検証(10));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<評価検証>>(
                     Expression.Condition(
                         Expression.Field(
@@ -463,7 +463,7 @@ public class Optimizerによる式変換:ATest{
         {
             var a=true;
             var b=new 評価検証(10);
-            this.Execute2(()=>
+            this.実行結果が一致するか確認(()=>
                 a?b+b:b
             );
         }
@@ -472,7 +472,7 @@ public class Optimizerによる式変換:ATest{
     public void ConditionalTrue2度False2度Expressionが出現(){
         {
             var x=(a:true,b:new 評価検証(10));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<評価検証>>(
                     Expression.Condition(
                         Expression.Field(
@@ -506,7 +506,7 @@ public class Optimizerによる式変換:ATest{
         {
             var a=true;
             var b=new 評価検証(10);
-            this.Execute2(()=>
+            this.実行結果が一致するか確認(()=>
                 a?b+b:b+b
             );
         }
@@ -514,7 +514,7 @@ public class Optimizerによる式変換:ATest{
     [TestMethod]
     public void 共通部分式(){
         var t=1m;
-        this.Execute2(()=>(t+t)+(t+t));
+        this.実行結果が一致するか確認(()=>(t+t)+(t+t));
     }
     [TestMethod]
     public void Blockの複数式の局所先行評価(){
@@ -524,7 +524,7 @@ public class Optimizerによる式変換:ATest{
         var a=Expression.Parameter(typeof(int),"a");
         var Cラムダ局所1=Expression.Parameter(typeof(int),"Cラムダ局所1");
         var Cラムダ局所0=Expression.Parameter(typeof(Point),"Cラムダ局所0");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<Point>>(
                 Expression.Block(
                     new[]{
@@ -572,21 +572,21 @@ public class Optimizerによる式変換:ATest{
     //$Cラムダ局所0 = .e;
     [TestMethod]
     public void 等価式(){
-        this.Execute2(()=>(new[]{
+        this.実行結果が一致するか確認(()=>(new[]{
             "A"
         } as IEnumerable<object>).Contains("A"));
-        this.Execute引数パターン(a=>ArrN<object>(a).Contains(2));
-        this.Execute引数パターン(a=>ArrN<int>(a).Contains(2));
+        this.実行結果が一致するか確認(a=>ArrN<object>(a).Contains(2));
+        this.実行結果が一致するか確認(a=>ArrN<int>(a).Contains(2));
         //if(a_Type.IsPrimitive) {
-        this.Execute引数パターン(a=>ArrN<int>(a).Where(p=>p==1).Where(p=>p==2));
+        this.実行結果が一致するか確認(a=>ArrN<int>(a).Where(p=>p==1).Where(p=>p==2));
         //} else if(IEquatableType.IsAssignableFrom(a_Type)) {
-        this.Execute引数パターン(a=>ArrN<decimal>(a).Where(p=>p==1).Where(p=>p==2));
+        this.実行結果が一致するか確認(a=>ArrN<decimal>(a).Where(p=>p==1).Where(p=>p==2));
         //} else {
         //    if(op_Equality!=null) {
         {
             var a=new Point(1,2);
             var b=new Point(2,3);
-            this.Execute2(()=>
+            this.実行結果が一致するか確認(()=>
                 new Point[]{
                     new(1,1),new(1,2),new(1,3),new(2,1),new(2,2),new(2,3),new(3,1),new(3,2),new(3,3)
                 }.Where(p=>p==a).Where(p=>p==b));
@@ -595,7 +595,7 @@ public class Optimizerによる式変換:ATest{
         {
             var b=new object();
             var c=new object();
-            this.Execute引数パターン(a=>ArrN<object>(a).Where(p=>p==b).Where(p=>p==c));
+            this.実行結果が一致するか確認(a=>ArrN<object>(a).Where(p=>p==b).Where(p=>p==c));
         }
         //    }
         //}
@@ -1131,7 +1131,7 @@ public class Optimizerによる式変換:ATest{
     [TestMethod]
     public void ラムダループ跨ぎ20(){
         var p=Expression.Parameter(typeof(decimal),"p");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[]{
@@ -1155,7 +1155,7 @@ public class Optimizerによる式変換:ATest{
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Invoke(
                     Expression.Lambda<Func<decimal>>(
@@ -1167,7 +1167,7 @@ public class Optimizerによる式変換:ATest{
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Call(
                     typeof(Optimizerによる式変換).GetMethod(nameof(DecimalLambda),BindingFlags.Static|BindingFlags.NonPublic),
@@ -1180,7 +1180,7 @@ public class Optimizerによる式変換:ATest{
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[]{
@@ -1559,7 +1559,7 @@ public class Optimizerによる式変換:ATest{
         var v=Expression.Parameter(typeof(int),"v");
         var a=Expression.Parameter(typeof(int),"a");
         var Inline=typeof(ExtensionSet).GetMethods().Last(p=>p.Name=="Inline");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int,int>>(
                 Expression.Call(
                     typeof(global::LinqDB.Sets.Helpers).GetMethod("Let")!.MakeGenericMethod(typeof(int),typeof(int)),
@@ -1582,7 +1582,7 @@ public class Optimizerによる式変換:ATest{
         var v=Expression.Parameter(typeof(評価検証),"v");
         var a=Expression.Parameter(typeof(評価検証),"a");
         var Inline=typeof(ExtensionSet).GetMethods().Last(p=>p.Name=="Inline");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<評価検証,評価検証>>(
                 Expression.Call(
                     typeof(global::LinqDB.Sets.Helpers).GetMethod("Let")!.MakeGenericMethod(typeof(評価検証),typeof(評価検証)),
@@ -1602,7 +1602,7 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]public void Letラムダ30(){
-        this.Execute2(v=>
+        this.実行結果が一致するか確認(v=>
             v.Let(a=>
                 v.Let(b=>
                     a+b
@@ -1611,7 +1611,7 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]public void Letラムダ31(){
-        this.Execute2(v=>
+        this.実行結果が一致するか確認(v=>
             v.Let(a=>
                 v.Inline(b=>
                     a+b
@@ -1621,7 +1621,7 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]public void Letラムダ32(){
         var v=1;
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(a=>
                 Inline(()=>
                     v+a
@@ -1630,7 +1630,7 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]public void Letラムダ33(){
-        this.Execute2(v=>
+        this.実行結果が一致するか確認(v=>
             v.Let(a=>
                 Inline(()=>
                     v+a
@@ -1639,7 +1639,7 @@ public class Optimizerによる式変換:ATest{
         );
     }
     [TestMethod]public void Letラムダ4(){
-        this.Execute2(v=>
+        this.実行結果が一致するか確認(v=>
             v.Let(a=>
                 Inline(()=>
                     v+a
@@ -1656,7 +1656,7 @@ public class Optimizerによる式変換:ATest{
         //    )
         //);
         var v=new[]{1,2,3};
-        this.Execute2(a=>
+        this.実行結果が一致するか確認(a=>
             v.Let(b=>
                 b.Select(c=>
                     new{b,a}
@@ -2045,7 +2045,7 @@ public class Optimizerによる式変換:ATest{
     }
     [TestMethod]
     public void ラムダ跨ぎ0(){
-        this.Execute引数パターン(v=>
+        this.実行結果が一致するか確認(v=>
             v.Let(a=>
                 v.Let(b=>
                     Inline(()=>
@@ -2054,9 +2054,9 @@ public class Optimizerによる式変換:ATest{
                 )
             )
         );
-        this.Execute引数パターン(a=>ArrN<int>(a).Where(p=>p==1));
-        this.Execute引数パターン(a=>ArrN<int>(a).Select(b=>a.Let(c=>a.Let(d=>c+b))));
-        this.Execute引数パターン(a=>a.Let(aa=>a.Let(aaa=>ArrN<int>(a).Where(aaaa=>aaaa==aa))));
+        this.実行結果が一致するか確認(a=>ArrN<int>(a).Where(p=>p==1));
+        this.実行結果が一致するか確認(a=>ArrN<int>(a).Select(b=>a.Let(c=>a.Let(d=>c+b))));
+        this.実行結果が一致するか確認(a=>a.Let(aa=>a.Let(aaa=>ArrN<int>(a).Where(aaaa=>aaaa==aa))));
     }
     [TestMethod]
     public void ラムダ跨ぎ1(){
@@ -2065,38 +2065,38 @@ public class Optimizerによる式変換:ATest{
         }.ToSet();
         var value=100m;
         var v=1m;
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 data.GroupBy(LINEITEM=>LINEITEM).Where(p=>p.Sum()>300m)
             )
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 value
             )
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 data.Select(p=>data.Sum(q=>q)>300m)
             )
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 data.Sum(q=>q)>300m
             )
         );
         var g=data.GroupBy(LINEITEM=>LINEITEM);
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 g.Where(p=>p.Sum()>300m)
             )
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(x=>
                 g.Where(p=>p.Sum()>300m)
             )
         );
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             from LINEITEM in data
             group LINEITEM by LINEITEM
             into p
@@ -2205,7 +2205,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         }
     }
     protected virtual void Assert(Expression e){
-        this.Execute2(Expression.Lambda<Func<T>>(e));
+        this.実行結果が一致するか確認(Expression.Lambda<Func<T>>(e));
     }
     //[TestMethod]
     //public void 組み合わせ()
@@ -2227,7 +2227,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a4=new 評価検証(4);
         var a5=new 評価検証(5);
         var a6=new 評価検証(6);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             ()=>(
                 (
                     a1+(
@@ -2254,7 +2254,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     [TestMethod]
     public void ラムダ局所0(){
         var a=new T();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     Expression.Constant(a),
@@ -2266,7 +2266,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     [TestMethod]
     public void ラムダ局所1(){
         var a=new T();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     Expression.Add(
@@ -2284,14 +2284,14 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     [TestMethod]
     public void ラムダ局所2(){
         var v=1;
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             v.Let(a=>a)
         );
     }
     [TestMethod]
     public void ラムダ局所3() {
         var v = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             v.Let(a =>
                 a*2+a*2==0
                     ? a*2+a*2
@@ -2322,7 +2322,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     public void ループ跨ぎ0(){
         var p=this.Parameter("p");
         var v評価=Constant評価;
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 InlineExpression(p,v評価,v評価),
                 p
@@ -2333,7 +2333,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     [TestMethod]
     public void ループ跨ぎ1インラインラムダごと共通部分式(){
         var a=this.Parameter("a");
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 Expression.Add(
                     InlineExpression(a,Constant評価,a),
@@ -2350,7 +2350,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var b=this.Parameter("b");
         var v評価=Constant評価;
         var b評価=評価(b);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 InlineExpression(
                     a,
@@ -2373,7 +2373,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var v評価=Constant評価;
         var b評価=評価(b);
         var c評価=評価(c);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 InlineExpression(
                     a,
@@ -2400,7 +2400,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var b=this.Parameter("b");
         var c=this.Parameter("c");
         var v評価=Constant評価;
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 InlineExpression(
                     b,
@@ -2429,7 +2429,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var d1=new int[]{
             3,4,5
         };
-        this.Execute2(
+        this.実行結果が一致するか確認(
             ()=>
                 d0.Join(d1,o=>o,i=>i,(o,i)=>new{
                     o,i
@@ -2443,7 +2443,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 InlineExpression(
                     a,
@@ -2477,7 +2477,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Block(
                     new[]{
@@ -2501,7 +2501,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a=this.Parameter("a");
         var b=this.Parameter("b");
         var v評価=Constant評価;
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T>>(
                 Expression.Call(
                     LetMethod.MakeGenericMethod(v評価.Type,a.Type),
@@ -2521,7 +2521,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a=this.Parameter("a");
         var b=this.Parameter("b");
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Block(
                     new[]{
@@ -2547,7 +2547,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 InlineExpression(
                     a,
@@ -2581,7 +2581,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 InlineExpression(
                     a,
@@ -2615,7 +2615,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -2649,7 +2649,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -2683,7 +2683,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -2717,7 +2717,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 InlineExpression(
                     a,
@@ -2751,7 +2751,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     InlineExpression(
@@ -2789,7 +2789,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     InlineExpression(
@@ -2827,7 +2827,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     InlineExpression(
@@ -2865,7 +2865,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     InlineExpression(
@@ -2903,7 +2903,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     LetExpression(
@@ -2940,7 +2940,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var b=this.Parameter("b");
         var a評価=評価(a);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -2966,7 +2966,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a=this.Parameter("a");
         var a評価=評価(a);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     LetExpression(
@@ -2989,7 +2989,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b=this.Parameter("b");
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -3012,7 +3012,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var b=this.Parameter("b");
         var a評価=評価(a);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -3039,7 +3039,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var b=this.Parameter("b");
         var a評価=評価(a);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -3073,7 +3073,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var c=this.Parameter("c");
         var a評価=評価(a);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -3109,7 +3109,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 LetExpression(
                     a,
@@ -3143,7 +3143,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     LetExpression(
@@ -3181,7 +3181,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     LetExpression(
@@ -3264,7 +3264,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
                 Lambda_b
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     Lambda_a,
@@ -3275,7 +3275,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     }
     [TestMethod]
     public void ラムダ跨ぎ評価回数10(){
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             7.Let(a0=>
                 7.Let(b0=>
                     Inline(()=>
@@ -3339,7 +3339,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     }
     [TestMethod]
     public void ラムダ跨ぎ評価回数11(){
-        this.Execute2(()=>
+        this.実行結果が一致するか確認(()=>
             0.Let(a0=>
                 1.Let(b1=>
                     2.Let(c2=>
@@ -3468,32 +3468,32 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     [TestMethod]
     public void ラムダ跨ぎ00(){
         var array=ArrN<int>(1);
-        this.Execute引数パターン(a=>
+        this.実行結果が一致するか確認(a=>
             array.GroupBy(LINEITEM=>LINEITEM).Select(p=>p.Max())
         );
-        this.Execute引数パターン(a=>
+        this.実行結果が一致するか確認(a=>
             array.GroupBy(LINEITEM=>LINEITEM).Select(p=>p.Sum())
         );
     }
     [TestMethod]
     public void ラムダ跨ぎ01(){
         var array=ArrN<int>(1);
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             array.GroupBy(LINEITEM => LINEITEM).Select(p => p.Sum()>300m)
         );
     }
     [TestMethod]
     public void ラムダ跨ぎ02(){
         var array=ArrN<int>(1);
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             array.GroupBy(LINEITEM => LINEITEM).Where(p => p.Sum()>300m)
         );
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             a.Let(aa =>
                 array.GroupBy(LINEITEM => LINEITEM).Where(p => p.Sum()>300m)
             )
         );
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             a.Let(aa =>
                 array.GroupBy(LINEITEM => LINEITEM).Where(p => p.Sum()>300m)
             )
@@ -3504,7 +3504,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     public void ラムダ跨ぎ1(){
         //var data=new[]{1,2,3}.ToSet();
         //var v=100m;
-        this.Execute引数パターン(v =>
+        this.実行結果が一致するか確認(v =>
             v.Let(a =>
                 v.Let(b =>
                     Inline(() =>
@@ -3513,9 +3513,9 @@ public class OptimizerGeneric<T>:ATest where T:new(){
                 )
             )
         );
-        this.Execute引数パターン(a => ArrN<int>(a).Where(p => p==1));
-        this.Execute引数パターン(a => ArrN<int>(a).Select(b => a.Let(c => a.Let(d => c+b))));
-        this.Execute引数パターン(a => a.Let(aa => a.Let(aaa => ArrN<int>(a).Where(aaaa => aaaa==aa))));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Where(p => p==1));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(b => a.Let(c => a.Let(d => c+b))));
+        this.実行結果が一致するか確認(a => a.Let(aa => a.Let(aaa => ArrN<int>(a).Where(aaaa => aaaa==aa))));
         //.Lambda ラムダ1<System.Func`1[System.Decimal]>() {
         //    .Block(System.Decimal $Cラムダ跨ぎ0) {
         //        $Cラムダ跨ぎ0 = .Constant<ClientTest.BackendClient.AAATest_Optimizer+<>c__DisplayClass3_0>(ClientTest.BackendClient.AAATest_Optimizer+<>c__DisplayClass3_0).b;
@@ -3525,27 +3525,27 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         //.Lambda ラムダ0<System.Func`1[System.Decimal]>() {
         //    $Cラムダ跨ぎ0
         //}
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             a.Let(p =>
                 a
             )
         );
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             a.Let(b =>
                 ArrN<int>(a).Select(p => ArrN<int>(b).Sum(q => q)>300m)
             )
         );
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             a.Let(aa =>
                 ArrN<int>(a).Sum(q => q)>300m
             )
         );
-        this.Execute引数パターン(a=>
+        this.実行結果が一致するか確認(a=>
             a.Let(aa=>
                 ArrN<int>(a).GroupBy(LINEITEM=>LINEITEM).Where(p=>p.Sum()>300m)
             )
         );
-        this.Execute引数パターン(a=>
+        this.実行結果が一致するか確認(a=>
             a.Let(aa=>
                 ArrN<int>(a).GroupBy(LINEITEM=>LINEITEM).Where(p=>p.Sum()>300m)
             )
@@ -3558,7 +3558,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         var a評価=評価(a);
         var b評価=評価(b);
         var v評価=Constant評価;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Block(
                     new[]{
@@ -3581,12 +3581,12 @@ public class OptimizerGeneric<T>:ATest where T:new(){
     public void ラムダ跨ぎ3() {
         var array = ArrN<int>(1);
         var g=array.GroupBy(LINEITEM=>LINEITEM);
-        this.Execute引数パターン(a =>
+        this.実行結果が一致するか確認(a =>
             g.Select(p => p.Count())
         );
     }
     private int 組み合わせ1Assert(MethodInfo A_Method0,MethodInfo A_Method3,MethodInfo B_Method1,MethodInfo B_Method2,MethodInfo B_Method4,MethodInfo B_Method5){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     組み合わせ1Assert共通メソッド(A_Method0,B_Method1,B_Method2),
@@ -3680,7 +3680,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
         );
     }
     private void 組み合わせ2Assert(MethodInfo A_Method00,MethodInfo A_Method07,MethodInfo B_Method01,MethodInfo B_Method02,MethodInfo B_Method08,MethodInfo B_Method09,MethodInfo C_Method03,MethodInfo C_Method04,MethodInfo C_Method05,MethodInfo C_Method06,MethodInfo C_Method10,MethodInfo C_Method11,MethodInfo C_Method12,MethodInfo C_Method13){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Add(
                     組み合わせ2の共通メソッド(A_Method00,B_Method01,B_Method02,C_Method03,C_Method04,C_Method05,C_Method06),
@@ -3714,7 +3714,7 @@ public class OptimizerGeneric<T>:ATest where T:new(){
             //    B_Method0,B_Method1,B_Method2,B_Method3,
             //    C_Method0,C_Method1,C_Method2,C_Method3,C_Method4,C_Method5,C_Method6,C_Method7
             //);
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<T>>(
                     Expression.Add(
                         組み合わせ2の共通メソッド(
@@ -3772,6 +3772,6 @@ public sealed class OptimizerGenericInt32:OptimizerGeneric<int>{
 [TestClass]
 public sealed class OptimizerGeneric評価検証:OptimizerGeneric<評価検証>{
     protected override void Assert(Expression e){
-        this.Execute2(Expression.Lambda<Func<評価検証>>(e));
+        this.実行結果が一致するか確認(Expression.Lambda<Func<評価検証>>(e));
     }
 }

@@ -434,7 +434,10 @@ partial class Optimizer{
             this.番号=0;
             this.List束縛Parameter情報.Clear();
             //this.Dictionary_Expression_ループラムダ跨ぎParameter.Clear();
-            return this.Traverse(Lambda0);
+            var Lambda1=(LambdaExpression)this.Traverse(Lambda0);
+            var Block1_Variables=this.Dictionaryラムダ跨ぎParameter.Keys.Concat(this.ループ跨ぎParameters);
+            var Lambda1_Body=Expression.Block(Block1_Variables,this._作業配列.Expressions設定(Lambda1.Body));
+            return Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda1.Name,Lambda1.TailCall,Lambda1.Parameters);
         }
         internal Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
             get=>this._取得_先行評価式.Dictionaryラムダ跨ぎParameter;

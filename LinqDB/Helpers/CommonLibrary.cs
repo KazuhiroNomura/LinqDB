@@ -280,8 +280,6 @@ public static class CommonLibrary {
             Type.Name.StartsWith(CSクロージャー,StringComparison.Ordinal) || 
             Type.Name.StartsWith(VBクロージャー, StringComparison.Ordinal)
         );
-    public static bool IsConstructedGenericType(this TypeInfo Type)=>Type.AsType().IsConstructedGenericType;
-    //public static bool IsAnonymous(this Type Type)=>Type.IsClass&&Type.IsGenericType&&(Type.Name.IndexOf(
     //    CS匿名型名,
     //    StringComparison.Ordinal)==0||Type.Name.IndexOf(
     //    VB匿名型名,
@@ -305,18 +303,18 @@ public static class CommonLibrary {
     /// <param name="Type"></param>
     /// <returns></returns>
     public static bool IsNullable(this Type Type) => Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
-    /// <summary>
-    /// 小文字か
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static bool IsLower(this string s) =>s.All(c=>!char.IsUpper(c));
-    /// <summary>
-    /// TypeがNullableまたは参照型であるか判定する。
-    /// </summary>
-    /// <param name="Type"></param>
-    /// <returns></returns>
-    public static bool IsNullable又は参照型(this Type Type) => !Type.IsValueType&&Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
+    ///// <summary>
+    ///// 小文字か
+    ///// </summary>
+    ///// <param name="s"></param>
+    ///// <returns></returns>
+    //public static bool IsLower(this string s) =>s.All(c=>!char.IsUpper(c));
+    ///// <summary>
+    ///// TypeがNullableまたは参照型であるか判定する。
+    ///// </summary>
+    ///// <param name="Type"></param>
+    ///// <returns></returns>
+    //public static bool IsNullable又は参照型(this Type Type) => !Type.IsValueType&&Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
     public static Type Nullableまたは参照型(this Type Type,Type[]Types){
         if(Type.IsValueType&&!Type.IsNullable()){
             Types[0]=Type;

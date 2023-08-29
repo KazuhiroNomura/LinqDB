@@ -1066,7 +1066,7 @@ partial class Optimizer {
                             var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments[2]);
                             var MethodCall1_Arguments_3 = this.Traverse(MethodCall0_Arguments[3]);
                             var MethodCall1_Arguments_4 = this.Traverse(MethodCall0_Arguments[4]);
-                            Expression? MethodCall1_Arguments_5=MethodCall0_Arguments.Count==6
+                            var MethodCall1_Arguments_5=MethodCall0_Arguments.Count==6
                                 //引数5にはComparerがあるのでそれで比較する。
                                 ?this.Traverse(MethodCall0_Arguments[5])
                                 :null;
@@ -2596,20 +2596,33 @@ partial class Optimizer {
             var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
             var MethodCall1_MethodCall_GenericMethodDefinition=MethodCall1_MethodCall_Method.GetGenericMethodDefinition();
             if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
-                Type? Set1 = selector1_Body.Type;
+                //Type? Set1 = selector1_Body.Type;
+                //while(true) {
+                //    if(Set1 is null) {
+                //        //IEnumerable<>
+                //        if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector) {
+                //            MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
+                //        }
+                //        break;
+                //    }
+                //    var GenericTypeDefinition = Set1;
+                //    if(GenericTypeDefinition.IsGenericType) {
+                //        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                //    }
+                //    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
+                //        break;
+                //    }
+                //    Set1=Set1.BaseType;
+                //}
+                var Set1 = selector1_Body.Type;
                 while(true) {
-                    if(Set1 is null) {
-                        //IEnumerable<>
-                        if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector) {
-                            MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
-                        }
-                        break;
-                    }
                     var GenericTypeDefinition = Set1;
-                    if(GenericTypeDefinition.IsGenericType) {
-                        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-                    }
-                    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
+                    if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                    if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
+                    if(Set1.BaseType is null) {
+                        //IEnumerable<>
+                        if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+                            MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
                         break;
                     }
                     Set1=Set1.BaseType;
@@ -2692,20 +2705,38 @@ partial class Optimizer {
             }
             var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
             if(typeof(ExtensionSet)==MethodCall1_MethodCall_Method.DeclaringType) {
-                Type? Set1 = selector1_Body.Type;
+                //Type? Set1 = selector1_Body.Type;
+                //while(true) {
+                //    if(Set1 is null) {
+                //        //IEnumerable<>
+                //        if(MethodCall1_MethodCall_Method.GetGenericMethodDefinition()==Reflection.ExtensionSet.SelectMany_selector) {
+                //            MethodCall1_MethodCall_Method=Reflection.ExtensionEnumerable.SelectMany_selector.MakeGenericMethod(MethodCall1_MethodCall_Method.GetGenericArguments());
+                //        }
+                //        break;
+                //    }
+                //    var GenericTypeDefinition = Set1;
+                //    if(GenericTypeDefinition.IsGenericType) {
+                //        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                //    }
+                //    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
+                //        break;
+                //    }
+                //    Set1=Set1.BaseType;
+                //}
+                var Set1 = selector1_Body.Type;
                 while(true) {
-                    if(Set1 is null) {
-                        //IEnumerable<>
-                        if(MethodCall1_MethodCall_Method.GetGenericMethodDefinition()==Reflection.ExtensionSet.SelectMany_selector) {
-                            MethodCall1_MethodCall_Method=Reflection.ExtensionEnumerable.SelectMany_selector.MakeGenericMethod(MethodCall1_MethodCall_Method.GetGenericArguments());
-                        }
-                        break;
-                    }
                     var GenericTypeDefinition = Set1;
                     if(GenericTypeDefinition.IsGenericType) {
                         GenericTypeDefinition=Set1.GetGenericTypeDefinition();
                     }
                     if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
+                        break;
+                    }
+                    if(Set1.BaseType is null) {
+                        //IEnumerable<>
+                        if(MethodCall1_MethodCall_Method.GetGenericMethodDefinition()==Reflection.ExtensionSet.SelectMany_selector) {
+                            MethodCall1_MethodCall_Method=Reflection.ExtensionEnumerable.SelectMany_selector.MakeGenericMethod(MethodCall1_MethodCall_Method.GetGenericArguments());
+                        }
                         break;
                     }
                     Set1=Set1.BaseType;

@@ -10,28 +10,28 @@ public class Test_取得_ループラムダ先行評価式 : ATest
     public void Traverse()
     {
         //if(e==null) return;
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a));
         //switch(e.NodeType) {
         //    case ExpressionType.Constant:{
         //        if(e.Type.Is定数をILで直接埋め込めるTypeか()) return;
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Select(d => 1)));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Select(d => 1m)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Select(d => 1)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Select(d => 1m)));
         //    }
         //    case ExpressionType.Lambda:
-        this.Execute引数パターン標準ラムダループ((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
+        this.実行結果が一致するか確認((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
         //    case ExpressionType.Block:{
-        this.Execute引数パターン標準ラムダループ((a, b) =>
+        this.実行結果が一致するか確認((a, b) =>
             ArrN<int>(a).Let(c =>
                 ArrN<int>(b).Let(d => c)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).Let(c => ArrN<int>(b).Let(d => c)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).Let(c => ArrN<int>(b).Let(d => c)));
         //    }
         //}
         //if(this.変数_判定_指定Parametersが存在しない.実行(e,this._Parameters)) {
-        this.Execute引数パターン標準ラムダループ((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
+        this.実行結果が一致するか確認((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
         //}
-        this.Execute引数パターン標準ラムダループ((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
+        this.実行結果が一致するか確認((a, b, c) => ArrN<int>(a).Select(d => ArrN<int>(b).Select(e => ArrN<int>(c).Select(f => e))));
     }
     [TestMethod]
     public void 発見したうまくいかないパターン0(){

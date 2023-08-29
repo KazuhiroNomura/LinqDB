@@ -73,24 +73,24 @@ public class Test_変換_単一メソッド : ATest
     {
     }
     [TestMethod]public void Test0(){
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(b => SetN<int>(a).Where(c => c==1&&b==0)));
-        this.Execute引数パターン(a => SetN<int>(a).Update(p => true, p => p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(b => SetN<int>(a).Where(c => c==1&&b==0)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update(p => true, p => p));
         //SelectMany内部のメソッドチェーンをAny()が出来る最低限に変形
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(Get).Any());
-        this.Execute引数パターン(a => SetN<int>(a).Any());
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p).LongCount());
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a)).Any());
-        this.Execute引数パターン(a => SetN<int>(a).Union(SetN<int>(a)).Any());
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => SetN<int>(a).SelectMany(q => SetN<int>(a)).Any()));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Select(r => r)).Any());
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).SelectMany(r => SetN<int>(a).SelectMany(q => SetN<int>(a)))).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(Get).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p).LongCount());
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a)).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).Union(SetN<int>(a)).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => SetN<int>(a).SelectMany(q => SetN<int>(a)).Any()));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Select(r => r)).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).SelectMany(r => SetN<int>(a).SelectMany(q => SetN<int>(a)))).Any());
         //SelectMany
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => r == 3)));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => p == 4)));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => r == 3 && p == 4)));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == r)));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == p)));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => static_field)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => r == 3)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => p == 4)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => r == 3 && p == 4)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == r)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => 4 == p && 3 == p)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(r => static_field)));
     }
     [TestMethod]public void Test1(){
         //()=>
@@ -132,59 +132,59 @@ public class Test_変換_単一メソッド : ATest
         //    )
         //にしたい。これはその後の最適化でWhereKeyに変形できるため。
         //todo ImmutableSet<>のGetEnumerator()でthisがnullになっている
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(predicate)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Where(predicate)));
     }
     [TestMethod]public void Test2(){
         var IEquatableでなくop_Equality変数 = new Set<IEquatableでなくop_Equality>();
         var IEquatableでなくop_Equalityでない変数 = new Set<IEquatableでなくop_Equalityでない>();
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Select(r => r)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a).Select(r => r)));
         //MethodCallExpression
-        this.Execute引数パターン(a => SetN<int>(a).Contains(1));
-        this.Execute2(() => IEquatableでなくop_Equality変数.Contains(new IEquatableでなくop_Equality()));
-        this.Execute2(() => IEquatableでなくop_Equalityでない変数.Contains(new IEquatableでなくop_Equalityでない()));
-        this.Execute引数パターン(a => SetN<int>(a).Delete(p => p == 1));
-        this.Execute引数パターン(a => SetN<int>(a).GroupBy(p => p));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a), (p, collection) => new { p, collection }));
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(p => SetN<int>(a), resultSelector));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Contains(1));
+        this.実行結果が一致するか確認(() => IEquatableでなくop_Equality変数.Contains(new IEquatableでなくop_Equality()));
+        this.実行結果が一致するか確認(() => IEquatableでなくop_Equalityでない変数.Contains(new IEquatableでなくop_Equalityでない()));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Delete(p => p == 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).GroupBy(p => p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a), (p, collection) => new { p, collection }));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(p => SetN<int>(a), resultSelector));
         //Join11.Select
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => o + i).Select(p => p + 1));
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => o + i).Select(selector));
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, resultSelector).Select(selector));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => o + i).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => o + i).Select(selector));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, resultSelector).Select(selector));
         //Select.Select
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p + 1).Select(q => q + 1));
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p + 1).Select(selector));
-        this.Execute引数パターン(a => SetN<int>(a).Select(selector).Select(q => q + 1));
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => new { a = p, b = p }).Select(q => new { q.a, q.b, c = q.a, d = q.b }));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p + 1).Select(q => q + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p + 1).Select(selector));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(selector).Select(q => q + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => new { a = p, b = p }).Select(q => new { q.a, q.b, c = q.a, d = q.b }));
         //Join11.Where
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.o == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.i == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.i + p.o == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, resultSelector).Where(p => p == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.o == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.i == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new { o, i }).Where(p => p.i + p.o == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, resultSelector).Where(p => p == 3));
         //Select.Where
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p + 1).Where(p => p == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Select(selector).Where(p => p == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p + 1).Where(p => p == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(selector).Where(p => p == 3));
         //Where.Where
-        this.Execute引数パターン(a => SetN<int>(a).Where(p => p == 3).Where(q => q == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Where(p => p == 3).Where(predicate));
-        this.Execute引数パターン(a => SetN<int>(a).Where(predicate).Where(q => q == 3));
-        this.Execute引数パターン(a => SetN<int>(a).Where(predicate).Where(predicate));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Where(p => p == 3).Where(q => q == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Where(p => p == 3).Where(predicate));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Where(predicate).Where(q => q == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Where(predicate).Where(predicate));
         //SelectWhere再帰で匿名型を走査
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => new string((char)p, 1)).Where(p => p == ""));
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => new { p }).Where(p => p.p == 3));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => new string((char)p, 1)).Where(p => p == ""));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => new { p }).Where(p => p.p == 3));
         //JoinWhere再帰で匿名型を走査
-        this.Execute引数パターン(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new string((char)o, 1)).Where(p => p == ""));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Join(SetN<int>(a), o => o, i => i, (o, i) => new string((char)o, 1)).Where(p => p == ""));
         //ArrayIndex
-        this.Execute引数パターン(a => (new int[3])[0]);
+        this.実行結果が一致するか確認(a => (new int[3])[0]);
         //GreaterThan
         var v = 3;
-        this.Execute引数パターン(a => v > 3);
+        this.実行結果が一致するか確認(a => v > 3);
         //GreaterThanOrEqual
-        this.Execute引数パターン(a => v >= 3);
+        this.実行結果が一致するか確認(a => v >= 3);
     }
     private void 共通BinaryAssign1パターン<T>(T a, T b, ExpressionType NodeType)
     {
         var p = Expression.Parameter(typeof(T));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Block(
                     new[] { p },
@@ -303,7 +303,7 @@ public class Test_変換_単一メソッド : ATest
     private void 共通Binary<T, TResult>(T a, T b, ExpressionType NodeType){
         var ap=Expression.Parameter(typeof(T));
         var bp=Expression.Parameter(typeof(T));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T,T,TResult>>(
                 Expression.MakeBinary(
                     NodeType,
@@ -313,7 +313,7 @@ public class Test_変換_単一メソッド : ATest
                 ap,bp
             ),a,b
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.MakeBinary(
                     NodeType,
@@ -422,7 +422,7 @@ public class Test_変換_単一メソッド : ATest
             )
         );
         var expected = Lambda.Compile()();
-        var actual = this.Execute2(Lambda);
+        var actual = this.実行結果が一致するか確認(Lambda);
         Assert.AreEqual(expected, actual);
     }
     private void 共通AndOr短絡評価(ExpressionType NodeType)
@@ -498,7 +498,7 @@ public class Test_変換_単一メソッド : ATest
     }
     private void 共通UnaryNullable対応2<T>(T a, ExpressionType NodeType)
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.MakeUnary(
                     NodeType,
@@ -526,7 +526,7 @@ public class Test_変換_単一メソッド : ATest
     private void 共通PostPreIncrementDecrementAssign<T>(ExpressionType NodeType)
     {
         var p = Expression.Parameter(typeof(T));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T>>(
                 Expression.Block(
                     new[] { p },
@@ -566,7 +566,7 @@ public class Test_変換_単一メソッド : ATest
         //    if(Block1_Expression.NodeType==ExpressionType.Assign){
         //        if(Dictionary代入先Expression.ContainsKey(Block1_Assign.Left)){
         var p = Expression.Parameter(typeof(int), "p");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -576,7 +576,7 @@ public class Test_変換_単一メソッド : ATest
             )
         );
         //        }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -591,7 +591,7 @@ public class Test_変換_単一メソッド : ATest
         //if(Binary0_Left==Binary1_Left&&Binary0_Right==Binary1_Right&&Binary0_Conversion==Binary1_Conversion)
         this._InstanceInt32 = 0;
         const int expected = 2;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Assign(
                     Expression.Field(
@@ -605,7 +605,7 @@ public class Test_変換_単一メソッド : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { i0, i1 },
@@ -640,7 +640,7 @@ public class Test_変換_単一メソッド : ATest
         //        )
         //    );
         //}
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -717,7 +717,7 @@ public class Test_変換_単一メソッド : ATest
             left,
             right
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return expected;
     }
@@ -744,7 +744,7 @@ public class Test_変換_単一メソッド : ATest
             typeof(object),
             operand
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return actual;
     }
@@ -771,7 +771,7 @@ public class Test_変換_単一メソッド : ATest
             typeof(TResult),
             Expression.Constant(input, typeof(object))
         );
-        var actual1=this.Execute2(Expression.Lambda<Func<TResult>>(Dynamic0));
+        var actual1=this.実行結果が一致するか確認(Expression.Lambda<Func<TResult>>(Dynamic0));
         Assert.AreEqual(expected,actual1);
     }
     [TestMethod]
@@ -797,7 +797,7 @@ public class Test_変換_単一メソッド : ATest
             Expression.Constant(array,typeof(TArray)),
             Expression.Constant(index,typeof(TIndex))
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return expected;
     }
@@ -836,7 +836,7 @@ public class Test_変換_単一メソッド : ATest
             Expression.Constant(index,typeof(TIndex)),
             Expression.Constant(value,typeof(TValue))
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         Assert.AreEqual(expected,value);
         return expected;
@@ -888,7 +888,7 @@ public class Test_変換_単一メソッド : ATest
             typeof(object),
             Expression.Constant(オブジェクト)
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return expected;
     }
@@ -921,7 +921,7 @@ public class Test_変換_単一メソッド : ATest
         );
         var Lambda = Expression.Lambda<Action>(Dynamic0);
         //Field.SetValue(オブジェクト,初期値);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Lambda,
             ()=>Field.SetValue(オブジェクト,初期値),
             ()=>Assert.AreEqual(設定値,Field.GetValue(オブジェクト))
@@ -951,7 +951,7 @@ public class Test_変換_単一メソッド : ATest
             Expression.Constant(b),
             Expression.Constant(c)
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return expected;
     }
@@ -980,7 +980,7 @@ public class Test_変換_単一メソッド : ATest
             Expression.Constant(@double),
             Expression.Constant(@string)
         );
-        this.Execute標準ラムダループ(Expression.Lambda<Action>(Dynamic0));
+        this.実行結果が一致するか確認(Expression.Lambda<Action>(Dynamic0));
     }
     private object DynamicInvokeMember_Func(object オブジェクト, string メンバー名,object @int,object @double,object @string){
         var binder=Binder.InvokeMember(
@@ -1009,7 +1009,7 @@ public class Test_変換_単一メソッド : ATest
             Expression.Constant(@double),
             Expression.Constant(@string)
         );
-        var actual=this.Execute2(Expression.Lambda<Func<object>>(Dynamic0));
+        var actual=this.実行結果が一致するか確認(Expression.Lambda<Func<object>>(Dynamic0));
         Assert.AreEqual(expected,actual);
         return expected;
     }
@@ -1170,18 +1170,18 @@ public class Test_変換_単一メソッド : ATest
             typeof(bool),
             operand
         );
-        this.Execute2(Expression.Lambda<Func<bool>>(Dynamic0));
+        this.実行結果が一致するか確認(Expression.Lambda<Func<bool>>(Dynamic0));
     }
     [TestMethod]
     public void Convert()
     {
-        this.Execute引数パターン(a => (int)a);
+        this.実行結果が一致するか確認(a => (int)a);
     }
     [TestMethod]
     public void ConvertChecked()
     {
-        this.Execute引数パターン(a => checked((int)a));
-        this.Execute引数パターン(a => checked((double)checked((int)a)));
+        this.実行結果が一致するか確認(a => checked((int)a));
+        this.実行結果が一致するか確認(a => checked((double)checked((int)a)));
     }
 
     [TestMethod]
@@ -1192,148 +1192,148 @@ public class Test_変換_単一メソッド : ATest
         //    if(GenericTypeDefinition.IsGenericType)
         //        GenericTypeDefinition=Type.GetGenericTypeDefinition();
         //    if(GenericTypeDefinition==typeof(Set<>))
-        this.Execute引数パターン(a => SetN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Contains(0));
         //    Type=Type.BaseType;
         //}
-        this.Execute引数パターン(a => EnuN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Contains(0));
     }
 
     [TestMethod]
     public void Call()
     {
         //if(Reflection.ExtendSet.Any==MethodCall0_GenericMethodDefinition||Reflection.ExtendEnumerable.Any==MethodCall0_GenericMethodDefinition) {
-        this.Execute引数パターン(a => ArrN<int>(a).Any());
-        this.Execute引数パターン(a => EnuN<int>(a).Any());
-        this.Execute引数パターン(a => SetN<int>(a).Any());
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Any());
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Any());
+        this.実行結果が一致するか確認(a => SetN<int>(a).Any());
         //} else if(Reflection.ExtendEnumerable.Any_predicate==MethodCall0_GenericMethodDefinition) {
-        this.Execute引数パターン(a => ArrN<int>(a).Any(p => p == 0));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Any(p => p == 0));
         //}else if((Setか=(Reflection.ExtendSet1.Contains_value==MethodCall0_GenericMethodDefinition))||Reflection.ExtendEnumerable.Contains_value==MethodCall0_GenericMethodDefinition) {
         //    if(MethodCall1_Arguments_0_Type.IsArray) {
-        this.Execute引数パターン(a => ArrN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Contains(0));
         //    }else{
         //        GenericArguments=Set1?.GetGenericArguments()??TypeからIEnumerable1を取得(MethodCall1_Arguments_0_Type).GetGenericArguments();
-        this.Execute引数パターン(a => SetN<int>(a).Contains(0));
-        this.Execute引数パターン(a => EnuN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Contains(0));
         //    }
         //    if(Setか){
-        this.Execute引数パターン(a => SetN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Contains(0));
         //    }else{
-        this.Execute引数パターン(a => EnuN<int>(a).Contains(0));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Contains(0));
         //    }
         //if(p_Type.IsPrimitive) {
-        this.Execute引数パターン(a => new Set<double>().Contains(0));
+        this.実行結果が一致するか確認(a => new Set<double>().Contains(0));
         //} else {
         //    if(IEquatableType.IsAssignableFrom(p_Type)) {
-        this.Execute2(() => new Set<struct_演算子オーバーロード>().Contains(new struct_演算子オーバーロード(0, true)));
+        this.実行結果が一致するか確認(() => new Set<struct_演算子オーバーロード>().Contains(new struct_演算子オーバーロード(0, true)));
         //    } else {
         //        if(q_Type.IsValueType) {
-        this.Execute2(() => new Set<Point>().Contains(new Point(0, 3)));
+        this.実行結果が一致するか確認(() => new Set<Point>().Contains(new Point(0, 3)));
         //        }
-        this.Execute2(() => new Set<ValueType>().Contains(3));
+        this.実行結果が一致するか確認(() => new Set<ValueType>().Contains(3));
         //    }
         //}
         //} else if(Reflection.ExtendSet1.Delete==MethodCall0_GenericMethodDefinition) {
         //    if(MethodCall1_predicate!=null) {
-        this.Execute引数パターン(a => SetN<int>(a).Delete(p => p == 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Delete(p => p == 1));
         //    }
-        this.Execute引数パターン(a => SetN<int>(a).Delete((Func<int, bool>)(p => p == 1)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Delete((Func<int, bool>)(p => p == 1)));
         //} else if(Reflection.ExtendSet1.Join==MethodCall0_GenericMethodDefinition) {
         //    if(outer.Type.GetGenericArguments().Length==1){
         //        if(inner.Type.GetGenericArguments().Length==1){
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity>(), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity>(), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
         //        }else{
         //            if(innerKeySelecter?.Body is MemberExpression innerKeySelecter_Body) {
         //                if(innerKeySelecter_Body_Expression==innerKeySelecter.Parameters[0]&&innerKeySelecter_Body.Member.MetadataToken==innerKeySelecter_Body_Expression.Type.GetProperty(nameof(IKeyEquatable<Int32>.PrimaryKey)).MetadataToken) {
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
         //                }
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
         var c = new Tables.Entity(1);
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => c.PrimaryKey.ID1, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => c.PrimaryKey.ID1, (o, i) => new { o, i }));
         //            }
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, i => i, (o, i) => new { o, i }));
-        this.Execute2(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, (Func<Tables.Entity,Tables.Entity>)(i => i), (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, i => i, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity>().Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, (Func<Tables.Entity,Tables.Entity>)(i => i), (o, i) => new { o, i }));
         //        }
         //    } else{
         //        if(outerKeySelecter?.Body is MemberExpression outerKeySelecter_Body) {
         //            if(outerKeySelecter_Body_Expression == outerKeySelecter.Parameters[0] && outerKeySelecter_Body.Member.MetadataToken == outerKeySelecter_Body_Expression.Type.GetProperty(nameof(IKeyEquatable<Int32>.PrimaryKey)).MetadataToken) {
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity>(), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity>(), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey, i => i.PrimaryKey, (o, i) => new { o, i }));
         //            }
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => c.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => c.PrimaryKey.ID1, i => i.PrimaryKey.ID1, (o, i) => new { o, i }));
         //        }
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, i => i, (o, i) => new { o, i }));
-        this.Execute2(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), (Func<Tables.Entity, Tables.Entity>)(o => o), i => i, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), o => o, i => i, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()).Join(new Set<Tables.Entity, PrimaryKeys.Entity, Container>(new Container2()), (Func<Tables.Entity, Tables.Entity>)(o => o), i => i, (o, i) => new { o, i }));
         //    }
         //}else if(Reflection.ExtendEnumerable.OfType==MethodCall0_GenericMethodDefinition){
         //    if(MethodCall1_Arguments_0_ElementType==MethodCall0_Method.ReturnType.GetGenericArguments()[0]){
         // ReSharper disable once RedundantEnumerableCastCall
-        this.Execute引数パターン(a => ArrN<int>(a).OfType<int>().OfType<object>());
+        this.実行結果が一致するか確認(a => ArrN<int>(a).OfType<int>().OfType<object>());
         //    }else{
-        this.Execute引数パターン(a => ArrN<int>(a).OfType<object>());
+        this.実行結果が一致するか確認(a => ArrN<int>(a).OfType<object>());
         //    }
         //}else if(Reflection.ExtendSet1.OfType==MethodCall0_GenericMethodDefinition){
         //    if(MethodCall1_Arguments_0.Type==MethodCall0_Method.ReturnType){
-        this.Execute引数パターン(a => SetN<int>(a).OfType<int>());
+        this.実行結果が一致するか確認(a => SetN<int>(a).OfType<int>());
         //    }else{
-        this.Execute引数パターン(a => SetN<int>(a).OfType<object>());
+        this.実行結果が一致するか確認(a => SetN<int>(a).OfType<object>());
         //    }
         //} else if(Reflection.ExtendSet1.Select_selector==MethodCall0_GenericMethodDefinition||Reflection.ExtendEnumerable.Select_selector==MethodCall0_GenericMethodDefinition) {
         //  if(MethodCall1_selector!=null&&MethodCall1_selector.Parameters[0]==MethodCall1_selector.Body)return MethodCall1_Arguments[0];
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p));
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => p));
-        this.Execute引数パターン(a => EnuN<int>(a).Select(p => p));
-        this.Execute引数パターン(a => SetN<int>(a).Select(p => p + 1));
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => p + 1));
-        this.Execute引数パターン(a => EnuN<int>(a).Select(p => p + 1));
-        this.Execute引数パターン(a => SetN<int>(a).Select((Func<int, int>)(p => p)));
-        this.Execute引数パターン(a => ArrN<int>(a).Select((Func<int, int>)(p => p)));
-        this.Execute引数パターン(a => EnuN<int>(a).Select((Func<int, int>)(p => p)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => p));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Select(p => p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select((Func<int, int>)(p => p)));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select((Func<int, int>)(p => p)));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Select((Func<int, int>)(p => p)));
         //} else if(Reflection.ExtendEnumerable.Single_predicate==MethodCall0_GenericMethodDefinition) {
-        this.Execute2(() => ArrN<int>(1).Single(p => p == 0));
+        this.実行結果が一致するか確認(() => ArrN<int>(1).Single(p => p == 0));
         //} else if(Reflection.ExtendEnumerable.SingleOrDefault_predicate==MethodCall0_GenericMethodDefinition) {
-        this.Execute引数パターン(a => ArrN<int>(a).SingleOrDefault(p => p == 0));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).SingleOrDefault(p => p == 0));
         //} else if(Reflection.ExtendEnumerable.ToArray==MethodCall0_GenericMethodDefinition) {
         //    if(MethodCall1_Arguments_0.Type.IsArray) return MethodCall1_Arguments_0;
-        this.Execute引数パターン(a => ArrN<int>(a).ToArray());
-        this.Execute引数パターン(a => ArrN<int>(a).AsEnumerable().ToArray());
+        this.実行結果が一致するか確認(a => ArrN<int>(a).ToArray());
+        this.実行結果が一致するか確認(a => ArrN<int>(a).AsEnumerable().ToArray());
         //} else if(Reflection.ExtendSet1.Update==MethodCall0_GenericMethodDefinition) {
-        this.Execute引数パターン(a => SetN<int>(a).Update(p => p == 0, p => p));
-        this.Execute引数パターン(a => SetN<int>(a).Update(p => p == 0, (Func<int, int>)(p => p)));
-        this.Execute引数パターン(a => SetN<int>(a).Update((Func<int, bool>)(p => p == 0), p => p));
-        this.Execute引数パターン(a => SetN<int>(a).Update((Func<int, bool>)(p => p == 0), (Func<int, int>)(p => p)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update(p => p == 0, p => p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update(p => p == 0, (Func<int, int>)(p => p)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update((Func<int, bool>)(p => p == 0), p => p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update((Func<int, bool>)(p => p == 0), (Func<int, int>)(p => p)));
         //}else if((Setか=Reflection.ExtendSet1.SelectMany_collectionSelector_resultSelector==MethodCall0_GenericMethodDefinition)||Reflection.ExtendEnumerable.SelectMany_collectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
         //    if(collectionSelector!=null&&resultSelector!=null) {
         //        if(Setか){
-        this.Execute引数パターン標準ラムダループ((a, b) => SetN<int>(a).SelectMany(p => SetN<int>(b), (p, q) => new { p, q }));
-        this.Execute引数パターン標準ラムダループ((a, b) => SetN<int>(a).SelectMany((Func<int, Set<int>>)(p => SetN<int>(b)), (p, q) => new { p, q }));
-        this.Execute引数パターン標準ラムダループ((a, b) => SetN<int>(a).SelectMany(p => SetN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
-        this.Execute引数パターン標準ラムダループ((a, b) => SetN<int>(a).SelectMany((Func<int, Set<int>>)(p => SetN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => SetN<int>(a).SelectMany(p => SetN<int>(b), (p, q) => new { p, q }));
+        this.実行結果が一致するか確認((a, b) => SetN<int>(a).SelectMany((Func<int, Set<int>>)(p => SetN<int>(b)), (p, q) => new { p, q }));
+        this.実行結果が一致するか確認((a, b) => SetN<int>(a).SelectMany(p => SetN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => SetN<int>(a).SelectMany((Func<int, Set<int>>)(p => SetN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
         //        }else{
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (p, q) => p + q));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((Func<int, IEnumerable<int>>)(p => ArrN<int>(a)), (p, q) => p + q));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((Func<int, IEnumerable<int>>)(p => ArrN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (p, q) => p + q));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((Func<int, IEnumerable<int>>)(p => ArrN<int>(a)), (p, q) => p + q));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((Func<int, IEnumerable<int>>)(p => ArrN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
         //        }
         //    }
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (p, q) => p + q));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany(p => ArrN<int>(b), (p, q) => p + q));
         //}else if(Reflection.ExtendEnumerable.SelectMany_indexCollectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
         //    if(indexCollectionSelector!=null&&resultSelector!=null) {
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((p, i) => ArrN<int>(b), (p, q) => new { p, q }));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((p, i) => ArrN<int>(b), (p, q) => new { p, q }));
         //    }
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((p, i) => ArrN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((Func<int, int, IEnumerable<int>>)((p, i) => ArrN<int>(b)), (p, q) => new { p, q }));
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).SelectMany((Func<int, int, IEnumerable<int>>)((p, i) => ArrN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((p, i) => ArrN<int>(b), (Func<int, int, int>)((p, q) => p + q)));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((Func<int, int, IEnumerable<int>>)((p, i) => ArrN<int>(b)), (p, q) => new { p, q }));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).SelectMany((Func<int, int, IEnumerable<int>>)((p, i) => ArrN<int>(b)), (Func<int, int, int>)((p, q) => p + q)));
         //}
         //if(!MethodCall0_Method.IsStatic) {
         //    foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public))
         //        if((ChildMethod.IsFinal||MethodCall1_Object_Type.IsSealed)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
-        this.Execute2(() => new STestClass().Virtual());
-        this.Execute2(() => new TestClass2().Virtual());
+        this.実行結果が一致するか確認(() => new STestClass().Virtual());
+        this.実行結果が一致するか確認(() => new TestClass2().Virtual());
         //        }
-        this.Execute2(() => new TestClass().Virtual());
+        this.実行結果が一致するか確認(() => new TestClass().Virtual());
         //}
-        this.Execute2(() => int.Parse("30"));
+        this.実行結果が一致するか確認(() => int.Parse("30"));
     }
     private interface ITest
     {
@@ -1397,7 +1397,7 @@ public class Test_変換_単一メソッド : ATest
     [TestMethod]
     public void IsFalse()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.IsFalse(
                     Expression.Default(typeof(struct_ショートカット検証))
@@ -1408,7 +1408,7 @@ public class Test_変換_単一メソッド : ATest
     [TestMethod]
     public void IsTrue()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.IsTrue(
                     Expression.Default(typeof(struct_ショートカット検証))
@@ -1421,9 +1421,9 @@ public class Test_変換_単一メソッド : ATest
     public void Join()
     {
         var S = new Set<int> { 1, 2, 3 };
-        this.Execute2(() => S.Join(S, o => o, i => i, (o, i) => new { o, i }));
-        this.Execute2(() => S.Join(S, o => o, i => i, (o, i) => new { o, i }));
-        this.Execute2(() => S.Join(S, o => o, i => i, resultSelector));
+        this.実行結果が一致するか確認(() => S.Join(S, o => o, i => i, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => S.Join(S, o => o, i => i, (o, i) => new { o, i }));
+        this.実行結果が一致するか確認(() => S.Join(S, o => o, i => i, resultSelector));
     }
     [TestMethod]
     public void JoinOuterKey()
@@ -1434,9 +1434,9 @@ public class Test_変換_単一メソッド : ATest
             new(3)
         };
         var Set = new Set<int> { 1, 2, 3 };
-        this.Execute2(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (entity_set, set) => new { entity_set, set }));
-        this.Execute2(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (entity_set, set) => new { entity_set, set }));
-        this.Execute2(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (Func<Tables.Entity, int, object>)((entity_set, set) => new { entity_set, set })));
+        this.実行結果が一致するか確認(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (entity_set, set) => new { entity_set, set }));
+        this.実行結果が一致するか確認(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (entity_set, set) => new { entity_set, set }));
+        this.実行結果が一致するか確認(() => EntitySet.Join(Set, entity_set => entity_set.PrimaryKey, set => new PrimaryKeys.Entity(set, set), (Func<Tables.Entity, int, object>)((entity_set, set) => new { entity_set, set })));
     }
     [TestMethod]
     public void InternalJoin_outerKeySelector()
@@ -1447,15 +1447,15 @@ public class Test_変換_単一メソッド : ATest
             new(2),
             new(3)
         };
-        this.Execute2(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (set, entity_set) => new { set, i = entity_set }));
-        this.Execute2(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (set, entity_set) => new { set, i = entity_set }));
-        this.Execute2(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (Func<int, Tables.Entity, object>)((set, entity_set) => new { set, entity_set })));
+        this.実行結果が一致するか確認(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (set, entity_set) => new { set, i = entity_set }));
+        this.実行結果が一致するか確認(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (set, entity_set) => new { set, i = entity_set }));
+        this.実行結果が一致するか確認(() => Set.Join(EntitySet, set => new PrimaryKeys.Entity(set, set), entity_set => entity_set.PrimaryKey, (Func<int, Tables.Entity, object>)((set, entity_set) => new { set, entity_set })));
     }
 
     [TestMethod]
     public void Lambda()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Constant(true)
             )
@@ -1463,7 +1463,7 @@ public class Test_変換_単一メソッド : ATest
     }
     private void 共通Shift<TLeft, TRight>(TLeft a, TRight b, ExpressionType NodeType)
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TLeft>>(
                 Expression.MakeBinary(
                     NodeType,
@@ -1483,7 +1483,7 @@ public class Test_変換_単一メソッド : ATest
     private void 共通ShiftAssgin<TLeft, TRight>(TLeft a, TRight b, ExpressionType NodeType)
     {
         var p = Expression.Parameter(typeof(TLeft));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TLeft>>(
                 Expression.Block(
                     new[] { p },
@@ -1569,7 +1569,7 @@ public class Test_変換_単一メソッド : ATest
     [TestMethod]
     public void Parameter()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { i0 },
@@ -1720,7 +1720,7 @@ public class Test_変換_単一メソッド : ATest
     [TestMethod]
     public void Unbox()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Unbox(
                     Expression.Constant(1, typeof(object)),
@@ -1739,7 +1739,7 @@ public class Test_変換_単一メソッド : ATest
     public void 共通BinaryNullable対応() => this.共通四則演算(ExpressionType.Add);
     private void 共通ConvertConvertChecked2<Tキャスト先>(object v)
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<Tキャスト先>>(
                 Expression.ConvertChecked(
                     Expression.Constant(v),
@@ -1753,7 +1753,7 @@ public class Test_変換_単一メソッド : ATest
     public void 共通ConvertConvertChecked()
     {
         //if(Unary_Type==Unary_Operand_Type&&Unary_Operand.NodeType!=ExpressionType.Lambda) return this.Traverse(Unary_Operand);
-        this.Execute2(() => ((Func2)(Func2)(a => a))(3));
+        this.実行結果が一致するか確認(() => ((Func2)(Func2)(a => a))(3));
         //if(Unary0.Method==null)
         this.共通ConvertConvertChecked2<double>(2);
         //if(
@@ -1776,7 +1776,7 @@ public class Test_変換_単一メソッド : ATest
         //    if(Unary0_Operand==Unary1_Operand)
         this.共通ConvertConvertChecked2<long>((decimal)2);
         var b = 3;
-        this.Execute引数パターン(a => (decimal)(IntPtr)b);
+        this.実行結果が一致するか確認(a => (decimal)(IntPtr)b);
         //}
     }
     [TestMethod]

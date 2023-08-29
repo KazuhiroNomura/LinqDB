@@ -151,12 +151,12 @@ namespace CoverageCS.LinqDB.Optimizers{
         public void Containerキャプチャ(){
             using var Container=new テスト.Container();
             // ReSharper disable once AccessToDisposedClosure
-            this.Execute2(()=>Container.dbo.Entity1.Select(p=>p.C_DATA));
+            this.実行結果が一致するか確認(()=>Container.dbo.Entity1.Select(p=>p.C_DATA));
         }
         [TestMethod]
         public void Container引数(){
             using var Container=new テスト.Container();
-            this.Execute2(Container,c=>c.dbo.Entity1.Select(p=>p.C_DATA));
+            this.実行結果が一致するか確認(Container,c=>c.dbo.Entity1.Select(p=>p.C_DATA));
         }
     }
 }

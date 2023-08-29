@@ -46,22 +46,22 @@ public class Test_DynamicAssembply:ATest {
     }
     [TestMethod]
     public void Select_indexSelector() {
-        this.Execute引数パターン(a => SetN<int>(a).Select((p,index) => p+index));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select((p,index) => p+index));
     }
     [TestMethod]
     public void Select_selector(){
-        this.Execute引数パターン(a => SetN<int>(a).Select(b => b+b));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Select(b => b+b));
     }
     [TestMethod]
     public void SelectMany_selector() {
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(b => SetN<int>(b)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(b => SetN<int>(b)));
     }
     [TestMethod]
     public void SelectMany_resultSelector() {
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(b => SetN<int>(b),(o,i)=>o));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(b => SetN<int>(b),(o,i)=>o));
     }
     [TestMethod]
     public void SelectMany_resultSelector_Select_selector() {
-        this.Execute引数パターン(a => SetN<int>(a).SelectMany(b => SetN<int>(b),(o,i) => o).Select((p,index)=>p));
+        this.実行結果が一致するか確認(a => SetN<int>(a).SelectMany(b => SetN<int>(b),(o,i) => o).Select((p,index)=>p));
     }
 }

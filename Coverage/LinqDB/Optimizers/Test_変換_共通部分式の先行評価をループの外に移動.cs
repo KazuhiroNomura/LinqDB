@@ -17,36 +17,36 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         var b = 1;
         var c = 2;
         //if(今回ラムダ間Assigns_Count==0&&今回ループ内Assigns_Count==0) {
-        this.Execute2(() => 0);
+        this.実行結果が一致するか確認(() => 0);
         //} else {
         //    for(var a = 今回ラムダ間Assigns_Count-1;a>=0;a--) {
         //        for(var b = a-1;b>=0;b--) {
         //            if(変数.Equals(今回ラムダ間Assign1.Right,今回ラムダ間Assign2.Right)) {
-        this.Execute2(() => Lambda(Default => new
+        this.実行結果が一致するか確認(() => Lambda(Default => new
         {
             A = b,
             A2 = b,
             Default
         }));
         //            }
-        this.Execute2(() => A.Let(a => new
+        this.実行結果が一致するか確認(() => A.Let(a => new
         {
             A = b,
             C = c,
             a
         }));
         //        }
-        this.Execute2(() => A.Let(a => c));
+        this.実行結果が一致するか確認(() => A.Let(a => c));
         //    }
-        this.Execute2(() => A.Let(a => Lambda(d => a)));
+        this.実行結果が一致するか確認(() => A.Let(a => Lambda(d => a)));
         //    for(var a = 今回ループ内Assigns_Count-1;a>=0;a--) {
         //        for(var b = a-1;b>=0;b--) {
         //            if(変数.Equals(今回ループ内Assign1.Right,今回ループ内Assign2.Right)) {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(b=> ArrN<int>(a).Select(c=>a+b+c)));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(b=> ArrN<int>(a).Select(c=>a+b+c)));
         //                break;
         //            }
         //        }
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => _StaticString));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => _StaticString));
         //    }
     }
     [TestMethod]
@@ -57,16 +57,16 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         var c = 1;
         //for(var a = 今回ラムダ間Assigns.Count-1;a>=0;a--) {
         //    if(変数_判定_指定Parametersが存在しない.実行(今回ラムダ間Assign,Lambda0_Parameters)) {
-        this.Execute2(() => Lambda(p => Lambda(r => c)));
+        this.実行結果が一致するか確認(() => Lambda(p => Lambda(r => c)));
         //    }else{
-        this.Execute2(() => A.Let(a => B.Let(b => a)));
+        this.実行結果が一致するか確認(() => A.Let(a => B.Let(b => a)));
         //    }
         //}
         //for(var a = 今回ループ内Assigns.Count-1;a>=0;a--) {
         //    if(変数_判定_指定Parametersが存在しない.実行(今回ループ内Assign,Lambda0_Parameters)) {
-        this.Execute2(() => ArrN<int>(10).Let(b => b.Average(p => p * 2m)));
+        this.実行結果が一致するか確認(() => ArrN<int>(10).Let(b => b.Average(p => p * 2m)));
         //    } else {
-        this.Execute引数パターン(a => Lambda(r => ArrN<int>(a).Select(q => q + r)));
+        this.実行結果が一致するか確認(a => Lambda(r => ArrN<int>(a).Select(q => q + r)));
         //    }
         //}
     }
@@ -74,7 +74,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     public void Lambda1()
     {
         var d = System.Array.Empty<int>();
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             d.SelectMany((Func<int, IEnumerable<int>>)(a =>
                     d.SelectMany((Func<int, IEnumerable<int>>)(b =>
                             d.Select(c => a * a)
@@ -88,26 +88,26 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //if(this._ループ展開するか&&ExtendedSet.ループ展開可能なEnumerableSetに属するGenericMethodDefinitionか(MethodCall0_Method)) {
         //    if(Reflection.ExtendSet1.Aggregate_seed_func_resultSelector.MethodEquals(MethodCall0_Method)||Reflection.ExtendEnumerable.Aggregate_seed_func_resultSelector.MethodEquals(MethodCall0_Method)) {
         //        resultSelector==null
-        this.Execute引数パターン(a => SetN<int>(a).Aggregate(0, (x, y) => x + y, (Func<int, int>)(z => z * 2)));
-        this.Execute引数パターン(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, (Func<int, int>)(z => z * 2)));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Aggregate(0, (x, y) => x + y, (Func<int, int>)(z => z * 2)));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, (Func<int, int>)(z => z * 2)));
         //        resultSelector!=null
-        this.Execute引数パターン(a => SetN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2));
-        this.Execute引数パターン(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2));
         //    }else{
-        this.Execute引数パターン(a => ArrN<int>(a).Select(z => z * 2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(z => z * 2));
         //    }
         //    if(ExpressionsEquals(MethodCall0_Arguments,MethodCall1_Arguments)) return MethodCall0;
         // ReSharper disable once ConvertToLocalFunction
         Func<int, int> selector = x => x * 3;
-        this.Execute引数パターン(a => ArrN<int>(a).Select(selector));
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => x * 3));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(selector));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => x * 3));
         //}else{
         //    for(var x=0;x<MethodCall0_Arguments_Count;x++) {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => $"A{p}B"));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => $"A{p}B"));
         //    }
         //    if(MethodCall0_Object==MethodCall1_Object&&ExpressionsEquals(MethodCall0_Arguments,MethodCall1_Arguments)) return MethodCall0;
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Aggregate(0, (x, y) => x + y, z => z * 2)));
-        this.Execute引数パターン(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2).ToString());
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).Select(c => ArrN<int>(b).Aggregate(0, (x, y) => x + y, z => z * 2)));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Aggregate(0, (x, y) => x + y, z => z * 2).ToString());
         //}
 
 
@@ -117,20 +117,20 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var B = 1;
         //if(Lambda==null)return this.Traverse(e);
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => x * 2));
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => x * 2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => x * 2));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => x * 2));
         //for(var _Field = 今回ラムダ間Assigns.Count-1;_Field>=0;_Field--) {
         //    if(変数_判定_指定Parametersが存在しない.実行(今回ラムダ間Assign,Lambda_Parameters)) {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => B.Let(y => Lambda(z => Lambda(d => z)))));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => B.Let(y => Lambda(z => Lambda(d => z)))));
         //    }else{
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => B.Let(y => Lambda(z => y + x))));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => B.Let(y => Lambda(z => y + x))));
         //    }
         //}
         //for(var _Field = 今回ループ内Assigns.Count-1;_Field>=0;_Field--) {
         //    if(変数_判定_指定Parametersが存在しない.実行(今回ループ内Assign,Lambda_Parameters)) {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => ArrN<int>(a).Select(y => ArrN<int>(a).Select(z => y))));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => ArrN<int>(a).Select(y => ArrN<int>(a).Select(z => y))));
         //    }else{
-        this.Execute引数パターン(a => ArrN<int>(a).Select(x => ArrN<int>(a).Select(y => ArrN<int>(a).Select(z => y + x))));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(x => ArrN<int>(a).Select(y => ArrN<int>(a).Select(z => y + x))));
         //    }
         //}
     }
@@ -139,56 +139,56 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 2;
         var B = 3;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a)
                 +
                 B.Let(b => a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => a)
                 +
                 Inline(() => a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a + a)
                 +
                 B.Let(b => a + a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => a + a)
                 +
                 Inline(() => a + a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => (a + a) - (a + a))
                 +
                 B.Let(b => (a + a) - (b + b))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a) - (b + b))
                 +
                 Inline(() => (a + a) - (a + a))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a - a)
                 +
                 B.Let(b => (a + a) - (b + b))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a) - (b + b))
                 +
@@ -201,7 +201,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a)
                 +
@@ -214,7 +214,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a)
                 +
@@ -227,7 +227,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a + a)
                 +
@@ -240,7 +240,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => (a + a) - (B + B))
                 +
@@ -254,7 +254,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         var A = 0;
         var B = 1;
         //IL生成を書き換えたらAssign参照が間違っているらしく結果が一致しなかった。
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a - a)
                 +
@@ -267,33 +267,33 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             B.Let(b => A)
             +
             B.Let(b => A + A)
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => a)
                 +
                 B.Let(b => a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => a + a)
                 +
                 B.Let(b => a + a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a) - (b + b))
                 +
                 B.Let(b => (a + a) - (b + b))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => a - b)
                 +
@@ -306,34 +306,34 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
     {
         var A = 0;
         var B = 1;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a) - (b + b))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 B.Let(b => (a + a) * (a + a) - (b + b) / (b + b))
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a + a)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             Inline(() =>
                 Inline(() => A + A)
                 +
                 Inline(() => A* A)
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             A.Let(a =>
                 Inline(() => a + a)
                 +
@@ -348,16 +348,16 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         var B = 1;
         var C = 2;
         //foreach(var 共通部分式 in Listループで初期化したい共通部分式) {
-        this.Execute引数パターン(a => Inline(() => C + Inline(() => a + C + B)));
+        this.実行結果が一致するか確認(a => Inline(() => C + Inline(() => a + C + B)));
         //}
         //foreach(var 共通部分式 in Listラムダで初期化したい共通部分式) {
-        this.Execute2(() => A.Let(a => B.Let(b => a)));
+        this.実行結果が一致するか確認(() => A.Let(a => B.Let(b => a)));
         //}
         //for(var a=List初期化したい共通部分式_Count-1;a>=0;a--){
         //    if(上位List初期化したい共通部分式.Contains(共通部分式,変数_ExpressionEqualityComparer)){
-        this.Execute2(() => Inline(() => C + Inline(() => C + B)));
+        this.実行結果が一致するか確認(() => Inline(() => C + Inline(() => C + B)));
         //    }
-        this.Execute2(() => A.Let(a => B.Let(b => a)));
+        this.実行結果が一致するか確認(() => A.Let(a => B.Let(b => a)));
         //}
     }
     private static int Let(Func<int,int>d)=>d(1);
@@ -367,14 +367,14 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         var A1 = 1;
         var B2 = 2;
         var C3 = 3;
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             Inline(() =>
                 B2
             )+Let(d =>
                 B2
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             B2.Let(a =>
                 Inline(() =>
                     B2
@@ -383,7 +383,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
                 )
             )
         );
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             B2.Let(a =>
                 Inline(() =>
                     C3 + B2
@@ -394,7 +394,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         );
         //for(var a = 0;a<Listループで初期化したい共通部分式_Count;a++) {
         //    for(var b = a+1;b<Listループで初期化したい共通部分式_Count;b++) {
-        this.Execute標準ラムダループ(() =>
+        this.実行結果が一致するか確認(() =>
             Inline(() =>
                 C3 + Inline(() =>
                     C3 + B2
@@ -402,9 +402,9 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
             )
         );
         //    }
-        this.Execute2(() => Inline(() => Inline(() => A1)));
+        this.実行結果が一致するか確認(() => Inline(() => Inline(() => A1)));
         //    for(var b = 0;b<Listラムダで初期化したい共通部分式_Count;b++) {
-        this.Execute2(() =>
+        this.実行結果が一致するか確認(() =>
             B2.Let(a =>
                 Inline(() =>
                     a + C3 + B2
@@ -414,23 +414,23 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
             )
         );
         //    }
-        this.Execute2(() => A1.Let(a => B2.Let(b => a)));
+        this.実行結果が一致するか確認(() => A1.Let(a => B2.Let(b => a)));
         //}
-        this.Execute2(() => Inline(() => C3 + Inline(() => C3 + B2)));
+        this.実行結果が一致するか確認(() => Inline(() => C3 + Inline(() => C3 + B2)));
         //for(var a = 0;a<Listラムダで初期化したい共通部分式_Count;a++) {
         //    for(var b = a+1;b<Listラムダで初期化したい共通部分式_Count;b++) {
-        this.Execute2(() => A1.Let(a => new { A = B2, C = C3, a }));
+        this.実行結果が一致するか確認(() => A1.Let(a => new { A = B2, C = C3, a }));
         //    }
-        this.Execute2(() => A1.Let(a => B2.Let(b => a)));
+        this.実行結果が一致するか確認(() => A1.Let(a => B2.Let(b => a)));
         //}
-        this.Execute2(() => Inline(() => Inline(() => C3 + B2)));
+        this.実行結果が一致するか確認(() => Inline(() => Inline(() => C3 + B2)));
         //if(Variables!=null){
-        this.Execute2(() => Inline(() => Inline(() =>C3 + B2)));
+        this.実行結果が一致するか確認(() => Inline(() => Inline(() =>C3 + B2)));
         //} else{
         //    if(Listループで初期化したい共通部分式.Count>0){
-        this.Execute2(() => A1.Let(a => B2.Let(b => a)));
+        this.実行結果が一致するか確認(() => A1.Let(a => B2.Let(b => a)));
         //    }
-        this.Execute2(() => Inline(() => C3 + Inline(() => C3 + B2)));
+        this.実行結果が一致するか確認(() => Inline(() => C3 + Inline(() => C3 + B2)));
         //}
     }
     [TestMethod]public void Assert1段1幅外出し0(){
@@ -464,7 +464,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"            })",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Call0
             )
@@ -514,7 +514,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //t1=1m
         //let(_=>t1)+let(_=>t2)
         //は良くない
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Add(
                     Call0,
@@ -541,7 +541,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"        }",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Add(
                     Call1,
@@ -565,7 +565,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"        }",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Add(
                     Call1,
@@ -594,7 +594,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"            })",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Call(
                     typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.Let))!.MakeGenericMethod(typeof(int), typeof(decimal)),
@@ -640,7 +640,7 @@ public class Test_変換_共通部分式の先行評価をループの外に移�
         //"            })",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Call(
                     typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.Let))!.MakeGenericMethod(typeof(int), typeof(decimal)),

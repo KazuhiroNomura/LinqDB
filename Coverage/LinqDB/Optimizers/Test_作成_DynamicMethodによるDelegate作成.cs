@@ -17,7 +17,7 @@ namespace CoverageCS.LinqDB.Optimizers;
 public class Test_作成_DynamicMethodによるDelegate作成 : ATest
 {
     [TestMethod]
-    public void Add() => this.Execute2(() => Int32_1 + Int32_2);
+    public void Add() => this.実行結果が一致するか確認(() => Int32_1 + Int32_2);
     [TestMethod]
     public void AddAssign() => this.演算Binary(ExpressionType.AddAssign);
     [TestMethod]
@@ -27,13 +27,13 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]
     public void And() => this.演算Binary(ExpressionType.And);
     [TestMethod]
-    public void AndAlso() => this.Execute2(() => Boolean1 && Boolean2);
+    public void AndAlso() => this.実行結果が一致するか確認(() => Boolean1 && Boolean2);
     [TestMethod]
     public void AndAssign() => this.演算Binary(ExpressionType.AndAssign);
     [TestMethod]
-    public void ArrayIndex() => this.Execute2(() => Array[0]);
+    public void ArrayIndex() => this.実行結果が一致するか確認(() => Array[0]);
     [TestMethod]
-    public void ArrayLength() => this.Execute2(() => Array.Length);
+    public void ArrayLength() => this.実行結果が一致するか確認(() => Array.Length);
     [TestMethod]
     public void Assign() => this.共通化Assign(ExpressionType.Assign);
     [TestMethod]
@@ -43,29 +43,29 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        case MemberBindingType.Assignment: {
         //            if(MemberAssignment_Expression.Type.IsValueType){
         //                if(Binding_Member.MemberType==MemberTypes.Field){
-        this.Execute2(() => new class_演算子オーバーロード { Int32フィールド = 3 });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Int32フィールド = 3 });
         //                } else{
-        this.Execute2(() => new class_演算子オーバーロード { Int32プロパティ = 3 });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Int32プロパティ = 3 });
         //                }
         //            } else{
         //                if(Binding_Member.MemberType==MemberTypes.Field){
-        this.Execute2(() => new class_演算子オーバーロード { Stringフィールド = "3" });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Stringフィールド = "3" });
         //                } else{
-        this.Execute2(() => new class_演算子オーバーロード { Stringプロパティ = "3" });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Stringプロパティ = "3" });
         //                }
         //            }
         //        }
         //        case MemberBindingType.MemberBinding: {
         //            if(Binding_Member.MemberType==MemberTypes.Field) {
         //                if(Local2Type.IsValueType) {
-        this.Execute2(() => new class_演算子オーバーロード
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード
         {
             Struct演算子オーバーロード2 = {
                 StructCollectionフィールド ={0}
             }
         });
         //                } else {
-        this.Execute2(() => new class_演算子オーバーロード
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード
         {
             class_演算子オーバーロード2フィールド ={
                 StructCollectionフィールド = {0}
@@ -73,7 +73,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         });
         //                }
         //            } else {
-        this.Execute2(() => new class_演算子オーバーロード
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード
         {
             class演算子オーバーロード2プロパティ ={
                 StructCollectionフィールド ={1}
@@ -84,25 +84,25 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        default: {
         //            if(Binding_Member.MemberType==MemberTypes.Field) {
         //                if(LocalType.IsValueType) {
-        this.Execute2(() => new class_演算子オーバーロード { StructCollectionフィールド = { 3 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { StructCollectionフィールド = { 3 } });
         //                }else{
-        this.Execute2(() => new class_演算子オーバーロード { Listフィールド = { 3 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Listフィールド = { 3 } });
         //                }
         //            } else {
-        this.Execute2(() => new class_演算子オーバーロード { Listプロパティ = { 3 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Listプロパティ = { 3 } });
         //            }
         //            if(MemberListBinding_Initializers.Count==1) {
         //                if(AddMethod.ReturnType!=typeof(void)) {
-        this.Execute2(() => new class_演算子オーバーロード { HashSetプロパティ = { 0 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { HashSetプロパティ = { 0 } });
         //                }else{
-        this.Execute2(() => new class_演算子オーバーロード { Listプロパティ = { 2 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Listプロパティ = { 2 } });
         //                }
         //            } else {
         //                foreach(var Initializer in MemberListBinding_Initializers) {
         //                    if(AddMethod.ReturnType!=typeof(void)) {
-        this.Execute2(() => new class_演算子オーバーロード { HashSetプロパティ = { 0, 1 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { HashSetプロパティ = { 0, 1 } });
         //                    }else{
-        this.Execute2(() => new class_演算子オーバーロード { Listプロパティ = { 2, 3 } });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Listプロパティ = { 2, 3 } });
         //                    }
         //                }
         //            }
@@ -113,7 +113,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]public void Block0(){
         //foreach(var Block_Variable in Block.Variables) {
         var p = Expression.Parameter(typeof(bool));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Block(
                     new[] { p },
@@ -126,7 +126,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]public void Block1(){
         //}
         //for(var a=0;a<Block_Expressions_Count_1;a++) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Constant(1),
@@ -138,14 +138,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     }
     private static int Callされるメソッド() => 0;
     [TestMethod]
-    public void Call() => this.Execute2(() => Callされるメソッド());
+    public void Call() => this.実行結果が一致するか確認(() => Callされるメソッド());
     [TestMethod]
     public void Coalesce()
     {
         //if(Binary_Left_Type.IsValueType){
-        this.Execute2(() => _NullableInt32 ?? 3);
+        this.実行結果が一致するか確認(() => _NullableInt32 ?? 3);
         //}else{
-        this.Execute2(() => _String ?? "3");
+        this.実行結果が一致するか確認(() => _String ?? "3");
         //}
     }
     [TestMethod]public void Conditional0(){
@@ -156,7 +156,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             var ジャンプ1 = Expression.Label("ジャンプ1");
             var ジャンプ2 = Expression.Label("ジャンプ2");
             var ジャンプ3 = Expression.Label(typeof(int),"ジャンプ3");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         Expression.Condition(
@@ -181,7 +181,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        }else{
         {
             var ジャンプ = Expression.Label(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         Expression.Condition(
@@ -211,7 +211,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var ジャンプ1 = Expression.Label(typeof(int));
             var ジャンプ3 = Expression.Label(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         Expression.Condition(
@@ -244,49 +244,49 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]public void Conditional3(){
         //    }
         //} else {
-        this.Execute2(() => _Int32 == 3 ? 4 : 5);
+        this.実行結果が一致するか確認(() => _Int32 == 3 ? 4 : 5);
         //}
     }
     [TestMethod]
     public void Constant()
     {
         //if     (Constant.Value==null             )this.I.Ldnull();
-        this.Execute2(() => (string?)null);
+        this.実行結果が一致するか確認(() => (string?)null);
         //else if(Constant      ==this.RootConstant)this.I.Ldarg_0();
         {
             var C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //else {
         //    if(Constant_Value_Type==typeof(String))this.I.Ldstr((String)Constant_Value);
-        this.Execute2(() => "A");
+        this.実行結果が一致するか確認(() => "A");
         //    else{
         //        var Constant_Value_Type2=Constant_Value_Type.IsEnum
         //            ?Enum.GetUnderlyingType(Constant_Value_Type)
-        this.Execute2(() => EEnum.A);
+        this.実行結果が一致するか確認(() => EEnum.A);
         //            :Constant_Value_Type;
         //        if(Constant_Value_Type2==typeof(SByte)) this.I.Ldc_I4((SByte)Constant_Value);
         {
             const sbyte C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(Int16)) this.I.Ldc_I4((Int16)Constant_Value);
         {
             const short C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(Int32)) this.I.Ldc_I4((Int32)Constant_Value);
         {
             const int C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(Int64)) this.I.Ldc_I8((Int64)Constant_Value);
         {
             const long C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(IntPtr))
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<IntPtr>>(
                 Expression.Constant(IntPtr.Zero)
             )
@@ -296,25 +296,25 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        else if(Constant_Value_Type2==typeof(Byte)) this.I.Ldc_I4((Byte)Constant_Value);
         {
             const byte C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(UInt16)) this.I.Ldc_I4((UInt16)Constant_Value);
         {
             const ushort C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(UInt32)) this.I.Ldc_I4((Int32)(UInt32)Constant_Value);
         {
             const uint C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(UInt64)) this.I.Ldc_I8((Int64)(UInt64)Constant_Value);
         {
             const ulong C = 1;
-            this.Execute2(() => C);
+            this.実行結果が一致するか確認(() => C);
         }
         //        else if(Constant_Value_Type2==typeof(UIntPtr))
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<UIntPtr>>(
                 Expression.Constant(UIntPtr.Zero)
             )
@@ -322,16 +322,16 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            if(UIntPtr.Size==4) this.I.Ldc_I4((Int32)(UIntPtr)Constant_Value);
         //            else this.I.Ldc_I8((Int64)(UIntPtr)Constant_Value);
         //        else if(Constant_Value_Type2==typeof(Boolean)) this.I.Ldc_I4((Boolean)Constant_Value ? 1 : 0);
-        this.Execute2(() => true);
+        this.実行結果が一致するか確認(() => true);
         //        else if(Constant_Value_Type2==typeof(Char)) this.I.Ldc_I4((Char)Constant_Value);
-        this.Execute2(() => 'A');
+        this.実行結果が一致するか確認(() => 'A');
         //        else if(Constant_Value_Type2==typeof(Single)) this.I.Ldc_R4((Single)Constant_Value);
-        this.Execute2(() => 1.0f);
+        this.実行結果が一致するか確認(() => 1.0f);
         //        else {
-        this.Execute2(() => 1.0d);
+        this.実行結果が一致するか確認(() => 1.0d);
         //        }
         //        if(Constant_Value_Type!=Constant.Type){
-        this.Execute2(() => (object)EEnum.A);
+        this.実行結果が一致するか確認(() => (object)EEnum.A);
         //        }
         //    }
         //}
@@ -460,44 +460,44 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //if(Unary.Method != null) {
         //    if(IsNullable(Unary.Type)) {
         //        if(IsNullable(Unary.Operand.Type)) {
-        this.Execute2(() => (decimal?)(double?)1);
+        this.実行結果が一致するか確認(() => (decimal?)(double?)1);
         //        } else {
-        this.Execute2(() => (decimal)(double?)1);
+        this.実行結果が一致するか確認(() => (decimal)(double?)1);
         //        }
         //    } else {
         //        if(IsNullable(Unary.Operand.Type)) {
-        this.Execute2(() => (decimal)(double?)1);
+        this.実行結果が一致するか確認(() => (decimal)(double?)1);
         //        } else {
-        this.Execute2(() => (decimal)(double)1);
+        this.実行結果が一致するか確認(() => (decimal)(double)1);
         //        }
         //    }
         //}
         //if(Unary.Operand.Type.IsValueType) {
         //    if(!Unary.Type.IsValueType) {
         const int ボクシングされる = 1;
-        this.Execute2(() => (object)ボクシングされる);
-        this.Execute2(() => (IEquatable<int>)ボクシングされる);
+        this.実行結果が一致するか確認(() => (object)ボクシングされる);
+        this.実行結果が一致するか確認(() => (IEquatable<int>)ボクシングされる);
         //    }
         const double Convertされる = 1;
-        this.Execute2(() => (long)Convertされる);
+        this.実行結果が一致するか確認(() => (long)Convertされる);
         //} else {
         //    if(Unary.Type.IsValueType)
         const int アンボクシングされる = 1;
-        this.Execute2(() => (int)(object)アンボクシングされる);
+        this.実行結果が一致するか確認(() => (int)(object)アンボクシングされる);
         //    else
-        this.Execute2(() => (string)(object)"1");
+        this.実行結果が一致するか確認(() => (string)(object)"1");
         //}
         //if(IsNullable(Unary.Type)) {
         const int Nullableされる = 1;
-        this.Execute2(() => (int?)Nullableされる);
+        this.実行結果が一致するか確認(() => (int?)Nullableされる);
         //} else if(IsNullable(Unary.Operand.Type)) {
         const int Nullableから戻される = 1;
-        this.Execute2(() => (int)(int?)Nullableから戻される);
+        this.実行結果が一致するか確認(() => (int)(int?)Nullableから戻される);
         //}
         const long Int64にキャストされるInt32 = 1;
-        this.Execute2(() => Int64にキャストされるInt32);
+        this.実行結果が一致するか確認(() => Int64にキャストされるInt32);
         //if(Unary.Method!=null) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<struct_演算子オーバーロード>>(
                 Expression.ConvertChecked(
                     Expression.Constant(_Int32),
@@ -508,7 +508,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //}
         //if(Unary.Operand.Type==typeof(Object)) {
         //    if(Unary.Type.IsValueType) this.I.Unbox_Any(Unary.Type);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ConvertChecked(
                     Expression.Convert(
@@ -520,7 +520,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    else this.I.Castclass(Unary.Type);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.ConvertChecked(
                     Expression.Convert(
@@ -534,7 +534,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //}
         //if(Unary.Type==typeof(Object)) {
         //    if(Unary.Operand.Type.IsValueType){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ConvertChecked(
                     Expression.Convert(
@@ -546,7 +546,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.ConvertChecked(
                     Expression.Convert(
@@ -560,7 +560,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //}
         //if(Unary.Type.IsGenericType) {
         //    if(Unary.Type.GetGenericTypeDefinition()==typeof(Nullable<>)) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int?>>(
                 Expression.ConvertChecked(
                     Expression.Constant(1),
@@ -569,7 +569,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<Nullable1<int>>>(
                 Expression.ConvertChecked(
                     Expression.Constant(new Nullable2<int>()),
@@ -579,7 +579,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //} else {
         //    if(Unary.Operand.Type.IsGenericType&&Unary.Operand.Type.GetGenericTypeDefinition()==typeof(Nullable<>)){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ConvertChecked(
                     Expression.Constant(1, typeof(int?)),
@@ -588,7 +588,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<Nullable0>>(
                 Expression.ConvertChecked(
                     Expression.Constant(new Nullable1<int>()),
@@ -609,23 +609,23 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //if(Unary_Operand_Type.IsPrimitive) {
         //    if(Unary_Type==typeof(SByte)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_I1_Un();
-        this.Execute2(() => checked((sbyte)UInt32));
-        this.Execute2(() => checked((sbyte)Int32));
+        this.実行結果が一致するか確認(() => checked((sbyte)UInt32));
+        this.実行結果が一致するか確認(() => checked((sbyte)Int32));
         //    } else if(Unary_Type==typeof(Int16)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_I2_Un();
-        this.Execute2(() => checked((short)UInt32));
-        this.Execute2(() => checked((short)Int32));
+        this.実行結果が一致するか確認(() => checked((short)UInt32));
+        this.実行結果が一致するか確認(() => checked((short)Int32));
         //    } else if(Unary_Type==typeof(Int32)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_I4_Un();
-        this.Execute2(() => checked((int)UInt32));
-        this.Execute2(() => checked((int)Int64));
+        this.実行結果が一致するか確認(() => checked((int)UInt32));
+        this.実行結果が一致するか確認(() => checked((int)Int64));
         //    } else if(Unary_Type==typeof(Int64)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this.I.Conv_Ovf_I8_Un();
-        this.Execute2(() => checked((long)UInt64));
-        this.Execute2(() => (long)Int32);
+        this.実行結果が一致するか確認(() => checked((long)UInt64));
+        this.実行結果が一致するか確認(() => (long)Int32);
         //    } else if(Unary_Type==typeof(IntPtr)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_I_Un();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<IntPtr>>(
                 Expression.ConvertChecked(
                     Expression.Constant(UInt64),
@@ -635,7 +635,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //        else this._I.Conv_Ovf_I();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<IntPtr>>(
                 Expression.ConvertChecked(
                     Expression.Constant(Int64),
@@ -645,26 +645,26 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //    } else if(Unary_Type==typeof(Byte)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_U1_Un();
-        this.Execute2(() => checked((byte)UInt32));
+        this.実行結果が一致するか確認(() => checked((byte)UInt32));
         //        else this._I.Conv_Ovf_U1();
-        this.Execute2(() => checked((byte)Int32));
+        this.実行結果が一致するか確認(() => checked((byte)Int32));
         //    } else if(Unary_Type==typeof(UInt16)||Unary_Type==typeof(Char)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_U2_Un();
-        this.Execute2(() => checked((ushort)UInt32));
-        this.Execute2(() => checked((char)UInt32));
+        this.実行結果が一致するか確認(() => checked((ushort)UInt32));
+        this.実行結果が一致するか確認(() => checked((char)UInt32));
         //        else this._I.Conv_Ovf_U2();
-        this.Execute2(() => checked((ushort)Int32));
-        this.Execute2(() => checked((char)Int32));
+        this.実行結果が一致するか確認(() => checked((ushort)Int32));
+        this.実行結果が一致するか確認(() => checked((char)Int32));
         //    } else if(Unary_Type==typeof(UInt32)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_Ovf_U4_Un();
-        this.Execute2(() => checked((uint)UInt64));
-        this.Execute2(() => checked((uint)Int64));
+        this.実行結果が一致するか確認(() => checked((uint)UInt64));
+        this.実行結果が一致するか確認(() => checked((uint)Int64));
         //    } else if(Unary_Type==typeof(UInt64)) {
         //        this._I.Conv_Ovf_U8();
-        this.Execute2(() => (ulong)UInt32);
-        this.Execute2(() => checked((ulong)Int32));
+        this.実行結果が一致するか確認(() => (ulong)UInt32);
+        this.実行結果が一致するか確認(() => checked((ulong)Int32));
         //    } else if(Unary_Type==typeof(UIntPtr)) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<UIntPtr>>(
                 Expression.ConvertChecked(
                     Expression.Constant(UInt32),
@@ -674,7 +674,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //    } else if(Unary_Type==typeof(Single)) {
         //        if(IsUnsigned(Unary.Operand.Type)) this._I.Conv_R_Un();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float>>(
                 Expression.ConvertChecked(
                     Expression.Constant(UInt32),
@@ -683,7 +683,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //        else this._I.Conv_R4();
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float>>(
                 Expression.ConvertChecked(
                     Expression.Constant(Int32),
@@ -692,7 +692,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    } else if(Unary_Type==typeof(Double)) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.ConvertChecked(
                     Expression.Constant(Int32),
@@ -701,7 +701,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<struct_演算子オーバーロード>>(
                 Expression.ConvertChecked(
                     Expression.Constant(_Int32),
@@ -710,7 +710,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //}
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.ConvertChecked(
                     Expression.Constant(_Static_class_演算子オーバーロード1),
@@ -721,7 +721,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void Decrement() => this.Execute2(
+    public void Decrement() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<int>>(
             Expression.Decrement(
                 Expression.Constant(1)
@@ -732,19 +732,19 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Default()
     {
         //if(Default_Type==typeof(void)) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Default(typeof(void))
             )
         );
         //} else if(Default_Type.IsValueType) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Default(typeof(int))
             )
         );
         //} else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Default(typeof(string))
             )
@@ -752,11 +752,11 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //}
     }
     [TestMethod]
-    public void Divide() => this.Execute2(() => Int32_1 / Int32_2);
+    public void Divide() => this.実行結果が一致するか確認(() => Int32_1 / Int32_2);
     private void 演算Binary(ExpressionType NodeType)
     {
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -785,7 +785,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         };
         var Select = M(() => data.Select(p1 => p1.X));
         var p = Expression.Parameter(typeof(Point), "p");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<object>>(
                 Expression.Call(
                     Select,
@@ -823,7 +823,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         IEnumerable<int> data = new[] { 1, 2, 3 };
         var Select = M(() => data.Select(p1 => p1));
         var p = Expression.Parameter(typeof(int), "p");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<object>>(
                 Expression.Call(
                     Select,
@@ -866,14 +866,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]
     public void Equal() => this.大小論理Binary(ExpressionType.Equal);
     [TestMethod]
-    public void ExclusiveOr() => this.Execute2(() => Int32_1 ^ Int32_2);
+    public void ExclusiveOr() => this.実行結果が一致するか確認(() => Int32_1 ^ Int32_2);
     [TestMethod]
     public void ExclusiveOrAssign() => this.演算Binary(ExpressionType.ExclusiveOrAssign);
     [TestMethod]
     public void Goto()
     {
         var GotoLabel = Expression.Label();
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Loop(
                     Expression.Goto(GotoLabel),
@@ -889,14 +889,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]
     public void GreaterThanOrEqualLessThanOrEqual() =>
         //if(this.演算(特定の形式はなし,Signed,Unsigned)) return;
-        this.Execute2(() => Decimal_1>=Decimal_2);
+        this.実行結果が一致するか確認(() => Decimal_1>=Decimal_2);
     [TestMethod]
     public void 共通IncrementDecrement()
     {
         //if(this.共通UnaryExpression(Unary)) return;
         {
             var p = Expression.Parameter(typeof(decimal));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<decimal>>(
                     Expression.Block(
                         new[] { p },
@@ -914,7 +914,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //if(     Unary_Type==typeof(Int32 ))I.Ldc_I4_1();
         {
             var p = Expression.Parameter(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -932,7 +932,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //else if(Unary_Type==typeof(Int64 ))I.Ldc_I8(1L);
         {
             var p = Expression.Parameter(typeof(long));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<long>>(
                     Expression.Block(
                         new[] { p },
@@ -950,7 +950,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //else if(Unary_Type==typeof(Char  ))I.Ldc_I4((Int16)1);
         {
             var p = Expression.Parameter(typeof(short));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<short>>(
                     Expression.Block(
                         new[] { p },
@@ -968,7 +968,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //else if(Unary_Type==typeof(Single))I.Ldc_R4(1F);
         {
             var p = Expression.Parameter(typeof(float));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<float>>(
                     Expression.Block(
                         new[] { p },
@@ -986,7 +986,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //else if(Unary_Type==typeof(_Double))I.Ldc_R8(1D);
         {
             var p = Expression.Parameter(typeof(double));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<double>>(
                     Expression.Block(
                         new[] { p },
@@ -1005,7 +1005,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var Field = typeof(ATest).GetField(nameof(_Static_class_演算子オーバーロード1), BindingFlags.Static | BindingFlags.NonPublic);
             var actual = new class_演算子オーバーロード(1);
-            var expected0 = this.Execute2(
+            var expected0 = this.実行結果が一致するか確認(
                 Expression.Lambda<Func<class_演算子オーバーロード>>(
                     Expression.Block(
                         Expression.Assign(
@@ -1031,7 +1031,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
     }
     [TestMethod]
-    public void Increment() => this.Execute2(
+    public void Increment() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<int>>(
             Expression.Increment(
                 Expression.Constant(1)
@@ -1045,7 +1045,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //var Index_Object = Index.Object;
         //this.PointerTraverse(Index_Object);
         //foreach(var Argument in Index.Arguments) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ArrayAccess(
                     Expression.Constant(Array1),
@@ -1055,7 +1055,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //}
         //if(Index.Arguments.Count==1) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ArrayAccess(
                     Expression.Constant(Array1),
@@ -1065,7 +1065,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //} else {
         var Array2 = new[,] { { 1, 11 }, { 2, 22 }, { 3, 33 } };
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.ArrayAccess(
                     Expression.Constant(Array2),
@@ -1084,7 +1084,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var a = Expression.Parameter(typeof(int), "a");
             var b = Expression.Parameter(typeof(int).MakeByRefType(), "b");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a },
@@ -1100,7 +1100,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         //        this.PointerTraverse(Invocation_Arguments[a]);
         //    } else {
-        this.Execute2(() => _Delegate(0));
+        this.実行結果が一致するか確認(() => _Delegate(0));
         //    }
         //}
     }
@@ -1108,14 +1108,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void IsFalse()
     {
         //if(this.共通UnaryExpression(Unary)) return;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.IsFalse(
                     Expression.Constant(new class_演算子オーバーロード(1, true))
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.IsFalse(
                     Expression.Constant(false)
@@ -1124,7 +1124,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void IsTrue() => this.Execute2(
+    public void IsTrue() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<bool>>(
             Expression.IsTrue(
                 Expression.Constant(false)
@@ -1145,22 +1145,22 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         //if(Member_Member.MemberType==MemberTypes.Field) {
         //    if(Member_Field.IsStatic) {
-        this.Execute2(() => _Static_class_演算子オーバーロード1);
+        this.実行結果が一致するか確認(() => _Static_class_演算子オーバーロード1);
         //    }else{
-        this.Execute2(() => this._InstanceInt32);
+        this.実行結果が一致するか確認(() => this._InstanceInt32);
         //    }
         //}else{
-        this.Execute2(() => Static_struct_演算子オーバーロード1);
-        this.Execute2(() => this.Instance_struct_演算子オーバーロード);
+        this.実行結果が一致するか確認(() => Static_struct_演算子オーバーロード1);
+        this.実行結果が一致するか確認(() => this.Instance_struct_演算子オーバーロード);
         //}
     }
     [TestMethod]
     public void MemberInit()
     {
         //if(MemberInit_Type.IsValueType) {
-        this.Execute2(() => new struct_演算子オーバーロード { Int32フィールド = 1 });
+        this.実行結果が一致するか確認(() => new struct_演算子オーバーロード { Int32フィールド = 1 });
         //}else{
-        this.Execute2(() => new class_演算子オーバーロード { Listフィールド = new List<int>() });
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード { Listフィールド = new List<int>() });
         //}
     }
     [TestMethod]
@@ -1176,67 +1176,67 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]
     public void MultiplyAssignChecked() => this.演算Binary(ExpressionType.MultiplyAssignChecked);
     [TestMethod]
-    public void Negate() => this.Execute2(() => -Int32_1);
+    public void Negate() => this.実行結果が一致するか確認(() => -Int32_1);
     [TestMethod]
-    public void NegateChecked() => this.Execute2(() => checked(-Int32_1));
+    public void NegateChecked() => this.実行結果が一致するか確認(() => checked(-Int32_1));
     [TestMethod]
     public void New()
     {
         //if(New.Constructor!=null) {
-        this.Execute2(() => new class_演算子オーバーロード());
+        this.実行結果が一致するか確認(() => new class_演算子オーバーロード());
         //}else{
-        this.Execute2(() => new struct_演算子オーバーロード());
+        this.実行結果が一致するか確認(() => new struct_演算子オーバーロード());
         //}
     }
     [TestMethod]
     public void NewArrayBound()
     {
         //if(NewArray_Expressions_Count==1) {
-        this.Execute2(() => new int[1]);
+        this.実行結果が一致するか確認(() => new int[1]);
         //}else{
-        this.Execute2(() => new int[1, 1]);
+        this.実行結果が一致するか確認(() => new int[1, 1]);
         //}
     }
     [TestMethod]
     public void NewArrayInit()
     {
         //for(var a=0;a<NewArray_Expressions_Count;a++) {
-        this.Execute2(() => new[] { 1, 2 });
+        this.実行結果が一致するか確認(() => new[] { 1, 2 });
         //}
-        this.Execute2(() => System.Array.Empty<int>());
+        this.実行結果が一致するか確認(() => System.Array.Empty<int>());
     }
     [TestMethod]
     public void Not()
     {
         //if(this.共通UnaryExpression(Unary)) return;
         var p0 = new class_演算子オーバーロード();
-        this.Execute2(() => !p0);
+        this.実行結果が一致するか確認(() => !p0);
         //if(Unary.Type==typeof(Boolean)) {
         var p1 = true;
-        this.Execute2(() => !p1);
+        this.実行結果が一致するか確認(() => !p1);
         //} else {
         var p2 = 2;
-        this.Execute2(() => ~p2);
+        this.実行結果が一致するか確認(() => ~p2);
         //}
     }
     [TestMethod]
     public void NotEqual()
     {
         //if(this.演算(特定の形式はなし,OpCodes.Ceq)) return;
-        this.Execute2(() => Decimal_1 != Decimal_2);
-        this.Execute2(() => Int32_1 != Int32_2);
+        this.実行結果が一致するか確認(() => Decimal_1 != Decimal_2);
+        this.実行結果が一致するか確認(() => Int32_1 != Int32_2);
     }
     [TestMethod]
     public void OnesComplement()
     {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.OnesComplement(
                     Expression.Constant(new class_演算子オーバーロード())
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.OnesComplement(
                     Expression.Constant(2)
@@ -1249,7 +1249,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]
     public void OrAssign() => this.演算Binary(ExpressionType.OrAssign);
     [TestMethod]
-    public void OrElse() => this.Execute2(() => Boolean1 || Boolean2);
+    public void OrElse() => this.実行結果が一致するか確認(() => Boolean1 || Boolean2);
     private delegate int FuncRef(ref int input);
     private static int Lambda(ref int input,FuncRef d) => d(ref input);
     [TestMethod]
@@ -1259,14 +1259,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(this.RootConstant!=null) index++;
         {
             var b = 0;
-            this.Execute2(() => Lambda(a => b));
+            this.実行結果が一致するか確認(() => Lambda(a => b));
         }
         //    if(Parameter.IsByRef) {
         {
             var p = Expression.Parameter(typeof(int), "p");
             var p1 = Expression.Parameter(typeof(int).MakeByRefType(), "p1");
             var p2 = Expression.Parameter(typeof(int).MakeByRefType(), "p2");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -1296,11 +1296,11 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             );
         }
         //    }
-        this.Execute2(() => Lambda(a => a));
+        this.実行結果が一致するか確認(() => Lambda(a => a));
         //} else { 
         {
             var p = Expression.Parameter(typeof(int), "p");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -1345,7 +1345,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    switch(NodeType) {
         //        case ExpressionType.Index: {
         //            if(Index_Arguments.Count==1) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1360,7 +1360,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //            } else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1380,7 +1380,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        case ExpressionType.MemberAccess: {
         //            if(Member_Member.MemberType==MemberTypes.Field) {
         //                if(Member_Field.IsStatic)
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1395,7 +1395,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //                else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1411,7 +1411,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //                }
         //            } else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1431,7 +1431,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var Int32Parameter = Expression.Parameter(typeof(int));
         //            if(index>=0) {
         //                if(this.RootConstant!=null)
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Block(
                     new[] { Int32Parameter },
@@ -1455,7 +1455,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var in_p = Expression.Parameter(typeof(int), "in_p");
             var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p },
@@ -1481,7 +1481,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var in_p1 = Expression.Parameter(typeof(int), "in_p1");
             var in_p2 = Expression.Parameter(typeof(int), "in_p2");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p1 },
@@ -1507,7 +1507,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            } else {
         {
             var in_p1 = Expression.Parameter(typeof(int), "in_p1");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p1 },
@@ -1530,7 +1530,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    switch(NodeType) {
         //        case ExpressionType.Index: {
         //            if(Index_Arguments.Count==1)
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1545,7 +1545,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //            else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1565,7 +1565,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        case ExpressionType.MemberAccess: {
         //            if(Member_Member.MemberType==MemberTypes.Field) {
         //                if(Member_Field.IsStatic) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1580,7 +1580,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //                } else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1596,7 +1596,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //                }
         //            } else {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Call(
                     Expression.Assign(
@@ -1616,7 +1616,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var StringParameter = Expression.Parameter(typeof(string));
         //            if(index>=0) {
         //                if(this.RootConstant!=null)
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<string>>(
                 Expression.Block(
                     new[] { StringParameter },
@@ -1641,7 +1641,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var in_p = Expression.Parameter(typeof(string), "in_p");
             var ref_p = Expression.Parameter(typeof(string).MakeByRefType(), "ref_p");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p },
@@ -1667,7 +1667,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var in_p1 = Expression.Parameter(typeof(string), "in_p1");
             var in_p2 = Expression.Parameter(typeof(string), "in_p2");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p1 },
@@ -1693,7 +1693,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            } else {
         {
             var in_p1 = Expression.Parameter(typeof(string), "in_p1");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<string>>(
                     Expression.Block(
                         new[] { in_p1 },
@@ -1727,46 +1727,46 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         //case ExpressionType.ArrayIndex: 
         //    if(e_Type.IsValueType) {
-        this.Execute2(() => _struct_演算子オーバーロードArray[0].Int32フィールド);
+        this.実行結果が一致するか確認(() => _struct_演算子オーバーロードArray[0].Int32フィールド);
         //    } else {
-        this.Execute2(() => _class_演算子オーバーロードArray[0].Stringフィールド);
+        this.実行結果が一致するか確認(() => _class_演算子オーバーロードArray[0].Stringフィールド);
         //    }
         //}
         //case ExpressionType.MemberAccess:{
         //    if(Member_Member.MemberType==MemberTypes.Field) {
         //        if(Member_Field.IsStatic){
         //            if(Member.Type.IsValueType){
-        this.Execute2(() => _Static_struct_演算子オーバーロード1.Int32フィールド);
+        this.実行結果が一致するか確認(() => _Static_struct_演算子オーバーロード1.Int32フィールド);
         //            } else{
-        this.Execute2(() => _Static_class_演算子オーバーロード1.Stringフィールド);
+        this.実行結果が一致するか確認(() => _Static_class_演算子オーバーロード1.Stringフィールド);
         //            }
         //        } else{
         //            if(Member.Type.IsValueType){
-        this.Execute2(() => this._Instance_struct_演算子オーバーロード1.Int32フィールド);
+        this.実行結果が一致するか確認(() => this._Instance_struct_演算子オーバーロード1.Int32フィールド);
         //            } else{
-        this.Execute2(() => this._Instance_class_演算子オーバーロード1.Stringフィールド);
+        this.実行結果が一致するか確認(() => this._Instance_class_演算子オーバーロード1.Stringフィールド);
         //            }
         //        }
         //    } else {
-        this.Execute2(() => Static_struct_演算子オーバーロード1.Int32フィールド);
-        this.Execute2(() => this.Instance_struct_演算子オーバーロード.Int32フィールド);
+        this.実行結果が一致するか確認(() => Static_struct_演算子オーバーロード1.Int32フィールド);
+        this.実行結果が一致するか確認(() => this.Instance_struct_演算子オーバーロード.Int32フィールド);
         //    }
         //}
         //case ExpressionType.Parameter:{
         //    if(index>=0) {
         //        if(this._RootConstant!=null) index++;
         var b = 3;
-        this.Execute2(() => _Static_struct_演算子オーバーロード1.Let(a => a.Int32プロパティ + b));
+        this.実行結果が一致するか確認(() => _Static_struct_演算子オーバーロード1.Let(a => a.Int32プロパティ + b));
         //        if(Parameter.Type.IsValueType) {
-        this.Execute2(() => _Static_struct_演算子オーバーロード1.Let(a => a.Int32プロパティ));
+        this.実行結果が一致するか確認(() => _Static_struct_演算子オーバーロード1.Let(a => a.Int32プロパティ));
         //        } else {
-        this.Execute2(() => _Static_class_演算子オーバーロード1.Let(a => a.Stringプロパティ));
+        this.実行結果が一致するか確認(() => _Static_class_演算子オーバーロード1.Let(a => a.Stringプロパティ));
         //        }
         //    } else { 
         //        if(Parameter.Type.IsValueType) {
         {
             var p = Expression.Parameter(typeof(struct_演算子オーバーロード));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -1785,7 +1785,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        } else {
         {
             var p = Expression.Parameter(typeof(class_演算子オーバーロード));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -1834,7 +1834,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         //}
         //default:{
-        this.Execute2(() => (_Boolean ? _Static_class_演算子オーバーロード1 : this._Instance_class_演算子オーバーロード1).Int32プロパティ);
+        this.実行結果が一致するか確認(() => (_Boolean ? _Static_class_演算子オーバーロード1 : this._Instance_class_演算子オーバーロード1).Int32プロパティ);
         //}
     }
     [TestMethod]
@@ -1842,7 +1842,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const int a = 3;
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -1857,7 +1857,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const int a = 3;
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -1873,7 +1873,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //if(Unary_Method!=null) this._I.Call(Unary_Method);
         {
             var a = Expression.Parameter(typeof(decimal), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<decimal>>(
                     Expression.Block(
                         new[] { a },
@@ -1890,7 +1890,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(Unary_Type==typeof(Int32)||Unary_Type==typeof(UInt32)||Unary_Type==typeof(Int16)||Unary_Type==typeof(UInt16)||Unary_Type==typeof(Char)) I.Ldc_I4_1();
         {
             var a = Expression.Parameter(typeof(int), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { a },
@@ -1905,7 +1905,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         {
             var a = Expression.Parameter(typeof(uint), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<uint>>(
                     Expression.Block(
                         new[] { a },
@@ -1920,7 +1920,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         {
             var a = Expression.Parameter(typeof(short), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<short>>(
                     Expression.Block(
                         new[] { a },
@@ -1935,7 +1935,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         {
             var a = Expression.Parameter(typeof(ushort), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<ushort>>(
                     Expression.Block(
                         new[] { a },
@@ -1951,7 +1951,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    else if(Unary_Type==typeof(Int64)) I.Ldc_I8(1L);
         {
             var a = Expression.Parameter(typeof(long), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<long>>(
                     Expression.Block(
                         new[] { a },
@@ -1967,7 +1967,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    else if(Unary_Type==typeof(Single)) I.Ldc_R4(1F);
         {
             var a = Expression.Parameter(typeof(float), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<float>>(
                     Expression.Block(
                         new[] { a },
@@ -1983,7 +1983,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    else if(Unary_Type==typeof(Double)) I.Ldc_R8(1D);
         {
             var a = Expression.Parameter(typeof(double), "a");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<double>>(
                     Expression.Block(
                         new[] { a },
@@ -2004,7 +2004,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const double a = 3, b = 2;
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Power(
                     Expression.Constant(a),
@@ -2020,7 +2020,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //if(Parameter!=null) {
         {
             var p = Expression.Parameter(typeof(double));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<double>>(
                     Expression.Block(
                         new[] { p },
@@ -2042,7 +2042,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //}
         {
             var o = Expression.Parameter(typeof(double[]));
-            var expected = this.Execute2(
+            var expected = this.実行結果が一致するか確認(
                 Expression.Lambda<Func<double>>(
                     Expression.Block(
                         new[] { o },
@@ -2078,7 +2078,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const int a = 3;
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -2093,7 +2093,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const int a = 3;
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -2110,7 +2110,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             const int a = 3;
             var p = Expression.Parameter(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -2127,7 +2127,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var Field = typeof(ATest).GetField(nameof(_Static_class_演算子オーバーロード1), BindingFlags.Static | BindingFlags.NonPublic);
             var o = new class_演算子オーバーロード(1);
-            var expected = this.Execute2(
+            var expected = this.実行結果が一致するか確認(
                 Expression.Lambda<Func<class_演算子オーバーロード>>(
                     Expression.Block(
                         Expression.Assign(
@@ -2159,14 +2159,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Lambda()
     {
         //if(this._DictionaryLambdaField.TryGetValue(Lambda,out Field)) {
-        this.Execute2(() => 先行評価されないLambda(a => a).NoEarlyEvaluation() + 先行評価されないLambda(b => b).NoEarlyEvaluation());
+        this.実行結果が一致するか確認(() => 先行評価されないLambda(a => a).NoEarlyEvaluation() + 先行評価されないLambda(b => b).NoEarlyEvaluation());
         //} else {
         //    _Target[Delegate番号]=RootParametereが含まれている
         //        ? D.CreateDelegate(Lambda.Type,_Target)
-        this.Execute2(() => Lambda(a => a));
+        this.実行結果が一致するか確認(() => Lambda(a => a));
         //        : D.CreateDelegate(Lambda.Type);
         var c = 1;
-        this.Execute2(() => Lambda(a => c));
+        this.実行結果が一致するか確認(() => Lambda(a => c));
         //}
     }
     [TestMethod]
@@ -2176,7 +2176,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     private void 大小論理Binary(ExpressionType NodeType)
     {
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Block(
                     new[] { p },
@@ -2229,14 +2229,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         //foreach(var Initializer in ListInit.Initializers) {
         //    if(ListInit_Type.IsValueType) {
-        this.Execute2(() => new StructList { 1 });
+        this.実行結果が一致するか確認(() => new StructList { 1 });
         //    }else{
-        this.Execute2(() => new List<int> { 1 });
+        this.実行結果が一致するか確認(() => new List<int> { 1 });
         //    }
         //    if(AddMethod.ReturnType!=typeof(void)) {
-        this.Execute2(() => new HashSet<int> { 3 });
+        this.実行結果が一致するか確認(() => new HashSet<int> { 3 });
         //    }else{
-        this.Execute2(() => new List<int> { 2 });
+        this.実行結果が一致するか確認(() => new List<int> { 2 });
         //    }
         //}
     }
@@ -2248,7 +2248,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label();
         var Continue = Expression.Label();
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2296,7 +2296,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int));
         var Break = Expression.Label(typeof(int));
         var Continue = Expression.Label();
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2343,7 +2343,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 引数 = Expression.Parameter(typeof(int));
         var 合計 = Expression.Parameter(typeof(int));
         var Break = Expression.Label();
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2382,7 +2382,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 引数 = Expression.Parameter(typeof(int));
         var 合計 = Expression.Parameter(typeof(int));
         var Break = Expression.Label(typeof(int));
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2422,7 +2422,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2474,7 +2474,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2526,7 +2526,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2579,7 +2579,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var 合計 = Expression.Parameter(typeof(int),"合計");
         var Break = Expression.Label("Break");
         var Continue = Expression.Label("Continue");
-        var R = this.Execute2(
+        var R = this.実行結果が一致するか確認(
             Expression.Lambda<Func<int, int>>(
                 Expression.Block(
                     new[] { 合計 },
@@ -2652,7 +2652,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     }
     [TestMethod]public void Switch02(){
         var p2 = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Switch(
                     Expression.Constant(124),
@@ -2671,7 +2671,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     }
     [TestMethod]public void Switch03(){
         var p2 = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p2 },
@@ -2757,7 +2757,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 p
             )
         );
-        this.Execute2(Lambda);
+        this.実行結果が一致するか確認(Lambda);
     }
     [TestMethod]public void Switch08(){
         this.Switch<decimal>(pp => 
@@ -2862,20 +2862,20 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                         p
                     )
                 );
-                this.Execute2(Lambda);
+                this.実行結果が一致するか確認(Lambda);
             }
         }
     }
-    private void PrivateTry(Expression<Action<Exception>>Lambda,Exception input){
-        var M = this.CreateDelegate(Lambda);
-        M(input);
-    }
+    //private void 実行結果が一致するか確認(Expression<Action<Exception>>Lambda,Exception input){
+    //    var M = this.CreateDelegate(Lambda);
+    //    M(input);
+    //}
     [TestMethod,ExpectedException(typeof(OverflowException))]
     public void Try_OverflowException(){
         var input = Expression.Parameter(typeof(Exception));
         var OverflowException = Expression.Parameter(typeof(OverflowException), "OverflowException");
         var ApplicationException = Expression.Parameter(typeof(ApplicationException), "ApplicationException");
-        this.PrivateTry(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action<Exception>>(
                 Expression.TryCatch(
                     Expression.Throw(input),
@@ -2889,7 +2889,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod,ExpectedException(typeof(ApplicationException))]
     public void Try_ApplicationException(){
         var input = Expression.Parameter(typeof(Exception));
-        this.PrivateTry(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action<Exception>>(
                 Expression.TryCatch(
                     Expression.Throw(input),
@@ -2910,7 +2910,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Try_Fault0(){
         //fault内部では例外が発生しないようだ
         var input = Expression.Parameter(typeof(Exception),"input");
-        this.PrivateTry(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action<Exception>>(
                 Expression.TryFault(
                     Expression.Constant(2),
@@ -2923,7 +2923,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod,ExpectedException(typeof(ApplicationException))]
     public void Try_Finally1(){
         var input=Expression.Parameter(typeof(Exception),"input");
-        this.PrivateTry(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action<Exception>>(
                 Expression.TryFinally(
                     Expression.Constant(2),
@@ -3015,7 +3015,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
     }
     [TestMethod]
-    public void Try_TryCatchパラメータなし() => this.Execute2(
+    public void Try_TryCatchパラメータなし() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<int>>(
             Expression.TryCatch(
                 Expression.Divide(
@@ -3033,7 +3033,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Try_TryCatchパラメータあり()
     {
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Divide(
@@ -3052,7 +3052,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Try_TryCatchFinally()
     {
         var p = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -3076,7 +3076,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void TryCatchFinally0()
     {
         const int Catch値 = 40,Finally値=30;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatchFinally(
                     Expression.Throw(
@@ -3096,7 +3096,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void TryCatchFinally1()
     {
         const int Left値 = 2, Catch値 = 40,Finally値=30;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Multiply(
                     Expression.Constant(Left値),
@@ -3119,7 +3119,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void TryThrow値がBinaryLeftの評価スタックを跨ぐ0()
     {
         const int Catch値 = 4;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Throw(
@@ -3138,7 +3138,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void TryThrow値がBinaryLeftの評価スタックを跨ぐ1()
     {
         const int Left値 = 2, Catch値 = 4;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Multiply(
                     Expression.Constant(Left値),
@@ -3167,7 +3167,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             Expression.Constant(v)
         )
     );
-    private void TryCatch値がCallの評価スタックを跨ぐ(Expression e1,Expression e2,Expression e3,Expression e4) => this.Execute2(
+    private void TryCatch値がCallの評価スタックを跨ぐ(Expression e1,Expression e2,Expression e3,Expression e4) => this.実行結果が一致するか確認(
         Expression.Lambda<Func<int>>(
             Expression.Call(
                 typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call4),BindingFlags.Static|BindingFlags.NonPublic),
@@ -3279,12 +3279,12 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void TypeAs() => this.Execute2(() => Object_String as string);
+    public void TypeAs() => this.実行結果が一致するか確認(() => Object_String as string);
     [TestMethod]
     public void TypeEqual()
     {
         var p = Expression.Parameter(typeof(object));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Block(
                     new[] { p },
@@ -3302,7 +3302,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Block(
                     new[] { p },
@@ -3322,7 +3322,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
     }
     [TestMethod]
-    public void TypeIs() => this.Execute2(() => Object_String is string);
+    public void TypeIs() => this.実行結果が一致するか確認(() => Object_String is string);
     public delegate int outパラメータを引数に取りIntを返す1(ref int q);
     private static int out_Lambda1(ref int v,outパラメータを引数に取りIntを返す1 a) => a(ref v);
     public delegate int outパラメータを引数に取りIntを返す2(ref int q);
@@ -3336,7 +3336,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int));
             var q = Expression.Parameter(typeof(int).MakeByRefType());
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3371,7 +3371,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int));
             var q = Expression.Parameter(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3401,7 +3401,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        } else {
         {
             var p = Expression.Parameter(typeof(int));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3424,7 +3424,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            if(Member_Field.IsStatic) {
         {
             const int expected = 2;
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         Expression.Assign(
@@ -3449,7 +3449,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            } else {
         {
             const int expected = 2;
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         Expression.Assign(
@@ -3493,7 +3493,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var expected = new class_演算子オーバーロード(1);
             var p = Expression.Parameter(typeof(class_演算子オーバーロード));
-            var r = this.Execute2(
+            var r = this.実行結果が一致するか確認(
                 Expression.Lambda<Func<class_演算子オーバーロード>>(
                     Expression.Block(
                         new[] { p },
@@ -3509,14 +3509,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             Assert.AreNotSame(expected, r);
         }
         //this._I.Unbox_Any(Unary.Type);
-        this.Execute2(() => (int)Object_Int32);
+        this.実行結果が一致するか確認(() => (int)Object_Int32);
     }
     [TestMethod]
     public void Unbox()
     {
-        this.Execute2(() => (int)Object_Int32);
+        this.実行結果が一致するか確認(() => (int)Object_Int32);
         var p = Expression.Parameter(typeof(object));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -3539,7 +3539,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Void演算Assign0()
     {
         var p = Expression.Parameter(typeof(int));
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -3560,7 +3560,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void Void演算Assign1()
     {
         var p = Expression.Parameter(typeof(int));
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -3582,7 +3582,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         const int a = 3;
         var p = Expression.Parameter(typeof(int));
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -3603,7 +3603,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //switch(e.NodeType) {
         //    case ExpressionType.Assign: {
         //        if(Binary_Right.NodeType==ExpressionType.Try){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
@@ -3625,7 +3625,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //        } else{
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -3641,10 +3641,10 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    }
         //    case ExpressionType.PreDecrementAssign:{
         //    case ExpressionType.PreIncrementAssign:{
-        this.Execute2(() => Enumerable.Range(1, 2));
+        this.実行結果が一致するか確認(() => Enumerable.Range(1, 2));
         //    }
         //    case ExpressionType.Block: {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.IfThen(
                     Expression.Constant(true),
@@ -3662,7 +3662,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    }
         //    default: {
         //        if(e.Type!=typeof(void)) {
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -3675,7 +3675,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //        }
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Default(typeof(void))
             )
@@ -3708,7 +3708,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             struct_ショートカット検証 a = false;
             struct_ショートカット検証 b = true;
             var expected = a && b;
-            var actual = this.Execute2(
+            var actual = this.実行結果が一致するか確認(
                 Expression.Lambda<Func<struct_ショートカット検証>>(
                     Expression.AndAlso(
                         Expression.Constant(a),
@@ -3723,7 +3723,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         }
         //} else {
         {
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<bool>>(
                     Expression.AndAlso(
                         Expression.Constant(true),
@@ -3741,7 +3741,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    case ExpressionType.Index: {
         {
             var 配列 = new[] { 1, 2, 3 };
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3762,7 +3762,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             this._InstanceString = "ABC";
             var Field = typeof(ATest).GetField(nameof(this._InstanceString), BindingFlags.Instance | BindingFlags.NonPublic);
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3785,7 +3785,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int).MakeByRefType(), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3815,7 +3815,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int).MakeByRefType(), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3840,7 +3840,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3866,7 +3866,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    case ExpressionType.Index: {
         {
             var 配列 = new[] { 1, 2, 3 };
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3889,7 +3889,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             _StaticString = "ABC";
             var Field = typeof(ATest).GetField(nameof(_StaticString), BindingFlags.Static | BindingFlags.NonPublic);
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3909,7 +3909,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             this._InstanceString = "ABC";
             var Field = typeof(ATest).GetField(nameof(this._InstanceString), BindingFlags.Instance | BindingFlags.NonPublic);
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3930,7 +3930,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             this.InstanceInt32プロパティ = 3;
             var Property = typeof(ATest).GetProperty(nameof(this.InstanceInt32プロパティ), BindingFlags.Instance | BindingFlags.NonPublic);
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3949,7 +3949,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             Staticプロパティ = 3;
             var Property = typeof(ATest).GetProperty(nameof(Staticプロパティ), BindingFlags.Static | BindingFlags.NonPublic);
-            this.Execute標準ラムダループ(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Assign(
@@ -3973,7 +3973,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int).MakeByRefType(), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -3999,7 +3999,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4027,7 +4027,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var q = Expression.Parameter(typeof(int), "q");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4053,7 +4053,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        } else {
         {
             var p = Expression.Parameter(typeof(int), "p");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4077,12 +4077,12 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var a = 1m;
             var b = 2m;
-            this.Execute2(() => a + b);
+            this.実行結果が一致するか確認(() => a + b);
         }
         {
             var a = 1U;
             var b = 2U;
-            this.Execute2(() => a + b);
+            this.実行結果が一致するか確認(() => a + b);
         }
     }
     [TestMethod]
@@ -4092,29 +4092,29 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var a = 1m;
             var b = 2m;
-            this.Execute2(() => a + b);
+            this.実行結果が一致するか確認(() => a + b);
         }
         //if(IsUnsigned(特定の形式はなし.Left.Type)&&IsUnsigned(特定の形式はなし.Right.Type)) {
         {
             var a = 1U;
             var b = 2U;
-            this.Execute2(() => checked(a + b));
+            this.実行結果が一致するか確認(() => checked(a + b));
         }
         //} else {
         {
             var a = 1;
             var b = 2U;
-            this.Execute2(() => checked(a + b));
+            this.実行結果が一致するか確認(() => checked(a + b));
         }
         {
             var a = 1U;
             var b = 2;
-            this.Execute2(() => checked(a + b));
+            this.実行結果が一致するか確認(() => checked(a + b));
         }
         {
             var a = 1;
             var b = 2;
-            this.Execute2(() => checked(a + b));
+            this.実行結果が一致するか確認(() => checked(a + b));
         }
         //}
     }
@@ -4184,39 +4184,39 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void ObjectメソッドEnum()
     {
         {
-            this.Execute2(() => ((Enum)EEnum.A).ToString());
-            this.Execute2(() => ((Enum)EEnum.A).Equals(EEnum.B));
-            this.Execute2(() => ((Enum)EEnum.A).GetType());
+            this.実行結果が一致するか確認(() => ((Enum)EEnum.A).ToString());
+            this.実行結果が一致するか確認(() => ((Enum)EEnum.A).Equals(EEnum.B));
+            this.実行結果が一致するか確認(() => ((Enum)EEnum.A).GetType());
         }
         {
             Enum A = EEnum.A;
-            this.Execute2(() => A.ToString());
-            this.Execute2(() => A.Equals(EEnum.B));
-            this.Execute2(() => A.GetType());
+            this.実行結果が一致するか確認(() => A.ToString());
+            this.実行結果が一致するか確認(() => A.Equals(EEnum.B));
+            this.実行結果が一致するか確認(() => A.GetType());
         }
     }
     [TestMethod]
     public void ObjectメソッドEEnum()
     {
         {
-            this.Execute2(() => EEnum.A.ToString());
-            this.Execute2(() => EEnum.A.Equals(EEnum.B));
-            this.Execute2(() => EEnum.A.GetType());
+            this.実行結果が一致するか確認(() => EEnum.A.ToString());
+            this.実行結果が一致するか確認(() => EEnum.A.Equals(EEnum.B));
+            this.実行結果が一致するか確認(() => EEnum.A.GetType());
         }
         {
             var A = EEnum.A;
-            this.Execute2(() => A.ToString());
-            this.Execute2(() => A.Equals(EEnum.B));
-            this.Execute2(() => A.GetType());
+            this.実行結果が一致するか確認(() => A.ToString());
+            this.実行結果が一致するか確認(() => A.Equals(EEnum.B));
+            this.実行結果が一致するか確認(() => A.GetType());
         }
     }
     [TestMethod]
     public void ObjectメソッドInt32()
     {
         var A = 1;
-        this.Execute2(() => A.ToString());
-        this.Execute2(() => A.Equals(2));
-        this.Execute2(() => A.GetType());
+        this.実行結果が一致するか確認(() => A.ToString());
+        this.実行結果が一致するか確認(() => A.Equals(2));
+        this.実行結果が一致するか確認(() => A.GetType());
     }
     private interface I<T>
     {
@@ -4230,7 +4230,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     public void T_ToString()
     {
         var A = new S<int>();
-        this.Execute2(() => A.Method());
+        this.実行結果が一致するか確認(() => A.Method());
     }
 
     [TestMethod]
@@ -4279,30 +4279,30 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         Assert.AreEqual("TestClass new New", TestClass_TestClass2.New());
         Assert.AreEqual("TestClass2", TestClass_TestClass2.ToString());
         //if(Reflection.Object.GetType_ == Method)
-        this.Execute2(() => 1.GetType());
+        this.実行結果が一致するか確認(() => 1.GetType());
         //} else if(InstanceType.IsSealed)
-        this.Execute2(() => STestClass.Interface());
-        this.Execute2(() => STestClass.Virtual());
-        this.Execute2(() => STestClass.ToString());
+        this.実行結果が一致するか確認(() => STestClass.Interface());
+        this.実行結果が一致するか確認(() => STestClass.Virtual());
+        this.実行結果が一致するか確認(() => STestClass.ToString());
         //else if(Method.IsVirtual)
-        this.Execute2(() => TestClass2.Virtual());
+        this.実行結果が一致するか確認(() => TestClass2.Virtual());
         //    if(InstanceType.IsValueType)
-        this.Execute2(() => TestStruct.Interface());
-        this.Execute2(() => TestStruct.Method());
-        this.Execute2(() => TestStruct.ToString());
+        this.実行結果が一致するか確認(() => TestStruct.Interface());
+        this.実行結果が一致するか確認(() => TestStruct.Method());
+        this.実行結果が一致するか確認(() => TestStruct.ToString());
         //    else
-        this.Execute2(() => TestClass2.Virtual());
-        this.Execute2(() => TestClass.Interface());
-        this.Execute2(() => TestClass.Virtual());
-        this.Execute2(() => TestClass.ToString());
+        this.実行結果が一致するか確認(() => TestClass2.Virtual());
+        this.実行結果が一致するか確認(() => TestClass.Interface());
+        this.実行結果が一致するか確認(() => TestClass.Virtual());
+        this.実行結果が一致するか確認(() => TestClass.ToString());
         //else
         //if(Reflection.Object.GetType_==Method||Method.IsVirtual) {
         //    if(InstanceType.IsValueType) {
-        this.Execute2(() => 1.ToString());
+        this.実行結果が一致するか確認(() => 1.ToString());
         //    }
-        this.Execute2(() => new object().ToString());
+        this.実行結果が一致するか確認(() => new object().ToString());
         //} else {
-        this.Execute2(() => "1".IndexOf("1", StringComparison.Ordinal));
+        this.実行結果が一致するか確認(() => "1".IndexOf("1", StringComparison.Ordinal));
         //}
     }
     private static int Call1RefInt32(ref int a) => a;
@@ -4315,7 +4315,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         //for(var a = 0;a<Expressions_Count;a++) {
         //    if(Expression.NodeType==ExpressionType.Try) {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1), BindingFlags.Static | BindingFlags.NonPublic),
@@ -4324,7 +4324,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
             )
         );
         //    }
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1), BindingFlags.Static | BindingFlags.NonPublic),
@@ -4338,11 +4338,11 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        case ExpressionType.ArrayIndex: {
         {
             var Array = new string[10];
-            this.Execute2(() => Call1RefString(ref Array[0]));
+            this.実行結果が一致するか確認(() => Call1RefString(ref Array[0]));
         }
         {
             var Array = new int[10];
-            this.Execute2(() => Call1RefInt32(ref Array[0]));
+            this.実行結果が一致するか確認(() => Call1RefInt32(ref Array[0]));
         }
         //        }
         //        case ExpressionType.Parameter: {
@@ -4351,7 +4351,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(decimal), "p");
             var p1 = Expression.Parameter(typeof(decimal).MakeByRefType(), "p1");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<decimal>>(
                     Expression.Block(
                         new[] { p },
@@ -4378,7 +4378,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var p1 = Expression.Parameter(typeof(int).MakeByRefType(), "p1");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4404,7 +4404,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         {
             var p = Expression.Parameter(typeof(int), "p");
             var p1 = Expression.Parameter(typeof(int), "p1");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4430,7 +4430,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            } else {
         {
             var p = Expression.Parameter(typeof(int), "p");
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<int>>(
                     Expression.Block(
                         new[] { p },
@@ -4449,7 +4449,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //            }
         //        }
         //        case ExpressionType.Try: {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1RefInt32), BindingFlags.Static | BindingFlags.NonPublic),
@@ -4460,7 +4460,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        }
         //        case ExpressionType.MemberAccess: {
         //            if(Member_Member.MemberType==MemberTypes.Property){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1RefInt32), BindingFlags.NonPublic | BindingFlags.Static),
@@ -4474,14 +4474,14 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         );
         //            } else{
         //                if(Member_Field.IsStatic){
-        this.Execute2(() => Call1RefInt32(ref _StaticInt32));
+        this.実行結果が一致するか確認(() => Call1RefInt32(ref _StaticInt32));
         //                } else{
-        this.Execute2(() => Call1RefInt32(ref this._InstanceInt32));
+        this.実行結果が一致するか確認(() => Call1RefInt32(ref this._InstanceInt32));
         //                }
         //            }
         //        }
         //        default: {
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1RefInt32), BindingFlags.NonPublic | BindingFlags.Static),
@@ -4492,7 +4492,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //        }
         //    }
         //} else if(Expression.NodeType==ExpressionType.Try){
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Call(
                     typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(Call1), BindingFlags.Static | BindingFlags.NonPublic),
@@ -4508,18 +4508,18 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         var x = 3m;
         //if(this.共通UnaryExpression(Unary)) return;
-        this.Execute2(() => -x);
+        this.実行結果が一致するか確認(() => -x);
         //this.I.Emit(Signed);
-        this.Execute2(() => -Int32_1);
+        this.実行結果が一致するか確認(() => -Int32_1);
     }
     [TestMethod]
     public void 実行()
     {
         //for(var a = 自由変数開始番号;a<自由変数終了番号;a++) {
         //    if(Field.FieldType.IsValueType) {
-        this.Execute2(() => 1.Let(a => a.Let(b => a + b)));
+        this.実行結果が一致するか確認(() => 1.Let(a => a.Let(b => a + b)));
         //    } else {
-        this.Execute2(() => "1".Let(a => a.Let(b => a + b)));
+        this.実行結果が一致するか確認(() => "1".Let(a => a.Let(b => a + b)));
         //    }
         //}
     }
@@ -4529,7 +4529,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         var Type = typeof(T?);
         var p = Expression.Parameter(Type);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.Block(
                     new[] { p },
@@ -4545,7 +4545,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.Block(
                     new[] { p },
@@ -4561,7 +4561,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.Block(
                     new[] { p },
@@ -4577,7 +4577,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.Block(
                     new[] { p },
@@ -4598,7 +4598,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         var Type = typeof(T?);
         var p = Expression.Parameter(Type);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool?>>(
                 Expression.Block(
                     new[] { p },
@@ -4614,7 +4614,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool?>>(
                 Expression.Block(
                     new[] { p },
@@ -4635,7 +4635,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     {
         var Type = typeof(T?);
         var p = Expression.Parameter(Type);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T?>>(
                 Expression.Block(
                     new[] { p },
@@ -4651,7 +4651,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T?>>(
                 Expression.Block(
                     new[] { p },
@@ -4671,7 +4671,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     private void NullableUnaryUnbox<T>(object a) where T : struct
     {
         var Type = typeof(T?);
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<T?>>(
                 Expression.Unbox(
                     Expression.Constant(a, typeof(object)),
@@ -4749,7 +4749,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         var Method = typeof(Test_作成_DynamicMethodによるDelegate作成).GetMethod(nameof(演算子), BindingFlags.Static | BindingFlags.NonPublic)!.MakeGenericMethod(typeof(TLeft), typeof(TRight));
         //if(IsUnsigned(Binary.Left.Type)&&IsUnsigned(Binary.Right.Type))
         var p = Expression.Parameter(typeof(TLeft));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<bool>>(
                 Expression.Block(
                     new[] { p },
@@ -4778,7 +4778,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         this.共通GreaterThan_LessThan(1, 2);
     }
     [TestMethod, ExpectedException(typeof(Exception))]
-    public void Throw() => this.Execute標準ラムダループ(
+    public void Throw() => this.実行結果が一致するか確認(
         Expression.Lambda<Action>(
             Expression.Throw(
                 Expression.New(
@@ -4788,7 +4788,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         )
     );
     [TestMethod]
-    public void Try_TryCatchFilter_Exception() => this.Execute2(
+    public void Try_TryCatchFilter_Exception() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<int>>(
             Expression.TryCatch(
                 Expression.Divide(
@@ -4804,7 +4804,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         )
     );
     //[TestMethod, ExpectedException(typeof(NotSupportedException))]
-    //public void Try_Fault() => this.Execute2(
+    //public void Try_Fault() => this.実行結果が一致するか確認(
     //    Expression.Lambda<Func<int>>(
     //        Expression.TryFault(
     //            Expression.Constant(0),
@@ -4833,7 +4833,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]public void TryAdd()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -4859,7 +4859,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
     [TestMethod]public void TryCatchFilter無変数()
     {
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -4877,7 +4877,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Throw(
@@ -4903,7 +4903,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Throw(
@@ -4934,7 +4934,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Throw(
@@ -4965,7 +4965,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         //}
         var ex = Expression.Parameter(typeof(Exception));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Throw(

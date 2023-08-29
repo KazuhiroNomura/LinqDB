@@ -46,22 +46,8 @@ partial class Optimizer {
         private List<ParameterExpression> Block_Variables=default!;
         public Expression 実行(Expression Lambda0) {
             this.DictionaryDynamic.Clear();
-            //var Block_Variables=this.Block_Variables;
-            //Block_Variables.Clear();
-            //var Lambda=(LambdaExpression)Lambda0;
-            //var Lambda1_Body=this.Traverse(Lambda.Body);
-            ////var Lambda1 = (LambdaExpression)base.Lambda(Lambda0);
-            //var Block1=Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1_Body));
-            //var Lambda1=Expression.Lambda(Lambda.Type,Block1,Lambda.Name,Lambda.TailCall,Lambda.Parameters);
-            //if(!this.DictionaryLambda.ContainsKey(Lambda1)) this.DictionaryLambda.Add(Lambda1,default!);
-            //return Lambda1;
-            //var Lambda1 = (LambdaExpression)this.Lambda((LambdaExpression)Lambda0);
-            //var Block1 = Expression.Block(Block_Variables,this._作業配列.Expressions設定(Lambda1.Body));
-            //return Expression.Lambda(Lambda1.Type,Block1,Lambda1.Name,Lambda1.TailCall,Lambda1.Parameters);
             return(LambdaExpression)this.Lambda((LambdaExpression)Lambda0);
         }
-        //private static CallSite<T> CallSite_Unary<T>(ExpressionType NodeType) where T:class=>CallSite<T>.Create(RuntimeBinder.Binder.UnaryOperation(RuntimeBinder.CSharpBinderFlags.None,NodeType,typeof(DynamicReflection),CSharpArgumentInfoArray1));
-        //private static CallSite<Func<CallSite,object,object>> CallSite_Unary(ExpressionType NodeType)=> CallSite_Unary<Func<CallSite,object,object>>(NodeType);
         protected override Expression Dynamic(DynamicExpression Dynamic0){
             var Dynamic1=(DynamicExpression)base.Dynamic(Dynamic0);
             if(this.DictionaryDynamic.ContainsKey(Dynamic1)) return Dynamic1;

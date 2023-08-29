@@ -59,7 +59,7 @@ public sealed class DispatchJsonFormatterResolver:IJsonFormatterResolver{
             typeof(T)==typeof(ElementInit))
             return Return(this.ExpressionFormatter);
         if(typeof(T).IsDisplay())return Return(new DisplayClassJsonFormatter<T>());
-        if(typeof(T).IsAnonymous())return Return(new AnonymousJsonFormatter<T>());
+        if(typeof(T).IsAnonymous())return Return(new CommonJsonFormatter<T>());
         //var Formatter=GetFormatter(typeof(T));
         //if(Formatter!=null) Return(Formatter);
         return Return(new AbstractJsonFormatter<T>());

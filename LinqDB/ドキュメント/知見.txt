@@ -9,3 +9,10 @@ FieldBuilderで同一名Fieldを定義した場合
 System.NotSupportedException: 'The invoked member is not supported in a dynamic module.'
 Disp_LambdaFieldが動的アセンブリだった場合
 Disp_LambdaField.GetValue(Tuple);
+
+Common Language Runtime detected an invalid program
+Call,ReadStringだとエラー
+ldarg.0
+call ReadStringだとOK
+つまりメソッドに必要な引数がpushされていないとき
+

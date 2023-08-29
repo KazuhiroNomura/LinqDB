@@ -230,7 +230,7 @@ public class 計算結果 : ATest
         var Lambda = Expression.Lambda<Func<T>>(
             Expression.Constant(input)
         );
-        this.Execute2(Lambda);
+        this.実行結果が一致するか確認(Lambda);
     }
     [TestMethod]
     public void Constant()
@@ -245,7 +245,7 @@ public class 計算結果 : ATest
                 typeof(T)
             )
         );
-        this.Execute2(Lambda);
+        this.実行結果が一致するか確認(Lambda);
     }
     [TestMethod]
     public void Convert()

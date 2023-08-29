@@ -11,23 +11,23 @@ public class Test_変換_ラムダ跨ぎ変数をTargetメンバー参照 : ATes
     public void MakeAssign()
     {
         //if(Binary0_Left==Binary1_Left&&Binary0_Right==Binary1_Right&&Binary0_Conversion==Binary1_Conversion) return Binary0;
-        this.Execute2(() => Lambda(p => p * 2) + Lambda(p => p * 2));
-        this.Execute2(() => _StaticString.GetType() == typeof(int) && _StaticInt32.GetType() == typeof(int));
+        this.実行結果が一致するか確認(() => Lambda(p => p * 2) + Lambda(p => p * 2));
+        this.実行結果が一致するか確認(() => _StaticString.GetType() == typeof(int) && _StaticInt32.GetType() == typeof(int));
     }
     [TestMethod]
     public void Traverse0(){
         //if(e==null) return null;
-        this.Execute2(() => Lambda(p => p * 3) + Lambda(p => p * 3));
+        this.実行結果が一致するか確認(() => Lambda(p => p * 3) + Lambda(p => p * 3));
     }
     [TestMethod]
     public void Traverse1(){
         //if(this.Dictionary大域Parameter大域Field.TryGetValue(e,out Right))return Right;
-        this.Execute2(() => _StaticInt32.GetType() == typeof(int));
+        this.実行結果が一致するか確認(() => _StaticInt32.GetType() == typeof(int));
     }
     [TestMethod]
     public void Traverse2(){
         //if(this.Dictionary大域Parameter大域Field.TryGetValue(e,out Right))return Right;
-        this.Execute2(() => _StaticInt32.GetType() == typeof(int) && _StaticString.GetType() == typeof(int));
+        this.実行結果が一致するか確認(() => _StaticInt32.GetType() == typeof(int) && _StaticString.GetType() == typeof(int));
     }
     public bool Get(int a,int b){
         return a.GetType() == typeof(int) && b.GetType() == typeof(int);

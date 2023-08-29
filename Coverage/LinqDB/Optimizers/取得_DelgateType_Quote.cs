@@ -10,10 +10,10 @@ public class Test_取得_DelgateType_Quote: ATest
     {
         //if(ExtendedSet.ループ展開可能なEnumerableSetに属するGenericMethodDefinitionか(GetGenericMethodDefinition(MethodCall.Method))) {
         //    foreach(var MethodCall_Argument in MethodCall.Arguments) {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => p + 1));
         //    }
         //} else {
-        this.Execute2(() => Lambda(p => 1));
+        this.実行結果が一致するか確認(() => Lambda(p => 1));
         //}
     }
     private static int Lambda(Func<int, int> l) => 1;
@@ -21,15 +21,15 @@ public class Test_取得_DelgateType_Quote: ATest
     public void Lambda()
     {
         //if(this._LambdaとしてAddするか) {
-        this.Execute2(() => Lambda(p => 1));
+        this.実行結果が一致するか確認(() => Lambda(p => 1));
         //} else {
-        this.Execute引数パターン(a => ArrN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => ArrN<int>(a).Select(p => p + 1));
         //}
     }
     private static int Quote(Expression<Func<int, int>> l) => l.Compile()(3);
     [TestMethod]
     public void Quote()
     {
-        this.Execute2(() => Quote(p => 1));
+        this.実行結果が一致するか確認(() => Quote(p => 1));
     }
 }

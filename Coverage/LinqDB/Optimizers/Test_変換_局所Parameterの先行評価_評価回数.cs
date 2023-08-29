@@ -24,7 +24,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 StaticInt32_Property
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -42,7 +42,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 StaticInt32_Property.NoLoopUnrolling()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -60,7 +60,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 StaticInt32_Method()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -78,7 +78,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 StaticInt32_Method().NoLoopUnrolling()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -98,7 +98,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 this.InstanceInt32_Property
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -116,7 +116,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 this.InstanceInt32_Property.NoLoopUnrolling()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -135,7 +135,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 this.InstanceInt32_Method().NoLoopUnrolling()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -157,7 +157,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 this.InstanceInt32_Method()
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Call,
@@ -176,7 +176,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
             null,
             typeof(Test_変換_局所Parameterの先行評価_評価回数).GetProperty(nameof(StaticInt32_Property),BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.FlattenHierarchy)!
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -200,7 +200,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 typeof(Test_変換_局所Parameterの先行評価_評価回数).GetProperty(nameof(StaticInt32_Property),BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.FlattenHierarchy)!
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -217,7 +217,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
     [TestMethod]
     public void StaticInt32_Methodのローカル最適化0() {
         var Call = Expression.Call(typeof(Test_変換_局所Parameterの先行評価_評価回数).GetMethod(nameof(StaticInt32_Method),BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.FlattenHierarchy)!);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -237,7 +237,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
             typeof(global::LinqDB.Sets.Helpers).GetMethod(nameof(global::LinqDB.Sets.Helpers.NoEarlyEvaluation))!.MakeGenericMethod(typeof(int)),
             Expression.Call(typeof(Test_変換_局所Parameterの先行評価_評価回数).GetMethod(nameof(StaticInt32_Method),BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.FlattenHierarchy)!)
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -260,7 +260,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 BindingFlags.NonPublic|BindingFlags.Instance
             )!
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -286,7 +286,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 )!
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -307,11 +307,11 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
         var Call = Expression.Call(
             Expression.Constant(this),
             typeof(Test_変換_局所Parameterの先行評価_評価回数).GetMethod(
-                nameof(InstanceInt32_Method),
+                nameof(this.InstanceInt32_Method),
                 BindingFlags.NonPublic|BindingFlags.Instance
-            )
+            )!
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(
@@ -337,7 +337,7 @@ public class Test_変換_局所Parameterの先行評価_評価回数:ATest {
                 )
             )
         );
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Add(

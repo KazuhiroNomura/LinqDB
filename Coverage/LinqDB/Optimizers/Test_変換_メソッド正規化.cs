@@ -11,32 +11,32 @@ public class Test_変換_メソッド正規化:ATest {
         //if(e.NodeType==ExpressionType.AndAlso) {
         //    if(Left葉Outerに移動する) {
         //        if(Right葉Outerに移動する) {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==3&&p.o==2));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==3&&p.o==2));
         //        } else {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==3&&p.i==2));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==3&&p.i==2));
         //        }
         //    } else {
         //        if(Right葉Outerに移動する) {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==p.i&&p.o==1));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==p.i&&p.o==1));
         //        } else {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==p.i&&p.i==p.o));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==p.i&&p.i==p.o));
         //        }
         //    }
         //} else { 
         //    if(this._変数_判定_葉に移動したいpredicate.実行(e,this._DictionaryOuter,this._DictionaryInner)) {
         var c = 1;
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==c||c==p.o));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.o==c||c==p.o));
         //    } else if(this._変数_判定_葉に移動したいpredicate.実行(e,this._DictionaryInner,this._DictionaryOuter)) {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==c||c==p.i));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==c||c==p.i));
         //    } else {
-        this.Execute引数パターン標準ラムダループ((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==p.o||p.o==p.i));
+        this.実行結果が一致するか確認((a,b) => ArrN<int>(a).Join(ArrN<int>(b),o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==p.o||p.o==p.i));
         //    }
         //}
     }
     [TestMethod]
     public void JoinWhere再帰で匿名型を走査() {
         var data = new Set<int> { 1,2,3,4 };
-        this.Execute引数パターン標準ラムダループ((a,b) => 
+        this.実行結果が一致するか確認((a,b) => 
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o0 => o0,
@@ -52,7 +52,7 @@ public class Test_変換_メソッド正規化:ATest {
         var A=new Set<int>{1,2,3,4};
         var B = A;
         var C = A;
-        this.Execute標準ラムダループ(() =>
+        this.実行結果が一致するか確認(() =>
                 //A.GroupJoin(
                 //    B,o=>o,i=>i,
                 //    (o,i)=>new{oo_oi=new{oo=o+o,oi=o+i.Count()},oi_ii=new{oi=o+i.Count(),ii=i.Count()+i.Count()}}
@@ -76,26 +76,26 @@ public class Test_変換_メソッド正規化:ATest {
             //  ArrN<Int32>(a).               GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}}).Where(p=>p.o.oo==3&&p.o.oi==4&&p.i.io==5&&p.i.ii==6).Where(p=>p.o.o.oo==3&&p.o.oi==4&&p.i.ii==6).GroupJoin(ArrN<Int32>(b),o=>o.o.oo,i=>i,(o,i)=>new{o,i=i.Count()}).Where(p=>p.i==5)
             //  ArrN<Int32>(a).Where(o=>o==3).GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}}).Where(p=>p.o.oo==3&&p.o.oi==4&&p.i.io==5&&p.i.ii==6).Where(p=>p.o.o.oo==3&&p.o.o.oi==4&&p.o.i.ii==6).GroupJoin(ArrN<Int32>(b),o=>o.o.oo,i=>i,(o,i)=>new{o,i=i.Count()}).Where(p=>p.i==5)
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}}).Where(p=>p.o.Equals(new{oo=p.o.oo*p.o.oo,oi=p.o.oo-p.o.oo}))
             //  ArrN<Int32>(a).GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}}).Where(p=>p.o.Equals(new{oo=p.o.oo*p.o.oo,oi=p.o.oo-p.o.oo}))
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).               GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}}).Where(p=>p.o.oo==3)
             //  ArrN<Int32>(a).Where(o=>o==3).GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=new{oo=o+o,oi=o+i.Count()},i=new{io=i.Count()+o,ii=i.Count()+i.Count()}})
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).               GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i.Count()+2}).Where(p=>p.o==3)
             //  ArrN<Int32>(a).Where(o=>o==3).GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i.Count()+2})
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).               GroupJoin(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i.Count()+2}).Where(p=>p.o==3&&p.i==2)
             //  ArrN<Int32>(a).Where(o=>o==3).GroupJoin(ArrN<Int32>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i.Count()+2}).Where(p=>        p.i==2)
         );
     }
     [TestMethod]
     public void Select_Whereを葉に移動() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 s => new { a = s+s,b = s*s }
             ).Where(
@@ -106,7 +106,7 @@ public class Test_変換_メソッド正規化:ATest {
     [TestMethod]
     public void Join_Join_Whereを葉に移動(){
         var data=new Set<int>{1,2,3,4};
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=> o,
@@ -122,7 +122,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_匿名型_Whereを葉に移動0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -137,7 +137,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_匿名型_Whereを葉に移動1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -152,7 +152,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_匿名型_Whereを葉に移動2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -167,7 +167,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_匿名型_Whereを葉に移動3() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -182,7 +182,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b)
             ).SelectMany(
@@ -192,7 +192,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 o1=>SetN<int>(b)
             ).SelectMany(
@@ -202,7 +202,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 o1 => SetN<int>(b).SelectMany(
                     o0 => SetN<int>(a+b).Select(p => new { a,b })
@@ -212,7 +212,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany3() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0 => ArrN<int>(b),
                 (o1,i1) => o1+i1
@@ -226,28 +226,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Select_selector_Select_selector() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p1) => p1+p1
             ).Select<int,double>(
                 p0=> p0*p0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p1) => p1+p1
             ).Select(
                 (Func<int,double>)(p0 => p0*p0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int>)((p1) => p1+p1)
             ).Select<int,double>(
                 p0=> p0*p0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int>)((p1) => p1+p1)
             ).Select(
@@ -257,28 +257,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Select_selector_Select_indexSelector() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p1) => p1+p1
             ).Select<int,double>(
                 (p0,index0) => p0*index0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p1) => p1+p1
             ).Select(
                 (Func<int,int,double>)((p0,index0) => (double)p0*index0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int>)((p1) => p1+p1)
             ).Select<int,double>(
                 (p0,index0) => (double)p0*index0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int>)((p1) => p1+p1)
             ).Select(
@@ -288,28 +288,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Select_indexSelector_Select_selector() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p0,index0) => p0+index0
             ).Select<int,double>(
                 p1 => p1*p1
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p0,index0) => p0+index0
             ).Select(
                 (Func<int,double>)(p1 => p1*p1)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int,int>)((p0,index0) => p0+index0)
             ).Select<int,double>(
                 p1 => p1*p1
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int,int>)((p0,index0) => p0+index0)
             ).Select(
@@ -319,28 +319,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Select_indexSelector_Select_indexSelector() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p0,index0) => p0+index0
             ).Select<int,double>(
                 (p1,index1) => p1*index1
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (p0,index0) => p0+index0
             ).Select<int,double>(
                 (Func<int,int,double>)((p1,index1) => p1*index1)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int,int>)((p0,index0) => p0+index0)
             ).Select<int,double>(
                 (p1,index1) => p1*index1
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Select(
                 (Func<int,int,int>)((p0,index0) => p0+index0)
             ).Select<int,double>(
@@ -350,7 +350,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_indexColleciotnSelector_resultSelector_Select_indexSelector() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (o0,index0) => ArrN<int>(b+index0),
                 (o1,i1) => o1+i1
@@ -400,7 +400,7 @@ public class Test_変換_メソッド正規化:ATest {
         ).Select(
             (_,index) => index
         ).ToArray();
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (o0) => ArrN<int>(b+b),
                 (o1,i1) => o1+i1
@@ -411,7 +411,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_indexSelector_SelectMany_indexSelector0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (o0,index0) => ArrN<int>(b+index0)
             ).Select(
@@ -421,7 +421,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_indexSelector_SelectMany_indexSelector1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (o0,index0) => ArrN<int>(b+index0),
                 (o1,i1) => o1+i1
@@ -435,7 +435,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_indexSelector_SelectMany_indexSelector2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 (o1,index1) => SetN<int>(b).SelectMany(
                     (o0,index0) => SetN<int>(a+b).Select((p,index) => new { a,b })
@@ -445,7 +445,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_Join0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).Join(
                 SetN<int>(b).Join(
                     SetN<int>(a+b),
@@ -461,7 +461,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_Join1() {
-        this.Execute引数パターン標準ラムダループアセンブリ出力しない((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).Join(
                 SetN<int>(b).Join(
                     SetN<int>(a+b),
@@ -480,7 +480,7 @@ public class Test_変換_メソッド正規化:ATest {
     private static Func<T,bool> predicate<T>(Func<T,bool> s) => s;
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -493,7 +493,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -506,7 +506,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動2() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=>o,
@@ -517,7 +517,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動3() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=>o,
@@ -528,7 +528,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動4() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=>o,
@@ -539,7 +539,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動5() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=>o,
@@ -550,7 +550,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動6() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o=>o,
@@ -561,19 +561,19 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動7() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i+2}).Where(p=>p.i==2)
         );
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動8() {
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
             ArrN<int>(a).Join(ArrN<int>(b),o=>o,i=>i,(o,i)=>new{o=o+1,i=i+2}).Where(p=>p.o==3&&p.i==2)
         );
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動9() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => o,
@@ -584,7 +584,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Join_resultSelector_Whereを葉に移動10() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Join(
                 ArrN<int>(b),
                 o => new { },
@@ -595,28 +595,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     i=>o==i&&o==0&&i==1&&i==o&&2==o&&3==i
                 )
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => o==i&&o==0&&i==1&&i==o&&2==o&&3==i)
                 )
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     i => o==i&&o==0&&i==1&&i==o&&2==o&&3==i
                 ))
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => o==i&&o==0&&i==1&&i==o&&2==o&&3==i)
@@ -626,7 +626,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b),
                 (o,i) =>new ValueTuple<int,int>(o,i)
@@ -634,7 +634,7 @@ public class Test_変換_メソッド正規化:ATest {
                 i => i.Item1==0&&2==i.Item1&&i.Item2==1&&3==i.Item2&&i.Item1==i.Item2&&i.Item2==i.Item1
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b),
                 (o,i) => new { o,i }
@@ -645,7 +645,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b),
                 (o,i) => new { o,i }
@@ -656,28 +656,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動3() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b)
             ).Where(
                 i => i==0&&1==i
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b)
             ).Where(
                 (Func<int,bool>)(i => i==0&&1==i)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,int[]>)(o => ArrN<int>(b))
             ).Where(
                 i => i==0&&1==i
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,int[]>)(o => ArrN<int>(b))
             ).Where(
@@ -687,7 +687,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動4() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     i => i==0&&1==o
@@ -696,7 +696,7 @@ public class Test_変換_メソッド正規化:ATest {
                 )
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&1==o)
@@ -705,7 +705,7 @@ public class Test_変換_メソッド正規化:ATest {
                 )
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     i => i==0&&1==o
@@ -714,7 +714,7 @@ public class Test_変換_メソッド正規化:ATest {
                 ))
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&1==o)
@@ -726,7 +726,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_selector_Whereを葉に移動5() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     i => i==0&&o==1&&o==i
@@ -735,7 +735,7 @@ public class Test_変換_メソッド正規化:ATest {
                 io=>io+io
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&o==1&&o==i)
@@ -744,7 +744,7 @@ public class Test_変換_メソッド正規化:ATest {
                 io => io+io
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     i => i==0&&o==1&&o==i
@@ -753,7 +753,7 @@ public class Test_変換_メソッド正規化:ATest {
                 io => io+io
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&o==1&&o==i)
@@ -762,7 +762,7 @@ public class Test_変換_メソッド正規化:ATest {
                 io => io+io
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     i => i==0&&o==1&&o==i
@@ -771,7 +771,7 @@ public class Test_変換_メソッド正規化:ATest {
                 (Func<int,int>)(io => io+io)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&o==1&&o==i)
@@ -780,7 +780,7 @@ public class Test_変換_メソッド正規化:ATest {
                 (Func<int,int>)(io => io+io)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     i => i==0&&o==1&&o==i
@@ -789,7 +789,7 @@ public class Test_変換_メソッド正規化:ATest {
                 (Func<int,int>)(io => io+io)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 (Func<int,IEnumerable<int>>)(o => ArrN<int>(b).Where(
                     (Func<int,bool>)(i => i==0&&o==1&&o==i)
@@ -801,7 +801,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0=>ArrN<int>(b),
                 (o1,i1) => new { 
@@ -824,7 +824,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0 => ArrN<int>(b).Where(
                     i0 => o0==i0&&o0==0&&i0==1&&i0==o0&&2==o0&&3==i0
@@ -837,7 +837,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 a=>ArrN<int>(b),
                 (o,i)=>new { o,i }
@@ -850,7 +850,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動3() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0=>ArrN<int>(b),
                 (o1,i1) => new { 
@@ -870,7 +870,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動4() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0=>ArrN<int>(b),
                 (o1,i1) => new {
@@ -899,7 +899,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_resultSelector_Whereを葉に移動5() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 o0 => ArrN<int>(b),
                 (o1,i1) => new { o1,i1 }
@@ -910,7 +910,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_Select() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b)
             ).Select(
@@ -920,7 +920,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany_SelectMany() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b)
             ).SelectMany(
@@ -932,7 +932,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Intersect_SelectMany0() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b)
             ).Intersect(
@@ -942,7 +942,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Intersect_SelectMany1() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 p => SetN<int>(b)
             ).Intersect(
@@ -952,21 +952,21 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Intersect_SelectMany2() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 p => SetN<int>(b).Select(q => p*10+q*1)
             ).Intersect(
                 SetN<int>(b).Select(q => q*10)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             SetN<int>(a).SelectMany(
                 p => SetN<int>(b).Select(q=>p*10+q*1)
             ).Intersect(
                 ArrN<int>(b).Select(q =>q*10)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b).Select(q => p*10+q*1)
             ).Intersect(
@@ -976,7 +976,7 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void SelectMany_SelectMany_Select() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).SelectMany(
                 p => ArrN<int>(b)
             ).SelectMany(
@@ -988,21 +988,21 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Intersect_Whereを葉に移動(){
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).Intersect(ArrN<int>(b)).Where(p=>p+1==p*p)
             //  ArrN<Int32>(a).Where(p=>p+1==p*p).Intersect(ArrN<Int32>(b).Where(p=>p+1==p*p))
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).Intersect(ArrN<int>(b).Where(i=>i==2)).Where(p=>p+1==p*p)
             //  ArrN<Int32>(a).Where(p=>p+1==p*p).Intersect(ArrN<Int32>(b).Where(i=>i==2).Where(p=>p+1==p*p))
             //  ArrN<Int32>(a).Where(p=>p+1==p*p).Intersect(ArrN<Int32>(b).Where(i=>i==2&&i+1==i*i))
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).Where(o=>o==1).Intersect(ArrN<int>(b)).Where(p=>p+1==p*p)
             //  ArrN<Int32>(a).Where(o=>o==1).Where(p=>p+1==p*p).Intersect(ArrN<Int32>(b).Where(p=>p+1==p*p))
             //  ArrN<Int32>(a).Where(o=>o==1&&o+1==o*o).Intersect(ArrN<Int32>(b).Where(p=>p+1==p*p))
         );
-        this.Execute引数パターン標準ラムダループ((a,b)=>
+        this.実行結果が一致するか確認((a,b)=>
                 ArrN<int>(a).Where(o=>o==1).Intersect(ArrN<int>(b).Where(i=>i==2)).Where(p=>p+1==p*p)
             //  ArrN<Int32>(a).Where(o=>o==1).Where(p=>p+1==p*p).Intersect(ArrN<Int32>(b).Where(i=>i==2).Where(p=>p+1==p*p))
             //  ArrN<Int32>(a).Where(o=>o==1&&o+1==o*o).Intersect(ArrN<Int32>(b).Where(i=>i==2&&i+1==i*i))
@@ -1010,28 +1010,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Where_Where() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1) => p1==1
             ).Where(
                 (p0) => p0==0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1) => p1==1
             ).Where(
                 (Func<int,bool>)((p0) => p0==0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,bool>)((p1) => p1==1)
             ).Where(
                 (p0) => p0==0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,bool>)((p1) => p1==1)
             ).Where(
@@ -1041,28 +1041,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Where_Where_index() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1) => p1==1
             ).Where(
                 (p0,i0) => p0==i0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1) => p1==1
             ).Where(
                 (Func<int,int,bool>)((p0,i0) => p0==i0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,bool>)((p1) => p1==1)
             ).Where(
                 (p0,i0) => p0==i0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,bool>)((p1) => p1==1)
             ).Where(
@@ -1072,28 +1072,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Where_index_Where() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1,i1) => p1==i1
             ).Where(
                 (p0) => p0==0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1,i1) => p1==i1
             ).Where(
                 (Func<int,bool>)((p0) => p0==0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,int,bool>)((p1,i1) => p1==i1)
             ).Where(
                 (p0) => p0==0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,int,bool>)((p1,i1) => p1==i1)
             ).Where(
@@ -1103,28 +1103,28 @@ public class Test_変換_メソッド正規化:ATest {
     }
     [TestMethod]
     public void Where_index_Where_index() {
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1,i1) => p1==i1
             ).Where(
                 (p0,i0) => p0==i0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (p1,i1) => p1==i1
             ).Where(
                 (Func<int,int,bool>)((p0,i0) => p0==i0)
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,int,bool>)((p1,i1) => p1==i1)
             ).Where(
                 (p0,i0) => p0==i0
             )
         );
-        this.Execute引数パターン標準ラムダループ((a,b) =>
+        this.実行結果が一致するか確認((a,b) =>
             ArrN<int>(a).Where(
                 (Func<int,int,bool>)((p1,i1) => p1==i1)
             ).Where(

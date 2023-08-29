@@ -62,7 +62,7 @@ public class Test_IL : ATest
     public void Conv_Ovf_I4_Un()
     {
         uint d = 0;
-        this.Execute2(() => checked((int)d));
+        this.実行結果が一致するか確認(() => checked((int)d));
     }
     [TestMethod]
     [ExpectedException(typeof(OverflowException))]
@@ -142,193 +142,193 @@ public class Test_IL : ATest
     public void Div()
     {
         var i = 0;
-        this.Execute2(() => i / 2);
+        this.実行結果が一致するか確認(() => i / 2);
     }
     [TestMethod]
     public void Div_Un()
     {
         uint i = 0;
-        this.Execute2(() => i / 2u);
+        this.実行結果が一致するか確認(() => i / 2u);
     }
     private struct STRUCT
     {
         public int value;
     }
     [TestMethod]
-    public void Initobj() => this.Execute2(() => new STRUCT().value);
+    public void Initobj() => this.実行結果が一致するか確認(() => new STRUCT().value);
     [TestMethod]
-    public void Ldarg() => this.Execute2(() =>
+    public void Ldarg() => this.実行結果が一致するか確認(() =>
         ((Func<int,int>)(p0 => p0))(1)
     );
     [TestMethod]
-    public void Ldarga() => this.Execute2(() =>
+    public void Ldarga() => this.実行結果が一致するか確認(() =>
         ((Func<STRUCT,int>)(p0 => p0.value))(new STRUCT { value=1 })
     );
     [TestMethod]
-    public void Ldc_I4() => this.Execute2(() => 1);
+    public void Ldc_I4() => this.実行結果が一致するか確認(() => 1);
     [TestMethod]
-    public void Ldc_I8() => this.Execute2(() => 1L);
+    public void Ldc_I8() => this.実行結果が一致するか確認(() => 1L);
     [TestMethod]
-    public void Ldc_R4() => this.Execute2(() => 1F);
+    public void Ldc_R4() => this.実行結果が一致するか確認(() => 1F);
     [TestMethod]
-    public void Ldc_R8() => this.Execute2(() => 1D);
+    public void Ldc_R8() => this.実行結果が一致するか確認(() => 1D);
     [TestMethod]
     public void Ldelem()
     {
         var d = new[] { 1 };
-        this.Execute2(() => d[0]);
+        this.実行結果が一致するか確認(() => d[0]);
     }
     [TestMethod]
     public void Ldelema()
     {
         var d = new[] { new STRUCT { value = 1 } };
-        this.Execute2(() => d[0].value);
+        this.実行結果が一致するか確認(() => d[0].value);
     }
     [TestMethod]
-    public void Ldfld() => this.Execute2(() => new STRUCT { value=1 }.value);
+    public void Ldfld() => this.実行結果が一致するか確認(() => new STRUCT { value=1 }.value);
     [TestMethod]
-    public void Ldflda() => this.Execute2(() =>
+    public void Ldflda() => this.実行結果が一致するか確認(() =>
         ((Func<STRUCT,string>)(p0 => p0.value.ToString()))(new STRUCT { value=1 })
     );
     [TestMethod]
-    public void Ldftn() => this.Execute2(() =>
+    public void Ldftn() => this.実行結果が一致するか確認(() =>
         ((Func<int,int>)(p0 => p0))(1)
     );
     [TestMethod]
     public void Ldlen()
     {
         var i = new[] { 1 };
-        this.Execute2(() => i.Length);
+        this.実行結果が一致するか確認(() => i.Length);
     }
     [TestMethod]
-    public void Ldnull() => this.Execute2(() => (object?)null);
+    public void Ldnull() => this.実行結果が一致するか確認(() => (object?)null);
     private static readonly int static_field = 1;
     [TestMethod]
-    public void Ldsfld() => this.Execute2(() => static_field);
+    public void Ldsfld() => this.実行結果が一致するか確認(() => static_field);
     [TestMethod]
-    public void Ldsflda() => this.Execute2(() => static_field.ToString());
+    public void Ldsflda() => this.実行結果が一致するか確認(() => static_field.ToString());
     [TestMethod]
-    public void Ldstr() => this.Execute2(() => "1");
+    public void Ldstr() => this.実行結果が一致するか確認(() => "1");
     [TestMethod]
     public void Mul()
     {
         var i = 1;
-        this.Execute2(() => i * 2);
+        this.実行結果が一致するか確認(() => i * 2);
     }
     [TestMethod]
     public void Mul_Ovf()
     {
         var i = 1;
-        this.Execute2(() => checked(i * 2));
+        this.実行結果が一致するか確認(() => checked(i * 2));
     }
     [TestMethod]
     [ExpectedException(typeof(OverflowException))]
     public void Mul_Ovf_OverflowException()
     {
         var i = int.MaxValue;
-        this.Execute2(() => checked(i * int.MaxValue));
+        this.実行結果が一致するか確認(() => checked(i * int.MaxValue));
     }
     [TestMethod]
     public void Mul_Ovf_Un()
     {
         var i = 1U;
-        this.Execute2(() => checked(i * 2U));
+        this.実行結果が一致するか確認(() => checked(i * 2U));
     }
     [TestMethod]
     [ExpectedException(typeof(OverflowException))]
     public void Mul_Ovf_Un_OverflowException()
     {
         var i = uint.MaxValue;
-        this.Execute2(() => checked(i * uint.MaxValue));
+        this.実行結果が一致するか確認(() => checked(i * uint.MaxValue));
     }
     [TestMethod]
     public void Neg()
     {
         var i = 1;
-        this.Execute2(() => -i);
+        this.実行結果が一致するか確認(() => -i);
     }
     [TestMethod]
-    public void Newarr() => this.Execute2(() => new int[3]);
+    public void Newarr() => this.実行結果が一致するか確認(() => new int[3]);
     [TestMethod]
-    public void Newobj() => this.Execute2(() => new string('a',2));
+    public void Newobj() => this.実行結果が一致するか確認(() => new string('a',2));
     [TestMethod]
     public void Not()
     {
         var i = true;
-        this.Execute2(() => !i);
+        this.実行結果が一致するか確認(() => !i);
     }
     [TestMethod]
     public void Or()
     {
         var a = 4;
-        this.Execute2(() => a | 1);
+        this.実行結果が一致するか確認(() => a | 1);
     }
     [TestMethod]
     public void Rem()
     {
         var a = 2;
-        this.Execute2(() => 5 % a);
+        this.実行結果が一致するか確認(() => 5 % a);
     }
     [TestMethod]
     public void Rem_Un()
     {
         var a = 2U;
-        this.Execute2(() => 5 % a);
+        this.実行結果が一致するか確認(() => 5 % a);
     }
     [TestMethod]
-    public void Ret() => this.Execute2(() => 1);
+    public void Ret() => this.実行結果が一致するか確認(() => 1);
     [TestMethod]
     public void Shl()
     {
         var a = 1;
-        this.Execute2(() => a << 1);
+        this.実行結果が一致するか確認(() => a << 1);
     }
     [TestMethod]
     public void Shr()
     {
         var a = 4;
-        this.Execute2(() => a >> 1);
+        this.実行結果が一致するか確認(() => a >> 1);
     }
     [TestMethod]
     public void Shr_Un()
     {
         var a = 4U;
-        this.Execute2(() => a >> 1);
+        this.実行結果が一致するか確認(() => a >> 1);
     }
     [TestMethod]
     public void Sub()
     {
         var a = 4;
-        this.Execute2(() => a - 1);
+        this.実行結果が一致するか確認(() => a - 1);
     }
     [TestMethod]
     public void Sub_Ovf()
     {
         var a = 4;
-        this.Execute2(() => checked(a - 1));
+        this.実行結果が一致するか確認(() => checked(a - 1));
     }
     [TestMethod]
     public void Sub_Ovf_Un()
     {
         var a = 4U;
-        this.Execute2(() => checked(a - 1U));
+        this.実行結果が一致するか確認(() => checked(a - 1U));
     }
     [TestMethod]
     public void Unbox_Any()
     {
         object a = 4;
-        this.Execute2(() => (int)a);
+        this.実行結果が一致するか確認(() => (int)a);
     }
     [TestMethod]
     public void Xor()
     {
         var a = 5;
-        this.Execute2(() => a ^ 15);
+        this.実行結果が一致するか確認(() => a ^ 15);
     }
     private void Conv<TResult, TInput>()
     {
         var MaxValue = typeof(TInput).GetField("MaxValue");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.Convert(
                     Expression.Constant(MaxValue.GetValue(null)),
@@ -337,7 +337,7 @@ public class Test_IL : ATest
             )
         );
     }
-    private void Conv_Ovf<TResult, TInput>() => this.Execute2(
+    private void Conv_Ovf<TResult, TInput>() => this.実行結果が一致するか確認(
         Expression.Lambda<Func<TResult>>(
             Expression.ConvertChecked(
                 Expression.Constant(default(TInput)),
@@ -348,7 +348,7 @@ public class Test_IL : ATest
     private void Conv_Ovf_MinValue<TResult, TInput>()
     {
         var MinValue = typeof(TInput).GetField("MinValue");
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.ConvertChecked(
                     Expression.Constant(MinValue.GetValue(null)),
@@ -370,7 +370,7 @@ public class Test_IL : ATest
     private void Conv_Ovf_MaxValue<TResult, TInput>()
     {
         var MaxValue = typeof(TInput).GetField("MaxValue")!;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<TResult>>(
                 Expression.ConvertChecked(
                     Expression.Constant(MaxValue.GetValue(null)),

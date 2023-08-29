@@ -12,53 +12,42 @@ using Utf8Json;
 using Utf8Json.Formatters;
 using AssemblyGenerator=Lokad.ILPack.AssemblyGenerator;
 namespace LinqDB.Serializers.Formatters;
-public static class Common2{
-    public static(DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[]Properties) 初期化<T,TWriter,TResolver>(){
-        var Types2 = new Type[2];
-        var Types3 = new Type[3];
-        Types3[0]=Types2[0]=typeof(TWriter).MakeByRefType();
-        Types3[1]=typeof(T);
-        Types2[1]=Types3[2]=typeof(TResolver);
-        var ctor=typeof(T).GetConstructors()[0];
-        var Parameters=ctor.GetParameters();
-        var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
-        var Properties_Length = Properties.Length;
-        Debug.Assert(Parameters.Length==Properties_Length);
-        Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
-        var D0 = new DynamicMethod("",typeof(void),Types3,typeof(Common2),true) { InitLocals=false };
-        var D1 = new DynamicMethod("",typeof(T),Types2,typeof(Common2),true) { InitLocals=false };
-        return(D0,D1,ctor,Properties);
-    }
-}
-public class AnonymousJsonFormatter{
-    protected static readonly MethodInfo WriteBeginArray=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteBeginArray))!;
+//public class Common2{
+//    public static(DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[]Properties) 初期化<T,TWriter,TResolver>(){
+//        var Types2 = new Type[2];
+//        var Types3 = new Type[3];
+//        Types3[0]=Types2[0]=typeof(TWriter).MakeByRefType();
+//        Types3[1]=typeof(T);
+//        Types2[1]=Types3[2]=typeof(TResolver);
+//        var ctor=typeof(T).GetConstructors()[0];
+//        var Parameters=ctor.GetParameters();
+//        var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
+//        var Properties_Length = Properties.Length;
+//        Debug.Assert(Parameters.Length==Properties_Length);
+//        Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
+//        var D0 = new DynamicMethod("",typeof(void),Types3,typeof(Common2),true) { InitLocals=false };
+//        var D1 = new DynamicMethod("",typeof(T),Types2,typeof(Common2),true) { InitLocals=false };
+//        return(D0,D1,ctor,Properties);
+//    }
+//}
+public class CommonJsonFormatter{
     protected static readonly MethodInfo WriteValueSeparator=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteValueSeparator))!;
-    protected static readonly MethodInfo WriteValWriteEndArrayueSeparator=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteEndArray))!;
-    protected static readonly MethodInfo WriteBeginObject=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteBeginObject))!;
-    protected static readonly MethodInfo WriWriteStringteBeginObject=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteString))!;
     protected static readonly MethodInfo WriteString=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteString))!;
     protected static readonly MethodInfo WriteNameSeparator=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteNameSeparator))!;
-    protected static readonly MethodInfo ReadIsBeginArrayWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsBeginArrayWithVerify))!;
     protected static readonly MethodInfo ReadIsValueSeparatorWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsValueSeparatorWithVerify))!;
-    protected static readonly MethodInfo ReadIsEndArrayWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsEndArrayWithVerify))!;
-    protected static readonly MethodInfo ReadIsBeginObjectWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsBeginObjectWithVerify))!;
     protected static readonly MethodInfo ReadString=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadString))!;
     protected static readonly MethodInfo ReadIsNameSeparatorWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsNameSeparatorWithVerify))!;
-    protected static void WriteType(ref JsonWriter writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
-    protected static Type ReadType(ref JsonReader reader)=>Type.GetType(reader.ReadString())!;
-    protected static void WriteType(ref MessagePackWriter writer,Type value)=>writer.Write(value.AssemblyQualifiedName);
-    protected static Type ReadType(ref MessagePackReader reader)=>Type.GetType(reader.ReadString())!;
     protected static void Serialize<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-    protected static readonly MethodInfo MethodSerialize=typeof(AnonymousJsonFormatter).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    protected static readonly MethodInfo MethodSerialize=typeof(CommonJsonFormatter).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
     protected static T Deserialize<T>(ref JsonReader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    protected static readonly MethodInfo MethodDeserialize=typeof(AnonymousJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    protected static readonly MethodInfo MethodDeserialize=typeof(CommonJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 }
-public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
+public class CommonJsonFormatter<T>:CommonJsonFormatter,IJsonFormatter<T>{
     private delegate void delegate_Serialize(ref JsonWriter writer,T value,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public AnonymousJsonFormatter() {
+    public CommonJsonFormatter() {
         var Types1 = new Type[1];
         var Types2 = new Type[2];
         var Types3 = new Type[3];
@@ -73,12 +62,11 @@ public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
         Debug.Assert(Parameters.Length==Properties_Length);
         Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
         {
-            var D0=new DynamicMethod("Serialize",typeof(void),Types3,typeof(Common2),true){InitLocals=false};
-            var D1=new DynamicMethod("Deserialize ",typeof(T),Types2,typeof(Common2),true){InitLocals=false};
-            //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
+            var D0=new DynamicMethod("Serialize",typeof(void),Types3,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var D1=new DynamicMethod("Deserialize ",typeof(T),Types2,typeof(CommonJsonFormatter),true){InitLocals=false};
             var I0=D0.GetILGenerator();
             var I1=D1.GetILGenerator();
-            NewFunction(I0,I1);
+            共通(I0,I1);
             this.DelegateSerialize=(delegate_Serialize)D0.CreateDelegate(typeof(delegate_Serialize));
             this.DelegateDeserialize=(delegate_Deserialize)D1.CreateDelegate(typeof(delegate_Deserialize));
         }
@@ -95,16 +83,12 @@ public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
             Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
             Deserialize.DefineParameter(2,ParameterAttributes.None,"resolver");
             Deserialize.InitLocals=false;
-            NewFunction(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
+            共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
             Disp_TypeBuilder.CreateType();
             var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
             new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\JsonSerializer.dll");
         }
-        void NewFunction(ILGenerator I0,ILGenerator I1){
-            //I0.Emit(OpCodes.Ldarg_0);
-            //I0.Emit(OpCodes.Call,WriteBeginArray);
-            //I1.Emit(OpCodes.Ldarg_0);
-            //I1.Emit(OpCodes.Call,ReadIsBeginArrayWithVerify);
+        void 共通(ILGenerator I0,ILGenerator I1){
             var index=0;
             while(true){
                 var Property=Properties[index];
@@ -120,10 +104,10 @@ public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
                 I0.Emit(OpCodes.Ldarg_2);//resolver
                 I0.Emit(OpCodes.Call,MethodSerialize.MakeGenericMethod(Types1));
                 I1.Emit(OpCodes.Ldarg_0);//reader
-                I1.Emit(OpCodes.Call,ReadString);
-                I1.Emit(OpCodes.Pop);
+                I1.Emit(OpCodes.Call,ReadString);//Nameを読む
+                I1.Emit(OpCodes.Pop);            //Nameを捨てる
                 I1.Emit(OpCodes.Ldarg_0);//reader
-                I1.Emit(OpCodes.Call,ReadIsNameSeparatorWithVerify);
+                I1.Emit(OpCodes.Call,ReadIsNameSeparatorWithVerify);//":"を読む
                 I1.Emit(OpCodes.Ldarg_0);//reader
                 I1.Emit(OpCodes.Ldarg_1);//Resolver
                 I1.Emit(OpCodes.Call,MethodDeserialize.MakeGenericMethod(Types1));
@@ -134,9 +118,7 @@ public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
                 I1.Emit(OpCodes.Ldarg_0);
                 I1.Emit(OpCodes.Call,ReadIsValueSeparatorWithVerify);
             }
-            //I0.Emit(OpCodes.Call,WriteValWriteEndArrayueSeparator);
             I0.Emit(OpCodes.Ret);
-            //I1.Emit(OpCodes.Call,ReadIsEndArrayWithVerify);
             I1.Emit(OpCodes.Newobj,ctor);
             I1.Emit(OpCodes.Ret);
         }
@@ -187,14 +169,10 @@ public class AnonymousJsonFormatter<T>:AnonymousJsonFormatter,IJsonFormatter<T>{
     }
 }
 public class AnonymousMessagePackFormatter{
-    protected static void WriteType(ref MessagePackWriter writer,Type value)=>writer.Write(value.AssemblyQualifiedName);
-    protected static Type ReadType(ref MessagePackReader reader)=>Type.GetType(reader.ReadString())!;
     private static void Serialize<T>(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
     protected static readonly MethodInfo MethodSerialize=typeof(AnonymousMessagePackFormatter).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
     private static T Deserialize<T>(ref MessagePackReader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
     protected static readonly MethodInfo MethodDeserialize=typeof(AnonymousMessagePackFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    //protected static readonly MethodInfo WriteMapHeader=typeof(MessagePackWriter).GetMethod(nameof(MessagePackWriter.WriteMapHeader),new []{typeof(int)})!;
-    //protected static readonly MethodInfo ReadMapHeader=typeof(MessagePackReader).GetMethod(nameof(MessagePackReader.ReadMapHeader))!;
     protected static readonly MethodInfo WriteArrayHeader=typeof(MessagePackWriter).GetMethod(nameof(MessagePackWriter.WriteArrayHeader),new []{typeof(int)})!;
     protected static readonly MethodInfo ReadArrayHeader=typeof(MessagePackReader).GetMethod(nameof(MessagePackReader.ReadArrayHeader))!;
 }
@@ -218,12 +196,12 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
         Debug.Assert(Parameters.Length==Properties_Length);
         Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
         {
-            var Serialize=new DynamicMethod("Serialize",typeof(void),Types3,typeof(Common2),true){InitLocals=false};
-            var Deserialize=new DynamicMethod("Deserialize",typeof(T),Types2,typeof(Common2),true){InitLocals=false};
+            var Serialize=new DynamicMethod("Serialize",typeof(void),Types3,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var Deserialize=new DynamicMethod("Deserialize",typeof(T),Types2,typeof(CommonJsonFormatter),true){InitLocals=false};
             //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
             var I0=Serialize.GetILGenerator();
             var I1=Deserialize.GetILGenerator();
-            NewFunction(I0,I1);
+            共通(I0,I1);
             this.DelegateSerialize=(delegate_Serialize)Serialize.CreateDelegate(typeof(delegate_Serialize));
             this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
         }
@@ -240,23 +218,19 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
             Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
             Deserialize.DefineParameter(2,ParameterAttributes.None,"options");
             Deserialize.InitLocals=false;
-            NewFunction(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
+            共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
             Disp_TypeBuilder.CreateType();
             var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
             new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\MessagePackSerializer.dll");
         }
-
-
-        void NewFunction(ILGenerator I0,ILGenerator I1){
+        void 共通(ILGenerator I0,ILGenerator I1){
             I0.Emit(OpCodes.Ldarg_0);//writer
             I0.Emit(OpCodes.Ldc_I4,Properties_Length);
             I0.Emit(OpCodes.Call,WriteArrayHeader);
             I1.Emit(OpCodes.Ldarg_0);//reader
             I1.Emit(OpCodes.Call,ReadArrayHeader);
             I1.Emit(OpCodes.Pop);
-//        writer.WriteMapHeader(Parameters_Length);
             var index=0;
-//        var Length=reader.ReadMapHeader();
             while(true){
                 var Property=Properties[index];
                 Types1[0]=Property.PropertyType;
@@ -276,7 +250,6 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
             I1.Emit(OpCodes.Newobj,ctor);
             I1.Emit(OpCodes.Ret);
         }
-        //150
     }
     private class Container2 : global::LinqDB.Databases.Container<Container2>
     {

@@ -23,6 +23,6 @@ public class Test_取得_ラムダ先行評価式の変数参照: ATest
         //    }
         //    default:return base.Traverse(e);
         //}
-        this.Execute2(() => A.Let(a => B.Let(b => a + 1)));
+        this.実行結果が一致するか確認(() => A.Let(a => B.Let(b => a + 1)));
     }
 }

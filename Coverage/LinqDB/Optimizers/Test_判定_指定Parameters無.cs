@@ -11,17 +11,17 @@ public class Test_判定_指定Parameters無: ATest
     [TestMethod]
     public void MakeAssign()
     {
-        this.Execute2(() => Lambda(a => Lambda(c => c == a)));
+        this.実行結果が一致するか確認(() => Lambda(a => Lambda(c => c == a)));
     }
     [TestMethod]
     public void Parameter0(){
-        this.Execute引数パターン(p=> 
+        this.実行結果が一致するか確認(p=> 
             Inline(() => p + 1)
         );
     }
     [TestMethod]public void Parameter1(){
         //ループ変数が必要ないのに作られる
-        this.Execute引数パターン(c => 
+        this.実行結果が一致するか確認(c => 
             Lambda(a => 
                 Inline(() => c == a)
             )
@@ -29,7 +29,7 @@ public class Test_判定_指定Parameters無: ATest
     }
     [TestMethod]public void Parameter2(){
         //ループ変数が必要ないのに作られる
-        this.Execute引数パターン(c => 
+        this.実行結果が一致するか確認(c => 
             Lambda(a => 
                 Lambda(b => 
                     Inline(() => c == a)
@@ -41,17 +41,17 @@ public class Test_判定_指定Parameters無: ATest
     public void MemberAccess()
     {
         //if(Member.Member.GetCustomAttribute(typeof(NoOptimizeAttribute))!=null) {
-        this.Execute2(() => Inline(() => 最適化されるField.NoLoopUnrolling()));
+        this.実行結果が一致するか確認(() => Inline(() => 最適化されるField.NoLoopUnrolling()));
         //}
-        this.Execute2(() => Inline(() => 最適化されるField));
+        this.実行結果が一致するか確認(() => Inline(() => 最適化されるField));
     }
     [TestMethod]
     public void Call()
     {
         //if(MethodCall.Method.GetCustomAttribute(typeof(NoOptimizeAttribute))!=null) {
-        this.Execute2(() => Inline(() => 最適化されるMethod().NoLoopUnrolling()));
+        this.実行結果が一致するか確認(() => Inline(() => 最適化されるMethod().NoLoopUnrolling()));
         //}
         // ReSharper disable once ConvertClosureToMethodGroup
-        this.Execute2(() => Inline(() => 最適化されるMethod()));
+        this.実行結果が一致するか確認(() => Inline(() => 最適化されるMethod()));
     }
 }

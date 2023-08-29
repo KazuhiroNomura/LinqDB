@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Net;
 using LinqDB;
 using LinqDB.Remote.Clients;
@@ -72,35 +73,23 @@ public class Test_特定パターン
     [TestMethod]public void Json(){
         const int 回数 = 10;
         const int ReceiveTimeout = 1000;
-        using var S = new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
+        const string serverdata="serverdata";
+        using var S = new Server<string>(serverdata,1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
         S.Open();
         Console.WriteLine("Backend.Open();");
         using(var C = new Client<object>(Dns.GetHostName(),ListenerSocketポート番号)) {
-            var Target = "Target";
+            const string 定数= "定数";
+            var キャプチャ= "キャプチャ";
             for(var a = 0;a<回数;a++) {
-                var r0= C.Expression(() => "TargetなしParameterなし",XmlType.Utf8Json);
-                var r1= C.Expression(() => "TargetなしParameterなし",XmlType.MessagePack);
-                //var TargetなしParameterあり = C.Expression(p => p+"TargetなしParameterあり");
-                //try {
-                //} catch(IOException) {
-                //    //
-                //}
-                //try {
-                //    var TargetありParameterあり = C.Expression(p => p+Target+"TargetありParameterあり");
-                //} catch(IOException) {
-                //    //
-                //}
-                //// var xx= R.Expression(() => "TargetなしParameterなし",() => "TargetなしParameterなし");
-                //try {
-                //    C.BytesSendTimeoutReceive(1,ReceiveTimeout*2);
-                //    //
-                //} catch(IOException) {
-                //    //
-                //}
-                //try {
-                //} catch(IOException) {
-                //    //
-                //}
+                Trace.WriteLine($"{a}回目");
+                var r0= C.SerializeSendReceive(定数,XmlType.Utf8Json);
+                Assert.AreEqual(定数,r0);
+                var r1= C.Expression(() => 定数,XmlType.Utf8Json);
+                Assert.AreEqual(定数,r1);
+                var r2= C.Expression(() => キャプチャ,XmlType.Utf8Json);
+                Assert.AreEqual(キャプチャ,r2);
+                var r3= C.Expression(p => p+キャプチャ,XmlType.Utf8Json);
+                Assert.AreEqual(serverdata+キャプチャ,r3);
             }
         }
         S.Close();
@@ -108,14 +97,23 @@ public class Test_特定パターン
     [TestMethod]public void MessagePack(){
         const int 回数 = 10;
         const int ReceiveTimeout = 1000;
-        using var S = new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
+        const string serverdata="serverdata";
+        using var S = new Server<string>(serverdata,1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
         S.Open();
         Console.WriteLine("Backend.Open();");
         using(var C = new Client<object>(Dns.GetHostName(),ListenerSocketポート番号)) {
-            var Target = "Target";
+            const string 定数= "定数";
+            var キャプチャ= "キャプチャ";
             for(var a = 0;a<回数;a++) {
-                var r0= C.SerializeSendReceive("TargetなしParameterなし",XmlType.MessagePack);
-                var r1= C.Expression(() => "TargetなしParameterなし",XmlType.MessagePack);
+                Trace.WriteLine($"{a}回目");
+                //var r0= C.SerializeSendReceive(定数,XmlType.MessagePack);
+                //Assert.AreEqual(定数,r0);
+                //var r1= C.Expression(() => 定数,XmlType.MessagePack);
+                //Assert.AreEqual(定数,r1);
+                var r2= C.Expression(() => キャプチャ,XmlType.MessagePack);
+                Assert.AreEqual(キャプチャ,r2);
+                var r3= C.Expression(p => p+キャプチャ,XmlType.MessagePack);
+                Assert.AreEqual(serverdata+キャプチャ,r3);
             }
         }
         S.Close();

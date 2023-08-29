@@ -22,11 +22,11 @@ public class ベンチマーク:ATest {
     }
     [TestMethod]
     public void 最適化OrderBy_ThenBy0速度() {
-        this.Execute2(() => this.OrderByテスト用array.OrderBy(p => p%100000/10000).ThenBy(p => p%10000/1000).ThenBy(p => p%1000/100).ThenBy(p => p%100/10).ThenBy(p => p%10/1));
+        this.実行結果が一致するか確認(() => this.OrderByテスト用array.OrderBy(p => p%100000/10000).ThenBy(p => p%10000/1000).ThenBy(p => p%1000/100).ThenBy(p => p%100/10).ThenBy(p => p%10/1));
     }
     [TestMethod]
     public void 最適化OrderBy_ThenBy0_ToArray速度() {
-        this.Execute2(() => this.OrderByテスト用array.OrderBy(p => p%100000/10000).ThenBy(p => p%10000/1000).ThenBy(p => p%1000/100).ThenBy(p => p%100/10).ThenBy(p => p%10/1).ToArray());
+        this.実行結果が一致するか確認(() => this.OrderByテスト用array.OrderBy(p => p%100000/10000).ThenBy(p => p%10000/1000).ThenBy(p => p%1000/100).ThenBy(p => p%100/10).ThenBy(p => p%10/1).ToArray());
     }
     private const int Equalsの速度 = 100000000;
     private static bool IEquatableの速度<T>(T a,T b) where T : IEquatable<T> {

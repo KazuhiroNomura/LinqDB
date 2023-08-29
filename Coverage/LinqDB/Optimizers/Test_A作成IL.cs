@@ -106,7 +106,7 @@ public class Test_A作成IL: ATest
         var C1Constant = Expression.Constant(C1);
         var OC1Constant = Expression.Constant(C1,typeof(object));
         var NS1Constant = Expression.Constant(S1,typeof(S1?));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double?>>(
                 Expression.Convert(
                     ODConstant,
@@ -114,7 +114,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<S1?>>(
                 Expression.Convert(
                     C1Constant,
@@ -122,7 +122,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal?>>(
                 Expression.Convert(
                     NDConstant,
@@ -130,7 +130,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float?>>(
                 Expression.Convert(
                     NDConstant,
@@ -138,7 +138,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Convert(
                     NDConstant,
@@ -146,7 +146,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float>>(
                 Expression.Convert(
                     NDConstant,
@@ -154,7 +154,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal?>>(
                 Expression.Convert(
                     DConstant,
@@ -162,7 +162,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float?>>(
                 Expression.Convert(
                     DConstant,
@@ -170,7 +170,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Convert(
                     DConstant,
@@ -178,7 +178,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<float>>(
                 Expression.Convert(
                     DConstant,
@@ -186,7 +186,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Convert(
                     ODConstant,
@@ -194,7 +194,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<object>>(
                 Expression.Convert(
                     NDConstant,
@@ -202,7 +202,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<C0>>(
                 Expression.Convert(
                     C1Constant,
@@ -210,7 +210,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<object>>(
                 Expression.Convert(
                     C1Constant,
@@ -218,7 +218,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<C1>>(
                 Expression.Convert(
                     OC1Constant,
@@ -226,7 +226,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<C1>>(
                 Expression.Convert(
                     NS1Constant,
@@ -234,7 +234,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<C1>>(
                 Expression.Convert(
                     S1Constant,
@@ -242,7 +242,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<object>>(
                 Expression.Convert(
                     S1Constant,
@@ -250,7 +250,7 @@ public class Test_A作成IL: ATest
                 )
             )
         );
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<I>>(
                 Expression.Convert(
                     S1Constant,

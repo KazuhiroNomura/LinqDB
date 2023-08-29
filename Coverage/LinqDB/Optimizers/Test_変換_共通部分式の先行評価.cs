@@ -14,10 +14,10 @@ public class Test_変換_共通部分式の先行評価 : ATest
     public void 特定パターン()
     {
         //            this.AssertExecute(() => Lambda(b => b * 3 + b * 3 == 0 ? b * 3 + b * 3 : b * 3 + b * 3 + 3));
-        this.Execute引数パターン(a => ArrN<int>(a).OrderBy(p => p).ThenBy(p => p, Comparer<int>.Default));
-        this.Execute引数パターン(a => a == 0 ? a : a);
-        this.Execute引数パターン(a => a == 0 ? a * 3 : a / 3);
-        this.Execute引数パターン(a => a * a + a * a);
+        this.実行結果が一致するか確認(a => ArrN<int>(a).OrderBy(p => p).ThenBy(p => p, Comparer<int>.Default));
+        this.実行結果が一致するか確認(a => a == 0 ? a : a);
+        this.実行結果が一致するか確認(a => a == 0 ? a * 3 : a / 3);
+        this.実行結果が一致するか確認(a => a * a + a * a);
     }
     [TestMethod]
     public void MakeAssigng()
@@ -32,7 +32,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //    "    }",
         //    "}"
         //);
-        this.Execute標準ラムダループ(
+        this.実行結果が一致するか確認(
             () =>
                 "".Let(p =>
                     a+a+a.NoEarlyEvaluation()
@@ -51,7 +51,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //"        }",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             () =>
                 "".Let(p =>
                     a + a + a.NoLoopUnrolling()
@@ -63,7 +63,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //"        + $Cラムダ局所0 + .Call Helpers.NoLoopUnrolling($Cラムダ局所0)",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             () => a + a + a.NoLoopUnrolling()
         );
         //".Lambda LラムダR<Func`1[Decimal]>() {",
@@ -72,7 +72,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //"        + $Cラムダ局所0 + .Call Helpers.NoEarlyEvaluation(.Constant<カバレッジCS.Lite.Optimizers.変換_共通部分式の先行評価+<>c__DisplayClass1_0>(カバレッジCS.Lite.Optimizers.変換_共通部分式の先行評価+<>c__DisplayClass1_0).a)",
         //"    }",
         //"}"
-        this.Execute2(
+        this.実行結果が一致するか確認(
             () => a + a + a.NoEarlyEvaluation()
         );
     }
@@ -82,7 +82,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
     {
         var array = new int[5];
         var i = Expression.Parameter(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { i },
@@ -112,7 +112,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
             )
         );
         var d = Expression.Parameter(typeof(decimal));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { d },
@@ -127,7 +127,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
             )
         );
         var p = Expression.Parameter(typeof(double));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Block(
                     new[] { p },
@@ -143,9 +143,9 @@ public class Test_変換_共通部分式の先行評価 : ATest
     public void Traverse()
     {
         //if(e0==null) return null;
-        this.Execute2(() => Staticメソッド());
+        this.実行結果が一致するか確認(() => Staticメソッド());
         //case ExpressionType.Default:return e0;
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Default(typeof(int))
             )
@@ -153,7 +153,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //case ExpressionType.Label
         var Label1 = Expression.Label(typeof(int));
         var Label2 = Expression.Label(typeof(int));
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -168,13 +168,13 @@ public class Test_変換_共通部分式の先行評価 : ATest
             )
         );
         //case ExpressionType.Parameter:return e0;
-        this.Execute2(() => Lambda(p => p));
+        this.実行結果が一致するか確認(() => Lambda(p => p));
         //case ExpressionType.Constant:
         //    if(e0.Type.Is定数をILで直接埋め込めるTypeか()) return e0;
-        this.Execute2(() => "ABC");
-        this.Execute2(() => 1m);
+        this.実行結果が一致するか確認(() => "ABC");
+        this.実行結果が一致するか確認(() => 1m);
         //case ExpressionType.Assign:
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Block(
                     new[] { d0 },
@@ -186,7 +186,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //case ExpressionType.PostIncrementAssign:
         //case ExpressionType.PreIncrementAssign:
         //case ExpressionType.PreDecrementAssign:
-        this.Execute2(
+        this.実行結果が一致するか確認(
             Expression.Lambda<Func<double>>(
                 Expression.Block(
                     new[] { d0 },
@@ -197,69 +197,69 @@ public class Test_変換_共通部分式の先行評価 : ATest
         );
         //case ExpressionType.Lambda:{
         //    if(this._HashSet一度出現したExpression.Add(e0)) {
-        this.Execute2(() => Lambda(p => p + 1));
+        this.実行結果が一致するか確認(() => Lambda(p => p + 1));
         //    }else{
-        this.Execute2(() => Lambda(p => p + 2) + (1).Let(p => p + 2));
+        this.実行結果が一致するか確認(() => Lambda(p => p + 2) + (1).Let(p => p + 2));
         //    }
         //}
         //case ExpressionType.Conditional:{
         //    if(this._変数_判定_ラムダ間ループ内指定Parameters以外のParameterが存在する.実行(e0,this._指定Parameters)) {
         // ReSharper disable once ConvertToLocalFunction
         Func<int, int> UpdateSelector = p => p;
-        this.Execute引数パターン(a => SetN<int>(a).Update(p => p == 0, UpdateSelector));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Update(p => p == 0, UpdateSelector));
         //    }else{
         //        if(HashSet一度出現したExpression.Add(e0)) {
-        this.Execute2(() => Lambda(a => a == 0 ? a + 1 : a + 2));
+        this.実行結果が一致するか確認(() => Lambda(a => a == 0 ? a + 1 : a + 2));
         //        }else{
-        this.Execute2(() => Lambda(a => (a == 0 ? a + 1 : a + 2) + (a == 0 ? a + 1 : a + 2)));
+        this.実行結果が一致するか確認(() => Lambda(a => (a == 0 ? a + 1 : a + 2) + (a == 0 ? a + 1 : a + 2)));
         //        }
         //    }
         //    foreach(var ifTrueで二度出現したExpression in HashSet_ifTrueで二度出現したExpression) {
         //        if(HashSet_ifFalseで二度出現したExpression.Contains(ifTrueで二度出現したExpression)) {
-        this.Execute2(() => Lambda(a => a * 2 + a * 2 == 0 ? a * 2 + a * 2 : a * 2 + a * 2 + 2));
+        this.実行結果が一致するか確認(() => Lambda(a => a * 2 + a * 2 == 0 ? a * 2 + a * 2 : a * 2 + a * 2 + 2));
         //        }else{
-        this.Execute2(() => Lambda(a => a == 0 ? a * 2 + a * 2 : a + 2));
+        this.実行結果が一致するか確認(() => Lambda(a => a == 0 ? a * 2 + a * 2 : a + 2));
         //        }
         //    }
         //    foreach(var ifTrueで一度出現したExpression in HashSet_ifTrueで一度出現したExpression) {
         //        if(HashSet_ifFalseで一度出現したExpression.Contains(ifTrueで一度出現したExpression)) {
         //            if(HashSet一度出現したExpression.Contains(ifTrueで一度出現したExpression)) {
-        this.Execute2(() => Lambda(a => a * 2 == 0 ? a * 2 : a * 2 + 1));
+        this.実行結果が一致するか確認(() => Lambda(a => a * 2 == 0 ? a * 2 : a * 2 + 1));
         //            } else {
-        this.Execute2(() => Lambda(a => a == 0 ? a * 2 : a * 2 + 1));
+        this.実行結果が一致するか確認(() => Lambda(a => a == 0 ? a * 2 : a * 2 + 1));
         //            }
         //        }else{
-        this.Execute2(() => Lambda(a => a == 0 ? a * 2 : a));
+        this.実行結果が一致するか確認(() => Lambda(a => a == 0 ? a * 2 : a));
         //        }
         //    }
         //    foreach(var 二度出現したExpression in HashSet二度出現したExpression) {
-        this.Execute2(() => Lambda(a => a * 2 == 0 ? a * 2 : a * 2 + 2));
+        this.実行結果が一致するか確認(() => Lambda(a => a * 2 == 0 ? a * 2 : a * 2 + 2));
         //    }
         //}
         //case ExpressionType.MemberAccess:{
         //    if(Member0_Member.GetCustomAttribute(typeof(NoOptimizeAttribute))!=null) {
-        this.Execute2(() => Lambda(a => _Static_class_演算子オーバーロード1._最適化されないメンバー));
+        this.実行結果が一致するか確認(() => Lambda(a => _Static_class_演算子オーバーロード1._最適化されないメンバー));
         //    }else{
-        this.Execute2(() => Lambda(a => _Static_class_演算子オーバーロード1.Int32フィールド));
+        this.実行結果が一致するか確認(() => Lambda(a => _Static_class_演算子オーバーロード1.Int32フィールド));
         //    }
         //}
         //case ExpressionType.Call:{
         //    if(MethodCall_Method.GetCustomAttribute(typeof(NoOptimizeAttribute))!=null)return
-        this.Execute2(() => Lambda(a => _Static_class_演算子オーバーロード1.最適化されないメソッド()));
-        this.Execute2(() => Lambda(a => _Static_class_演算子オーバーロード1.メソッド()));
+        this.実行結果が一致するか確認(() => Lambda(a => _Static_class_演算子オーバーロード1.最適化されないメソッド()));
+        this.実行結果が一致するか確認(() => Lambda(a => _Static_class_演算子オーバーロード1.メソッド()));
         //    if(ExtendedSet.ループ展開可能なEnumerableSetに属するGenericMethodDefinitionか(MethodCall0_GenericMethodDefinition)) {
         //        if(Reflection.ExtendSet1.Aggregate_seed_func_resultSelector==MethodCall0_GenericMethodDefinition||Reflection.ExtendEnumerable.Aggregate_seed_func_resultSelector==MethodCall0_GenericMethodDefinition) {
         //            if(resultSelctor0!=null) {
-        this.Execute引数パターン(a => SetN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
-        this.Execute引数パターン(a => EnuN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
         //            }else{
-        this.Execute引数パターン(a => SetN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
-        this.Execute引数パターン(a => EnuN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
+        this.実行結果が一致するか確認(a => SetN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Aggregate(1, (x, y) => x + y, c => c + 1));
         //            }
         //        }else{
         //            for(var _Field = 0;_Field<MethodCall0_Arguments_Count;_Field++) {
         //                if(MethodCall0_Lambda!=null) {
-        this.Execute引数パターン(a => EnuN<int>(a).Select(p => p + 1));
+        this.実行結果が一致するか確認(a => EnuN<int>(a).Select(p => p + 1));
         //                } else {
         //↑と同じ
         //                }
@@ -271,7 +271,7 @@ public class Test_変換_共通部分式の先行評価 : ATest
         {
             var Break = Expression.Label();
             var 作業 = Expression.Variable(typeof(decimal));
-            this.Execute2(
+            this.実行結果が一致するか確認(
                 Expression.Lambda<Func<decimal>>(
                     Expression.Block(
                         new[] { 作業 },
@@ -296,13 +296,13 @@ public class Test_変換_共通部分式の先行評価 : ATest
         //}
         //if(this._変数_判定_ラムダ間ループ内指定Parameters以外のParameterが存在する.実行(e0,this._指定Parameters)) {
         var 外部パラメータ = 3;
-        this.Execute引数パターン標準ラムダループ((a, b) => ArrN<int>(a).Join(ArrN<int>(b), o => o, i => i, (o, i) => new { o, i }).Select(oi => 外部パラメータ));
+        this.実行結果が一致するか確認((a, b) => ArrN<int>(a).Join(ArrN<int>(b), o => o, i => i, (o, i) => new { o, i }).Select(oi => 外部パラメータ));
         //Execute(()=>Lambda(_Field=>Lambda(b=>_Field)));
         //} else{
         //    if(this._HashSet一度出現したExpression.Add(e0)) {
-        this.Execute2(() => _Int32);
+        this.実行結果が一致するか確認(() => _Int32);
         //    } else {
-        this.Execute2(() => _Int32 + _Int32);
+        this.実行結果が一致するか確認(() => _Int32 + _Int32);
         //    }
         //}
     }
