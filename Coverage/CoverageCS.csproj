@@ -8,8 +8,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>NET60-windows</TargetFramework>
-    <LangVersion>10.0</LangVersion>
+    <TargetFramework>net7.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
@@ -37,24 +37,6 @@
     <Compile Remove="作りたい仕様確認\Set\Test_Transaction_Add.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="AssemblyInfo.fs" />
-    <None Remove="AssertExecute.fs" />
-    <None Remove="CoverageCS.csproj.vspscc" />
-    <None Remove="CoverageCS.Lite.CRC.csproj.vspscc" />
-    <None Remove="CoverageFS.fsproj.vspscc" />
-    <None Remove="CoverageVB.vbproj.vspscc" />
-    <None Remove="Enumerable_Set.fs" />
-    <None Remove="LinqDB\Optimizers\ExpressionEqualityComparer.vb" />
-    <None Remove="Program.fs" />
-    <None Remove="作りたい仕様確認\Set\Model.edmx" />
-    <None Remove="作りたい仕様確認\Set\Model.tt" />
-    <None Remove="作成_DynamicMethodによるDelegate作成.fs" />
-    <None Remove="固有.fs" />
-    <None Remove="基礎.fs" />
-    <None Remove="変換_KeySelectorの匿名型をValueTupleに書き換え.fs" />
-    <None Remove="変換_単一メソッドの書き換え.fs" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="LinqDB\Sets\Test_AssociationSet`1.cs" />
     <Content Include="作りたい仕様確認\Set\Model.cs">
       <DesignTime>True</DesignTime>
@@ -75,14 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="2.5.124" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LinqDB\LinqDB.csproj" />

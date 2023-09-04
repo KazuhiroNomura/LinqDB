@@ -22,6 +22,10 @@ partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.CatchBlock>{
         this.Serialize(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         this.Serialize(ref writer,value.Filter,Resolver);
+        if(value.Variable is not null){
+            var ListParameter=this.ListParameter;
+            ListParameter.RemoveAt(ListParameter.Count-1);
+        }
         writer.WriteEndArray();
     }
     Expressions.CatchBlock IJsonFormatter<Expressions.CatchBlock>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
@@ -30,18 +34,27 @@ partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.CatchBlock>{
         var test= Deserialize_Type(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var 変数か=reader.ReadInt32();
-        string? name;
-        if(変数か==0) name=null;
-        else{
+        Expressions.ParameterExpression? Variable;
+        if(変数か==0){
+            Variable=null;
+        } else{
             reader.ReadIsValueSeparatorWithVerify();
-            name=reader.ReadString();
+            var name=reader.ReadString();
+            Variable=Expressions.Expression.Parameter(test,name);
+            this.ListParameter.Add(Variable);
         }
         reader.ReadIsValueSeparatorWithVerify();
         var body= this.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var @filter= this.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return name is null?Expressions.Expression.Catch(test,body,@filter):Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,@filter);
+        if(Variable is null){
+            return Expressions.Expression.Catch(test,body,@filter);
+        }else{
+            var ListParameter=this.ListParameter;
+            ListParameter.RemoveAt(ListParameter.Count-1);
+            return Expressions.Expression.Catch(Variable,body,@filter);
+        }
     }
 }
 partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.CatchBlock>{

@@ -90,8 +90,8 @@ public sealed partial class Optimizer{
             return e.Expression.Convert(Expression,this.作業配列.MakeGenericType(typeof(Nullable<>),Type));
         }
         private readonly e.MemberExpression Encoding=e.Expression.Property(null,typeof(Encoding).GetProperty("Unicode"));
-        private readonly MethodInfo Encoding_GetString=typeof(Encoding).GetMethod("GetString",new Type[]{typeof(byte[]) });
-        private readonly MethodInfo Encoding_GetBytes=typeof(Encoding).GetMethod("GetBytes",new Type[]{typeof(string) });
+        private readonly MethodInfo Encoding_GetString=typeof(Encoding).GetMethod("GetString",new Type[]{typeof(byte[]) })!;
+        private readonly MethodInfo Encoding_GetBytes=typeof(Encoding).GetMethod("GetBytes",new Type[]{typeof(string) })!;
         private e.Expression Booleanを返すComparer(e.Expression Left,e.Expression Right,Func<e.Expression,e.Expression,e.Expression> 非NullのExpression) {
             //SQL                   C#
             //0<=0=true
@@ -1376,7 +1376,7 @@ public sealed partial class Optimizer{
                 //変換関数	データ型のキャストと変換をサポートします。
                 //カーソル関数	カーソルについての情報を返します。
                 //日付と時刻のデータ型および関数	日付時刻型の入力値に対して操作を実行し、文字列値、数値、または日付時刻値を返します。
-                case "dateadd":{//(datepart,number,date)
+                case "DATEADD":{//(datepart,number,date)
                     var datepart = (ColumnReferenceExpression)x_Parameters[0];
                     Debug.Assert(datepart.ColumnType == ColumnType.Regular);
                     Debug.Assert(datepart.MultiPartIdentifier.Identifiers.Count == 1);
@@ -1407,7 +1407,7 @@ public sealed partial class Optimizer{
                     }
                     e.BinaryExpression dateadd_long(MethodInfo Method,e.Expression Constant) => e.Expression.Divide(dateadd(Method,typeof(int)),Constant);
                 }
-                case "datediff":{
+                case "DATEDIFF":{
                     //datediff(mm,startdate,enddate)。enddate-startdate。小さな数値に切り捨てられる
                     Debug.Assert(x_Parameters.Count == 3);
                     var y = (ColumnReferenceExpression)x_Parameters[0];
@@ -1437,7 +1437,7 @@ public sealed partial class Optimizer{
                         )
                     );
                 }
-                case "datepart":{
+                case "DATEPART":{
                     Debug.Assert(x_Parameters.Count == 2);
                     return this.NULLを返す1(
                         this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[1]),typeof(DateTime?)),
@@ -1465,7 +1465,7 @@ public sealed partial class Optimizer{
                         });
                     //return e.Expression.Call(interval(x_Parameters[0]),this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[1]),typeof(DateTimeOffset?)));
                 }
-                case "datename":{
+                case "DATENAME":{
                     Debug.Assert(x_Parameters.Count == 2);
                     var y = (ColumnReferenceExpression)x_Parameters[0];
                     var Method=y.MultiPartIdentifier.Identifiers[0].Value.ToUpperInvariant()switch{
@@ -1504,7 +1504,7 @@ public sealed partial class Optimizer{
                 //    );
                 //}
                 //システム関数
-                case "isnull":{
+                case "ISNULL":{
                     var 変換元 = this.ScalarExpression(x_Parameters[0]);
                     var 変換先 = this.ScalarExpression(x_Parameters[1]);
                     this.判定指定Table.実行(変換元,this.RefPeek.List_TableExpression);
@@ -1594,36 +1594,36 @@ public sealed partial class Optimizer{
                 //    );
                 //}
                 //OPEN XML
-                case "value":{
+                case "VALUE":{
                     Debug.Assert(x_Parameters.Count == 2);
                     //'nvarchar'のようにリテラルなのでシングルクォートなので削除するべき
                     var DBType = this.SQL取得(x_Parameters[1])[1..^1];
                     //Typeに合うようにExpressionを変形する()
                     var value=DBType switch{
-                        "bit"             =>Product.SQLServer.Reflection.value_Boolean,
-                        "tinyint"         =>Product.SQLServer.Reflection.value_SByte,
-                        "smallint"        =>Product.SQLServer.Reflection.value_Int16,
-                        "integer"or"int"  =>Product.SQLServer.Reflection.value_Int32,
-                        "bigint"          =>Product.SQLServer.Reflection.value_Int64,
-                        "real"            =>Product.SQLServer.Reflection.value_Single,
-                        "float"           =>Product.SQLServer.Reflection.value_Double,
-                        "money"or"decimal"=>Product.SQLServer.Reflection.value_Decimal,
-                        "datetime"        =>Product.SQLServer.Reflection.value_DateTime,
-                        "xml"             =>Product.SQLServer.Reflection.value_XElement,
-                        "uniqueidentifier"=>Product.SQLServer.Reflection.value_Guid,
+                        "BIT"             =>Product.SQLServer.Reflection.value_Boolean,
+                        "TINYINT"         =>Product.SQLServer.Reflection.value_SByte,
+                        "SMALLINT"        =>Product.SQLServer.Reflection.value_Int16,
+                        "INTEGER"or"INT"  =>Product.SQLServer.Reflection.value_Int32,
+                        "BIGINT"          =>Product.SQLServer.Reflection.value_Int64,
+                        "REAL"            =>Product.SQLServer.Reflection.value_Single,
+                        "FLOAT"           =>Product.SQLServer.Reflection.value_Double,
+                        "MONEY"or"DECIMAL"=>Product.SQLServer.Reflection.value_Decimal,
+                        "DATETIME"        =>Product.SQLServer.Reflection.value_DateTime,
+                        "XML"             =>Product.SQLServer.Reflection.value_XElement,
+                        "UNIQUEIDENTIFIER"=>Product.SQLServer.Reflection.value_Guid,
                         _=>DBType.Length>=4
-                            ?DBType[..4]is"char"or"text"
+                            ?DBType[..4]is"CHAR"or"TEXT"
                                 ?Product.SQLServer.Reflection.value_String
                                 :DBType.Length>=5
-                                    ?DBType[..5]is"nchar"or"ntext"
+                                    ?DBType[..5]is"NCHAR"or"NTEXT"
                                         ?Product.SQLServer.Reflection.value_String
                                         :DBType.Length>=7
-                                            ?DBType[..7]is"decimal"
+                                            ?DBType[..7]is"DECIMAL"
                                                 ?Product.SQLServer.Reflection.value_Decimal
-                                                :DBType[..7]is"varchar"or"sysname"
+                                                :DBType[..7]is"VARCHAR"or"SYSNAME"
                                                     ?Product.SQLServer.Reflection.value_String
                                                     :DBType.Length>=8
-                                                        ?DBType[..8]is"nvarchar"
+                                                        ?DBType[..8]is"NVARCHAR"
                                                             ?Product.SQLServer.Reflection.value_String
                                                             :throw new NotSupportedException(DBType)
                                                         :throw new NotSupportedException(DBType)
@@ -1856,7 +1856,7 @@ public sealed partial class Optimizer{
                                     var Method_Parameters = Method.GetParameters();
                                     var Method_Parameters_Length = Method_Parameters.Length;
                                     var ScalarExpressions_Length = ScalarExpressions.Length;
-                                    for(var a="convert" == FunctionName?1:0;a< ScalarExpressions_Length;a++) {
+                                    for(var a="CONVERT" == FunctionName?1:0;a< ScalarExpressions_Length;a++) {
                                         var Method_Parameter = Method_Parameters[a];
                                         var ScalarExpression_Type = ScalarExpressions[a].Type;
                                         if(Method_Parameter.ParameterType!=ScalarExpression_Type) return false;
@@ -1877,7 +1877,7 @@ public sealed partial class Optimizer{
                                     //パラメータ数が一致したら一次審査は通る
                                     //(int,int=3)に(int)
                                     if(Method_Parameters_Length==0&&ScalarExpressions_Length>0) return false;
-                                    for(var a="convert" == FunctionName?1:0;a< ScalarExpressions_Length;a++) {
+                                    for(var a="CONVERT" == FunctionName?1:0;a< ScalarExpressions_Length;a++) {
                                         var Method_Parameter = Method_Parameters[a];
                                         var ScalarExpression_Type = this.Convertデータ型を合わせるNullableは想定する(ScalarExpressions[a],Method_Parameter.ParameterType).Type;
                                         if(Method_Parameter.ParameterType!=ScalarExpression_Type) return false;
@@ -1956,6 +1956,7 @@ public sealed partial class Optimizer{
             if(x.CallTarget is not null) {
                 var Schema = this.CallTarget(x.CallTarget);
                 var Method = Schema.Type.GetMethod(FunctionName,BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.IgnoreCase);
+                Debug.Assert(Method!=null);
                 var Parameters = Method.GetParameters();
                 var arguments_Length = x_Parameters.Count;
                 var arguments = new e.Expression[arguments_Length];
@@ -2394,6 +2395,7 @@ public sealed partial class Optimizer{
             //var Schema=x_Name.SchemaIdentifier is null ? "dbo" orx_Name.SchemaIdentifier.Value;
             var Schema_FulllName=this.ContainerType.Namespace+".Schemas."+Schema;
             var Schema_Type=ContainerType.Assembly.GetType(Schema_FulllName.Replace("*",@"\*"),true,true);
+            Debug.Assert(Schema_Type!=null);
             var x_SchemaObjectName_BaseIdentifier_Value=x_SchemaObjectName.BaseIdentifier.Value;
             //var View = Schema_Type.GetProperty(x_SchemaObjectName_BaseIdentifier_Value,BindingFlags.Public|BindingFlags.Instance);
             var View=Schema_Type.GetProperties(BindingFlags.Public|BindingFlags.Instance).Where(p=>string.Equals(p.Name,x_SchemaObjectName_BaseIdentifier_Value,StringComparison.OrdinalIgnoreCase)).Single();
@@ -2406,6 +2408,7 @@ public sealed partial class Optimizer{
                 var 内ElementType=SelectStatement.Type.GetGenericArguments()[0];
                 var TypeName=$"{this.ContainerType.Namespace}.Views.{Schema}.{x_SchemaObjectName.BaseIdentifier.Value}";
                 var 外ElementType=ContainerType.Assembly.GetType(TypeName.Replace("*",@"\*"),true,true);
+                Debug.Assert(外ElementType!=null);
                 var p=e.Expression.Parameter(内ElementType,"p");
                 var Constructor=外ElementType.GetConstructors()[0];
                 var Parameters=Constructor.GetParameters();
@@ -2415,7 +2418,7 @@ public sealed partial class Optimizer{
                 e.Expression ValueTuple=p;
                 var Item番号=1;
                 for(var a=0;a<Parameters_Length;a++){
-                    e.Expression Item=ValueTuple_Item(ref ValueTuple,ref Item番号);
+                    var Item=ValueTuple_Item(ref ValueTuple,ref Item番号);
                     NewArguments[a]=this.Convertデータ型を合わせるNullableは想定する(Item,Parameters[a].ParameterType);
                 }
                 var Call=e.Expression.Call(
@@ -4395,7 +4398,6 @@ public sealed partial class Optimizer{
             SemanticTableReference y=>this.SemanticTableReference(y),
             OpenXmlTableReference y=>this.OpenXmlTableReference(y),
             OpenJsonTableReference y=>this.OpenJsonTableReference(y),
-            OpenRowsetTableReference y=>this.OpenRowsetTableReference(y),
             InternalOpenRowset y=>this.InternalOpenRowset(y),
             OpenQueryTableReference y=>this.OpenQueryTableReference(y),
             AdHocTableReference y=>this.AdHocTableReference(y),
@@ -4442,6 +4444,7 @@ public sealed partial class Optimizer{
                 return (Set_ColumnAliases.Set,Element);
             } else {
                 var ContainerType=this.ContainerType;
+                Debug.Assert(ContainerType!=null);
                 const BindingFlags BindingFlags=BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly|BindingFlags.IgnoreCase|BindingFlags.GetProperty;
                 PropertyInfo Schema_PropertyInfo;
                 PropertyInfo Table_Property;
@@ -4461,17 +4464,19 @@ public sealed partial class Optimizer{
                 }else{
                     //Schema_PropertyInfo=ContainerType.GetProperty(SchemaObject.SchemaIdentifier.Value,BindingFlags)!;
                     var Schema= SchemaObject.SchemaIdentifier.Value;
-                    Schema_PropertyInfo=ContainerType.GetProperties(BindingFlags).Where(p => string.Equals(p.Name,Schema,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
-                    if(Schema_PropertyInfo is null){
+                    var Schema_PropertyInfo0=ContainerType.GetProperties(BindingFlags).Where(p => string.Equals(p.Name,Schema,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+                    if(Schema_PropertyInfo0 is null){
                         Trace.WriteLine(Schema);
                         throw new NotImplementedException($"{Schema}スキーマは定義されていなかった");
                     }
                     //Table_Property=Schema_PropertyInfo.PropertyType.GetProperty(Table,BindingFlags)!;
-                    Table_Property=Schema_PropertyInfo.PropertyType.GetProperties(BindingFlags).Where(p=>string.Equals(p.Name,Table,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
-                    if(Table_Property is null){
+                    Schema_PropertyInfo=Schema_PropertyInfo0;
+                    var Table_Property0=Schema_PropertyInfo.PropertyType.GetProperties(BindingFlags).Where(p=>string.Equals(p.Name,Table,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+                    if(Table_Property0 is null){
                         Trace.WriteLine(Table);
                         throw new NotImplementedException($"{Table}テーブルプロパティが定義されていなかった");
                     }
+                    Table_Property=Table_Property0;
                     //if (x.Value=="objects$")
                     //{
                     //   // x.Value="(SELECT x.*,s.null_on_null_input from sys.all_objects x JOIN sys.system_sql_modules s on x.object_id=s.object_id)";
@@ -4606,7 +4611,7 @@ public sealed partial class Optimizer{
             var Schema = this.FindSchema(Key);
             //var Schema=this.ContainerType.GetProperty(Key);
             if(Schema is not null) {
-                Debug.Assert((e.ParameterExpression)Schema.Expression==this.Container);
+                Debug.Assert(Schema.Expression!=null&&(e.ParameterExpression)Schema.Expression==this.Container);
                 var Method =FindFunction(Schema.Type,SchemaObject.BaseIdentifier.Value);
                 //var Method=Schema.Type.GetMethod(SchemaObject.BaseIdentifier.Value,BindingFlags.Public|BindingFlags.Instance|BindingFlags.DeclaredOnly);
                 if(Method is null) {
@@ -6977,15 +6982,15 @@ public sealed partial class Optimizer{
             return e.Expression.Call(作業配列.MakeGenericMethod(GenericMethodDifinition,外ElementType),Call1,Call2);
             static (e.Expression?Item1, e.Expression?Item2)ValueTuple_Item(ref e.Expression ValueTuple1,ref e.Expression ValueTuple2,ref int Item番号) {
                 if(Item番号==8) {
-                    FieldInfo ValueTuple1_Rest= ValueTuple1.Type.GetField("Rest"), ValueTuple2_Rest = ValueTuple2.Type.GetField("Rest");
+                    FieldInfo ValueTuple1_Rest= ValueTuple1.Type.GetField("Rest")!, ValueTuple2_Rest = ValueTuple2.Type.GetField("Rest")!;
                     if(ValueTuple1_Rest is null)return (null,null);
                     (ValueTuple1, ValueTuple2) = (e.Expression.Field(ValueTuple1,ValueTuple1_Rest),e.Expression.Field(ValueTuple2,ValueTuple2_Rest));
                     Item番号 = 2;
-                    FieldInfo ValueTuple1_Item1 = ValueTuple1.Type.GetField("Item1"), ValueTuple2_Item1 = ValueTuple2.Type.GetField("Item1");
+                    FieldInfo ValueTuple1_Item1 = ValueTuple1.Type.GetField("Item1")!, ValueTuple2_Item1 = ValueTuple2.Type.GetField("Item1")!;
                     return (e.Expression.Field(ValueTuple1,ValueTuple1_Item1), e.Expression.Field(ValueTuple2,ValueTuple2_Item1));
                 }
                 var Item= $"Item{Item番号}";
-                FieldInfo ValueTuple1_Item = ValueTuple1.Type.GetField(Item),ValueTuple2_Item=ValueTuple2.Type.GetField(Item);
+                FieldInfo ValueTuple1_Item = ValueTuple1.Type.GetField(Item)!,ValueTuple2_Item=ValueTuple2.Type.GetField(Item)!;
                 Item番号++;
                 return ValueTuple1_Item  is null?(null,null):(e.Expression.Field(ValueTuple1,ValueTuple1_Item), e.Expression.Field(ValueTuple2,ValueTuple2_Item));
             }

@@ -2781,6 +2781,7 @@ partial class Optimizer {
                 var IsAnonymous = NewExpression_Type.IsAnonymous();
                 var IsValueTuple = NewExpression_Type.IsValueTuple();
                 if(IsAnonymous||IsValueTuple) {
+                    Debug.Assert(NewExpression.Constructor!=null);
                     var NewExpression_Constructor_GetParameters = NewExpression.Constructor.GetParameters();
                     if(IsAnonymous) {
                         var NewExpression_Arguments = NewExpression.Arguments;

@@ -3,9 +3,12 @@ using MessagePack;
 
 using System.Reflection.Emit;
 using System;
+using System.Diagnostics;
 using LinqDB.Helpers;
-using LinqDB.Serializers.Formatters;
+using MemoryPack_Formatters=LinqDB.Serializers.MemoryPack.Formatters;
+using MemoryPack.Formatters;
 using Utf8Json;
+
 namespace LinqDB.Serializers;
 public readonly struct SerializerConfiguration{
     private readonly DispatchJsonFormatterResolver DispatchJsonFormatterResolver=new();
@@ -22,6 +25,7 @@ public readonly struct SerializerConfiguration{
     public SerializerConfiguration(){
         //this.AnonymousExpressionJsonFormatterResolver=new();
         //順序が大事
+        Debug.WriteLine("0");
         this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
             //new IJsonFormatter[]{
             //    this.AnonymousExpressionJsonFormatterResolver.ExpressionFormatter, 
@@ -173,6 +177,7 @@ public readonly struct SerializerConfiguration{
                 //this.AnonymousExpressionJsonFormatterResolver,
             }
         );
+        Debug.WriteLine("1");
         //this.JsonFormatterResolver =Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
         //    Utf8Json.Resolvers.BuiltinResolver.Instance,

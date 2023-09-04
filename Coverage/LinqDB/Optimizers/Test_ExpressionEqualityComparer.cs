@@ -517,8 +517,18 @@ public class Test_ExpressionEqualityComparer : ATest
             );
         }
     }
-    [TestMethod]
-    public void Goto0(){
+    [TestMethod]public void Goto00(){
+        var Label1 = Expression.Label(typeof(int),"Label1");
+        this.実行結果が一致するか確認(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    Expression.Goto(Label1, Expression.Constant(1)),
+                    Expression.Label(Label1, Expression.Constant(11))
+                )
+            )
+        );
+    }
+    [TestMethod]public void Goto01(){
         //a.Target==b.Target&&this.Equals(a.Value,b.Value);
         var Label1 = Expression.Label(typeof(int),"Label1");
         var Label2 = Expression.Label(typeof(int),"Label2");

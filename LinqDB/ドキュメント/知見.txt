@@ -16,3 +16,6 @@ ldarg.0
 call ReadStringだとOK
 つまりメソッドに必要な引数がpushされていないとき
 
+MemoryPackFormatterProvider.Register(formatter0);で以下の例外が出る時
+Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 'The best overloaded method match for 'MemoryPack.MemoryPackFormatterProvider.Register<object>(MemoryPack.MemoryPackFormatter<object>)' has some invalid arguments'
+private型を登録するとなる

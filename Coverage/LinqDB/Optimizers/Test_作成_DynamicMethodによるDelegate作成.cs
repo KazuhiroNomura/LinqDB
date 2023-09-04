@@ -1327,7 +1327,7 @@ public class Test_作成_DynamicMethodによるDelegate作成 : ATest
         public Struct キャスト() => this;
 
         public bool Equals(Struct other) => this.内部の値==other.内部の値;
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null) return false;
             return obj is Struct @struct && this.Equals(@struct);

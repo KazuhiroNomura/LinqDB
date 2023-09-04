@@ -1053,7 +1053,7 @@ public class Test_ILGenerator拡張メソッド
         {
             try
             {
-                Assert.AreEqual(Conv<ulong, UIntPtr>(I => I.Conv_Ovf_U_Un())(ulong.MaxValue), (UIntPtr)(-1));
+                Assert.AreEqual(Conv<ulong, UIntPtr>(I => I.Conv_Ovf_U_Un())(ulong.MaxValue), unchecked((UIntPtr)(-1)));
             }
             catch (OverflowException) { }
         }

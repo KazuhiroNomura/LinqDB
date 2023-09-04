@@ -28,7 +28,7 @@ public class 沢山の組み合わせ : ATest
             }
             return true;
         }
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return this.Equals((結果)obj);
         }

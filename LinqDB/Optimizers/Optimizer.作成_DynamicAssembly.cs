@@ -50,7 +50,7 @@ partial class Optimizer{
             //Dictionaryラムダ跨ぎParameter.Add(ContainerParameter,(ContainerField,Expression.Field(DispParameter,ContainerField)));
             foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable()){
                 Debug.Assert(a.Key.Name==a.Value.Disp.Name);
-                Dictionaryラムダ跨ぎParameter[a.Key]=(DispType.GetField(a.Key.Name,Instance_NonPublic_Public),a.Value.Member);
+                Dictionaryラムダ跨ぎParameter[a.Key]=(DispType.GetField(a.Key.Name,Instance_NonPublic_Public),a.Value.Member)!;
             }
             this.Clear();
             this.インスタンスメソッドか=true;
@@ -66,7 +66,7 @@ partial class Optimizer{
             this.Dictionary_Parameter_LocalBuilder=new();
             var Lambda_Parameters = Lambda.Parameters;
             if(旧インスタンスメソッドか){
-                this.インスタンスメソッドか=this.判定_InstanceMethodか.実行(Lambda.Body);
+                this.インスタンスメソッドか=this.判定_InstanceMethodか.実行(Lambda.Body)|true;
             }
             var ReturnType = Lambda.ReturnType;
             var (_,Member,Impl)=this.DictionaryLambda[Lambda];

@@ -9,7 +9,7 @@ public class Test_ジェネリックEqualsの速度差
     {
         private readonly int a;
         public TestClass(int a) => this.a = a;
-        public override bool Equals(object obj) => obj is TestClass o&&this.a==o.a;
+        public override bool Equals(object? obj) => obj is TestClass o&&this.a==o.a;
         public override int GetHashCode() => this.a;
     }
     private class TestClassIEqutable : IEquatable<TestClassIEqutable>
@@ -22,14 +22,14 @@ public class Test_ジェネリックEqualsの速度差
             if (other is null) return false;
             return this.a == other.a;
         }
-        public override bool Equals(object obj) => this.Equals((TestClassIEqutable)obj);
+        public override bool Equals(object? obj) => this.Equals((TestClassIEqutable)obj);
         public override int GetHashCode() => this.a;
     }
     private readonly struct TestStruct
     {
         private readonly int a;
         public TestStruct(int a) => this.a = a;
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             Contract.Assert(obj != null, "obj != null");
             var o = (TestStruct)obj;
@@ -42,7 +42,7 @@ public class Test_ジェネリックEqualsの速度差
         private readonly int a;
         public TestStructIEqutable(int a) => this.a = a;
         public bool Equals(TestStructIEqutable other) => this.a == other.a;
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             Contract.Assert(obj != null, "obj != null");
             return this.Equals((TestStructIEqutable)obj);

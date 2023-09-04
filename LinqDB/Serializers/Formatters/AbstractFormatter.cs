@@ -14,11 +14,22 @@ using static Common;
 /// </summary>
 public class AbstractFormatter{
 #pragma warning restore CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
-    protected static bool GetInterface(Type type,out Type Interface){
-        if(
-            (Interface=type.GetInterface(typeof(ILookup<,>).FullName)) is not null||
-            (Interface=type.GetInterface(typeof(IGrouping<,>).FullName)) is not null
-        ) return true;
+    protected static bool GetInterface(Type Type,out Type Interface){
+        var Interface0=Type.GetInterface(typeof(ILookup<,>).FullName);
+        if(Interface0 is not null){
+            Interface=Interface0;
+            return true;
+        }
+        var Interface1=Type.GetInterface(typeof(IGrouping<,>).FullName);
+        if(Interface1 is not null){
+            Interface=Interface1;
+            return true;
+        }
+        //if(
+        //    (Interface=Type.GetInterface(typeof(ILookup<,>).FullName)) is not null||
+        //    (Interface=Type.GetInterface(typeof(IGrouping<,>).FullName)) is not null
+        //) return true;
+        Interface=default!;
         return false;
     }
 }
@@ -27,6 +38,8 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
     private static object GetFormatter(IJsonFormatterResolver formatterResolver,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         else if(typeof(LambdaExpression).IsAssignableFrom(type)) type=typeof(LambdaExpression);
+        //else if(type.IsDisplay())return new DisplayClassJsonFormatter<T>();
+        if(type.IsDisplay()){}
         var Formatter=formatterResolver.GetFormatterDynamic(type);
         Debug.Assert(Formatter is not null,"Formatterが見つからない");
         var Foramtter_Type=Formatter.GetType();
@@ -82,7 +95,7 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
         var Objects2 = this.Objects2;
         Objects2[0]=reader;
         Objects2[1]=formatterResolver;
-        var value = (T)Deserialize.Invoke(Formatter,Objects2);
+        var value = (T)Deserialize.Invoke(Formatter,Objects2)!;
         reader=(JsonReader)Objects2[0];
         reader.ReadIsEndArrayWithVerify();
         return value;

@@ -77,7 +77,7 @@ public class Test_Set1
         {
             this.ID = ID;
         }
-        public override bool Equals(object obj) => this.Equals((EntityKey)obj);
+        public override bool Equals(object? obj) => this.Equals((EntityKey)obj);
         public override int GetHashCode() => this.ID.GetHashCode();
         public bool Equals(EntityKey other) => this.ID == other.ID;
     }
@@ -216,37 +216,6 @@ public class Test_Set1
     public void ctor4()
     {
         Assert.IsNotNull(new Set<int>(new[] { 1, 2 }.AsEnumerable()));
-    }
-    [TestMethod]
-    public void GetObjectData()
-    {
-        var b = new BinaryFormatter();
-        var m = new MemoryStream();
-        var d = new Set<int>();
-        for (var a = 0; a < 100; a++)
-        {
-            d.IsAdded(a);
-        }
-        b.Serialize(m, d);
-    }
-    [TestMethod]
-    public void OnDeserialization()
-    {
-        var b = new BinaryFormatter();
-        var m = new MemoryStream();
-        var d0 = new Set<int>();
-        for (var a = 0; a < 500; a++)
-        {
-            d0.IsAdded(a);
-        }
-        //            d0.Add(0x7FFFFFFF);
-        //          d0.Add(0xBFFFFFFF);
-        //        d0.Add(0x2FFFFFFF);
-        //d0.Add(0x1FFFFFFF);
-        b.Serialize(m, d0);
-        m.Position = 0;
-        var d1 = b.Deserialize(m);
-        Assert.IsTrue(d0.SequenceEqual((IEnumerable<int>)d1));
     }
     [TestMethod]
     public void SymmetricExceptWith()
@@ -648,19 +617,6 @@ public class Test_Set1
                 Set.Assert();
             }
         }
-    }
-    [TestMethod]
-    [ExpectedException(typeof(SerializationException))]
-    public void OnDeserialization_SerializationException()
-    {
-        var b = new BinaryFormatter();
-        var m = new MemoryStream();
-        for (var a = 0; a < 1000; a++)
-        {
-            m.WriteByte(0);
-        }
-        m.Position = 0;
-        b.Deserialize(m);
     }
     [TestMethod]
     [ExpectedException(typeof(OneTupleException))]

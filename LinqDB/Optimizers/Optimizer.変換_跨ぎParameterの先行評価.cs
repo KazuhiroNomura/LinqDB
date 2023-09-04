@@ -450,6 +450,7 @@ partial class Optimizer{
             ListVariables.Add(Block0_Variables);
             var LinkedList = new LinkedList<Expression>(Block0.Expressions);
             this.外だし(LinkedList);
+            Debug.Assert(LinkedList.Last!=null,"LinkedList.Last != null");
             if(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type) return LinkedList.Last.Value;
             return Expression.Block(Block0.Type,Block0_Variables,LinkedList);
         }
@@ -491,6 +492,7 @@ partial class Optimizer{
             var 変換_先行評価式 = this._変換_先行評価式;
             var 回数 = 0;
             do {
+                Debug.Assert(LinkedListNode!=null);
                 var LinkedListNode_Value = LinkedListNode.Value;
                 if(LinkedListNode_Value.NodeType==ExpressionType.Assign) {
                     LinkedListNode_Value=((BinaryExpression)LinkedListNode_Value).Right;

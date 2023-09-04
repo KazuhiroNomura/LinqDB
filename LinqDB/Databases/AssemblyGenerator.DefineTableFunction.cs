@@ -10,7 +10,7 @@ using LinqDB.Databases.Dom;
 namespace LinqDB.Databases;
 public partial class AssemblyGenerator {
     private void DefineTableFunction(ITableFunction Object,ModuleBuilder ModuleBuilder,TypeBuilder Container_TypeBuilder,TypeBuilder Schema_TypeBuilder,ILGenerator Schema_ctor_I,LocalBuilder Schema_ToString_sb,ILGenerator Schema_ToString_I) {
-        const string Disp_Name = "Evaluate4",Impl_Name = "Evaluate5";
+        const string Disp_Name = "DispTableFunction",Impl_Name = "ImplTableFunction";
         //1 V,TF
         var Entity2 = typeof(Entity);
         //2 T,V,TF,SF

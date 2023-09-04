@@ -3580,7 +3580,7 @@ public sealed partial class Optimizer{
             SemanticTableReference            y => this.TableReference(y),
             OpenXmlTableReference             y => this.TableReference(y),
             OpenJsonTableReference            y => this.TableReference(y),
-            OpenRowsetTableReference          y => this.TableReference(y),
+            //OpenRowsetTableReference          y => this.TableReference(y),
             InternalOpenRowset                y => this.TableReference(y),
             OpenQueryTableReference           y => this.TableReference(y),
             AdHocTableReference               y => this.TableReference(y),
@@ -3603,6 +3603,7 @@ public sealed partial class Optimizer{
         /// <param name="x"></param>
         /// <returns></returns>
         protected virtual TableReferenceWithAliasAndColumns TableReference(TableReferenceWithAliasAndColumns x) => x switch{
+            OpenRowsetTableReference           y => this.TableReference(y),
             SchemaObjectFunctionTableReference y => this.TableReference(y),
             QueryDerivedTable                  y => this.TableReference(y),
             InlineDerivedTable                 y => this.TableReference(y),

@@ -11,7 +11,7 @@ using LinqDB.Databases.Dom;
 namespace LinqDB.Databases;
 public partial class AssemblyGenerator {
     private void DefineView(IView Object,ModuleBuilder ModuleBuilder,TypeBuilder Container_TypeBuilder,TypeBuilder Schema_TypeBuilder,ILGenerator Schema_ctor_I,LocalBuilder Schema_ToString_sb,ILGenerator Schema_ToString_I) {
-        const string Disp_Name = "Evaluate0",Impl_Name = "Evaluate1";
+        const string Disp_Name = "DispView",Impl_Name = "ImplView";
         //1 V,TF
         var Entity2 = typeof(Entity);
         //2 T,V,TF,SF

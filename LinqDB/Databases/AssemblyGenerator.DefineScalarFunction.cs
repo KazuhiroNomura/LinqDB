@@ -10,7 +10,7 @@ using LinqDB.Databases.Dom;
 namespace LinqDB.Databases;
 public partial class AssemblyGenerator {
     private void DefineScalarFunction(IScalarFunction Object,ModuleBuilder ModuleBuilder,TypeBuilder Container_TypeBuilder,TypeBuilder Schema_TypeBuilder,ILGenerator Schema_ctor_I,LocalBuilder Schema_ToString_sb,ILGenerator Schema_ToString_I) {
-        const string Disp_Name = "Evaluate2",Impl_Name = "Evaluate3";
+        const string Disp_Name = "DispScalarFunction",Impl_Name = "ImplScalarFunction";
         //1 V,TF
         //2 T,V,TF,SF
         var EscapedName           =Object.EscapedName;

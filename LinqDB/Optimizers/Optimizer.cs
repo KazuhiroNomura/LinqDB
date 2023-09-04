@@ -384,6 +384,7 @@ public sealed partial class Optimizer:IDisposable{
         /// </summary>
         /// <param name="スコープParameters"></param>
         public ExpressionEqualityComparer(IList<ParameterExpression> スコープParameters) => this.スコープParameters=スコープParameters;
+        public ExpressionEqualityComparer() => this.スコープParameters=new List<ParameterExpression>();
 
         /// <summary>
         /// 式木のハッシュコード。NodeTypeとTypeを使う。
@@ -1293,25 +1294,34 @@ public sealed partial class Optimizer:IDisposable{
         if(Member.Expression is MemberExpression Member1){
             Tuple=Get_ValueTuple(Member1,Tuple);
         }
-        return Field.GetValue(Tuple);
+        var Value=Field.GetValue(Tuple);
+        Debug.Assert(Value!=null);
+        return Value;
     }
     private static MemberExpression ValueTuple_Item(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression,object Value) {
         if(Item番号==8){
             var Rest=TupleType.GetField("Rest");
+            Debug.Assert(Rest!=null);
             TupleType=Rest.FieldType;
-            TupleValue=Rest.GetValue(TupleValue);
+            var Value0=Rest.GetValue(TupleValue);
+            Debug.Assert(Value0!=null);
+            TupleValue=Value0;
             TupleExpression=Expression.Field(TupleExpression,Rest);
             Item番号=1;
         }
         var TupleField=TupleType.GetField($"Item{Item番号++}");
+        Debug.Assert(TupleField!=null);
         TupleField.SetValue(TupleValue,Value);
         return Expression.Field(TupleExpression,TupleField);
     }
     private static MemberExpression ValueTuple_Item(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression) {
         if(Item番号==8){
             var Rest=TupleType.GetField("Rest");
+            Debug.Assert(Rest!=null);
             TupleType=Rest.FieldType;
-            TupleValue=Rest.GetValue(TupleValue);
+            var Value0=Rest.GetValue(TupleValue);
+            Debug.Assert(Value0!=null);
+            TupleValue=Value0;
             TupleExpression=Expression.Field(TupleExpression,Rest);
             Item番号=1;
         }
@@ -1346,7 +1356,7 @@ public sealed partial class Optimizer:IDisposable{
                 var Lambda = a.Key;
                 var Lambda_Parameters = Lambda.Parameters;
                 var Lambda_Parameters_Count = Lambda_Parameters.Count;
-                var インスタンスメソッドか = 判定InstanceMethodか.実行(Lambda.Body);
+                var インスタンスメソッドか = 判定InstanceMethodか.実行(Lambda.Body)|true;
                 Type[] DispTypes, ImplTypes;
                 if(インスタンスメソッドか) {
                     DispTypes=new Type[Lambda_Parameters_Count];
@@ -1653,7 +1663,7 @@ public sealed partial class Optimizer:IDisposable{
             var Lambda=a.Key;
             var LambdaParameters=Lambda.Parameters;
             var LambdaParametersCount=LambdaParameters.Count;
-            var インスタンスメソッドか=判定InstanceMethodか.実行(Lambda.Body);
+            var インスタンスメソッドか=判定InstanceMethodか.実行(Lambda.Body)|true;
             Type[] DispTypes,ImplTypes;
             if(インスタンスメソッドか){
                 DispTypes=new Type[LambdaParametersCount];

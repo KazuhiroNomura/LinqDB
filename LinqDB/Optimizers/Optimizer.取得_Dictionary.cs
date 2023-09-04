@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Reflection.Metadata;
-using System.Diagnostics;
-
 namespace LinqDB.Optimizers;
 partial class Optimizer {
     /// <summary>

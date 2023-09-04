@@ -63,6 +63,7 @@ partial class Optimizer{
         private void PrivateCall(MethodInfo Method){
             var I = this.I;
             Debug.Assert(I is not null);
+            Debug.Assert(Method.ReflectedType is not null);
             if(Method.ReflectedType.IsValueType) {
                 if(Method.IsVirtual) {
                     I.Constrained(Method.ReflectedType);
@@ -1617,9 +1618,10 @@ partial class Optimizer{
             if(Index.Indexer is not null) {
                 this.PrivateCall(Index.Indexer.GetMethod!);
             }else if(Index.Arguments.Count==1){
-                Debug.Assert(Index_Object.Type.GetMethod("Get") is not null);
+                Debug.Assert(Index_Object!=null&&Index_Object.Type.GetMethod("Get")!=null);
                 this.I!.Ldelem(Index.Type);
             } else{
+                Debug.Assert(Index_Object!=null&&Index_Object.Type.GetMethod("Get")!=null);
                 this.I!.Call(Index_Object.Type.GetMethod("Get")!);
             }
         }
@@ -1734,6 +1736,7 @@ partial class Optimizer{
                         this.TraverseExpressions(Index.Arguments);
                         //foreach(var Argument in Index.Arguments)
                           //  this.Traverse(Argument);
+                        Debug.Assert(Index_Object!=null);
                         var Index_Object_Type = Index_Object.Type;
                         Debug.Assert(Index_Object_Type.IsArray);
                         Debug.Assert(Index.Indexer is null);
@@ -1815,6 +1818,7 @@ partial class Optimizer{
                         //foreach(var Argument in Index.Arguments) {
                         //    this.Traverse(Argument);
                         //}
+                        Debug.Assert(Index_Object!=null);
                         var Index_Object_Type = Index_Object.Type;
                         Debug.Assert(Index_Object_Type.IsArray);
                         Debug.Assert(Index.Indexer is null);

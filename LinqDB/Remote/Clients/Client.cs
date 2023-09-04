@@ -664,27 +664,32 @@ public class Client:IDisposable {
         var Lambda = (LambdaExpression)Expression;
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
-            case XmlType.Utf8Json:
-                var JsonStream = new FileStream("送信Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-                JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
-                JsonStream.Close();
-                JsonSerializer.Serialize(this.MemoryStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+            case XmlType.Utf8Json:{
+                //var JsonStream = new FileStream("送信Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
+                //JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+                //JsonStream.Close();
+                var SerializerConfiguration=this.SerializerConfiguration;
+                SerializerConfiguration.ClearJson();
+                JsonSerializer.Serialize(this.MemoryStream,Lambda,SerializerConfiguration.JsonFormatterResolver);
                 break;
+            }
             case XmlType.MessagePack:{
-                {
-                    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Create,FileAccess.Write,
-                        FileShare.ReadWrite);
-                    MessagePackSerializer.Serialize(MessagePackStream,Lambda,
-                        this.SerializerConfiguration.MessagePackSerializerOptions);
-                    MessagePackStream.Close();
-                }
+                //{
+                //    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Create,FileAccess.Write,
+                //        FileShare.ReadWrite);
+                //    MessagePackSerializer.Serialize(MessagePackStream,Lambda,
+                //        this.SerializerConfiguration.MessagePackSerializerOptions);
+                //    MessagePackStream.Close();
+                //}
                 //{
                 //    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Open,FileAccess.Read,
                 //        FileShare.Read);
                 //    var r=MessagePackSerializer.Deserialize<LambdaExpression>(MessagePackStream,this.SerializerConfiguration.MessagePackSerializerOptions);
                 //    MessagePackStream.Close();
                 //}
-                MessagePackSerializer.Serialize(this.MemoryStream,Lambda,this.SerializerConfiguration.MessagePackSerializerOptions);
+                var SerializerConfiguration=this.SerializerConfiguration;
+                SerializerConfiguration.ClearMessagePack();
+                MessagePackSerializer.Serialize(this.MemoryStream,Lambda,SerializerConfiguration.MessagePackSerializerOptions);
                 break;
             }
             default:

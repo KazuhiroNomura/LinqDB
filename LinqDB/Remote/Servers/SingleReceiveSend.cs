@@ -61,10 +61,12 @@ internal class SingleReceiveSend:IDisposable{
     /// <param name="MultiReceiveSend"></param>
     /// <param name="Index"></param>
     public SingleReceiveSend(MultiReceiveSend MultiReceiveSend,int Index){
+        Debug.WriteLine("11");
         this.MultiReceiveSend=MultiReceiveSend;
         this.Index=Index;
         this.MemoryStream=new MemoryStream(this.Buffer);
         this.SerializerConfiguration=new();
+        Debug.WriteLine("12");
 
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
@@ -771,10 +773,6 @@ internal class SingleReceiveSend:IDisposable{
             Stream.Flush();
             Trace_WriteLine(2,"Server.Function送信.BufferにLengthとSHA256を設定してStreamにWrite");
         }
-    }
-    static string format_json(string json){
-        dynamic parsedJson=Newtonsoft.Json.JsonConvert.DeserializeObject(json)!;
-        return Newtonsoft.Json.JsonConvert.SerializeObject(parsedJson,Newtonsoft.Json.Formatting.Indented);
     }
     private void Function送信終了(IAsyncResult IAsyncResult) {
         Trace_WriteLine(0,"Server.Function送信終了");

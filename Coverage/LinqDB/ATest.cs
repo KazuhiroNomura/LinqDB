@@ -412,6 +412,7 @@ public abstract class ATest{
     protected Server<string> Server;
     [TestInitialize]
     public virtual void MyTestInitialize(){
+        Debug.WriteLine("3");
         const int ReceiveTimeout = 1000;
         var Server = this.Server=new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
         Server.Open();

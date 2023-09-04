@@ -1,5 +1,6 @@
 ﻿//using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 // ReSharper disable AssignNullToNotNullAttribute
@@ -135,7 +136,11 @@ internal static class Reflection {
     //テキストとイメージ関数	テキスト入力値、イメージ入力値、または列に対して操作を実行し、値についての情報を返します。
     //バイナリー
 
-    private static MethodInfo m(string name)=>typeof(Methods).GetMethod(name);
+    private static MethodInfo m(string name){
+        var Method=typeof(Methods).GetMethod(name);
+        Debug.Assert(Method!=null);
+        return Method;
+    }
     public static readonly MethodInfo nodes           = m(nameof(Methods.nodes));
     public static readonly MethodInfo value_Boolean   = m(nameof(Methods.value_Boolean));
     public static readonly MethodInfo value_SByte     = m(nameof(Methods.value_SByte));

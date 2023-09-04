@@ -10,9 +10,6 @@ using System.Runtime.Serialization;
 using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
-using MessagePack;
-using MessagePack.Formatters;
-using Utf8Json;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ArrangeStaticMemberQualifier
 namespace LinqDB.Sets;

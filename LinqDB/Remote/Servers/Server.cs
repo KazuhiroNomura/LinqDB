@@ -254,11 +254,14 @@ public class Server:IDisposable{
     /// <param name="ReceiveSendスレッド数"></param>
     /// <param name="ListenPorts"></param>
     private protected Server(object? ServerObject,object プロキシ,int ReceiveSendスレッド数,params int[] ListenPorts) {
+        Debug.WriteLine("4");
         this.ServerObject=ServerObject;
         this.Proxy=プロキシ;
         this.RequestResponseSingleReceiveSends=new BlockingCollection<SingleReceiveSend>(RequestResponseCount);
         var SingleAcceptReceiveSends = this.SingleAcceptReceiveSends=new SingleAcceptReceiveSend[ListenPorts.Length];
+        Debug.WriteLine("5");
         for(var a=0;a<ListenPorts.Length;a++)SingleAcceptReceiveSends[a]=new SingleAcceptReceiveSend(this,ReceiveSendスレッド数,ListenPorts[a]);
+        Debug.WriteLine("6");
         //var Threadで実行するDelegate_Target = new Threadで実行するMethodデータ(ServerObject);
         //BlockingCollection.Dispose()したあとCancellationTokenSource.Cancel()したらAggregateException
         //this.RequestResponseSingleReceiveSends=Server.RequestResponseSingleReceiveSends;

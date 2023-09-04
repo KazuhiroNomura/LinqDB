@@ -14,9 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoverageCS.LinqDB.Optimizers;
 
-[TestClass]
-public class Test_A作成IL: ATest
-{
+[TestClass]public class Test_A作成IL: ATest{
     private interface I
     {
     }
@@ -258,5 +256,10 @@ public class Test_A作成IL: ATest
                 )
             )
         );
+    }
+}
+[TestClass]public class TestTestTest: ATest{
+    [TestMethod]
+    public void CovertNullableMethod(){
     }
 }

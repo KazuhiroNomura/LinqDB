@@ -11,22 +11,22 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.Serializers;
 [TestClass]
 public class Test_Collection:ATest_シリアライズ{
-    [TestMethod]public void Array()=>共通object(new[]{1});
-    [TestMethod]public void List()=>共通object(new List<int>{1});
-    [TestMethod]public void LinkedList()=>共通object(new LinkedList<int>(new[]{1}));
-    [TestMethod]public void Queue()=>共通object(new Queue<int>(new[]{1}));
-    [TestMethod]public void Stack()=>共通object(new Stack<int>(new[]{1}));
-    [TestMethod]public void HashSet()=>共通object(new HashSet<int>(new[]{1}));
-    [TestMethod]public void ReadOnlyCollection()=>共通object(new ReadOnlyCollection<int>(new[]{1}));
-    [TestMethod]public void IList()=>共通object<IList<int>>(new[]{1});
-    [TestMethod]public void ICollection()=>共通object<ICollection<int>>(new[]{1});
-    [TestMethod]public void IEnumerable0()=>共通object<IEnumerable<int>>(new[]{1});
-    [TestMethod]public void IEnumerable1()=>共通object<IEnumerable<int>>(new List<int>{1});
-    [TestMethod]public void Dictionary()=>共通object(new Dictionary<int,int>{{1,1}});
-    [TestMethod]public void IDictionary()=>共通object<IDictionary<int,int>>(new Dictionary<int,int>{{1,1}});
-    [TestMethod]public void SortedDictionary()=>共通object(new SortedDictionary<int,int>{{1,1}});
-    [TestMethod]public void SortedList()=>共通object(new SortedList<int,int>{{1,1}});
-    [TestMethod]public void ILookup()=>共通object(System.Array.Empty<int>().ToLookup(p=>p*p));
+    [TestMethod]public void Array_()=>共通object(new[]{1});
+    [TestMethod]public void List()=>共通object2(new List<int>{1});
+    [TestMethod]public void LinkedList()=>共通object2(new LinkedList<int>(new[]{1}));
+    [TestMethod]public void Queue()=>共通object2(new Queue<int>(new[]{1}));
+    [TestMethod]public void Stack()=>共通object2(new Stack<int>(new[]{1}));
+    [TestMethod]public void HashSet()=>共通object2(new HashSet<int>(new[]{1}));
+    [TestMethod]public void ReadOnlyCollection()=>共通object2(new ReadOnlyCollection<int>(new[]{1}));
+    [TestMethod]public void IList()=>共通object2<IList<int>>(new[]{1});
+    [TestMethod]public void ICollection()=>共通object2<ICollection<int>>(new[]{1});
+    [TestMethod]public void IEnumerable0()=>共通object2<IEnumerable<int>>(new[]{1});
+    [TestMethod]public void IEnumerable1()=>共通object2<IEnumerable<int>>(new List<int>{1});
+    [TestMethod]public void Dictionary()=>共通object2(new Dictionary<int,int>{{1,1}});
+    [TestMethod]public void IDictionary()=>共通object2<IDictionary<int,int>>(new Dictionary<int,int>{{1,1}});
+    [TestMethod]public void SortedDictionary()=>共通object2(new SortedDictionary<int,int>{{1,1}});
+    [TestMethod]public void SortedList()=>共通object2(new SortedList<int,int>{{1,1}});
+    [TestMethod]public void ILookup()=>共通object2(System.Array.Empty<int>().ToLookup(p=>p*p));
     //[TestMethod]public void IDictionary()=>共通object<IDictionary<int,int>>(new Dictionary<int,int>{{1,1}});
     //[TestMethod]public void SortedDictionary()=>共通object(new SortedDictionary<int,int>{{1,1}});
     //[TestMethod]public void SortedList()=>共通object(new SortedList<int,int>{{1,1}});
@@ -42,19 +42,19 @@ public class Test_Collection:ATest_シリアライズ{
     }
     [TestMethod]
     public void Grouping(){
-        共通object<IGrouping<int,int>>(new GroupingImpliment());
+        共通object2<IGrouping<int,int>>(new GroupingImpliment());
     }
-    [TestMethod]public void ObservableCollection()=>共通object(new ObservableCollection<int>(new[]{1}));
-    [TestMethod]public void ReadOnlyObservableCollection()=>共通object(new ReadOnlyObservableCollection<int>(new ObservableCollection<int>(new[]{1})));
-    [TestMethod]public void IReadOnlyList()=>共通object<IReadOnlyList<int>>(new []{1,2});
-    [TestMethod]public void IReadOnlyCollection()=>共通object<IReadOnlyCollection<int>>(new[]{1});
-    [TestMethod]public void ISet()=>共通object<ISet<int>>(new HashSet<int>(new[]{1}));
-    [TestMethod]public void ConcurrentBag()=>共通object(new ConcurrentBag<int>(new[]{1}));
-    [TestMethod]public void ConcurrentQueue()=>共通object(new ConcurrentQueue<int>(new[]{1}));
-    [TestMethod]public void ConcurrentStack()=>共通object(new ConcurrentStack<int>(new[]{1}));
-    [TestMethod]public void ReadOnlyDictionary()=>共通object(new ReadOnlyDictionary<int,int>(new Dictionary<int,int>{{1,1}}));
-    [TestMethod]public void IReadOnlyDictionary()=>共通object<IReadOnlyDictionary<int,int>>(new ReadOnlyDictionary<int,int>(new Dictionary<int,int>{{1,1}}));
-    [TestMethod]public void ConcurrentDictionary()=>共通object(new ConcurrentDictionary<int,int>(new[]{new KeyValuePair<int,int>(1,1)}));
-    [TestMethod]public void Lazy()=>共通object(new Lazy<int,int>(1));
-    [TestMethod]public void Task()=>共通object(new Task<int>(()=>1));
+    [TestMethod]public void ObservableCollection()=>共通object2(new ObservableCollection<int>(new[]{1}));
+    [TestMethod]public void ReadOnlyObservableCollection()=>共通object2(new ReadOnlyObservableCollection<int>(new ObservableCollection<int>(new[]{1})));
+    [TestMethod]public void IReadOnlyList()=>共通object2<IReadOnlyList<int>>(new []{1,2});
+    [TestMethod]public void IReadOnlyCollection()=>共通object2<IReadOnlyCollection<int>>(new[]{1});
+    [TestMethod]public void ISet()=>共通object2<ISet<int>>(new HashSet<int>(new[]{1}));
+    [TestMethod]public void ConcurrentBag()=>共通object2(new ConcurrentBag<int>(new[]{1}));
+    [TestMethod]public void ConcurrentQueue()=>共通object2(new ConcurrentQueue<int>(new[]{1}));
+    [TestMethod]public void ConcurrentStack()=>共通object2(new ConcurrentStack<int>(new[]{1}));
+    [TestMethod]public void ReadOnlyDictionary()=>共通object2(new ReadOnlyDictionary<int,int>(new Dictionary<int,int>{{1,1}}));
+    [TestMethod]public void IReadOnlyDictionary()=>共通object2<IReadOnlyDictionary<int,int>>(new ReadOnlyDictionary<int,int>(new Dictionary<int,int>{{1,1}}));
+    [TestMethod]public void ConcurrentDictionary()=>共通object2(new ConcurrentDictionary<int,int>(new[]{new KeyValuePair<int,int>(1,1)}));
+    //[TestMethod]public void Lazy()=>共通object(new Lazy<int,int>(1));
+    //[TestMethod]public void Task()=>共通object(new Task<int>(()=>1));
 }

@@ -5,11 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
-using LinqDB.Databases;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
-using Utf8Json.Formatters;
 using AssemblyGenerator=Lokad.ILPack.AssemblyGenerator;
 namespace LinqDB.Serializers.Formatters;
 //public class Common2{
@@ -42,19 +40,19 @@ public class CommonJsonFormatter{
     protected static T Deserialize<T>(ref JsonReader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
     protected static readonly MethodInfo MethodDeserialize=typeof(CommonJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 }
-public class CommonJsonFormatter<T>:CommonJsonFormatter,IJsonFormatter<T>{
+public class AnonymousJsonFormatter<T>:CommonJsonFormatter,IJsonFormatter<T>{
     private delegate void delegate_Serialize(ref JsonWriter writer,T value,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public CommonJsonFormatter() {
+    public AnonymousJsonFormatter() {
         var Types1 = new Type[1];
-        var Types2 = new Type[2];
-        var Types3 = new Type[3];
-        Types3[0]=typeof(JsonWriter).MakeByRefType();
-        Types2[0]=typeof(JsonReader).MakeByRefType();
-        Types3[1]=typeof(T);
-        Types2[1]=Types3[2]=typeof(IJsonFormatterResolver);
+        var DeserializeTypes = new Type[2];
+        var SerializeTypes = new Type[3];
+        SerializeTypes[0]=typeof(JsonWriter).MakeByRefType();
+        DeserializeTypes[0]=typeof(JsonReader).MakeByRefType();
+        SerializeTypes[1]=typeof(T);
+        DeserializeTypes[1]=SerializeTypes[2]=typeof(IJsonFormatterResolver);
         var ctor=typeof(T).GetConstructors()[0];
         var Parameters=ctor.GetParameters();
         var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
@@ -62,32 +60,35 @@ public class CommonJsonFormatter<T>:CommonJsonFormatter,IJsonFormatter<T>{
         Debug.Assert(Parameters.Length==Properties_Length);
         Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
         {
-            var D0=new DynamicMethod("Serialize",typeof(void),Types3,typeof(CommonJsonFormatter),true){InitLocals=false};
-            var D1=new DynamicMethod("Deserialize ",typeof(T),Types2,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var D0=new DynamicMethod("Serialize",typeof(void),SerializeTypes,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var D1=new DynamicMethod("Deserialize ",typeof(T),DeserializeTypes,typeof(CommonJsonFormatter),true){InitLocals=false};
             var I0=D0.GetILGenerator();
             var I1=D1.GetILGenerator();
+            D0.InitLocals=false;
+            D1.InitLocals=false;
             共通(I0,I1);
             this.DelegateSerialize=(delegate_Serialize)D0.CreateDelegate(typeof(delegate_Serialize));
             this.DelegateDeserialize=(delegate_Deserialize)D1.CreateDelegate(typeof(delegate_Deserialize));
         }
-        {
-            var AssemblyName = new AssemblyName { Name="Name" };
-            var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
-            var ModuleBuilder = DynamicAssembly.DefineDynamicModule("動的");
-            var Disp_TypeBuilder = ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
-            var Serialize = Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),Types3);
-            Serialize.DefineParameter(1,ParameterAttributes.None,"writer");
-            Serialize.DefineParameter(2,ParameterAttributes.None,"value");
-            Serialize.DefineParameter(3,ParameterAttributes.None,"resolver");
-            var Deserialize = Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),Types2);
-            Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
-            Deserialize.DefineParameter(2,ParameterAttributes.None,"resolver");
-            Deserialize.InitLocals=false;
-            共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
-            Disp_TypeBuilder.CreateType();
-            var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\JsonSerializer.dll");
-        }
+        //{
+        //    var AssemblyName = new AssemblyName { Name="Name" };
+        //    var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        //    var ModuleBuilder = DynamicAssembly.DefineDynamicModule("動的");
+        //    var Disp_TypeBuilder = ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
+        //    var Serialize = Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),SerializeTypes);
+        //    Serialize.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Serialize.DefineParameter(2,ParameterAttributes.None,"value");
+        //    Serialize.DefineParameter(3,ParameterAttributes.None,"resolver");
+        //    Serialize.InitLocals=false;
+        //    var Deserialize = Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),DeserializeTypes);
+        //    Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Deserialize.DefineParameter(2,ParameterAttributes.None,"resolver");
+        //    Deserialize.InitLocals=false;
+        //    共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
+        //    Disp_TypeBuilder.CreateType();
+        //    var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
+        //    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\JsonSerializer.dll");
+        //}
         void 共通(ILGenerator I0,ILGenerator I1){
             var index=0;
             while(true){
@@ -183,12 +184,12 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
     private readonly delegate_Deserialize DelegateDeserialize;
     public AnonymousMessagePackFormatter() {
         var Types1 = new Type[1];
-        var Types2 = new Type[2];
-        var Types3 = new Type[3];
-        Types3[0]=typeof(MessagePackWriter).MakeByRefType();
-        Types2[0]=typeof(MessagePackReader).MakeByRefType();
-        Types3[1]=typeof(T);
-        Types2[1]=Types3[2]=typeof(MessagePackSerializerOptions);
+        var DeserializeTypes = new Type[2];
+        var SerializeTypes = new Type[3];
+        SerializeTypes[0]=typeof(MessagePackWriter).MakeByRefType();
+        DeserializeTypes[0]=typeof(MessagePackReader).MakeByRefType();
+        SerializeTypes[1]=typeof(T);
+        DeserializeTypes[1]=SerializeTypes[2]=typeof(MessagePackSerializerOptions);
         var ctor=typeof(T).GetConstructors()[0];
         var Parameters=ctor.GetParameters();
         var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
@@ -196,33 +197,36 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
         Debug.Assert(Parameters.Length==Properties_Length);
         Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
         {
-            var Serialize=new DynamicMethod("Serialize",typeof(void),Types3,typeof(CommonJsonFormatter),true){InitLocals=false};
-            var Deserialize=new DynamicMethod("Deserialize",typeof(T),Types2,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var D0=new DynamicMethod("Serialize",typeof(void),SerializeTypes,typeof(CommonJsonFormatter),true){InitLocals=false};
+            var D1=new DynamicMethod("Deserialize",typeof(T),DeserializeTypes,typeof(CommonJsonFormatter),true){InitLocals=false};
             //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
-            var I0=Serialize.GetILGenerator();
-            var I1=Deserialize.GetILGenerator();
+            var I0=D0.GetILGenerator();
+            var I1=D1.GetILGenerator();
+            D0.InitLocals=false;
+            D1.InitLocals=false;
             共通(I0,I1);
-            this.DelegateSerialize=(delegate_Serialize)Serialize.CreateDelegate(typeof(delegate_Serialize));
-            this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
+            this.DelegateSerialize=(delegate_Serialize)D0.CreateDelegate(typeof(delegate_Serialize));
+            this.DelegateDeserialize=(delegate_Deserialize)D1.CreateDelegate(typeof(delegate_Deserialize));
         }
-        {
-            var AssemblyName = new AssemblyName { Name="Name" };
-            var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
-            var ModuleBuilder = DynamicAssembly.DefineDynamicModule("動的");
-            var Disp_TypeBuilder = ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
-            var Serialize = Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),Types3);
-            Serialize.DefineParameter(1,ParameterAttributes.None,"writer");
-            Serialize.DefineParameter(2,ParameterAttributes.None,"value");
-            Serialize.DefineParameter(3,ParameterAttributes.None,"options");
-            var Deserialize = Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),Types2);
-            Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
-            Deserialize.DefineParameter(2,ParameterAttributes.None,"options");
-            Deserialize.InitLocals=false;
-            共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
-            Disp_TypeBuilder.CreateType();
-            var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\MessagePackSerializer.dll");
-        }
+        //{
+        //    var AssemblyName = new AssemblyName { Name="Name" };
+        //    var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        //    var ModuleBuilder = DynamicAssembly.DefineDynamicModule("動的");
+        //    var Disp_TypeBuilder = ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
+        //    var Serialize = Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),SerializeTypes);
+        //    Serialize.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Serialize.DefineParameter(2,ParameterAttributes.None,"value");
+        //    Serialize.DefineParameter(3,ParameterAttributes.None,"options");
+        //    Serialize.InitLocals=false;
+        //    var Deserialize = Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),DeserializeTypes);
+        //    Deserialize.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Deserialize.DefineParameter(2,ParameterAttributes.None,"options");
+        //    Deserialize.InitLocals=false;
+        //    共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
+        //    Disp_TypeBuilder.CreateType();
+        //    var Folder = Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
+        //    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\MessagePackSerializer.dll");
+        //}
         void 共通(ILGenerator I0,ILGenerator I1){
             I0.Emit(OpCodes.Ldarg_0);//writer
             I0.Emit(OpCodes.Ldc_I4,Properties_Length);
@@ -236,7 +240,7 @@ public class AnonymousMessagePackFormatter<T>:AnonymousMessagePackFormatter,IMes
                 Types1[0]=Property.PropertyType;
                 I0.Emit(OpCodes.Ldarg_0);//writer
                 I0.Emit(OpCodes.Ldarg_1);//value
-                Debug.Assert(!Property.GetMethod.IsVirtual);
+                Debug.Assert(Property.GetMethod!=null&&!Property.GetMethod.IsVirtual);
                 I0.Emit(OpCodes.Call,Property.GetMethod);//value.property
                 I0.Emit(OpCodes.Ldarg_2);//options
                 I0.Emit(OpCodes.Call,MethodSerialize.MakeGenericMethod(Types1));

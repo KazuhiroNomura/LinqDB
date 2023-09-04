@@ -1,15 +1,11 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using Lokad.ILPack;
 using MessagePack;
 using MessagePack.Formatters;
-using Newtonsoft.Json.Linq;
-
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 //public class DisplayClassJsonFormatter{

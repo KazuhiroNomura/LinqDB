@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Sets;
+
 namespace LinqDB.Reflection;
 
 internal static class Common{
     public static MethodInfo M<T>(Expression<Func<T>> e){
+        var Method=((MethodCallExpression)e.Body).Method;
+        return Method.IsGenericMethod ? Method.GetGenericMethodDefinition() : Method;
+    }
+    public static MethodInfo M(Expression<Action> e){
         var Method=((MethodCallExpression)e.Body).Method;
         return Method.IsGenericMethod ? Method.GetGenericMethodDefinition() : Method;
     }

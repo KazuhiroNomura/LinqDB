@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -23,10 +24,12 @@ internal class MultiReceiveSend {
         this.Server=Server;
         var SingleReceiveSends=this.SingleReceiveSends=new SingleReceiveSend[ReceiveSendスレッド数];
         var 未使用のSingleReceiveSends=this.未使用のSingleReceiveSends = new BlockingCollection<int>(ReceiveSendスレッド数);
+        Debug.WriteLine("9");
         for(var a = 0;a<ReceiveSendスレッド数;a++) {
             SingleReceiveSends[a]=new SingleReceiveSend(this,a);
             未使用のSingleReceiveSends.Add(a);
         }
+        Debug.WriteLine("10");
     }
 
     //internal Logic Logic=>this.Server.Logic;

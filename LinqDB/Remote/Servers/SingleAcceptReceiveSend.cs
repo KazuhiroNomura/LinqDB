@@ -47,7 +47,9 @@ internal class SingleAcceptReceiveSend:IDisposable {
     public SingleAcceptReceiveSend(Server Server,int ReceiveSendスレッド数,int ListenPort){
         this.Server=Server;
         this.IPEndPoint=new IPEndPoint(System.Net.IPAddress.Any,ListenPort);
+        Debug.WriteLine("7");
         this.MultiReceiveSend=new MultiReceiveSend(Server,ReceiveSendスレッド数);
+        Debug.WriteLine("8");
         this.AcceptEventArgs.Completed+=this.AcceptCompleted;
     }
     private CancellationToken CancellationToken;

@@ -39,7 +39,7 @@ public class Test_Set2 {
         }
 
         public bool Equals(Value other) => this.メンバー.Equals(other.メンバー);
-        public override bool Equals(object obj) => obj is Value other&&this.Equals(other);
+        public override bool Equals(object? obj) => obj is Value other&&this.Equals(other);
         protected override void ToStringBuilder(StringBuilder sb) => sb.Append(this.メンバー.ToString());
     }
     [Serializable]

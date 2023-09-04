@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Diagnostics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.SqlServer.Dac.Model;
 using System.Reflection;
 
 namespace LinqDB.Optimizers;

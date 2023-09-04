@@ -2139,7 +2139,7 @@ public sealed class 評価検証:IEquatable<評価検証>{
         return other!=null&&this.参照評価回数.評価回数==other.参照評価回数.評価回数;
     }
 
-    public override bool Equals(object obj)=>this.Equals((評価検証)obj);
+    public override bool Equals(object? obj)=>this.Equals((評価検証)obj);
     [SuppressMessage("ReSharper","NonReadonlyMemberInGetHashCode")]
     public override int GetHashCode()=>this.参照評価回数.評価回数;
 }

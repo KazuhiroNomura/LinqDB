@@ -1,4 +1,5 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
+using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
@@ -12,14 +13,14 @@ partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.LabelTarget>{
             return;
         }
         writer.WriteBeginArray();
-        if(this.Dictionary_LabelTarget_int.TryGetValue(value,out var 番号)){
-            writer.WriteInt32(番号);
+        if(this.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+            writer.WriteInt32(index);
         } else{
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
-            番号=Dictionary_LabelTarget_int.Count;
-            this.Dictionary_int_LabelTarget.Add(番号,value);
-            Dictionary_LabelTarget_int.Add(value,番号);
-            writer.WriteInt32(-1);
+            index=Dictionary_LabelTarget_int.Count;
+            this.ListLabelTarget.Add(value);
+            Dictionary_LabelTarget_int.Add(value,index);
+            writer.WriteInt32(index);
             writer.WriteValueSeparator();
             Serialize_Type(ref writer,value.Type,Resolver);
             writer.WriteValueSeparator();
@@ -30,10 +31,12 @@ partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.LabelTarget>{
     Expressions.LabelTarget IJsonFormatter<Expressions.LabelTarget>.Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var 番号=reader.ReadInt32();
+        var index=reader.ReadInt32();
+        var ListLabelTarget=this.ListLabelTarget;
+        Debug.Assert(this.Dictionary_LabelTarget_int.Count==this.ListLabelTarget.Count);
         Expressions.LabelTarget target;
-        if(番号>-1){
-            target=this.Dictionary_int_LabelTarget[番号];
+        if(index<ListLabelTarget.Count){
+            target=ListLabelTarget[index];
         } else{
             reader.ReadIsValueSeparatorWithVerify();
             var type=Deserialize_Type(ref reader,Resolver);
@@ -41,9 +44,10 @@ partial class ExpressionJsonFormatter:IJsonFormatter<Expressions.LabelTarget>{
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
-            var Dictionary_LabelTarget_int_Count=Dictionary_LabelTarget_int.Count;
-            this.Dictionary_int_LabelTarget.Add(Dictionary_LabelTarget_int_Count,target);
-            Dictionary_LabelTarget_int.Add(target,Dictionary_LabelTarget_int_Count);
+            Debug.Assert(index==Dictionary_LabelTarget_int.Count);
+            index=Dictionary_LabelTarget_int.Count;
+            ListLabelTarget.Add(target);
+            Dictionary_LabelTarget_int.Add(target,index);
         }
         reader.ReadIsEndArrayWithVerify();
         return target;
@@ -56,32 +60,33 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.L
             writer.WriteNil();
             return;
         }
-        if(this.Dictionary_LabelTarget_int.TryGetValue(value,out var 番号)){
-            writer.WriteInt32(番号);
+        if(this.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+            writer.WriteInt32(index);
         } else{
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
-            番号=Dictionary_LabelTarget_int.Count;
-            this.Dictionary_int_LabelTarget.Add(番号,value);
-            Dictionary_LabelTarget_int.Add(value,番号);
-            writer.WriteInt32(-1);
+            index=Dictionary_LabelTarget_int.Count;
+            this.ListLabelTarget.Add(value);
+            Dictionary_LabelTarget_int.Add(value,index);
+            writer.WriteInt32(index);
             Serialize_Type(ref writer,value.Type,Resolver);
             writer.Write(value.Name);
         }
     }
     Expressions.LabelTarget IMessagePackFormatter<Expressions.LabelTarget>.Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
-        var 番号=reader.ReadInt32();
+        var index=reader.ReadInt32();
+        var ListLabelTarget=this.ListLabelTarget;
         Expressions.LabelTarget target;
-        if(番号>-1){
-            target=this.Dictionary_int_LabelTarget[番号];
+        if(index<ListLabelTarget.Count){
+            target=ListLabelTarget[index];
         } else{
             var type=Deserialize_Type(ref reader,Resolver);
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
-            var Dictionary_LabelTarget_int_Count=Dictionary_LabelTarget_int.Count;
-            this.Dictionary_int_LabelTarget.Add(Dictionary_LabelTarget_int_Count,target);
-            Dictionary_LabelTarget_int.Add(target,Dictionary_LabelTarget_int_Count);
+            index=Dictionary_LabelTarget_int.Count;
+            ListLabelTarget.Add(target);
+            Dictionary_LabelTarget_int.Add(target,index);
         }
         return target;
     }

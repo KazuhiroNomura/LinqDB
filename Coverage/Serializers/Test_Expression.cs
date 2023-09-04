@@ -28,10 +28,14 @@ public class Test_Expression:ATest_シリアライズ{
     }
     [TestMethod]
     public void Anonymous011(){
+        共通object1(new{a=11});
+    }
+    [TestMethod]
+    public void Anonymous021(){
         共通Expression(Expression.Constant(new{a=11}));
     }
     [TestMethod]
-    public void Anonymous012(){
+    public void Anonymous022(){
         共通Expression(Expression.Constant(new{a=11,b=2.2,c=33m,d=44f,e="ee"}));
     }
     private static readonly ParameterExpression @decimal = Expression.Parameter(typeof(decimal),"p");
@@ -143,13 +147,12 @@ public class Test_Expression:ATest_シリアライズ{
             )
         );
     }
-    [TestMethod]
-    public void Constant(){
-        共通Expression(
-            Expression.Constant(null,typeof(string))
-        );
+    [TestMethod]public void Constant0(){
+        共通Expression(Expression.Constant(null,typeof(string)));
+    }
+    [TestMethod]public void Constant1(){
         共通Expression(Expression.Constant(1111m));
-        共通Expression(Expression.Constant(1111m));
+        共通Expression(Expression.Constant(1111m,typeof(object)));
     }
     static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
     [TestMethod]

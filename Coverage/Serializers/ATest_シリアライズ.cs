@@ -2,16 +2,21 @@
 using System.Linq.Expressions;
 using CoverageCS.LinqDB;
 using LinqDB.CRC;
+using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Serializers;
+using LinqDB.Serializers.MemoryPack.Formatters;
+using MemoryPack;
 //using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.MessagePack;
 using MessagePack;
 using MessagePack.Formatters;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 //using MessagePack.Resolvers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Utf8Json;
 using Assert=Microsoft.VisualStudio.TestTools.UnitTesting.Assert;
+using Expression=System.Linq.Expressions.Expression;
 using Json=Newtonsoft.Json;
 // ReSharper disable PossibleNullReferenceException
 //具体的なAnonymousTypeをそのままSerialize,DeserializeするときはAnonymousExpressionResolverを通過しない。AnonymousTypeを返す。
@@ -25,7 +30,9 @@ public class ATest_シリアライズ:ATest{
     //private static readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver=new();
     //private static readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver=new();
     private static readonly SerializerConfiguration SerializerConfiguration=new();
+    private static readonly global::LinqDB.Serializers.MemoryPack.Formatters.必要なFormatters Formatters=new();
     static ATest_シリアライズ(){
+        //MemoryPackFormatterProvider.Register(Formatters.Expression);
         JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatter[]{
                 classキーあり.JsonFormatter.Instance,
@@ -56,8 +63,8 @@ public class ATest_シリアライズ:ATest{
     }
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     protected static void 共通object(object input){
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
-        Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        共通object1(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        共通object1<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     [MessagePackObject(true)]protected class classキーあり{
         public sealed class JsonFormatter:IJsonFormatter<classキーあり>{
@@ -165,8 +172,20 @@ public class ATest_シリアライズ:ATest{
     const string Messagepackファイル名="Messagepack.bin";
     const string Jsonファイル名="Json.txt";
     const string 整形済みJsonファイル名="整形済みJson.txt";
-    private static void Private共通object<T>(T input,Action<T> AssertAction){
-        //var jsonString = MessagePackSerializer.ConvertToJson(MessagePackSerializer.Serialize(input, SerializerSet.MessagePackSerializerOptions));
+    private static void Regist(System.Type Type){
+        var AnonymousType=typeof(Anonymous<>).MakeGenericType(Type);
+        dynamic formatter=Activator.CreateInstance(AnonymousType);
+        // var b=writer.GetFormatter(value0);
+        MemoryPackFormatterProvider.Register(formatter);
+    }
+    protected static void 共通object1<T>(T input,Action<T> AssertAction){
+        {
+            Regist(input.GetType());
+            //var json0=MessagePackSerializer.(MessagepackAllBytes,SerializerConfiguration.MessagePackSerializerOptions);
+            var bytes=MemoryPackSerializer.Serialize(input);
+            var output = MemoryPackSerializer.Deserialize<T>(bytes);
+            AssertAction(output);
+        }
         {
             SerializerConfiguration.ClearJson();
             var JsonStream=new FileStream(Jsonファイル名,FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
@@ -201,15 +220,18 @@ public class ATest_シリアライズ:ATest{
         }
     }
     protected static void 共通object<T>(T[] input){
-        Private共通object(input,output=>Assert.IsTrue(output.SequenceEqual(input)));
+        共通object1(input,output=>Assert.IsTrue(output.SequenceEqual(input)));
     }
-    protected static void 共通object<T>(T input){
-        Private共通object<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
-        Private共通object(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+    protected static void 共通object1<T>(T input){
+        共通object1<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+    }
+    protected static void 共通object2<T>(T input){
+        共通object1<object>(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
+        共通object1(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
     }
     protected static void 共通Expression<T>(T input)where T:Expression?{
         //Debug.Assert(input!=null,nameof(input)+" != null");
-        Private共通object(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
+        共通object1(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
         //Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
     }
     private static string format_json(string json){

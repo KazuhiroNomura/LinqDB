@@ -3,10 +3,11 @@ using System.Text;
 using LinqDB.CRC;
 using LinqDB.Databases;
 using LinqDB.Sets;
+using MessagePack;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoverageCS.LinqDB.Optimizers{
     namespace テスト{
-        [Serializable]
+        [MessagePackObject]
         public class Container:Container<Container>{
             public Schemas.dbo dbo{get;private set;}
 
@@ -31,7 +32,7 @@ namespace CoverageCS.LinqDB.Optimizers{
             }
         }
         namespace Schemas{
-            [Serializable]
+            [MessagePackObject]
             public class dbo:Schema{
                 //public Set<Int32> Int32 { get; private set; }
                 private Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container> _Entity1;
@@ -53,7 +54,7 @@ namespace CoverageCS.LinqDB.Optimizers{
         }
         namespace PrimaryKeys{
             namespace dbo{
-                [Serializable]
+                [MessagePackObject]
                 public struct Entity1:IEquatable<Entity1>{
                     public decimal ID1{get;}
                     public decimal ID2{get;}
@@ -95,7 +96,7 @@ namespace CoverageCS.LinqDB.Optimizers{
         }
         namespace Tables{
             namespace dbo{
-                [Serializable]
+                [MessagePackObject]
                 public sealed class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>,IEquatable<Entity1>,
                     IWriteRead<Entity1>{
                     public decimal ID1=>this.ProtectedPrimaryKey.ID1;

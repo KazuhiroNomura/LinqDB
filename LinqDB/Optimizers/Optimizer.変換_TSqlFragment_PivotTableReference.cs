@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
-using System.Globalization;
 using System.Reflection;
 using LinqDB.Sets;
 using Expressions = System.Linq.Expressions;
@@ -175,7 +174,7 @@ public sealed partial class Optimizer{
             RefPeek.集約関数のParameter=null;
             //Debug.Assert(集約関数のParameter is not null&&集約関数のSource is not null);
             switch(FunctionName) {
-                case "avg": {
+                case "AVG": {
                     var Body = 共通();
                     var Body_Type =Int32に変換して(ref Body);
                     if     (typeof(int?    )==Body_Type)return 共通Nullable(Body,Reflection.ExtensionSet.AverageNullableInt32_selector  );
@@ -191,7 +190,7 @@ public sealed partial class Optimizer{
                         return Expressions.Expression.Call(Method,集約関数のSource,Lambda);
                     }
                 }
-                case "sum": {
+                case "SUM": {
                     var Body = 共通();
                     MethodInfo Method;
                     var Body_Type =Int32に変換して(ref Body);
@@ -213,15 +212,15 @@ public sealed partial class Optimizer{
                         Expressions.Expression.Lambda(Body,作業配列.Parameters設定(集約関数のParameter))
                     );
                 }
-                case "count":return Expressions.Expression.Convert(
+                case "COUNT":return Expressions.Expression.Convert(
                     Expressions.Expression.Call(
                         this.作業配列.MakeGenericMethod(Reflection.ExtensionSet.Count,IEnumerable1のT(集約関数のSource.Type)),
                         集約関数のSource
                     ),
                     typeof(int?)
                 );
-                case "max":
-                case "min":{
+                case "MAX":
+                case "MIN":{
                     var Body = 共通();
                     var Body_Type =Int32に変換して(ref Body);
                     if     (Body_Type==typeof(int     ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinInt32_selector          :Reflection.ExtensionSet.MaxInt32_selector          );

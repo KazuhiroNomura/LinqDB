@@ -1,19 +1,22 @@
-﻿using System;
-using System.Buffers;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
 using LinqDB.Serializers.Formatters;
-using LinqDB.Sets;
+using LinqDB.Serializers.MemoryPack.Formatters;
+using MemoryPack;
 using MessagePack;
 using MessagePack.Formatters;
 //using MessagePack.Formatters;
 
 using Utf8Json;
+using CatchBlock=System.Linq.Expressions.CatchBlock;
+using ElementInit=System.Linq.Expressions.ElementInit;
+using Expression=System.Linq.Expressions.Expression;
+using MemberBinding=System.Linq.Expressions.MemberBinding;
+using SwitchCase=System.Linq.Expressions.SwitchCase;
+using Type=System.Type;
+
 //using Utf8Json.Formatters;
 namespace LinqDB.Serializers;
 public sealed class DispatchJsonFormatterResolver:IJsonFormatterResolver{
@@ -59,9 +62,12 @@ public sealed class DispatchJsonFormatterResolver:IJsonFormatterResolver{
             typeof(T)==typeof(ElementInit))
             return Return(this.ExpressionFormatter);
         if(typeof(T).IsDisplay())return Return(new DisplayClassJsonFormatter<T>());
-        if(typeof(T).IsAnonymous())return Return(new CommonJsonFormatter<T>());
+        if(typeof(T).IsAnonymous())return Return(new AnonymousJsonFormatter<T>());
         //var Formatter=GetFormatter(typeof(T));
         //if(Formatter!=null) Return(Formatter);
+        if(typeof(T).IsDefined(typeof(MessagePackObjectAttribute))){
+            return null!;
+        }
         return Return(new AbstractJsonFormatter<T>());
         IJsonFormatter<T> Return(object Formatter){
             var result=(IJsonFormatter<T>)Formatter;

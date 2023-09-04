@@ -22,11 +22,11 @@ namespace LinqDB.Serializers.Formatters;
 public class ExpressionFormatter{
     internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     protected readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    protected readonly Dictionary<int,Expressions.LabelTarget> Dictionary_int_LabelTarget=new();
+    protected readonly List<Expressions.LabelTarget> ListLabelTarget=new();
     public void Clear(){
         this.ListParameter.Clear();
         this.Dictionary_LabelTarget_int.Clear();
-        this.Dictionary_int_LabelTarget.Clear();
+        this.ListLabelTarget.Clear();
     }
 }
 public partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Expressions.Expression>{

@@ -5209,7 +5209,6 @@ public sealed partial class Optimizer {
                 case SemanticTableReference y: this.SemanticTableReference(y); break;
                 case OpenXmlTableReference y: this.OpenXmlTableReference(y); break;
                 case OpenJsonTableReference y: this.OpenJsonTableReference(y); break;
-                case OpenRowsetTableReference y: this.OpenRowsetTableReference(y); break;
                 case InternalOpenRowset y: this.InternalOpenRowset(y); break;
                 case OpenQueryTableReference y: this.OpenQueryTableReference(y); break;
                 case AdHocTableReference y: this.AdHocTableReference(y); break;
@@ -5294,7 +5293,9 @@ public sealed partial class Optimizer {
         protected virtual void BulkOpenRowset(BulkOpenRowset x) {
             if(x.Alias is not null)this.SwitchIdentifier(x.Alias);
             this.Identifiers(x.Columns);
-            this.StringLiteral(x.DataFile);
+            foreach(var DataFile in x.DataFiles){
+                this.StringLiteral(DataFile);
+            }
             this.BulkInsertOptions(x.Options);
         }
         /// <summary>
