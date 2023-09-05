@@ -6,7 +6,6 @@ using System.Reflection;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
@@ -123,14 +122,14 @@ public class AbstractMessagePackFormatter<T>:AbstractFormatter,IMessagePackForma
         writer.WriteArrayHeader(2);
         var type=value.GetType();
         Serialize_Type(ref writer,type,options);
-        CustomSerializerMessagePack.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
+        MessagePackCustomSerializer.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
     }
     public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         var ArrayHeader=reader.ReadArrayHeader();
         Debug.Assert(ArrayHeader==2);
         var type=Deserialize_Type(ref reader,options);
-        var value=(T)CustomSerializerMessagePack.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
+        var value=(T)MessagePackCustomSerializer.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
         return value;
     }
 }

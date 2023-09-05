@@ -3,7 +3,6 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
@@ -86,7 +85,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
                     if(PropertyType.IsAnonymous()){
                         PropertyTypes[0]=PropertyType;
                         var FormatterType=typeof(Anonymous<>).MakeGenericType(PropertyTypes);
-                        var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(PropertyTypes);
+                        var Register=MemoryPackCustomSerializer.Register.MakeGenericMethod(PropertyTypes);
                         Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
                     }
                     MethodTypes[1]=PropertyType;

@@ -16,15 +16,15 @@ public class Conditional:MemoryPackFormatter<ConditionalExpression>{
             //writer.WriteNil();
             return;
         }
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Test);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.IfTrue);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.IfFalse);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Test);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.IfTrue);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.IfFalse);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref ConditionalExpression? value){
         //if(reader.TryReadNil()) return null!;
-        var test= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
-        var ifTrue= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
-        var ifFalse= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var test= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var ifTrue= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var ifFalse= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
         value=System.Linq.Expressions.Expression.Condition(
             test,
             ifTrue,

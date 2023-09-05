@@ -1,7 +1,7 @@
 ﻿using MemoryPack;
 using System.Buffers;
 
-using Guid=System.Guid;
+using Guid = System.Guid;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 public class Object:MemoryPackFormatter<object>{
     public void SerializeObject<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
@@ -20,7 +20,7 @@ public class Object:MemoryPackFormatter<object>{
         //    return;
         //}
         var type=value.GetType();
-        CustomSerializerMemoryPack.Type.Serialize(ref writer,type);
+        MemoryPackCustomSerializer.Type.Serialize(ref writer,type);
         //writer.WriteValue(value.Value.GetType(),value.Value);
         //this.Serialize(ref writer,value.Type);
         switch(value){
@@ -59,12 +59,12 @@ public class Object:MemoryPackFormatter<object>{
             
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref object? value){
-        var value0=CustomSerializerMemoryPack.ReadBoolean(ref reader);
+        var value0=MemoryPackCustomSerializer.ReadBoolean(ref reader);
         if(!value0){
             value=null;
             return;
         }
-        var type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
+        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
         //object? value=default;
         if     (typeof(sbyte  )==type)value=reader.ReadVarIntSByte();
         else if(typeof(short  )==type)value=reader.ReadVarIntInt16();

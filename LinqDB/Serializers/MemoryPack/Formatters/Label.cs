@@ -18,13 +18,13 @@ public class Label:MemoryPackFormatter<LabelExpression>{
             //writer.WriteNil();
             return;
         }
-        CustomSerializerMemoryPack.LabelTarget.Serialize(ref writer,value.Target);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.DefaultValue);
+        MemoryPackCustomSerializer.LabelTarget.Serialize(ref writer,value.Target);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.DefaultValue);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref LabelExpression? value){
         //if(reader.TryReadNil()) return;
-        var target= CustomSerializerMemoryPack.LabelTarget.DeserializeLabelTarget(ref reader);
-        var defaultValue=CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var target= MemoryPackCustomSerializer.LabelTarget.DeserializeLabelTarget(ref reader);
+        var defaultValue=MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
         value=System.Linq.Expressions.Expression.Label(target,defaultValue);
     }
 }

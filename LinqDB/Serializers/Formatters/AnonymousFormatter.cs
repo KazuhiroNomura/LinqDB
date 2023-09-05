@@ -1,14 +1,12 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
-using AssemblyGenerator=Lokad.ILPack.AssemblyGenerator;
 namespace LinqDB.Serializers.Formatters;
 //public class Common2{
 //    public static(DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[]Properties) 初期化<T,TWriter,TResolver>(){

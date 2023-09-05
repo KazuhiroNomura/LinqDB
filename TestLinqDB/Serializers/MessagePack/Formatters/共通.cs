@@ -24,7 +24,7 @@ using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using LinqDB.Helpers;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using Newtonsoft.Json.Linq;
 using MessagePack;
 using Utf8Json;
@@ -42,8 +42,7 @@ public abstract class 共通{
     protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected IJsonFormatterResolver JsonFormatterResolver=>this.SerializerConfiguration.JsonFormatterResolver;
     //protected MessagePackSerializerOptions MessagePackSerializerOptions=>this.SerializerConfiguration.MessagePackSerializerOptions;
-    protected readonly CustomSerializerUtf8Json CustomSerializerUtf8Json=new();
-    protected readonly CustomSerializerMessagePack CustomSerializerMessagePack=new();
+    //protected readonly MessagePackCustomSerializer MessagePackCustomSerializer=new();
     //protected readonly CustomSerializerMemoryPack CustomSerializerMemoryPack=new();
     //protected 共通(){
     //    var SerializerConfiguration=this.SerializerConfiguration;
@@ -82,20 +81,18 @@ public abstract class 共通{
             //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
             //    //Register.Invoke(null,Array.Empty<object>());
             //}
-            var bytes=CustomSerializerMemoryPack.Serialize(input);
-            var output = CustomSerializerMemoryPack.Deserialize<T>(bytes);
+            var bytes=MemoryPackCustomSerializer.Serialize(input);
+            var output = MemoryPackCustomSerializer.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var Configuration=this.CustomSerializerUtf8Json;
-            var bytes=Configuration.Serialize(input);
-            var output = Configuration.Deserialize<T>(bytes);
+            var bytes=Utf8JsonCustomSerializer.Serialize(input);
+            var output = Utf8JsonCustomSerializer.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var Configuration=this.CustomSerializerMessagePack;
-            var bytes=Configuration.Serialize(input);
-            var output = Configuration.Deserialize<T>(bytes);
+            var bytes=MessagePackCustomSerializer.Serialize(input);
+            var output = MessagePackCustomSerializer.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
     }
@@ -164,20 +161,18 @@ public abstract class 共通{
                 //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
                 //Register.Invoke(null,Array.Empty<object>());
             }
-            var bytes=CustomSerializerMemoryPack.Serialize(input);
-            var output = CustomSerializerMemoryPack.Deserialize<T>(bytes);
+            var bytes=MemoryPackCustomSerializer.Serialize(input);
+            var output = MemoryPackCustomSerializer.Deserialize<T>(bytes);
             AssertAction(output!);
         }
         {
-            var Configuration=this.CustomSerializerUtf8Json;
-            var bytes = Configuration.Serialize(input);
-            var output = Configuration.Deserialize<T>(bytes);
+            var bytes = Utf8JsonCustomSerializer.Serialize(input);
+            var output = Utf8JsonCustomSerializer.Deserialize<T>(bytes);
             AssertAction(output);
         }
         {
-            var Configuration=this.CustomSerializerMessagePack;
-            var bytes = Configuration.Serialize(input);
-            var output = Configuration.Deserialize<T>(bytes);
+            var bytes = MessagePackCustomSerializer.Serialize(input);
+            var output = MessagePackCustomSerializer.Deserialize<T>(bytes);
             AssertAction(output);
         }
     }

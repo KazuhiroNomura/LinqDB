@@ -24,12 +24,12 @@ public class Constant:MemoryPackFormatter<ConstantExpression>{
         //    writer.WriteNullObjectHeader();
         //    return;
         //}
-        CustomSerializerMemoryPack.Type.Serialize(ref writer,value!.Type);
-        CustomSerializerMemoryPack.Object.SerializeObject(ref writer,value.Value);
+        MemoryPackCustomSerializer.Type.Serialize(ref writer,value!.Type);
+        MemoryPackCustomSerializer.Object.SerializeObject(ref writer,value.Value);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref ConstantExpression? value){
-        var Constant_type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
-        var Constant_value=CustomSerializerMemoryPack.Object.DeserializeObject(ref reader);
+        var Constant_type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
+        var Constant_value=MemoryPackCustomSerializer.Object.DeserializeObject(ref reader);
         value=System.Linq.Expressions.Expression.Constant(Constant_value,Constant_type);
     }
 }

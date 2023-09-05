@@ -19,14 +19,14 @@ public class Member:MemoryPackFormatter<MemberInfo>{
             //writer.WriteNil();
             return;
         }
-        CustomSerializerMemoryPack.Type.Serialize(ref writer,value.ReflectedType);
+        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.ReflectedType);
         //this.Serialize(ref writer,value.ReflectedType!);
         writer.WriteString(value.Name);
         writer.WriteVarInt(value.MetadataToken);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref MemberInfo? value){
         //if(reader.TryReadNil()) return;
-        var ReflectedType= CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
+        var ReflectedType= MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
         var Name=reader.ReadString();
         var MetadataToken=reader.ReadVarIntInt32();
         value=ReflectedType.GetMembers(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.Name==Name&&p.MetadataToken==MetadataToken);

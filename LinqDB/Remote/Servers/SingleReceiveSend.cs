@@ -13,14 +13,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqDB.Serializers;
-using LinqDB.Serializers.MemoryPack.Formatters;
-using MessagePack;
-using Utf8Json;
 //using MemoryStream = System.IO.MemoryStream;
 using MemoryStream = LinqDB.Helpers.CommonLibrary.MemoryStream;
 using static LinqDB.Helpers.Configulation;
 using static LinqDB.Helpers.CommonLibrary;
-using Expression=System.Linq.Expressions.Expression;
 
 //using NetworkStream = Lite.Collections.NetworkStream;
 // ReSharper disable ConvertToLocalFunction
@@ -51,8 +47,7 @@ internal class SingleReceiveSend:IDisposable{
     //private readonly Action<Object> Delegate送信;
     //private readonly AsyncCallback Delegate送信終了;
     private readonly int Index;
-    private readonly CustomSerializerUtf8Json CustomSerializerUtf8Json=new();
-    private readonly CustomSerializerMessagePack CustomSerializerMessagePack=new();
+    //private readonly MessagePackCustomSerializer MessagePackCustomSerializer=new();
     //private readonly CustomSerializerMemoryPack CustomSerializerMemoryPack=new();
     //private readonly SerializerConfiguration SerializerConfiguration;
     //private readonly Serializers.Utf8Json.Resolver Utf8Json_Resolver=new();
@@ -70,8 +65,6 @@ internal class SingleReceiveSend:IDisposable{
         this.MultiReceiveSend=MultiReceiveSend;
         this.Index=Index;
         this.MemoryStream=new MemoryStream(this.Buffer);
-        this.CustomSerializerUtf8Json=new();
-        this.CustomSerializerMessagePack=new();
         Debug.WriteLine("12");
 
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
@@ -327,9 +320,9 @@ internal class SingleReceiveSend:IDisposable{
                         ////var input = e.Result;
                         //break;
                         var Object=XmlType switch{
-                            XmlType.Utf8Json   =>this.CustomSerializerUtf8Json.Deserialize<LambdaExpression>(MemoryStream),
-                            XmlType.MessagePack=>this.CustomSerializerMessagePack.Deserialize<LambdaExpression>(MemoryStream),
-                            XmlType.MemoryPack =>CustomSerializerMemoryPack.Deserialize<LambdaExpression>(MemoryStream),
+                            XmlType.Utf8Json   =>Utf8JsonCustomSerializer.Deserialize<LambdaExpression>(MemoryStream),
+                            XmlType.MessagePack=>MessagePackCustomSerializer.Deserialize<LambdaExpression>(MemoryStream),
+                            XmlType.MemoryPack =>MemoryPackCustomSerializer.Deserialize<LambdaExpression>(MemoryStream),
                             _=>throw new NotSupportedException(XmlType.ToString())
                         };
                         this.Privateデシリアライズした(
@@ -551,9 +544,9 @@ internal class SingleReceiveSend:IDisposable{
                     Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
                     try{
                         var Object=XmlType switch{
-                            XmlType.Utf8Json=>this.CustomSerializerUtf8Json.Deserialize<object>(MemoryStream),
-                            XmlType.MessagePack=>this.CustomSerializerMessagePack.Deserialize<object>(MemoryStream),
-                            XmlType.MemoryPack=>CustomSerializerMemoryPack.Deserialize<object>(MemoryStream),
+                            XmlType.Utf8Json=>Utf8JsonCustomSerializer.Deserialize<object>(MemoryStream),
+                            XmlType.MessagePack=>MessagePackCustomSerializer.Deserialize<object>(MemoryStream),
+                            XmlType.MemoryPack=>MemoryPackCustomSerializer.Deserialize<object>(MemoryStream),
                             _=>throw new NotSupportedException(XmlType.ToString())
                         };
                         //var Object=XmlType==XmlType.Utf8Json
@@ -587,9 +580,9 @@ internal class SingleReceiveSend:IDisposable{
                         //    this.SerializerConfiguration.JsonFormatterResolver);
                         //var Lambda=JsonSerializer.Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
                         var Object=XmlType switch{
-                            XmlType.Utf8Json=>this.CustomSerializerUtf8Json.Deserialize<object>(MemoryStream),
-                            XmlType.MessagePack=>this.CustomSerializerMessagePack.Deserialize<object>(MemoryStream),
-                            XmlType.MemoryPack=>CustomSerializerMemoryPack.Deserialize<object>(MemoryStream),
+                            XmlType.Utf8Json=>Utf8JsonCustomSerializer.Deserialize<object>(MemoryStream),
+                            XmlType.MessagePack=>MessagePackCustomSerializer.Deserialize<object>(MemoryStream),
+                            XmlType.MemoryPack=>MemoryPackCustomSerializer.Deserialize<object>(MemoryStream),
                             _=>throw new NotSupportedException(XmlType.ToString())
                         };
                         this.Privateデシリアライズした(
@@ -674,9 +667,9 @@ internal class SingleReceiveSend:IDisposable{
                     var XmlType = シリアライズしたい.XmlType;
                     MemoryStream.WriteByte((byte)XmlType);
                     switch(XmlType) {
-                        case XmlType.Utf8Json:this.CustomSerializerUtf8Json.Serialize(MemoryStream,シリアライズしたい.Object);break;
-                        case XmlType.MessagePack:this.CustomSerializerMessagePack.Serialize(MemoryStream,シリアライズしたい.Object);break;
-                        case XmlType.MemoryPack:CustomSerializerMemoryPack.Serialize(MemoryStream,シリアライズしたい.Object); break;
+                        case XmlType.Utf8Json:Utf8JsonCustomSerializer.Serialize(MemoryStream,シリアライズしたい.Object);break;
+                        case XmlType.MessagePack:MessagePackCustomSerializer.Serialize(MemoryStream,シリアライズしたい.Object);break;
+                        case XmlType.MemoryPack:MemoryPackCustomSerializer.Serialize(MemoryStream,シリアライズしたい.Object); break;
                         default:throw new NotSupportedException(XmlType.ToString());
                     }
                     break;
@@ -702,9 +695,9 @@ internal class SingleReceiveSend:IDisposable{
             //}
             var XmlType = シリアライズしたい.XmlType;
             switch(XmlType) {
-                case XmlType.Utf8Json:this.CustomSerializerUtf8Json.Serialize<object>(MemoryStream,ex);break;
-                case XmlType.MessagePack:this.CustomSerializerMessagePack.Serialize<object>(MemoryStream,ex); break;
-                case XmlType.MemoryPack:CustomSerializerMemoryPack.Serialize<object>(MemoryStream,ex); break;
+                case XmlType.Utf8Json:Utf8JsonCustomSerializer.Serialize<object>(MemoryStream,ex);break;
+                case XmlType.MessagePack:MessagePackCustomSerializer.Serialize<object>(MemoryStream,ex); break;
+                case XmlType.MemoryPack:MemoryPackCustomSerializer.Serialize<object>(MemoryStream,ex); break;
                 default:throw new NotSupportedException(XmlType.ToString());
             }
             BufferにLengthとSHA256を設定してStreamにWrite();

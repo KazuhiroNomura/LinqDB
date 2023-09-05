@@ -20,13 +20,13 @@ public class New:MemoryPackFormatter<NewExpression>{
             //writer.WriteNil();
             return;
         }
-        CustomSerializerMemoryPack.Constructor.Serialize(ref writer,value.Constructor!);
+        MemoryPackCustomSerializer.Constructor.Serialize(ref writer,value.Constructor!);
 
-        CustomSerializerMemoryPack.Serialize(ref writer,value.Arguments);
+        MemoryPackCustomSerializer.Serialize(ref writer,value.Arguments);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref NewExpression? value){
         //if(reader.TryReadNil()) return;
-        var constructor= CustomSerializerMemoryPack.Constructor.DeserializeConstructorInfo(ref reader);
+        var constructor= MemoryPackCustomSerializer.Constructor.DeserializeConstructorInfo(ref reader);
         var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=System.Linq.Expressions.Expression.New(
             constructor,

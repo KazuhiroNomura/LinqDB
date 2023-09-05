@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MemoryPack;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
@@ -16,15 +17,15 @@ public class MethodCall:MemoryPackFormatter<Expressions.MethodCallExpression>{
             return;
         }
         var Method=value.Method;
-        CustomSerializerMemoryPack.Method.Serialize(ref writer,Method);
+        MemoryPackCustomSerializer.Method.Serialize(ref writer,Method);
         if(!Method.IsStatic){
-            CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Object!);
+            MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Object!);
         }
-        CustomSerializerMemoryPack.Serialize(ref writer,value.Arguments);
+        MemoryPackCustomSerializer.Serialize(ref writer,value.Arguments);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.MethodCallExpression? value){
         //if(reader.TryReadNil()) return;
-        var method= CustomSerializerMemoryPack.Method.Deserialize(ref reader);
+        var method= MemoryPackCustomSerializer.Method.Deserialize(ref reader);
         if(method.IsStatic){
             var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
             value=System.Linq.Expressions.Expression.Call(
@@ -32,7 +33,7 @@ public class MethodCall:MemoryPackFormatter<Expressions.MethodCallExpression>{
                 arguments!
             );
         } else{
-            var instance= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+            var instance= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
             var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
             value=System.Linq.Expressions.Expression.Call(
                 instance,

@@ -1,14 +1,8 @@
 ﻿using System;
 using MemoryPack;
 using System.Buffers;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.Serialization;
 using LinqDB.Helpers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
@@ -35,16 +29,16 @@ public class Type:MemoryPackFormatter<System.Type>{
     }
     private void Register(System.Type AnonymousType){
         var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-        var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(AnonymousType);
+        var Register=MemoryPackCustomSerializer.Register.MakeGenericMethod(AnonymousType);
         var objects2=this.objects2;
         objects2[0]=Activator.CreateInstance(FormatterType)!;
         Register.Invoke(null,objects2);
     }
     private void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,System.Type value)where TBufferWriter:IBufferWriter<byte>{
-        if(CustomSerializerMemoryPack.DictionaryTypeIndex.TryGetValue(value,out var index)){
+        if(MemoryPackCustomSerializer.DictionaryTypeIndex.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
-            var DictionaryTypeIndex=CustomSerializerMemoryPack.DictionaryTypeIndex;
+            var DictionaryTypeIndex=MemoryPackCustomSerializer.DictionaryTypeIndex;
             index=DictionaryTypeIndex.Count;
             writer.WriteVarInt(index);
             DictionaryTypeIndex.Add(value,index);
@@ -56,7 +50,7 @@ public class Type:MemoryPackFormatter<System.Type>{
             } else{
                 writer.WriteString(value.AssemblyQualifiedName);
             }
-            CustomSerializerMemoryPack.Types.Add(value);
+            MemoryPackCustomSerializer.Types.Add(value);
         }
     }
     private readonly object[] objects2=new object[1];
@@ -99,11 +93,11 @@ public class Type:MemoryPackFormatter<System.Type>{
     }
     private System.Type PrivateDeserialize(ref MemoryPackReader reader){
         var index=reader.ReadVarIntInt32();
-        var Types=CustomSerializerMemoryPack.Types;
+        var Types=MemoryPackCustomSerializer.Types;
         if(index<Types.Count){
             return Types[index];
         } else{
-            var DictionaryTypeIndex=CustomSerializerMemoryPack.DictionaryTypeIndex;
+            var DictionaryTypeIndex=MemoryPackCustomSerializer.DictionaryTypeIndex;
             Debug.Assert(index==Types.Count);
             var AssemblyQualifiedName=reader.ReadString();
             var value=System.Type.GetType(AssemblyQualifiedName);

@@ -1,7 +1,6 @@
 ﻿using System.Buffers;
 using MemoryPack;
-using Expressions=System.Linq.Expressions;
-using MemoryPack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
@@ -13,12 +12,12 @@ public class SwitchCase:MemoryPackFormatter<Expressions.SwitchCase>{
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.SwitchCase? value){
-        CustomSerializerMemoryPack.Serialize(ref writer,value!.TestValues);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Body);
+        MemoryPackCustomSerializer.Serialize(ref writer,value!.TestValues);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Body);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.SwitchCase? value){
         var testValues=reader.ReadArray<Expressions.Expression>();
-        var body= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var body= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
         value=Expressions.Expression.SwitchCase(body,testValues!);
     }
 }

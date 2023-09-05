@@ -14,12 +14,12 @@ public class MemberAccess:MemoryPackFormatter<MemberExpression>{
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref MemberExpression? value){
-        CustomSerializerMemoryPack.Member.Serialize(ref writer,value!.Member);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Expression);
+        MemoryPackCustomSerializer.Member.Serialize(ref writer,value!.Member);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Expression);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref MemberExpression? value){
-        var member=CustomSerializerMemoryPack.Member.DeserializeMemberInfo(ref reader);
-        var expression= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var member=MemoryPackCustomSerializer.Member.DeserializeMemberInfo(ref reader);
+        var expression= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
         value=System.Linq.Expressions.Expression.MakeMemberAccess(expression,member);
     }
 }

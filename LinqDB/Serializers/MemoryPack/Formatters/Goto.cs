@@ -15,15 +15,15 @@ public class Goto:MemoryPackFormatter<GotoExpression>{
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref GotoExpression? value){
         writer.WriteVarInt((byte)value!.Kind);
-        CustomSerializerMemoryPack.LabelTarget.Serialize(ref writer,value.Target);
-        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Value);
-        CustomSerializerMemoryPack.Type.Serialize(ref writer,value.Type);
+        MemoryPackCustomSerializer.LabelTarget.Serialize(ref writer,value.Target);
+        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Value);
+        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.Type);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref GotoExpression? value){
         var kind=(GotoExpressionKind)reader.ReadVarIntByte();
-        var target= CustomSerializerMemoryPack.LabelTarget.DeserializeLabelTarget(ref reader);
-        var Goto_value=CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
-        var type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
+        var target= MemoryPackCustomSerializer.LabelTarget.DeserializeLabelTarget(ref reader);
+        var Goto_value=MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
         value=System.Linq.Expressions.Expression.MakeGoto(kind,target,Goto_value,type);
     }
 }

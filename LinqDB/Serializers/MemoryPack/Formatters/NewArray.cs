@@ -17,13 +17,13 @@ public class NewArray:MemoryPackFormatter<NewArrayExpression>{
             return;
         }
         writer.WriteVarInt((byte)value.NodeType);
-        CustomSerializerMemoryPack.Type.Serialize(ref writer,value.Type.GetElementType());
-        CustomSerializerMemoryPack.Serialize(ref writer,value.Expressions);
+        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.Type.GetElementType());
+        MemoryPackCustomSerializer.Serialize(ref writer,value.Expressions);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref NewArrayExpression? value){
         //if(reader.TryReadNil()) return;
         var NodeType=(ExpressionType)reader.ReadVarIntByte();
-        var type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
+        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
         //var expressions=global::MemoryPack.Formatters.ArrayFormatter<Expression>() Deserialize_T<Expression[]>(ref reader);
         var expressions=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=NodeType switch{
