@@ -7,8 +7,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
 public class New:MemoryPackFormatter<NewExpression>{
-    private readonly 必要なFormatters Formatters;
-    public New(必要なFormatters Formatters)=>this.Formatters=Formatters;
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,NewExpression? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
@@ -22,13 +20,13 @@ public class New:MemoryPackFormatter<NewExpression>{
             //writer.WriteNil();
             return;
         }
-        this.Formatters.Constructor.Serialize(ref writer,value.Constructor!);
+        CustomSerializerMemoryPack.Constructor.Serialize(ref writer,value.Constructor!);
 
-        必要なFormatters.Serialize(ref writer,value.Arguments);
+        CustomSerializerMemoryPack.Serialize(ref writer,value.Arguments);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref NewExpression? value){
         //if(reader.TryReadNil()) return;
-        var constructor= this.Formatters.Constructor.DeserializeConstructorInfo(ref reader);
+        var constructor= CustomSerializerMemoryPack.Constructor.DeserializeConstructorInfo(ref reader);
         var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=System.Linq.Expressions.Expression.New(
             constructor,

@@ -2,9 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Utf8Json;
 namespace LinqDB.Serializers.Formatters;
 using static Common;
@@ -14,23 +16,18 @@ using static Common;
 /// </summary>
 public class AbstractFormatter{
 #pragma warning restore CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
-    protected static bool GetInterface(Type Type,out Type Interface){
+    protected static void GetInterface(ref Type Type){
         var Interface0=Type.GetInterface(typeof(ILookup<,>).FullName);
         if(Interface0 is not null){
-            Interface=Interface0;
-            return true;
-        }
-        var Interface1=Type.GetInterface(typeof(IGrouping<,>).FullName);
-        if(Interface1 is not null){
-            Interface=Interface1;
-            return true;
+            Type=Interface0;
+        } else{
+            var Interface1=Type.GetInterface(typeof(IGrouping<,>).FullName);
+            if(Interface1 is not null) Type=Interface1;
         }
         //if(
         //    (Interface=Type.GetInterface(typeof(ILookup<,>).FullName)) is not null||
         //    (Interface=Type.GetInterface(typeof(IGrouping<,>).FullName)) is not null
         //) return true;
-        Interface=default!;
-        return false;
     }
 }
 public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
@@ -43,8 +40,10 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
         var Formatter=formatterResolver.GetFormatterDynamic(type);
         Debug.Assert(Formatter is not null,"Formatterが見つからない");
         var Foramtter_Type=Formatter.GetType();
-        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)&&GetInterface(type,out var Interface))
-            Formatter=formatterResolver.GetFormatterDynamic(Interface);
+        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractJsonFormatter<>)){
+            GetInterface(ref type);
+            Formatter=formatterResolver.GetFormatterDynamic(type);
+        }
         return Formatter;
     }
     public void Serialize(ref JsonWriter writer,T? value,IJsonFormatterResolver formatterResolver){
@@ -63,11 +62,15 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
             //Formatter.Serialize(ref writer,(LambdaExpression)(object)value,formatterResolver);
         //}else if(typeof(T).IsDisplay()){
         //    return Return(new DisplayClassJsonFormatter<T>());
-        //}else  if(typeof(T).IsAnonymous()){
-        //    return Return(new AnonymousJsonFormatter<T>());
+        }else  if(typeof(T).IsAnonymous()){
+            var Formatter=new AnonymousJsonFormatter<T>();
+            Formatter.Serialize(ref writer,value,formatterResolver);
         }else{
+            if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null){
+              //  formatterResolver.
+            }
             var Formatter=GetFormatter(formatterResolver,type);
-            Debug.Assert(this!=Formatter);
+            if(Formatter==this) throw new InvalidProgramException("Formatter探索で無限ループ");
             var Serialize=Formatter.GetType().GetMethod("Serialize");
             Debug.Assert(Serialize is not null);
             var Objects3=this.Objects3;
@@ -106,8 +109,10 @@ public class AbstractMessagePackFormatter<T>:AbstractFormatter,IMessagePackForma
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         var Formatter=options.Resolver.GetFormatterDynamic(type)!;
         var Foramtter_Type=Formatter.GetType();
-        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractMessagePackFormatter<>)&&GetInterface(type,out var Interface))
-            Formatter=options.Resolver.GetFormatterDynamic(Interface)!;
+        if(Foramtter_Type.IsGenericType&&Foramtter_Type.GetGenericTypeDefinition()==typeof(AbstractMessagePackFormatter<>)){
+            GetInterface(ref type);
+            Formatter=options.Resolver.GetFormatterDynamic(type)!;
+        }
         return Formatter;
     }
     public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
@@ -118,14 +123,14 @@ public class AbstractMessagePackFormatter<T>:AbstractFormatter,IMessagePackForma
         writer.WriteArrayHeader(2);
         var type=value.GetType();
         Serialize_Type(ref writer,type,options);
-        SerializerConfiguration.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
+        CustomSerializerMessagePack.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
     }
     public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         var ArrayHeader=reader.ReadArrayHeader();
         Debug.Assert(ArrayHeader==2);
         var type=Deserialize_Type(ref reader,options);
-        var value=(T)SerializerConfiguration.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
+        var value=(T)CustomSerializerMessagePack.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
         return value;
     }
 }

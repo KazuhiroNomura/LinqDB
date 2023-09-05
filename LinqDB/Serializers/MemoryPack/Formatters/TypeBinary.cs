@@ -4,8 +4,6 @@ using MemoryPack;
 using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 public class TypeBinary:MemoryPackFormatter<TypeBinaryExpression>{
-    private readonly 必要なFormatters Formatters;
-    public TypeBinary(必要なFormatters Formatters)=>this.Formatters=Formatters;
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,TypeBinaryExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
     internal TypeBinaryExpression DeserializeTypeBinary(ref MemoryPackReader reader){
         TypeBinaryExpression? value=default;
@@ -18,14 +16,14 @@ public class TypeBinary:MemoryPackFormatter<TypeBinaryExpression>{
             return;
         }
         writer.WriteVarInt((byte)value!.NodeType);
-        this.Formatters.Expression.Serialize(ref writer,value.Expression);
-        this.Formatters.Type.Serialize(ref writer,value.TypeOperand);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Expression);
+        CustomSerializerMemoryPack.Type.Serialize(ref writer,value.TypeOperand);
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref TypeBinaryExpression? value){
         //if(reader.TryReadNil()) return;
         var NodeType=(ExpressionType)reader.ReadVarIntByte();
-        var expression= this.Formatters.Expression.Deserialize(ref reader);
-        var type=this.Formatters.Type.DeserializeType(ref reader);
+        var expression= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
         value=NodeType switch{
             ExpressionType.TypeEqual=>System.Linq.Expressions.Expression.TypeEqual(expression,type),
             ExpressionType.TypeIs=>System.Linq.Expressions.Expression.TypeIs(expression,type),

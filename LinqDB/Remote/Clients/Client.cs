@@ -15,10 +15,12 @@ using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Properties;
 using LinqDB.Serializers;
+using LinqDB.Serializers.MemoryPack.Formatters;
 using MessagePack;
 using Utf8Json;
 using static LinqDB.Helpers.CommonLibrary;
 using static LinqDB.Helpers.Configulation;
+using Expression=System.Linq.Expressions.Expression;
 //using MemoryStream = System.IO.MemoryStream;
 using MemoryStream = LinqDB.Helpers.CommonLibrary.MemoryStream;
 
@@ -190,7 +192,9 @@ public class Client:IDisposable {
     /// 既定コンストラクタ。
     /// </summary>
     public Client():this(既定のタイムアウト,既定のタイムアウト,null!) {}
-    private readonly SerializerConfiguration SerializerConfiguration;
+    private readonly CustomSerializerUtf8Json CustomSerializerUtf8Json;
+    private readonly CustomSerializerMessagePack CustomSerializerMessagePack;
+    //private readonly CustomSerializerMemoryPack CustomSerializerMemoryPack;
     //private readonly Serializers.Utf8Json.Resolver Utf8Json_Resolver=new Serializers.Utf8Json.Resolver();
     //private readonly IJsonFormatterResolver JsonFormatterResolver;
     //private readonly Serializers.MessagePack.Resolver MessagePack_Resolver=new Serializers.MessagePack.Resolver();
@@ -207,7 +211,8 @@ public class Client:IDisposable {
         this.WriteTimeout=WriteTimeout;
         this.ReadTimeout=ReadTimeout;
         this.DnsEndPoint=DnsEndPoint;
-        this.SerializerConfiguration=new();
+        this.CustomSerializerUtf8Json=new();
+        this.CustomSerializerMessagePack=new();
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
         //    //順序が大事
         //    this.Utf8Json_Resolver,
@@ -493,8 +498,9 @@ public class Client:IDisposable {
     internal T ReadObject<T>(MemoryStream ReadStream) {
         var XmlType = (XmlType)ReadStream.ReadByte();
         return XmlType switch{
-            XmlType.Utf8Json=>(T)JsonSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver),
-            XmlType.MessagePack=>(T)MessagePackSerializer.Deserialize<object>(ReadStream,this.SerializerConfiguration.MessagePackSerializerOptions),
+            XmlType.Utf8Json=>(T)this.CustomSerializerUtf8Json.Deserialize<object>(ReadStream),
+            XmlType.MessagePack=>(T)this.CustomSerializerMessagePack.Deserialize<object>(ReadStream),
+            XmlType.MemoryPack=>(T)CustomSerializerMemoryPack.Deserialize<object>(ReadStream),
             _=>throw new NotSupportedException(XmlType.ToString())
         };
         //object o;
@@ -641,8 +647,9 @@ public class Client:IDisposable {
         this.BufferにUserとPasswordHashを設定(Request);
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
-            case XmlType.Utf8Json:JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.JsonFormatterResolver); break;
-            case XmlType.MessagePack:MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.MessagePackSerializerOptions); break;
+            case XmlType.Utf8Json:this.CustomSerializerUtf8Json.Serialize(this.MemoryStream,Object); break;
+            case XmlType.MessagePack:this.CustomSerializerMessagePack.Serialize(this.MemoryStream,Object); break;
+            case XmlType.MemoryPack:CustomSerializerMemoryPack.Serialize(this.MemoryStream,Object); break;
             default:throw new NotSupportedException(XmlType.ToString());
         }
         //switch(XmlType) {
@@ -661,39 +668,13 @@ public class Client:IDisposable {
     private readonly Optimizer.取得_CSharp 取得_CSharp = new();
     internal void サーバーに送信(Request Request,XmlType XmlType,Expression Expression) {
         this.BufferにUserとPasswordHashを設定(Request);
-        var Lambda = (LambdaExpression)Expression;
+        //var Lambda = (LambdaExpression)Expression;
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
-            case XmlType.Utf8Json:{
-                //var JsonStream = new FileStream("送信Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-                //JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
-                //JsonStream.Close();
-                var SerializerConfiguration=this.SerializerConfiguration;
-                SerializerConfiguration.ClearJson();
-                JsonSerializer.Serialize(this.MemoryStream,Lambda,SerializerConfiguration.JsonFormatterResolver);
-                break;
-            }
-            case XmlType.MessagePack:{
-                //{
-                //    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Create,FileAccess.Write,
-                //        FileShare.ReadWrite);
-                //    MessagePackSerializer.Serialize(MessagePackStream,Lambda,
-                //        this.SerializerConfiguration.MessagePackSerializerOptions);
-                //    MessagePackStream.Close();
-                //}
-                //{
-                //    var MessagePackStream=new FileStream("送信MessagePack.json",FileMode.Open,FileAccess.Read,
-                //        FileShare.Read);
-                //    var r=MessagePackSerializer.Deserialize<LambdaExpression>(MessagePackStream,this.SerializerConfiguration.MessagePackSerializerOptions);
-                //    MessagePackStream.Close();
-                //}
-                var SerializerConfiguration=this.SerializerConfiguration;
-                SerializerConfiguration.ClearMessagePack();
-                MessagePackSerializer.Serialize(this.MemoryStream,Lambda,SerializerConfiguration.MessagePackSerializerOptions);
-                break;
-            }
-            default:
-                throw new NotSupportedException(XmlType.ToString());
+            case XmlType.Utf8Json:this.CustomSerializerUtf8Json.Serialize(this.MemoryStream,Expression);break;
+            case XmlType.MessagePack:this.CustomSerializerMessagePack.Serialize(this.MemoryStream,Expression); break;
+            case XmlType.MemoryPack:CustomSerializerMemoryPack.Serialize(this.MemoryStream,Expression); break;
+            default:throw new NotSupportedException(XmlType.ToString());
         }
         //switch(XmlType) {
         //    case XmlType.Utf8Json:
@@ -825,7 +806,7 @@ public class Client:IDisposable {
     /// </summary>
     /// <param name="Lambda">戻り値のあるリモート処理を行うデリゲート。</param>
     /// <param name="XmlType"></param>
-    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType=XmlType.Utf8Json) {
+    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType) {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;

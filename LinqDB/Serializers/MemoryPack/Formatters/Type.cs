@@ -13,14 +13,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
 public class Type:MemoryPackFormatter<System.Type>{
-    private readonly 必要なFormatters Formatters;
-    public Type(必要なFormatters Formatters)=>this.Formatters=Formatters;
-    private readonly Dictionary<System.Type,int> DictionaryTypeIndex = new();
-    private readonly List<System.Type> Types = new();
-    internal void Clear(){
-        this.DictionaryTypeIndex.Clear();
-        this.Types.Clear();
-    }
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,System.Type? value) where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
         ////Debug.Assert(value.IsGenericType==value.IsGenericTypeDefinition);
@@ -41,42 +33,97 @@ public class Type:MemoryPackFormatter<System.Type>{
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref System.Type? value){
-        var value0=value!;
-        //Debug.Assert(value.IsGenericType==value.IsGenericTypeDefinition);
-        if(this.DictionaryTypeIndex.TryGetValue(value0,out var index)){
-            //必要なFormatters.WriteBoolean(ref writer,true);
+    private void Register(System.Type AnonymousType){
+        var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
+        var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(AnonymousType);
+        var objects2=this.objects2;
+        objects2[0]=Activator.CreateInstance(FormatterType)!;
+        Register.Invoke(null,objects2);
+    }
+    private void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,System.Type value)where TBufferWriter:IBufferWriter<byte>{
+        if(CustomSerializerMemoryPack.DictionaryTypeIndex.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
-            var DictionaryTypeIndex=this.DictionaryTypeIndex;
+            var DictionaryTypeIndex=CustomSerializerMemoryPack.DictionaryTypeIndex;
             index=DictionaryTypeIndex.Count;
             writer.WriteVarInt(index);
-            DictionaryTypeIndex.Add(value0,index);
-            //必要なFormatters.WriteBoolean(ref writer,false);
-            writer.WriteString(value0.AssemblyQualifiedName);
-            this.Types.Add(value);
-            if(value0.IsAnonymous()){
-                var FormatterType=typeof(Anonymous<>).MakeGenericType(value0);
-                var Register=必要なFormatters.Register.MakeGenericMethod(value0);
-                Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
-                //this.Formatters.SetProvider(Activator.CreateInstance(FormatterType));
+            DictionaryTypeIndex.Add(value,index);
+            if(value.IsGenericType){
+                var GenericTypeDifinition=value.GetGenericTypeDefinition();
+                writer.WriteString(GenericTypeDifinition.AssemblyQualifiedName);
+                foreach(var GenericArgument in value.GetGenericArguments()) this.PrivateSerialize(ref writer,GenericArgument);
+                if(value.IsAnonymous()) this.Register(value);
+            } else{
+                writer.WriteString(value.AssemblyQualifiedName);
             }
+            CustomSerializerMemoryPack.Types.Add(value);
+        }
+    }
+    private readonly object[] objects2=new object[1];
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref System.Type? value){
+        this.PrivateSerialize(ref writer,value);
+        //var value0=value!;
+        //if(value0.IsGenericType){
+        //    var GenericTypeDifinition=value0.GetGenericTypeDefinition();
+        //    writer.WriteString(value0.AssemblyQualifiedName);
+        //    if(value0.IsAnonymous()){
+        //        var FormatterType=typeof(Anonymous<>).MakeGenericType(value0);
+        //        var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(value0);
+        //        var objects2=this.objects2;
+        //        objects2[0]=Activator.CreateInstance(FormatterType)!;
+        //        Register.Invoke(null,objects2);
+        //        //Register.Invoke(null,Array.Empty<object>());
+        //    }
+        //    foreach(var GenericArgument in value0.GetGenericArguments())this.変数Register(GenericArgument);
+        //} else{
+        //    //Debug.Assert(value.IsGenericType==value.IsGenericTypeDefinition);
+        //    if(this.DictionaryTypeIndex.TryGetValue(value0,out var index)){
+        //        //必要なFormatters.WriteBoolean(ref writer,true);
+        //        writer.WriteVarInt(index);
+        //    } else{
+        //        var DictionaryTypeIndex=this.DictionaryTypeIndex;
+        //        index=DictionaryTypeIndex.Count;
+        //        writer.WriteVarInt(index);
+        //        DictionaryTypeIndex.Add(value0,index);
+        //        //必要なFormatters.WriteBoolean(ref writer,false);
+        //        writer.WriteString(value0.AssemblyQualifiedName);
+        //        this.Types.Add(value);
+        //        if(value0.IsAnonymous()){
+        //            var FormatterType=typeof(Anonymous<>).MakeGenericType(value0);
+        //            var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(value0);
+        //            Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
+        //            //CustomSerializerMemoryPack.SetProvider(Activator.CreateInstance(FormatterType));
+        //        }
+        //    }
+        //}
+    }
+    private System.Type PrivateDeserialize(ref MemoryPackReader reader){
+        var index=reader.ReadVarIntInt32();
+        var Types=CustomSerializerMemoryPack.Types;
+        if(index<Types.Count){
+            return Types[index];
+        } else{
+            var DictionaryTypeIndex=CustomSerializerMemoryPack.DictionaryTypeIndex;
+            Debug.Assert(index==Types.Count);
+            var AssemblyQualifiedName=reader.ReadString();
+            var value=System.Type.GetType(AssemblyQualifiedName);
+            Types.Add(value);
+            Debug.Assert(value!=null,nameof(value)+" != null");
+            if(value.IsGenericType){
+                Debug.Assert(value.IsGenericTypeDefinition);
+                var GenericArguments=value.GetGenericArguments();
+                for(var a=0;a<GenericArguments.Length;a++)GenericArguments[a]=this.PrivateDeserialize(ref reader);
+                value=value.MakeGenericType(GenericArguments);
+                if(value.IsAnonymous())this.Register(value);
+                Debug.Assert(Types[index]==value.GetGenericTypeDefinition());
+                Types[index]=value;
+            }
+            DictionaryTypeIndex.Add(value,index);
+            return value;
         }
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref System.Type? value){
-        var index=reader.ReadVarIntInt32();
-        var Types=this.Types;
-        if(index<Types.Count){
-            value=Types[index];
-        } else{
-            var AssemblyQualifiedName=reader.ReadString();
-            var Type=System.Type.GetType(AssemblyQualifiedName);
-            var DictionaryTypeIndex=this.DictionaryTypeIndex;
-            Debug.Assert(index==DictionaryTypeIndex.Count);
-            DictionaryTypeIndex.Add(Type,index);
-            Types.Add(Type);
-            value=Type;
-        }
+        value=this.PrivateDeserialize(ref reader);
         //var i=reader.ReadVarIntInt32();
         //var value0=ListType[i];
         //if(value0!.IsGenericType){

@@ -64,53 +64,6 @@ public class Expression:共通 {
     //        )
     //    );
     //}
-    protected void 共通object1<T>(T input,Action<T> AssertAction){
-        var Formatters=this.Formatters;
-        {
-            //GetFormatter<T>Tが匿名型だと例外なのであらかじめ
-            if(typeof(T).IsAnonymous()){
-                var Type=input.GetType();
-                var FormatterType=typeof(Anonymous<>).MakeGenericType(Type);
-                dynamic formatter = Activator.CreateInstance(FormatterType)!;
-                MemoryPackFormatterProvider.Register(formatter);
-                //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
-                //Register.Invoke(null,Array.Empty<object>());
-            }
-            byte[] bytes;
-            Formatters.Clear();
-            bytes=MemoryPackSerializer.Serialize(input);
-            while(true){
-                try{
-                    break;
-                } catch(MemoryPackSerializationException ex){
-                }
-            }
-            Formatters.Clear();
-            var output = MemoryPackSerializer.Deserialize<T>(bytes);
-            AssertAction(output!);
-        }
-        var SerializerConfiguration=this.SerializerConfiguration;
-        {
-            SerializerConfiguration.ClearJson();
-            var bytes = Utf8Json.JsonSerializer.Serialize(input,this.JsonFormatterResolver);
-            SerializerConfiguration.ClearJson();
-            var output = Utf8Json.JsonSerializer.Deserialize<T>(bytes,this.JsonFormatterResolver);
-            AssertAction(output);
-        }
-        {
-            SerializerConfiguration.ClearMessagePack();
-            var bytes = global::MessagePack.MessagePackSerializer.Serialize(input,this.MessagePackSerializerOptions);
-            SerializerConfiguration.ClearMessagePack();
-            //var json1=global::MessagePack.MessagePackSerializer.ConvertToJson(bytes,MessagePackSerializerOptions);
-            var output = global::MessagePack.MessagePackSerializer.Deserialize<T>(bytes,this.MessagePackSerializerOptions);
-            AssertAction(output);
-        }
-    }
-    protected void 共通Expression<T>(T input)where T:Expressions.Expression?{
-        //Debug.Assert(input!=null,nameof(input)+" != null");
-        this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        //Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
-    }
     private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"p");
     [Fact]public void Block0(){
         this.共通Expression(

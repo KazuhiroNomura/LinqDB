@@ -349,14 +349,14 @@ public sealed partial class Optimizer:IDisposable{
                 argument
             );
     }
-    /// <summary>
-    /// テストプロジェクト用に公開するExpressionを比較するメソッド。
-    /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns></returns>
-    public static bool Test_ExpressionEqualityComparer(Expression a,Expression b) =>
-        new ExpressionEqualityComparer(new List<ParameterExpression>()).Equals(a,b);
+    ///// <summary>
+    ///// テストプロジェクト用に公開するExpressionを比較するメソッド。
+    ///// </summary>
+    ///// <param name="a"></param>
+    ///// <param name="b"></param>
+    ///// <returns></returns>
+    //public static bool Test_ExpressionEqualityComparer(Expression a,Expression b) =>
+    //    new ExpressionEqualityComparer(new List<ParameterExpression>()).Equals(a,b);
     /// <summary>
     /// ビルド,プローブ式木の等価を比較する
     /// </summary>

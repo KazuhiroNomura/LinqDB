@@ -3,7 +3,7 @@ using LinqDB.Remote.Clients;
 using LinqDB.Remote.Servers;
 using LinqDB.Sets;
 using LinqDB;
-
+using static LinqDB.Helpers.Configulation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,15 +29,22 @@ using Newtonsoft.Json.Linq;
 using MessagePack;
 using Utf8Json;
 using static LinqDB.Optimizers.Optimizer;
-
+using System.Configuration;
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
-    protected static readonly EnumerableSetEqualityComparer Comparer=new();
+    protected Server<string> Server;
+    protected 共通(){
+        const int ReceiveTimeout = 1000;
+        var Server = this.Server=new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
+        Server.Open();
+    }
+    protected readonly EnumerableSetEqualityComparer Comparer=new();
     protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
-    protected IJsonFormatterResolver JsonFormatterResolver=>this.SerializerConfiguration.JsonFormatterResolver;
-    protected MessagePackSerializerOptions MessagePackSerializerOptions=>this.SerializerConfiguration.MessagePackSerializerOptions;
-    protected readonly SerializerConfiguration SerializerConfiguration=new();
-    protected readonly 必要なFormatters Formatters=new();
+    //protected IJsonFormatterResolver JsonFormatterResolver=>this.SerializerConfiguration.JsonFormatterResolver;
+    //protected MessagePackSerializerOptions MessagePackSerializerOptions=>this.SerializerConfiguration.MessagePackSerializerOptions;
+    protected readonly CustomSerializerUtf8Json CustomSerializerUtf8Json=new();
+    protected readonly CustomSerializerMessagePack CustomSerializerMessagePack=new();
+    //protected readonly CustomSerializerMemoryPack CustomSerializerMemoryPack=new();
     //protected 共通(){
     //    var SerializerConfiguration=this.SerializerConfiguration;
     //    this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
@@ -65,7 +72,88 @@ public abstract class 共通{
     //    );
     //}
     protected void 共通object1<T>(T input){
-        var Formatters=this.Formatters;
+        {
+            ////GetFormatter<T>Tが匿名型だと例外なのであらかじめ
+            //if(typeof(T).IsAnonymous()){
+            //    var Type=input.GetType();
+            //    var FormatterType=typeof(Anonymous<>).MakeGenericType(Type);
+            //    dynamic formatter = Activator.CreateInstance(FormatterType)!;
+            //    MemoryPackFormatterProvider.Register(formatter);
+            //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
+            //    //Register.Invoke(null,Array.Empty<object>());
+            //}
+            var bytes=CustomSerializerMemoryPack.Serialize(input);
+            var output = CustomSerializerMemoryPack.Deserialize<T>(bytes);
+            Assert.Equal(input,output,this.Comparer);
+        }
+        {
+            var Configuration=this.CustomSerializerUtf8Json;
+            var bytes=Configuration.Serialize(input);
+            var output = Configuration.Deserialize<T>(bytes);
+            Assert.Equal(input,output,this.Comparer);
+        }
+        {
+            var Configuration=this.CustomSerializerMessagePack;
+            var bytes=Configuration.Serialize(input);
+            var output = Configuration.Deserialize<T>(bytes);
+            Assert.Equal(input,output,this.Comparer);
+        }
+    }
+    protected void 共通object2<T>(T input){
+        Debug.Assert(input!=null,nameof(input)+" != null");
+        this.共通object1<object>(input);
+        this.共通object1(input);
+    }
+    protected readonly Optimizer Optimizer=new(){IsGenerateAssembly = false,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
+    protected void 実行結果が一致するか確認(Expression<Action> Lambda){
+        Lambda.Compile()();
+        var Optimizer=this.Optimizer;
+        Optimizer.IsInline=false;
+        Optimizer.CreateDelegate(Lambda)();
+        Optimizer.IsInline=true;
+        Optimizer.CreateDelegate(Lambda)();
+    }
+    protected void 共通Expression<T>(T input)where T:Expressions.Expression?{
+        //Debug.Assert(input!=null,nameof(input)+" != null");
+        this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        //Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
+    }
+    protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
+        this.共通Expression<Expressions.Expression>(Lambda);
+        //var 標準=Lambda.Compile();
+        //var Optimizer=this.Optimizer;
+        //Optimizer.IsInline=false;
+        //var ラムダ=Optimizer.CreateDelegate(Lambda);
+        //Optimizer.IsInline=true;
+        //var ループ=Optimizer.CreateDelegate(Lambda);
+        //var expected=標準();
+        //{
+        //    var actual=ラムダ();
+        //    Assert.IsTrue(Comparer.Equals(expected,actual));
+        //}
+        //{
+        //    var actual=ループ();
+        //    Assert.IsTrue(Comparer.Equals(expected,actual));
+        //}
+        var Optimizer=this.Optimizer;
+        var 標準=Lambda.Compile();
+        var expected=標準();
+        Optimizer.IsInline=false;
+        var ラムダ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        Optimizer.IsInline=true;
+        var ループ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        using var C = new Client<object>(Dns.GetHostName(),ListenerSocketポート番号);
+        {
+            var actual=C.Expression(ラムダ,XmlType.Utf8Json);
+            Assert.Equal(expected,actual,this.Comparer);
+        }
+        {
+            var actual=C.Expression(ループ,XmlType.MessagePack);
+            Assert.Equal(expected,actual,this.Comparer);
+        }
+        return expected;
+    }
+    protected void 共通object1<T>(T input,Action<T> AssertAction){
         {
             //GetFormatter<T>Tが匿名型だと例外なのであらかじめ
             if(typeof(T).IsAnonymous()){
@@ -76,39 +164,21 @@ public abstract class 共通{
                 //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
                 //Register.Invoke(null,Array.Empty<object>());
             }
-            Formatters.変数Register(input.GetType());
-            byte[] bytes;
-            Formatters.Clear();
-            bytes=MemoryPackSerializer.Serialize(input);
-            while(true){
-                try{
-                    break;
-                } catch(MemoryPackSerializationException ex){
-                }
-            }
-            Formatters.Clear();
-            var output = MemoryPackSerializer.Deserialize<T>(bytes);
-            Assert.Equal(input,output,Comparer);
-        }
-        var SerializerConfiguration=this.SerializerConfiguration;
-        {
-            SerializerConfiguration.ClearMessagePack();
-            var bytes = Utf8Json.JsonSerializer.Serialize(input,this.JsonFormatterResolver);
-            SerializerConfiguration.ClearMessagePack();
-            var output = Utf8Json.JsonSerializer.Deserialize<T>(bytes,this.JsonFormatterResolver);
-            Assert.Equal(input,output,Comparer);
+            var bytes=CustomSerializerMemoryPack.Serialize(input);
+            var output = CustomSerializerMemoryPack.Deserialize<T>(bytes);
+            AssertAction(output!);
         }
         {
-            SerializerConfiguration.ClearMessagePack();
-            var bytes = global::MessagePack.MessagePackSerializer.Serialize(input,this.MessagePackSerializerOptions);
-            SerializerConfiguration.ClearMessagePack();
-            var output = global::MessagePack.MessagePackSerializer.Deserialize<T>(bytes,this.MessagePackSerializerOptions);
-            Assert.Equal(input,output,Comparer);
+            var Configuration=this.CustomSerializerUtf8Json;
+            var bytes = Configuration.Serialize(input);
+            var output = Configuration.Deserialize<T>(bytes);
+            AssertAction(output);
         }
-    }
-    protected void 共通object2<T>(T input){
-        Debug.Assert(input!=null,nameof(input)+" != null");
-        this.共通object1<object>(input);
-        this.共通object1(input);
+        {
+            var Configuration=this.CustomSerializerMessagePack;
+            var bytes = Configuration.Serialize(input);
+            var output = Configuration.Deserialize<T>(bytes);
+            AssertAction(output);
+        }
     }
 }

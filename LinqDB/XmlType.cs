@@ -8,16 +8,16 @@ public enum XmlType:byte {
     /// </summary>
     Head,
     /// <summary>
-    /// Byte読み書き
-    /// </summary>
-    Native= Head,
-    /// <summary>
     /// Utf8Json.JsonSerializer
     /// </summary>
-    Utf8Json,
+    Utf8Json=Head,
     /// <summary>
-    /// MessagePack.JsonSerializer
+    /// MessagePack.MessagePackSerializer
     /// </summary>
     MessagePack,
+    /// <summary>
+    /// MemoryPack.MemoryPackSerializer
+    /// </summary>
+    MemoryPack,
     Tail= MessagePack
 }

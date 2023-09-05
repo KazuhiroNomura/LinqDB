@@ -7,8 +7,6 @@ using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 public class Unary:MemoryPackFormatter<Expressions.UnaryExpression>{
-    private readonly 必要なFormatters Formatters;
-    public Unary(必要なFormatters Formatters)=>this.Formatters=Formatters;
     //internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,UnaryExpression? value){
     //    this.Serialize(ref writer,ref value);
     //}
@@ -57,39 +55,39 @@ public class Unary:MemoryPackFormatter<Expressions.UnaryExpression>{
     //}
     public void Serialize_Unary<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression value) where TBufferWriter :IBufferWriter<byte> {
         var Unary = (Expressions.UnaryExpression)value;
-        this.Formatters.Expression.Serialize(ref writer,Unary.Operand);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,Unary.Operand);
     }
     public void Serialize_Unary_Type<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression value) where TBufferWriter :IBufferWriter<byte> {
         var Unary = (Expressions.UnaryExpression)value;
-        this.Formatters.Expression.Serialize(ref writer,Unary.Operand);
-        this.Formatters.Type.Serialize(ref writer,Unary.Type);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,Unary.Operand);
+        CustomSerializerMemoryPack.Type.Serialize(ref writer,Unary.Type);
     }
     public void Serialize_Unary_MethodInfo<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression value) where TBufferWriter :IBufferWriter<byte> {
         var Unary = (Expressions.UnaryExpression)value;
-        this.Formatters.Expression.Serialize(ref writer,Unary.Operand);
-        this.Formatters.Method.SerializeNullable(ref writer,Unary.Method);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,Unary.Operand);
+        CustomSerializerMemoryPack.Method.SerializeNullable(ref writer,Unary.Method);
     }
     public void Serialize_Unary_Type_MethodInfo<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression value) where TBufferWriter :IBufferWriter<byte> {
         var Unary = (Expressions.UnaryExpression)value;
-        this.Formatters.Expression.Serialize(ref writer,Unary.Operand);
-        this.Formatters.Type.Serialize(ref writer,Unary.Type);
-        this.Formatters.Method.SerializeNullable(ref writer,Unary.Method);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,Unary.Operand);
+        CustomSerializerMemoryPack.Type.Serialize(ref writer,Unary.Type);
+        CustomSerializerMemoryPack.Method.SerializeNullable(ref writer,Unary.Method);
     }
-    public Expressions.Expression Deserialize_Unary(ref MemoryPackReader reader) => this.Formatters.Expression.Deserialize(ref reader);
+    public Expressions.Expression Deserialize_Unary(ref MemoryPackReader reader) => CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
     public (Expressions.Expression Operand, System.Type Type) Deserialize_Unary_Type(ref MemoryPackReader reader) {
-        var Operand = this.Formatters.Expression.Deserialize(ref reader);
-        var Type = this.Formatters.Type.DeserializeType(ref reader);
+        var Operand = CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var Type = CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
         return (Operand, Type);
     }
     public (Expressions.Expression Operand, MethodInfo? Method) Deserialize_Unary_MethodInfo(ref MemoryPackReader reader) {
-        var Operand = this.Formatters.Expression.Deserialize(ref reader);
-        var Method = this.Formatters.Method.DeserializeNullable(ref reader);
+        var Operand = CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var Method = CustomSerializerMemoryPack.Method.DeserializeNullable(ref reader);
         return (Operand, Method);
     }
     public (Expressions.Expression Operand, System.Type Type, MethodInfo? Method) Deserialize_Unary_Type_MethodInfo(ref MemoryPackReader reader) {
-        var Operand = this.Formatters.Expression.Deserialize(ref reader);
-        var Type = this.Formatters.Type.DeserializeType(ref reader);
-        var Method = this.Formatters.Method.DeserializeNullable(ref reader);
+        var Operand = CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
+        var Type = CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
+        var Method = CustomSerializerMemoryPack.Method.DeserializeNullable(ref reader);
         return (Operand, Type, Method);
     }
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.UnaryExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);

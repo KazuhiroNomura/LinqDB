@@ -6,8 +6,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
 public class LabelTarget:MemoryPackFormatter<Expressions.LabelTarget>{
-    private readonly 必要なFormatters Formatters;
-    public LabelTarget(必要なFormatters Formatters)=>this.Formatters=Formatters;
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.LabelTarget? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
@@ -18,37 +16,36 @@ public class LabelTarget:MemoryPackFormatter<Expressions.LabelTarget>{
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.LabelTarget? value){
         if(value is null){
-            必要なFormatters.WriteBoolean(ref writer,false);
+            CustomSerializerMemoryPack.WriteBoolean(ref writer,false);
             return;
         }
-        必要なFormatters.WriteBoolean(ref writer,true);
-        if(this.Formatters.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+        CustomSerializerMemoryPack.WriteBoolean(ref writer,true);
+        if(CustomSerializerMemoryPack.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
-            var Dictionary_LabelTarget_int=this.Formatters.Dictionary_LabelTarget_int;
-            this.Formatters.ListLabelTarget.Add(value);
+            var Dictionary_LabelTarget_int=CustomSerializerMemoryPack.Dictionary_LabelTarget_int;
+            CustomSerializerMemoryPack.ListLabelTarget.Add(value);
             index=Dictionary_LabelTarget_int.Count;
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteVarInt(index);
-            this.Formatters.Type.Serialize(ref writer,value.Type);
+            CustomSerializerMemoryPack.Type.Serialize(ref writer,value.Type);
             writer.WriteString(value.Name);
         }
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.LabelTarget? value){
-        if(!必要なFormatters.ReadBoolean(ref reader)) return;
+        if(!CustomSerializerMemoryPack.ReadBoolean(ref reader)) return;
         var index=reader.ReadVarIntInt32();
-        var Formatters=this.Formatters;
-        var ListLabelTarget=Formatters.ListLabelTarget;
+        var ListLabelTarget=CustomSerializerMemoryPack.ListLabelTarget;
         Expressions.LabelTarget target;
         if(index<ListLabelTarget.Count){
             target=ListLabelTarget[index];
         } else{
-            var type=Formatters.Type.DeserializeType(ref reader);
+            var type=CustomSerializerMemoryPack.Type.DeserializeType(ref reader);
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             ListLabelTarget.Add(target);
             index=ListLabelTarget.Count;
-            Formatters.Dictionary_LabelTarget_int.Add(target,index);
+            CustomSerializerMemoryPack.Dictionary_LabelTarget_int.Add(target,index);
         }
         value=target;
     }

@@ -273,6 +273,7 @@ public class Server:IDisposable{
         var RequestResponseSingleReceiveSends = (BlockingCollection<SingleReceiveSend>)obj!;
         var Threadで実行するDelegate_Target = new Threadで実行するMethodデータ(this.ServerObject);
         var Token = this.CancellationTokenSourceループRequestResponse.Token;
+        var Optimizer=new Optimizers.Optimizer(){IsGenerateAssembly=false};
         try {
             while(true) {
                 var SingleReceiveSend = RequestResponseSingleReceiveSends.Take(Token);
@@ -325,9 +326,8 @@ public class Server:IDisposable{
                                     }
                                     case Request.Delegate_Invoke:
                                     case Request.Expression_Invoke: {
-                                        Debug.Assert(デシリアライズした.XmlType==XmlType.Utf8Json||デシリアライズした.XmlType==XmlType.MessagePack);
+                                        Debug.Assert(XmlType.Head<=デシリアライズした.XmlType&&デシリアライズした.XmlType<=XmlType.Tail);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
-                                        var Optimizer=new Optimizers.Optimizer();
                                         var Delegate=Optimizer.CreateServerDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
                                             Delegate

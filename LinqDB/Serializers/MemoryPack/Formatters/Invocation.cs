@@ -5,8 +5,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 
 public class Invocation:MemoryPackFormatter<Expressions.InvocationExpression>{
-    private readonly 必要なFormatters Formatters;
-    public Invocation(必要なFormatters Formatters)=>this.Formatters=Formatters;
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.InvocationExpression? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
@@ -20,8 +18,8 @@ public class Invocation:MemoryPackFormatter<Expressions.InvocationExpression>{
             //writer.WriteNil();
             return;
         }
-        this.Formatters.Expression.Serialize(ref writer,value.Expression);
-        必要なFormatters.Serialize(ref writer,value.Arguments);
+        CustomSerializerMemoryPack.Expression.Serialize(ref writer,value.Expression);
+        CustomSerializerMemoryPack.Serialize(ref writer,value.Arguments);
     }
     // public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref InvocationExpression? value) where TBufferWriter:IBufferWriter<byte>
     // {
@@ -29,7 +27,7 @@ public class Invocation:MemoryPackFormatter<Expressions.InvocationExpression>{
     // }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.InvocationExpression? value){
         //if(reader.TryReadNil()) return;
-        var expression= this.Formatters.Expression.Deserialize(ref reader);
+        var expression= CustomSerializerMemoryPack.Expression.Deserialize(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         value=Expressions.Expression.Invoke(expression,arguments!);
     }

@@ -6,30 +6,26 @@ using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 public class Binary:MemoryPackFormatter<Expressions.BinaryExpression>{
-    private readonly 必要なFormatters Formatters;
-    public Binary(必要なFormatters Formatters) => this.Formatters=Formatters;
     internal (Expressions.Expression Left, Expressions.Expression Right) Deserialize_Binary(ref MemoryPackReader reader) {
-        var Ex = this.Formatters.Expression;
+        var Ex = CustomSerializerMemoryPack.Expression;
         var Left = Ex.Deserialize(ref reader);
         var Right = Ex.Deserialize(ref reader);
         Debug.Assert(Left!=null);
         return (Left, Right);
     }
     internal (Expressions.Expression Left, Expressions.Expression Right, MethodInfo? Method) Deserialize_Binary_MethodInfo(ref MemoryPackReader reader) {
-        var Formatters=this.Formatters;
-        var Ex = Formatters.Expression;
+        var Ex = CustomSerializerMemoryPack.Expression;
         var Left = Ex.Deserialize(ref reader);
         var Right = Ex.Deserialize(ref reader);
-        var Method = Formatters.Method.DeserializeNullable(ref reader);
+        var Method = CustomSerializerMemoryPack.Method.DeserializeNullable(ref reader);
         return (Left, Right, Method);
     }
     internal (Expressions.Expression Left, Expressions.Expression Right, bool IsLiftedToNull, MethodInfo? Method) Deserialize_Binary_bool_MethodInfo(ref MemoryPackReader reader){
-        var Formatters=this.Formatters;
-        var Ex = Formatters.Expression;
+        var Ex = CustomSerializerMemoryPack.Expression;
         var Left = Ex.Deserialize(ref reader);
         var Right = Ex.Deserialize(ref reader);
-        var IsLiftedToNull =必要なFormatters.ReadBoolean(ref reader);
-        var Method = Formatters.Method.DeserializeNullable(ref reader);
+        var IsLiftedToNull =CustomSerializerMemoryPack.ReadBoolean(ref reader);
+        var Method = CustomSerializerMemoryPack.Method.DeserializeNullable(ref reader);
         return (Left, Right, IsLiftedToNull, Method);
     }
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.BinaryExpression? value)where TBufferWriter:IBufferWriter<byte> => this.Serialize(ref writer,ref value);
@@ -45,8 +41,8 @@ public class Binary:MemoryPackFormatter<Expressions.BinaryExpression>{
             case Expressions.ExpressionType.Assign or Expressions.ExpressionType.Coalesce or Expressions.ExpressionType.ArrayIndex:{
                 var Left=value.Left;
                 var Right=value.Right;
-                this.Formatters.Expression.Serialize(ref writer,ref Left);
-                this.Formatters.Expression.Serialize(ref writer,ref Right);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Left);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Right);
                 break;
             }
             case Expressions.ExpressionType.Add:
@@ -81,9 +77,9 @@ public class Binary:MemoryPackFormatter<Expressions.BinaryExpression>{
             case Expressions.ExpressionType.SubtractChecked: {
                 var Left=value.Left;
                 var Right=value.Right;
-                this.Formatters.Expression.Serialize(ref writer,ref Left);
-                this.Formatters.Expression.Serialize(ref writer,ref Right);
-                this.Formatters.Method.SerializeNullable(ref writer,value.Method);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Left);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Right);
+                CustomSerializerMemoryPack.Method.SerializeNullable(ref writer,value.Method);
                 break;
             }
             case Expressions.ExpressionType.Equal:
@@ -94,10 +90,10 @@ public class Binary:MemoryPackFormatter<Expressions.BinaryExpression>{
             case Expressions.ExpressionType.NotEqual: {
                 var Left=value.Left;
                 var Right=value.Right;
-                this.Formatters.Expression.Serialize(ref writer,ref Left);
-                this.Formatters.Expression.Serialize(ref writer,ref Right);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Left);
+                CustomSerializerMemoryPack.Expression.Serialize(ref writer,ref Right);
                 writer.WriteVarInt((byte)(value.IsLiftedToNull ? 1 : 0));
-                this.Formatters.Method.SerializeNullable(ref writer,value.Method);
+                CustomSerializerMemoryPack.Method.SerializeNullable(ref writer,value.Method);
                 break;
             }
             default:

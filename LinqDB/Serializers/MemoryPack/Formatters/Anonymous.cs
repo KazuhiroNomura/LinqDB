@@ -86,7 +86,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
                     if(PropertyType.IsAnonymous()){
                         PropertyTypes[0]=PropertyType;
                         var FormatterType=typeof(Anonymous<>).MakeGenericType(PropertyTypes);
-                        var Register=必要なFormatters.Register.MakeGenericMethod(PropertyTypes);
+                        var Register=CustomSerializerMemoryPack.Register.MakeGenericMethod(PropertyTypes);
                         Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
                     }
                     MethodTypes[1]=PropertyType;
