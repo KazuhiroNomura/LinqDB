@@ -174,7 +174,7 @@ public class Expression:共通 {
         );
     }
     [Fact]public void Constant0(){
-        this.共通Expression(Expressions.Expression.Constant(null,typeof(string)));
+        this.共通Expression((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
     }
     [Fact]public void Constant1(){
         this.共通Expression(Expressions.Expression.Constant(1111m));
@@ -457,7 +457,7 @@ public class Expression:共通 {
     [Fact]
     public void ArrayIndex0(){
         var List=Expressions.Expression.Parameter(typeof(List<int>));
-        this.共通Expression(
+        this.共通Expression((Expressions.Expression)
             Expressions.Expression.Block(
                 new[] { List },
                 Expressions.Expression.MakeIndex(

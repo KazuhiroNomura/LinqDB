@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 using LinqDB.Databases;
 using System.IO;
 using System.CodeDom.Compiler;
-
+using LinqDB.Serializers.Utf8Json;
 namespace LinqDB.Sets;
 
 /// <summary>
@@ -131,8 +131,8 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContain
     public void ReadDifference(Stream Reader) {
         //var List削除Key=(List<TKey>)ExpressionSurrogateSelector.serializer.ReadObject(Reader);
         //var List追加Value=(List<TValue>)ExpressionSurrogateSelector.serializer.ReadObject(Reader);
-        var List削除Key = Utf8Json.JsonSerializer.Deserialize<List<TKey>>(Reader);
-        var List追加Value = Utf8Json.JsonSerializer.Deserialize<List<TValue>>(Reader);
+        var List削除Key =  Utf8JsonCustomSerializer.Instance.Deserialize<List<TKey>>(Reader);
+        var List追加Value =Utf8JsonCustomSerializer.Instance.Deserialize<List<TValue>>(Reader);
         var Count = this.Count;
         foreach(var 削除Key in List削除Key) {
             if(!this.RemoveKey(削除Key)) {

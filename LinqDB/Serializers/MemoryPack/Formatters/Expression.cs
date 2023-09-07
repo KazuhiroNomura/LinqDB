@@ -2,44 +2,13 @@
 using System.Buffers;
 using MemoryPack;
 using Expressions = System.Linq.Expressions;
-using System.Linq.Expressions;
 // ReSharper disable InconsistentNaming
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=Expressions.Expression;
+
 public class Expression:MemoryPackFormatter<Expressions.Expression>{
-    //public static readonly Formatter Instance=new();
-    //private static readonly Dictionary<int,MemberInfo>Members=new();
-    //private static readonly Dictionary<int,Type>Types=new();
-    //private static readonly Dictionary<int,FieldInfo>Fields=new();
-    //private static readonly Dictionary<int,PropertyInfo>Properties=new();
-    //private static readonly Dictionary<int,MethodInfo>Methods=new();
-    //private static readonly Dictionary<int,EventInfo>Events=new();
-    //static Expression(){
-    //    foreach(var Assembly in AppDomain.CurrentDomain.GetAssemblies()){
-    //        foreach(var Type in Assembly.GetTypes()){
-    //            foreach(var Member in Type.GetMembers()){
-    //                var MetadataToken=Member.MetadataToken;
-    //                Members.Add(MetadataToken,Member);
-    //                if     (Member.MemberType==MemberTypes.TypeInfo)Types.Add(MetadataToken,(Type)Member);
-    //                else if(Member.MemberType==MemberTypes.Field)Fields.Add(MetadataToken,(FieldInfo)Member);
-    //                else if(Member.MemberType==MemberTypes.Property)Properties.Add(MetadataToken,(PropertyInfo)Member);
-    //                else if(Member.MemberType==MemberTypes.Method)Methods.Add(MetadataToken,(MethodInfo)Member);
-    //                else if(Member.MemberType==MemberTypes.Event)Events.Add(MetadataToken,(EventInfo)Member);
-    //            }
-    //        }
-    //    }
-    //}
-    //private readonly global::MemoryPack.Formatters.TypeFormatter TypeFormatter=new();
-    //private static readonly ReadOnlyCollectionFormatter<Expressions.Expression>SerializeExpressionsFormatter=new();
-    //private static readonly ArrayFormatter<Expression>DeserializeExpressionsFormatter=new();
-    //public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.Expression> value)where TBufferWriter:IBufferWriter<byte> =>writer.WriteArray(value);
-    // private void Serialize<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>where where T:Expression{
-    //     this.Serialize(ref writer,ref value);
-    // }
-    // private T DeserializeExpression<T>(ref MemoryPackReader reader)where T:Expression{
-    //     T? value=default;
-    //     this.Deserialize(ref reader,ref value);
-    //     return value!;
-    // }
+    public static readonly Expression Instance=new();
     public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
@@ -50,445 +19,352 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.Expression? value){
         if(value is null){
-            MemoryPackCustomSerializer.WriteBoolean(ref writer,false);
+            writer.WriteBoolean(false);
             return;
         }
-        MemoryPackCustomSerializer.WriteBoolean(ref writer,true);
-        writer.WriteVarInt((byte)value.NodeType);
+        writer.WriteBoolean(true);
+        writer.WriteNodeType(value.NodeType);
         switch(value.NodeType){
-            case ExpressionType.Assign or ExpressionType.Coalesce or ExpressionType.ArrayIndex:{
-                var Binary=(BinaryExpression)value;
-                this.Serialize(ref writer,Binary.Left);
-                this.Serialize(ref writer,Binary.Right);
-                break;
-            }
-            case ExpressionType.Add:
-            case ExpressionType.AddAssign:
-            case ExpressionType.AddAssignChecked:
-            case ExpressionType.AddChecked:
-            case ExpressionType.And:
-            case ExpressionType.AndAssign:
-            case ExpressionType.AndAlso:
-            case ExpressionType.Divide:
-            case ExpressionType.DivideAssign:
-            case ExpressionType.ExclusiveOr:
-            case ExpressionType.ExclusiveOrAssign:
-            case ExpressionType.LeftShift:
-            case ExpressionType.LeftShiftAssign:
-            case ExpressionType.Modulo:
-            case ExpressionType.ModuloAssign:
-            case ExpressionType.Multiply:
-            case ExpressionType.MultiplyAssign:
-            case ExpressionType.MultiplyAssignChecked:
-            case ExpressionType.MultiplyChecked:
-            case ExpressionType.Or:
-            case ExpressionType.OrAssign:
-            case ExpressionType.OrElse:
-            case ExpressionType.Power:
-            case ExpressionType.PowerAssign:
-            case ExpressionType.RightShift:
-            case ExpressionType.RightShiftAssign:
-            case ExpressionType.Subtract:
-            case ExpressionType.SubtractAssign:
-            case ExpressionType.SubtractAssignChecked:
-            case ExpressionType.SubtractChecked:{
-                var Binary=(BinaryExpression)value;
-                this.Serialize(ref writer,Binary.Left);
-                this.Serialize(ref writer,Binary.Right);
-                MemoryPackCustomSerializer.Method.SerializeNullable(ref writer,Binary.Method);
-                break;
-            }
-            case ExpressionType.Equal:
-            case ExpressionType.GreaterThan:
-            case ExpressionType.GreaterThanOrEqual:
-            case ExpressionType.LessThan:
-            case ExpressionType.LessThanOrEqual:
-            case ExpressionType.NotEqual:{
-                var Binary=(BinaryExpression)value;
-                this.Serialize(ref writer,Binary.Left);
-                this.Serialize(ref writer,Binary.Right);
-                writer.WriteVarInt((byte)(Binary.IsLiftedToNull ? 1 : 0));
-                MemoryPackCustomSerializer.Method.SerializeNullable(ref writer,Binary.Method!);
-                break;
-            }
-
-            case ExpressionType.ArrayLength        :MemoryPackCustomSerializer.Unary.Serialize_Unary(ref writer,value);break;
-            case ExpressionType.Convert            :MemoryPackCustomSerializer.Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
-            case ExpressionType.ConvertChecked     :MemoryPackCustomSerializer.Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
-            case ExpressionType.Decrement          :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.Increment          :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.IsFalse            :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.IsTrue             :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.Negate             :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.NegateChecked      :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.Not                :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.OnesComplement     :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.PostDecrementAssign:MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.PostIncrementAssign:MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.PreDecrementAssign :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.PreIncrementAssign :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.Quote              :MemoryPackCustomSerializer.Unary.Serialize_Unary(ref writer,value);break;
-            case ExpressionType.Throw              :MemoryPackCustomSerializer.Unary.Serialize_Unary_Type(ref writer,value);break;
-            case ExpressionType.TypeAs             :MemoryPackCustomSerializer.Unary.Serialize_Unary_Type(ref writer,value);break;
-            case ExpressionType.UnaryPlus          :MemoryPackCustomSerializer.Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case ExpressionType.Unbox              :MemoryPackCustomSerializer.Unary.Serialize_Unary_Type(ref writer,value);break;
-            case ExpressionType.TypeEqual          :
-            case ExpressionType.TypeIs             :MemoryPackCustomSerializer.TypeBinary.Serialize(ref writer,(TypeBinaryExpression)value); break;
-            case ExpressionType.Conditional        :MemoryPackCustomSerializer.Conditional.Serialize(ref writer,(ConditionalExpression)value);break;
-            case ExpressionType.Constant           :MemoryPackCustomSerializer.Constant.Serialize(ref writer,(ConstantExpression)value);break;
-            case ExpressionType.Parameter          :MemoryPackCustomSerializer.Parameter.Serialize(ref writer,(ParameterExpression)value);break;
-            case ExpressionType.Lambda             :MemoryPackCustomSerializer.Lambda.Serialize(ref writer,(LambdaExpression)value); break;
-            case ExpressionType.Call               :MemoryPackCustomSerializer.MethodCall.Serialize(ref writer,(MethodCallExpression)value);break;
-            case ExpressionType.Invoke             :MemoryPackCustomSerializer.Invocation.Serialize(ref writer,(InvocationExpression)value);break;
-            case ExpressionType.New                :MemoryPackCustomSerializer.New.Serialize(ref writer,(NewExpression)value);break;
-            case ExpressionType.NewArrayInit       :
-            case ExpressionType.NewArrayBounds     :MemoryPackCustomSerializer.NewArray.Serialize(ref writer,(NewArrayExpression)value);break;//this.Serialize(ref writer,(Expressions.(NewArrayExpression)value).Expressions);break;
-            case ExpressionType.ListInit           :MemoryPackCustomSerializer.ListInit.Serialize(ref writer,(ListInitExpression)value);break;
-            case ExpressionType.MemberAccess       :MemoryPackCustomSerializer.MemberAccess.Serialize(ref writer,(MemberExpression)value);break;
-            case ExpressionType.MemberInit         :MemoryPackCustomSerializer.MemberInit.Serialize(ref writer,(MemberInitExpression)value);break;
-            case ExpressionType.Block              :MemoryPackCustomSerializer.Block.Serialize(ref writer,(BlockExpression)value);break;
-            case ExpressionType.DebugInfo          :
-            case ExpressionType.Dynamic            :
-            case ExpressionType.Default            :MemoryPackCustomSerializer.Default.Serialize(ref writer,(DefaultExpression)value);break;
-            case ExpressionType.Extension          :
-            case ExpressionType.Goto               :MemoryPackCustomSerializer.Goto.Serialize(ref writer,(GotoExpression)value);break;
-            case ExpressionType.Index              :MemoryPackCustomSerializer.Index.Serialize(ref writer,(IndexExpression)value);break;
-            case ExpressionType.Label              :MemoryPackCustomSerializer.Label.Serialize(ref writer,(LabelExpression)value);break;
-            case ExpressionType.RuntimeVariables   :throw new ArgumentOutOfRangeException(value.NodeType.ToString());
-            case ExpressionType.Loop               :MemoryPackCustomSerializer.Loop.Serialize(ref writer,(LoopExpression)value);break;
-            case ExpressionType.Switch             :MemoryPackCustomSerializer.Switch.Serialize(ref writer,(SwitchExpression)value);break;
-            case ExpressionType.Try                :MemoryPackCustomSerializer.Try.Serialize(ref writer,(TryExpression)value);break;
+            case Expressions.ExpressionType.Assign:
+            case Expressions.ExpressionType.Coalesce:
+            case Expressions.ExpressionType.ArrayIndex:Binary.Serialize_Binary(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Add:
+            case Expressions.ExpressionType.AddAssign:
+            case Expressions.ExpressionType.AddAssignChecked:
+            case Expressions.ExpressionType.AddChecked:
+            case Expressions.ExpressionType.And:
+            case Expressions.ExpressionType.AndAssign:
+            case Expressions.ExpressionType.AndAlso:
+            case Expressions.ExpressionType.Divide:
+            case Expressions.ExpressionType.DivideAssign:
+            case Expressions.ExpressionType.ExclusiveOr:
+            case Expressions.ExpressionType.ExclusiveOrAssign:
+            case Expressions.ExpressionType.LeftShift:
+            case Expressions.ExpressionType.LeftShiftAssign:
+            case Expressions.ExpressionType.Modulo:
+            case Expressions.ExpressionType.ModuloAssign:
+            case Expressions.ExpressionType.Multiply:
+            case Expressions.ExpressionType.MultiplyAssign:
+            case Expressions.ExpressionType.MultiplyAssignChecked:
+            case Expressions.ExpressionType.MultiplyChecked:
+            case Expressions.ExpressionType.Or:
+            case Expressions.ExpressionType.OrAssign:
+            case Expressions.ExpressionType.OrElse:
+            case Expressions.ExpressionType.Power:
+            case Expressions.ExpressionType.PowerAssign:
+            case Expressions.ExpressionType.RightShift:
+            case Expressions.ExpressionType.RightShiftAssign:
+            case Expressions.ExpressionType.Subtract:
+            case Expressions.ExpressionType.SubtractAssign:
+            case Expressions.ExpressionType.SubtractAssignChecked:
+            case Expressions.ExpressionType.SubtractChecked:Binary.Serialize_Binary_MethodInfo(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Equal:
+            case Expressions.ExpressionType.GreaterThan:
+            case Expressions.ExpressionType.GreaterThanOrEqual:
+            case Expressions.ExpressionType.LessThan:
+            case Expressions.ExpressionType.LessThanOrEqual:
+            case Expressions.ExpressionType.NotEqual:Binary.Serialize_Binary_bool_MethodInfo(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.ArrayLength        :Unary.Serialize_Unary(ref writer,value);break;
+            case Expressions.ExpressionType.Quote              :Unary.Serialize_Unary(ref writer,value);break;
+            case Expressions.ExpressionType.Throw              :Unary.Serialize_Unary_Type(ref writer,value);break;
+            case Expressions.ExpressionType.TypeAs             :Unary.Serialize_Unary_Type(ref writer,value);break;
+            case Expressions.ExpressionType.Unbox              :Unary.Serialize_Unary_Type(ref writer,value);break;
+            case Expressions.ExpressionType.Convert            :Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.ConvertChecked     :Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.Decrement          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.Increment          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.IsFalse            :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.IsTrue             :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.Negate             :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.NegateChecked      :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.Not                :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.OnesComplement     :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.PostDecrementAssign:Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.PostIncrementAssign:Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.PreDecrementAssign :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.PreIncrementAssign :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.UnaryPlus          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.TypeEqual          :
+            case Expressions.ExpressionType.TypeIs             :TypeBinary.Instance.Serialize(ref writer,(Expressions.TypeBinaryExpression)value); break;
+            case Expressions.ExpressionType.Conditional        :Conditional.Instance.Serialize(ref writer,(Expressions.ConditionalExpression)value);break;
+            case Expressions.ExpressionType.Constant           :Constant.Instance.Serialize(ref writer,(Expressions.ConstantExpression)value);break;
+            case Expressions.ExpressionType.Parameter          :Parameter.Instance.Serialize(ref writer,(Expressions.ParameterExpression)value);break;
+            case Expressions.ExpressionType.Lambda             :Lambda.Instance.Serialize(ref writer,(Expressions.LambdaExpression)value); break;
+            case Expressions.ExpressionType.Call               :MethodCall.Instance.Serialize(ref writer,(Expressions.MethodCallExpression)value);break;
+            case Expressions.ExpressionType.Invoke             :Invocation.Instance.Serialize(ref writer,(Expressions.InvocationExpression)value);break;
+            case Expressions.ExpressionType.New                :New.Instance.Serialize(ref writer,(Expressions.NewExpression)value);break;
+            case Expressions.ExpressionType.NewArrayInit       :
+            case Expressions.ExpressionType.NewArrayBounds     :NewArray.Instance.Serialize(ref writer,(Expressions.NewArrayExpression)value);break;//this.Instance.Serialize(ref writer,(Expressions.Expressions.(NewArrayExpression)value).Expressions);break;
+            case Expressions.ExpressionType.ListInit           :ListInit.Instance.Serialize(ref writer,(Expressions.ListInitExpression)value);break;
+            case Expressions.ExpressionType.MemberAccess       :MemberAccess.Instance.Serialize(ref writer,(Expressions.MemberExpression)value);break;
+            case Expressions.ExpressionType.MemberInit         :MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value);break;
+            case Expressions.ExpressionType.Block              :Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value);break;
+            //case Expressions.ExpressionType.DebugInfo          :
+            //case Expressions.ExpressionType.Dynamic            :
+            case Expressions.ExpressionType.Default            :Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value);break;
+            //case Expressions.ExpressionType.Extension          :
+            case Expressions.ExpressionType.Goto               :Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value);break;
+            case Expressions.ExpressionType.Index              :Index.Instance.Serialize(ref writer,(Expressions.IndexExpression)value);break;
+            case Expressions.ExpressionType.Label              :Label.Instance.Serialize(ref writer,(Expressions.LabelExpression)value);break;
+            //case Expressions.ExpressionType.RuntimeVariables   :
+            case Expressions.ExpressionType.Loop               :Loop.Instance.Serialize(ref writer,(Expressions.LoopExpression)value);break;
+            case Expressions.ExpressionType.Switch             :Switch.Instance.Serialize(ref writer,(Expressions.SwitchExpression)value);break;
+            case Expressions.ExpressionType.Try                :Try.Instance.Serialize(ref writer,(Expressions.TryExpression)value);break;
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.Expression? value){
-        if(!MemoryPackCustomSerializer.ReadBoolean(ref reader)) return;
+        if(!reader.ReadBoolean()) return;
         //if(reader.TryReadNil())return;
-        var NodeType=(ExpressionType)reader.ReadVarIntByte();
+        var NodeType=reader.ReadNodeType();
         switch(NodeType){
-            case ExpressionType.Assign: {
-                var (Left, Right)=MemoryPackCustomSerializer.Binary.Deserialize_Binary(ref reader);
-                value=Expressions.Expression.Assign(Left,Right); break;
+            case Expressions.ExpressionType.Assign:
+            case Expressions.ExpressionType.Coalesce:
+            case Expressions.ExpressionType.ArrayIndex:{
+                var (Left,Right)=Binary.Deserialize_Binary(ref reader);
+                value=Expressions.Expression.MakeBinary(NodeType,Left,Right); break;
             }
-            case ExpressionType.Coalesce: {
-                var (Left, Right)=MemoryPackCustomSerializer.Binary.Deserialize_Binary(ref reader);
-                value=Expressions.Expression.Coalesce(Left,Right); break;
+            case Expressions.ExpressionType.Add:
+            case Expressions.ExpressionType.AddAssign:
+            case Expressions.ExpressionType.AddAssignChecked:
+            case Expressions.ExpressionType.AddChecked:
+            case Expressions.ExpressionType.And:
+            case Expressions.ExpressionType.AndAssign:
+            case Expressions.ExpressionType.AndAlso:
+            case Expressions.ExpressionType.Divide:
+            case Expressions.ExpressionType.DivideAssign:
+            case Expressions.ExpressionType.ExclusiveOr:
+            case Expressions.ExpressionType.ExclusiveOrAssign:
+            case Expressions.ExpressionType.LeftShift:
+            case Expressions.ExpressionType.LeftShiftAssign:
+            case Expressions.ExpressionType.Modulo:
+            case Expressions.ExpressionType.ModuloAssign:
+            case Expressions.ExpressionType.Multiply:
+            case Expressions.ExpressionType.MultiplyAssign:
+            case Expressions.ExpressionType.MultiplyAssignChecked:
+            case Expressions.ExpressionType.MultiplyChecked:
+            case Expressions.ExpressionType.Or:
+            case Expressions.ExpressionType.OrAssign:
+            case Expressions.ExpressionType.OrElse:
+            case Expressions.ExpressionType.Power:
+            case Expressions.ExpressionType.PowerAssign:
+            case Expressions.ExpressionType.RightShift:
+            case Expressions.ExpressionType.RightShiftAssign:
+            case Expressions.ExpressionType.Subtract:
+            case Expressions.ExpressionType.SubtractAssign:
+            case Expressions.ExpressionType.SubtractAssignChecked:
+            case Expressions.ExpressionType.SubtractChecked: {
+                var (Left, Right, Method)=Binary.Deserialize_Binary_MethodInfo(ref reader);
+                value=Expressions.Expression.MakeBinary(NodeType,Left,Right,false,Method); break;
             }
-            case ExpressionType.Add: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Add(Left,Right,Method); break;
-            }
-            case ExpressionType.AddAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.AddAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.AddAssignChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.AddAssignChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.AddChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.AddChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.And: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.And(Left,Right,Method); break;
-            }
-            case ExpressionType.AndAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.AndAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.AndAlso: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.AndAlso(Left,Right,Method); break;
-            }
-            case ExpressionType.Divide: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Divide(Left,Right,Method); break;
-            }
-            case ExpressionType.DivideAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.DivideAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.ExclusiveOr: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.ExclusiveOr(Left,Right,Method); break;
-            }
-            case ExpressionType.ExclusiveOrAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.ExclusiveOrAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.LeftShift: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.LeftShift(Left,Right,Method); break;
-            }
-            case ExpressionType.LeftShiftAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.LeftShiftAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.Modulo: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Modulo(Left,Right,Method); break;
-            }
-            case ExpressionType.ModuloAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.ModuloAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.Multiply: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Multiply(Left,Right,Method); break;
-            }
-            case ExpressionType.MultiplyAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.MultiplyAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.MultiplyAssignChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.MultiplyAssignChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.MultiplyChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.MultiplyChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.Or: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Or(Left,Right,Method); break;
-            }
-            case ExpressionType.OrAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.OrAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.OrElse: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.OrElse(Left,Right,Method); break;
-            }
-            case ExpressionType.Power: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Power(Left,Right,Method); break;
-            }
-            case ExpressionType.PowerAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.PowerAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.RightShift: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.RightShift(Left,Right,Method); break;
-            }
-            case ExpressionType.RightShiftAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.RightShiftAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.Subtract: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.Subtract(Left,Right,Method); break;
-            }
-            case ExpressionType.SubtractAssign: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.SubtractAssign(Left,Right,Method); break;
-            }
-            case ExpressionType.SubtractAssignChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.SubtractAssignChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.SubtractChecked: {
-                var (Left, Right, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_MethodInfo(ref reader);
-                value=Expressions.Expression.SubtractChecked(Left,Right,Method); break;
-            }
-            case ExpressionType.Equal: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
-                value=Expressions.Expression.Equal(Left,Right,IsLiftedToNull,Method); break;
-            }
-            case ExpressionType.GreaterThan: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
-                value=Expressions.Expression.GreaterThan(Left,Right,IsLiftedToNull,Method); break;
-            }
-            case ExpressionType.GreaterThanOrEqual: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
-                value=Expressions.Expression.GreaterThanOrEqual(Left,Right,IsLiftedToNull,Method); break;
-            }
-            case ExpressionType.LessThan: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
-                value=Expressions.Expression.LessThan(Left,Right,IsLiftedToNull,Method); break;
-            }
-            case ExpressionType.LessThanOrEqual: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
-                value=Expressions.Expression.LessThanOrEqual(Left,Right,IsLiftedToNull,Method); break;
-            }
-            case ExpressionType.NotEqual: {
-                var (Left, Right, IsLiftedToNull, Method)=MemoryPackCustomSerializer.Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
+            case Expressions.ExpressionType.Equal:
+            case Expressions.ExpressionType.GreaterThan:
+            case Expressions.ExpressionType.GreaterThanOrEqual:
+            case Expressions.ExpressionType.LessThan:
+            case Expressions.ExpressionType.LessThanOrEqual:
+            case Expressions.ExpressionType.NotEqual: {
+                var (Left, Right, IsLiftedToNull, Method)=Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
                 value=Expressions.Expression.NotEqual(Left,Right,IsLiftedToNull,Method); break;
             }
-            case ExpressionType.ArrayIndex: {
-                var (array, index)=MemoryPackCustomSerializer.Binary.Deserialize_Binary(ref reader);
-                value=Expressions.Expression.ArrayIndex(array,index); break;
+            //case Expressions.Expressions.ExpressionType.Assign:
+            //case Expressions.Expressions.ExpressionType.Coalesce:
+            //case Expressions.Expressions.ExpressionType.Add:
+            //case Expressions.Expressions.ExpressionType.AddAssign:
+            //case Expressions.Expressions.ExpressionType.AddAssignChecked:
+            //case Expressions.Expressions.ExpressionType.AddChecked:
+            //case Expressions.Expressions.ExpressionType.And:
+            //case Expressions.Expressions.ExpressionType.AndAssign:
+            //case Expressions.Expressions.ExpressionType.AndAlso:
+            //case Expressions.Expressions.ExpressionType.Divide:
+            //case Expressions.Expressions.ExpressionType.DivideAssign:
+            //case Expressions.Expressions.ExpressionType.ExclusiveOr:
+            //case Expressions.Expressions.ExpressionType.ExclusiveOrAssign:
+            //case Expressions.Expressions.ExpressionType.LeftShift:
+            //case Expressions.Expressions.ExpressionType.LeftShiftAssign:
+            //case Expressions.Expressions.ExpressionType.Modulo:
+            //case Expressions.Expressions.ExpressionType.ModuloAssign:
+            //case Expressions.Expressions.ExpressionType.Multiply:
+            //case Expressions.Expressions.ExpressionType.MultiplyAssign:
+            //case Expressions.Expressions.ExpressionType.MultiplyAssignChecked:
+            //case Expressions.Expressions.ExpressionType.MultiplyChecked:
+            //case Expressions.Expressions.ExpressionType.Or:
+            //case Expressions.Expressions.ExpressionType.OrAssign:
+            //case Expressions.Expressions.ExpressionType.OrElse:
+            //case Expressions.Expressions.ExpressionType.Power:
+            //case Expressions.Expressions.ExpressionType.PowerAssign:
+            //case Expressions.Expressions.ExpressionType.RightShift:
+            //case Expressions.Expressions.ExpressionType.RightShiftAssign:
+            //case Expressions.Expressions.ExpressionType.Subtract:
+            //case Expressions.Expressions.ExpressionType.SubtractAssign:
+            //case Expressions.Expressions.ExpressionType.SubtractAssignChecked:
+            //case Expressions.Expressions.ExpressionType.SubtractChecked:
+            //case Expressions.Expressions.ExpressionType.Equal:
+            //case Expressions.Expressions.ExpressionType.GreaterThan:
+            //case Expressions.Expressions.ExpressionType.GreaterThanOrEqual:
+            //case Expressions.Expressions.ExpressionType.LessThan:
+            //case Expressions.Expressions.ExpressionType.LessThanOrEqual:
+            //case Expressions.Expressions.ExpressionType.NotEqual:
+            //case Expressions.Expressions.ExpressionType.ArrayIndex:value=CustomSerializerMemoryPack.Binary.Deserialize(ref reader);break;
+            case Expressions.ExpressionType.ArrayLength        :
+            case Expressions.ExpressionType.Quote              :{
+                var Operand= Unary.Deserialize_Unary(ref reader);
+                value=Expressions.Expression.ArrayLength(Operand);break;
             }
-            //case Expressions.ExpressionType.Assign:
-            //case Expressions.ExpressionType.Coalesce:
-            //case Expressions.ExpressionType.Add:
-            //case Expressions.ExpressionType.AddAssign:
-            //case Expressions.ExpressionType.AddAssignChecked:
-            //case Expressions.ExpressionType.AddChecked:
-            //case Expressions.ExpressionType.And:
-            //case Expressions.ExpressionType.AndAssign:
-            //case Expressions.ExpressionType.AndAlso:
-            //case Expressions.ExpressionType.Divide:
-            //case Expressions.ExpressionType.DivideAssign:
-            //case Expressions.ExpressionType.ExclusiveOr:
-            //case Expressions.ExpressionType.ExclusiveOrAssign:
-            //case Expressions.ExpressionType.LeftShift:
-            //case Expressions.ExpressionType.LeftShiftAssign:
-            //case Expressions.ExpressionType.Modulo:
-            //case Expressions.ExpressionType.ModuloAssign:
-            //case Expressions.ExpressionType.Multiply:
-            //case Expressions.ExpressionType.MultiplyAssign:
-            //case Expressions.ExpressionType.MultiplyAssignChecked:
-            //case Expressions.ExpressionType.MultiplyChecked:
-            //case Expressions.ExpressionType.Or:
-            //case Expressions.ExpressionType.OrAssign:
-            //case Expressions.ExpressionType.OrElse:
-            //case Expressions.ExpressionType.Power:
-            //case Expressions.ExpressionType.PowerAssign:
-            //case Expressions.ExpressionType.RightShift:
-            //case Expressions.ExpressionType.RightShiftAssign:
-            //case Expressions.ExpressionType.Subtract:
-            //case Expressions.ExpressionType.SubtractAssign:
-            //case Expressions.ExpressionType.SubtractAssignChecked:
-            //case Expressions.ExpressionType.SubtractChecked:
-            //case Expressions.ExpressionType.Equal:
-            //case Expressions.ExpressionType.GreaterThan:
-            //case Expressions.ExpressionType.GreaterThanOrEqual:
-            //case Expressions.ExpressionType.LessThan:
-            //case Expressions.ExpressionType.LessThanOrEqual:
-            //case Expressions.ExpressionType.NotEqual:
-            //case Expressions.ExpressionType.ArrayIndex:value=CustomSerializerMemoryPack.Binary.Deserialize(ref reader);break;
-            case ExpressionType.ArrayLength: {
-                var Operand=MemoryPackCustomSerializer.Unary.Deserialize_Unary(ref reader);
-                value=Expressions.Expression.ArrayLength(Operand); break;
+            case Expressions.ExpressionType.Throw              :
+            case Expressions.ExpressionType.TypeAs             :
+            case Expressions.ExpressionType.Unbox              :{
+                var (Operand,Type)=Unary.Deserialize_Unary_Type(ref reader);
+                value=Expressions.Expression.MakeUnary(NodeType,Operand,Type);break;
             }
-            case ExpressionType.Convert: {
-                var (Operand, Type, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
-                value=Expressions.Expression.Convert(Operand,Type,Method); break;
+            case Expressions.ExpressionType.Convert            :
+            case Expressions.ExpressionType.ConvertChecked     :{
+                var(Operand,Type,Method)=Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
+                value=Expressions.Expression.ConvertChecked(Operand,Type,Method);break;
             }
-            case ExpressionType.ConvertChecked: {
-                var (Operand, Type, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
-                value=Expressions.Expression.ConvertChecked(Operand,Type,Method); break;
+            case Expressions.ExpressionType.Decrement          :
+            case Expressions.ExpressionType.Increment          :
+            case Expressions.ExpressionType.IsFalse            :
+            case Expressions.ExpressionType.IsTrue             :
+            case Expressions.ExpressionType.Negate             :
+            case Expressions.ExpressionType.NegateChecked      :
+            case Expressions.ExpressionType.Not                :
+            case Expressions.ExpressionType.OnesComplement     :
+            case Expressions.ExpressionType.PostDecrementAssign:
+            case Expressions.ExpressionType.PostIncrementAssign:
+            case Expressions.ExpressionType.PreDecrementAssign :
+            case Expressions.ExpressionType.PreIncrementAssign :
+            case Expressions.ExpressionType.UnaryPlus          :{
+                var (Operand,Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+                value=Expressions.Expression.PreIncrementAssign(Operand,Method);break;
             }
-            case ExpressionType.Decrement: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.Decrement(Operand,Method); break;
-            }
-            case ExpressionType.Increment: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.Increment(Operand,Method); break;
-            }
-            case ExpressionType.IsFalse: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.IsFalse(Operand,Method); break;
-            }
-            case ExpressionType.IsTrue: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.IsTrue(Operand,Method); break;
-            }
-            case ExpressionType.Negate: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.Negate(Operand,Method); break;
-            }
-            case ExpressionType.NegateChecked: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.NegateChecked(Operand,Method); break;
-            }
-            case ExpressionType.Not: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.Not(Operand,Method); break;
-            }
-            case ExpressionType.OnesComplement: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.OnesComplement(Operand,Method); break;
-            }
-            case ExpressionType.PostDecrementAssign: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.PostDecrementAssign(Operand,Method); break;
-            }
-            case ExpressionType.PostIncrementAssign: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.PostIncrementAssign(Operand,Method); break;
-            }
-            case ExpressionType.PreDecrementAssign: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.PreDecrementAssign(Operand,Method); break;
-            }
-            case ExpressionType.PreIncrementAssign: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.PreIncrementAssign(Operand,Method); break;
-            }
-            case ExpressionType.Quote: {
-                var result = Expressions.Expression.Quote(MemoryPackCustomSerializer.Unary.Deserialize_Unary(ref reader));
-                value=result; break;
-            }
-            case ExpressionType.Throw: {
-                var (Operand, Type)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_Type(ref reader);
-                value=Expressions.Expression.Throw(Operand,Type); break;
-            }
-            case ExpressionType.TypeAs: {
-                var (Operand, Type)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_Type(ref reader);
-                value=Expressions.Expression.TypeAs(Operand,Type); break;
-            }
-            case ExpressionType.UnaryPlus: {
-                var (Operand, Method)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.UnaryPlus(Operand,Method); break;
-            }
-            case ExpressionType.Unbox: {
-                var (Operand, Type)=MemoryPackCustomSerializer.Unary.Deserialize_Unary_Type(ref reader);
-                value=Expressions.Expression.Unbox(Operand,Type); break;
-            }
-            ////readonly object[] Objects2=new object[2];
+            //case Expressions.ExpressionType.ArrayLength: {
+            //    var Operand=Unary.Deserialize_Unary(ref reader);
+            //    value=Expressions.Expression.ArrayLength(Operand); break;
+            //}
+            //case Expressions.ExpressionType.Quote: {
+            //    var Operand=Unary.Deserialize_Unary(ref reader);
+            //    value=Expressions.Expression.Quote(Operand); break;
+            //}
+            //case Expressions.ExpressionType.Convert: {
+            //    var (Operand, Type, Method)=Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
+            //    value=Expressions.Expression.Convert(Operand,Type,Method); break;
+            //}
+            //case Expressions.ExpressionType.ConvertChecked: {
+            //    var (Operand, Type, Method)=Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
+            //    value=Expressions.Expression.ConvertChecked(Operand,Type,Method); break;
+            //}
+            //case Expressions.ExpressionType.Decrement: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.Decrement(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.Increment: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.Increment(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.IsFalse: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.IsFalse(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.IsTrue: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.IsTrue(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.Negate: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.Negate(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.NegateChecked: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.NegateChecked(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.Not: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.Not(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.OnesComplement: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.OnesComplement(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.PostDecrementAssign: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.PostDecrementAssign(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.PostIncrementAssign: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.PostIncrementAssign(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.PreDecrementAssign: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.PreDecrementAssign(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.PreIncrementAssign: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.PreIncrementAssign(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.Throw: {
+            //    var (Operand, Type)=Unary.Deserialize_Unary_Type(ref reader);
+            //    value=Expressions.Expression.Throw(Operand,Type); break;
+            //}
+            //case Expressions.ExpressionType.TypeAs: {
+            //    var (Operand, Type)=Unary.Deserialize_Unary_Type(ref reader);
+            //    value=Expressions.Expression.TypeAs(Operand,Type); break;
+            //}
+            //case Expressions.ExpressionType.UnaryPlus: {
+            //    var (Operand, Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
+            //    value=Expressions.Expression.UnaryPlus(Operand,Method); break;
+            //}
+            //case Expressions.ExpressionType.Unbox: {
+            //    var (Operand, Type)=Unary.Deserialize_Unary_Type(ref reader);
+            //    value=Expressions.Expression.Unbox(Operand,Type); break;
+            //}
+            //////readonly object[] Objects2=new object[2];
 
-            //case Expressions.ExpressionType.ArrayLength        :
-            //case Expressions.ExpressionType.Convert            :
-            //case Expressions.ExpressionType.ConvertChecked     :
-            //case Expressions.ExpressionType.Decrement          :
-            //case Expressions.ExpressionType.Increment          :
-            //case Expressions.ExpressionType.IsFalse            :
-            //case Expressions.ExpressionType.IsTrue             :
-            //case Expressions.ExpressionType.Negate             :
-            //case Expressions.ExpressionType.NegateChecked      :
-            //case Expressions.ExpressionType.Not                :
-            //case Expressions.ExpressionType.OnesComplement     :
-            //case Expressions.ExpressionType.PostDecrementAssign:
-            //case Expressions.ExpressionType.PostIncrementAssign:
-            //case Expressions.ExpressionType.PreDecrementAssign :
-            //case Expressions.ExpressionType.PreIncrementAssign :
-            //case Expressions.ExpressionType.Quote              :
-            //case Expressions.ExpressionType.Throw              :
-            //case Expressions.ExpressionType.TypeAs             :
-            //case Expressions.ExpressionType.UnaryPlus          :
-            //case Expressions.ExpressionType.Unbox              :value=CustomSerializerMemoryPack.Unary.Deserialize(ref reader);break;
-            case ExpressionType.TypeEqual          :
-            case ExpressionType.TypeIs             :value=MemoryPackCustomSerializer.TypeBinary.DeserializeTypeBinary(ref reader);break;
-            case ExpressionType.Conditional        :value=MemoryPackCustomSerializer.Conditional.DeserializeConditional(ref reader);break;
-            case ExpressionType.Constant           :value=MemoryPackCustomSerializer.Constant.DeserializeConstant(ref reader);break;
-            case ExpressionType.Parameter          :value=MemoryPackCustomSerializer.Parameter.DeserializeParameter(ref reader);break;
-            case ExpressionType.Lambda             :value=MemoryPackCustomSerializer.Lambda.DeserializeLambda(ref reader);break;
-            case ExpressionType.Call               :value=MemoryPackCustomSerializer.MethodCall.DeserializeMethodCall(ref reader);break;
-            case ExpressionType.Invoke             :value=MemoryPackCustomSerializer.Invocation.DeserializeInvocation(ref reader);break;
-            case ExpressionType.New                :value=MemoryPackCustomSerializer.New.DeserializeNew(ref reader);break;
-            case ExpressionType.NewArrayInit       :value=MemoryPackCustomSerializer.NewArray.DeserializeNewArray(ref reader);break;
-            case ExpressionType.NewArrayBounds     :value=MemoryPackCustomSerializer.NewArray.DeserializeNewArray(ref reader);break;
-            case ExpressionType.ListInit           :value=MemoryPackCustomSerializer.ListInit.DeserializeListInit(ref reader);break;
-            case ExpressionType.MemberAccess       :value=MemoryPackCustomSerializer.MemberAccess.DeserializeMember(ref reader);break;
-            case ExpressionType.MemberInit         :value=MemoryPackCustomSerializer.MemberInit.DeserializeMemberInit(ref reader);break;
-            case ExpressionType.Block              :value=MemoryPackCustomSerializer.Block.DeserializeBlock(ref reader);break;
-            case ExpressionType.DebugInfo          :
-            case ExpressionType.Dynamic            :
-            case ExpressionType.Default            :value=MemoryPackCustomSerializer.Default.DeserializeDefault(ref reader);break;
-            case ExpressionType.Extension          :break;
-            case ExpressionType.Goto               :value=MemoryPackCustomSerializer.Goto.DeserializeGoto(ref reader);break;
-            case ExpressionType.Index              :value=MemoryPackCustomSerializer.Index.DeserializeIndex(ref reader);break;
-            case ExpressionType.Label              :value=MemoryPackCustomSerializer.Label.DeserializeLabel(ref reader);break;
-            case ExpressionType.RuntimeVariables   :break;
-            case ExpressionType.Loop               :value=MemoryPackCustomSerializer.Loop.DeserializeLoop(ref reader);break;
-            case ExpressionType.Switch             :value=MemoryPackCustomSerializer.Switch.DeserializeSwitch(ref reader);break;
-            case ExpressionType.Try                :value=MemoryPackCustomSerializer.Try.DeserializeTry(ref reader);break;
+            //case Expressions.Expressions.ExpressionType.ArrayLength        :
+            //case Expressions.Expressions.ExpressionType.Convert            :
+            //case Expressions.Expressions.ExpressionType.ConvertChecked     :
+            //case Expressions.Expressions.ExpressionType.Decrement          :
+            //case Expressions.Expressions.ExpressionType.Increment          :
+            //case Expressions.Expressions.ExpressionType.IsFalse            :
+            //case Expressions.Expressions.ExpressionType.IsTrue             :
+            //case Expressions.Expressions.ExpressionType.Negate             :
+            //case Expressions.Expressions.ExpressionType.NegateChecked      :
+            //case Expressions.Expressions.ExpressionType.Not                :
+            //case Expressions.Expressions.ExpressionType.OnesComplement     :
+            //case Expressions.Expressions.ExpressionType.PostDecrementAssign:
+            //case Expressions.Expressions.ExpressionType.PostIncrementAssign:
+            //case Expressions.Expressions.ExpressionType.PreDecrementAssign :
+            //case Expressions.Expressions.ExpressionType.PreIncrementAssign :
+            //case Expressions.Expressions.ExpressionType.Quote              :
+            //case Expressions.Expressions.ExpressionType.Throw              :
+            //case Expressions.Expressions.ExpressionType.TypeAs             :
+            //case Expressions.Expressions.ExpressionType.UnaryPlus          :
+            //case Expressions.Expressions.ExpressionType.Unbox              :value=CustomSerializerMemoryPack.Unary.Deserialize(ref reader);break;
+            case Expressions.ExpressionType.TypeEqual          :
+            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.Instance.DeserializeTypeBinary(ref reader);break;
+            case Expressions.ExpressionType.Conditional        :value=Conditional.Instance.DeserializeConditional(ref reader);break;
+            case Expressions.ExpressionType.Constant           :value=Constant.Instance.DeserializeConstant(ref reader);break;
+            case Expressions.ExpressionType.Parameter          :value=Parameter.Instance.DeserializeParameter(ref reader);break;
+            case Expressions.ExpressionType.Lambda             :value=Lambda.Instance.DeserializeLambda(ref reader);break;
+            case Expressions.ExpressionType.Call               :value=MethodCall.Instance.DeserializeMethodCall(ref reader);break;
+            case Expressions.ExpressionType.Invoke             :value=Invocation.Instance.DeserializeInvocation(ref reader);break;
+            case Expressions.ExpressionType.New                :value=New.Instance.DeserializeNew(ref reader);break;
+            case Expressions.ExpressionType.NewArrayInit       :value=NewArray.Instance.DeserializeNewArray(ref reader);break;
+            case Expressions.ExpressionType.NewArrayBounds     :value=NewArray.Instance.DeserializeNewArray(ref reader);break;
+            case Expressions.ExpressionType.ListInit           :value=ListInit.Instance.DeserializeListInit(ref reader);break;
+            case Expressions.ExpressionType.MemberAccess       :value=MemberAccess.Instance.DeserializeMember(ref reader);break;
+            case Expressions.ExpressionType.MemberInit         :value=MemberInit.Instance.DeserializeMemberInit(ref reader);break;
+            case Expressions.ExpressionType.Block              :value=Block.Instance.DeserializeBlock(ref reader);break;
+            case Expressions.ExpressionType.DebugInfo          :
+            case Expressions.ExpressionType.Dynamic            :
+            case Expressions.ExpressionType.Default            :value=Default.Instance.DeserializeDefault(ref reader);break;
+            case Expressions.ExpressionType.Extension          :break;
+            case Expressions.ExpressionType.Goto               :value=Goto.Instance.DeserializeGoto(ref reader);break;
+            case Expressions.ExpressionType.Index              :value=Index.Instance.DeserializeIndex(ref reader);break;
+            case Expressions.ExpressionType.Label              :value=Label.Instance.DeserializeLabel(ref reader);break;
+            case Expressions.ExpressionType.RuntimeVariables   :break;
+            case Expressions.ExpressionType.Loop               :value=Loop.Instance.DeserializeLoop(ref reader);break;
+            case Expressions.ExpressionType.Switch             :value=Switch.Instance.DeserializeSwitch(ref reader);break;
+            case Expressions.ExpressionType.Try                :value=Try.Instance.DeserializeTry(ref reader);break;
             default:throw new NotSupportedException(NodeType.ToString());
         }
         

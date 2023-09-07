@@ -1,13 +1,16 @@
 ﻿using System.Buffers;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=Expressions.LoopExpression;
+using C=MemoryPackCustomSerializer;
 
-
-public class Loop:MemoryPackFormatter<LoopExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,LoopExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal LoopExpression DeserializeLoop(ref MemoryPackReader reader){
-        LoopExpression? value=default;
+public class Loop:MemoryPackFormatter<T>{
+    public static readonly Loop Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeLoop(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
@@ -16,15 +19,15 @@ public class Loop:MemoryPackFormatter<LoopExpression>{
     //    this.Deserialize(ref reader,ref value);
     //    return value!;
     //}
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref LoopExpression? value){
-        MemoryPackCustomSerializer.LabelTarget.Serialize(ref writer,value!.BreakLabel);
-        MemoryPackCustomSerializer.LabelTarget.Serialize(ref writer,value.ContinueLabel);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Body);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        LabelTarget.Instance.Serialize(ref writer,value!.BreakLabel);
+        LabelTarget.Instance.Serialize(ref writer,value.ContinueLabel);
+        Expression.Instance.Serialize(ref writer,value.Body);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref LoopExpression? value){
-        var breakLabel= MemoryPackCustomSerializer.LabelTarget.DeserializeLabelTarget(ref reader);
-        var continueLabel= MemoryPackCustomSerializer.LabelTarget.DeserializeLabelTarget(ref reader);
-        var body= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        value=System.Linq.Expressions.Expression.Loop(body,breakLabel,continueLabel);
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var breakLabel= LabelTarget.Instance.DeserializeLabelTarget(ref reader);
+        var continueLabel= LabelTarget.Instance.DeserializeLabelTarget(ref reader);
+        var body= Expression.Instance.Deserialize(ref reader);
+        value=Expressions.Expression.Loop(body,breakLabel,continueLabel);
     }
 }

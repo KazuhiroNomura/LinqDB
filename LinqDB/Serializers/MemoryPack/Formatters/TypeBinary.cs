@@ -1,33 +1,36 @@
 ﻿using System;
 using System.Buffers;
 using MemoryPack;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-public class TypeBinary:MemoryPackFormatter<TypeBinaryExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,TypeBinaryExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal TypeBinaryExpression DeserializeTypeBinary(ref MemoryPackReader reader){
-        TypeBinaryExpression? value=default;
+using Reader=MemoryPackReader;
+using T=Expressions.TypeBinaryExpression;
+public class TypeBinary:MemoryPackFormatter<T> {
+    public static readonly TypeBinary Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeTypeBinary(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TypeBinaryExpression? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
             return;
         }
         writer.WriteVarInt((byte)value!.NodeType);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Expression);
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.TypeOperand);
+        Expression.Instance.Serialize(ref writer,value.Expression);
+        Type.Instance.Serialize(ref writer,value.TypeOperand);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref TypeBinaryExpression? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var NodeType=(ExpressionType)reader.ReadVarIntByte();
-        var expression= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
+        var NodeType=(Expressions.ExpressionType)reader.ReadVarIntByte();
+        var expression= Expression.Instance.Deserialize(ref reader);
+        var type=Type.Instance.Deserialize(ref reader);
         value=NodeType switch{
-            ExpressionType.TypeEqual=>System.Linq.Expressions.Expression.TypeEqual(expression,type),
-            ExpressionType.TypeIs=>System.Linq.Expressions.Expression.TypeIs(expression,type),
+            Expressions.ExpressionType.TypeEqual=>Expressions.Expression.TypeEqual(expression,type),
+            Expressions.ExpressionType.TypeIs=>Expressions.Expression.TypeIs(expression,type),
             _=>throw new NotSupportedException(NodeType.ToString())
         };
     }

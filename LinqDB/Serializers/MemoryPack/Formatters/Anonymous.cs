@@ -3,23 +3,39 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-public class Anonymous<T>:MemoryPackFormatter<T>{
-    private static void Serialize2<TBufferWriter,TValue>(ref MemoryPackWriter<TBufferWriter> writer,
-        scoped ref TValue? value) where TBufferWriter:IBufferWriter<byte>{
+using Reader=MemoryPackReader;
+internal static class Anonymous{
+    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
+        scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
         writer.WriteValue(value);
         //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
     }
-    private static readonly MethodInfo MethodSerialize = typeof(Anonymous<T>).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value){
+    public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value) {
         reader.ReadValue(ref value);
         //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
     }
-    private static readonly MethodInfo MethodDeserialize = typeof(Anonymous<T>).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    public static readonly MethodInfo MethodDeserialize = typeof(Anonymous).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+}
+public class Anonymous<T>:MemoryPackFormatter<T>{
+    public static readonly Anonymous<T> Instance=new();
+    //private static void Serialize2<TBufferWriter,TValue>(ref MemoryPackWriter<TBufferWriter> writer,
+    //    scoped ref TValue? value) where TBufferWriter:IBufferWriter<byte>{
+    //    writer.WriteValue(value);
+    //    //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
+    //}
+    //private static readonly MethodInfo MethodSerialize = typeof(Anonymous<T>).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    //private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value){
+    //    reader.ReadValue(ref value);
+    //    //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
+    //}
+    ////private static readonly MethodInfo MethodDeserialize = typeof(Anonymous<T>).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref MemoryPackReader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
@@ -35,6 +51,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
         Debug.Assert(Parameters.Length==Properties_Length);
         Properties=Parameters.Select(Parameter => Properties.Single(Property => Property.Name==Parameter.Name)).ToArray();
         {
+            //var MethodDeserialize = typeof(Anonymous).GetMethod("Deserialize2",BindingFlags.Static|BindingFlags.NonPublic)!;
             var Deserialize = new DynamicMethod("Deserialize",typeof(void),DeserializeTypes,typeof(Anonymous<T>),true) { InitLocals=false };
             var I1 = Deserialize.GetILGenerator();
             I1.Emit(OpCodes.Ldarg_1);
@@ -45,7 +62,8 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
                 I1.Emit(OpCodes.Ldarg_0);//reader
                 var L = I1.DeclareLocal(Property.PropertyType);
                 I1.Emit(OpCodes.Ldloca,L);//value
-                I1.Emit(OpCodes.Call,MethodDeserialize.MakeGenericMethod(Types1));
+                //I1.Emit(OpCodes.Call,MethodDeserialize.MakeGenericMethod(Types1));
+                I1.Emit(OpCodes.Call,Anonymous.MethodDeserialize.MakeGenericMethod(Types1));
                 I1.Emit(OpCodes.Ldloc,L);//value
                 index++;
                 if(index==Properties_Length) break;
@@ -97,7 +115,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
                     var L = I0.DeclareLocal(Property.PropertyType);
                     I0.Emit(OpCodes.Stloc,L);//value=
                     I0.Emit(OpCodes.Ldloca,L);//ref value
-                    I0.Emit(OpCodes.Call,MethodSerialize.MakeGenericMethod(MethodTypes));
+                    I0.Emit(OpCodes.Call,Anonymous.MethodSerialize.MakeGenericMethod(MethodTypes));
                     index++;
                     if(index==Properties_Length) break;
                 }

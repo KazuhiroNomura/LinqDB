@@ -34,6 +34,11 @@
     <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Serializers\Formatters\**" />
+    <EmbeddedResource Remove="Serializers\Formatters\**" />
+    <None Remove="Serializers\Formatters\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
   </ItemGroup>
@@ -85,10 +90,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Serializers\Utf8Json\Formatters\" />
-    <Folder Include="Serializers\MessagePack\Formatters\" />
   </ItemGroup>
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

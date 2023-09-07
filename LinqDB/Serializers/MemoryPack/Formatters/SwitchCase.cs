@@ -1,23 +1,27 @@
 ﻿using System.Buffers;
 using MemoryPack;
+using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using static Common;
+using T=Expressions.SwitchCase;
 
-
-public class SwitchCase:MemoryPackFormatter<Expressions.SwitchCase>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.SwitchCase? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    private Expressions.SwitchCase DeserializeSwitchCase(ref MemoryPackReader reader){
-        Expressions.SwitchCase? value=default;
+public class SwitchCase:MemoryPackFormatter<T> {
+    public static readonly SwitchCase Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    private T DeserializeSwitchCase(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.SwitchCase? value){
-        MemoryPackCustomSerializer.Serialize(ref writer,value!.TestValues);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Body);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        SerializeReadOnlyCollection(ref writer,value!.TestValues);
+        Expression.Instance.Serialize(ref writer,value.Body);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.SwitchCase? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         var testValues=reader.ReadArray<Expressions.Expression>();
-        var body= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var body= Expression.Instance.Deserialize(ref reader);
         value=Expressions.Expression.SwitchCase(body,testValues!);
     }
 }

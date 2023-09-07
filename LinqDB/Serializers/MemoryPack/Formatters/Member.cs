@@ -1,34 +1,50 @@
 ﻿using System.Buffers;
+using System.Diagnostics;
 using System.Linq;
+using System;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=MemberInfo;
+using C=MemoryPackCustomSerializer;
 
 
-public class Member:MemoryPackFormatter<MemberInfo>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,MemberInfo? value)where TBufferWriter:IBufferWriter<byte>{
+public class Member:MemoryPackFormatter<T>{
+    public static readonly Member Instance=new();
+    //internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    //    this.Serialize(ref writer,ref value);
+    //internal T DeserializeMemberInfo(ref MemoryPackReader reader){
+    //    T? value=default;
+    //    this.Deserialize(ref reader,ref value);
+    //    return value!;
+    //}
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         this.Serialize(ref writer,ref value);
+    internal void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
+        writer.WriteBoolean(value is not null);
+        if(value is not null) this.Serialize(ref writer,ref value);
     }
-    internal MemberInfo DeserializeMemberInfo(ref MemoryPackReader reader){
-        MemberInfo? value=default;
+    internal T Deserialize(ref MemoryPackReader reader) {
+        T? value = default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref MemberInfo? value){
-        if(value is null){
-            //writer.WriteNil();
-            return;
-        }
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.ReflectedType);
-        //this.Serialize(ref writer,value.ReflectedType!);
-        writer.WriteString(value.Name);
-        writer.WriteVarInt(value.MetadataToken);
+    internal T? DeserializeNullable(ref MemoryPackReader reader) {
+        var value = reader.ReadBoolean();
+        return value ? this.Deserialize(ref reader) : null;
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref MemberInfo? value){
-        //if(reader.TryReadNil()) return;
-        var ReflectedType= MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
-        var Name=reader.ReadString();
-        var MetadataToken=reader.ReadVarIntInt32();
-        value=ReflectedType.GetMembers(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.Name==Name&&p.MetadataToken==MetadataToken);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        var ReflectedType=value.ReflectedType!;
+        Type.Instance.Serialize(ref writer,ReflectedType);
+        var array= C.Instance.TypeMembers.Get(ReflectedType);
+        writer.WriteVarInt(Array.IndexOf(array,value));
+    }
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var ReflectedType= Type.Instance.Deserialize(ref reader);
+        var array= C.Instance.TypeMembers.Get(ReflectedType);
+        var Index=reader.ReadVarIntInt32();
+        value=array[Index];
     }
 }

@@ -1,24 +1,34 @@
-﻿using System.Buffers;
+﻿using System;
+using System.Buffers;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using C=MemoryPackCustomSerializer;
+using T=ConstructorInfo;
 
 
-public class Constructor:MemoryPackFormatter<ConstructorInfo>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ConstructorInfo? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal ConstructorInfo DeserializeConstructorInfo(ref MemoryPackReader reader){
-        ConstructorInfo? value=default;
+public class Constructor:MemoryPackFormatter<T> {
+    public static readonly Constructor Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeConstructorInfo(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref ConstructorInfo? value){
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value!.ReflectedType!);
-        writer.WriteVarInt(value.MetadataToken);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        var ReflectedType=value.ReflectedType!;
+        Type.Instance.Serialize(ref writer,ReflectedType);
+        var array= C.Instance.TypeConstructors.Get(ReflectedType);
+        writer.WriteVarInt(Array.IndexOf(array,value));
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref ConstructorInfo? value){
-        var ReflectedType= MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
-        var MetadataToken=reader.ReadVarIntInt32();
-        value=ReflectedType.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.MetadataToken==MetadataToken);
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var ReflectedType= Type.Instance.Deserialize(ref reader);
+        var array= C.Instance.TypeConstructors.Get(ReflectedType);
+        var Index=reader.ReadVarIntInt32();
+        value=array[Index];
     }
 }

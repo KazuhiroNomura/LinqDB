@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
+using LinqDB.Serializers.Utf8Json;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ArrangeStaticMemberQualifier
 namespace LinqDB.Sets;
@@ -1272,10 +1273,10 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///// </summary>
     ///// <param name="Reader"></param>
     //public void Read(BinaryReader Reader) {
-    //    var ElementCount=Json.JsonSerializer.Deserialize<Int64>(Reader.ReadString());
+    //    var ElementCount=Json.JsonSerializer.Instance.Deserialize<Int64>(Reader.ReadString());
     //    Int64 Count = 0;
     //    for(Int64 a = 0;a<ElementCount;a++) {
-    //        if(this.InternalAdd(Json.JsonSerializer.Deserialize<T>(Reader.ReadString()))){
+    //        if(this.InternalAdd(Json.JsonSerializer.Instance.Deserialize<T>(Reader.ReadString()))){
     //            Count++;
     //        }
     //    }
@@ -1317,7 +1318,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         try {
             while(true) {
                 this.InternalAdd(
-                    Utf8Json.JsonSerializer.Deserialize<T>(Reader)
+                    Utf8JsonCustomSerializer.Instance.Deserialize<T>(Reader)
                 );
                 Count++;
             }

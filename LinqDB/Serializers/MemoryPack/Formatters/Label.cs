@@ -1,30 +1,34 @@
 ﻿using System.Buffers;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=Expressions.LabelExpression;
+using C=MemoryPackCustomSerializer;
 
 
-public class Label:MemoryPackFormatter<LabelExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,LabelExpression? value)where TBufferWriter:IBufferWriter<byte>{
+public class Label:MemoryPackFormatter<T> {
+    public static readonly Label Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal LabelExpression DeserializeLabel(ref MemoryPackReader reader){
-        LabelExpression? value=default;
+    internal T DeserializeLabel(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref LabelExpression? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
             return;
         }
-        MemoryPackCustomSerializer.LabelTarget.Serialize(ref writer,value.Target);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.DefaultValue);
+        LabelTarget.Instance.Serialize(ref writer,value.Target);
+        Expression.Instance.Serialize(ref writer,value.DefaultValue);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref LabelExpression? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var target= MemoryPackCustomSerializer.LabelTarget.DeserializeLabelTarget(ref reader);
-        var defaultValue=MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        value=System.Linq.Expressions.Expression.Label(target,defaultValue);
+        var target= LabelTarget.Instance.DeserializeLabelTarget(ref reader);
+        var defaultValue= Expression.Instance.Deserialize(ref reader);
+        value=Expressions.Expression.Label(target,defaultValue);
     }
 }

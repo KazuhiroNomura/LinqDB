@@ -1,34 +1,39 @@
 ﻿using System.Buffers;
 using Expressions = System.Linq.Expressions;
 using MemoryPack;
+using System.Linq.Expressions;
+using MessagePack;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T= InvocationExpression;
+using static Common;
 
-
-public class Invocation:MemoryPackFormatter<Expressions.InvocationExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.InvocationExpression? value)where TBufferWriter:IBufferWriter<byte>{
+public class Invocation:MemoryPackFormatter<T> {
+    public static readonly Invocation Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal Expressions.InvocationExpression DeserializeInvocation(ref MemoryPackReader reader){
-        Expressions.InvocationExpression? value=default;
+    internal T DeserializeInvocation(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.InvocationExpression? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
             return;
         }
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Expression);
-        MemoryPackCustomSerializer.Serialize(ref writer,value.Arguments);
+        Expression.Instance.Serialize(ref writer,value.Expression);
+        SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
     // public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref InvocationExpression? value) where TBufferWriter:IBufferWriter<byte>
     // {
     //     throw new NotImplementedException();
     // }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.InvocationExpression? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var expression= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var expression= Expression.Instance.Deserialize(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         value=Expressions.Expression.Invoke(expression,arguments!);
     }

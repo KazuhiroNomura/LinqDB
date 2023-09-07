@@ -4,45 +4,47 @@ using MemoryPack;
 using System.Buffers;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=Expressions.MemberBinding;
+using C=MemoryPackCustomSerializer;
+using static Common;
 
-
-public class MemberBinding:MemoryPackFormatter<Expressions.MemberBinding>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.MemberBinding? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal Expressions.MemberBinding DeserializeMemberBinding(ref MemoryPackReader reader){
-        Expressions.MemberBinding? value=default;
+public class MemberBinding:MemoryPackFormatter<T> {
+    public static readonly MemberBinding Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeMemberBinding(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
     //private static readonly ReadOnlyCollectionFormatter<Expressions.MemberBinding>SerializeBindings=new();
     //private static readonly ReadOnlyCollectionFormatter<Expressions.ElementInit>SerializeElementInits=new();
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.MemberBinding? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteVarInt((byte)value!.BindingType);
-        MemoryPackCustomSerializer.Member.Serialize(ref writer,value.Member);
+        Member.Instance.Serialize(ref writer,value.Member);
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
-                MemoryPackCustomSerializer.Expression.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression);
+                Expression.Instance.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression);
                 break;
             case Expressions.MemberBindingType.MemberBinding:{
-                var Bindings=((Expressions.MemberMemberBinding)value).Bindings;
-                MemoryPackCustomSerializer.MemberBindings.Serialize(ref writer,ref Bindings!);
+                SerializeReadOnlyCollection(ref writer,((Expressions.MemberMemberBinding)value).Bindings);
                 break;
             }
             case Expressions.MemberBindingType.ListBinding:{
-                var Initializers=((Expressions.MemberListBinding)value).Initializers;
-                MemoryPackCustomSerializer.ElementInits.Serialize(ref writer,ref Initializers!);
+                SerializeReadOnlyCollection(ref writer,((Expressions.MemberListBinding)value).Initializers);
                 break;
             }
             default:
                 throw new ArgumentOutOfRangeException(value.BindingType.ToString());
         }
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.MemberBinding? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         var BindingType=(Expressions.MemberBindingType)reader.ReadVarIntByte();
         //MemberInfo?member=default;
-        var member=MemoryPackCustomSerializer.Member.DeserializeMemberInfo(ref reader);
-        Expressions.MemberBinding MemberBinding=BindingType switch{
-            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,MemoryPackCustomSerializer.Expression.Deserialize(ref reader)),
-            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<Expressions.MemberBinding>()!),
+        var member= Member.Instance.Deserialize(ref reader);
+        T MemberBinding =BindingType switch{
+            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Instance.Deserialize(ref reader)),
+            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>()!),
             Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>()!),
             _=>throw new ArgumentOutOfRangeException(BindingType.ToString())
         };

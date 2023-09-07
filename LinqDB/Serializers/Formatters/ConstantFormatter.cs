@@ -69,7 +69,7 @@ partial class ExpressionMessagePackFormatter:IMessagePackFormatter<Expressions.C
         else if(typeof(string )==type)value=reader.ReadString();
         else if(typeof(decimal)==type)value=Deserialize_T<decimal>(ref reader,Resolver);
         else if(typeof(Guid   )==type)value=Deserialize_T<Guid>(ref reader,Resolver);
-        else value=MessagePackSerializer.Deserialize(type,ref reader,Resolver);
+        else value=MessagePackSerializer.Instance.Deserialize(type,ref reader,Resolver);
         //var Formatter = options.Resolver.GetFormatter<object>();
         //var value = Formatter.Deserialize(ref reader,options);
         return Expressions.Expression.Constant(value,type);

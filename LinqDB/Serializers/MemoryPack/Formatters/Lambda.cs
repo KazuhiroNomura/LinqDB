@@ -2,37 +2,41 @@
 using System.Linq.Expressions;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using static Common;
+using T=LambdaExpression;
+using C=MemoryPackCustomSerializer;
 
-
-public class Lambda:MemoryPackFormatter<LambdaExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,LambdaExpression? value)where TBufferWriter:IBufferWriter<byte>{
+public class Lambda:MemoryPackFormatter<T> {
+    public static readonly Lambda Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal LambdaExpression DeserializeLambda(ref MemoryPackReader reader){
-        LambdaExpression? value=default;
+    internal T DeserializeLambda(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref LambdaExpression? value){
-        var ListParameter=MemoryPackCustomSerializer.ListParameter;
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.Type);
-        MemoryPackCustomSerializer.Serialize宣言Parameters(ref writer,value.Parameters);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Body);
-        writer.WriteVarInt((byte)(value.TailCall ? 1 : 0));
+        Type.Instance.Serialize(ref writer,value.Type);
+        Serialize宣言Parameters(ref writer,value.Parameters);
+        Expression.Instance.Serialize(ref writer,value.Body);
+        writer.WriteBoolean(value.TailCall);
         
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref LambdaExpression? value){
-        var ListParameter=MemoryPackCustomSerializer.ListParameter;
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
-        var type = MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
-        var parameters=MemoryPackCustomSerializer.Deserialize宣言Parameters(ref reader);
+        var type = Type.Instance.Deserialize(ref reader);
+        var parameters= Deserialize宣言Parameters(ref reader);
         ListParameter.AddRange(parameters!);
-        var body =MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        var tailCall =MemoryPackCustomSerializer.ReadBoolean(ref reader);
+        var body = Expression.Instance.Deserialize(ref reader);
+        var tailCall = reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters!.Length);
         value=System.Linq.Expressions.Expression.Lambda(
             type,

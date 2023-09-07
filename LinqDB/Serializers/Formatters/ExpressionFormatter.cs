@@ -19,7 +19,7 @@ namespace LinqDB.Serializers.Formatters;
 //    private IJsonFormatter<Expression> JExpression=>this;
 //    private IMessagePackFormatter<Expression> MSExpression=>this;
 //}
-public class ExpressionFormatter{
+public class Expression{
     internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     protected readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
     protected readonly List<Expressions.LabelTarget> ListLabelTarget=new();
@@ -29,7 +29,7 @@ public class ExpressionFormatter{
         this.ListLabelTarget.Clear();
     }
 }
-public partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<Expressions.Expression>{
+public partial class ExpressionJsonFormatter:Expression,IJsonFormatter<Expressions.Expression>{
     //public IJsonFormatter<Expressions.Expression> Expression=>this;
     public void Serialize(ref JsonWriter writer,Expressions.Expression? value,IJsonFormatterResolver Resolver) {
         if(value is null){
@@ -515,7 +515,7 @@ public partial class ExpressionJsonFormatter:ExpressionFormatter,IJsonFormatter<
         throw new NotSupportedException(TypeName);
     }
 }
-public partial class ExpressionMessagePackFormatter:ExpressionFormatter,IMessagePackFormatter<Expressions.Expression>{
+public partial class ExpressionMessagePackFormatter:Expression,IMessagePackFormatter<Expressions.Expression>{
     public IMessagePackFormatter<Expressions.Expression> _Expression=>this;
     public void Serialize(ref MessagePackWriter writer,Expressions.Expression? value,MessagePackSerializerOptions Resolver){
         if(value is null){

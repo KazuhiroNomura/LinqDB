@@ -1,51 +1,57 @@
 ﻿using Expressions = System.Linq.Expressions;
 using MemoryPack;
 using System.Buffers;
+using System.Reflection;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using C=MemoryPackCustomSerializer;
+using T=Expressions.LabelTarget;
 
 
-public class LabelTarget:MemoryPackFormatter<Expressions.LabelTarget>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.LabelTarget? value)where TBufferWriter:IBufferWriter<byte>{
+
+public class LabelTarget:MemoryPackFormatter<T> {
+    public static readonly LabelTarget Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal Expressions.LabelTarget DeserializeLabelTarget(ref MemoryPackReader reader){
-        Expressions.LabelTarget? value=default;
+    internal T DeserializeLabelTarget(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.LabelTarget? value){
-        if(value is null){
-            MemoryPackCustomSerializer.WriteBoolean(ref writer,false);
-            return;
-        }
-        MemoryPackCustomSerializer.WriteBoolean(ref writer,true);
-        if(MemoryPackCustomSerializer.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        //if(value is null){
+        //    writer.WriteBoolean(false);
+        //    return;
+        //}
+        //C.WriteBoolean(ref writer,true);
+        if(C.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
-            var Dictionary_LabelTarget_int=MemoryPackCustomSerializer.Dictionary_LabelTarget_int;
-            MemoryPackCustomSerializer.ListLabelTarget.Add(value);
+            var Dictionary_LabelTarget_int= C.Instance.Dictionary_LabelTarget_int;
+            C.Instance.ListLabelTarget.Add(value);
             index=Dictionary_LabelTarget_int.Count;
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteVarInt(index);
-            MemoryPackCustomSerializer.Type.Serialize(ref writer,value.Type);
+            writer.WriteType(value.Type);
             writer.WriteString(value.Name);
         }
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.LabelTarget? value){
-        if(!MemoryPackCustomSerializer.ReadBoolean(ref reader)) return;
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        //if(!C.ReadBoolean(ref reader)) return;
         var index=reader.ReadVarIntInt32();
-        var ListLabelTarget=MemoryPackCustomSerializer.ListLabelTarget;
-        Expressions.LabelTarget target;
+        var ListLabelTarget= C.Instance.ListLabelTarget;
+        T target;
         if(index<ListLabelTarget.Count){
             target=ListLabelTarget[index];
         } else{
-            var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
+            var type= Type.Instance.Deserialize(ref reader);
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             ListLabelTarget.Add(target);
             index=ListLabelTarget.Count;
-            MemoryPackCustomSerializer.Dictionary_LabelTarget_int.Add(target,index);
+            C.Instance.Dictionary_LabelTarget_int.Add(target,index);
         }
         value=target;
     }

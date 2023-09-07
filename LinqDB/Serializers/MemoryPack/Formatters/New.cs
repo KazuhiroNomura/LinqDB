@@ -1,32 +1,32 @@
 ﻿using MemoryPack;
 
 using System.Buffers;
+using System.Diagnostics;
 using System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T= NewExpression;
+using static Common;
 
 
-public class New:MemoryPackFormatter<NewExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,NewExpression? value)where TBufferWriter:IBufferWriter<byte>{
+public class New:MemoryPackFormatter<T> {
+    public static readonly New Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal NewExpression DeserializeNew(ref MemoryPackReader reader){
-        NewExpression? value=default;
+    internal T DeserializeNew(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref NewExpression? value){
-        if(value is null){
-            //writer.WriteNil();
-            return;
-        }
-        MemoryPackCustomSerializer.Constructor.Serialize(ref writer,value.Constructor!);
-
-        MemoryPackCustomSerializer.Serialize(ref writer,value.Arguments);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        Constructor.Instance.Serialize(ref writer,value.Constructor!);
+        SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref NewExpression? value){
-        //if(reader.TryReadNil()) return;
-        var constructor= MemoryPackCustomSerializer.Constructor.DeserializeConstructorInfo(ref reader);
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var constructor= Constructor.Instance.DeserializeConstructorInfo(ref reader);
         var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=System.Linq.Expressions.Expression.New(
             constructor,

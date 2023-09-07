@@ -4,27 +4,32 @@ using System.Buffers;
 using System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-public class Conditional:MemoryPackFormatter<ConditionalExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ConditionalExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal ConditionalExpression DeserializeConditional(ref MemoryPackReader reader){
-        ConditionalExpression? value=default;
+using Reader=MemoryPackReader;
+using T=ConditionalExpression;
+using C=MemoryPackCustomSerializer;
+
+public class Conditional:MemoryPackFormatter<T> {
+    public static readonly Conditional Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeConditional(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref ConditionalExpression? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
             return;
         }
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.Test);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.IfTrue);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.IfFalse);
+        Expression.Instance.Serialize(ref writer,value.Test);
+        Expression.Instance.Serialize(ref writer,value.IfTrue);
+        Expression.Instance.Serialize(ref writer,value.IfFalse);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref ConditionalExpression? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return null!;
-        var test= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        var ifTrue= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        var ifFalse= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var test= Expression.Instance.Deserialize(ref reader);
+        var ifTrue= Expression.Instance.Deserialize(ref reader);
+        var ifFalse= Expression.Instance.Deserialize(ref reader);
         value=System.Linq.Expressions.Expression.Condition(
             test,
             ifTrue,

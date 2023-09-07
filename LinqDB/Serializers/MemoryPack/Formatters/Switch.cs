@@ -1,31 +1,33 @@
 ﻿using MemoryPack;
 using Expressions = System.Linq.Expressions;
 using System.Buffers;
-
+using MemoryPack.Formatters;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-
-
-public class Switch:MemoryPackFormatter<Expressions.SwitchExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.SwitchExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal Expressions.SwitchExpression DeserializeSwitch(ref MemoryPackReader reader){
-        Expressions.SwitchExpression? value=default;
+using Reader=MemoryPackReader;
+using static Common;
+using T=Expressions.SwitchExpression;
+public class Switch:MemoryPackFormatter<T> {
+    public static readonly Switch Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        this.Serialize(ref writer,ref value);
+    internal T DeserializeSwitch(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.SwitchExpression? value){
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value!.Type);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.SwitchValue);
-        MemoryPackCustomSerializer.Method.SerializeNullable(ref writer,value.Comparison);
-        //this.Serialize(ref writer,value.Cases);
-        MemoryPackCustomSerializer.Serialize(ref writer,value.Cases);
-        MemoryPackCustomSerializer.Expression.Serialize(ref writer,value.DefaultBody);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Type.Instance.Serialize(ref writer,value!.Type);
+        Expression.Instance.Serialize(ref writer,value.SwitchValue);
+        Method.Instance.SerializeNullable(ref writer,value.Comparison);
+        SerializeReadOnlyCollection(ref writer,value.Cases);
+        Expression.Instance.Serialize(ref writer,value.DefaultBody);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.SwitchExpression? value){
-        var type       = MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
-        var switchValue= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
-        var comparison = MemoryPackCustomSerializer.Method.DeserializeNullable(ref reader);
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var type       = Type.Instance.Deserialize(ref reader);
+        var switchValue= Expression.Instance.Deserialize(ref reader);
+        var comparison = Method.Instance.DeserializeNullable(ref reader);
         var cases      =reader.ReadArray<Expressions.SwitchCase>();
-        var defaultBody= MemoryPackCustomSerializer.Expression.Deserialize(ref reader);
+        var defaultBody= Expression.Instance.Deserialize(ref reader);
         value=Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases!);
     }
 }

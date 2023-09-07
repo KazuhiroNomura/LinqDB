@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
+using LinqDB.Serializers.MessagePack;
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
@@ -13,7 +14,7 @@ using static Common;
 /// <summary>
 /// sealedではないクラスをシリアライズする
 /// </summary>
-public class AbstractFormatter{
+public class Abstract{
 #pragma warning restore CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
     protected static void GetInterface(ref Type Type){
         var Interface0=Type.GetInterface(typeof(ILookup<,>).FullName);
@@ -29,7 +30,7 @@ public class AbstractFormatter{
         //) return true;
     }
 }
-public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
+public class AbstractJsonFormatter<T>:Abstract,IJsonFormatter<T>{
     private readonly object[] Objects3=new object[3];
     private static object GetFormatter(IJsonFormatterResolver formatterResolver,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
@@ -54,29 +55,29 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
         var type=value.GetType();
         Serialize_Type(ref writer,type,formatterResolver);
         writer.WriteValueSeparator();
-        if(typeof(Expression).IsAssignableFrom(type)){
-            var Formatter=formatterResolver.GetFormatter<Expression>();
+        if(typeof(System.Linq.Expressions.Expression).IsAssignableFrom(type)){
+            var Formatter= formatterResolver.GetFormatter<System.Linq.Expressions.Expression>();
             //var Formatter = formatterResolver.GetFormatter<LambdaExpression>();
-            Formatter.Serialize(ref writer,(Expression)(object)value,formatterResolver);
+            Formatter.Serialize(ref writer,(System.Linq.Expressions.Expression)(object)value, formatterResolver);
             //Formatter.Serialize(ref writer,(LambdaExpression)(object)value,formatterResolver);
         //}else if(typeof(T).IsDisplay()){
         //    return Return(new DisplayClassJsonFormatter<T>());
         }else  if(typeof(T).IsAnonymous()){
             var Formatter=new AnonymousJsonFormatter<T>();
-            Formatter.Serialize(ref writer,value,formatterResolver);
+            Formatter.Serialize(ref writer, value, formatterResolver);
         }else{
             if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null){
               //  formatterResolver.
             }
-            var Formatter=GetFormatter(formatterResolver,type);
+            var Formatter= AbstractJsonFormatter<T>.GetFormatter(formatterResolver, type);
             if(Formatter==this) throw new InvalidProgramException("Formatter探索で無限ループ");
-            var Serialize=Formatter.GetType().GetMethod("Serialize");
+            var Serialize= Formatter.GetType().GetMethod("Serialize");
             Debug.Assert(Serialize is not null);
             var Objects3=this.Objects3;
             Objects3[0]=writer;
             Objects3[1]=value;
             Objects3[2]=formatterResolver;
-            Serialize.Invoke(Formatter,Objects3);
+            Serialize.Invoke(Formatter, Objects3);
             writer=(JsonWriter)Objects3[0];
         }
         //Utf8Json.Resolvers.StandardResolver.Default.GetFormatter<T>().Serialize(ref writer,value,formatterResolver);
@@ -103,7 +104,7 @@ public class AbstractJsonFormatter<T>:AbstractFormatter,IJsonFormatter<T>{
         return value;
     }
 }
-public class AbstractMessagePackFormatter<T>:AbstractFormatter,IMessagePackFormatter<T>{
+public class AbstractMessagePackFormatter<T>:Abstract,IMessagePackFormatter<T>{
     private static object GetFormatter(MessagePackSerializerOptions options,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         var Formatter=options.Resolver.GetFormatterDynamic(type)!;

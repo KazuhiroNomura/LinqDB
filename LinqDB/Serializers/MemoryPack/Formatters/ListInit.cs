@@ -4,27 +4,31 @@ using MemoryPack;
 using MemoryPack.Formatters;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=Expressions.ListInitExpression;
 
 
-public class ListInit:MemoryPackFormatter<Expressions.ListInitExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.ListInitExpression? value)where TBufferWriter:IBufferWriter<byte>{
+
+public class ListInit:MemoryPackFormatter<T> {
+    public static readonly ListInit Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal Expressions.ListInitExpression DeserializeListInit(ref MemoryPackReader reader){
-        Expressions.ListInitExpression? value=default;
+    internal T DeserializeListInit(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    private static readonly ReadOnlyCollectionFormatter<Expressions.ElementInit>SerializeInitializers=new();
+    private static readonly ReadOnlyCollectionFormatter<Expressions.ElementInit>Formatter=new();
     //private static readonly ArrayFormatter<ElementInit>DeserializeInitializers=new();
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.ListInitExpression? value){
-        MemoryPackCustomSerializer.New.Serialize(ref writer,value!.NewExpression);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        New.Instance.Serialize(ref writer,value!.NewExpression);
         var Initializers=value.Initializers;
-        SerializeInitializers.Serialize(ref writer,ref Initializers!);
+        Formatter.Serialize(ref writer,ref Initializers!);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.ListInitExpression? value){
-        var New=MemoryPackCustomSerializer.New.DeserializeNew(ref reader);
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+        var @new=New.Instance.DeserializeNew(ref reader);
         var Initializers=reader.ReadArray<Expressions.ElementInit>();
-        value=Expressions.Expression.ListInit(New,Initializers!);
+        value=Expressions.Expression.ListInit(@new,Initializers!);
     }
 }

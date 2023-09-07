@@ -2,28 +2,32 @@
 using MemoryPack;
 using System.Linq.Expressions;
 using System.Buffers;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-public class NewArray:MemoryPackFormatter<NewArrayExpression>{
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,NewArrayExpression? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal NewArrayExpression DeserializeNewArray(ref MemoryPackReader reader){
-        NewArrayExpression? value=default;
+using Reader=MemoryPackReader;
+using static Common;
+using T=NewArrayExpression;
+using C=MemoryPackCustomSerializer;
+public class NewArray:MemoryPackFormatter<T> {
+    public static readonly NewArray Instance=new();
+    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    internal T DeserializeNewArray(ref MemoryPackReader reader){
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref NewArrayExpression? value){
-        if(value is null){
-            //writer.WriteNil();
-            return;
-        }
-        writer.WriteVarInt((byte)value.NodeType);
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,value.Type.GetElementType());
-        MemoryPackCustomSerializer.Serialize(ref writer,value.Expressions);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteNodeType(value.NodeType);
+        Type.Instance.Serialize(ref writer,value.Type.GetElementType());
+        SerializeReadOnlyCollection(ref writer,value.Expressions);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref NewArrayExpression? value){
+    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var NodeType=(ExpressionType)reader.ReadVarIntByte();
-        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
+        var NodeType=reader.ReadNodeType();
+        var type= Type.Instance.Deserialize(ref reader);
         //var expressions=global::MemoryPack.Formatters.ArrayFormatter<Expression>() Deserialize_T<Expression[]>(ref reader);
         var expressions=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=NodeType switch{

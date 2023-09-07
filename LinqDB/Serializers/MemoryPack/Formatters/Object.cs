@@ -3,7 +3,10 @@ using System.Buffers;
 
 using Guid = System.Guid;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reader=MemoryPackReader;
+using T=System.Object;
 public class Object:MemoryPackFormatter<object>{
+    public static readonly Object Instance=new();
     public void SerializeObject<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
@@ -20,7 +23,7 @@ public class Object:MemoryPackFormatter<object>{
         //    return;
         //}
         var type=value.GetType();
-        MemoryPackCustomSerializer.Type.Serialize(ref writer,type);
+        writer.WriteType(type);
         //writer.WriteValue(value.Value.GetType(),value.Value);
         //this.Serialize(ref writer,value.Type);
         switch(value){
@@ -33,7 +36,9 @@ public class Object:MemoryPackFormatter<object>{
             case uint    v:writer.WriteVarInt(v         );break;
             case ulong   v:writer.WriteVarInt(v         );break;
             case string  v:writer.WriteString(v         );break;
-            default       :writer.WriteValue (type,value);break;
+            default       :
+                MemoryPackCustomSerializer.変数Register(type);
+                writer.WriteValue (type,value);break;
         }
         //if    (typeof(sbyte  )==type)writer.WriteVarInt((sbyte  )value);
         //else if(typeof(short  )==type)writer.WriteVarInt((short  )value);
@@ -59,12 +64,12 @@ public class Object:MemoryPackFormatter<object>{
             
     }
     public override void Deserialize(ref MemoryPackReader reader,scoped ref object? value){
-        var value0=MemoryPackCustomSerializer.ReadBoolean(ref reader);
+        var value0=reader.ReadBoolean();
         if(!value0){
             value=null;
             return;
         }
-        var type=MemoryPackCustomSerializer.Type.DeserializeType(ref reader);
+        var type=reader.ReadType();
         //object? value=default;
         if     (typeof(sbyte  )==type)value=reader.ReadVarIntSByte();
         else if(typeof(short  )==type)value=reader.ReadVarIntInt16();
@@ -74,13 +79,14 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(ushort )==type)value=reader.ReadVarIntUInt16();
         else if(typeof(uint   )==type)value=reader.ReadVarIntUInt32();
         else if(typeof(ulong  )==type)value=reader.ReadVarIntUInt64();
-        else if(typeof(float  )==type){float   Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
-        else if(typeof(double )==type){double  Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
-        else if(typeof(bool   )==type){bool    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
-        else if(typeof(string )==type){value=reader.ReadString(); }
-        else if(typeof(decimal)==type){decimal Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
-        else if(typeof(Guid   )==type){Guid    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
+        //else if(typeof(float  )==type){float   Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
+        //else if(typeof(double )==type){double  Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
+        //else if(typeof(bool   )==type){bool    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
+        //else if(typeof(string )==type){value=reader.ReadString(); }
+        //else if(typeof(decimal)==type){decimal Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
+        //else if(typeof(Guid   )==type){Guid    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
         else{
+            MemoryPackCustomSerializer.変数Register(type);
             reader.ReadValue(type,ref value);
             //var Formatter=reader.GetFormatter(type);
             //Formatter.Deserialize(ref reader,ref value);
