@@ -10,13 +10,18 @@ using Utf8Json.Formatters;
 namespace LinqDB.Serializers.Utf8Json;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-public static class Common{
+internal static class Common{
     public static void WriteValue<T>(this ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static T ReadValue<T>(this ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
     public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
     public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
     public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteByte((byte)NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadByte();
+    public static bool WriteIsNull(this ref Writer writer,object? value){
+        if(value is not null)return false;
+        writer.WriteNull();
+        return true;
+    }
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }

@@ -22,6 +22,16 @@ public static class Common{
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.ExpressionType NodeType)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadVarIntByte();
+    public static bool TryWriteNil<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
+        if(value is not null){
+            writer.WriteBoolean(false);
+            return false;
+        } else{
+            writer.WriteBoolean(true);
+            return true;
+        }
+    }
+    public static bool TryReadNil(this ref Reader reader)=>reader.ReadBoolean();
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }

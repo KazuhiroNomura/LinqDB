@@ -7,15 +7,13 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using static Common;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 using T=Expressions.LabelTarget;
 public class LabelTarget:IJsonFormatter<T> {
     public static readonly LabelTarget Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         if(C.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteInt32(index);

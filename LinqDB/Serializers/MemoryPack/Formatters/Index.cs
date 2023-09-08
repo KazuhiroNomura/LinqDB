@@ -13,7 +13,7 @@ public class Index:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeIndex(ref MemoryPackReader reader){
+    internal T DeserializeIndex(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -27,7 +27,7 @@ public class Index:MemoryPackFormatter<T> {
         Property.Instance.Serialize(ref writer,value.Indexer);
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
         var instance= Expression.Instance.Deserialize(ref reader);
         var indexer= Property.Instance.Deserialize(ref reader);

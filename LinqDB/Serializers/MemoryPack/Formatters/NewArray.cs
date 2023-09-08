@@ -9,11 +9,11 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using static Common;
 using T=NewArrayExpression;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeNewArray(ref MemoryPackReader reader){
+    internal T DeserializeNewArray(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -24,7 +24,7 @@ public class NewArray:MemoryPackFormatter<T> {
         Type.Instance.Serialize(ref writer,value.Type.GetElementType());
         SerializeReadOnlyCollection(ref writer,value.Expressions);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
         var NodeType=reader.ReadNodeType();
         var type= Type.Instance.Deserialize(ref reader);

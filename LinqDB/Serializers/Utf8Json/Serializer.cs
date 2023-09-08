@@ -16,53 +16,8 @@ namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 
 
-//public abstract class ACustomSerializer{
-//    //public abstract void Clear();
-//    public abstract byte[]Serialize<T>(T value);
-//    public abstract void Serialize<T>(Stream stream,T value);
-//    public abstract T Deserialize<T>(byte[]bytes);
-//    public abstract T Deserialize<T>(Stream stream);
-//}
-public class Utf8JsonCustomSerializer{
-    public static readonly Utf8JsonCustomSerializer Instance=new();
-    //internal readonly Binary Binary=new();
-    //internal readonly Block Block=new();
-    //internal readonly CatchBlock CatchBlock=new();
-    //internal readonly Conditional Conditional=new();
-    //internal readonly Constant Constant=new();
-    //internal readonly Constructor Constructor=new();
-    //internal readonly Default Default=new();
-    //internal readonly ElementInit ElementInit=new();
-    //internal readonly Expression Expression=new();
-    //internal readonly Field Field=new();
-    //internal readonly Goto Goto=new();
-    //internal readonly Index Index=new();
-    //internal readonly Invocation Invocation=new();
-    //internal readonly Label Label=new();
-    //internal readonly LabelTarget LabelTarget=new();
-    //internal readonly Lambda Lambda=new();
-    //internal readonly ListInit ListInit=new();
-    //internal readonly Loop Loop=new();
-    //internal readonly Member Member=new();
-    //internal readonly MemberAccess MemberAccess=new();
-    //internal readonly MemberBinding MemberBinding=new();
-    //internal readonly MemberInit MemberInit=new();
-    //internal readonly Method Method=new();
-    //internal readonly MethodCall MethodCall=new();
-    //internal readonly New New=new();
-    //internal readonly NewArray NewArray=new();
-    //internal readonly Object Object=new();
-    //internal readonly Parameter Parameter=new();
-    //internal readonly Property Property=new();
-    //internal readonly Switch Switch=new();
-    //internal readonly SwitchCase SwitchCase=new();
-    //internal readonly Try Try=new();
-    //internal readonly Type Type=new();
-    //internal readonly TypeBinary TypeBinary=new();
-    //internal readonly Unary Unary=new();
-    //private readonly Expression ExpressionFormatter=new();
-
-    //private readonly ExpressionJsonFormatter ExpressionFormatter=new();
+public class Serializer{
+    public static readonly Serializer Instance=new();
     private sealed class Utf8JsonCustomFormatterResolver:IJsonFormatterResolver{
         //private readonly Type[] GenericArguments=new Type[1];
         public readonly Dictionary<System.Type,IJsonFormatter> DictionaryTypeFormatter=new();
@@ -144,7 +99,7 @@ public class Utf8JsonCustomSerializer{
     //    var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
     //    if(DictionaryTypeFormatter.)
     //}
-    private Utf8JsonCustomSerializer(){
+    private Serializer(){
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
             //System.Array.Empty<IJsonFormatter>(),
             new IJsonFormatter[]{
@@ -270,55 +225,4 @@ public class Utf8JsonCustomSerializer{
     }
     public T Deserialize_T<T>(ref JsonReader reader)=>
         this.Resolver.GetFormatter<T>().Deserialize(ref reader,this.Resolver);
-    //private static class StaticReadOnlyCollectionFormatter<T>{
-    //    public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
-    //}
-    //internal static void SerializeReadOnlyCollection<T>(ref JsonWriter writer,
-    //    ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver) =>
-    //    StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value!,Resolver);
-    //private static class StaticArrayFormatter<T>{
-    //    public static readonly ArrayFormatter<T> Formatter=new();
-    //}
-    //internal static T[] DeserializeArray<T>(ref JsonReader reader,IJsonFormatterResolver Resolver) =>
-    //    StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
-    //public static System.Type Deserialize_Type(ref JsonReader reader,IJsonFormatterResolver Resolver){
-    //    var AssemblyQualifiedName=reader.ReadString();
-    //    return System.Type.GetType(AssemblyQualifiedName)!;
-    //}
-    //internal static void Serialize宣言Parameters(ref JsonWriter writer,ReadOnlyCollection<Expressions.ParameterExpression> value,
-    //    IJsonFormatterResolver Resolver){
-    //    writer.WriteBeginArray();
-    //    var Count=value.Count;
-    //    if(Count>0){
-    //        for(var a=0;;a++){
-    //            var Parameter=value[a];
-    //            writer.WriteBeginObject();
-    //            writer.WriteString(Parameter.Name);
-    //            writer.WriteNameSeparator();
-    //            Instance.Type.Serialize(ref writer,Parameter.Type,Resolver);
-    //            writer.WriteEndObject();
-    //            if(a==Count-1) break;
-    //            writer.WriteValueSeparator();
-    //        }
-    //    }
-    //    writer.WriteEndArray();
-    //}
-    //internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(ref JsonReader reader,
-    //    IJsonFormatterResolver Resolver){
-    //    var List=new List<Expressions.ParameterExpression>();
-    //    //var t=reader;
-    //    reader.ReadIsBeginArrayWithVerify();
-    //    while(reader.ReadIsBeginObject()){
-    //        var name=reader.ReadString();
-    //        reader.ReadIsNameSeparatorWithVerify();
-    //        var type=reader.ReadType()
-    //        List.Add(Expressions.Expression.Parameter(type,name));
-    //        reader.ReadIsEndObjectWithVerify();
-    //        //var count=0;
-    //        //if(!t.ReadIsEndObjectWithSkipValueSeparator(ref count)) break;
-    //        if(!reader.ReadIsValueSeparator()) break;
-    //    }
-    //    reader.ReadIsEndArrayWithVerify();
-    //    return List;
-    //}
 }

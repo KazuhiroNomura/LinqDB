@@ -11,7 +11,7 @@ public class ElementInit:MemoryPackFormatter<T> {
         Method.Instance.Serialize(ref writer,value!.AddMethod);
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var addMethod= Method.Instance.Deserialize(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         value=Expressions.Expression.ElementInit(addMethod,arguments!);

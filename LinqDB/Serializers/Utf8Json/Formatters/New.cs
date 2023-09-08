@@ -2,6 +2,8 @@
 using MessagePack;
 using MessagePack.Formatters;
 using Utf8Json;
+using System.Diagnostics;
+
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -9,10 +11,8 @@ using static Common;
 public class New:IJsonFormatter<Expressions.NewExpression>{
     public static readonly New Instance=new();
     public void Serialize(ref Writer writer,Expressions.NewExpression? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         Constructor.Instance.Serialize(ref writer,value.Constructor!,Resolver);
         writer.WriteValueSeparator();

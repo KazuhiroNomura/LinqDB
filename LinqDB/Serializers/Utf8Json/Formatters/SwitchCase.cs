@@ -9,14 +9,14 @@ using T=Expressions.SwitchCase;
 using static Common;
 public class SwitchCase:IJsonFormatter<T> {
     public static readonly SwitchCase Instance=new();
-    public void Serialize(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         SerializeReadOnlyCollection(ref writer,value.TestValues,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver) {
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
         var testValues=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();

@@ -5,8 +5,6 @@ using System.Diagnostics;
 using LinqDB.Helpers;
 using LinqDB.Serializers.Utf8Json.Formatters;
 using MessagePack.Formatters;
-using C=LinqDB.Serializers.MessagePack.MessagePackCustomSerializer;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -15,35 +13,15 @@ using T=System.Type;
 
 public class Type:IMessagePackFormatter<T> {
     public static readonly Type Instance=new();
-    //internal void Serialize(ref MessagePackWriter writer,System.Type? value) {
-    //    this.Serialize(ref writer,ref value);
-    //    ////Debug.Assert(value.IsGenericType==value.IsGenericTypeDefinition);
-    //    //if(this.DictionaryTypeIndex.TryGetValue(value,out var index)){
-    //    //    必要なFormatters.WriteBoolean(ref writer,true);
-    //    //    writer.WriteVarInt(index);
-    //    //} else{
-    //    //    必要なFormatters.WriteBoolean(ref writer,false);
-    //    //    writer.WriteString(value.AssemblyQualifiedName);
-    //    //    var DictionaryTypeIndex=this.DictionaryTypeIndex;
-    //    //    DictionaryTypeIndex.Add(value,DictionaryTypeIndex.Count);
-    //    //    this.ListType.Add(value);
-    //    //    this.Regist(value);
-    //    //}
-    //}
-    //internal System.Type DeserializeType(ref MessagePackReader reader){
-    //    System.Type? value=default;
-    //    this.Deserialize(ref reader,ref value);
-    //    return value!;
-    //}
-    //private void Register(System.Type AnonymousType){
-    //    var FormatterType = (IMessagePackFormatter)typeof(Anonymous<>).MakeGenericType(AnonymousType);
-    //    C.Instance.Resolver.DictionaryTypeFormatter.TryAdd(AnonymousType,FormatterType);
-    //}
+    private const int ArrayHeader0=2;
+    private const int ArrayHeader1=2;
     private void PrivateSerialize(ref Writer writer,T value){
-        if(C.Instance.DictionaryTypeIndex.TryGetValue(value,out var index)){
+        if(Serializer.Instance.DictionaryTypeIndex.TryGetValue(value,out var index)){
+            writer.WriteArrayHeader(ArrayHeader0);
             writer.WriteInt32(index);
         } else{
-            var DictionaryTypeIndex=C.Instance.DictionaryTypeIndex;
+            writer.WriteArrayHeader(ArrayHeader1);
+            var DictionaryTypeIndex=Serializer.Instance.DictionaryTypeIndex;
             index=DictionaryTypeIndex.Count;
             writer.WriteInt32(index);
             DictionaryTypeIndex.Add(value,index);
@@ -60,7 +38,7 @@ public class Type:IMessagePackFormatter<T> {
                 writer.WriteString(value.AssemblyQualifiedName);
             }
             */
-            C.Instance.Types.Add(value);
+            Serializer.Instance.Types.Add(value);
         }
     }
     //private readonly object[] objects2=new object[1];
@@ -68,12 +46,15 @@ public class Type:IMessagePackFormatter<T> {
         this.PrivateSerialize(ref writer,value);
     }
     private T PrivateDeserialize(ref Reader reader){
+        var count=reader.ReadArrayHeader();
         var index=reader.ReadInt32();
-        var Types=C.Instance.Types;
+        var Types=Serializer.Instance.Types;
         if(index<Types.Count){
+            Debug.Assert(count==ArrayHeader0);
             return Types[index];
         } else{
-            var DictionaryTypeIndex=C.Instance.DictionaryTypeIndex;
+            Debug.Assert(count==ArrayHeader1);
+            var DictionaryTypeIndex=Serializer.Instance.DictionaryTypeIndex;
             Debug.Assert(index==Types.Count);
             var AssemblyQualifiedName=reader.ReadString();
             var value=System.Type.GetType(AssemblyQualifiedName);

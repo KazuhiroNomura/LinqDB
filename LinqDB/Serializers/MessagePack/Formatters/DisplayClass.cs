@@ -28,17 +28,17 @@ using Reader=MessagePackReader;
 //    protected static readonly MethodInfo MethodDeserialize=typeof(CommonJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 //}
 public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter<T>{
-    public static readonly CatchBlock Instance=new();
-    private delegate void delegate_Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options);
+    //public static readonly CatchBlock Instance=new();
+    private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
     private readonly delegate_Serialize DelegateSerialize;
-    private delegate T delegate_Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options);
+    private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);
     private readonly delegate_Deserialize DelegateDeserialize;
     public DisplayClassMessagePackFormatter() {
         var Types1 = new System.Type[1];
         var Types2 = new System.Type[2];
         var Types3 = new System.Type[3];
-        Types3[0]=typeof(MessagePackWriter).MakeByRefType();
-        Types2[0]=typeof(MessagePackReader).MakeByRefType();
+        Types3[0]=typeof(Writer).MakeByRefType();
+        Types2[0]=typeof(Reader).MakeByRefType();
         Types3[1]=typeof(T);
         Types2[1]=Types3[2]=typeof(MessagePackSerializerOptions);
         var ctor=typeof(T).GetConstructors()[0];
@@ -46,8 +46,8 @@ public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter
         var Fields_Length = Fields.Length;
         Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
         {
-            var Serialize=new DynamicMethod("Serialize",typeof(void),Types3,typeof(Utf8JsonCustomSerializer),true){InitLocals=false};
-            var Deserialize=new DynamicMethod("Deserialize",typeof(T),Types2,typeof(Utf8JsonCustomSerializer),true){InitLocals=false};
+            var Serialize=new DynamicMethod("Serialize",typeof(void), Types3, typeof(Utf8Json.Serializer),true){ InitLocals=false};
+            var Deserialize=new DynamicMethod("Deserialize",typeof(T), Types2, typeof(Utf8Json.Serializer),true){ InitLocals=false};
             //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
             var I0=Serialize.GetILGenerator();
             var I1=Deserialize.GetILGenerator();
@@ -105,11 +105,8 @@ public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter
             I1.Emit(OpCodes.Ret);
         }
     }
-    public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions options){
+        if(writer.TryWriteNil(value)) return;
         this.DelegateSerialize(ref writer, value,options);
 //        var Parameters = typeof(T).GetConstructors()[0].GetParameters();
 //        var Parameters_Length = Parameters.Length;
@@ -130,7 +127,7 @@ public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter
 //        }
 //#endif
     }
-    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         return this.DelegateDeserialize(ref reader,options);
 //        var ctor = typeof(T).GetConstructors()[0];

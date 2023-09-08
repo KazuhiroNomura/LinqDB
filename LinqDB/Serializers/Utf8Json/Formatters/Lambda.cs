@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.LambdaExpression;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 using static Common;
 public class Lambda:IJsonFormatter<T> {
     public static readonly Lambda Instance=new();

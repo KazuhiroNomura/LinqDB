@@ -8,27 +8,36 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.IndexExpression;
-using C=MessagePackCustomSerializer;
 using static Common;
-public class Index:IMessagePackFormatter<Expressions.IndexExpression>{
+public class Index:IMessagePackFormatter<T> {
     public static readonly Index Instance=new();
-    public void Serialize(ref MessagePackWriter writer,Expressions.IndexExpression? value,MessagePackSerializerOptions Resolver){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        writer.WriteArrayHeader(3);
-        Expression.Instance.Serialize(ref writer,value.Object,Resolver);
+    private const int ArrayHeader=4;
+    private const int InternalArrayHeader=ArrayHeader+1;
+    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        Expression.Instance.Serialize(ref writer,value!.Object,Resolver);
         Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
         SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
     }
-    public Expressions.IndexExpression Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
-        var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);
+    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteNodeType(Expressions.ExpressionType.Index);
+        PrivateSerialize(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(ArrayHeader);
+        PrivateSerialize(ref writer,value,Resolver);
+    }
+    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var instance= Expression.Instance.Deserialize(ref reader,Resolver);
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
         var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
+        return InternalDeserialize(ref reader,Resolver);
     }
 }

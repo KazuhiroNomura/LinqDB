@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using MessagePack;
@@ -9,14 +10,12 @@ using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=FieldInfo;
 using static Common;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 public class Field:IJsonFormatter<T> {
     public static readonly Field Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var ReflectedType=value.ReflectedType;
         writer.WriteType(ReflectedType);

@@ -10,7 +10,7 @@ public class Switch:MemoryPackFormatter<T> {
     public static readonly Switch Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         this.Serialize(ref writer,ref value);
-    internal T DeserializeSwitch(ref MemoryPackReader reader){
+    internal T DeserializeSwitch(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -22,7 +22,7 @@ public class Switch:MemoryPackFormatter<T> {
         SerializeReadOnlyCollection(ref writer,value.Cases);
         Expression.Instance.Serialize(ref writer,value.DefaultBody);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var type       = Type.Instance.Deserialize(ref reader);
         var switchValue= Expression.Instance.Deserialize(ref reader);
         var comparison = Method.Instance.DeserializeNullable(ref reader);

@@ -8,20 +8,22 @@ using System.Linq;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
-using T=System.Reflection.MemberInfo;
-using C=LinqDB.Serializers.MessagePack.MessagePackCustomSerializer;
+using T= MemberInfo;
 public class Member:IMessagePackFormatter<T>{
     public static readonly Member Instance=new();
-    public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions Resolver){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        var ReflectedType=value.ReflectedType!;
+    private const int ArrayHeader=2;
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(ArrayHeader);
+        var ReflectedType=value!.ReflectedType!;
         writer.WriteType(ReflectedType);
-        var array= C.Instance.TypeMembers.Get(ReflectedType);
+        var array= Serializer.Instance.TypeMembers.Get(ReflectedType);
         writer.WriteInt32(Array.IndexOf(array,value));
     }
-    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var array= C.Instance.TypeMembers.Get(type);
+        var array= Serializer.Instance.TypeMembers.Get(type);
         var Index=reader.ReadInt32();
         return array[Index];
     }

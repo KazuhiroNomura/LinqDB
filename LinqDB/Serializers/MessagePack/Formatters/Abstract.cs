@@ -7,8 +7,6 @@ using MessagePack.Formatters;
 namespace LinqDB.Serializers.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
-using C=MessagePackCustomSerializer;
-
 #pragma warning disable CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
 /// <summary>
 /// sealedではないクラスをシリアライズする
@@ -30,6 +28,7 @@ public class Abstract{
     }
 }
 public class AbstractMessagePackFormatter<T>:Abstract,IMessagePackFormatter<T>{
+    private const int ArrayHeader=2;
     private static object GetFormatter(MessagePackSerializerOptions options,Type type){
         if(typeof(Type).IsAssignableFrom(type)) type=typeof(Type);
         var Formatter=options.Resolver.GetFormatterDynamic(type)!;
@@ -40,22 +39,19 @@ public class AbstractMessagePackFormatter<T>:Abstract,IMessagePackFormatter<T>{
         }
         return Formatter;
     }
-    public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        writer.WriteArrayHeader(2);
-        var type=value.GetType();
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions options){
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(ArrayHeader);
+        var type=value!.GetType();
         writer.WriteType(type);
-        C.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
+        Serializer.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
     }
-    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
-        var ArrayHeader=reader.ReadArrayHeader();
-        Debug.Assert(ArrayHeader==2);
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var value=(T)C.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
+        var value=(T)Serializer.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
         return value;
     }
 }

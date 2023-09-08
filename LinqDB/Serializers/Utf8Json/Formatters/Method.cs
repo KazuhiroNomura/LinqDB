@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.Formats.Asn1;
 using System.Linq;
 using System.Reflection;
@@ -14,22 +15,19 @@ using Writer=JsonWriter;
 using Reader=JsonReader;
 using static Common;
 using T= MethodInfo;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 public class Method:IJsonFormatter<T> {
     public static readonly Method Instance=new();
     internal void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        writer.WriteBoolean(value is not null);
-        if(value is not null) this.Serialize(ref writer,value,Resolver);
+        if(value is null)writer.WriteNull();
+        else this.Serialize(ref writer,value,Resolver);
     }
     internal T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver) {
-        var value0 = reader.ReadBoolean();
-        return value0 ? this.Deserialize(ref reader,Resolver) : null;
+        return reader.ReadIsNull() ?null: this.Deserialize(ref reader,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var ReflectedType=value.ReflectedType;
         writer.WriteType(ReflectedType);

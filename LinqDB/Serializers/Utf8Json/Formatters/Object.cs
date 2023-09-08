@@ -11,23 +11,13 @@ using System;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 public class Object:IJsonFormatter<object>{
     public static readonly Object Instance=new();
-    //public void SerializeObject<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
-    //    this.Serialize(ref writer,ref value);
-    //}
-    //public object DeserializeObject(ref MemoryPackReader reader){
-    //    object? value=default;
-    //    this.Deserialize(ref reader,ref value);
-    //    return value!;
-    //}
     private readonly object[] Objects3=new object[3];
-    public void Serialize(ref JsonWriter writer,object? value,IJsonFormatterResolver Resolver){
-        if(value is null) {
-            writer.WriteNull();
-            return;
-        }
+    public void Serialize(ref Writer writer,object? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.GetType();
@@ -62,14 +52,14 @@ public class Object:IJsonFormatter<object>{
                 Objects3[1]=value;
                 Objects3[2]=Resolver;
                 Serialize.Invoke(Formatter, Objects3);
-                writer=(JsonWriter)Objects3[0];
+                writer=(Writer)Objects3[0];
                 break;
             }
         }
         writer.WriteEndArray();
     }
     private readonly object[] Objects2=new object[2];
-    public object Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    public object Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(!reader.ReadBoolean())return null!;
         if(reader.ReadIsNull()) return null!;
         object result;
@@ -99,7 +89,7 @@ public class Object:IJsonFormatter<object>{
             Objects2[0]=reader;
             Objects2[1]=Resolver;
             result=Deserialize.Invoke(Formatter, Objects2)!;
-            reader=(JsonReader)Objects2[0];
+            reader=(Reader)Objects2[0];
             //global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);}
             //var Formatter=reader.GetFormatter(type);
             //Formatter.Deserialize(ref reader,ref value);

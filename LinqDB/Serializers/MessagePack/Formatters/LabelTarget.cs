@@ -1,42 +1,46 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
+using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.LabelTarget;
-using C=MessagePackCustomSerializer;
-public class LabelTarget:IMessagePackFormatter<Expressions.LabelTarget>{
+public class LabelTarget:IMessagePackFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    public void Serialize(ref MessagePackWriter writer,Expressions.LabelTarget? value,MessagePackSerializerOptions Resolver){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        if(C.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+    private const int ArrayHeader0=1;
+    private const int ArrayHeader1=3;
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
+        if(Serializer.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+            writer.WriteArrayHeader(ArrayHeader0);
             writer.WriteInt32(index);
         } else{
-            var Dictionary_LabelTarget_int=C.Instance.Dictionary_LabelTarget_int;
+            writer.WriteArrayHeader(ArrayHeader1);
+            var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
             index=Dictionary_LabelTarget_int.Count;
-            C.Instance.ListLabelTarget.Add(value);
+            Serializer.Instance.ListLabelTarget.Add(value);
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteInt32(index);
             writer.WriteType(value.Type);
             writer.Write(value.Name);
         }
     }
-    public Expressions.LabelTarget Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
         var index=reader.ReadInt32();
-        var ListLabelTarget=C.Instance.ListLabelTarget;
-        Expressions.LabelTarget target;
+        var ListLabelTarget=Serializer.Instance.ListLabelTarget;
+        T target;
         if(index<ListLabelTarget.Count){
+            Debug.Assert(count==ArrayHeader0);
             target=ListLabelTarget[index];
         } else{
+            Debug.Assert(count==ArrayHeader1);
             var type=reader.ReadType();
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
-            var Dictionary_LabelTarget_int=C.Instance.Dictionary_LabelTarget_int;
+            var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
             index=Dictionary_LabelTarget_int.Count;
             ListLabelTarget.Add(target);
             Dictionary_LabelTarget_int.Add(target,index);

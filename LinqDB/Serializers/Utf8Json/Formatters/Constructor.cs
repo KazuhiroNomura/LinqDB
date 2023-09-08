@@ -12,7 +12,6 @@ public class Constructor:IJsonFormatter<T> {
     public static readonly Constructor Instance=new();
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        //this.Serialize(ref writer,value.ReflectedType!,Resolver);
         Type.Instance.Serialize(ref writer,value.ReflectedType!,Resolver);
         writer.WriteValueSeparator();
         writer.WriteInt32(value.MetadataToken);

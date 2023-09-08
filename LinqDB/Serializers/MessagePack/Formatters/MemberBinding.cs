@@ -2,6 +2,8 @@
 using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using System.Diagnostics;
+
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -9,7 +11,9 @@ using T=Expressions.MemberBinding;
 using static Common;
 public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
+    private const int ArrayHeader=3;
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(ArrayHeader);
         writer.Write((byte)value.BindingType);
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
         switch(value.BindingType){
@@ -27,6 +31,8 @@ public class MemberBinding:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();
         var member= Member.Instance.Deserialize(ref reader,Resolver);
         T MemberBinding =BindingType switch{

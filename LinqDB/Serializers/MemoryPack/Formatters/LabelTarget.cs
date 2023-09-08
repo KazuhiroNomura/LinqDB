@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 using T=Expressions.LabelTarget;
 
 
@@ -15,17 +15,12 @@ public class LabelTarget:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeLabelTarget(ref MemoryPackReader reader){
+    internal T DeserializeLabelTarget(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        //if(value is null){
-        //    writer.WriteBoolean(false);
-        //    return;
-        //}
-        //C.WriteBoolean(ref writer,true);
         if(C.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
@@ -38,8 +33,7 @@ public class LabelTarget:MemoryPackFormatter<T> {
             writer.WriteString(value.Name);
         }
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
-        //if(!C.ReadBoolean(ref reader)) return;
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var index=reader.ReadVarIntInt32();
         var ListLabelTarget= C.Instance.ListLabelTarget;
         T target;

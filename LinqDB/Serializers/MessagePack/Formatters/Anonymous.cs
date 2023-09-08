@@ -10,24 +10,24 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 public class Anonymous{
-    private static void Serialize<T>(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
+    private static void Serialize<T>(ref Writer writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
     protected static readonly MethodInfo MethodSerialize=typeof(Anonymous).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static T Deserialize<T>(ref MessagePackReader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
+    private static T Deserialize<T>(ref Reader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
     protected static readonly MethodInfo MethodDeserialize=typeof(Anonymous).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    protected static readonly MethodInfo WriteArrayHeader=typeof(MessagePackWriter).GetMethod(nameof(MessagePackWriter.WriteArrayHeader),new []{typeof(int)})!;
-    protected static readonly MethodInfo ReadArrayHeader=typeof(MessagePackReader).GetMethod(nameof(MessagePackReader.ReadArrayHeader))!;
+    protected static readonly MethodInfo WriteArrayHeader=typeof(Writer).GetMethod(nameof(Writer.WriteArrayHeader),new []{typeof(int)})!;
+    protected static readonly MethodInfo ReadArrayHeader=typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
 }
 public class Anonymous<T>:Anonymous,IMessagePackFormatter<T>{
-    private delegate void delegate_Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options);
+    private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
     private readonly delegate_Serialize DelegateSerialize;
-    private delegate T delegate_Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options);
+    private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);
     private readonly delegate_Deserialize DelegateDeserialize;
     public Anonymous() {
         var Types1 = new System.Type[1];
         var DeserializeTypes = new System.Type[2];
         var SerializeTypes = new System.Type[3];
-        SerializeTypes[0]=typeof(MessagePackWriter).MakeByRefType();
-        DeserializeTypes[0]=typeof(MessagePackReader).MakeByRefType();
+        SerializeTypes[0]=typeof(Writer).MakeByRefType();
+        DeserializeTypes[0]=typeof(Reader).MakeByRefType();
         SerializeTypes[1]=typeof(T);
         DeserializeTypes[1]=SerializeTypes[2]=typeof(MessagePackSerializerOptions);
         var ctor=typeof(T).GetConstructors()[0];
@@ -95,14 +95,8 @@ public class Anonymous<T>:Anonymous,IMessagePackFormatter<T>{
             I1.Emit(OpCodes.Ret);
         }
     }
-    private class Container2 : global::LinqDB.Databases.Container<Container2>
-    {
-    }
-    public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions options){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions options){
+        if(writer.TryWriteNil(value)) return;
         this.DelegateSerialize(ref writer, value,options);
 //        var Parameters = typeof(T).GetConstructors()[0].GetParameters();
 //        var Parameters_Length = Parameters.Length;
@@ -123,7 +117,7 @@ public class Anonymous<T>:Anonymous,IMessagePackFormatter<T>{
 //        }
 //#endif
     }
-    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options){
         if(reader.TryReadNil()) return default!;
         return this.DelegateDeserialize(ref reader,options);
 //        var ctor = typeof(T).GetConstructors()[0];

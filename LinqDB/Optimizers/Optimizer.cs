@@ -1047,7 +1047,7 @@ public sealed partial class Optimizer:IDisposable{
         protected ReturnExpressionTraverser_Quoteを処理しない(作業配列 作業配列) : base(作業配列) { }
         //protected sealed override Expression Quote(UnaryExpression Unary0) => Unary0;
     }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization","CA1303:Do not pass literals as localized parameters",Justification = "<保留中>")]
+    [SuppressMessage("Globalization","CA1303:Do not pass literals as localized parameters",Justification = "<保留中>")]
     private sealed class 検証_変形状態:VoidExpressionTraverser_Quoteを処理しない{
         public void 実行(Expression e)=>this.Traverse(e);
         protected override void Traverse(Expression e) {

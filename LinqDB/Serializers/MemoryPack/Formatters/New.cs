@@ -15,7 +15,7 @@ public class New:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeNew(ref MemoryPackReader reader){
+    internal T DeserializeNew(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -25,7 +25,7 @@ public class New:MemoryPackFormatter<T> {
         Constructor.Instance.Serialize(ref writer,value.Constructor!);
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var constructor= Constructor.Instance.DeserializeConstructorInfo(ref reader);
         var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=System.Linq.Expressions.Expression.New(

@@ -12,19 +12,22 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=FieldInfo;
-using C=MessagePackCustomSerializer;
 public class Field:IMessagePackFormatter<T>{
     public static readonly Field Instance=new();
-    public void Serialize(ref MessagePackWriter writer,T? value,MessagePackSerializerOptions Resolver){
+    private const int ArrayHeader=2;
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteArrayHeader(ArrayHeader);
         var ReflectedType=value.ReflectedType!;
         writer.WriteType(ReflectedType);
-        var Methods= C.Instance.TypeFields.Get(ReflectedType);
+        var Methods= Serializer.Instance.TypeFields.Get(ReflectedType);
         writer.WriteInt32(Array.IndexOf(Methods,value));
     }
-    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var results= C.Instance.TypeFields.Get(type);
+        var results= Serializer.Instance.TypeFields.Get(type);
         var Index=reader.ReadInt32();
         return results[Index];
     }

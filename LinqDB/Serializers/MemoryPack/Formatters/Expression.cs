@@ -7,17 +7,17 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.Expression;
 
-public class Expression:MemoryPackFormatter<Expressions.Expression>{
+public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
-    public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression? value)where TBufferWriter:IBufferWriter<byte>{
+    public void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    public Expressions.Expression Deserialize(ref MemoryPackReader reader){
-        Expressions.Expression? value=default;
+    public T Deserialize(ref Reader reader) {
+        T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Expressions.Expression? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             writer.WriteBoolean(false);
             return;
@@ -25,67 +25,69 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
         writer.WriteBoolean(true);
         writer.WriteNodeType(value.NodeType);
         switch(value.NodeType){
-            case Expressions.ExpressionType.Assign:
-            case Expressions.ExpressionType.Coalesce:
-            case Expressions.ExpressionType.ArrayIndex:Binary.Serialize_Binary(ref writer,(Expressions.BinaryExpression)value); break;
-            case Expressions.ExpressionType.Add:
-            case Expressions.ExpressionType.AddAssign:
-            case Expressions.ExpressionType.AddAssignChecked:
-            case Expressions.ExpressionType.AddChecked:
-            case Expressions.ExpressionType.And:
-            case Expressions.ExpressionType.AndAssign:
-            case Expressions.ExpressionType.AndAlso:
-            case Expressions.ExpressionType.Divide:
-            case Expressions.ExpressionType.DivideAssign:
-            case Expressions.ExpressionType.ExclusiveOr:
-            case Expressions.ExpressionType.ExclusiveOrAssign:
-            case Expressions.ExpressionType.LeftShift:
-            case Expressions.ExpressionType.LeftShiftAssign:
-            case Expressions.ExpressionType.Modulo:
-            case Expressions.ExpressionType.ModuloAssign:
-            case Expressions.ExpressionType.Multiply:
-            case Expressions.ExpressionType.MultiplyAssign:
+            case Expressions.ExpressionType.Assign               :
+            case Expressions.ExpressionType.Coalesce             :
+            case Expressions.ExpressionType.ArrayIndex           :Binary.InternalSerializeBinary(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Add                  :
+            case Expressions.ExpressionType.AddAssign            :
+            case Expressions.ExpressionType.AddAssignChecked     :
+            case Expressions.ExpressionType.AddChecked           :
+            case Expressions.ExpressionType.And                  :
+            case Expressions.ExpressionType.AndAssign            :
+            case Expressions.ExpressionType.AndAlso              :
+            case Expressions.ExpressionType.Divide               :
+            case Expressions.ExpressionType.DivideAssign         :
+            case Expressions.ExpressionType.ExclusiveOr          :
+            case Expressions.ExpressionType.ExclusiveOrAssign    :
+            case Expressions.ExpressionType.LeftShift            :
+            case Expressions.ExpressionType.LeftShiftAssign      :
+            case Expressions.ExpressionType.Modulo               :
+            case Expressions.ExpressionType.ModuloAssign         :
+            case Expressions.ExpressionType.Multiply             :
+            case Expressions.ExpressionType.MultiplyAssign       :
             case Expressions.ExpressionType.MultiplyAssignChecked:
-            case Expressions.ExpressionType.MultiplyChecked:
-            case Expressions.ExpressionType.Or:
-            case Expressions.ExpressionType.OrAssign:
-            case Expressions.ExpressionType.OrElse:
-            case Expressions.ExpressionType.Power:
-            case Expressions.ExpressionType.PowerAssign:
-            case Expressions.ExpressionType.RightShift:
-            case Expressions.ExpressionType.RightShiftAssign:
-            case Expressions.ExpressionType.Subtract:
-            case Expressions.ExpressionType.SubtractAssign:
+            case Expressions.ExpressionType.MultiplyChecked      :
+            case Expressions.ExpressionType.Or                   :
+            case Expressions.ExpressionType.OrAssign             :
+            case Expressions.ExpressionType.OrElse               :
+            case Expressions.ExpressionType.Power                :
+            case Expressions.ExpressionType.PowerAssign          :
+            case Expressions.ExpressionType.RightShift           :
+            case Expressions.ExpressionType.RightShiftAssign     :
+            case Expressions.ExpressionType.Subtract             :
+            case Expressions.ExpressionType.SubtractAssign       :
             case Expressions.ExpressionType.SubtractAssignChecked:
-            case Expressions.ExpressionType.SubtractChecked:Binary.Serialize_Binary_MethodInfo(ref writer,(Expressions.BinaryExpression)value); break;
-            case Expressions.ExpressionType.Equal:
-            case Expressions.ExpressionType.GreaterThan:
-            case Expressions.ExpressionType.GreaterThanOrEqual:
-            case Expressions.ExpressionType.LessThan:
-            case Expressions.ExpressionType.LessThanOrEqual:
-            case Expressions.ExpressionType.NotEqual:Binary.Serialize_Binary_bool_MethodInfo(ref writer,(Expressions.BinaryExpression)value); break;
-            case Expressions.ExpressionType.ArrayLength        :Unary.Serialize_Unary(ref writer,value);break;
-            case Expressions.ExpressionType.Quote              :Unary.Serialize_Unary(ref writer,value);break;
-            case Expressions.ExpressionType.Throw              :Unary.Serialize_Unary_Type(ref writer,value);break;
-            case Expressions.ExpressionType.TypeAs             :Unary.Serialize_Unary_Type(ref writer,value);break;
-            case Expressions.ExpressionType.Unbox              :Unary.Serialize_Unary_Type(ref writer,value);break;
-            case Expressions.ExpressionType.Convert            :Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.ConvertChecked     :Unary.Serialize_Unary_Type_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.Decrement          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.Increment          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.IsFalse            :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.IsTrue             :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.Negate             :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.NegateChecked      :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.Not                :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.OnesComplement     :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.PostDecrementAssign:Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.PostIncrementAssign:Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.PreDecrementAssign :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.PreIncrementAssign :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
-            case Expressions.ExpressionType.UnaryPlus          :Unary.Serialize_Unary_MethodInfo(ref writer,value);break;
+            case Expressions.ExpressionType.SubtractChecked      :Binary.InternalSerializeBinaryMethod(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Equal                :
+            case Expressions.ExpressionType.GreaterThan          :
+            case Expressions.ExpressionType.GreaterThanOrEqual   :
+            case Expressions.ExpressionType.LessThan             :
+            case Expressions.ExpressionType.LessThanOrEqual      :
+            case Expressions.ExpressionType.NotEqual             :Binary.InternalSerializeBinaryBooleanMethod(ref writer,(Expressions.BinaryExpression)value); break;
+
+            case Expressions.ExpressionType.ArrayLength        :
+            case Expressions.ExpressionType.Quote              :Unary.InternalSerializeUnary(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Throw              :
+            case Expressions.ExpressionType.TypeAs             :
+            case Expressions.ExpressionType.Unbox              :Unary.InternalSerializeUnaryType(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Convert            :
+            case Expressions.ExpressionType.ConvertChecked     :Unary.InternalSerializeOperandTypeMethod(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Decrement          :
+            case Expressions.ExpressionType.Increment          :
+            case Expressions.ExpressionType.IsFalse            :
+            case Expressions.ExpressionType.IsTrue             :
+            case Expressions.ExpressionType.Negate             :
+            case Expressions.ExpressionType.NegateChecked      :
+            case Expressions.ExpressionType.Not                :
+            case Expressions.ExpressionType.OnesComplement     :
+            case Expressions.ExpressionType.PostDecrementAssign:
+            case Expressions.ExpressionType.PostIncrementAssign:
+            case Expressions.ExpressionType.PreDecrementAssign :
+            case Expressions.ExpressionType.PreIncrementAssign :
+            case Expressions.ExpressionType.UnaryPlus          :Unary.InternalSerializeUnaryMethod(ref writer,(Expressions.UnaryExpression)value);break;
+
             case Expressions.ExpressionType.TypeEqual          :
-            case Expressions.ExpressionType.TypeIs             :TypeBinary.Instance.Serialize(ref writer,(Expressions.TypeBinaryExpression)value); break;
+            case Expressions.ExpressionType.TypeIs             :TypeBinary.InternalSerializeExpression(ref writer,(Expressions.TypeBinaryExpression)value); break;
             case Expressions.ExpressionType.Conditional        :Conditional.Instance.Serialize(ref writer,(Expressions.ConditionalExpression)value);break;
             case Expressions.ExpressionType.Constant           :Constant.Instance.Serialize(ref writer,(Expressions.ConstantExpression)value);break;
             case Expressions.ExpressionType.Parameter          :Parameter.Instance.Serialize(ref writer,(Expressions.ParameterExpression)value);break;
@@ -113,15 +115,14 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref Expressions.Expression? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(!reader.ReadBoolean()) return;
-        //if(reader.TryReadNil())return;
         var NodeType=reader.ReadNodeType();
         switch(NodeType){
             case Expressions.ExpressionType.Assign:
             case Expressions.ExpressionType.Coalesce:
             case Expressions.ExpressionType.ArrayIndex:{
-                var (Left,Right)=Binary.Deserialize_Binary(ref reader);
+                var (Left,Right)=Binary.InternalDeserializeBinary(ref reader);
                 value=Expressions.Expression.MakeBinary(NodeType,Left,Right); break;
             }
             case Expressions.ExpressionType.Add:
@@ -154,7 +155,7 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             case Expressions.ExpressionType.SubtractAssign:
             case Expressions.ExpressionType.SubtractAssignChecked:
             case Expressions.ExpressionType.SubtractChecked: {
-                var (Left, Right, Method)=Binary.Deserialize_Binary_MethodInfo(ref reader);
+                var (Left, Right, Method)=Binary.InternalDeserializeBinaryMethod(ref reader);
                 value=Expressions.Expression.MakeBinary(NodeType,Left,Right,false,Method); break;
             }
             case Expressions.ExpressionType.Equal:
@@ -163,7 +164,7 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             case Expressions.ExpressionType.LessThan:
             case Expressions.ExpressionType.LessThanOrEqual:
             case Expressions.ExpressionType.NotEqual: {
-                var (Left, Right, IsLiftedToNull, Method)=Binary.Deserialize_Binary_bool_MethodInfo(ref reader);
+                var (Left, Right, IsLiftedToNull, Method)=Binary.InternalDeserializeBinaryBooleanMethod(ref reader);
                 value=Expressions.Expression.NotEqual(Left,Right,IsLiftedToNull,Method); break;
             }
             //case Expressions.Expressions.ExpressionType.Assign:
@@ -207,7 +208,7 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             //case Expressions.Expressions.ExpressionType.ArrayIndex:value=CustomSerializerMemoryPack.Binary.Deserialize(ref reader);break;
             case Expressions.ExpressionType.ArrayLength        :
             case Expressions.ExpressionType.Quote              :{
-                var Operand= Unary.Deserialize_Unary(ref reader);
+                var Operand= Unary.InternalDeserializeOperand(ref reader);
                 value=Expressions.Expression.ArrayLength(Operand);break;
             }
             case Expressions.ExpressionType.Throw              :
@@ -218,8 +219,8 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             }
             case Expressions.ExpressionType.Convert            :
             case Expressions.ExpressionType.ConvertChecked     :{
-                var(Operand,Type,Method)=Unary.Deserialize_Unary_Type_MethodInfo(ref reader);
-                value=Expressions.Expression.ConvertChecked(Operand,Type,Method);break;
+                var(Operand,Type,Method)=Unary.InternalDeserializeUnaryTypeMethod(ref reader);
+                value=Expressions.Expression.MakeUnary(NodeType,Operand,Type,Method);break;
             }
             case Expressions.ExpressionType.Decrement          :
             case Expressions.ExpressionType.Increment          :
@@ -234,8 +235,9 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             case Expressions.ExpressionType.PreDecrementAssign :
             case Expressions.ExpressionType.PreIncrementAssign :
             case Expressions.ExpressionType.UnaryPlus          :{
-                var (Operand,Method)=Unary.Deserialize_Unary_MethodInfo(ref reader);
-                value=Expressions.Expression.PreIncrementAssign(Operand,Method);break;
+                var (Operand,Method)=Unary.InternalDeserializeUnaryMethod(ref reader);
+                //value=Expressions.Expression.PreIncrementAssign(Operand,Method);break;
+                value=Expressions.Expression.MakeUnary(NodeType,Operand,typeof(void),Method);break;
             }
             //case Expressions.ExpressionType.ArrayLength: {
             //    var Operand=Unary.Deserialize_Unary(ref reader);
@@ -339,8 +341,8 @@ public class Expression:MemoryPackFormatter<Expressions.Expression>{
             //case Expressions.Expressions.ExpressionType.TypeAs             :
             //case Expressions.Expressions.ExpressionType.UnaryPlus          :
             //case Expressions.Expressions.ExpressionType.Unbox              :value=CustomSerializerMemoryPack.Unary.Deserialize(ref reader);break;
-            case Expressions.ExpressionType.TypeEqual          :
-            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.Instance.DeserializeTypeBinary(ref reader);break;
+            case Expressions.ExpressionType.TypeEqual          :value=TypeBinary.InternalDeserializeTypeEqual(ref reader);break;
+            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.InternalDeserializeTypeIs(ref reader);break;
             case Expressions.ExpressionType.Conditional        :value=Conditional.Instance.DeserializeConditional(ref reader);break;
             case Expressions.ExpressionType.Constant           :value=Constant.Instance.DeserializeConstant(ref reader);break;
             case Expressions.ExpressionType.Parameter          :value=Parameter.Instance.DeserializeParameter(ref reader);break;

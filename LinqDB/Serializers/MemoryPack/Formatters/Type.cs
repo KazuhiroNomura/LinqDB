@@ -26,14 +26,14 @@ public class Type:MemoryPackFormatter<T> {
         //    this.Regist(value);
         //}
     }
-    internal T Deserialize(ref MemoryPackReader reader){
+    internal T Deserialize(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
     private void Register(T AnonymousType){
         var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-        var Register=MemoryPackCustomSerializer.Register.MakeGenericMethod(AnonymousType);
+        var Register=Serializer.Register.MakeGenericMethod(AnonymousType);
         var objects2=this.objects2;
         objects2[0]=Activator.CreateInstance(FormatterType)!;
         Register.Invoke(null,objects2);
@@ -87,7 +87,7 @@ public class Type:MemoryPackFormatter<T> {
     //        return value;
     //    }
     //}
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         value=reader.ReadType();
         //value=this.PrivateDeserialize(ref reader);
         //var i=reader.ReadVarIntInt32();

@@ -1,21 +1,40 @@
 ﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using System.Diagnostics;
+
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.ListInitExpression;
-using C=MessagePackCustomSerializer;
 using static Common;
-public class ListInit:IMessagePackFormatter<Expressions.ListInitExpression>{
+public class ListInit:IMessagePackFormatter<T> {
     public static readonly ListInit Instance=new();
-    public void Serialize(ref MessagePackWriter writer,Expressions.ListInitExpression value,MessagePackSerializerOptions Resolver){
-        New.Instance.Serialize(ref writer,value.NewExpression,Resolver);
+    private const int ArrayHeader=2;
+    private const int InternalArrayHeader=ArrayHeader+1;
+    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        New.Instance.Serialize(ref writer,value!.NewExpression,Resolver);
         SerializeReadOnlyCollection(ref writer,value.Initializers,Resolver);
     }
-    public Expressions.ListInitExpression Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
+    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteNodeType(Expressions.ExpressionType.ListInit);
+        PrivateSerialize(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(ArrayHeader);
+        PrivateSerialize(ref writer,value,Resolver);
+    }
+    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var @new=New.Instance.Deserialize(ref reader,Resolver);
         var Initializers=DeserializeArray<Expressions.ElementInit>(ref reader,Resolver);
         return Expressions.Expression.ListInit(@new,Initializers);
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
+        return InternalDeserialize(ref reader,Resolver);
     }
 }

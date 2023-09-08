@@ -10,7 +10,7 @@ public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
     private static readonly ReadOnlyCollectionFormatter<Expressions.CatchBlock?>CatchBlocks=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeTry(ref MemoryPackReader reader){
+    internal T DeserializeTry(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -23,7 +23,7 @@ public class Try:MemoryPackFormatter<T> {
         //this.Serialize(ref writer,value.Handlers);
         //writer.Write("ABC");
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var body= Expression.Instance.Deserialize(ref reader);
         //var s=reader.ReadString();
         var @finally= Expression.Instance.Deserialize(ref reader);

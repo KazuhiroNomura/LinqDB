@@ -4298,7 +4298,7 @@ public sealed partial class Optimizer{
 //            foreach(var ColumnDefinition in x.ColumnDefinitions)
   //.              this.ColumnDefinition(ColumnDefinition);
      //       throw this.単純NotSupportedException(x);
-            Type ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<ColumnDefinition> Arguments,int Offset) {
+            Type ValueTupleでNewする(作業配列 作業配列,IList<ColumnDefinition> Arguments,int Offset) {
                 var 残りType数 = Arguments.Count-Offset;
                 switch(残りType数) {
                     case 1:return 作業配列.MakeGenericType(
@@ -4617,7 +4617,7 @@ public sealed partial class Optimizer{
                 if(Method is null) {
                     Trace.WriteLine("function2:"+SchemaObject.BaseIdentifier.Value);
                     //動的な型を使ってごまかす
-                    return (TABLE_DEE,e.Expression.Parameter(typeof(LinqDB.Databases.AttributeEmpty),x.Alias?.Value));
+                    return (TABLE_DEE,e.Expression.Parameter(typeof(Databases.AttributeEmpty),x.Alias?.Value));
                 }
                 Debug.Assert(x.Columns.Count==0);
                 var Parameters=x.Parameters;

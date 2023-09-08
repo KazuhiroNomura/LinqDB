@@ -14,7 +14,7 @@ public class ListInit:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeListInit(ref MemoryPackReader reader){
+    internal T DeserializeListInit(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -26,7 +26,7 @@ public class ListInit:MemoryPackFormatter<T> {
         var Initializers=value.Initializers;
         Formatter.Serialize(ref writer,ref Initializers!);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var @new=New.Instance.DeserializeNew(ref reader);
         var Initializers=reader.ReadArray<Expressions.ElementInit>();
         value=Expressions.Expression.ListInit(@new,Initializers!);

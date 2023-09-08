@@ -13,7 +13,7 @@ public class MemberInit:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeMemberInit(ref MemoryPackReader reader){
+    internal T DeserializeMemberInit(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -24,7 +24,7 @@ public class MemberInit:MemoryPackFormatter<T> {
         SerializeReadOnlyCollection(ref writer,value.Bindings);
         //this.Serialize(ref writer,value.Bindings);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var @new= New.Instance.DeserializeNew(ref reader);
         var bindings=reader.ReadArray<Expressions.MemberBinding>();
         value=Expressions.Expression.MemberInit(@new,bindings!);

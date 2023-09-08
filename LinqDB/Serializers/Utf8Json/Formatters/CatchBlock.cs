@@ -9,7 +9,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.CatchBlock;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 
 
 

@@ -1318,7 +1318,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         try {
             while(true) {
                 this.InternalAdd(
-                    Utf8JsonCustomSerializer.Instance.Deserialize<T>(Reader)
+                    Serializer.Instance.Deserialize<T>(Reader)
                 );
                 Count++;
             }

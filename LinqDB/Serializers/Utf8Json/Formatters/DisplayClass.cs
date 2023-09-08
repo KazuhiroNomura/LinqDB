@@ -1,5 +1,6 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -77,10 +78,8 @@ public class DisplayClass<T>:Anonymous,IJsonFormatter<T>{
     }
     //private readonly object[] Objects3=new object[3];
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver formatterResolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginObject();
         this.DelegateSerialize(ref writer, value, formatterResolver);
         writer.WriteEndObject();

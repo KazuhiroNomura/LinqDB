@@ -11,7 +11,7 @@ using System.Diagnostics;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 public class Type:IJsonFormatter<System.Type>{
     public static readonly Type Instance=new();
     //private void PrivateSerialize<TBufferWriter>(ref JsonWriter writer,System.Type value){

@@ -5,14 +5,14 @@ using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.MethodCallExpression;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 using static Common;
 
 
 public class MethodCall:MemoryPackFormatter<T> {
     public static readonly MethodCall Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeMethodCall(ref MemoryPackReader reader){
+    internal T DeserializeMethodCall(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -28,7 +28,7 @@ public class MethodCall:MemoryPackFormatter<T> {
         }
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
         var method= Method.Instance.Deserialize(ref reader);
         if(method.IsStatic){

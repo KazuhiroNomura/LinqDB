@@ -6,13 +6,13 @@ using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.MemberBinding;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 using static Common;
 
 public class MemberBinding:MemoryPackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeMemberBinding(ref MemoryPackReader reader){
+    internal T DeserializeMemberBinding(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -38,7 +38,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
                 throw new ArgumentOutOfRangeException(value.BindingType.ToString());
         }
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var BindingType=(Expressions.MemberBindingType)reader.ReadVarIntByte();
         //MemberInfo?member=default;
         var member= Member.Instance.Deserialize(ref reader);

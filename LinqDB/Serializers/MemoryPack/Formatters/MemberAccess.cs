@@ -11,7 +11,7 @@ public class MemberAccess:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeMember(ref MemoryPackReader reader){
+    internal T DeserializeMember(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -20,7 +20,7 @@ public class MemberAccess:MemoryPackFormatter<T> {
         Member.Instance.Serialize(ref writer,value!.Member);
         Expression.Instance.Serialize(ref writer,value.Expression);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var member=Member.Instance.Deserialize(ref reader);
         var expression= Expression.Instance.Deserialize(ref reader);
         value=Expressions.Expression.MakeMemberAccess(expression,member);

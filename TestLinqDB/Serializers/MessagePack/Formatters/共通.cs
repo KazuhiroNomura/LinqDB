@@ -28,10 +28,9 @@ using MessagePack;
 using Utf8Json;
 using static LinqDB.Optimizers.Optimizer;
 using System.Configuration;
-using LinqDB.Serializers.Utf8Json;
-using LinqDB.Serializers.MessagePack;
-using LinqDB.Serializers.Utf8Json.Formatters;
-using LinqDB.Serializers.MemoryPack;
+using Utf8Json2=LinqDB.Serializers.Utf8Json;
+using MessagePack2=LinqDB.Serializers.MessagePack;
+using MemoryPack2=LinqDB.Serializers.MemoryPack;
 
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
@@ -84,18 +83,18 @@ public abstract class 共通{
             //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
             //    //Register.Invoke(null,Array.Empty<object>());
             //}
-            var bytes=MemoryPackCustomSerializer.Instance.Serialize(input);
-            var output = MemoryPackCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes=MemoryPack2.Serializer.Instance.Serialize(input);
+            var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes=Utf8JsonCustomSerializer.Instance.Serialize(input);
-            var output = Utf8JsonCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes=Utf8Json2.Serializer.Instance.Serialize(input);
+            var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes=MessagePackCustomSerializer.Instance.Serialize(input);
-            var output = MessagePackCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes=MessagePack2.Serializer.Instance.Serialize(input);
+            var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
     }
@@ -164,19 +163,20 @@ public abstract class 共通{
                 //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
                 //Register.Invoke(null,Array.Empty<object>());
             }
-            var bytes=MemoryPackCustomSerializer.Instance.Serialize(input);
-            var output = MemoryPackCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes=MemoryPack2.Serializer.Instance.Serialize(input);
+            var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
             AssertAction(output!);
         }
         {
-            var bytes = Utf8JsonCustomSerializer.Instance.Serialize(input);
-            var output = Utf8JsonCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
+            var s=Encoding.UTF8.GetString(bytes);
+            var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
             AssertAction(output);
         }
         {
-            var bytes = MessagePackCustomSerializer.Instance.Serialize(input);
-            var s=MessagePackSerializer.ConvertToJson(bytes,MessagePackCustomSerializer.Instance.Options);
-            var output = MessagePackCustomSerializer.Instance.Deserialize<T>(bytes);
+            var bytes = MessagePack2.Serializer.Instance.Serialize(input);
+            var s=MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
+            var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
             AssertAction(output);
         }
     }

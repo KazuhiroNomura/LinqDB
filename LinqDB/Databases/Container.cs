@@ -48,10 +48,10 @@ public abstract class Container:IDisposable {
         var referential_constraints = new Set<referential_constraints>();
         this.information_schema=new Schemas.information_schema(tables,columns,referential_constraints);
         var Schemas = new Set<Tables.Schema,PrimaryKeys.Reflection>();
-        var Tables = new Set<Tables.Table,PrimaryKeys.Reflection>();
-        var Views = new Set<Tables.View,PrimaryKeys.Reflection>();
-        var TableColumns = new Set<Tables.TableColumn,PrimaryKeys.Reflection>();
-        var ViewColumns = new Set<Tables.ViewColumn,PrimaryKeys.Reflection>();
+        var Tables = new Set<Table,PrimaryKeys.Reflection>();
+        var Views = new Set<View,PrimaryKeys.Reflection>();
+        var TableColumns = new Set<TableColumn,PrimaryKeys.Reflection>();
+        var ViewColumns = new Set<ViewColumn,PrimaryKeys.Reflection>();
         this.system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
         var Container_Type = this.GetType();
         var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
@@ -97,17 +97,17 @@ public abstract class Container:IDisposable {
                 var CategoryIndex = TableView_FullName.LastIndexOf('.',SchemaIndex-1);
                 var Category = TableView_FullName[CategoryIndex..SchemaIndex];
                 if(Category==".Tables") {
-                    var Table = new Tables.Table(TableView_Property,system_Schema);
+                    var Table = new Table(TableView_Property,system_Schema);
                     Tables.IsAdded(Table);
                     foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        TableColumns.IsAdded(new Tables.TableColumn(TableColumn_Property,Table));
+                        TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
                     }
                 } else {
                     Debug.Assert(Category==".Views");
-                    var View=new Tables.View(TableView_Property,system_Schema);
+                    var View=new View(TableView_Property,system_Schema);
                     Views.IsAdded(View);
                     foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        ViewColumns.IsAdded(new Tables.ViewColumn(ViewColumn_Property,View));
+                        ViewColumns.IsAdded(new ViewColumn(ViewColumn_Property,View));
                     }
                 }
             }

@@ -9,15 +9,15 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 
 using static Common;
-using C=MemoryPackCustomSerializer;
-using T=Expressions.BlockExpression;
+using C=Serializer;
+using T= BlockExpression;
 
 public class Block:MemoryPackFormatter<T> {
     public static readonly Block Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeBlock(ref MemoryPackReader reader){
+    internal T DeserializeBlock(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -35,7 +35,7 @@ public class Block:MemoryPackFormatter<T> {
         Debug.Assert(Variables!=null,nameof(Variables)+" != null");
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type= Type.Instance.Deserialize(ref reader);

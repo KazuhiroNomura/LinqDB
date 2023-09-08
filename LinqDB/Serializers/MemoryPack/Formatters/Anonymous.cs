@@ -17,7 +17,7 @@ internal static class Anonymous{
         //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
     }
     public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value) {
+    private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
         reader.ReadValue(ref value);
         //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
     }
@@ -37,12 +37,12 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
     //}
     ////private static readonly MethodInfo MethodDeserialize = typeof(Anonymous<T>).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
-    private delegate void delegate_Deserialize(ref MemoryPackReader reader,scoped ref T?value);
+    private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
     public Anonymous(){
         var Types1 = new System.Type[1];
         var DeserializeTypes = new System.Type[2];
-        DeserializeTypes[0]=typeof(MemoryPackReader).MakeByRefType();
+        DeserializeTypes[0]=typeof(Reader).MakeByRefType();
         DeserializeTypes[1]=typeof(T).MakeByRefType();
         var ctor = typeof(T).GetConstructors()[0];
         var Parameters = ctor.GetParameters();
@@ -103,7 +103,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
                     if(PropertyType.IsAnonymous()){
                         PropertyTypes[0]=PropertyType;
                         var FormatterType=typeof(Anonymous<>).MakeGenericType(PropertyTypes);
-                        var Register=MemoryPackCustomSerializer.Register.MakeGenericMethod(PropertyTypes);
+                        var Register=Serializer.Register.MakeGenericMethod(PropertyTypes);
                         Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
                     }
                     MethodTypes[1]=PropertyType;
@@ -128,7 +128,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
         }
         ((delegate_Serialize<TBufferWriter>)Delegate)(ref writer,ref value!);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value) {
+    public override void Deserialize(ref Reader reader,scoped ref T? value) {
         this.DelegateDeserialize(ref reader,ref value);
     }
 }

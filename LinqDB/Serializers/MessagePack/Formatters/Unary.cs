@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Expressions=System.Linq.Expressions;
 using System.Reflection;
 using MessagePack;
@@ -6,121 +7,171 @@ using MessagePack.Formatters;
 using MemoryPack;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using C=MessagePackCustomSerializer;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.UnaryExpression;
-public class Unary:IMessagePackFormatter<Expressions.UnaryExpression>{
-    public static readonly CatchBlock Instance=new();
-    internal static void Serialize_Unary(ref Writer writer,Expressions.Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(Expressions.UnaryExpression)value;
-        Expression.Instance.Serialize(ref writer,Unary.Operand,Resolver);
+public class Unary:IMessagePackFormatter<T> {
+    public static readonly Unary Instance=new();
+    internal static void InternalSerializeOperand(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(2);
+        writer.WriteNodeType(value.NodeType);
+        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
     }
-    internal static void Serialize_Unary_Type(ref Writer writer,Expressions.Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(Expressions.UnaryExpression)value;
-        Expression.Instance.Serialize(ref writer,Unary.Operand,Resolver);
-        Type.Instance.Serialize(ref writer,Unary.Type,Resolver);
+    internal static void InternalSerializeOperandType(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(3);
+        writer.WriteNodeType(value.NodeType);
+        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Type.Instance.Serialize(ref writer,value.Type,Resolver);
     }
-    internal static void Serialize_Unary_MethodInfo(ref Writer writer,Expressions.Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(Expressions.UnaryExpression)value;
-        Expression.Instance.Serialize(ref writer,Unary.Operand,Resolver);
-        Method.Instance.Serialize(ref writer,Unary.Method,Resolver);
+    internal static void InternalSerializeOperandMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(3);
+        writer.WriteNodeType(value.NodeType);
+        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
     }
-    internal static void Serialize_Unary_Type_MethodInfo(ref Writer writer,Expressions.Expression value,MessagePackSerializerOptions Resolver){
-        var Unary=(Expressions.UnaryExpression)value;
-        Expression.Instance.Serialize(ref writer,Unary.Operand,Resolver);
-        Type.Instance.Serialize(ref writer,Unary.Type,Resolver);
-        Method.Instance.Serialize(ref writer,Unary.Method,Resolver);
+    internal static void InternalSerializeOperandTypeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(4);
+        writer.WriteNodeType(value.NodeType);
+        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Type.Instance.Serialize(ref writer,value.Type,Resolver);
+        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
     }
     //internal readonly object[] Objects2=new object[2];
-    internal static Expressions.Expression Deserialize_Unary(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var Operand= Expression.Instance.Deserialize(ref reader,Resolver);
-        return Operand;
+    internal static Expressions.Expression InternalDeserializeOperand(ref Reader reader,MessagePackSerializerOptions Resolver)=>
+        Expression.Instance.Deserialize(ref reader,Resolver);
+    internal static (Expressions.Expression Operand,System.Type Type)InternalDeserializeOperandType(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var type=reader.ReadType();
+        return(operand,type);
     }
-    internal static (Expressions.Expression Operand,System.Type Type)Deserialize_Unary_Type(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var Operand= Expression.Instance.Deserialize(ref reader,Resolver);
-        var Type=reader.ReadType();
-        return(Operand,Type);
+    internal static (Expressions.Expression Operand,MethodInfo? Method)InternalDeserializeOperandMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var method=Method.InternalDeserializeNullable(ref reader,Resolver);
+        return(operand,method);
     }
-    internal static (Expressions.Expression Operand,MethodInfo Method)Deserialize_Unary_MethodInfo(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var Operand= Expression.Instance.Deserialize(ref reader,Resolver);
-        var method=Method.Instance.Deserialize(ref reader,Resolver);
-        return(Operand,method);
+    internal static (Expressions.Expression Operand,System.Type Type,MethodInfo? Method)InternalDeserializeOperandTypeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var type=reader.ReadType();
+        var method=Method.InternalDeserializeNullable(ref reader,Resolver);
+        return(operand,type,method);
     }
-    internal static (Expressions.Expression Operand,System.Type Type,MethodInfo Method)Deserialize_Unary_Type_MethodInfo(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var Operand= Expression.Instance.Deserialize(ref reader,Resolver);
-        var Type=reader.ReadType();
-        var method=Method.Instance.Deserialize(ref reader,Resolver);
-        return(Operand,Type,method);
-    }
-    public void Serialize(ref Writer writer,Expressions.UnaryExpression? value,MessagePackSerializerOptions Resolver){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        writer.Write((byte)value.NodeType);
-        switch(value.NodeType){
-            case Expressions.ExpressionType.ArrayLength        : Serialize_Unary(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Quote              : Serialize_Unary(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Throw              : Serialize_Unary_Type(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.TypeAs             : Serialize_Unary_Type(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Unbox              : Serialize_Unary_Type(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Convert            : Serialize_Unary_Type_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.ConvertChecked     : Serialize_Unary_Type_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Decrement          : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Increment          : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.IsFalse            : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.IsTrue             : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Negate             : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.NegateChecked      : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Not                : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.OnesComplement     : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PostDecrementAssign: Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PostIncrementAssign: Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PreDecrementAssign : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PreIncrementAssign : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.UnaryPlus          : Serialize_Unary_MethodInfo(ref writer,value,Resolver);break;
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        //if(writer.TryWriteNil(value)) return;
+        //writer.WriteNodeType(value!.NodeType);
+        switch(value!.NodeType){
+            case Expressions.ExpressionType.ArrayLength        : 
+            case Expressions.ExpressionType.Quote              : InternalSerializeOperand(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Throw              : 
+            case Expressions.ExpressionType.TypeAs             : 
+            case Expressions.ExpressionType.Unbox              : InternalSerializeOperandType(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Convert            : 
+            case Expressions.ExpressionType.ConvertChecked     : InternalSerializeOperandTypeMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Decrement          : 
+            case Expressions.ExpressionType.Increment          : 
+            case Expressions.ExpressionType.IsFalse            : 
+            case Expressions.ExpressionType.IsTrue             : 
+            case Expressions.ExpressionType.Negate             : 
+            case Expressions.ExpressionType.NegateChecked      : 
+            case Expressions.ExpressionType.Not                : 
+            case Expressions.ExpressionType.OnesComplement     : 
+            case Expressions.ExpressionType.PostDecrementAssign: 
+            case Expressions.ExpressionType.PostIncrementAssign: 
+            case Expressions.ExpressionType.PreDecrementAssign : 
+            case Expressions.ExpressionType.PreIncrementAssign : 
+            case Expressions.ExpressionType.UnaryPlus          : InternalSerializeOperandMethod(ref writer,value,Resolver);break;
             default:
                 throw new NotSupportedException(value.NodeType.ToString());
         }
     }
-    public Expressions.UnaryExpression Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
-        var NodeType=(Expressions.ExpressionType)reader.ReadByte();
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        //if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(2<=count&&count<=4);
+        T value;
+        var NodeType=reader.ReadNodeType();
         switch(NodeType){
-            case Expressions.ExpressionType.ArrayLength        :
-            case Expressions.ExpressionType.Quote              :{
-                var Operand= Deserialize_Unary(ref reader,Resolver);
-                return Expressions.Expression.ArrayLength(Operand);
+            case Expressions.ExpressionType.ArrayLength: {
+                var Operand = InternalDeserializeOperand(ref reader,Resolver);
+                value=Expressions.Expression.ArrayLength(Operand); break;
             }
-            case Expressions.ExpressionType.Throw              :
-            case Expressions.ExpressionType.TypeAs             :
-            case Expressions.ExpressionType.Unbox              :{
-                var (Operand,Type)=Deserialize_Unary_Type(ref reader,Resolver);
-                return Expressions.Expression.MakeUnary(NodeType,Operand,Type);
+            case Expressions.ExpressionType.Quote: {
+                var Operand = InternalDeserializeOperand(ref reader,Resolver);
+                value=Expressions.Expression.Quote(Operand); break;
             }
-            case Expressions.ExpressionType.Convert            :
-            case Expressions.ExpressionType.ConvertChecked     :{
-                var(Operand,Type,Method)=Deserialize_Unary_Type_MethodInfo(ref reader,Resolver);
-                return Expressions.Expression.ConvertChecked(Operand,Type,Method);
+            case Expressions.ExpressionType.Convert:{
+                var (Operand, Type, Method)=InternalDeserializeOperandTypeMethod(ref reader,Resolver);
+                value=Expressions.Expression.Convert(Operand,Type,Method); break;
             }
-            case Expressions.ExpressionType.Decrement          :
-            case Expressions.ExpressionType.Increment          :
-            case Expressions.ExpressionType.IsFalse            :
-            case Expressions.ExpressionType.IsTrue             :
-            case Expressions.ExpressionType.Negate             :
-            case Expressions.ExpressionType.NegateChecked      :
-            case Expressions.ExpressionType.Not                :
-            case Expressions.ExpressionType.OnesComplement     :
-            case Expressions.ExpressionType.PostDecrementAssign:
-            case Expressions.ExpressionType.PostIncrementAssign:
-            case Expressions.ExpressionType.PreDecrementAssign :
-            case Expressions.ExpressionType.PreIncrementAssign :
-            case Expressions.ExpressionType.UnaryPlus          :{
-                var (Operand,Method)=Deserialize_Unary_MethodInfo(ref reader,Resolver);
-                return Expressions.Expression.PreIncrementAssign(Operand,Method);
+            case Expressions.ExpressionType.ConvertChecked: {
+                var (Operand, Type, Method)=InternalDeserializeOperandTypeMethod(ref reader,Resolver);
+                value=Expressions.Expression.ConvertChecked(Operand,Type,Method); break;
+            }
+            case Expressions.ExpressionType.Decrement: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.Decrement(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.Increment: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.Increment(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.IsFalse: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.IsFalse(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.IsTrue: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.IsTrue(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.Negate: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.Negate(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.NegateChecked: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.NegateChecked(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.Not: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.Not(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.OnesComplement: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.OnesComplement(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.PostDecrementAssign: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.PostDecrementAssign(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.PostIncrementAssign: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.PostIncrementAssign(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.PreDecrementAssign: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.PreDecrementAssign(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.PreIncrementAssign: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.PreIncrementAssign(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.UnaryPlus: {
+                var (Operand, Method)=InternalDeserializeOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.UnaryPlus(Operand,Method); break;
+            }
+            case Expressions.ExpressionType.Throw: {
+                var (Operand, Type)=InternalDeserializeOperandType(ref reader,Resolver);
+                value=Expressions.Expression.Throw(Operand,Type); break;
+            }
+            case Expressions.ExpressionType.TypeAs: {
+                var (Operand, Type)=InternalDeserializeOperandType(ref reader,Resolver);
+                value=Expressions.Expression.TypeAs(Operand,Type); break;
+            }
+            case Expressions.ExpressionType.Unbox: {
+                var (Operand, Type)=InternalDeserializeOperandType(ref reader,Resolver);
+                value=Expressions.Expression.Unbox(Operand,Type); break;
             }
             default:throw new NotSupportedException(NodeType.ToString());
         }
+        return value;
     }
 }

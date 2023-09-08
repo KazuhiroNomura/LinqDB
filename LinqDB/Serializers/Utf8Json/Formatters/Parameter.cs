@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.ParameterExpression;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 public class Parameter:IJsonFormatter<T> {
     public static readonly Parameter Instance=new();
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {

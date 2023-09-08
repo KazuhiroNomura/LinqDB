@@ -11,7 +11,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 using static Common;
 #pragma warning disable CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
 /// <summary>
@@ -51,10 +51,8 @@ public class Abstract<T>:Abstract,IJsonFormatter<T>{
         return Formatter;
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var type=value.GetType();
         writer.WriteType(type);

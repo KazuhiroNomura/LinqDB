@@ -6,12 +6,12 @@ using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=ConditionalExpression;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 
 public class Conditional:MemoryPackFormatter<T> {
     public static readonly Conditional Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeConditional(ref MemoryPackReader reader){
+    internal T DeserializeConditional(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -25,7 +25,7 @@ public class Conditional:MemoryPackFormatter<T> {
         Expression.Instance.Serialize(ref writer,value.IfTrue);
         Expression.Instance.Serialize(ref writer,value.IfFalse);
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return null!;
         var test= Expression.Instance.Deserialize(ref reader);
         var ifTrue= Expression.Instance.Deserialize(ref reader);

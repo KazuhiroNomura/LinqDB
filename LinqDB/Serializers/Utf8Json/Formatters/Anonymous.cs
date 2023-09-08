@@ -11,29 +11,29 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 public class Anonymous{
-    protected static readonly MethodInfo WriteValueSeparator=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteValueSeparator))!;
-    protected static readonly MethodInfo WriteString=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteString))!;
-    protected static readonly MethodInfo WriteNameSeparator=typeof(JsonWriter).GetMethod(nameof(JsonWriter.WriteNameSeparator))!;
-    protected static readonly MethodInfo ReadIsValueSeparatorWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsValueSeparatorWithVerify))!;
-    protected static readonly MethodInfo ReadString=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadString))!;
-    protected static readonly MethodInfo ReadIsNameSeparatorWithVerify=typeof(JsonReader).GetMethod(nameof(JsonReader.ReadIsNameSeparatorWithVerify))!;
-    protected static void Serialize<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+    protected static readonly MethodInfo WriteValueSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
+    protected static readonly MethodInfo WriteString=typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
+    protected static readonly MethodInfo WriteNameSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
+    protected static readonly MethodInfo ReadIsValueSeparatorWithVerify=typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
+    protected static readonly MethodInfo ReadString=typeof(Reader).GetMethod(nameof(Reader.ReadString))!;
+    protected static readonly MethodInfo ReadIsNameSeparatorWithVerify=typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
+    protected static void Serialize<T>(ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     protected static readonly MethodInfo MethodSerialize=typeof(Anonymous).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    protected static T Deserialize<T>(ref JsonReader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
+    protected static T Deserialize<T>(ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
     protected static readonly MethodInfo MethodDeserialize=typeof(Anonymous).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 }
 public class Anonymous<T>:Anonymous,IJsonFormatter<T>{
     public static readonly Anonymous<T> Instance=new();
-    private delegate void delegate_Serialize(ref JsonWriter writer,T value,IJsonFormatterResolver formatterResolver);
+    private delegate void delegate_Serialize(ref Writer writer,T value,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Serialize DelegateSerialize;
-    private delegate T delegate_Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver);
+    private delegate T delegate_Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Deserialize DelegateDeserialize;
     public Anonymous() {
         var Types1 = new System.Type[1];
         var DeserializeTypes = new System.Type[2];
         var SerializeTypes = new System.Type[3];
-        SerializeTypes[0]=typeof(JsonWriter).MakeByRefType();
-        DeserializeTypes[0]=typeof(JsonReader).MakeByRefType();
+        SerializeTypes[0]=typeof(Writer).MakeByRefType();
+        DeserializeTypes[0]=typeof(Reader).MakeByRefType();
         SerializeTypes[1]=typeof(T);
         DeserializeTypes[1]=SerializeTypes[2]=typeof(IJsonFormatterResolver);
         var ctor=typeof(T).GetConstructors()[0];
@@ -108,17 +108,15 @@ public class Anonymous<T>:Anonymous,IJsonFormatter<T>{
         }
     }
     //private readonly object[] Objects3=new object[3];
-    public void Serialize(ref JsonWriter writer,T? value,IJsonFormatterResolver formatterResolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver formatterResolver){
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginObject();
         this.DelegateSerialize(ref writer, value, formatterResolver);
         writer.WriteEndObject();
     }
     //private readonly object[] Objects2=new object[2];
-    public T Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver){
         if(reader.ReadIsNull())return default!;
         reader.ReadIsBeginObjectWithVerify();
         var result=this.DelegateDeserialize(ref reader, formatterResolver);

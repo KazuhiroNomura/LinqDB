@@ -10,18 +10,16 @@ public class Object:MemoryPackFormatter<object>{
     public void SerializeObject<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    public object DeserializeObject(ref MemoryPackReader reader){
+    public object DeserializeObject(ref Reader reader){
         object? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value){
-        writer.WriteVarInt((byte)(value is not null ? 1 : 0));
-        if(value is null)return;
-        //if(value==null) {
-        //    writer.WriteNullObjectHeader();
-        //    return;
-        //}
+        if(value is null){
+            writer.WriteNullObjectHeader();
+            return;
+        }
         var type=value.GetType();
         writer.WriteType(type);
         //writer.WriteValue(value.Value.GetType(),value.Value);
@@ -37,7 +35,7 @@ public class Object:MemoryPackFormatter<object>{
             case ulong   v:writer.WriteVarInt(v         );break;
             case string  v:writer.WriteString(v         );break;
             default       :
-                MemoryPackCustomSerializer.変数Register(type);
+                Serializer.変数Register(type);
                 writer.WriteValue (type,value);break;
         }
         //if    (typeof(sbyte  )==type)writer.WriteVarInt((sbyte  )value);
@@ -63,9 +61,9 @@ public class Object:MemoryPackFormatter<object>{
         //MessagePackSerializer.Typeless.Serialize(ref writer,value.Value);
             
     }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref object? value){
-        var value0=reader.ReadBoolean();
-        if(!value0){
+    public override void Deserialize(ref Reader reader,scoped ref object? value){
+        if(reader.PeekIsNull()){
+            reader.Advance(1);
             value=null;
             return;
         }
@@ -86,7 +84,7 @@ public class Object:MemoryPackFormatter<object>{
         //else if(typeof(decimal)==type){decimal Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
         //else if(typeof(Guid   )==type){Guid    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
         else{
-            MemoryPackCustomSerializer.変数Register(type);
+            Serializer.変数Register(type);
             reader.ReadValue(type,ref value);
             //var Formatter=reader.GetFormatter(type);
             //Formatter.Deserialize(ref reader,ref value);

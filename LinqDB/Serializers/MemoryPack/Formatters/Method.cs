@@ -13,15 +13,15 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 
 using T= MethodInfo;
-using C=MemoryPackCustomSerializer;
+using C=Serializer;
 
 public class Method:MemoryPackFormatter<T> {
     public static readonly Method Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         this.Serialize(ref writer,ref value);
     internal void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
-        writer.WriteBoolean(value is not null);
-        if(value is not null) this.Serialize(ref writer,ref value);
+        if(value is null)writer.WriteNullObjectHeader();
+        else this.Serialize(ref writer,ref value);
     }
     internal T Deserialize(ref Reader reader) {
         T? value = default;
@@ -29,8 +29,11 @@ public class Method:MemoryPackFormatter<T> {
         return value!;
     }
     internal T? DeserializeNullable(ref Reader reader) {
-        var value0 = reader.ReadBoolean();
-        return value0 ? this.Deserialize(ref reader) : null;
+        if(reader.PeekIsNull()){
+            reader.Advance(1);
+            return null;
+        }
+        return this.Deserialize(ref reader);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using LinqDB.Serializers.MessagePack;
@@ -10,15 +11,13 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=MemberInfo;
-using C=Utf8JsonCustomSerializer;
+using C=Serializer;
 
 public class Member:IJsonFormatter<T> {
     public static readonly Member Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(value is null){
-            writer.WriteNull();
-            return;
-        }
+        if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var ReflectedType=value.ReflectedType;
         writer.WriteType(ReflectedType);

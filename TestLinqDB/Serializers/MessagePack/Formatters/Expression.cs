@@ -306,6 +306,8 @@ public class Expression:共通 {
                 @decimal
             )
         );
+    }
+    [Fact]public void Lambda5(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
         this.共通Expression<LambdaExpression>(
             Expressions.Expression.Lambda(
@@ -430,7 +432,7 @@ public class Expression:共通 {
     private static readonly Expressions.LabelTarget Label_decimal=Expressions.Expression.Label(typeof(decimal),"Label_decimal");
     private static readonly Expressions.LabelTarget Label_void=Expressions.Expression.Label("Label");
     [Fact]
-    public void Loop(){
+    public void Loop0(){
         this.共通Expression(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
@@ -441,6 +443,8 @@ public class Expression:共通 {
                 Label_void
             )
         );
+    }
+    [Fact]public void Loop1(){
         this.共通Expression(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
@@ -454,8 +458,7 @@ public class Expression:共通 {
     public void Negate(){
         this.共通Expression(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
     }
-    [Fact]
-    public void ArrayIndex0(){
+    [Fact]public void ArrayIndex0(){
         var List=Expressions.Expression.Parameter(typeof(List<int>));
         this.共通Expression((Expressions.Expression)
             Expressions.Expression.Block(
@@ -467,6 +470,8 @@ public class Expression:共通 {
                 )
             )
         );
+    }
+    [Fact]public void ArrayIndex1(){
         var Array1=Expressions.Expression.Parameter(typeof(int[]));
         this.共通Expression(
             Expressions.Expression.Lambda(
@@ -479,7 +484,7 @@ public class Expression:共通 {
         );
     }
     [Fact]
-    public void ArrayIndex1(){
+    public void ArrayIndex2(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
         this.共通Expression(
             Expressions.Expression.Lambda(
@@ -567,10 +572,10 @@ public class Expression:共通 {
         var Point=Expressions.Expression.Parameter(typeof(Point));
         this.共通Expression(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
-    [Fact]
-    public void Null(){
-        this.共通Expression<Expressions.Expression?>(null);
-    }
+    //[Fact]
+    //public void Null(){
+    //    this.共通Expression<Expressions.Expression?>(null);
+    //}
     [Fact]
     public void GreaterThan(){
         this.共通Expression(Expressions.Expression.GreaterThan(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));

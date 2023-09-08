@@ -1,24 +1,24 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
+using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.ConditionalExpression;
-using C=MessagePackCustomSerializer;
-public class Conditional:IMessagePackFormatter<Expressions.ConditionalExpression>{
+public class Conditional:IMessagePackFormatter<T> {
     public static readonly Conditional Instance=new();
-    public void Serialize(ref MessagePackWriter writer,Expressions.ConditionalExpression? value,MessagePackSerializerOptions Resolver){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
+    private const int ArrayHeader=3;
+    internal static void InternalSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteArrayHeader(ArrayHeader);
         Expression.Instance.Serialize(ref writer,value.Test,Resolver);
         Expression.Instance.Serialize(ref writer,value.IfTrue,Resolver);
         Expression.Instance.Serialize(ref writer,value.IfFalse,Resolver);
     }
-    public Expressions.ConditionalExpression Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var test   = Expression.Instance.Deserialize(ref reader,Resolver);
         var ifTrue = Expression.Instance.Deserialize(ref reader,Resolver);
         var ifFalse= Expression.Instance.Deserialize(ref reader,Resolver);
@@ -27,5 +27,11 @@ public class Conditional:IMessagePackFormatter<Expressions.ConditionalExpression
             ifTrue,
             ifFalse
         );
+    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        InternalSerialize(ref writer,value,Resolver);
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        return InternalDeserialize(ref reader,Resolver);
     }
 }

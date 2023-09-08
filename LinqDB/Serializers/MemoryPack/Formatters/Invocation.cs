@@ -14,7 +14,7 @@ public class Invocation:MemoryPackFormatter<T> {
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeInvocation(ref MemoryPackReader reader){
+    internal T DeserializeInvocation(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;
@@ -31,7 +31,7 @@ public class Invocation:MemoryPackFormatter<T> {
     // {
     //     throw new NotImplementedException();
     // }
-    public override void Deserialize(ref MemoryPackReader reader,scoped ref T? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
         var expression= Expression.Instance.Deserialize(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();

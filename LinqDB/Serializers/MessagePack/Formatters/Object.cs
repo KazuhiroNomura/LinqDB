@@ -3,26 +3,21 @@ using MessagePack.Formatters;
 using MessagePack;
 
 using System.Buffers;
-
+using System.Diagnostics;
 using LinqDB.Serializers.MemoryPack;
 using LinqDB.Serializers.Utf8Json.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=System.Object;
-using C=MessagePackCustomSerializer;
 public class Object:IMessagePackFormatter<object>{
     public static readonly Object Instance=new();
-    public void Serialize(ref MessagePackWriter writer,object? value,MessagePackSerializerOptions Resolver){
-        if(value is null){
-            writer.WriteNil();
-            return;
-        }
-        //if(value==null) {
-        //    writer.WriteNullObjectHeader();
-        //    return;
-        //}
-        var type=value.GetType();
+    private const int ArrayHeader=2;
+    //private const int InternalArrayHeader=ArrayHeader+1;
+    public void Serialize(ref Writer writer,object? value,MessagePackSerializerOptions Resolver){
+        //if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(ArrayHeader);
+        var type=value!.GetType();
         writer.WriteType(type);
         //writer.WriteValue(value.Value.GetType(),value.Value);
         //this.Serialize(ref writer,value.Type);
@@ -38,13 +33,15 @@ public class Object:IMessagePackFormatter<object>{
             case string  v:writer.Write(v         );break;
             default:{
                 var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-                C.DynamicSerialize(Formatter,ref writer,value,Resolver);break;
+                Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);break;
             }
         }
     }
-    public object Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+    public object Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        //if(reader.TryReadNil()) return null!;
         //if(reader.TryReadNil()) value=null;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
         //object? value;
         if     (typeof(sbyte  )==type)return reader.ReadSByte();
@@ -59,6 +56,9 @@ public class Object:IMessagePackFormatter<object>{
         else if(typeof(double )==type)return reader.ReadDouble();
         else if(typeof(bool   )==type)return reader.ReadBoolean();
         else if(typeof(string )==type)return reader.ReadString()!;
-        else return C.DynamicDeserialize(type,ref reader,Resolver);
+        else{
+            var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+            return Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
+        }
     }
 }

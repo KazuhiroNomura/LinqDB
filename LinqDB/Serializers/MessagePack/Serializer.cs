@@ -16,50 +16,8 @@ using Formatters;
 
 using System.Collections.ObjectModel;
 
-//public abstract class ACustomSerializer{
-//    //public abstract void Clear();
-//    public abstract byte[]Serialize<T>(T value);
-//    public abstract void Serialize<T>(Stream stream,T value);
-//    public abstract T Deserialize<T>(byte[]bytes);
-//    public abstract T Deserialize<T>(Stream stream);
-//}
-public class MessagePackCustomSerializer{
-    public static readonly MessagePackCustomSerializer Instance=new();
-    //internal readonly Binary Binary=new();
-    //internal readonly Block Block=new();
-    //internal readonly CatchBlock CatchBlock=new();
-    //internal readonly Conditional Conditional=new();
-    //internal readonly Constant Constant=new();
-    //internal readonly Constructor Constructor=new();
-    //internal readonly Default Default=new();
-    //internal readonly ElementInit ElementInit=new();
-    //internal readonly Expression Expression=new();
-    //internal readonly Field Field=new();
-    //internal readonly Goto Goto=new();
-    //internal readonly Index Index=new();
-    //internal readonly Invocation Invocation=new();
-    //internal readonly Label Label=new();
-    //internal readonly LabelTarget LabelTarget=new();
-    //internal readonly Lambda Lambda=new();
-    //internal readonly ListInit ListInit=new();
-    //internal readonly Loop Loop=new();
-    //internal readonly Member Member=new();
-    //internal readonly MemberAccess MemberAccess=new();
-    //internal readonly MemberBinding MemberBinding=new();
-    //internal readonly MemberInit MemberInit=new();
-    //internal readonly Method Method=new();
-    //internal readonly MethodCall MethodCall=new();
-    //internal readonly New New=new();
-    //internal readonly NewArray NewArray=new();
-    //internal readonly Object Object=new();
-    //internal readonly Parameter Parameter=new();
-    //internal readonly Property Property=new();
-    //internal readonly Switch Switch=new();
-    //internal readonly SwitchCase SwitchCase=new();
-    //internal readonly Try Try=new();
-    //internal readonly Type Type=new();
-    //internal readonly TypeBinary TypeBinary=new();
-    //internal readonly Unary Unary=new();
+public class Serializer{
+    public static readonly Serializer Instance=new();
     private sealed class FormatterResolver:IFormatterResolver{
         private readonly Expression ExpressionFormatter=new();
         public readonly Dictionary<System.Type,IMessagePackFormatter> DictionaryTypeFormatter=new();
@@ -71,16 +29,16 @@ public class MessagePackCustomSerializer{
             if(typeof(Expressions.Expression).IsAssignableFrom(typeof(T))) return Return(this.ExpressionFormatter);
             if(
                 typeof(T)==typeof(System.Type)||
-                typeof(T)==typeof(System.Reflection.MemberInfo)||
-                typeof(T)==typeof(System.Reflection.MethodInfo)||
-                typeof(T)==typeof(System.Reflection.FieldInfo)||
-                typeof(T)==typeof(System.Reflection.PropertyInfo)||
-                typeof(T)==typeof(System.Reflection.EventInfo)||
+                typeof(T)==typeof(MemberInfo)||
+                typeof(T)==typeof(MethodInfo)||
+                typeof(T)==typeof(FieldInfo)||
+                typeof(T)==typeof(PropertyInfo)||
+                typeof(T)==typeof(EventInfo)||
                 typeof(Expressions.MemberBinding).IsAssignableFrom(typeof(T))||
                 typeof(T)==typeof(Expressions.CatchBlock)||
                 typeof(T)==typeof(Expressions.SwitchCase)||
                 typeof(T)==typeof(Expressions.ElementInit))
-                return Return(this.ExpressionFormatter);
+                return null!;//Return(this.ExpressionFormatter);
             if(typeof(T).IsDisplay()) return Return(new DisplayClassMessagePackFormatter<T>());
             if(typeof(T).IsAnonymous()) return Return(new Anonymous<T>());
             return Return(new AbstractMessagePackFormatter<T>());
@@ -100,10 +58,11 @@ public class MessagePackCustomSerializer{
     public IMessagePackFormatter<T>? GetFormatter<T>()=>this.Resolver.DictionaryTypeFormatter.TryGetValue(typeof(T),out var value)?(IMessagePackFormatter<T>?)value:null;
     public IMessagePackFormatter? GetFormatter(System.Type Type)=>this.Resolver.DictionaryTypeFormatter.TryGetValue(Type,out var value)?(IMessagePackFormatter?)value:null;
     public readonly MessagePackSerializerOptions Options;
-    private MessagePackCustomSerializer(){
+    private Serializer(){
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
                 new IMessagePackFormatter[]{
+                    Object.Instance,
                     Binary.Instance,
                     Block.Instance,
                     CatchBlock.Instance,
@@ -150,7 +109,7 @@ public class MessagePackCustomSerializer{
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
                     global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate
                         .Instance,//MessagePackObjectAttribute
-                    this.Resolver,
+                    //this.Resolver,
                     //MessagePack.Resolvers.StandardResolver.Instance,
                     //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
                     //MessagePack.Resolvers.StandardResolver.Instance,//
@@ -158,6 +117,10 @@ public class MessagePackCustomSerializer{
                 }
             )
         );
+        var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();
+        var e1=this.Options.Resolver.GetFormatter<Expressions.UnaryExpression>();
+        var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
+        var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
     internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
@@ -182,25 +145,6 @@ public class MessagePackCustomSerializer{
         this.TypeProperties.Clear();
         this.TypeEvents.Clear();
     }
-    //public static void WriteBoolean(ref MessagePackWriter writer,bool value)=>
-    //    writer.WriteInt8((sbyte)(value?1:0));
-    //public static bool ReadBoolean(ref MessagePackReader reader)=>reader.ReadByte()!=0;
-    //public byte[] Serialize<T>(T value){
-    //    Clear();
-    //    return MessagePackSerializer.Serialize(value);
-    //}
-    //public void Serialize<T>(Stream stream,T? value){
-    //    Clear();
-    //    MessagePackSerializer.Serialize(stream,value);
-    //}
-    //public T Deserialize<T>(byte[] bytes){
-    //    Clear();
-    //    return MessagePackSerializer.Instance.Deserialize<T>(bytes)!;
-    //}
-    //public T Deserialize<T>(Stream stream){
-    //    Clear();
-    //    return MessagePackSerializer.Instance.Deserialize<T>(stream);
-    //}
     public byte[] Serialize<T>(T value){
         this.Clear();
         return MessagePackSerializer.Serialize(value,this.Options);
@@ -257,13 +201,4 @@ public class MessagePackCustomSerializer{
         var Result=Del(Formatter,ref reader,options);
         return Result;
     }
-    //public void SerializeReadOnlyCollection<T>(ref MessagePackWriter writer,T value)=>
-    //    this.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,this.Options);
-    //public static void Serialize_Type(ref MessagePackWriter writer,System.Type value){
-    //    writer.Write(value.AssemblyQualifiedName);
-    //}
-    //public T Deserialize_T<T>(ref MessagePackReader reader)=>
-    //    this.Resolver.GetFormatter<T>()!.Deserialize(ref reader,this.Options);
-    //public static System.Type Deserialize_Type(ref MessagePackReader reader)=>
-    //    System.Type.GetType(reader.ReadString()!)!;
 }
