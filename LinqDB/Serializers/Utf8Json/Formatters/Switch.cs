@@ -1,18 +1,14 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Serializer;
 using static Common;
 using T=Expressions.SwitchExpression;
 public class Switch:IJsonFormatter<T> {
     public static readonly Switch Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Type.Instance.Serialize(ref writer,value.Type,Resolver);
-        //this.Serialize(ref writer,value.Type,Resolver);
+        writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.SwitchValue,Resolver);
         writer.WriteValueSeparator();
@@ -28,7 +24,7 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var type=Type.Instance.Deserialize(ref reader,Resolver);
+        var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var switchValue=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();

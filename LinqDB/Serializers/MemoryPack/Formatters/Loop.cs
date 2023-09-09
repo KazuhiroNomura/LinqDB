@@ -21,8 +21,7 @@ public class Loop:MemoryPackFormatter<T>{
     //    return value!;
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        if(value.BreakLabel is null){
+        if(value!.BreakLabel is null){
             writer.WriteNullObjectHeader();
             Expression.Instance.Serialize(ref writer,value.Body);
         } else{

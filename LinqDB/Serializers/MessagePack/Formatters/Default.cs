@@ -19,7 +19,7 @@ public class Default:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
+        //if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
@@ -28,7 +28,7 @@ public class Default:IMessagePackFormatter<T> {
         return Expressions.Expression.Default(type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return InternalDeserialize(ref reader,Resolver);

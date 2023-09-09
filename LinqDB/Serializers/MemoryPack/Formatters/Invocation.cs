@@ -2,8 +2,6 @@
 using Expressions = System.Linq.Expressions;
 using MemoryPack;
 using System.Linq.Expressions;
-using MessagePack;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T= InvocationExpression;

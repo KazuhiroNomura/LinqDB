@@ -1,11 +1,7 @@
-﻿//#define 匿名型にキーを入れる
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Reflection;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -109,7 +105,7 @@ public class Anonymous<T>:Anonymous,IJsonFormatter<T>{
     }
     //private readonly object[] Objects3=new object[3];
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver formatterResolver){
-        if(writer.WriteIsNull(value))return;
+   //     if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginObject();
         this.DelegateSerialize(ref writer, value, formatterResolver);
@@ -117,7 +113,7 @@ public class Anonymous<T>:Anonymous,IJsonFormatter<T>{
     }
     //private readonly object[] Objects2=new object[2];
     public T Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver){
-        if(reader.ReadIsNull())return default!;
+        //if(reader.ReadIsNull())return default!;
         reader.ReadIsBeginObjectWithVerify();
         var result=this.DelegateDeserialize(ref reader, formatterResolver);
         reader.ReadIsEndObjectWithVerify();

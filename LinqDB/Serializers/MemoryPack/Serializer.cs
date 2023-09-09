@@ -1,22 +1,20 @@
-﻿using System;
+﻿//using System;
 using System.Collections.Generic;
-using System.Buffers;
 using MemoryPack;
 using Expressions = System.Linq.Expressions;
-using System.Collections.ObjectModel;
 using System.Reflection;
-using MemoryPack.Formatters;
 using static LinqDB.Reflection.Common;
 using System.IO;
 using LinqDB.Helpers;
 using LinqDB.Serializers.MemoryPack.Formatters;
+/*
 using Index=LinqDB.Serializers.MemoryPack.Formatters.Index;
 using Object=LinqDB.Serializers.MemoryPack.Formatters.Object;
 using Type=LinqDB.Serializers.MemoryPack.Formatters.Type;
-
+*/
 // ReSharper disable InconsistentNaming
 namespace LinqDB.Serializers.MemoryPack;
-public class Serializer{
+public class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
     public static readonly MethodInfo Register=M(()=>MemoryPackFormatterProvider.Register(new Anonymous<int>()));
     private Serializer(){
@@ -57,29 +55,30 @@ public class Serializer{
         MemoryPackFormatterProvider.Register(TypeBinary.Instance);
         MemoryPackFormatterProvider.Register(Unary.Instance);
     }
-    internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    internal readonly List<Expressions.LabelTarget> ListLabelTarget=new();
-    internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
-    internal readonly List<System.Type> Types=new();
-    internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
-    internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
-    internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
-    internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
-    internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
-    internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
+    //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
+    //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
+    //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
+    //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
+    //internal readonly List<System.Type> Types=new();
+    //internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
+    //internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
+    //internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
+    //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
+    //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
+    //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
      private void Clear(){
-        this.ListParameter.Clear();
-        this.Dictionary_LabelTarget_int.Clear();
-        this.ListLabelTarget.Clear();
-        this.DictionaryTypeIndex.Clear();
-        this.Types.Clear();
-        this.TypeMembers.Clear();
-        this.TypeConstructors.Clear();
-        this.TypeMethods.Clear();
-        this.TypeFields.Clear();
-        this.TypeProperties.Clear();
-        this.TypeEvents.Clear();
+         base.ProtectedClear();
+        //this.ListParameter.Clear();
+        //this.Dictionary_LabelTarget_int.Clear();
+        //this.LabelTargets.Clear();
+        //this.DictionaryTypeIndex.Clear();
+        //this.Types.Clear();
+        //this.TypeMembers.Clear();
+        //this.TypeConstructors.Clear();
+        //this.TypeMethods.Clear();
+        //this.TypeFields.Clear();
+        //this.TypeProperties.Clear();
+        //this.TypeEvents.Clear();
     }
     private static readonly object[] objects1 = new object[1];
     internal static void 変数Register(System.Type Type) {
@@ -87,7 +86,7 @@ public class Serializer{
             if(Type.IsAnonymous()) {
                 var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
                 var Register = Serializer.Register.MakeGenericMethod(Type);
-                objects1[0]=Activator.CreateInstance(FormatterType)!;
+                objects1[0]=System.Activator.CreateInstance(FormatterType)!;
                 Register.Invoke(null,objects1);
                 //Register.Invoke(null,Array.Empty<object>());
             }
@@ -101,6 +100,7 @@ public class Serializer{
     }
     public void Serialize<T>(Stream stream,T? value){
         this.Clear();
+        if(value is not null) 変数Register(value.GetType());
         var Task=MemoryPackSerializer.SerializeAsync(stream,value).AsTask();
         Task.Wait();
     }

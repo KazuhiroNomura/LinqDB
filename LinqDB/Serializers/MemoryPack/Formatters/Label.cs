@@ -1,6 +1,6 @@
-﻿using System.Buffers;
+﻿using MemoryPack;
 using Expressions=System.Linq.Expressions;
-using MemoryPack;
+using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.LabelExpression;
@@ -18,11 +18,11 @@ public class Label:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(value is null){
+        //if(value is null){
             //writer.WriteNil();
-            return;
-        }
-        LabelTarget.Instance.Serialize(ref writer,value.Target);
+        //    return;
+        //}
+        LabelTarget.Instance.Serialize(ref writer,value!.Target);
         Expression.Instance.Serialize(ref writer,value.DefaultValue);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

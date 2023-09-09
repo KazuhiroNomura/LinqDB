@@ -1,6 +1,5 @@
-﻿using LinqDB.Serializers.Utf8Json.Formatters;
+﻿using MessagePack;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
 using MessagePack.Formatters;
 using System.Diagnostics;
 
@@ -23,7 +22,7 @@ public class Label:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
+        //if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
@@ -33,7 +32,7 @@ public class Label:IMessagePackFormatter<T> {
         return Expressions.Expression.Label(target,defaultValue);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return InternalDeserialize(ref reader,Resolver);

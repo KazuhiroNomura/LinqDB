@@ -1,9 +1,5 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
-using LinqDB.Serializers.MessagePack;
-
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -17,7 +13,7 @@ public class Block:IJsonFormatter<T> {
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
         ListParameter.AddRange(Variables);
-        Type.Instance.Serialize(ref writer,value.Type,Resolver);
+        writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Serialize宣言Parameters(ref writer,value.Variables,Resolver);
         writer.WriteValueSeparator();

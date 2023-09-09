@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
@@ -22,8 +21,8 @@ public class Constructor:IMessagePackFormatter<T> {
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var results= Serializer.Instance.TypeConstructors.Get(type);
-        var Index=reader.ReadInt32();
-        return results[Index];
+        var array= Serializer.Instance.TypeConstructors.Get(type);
+        var index=reader.ReadInt32();
+        return array[index];
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Expressions=System.Linq.Expressions;
+﻿using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 using System.Diagnostics;
@@ -19,7 +18,7 @@ public class Block:IMessagePackFormatter<T> {
         var Variables=value.Variables;
         ListParameter.AddRange(Variables);
         writer.WriteType(value.Type);
-        Serialize宣言Parameters(ref writer,value.Variables);
+        Serialize宣言Parameters(ref writer,value.Variables,Resolver);
         SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }

@@ -1,10 +1,7 @@
-﻿using System;
+﻿using MessagePack;
+using MessagePack.Formatters;
 using System.Diagnostics;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
-using LinqDB.Serializers.Utf8Json.Formatters;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -34,7 +31,7 @@ public class Constant:IMessagePackFormatter<T> {
         return Expressions.Expression.Constant(value,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return InternalDeserialize(ref reader,Resolver);

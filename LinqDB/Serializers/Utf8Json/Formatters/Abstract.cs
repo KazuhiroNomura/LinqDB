@@ -4,9 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
-using LinqDB.Serializers.Formatters;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -51,7 +48,7 @@ public class Abstract<T>:Abstract,IJsonFormatter<T>{
         return Formatter;
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var type=value.GetType();
@@ -87,7 +84,7 @@ public class Abstract<T>:Abstract,IJsonFormatter<T>{
     }
     private readonly object[] Objects2=new object[2];
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return default!;
+        //if(reader.ReadIsNull())return default!;
         //reader.ReadIsBeginObject();
         reader.ReadIsBeginArrayWithVerify();
         var type=reader.ReadType();

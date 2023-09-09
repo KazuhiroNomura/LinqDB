@@ -7,16 +7,11 @@ using Emit=System.Reflection.Emit;
 using LinqDB.Serializers.Formatters;
 using MessagePack.Formatters;
 using System.Collections.Generic;
-using MemoryPack;
-using System.Buffers;
 using System.Reflection;
 
 namespace LinqDB.Serializers.MessagePack;
 using Formatters;
-
-using System.Collections.ObjectModel;
-
-public class Serializer{
+public class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
     private sealed class FormatterResolver:IFormatterResolver{
         private readonly Expression ExpressionFormatter=new();
@@ -117,33 +112,35 @@ public class Serializer{
                 }
             )
         );
-        var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();
-        var e1=this.Options.Resolver.GetFormatter<Expressions.UnaryExpression>();
-        var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
+        //var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();
+        //var e1=this.Options.Resolver.GetFormatter<Expressions.UnaryExpression>();
+        //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
         var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
-    internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    internal readonly List<Expressions.LabelTarget> ListLabelTarget=new();
-    internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
-    internal readonly List<System.Type> Types=new();
-    internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
-    internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
-    internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
-    internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
-    internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
-    internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
-    public void Clear(){
-        this.ListParameter.Clear();
-        this.Dictionary_LabelTarget_int.Clear();
-        this.ListLabelTarget.Clear();
-        this.DictionaryTypeIndex.Clear();
-        this.Types.Clear();
-        this.TypeConstructors.Clear();
-        this.TypeMethods.Clear();
-        this.TypeFields.Clear();
-        this.TypeProperties.Clear();
-        this.TypeEvents.Clear();
+    //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
+    //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
+    //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
+    //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
+    //internal readonly List<System.Type> Types=new();
+    //internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
+    //internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
+    //internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
+    //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
+    //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
+    //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
+    private void Clear(){
+        base.ProtectedClear();
+        //this.ListParameter.Clear();
+        //this.Dictionary_LabelTarget_int.Clear();
+        //this.LabelTargets.Clear();
+        //this.DictionaryTypeIndex.Clear();
+        //this.Types.Clear();
+        //this.TypeMembers.Clear();
+        //this.TypeConstructors.Clear();
+        //this.TypeMethods.Clear();
+        //this.TypeFields.Clear();
+        //this.TypeProperties.Clear();
+        //this.TypeEvents.Clear();
     }
     public byte[] Serialize<T>(T value){
         this.Clear();

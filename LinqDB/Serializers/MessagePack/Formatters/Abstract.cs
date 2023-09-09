@@ -44,14 +44,14 @@ public class AbstractMessagePackFormatter<T>:Abstract,IMessagePackFormatter<T>{
         writer.WriteArrayHeader(ArrayHeader);
         var type=value!.GetType();
         writer.WriteType(type);
-        Serializer.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
+        MessagePack.Serializer.DynamicSerialize(GetFormatter(options,type),ref writer,value,options);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions options){
-        if(reader.TryReadNil()) return default!;
+        //if(reader.TryReadNil()) return default!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var value=(T)Serializer.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
+        var value=(T)MessagePack.Serializer.DynamicDeserialize(GetFormatter(options,type),ref reader,options);
         return value;
     }
 }

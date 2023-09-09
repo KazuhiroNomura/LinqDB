@@ -1,6 +1,4 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -21,19 +19,18 @@ public class Try:IJsonFormatter<T> {
         InternalSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static Expressions.Expression InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver,
-        out Expressions.Expression @finally,out Expressions.CatchBlock[] handlers){
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var body=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        @finally=Expression.Instance.Deserialize(ref reader,Resolver);
+        var @finally=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        handlers=DeserializeArray<Expressions.CatchBlock>(ref reader,Resolver);
-        return body;
+        var handlers=DeserializeArray<Expressions.CatchBlock>(ref reader,Resolver);
+        return Expressions.Expression.TryCatchFinally(body,@finally,handlers);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var body=InternalDeserialize(ref reader,Resolver,out var @finally,out var handlers);
+        var value=InternalDeserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return Expressions.Expression.TryCatchFinally(body,@finally,handlers);
+        return value;
     }
 }

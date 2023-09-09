@@ -11,7 +11,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
     private const int ArrayHeader0=1;
     private const int ArrayHeader1=3;
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
+        //if(writer.TryWriteNil(value)) return;
         if(Serializer.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteArrayHeader(ArrayHeader0);
             writer.WriteInt32(index);
@@ -19,7 +19,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
             writer.WriteArrayHeader(ArrayHeader1);
             var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
             index=Dictionary_LabelTarget_int.Count;
-            Serializer.Instance.ListLabelTarget.Add(value);
+            Serializer.Instance.LabelTargets.Add(value);
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteInt32(index);
             writer.WriteType(value.Type);
@@ -27,14 +27,14 @@ public class LabelTarget:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         var index=reader.ReadInt32();
-        var ListLabelTarget=Serializer.Instance.ListLabelTarget;
+        var LabelTargets=Serializer.Instance.LabelTargets;
         T target;
-        if(index<ListLabelTarget.Count){
+        if(index<LabelTargets.Count){
             Debug.Assert(count==ArrayHeader0);
-            target=ListLabelTarget[index];
+            target=LabelTargets[index];
         } else{
             Debug.Assert(count==ArrayHeader1);
             var type=reader.ReadType();
@@ -42,7 +42,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
             target=Expressions.Expression.Label(type,name);
             var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
             index=Dictionary_LabelTarget_int.Count;
-            ListLabelTarget.Add(target);
+            LabelTargets.Add(target);
             Dictionary_LabelTarget_int.Add(target,index);
         }
         return target;

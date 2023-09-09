@@ -22,6 +22,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
+        //writer.WriteType(value.Type);
         Type.Instance.Serialize(ref writer,value.Type);
         Serialize宣言Parameters(ref writer,value.Parameters);
         Expression.Instance.Serialize(ref writer,value.Body);
@@ -32,7 +33,7 @@ public class Lambda:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
-        var type = Type.Instance.Deserialize(ref reader);
+        var type = reader.ReadType();
         var parameters= Deserialize宣言Parameters(ref reader);
         ListParameter.AddRange(parameters!);
         var body = Expression.Instance.Deserialize(ref reader);

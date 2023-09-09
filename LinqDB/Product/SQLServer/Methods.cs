@@ -157,7 +157,7 @@ public static class Methods {
         public static long microsecond(DateTime date)=>date.Ticks/100000;
         public static long nanosecond(DateTime date)=>date.Ticks/100;
         public static long tzoffset(DateTime date)=>date.Ticks;
-        public static long iso_week(DateTime date)=> System.Globalization.ISOWeek.GetWeekOfYear(date);
+        public static long iso_week(DateTime date)=> ISOWeek.GetWeekOfYear(date);
         //public static int? year(DateTime? date)=>date?.Year;
         //public static int? month(DateTime? date)=>date?.Month;
         //public static int? day(DateTime? date)=>date?.Day;

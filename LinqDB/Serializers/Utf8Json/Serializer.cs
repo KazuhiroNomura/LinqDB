@@ -3,20 +3,18 @@
 using System;
 using Expressions = System.Linq.Expressions;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using LinqDB.Helpers;
 //using MemoryPack_Formatters = LinqDB.Serializers.MemoryPack.Formatters;
 using Utf8Json;
-using Utf8Json.Formatters;
 //using LinqDB.Serializers.Formatters;
 
 namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 
 
-public class Serializer{
+public class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
     private sealed class Utf8JsonCustomFormatterResolver:IJsonFormatterResolver{
         //private readonly Type[] GenericArguments=new Type[1];
@@ -101,7 +99,6 @@ public class Serializer{
     //}
     private Serializer(){
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-            //System.Array.Empty<IJsonFormatter>(),
             new IJsonFormatter[]{
                 Binary.Instance,
                 Block.Instance,
@@ -180,27 +177,45 @@ public class Serializer{
             }
         );
     }
-    internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    internal readonly List<Expressions.LabelTarget> ListLabelTarget=new();
-    internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
-    internal readonly List<System.Type> Types=new();
-    internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
-    internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
-    internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
-    internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
-    internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
+    //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
+    //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
+    //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
+    //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
+    //internal readonly List<System.Type> Types=new();
+    //internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
+    //internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
+    //internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
+    //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
+    //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
+    //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
+    //private void Clear(){
+    //    this.Resolver.Clear();
+    //    this.ListParameter.Clear();
+    //    this.Dictionary_LabelTarget_int.Clear();
+    //    this.LabelTargets.Clear();
+    //    this.DictionaryTypeIndex.Clear();
+    //    this.Types.Clear();
+    //    this.TypeMembers.Clear();
+    //    this.TypeConstructors.Clear();
+    //    this.TypeMethods.Clear();
+    //    this.TypeFields.Clear();
+    //    this.TypeProperties.Clear();
+    //    this.TypeEvents.Clear();
+    //}
     private void Clear(){
         this.Resolver.Clear();
-        this.ListParameter.Clear();
-        this.Dictionary_LabelTarget_int.Clear();
-        this.ListLabelTarget.Clear();
-        this.DictionaryTypeIndex.Clear();
-        this.Types.Clear();
-        this.TypeMethods.Clear();
-        this.TypeFields.Clear();
-        this.TypeProperties.Clear();
-        this.TypeEvents.Clear();
+        base.ProtectedClear();
+        //    this.ListParameter.Clear();
+        //    this.Dictionary_LabelTarget_int.Clear();
+        //    this.LabelTargets.Clear();
+        //    this.DictionaryTypeIndex.Clear();
+        //    this.Types.Clear();
+        //    this.TypeMembers.Clear();
+        //    this.TypeConstructors.Clear();
+        //    this.TypeMethods.Clear();
+        //    this.TypeFields.Clear();
+        //    this.TypeProperties.Clear();
+        //    this.TypeEvents.Clear();
     }
     public byte[] Serialize<T>(T value){
         this.Clear();
@@ -223,6 +238,4 @@ public class Serializer{
     public static void Serialize_Type(ref JsonWriter writer,System.Type value){
         writer.WriteString(value.AssemblyQualifiedName);
     }
-    public T Deserialize_T<T>(ref JsonReader reader)=>
-        this.Resolver.GetFormatter<T>().Deserialize(ref reader,this.Resolver);
 }

@@ -18,7 +18,7 @@ public class Lambda:IMessagePackFormatter<T> {
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
-        Serialize宣言Parameters(ref writer,value.Parameters);
+        Serialize宣言Parameters(ref writer,value.Parameters,Resolver);
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         writer.Write(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);

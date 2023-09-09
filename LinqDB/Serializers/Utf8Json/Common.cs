@@ -1,20 +1,70 @@
 ﻿using System;
-using System.Reflection;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
 using Utf8Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 //using LinqDB.Serializers.Utf8Json.Formatters;
 using Utf8Json.Formatters;
+using MemoryPack;
+using System.Buffers;
+using System.Diagnostics;
+
 namespace LinqDB.Serializers.Utf8Json;
 using Writer=JsonWriter;
 using Reader=JsonReader;
+using C=Serializer;
 internal static class Common{
     public static void WriteValue<T>(this ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static T ReadValue<T>(this ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
-    public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
+    //public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
+    //public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
+    public static void WriteType(this ref Writer writer,System.Type value){
+        if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+            writer.WriteInt32(index);
+        } else{
+            writer.WriteBeginArray();
+            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+            index=Dictionary_Type_int.Count;
+            writer.WriteInt32(index);
+            Dictionary_Type_int.Add(value,index);
+            Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
+            writer.WriteValueSeparator();
+            writer.WriteString(value.AssemblyQualifiedName);
+            C.Instance.Types.Add(value);
+            writer.WriteEndArray();
+        }
+    }
+    public static System.Type ReadType(this ref Reader reader){
+        var Types=C.Instance.Types;
+        if(!reader.ReadIsBeginArray()){
+            var index=reader.ReadInt32();
+            return Types[index];
+        } else{
+            var index=reader.ReadInt32();
+            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+            reader.ReadIsValueSeparatorWithVerify();
+            Debug.Assert(index==Types.Count);
+            var AssemblyQualifiedName=reader.ReadString();
+            reader.ReadIsEndArrayWithVerify();
+            var value=System.Type.GetType(AssemblyQualifiedName);
+            Types.Add(value);
+            Dictionary_Type_int.Add(value,index);
+            return value;
+        }
+        //var index=reader.ReadInt32();
+        //var Types=C.Instance.Types;
+        //if(index<Types.Count){
+        //    return Types[index];
+        //} else{
+        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    Debug.Assert(index==Types.Count);
+        //    var AssemblyQualifiedName=reader.ReadString();
+        //    var value=System.Type.GetType(AssemblyQualifiedName);
+        //    Types.Add(value);
+        //    Dictionary_Type_int.Add(value,index);
+        //    return value;
+        //}
+    }
     public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteByte((byte)NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadByte();
     public static bool WriteIsNull(this ref Writer writer,object? value){
@@ -57,7 +107,7 @@ internal static class Common{
         while(reader.ReadIsBeginObject()){
             var name=reader.ReadString();
             reader.ReadIsNameSeparatorWithVerify();
-            var type=Formatters.Type.Instance.Deserialize(ref reader,Resolver);
+            var type=reader.ReadType();
             List.Add(Expressions.Expression.Parameter(type,name));
             reader.ReadIsEndObjectWithVerify();
             //var count=0;

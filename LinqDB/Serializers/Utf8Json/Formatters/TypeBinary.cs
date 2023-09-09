@@ -1,7 +1,5 @@
 ﻿using System;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 using System.Diagnostics;
 
@@ -14,10 +12,10 @@ public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
     internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
-        Type.Instance.Serialize(ref writer,value.TypeOperand,Resolver);
+        writer.WriteType(value.TypeOperand);
     }
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         writer.WriteString(value.NodeType.ToString());
@@ -40,7 +38,7 @@ public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
         return Expressions.Expression.TypeIs(expression,type);
     }
     public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeTypeName=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();

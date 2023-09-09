@@ -1,8 +1,6 @@
 ﻿using Expressions = System.Linq.Expressions;
 using MemoryPack;
 using System.Buffers;
-using System.Reflection;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using C=Serializer;
@@ -25,7 +23,7 @@ public class LabelTarget:MemoryPackFormatter<T> {
             writer.WriteVarInt(index);
         } else{
             var Dictionary_LabelTarget_int= C.Instance.Dictionary_LabelTarget_int;
-            C.Instance.ListLabelTarget.Add(value);
+            C.Instance.LabelTargets.Add(value);
             index=Dictionary_LabelTarget_int.Count;
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteVarInt(index);
@@ -35,16 +33,16 @@ public class LabelTarget:MemoryPackFormatter<T> {
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var index=reader.ReadVarIntInt32();
-        var ListLabelTarget= C.Instance.ListLabelTarget;
+        var LabelTargets= C.Instance.LabelTargets;
         T target;
-        if(index<ListLabelTarget.Count){
-            target=ListLabelTarget[index];
+        if(index<LabelTargets.Count){
+            target=LabelTargets[index];
         } else{
             var type= Type.Instance.Deserialize(ref reader);
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
-            ListLabelTarget.Add(target);
-            index=ListLabelTarget.Count;
+            LabelTargets.Add(target);
+            index=LabelTargets.Count;
             C.Instance.Dictionary_LabelTarget_int.Add(target,index);
         }
         value=target;

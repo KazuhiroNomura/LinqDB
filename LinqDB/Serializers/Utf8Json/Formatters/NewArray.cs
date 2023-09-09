@@ -1,7 +1,5 @@
 ﻿using System;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 using System.Diagnostics;
 
@@ -12,18 +10,18 @@ using static Common;
 public class NewArray:IJsonFormatter<Expressions.NewArrayExpression>{
     public static readonly NewArray Instance=new();
     public void Serialize(ref Writer writer,Expressions.NewArrayExpression? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         writer.WriteString(value.NodeType.ToString());
         writer.WriteValueSeparator();
-        Type.Instance.Serialize(ref writer,value.Type.GetElementType(),Resolver);
+        writer.WriteType(value.Type.GetElementType());
         writer.WriteValueSeparator();
         SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
         writer.WriteEndArray();
     }
     public Expressions.NewArrayExpression Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeTypeName=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();

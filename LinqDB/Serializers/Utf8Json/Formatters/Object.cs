@@ -1,13 +1,6 @@
-﻿using MemoryPack;
-using System.Buffers;
-using Expressions=System.Linq.Expressions;
-using Utf8Json;
+﻿using Utf8Json;
 
 using System.Diagnostics;
-using LinqDB.Helpers;
-using MessagePack;
-using System;
-
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -19,7 +12,6 @@ public class Object:IJsonFormatter<object>{
         if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
@@ -60,7 +52,6 @@ public class Object:IJsonFormatter<object>{
     }
     private readonly object[] Objects2=new object[2];
     public object Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(!reader.ReadBoolean())return null!;
         if(reader.ReadIsNull()) return null!;
         object result;
         reader.ReadIsBeginArrayWithVerify();

@@ -2,8 +2,6 @@
 using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
-using LinqDB.Serializers.MemoryPack;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -15,19 +13,46 @@ public class CatchBlock:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         writer.WriteType(value.Test);
         if(value.Variable is null){
-            writer.WriteNil();
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
-            if(value.Filter is null)writer.WriteNil();
-            else Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+            if(value.Filter is null){
+                writer.WriteNil();
+                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                writer.WriteNil();
+            } else{
+                writer.WriteNil();
+                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+            }
         } else{
-            writer.Write(value.Variable.Name);
-            Serializer.Instance.ListParameter.Add(value.Variable);
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
-            if(value.Filter is null)writer.WriteNil();
-            else Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
-            var ListParameter=Serializer.Instance.ListParameter;
-            ListParameter.RemoveAt(ListParameter.Count-1);
+            if(value.Filter is null){
+                writer.Write(value.Variable.Name);
+                Serializer.Instance.ListParameter.Add(value.Variable);
+                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                writer.WriteNil();
+                var ListParameter=Serializer.Instance.ListParameter;
+                ListParameter.RemoveAt(ListParameter.Count-1);
+            } else{
+                writer.Write(value.Variable.Name);
+                Serializer.Instance.ListParameter.Add(value.Variable);
+                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+                var ListParameter=Serializer.Instance.ListParameter;
+                ListParameter.RemoveAt(ListParameter.Count-1);
+            }
         }
+        //if(value.Variable is null){
+        //    writer.WriteNil();
+        //    Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        //    if(value.Filter is null)writer.WriteNil();
+        //    else Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+        //} else{
+        //    writer.Write(value.Variable.Name);
+        //    Serializer.Instance.ListParameter.Add(value.Variable);
+        //    Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        //    if(value.Filter is null)writer.WriteNil();
+        //    else Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+        //    var ListParameter=Serializer.Instance.ListParameter;
+        //    ListParameter.RemoveAt(ListParameter.Count-1);
+        //}
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();

@@ -1,11 +1,6 @@
-﻿using MemoryPack;
-using MessagePack.Formatters;
+﻿using MessagePack.Formatters;
 using MessagePack;
-
-using System.Buffers;
 using System.Diagnostics;
-using LinqDB.Serializers.MemoryPack;
-using LinqDB.Serializers.Utf8Json.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;

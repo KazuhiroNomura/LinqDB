@@ -1,9 +1,5 @@
-﻿using System;
-using MessagePack;
-using System.Buffers;
+﻿using MessagePack;
 using System.Diagnostics;
-using LinqDB.Helpers;
-using LinqDB.Serializers.Utf8Json.Formatters;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
@@ -16,12 +12,12 @@ public class Type:IMessagePackFormatter<T> {
     private const int ArrayHeader0=2;
     private const int ArrayHeader1=2;
     private void PrivateSerialize(ref Writer writer,T value){
-        if(Serializer.Instance.DictionaryTypeIndex.TryGetValue(value,out var index)){
+        if(Serializer.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
             writer.WriteArrayHeader(ArrayHeader0);
             writer.WriteInt32(index);
         } else{
             writer.WriteArrayHeader(ArrayHeader1);
-            var DictionaryTypeIndex=Serializer.Instance.DictionaryTypeIndex;
+            var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
             index=DictionaryTypeIndex.Count;
             writer.WriteInt32(index);
             DictionaryTypeIndex.Add(value,index);
@@ -54,7 +50,7 @@ public class Type:IMessagePackFormatter<T> {
             return Types[index];
         } else{
             Debug.Assert(count==ArrayHeader1);
-            var DictionaryTypeIndex=Serializer.Instance.DictionaryTypeIndex;
+            var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
             Debug.Assert(index==Types.Count);
             var AssemblyQualifiedName=reader.ReadString();
             var value=System.Type.GetType(AssemblyQualifiedName);

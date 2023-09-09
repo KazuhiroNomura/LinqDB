@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Buffers;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;

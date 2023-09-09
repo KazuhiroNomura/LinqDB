@@ -187,7 +187,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     private static void WriteObject(string フォルダ名,object value) {
         var フィールドに対応するファイル名 = フォルダ名+@"\"+DateTimeOffset.Now.ToString("yyyyMMddHHmmssff",CultureInfo.CurrentCulture)+".tlg";
         using var FileStream = new FileStream(フィールドに対応するファイル名,FileMode.Create,FileAccess.Write,FileShare.Read);
-        Utf8Json.JsonSerializer.Serialize(FileStream,value);
+        JsonSerializer.Serialize(FileStream,value);
         //var Writer = XmlDictionaryWriter.CreateTextWriter(FileStream,Encoding.UTF8,false);
         //ExpressionSurrogateSelector.serializer.WriteObject(Writer,value);
         //Writer.Flush();

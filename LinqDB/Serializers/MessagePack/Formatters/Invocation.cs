@@ -31,7 +31,7 @@ public class Invocation:IMessagePackFormatter<T> {
         return Expressions.Expression.Invoke(expression,arguments);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return InternalDeserialize(ref reader,Resolver);

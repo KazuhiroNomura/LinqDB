@@ -1,6 +1,4 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 using System.Diagnostics;
 
@@ -11,7 +9,7 @@ using static Common;
 public class New:IJsonFormatter<Expressions.NewExpression>{
     public static readonly New Instance=new();
     public void Serialize(ref Writer writer,Expressions.NewExpression? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         Constructor.Instance.Serialize(ref writer,value.Constructor!,Resolver);
@@ -26,7 +24,7 @@ public class New:IJsonFormatter<Expressions.NewExpression>{
         //writer.WriteEndArray();
     }
     public Expressions.NewExpression Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var constructor= Constructor.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();

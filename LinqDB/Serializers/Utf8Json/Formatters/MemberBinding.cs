@@ -1,10 +1,6 @@
 ﻿using System;
 using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
-using LinqDB.Serializers.MessagePack;
-
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;

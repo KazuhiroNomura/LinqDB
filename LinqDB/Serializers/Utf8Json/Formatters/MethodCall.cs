@@ -1,15 +1,11 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
-using System.Reflection;
 using System.Diagnostics;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T= Expressions.MethodCallExpression;
-using static Serializer;
 using static Common;
 public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
@@ -34,7 +30,7 @@ public class MethodCall:IJsonFormatter<T> {
         }
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var method=value.Method;
@@ -48,7 +44,7 @@ public class MethodCall:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //i//f(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var result=InternalDeserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

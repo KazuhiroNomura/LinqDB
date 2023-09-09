@@ -1,6 +1,4 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -18,7 +16,7 @@ public class Lambda:IJsonFormatter<T> {
 
         writer.WriteBeginArray();
         //this.Serialize(ref writer,value.Type,Resolver);
-        Type.Instance.Serialize(ref writer,value.Type,Resolver);
+        writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Serialize宣言Parameters(ref writer,value.Parameters,Resolver);
         writer.WriteValueSeparator();

@@ -28,9 +28,6 @@ public class Try:MemoryPackFormatter<T> {
         //var s=reader.ReadString();
         var @finally= Expression.Instance.Deserialize(ref reader);
         var handlers=reader.ReadArray<Expressions.CatchBlock>();
-        if(handlers!.Length==0)
-            value=Expressions.Expression.TryFinally(body,@finally);
-        else
-            value=Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
+        value=handlers!.Length==0?Expressions.Expression.TryFinally(body,@finally):Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
     }
 }

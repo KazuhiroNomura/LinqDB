@@ -1,7 +1,5 @@
-﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
-using Utf8Json;
+﻿using Utf8Json;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -15,10 +13,10 @@ public class Goto:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Value,Resolver);
+        if(!writer.WriteIsNull(value.Value))Expression.Instance.Serialize(ref writer,value.Value,Resolver);
         writer.WriteValueSeparator();
         //this.Serialize(ref writer,value.Type,Resolver);
-        Type.Instance.Serialize(ref writer,value.Type,Resolver);
+        writer.WriteType(value.Type);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -29,7 +27,7 @@ public class Goto:IJsonFormatter<T> {
         //var target=Deserialize_T<LabelTarget>(ref reader,Resolver);
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var value=Expression.Instance.Deserialize(ref reader,Resolver);
+        var value=reader.ReadIsNull()?null:Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         reader.ReadIsEndArrayWithVerify();

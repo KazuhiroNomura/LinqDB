@@ -19,11 +19,11 @@ public class Index:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(value is null){
+        //if(value is null){
             //writer.WriteNil();
-            return;
-        }
-        Expression.Instance.Serialize(ref writer,value.Object);
+       //     return;
+        //}
+        Expression.Instance.Serialize(ref writer,value!.Object);
         Property.Instance.Serialize(ref writer,value.Indexer);
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }

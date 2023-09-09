@@ -1,8 +1,4 @@
-﻿using System.Dynamic;
-using System.Runtime.CompilerServices;
-using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
+﻿using Expressions=System.Linq.Expressions;
 using Utf8Json;
 using System.Diagnostics;
 
@@ -14,7 +10,7 @@ using static Common;
 public class Dynamic:IJsonFormatter<T> {
     public static readonly Dynamic Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+     //   if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         //switch(value.Binder){
@@ -34,7 +30,7 @@ public class Dynamic:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();

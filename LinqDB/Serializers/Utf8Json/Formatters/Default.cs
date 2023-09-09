@@ -1,6 +1,4 @@
 ﻿using Expressions=System.Linq.Expressions;
-using MessagePack;
-using MessagePack.Formatters;
 using Utf8Json;
 using System.Diagnostics;
 
@@ -12,10 +10,10 @@ using static Common;
 public class Default:IJsonFormatter<T> {
     public static readonly Default Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Type.Instance.Serialize(ref writer,value.Type,Resolver);
+        writer.WriteType(value.Type);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         InternalSerialize(ref writer,value,Resolver);
@@ -26,7 +24,7 @@ public class Default:IJsonFormatter<T> {
         return Expressions.Expression.Default(type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=InternalDeserialize(ref reader);
         reader.ReadIsEndArrayWithVerify();

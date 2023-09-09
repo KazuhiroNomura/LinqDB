@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Buffers;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using C=Serializer;
 using T=ConstructorInfo;
-
-
 public class Constructor:MemoryPackFormatter<T> {
     public static readonly Constructor Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
@@ -26,9 +23,9 @@ public class Constructor:MemoryPackFormatter<T> {
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ReflectedType= Type.Instance.Deserialize(ref reader);
-        var array= C.Instance.TypeConstructors.Get(ReflectedType);
-        var Index=reader.ReadVarIntInt32();
-        value=array[Index];
+        var type=reader.ReadType();
+        var array= C.Instance.TypeConstructors.Get(type);
+        var index=reader.ReadVarIntInt32();
+        value=array[index];
     }
 }

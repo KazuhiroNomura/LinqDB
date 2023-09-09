@@ -723,7 +723,7 @@ public partial class AssemblyGenerator {
         var Set2_TryGetValue = TypeBuilder.GetMethod(typeof(Set<,>).MakeGenericType(Types2),AssemblyGenerator.Set2_TryGetValue);
         Types1[0]=子Table_TypeBuilder;
         var Set1 = typeof(Set<>).MakeGenericType(Types1);
-        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,AssemblyGenerator.Set1_Remove);
+        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,Set1_Remove);
         var AddRelationship_I = 子Table_Information.AddRelationship_I;
         var RemoveRelationship_I = 子Table_Information.RemoveRelationship_I;
         var AddRelationship_親タプル = this.共通AddRelationship0(

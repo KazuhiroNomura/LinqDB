@@ -2,8 +2,6 @@
 using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
-using MemoryPack;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;

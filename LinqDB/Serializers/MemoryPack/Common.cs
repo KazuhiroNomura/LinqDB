@@ -1,23 +1,49 @@
-﻿using System;
-using System.Reflection;
+﻿//using System;
 using Expressions=System.Linq.Expressions;
 using MemoryPack;
-using Utf8Json;
 using System.Buffers;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using MessagePack;
 using System.Collections.ObjectModel;
+using LinqDB.Serializers.MemoryPack.Formatters;
 using MemoryPack.Formatters;
+using System.Diagnostics;
+
 namespace LinqDB.Serializers.MemoryPack;
 //using Writer=MemoryPackWriter;
 using Reader=MemoryPackReader;
+using C=Serializer;
 public static class Common{
     public static void WriteValue<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)where TBufferWriter :IBufferWriter<byte> =>writer.GetFormatter<T>()!.Serialize(ref writer,ref value);
     public static void ReadValue<T>(this ref Reader reader,scoped ref T? value)=>reader.GetFormatter<T>()!.Deserialize(ref reader,ref value);
-    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
-    public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
+    //public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
+    //public static Type ReadType(this ref Reader reader)=>Type.Instance.Deserialize().GetType(reader.ReadString())!;
+    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
+        if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+            writer.WriteVarInt(index);
+        } else{
+            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+            index=Dictionary_Type_int.Count;
+            writer.WriteVarInt(index);
+            Dictionary_Type_int.Add(value,index);
+            Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
+            writer.WriteString(value.AssemblyQualifiedName);
+            C.Instance.Types.Add(value);
+        }
+    }
+    public static System.Type ReadType(this ref Reader reader){
+        var index=reader.ReadVarIntInt32();
+        var Types=C.Instance.Types;
+        if(index<Types.Count){
+            return Types[index];
+        } else{
+            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+            Debug.Assert(index==Types.Count);
+            var AssemblyQualifiedName=reader.ReadString();
+            var value=System.Type.GetType(AssemblyQualifiedName);
+            Types.Add(value);
+            Dictionary_Type_int.Add(value,index);
+            return value;
+        }
+    }
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.ExpressionType NodeType)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)NodeType);

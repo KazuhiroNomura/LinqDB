@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using MemoryPack;
-using System.Linq.Expressions;
-
 using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
@@ -12,47 +11,85 @@ using T=Expressions.CatchBlock;
 
 public class CatchBlock:MemoryPackFormatter<T> {
     public static readonly CatchBlock Instance=new();
+    [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteType(value.Test);
         if(value.Variable is null){
-            writer.WriteBoolean(true);
-            Expression.Instance.Serialize(ref writer,value.Body);
-            if(value.Filter is null){
-                writer.WriteBoolean(true);
-            } else{
-                writer.WriteBoolean(false);
+            if(value.Filter is null) {
+                writer.WriteVarInt(0);
+                Expression.Instance.Serialize(ref writer,value.Body);
+            } else {
+                writer.WriteVarInt(1);
+                writer.WriteType(value.Test);
+                Expression.Instance.Serialize(ref writer,value.Body);
                 Expression.Instance.Serialize(ref writer,value.Filter);
             }
         } else{
-            writer.WriteBoolean(false);
-            writer.WriteString(value.Variable.Name);
-            C.Instance.ListParameter.Add(value.Variable);
-            Expression.Instance.Serialize(ref writer,value.Body);
-            if(value.Filter is null){
-                writer.WriteBoolean(true);
-            } else{
-                writer.WriteBoolean(false);
+            var ListParameter= C.Instance.ListParameter;
+            ListParameter.Add(value.Variable);
+            if(value.Filter is null) {
+                writer.WriteVarInt(2);
+                writer.WriteString(value.Variable.Name);
+                Expression.Instance.Serialize(ref writer,value.Body);
+            } else {
+                writer.WriteVarInt(3);
+                writer.WriteString(value.Variable.Name);
+                Expression.Instance.Serialize(ref writer,value.Body);
                 Expression.Instance.Serialize(ref writer,value.Filter);
             }
-            var ListParameter= C.Instance.ListParameter;
             ListParameter.RemoveAt(ListParameter.Count-1);
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var test=reader.ReadType();
-        if(reader.ReadBoolean()){
-            var body=Expression.Instance.Deserialize(ref reader);
-            var filter=reader.ReadBoolean()?null:Expression.Instance.Deserialize(ref reader);
-            value=Expressions.Expression.Catch(test,body,filter);
-        } else{
-            var name=reader.ReadString();
-            var ListParameter=C.Instance.ListParameter;
-            ListParameter.Add(Expressions.Expression.Parameter(test,name));
-            var body=Expression.Instance.Deserialize(ref reader);
-            var filter=reader.ReadBoolean()?null:Expression.Instance.Deserialize(ref reader);
-            ListParameter.RemoveAt(ListParameter.Count-1);
-            value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,filter);
+        var id=reader.ReadVarIntInt32();
+        switch(id){
+            case 0:{
+                var body=Expression.Instance.Deserialize(ref reader);
+                value=Expressions.Expression.Catch(test,body);
+                break;
+            }
+            case 1:{
+                var body=Expression.Instance.Deserialize(ref reader);
+                var filter=Expression.Instance.Deserialize(ref reader);
+                value=Expressions.Expression.Catch(test,body,filter);
+                break;
+            }
+            case 2:{
+                var name=reader.ReadString();
+                var ListParameter=C.Instance.ListParameter;
+                ListParameter.Add(Expressions.Expression.Parameter(test,name));
+                var body=Expression.Instance.Deserialize(ref reader);
+                ListParameter.RemoveAt(ListParameter.Count-1);
+                value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body);
+                break;
+            }
+            case 3:{
+                var name=reader.ReadString();
+                var ListParameter=C.Instance.ListParameter;
+                ListParameter.Add(Expressions.Expression.Parameter(test,name));
+                var body=Expression.Instance.Deserialize(ref reader);
+                var filter=Expression.Instance.Deserialize(ref reader);
+                ListParameter.RemoveAt(ListParameter.Count-1);
+                value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,filter);
+                break;
+            }
         }
+        //if(reader.ReadBoolean()){
+        //    var body=Expression.Instance.Deserialize(ref reader);
+        //    var filter=reader.TryPeekObjectHeader(out var count)?null:Expression.Instance.Deserialize(ref reader);
+        //    //var filter=reader.ReadBoolean()?null:Expression.Instance.Deserialize(ref reader);
+        //    value=Expressions.Expression.Catch(test,body,filter);
+        //} else{
+        //    var name=reader.ReadString();
+        //    var ListParameter=C.Instance.ListParameter;
+        //    ListParameter.Add(Expressions.Expression.Parameter(test,name));
+        //    var body=Expression.Instance.Deserialize(ref reader);
+        //    var filter=reader.TryPeekObjectHeader(out var count)?null:Expression.Instance.Deserialize(ref reader);
+        //    //var filter=reader.ReadBoolean()?null:Expression.Instance.Deserialize(ref reader);
+        //    ListParameter.RemoveAt(ListParameter.Count-1);
+        //    value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,filter);
+        //}
     }
 }

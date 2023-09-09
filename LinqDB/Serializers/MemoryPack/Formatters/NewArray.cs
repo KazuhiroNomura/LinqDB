@@ -3,8 +3,6 @@ using MemoryPack;
 using System.Linq.Expressions;
 using System.Buffers;
 using System.Diagnostics;
-using System.Reflection;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using static Common;

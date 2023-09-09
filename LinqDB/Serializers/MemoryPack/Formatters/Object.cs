@@ -1,7 +1,5 @@
 ﻿using MemoryPack;
 using System.Buffers;
-
-using Guid = System.Guid;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=System.Object;

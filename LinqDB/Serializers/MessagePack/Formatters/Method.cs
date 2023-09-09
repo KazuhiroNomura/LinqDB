@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-
-using LinqDB.Serializers.MemoryPack;
-using LinqDB.Sets;
-
 using MessagePack;
 using MessagePack.Formatters;
-using Microsoft.CodeAnalysis;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;

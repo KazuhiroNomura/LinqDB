@@ -3,8 +3,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
-using LinqDB.Serializers.Formatters;
-using LinqDB.Serializers.Utf8Json;
 using Lokad.ILPack;
 using MessagePack;
 using MessagePack.Formatters;
