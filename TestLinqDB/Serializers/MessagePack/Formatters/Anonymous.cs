@@ -58,6 +58,14 @@ public class Anonymous:共通 {
         //MemoryPackFormatterProvider.Register(formatter);
         this.共通object2(value);
     }
+    static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
+    [Fact]public void ClassDisplay(){
+        var a=1;
+        var body=Lambda(()=>a).Body;
+        var member=(Expressions.MemberExpression)body;
+        var constant=(Expressions.ConstantExpression)member.Expression;
+        this.共通object2(constant.Value);
+    }
     [Fact]
     public void Anonymous002(){
         this.共通object2(new{a=(object)1});

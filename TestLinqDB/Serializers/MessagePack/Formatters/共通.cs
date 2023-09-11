@@ -31,6 +31,7 @@ using System.Configuration;
 using Utf8Json2=LinqDB.Serializers.Utf8Json;
 using MessagePack2=LinqDB.Serializers.MessagePack;
 using MemoryPack2=LinqDB.Serializers.MemoryPack;
+using System.Reflection.PortableExecutable;
 
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
@@ -72,6 +73,25 @@ public abstract class 共通{
     //        )
     //    );
     //}
+    class Display{
+        public int a;
+    }
+    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
+        scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
+        writer.WriteValue(value);
+        //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
+    }
+    public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static void serialize<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter> writer,ref Display value)where TBufferWriter:IBufferWriter<byte>{
+        Serialize2(ref writer,ref value.a);
+    }
+    private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value) {
+        reader.ReadValue(ref value);
+        //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
+    }
+    private static void deserialize<T>(ref MemoryPackReader reader,ref Display value){
+        Deserialize2(ref reader,ref value.a);
+    }
     protected void 共通object1<T>(T input){
         {
             ////GetFormatter<T>Tが匿名型だと例外なのであらかじめ
@@ -112,10 +132,11 @@ public abstract class 共通{
         Optimizer.IsInline=true;
         Optimizer.CreateDelegate(Lambda)();
     }
-    protected void 共通Expression<T>(T input)where T:Expressions.Expression?{
-        //Debug.Assert(input!=null,nameof(input)+" != null");
+    protected void 共通Expression<T>(T input)
+        where T:Expressions.Expression?
+    {
         this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        //Private共通object<Expression>(input,output=>Assert.IsTrue(ExpressionEqualityComparer.Equals(input,output)));
+        this.共通object1<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
         this.共通Expression<Expressions.Expression>(Lambda);
@@ -152,32 +173,36 @@ public abstract class 共通{
         }
         return expected;
     }
+    private static readonly object lockobject=new();
     protected void 共通object1<T>(T input,Action<T> AssertAction){
-        {
-            //GetFormatter<T>Tが匿名型だと例外なのであらかじめ
-            if(typeof(T).IsAnonymous()){
-                var Type=input.GetType();
-                var FormatterType=typeof(LinqDB.Serializers.MemoryPack.Formatters.Anonymous<>).MakeGenericType(Type);
-                dynamic formatter = Activator.CreateInstance(FormatterType)!;
-                MemoryPackFormatterProvider.Register(formatter);
-                //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
-                //Register.Invoke(null,Array.Empty<object>());
+        lock(lockobject){
+            {
+                //GetFormatter<T>Tが匿名型だと例外なのであらかじめ
+                //if(typeof(T).IsAnonymous()) {
+                //    var Type = input.GetType();
+                //    var FormatterType =
+                //        typeof(LinqDB.Serializers.MemoryPack.Formatters.Anonymous<>).MakeGenericType(Type);
+                //    dynamic formatter = Activator.CreateInstance(FormatterType)!;
+                //    MemoryPackFormatterProvider.Register(formatter);
+                //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
+                //    //Register.Invoke(null,Array.Empty<object>());
+                //}
+                var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
+                var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
+                AssertAction(output!);
             }
-            var bytes=MemoryPack2.Serializer.Instance.Serialize(input);
-            var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
-            AssertAction(output!);
-        }
-        {
-            var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
-            var s=Encoding.UTF8.GetString(bytes);
-            var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
-            AssertAction(output);
-        }
-        {
-            var bytes = MessagePack2.Serializer.Instance.Serialize(input);
-            var s=MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
-            var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
-            AssertAction(output);
+            {
+                var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
+                var s = Encoding.UTF8.GetString(bytes);
+                var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
+                AssertAction(output);
+            }
+            {
+                var bytes = MessagePack2.Serializer.Instance.Serialize(input);
+                var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
+                var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
+                AssertAction(output);
+            }
         }
     }
 }

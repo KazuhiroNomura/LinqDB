@@ -14,6 +14,8 @@ public class Conditional:IJsonFormatter<T> {
         Expression.Instance.Serialize(ref writer,value.IfTrue,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.IfFalse,Resolver);
+        writer.WriteValueSeparator();
+        writer.WriteType(value.Type);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
     //    if(writer.WriteIsNull(value))return;
@@ -28,11 +30,9 @@ public class Conditional:IJsonFormatter<T> {
         var ifTrue=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var ifFalse=Expression.Instance.Deserialize(ref reader,Resolver);
-        return Expressions.Expression.Condition(
-            test,
-            ifTrue,
-            ifFalse
-        );
+        reader.ReadIsValueSeparatorWithVerify();
+        var type=reader.ReadType();
+        return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;

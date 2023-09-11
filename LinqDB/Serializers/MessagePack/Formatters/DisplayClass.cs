@@ -1,5 +1,6 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -9,6 +10,15 @@ using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
+internal static class DisplayClass {
+    private static void Serialize<T>(ref Writer writer,T value,MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
+    public static readonly MethodInfo MethodSerialize = typeof(DisplayClass).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static T Deserialize<T>(ref Reader reader,MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
+    public static readonly MethodInfo MethodDeserialize = typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    public static readonly MethodInfo WriteArrayHeader = typeof(Writer).GetMethod(nameof(Writer.WriteArrayHeader),new[] { typeof(int) })!;
+    public static readonly MethodInfo ReadArrayHeader = typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
+    public static readonly Dictionary<System.Type,Delegate> DictionarySerialize = new();
+}
 //public class DisplayClassJsonFormatter{
 //    protected static readonly MethodInfo WriteBeginArray=typeof(JsonWriter).GetMethod("WriteBeginArray")!;
 //    protected static readonly MethodInfo WriteValueSeparator=typeof(JsonWriter).GetMethod("WriteValueSeparator")!;
@@ -25,13 +35,13 @@ using Reader=MessagePackReader;
 //    protected static T Deserialize<T>(ref JsonReader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
 //    protected static readonly MethodInfo MethodDeserialize=typeof(CommonJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 //}
-public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter<T>{
-    //public static readonly CatchBlock Instance=new();
+public class DisplayClass<T>:IMessagePackFormatter<T>{
+    public static readonly DisplayClass<T>Instance=new();
     private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public DisplayClassMessagePackFormatter() {
+    public DisplayClass() {
         var Types1 = new System.Type[1];
         var Types2 = new System.Type[2];
         var Types3 = new System.Type[3];
@@ -74,9 +84,9 @@ public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter
         void 共通(ILGenerator I0,ILGenerator I1){
             I0.Emit(OpCodes.Ldarg_0);//writer
             I0.Emit(OpCodes.Ldc_I4,Fields_Length);
-            I0.Emit(OpCodes.Call,WriteArrayHeader);
+            I0.Emit(OpCodes.Call,DisplayClass.WriteArrayHeader);
             I1.Emit(OpCodes.Ldarg_0);//reader
-            I1.Emit(OpCodes.Call,ReadArrayHeader);
+            I1.Emit(OpCodes.Call,DisplayClass.ReadArrayHeader);
             I1.Emit(OpCodes.Pop);
             I1.Emit(OpCodes.Newobj,ctor);
             I1.DeclareLocal(typeof(T));
@@ -89,11 +99,11 @@ public class DisplayClassMessagePackFormatter<T>:Anonymous,IMessagePackFormatter
                 I0.Emit(OpCodes.Ldarg_1);//value
                 I0.Emit(OpCodes.Ldfld,Field);//value.property
                 I0.Emit(OpCodes.Ldarg_2);//options
-                I0.Emit(OpCodes.Call,MethodSerialize.MakeGenericMethod(Types1));
+                I0.Emit(OpCodes.Call,DisplayClass.MethodSerialize.MakeGenericMethod(Types1));
                 I1.Emit(OpCodes.Ldloc_0);//変数.
                 I1.Emit(OpCodes.Ldarg_0);//reader
                 I1.Emit(OpCodes.Ldarg_1);//options
-                I1.Emit(OpCodes.Call,MethodDeserialize.MakeGenericMethod(Types1));
+                I1.Emit(OpCodes.Call,DisplayClass.MethodDeserialize.MakeGenericMethod(Types1));
                 I1.Emit(OpCodes.Stfld,Field);//変数.field=Deserialize(ref reader,options)
                 index++;
                 if(index==Fields_Length) break;

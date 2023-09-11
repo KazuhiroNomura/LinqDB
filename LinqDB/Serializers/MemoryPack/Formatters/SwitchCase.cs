@@ -8,12 +8,12 @@ using T=Expressions.SwitchCase;
 
 public class SwitchCase:MemoryPackFormatter<T> {
     public static readonly SwitchCase Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    private T DeserializeSwitchCase(ref Reader reader){
-        T? value=default;
-        this.Deserialize(ref reader,ref value);
-        return value!;
-    }
+    //internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
+    //private T DeserializeSwitchCase(ref Reader reader){
+    //    T? value=default;
+    //    this.Deserialize(ref reader,ref value);
+    //    return value!;
+    //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         SerializeReadOnlyCollection(ref writer,value!.TestValues);
         Expression.Instance.Serialize(ref writer,value.Body);

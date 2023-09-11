@@ -13,18 +13,6 @@ public class Type:MemoryPackFormatter<T> {
     public static readonly Type Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
-        ////Debug.Assert(value.IsGenericType==value.IsGenericTypeDefinition);
-        //if(this.DictionaryTypeIndex.TryGetValue(value,out var index)){
-        //    必要なFormatters.WriteBoolean(ref writer,true);
-        //    writer.WriteVarInt(index);
-        //} else{
-        //    必要なFormatters.WriteBoolean(ref writer,false);
-        //    writer.WriteString(value.AssemblyQualifiedName);
-        //    var DictionaryTypeIndex=this.DictionaryTypeIndex;
-        //    DictionaryTypeIndex.Add(value,DictionaryTypeIndex.Count);
-        //    this.ListType.Add(value);
-        //    this.Regist(value);
-        //}
     }
     internal T Deserialize(ref Reader reader){
         T? value=default;
@@ -33,7 +21,7 @@ public class Type:MemoryPackFormatter<T> {
     }
     private void Register(T AnonymousType){
         var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-        var Register=Serializer.Register.MakeGenericMethod(AnonymousType);
+        var Register= C.Register.MakeGenericMethod(AnonymousType);
         var objects2=this.objects2;
         objects2[0]=Activator.CreateInstance(FormatterType)!;
         Register.Invoke(null,objects2);
@@ -59,30 +47,32 @@ public class Type:MemoryPackFormatter<T> {
     //}
     private readonly object[] objects2=new object[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        //this.PrivateSerialize(ref writer,value);
-        if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
-            writer.WriteVarInt(index);
-        } else{
-            var Dictionary_Type_int= C.Instance.Dictionary_Type_int;
-            C.Instance.Types.Add(value);
-            index=Dictionary_Type_int.Count;
-            Dictionary_Type_int.Add(value,index);
-            writer.WriteVarInt(index);
-            writer.WriteString(value.AssemblyQualifiedName);
-        }
+        writer.WriteType(value);
+        ////this.PrivateSerialize(ref writer,value);
+        //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+        //    writer.WriteVarInt(index);
+        //} else{
+        //    var Dictionary_Type_int= C.Instance.Dictionary_Type_int;
+        //    C.Instance.Types.Add(value);
+        //    index=Dictionary_Type_int.Count;
+        //    Dictionary_Type_int.Add(value,index);
+        //    writer.WriteVarInt(index);
+        //    writer.WriteString(value.AssemblyQualifiedName);
+        //}
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var index=reader.ReadVarIntInt32();
-        var Types=Serializer.Instance.Types;
-        if(index<Types.Count){
-            value=Types[index];
-        } else{
-            value=System.Type.GetType(reader.ReadString())!;
-            var Dictionary_Type_int=Serializer.Instance.Dictionary_Type_int;
-            index=Dictionary_Type_int.Count;
-            Types.Add(value);
-            Dictionary_Type_int.Add(value,index);
-        }
+        value=reader.ReadType();
+        //var index=reader.ReadVarIntInt32();
+        //var Types= C.Instance.Types;
+        //if(index<Types.Count){
+        //    value=Types[index];
+        //} else{
+        //    value=System.Type.GetType(reader.ReadString())!;
+        //    var Dictionary_Type_int= C.Instance.Dictionary_Type_int;
+        //    index=Dictionary_Type_int.Count;
+        //    Types.Add(value);
+        //    Dictionary_Type_int.Add(value,index);
+        //}
     }
     //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex = new();
     //internal readonly SortedDictionary<string,int> DictionaryTypeNameIndex = new();

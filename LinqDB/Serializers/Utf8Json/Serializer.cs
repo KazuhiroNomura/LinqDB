@@ -1,98 +1,46 @@
 ﻿
 //using System;
 using System;
-using Expressions = System.Linq.Expressions;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using LinqDB.Helpers;
 //using MemoryPack_Formatters = LinqDB.Serializers.MemoryPack.Formatters;
 using Utf8Json;
+using Utf8Json.Resolvers;
 //using LinqDB.Serializers.Formatters;
 
 namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 
+using LinqDB.Helpers;
+
+using System.Runtime.Serialization;
+
+//using LinqDB.Serializers.MemoryPack.Formatters;
 
 public class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
-    private sealed class Utf8JsonCustomFormatterResolver:IJsonFormatterResolver{
-        //private readonly Type[] GenericArguments=new Type[1];
-        public readonly Dictionary<System.Type,IJsonFormatter> DictionaryTypeFormatter=new();
-        public IJsonFormatter<T> GetFormatter<T>(){
-            if(this.DictionaryTypeFormatter.TryGetValue(typeof(T),out var IJsonFormatter))
-                return(IJsonFormatter<T>)IJsonFormatter;
-            if(typeof(Expressions.Expression).IsAssignableFrom(typeof(T))){
-                //return Return(Instance.ExpressionFormatter);
-                return null!;
-            }
-            if(
-                typeof(T)==typeof(System.Type)||
-                typeof(T)==typeof(MemberInfo)||
-                typeof(T)==typeof(MethodInfo)||
-                typeof(T)==typeof(FieldInfo)||
-                typeof(T)==typeof(PropertyInfo)||
-                typeof(T)==typeof(EventInfo)||
-                typeof(Expressions.MemberBinding).IsAssignableFrom(typeof(T))||
-                typeof(T)==typeof(MethodInfo)||
-                typeof(T)==typeof(MemberInfo)||
-                typeof(T)==typeof(Expressions.CatchBlock)||
-                typeof(T)==typeof(Expressions.SwitchCase)||
-                typeof(T)==typeof(Expressions.ElementInit))
-                return null!;
-                //return Return(Instance.ExpressionFormatter);
-            if(typeof(T).IsDisplay()){
-                var Formatter=new DisplayClass<T>();
-                Instance.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-                    new IJsonFormatter[]{Formatter},
-                    new []{Instance.IResolver}
-                );
-                return Formatter;
-            }
-            if(typeof(T).IsAnonymous()){
-                var Formatter=new Anonymous<T>();
-                Instance.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-                    new IJsonFormatter[]{Formatter},
-                    new []{Instance.IResolver}
-                );
-                return Formatter;
-            }
-            //var Formatter=GetFormatter(typeof(T));
-            //if(Formatter!=null) Return(Formatter);
-            return Return(new Abstract<T>());
-            IJsonFormatter<T> Return(object Formatter){
-                var result=(IJsonFormatter<T>)Formatter;
-                this.DictionaryTypeFormatter.Add(typeof(T),result);
-                return result;
-            }
-        }
-        public void Clear(){
-            //this.ExpressionFormatter.Clear();
-            this.DictionaryTypeFormatter.Clear();
-        }
-    }
-    private readonly Utf8JsonCustomFormatterResolver Resolver=new();
-    public IJsonFormatterResolver IResolver;
+    private readonly FormatterResolver Resolver=new();
+    internal IJsonFormatterResolver IResolver;
     //public IJsonFormatter<T>? GetFormatter<T>()=>(IJsonFormatter<T>?)this.GetFormatterDynamic(typeof(T));
-    private readonly System.Type[]Types1=new System.Type[1];
-    public IJsonFormatter? GetFormatterDynamic(System.Type Type){
-        var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
-        if(DictionaryTypeFormatter.TryGetValue(Type,out var value)) return value;
-        if(Type.IsAnonymous()){
-            var Types1=this.Types1;
-            Types1[0]=Type;
-            value=(IJsonFormatter)Activator.CreateInstance(typeof(Anonymous<>).MakeGenericType(Types1))!;
-            DictionaryTypeFormatter.Add(
-                Type,
-                value
-            );
-            this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-                new IJsonFormatter[]{value},
-                new []{this.IResolver}
-            );
-        }
-        return value;
-    }
+    //private readonly System.Type[]Types1=new System.Type[1];
+    //public IJsonFormatter? GetFormatterDynamic(System.Type Type){
+    //    var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
+    //    if(DictionaryTypeFormatter.TryGetValue(Type,out var value)) return value;
+    //    if(Type.IsAnonymous()){
+    //        var Types1=this.Types1;
+    //        Types1[0]=Type;
+    //        value=(IJsonFormatter)Activator.CreateInstance(typeof(Anonymous<>).MakeGenericType(Types1))!;
+    //        DictionaryTypeFormatter.Add(
+    //            Type,
+    //            value
+    //        );
+    //        this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
+    //            new IJsonFormatter[]{value},
+    //            new []{this.IResolver}
+    //        );
+    //    }
+    //    return value;
+    //}
     //public void Register(Type type){
     //    var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
     //    if(DictionaryTypeFormatter.)
@@ -100,17 +48,13 @@ public class Serializer:Serializers.Serializer{
     private Serializer(){
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatter[]{
+                Object.Instance,
                 Binary.Instance,
                 Block.Instance,
-                CatchBlock.Instance,
                 Conditional.Instance,
                 Constant.Instance,
-                Constructor.Instance,
                 Default.Instance,
-                ElementInit.Instance,
-                Event.Instance,
                 Expression.Instance,
-                Field.Instance,
                 Goto.Instance,
                 Index.Instance,
                 Invocation.Instance,
@@ -119,23 +63,27 @@ public class Serializer:Serializers.Serializer{
                 Lambda.Instance,
                 ListInit.Instance,
                 Loop.Instance,
-                Member.Instance,
                 MemberAccess.Instance,
-                MemberBinding.Instance,
-                MemberInit.Instance,
-                Method.Instance,
                 MethodCall.Instance,
                 New.Instance,
                 NewArray.Instance,
-                //Object.Instance,
                 Parameter.Instance,
-                Property.Instance,
                 Switch.Instance,
-                SwitchCase.Instance,
                 Try.Instance,
-                Type.Instance,
                 TypeBinary.Instance,
                 Unary.Instance,
+                SwitchCase.Instance,
+                CatchBlock.Instance,
+                ElementInit.Instance,
+                MemberBinding.Instance,
+                MemberInit.Instance,
+                Type.Instance,
+                Member.Instance,
+                Constructor.Instance,
+                Method.Instance,
+                Property.Instance,
+                Event.Instance,
+                Field.Instance,
             },
             new IJsonFormatterResolver[]{
                 //    this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
@@ -152,7 +100,7 @@ public class Serializer:Serializers.Serializer{
                 global::Utf8Json.Resolvers.EnumResolver.Default,global::Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
                 //Utf8Json.Resolvers.StandardResolver.Default,
 
-                global::Utf8Json.Resolvers.DynamicObjectResolver.Default,
+                global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//.Default,//Anonymous
                 //Utf8Json.Resolvers.CompositeResolver.Instance,
 
 
@@ -202,9 +150,11 @@ public class Serializer:Serializers.Serializer{
     //    this.TypeProperties.Clear();
     //    this.TypeEvents.Clear();
     //}
+    //private static readonly IJsonFormatter[] IJsonFormatters = new IJsonFormatter[1];
+    //private static readonly IJsonFormatterResolver[] IJsonFormatterResolvers= new IJsonFormatterResolver[1];
     private void Clear(){
         this.Resolver.Clear();
-        base.ProtectedClear();
+        this.ProtectedClear();
         //    this.ListParameter.Clear();
         //    this.Dictionary_LabelTarget_int.Clear();
         //    this.LabelTargets.Clear();
@@ -235,7 +185,7 @@ public class Serializer:Serializers.Serializer{
     }
     public void SerializeReadOnlyCollection<T>(ref JsonWriter writer,T value)=>
         this.Resolver.GetFormatter<T>().Serialize(ref writer,value,this.Resolver);
-    public static void Serialize_Type(ref JsonWriter writer,System.Type value){
-        writer.WriteString(value.AssemblyQualifiedName);
-    }
+    //public static void Serialize_Type(ref JsonWriter writer,System.Type value){
+    //    writer.WriteString(value.AssemblyQualifiedName);
+    //}
 }

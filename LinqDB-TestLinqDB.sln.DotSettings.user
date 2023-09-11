@@ -8,4 +8,5 @@
     &lt;Namespace&gt;Serializers.MessagePack.Formatters&lt;/Namespace&gt;&#xD;
     &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
   &lt;/And&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/HangingTestRunnerResponse/@EntryValue">WaitForExit</s:String></wpf:ResourceDictionary>

@@ -6,25 +6,16 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
+using LinqDB.Serializers.MessagePack.Formatters;
+
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-internal static class Anonymous{
-    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
-        scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
-        writer.WriteValue(value);
-        //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
-    }
-    public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
-        reader.ReadValue(ref value);
-        //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
-    }
-    public static readonly MethodInfo MethodDeserialize = typeof(Anonymous).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    //public static readonly Dictionary<System.Type,Delegate> DictionarySerialize=new();
+internal static class DisplayClass {
+    public static readonly Dictionary<System.Type,Delegate> DictionarySerialize = new();
 }
-public class Anonymous<T>:MemoryPackFormatter<T>{
-    public static readonly Anonymous<T> Instance=new();
+public class DisplayClass<T>:MemoryPackFormatter<T>{
+    public static readonly DisplayClass<T> Instance=new();
     //private static void Serialize2<TBufferWriter,TValue>(ref MemoryPackWriter<TBufferWriter> writer,
     //    scoped ref TValue? value) where TBufferWriter:IBufferWriter<byte>{
     //    writer.WriteValue(value);
@@ -39,91 +30,86 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public Anonymous(){
+    public DisplayClass(){
+        //DisplayClassMessagePackFormatterを参考にする
         var Types1 = new System.Type[1];
         var DeserializeTypes = new System.Type[2];
         DeserializeTypes[0]=typeof(Reader).MakeByRefType();
         DeserializeTypes[1]=typeof(T).MakeByRefType();
         var ctor = typeof(T).GetConstructors()[0];
-        var Parameters = ctor.GetParameters();
-        var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
-        var Properties_Length = Properties.Length;
-        Debug.Assert(Parameters.Length==Properties_Length);
-        Properties=Parameters.Select(Parameter => Properties.Single(Property => Property.Name==Parameter.Name)).ToArray();
+        var Fields = typeof(T).GetFields(BindingFlags.Public|BindingFlags.Instance);
+        var Fields_Length = Fields.Length;
+        Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
         {
             //var MethodDeserialize = typeof(Anonymous).GetMethod("Deserialize2",BindingFlags.Static|BindingFlags.NonPublic)!;
             var Deserialize = new DynamicMethod("Deserialize",typeof(void),DeserializeTypes,typeof(Anonymous<T>),true) { InitLocals=false };
             var I1 = Deserialize.GetILGenerator();
-            I1.Emit(OpCodes.Ldarg_1);//ref value
-            var index = 0;
-            while(true) {
-                var Property = Properties[index];
-                Types1[0]=Property.PropertyType;
-                I1.Emit(OpCodes.Ldarg_0);//reader
-                var L = I1.DeclareLocal(Property.PropertyType);
-                I1.Emit(OpCodes.Ldloca,L);//value
-                //I1.Emit(OpCodes.Call,MethodDeserialize.MakeGenericMethod(Types1));
-                I1.Emit(OpCodes.Call,Anonymous.MethodDeserialize.MakeGenericMethod(Types1));
-                I1.Emit(OpCodes.Ldloc,L);//value
-                index++;
-                if(index==Properties_Length) break;
-            }
+            I1.Emit(OpCodes.Ldarg_1);//value=new c_DisplayClass()
             I1.Emit(OpCodes.Newobj,ctor);
             I1.Emit(OpCodes.Stobj,typeof(T));
+            var index = 0;
+            while(true) {
+                var Field = Fields[index];
+                var FieldType=Field.FieldType;
+                Types1[0]=FieldType;
+                I1.Emit(OpCodes.Ldarg_0);//reader
+                I1.Emit(OpCodes.Ldarg_1);//value
+                I1.Emit(OpCodes.Ldind_Ref);
+                I1.Emit(OpCodes.Ldflda,Field);//value.field
+                I1.Emit(OpCodes.Call,Anonymous.MethodDeserialize.MakeGenericMethod(Types1));//Deserialize(ref reader,ref value.field)
+                index++;
+                if(index==Fields_Length) break;
+            }
             I1.Emit(OpCodes.Ret);
             this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
         }
     }
-    private static readonly Dictionary<System.Type,Delegate> DictionarySerialize=new();
     private readonly System.Type[] MethodTypes = new System.Type[2];
     private readonly System.Type[] SerializeTypes = new System.Type[2];
-    private readonly System.Type[] PropertyTypes = new System.Type[1];
+    private readonly System.Type[] FieldTypes = new System.Type[1];
+    private readonly object[] objects1=new object[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(!DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
+        if(!DisplayClass.DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
             var MethodTypes =this.MethodTypes;
             var SerializeTypes =this.SerializeTypes;
-            var PropertyTypes=this.PropertyTypes;
+            var FieldTypes=this.FieldTypes;
             SerializeTypes[0]=typeof(MemoryPackWriter<TBufferWriter>).MakeByRefType();
             SerializeTypes[1]=typeof(T).MakeByRefType();
-            var ctor=typeof(T).GetConstructors()[0];
-            var Parameters=ctor.GetParameters();
-            var Properties = typeof(T).GetProperties(BindingFlags.Public|BindingFlags.Instance);
-            var Properties_Length = Properties.Length;
-            Debug.Assert(Parameters.Length==Properties_Length);
-            Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
+            //var ctor=typeof(T).GetConstructors()[0];
+            var Fields = typeof(T).GetFields(BindingFlags.Public|BindingFlags.Instance);
+            var Fields_Length = Fields.Length;
+            Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
             {
+                var objects1=this.objects1;
                 var Serialize=new DynamicMethod("Serialize",typeof(void),SerializeTypes,typeof(Anonymous<T>),true){InitLocals=false};
                 //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
                 var I0=Serialize.GetILGenerator();
                 MethodTypes[0]=typeof(TBufferWriter);
                 var index=0;
                 while(true){
-                    var Property=Properties[index];
-                    var PropertyType=Property.PropertyType;
-                    if(PropertyType.IsAnonymous()){
-                        PropertyTypes[0]=PropertyType;
-                        var FormatterType=typeof(Anonymous<>).MakeGenericType(PropertyTypes);
-                        var Register=Serializer.Register.MakeGenericMethod(PropertyTypes);
-                        Register.Invoke(null,new[]{Activator.CreateInstance(FormatterType)});
+                    var Field=Fields[index];
+                    var FieldType=Field.FieldType;
+                    if(FieldType.IsAnonymous()){
+                        FieldTypes[0]=FieldType;
+                        var FormatterType=typeof(Anonymous<>).MakeGenericType(FieldTypes);
+                        var Register=Serializer.Register.MakeGenericMethod(FieldTypes);
+                        objects1[0]=Activator.CreateInstance(FormatterType)!;
+                        Register.Invoke(null,objects1);
                     }
-                    MethodTypes[1]=PropertyType;
+                    MethodTypes[1]=FieldType;
                     I0.Emit(OpCodes.Ldarg_0);//writer
                     I0.Emit(OpCodes.Ldarg_1);//value
-                    I0.Emit(OpCodes.Ldobj,typeof(T));//*value
-                    Debug.Assert(Property.GetMethod!=null&&!Property.GetMethod.IsVirtual);
-                    I0.Emit(OpCodes.Call,Property.GetMethod);//value.property
-                    var L = I0.DeclareLocal(Property.PropertyType);
-                    I0.Emit(OpCodes.Stloc,L);//value=
-                    I0.Emit(OpCodes.Ldloca,L);//ref value
+                    I0.Emit(OpCodes.Ldind_Ref);//*value
+                    I0.Emit(OpCodes.Ldflda,Field);//ref value.field
                     I0.Emit(OpCodes.Call,Anonymous.MethodSerialize.MakeGenericMethod(MethodTypes));
                     index++;
-                    if(index==Properties_Length) break;
+                    if(index==Fields_Length) break;
                 }
                 I0.Emit(OpCodes.Ret);
                 Debug.Assert(SerializeTypes[0]==typeof(delegate_Serialize<TBufferWriter>).GetMethod("Invoke")!.GetParameters()[0].ParameterType);
                 Debug.Assert(SerializeTypes[1]==typeof(delegate_Serialize<TBufferWriter>).GetMethod("Invoke")!.GetParameters()[1].ParameterType);
                 Delegate=Serialize.CreateDelegate(typeof(delegate_Serialize<TBufferWriter>));
-                DictionarySerialize.Add(typeof(TBufferWriter),Delegate);
+                DisplayClass.DictionarySerialize.Add(typeof(TBufferWriter),Delegate);
             }
         }
         ((delegate_Serialize<TBufferWriter>)Delegate)(ref writer,ref value!);

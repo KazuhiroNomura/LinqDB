@@ -1,5 +1,9 @@
 ﻿using MemoryPack;
+using Microsoft.CodeAnalysis;
+
 using System.Buffers;
+using System.Reflection;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=System.Object;
@@ -32,32 +36,22 @@ public class Object:MemoryPackFormatter<object>{
             case uint    v:writer.WriteVarInt(v         );break;
             case ulong   v:writer.WriteVarInt(v         );break;
             case string  v:writer.WriteString(v         );break;
-            default       :
-                Serializer.変数Register(type);
-                writer.WriteValue (type,value);break;
+            default:{
+                if     (typeof(Expressions.Expression).IsAssignableFrom(type))Expression .Instance.Serialize(ref writer,(Expressions.Expression)value);
+                else if(typeof(System.Type           ).IsAssignableFrom(type))Type       .Instance.Serialize(ref writer,(System.Type           )value);
+                else if(typeof(MemberInfo            ).IsAssignableFrom(type))Member     .Instance.Serialize(ref writer,(MemberInfo            )value);
+                else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))Constructor.Instance.Serialize(ref writer,(ConstructorInfo       )value);
+                else if(typeof(MethodInfo            ).IsAssignableFrom(type))Method     .Instance.Serialize(ref writer,(MethodInfo            )value);
+                else if(typeof(PropertyInfo          ).IsAssignableFrom(type))Property   .Instance.Serialize(ref writer,(PropertyInfo          )value);
+                else if(typeof(EventInfo             ).IsAssignableFrom(type))Event      .Instance.Serialize(ref writer,(EventInfo             )value);
+                else if(typeof(FieldInfo             ).IsAssignableFrom(type))Field      .Instance.Serialize(ref writer,(FieldInfo             )value);
+                else{
+                    Serializer.RegisterAnonymousDisplay(type);
+                    writer.WriteValue(type,value);
+                }
+                break;
+            }
         }
-        //if    (typeof(sbyte  )==type)writer.WriteVarInt((sbyte  )value);
-        //else if(typeof(short  )==type)writer.WriteVarInt((short  )value);
-        //else if(typeof(int    )==type)writer.WriteVarInt((int    )value);
-        //else if(typeof(long   )==type)writer.WriteVarInt((long   )value);
-        //else if(typeof(byte   )==type)writer.WriteVarInt((byte   )value);
-        //else if(typeof(ushort )==type)writer.WriteVarInt((ushort )value);
-        //else if(typeof(uint   )==type)writer.WriteVarInt((uint   )value);
-        //else if(typeof(ulong  )==type)writer.WriteVarInt((ulong  )value);
-        //else if(typeof(float  )==type)writer.WriteValue((float  )value);
-        //else if(typeof(double )==type)writer.WriteValue((double )value);
-        //else if(typeof(bool   )==type)writer.WriteValue((bool   )value);
-        //else if(typeof(string )==type)writer.WriteString((string )value);
-        //else if(typeof(decimal)==type)writer.WriteValue((decimal)value);
-        //else if(typeof(Guid   )==type)writer.WriteValue((Guid   )value);
-        //else{
-        //    writer.WriteValue(type,value);
-        //    //var Formatter=writer.GetFormatter(type);
-        //    //Formatter.Serialize(ref writer,ref value);
-        //}
-            //this.Serialize(ref writer,value.Value);
-        //MessagePackSerializer.Typeless.Serialize(ref writer,value.Value);
-            
     }
     public override void Deserialize(ref Reader reader,scoped ref object? value){
         if(reader.PeekIsNull()){
@@ -82,8 +76,16 @@ public class Object:MemoryPackFormatter<object>{
         //else if(typeof(decimal)==type){decimal Constant_value=0       ;reader.ReadValue (ref Constant_value);value=Constant_value; }
         //else if(typeof(Guid   )==type){Guid    Constant_value=default!;reader.ReadValue (ref Constant_value);value=Constant_value; }
         else{
-            Serializer.変数Register(type);
-            reader.ReadValue(type,ref value);
+            Serializer.RegisterAnonymousDisplay(type);
+            if     (typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader);
+            else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader);
+            else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader);
+            else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader);
+            else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader);
+            else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader);
+            else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader);
+            else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader);
+            else reader.ReadValue(type,ref value);
             //var Formatter=reader.GetFormatter(type);
             //Formatter.Deserialize(ref reader,ref value);
         }

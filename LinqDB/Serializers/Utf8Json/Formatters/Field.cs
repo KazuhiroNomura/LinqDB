@@ -22,7 +22,7 @@ public class Field:IJsonFormatter<T> {
         writer.WriteInt32(Array.IndexOf(C.Instance.TypeMembers.Get(trype),value));
         writer.WriteEndArray();
     }
-    T IJsonFormatter<T>.Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         //var ReflectedType= this.Type.Deserialize(ref reader,Resolver);

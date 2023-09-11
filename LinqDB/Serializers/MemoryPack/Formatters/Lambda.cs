@@ -22,8 +22,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
-        //writer.WriteType(value.Type);
-        Type.Instance.Serialize(ref writer,value.Type);
+        writer.WriteType(value.Type);
         Serialize宣言Parameters(ref writer,value.Parameters);
         Expression.Instance.Serialize(ref writer,value.Body);
         writer.WriteBoolean(value.TailCall);

@@ -190,7 +190,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         var x_GetType = x.GetType();
         var y_GetType = y.GetType();
         if(x_GetType.IsAnonymous()) {
-            if(y_GetType.IsAnonymous()) {
+            if(x_GetType==y_GetType) {
                 var x_Properties = x_GetType.GetProperties();
                 var x_Properties_Length = x_Properties.Length;
                 var y_Properties = y_GetType.GetProperties();
@@ -202,29 +202,64 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     if(!this.Equals(x0,y0)) return false;
                 }
                 return true;
-            } else {
-                var x_Properties = x_GetType.GetProperties();
-                foreach(var x_Property in x_Properties) {
-                    object y0;
-                    var y_Field = x_GetType.GetField(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
-                    if(y_Field is not null) {
-                        y0=y_Field.GetValue(y)!;
-                    } else {
-                        var y_Property = x_GetType.GetProperty(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
-                        if(y_Property is not null) {
-                            y0=y_Property.GetValue(y)!;
-                        } else {
-                            return false;
-                        }
-                    }
-                    var x0 = x_Property.GetValue(x);
+            } else{
+                return false;
+            }
+        } else if(x_GetType.IsDisplay()){
+            if(x_GetType==y_GetType) {
+                var x_Fields = x_GetType.GetFields();
+                var x_Fields_Length = x_Fields.Length;
+                var y_Fields = y_GetType.GetFields();
+                var y_Fields_Length = y_Fields.Length;
+                if(x_Fields_Length!=y_Fields_Length) return false;
+                for(var Index = 0;Index<x_Fields_Length;Index++) {
+                    var x0 = x_Fields[Index].GetValue(x)!;
+                    var y0 = y_Fields[Index].GetValue(y)!;
                     if(!this.Equals(x0,y0)) return false;
                 }
                 return true;
+            } else{
+                return false;
             }
-        } else {
+        }else{
             return x.Equals(y);
         }
+        //if(x_GetType.IsAnonymous()) {
+        //    if(y_GetType.IsAnonymous()) {
+        //        var x_Properties = x_GetType.GetProperties();
+        //        var x_Properties_Length = x_Properties.Length;
+        //        var y_Properties = y_GetType.GetProperties();
+        //        var y_Properties_Length = y_Properties.Length;
+        //        if(x_Properties_Length!=y_Properties_Length) return false;
+        //        for(var Index = 0;Index<x_Properties_Length;Index++) {
+        //            var x0 = x_Properties[Index].GetMethod!.Invoke(x,Array.Empty<object>())!;
+        //            var y0 = y_Properties[Index].GetMethod!.Invoke(y,Array.Empty<object>())!;
+        //            if(!this.Equals(x0,y0)) return false;
+        //        }
+        //        return true;
+        //    } else {
+        //        var x_Properties = x_GetType.GetProperties();
+        //        foreach(var x_Property in x_Properties) {
+        //            object y0;
+        //            var y_Field = x_GetType.GetField(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
+        //            if(y_Field is not null) {
+        //                y0=y_Field.GetValue(y)!;
+        //            } else {
+        //                var y_Property = x_GetType.GetProperty(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
+        //                if(y_Property is not null) {
+        //                    y0=y_Property.GetValue(y)!;
+        //                } else {
+        //                    return false;
+        //                }
+        //            }
+        //            var x0 = x_Property.GetValue(x);
+        //            if(!this.Equals(x0,y0)) return false;
+        //        }
+        //        return true;
+        //    }
+        //} else {
+        //    return x.Equals(y);
+        //}
     }
     /// <summary>
     /// キーのハッシュコードを返す

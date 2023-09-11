@@ -19,38 +19,40 @@ internal static class Common{
     //public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
     //public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
     public static void WriteType(this ref Writer writer,System.Type value){
-        if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
-            writer.WriteInt32(index);
-        } else{
-            writer.WriteBeginArray();
-            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
-            index=Dictionary_Type_int.Count;
-            writer.WriteInt32(index);
-            Dictionary_Type_int.Add(value,index);
-            Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
-            writer.WriteValueSeparator();
-            writer.WriteString(value.AssemblyQualifiedName);
-            C.Instance.Types.Add(value);
-            writer.WriteEndArray();
-        }
+        writer.WriteString(value.AssemblyQualifiedName);
+        //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+        //    writer.WriteInt32(index);
+        //} else{
+        //    writer.WriteBeginArray();
+        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    index=Dictionary_Type_int.Count;
+        //    writer.WriteInt32(index);
+        //    Dictionary_Type_int.Add(value,index);
+        //    Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
+        //    writer.WriteValueSeparator();
+        //    writer.WriteString(value.AssemblyQualifiedName);
+        //    C.Instance.Types.Add(value);
+        //    writer.WriteEndArray();
+        //}
     }
     public static System.Type ReadType(this ref Reader reader){
-        var Types=C.Instance.Types;
-        if(!reader.ReadIsBeginArray()){
-            var index=reader.ReadInt32();
-            return Types[index];
-        } else{
-            var index=reader.ReadInt32();
-            var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
-            reader.ReadIsValueSeparatorWithVerify();
-            Debug.Assert(index==Types.Count);
-            var AssemblyQualifiedName=reader.ReadString();
-            reader.ReadIsEndArrayWithVerify();
-            var value=System.Type.GetType(AssemblyQualifiedName);
-            Types.Add(value);
-            Dictionary_Type_int.Add(value,index);
-            return value;
-        }
+        return Type.GetType(reader.ReadString())!;
+        //var Types=C.Instance.Types;
+        //if(!reader.ReadIsBeginArray()){
+        //    var index=reader.ReadInt32();
+        //    return Types[index];
+        //} else{
+        //    var index=reader.ReadInt32();
+        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    reader.ReadIsValueSeparatorWithVerify();
+        //    Debug.Assert(index==Types.Count);
+        //    var AssemblyQualifiedName=reader.ReadString();
+        //    reader.ReadIsEndArrayWithVerify();
+        //    var value=System.Type.GetType(AssemblyQualifiedName);
+        //    Types.Add(value);
+        //    Dictionary_Type_int.Add(value,index);
+        //    return value;
+        //}
         //var index=reader.ReadInt32();
         //var Types=C.Instance.Types;
         //if(index<Types.Count){

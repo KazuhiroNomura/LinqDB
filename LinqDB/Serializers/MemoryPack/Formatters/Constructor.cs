@@ -10,7 +10,7 @@ using T=ConstructorInfo;
 public class Constructor:MemoryPackFormatter<T> {
     public static readonly Constructor Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeConstructorInfo(ref Reader reader){
+    internal T Deserialize(ref Reader reader){
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;

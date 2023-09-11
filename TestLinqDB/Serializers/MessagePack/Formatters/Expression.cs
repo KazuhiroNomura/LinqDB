@@ -24,8 +24,10 @@ using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using LinqDB.Helpers;
 using Expressions=System.Linq.Expressions;
+using Binder = Microsoft.CSharp.RuntimeBinder;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using static LinqDB.Optimizers.Optimizer;
@@ -64,7 +66,33 @@ public class Expression:共通 {
     //        )
     //    );
     //}
-    private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"p");
+    private static readonly ParameterExpression int8    = Expressions.Expression.Parameter(typeof(sbyte),"int8");
+    private static readonly ParameterExpression int16   = Expressions.Expression.Parameter(typeof(short),"int16");
+    private static readonly ParameterExpression int32   = Expressions.Expression.Parameter(typeof(int),"int32");
+    private static readonly ParameterExpression int64   = Expressions.Expression.Parameter(typeof(long),"int64");
+    private static readonly ParameterExpression uint8   = Expressions.Expression.Parameter(typeof(byte),"uint8");
+    private static readonly ParameterExpression uint16  = Expressions.Expression.Parameter(typeof(ushort),"uint16");
+    private static readonly ParameterExpression uint32  = Expressions.Expression.Parameter(typeof(uint),"uint32");
+    private static readonly ParameterExpression uint64  = Expressions.Expression.Parameter(typeof(ulong),"uint64");
+    private static readonly ParameterExpression @float  = Expressions.Expression.Parameter(typeof(float),"float");
+    private static readonly ParameterExpression @double = Expressions.Expression.Parameter(typeof(double),"double");
+    private static readonly ParameterExpression @decimal= Expressions.Expression.Parameter(typeof(decimal),"decimal");
+    private static readonly ParameterExpression @string = Expressions.Expression.Parameter(typeof(string),"string");
+    //private static readonly ParameterExpression[] Parameters={int8,int16,int32,int64,uint8,uint16,uint32,uint64,@float,@double,@decimal,@string};
+    //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
+    //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
+    //private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"decimal");
+    [Fact]public void Binary(){
+        var Parameters=new[]{int16,int32,int64,uint16,uint32,uint64,@float,@double,@decimal};
+        foreach(var p in Parameters){
+            this.共通Expression(
+                Expressions.Expression.Block(
+                    new[]{p},
+                    Expressions.Expression.Add(p,p)
+                )
+            );
+        }
+    }
     [Fact]public void Block0(){
         this.共通Expression(
             Expressions.Expression.Block(
@@ -164,12 +192,25 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]
-    public void Binary(){
+    [Fact]public void Condition(){
         this.共通Expression(
-            Expressions.Expression.Add(
-                Expressions.Expression.Constant(1),
-                Expressions.Expression.Constant(2)
+            Expressions.Expression.Condition(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m),
+                Expressions.Expression.Constant(2m)
+            )
+        );
+        this.共通Expression(
+            Expressions.Expression.IfThenElse(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m),
+                Expressions.Expression.Constant(2m)
+            )
+        );
+        this.共通Expression(
+            Expressions.Expression.IfThen(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m)
             )
         );
     }
@@ -179,6 +220,205 @@ public class Expression:共通 {
     [Fact]public void Constant1(){
         this.共通Expression(Expressions.Expression.Constant(1111m));
         this.共通Expression(Expressions.Expression.Constant(1111m,typeof(object)));
+    }
+    [Fact]public void Constructor(){
+        this.共通Expression(
+            Expressions.Expression.New(
+                typeof(string).GetConstructor(new System.Type[]{typeof(char),typeof(int)})!,
+                Expressions.Expression.Constant('a'),
+                Expressions.Expression.Constant(2)
+            )
+        );
+    }
+    [Fact]public void Default(){
+        this.共通Expression(Expressions.Expression.Default(typeof(int)));
+        this.共通Expression(Expressions.Expression.Default(typeof(decimal)));
+    }
+    //[Fact]public void Dynamic(){
+    //    var CallSiteBinder=new CallSiteBinder();
+    //    this.共通Expression(Expressions.Expression.Dynamic(new CallSiteBinder(); typeof(int)));
+    //    this.共通Expression(Expressions.Expression.Default(typeof(decimal)));
+    //}
+    public struct TestDynamic<T>
+    {
+        public readonly T メンバー1;
+        public readonly T メンバー2;
+
+        public TestDynamic(T メンバー)
+        {
+            this.メンバー1 = メンバー;
+            this.メンバー2 = メンバー;
+        }
+    }
+    [Fact]public void Dynamic()
+    {
+        var CSharpArgumentInfo1 = Binder.CSharpArgumentInfo.Create(Binder.CSharpArgumentInfoFlags.None, null);
+        var CSharpArgumentInfoArray1 = new[] {
+            CSharpArgumentInfo1
+        };
+        var CSharpArgumentInfoArray2 = new[] {
+            CSharpArgumentInfo1,
+            CSharpArgumentInfo1
+        };
+        var CSharpArgumentInfoArray3 = new[] {
+            CSharpArgumentInfo1,
+            CSharpArgumentInfo1,
+            CSharpArgumentInfo1
+        };
+        //if(!this.SequenceEqual(a.Arguments,b.Arguments)) return false;
+        {
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.UnaryOperation(
+                        Binder.CSharpBinderFlags.None,
+                        Expressions.ExpressionType.Increment,
+                        typeof(Expression),
+                        CSharpArgumentInfoArray1
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(1,typeof(object))
+                )
+            );
+        }
+        //if(a_ConvertBinder!=null) {
+        //    if(a_ConvertBinder.ReturnType!=b_ConvertBinder.ReturnType)return false;
+        {
+            var Constant_1L = Expressions.Expression.Constant(1L);
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.Convert(
+                        Binder.CSharpBinderFlags.ConvertExplicit,
+                        typeof(double),
+                        typeof(Expression)
+                    ),
+                    typeof(object),
+                    Constant_1L
+                )
+            );
+        }
+        //    return a_ConvertBinder.Explicit==b_ConvertBinder.Explicit;
+        {
+            var Constant_1L = Expressions.Expression.Constant(1L);
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.Convert(
+                        Binder.CSharpBinderFlags.ConvertExplicit,
+                        typeof(double),
+                        typeof(Expression)
+                    ),
+                    typeof(object),
+                    Constant_1L
+                )
+            );
+        }
+        //if(a_GetMemberBinder!=null) {
+        {
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.GetMember(
+                        Binder.CSharpBinderFlags.None,
+                        nameof(TestDynamic<int>.メンバー1),
+                        typeof(Expression),
+                        CSharpArgumentInfoArray1
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(new TestDynamic<int>(1))
+                )
+            );
+        }
+        //    return a_GetMemberBinder.Name.Equals(b_GetMemberBinder.Name,StringComparison.Ordinal);
+        {
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.GetMember(
+                        Binder.CSharpBinderFlags.ResultIndexed,
+                        nameof(TestDynamic<int>.メンバー1),
+                        typeof(Expression),
+                        CSharpArgumentInfoArray1
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(new TestDynamic<int>(1))
+                )
+            );
+        }
+        //}
+        //if(a_SetMemberBinder!=null) {
+        //    return a_SetMemberBinder.Name.Equals(b_SetMemberBinder.Name,StringComparison.Ordinal);
+        {
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.SetMember(
+                        Binder.CSharpBinderFlags.ResultIndexed,
+                        nameof(TestDynamic<int>.メンバー1),
+                        typeof(Expression),
+                        CSharpArgumentInfoArray2
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(new TestDynamic<int>(1)),
+                    Expressions.Expression.Constant(2)
+                )
+            );
+        }
+        //}
+        //if(a_GetIndexBinder!=null) {
+        {
+            const int expected = 2;
+            var Array = new[] {
+                1,expected,3
+            };
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.GetIndex(
+                        Binder.CSharpBinderFlags.None,
+                        typeof(Expression),
+                        CSharpArgumentInfoArray2
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(Array),
+                    Expressions.Expression.Constant(1)
+                )
+            );
+        }
+        //}
+        //if(a_SetIndexBinder!=null) {
+        //    return a_SetIndexBinder.CallInfo.Equals(b_SetIndexBinder.CallInfo);
+        {
+            var Array = new[] {
+                1,2,3
+            };
+            this.共通Expression(
+                Expressions.Expression.Dynamic(
+                    Binder.Binder.SetIndex(
+                        Binder.CSharpBinderFlags.None,
+                        typeof(Expression),
+                        CSharpArgumentInfoArray3
+                    ),
+                    typeof(object),
+                    Expressions.Expression.Constant(Array),
+                    Expressions.Expression.Constant(1),
+                    Expressions.Expression.Constant(2)
+                )
+            );
+        }
+        //}
+        //return true;
+        {
+            var オペランド = Expressions.Expression.Dynamic(
+                Binder.Binder.BinaryOperation(
+                    Binder.CSharpBinderFlags.None,
+                    Expressions.ExpressionType.Add,
+                    typeof(Expression),
+                    new[] {
+                        Binder.CSharpArgumentInfo.Create(Binder.CSharpArgumentInfoFlags.None,null),
+                        Binder.CSharpArgumentInfo.Create(Binder.CSharpArgumentInfoFlags.None,null)
+                    }
+                ),
+                typeof(object),
+                Expressions.Expression.Constant(1),
+                Expressions.Expression.Constant(1)
+            );
+            this.共通Expression(オペランド);
+        }
     }
     static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
     [Fact]
@@ -350,11 +590,6 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]
-    public void Default(){
-        this.共通Expression(Expressions.Expression.Default(typeof(int)));
-        this.共通Expression(Expressions.Expression.Default(typeof(decimal)));
-    }
     class BindCollection
     {
         public int Int32フィールド1;
@@ -458,7 +693,7 @@ public class Expression:共通 {
     public void Negate(){
         this.共通Expression(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
     }
-    [Fact]public void ArrayIndex0(){
+    [Fact]public void Index0(){
         var List=Expressions.Expression.Parameter(typeof(List<int>));
         this.共通Expression((Expressions.Expression)
             Expressions.Expression.Block(
@@ -471,7 +706,7 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]public void ArrayIndex1(){
+    [Fact]public void Index1(){
         var Array1=Expressions.Expression.Parameter(typeof(int[]));
         this.共通Expression(
             Expressions.Expression.Lambda(
@@ -484,7 +719,7 @@ public class Expression:共通 {
         );
     }
     [Fact]
-    public void ArrayIndex2(){
+    public void Index2(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
         this.共通Expression(
             Expressions.Expression.Lambda(
@@ -498,13 +733,17 @@ public class Expression:共通 {
         );
     }
     [Fact]
-    public void Condition(){
-        this.共通Expression(Expressions.Expression.Add(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));
+    public void Index3(){
+        var Array2=Expressions.Expression.Parameter(typeof(int[,,]));
         this.共通Expression(
-            Expressions.Expression.Condition(
-                Expressions.Expression.Constant(true),
-                Expressions.Expression.Constant(1m),
-                Expressions.Expression.Constant(2m)
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
+                    Array2,
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0)
+                ),
+                Array2
             )
         );
     }
@@ -580,7 +819,6 @@ public class Expression:共通 {
     public void GreaterThan(){
         this.共通Expression(Expressions.Expression.GreaterThan(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));
     }
-    private static readonly ParameterExpression @string=Expressions.Expression.Parameter(typeof(string),"p");
 
     [Fact]
     public void Assign(){
@@ -595,8 +833,7 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]
-    public void New(){
+    [Fact]public void New(){
         this.共通Expression(
             Expressions.Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],

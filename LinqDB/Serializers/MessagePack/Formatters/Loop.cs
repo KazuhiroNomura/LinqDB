@@ -39,35 +39,17 @@ public class Loop:IMessagePackFormatter<T> {
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
-    //private static T PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver,int offset){
-    //    T value;
-    //    var count=reader.ReadArrayHeader();
-    //    if(count==offset){
-    //        var body=Expression.Instance.Deserialize(ref reader,Resolver);
-    //        value=Expressions.Expression.Loop(body);
-    //    } else{
-    //        var breakLabel=LabelTarget.Instance.Deserialize(ref reader,Resolver);
-    //        if(count==offset+1){
-    //            var body=Expression.Instance.Deserialize(ref reader,Resolver);
-    //            value=Expressions.Expression.Loop(body,breakLabel);
-    //        } else{
-    //            var continueLabel=LabelTarget.Instance.Deserialize(ref reader,Resolver);
-    //            var body=Expression.Instance.Deserialize(ref reader,Resolver);
-    //            value=Expressions.Expression.Loop(body,breakLabel,continueLabel);
-    //        }
-    //    }
-    //    return value;
-    //}
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver,int ArrayHeader){
         T value;
-        if(ArrayHeader==1) {//body
+        if(ArrayHeader==2) {//body
             var body = Expression.Instance.Deserialize(ref reader,Resolver);
             value=Expressions.Expression.Loop(body);
-        } else if(ArrayHeader==2){//break,body
+        } else if(ArrayHeader==3){//break,body
             var breakLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
             var body = Expression.Instance.Deserialize(ref reader,Resolver);
             value=Expressions.Expression.Loop(body,breakLabel);
         } else {//break,continue,body
+            Debug.Assert(ArrayHeader==4);
             var breakLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
             var continueLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
             var body = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -77,6 +59,6 @@ public class Loop:IMessagePackFormatter<T> {
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ArrayHeader=reader.ReadArrayHeader();
-        return InternalDeserialize(ref reader,Resolver,ArrayHeader);
+        return InternalDeserialize(ref reader,Resolver,ArrayHeader+1);
     }
 }

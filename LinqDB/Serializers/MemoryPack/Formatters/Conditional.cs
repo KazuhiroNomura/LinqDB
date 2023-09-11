@@ -19,21 +19,19 @@ public class Conditional:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
-            return;
+            //return;
         }
-        Expression.Instance.Serialize(ref writer,value.Test);
+        Expression.Instance.Serialize(ref writer,value!.Test);
         Expression.Instance.Serialize(ref writer,value.IfTrue);
         Expression.Instance.Serialize(ref writer,value.IfFalse);
+        writer.WriteType(value.Type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return null!;
         var test= Expression.Instance.Deserialize(ref reader);
         var ifTrue= Expression.Instance.Deserialize(ref reader);
         var ifFalse= Expression.Instance.Deserialize(ref reader);
-        value=System.Linq.Expressions.Expression.Condition(
-            test,
-            ifTrue,
-            ifFalse
-        );
+        var type=reader.ReadType();
+        value=Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
 }

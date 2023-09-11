@@ -53,7 +53,7 @@ public class Type:IMessagePackFormatter<T> {
             var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
             Debug.Assert(index==Types.Count);
             var AssemblyQualifiedName=reader.ReadString();
-            var value=System.Type.GetType(AssemblyQualifiedName);
+            var value= T.GetType(AssemblyQualifiedName);
             Types.Add(value);
             Debug.Assert(value!=null,nameof(value)+" != null");
             if(value.IsGenericType){

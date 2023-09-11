@@ -61,9 +61,9 @@ public class Abstract<T>:Abstract,IJsonFormatter<T>{
             //Formatter.Serialize(ref writer,(LambdaExpression)(object)value,formatterResolver);
         //}else if(typeof(T).IsDisplay()){
         //    return Return(new DisplayClassJsonFormatter<T>());
-        }else  if(typeof(T).IsAnonymous()){
-            var Formatter=new Anonymous<T>();
-            Formatter.Serialize(ref writer, value, Resolver);
+        //}else  if(typeof(T).IsAnonymous()){
+        //    var Formatter=new Anonymous<T>();
+        //    Formatter.Serialize(ref writer, value, Resolver);
         }else{
             if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null){
               //  formatterResolver.

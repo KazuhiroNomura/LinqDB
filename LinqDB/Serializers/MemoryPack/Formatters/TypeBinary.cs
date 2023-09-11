@@ -10,6 +10,7 @@ public class TypeBinary:MemoryPackFormatter<T> {
     public static readonly TypeBinary Instance=new();
     internal static void InternalSerializeExpression<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.Instance.Serialize(ref writer,value.Expression);
+        writer.WriteType(value.TypeOperand);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
         var expression=Expression.Instance.Deserialize(ref reader);
@@ -33,7 +34,6 @@ public class TypeBinary:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(value is null){
             //writer.WriteNil();
-            return;
         }
         writer.WriteVarInt((byte)value!.NodeType);
         Expression.Instance.Serialize(ref writer,value.Expression);

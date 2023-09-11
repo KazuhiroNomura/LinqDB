@@ -10,8 +10,18 @@ using T=Expressions.UnaryExpression;
 using static Common;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
-    internal static void InternalSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+    internal static void PrivateSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteNodeType(value!.NodeType);
         Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        writer.WriteType(value.TypeOperand);
+    }
+    internal static void InternalSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+        PrivateSerializeExpression(ref writer,value,Resolver);
+    }
+    private const int ArrayHeader=3;
+    public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
+        PrivateSerializeExpression(ref writer,value,Resolver);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var expression=Expression.Instance.Deserialize(ref reader,Resolver);
@@ -25,13 +35,6 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     internal static Expressions.TypeBinaryExpression InternalDeserializeTypeIs(ref Reader reader,MessagePackSerializerOptions Resolver){
         var (expression,type)=PrivateDeserialize(ref reader,Resolver);
         return Expressions.Expression.TypeIs(expression,type);
-    }
-    private const int ArrayHeader=3;
-    public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
-        writer.WriteNodeType(value!.NodeType);
-        InternalSerializeExpression(ref writer,value,Resolver);
-        writer.WriteType(value.TypeOperand);
     }
     public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();

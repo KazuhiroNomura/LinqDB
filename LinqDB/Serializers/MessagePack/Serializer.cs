@@ -11,48 +11,21 @@ using System.Reflection;
 
 namespace LinqDB.Serializers.MessagePack;
 using Formatters;
-public class Serializer:Serializers.Serializer{
+//using MessagePack;
+////using System.Reflection.Emit;
+//using System.IO;
+//using Expressions=System.Linq.Expressions;
+//using LinqDB.Helpers;
+//using Emit=System.Reflection.Emit;
+//using MessagePack.Formatters;
+//namespace LinqDB.Serializers.MessagePack;
+////using Formatters;
+//using LinqDB.Serializers.MemoryPack.Formatters;
+
+public partial class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
-    private sealed class FormatterResolver:IFormatterResolver{
-        private readonly Expression ExpressionFormatter=new();
-        public readonly Dictionary<System.Type,IMessagePackFormatter> DictionaryTypeFormatter=new();
-        public IMessagePackFormatter<T> GetFormatter<T>(){
-            if(typeof(T).IsDefined(typeof(MessagePackSerializer),true)) return null!;
-            //if(Attribute.IsDefined(typeof(T),typeof(MessagePackSerializer))) return null!;
-            if(this.DictionaryTypeFormatter.TryGetValue(typeof(T),out var IMessagePackFormatter))
-                return(IMessagePackFormatter<T>)IMessagePackFormatter;
-            if(typeof(Expressions.Expression).IsAssignableFrom(typeof(T))) return Return(this.ExpressionFormatter);
-            if(
-                typeof(T)==typeof(System.Type)||
-                typeof(T)==typeof(MemberInfo)||
-                typeof(T)==typeof(MethodInfo)||
-                typeof(T)==typeof(FieldInfo)||
-                typeof(T)==typeof(PropertyInfo)||
-                typeof(T)==typeof(EventInfo)||
-                typeof(Expressions.MemberBinding).IsAssignableFrom(typeof(T))||
-                typeof(T)==typeof(Expressions.CatchBlock)||
-                typeof(T)==typeof(Expressions.SwitchCase)||
-                typeof(T)==typeof(Expressions.ElementInit))
-                return null!;//Return(this.ExpressionFormatter);
-            if(typeof(T).IsDisplay()) return Return(new DisplayClassMessagePackFormatter<T>());
-            if(typeof(T).IsAnonymous()) return Return(new Anonymous<T>());
-            return Return(new AbstractMessagePackFormatter<T>());
-            //if(!typeof(T).IsValueType&&!typeof(T).IsSealed)return Return(new AbstractMessagePackFormatter<T>());
-            //return null!;
-            IMessagePackFormatter<T> Return(object Formatter){
-                var result=(IMessagePackFormatter<T>)Formatter;
-                this.DictionaryTypeFormatter.Add(typeof(T),result);
-                return result;
-            }
-        }
-        public void Clear(){
-            this.DictionaryTypeFormatter.Clear();
-        }
-    }
-    private readonly FormatterResolver Resolver=new();
-    public IMessagePackFormatter<T>? GetFormatter<T>()=>this.Resolver.DictionaryTypeFormatter.TryGetValue(typeof(T),out var value)?(IMessagePackFormatter<T>?)value:null;
-    public IMessagePackFormatter? GetFormatter(System.Type Type)=>this.Resolver.DictionaryTypeFormatter.TryGetValue(Type,out var value)?(IMessagePackFormatter?)value:null;
-    public readonly MessagePackSerializerOptions Options;
+    //private readonly FormatterResolver Resolver=new();
+    public MessagePackSerializerOptions Options;
     private Serializer(){
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
@@ -60,15 +33,10 @@ public class Serializer:Serializers.Serializer{
                     Object.Instance,
                     Binary.Instance,
                     Block.Instance,
-                    CatchBlock.Instance,
                     Conditional.Instance,
                     Constant.Instance,
-                    Constructor.Instance,
                     Default.Instance,
-                    ElementInit.Instance,
-                    Event.Instance,
                     Expression.Instance,
-                    Field.Instance,
                     Goto.Instance,
                     Index.Instance,
                     Invocation.Instance,
@@ -77,23 +45,27 @@ public class Serializer:Serializers.Serializer{
                     Lambda.Instance,
                     ListInit.Instance,
                     Loop.Instance,
-                    Member.Instance,
                     MemberAccess.Instance,
-                    MemberBinding.Instance,
-                    MemberInit.Instance,
-                    Method.Instance,
                     MethodCall.Instance,
                     New.Instance,
                     NewArray.Instance,
-                    //Object.Instance,
                     Parameter.Instance,
-                    Property.Instance,
                     Switch.Instance,
-                    SwitchCase.Instance,
                     Try.Instance,
-                    Type.Instance,
                     TypeBinary.Instance,
                     Unary.Instance,
+                    SwitchCase.Instance,
+                    CatchBlock.Instance,
+                    ElementInit.Instance,
+                    MemberBinding.Instance,
+                    MemberInit.Instance,
+                    Type.Instance,
+                    Member.Instance,
+                    Constructor.Instance,
+                    Method.Instance,
+                    Property.Instance,
+                    Event.Instance,
+                    Field.Instance,
                 },
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
@@ -102,8 +74,8 @@ public class Serializer:Serializers.Serializer{
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
                     //MessagePack.Resolvers.DynamicEnumResolver.Instance,
                     //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
-                    global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate
-                        .Instance,//MessagePackObjectAttribute
+                    global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
+                    FormatterResolver.Instance
                     //this.Resolver,
                     //MessagePack.Resolvers.StandardResolver.Instance,
                     //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
@@ -117,6 +89,42 @@ public class Serializer:Serializers.Serializer{
         //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
         var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
+    //private static readonly object[] objects1 = new object[1];
+    internal static void RegisterAnonymousDisplay(System.Type Type,MessagePackSerializerOptions Options) {
+        if(Type.IsDisplay()){
+            //あらかじめ設定してあるResolverに設定する
+            var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
+            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+            Options.WithResolver(
+                global::MessagePack.Resolvers.CompositeResolver.Create(
+                    new IMessagePackFormatter[]{(IMessagePackFormatter)Instance.GetValue(null)!},
+                    new IFormatterResolver[]{Serializer.Instance.Options.Resolver}
+                )
+            );
+            //Serializer.Instance.Options=MessagePackSerializerOptions.Standard.WithResolver(
+            //    global::MessagePack.Resolvers.CompositeResolver.Create(
+            //        new IMessagePackFormatter[]{(IMessagePackFormatter)Instance.GetValue(null)!},
+            //        new IFormatterResolver[]{Serializer.Instance.Options.Resolver}
+            //    )
+            //);
+
+            //this.Options=MessagePackSerializerOptions.Standard.WithResolver()
+            //var Register = Serializer.Register.MakeGenericMethod(Type);
+            //objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+            //Register.Invoke(null,objects1);
+            //Register.Invoke(null,Array.Empty<object>());
+        //}else if(Type.IsGenericType) {
+        //    if(Type.IsAnonymous()) {
+        //        var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
+        //        var Register = Serializer.Register.MakeGenericMethod(Type);
+        //        var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+        //        objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+        //        Register.Invoke(null,objects1);
+        //        //Register.Invoke(null,Array.Empty<object>());
+        //    }
+        //    foreach(var GenericArgument in Type.GetGenericArguments()) RegisterAnonymousDisplay(GenericArgument);
+        }
+    }
     //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
     //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
@@ -129,7 +137,7 @@ public class Serializer:Serializers.Serializer{
     //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
     //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
     private void Clear(){
-        base.ProtectedClear();
+        this.ProtectedClear();
         //this.ListParameter.Clear();
         //this.Dictionary_LabelTarget_int.Clear();
         //this.LabelTargets.Clear();
@@ -164,16 +172,23 @@ public class Serializer:Serializers.Serializer{
     private static readonly System.Type[] SerializeTypes={
         typeof(object),typeof(MessagePackWriter).MakeByRefType(),typeof(object),typeof(MessagePackSerializerOptions)
     };
+    /// <summary>
+    /// Invokeではref引数を呼べないため。
+    /// </summary>
+    /// <param name="Formatter"></param>
+    /// <param name="writer"></param>
+    /// <param name="value"></param>
+    /// <param name="options"></param>
     public static void DynamicSerialize(object Formatter,ref MessagePackWriter writer,object value,
         MessagePackSerializerOptions options){
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
         var D=new Emit.DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
-        I.Ldarg_0();
-        I.Ldarg_1();
-        I.Ldarg_2();
+        I.Ldarg_0();//formatter
+        I.Ldarg_1();//writer
+        I.Ldarg_2();//value
         I.Unbox_Any(Formatter_Serialize.GetParameters()[1].ParameterType);
-        I.Ldarg_3();
+        I.Ldarg_3();//options
         I.Callvirt(Formatter_Serialize);
         I.Ret();
         ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,options);

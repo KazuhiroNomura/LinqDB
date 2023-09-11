@@ -27,7 +27,7 @@ public class Type:IJsonFormatter<System.Type>{
     //        MemoryPackCustomSerializer.Instance.Types.Add(value);
     //    }
     //}
-    private readonly System.Type[]Types1=new System.Type[1];
+    //private readonly System.Type[]Types1=new System.Type[1];
     public void Serialize(ref Writer writer,System.Type? value,IJsonFormatterResolver Resolver){
         //if(value is null){
         //    writer.WriteNull();
@@ -35,15 +35,15 @@ public class Type:IJsonFormatter<System.Type>{
         //}
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteType(value);
-        if(value.IsAnonymous()){
-            var Types1=this.Types1;
-            Types1[0]=value;
-            var Formatter=(IJsonFormatter)Activator.CreateInstance(typeof(Anonymous<>).MakeGenericType(Types1))!;
-            C.Instance.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-                new IJsonFormatter[]{Formatter},
-                new []{C.Instance.IResolver}
-            );
-        }
+        //if(value.IsAnonymous()){
+        //    var Types1=this.Types1;
+        //    Types1[0]=value;
+        //    var Formatter=(IJsonFormatter)Activator.CreateInstance(typeof(Anonymous<>).MakeGenericType(Types1))!;
+        //    C.Instance.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
+        //        new IJsonFormatter[]{Formatter},
+        //        new []{C.Instance.IResolver}
+        //    );
+        //}
     }
     public System.Type Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         return reader.ReadType();

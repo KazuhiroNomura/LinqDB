@@ -26,7 +26,7 @@ public class New:MemoryPackFormatter<T> {
         SerializeReadOnlyCollection(ref writer,value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var constructor= Constructor.Instance.DeserializeConstructorInfo(ref reader);
+        var constructor= Constructor.Instance.Deserialize(ref reader);
         var arguments=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=System.Linq.Expressions.Expression.New(
             constructor,

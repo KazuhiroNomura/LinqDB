@@ -7,53 +7,47 @@ using static LinqDB.Reflection.Common;
 using System.IO;
 using LinqDB.Helpers;
 using LinqDB.Serializers.MemoryPack.Formatters;
-/*
-using Index=LinqDB.Serializers.MemoryPack.Formatters.Index;
-using Object=LinqDB.Serializers.MemoryPack.Formatters.Object;
-using Type=LinqDB.Serializers.MemoryPack.Formatters.Type;
-*/
-// ReSharper disable InconsistentNaming
 namespace LinqDB.Serializers.MemoryPack;
 public class Serializer:Serializers.Serializer{
     public static readonly Serializer Instance=new();
     public static readonly MethodInfo Register=M(()=>MemoryPackFormatterProvider.Register(new Anonymous<int>()));
     private Serializer(){
+        MemoryPackFormatterProvider.Register(Object.Instance);
+        MemoryPackFormatterProvider.Register(Expression.Instance);
         MemoryPackFormatterProvider.Register(Binary.Instance);
         MemoryPackFormatterProvider.Register(Block.Instance);
-        MemoryPackFormatterProvider.Register(CatchBlock.Instance);
         MemoryPackFormatterProvider.Register(Conditional.Instance);
         MemoryPackFormatterProvider.Register(Constant.Instance);
-        MemoryPackFormatterProvider.Register(Constructor.Instance);
         MemoryPackFormatterProvider.Register(Default.Instance);
-        MemoryPackFormatterProvider.Register(ElementInit.Instance);
-        MemoryPackFormatterProvider.Register(Event.Instance);
-        MemoryPackFormatterProvider.Register(Expression.Instance);
-        MemoryPackFormatterProvider.Register(Field.Instance);
         MemoryPackFormatterProvider.Register(Goto.Instance);
         MemoryPackFormatterProvider.Register(Index.Instance);
         MemoryPackFormatterProvider.Register(Invocation.Instance);
         MemoryPackFormatterProvider.Register(Label.Instance);
-        MemoryPackFormatterProvider.Register(LabelTarget.Instance);
         MemoryPackFormatterProvider.Register(Lambda.Instance);
         MemoryPackFormatterProvider.Register(ListInit.Instance);
         MemoryPackFormatterProvider.Register(Loop.Instance);
-        MemoryPackFormatterProvider.Register(Member.Instance);
         MemoryPackFormatterProvider.Register(MemberAccess.Instance);
-        MemoryPackFormatterProvider.Register(MemberBinding.Instance);
-        MemoryPackFormatterProvider.Register(MemberInit.Instance);
-        MemoryPackFormatterProvider.Register(Method.Instance);
         MemoryPackFormatterProvider.Register(MethodCall.Instance);
         MemoryPackFormatterProvider.Register(New.Instance);
         MemoryPackFormatterProvider.Register(NewArray.Instance);
-        MemoryPackFormatterProvider.Register(Object.Instance);
         MemoryPackFormatterProvider.Register(Parameter.Instance);
-        MemoryPackFormatterProvider.Register(Property.Instance);
         MemoryPackFormatterProvider.Register(Switch.Instance);
-        MemoryPackFormatterProvider.Register(SwitchCase.Instance);
         MemoryPackFormatterProvider.Register(Try.Instance);
-        MemoryPackFormatterProvider.Register(Type.Instance);
         MemoryPackFormatterProvider.Register(TypeBinary.Instance);
         MemoryPackFormatterProvider.Register(Unary.Instance);
+        MemoryPackFormatterProvider.Register(SwitchCase.Instance);
+        MemoryPackFormatterProvider.Register(CatchBlock.Instance);
+        MemoryPackFormatterProvider.Register(ElementInit.Instance);
+        MemoryPackFormatterProvider.Register(MemberBinding.Instance);
+        MemoryPackFormatterProvider.Register(MemberInit.Instance);
+        //MemoryPackFormatterProvider.Register(LabelTarget.Instance);
+        MemoryPackFormatterProvider.Register(Type.Instance);
+        MemoryPackFormatterProvider.Register(Member.Instance);
+        MemoryPackFormatterProvider.Register(Constructor.Instance);
+        MemoryPackFormatterProvider.Register(Method.Instance);
+        MemoryPackFormatterProvider.Register(Event.Instance);
+        MemoryPackFormatterProvider.Register(Property.Instance);
+        MemoryPackFormatterProvider.Register(Field.Instance);
     }
     //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
@@ -66,8 +60,30 @@ public class Serializer:Serializers.Serializer{
     //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
     //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
     //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
-     private void Clear(){
-         base.ProtectedClear();
+    private static readonly object[] objects1 = new object[1];
+    internal static void RegisterAnonymousDisplay(System.Type Type) {
+        if(Type.IsDisplay()){
+            if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
+            var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
+            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+            var Register = Serializer.Register.MakeGenericMethod(Type);
+            objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+            Register.Invoke(null,objects1);
+            //Register.Invoke(null,Array.Empty<object>());
+        }else if(Type.IsGenericType) {
+            if(Type.IsAnonymous()) {
+                var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
+                var Register = Serializer.Register.MakeGenericMethod(Type);
+                var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+                objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+                Register.Invoke(null,objects1);
+                //Register.Invoke(null,Array.Empty<object>());
+            }
+            foreach(var GenericArgument in Type.GetGenericArguments()) RegisterAnonymousDisplay(GenericArgument);
+        }
+    }
+    private void Clear(){
+         this.ProtectedClear();
         //this.ListParameter.Clear();
         //this.Dictionary_LabelTarget_int.Clear();
         //this.LabelTargets.Clear();
@@ -80,27 +96,14 @@ public class Serializer:Serializers.Serializer{
         //this.TypeProperties.Clear();
         //this.TypeEvents.Clear();
     }
-    private static readonly object[] objects1 = new object[1];
-    internal static void 変数Register(System.Type Type) {
-        if(Type.IsGenericType) {
-            if(Type.IsAnonymous()) {
-                var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
-                var Register = Serializer.Register.MakeGenericMethod(Type);
-                objects1[0]=System.Activator.CreateInstance(FormatterType)!;
-                Register.Invoke(null,objects1);
-                //Register.Invoke(null,Array.Empty<object>());
-            }
-            foreach(var GenericArgument in Type.GetGenericArguments()) 変数Register(GenericArgument);
-        }
-    }
     public byte[] Serialize<T>(T? value){
         this.Clear();
-        if(value is not null) 変数Register(value.GetType());
+        if(value is not null) RegisterAnonymousDisplay(value.GetType());
         return MemoryPackSerializer.Serialize(value);
     }
     public void Serialize<T>(Stream stream,T? value){
         this.Clear();
-        if(value is not null) 変数Register(value.GetType());
+        if(value is not null) RegisterAnonymousDisplay(value.GetType());
         var Task=MemoryPackSerializer.SerializeAsync(stream,value).AsTask();
         Task.Wait();
     }
