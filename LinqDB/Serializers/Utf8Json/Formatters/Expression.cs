@@ -95,7 +95,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.MemberInit         : MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
             case Expressions.ExpressionType.Block              : Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
             //case Expressions.ExpressionType.DebugInfo          :
-            //case Expressions.ExpressionType.Dynamic            :
+            case Expressions.ExpressionType.Dynamic            : Dynamic.Instance.Serialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
             case Expressions.ExpressionType.Default            : Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
             case Expressions.ExpressionType.Extension          :
             case Expressions.ExpressionType.Goto               : Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
@@ -113,10 +113,10 @@ public class Expression:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var TypeName=reader.ReadString();
+        var NodeTypeName=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();
         T value;
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(TypeName);
+        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=Binary.InternalDeserialize(ref reader,Resolver);
@@ -373,7 +373,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.MemberInit      :value=MemberInit.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Block           :value=Block.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.DebugInfo       :
-            case Expressions.ExpressionType.Dynamic         :
+            case Expressions.ExpressionType.Dynamic         :value=Dynamic.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Default         :value=Default.Instance.Deserialize(ref reader,Resolver);break;
             //case Expressions.ExpressionType.Extension       :break;
             case Expressions.ExpressionType.Goto            :value=Goto.Instance.Deserialize(ref reader,Resolver);break;
@@ -383,7 +383,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.Loop            :value=Loop.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Switch          :value=Switch.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Try             :value=Try.InternalDeserialize(ref reader,Resolver);break;
-            default                                         :throw new NotSupportedException(TypeName);
+            default                                         :throw new NotSupportedException(NodeTypeName);
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

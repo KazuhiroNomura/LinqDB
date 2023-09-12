@@ -3,7 +3,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 using T=Expressions.SwitchExpression;
 public class Switch:IJsonFormatter<T> {
     public static readonly Switch Instance=new();
@@ -14,7 +14,7 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Comparison,Resolver);
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Cases,Resolver);
+        writer.SerializeReadOnlyCollection(value.Cases,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.DefaultBody,Resolver);
     }
@@ -30,7 +30,7 @@ public class Switch:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var comparison=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var cases=DeserializeArray<Expressions.SwitchCase>(ref reader,Resolver);
+        var cases=reader.DeserializeArray<Expressions.SwitchCase>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var defaultBody=Expression.Instance.Deserialize(ref reader,Resolver);
         var value=Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);

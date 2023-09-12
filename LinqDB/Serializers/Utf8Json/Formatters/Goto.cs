@@ -3,7 +3,7 @@ using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 using T=Expressions.GotoExpression;
 public class Goto:IJsonFormatter<T> {
     public static readonly Goto Instance=new();

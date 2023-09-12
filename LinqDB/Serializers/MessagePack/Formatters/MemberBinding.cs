@@ -8,7 +8,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.MemberBinding;
-using static Common;
+using static Extension;
 public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private const int ArrayHeader=3;
@@ -21,10 +21,10 @@ public class MemberBinding:IMessagePackFormatter<T> {
                 Expression.Instance.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression,Resolver);
                 break;
             case Expressions.MemberBindingType.MemberBinding:
-                SerializeReadOnlyCollection(ref writer,((Expressions.MemberMemberBinding)value).Bindings,Resolver);
+                writer.SerializeReadOnlyCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
                 break;
             case Expressions.MemberBindingType.ListBinding:
-                SerializeReadOnlyCollection(ref writer,((Expressions.MemberListBinding)value).Initializers,Resolver);
+                writer.SerializeReadOnlyCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(value.BindingType.ToString());
@@ -37,8 +37,8 @@ public class MemberBinding:IMessagePackFormatter<T> {
         var member= Member.Instance.Deserialize(ref reader,Resolver);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Instance.Deserialize(ref reader,Resolver)),
-            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,DeserializeArray<T>(ref reader,Resolver)),
-            Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,DeserializeArray<Expressions.ElementInit>(ref reader,Resolver)),
+            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.DeserializeArray<T>(Resolver)),
+            Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.DeserializeArray<Expressions.ElementInit>(Resolver)),
             _=>throw new ArgumentOutOfRangeException(BindingType.ToString())
         };
         return MemberBinding;

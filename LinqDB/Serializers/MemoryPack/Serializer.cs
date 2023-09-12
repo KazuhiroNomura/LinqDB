@@ -19,6 +19,7 @@ public class Serializer:Serializers.Serializer{
         MemoryPackFormatterProvider.Register(Conditional.Instance);
         MemoryPackFormatterProvider.Register(Constant.Instance);
         MemoryPackFormatterProvider.Register(Default.Instance);
+        MemoryPackFormatterProvider.Register(Dynamic.Instance);
         MemoryPackFormatterProvider.Register(Goto.Instance);
         MemoryPackFormatterProvider.Register(Index.Instance);
         MemoryPackFormatterProvider.Register(Invocation.Instance);
@@ -48,6 +49,7 @@ public class Serializer:Serializers.Serializer{
         MemoryPackFormatterProvider.Register(Event.Instance);
         MemoryPackFormatterProvider.Register(Property.Instance);
         MemoryPackFormatterProvider.Register(Field.Instance);
+        MemoryPackFormatterProvider.Register(Delegate2.Instance);
     }
     //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
     //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();

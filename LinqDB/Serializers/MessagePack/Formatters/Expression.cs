@@ -91,7 +91,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.MemberInit         :MemberInit.InternalSerialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
             case Expressions.ExpressionType.Block              :Block.InternalSerialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
             //case Expressions.ExpressionType.DebugInfo          :
-            //case Expressions.ExpressionType.Dynamic            :
+            case Expressions.ExpressionType.Dynamic            :Dynamic.InternalSerialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
             case Expressions.ExpressionType.Default            :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
             //case Expressions.ExpressionType.Extension          :
             case Expressions.ExpressionType.Goto               :Goto.InternalSerialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
@@ -366,7 +366,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.MemberInit      :value=MemberInit.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Block           :value=Block.InternalDeserialize(ref reader,Resolver);break;
             //case Expressions.ExpressionType.DebugInfo       :
-            //case Expressions.ExpressionType.Dynamic         :
+            case Expressions.ExpressionType.Dynamic         :value=Dynamic.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Default         :value=Default.InternalDeserialize(ref reader,Resolver);break;
             //case Expressions.ExpressionType.Extension       :
             case Expressions.ExpressionType.Goto            :value=Goto.InternalDeserialize(ref reader,Resolver);break;

@@ -258,7 +258,19 @@ public static class CommonLibrary {
     internal static readonly string IEqualityComparer_FullName = typeof(IEqualityComparer<>).FullName!;
     private const string CS匿名型名="<>f__AnonymousType";
     private const string VB匿名型名="VB$AnonymousType";
-    private const string CSクロージャー="<>c__DisplayClass";
+    //private sealed class <>c{
+    //	public static readonly <>c <>9 = new <>c();
+    //	public static Func<int, int, int, bool> <>9__31_0;
+    //	public static Func<int, int, int, bool> <>9__31_1;
+    //	internal bool <DynamicInvoke>b__31_0(int a, int b, int c){
+    //		return a == b && a == c;
+    //	}
+    //	internal bool <DynamicInvoke>b__31_1(int a, int b, int c){
+    //		return a == b && a == c;
+    //	}
+    //}
+    //private const string CSクロージャー="<>c__DisplayClass";//staticの場合"<>c"だけになる
+    private const string CSクロージャー="<>c";
     private const string VBクロージャー="_Closure$__";
     /// <summary>
     /// Typeが匿名型であるか判定する。

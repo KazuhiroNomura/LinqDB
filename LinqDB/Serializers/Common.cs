@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using LinqDB.Databases.Schemas;
+using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 using Expressions=System.Linq.Expressions;
-internal static class Common {
+internal static class Extension {
     public static MemberInfo[] Get(this Dictionary<Type,MemberInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
             array=ReflectedType.GetMembers(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
@@ -48,46 +49,32 @@ internal static class Common {
     }
     public static MethodInfo[] Get(this Dictionary<Type,MethodInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetMethods(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
+            //NonPublicは<>cのinternalメソッドが匿名デリゲートの本体になることがあるため
+            array=ReflectedType.GetMethods(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }
         return array;
     }
 }
-public class Serializer{
-    internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    internal readonly List<Expressions.LabelTarget> LabelTargets=new();
-    internal readonly Dictionary<System.Type,int> Dictionary_Type_int=new();
-    internal readonly List<Type> Types=new();
-    internal readonly Dictionary<Type,MemberInfo[]> TypeMembers=new();
-    internal readonly Dictionary<Type,ConstructorInfo[]> TypeConstructors=new();
-    internal readonly Dictionary<Type,MethodInfo[]> TypeMethods=new();
-    internal readonly Dictionary<Type,FieldInfo[]> TypeFields=new();
-    internal readonly Dictionary<Type,PropertyInfo[]> TypeProperties=new();
-    internal readonly Dictionary<Type,EventInfo[]> TypeEvents=new();
-    internal int GetIndex(Expressions.LabelTarget value){
-        if(this.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
-        } else{
-            var Dictionary_LabelTarget_int=this.Dictionary_LabelTarget_int;
-            index=Dictionary_LabelTarget_int.Count;
-            this.LabelTargets.Add(value);
-            Dictionary_LabelTarget_int.Add(value,index);
-        }
-        return index;
-    }
-    protected void ProtectedClear(){
-        this.ListParameter.Clear();
-        this.Dictionary_LabelTarget_int.Clear();
-        this.LabelTargets.Clear();
-        this.Dictionary_Type_int.Clear();
-        this.Types.Clear();
-        this.TypeMembers.Clear();
-        this.TypeConstructors.Clear();
-        this.TypeMethods.Clear();
-        this.TypeFields.Clear();
-        this.TypeProperties.Clear();
-        this.TypeEvents.Clear();
-    }
+internal static class Common {
+    public static readonly CSharpArgumentInfo CSharpArgumentInfo1 = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
+    public static readonly CSharpArgumentInfo[]CSharpArgumentInfos1={CSharpArgumentInfo1};
+    public static readonly CSharpArgumentInfo[]CSharpArgumentInfos2={CSharpArgumentInfo1,CSharpArgumentInfo1};
+    public static readonly CSharpArgumentInfo[]CSharpArgumentInfos3={CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
+    public static readonly CSharpArgumentInfo[]CSharpArgumentInfos4={CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
+}
+internal enum BinderType:byte{
+    BinaryOperationBinder,
+    ConvertBinder,
+    CreateInstanceBinder,
+    DeleteIndexBinder,
+    DeleteMemberBinder,
+    GetIndexBinder,
+    GetMemberBinder,
+    InvokeBinder,
+    InvokeMemberBinder,
+    SetIndexBinder,
+    SetMemberBinder,
+    UnaryOperationBinder,
 }

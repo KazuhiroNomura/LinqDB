@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.MethodCallExpression;
-using static Common;
+using static Extension;
 public class MethodCall:IMessagePackFormatter<T> {
     public static readonly MethodCall Instance=new();
     private const int ArrayHeader0=2;
@@ -26,7 +26,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             Method.InternalSerializeNullable(ref writer,method,Resolver);
             Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
         }
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         //if(writer.TryWriteNil(value)) return;
@@ -39,19 +39,19 @@ public class MethodCall:IMessagePackFormatter<T> {
             Method.InternalSerializeNullable(ref writer,method,Resolver);
             Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
         }
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
             );
         } else{
             var instance= Expression.Instance.Deserialize(ref reader,Resolver);
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,
@@ -65,7 +65,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
             Debug.Assert(count==ArrayHeader0);
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
@@ -73,7 +73,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         } else{
             Debug.Assert(count==ArrayHeader1);
             var instance= Expression.Instance.Deserialize(ref reader,Resolver);
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,

@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.UnaryExpression;
-using static Common;
+using static Extension;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
     internal static void PrivateSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){

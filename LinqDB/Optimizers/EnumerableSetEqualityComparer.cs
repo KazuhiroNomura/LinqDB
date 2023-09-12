@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;
@@ -16,6 +18,12 @@ namespace LinqDB.Optimizers;
 /// </summary>
 /// </summary>
 public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
+    //public EnumerableSetEqualityComparer(){
+    //}
+    private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer;
+    public EnumerableSetEqualityComparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
+        this.ExpressionEqualityComparer=ExpressionEqualityComparer;
+    }
     private static readonly Type[] Types1 = new Type[1];
     private static readonly Type[] Types2 = new Type[2];
     private static readonly Type[] Types3 = new Type[3];
@@ -206,10 +214,12 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 return false;
             }
         } else if(x_GetType.IsDisplay()){
-            if(x_GetType==y_GetType) {
-                var x_Fields = x_GetType.GetFields();
+            if(x_GetType==y_GetType){
+                Debug.Assert(x_GetType.GetFields(BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static).Length==0);
+                var Flag=BindingFlags.Public|BindingFlags.Instance;
+                var x_Fields = x_GetType.GetFields(Flag);
                 var x_Fields_Length = x_Fields.Length;
-                var y_Fields = y_GetType.GetFields();
+                var y_Fields = y_GetType.GetFields(Flag);
                 var y_Fields_Length = y_Fields.Length;
                 if(x_Fields_Length!=y_Fields_Length) return false;
                 for(var Index = 0;Index<x_Fields_Length;Index++) {
@@ -222,6 +232,13 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 return false;
             }
         }else{
+            switch(x,y){
+                case(Delegate x0,Delegate y0):{
+                    if(x0.Method!=y0.Method) return false;
+                    if(!this.Equals(x0.Target,y0.Target))return false;
+                    return true;
+                }
+            }
             return x.Equals(y);
         }
         //if(x_GetType.IsAnonymous()) {

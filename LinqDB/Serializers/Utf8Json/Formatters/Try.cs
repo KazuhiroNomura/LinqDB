@@ -3,7 +3,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 using T=Expressions.TryExpression;
 public class Try:IJsonFormatter<T> {
     public static readonly Try Instance=new();
@@ -12,7 +12,7 @@ public class Try:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Finally,Resolver);
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Handlers,Resolver);
+        writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
@@ -24,7 +24,7 @@ public class Try:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var @finally=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var handlers=DeserializeArray<Expressions.CatchBlock>(ref reader,Resolver);
+        var handlers=reader.DeserializeArray<Expressions.CatchBlock>(Resolver);
         return Expressions.Expression.TryCatchFinally(body,@finally,handlers);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {

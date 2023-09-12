@@ -19,13 +19,13 @@ public class Type:MemoryPackFormatter<T> {
         this.Deserialize(ref reader,ref value);
         return value!;
     }
-    private void Register(T AnonymousType){
-        var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-        var Register= C.Register.MakeGenericMethod(AnonymousType);
-        var objects2=this.objects2;
-        objects2[0]=Activator.CreateInstance(FormatterType)!;
-        Register.Invoke(null,objects2);
-    }
+    //private void Register(T AnonymousType){
+    //    var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
+    //    var Register= C.Register.MakeGenericMethod(AnonymousType);
+    //    var objects2=this.objects2;
+    //    objects2[0]=Activator.CreateInstance(FormatterType)!;
+    //    Register.Invoke(null,objects2);
+    //}
     //private void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
     //    if(DictionaryTypeIndex.TryGetValue(value,out var index)){
     //        writer.WriteVarInt(index);
@@ -45,7 +45,7 @@ public class Type:MemoryPackFormatter<T> {
     //        Types.Add(value);
     //    }
     //}
-    private readonly object[] objects2=new object[1];
+    //private readonly object[] objects2=new object[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteType(value);
         ////this.PrivateSerialize(ref writer,value);

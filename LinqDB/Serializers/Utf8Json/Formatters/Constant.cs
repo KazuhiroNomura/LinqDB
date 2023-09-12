@@ -5,7 +5,7 @@ using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.ConstantExpression;
 using C=Serializer;
-using static Common;
+using static Extension;
 public class Constant:IJsonFormatter<T> {
     public static readonly Constant Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){

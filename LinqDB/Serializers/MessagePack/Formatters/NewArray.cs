@@ -8,7 +8,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.NewArrayExpression;
-using static Common;
+using static Extension;
 public class NewArray:IMessagePackFormatter<T> {
     public static readonly NewArray Instance=new();
     private const int ArrayHeader=3;
@@ -16,7 +16,7 @@ public class NewArray:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         writer.WriteNodeType(value!.NodeType);
         writer.WriteType(value.Type.GetElementType());
-        SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
+        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         //if(writer.TryWriteNil()) return;
@@ -25,7 +25,7 @@ public class NewArray:IMessagePackFormatter<T> {
     }
     private static (System.Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var type=reader.ReadType();
-        var expressions=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
         return (type,expressions);
     }
     internal static T InternalDeserializeNewArrayBounds(ref Reader reader,MessagePackSerializerOptions Resolver){

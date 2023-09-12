@@ -5,7 +5,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 using C=Serializer;
 public class Property:IJsonFormatter<PropertyInfo>{
     public static readonly Property Instance=new();

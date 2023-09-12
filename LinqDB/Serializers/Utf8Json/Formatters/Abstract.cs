@@ -9,7 +9,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using C=Serializer;
-using static Common;
+using static Extension;
 #pragma warning disable CA1052 // スタティック ホルダー型は Static または NotInheritable でなければなりません
 /// <summary>
 /// sealedではないクラスをシリアライズする

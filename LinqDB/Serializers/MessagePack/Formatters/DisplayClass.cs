@@ -91,9 +91,7 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
             I1.Emit(OpCodes.Newobj,ctor);
             I1.DeclareLocal(typeof(T));
             I1.Emit(OpCodes.Stloc_0);//変数=new T()
-            var index=0;
-            while(true){
-                var Field=Fields[index];
+            foreach(var Field in Fields){
                 Types1[0]=Field.FieldType;
                 I0.Emit(OpCodes.Ldarg_0);//writer
                 I0.Emit(OpCodes.Ldarg_1);//value
@@ -105,8 +103,6 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
                 I1.Emit(OpCodes.Ldarg_1);//options
                 I1.Emit(OpCodes.Call,DisplayClass.MethodDeserialize.MakeGenericMethod(Types1));
                 I1.Emit(OpCodes.Stfld,Field);//変数.field=Deserialize(ref reader,options)
-                index++;
-                if(index==Fields_Length) break;
             }
             I0.Emit(OpCodes.Ret);
             I1.Emit(OpCodes.Ldloc_0);

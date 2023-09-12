@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 public class New:IJsonFormatter<Expressions.NewExpression>{
     public static readonly New Instance=new();
     public void Serialize(ref Writer writer,Expressions.NewExpression? value,IJsonFormatterResolver Resolver){
@@ -14,7 +14,7 @@ public class New:IJsonFormatter<Expressions.NewExpression>{
         writer.WriteBeginArray();
         Constructor.Instance.Serialize(ref writer,value.Constructor!,Resolver);
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
         //var Arguments=value.Arguments;
         //var Arguments_Count=Arguments.Count;
@@ -28,7 +28,7 @@ public class New:IJsonFormatter<Expressions.NewExpression>{
         reader.ReadIsBeginArrayWithVerify();
         var constructor= Constructor.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.New(
             constructor,

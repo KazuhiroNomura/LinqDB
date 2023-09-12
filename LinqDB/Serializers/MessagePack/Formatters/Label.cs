@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.LabelExpression;
-using static Common;
+using static Extension;
 public class Label:IMessagePackFormatter<T> {
     public static readonly Label Instance=new();
     private const int ArrayHeader=2;

@@ -5,7 +5,7 @@ using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.MemberInitExpression;
-using static Common;
+using static Extension;
 
 public class MemberInit:MemoryPackFormatter<T> {
     public static readonly MemberInit Instance=new();
@@ -20,7 +20,7 @@ public class MemberInit:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         New.Instance.Serialize(ref writer,value.NewExpression);
-        SerializeReadOnlyCollection(ref writer,value.Bindings);
+        writer.SerializeReadOnlyCollection(value.Bindings);
         //this.Serialize(ref writer,value.Bindings);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.BlockExpression;
-using static Common;
+using static Extension;
 public class Block:IMessagePackFormatter<T> {
     public static readonly Block Instance=new();
     private const int ArrayHeader=3;
@@ -18,8 +18,8 @@ public class Block:IMessagePackFormatter<T> {
         var Variables=value.Variables;
         ListParameter.AddRange(Variables);
         writer.WriteType(value.Type);
-        Serialize宣言Parameters(ref writer,value.Variables,Resolver);
-        SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
+        writer.Serialize宣言Parameters(value.Variables,Resolver);
+        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     /// <summary>
@@ -41,9 +41,9 @@ public class Block:IMessagePackFormatter<T> {
         var ListParameter=Serializer.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
-        var variables= Deserialize宣言Parameters(ref reader,Resolver);
+        var variables= reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(variables);
-        var expressions=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
         ListParameter.RemoveRange(ListParameter_Count,variables.Length);
         return Expressions.Expression.Block(type,variables,expressions);
     }

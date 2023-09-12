@@ -54,6 +54,7 @@ public class Serializer:Serializers.Serializer{
                 Conditional.Instance,
                 Constant.Instance,
                 Default.Instance,
+                Dynamic.Instance,
                 Expression.Instance,
                 Goto.Instance,
                 Index.Instance,

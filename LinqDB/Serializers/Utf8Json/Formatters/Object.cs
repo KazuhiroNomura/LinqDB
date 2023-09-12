@@ -38,26 +38,25 @@ public class Object:IJsonFormatter<object>{
             case uint    v:writer.WriteUInt32(v);break;
             case ulong   v:writer.WriteUInt64(v);break;
             case string  v:writer.WriteString(v);break;
+            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
+            case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
+            case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
+            case MethodInfo             v:Method     .Instance.Serialize(ref writer,v,Resolver);break;
+            case PropertyInfo           v:Property   .Instance.Serialize(ref writer,v,Resolver);break;
+            case EventInfo              v:Event      .Instance.Serialize(ref writer,v,Resolver);break;
+            case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
+            case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                if     (typeof(Expressions.Expression).IsAssignableFrom(type))Expression .Instance.Serialize(ref writer,(Expressions.Expression)value,Resolver);
-                else if(typeof(System.Type           ).IsAssignableFrom(type))Type       .Instance.Serialize(ref writer,(System.Type           )value,Resolver);
-                else if(typeof(MemberInfo            ).IsAssignableFrom(type))Member     .Instance.Serialize(ref writer,(MemberInfo            )value,Resolver);
-                else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))Constructor.Instance.Serialize(ref writer,(ConstructorInfo       )value,Resolver);
-                else if(typeof(MethodInfo            ).IsAssignableFrom(type))Method     .Instance.Serialize(ref writer,(MethodInfo            )value,Resolver);
-                else if(typeof(PropertyInfo          ).IsAssignableFrom(type))Property   .Instance.Serialize(ref writer,(PropertyInfo          )value,Resolver);
-                else if(typeof(EventInfo             ).IsAssignableFrom(type))Event      .Instance.Serialize(ref writer,(EventInfo             )value,Resolver);
-                else if(typeof(FieldInfo             ).IsAssignableFrom(type))Field      .Instance.Serialize(ref writer,(FieldInfo             )value,Resolver);
-                else{
-                    var Formatter=Resolver.GetFormatterDynamic(type);
-                    var Serialize=Formatter.GetType().GetMethod("Serialize");
-                    Debug.Assert(Serialize is not null);
-                    var Objects3=this.Objects3;
-                    Objects3[0]=writer;
-                    Objects3[1]=value;
-                    Objects3[2]=Resolver;
-                    Serialize.Invoke(Formatter,Objects3);
-                    writer=(Writer)Objects3[0];
-                }
+                var Formatter=Resolver.GetFormatterDynamic(type);
+                var Serialize=Formatter.GetType().GetMethod("Serialize");
+                Debug.Assert(Serialize is not null);
+                var Objects3=this.Objects3;
+                Objects3[0]=writer;
+                Objects3[1]=value;
+                Objects3[2]=Resolver;
+                Serialize.Invoke(Formatter,Objects3);
+                writer=(Writer)Objects3[0];
                 break;
             }
         }
@@ -83,31 +82,30 @@ public class Object:IJsonFormatter<object>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString();
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
         //else if(typeof(decimal)==type)result=global::Utf8Json.Formatters.DecimalFormatter.Default.Deserialize(ref reader,Resolver);
         //else if(typeof(Guid   )==type)result=global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);
+        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
         else{
-            if     (typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
-            else{
-                var Formatter=Resolver.GetFormatterDynamic(type);
-                var Deserialize=Formatter.GetType().GetMethod("Deserialize");
-                Debug.Assert(Deserialize is not null);
-                var Objects2=this.Objects2;
-                Objects2[0]=reader;
-                Objects2[1]=Resolver;
-                value=Deserialize.Invoke(Formatter,Objects2)!;
-                reader=(Reader)Objects2[0];
-            }
+            var Formatter=Resolver.GetFormatterDynamic(type);
+            var Deserialize=Formatter.GetType().GetMethod("Deserialize");
+            Debug.Assert(Deserialize is not null);
+            var Objects2=this.Objects2;
+            Objects2[0]=reader;
+            Objects2[1]=Resolver;
+            value=Deserialize.Invoke(Formatter,Objects2)!;
+            reader=(Reader)Objects2[0];
+        }
             //global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);}
             //var Formatter=reader.GetFormatter(type);
             //Formatter.Deserialize(ref reader,ref value);
-        }
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

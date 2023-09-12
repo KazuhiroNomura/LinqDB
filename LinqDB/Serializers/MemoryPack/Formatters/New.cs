@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T= NewExpression;
-using static Common;
+using static Extension;
 
 
 public class New:MemoryPackFormatter<T> {
@@ -23,7 +23,7 @@ public class New:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         Constructor.Instance.Serialize(ref writer,value.Constructor!);
-        SerializeReadOnlyCollection(ref writer,value.Arguments);
+        writer.SerializeReadOnlyCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var constructor= Constructor.Instance.Deserialize(ref reader);

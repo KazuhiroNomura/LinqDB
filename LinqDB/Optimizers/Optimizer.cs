@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -374,7 +375,8 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:IEqualityComparer<Expression> {
+    public class ExpressionEqualityComparer:IEqualityComparer<Expression>{
+        private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
         /// </summary>
@@ -383,8 +385,12 @@ public sealed partial class Optimizer:IDisposable{
         /// コンストラクタ
         /// </summary>
         /// <param name="スコープParameters"></param>
-        public ExpressionEqualityComparer(IList<ParameterExpression> スコープParameters) => this.スコープParameters=スコープParameters;
-        public ExpressionEqualityComparer() => this.スコープParameters=new List<ParameterExpression>();
+        public ExpressionEqualityComparer(IList<ParameterExpression> スコープParameters){
+            this.スコープParameters=スコープParameters;
+            this.ObjectComparer=new(this);
+        }
+        public ExpressionEqualityComparer():this(new List<ParameterExpression>()){
+        }
 
         /// <summary>
         /// 式木のハッシュコード。NodeTypeとTypeを使う。
@@ -635,10 +641,10 @@ public sealed partial class Optimizer:IDisposable{
             this.PrivateEquals(a.Test,b.Test)&&
             this.PrivateEquals(a.IfTrue,b.IfTrue)&&
             this.PrivateEquals(a.IfFalse,b.IfFalse);
-        private bool T(ConstantExpression a,ConstantExpression b) =>
+        private bool T(ConstantExpression a,ConstantExpression b)=>
             ReferenceEquals(a.Value,b.Value)||
-            a.Type==b.Type&&
-            Equals(a.Value,b.Value);
+            a.Type==b.Type&&this.ObjectComparer.Equals(a.Value,b.Value);
+            //Equals(a.Value,b.Value);
         private bool T(DebugInfoExpression a,DebugInfoExpression b) =>
             a.Document==b.Document&&
             a.StartLine==b.StartLine&&
@@ -652,46 +658,80 @@ public sealed partial class Optimizer:IDisposable{
             var a_Binder = a.Binder;
             var b_Binder = b.Binder;
             Debug.Assert(a_Binder.GetType()==b_Binder.GetType(),"SequenceEqualの抜け穴パターンがあるか？");
-            switch(a_Binder, b_Binder){
-                case (ConvertBinder a_ConvertBinder,ConvertBinder b_ConvertBinder):{
-                    if(a_ConvertBinder.ReturnType!=b_ConvertBinder.ReturnType)
-                        return false;
-                    Debug.Assert(a_ConvertBinder.ReturnType==a_ConvertBinder.Type);
-                    Debug.Assert(b_ConvertBinder.ReturnType==b_ConvertBinder.Type);
-                    return a_ConvertBinder.Explicit==b_ConvertBinder.Explicit;
+            switch(a_Binder,b_Binder){
+                case(DynamicMetaObjectBinder a0,DynamicMetaObjectBinder b0):{
+                    Debug.Assert(a0.ReturnType==b0.ReturnType,"DynamicMetaObjectBinder ReturnTypeが違うパターンもあるんじゃないか");
+                    Debug.Assert(a0.ReturnType==b0.ReturnType,"DynamicMetaObjectBinder ReturnTypeが違うパターンもあるんじゃないか");
+                    switch(a0, b0) {
+                        case (BinaryOperationBinder a1, BinaryOperationBinder b1): {
+                            if(a1.Operation!=b1.Operation) return false;
+                            return true;
+                        }
+                        case (ConvertBinder a1, ConvertBinder b1): {
+                            if(a1.Explicit!=b1.Explicit) return false;
+                            Debug.Assert(a1.ReturnType==a1.Type);
+                            Debug.Assert(b1.ReturnType==b1.Type);
+                            return true;
+                        }
+                        case (CreateInstanceBinder a1, CreateInstanceBinder b1): {
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (DeleteIndexBinder a1, DeleteIndexBinder b1): {
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (DeleteMemberBinder a1, DeleteMemberBinder b1): {
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
+                            if(a1.Name!=b1.Name) return false;
+                            return true;
+                        }
+                        case (GetIndexBinder a1, GetIndexBinder b1): {
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (GetMemberBinder a1, GetMemberBinder b1): {
+                            Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"GetMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
+                            if(a1.Name!=b1.Name)return false;
+                            return true;
+                        }
+                        case (InvokeBinder a1, InvokeBinder b1): {
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (InvokeMemberBinder a1, InvokeMemberBinder b1): {
+                            Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"InvokeMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
+                            if(a1.Name!=b1.Name) return false;
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (SetIndexBinder a1, SetIndexBinder b1): {
+                            Debug.Assert(a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames),"CallInfo.Argumentsが違うパターンもあるんじゃないか");
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            return true;
+                        }
+                        case (SetMemberBinder a1, SetMemberBinder b1): {
+                            Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"本当はVBとかで破るパターンあるんじゃないのか");
+                            return a1.Name.Equals(b1.Name,StringComparison.Ordinal);
+                        }
+                        case (UnaryOperationBinder a1, UnaryOperationBinder b1): {
+                            if(a1.Operation!=b1.Operation) return false;
+                            return true;
+                        }
+                        default:
+                            throw new NotSupportedException($"{a0.GetType()},{b0.GetType()}が一致しない");
+                    }
                 }
-                case (GetMemberBinder a_GetMemberBinder, GetMemberBinder b_GetMemberBinder): {
-                    Debug.Assert(a_GetMemberBinder.ReturnType==b_GetMemberBinder.ReturnType,"型が違うパターンもあるんじゃないか");
-                    Debug.Assert(a_GetMemberBinder.IgnoreCase==b_GetMemberBinder.IgnoreCase,"本当はVBとかで破るパターンあるんじゃないのか");
-                    return a_GetMemberBinder.Name.Equals(b_GetMemberBinder.Name,StringComparison.Ordinal);
-                }
-                case (SetMemberBinder a_SetMemberBinder, SetMemberBinder b_SetMemberBinder): {
-                    Debug.Assert(a_SetMemberBinder.ReturnType==b_SetMemberBinder.ReturnType,"型が違うパターンもあるんじゃないか");
-                    Debug.Assert(a_SetMemberBinder.IgnoreCase==b_SetMemberBinder.IgnoreCase,"本当はVBとかで破るパターンあるんじゃないのか");
-                    return a_SetMemberBinder.Name.Equals(b_SetMemberBinder.Name,StringComparison.Ordinal);
-                }
-                case (GetIndexBinder a_GetIndexBinder, GetIndexBinder b_GetIndexBinder):
-                    Debug.Assert(a_GetIndexBinder.ReturnType==b_GetIndexBinder.ReturnType,"型が違うパターンもあるんじゃないか");
-                    Debug.Assert(a_GetIndexBinder.CallInfo.ArgumentCount==b_GetIndexBinder.CallInfo.ArgumentCount,
-                        "CallInfo.ArgumentCountが違うパターンもあるんじゃないか"
-                    );
-                    Debug.Assert(
-                        a_GetIndexBinder.CallInfo.ArgumentNames.SequenceEqual(b_GetIndexBinder.CallInfo.ArgumentNames),
-                        "CallInfo.ArgumentNamesが違うパターンもあるんじゃないか"
-                    );
-                    return true;
-                case (SetIndexBinder a_SetIndexBinder, SetIndexBinder b_SetIndexBinder):
-                    Debug.Assert(a_SetIndexBinder.ReturnType==b_SetIndexBinder.ReturnType,"型が違うパターンもあるんじゃないか");
-                    Debug.Assert(a_SetIndexBinder.CallInfo.ArgumentCount==b_SetIndexBinder.CallInfo.ArgumentCount,
-                        "CallInfo.ArgumentCountが違うパターンもあるんじゃないか"
-                    );
-                    Debug.Assert(
-                        a_SetIndexBinder.CallInfo.ArgumentNames.SequenceEqual(b_SetIndexBinder.CallInfo.ArgumentNames),
-                        "CallInfo.ArgumentNamesが違うパターンもあるんじゃないか"
-                    );
-                    break;
+                default:
+                    throw new NotSupportedException($"{a.GetType()},{b.GetType()}が一致しない");
             }
-            return true;
         }
         private bool InitializersEquals(ReadOnlyCollection<ElementInit> a_Initializers,
             ReadOnlyCollection<ElementInit> b_Initializers) {

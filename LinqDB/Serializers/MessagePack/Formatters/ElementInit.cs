@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.ElementInit;
-using static Common;
+using static Extension;
 
 public class ElementInit:IMessagePackFormatter<T> {
     public static readonly ElementInit Instance=new();
@@ -14,13 +14,13 @@ public class ElementInit:IMessagePackFormatter<T> {
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         Method.InternalSerializeNullable(ref writer,value.AddMethod,Resolver);
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var addMethod= Method.Instance.Deserialize(ref reader,Resolver);
-        var arguments= DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var arguments= reader.DeserializeArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.ElementInit(addMethod,arguments);
     }
 }

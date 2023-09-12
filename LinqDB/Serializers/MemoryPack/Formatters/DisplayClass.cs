@@ -42,23 +42,26 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
         Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
         {
             //var MethodDeserialize = typeof(Anonymous).GetMethod("Deserialize2",BindingFlags.Static|BindingFlags.NonPublic)!;
-            var Deserialize = new DynamicMethod("Deserialize",typeof(void),DeserializeTypes,typeof(Anonymous<T>),true) { InitLocals=false };
+            var Deserialize = new DynamicMethod("Deserialize",typeof(void),DeserializeTypes,typeof(DisplayClass<T>),true) { InitLocals=false };
             var I1 = Deserialize.GetILGenerator();
             I1.Emit(OpCodes.Ldarg_1);//value=new c_DisplayClass()
             I1.Emit(OpCodes.Newobj,ctor);
             I1.Emit(OpCodes.Stobj,typeof(T));
             var index = 0;
-            while(true) {
-                var Field = Fields[index];
-                var FieldType=Field.FieldType;
-                Types1[0]=FieldType;
-                I1.Emit(OpCodes.Ldarg_0);//reader
-                I1.Emit(OpCodes.Ldarg_1);//value
-                I1.Emit(OpCodes.Ldind_Ref);
-                I1.Emit(OpCodes.Ldflda,Field);//value.field
-                I1.Emit(OpCodes.Call,Anonymous.MethodDeserialize.MakeGenericMethod(Types1));//Deserialize(ref reader,ref value.field)
-                index++;
-                if(index==Fields_Length) break;
+            if(Fields_Length>0){
+                while(true){
+                    var Field=Fields[index];
+                    var FieldType=Field.FieldType;
+                    Types1[0]=FieldType;
+                    I1.Emit(OpCodes.Ldarg_0);//reader
+                    I1.Emit(OpCodes.Ldarg_1);//value
+                    I1.Emit(OpCodes.Ldind_Ref);
+                    I1.Emit(OpCodes.Ldflda,Field);//value.field
+                    I1.Emit(OpCodes.Call,
+                        Extension.MethodDeserialize.MakeGenericMethod(Types1));//Deserialize(ref reader,ref value.field)
+                    index++;
+                    if(index==Fields_Length) break;
+                }
             }
             I1.Emit(OpCodes.Ret);
             this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
@@ -85,9 +88,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
                 //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
                 var I0=Serialize.GetILGenerator();
                 MethodTypes[0]=typeof(TBufferWriter);
-                var index=0;
-                while(true){
-                    var Field=Fields[index];
+                foreach(var Field in Fields){
                     var FieldType=Field.FieldType;
                     if(FieldType.IsAnonymous()){
                         FieldTypes[0]=FieldType;
@@ -101,9 +102,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
                     I0.Emit(OpCodes.Ldarg_1);//value
                     I0.Emit(OpCodes.Ldind_Ref);//*value
                     I0.Emit(OpCodes.Ldflda,Field);//ref value.field
-                    I0.Emit(OpCodes.Call,Anonymous.MethodSerialize.MakeGenericMethod(MethodTypes));
-                    index++;
-                    if(index==Fields_Length) break;
+                    I0.Emit(OpCodes.Call,Extension.MethodSerialize.MakeGenericMethod(MethodTypes));
                 }
                 I0.Emit(OpCodes.Ret);
                 Debug.Assert(SerializeTypes[0]==typeof(delegate_Serialize<TBufferWriter>).GetMethod("Invoke")!.GetParameters()[0].ParameterType);

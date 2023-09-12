@@ -8,7 +8,7 @@ using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.TryExpression;
 
-using static Common;
+using static Extension;
 public class Try:IMessagePackFormatter<T>{
     public static readonly Try Instance=new();
     private const int ArrayHeader=3;
@@ -16,7 +16,7 @@ public class Try:IMessagePackFormatter<T>{
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Instance.Serialize(ref writer,value!.Body,Resolver);
         Expression.Instance.Serialize(ref writer,value.Finally,Resolver);
-        SerializeReadOnlyCollection(ref writer,value.Handlers,Resolver);
+        writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -31,7 +31,7 @@ public class Try:IMessagePackFormatter<T>{
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
         var @finally=Expression.Instance.Deserialize(ref reader,Resolver);
-        var handlers=DeserializeArray<Expressions.CatchBlock>(ref reader,Resolver);
+        var handlers=reader.DeserializeArray<Expressions.CatchBlock>(Resolver);
         return handlers is null?Expressions.Expression.TryFinally(body,@finally):Expressions.Expression.TryCatchFinally(body,@finally,handlers);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.MemberBinding;
 using C=Serializer;
-using static Common;
+using static Extension;
 
 public class MemberBinding:MemoryPackFormatter<T> {
     public static readonly MemberBinding Instance=new();
@@ -27,11 +27,11 @@ public class MemberBinding:MemoryPackFormatter<T> {
                 Expression.Instance.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression);
                 break;
             case Expressions.MemberBindingType.MemberBinding:{
-                SerializeReadOnlyCollection(ref writer,((Expressions.MemberMemberBinding)value).Bindings);
+                writer.SerializeReadOnlyCollection(((Expressions.MemberMemberBinding)value).Bindings);
                 break;
             }
             case Expressions.MemberBindingType.ListBinding:{
-                SerializeReadOnlyCollection(ref writer,((Expressions.MemberListBinding)value).Initializers);
+                writer.SerializeReadOnlyCollection(((Expressions.MemberListBinding)value).Initializers);
                 break;
             }
             default:

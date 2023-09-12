@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.MethodCallExpression;
 using C=Serializer;
-using static Common;
+using static Extension;
 
 
 public class MethodCall:MemoryPackFormatter<T> {
@@ -26,7 +26,7 @@ public class MethodCall:MemoryPackFormatter<T> {
         if(!method.IsStatic){
             Expression.Instance.Serialize(ref writer,value.Object!);
         }
-        SerializeReadOnlyCollection(ref writer,value.Arguments);
+        writer.SerializeReadOnlyCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;

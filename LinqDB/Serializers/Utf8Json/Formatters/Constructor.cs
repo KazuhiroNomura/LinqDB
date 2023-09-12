@@ -5,7 +5,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=ConstructorInfo;
-using static Common;
+using static Extension;
 public class Constructor:IJsonFormatter<T> {
     public static readonly Constructor Instance=new();
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){

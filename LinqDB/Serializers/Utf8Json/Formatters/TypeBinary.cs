@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
     internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){

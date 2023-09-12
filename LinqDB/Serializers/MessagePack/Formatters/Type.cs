@@ -9,68 +9,70 @@ using T=System.Type;
 
 public class Type:IMessagePackFormatter<T> {
     public static readonly Type Instance=new();
-    private const int ArrayHeader0=2;
-    private const int ArrayHeader1=2;
-    private void PrivateSerialize(ref Writer writer,T value){
-        if(Serializer.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
-            writer.WriteArrayHeader(ArrayHeader0);
-            writer.WriteInt32(index);
-        } else{
-            writer.WriteArrayHeader(ArrayHeader1);
-            var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
-            index=DictionaryTypeIndex.Count;
-            writer.WriteInt32(index);
-            DictionaryTypeIndex.Add(value,index);
-            writer.WriteType(value);
-            /*
-            if(value.IsGenericType){
-                var GenericTypeDifinition=value.GetGenericTypeDefinition();
-                //ReadOnlySpan<char> gg="ABC";
-                string s=GenericTypeDifinition!.AssemblyQualifiedName!;
-                writer.WriteString(GenericTypeDifinition!.AssemblyQualifiedName!);
-                foreach(var GenericArgument in value.GetGenericArguments()) this.PrivateSerialize(ref writer,GenericArgument);
-                if(value.IsAnonymous()) this.Register(value);
-            } else{
-                writer.WriteString(value.AssemblyQualifiedName);
-            }
-            */
-            Serializer.Instance.Types.Add(value);
-        }
-    }
+    //private const int ArrayHeader0=2;
+    //private const int ArrayHeader1=2;
+    //private void PrivateSerialize(ref Writer writer,T value){
+    //    if(Serializer.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+    //        writer.WriteArrayHeader(ArrayHeader0);
+    //        writer.WriteInt32(index);
+    //    } else{
+    //        writer.WriteArrayHeader(ArrayHeader1);
+    //        var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
+    //        index=DictionaryTypeIndex.Count;
+    //        writer.WriteInt32(index);
+    //        DictionaryTypeIndex.Add(value,index);
+    //        writer.WriteType(value);
+    //        /*
+    //        if(value.IsGenericType){
+    //            var GenericTypeDifinition=value.GetGenericTypeDefinition();
+    //            //ReadOnlySpan<char> gg="ABC";
+    //            string s=GenericTypeDifinition!.AssemblyQualifiedName!;
+    //            writer.WriteString(GenericTypeDifinition!.AssemblyQualifiedName!);
+    //            foreach(var GenericArgument in value.GetGenericArguments()) this.PrivateSerialize(ref writer,GenericArgument);
+    //            if(value.IsAnonymous()) this.Register(value);
+    //        } else{
+    //            writer.WriteString(value.AssemblyQualifiedName);
+    //        }
+    //        */
+    //        Serializer.Instance.Types.Add(value);
+    //    }
+    //}
     //private readonly object[] objects2=new object[1];
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions options) {
-        this.PrivateSerialize(ref writer,value);
+        writer.WriteType(value);
+        //this.PrivateSerialize(ref writer,value);
     }
-    private T PrivateDeserialize(ref Reader reader){
-        var count=reader.ReadArrayHeader();
-        var index=reader.ReadInt32();
-        var Types=Serializer.Instance.Types;
-        if(index<Types.Count){
-            Debug.Assert(count==ArrayHeader0);
-            return Types[index];
-        } else{
-            Debug.Assert(count==ArrayHeader1);
-            var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
-            Debug.Assert(index==Types.Count);
-            var AssemblyQualifiedName=reader.ReadString();
-            var value= T.GetType(AssemblyQualifiedName);
-            Types.Add(value);
-            Debug.Assert(value!=null,nameof(value)+" != null");
-            if(value.IsGenericType){
-                Debug.Assert(value.IsGenericTypeDefinition);
-                var GenericArguments=value.GetGenericArguments();
-                for(var a=0;a<GenericArguments.Length;a++)GenericArguments[a]=this.PrivateDeserialize(ref reader);
-                value=value.MakeGenericType(GenericArguments);
-                //f(value.IsAnonymous())this.Register(value);
-                Debug.Assert(Types[index]==value.GetGenericTypeDefinition());
-                Types[index]=value;
-            }
-            DictionaryTypeIndex.Add(value,index);
-            return value;
-        }
-    }
+    //private T PrivateDeserialize(ref Reader reader){
+    //    var count=reader.ReadArrayHeader();
+    //    var index=reader.ReadInt32();
+    //    var Types=Serializer.Instance.Types;
+    //    if(index<Types.Count){
+    //        Debug.Assert(count==ArrayHeader0);
+    //        return Types[index];
+    //    } else{
+    //        Debug.Assert(count==ArrayHeader1);
+    //        var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
+    //        Debug.Assert(index==Types.Count);
+    //        var AssemblyQualifiedName=reader.ReadString();
+    //        var value= T.GetType(AssemblyQualifiedName);
+    //        Types.Add(value);
+    //        Debug.Assert(value!=null,nameof(value)+" != null");
+    //        if(value.IsGenericType){
+    //            Debug.Assert(value.IsGenericTypeDefinition);
+    //            var GenericArguments=value.GetGenericArguments();
+    //            for(var a=0;a<GenericArguments.Length;a++)GenericArguments[a]=this.PrivateDeserialize(ref reader);
+    //            value=value.MakeGenericType(GenericArguments);
+    //            //f(value.IsAnonymous())this.Register(value);
+    //            Debug.Assert(Types[index]==value.GetGenericTypeDefinition());
+    //            Types[index]=value;
+    //        }
+    //        DictionaryTypeIndex.Add(value,index);
+    //        return value;
+    //    }
+    //}
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions options) {
-        return this.PrivateDeserialize(ref reader);
+        return reader.ReadType();
+        //return this.PrivateDeserialize(ref reader);
         //var i=reader.ReadVarIntInt32();
         //var value0=ListType[i];
         //if(value0!.IsGenericType){

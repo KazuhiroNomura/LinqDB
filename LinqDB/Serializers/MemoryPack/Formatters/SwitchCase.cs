@@ -3,7 +3,7 @@ using MemoryPack;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using static Common;
+using static Extension;
 using T=Expressions.SwitchCase;
 
 public class SwitchCase:MemoryPackFormatter<T> {
@@ -15,7 +15,7 @@ public class SwitchCase:MemoryPackFormatter<T> {
     //    return value!;
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        SerializeReadOnlyCollection(ref writer,value!.TestValues);
+        writer.SerializeReadOnlyCollection(value!.TestValues);
         Expression.Instance.Serialize(ref writer,value.Body);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

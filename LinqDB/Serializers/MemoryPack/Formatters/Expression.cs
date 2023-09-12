@@ -102,7 +102,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.MemberInit         :MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value);break;
             case Expressions.ExpressionType.Block              :Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value);break;
             //case Expressions.ExpressionType.DebugInfo          :
-            //case Expressions.ExpressionType.Dynamic            :
+            case Expressions.ExpressionType.Dynamic            :Dynamic.Instance.Serialize(ref writer,(Expressions.DynamicExpression)value);break;
             case Expressions.ExpressionType.Default            :Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value);break;
             //case Expressions.ExpressionType.Extension          :
             case Expressions.ExpressionType.Goto               :Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value);break;
@@ -371,8 +371,8 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.MemberInit         :value=MemberInit.Instance.DeserializeMemberInit(ref reader);break;
             case Expressions.ExpressionType.Block              :value=Block.Instance.DeserializeBlock(ref reader);break;
             case Expressions.ExpressionType.DebugInfo          :
-            case Expressions.ExpressionType.Dynamic            :
-            case Expressions.ExpressionType.Default            :value=Default.Instance.DeserializeDefault(ref reader);break;
+            case Expressions.ExpressionType.Dynamic            :value=Dynamic.Instance.Deserialize(ref reader);break;
+            case Expressions.ExpressionType.Default            :value=Default.Instance.Deserialize(ref reader);break;
             case Expressions.ExpressionType.Extension          :break;
             case Expressions.ExpressionType.Goto               :value=Goto.Instance.DeserializeGoto(ref reader);break;
             case Expressions.ExpressionType.Index              :value=Index.Instance.DeserializeIndex(ref reader);break;

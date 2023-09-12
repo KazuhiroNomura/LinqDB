@@ -10,7 +10,7 @@ using C=Serializer;
 
 
 
-using static Common;
+using static Extension;
 public class CatchBlock:IJsonFormatter<T> {
     public static readonly CatchBlock Instance=new();
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {

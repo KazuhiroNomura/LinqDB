@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.IndexExpression;
-using static Common;
+using static Extension;
 public class Index:IJsonFormatter<T> {
     public static readonly Index Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
@@ -17,7 +17,7 @@ public class Index:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -27,7 +27,7 @@ public class Index:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
     }

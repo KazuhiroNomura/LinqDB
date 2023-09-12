@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=FieldInfo;
-using static Common;
+using static Extension;
 using C=Serializer;
 public class Field:IJsonFormatter<T> {
     public static readonly Field Instance=new();

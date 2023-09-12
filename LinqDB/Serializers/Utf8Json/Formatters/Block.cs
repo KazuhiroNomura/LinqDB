@@ -5,7 +5,7 @@ using Writer=JsonWriter;
 using Reader=JsonReader;
 using T= Expressions.BlockExpression;
 using C=Serializer;
-using static Common;
+using static Extension;
 public class Block:IJsonFormatter<T> {
     public static readonly Block Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
@@ -15,9 +15,9 @@ public class Block:IJsonFormatter<T> {
         ListParameter.AddRange(Variables);
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
-        Serialize宣言Parameters(ref writer,value.Variables,Resolver);
+        writer.Serialize宣言Parameters(value.Variables,Resolver);
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
+        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
@@ -30,10 +30,10 @@ public class Block:IJsonFormatter<T> {
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var variables=Deserialize宣言Parameters(ref reader,Resolver);
+        var variables=reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(variables);
         reader.ReadIsValueSeparatorWithVerify();
-        var expressions=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
         ListParameter.RemoveRange(ListParameter_Count,variables.Count);
         return Expressions.Expression.Block(type,variables,expressions);
     }

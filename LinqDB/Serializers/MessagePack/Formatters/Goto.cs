@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.GotoExpression;
-using static Common;
+using static Extension;
 public class Goto:IMessagePackFormatter<T> {
     public static readonly Goto Instance=new();
     private const int ArrayHeader=4;

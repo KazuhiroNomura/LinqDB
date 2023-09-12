@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=EventInfo;
-using static Common;
+using static Extension;
 using C=Serializer;
 
 public class Event:IJsonFormatter<T> {

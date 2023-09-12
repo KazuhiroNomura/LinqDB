@@ -7,13 +7,13 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=Expressions.DefaultExpression;
 
-using static Common;
+using static Extension;
 public class Default:MemoryPackFormatter<T> {
     public static readonly Default Instance=new();
     internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         this.Serialize(ref writer,ref value);
     }
-    internal T DeserializeDefault(ref Reader reader) {
+    internal T Deserialize(ref Reader reader) {
         T? value=default;
         this.Deserialize(ref reader,ref value);
         return value!;

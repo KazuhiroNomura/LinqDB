@@ -5,7 +5,7 @@ using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.LambdaExpression;
 using C=Serializer;
-using static Common;
+using static Extension;
 public class Lambda:IJsonFormatter<T> {
     public static readonly Lambda Instance=new();
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
@@ -18,7 +18,7 @@ public class Lambda:IJsonFormatter<T> {
         //this.Serialize(ref writer,value.Type,Resolver);
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
-        Serialize宣言Parameters(ref writer,value.Parameters,Resolver);
+        writer.Serialize宣言Parameters(value.Parameters,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
@@ -35,7 +35,7 @@ public class Lambda:IJsonFormatter<T> {
         //var s=reader.ReadString();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var parameters = Deserialize宣言Parameters(ref reader,Resolver);
+        var parameters = reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(parameters);
 
         reader.ReadIsValueSeparatorWithVerify();

@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.LambdaExpression;
-using static Common;
+using static Extension;
 public class Lambda:IMessagePackFormatter<T> {
     public static readonly Lambda Instance=new();
     private const int ArrayHeader=4;
@@ -18,13 +18,13 @@ public class Lambda:IMessagePackFormatter<T> {
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
-        Serialize宣言Parameters(ref writer,value.Parameters,Resolver);
+        writer.Serialize宣言Parameters(value.Parameters,Resolver);
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
-        writer.Write(value.TailCall);
+        writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteArrayHeader(InternalArrayHeader-2);
         writer.WriteNodeType(Expressions.ExpressionType.Lambda);
         PrivateSerialize(ref writer,value,Resolver);
     }
@@ -36,10 +36,10 @@ public class Lambda:IMessagePackFormatter<T> {
         var ListParameter=Serializer.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
-        var parameters = Deserialize宣言Parameters(ref reader,Resolver);
+        var parameters = reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(parameters);
         var body =Expression.Instance.Deserialize(ref reader,Resolver);
-        var tailCall = reader.ReadBoolean();
+        var tailCall=reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters.Length);
         return Expressions.Expression.Lambda(
             type,

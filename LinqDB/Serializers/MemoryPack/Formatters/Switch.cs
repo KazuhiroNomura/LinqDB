@@ -3,7 +3,7 @@ using Expressions = System.Linq.Expressions;
 using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using static Common;
+using static Extension;
 using T=Expressions.SwitchExpression;
 public class Switch:MemoryPackFormatter<T> {
     public static readonly Switch Instance=new();
@@ -18,7 +18,7 @@ public class Switch:MemoryPackFormatter<T> {
         Type.Instance.Serialize(ref writer,value!.Type);
         Expression.Instance.Serialize(ref writer,value.SwitchValue);
         Method.Instance.SerializeNullable(ref writer,value.Comparison);
-        SerializeReadOnlyCollection(ref writer,value.Cases);
+        writer.SerializeReadOnlyCollection(value.Cases);
         Expression.Instance.Serialize(ref writer,value.DefaultBody);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

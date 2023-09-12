@@ -10,7 +10,8 @@ using System.Linq.Expressions;
 using LinqDB.Sets;
 using LinqDB.Optimizers;
 public abstract class 共通 {
-    protected static readonly EnumerableSetEqualityComparer ProtectedComparer = new();
+    protected static readonly EnumerableSetEqualityComparer ProtectedComparer=new(ExpressionEqualityComparer);
+    protected static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
     protected static void WriteLine(string s) {
         Trace.WriteLine(s);
         Console.WriteLine(s);

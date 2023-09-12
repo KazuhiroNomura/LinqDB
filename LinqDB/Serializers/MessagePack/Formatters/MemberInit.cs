@@ -7,14 +7,14 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.MemberInitExpression;
-using static Common;
+using static Extension;
 public class MemberInit:IMessagePackFormatter<T> {
     public static readonly MemberInit Instance=new();
     private const int ArrayHeader=2;
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         New.Instance.Serialize(ref writer,value!.NewExpression,Resolver);
-        SerializeReadOnlyCollection(ref writer,value.Bindings,Resolver);
+        writer.SerializeReadOnlyCollection(value.Bindings,Resolver);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -28,7 +28,7 @@ public class MemberInit:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var @new=New.Instance.Deserialize(ref reader,Resolver);
-        var bindings=DeserializeArray<Expressions.MemberBinding>(ref reader,Resolver);
+        var bindings=reader.DeserializeArray<Expressions.MemberBinding>(Resolver);
         return Expressions.Expression.MemberInit(@new,bindings);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

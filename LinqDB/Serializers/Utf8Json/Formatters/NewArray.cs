@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 public class NewArray:IJsonFormatter<Expressions.NewArrayExpression>{
     public static readonly NewArray Instance=new();
     public void Serialize(ref Writer writer,Expressions.NewArrayExpression? value,IJsonFormatterResolver Resolver){
@@ -17,7 +17,7 @@ public class NewArray:IJsonFormatter<Expressions.NewArrayExpression>{
         writer.WriteValueSeparator();
         writer.WriteType(value.Type.GetElementType());
         writer.WriteValueSeparator();
-        SerializeReadOnlyCollection(ref writer,value.Expressions,Resolver);
+        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         writer.WriteEndArray();
     }
     public Expressions.NewArrayExpression Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -28,7 +28,7 @@ public class NewArray:IJsonFormatter<Expressions.NewArrayExpression>{
         var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var expressions= DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+        var expressions= reader.DeserializeArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>Expressions.Expression.NewArrayBounds(type,expressions),

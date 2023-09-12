@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using T=Expressions.ConditionalExpression;
+using T= ConditionalExpression;
 using C=Serializer;
 
 public class Conditional:MemoryPackFormatter<T> {

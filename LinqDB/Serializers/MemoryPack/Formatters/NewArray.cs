@@ -5,7 +5,7 @@ using System.Buffers;
 using System.Diagnostics;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using static Common;
+using static Extension;
 using T=NewArrayExpression;
 using C=Serializer;
 public class NewArray:MemoryPackFormatter<T> {
@@ -20,7 +20,7 @@ public class NewArray:MemoryPackFormatter<T> {
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteNodeType(value.NodeType);
         Type.Instance.Serialize(ref writer,value.Type.GetElementType());
-        SerializeReadOnlyCollection(ref writer,value.Expressions);
+        writer.SerializeReadOnlyCollection(value.Expressions);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;

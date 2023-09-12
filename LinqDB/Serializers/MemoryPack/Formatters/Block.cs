@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Diagnostics;
+using System.Reflection.PortableExecutable;
 //using System.Linq.Expressions;
 
 using MemoryPack;
@@ -8,7 +9,7 @@ using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 
-using static Common;
+using static Extension;
 using C=Serializer;
 using T=Expressions.BlockExpression;
 
@@ -30,8 +31,8 @@ public class Block:MemoryPackFormatter<T> {
         var type=value.Type;
         Type.Instance.Serialize(ref writer,ref type);
         //var Variables=value.Variables;
-        Serialize宣言Parameters(ref writer,Variables);
-        SerializeReadOnlyCollection(ref writer,value.Expressions);
+        writer.Serialize宣言Parameters(Variables);
+        writer.SerializeReadOnlyCollection(value.Expressions);
         Debug.Assert(Variables!=null,nameof(Variables)+" != null");
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
@@ -39,7 +40,7 @@ public class Block:MemoryPackFormatter<T> {
         var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type= Type.Instance.Deserialize(ref reader);
-        var variables= Deserialize宣言Parameters(ref reader);
+        var variables= reader.Deserialize宣言Parameters();
         ListParameter.AddRange(variables!);
         var expressions=reader.ReadArray<Expressions.Expression>();
         ListParameter.RemoveRange(ListParameter_Count,variables!.Length);

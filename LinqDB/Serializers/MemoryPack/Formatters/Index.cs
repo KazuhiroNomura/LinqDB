@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T= IndexExpression;
-using static Common;
+using static Extension;
 
 public class Index:MemoryPackFormatter<T> {
     public static readonly Index Instance=new();
@@ -25,7 +25,7 @@ public class Index:MemoryPackFormatter<T> {
         //}
         Expression.Instance.Serialize(ref writer,value!.Object);
         Property.Instance.Serialize(ref writer,value.Indexer);
-        SerializeReadOnlyCollection(ref writer,value.Arguments);
+        writer.SerializeReadOnlyCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;

@@ -1,9 +1,11 @@
 ﻿using System.Buffers;
 using System.Linq.Expressions;
+using System.Reflection.PortableExecutable;
+
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-using static Common;
+using static Extension;
 using T=LambdaExpression;
 using C=Serializer;
 
@@ -23,7 +25,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
-        Serialize宣言Parameters(ref writer,value.Parameters);
+        writer.Serialize宣言Parameters(value.Parameters);
         Expression.Instance.Serialize(ref writer,value.Body);
         writer.WriteBoolean(value.TailCall);
         
@@ -33,7 +35,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var ListParameter= C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
-        var parameters= Deserialize宣言Parameters(ref reader);
+        var parameters= reader.Deserialize宣言Parameters();
         ListParameter.AddRange(parameters!);
         var body = Expression.Instance.Deserialize(ref reader);
         var tailCall = reader.ReadBoolean();

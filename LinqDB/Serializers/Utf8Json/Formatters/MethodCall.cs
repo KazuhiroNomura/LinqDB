@@ -6,14 +6,14 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T= Expressions.MethodCallExpression;
-using static Common;
+using static Extension;
 public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(method.IsStatic){
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
@@ -21,7 +21,7 @@ public class MethodCall:IJsonFormatter<T> {
         } else{
             var instance=Expression.Instance.Deserialize(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
-            var arguments=DeserializeArray<Expressions.Expression>(ref reader,Resolver);
+            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,
@@ -40,7 +40,7 @@ public class MethodCall:IJsonFormatter<T> {
             Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
             writer.WriteValueSeparator();
         }
-        SerializeReadOnlyCollection(ref writer,value.Arguments,Resolver);
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){

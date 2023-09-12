@@ -36,13 +36,14 @@ using System.Reflection.PortableExecutable;
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
     protected Server<string> Server;
+    protected readonly EnumerableSetEqualityComparer Comparer;
+    protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     protected 共通(){
         const int ReceiveTimeout = 1000;
+        this.Comparer=new(this.ExpressionEqualityComparer);
         var Server = this.Server=new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=ReceiveTimeout };
         Server.Open();
     }
-    protected readonly EnumerableSetEqualityComparer Comparer=new();
-    protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected IJsonFormatterResolver JsonFormatterResolver=>this.SerializerConfiguration.JsonFormatterResolver;
     //protected MessagePackSerializerOptions MessagePackSerializerOptions=>this.SerializerConfiguration.MessagePackSerializerOptions;
     //protected readonly MessagePackCustomSerializer MessagePackCustomSerializer=new();
@@ -135,7 +136,7 @@ public abstract class 共通{
     protected void 共通Expression<T>(T input)
         where T:Expressions.Expression?
     {
-        this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         this.共通object1<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){

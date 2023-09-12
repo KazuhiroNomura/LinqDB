@@ -5,7 +5,7 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using static Common;
+using static Extension;
 using C=Serializer;
 using T=Expressions.LabelTarget;
 public class LabelTarget:IJsonFormatter<T> {

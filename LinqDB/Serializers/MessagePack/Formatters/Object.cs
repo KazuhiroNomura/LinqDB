@@ -21,40 +21,40 @@ public class Object:IMessagePackFormatter<object>{
         //writer.WriteValue(value.Value.GetType(),value.Value);
         //this.Serialize(ref writer,value.Type);
         switch(value){
-            case sbyte   v:writer.Write(v         );break;
-            case short   v:writer.Write(v         );break;
-            case int     v:writer.Write(v         );break;
-            case long    v:writer.Write(v         );break;
-            case byte    v:writer.Write(v         );break;
-            case ushort  v:writer.Write(v         );break;
-            case uint    v:writer.Write(v         );break;
-            case ulong   v:writer.Write(v         );break;
-            case float   v:writer.Write(v         );break;
-            case double  v:writer.Write(v         );break;
-            case bool    v:writer.Write(v         );break;
-            case string  v:writer.Write(v         );break;
+            case sbyte   v:writer.Write(v);break;
+            case short   v:writer.Write(v);break;
+            case int     v:writer.Write(v);break;
+            case long    v:writer.Write(v);break;
+            case byte    v:writer.Write(v);break;
+            case ushort  v:writer.Write(v);break;
+            case uint    v:writer.Write(v);break;
+            case ulong   v:writer.Write(v);break;
+            case float   v:writer.Write(v);break;
+            case double  v:writer.Write(v);break;
+            case bool    v:writer.Write(v);break;
+            case string  v:writer.Write(v);break;
+            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
+            case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
+            case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
+            case MethodInfo             v:Method     .Instance.Serialize(ref writer,v,Resolver);break;
+            case PropertyInfo           v:Property   .Instance.Serialize(ref writer,v,Resolver);break;
+            case EventInfo              v:Event      .Instance.Serialize(ref writer,v,Resolver);break;
+            case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
+            case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                if     (typeof(Expressions.Expression).IsAssignableFrom(type))Expression .Instance.Serialize(ref writer,(Expressions.Expression)value,Resolver);
-                else if(typeof(System.Type           ).IsAssignableFrom(type))Type       .Instance.Serialize(ref writer,(System.Type           )value,Resolver);
-                else if(typeof(MemberInfo            ).IsAssignableFrom(type))Member     .Instance.Serialize(ref writer,(MemberInfo            )value,Resolver);
-                else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))Constructor.Instance.Serialize(ref writer,(ConstructorInfo       )value,Resolver);
-                else if(typeof(MethodInfo            ).IsAssignableFrom(type))Method     .Instance.Serialize(ref writer,(MethodInfo            )value,Resolver);
-                else if(typeof(PropertyInfo          ).IsAssignableFrom(type))Property   .Instance.Serialize(ref writer,(PropertyInfo          )value,Resolver);
-                else if(typeof(EventInfo             ).IsAssignableFrom(type))Event      .Instance.Serialize(ref writer,(EventInfo             )value,Resolver);
-                else if(typeof(FieldInfo             ).IsAssignableFrom(type))Field      .Instance.Serialize(ref writer,(FieldInfo             )value,Resolver);
-                else{
-                    //writer.WriteValue(value,Resolver);
-                    //object Formatter;
-                    //if(type.IsDisplay()){
-                    //    if(DisplayClass.DictionarySerialize.TryGetValue(type,out var Foramtter)) return;
-                    //    var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
-                    //    Formatter=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-                    //} else{
-                    //    Formatter=Serializer.Instance.Options.Resolver.GetFormatterDynamic(type)!;
-                    //}
-                    var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-                    Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
-                }
+                //Serializer.RegisterAnonymousDisplay(type);
+                //writer.WriteValue(value,Resolver);
+                //object Formatter;
+                //if(type.IsDisplay()){
+                //    if(DisplayClass.DictionarySerialize.TryGetValue(type,out var Foramtter)) return;
+                //    var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
+                //    Formatter=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+                //} else{
+                //    Formatter=Serializer.Instance.Options.Resolver.GetFormatterDynamic(type)!;
+                //}
+                var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+                Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
                 break;
             }
         }
@@ -79,20 +79,19 @@ public class Object:IMessagePackFormatter<object>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString()!;
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
         else{
-            if     (typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
-            else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
-            else{
-                //reader.ReadValue(ref value);
-                var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-                value=Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
-            }
+            //reader.ReadValue(ref value);
+            var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+            value=Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
         }
         return value;
     }

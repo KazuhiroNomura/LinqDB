@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T= InvocationExpression;
-using static Common;
+using static Extension;
 
 public class Invocation:MemoryPackFormatter<T> {
     public static readonly Invocation Instance=new();
@@ -23,7 +23,7 @@ public class Invocation:MemoryPackFormatter<T> {
             return;
         }
         Expression.Instance.Serialize(ref writer,value.Expression);
-        SerializeReadOnlyCollection(ref writer,value.Arguments);
+        writer.SerializeReadOnlyCollection(value.Arguments);
     }
     // public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref InvocationExpression? value) where TBufferWriter:IBufferWriter<byte>
     // {

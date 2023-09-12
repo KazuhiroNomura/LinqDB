@@ -113,7 +113,7 @@ public class DisplayClass<T>:IJsonFormatter<T>{
         //    writer=(JsonWriter)Objects3[0];
         //    if(a<Parameters_Length-1)
         //        writer.WriteValueSeparator();
-        //    //SerializeReadOnlyCollection(ref writer,Value,formatterResolver);
+        //    //writer.SerializeReadOnlyCollection(Value,formatterResolver);
         //}
         //writer.WriteEndObject();
     }
