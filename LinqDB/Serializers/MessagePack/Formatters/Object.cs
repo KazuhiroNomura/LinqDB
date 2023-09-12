@@ -43,7 +43,17 @@ public class Object:IMessagePackFormatter<object>{
             case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
             case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                //Serializer.RegisterAnonymousDisplay(type);
+                //object Formatter;
+                //if(type.IsDisplay()){
+                //    //あらかじめ設定してあるResolverに設定する
+                //    var FormatterType=typeof(DisplayClass<>).MakeGenericType(type);
+                //    var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+                //    Formatter=Instance.GetValue(null)!;
+                //} else{
+                //    Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+                //}
+                var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+                Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
                 //writer.WriteValue(value,Resolver);
                 //object Formatter;
                 //if(type.IsDisplay()){
@@ -53,8 +63,6 @@ public class Object:IMessagePackFormatter<object>{
                 //} else{
                 //    Formatter=Serializer.Instance.Options.Resolver.GetFormatterDynamic(type)!;
                 //}
-                var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-                Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
                 break;
             }
         }

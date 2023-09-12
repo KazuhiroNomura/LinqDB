@@ -1,6 +1,7 @@
 ﻿
 //using System;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 //using MemoryPack_Formatters = LinqDB.Serializers.MemoryPack.Formatters;
@@ -12,6 +13,7 @@ namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 
 using LinqDB.Helpers;
+//using LinqDB.Serializers.MemoryPack.Formatters;
 
 using System.Runtime.Serialization;
 
@@ -153,6 +155,35 @@ public class Serializer:Serializers.Serializer{
     //}
     //private static readonly IJsonFormatter[] IJsonFormatters = new IJsonFormatter[1];
     //private static readonly IJsonFormatterResolver[] IJsonFormatterResolvers= new IJsonFormatterResolver[1];
+    //private static readonly object[] objects1 = new object[1];
+    public readonly Dictionary<System.Type,object> DictionarySerialize = new();
+    internal object? RegisterDisplay(System.Type Type) {
+        if(Type.IsDisplay()){
+            if(this.DictionarySerialize.TryGetValue(Type,out var Formatter)) return Formatter;
+            var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
+            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+            try{
+                Formatter=Instance.GetValue(null)!;
+                this.DictionarySerialize.Add(Type,Formatter);
+                return Formatter;
+            } catch(Exception ex){
+                Console.Write(ex);
+                throw;
+            }
+            //Register.Invoke(null,Array.Empty<object>());
+            //}else if(Type.IsGenericType) {
+            //    if(Type.IsAnonymous()) {
+            //        var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
+            //        var Register = Serializer.Register.MakeGenericMethod(Type);
+            //        var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+            //        objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+            //        Register.Invoke(null,objects1);
+            //        //Register.Invoke(null,Array.Empty<object>());
+            //    }
+            //    foreach(var GenericArgument in Type.GetGenericArguments()) RegisterAnonymousDisplay(GenericArgument);
+        }
+        return null;
+    }
     private void Clear(){
         this.Resolver.Clear();
         this.ProtectedClear();

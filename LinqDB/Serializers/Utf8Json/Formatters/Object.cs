@@ -48,7 +48,8 @@ public class Object:IJsonFormatter<object>{
             case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
             case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                var Formatter=Resolver.GetFormatterDynamic(type);
+                var Formatter=Serializer.Instance.RegisterDisplay(type)??Resolver.GetFormatterDynamic(type);
+                //var Formatter=Resolver.GetFormatterDynamic(type);
                 var Serialize=Formatter.GetType().GetMethod("Serialize");
                 Debug.Assert(Serialize is not null);
                 var Objects3=this.Objects3;

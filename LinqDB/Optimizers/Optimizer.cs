@@ -441,7 +441,8 @@ public sealed partial class Optimizer:IDisposable{
             this.b_Parameters.Clear();
             this.a_LabelTargets.Clear();
             this.b_LabelTargets.Clear();
-            return this.PrivateEqualsNullable(a,b);
+            var r=this.PrivateEqualsNullable(a,b);
+            return r;
         }
 
         /// <summary>

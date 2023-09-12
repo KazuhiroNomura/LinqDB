@@ -36,14 +36,18 @@ using MessagePack;
 using Utf8Json;
 
 namespace Serializers.MessagePack.Formatters;
-[MemoryPackable,MessagePackObject(true)]
+[Serializable,MemoryPackable,MessagePackObject(true)]
 public partial class テスト:IEquatable<テスト>{
-    [MemoryPackIgnore,IgnoreMember]
-    public Func<int,int,int,bool> Delegate=(a,b,c)=>a==b&&b==c;
+    //[MemoryPackIgnore,IgnoreMember]
+    //public Func<int,int,int,bool> Delegate=(a,b,c)=>a==b&&b==c;
     public void Action(int a,double b,string c){Trace.WriteLine("Action");}
     public bool Func(int a,double b,string c){
         Trace.WriteLine("Func");
         return a.Equals(b)&&b.Equals(c);
+    }
+    void xx(){
+       // this.Delegate(1,2,3);
+        //this.Action(a:0,1,b:3);
     }
     public static int static_Func(int a,int b)=>a+b;
     public bool Equals(テスト? other){
@@ -419,11 +423,18 @@ public class Expression:共通 {
             return expected;
         }
     }
-    [Fact]public void DynamicInvokeMember(){
-        Action(new テスト(),"Action",1,2.0,"string");
-        Func(new テスト(),"Func",1,2.0,"string");
+    [Fact]public void Display(){
+        var o=new テスト();
+        this.共通object1(o);
+    }
 
-        void Action(object オブジェクト, string メンバー名,object @int,object @double,object @string){
+    [Fact]public void DynamicInvokeMember(){
+        引数名();
+        Action("Action",1,2.0,"string");
+        Func("Func",1,2.0,"string");
+
+        void Action(string メンバー名,object @int,object @double,object @string){
+            var o=new テスト();
             var binder=Binder.InvokeMember(
                 CSharpBinderFlags.ResultDiscarded,//Actionの時に指定
                 メンバー名,
@@ -434,11 +445,11 @@ public class Expression:共通 {
                 CSharpArgumentInfoArray4
             );
             var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
-            CallSite.Target(CallSite,オブジェクト,@int,@double,@string);
+            CallSite.Target(CallSite,o,@int,@double,@string);
             var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expressions.Expression.Constant(オブジェクト),
+                Expressions.Expression.Constant(o),
                 Expressions.Expression.Constant(@int),
                 Expressions.Expression.Constant(@double),
                 Expressions.Expression.Constant(@string)
@@ -449,7 +460,8 @@ public class Expression:共通 {
             var M=Lambda.Compile();
             M();
         }
-        object Func(object オブジェクト, string メンバー名,object @int,object @double,object @string){
+        object Func(string メンバー名,object @int,object @double,object @string){
+            var o=new テスト();
             var binder=Binder.InvokeMember(
                 CSharpBinderFlags.None,
                 メンバー名,
@@ -462,11 +474,11 @@ public class Expression:共通 {
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(
                 binder
             );
-            var expected=CallSite.Target(CallSite,オブジェクト,@int,@double,@string);
+            var expected=CallSite.Target(CallSite,o,@int,@double,@string);
             var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expressions.Expression.Constant(オブジェクト),
+                Expressions.Expression.Constant(o),
                 Expressions.Expression.Constant(@int),
                 Expressions.Expression.Constant(@double),
                 Expressions.Expression.Constant(@string)
@@ -477,6 +489,35 @@ public class Expression:共通 {
             var actual=M();
             Assert.Equal(expected,actual);
             return expected;
+        }
+        void 引数名(){
+            var o=new テスト();
+            var Dynamic0=Expressions.Expression.Dynamic(
+                Binder.InvokeMember(
+                    CSharpBinderFlags.ResultIndexed,
+                    "Func",
+                    null,
+                    this.GetType(),
+                    new[]{
+                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                        CSharpArgumentInfo1,CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"a"),
+                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"b"),
+                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"c"),
+                    }
+                ),
+                typeof(object),
+                Expressions.Expression.Constant(o),
+                Expressions.Expression.Constant(11),
+                Expressions.Expression.Constant(22),
+                Expressions.Expression.Constant("cc")
+            );
+            this.共通Expression(Dynamic0);
+            var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
+            this.共通Expression(Lambda);
+            var M=Lambda.Compile();
+            var x=M();
         }
     }
     [Fact]public void DynamicGetMember(){

@@ -95,26 +95,17 @@ public abstract class 共通{
     }
     protected void 共通object1<T>(T input){
         {
-            ////GetFormatter<T>Tが匿名型だと例外なのであらかじめ
-            //if(typeof(T).IsAnonymous()){
-            //    var Type=input.GetType();
-            //    var FormatterType=typeof(Anonymous<>).MakeGenericType(Type);
-            //    dynamic formatter = Activator.CreateInstance(FormatterType)!;
-            //    MemoryPackFormatterProvider.Register(formatter);
-            //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
-            //    //Register.Invoke(null,Array.Empty<object>());
-            //}
-            var bytes=MemoryPack2.Serializer.Instance.Serialize(input);
+            var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
             var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes=Utf8Json2.Serializer.Instance.Serialize(input);
+            var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
             var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes=MessagePack2.Serializer.Instance.Serialize(input);
+            var bytes = MessagePack2.Serializer.Instance.Serialize(input);
             var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
@@ -177,31 +168,21 @@ public abstract class 共通{
     private static readonly object lockobject=new();
     protected void 共通object1<T>(T input,Action<T> AssertAction){
         lock(lockobject){
-            {
-                //GetFormatter<T>Tが匿名型だと例外なのであらかじめ
-                //if(typeof(T).IsAnonymous()) {
-                //    var Type = input.GetType();
-                //    var FormatterType =
-                //        typeof(LinqDB.Serializers.MemoryPack.Formatters.Anonymous<>).MakeGenericType(Type);
-                //    dynamic formatter = Activator.CreateInstance(FormatterType)!;
-                //    MemoryPackFormatterProvider.Register(formatter);
-                //    //var Register=typeof(MemoryPackFormatterProvider).GetMethod("Register",System.Type.EmptyTypes)!.MakeGenericMethod(Type);
-                //    //Register.Invoke(null,Array.Empty<object>());
-                //}
-                var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
-                var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
-                AssertAction(output!);
-            }
+            //{
+            //    var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
+            //    var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
+            //    AssertAction(output!);
+            //}
+            //{
+            //    var bytes = MessagePack2.Serializer.Instance.Serialize(input);
+            //    var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
+            //    var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
+            //    AssertAction(output);
+            //}
             {
                 var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
                 var s = Encoding.UTF8.GetString(bytes);
                 var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
-                AssertAction(output);
-            }
-            {
-                var bytes = MessagePack2.Serializer.Instance.Serialize(input);
-                var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
-                var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
                 AssertAction(output);
             }
         }

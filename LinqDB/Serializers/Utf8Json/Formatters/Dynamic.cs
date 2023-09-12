@@ -7,6 +7,8 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Dynamic;
 using MemoryPack;
 using System.Buffers;
+using LinqDB.Serializers.MemoryPack;
+using System.Collections.ObjectModel;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -82,8 +84,7 @@ public class Dynamic:IJsonFormatter<T> {
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         writer.WriteValueSeparator();
                         writer.WriteType(v1.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case GetMemberBinder v1:{
@@ -100,8 +101,7 @@ public class Dynamic:IJsonFormatter<T> {
                         WriteBinderType(ref writer,BinderType.InvokeBinder);
                         writer.WriteValueSeparator();
                         writer.WriteType(v1.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case InvokeMemberBinder v1:{
@@ -110,16 +110,14 @@ public class Dynamic:IJsonFormatter<T> {
                         writer.WriteType(v0.ReturnType);
                         writer.WriteValueSeparator();
                         writer.WriteString(v1.Name);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case SetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetIndexBinder);
                         writer.WriteValueSeparator();
                         writer.WriteType(v0.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case SetMemberBinder v1:{
@@ -151,6 +149,14 @@ public class Dynamic:IJsonFormatter<T> {
             }
         }
         writer.WriteEndArray();
+        void 共通(ref Writer writer0,ReadOnlyCollection<Expressions.Expression>Arguments,CallInfo CallInfo){
+            writer0.WriteValueSeparator();
+            writer0.WriteInt32(CallInfo.ArgumentCount);
+            writer0.WriteValueSeparator();
+            writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames,Resolver);
+            writer0.WriteValueSeparator();
+            writer0.SerializeReadOnlyCollection(Arguments,Resolver);
+        }
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
@@ -207,8 +213,7 @@ public class Dynamic:IJsonFormatter<T> {
             //    break;
             case BinderType.GetIndexBinder:{
                 var returnType=reader.ReadType();
-                reader.ReadIsValueSeparatorWithVerify();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.GetIndex(
                         CSharpBinderFlags.None,
@@ -240,12 +245,7 @@ public class Dynamic:IJsonFormatter<T> {
             }
             case BinderType.InvokeBinder:{
                 var returnType=reader.ReadType();
-                reader.ReadIsValueSeparatorWithVerify();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
-                var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
-                for(var a=0;a<CSharpArgumentInfos.Length;a++){
-                    CSharpArgumentInfos[a]=CSharpArgumentInfo1;
-                }
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.Invoke(
                         CSharpBinderFlags.None,
@@ -261,12 +261,7 @@ public class Dynamic:IJsonFormatter<T> {
                 var returnType=reader.ReadType();
                 reader.ReadIsValueSeparatorWithVerify();
                 var name=reader.ReadString();
-                reader.ReadIsValueSeparatorWithVerify();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
-                var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
-                for(var a=0;a<CSharpArgumentInfos.Length;a++){
-                    CSharpArgumentInfos[a]=CSharpArgumentInfo1;
-                }
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.InvokeMember(
                         CSharpBinderFlags.None,
@@ -282,14 +277,12 @@ public class Dynamic:IJsonFormatter<T> {
             }
             case BinderType.SetIndexBinder:{
                 var returnType=reader.ReadType();
-                reader.ReadIsValueSeparatorWithVerify();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
-                reader.ReadIsValueSeparatorWithVerify();
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.SetIndex(
                         CSharpBinderFlags.None,
                         typeof(Expression),
-                        CSharpArgumentInfos2
+                        CSharpArgumentInfos
                     ),
                     returnType,
                     Arguments
@@ -340,6 +333,20 @@ public class Dynamic:IJsonFormatter<T> {
         }
         reader.ReadIsEndArrayWithVerify();
         return value;
-        //return Expressions.Expression.Dynamic(type);
+        (CSharpArgumentInfo[]CSharpArgumentInfos,Expressions.Expression[]Arguments)共通(ref Reader reader0){
+            reader0.ReadIsValueSeparatorWithVerify();
+            var ArgumentCount=reader0.ReadInt32();
+            reader0.ReadIsValueSeparatorWithVerify();
+            var ArgumentNames=reader0.DeserializeArray<string>(Resolver);
+            reader0.ReadIsValueSeparatorWithVerify();
+            var Arguments=reader0.DeserializeArray<Expressions.Expression>(Resolver);
+            var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
+            var ArgumentNames_Length=ArgumentNames.Length;
+            for(var a=0;a<ArgumentNames_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,ArgumentNames[a]);
+            var CSharpArgumentInfos_Length=CSharpArgumentInfos.Length;
+            //Debug.Assert((CSharpArgumentInfos_Length==ArgumentCount||CSharpArgumentInfos_Length-1==ArgumentCount)&&ArgumentNames.Length<=ArgumentCount);
+            for(var a=ArgumentNames_Length;a<CSharpArgumentInfos_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo1;
+            return (CSharpArgumentInfos,Arguments);
+        }
     }
 }

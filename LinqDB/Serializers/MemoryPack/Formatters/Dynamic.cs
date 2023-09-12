@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
 using Expressions=System.Linq.Expressions;
@@ -97,7 +98,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case GetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         writer.WriteType(v0.ReturnType);
-                        writer.SerializeReadOnlyCollection(value.Arguments);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case GetMemberBinder v1:{
@@ -110,20 +111,20 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case InvokeBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeBinder);
                         writer.WriteType(v0.ReturnType);
-                        writer.SerializeReadOnlyCollection(value.Arguments);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case InvokeMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
                         writer.WriteType(v0.ReturnType);
                         writer.WriteString(v1.Name);
-                        writer.SerializeReadOnlyCollection(value.Arguments);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case SetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetIndexBinder);
                         writer.WriteType(v0.ReturnType);
-                        writer.SerializeReadOnlyCollection(value.Arguments);
+                        共通(ref writer,value.Arguments,v1.CallInfo);
                         break;
                     }
                     case SetMemberBinder v1:{
@@ -146,6 +147,11 @@ public class Dynamic:MemoryPackFormatter<T> {
                 }
                 break;
             }
+        }
+        static void 共通(ref MemoryPackWriter<TBufferWriter> writer0,ReadOnlyCollection<Expressions.Expression>Arguments,CallInfo CallInfo){
+            writer0.WriteVarInt(CallInfo.ArgumentCount);
+            writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames);
+            writer0.SerializeReadOnlyCollection(Arguments);
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
@@ -193,12 +199,12 @@ public class Dynamic:MemoryPackFormatter<T> {
                 break;
             case BinderType.GetIndexBinder:{
                 var returnType=reader.ReadType();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>();
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.GetIndex(
                         CSharpBinderFlags.None,
                         typeof(Expression),
-                        CSharpArgumentInfos2
+                        CSharpArgumentInfos
                     ),
                     returnType,
                     Arguments
@@ -223,11 +229,7 @@ public class Dynamic:MemoryPackFormatter<T> {
             }
             case BinderType.InvokeBinder:{
                 var returnType=reader.ReadType();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>();
-                var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
-                for(var a=0;a<CSharpArgumentInfos.Length;a++){
-                    CSharpArgumentInfos[a]=CSharpArgumentInfo1;
-                }
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.Invoke(
                         CSharpBinderFlags.None,
@@ -242,11 +244,7 @@ public class Dynamic:MemoryPackFormatter<T> {
             case BinderType.InvokeMemberBinder:{
                 var returnType=reader.ReadType();
                 var name=reader.ReadString();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>();
-                var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
-                for(var a=0;a<CSharpArgumentInfos.Length;a++){
-                    CSharpArgumentInfos[a]=CSharpArgumentInfo1;
-                }
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.InvokeMember(
                         CSharpBinderFlags.None,
@@ -262,12 +260,12 @@ public class Dynamic:MemoryPackFormatter<T> {
             }
             case BinderType.SetIndexBinder:{
                 var returnType=reader.ReadType();
-                var Arguments=reader.DeserializeArray<Expressions.Expression>();
+                var (CSharpArgumentInfos,Arguments)=共通(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.SetIndex(
                         CSharpBinderFlags.None,
                         typeof(Expression),
-                        CSharpArgumentInfos2
+                        CSharpArgumentInfos
                     ),
                     returnType,
                     Arguments
@@ -310,6 +308,19 @@ public class Dynamic:MemoryPackFormatter<T> {
             }
             default:
                 throw new ArgumentOutOfRangeException(BinderType.ToString());
+        }
+        static (CSharpArgumentInfo[]CSharpArgumentInfos,Expressions.Expression[]Arguments)共通(ref Reader reader0){
+            var ArgumentCount=reader0.ReadVarIntInt32();
+            var ArgumentNames=reader0.DeserializeArray<string>();
+            //ArgumentCountは()内の引数。Argumentsはthisも含んでいる
+            var Arguments=reader0.DeserializeArray<Expressions.Expression>();
+            var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
+            var ArgumentNames_Length=ArgumentNames.Length;
+            for(var a=0;a<ArgumentNames_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,ArgumentNames[a]);
+            var CSharpArgumentInfos_Length=CSharpArgumentInfos.Length;
+            //Debug.Assert((CSharpArgumentInfos_Length==ArgumentCount||CSharpArgumentInfos_Length-1==ArgumentCount)&&ArgumentNames.Length<=ArgumentCount);
+            for(var a=ArgumentNames_Length;a<CSharpArgumentInfos_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo1;
+            return (CSharpArgumentInfos,Arguments);
         }
     }
 }

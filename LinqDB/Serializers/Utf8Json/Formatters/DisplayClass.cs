@@ -8,18 +8,23 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-internal static class DisplayClass {
-    public static readonly MethodInfo WriteValueSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
-    public static readonly MethodInfo WriteString = typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
-    public static readonly MethodInfo WriteNameSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
-    public static readonly MethodInfo ReadIsValueSeparatorWithVerify = typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
-    public static readonly MethodInfo ReadString = typeof(Reader).GetMethod(nameof(Reader.ReadString))!;
-    public static readonly MethodInfo ReadIsNameSeparatorWithVerify = typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
-    private static void Serialize<T>(ref Writer writer,T value,IJsonFormatterResolver Resolver) => Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-    public static readonly MethodInfo MethodSerialize = typeof(DisplayClass).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static T Deserialize<T>(ref Reader reader,IJsonFormatterResolver Resolver) => Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    public static readonly MethodInfo MethodDeserialize = typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    //public static readonly Dictionary<System.Type,Delegate> DictionarySerialize = new();
+internal static class DisplayClass{
+    public static readonly MethodInfo WriteValueSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
+    public static readonly MethodInfo WriteString=typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
+    public static readonly MethodInfo WriteNameSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
+    public static readonly MethodInfo ReadIsValueSeparatorWithVerify=
+        typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
+    public static readonly MethodInfo ReadString=typeof(Reader).GetMethod(nameof(Reader.ReadString))!;
+    public static readonly MethodInfo ReadIsNameSeparatorWithVerify=
+        typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
+    private static void Serialize<T>(ref Writer writer,T value,IJsonFormatterResolver Resolver)=>
+        Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+    public static readonly MethodInfo MethodSerialize=
+        typeof(DisplayClass).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static T Deserialize<T>(ref Reader reader,IJsonFormatterResolver Resolver)=>
+        Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
+    public static readonly MethodInfo MethodDeserialize=
+        typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 }
 public class DisplayClass<T>:IJsonFormatter<T>{
     public static readonly DisplayClass<T> Instance=new();
@@ -28,6 +33,7 @@ public class DisplayClass<T>:IJsonFormatter<T>{
     private delegate T delegate_Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Deserialize DelegateDeserialize;
     public DisplayClass() {
+        try{
         var Types1 = new System.Type[1];
         var Types2 = new System.Type[2];
         var Types3 = new System.Type[3];
@@ -48,42 +54,48 @@ public class DisplayClass<T>:IJsonFormatter<T>{
         }
         void 共通(ILGenerator I0,ILGenerator I1){
             I1.Emit(OpCodes.Newobj,typeof(T).GetConstructor(System.Type.EmptyTypes)!);
-            var display=I1.DeclareLocal(typeof(T));
+            I1.DeclareLocal(typeof(T));
             I1.Emit(OpCodes.Stloc_0);
-            var index=0;
-            while(true){
-                var Field=Fields[index];
-                Types1[0]=Field.FieldType;
-                I0.Emit(OpCodes.Ldarg_0);//writer
-                I0.Emit(OpCodes.Ldstr,Field.Name);
-                I0.Emit(OpCodes.Call,DisplayClass.WriteString);
-                I0.Emit(OpCodes.Ldarg_0);//writer
-                I0.Emit(OpCodes.Call,DisplayClass.WriteNameSeparator);
-                I0.Emit(OpCodes.Ldarg_0);//writer
-                I0.Emit(OpCodes.Ldarg_1);//value
-                I0.Emit(OpCodes.Ldfld,Field);//value.field
-                I0.Emit(OpCodes.Ldarg_2);//resolver
-                I0.Emit(OpCodes.Call,DisplayClass.MethodSerialize.MakeGenericMethod(Types1));
-                I1.Emit(OpCodes.Ldarg_0);//reader
-                I1.Emit(OpCodes.Call,DisplayClass.ReadString);//Nameを読む
-                I1.Emit(OpCodes.Pop);            //Nameを捨てる
-                I1.Emit(OpCodes.Ldarg_0);//reader
-                I1.Emit(OpCodes.Call,DisplayClass.ReadIsNameSeparatorWithVerify);//":"を読む
-                I1.Emit(OpCodes.Ldloc_0);//display
-                I1.Emit(OpCodes.Ldarg_0);//display reader
-                I1.Emit(OpCodes.Ldarg_1);//display reader resolver
-                I1.Emit(OpCodes.Call,DisplayClass.MethodDeserialize.MakeGenericMethod(Types1));//display Deserialize(ref reader,resolver)
-                I1.Emit(OpCodes.Stfld,Field);//display.field=Deserialize(ref reader,resolver)
-                index++;
-                if(index==Fields_Length) break;
-                I0.Emit(OpCodes.Ldarg_0);
-                I0.Emit(OpCodes.Call,DisplayClass.WriteValueSeparator);
-                I1.Emit(OpCodes.Ldarg_0);
-                I1.Emit(OpCodes.Call,DisplayClass.ReadIsValueSeparatorWithVerify);
+            if(Fields_Length>0){
+                var index=0;
+                while(true){
+                    var Field=Fields[index];
+                    Types1[0]=Field.FieldType;
+                    I0.Emit(OpCodes.Ldarg_0);//writer
+                    I0.Emit(OpCodes.Ldstr,Field.Name);
+                    I0.Emit(OpCodes.Call,DisplayClass.WriteString);
+                    I0.Emit(OpCodes.Ldarg_0);//writer
+                    I0.Emit(OpCodes.Call,DisplayClass.WriteNameSeparator);
+                    I0.Emit(OpCodes.Ldarg_0);//writer
+                    I0.Emit(OpCodes.Ldarg_1);//value
+                    I0.Emit(OpCodes.Ldfld,Field);//value.field
+                    I0.Emit(OpCodes.Ldarg_2);//resolver
+                    I0.Emit(OpCodes.Call,DisplayClass.MethodSerialize.MakeGenericMethod(Types1));
+                    I1.Emit(OpCodes.Ldarg_0);//reader
+                    I1.Emit(OpCodes.Call,DisplayClass.ReadString);//Nameを読む
+                    I1.Emit(OpCodes.Pop);//Nameを捨てる
+                    I1.Emit(OpCodes.Ldarg_0);//reader
+                    I1.Emit(OpCodes.Call,DisplayClass.ReadIsNameSeparatorWithVerify);//":"を読む
+                    I1.Emit(OpCodes.Ldloc_0);//display
+                    I1.Emit(OpCodes.Ldarg_0);//display reader
+                    I1.Emit(OpCodes.Ldarg_1);//display reader resolver
+                    I1.Emit(OpCodes.Call,DisplayClass.MethodDeserialize.MakeGenericMethod(Types1));//display Deserialize(ref reader,resolver)
+                    I1.Emit(OpCodes.Stfld,Field);//display.field=Deserialize(ref reader,resolver)
+                    index++;
+                    if(index==Fields_Length) break;
+                    I0.Emit(OpCodes.Ldarg_0);
+                    I0.Emit(OpCodes.Call,DisplayClass.WriteValueSeparator);
+                    I1.Emit(OpCodes.Ldarg_0);
+                    I1.Emit(OpCodes.Call,DisplayClass.ReadIsValueSeparatorWithVerify);
+                }
             }
             I0.Emit(OpCodes.Ret);
             I1.Emit(OpCodes.Ldloc_0);
             I1.Emit(OpCodes.Ret);
+        }
+        } catch(Exception ex){
+            Console.Write(ex.ToString());
+            throw;
         }
     }
     //private readonly object[] Objects3=new object[3];
@@ -91,7 +103,9 @@ public class DisplayClass<T>:IJsonFormatter<T>{
   //      if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginObject();
+        //writer.WriteBeginArray();
         this.DelegateSerialize(ref writer, value, formatterResolver);
+        //writer.WriteEndArray();
         writer.WriteEndObject();
         //var Parameters = typeof(T).GetConstructors()[0].GetParameters();
         //var Parameters_Length = Parameters.Length;
@@ -121,6 +135,7 @@ public class DisplayClass<T>:IJsonFormatter<T>{
     public T Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver){
         //if(reader.ReadIsNull())return default!;
         reader.ReadIsBeginObjectWithVerify();
+        //reader.ReadIsBeginArrayWithVerify();
         var result=this.DelegateDeserialize(ref reader, formatterResolver);
         //var ctor = typeof(T).GetConstructors()[0];
         //var Parameters = ctor.GetParameters();
@@ -141,6 +156,7 @@ public class DisplayClass<T>:IJsonFormatter<T>{
         //    if(a<Parameters_Length-1)
         //        reader.ReadIsValueSeparatorWithVerify();
         //}
+        //reader.ReadIsEndArrayWithVerify();
         reader.ReadIsEndObjectWithVerify();
         return result;
         //return (T)ctor.Invoke(args);
