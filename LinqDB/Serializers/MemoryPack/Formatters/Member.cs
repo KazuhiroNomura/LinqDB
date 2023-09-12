@@ -31,15 +31,16 @@ public class Member:MemoryPackFormatter<T>{
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        var ReflectedType=value.ReflectedType!;
-        Type.Instance.Serialize(ref writer,ReflectedType);
-        var array= C.Instance.TypeMembers.Get(ReflectedType);
-        writer.WriteVarInt(Array.IndexOf(array,value));
+        var type=value.ReflectedType!;
+        Type.Instance.Serialize(ref writer,type);
+        var array= C.Instance.TypeMembers.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteVarInt(index);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ReflectedType= Type.Instance.Deserialize(ref reader);
-        var array= C.Instance.TypeMembers.Get(ReflectedType);
-        var Index=reader.ReadVarIntInt32();
-        value=array[Index];
+        var type= Type.Instance.Deserialize(ref reader);
+        var array= C.Instance.TypeMembers.Get(type);
+        var index=reader.ReadVarIntInt32();
+        value=array[index];
     }
 }

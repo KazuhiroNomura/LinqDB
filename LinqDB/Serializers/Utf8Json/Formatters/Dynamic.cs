@@ -9,7 +9,7 @@ using MemoryPack;
 using System.Buffers;
 using LinqDB.Serializers.MemoryPack;
 using System.Collections.ObjectModel;
-
+using LinqDB.Helpers;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -143,6 +143,13 @@ public class Dynamic:IJsonFormatter<T> {
                         writer.WriteValueSeparator();
                         Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
                         break;
+                    }
+                    default:{
+                        dynamic o=new NonPublicAccessor(v0);
+                        var BindingFlags=o.BindingFlags;
+                        var Name=o.Name;
+                        var TypeArguments=o.TypeArguments;
+                        throw new NotSupportedException(v0.ToString());
                     }
                 }
                 break;

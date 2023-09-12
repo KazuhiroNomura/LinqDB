@@ -363,9 +363,9 @@ public class Server実行ExpressionEqualityComparer:共通{
         return a.メンバー;
     }
     private readonly Optimizer.ExpressionEqualityComparer Comparer=new();
-    private void AssertEqual(Expression a,Expression b)=>this.共通object1(a,b=>Assert.Equal(a,b,this.Comparer));
+    private void AssertEqual(Expression a,Expression b)=>this.シリアライズデシリアライズ3パターン(a,b=>Assert.Equal(a,b,this.Comparer));
 
-    private void AssertNotEqual(Expression a,Expression b)=>this.共通object1(a,b=>Assert.NotEqual(a,b,this.Comparer));
+    private void AssertNotEqual(Expression a,Expression b)=>this.シリアライズデシリアライズ3パターン(a,b=>Assert.NotEqual(a,b,this.Comparer));
 
     [Fact]
     public void Dynamic(){

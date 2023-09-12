@@ -88,7 +88,7 @@ public class Object:IJsonFormatter<object>{
         //else if(typeof(Guid   )==type)result=global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
+        //else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
         else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);

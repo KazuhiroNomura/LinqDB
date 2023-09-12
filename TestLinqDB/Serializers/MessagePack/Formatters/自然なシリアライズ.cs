@@ -41,6 +41,6 @@ public class 自然なシリアライズ:共通{
         //var FormatterType=typeof(Anonymous<>).MakeGenericType(value.GetType());
         //dynamic formatter=Activator.CreateInstance(FormatterType)!;
         //MemoryPackFormatterProvider.Register(formatter);
-        this.共通object2(value);
+        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(value);
     }
 }

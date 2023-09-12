@@ -47,7 +47,7 @@ public class Object:MemoryPackFormatter<object>{
             case PropertyInfo           v:Property   .Instance.Serialize(ref writer,v);break;
             case EventInfo              v:Event      .Instance.Serialize(ref writer,v);break;
             case FieldInfo              v:Field      .Instance.Serialize(ref writer,v);break;
-            case MemberInfo             v:Member     .Instance.Serialize(ref writer,v);break;
+            //case MemberInfo             v:Member     .Instance.Serialize(ref writer,v);break;
             default:
                 Serializer.RegisterAnonymousDisplay(type);
                 writer.WriteValue(type,value);
@@ -78,12 +78,12 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader);
         else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader);
-        else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader);
         else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader);
         else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader);
         else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader);
         else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader);
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader);
+        //else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader);
         else{
             Serializer.RegisterAnonymousDisplay(type);
             reader.ReadValue(type,ref value);

@@ -82,7 +82,7 @@ public abstract class 共通{
         writer.WriteValue(value);
         //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
     }
-    public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    public static readonly MethodInfo MethodSerialize = typeof(色んなデータ型).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
     private static void serialize<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter> writer,ref Display value)where TBufferWriter:IBufferWriter<byte>{
         Serialize2(ref writer,ref value.a);
     }
@@ -93,7 +93,7 @@ public abstract class 共通{
     private static void deserialize<T>(ref MemoryPackReader reader,ref Display value){
         Deserialize2(ref reader,ref value.a);
     }
-    protected void 共通object1<T>(T input){
+    protected void シリアライズデシリアライズ3パターン<T>(T input){
         {
             var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
             var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
@@ -110,10 +110,10 @@ public abstract class 共通{
             Assert.Equal(input,output,this.Comparer);
         }
     }
-    protected void 共通object2<T>(T input){
+    protected void シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス<T>(T input){
         Debug.Assert(input!=null,nameof(input)+" != null");
-        this.共通object1<object>(input);
-        this.共通object1(input);
+        this.シリアライズデシリアライズ3パターン<object>(input);
+        this.シリアライズデシリアライズ3パターン(input);
     }
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly = false,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
     protected void 実行結果が一致するか確認(Expression<Action> Lambda){
@@ -128,7 +128,7 @@ public abstract class 共通{
         where T:Expressions.Expression?
     {
         //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.共通object1<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
+        this.シリアライズデシリアライズ3パターン<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
         this.共通Expression<Expressions.Expression>(Lambda);
@@ -166,19 +166,19 @@ public abstract class 共通{
         return expected;
     }
     private static readonly object lockobject=new();
-    protected void 共通object1<T>(T input,Action<T> AssertAction){
+    protected void シリアライズデシリアライズ3パターン<T>(T input,Action<T> AssertAction){
         lock(lockobject){
-            //{
-            //    var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
-            //    var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
-            //    AssertAction(output!);
-            //}
-            //{
-            //    var bytes = MessagePack2.Serializer.Instance.Serialize(input);
-            //    var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
-            //    var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
-            //    AssertAction(output);
-            //}
+            {
+                var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
+                var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
+                AssertAction(output!);
+            }
+            {
+                var bytes = MessagePack2.Serializer.Instance.Serialize(input);
+                var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
+                var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
+                AssertAction(output);
+            }
             {
                 var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
                 var s = Encoding.UTF8.GetString(bytes);

@@ -6,10 +6,11 @@ using LinqDB.Databases.Schemas;
 using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 using Expressions=System.Linq.Expressions;
-internal static class Extension {
+internal static class Extension{
+    private static BindingFlags Flags=BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;
     public static MemberInfo[] Get(this Dictionary<Type,MemberInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetMembers(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
+            array=ReflectedType.GetMembers(Flags).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }
@@ -25,7 +26,7 @@ internal static class Extension {
     }
     public static EventInfo[] Get(this Dictionary<Type,EventInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetEvents(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
+            array=ReflectedType.GetEvents(Flags).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }
@@ -33,7 +34,7 @@ internal static class Extension {
     }
     public static FieldInfo[] Get(this Dictionary<Type,FieldInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetFields(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
+            array=ReflectedType.GetFields(Flags).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }
@@ -41,7 +42,7 @@ internal static class Extension {
     }
     public static PropertyInfo[] Get(this Dictionary<Type,PropertyInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetProperties(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public).ToArray();
+            array=ReflectedType.GetProperties(Flags).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }
@@ -50,7 +51,7 @@ internal static class Extension {
     public static MethodInfo[] Get(this Dictionary<Type,MethodInfo[]>d,Type ReflectedType){
         if(!d.TryGetValue(ReflectedType,out var array)){
             //NonPublicは<>cのinternalメソッドが匿名デリゲートの本体になることがあるため
-            array=ReflectedType.GetMethods(BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).ToArray();
+            array=ReflectedType.GetMethods(Flags|BindingFlags.NonPublic).ToArray();
             d.Add(ReflectedType,array);
             Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
         }

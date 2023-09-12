@@ -34,6 +34,7 @@ using System.Security.Cryptography;
 using static LinqDB.Optimizers.Optimizer;
 using MessagePack;
 using Utf8Json;
+using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace Serializers.MessagePack.Formatters;
 [Serializable,MemoryPackable,MessagePackObject(true)]
@@ -317,96 +318,96 @@ public class Expression:共通 {
         CSharpArgumentInfo1
     };
     [Fact]public void DynamicUnary(){
-        //if(!this.SequenceEqual(a.Arguments,b.Arguments)) return false;
-        {
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.UnaryOperation(
-                        CSharpBinderFlags.None,
-                        Expressions.ExpressionType.Increment,
-                        this.GetType(),
-                        CSharpArgumentInfoArray1
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(1,typeof(object))
-                )
-            );
-        }
+        var arg1=1;
+        var binder=Binder.UnaryOperation(
+            CSharpBinderFlags.None,
+            Expressions.ExpressionType.Increment,
+            this.GetType(),
+            CSharpArgumentInfoArray1
+        );
+        var Dynamic0=Expressions.Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expressions.Expression.Constant(arg1,typeof(object))
+        );
+        var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
     }
     [Fact]public void DynamicCreateInstance(){
+        var binder=Binder.InvokeConstructor(
+            CSharpBinderFlags.None,
+            typeof(Expression),
+            new CSharpArgumentInfo[]{
+                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.UseCompileTimeType, null)
+            }
+        );
+        var  CallSite = CallSite<Func<CallSite,System.Type,object>>.Create(binder);
         {
-            var Constant_1L = Expressions.Expression.Constant(1L);
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.InvokeConstructor(
-                        CSharpBinderFlags.InvokeSpecialName,
-                        this.GetType(),
-                        new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, "Hello") }
-                    ),
-                    typeof(object),
-                    Constant_1L
-                )
+            var Dynamic0 = Expressions.Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expressions.Expression.Constant(typeof(テスト))
             );
+            this.共通Dynamic(CallSite.Target(CallSite,typeof(テスト)),Dynamic0);
         }
-        {
-            var Constant_1L = Expressions.Expression.Constant(1L);
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.Convert(
-                        CSharpBinderFlags.ConvertExplicit,
-                        typeof(double),
-                        this.GetType()
-                    ),
-                    typeof(object),
-                    Constant_1L
-                )
-            );
-        }
+        //{
+        //    var Constant_1L = Expressions.Expression.Constant(1L);
+        //    var binder=Binder.Convert(
+        //        CSharpBinderFlags.ConvertExplicit,
+        //        typeof(double),
+        //        this.GetType()
+        //    );
+        //    var Dynamic0=Expressions.Expression.Dynamic(
+        //        binder,
+        //        typeof(object),
+        //        Constant_1L
+        //    );
+        //    var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
+        //    this.共通Dynamic(CallSite.Target(CallSite,Constant_1L),Dynamic0);
+        //}
     }
-    [Fact]public void DynamicConvert(){
-        {
-            var Constant_1L = Expressions.Expression.Constant(1L);
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.Convert(
-                        CSharpBinderFlags.None,
-                        typeof(double),
-                        this.GetType()
-                    ),
-                    typeof(object),
-                    Constant_1L
-                )
-            );
-        }
-        {
-            var Constant_1L = Expressions.Expression.Constant(1L);
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.Convert(
-                        CSharpBinderFlags.ConvertExplicit,
-                        typeof(double),
-                        this.GetType()
-                    ),
-                    typeof(object),
-                    Constant_1L
-                )
-            );
-        }
+    [Fact]public void DynamicConvertImpliccit(){
+        this.PrivateDynamicConvert<int,long>(1,CSharpBinderFlags.None);
+        this.PrivateDynamicConvert<int,double>(1,CSharpBinderFlags.None);
+        this.PrivateDynamicConvert<float,double>(1,CSharpBinderFlags.None);
+    }
+    [Fact]public void DynamicConvertExplicit(){
+        this.PrivateDynamicConvert<long,int>(1,CSharpBinderFlags.ConvertExplicit);
+        this.PrivateDynamicConvert<double,int>(1,CSharpBinderFlags.ConvertExplicit);
+        this.PrivateDynamicConvert<double,float>(1,CSharpBinderFlags.ConvertExplicit);
+    }
+    private void PrivateDynamicConvert<TInput,TResult>(TInput input,CSharpBinderFlags Flag){
+        var Constant = Expressions.Expression.Constant(input);
+        var binder=Binder.Convert(
+            Flag,
+            typeof(TResult),
+            this.GetType()
+        );
+        var Dynamic0=Expressions.Expression.Dynamic(
+            binder,
+            typeof(TResult),
+            Constant
+        );
+        var CallSite=CallSite<Func<CallSite,object,TResult>>.Create(binder);
+        var expected=CallSite.Target(CallSite,input!);
+        this.共通Expression(Dynamic0);
+        var Lambda=Expressions.Expression.Lambda<Func<TResult>>(Dynamic0);
+        this.共通Expression(Lambda);
+        var M=Lambda.Compile();
+        var actual=M();
+        Assert.Equal(expected,actual);
     }
     [Fact]public void DynamicInvoke(){
         共通((int a,int b,int c)=>a==b&&a==c,1,2,3);
         共通((int a,int b,int c)=>a==b&&a==c,2,2,2);
 
-        object 共通(object オブジェクト, object a,object b,object c){
+        void 共通(object オブジェクト, object a,object b,object c){
             var binder=Binder.Invoke(
                 CSharpBinderFlags.None,
                 typeof(Expression),
                 CSharpArgumentInfoArray4
             );
-            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(
-                binder
-            );
-            var expected=CallSite.Target(CallSite,オブジェクト,a,b,c);
+            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
             var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
@@ -415,17 +416,12 @@ public class Expression:共通 {
                 Expressions.Expression.Constant(b),
                 Expressions.Expression.Constant(c)
             );
-            var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
-            this.共通Expression(Lambda);
-            var M=Lambda.Compile();
-            var actual=M();
-            Assert.Equal(expected,actual);
-            return expected;
+            this.共通Dynamic(CallSite.Target(CallSite,オブジェクト,a,b,c),Dynamic0);
         }
     }
     [Fact]public void Display(){
         var o=new テスト();
-        this.共通object1(o);
+        this.シリアライズデシリアライズ3パターン(o);
     }
 
     [Fact]public void DynamicInvokeMember(){
@@ -460,7 +456,7 @@ public class Expression:共通 {
             var M=Lambda.Compile();
             M();
         }
-        object Func(string メンバー名,object @int,object @double,object @string){
+        void Func(string メンバー名,object @int,object @double,object @string){
             var o=new テスト();
             var binder=Binder.InvokeMember(
                 CSharpBinderFlags.None,
@@ -471,10 +467,7 @@ public class Expression:共通 {
                 typeof(Expression),
                 CSharpArgumentInfoArray4
             );
-            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(
-                binder
-            );
-            var expected=CallSite.Target(CallSite,o,@int,@double,@string);
+            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
             var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
@@ -483,150 +476,167 @@ public class Expression:共通 {
                 Expressions.Expression.Constant(@double),
                 Expressions.Expression.Constant(@string)
             );
-            var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
-            var M=Lambda.Compile();
-            this.共通Expression(Lambda);
-            var actual=M();
-            Assert.Equal(expected,actual);
-            return expected;
+            this.共通Dynamic(CallSite.Target(CallSite,o,@int,@double,@string),Dynamic0);
         }
         void 引数名(){
-            var o=new テスト();
-            var Dynamic0=Expressions.Expression.Dynamic(
-                Binder.InvokeMember(
-                    CSharpBinderFlags.ResultIndexed,
-                    "Func",
-                    null,
-                    this.GetType(),
-                    new[]{
-                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                        CSharpArgumentInfo1,CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"a"),
-                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"b"),
-                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                        //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"c"),
-                    }
-                ),
-                typeof(object),
-                Expressions.Expression.Constant(o),
-                Expressions.Expression.Constant(11),
-                Expressions.Expression.Constant(22),
-                Expressions.Expression.Constant("cc")
+            var arg1=new テスト();
+            var arg2=11;
+            var arg3=22;
+            var arg4="cc";
+            var binder=Binder.InvokeMember(
+                CSharpBinderFlags.ResultIndexed,
+                "Func",
+                null,
+                this.GetType(),
+                new[]{
+                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                    CSharpArgumentInfo1,CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"a"),
+                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"b"),
+                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"c"),
+                }
             );
-            this.共通Expression(Dynamic0);
-            var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
-            this.共通Expression(Lambda);
-            var M=Lambda.Compile();
-            var x=M();
+            var Dynamic0=Expressions.Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expressions.Expression.Constant(arg1),
+                Expressions.Expression.Constant(arg2),
+                Expressions.Expression.Constant(arg3),
+                Expressions.Expression.Constant(arg4)
+            );
+            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
+            this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3,arg4),Dynamic0);
         }
     }
     [Fact]public void DynamicGetMember(){
         //if(a_GetMemberBinder!=null) {
         {
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.GetMember(
-                        CSharpBinderFlags.None,
-                        nameof(TestDynamic<int>.メンバー1),
-                        this.GetType(),
-                        CSharpArgumentInfoArray1
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(new TestDynamic<int>(1,2))
-                )
+            var arg1=new TestDynamic<int>(1,2);
+            var binder=Binder.GetMember(
+                CSharpBinderFlags.None,
+                nameof(TestDynamic<int>.メンバー1),
+                this.GetType(),
+                CSharpArgumentInfoArray1
             );
+            var Dynamic0=Expressions.Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expressions.Expression.Constant(arg1)
+            );
+            this.共通Expression(Dynamic0);
+            var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
+            this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
         //    return a_GetMemberBinder.Name.Equals(b_GetMemberBinder.Name,StringComparison.Ordinal);
         {
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.GetMember(
-                        CSharpBinderFlags.ResultIndexed,
-                        nameof(TestDynamic<int>.メンバー1),
-                        this.GetType(),
-                        CSharpArgumentInfoArray1
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(new TestDynamic<int>(1,2))
-                )
+            var arg1=new TestDynamic<int>(1,2);
+            var binder=Binder.GetMember(
+                CSharpBinderFlags.ResultIndexed,
+                nameof(TestDynamic<int>.メンバー1),
+                this.GetType(),
+                CSharpArgumentInfoArray1
             );
+            var Dynamic0=Expressions.Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expressions.Expression.Constant(arg1)
+            );
+            this.共通Expression(Dynamic0);
+            var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
+            this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
     }
     [Fact]public void DynamicSetMember(){
-        {
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.SetMember(
-                        CSharpBinderFlags.ResultIndexed,
-                        nameof(TestDynamic<int>.メンバー1),
-                        this.GetType(),
-                        CSharpArgumentInfoArray2
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(new TestDynamic<int>(1,2)),
-                    Expressions.Expression.Constant(2)
-                )
-            );
-        }
+        var arg1=new TestDynamic<int>(1,2);
+        var arg2=2;
+        var binder=Binder.SetMember(
+            CSharpBinderFlags.ResultIndexed,
+            nameof(TestDynamic<int>.メンバー1),
+            this.GetType(),
+            CSharpArgumentInfoArray2
+        );
+        var Dynamic0=Expressions.Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expressions.Expression.Constant(arg1),
+            Expressions.Expression.Constant(arg2)
+        );
+        this.共通Expression(Dynamic0);
+        var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     [Fact]public void DynamicGetIndex(){
-        {
-            const int expected = 2;
-            var Array = new[] {
-                1,expected,3
-            };
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.GetIndex(
-                        CSharpBinderFlags.None,
-                        this.GetType(),
-                        CSharpArgumentInfoArray2
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(Array),
-                    Expressions.Expression.Constant(1)
-                )
-            );
-        }
+        const int expected = 2;
+        var arg1 = new[] {
+            1,expected,3
+        };
+        var arg2=1;
+        var binder=Binder.GetIndex(
+            CSharpBinderFlags.None,
+            this.GetType(),
+            CSharpArgumentInfoArray2
+        );
+        var Dynamic0=Expressions.Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expressions.Expression.Constant(arg1),
+            Expressions.Expression.Constant(arg2)
+        );
+        this.共通Expression(Dynamic0);
+        var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     [Fact]public void DynamicSetIndex(){
-        {
-            var Array = new[] {
-                1,2,3
-            };
-            this.共通Expression(
-                Expressions.Expression.Dynamic(
-                    Binder.SetIndex(
-                        CSharpBinderFlags.None,
-                        this.GetType(),
-                        CSharpArgumentInfoArray3
-                    ),
-                    typeof(object),
-                    Expressions.Expression.Constant(Array),
-                    Expressions.Expression.Constant(1),
-                    Expressions.Expression.Constant(2)
-                )
-            );
-        }
+        var arg1= new[] {
+            1,2,3
+        };
+        var arg2=1;
+        var arg3=1;
+        var binder=Binder.SetIndex(
+            CSharpBinderFlags.None,
+            this.GetType(),
+            CSharpArgumentInfoArray3
+        );
+        var Dynamic0=Expressions.Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expressions.Expression.Constant(arg1),
+            Expressions.Expression.Constant(arg2),
+            Expressions.Expression.Constant(arg3)
+        );
+        this.共通Expression(Dynamic0);
+        var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
     }
     [Fact]public void DynamicBinary(){
-        {
-            var オペランド = Expressions.Expression.Dynamic(
-                Binder.BinaryOperation(
-                    CSharpBinderFlags.None,
-                    Expressions.ExpressionType.Add,
-                    this.GetType(),
-                    new[] {
-                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                        CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null)
-                    }
-                ),
-                typeof(object),
-                Expressions.Expression.Constant(1),
-                Expressions.Expression.Constant(1)
-            );
-            this.共通Expression(オペランド);
-        }
+        var arg1=1;
+        var arg2=1;
+        var binder=Binder.BinaryOperation(
+            CSharpBinderFlags.None,
+            Expressions.ExpressionType.Add,
+            this.GetType(),
+            new[]{
+                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
+                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null)
+            }
+        );
+        var Dynamic0 = Expressions.Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expressions.Expression.Constant(arg1),
+            Expressions.Expression.Constant(arg2)
+        );
+        var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
+    }
+    private void 共通Dynamic(object expected,Expressions.DynamicExpression Dynamic0){
+        this.共通Expression(Dynamic0);
+        var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
+        this.共通Expression(Lambda);
+        var M=Lambda.Compile();
+        var actual=M();
+        Assert.Equal(expected,actual);
     }
     [Fact]public void ElementInit(){
         var Type=typeof(BindCollection);

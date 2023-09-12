@@ -14,12 +14,13 @@ public class Field:IJsonFormatter<T> {
        // if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        var trype=value.ReflectedType;
-        writer.WriteType(trype);
+        var type=value.ReflectedType;
+        writer.WriteType(type);
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(C.Instance.TypeMembers.Get(trype),value));
+        var index=Array.IndexOf(C.Instance.TypeFields.Get(type),value);
+        writer.WriteInt32(index);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){

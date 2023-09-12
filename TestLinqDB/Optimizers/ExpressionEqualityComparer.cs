@@ -361,9 +361,9 @@ public class ExpressionEqualityComparer:共通{
     public static dynamic Dynamicメンバーアクセス(dynamic a){
         return a.メンバー;
     }
-    private void AssertEqual(Expression a,Expression b)=>this.共通object1(a,b=>Assert.Equal(a,b,this.Comparer));
+    private void AssertEqual(Expression a,Expression b)=>this.シリアライズデシリアライズ3パターン(a,b=>Assert.Equal(a,b,this.Comparer));
 
-    private void AssertNotEqual(Expression a,Expression b)=>this.共通object1(a,b=>Assert.NotEqual(a,b,this.Comparer));
+    private void AssertNotEqual(Expression a,Expression b)=>this.シリアライズデシリアライズ3パターン(a,b=>Assert.NotEqual(a,b,this.Comparer));
 
     [Fact]
     public void Dynamic(){

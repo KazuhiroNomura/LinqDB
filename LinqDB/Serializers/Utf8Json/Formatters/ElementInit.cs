@@ -14,7 +14,7 @@ public class ElementInit:IJsonFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
-    T IJsonFormatter<T>.Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var addMethod= Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
