@@ -43,7 +43,7 @@ public class Block:IMessagePackFormatter<T> {
         var type=reader.ReadType();
         var variables= reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(variables);
-        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
         ListParameter.RemoveRange(ListParameter_Count,variables.Length);
         return Expressions.Expression.Block(type,variables,expressions);
     }

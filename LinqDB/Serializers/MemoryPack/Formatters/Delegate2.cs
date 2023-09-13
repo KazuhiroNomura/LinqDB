@@ -11,33 +11,33 @@ using C=Serializer;
 
 public class Delegate2:MemoryPackFormatter<T> {
     public static readonly Delegate2 Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        this.Serialize(ref writer,ref value);
-    internal void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
         if(value is null)writer.WriteNullObjectHeader();
-        else this.Serialize(ref writer,ref value);
+        else Instance.Serialize(ref writer,ref value);
     }
-    internal T Deserialize(ref Reader reader) {
+    internal static T Deserialize(ref Reader reader) {
         T? value = default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
-    internal T? DeserializeNullable(ref Reader reader) {
+    internal static T? DeserializeNullable(ref Reader reader) {
         if(reader.PeekIsNull()){
             reader.Advance(1);
             return null;
         }
-        return this.Deserialize(ref reader);
+        return Deserialize(ref reader);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Type.Instance.Serialize(ref writer,value!.GetType());
-        Method.Instance.Serialize(ref writer,value.Method);
-        Object.Instance.Serialize(ref writer,value.Target);
+        Type.Serialize(ref writer,value!.GetType());
+        Method.Serialize(ref writer,value.Method);
+        Object.Serialize(ref writer,value.Target);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var delegateType=Type.Instance.Deserialize(ref reader);
-        var method=Method.Instance.Deserialize(ref reader);
-        var target=Object.Instance.Deserialize(ref reader);
+        var delegateType=Type.Deserialize(ref reader);
+        var method=Method.Deserialize(ref reader);
+        var target=Object.Deserialize(ref reader);
         value=method.CreateDelegate(delegateType,target);
     }
 }

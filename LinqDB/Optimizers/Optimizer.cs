@@ -375,7 +375,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:IEqualityComparer<Expression>{
+    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>{
         private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
@@ -803,7 +803,14 @@ public sealed partial class Optimizer:IDisposable{
         private bool T(NewExpression a,NewExpression b) =>
             this.SequenceEqual(a.Arguments,b.Arguments)&&
             a.Constructor==b.Constructor;
-        private bool T(LabelExpression a,LabelExpression b) {
+        public bool Equals(LabelTarget? a,LabelTarget? b){
+            if(a==b) return true;
+            if(a==null&&b!=null||a!=null&&b==null) return false;
+            return a!.Type==b!.Type&&a.Name==b.Name&&
+                this.a_LabelTargets.IndexOf(a)==this.b_LabelTargets.IndexOf(b);
+        }
+        private bool T(LabelExpression a,LabelExpression b){
+            if(!this.Equals(a.Target,b.Target)) return false;
             var a_LabelTargets = this.a_LabelTargets;
             var b_LabelTargets = this.b_LabelTargets;
             var a_LabelTargets_Count = a_LabelTargets.Count;
@@ -816,14 +823,14 @@ public sealed partial class Optimizer:IDisposable{
             b_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             return r;
         }
-        private bool T(LambdaExpression Lambda_a,LambdaExpression Lambda_b){
-            if(Lambda_a.Type!=Lambda_b.Type||Lambda_a.TailCall!=Lambda_b.TailCall) return false;
+        private bool T(LambdaExpression a,LambdaExpression b){
+            if(a.Type!=b.Type||a.TailCall!=b.TailCall) return false;
             var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
             var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
             this.a_ラムダ跨ぎParameters=new();
             this.b_ラムダ跨ぎParameters=new();
-            var Lambda_a_Parameters = Lambda_a.Parameters;
-            var Lambda_b_Parameters = Lambda_b.Parameters;
+            var Lambda_a_Parameters = a.Parameters;
+            var Lambda_b_Parameters = b.Parameters;
             var Lambda_a_Parameters_Count = Lambda_a_Parameters.Count;
             if(Lambda_a_Parameters_Count!=Lambda_b_Parameters.Count) return false;
             var a_Parameters = this.a_Parameters;
@@ -834,7 +841,7 @@ public sealed partial class Optimizer:IDisposable{
             b_Parameters.AddRange(Lambda_b_Parameters);
             Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
             //var count=this.count++;
-            var r = this.PrivateEquals(Lambda_a.Body,Lambda_b.Body);
+            var r = this.PrivateEquals(a.Body,b.Body);
             Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
             a_Parameters.RemoveRange(a_Parameters_Count,Lambda_a_Parameters_Count);
             b_Parameters.RemoveRange(a_Parameters_Count,Lambda_a_Parameters_Count);
@@ -991,6 +998,11 @@ public sealed partial class Optimizer:IDisposable{
             a.Method==b.Method&&a.Type==b.Type&&(
                 a.Operand is not null&&b.Operand is not null&&this.PrivateEquals(a.Operand,b.Operand)||
                 a.Operand is null&&b.Operand is null);
+
+
+        public int GetHashCode([DisallowNull] LabelTarget obj) {
+            throw new NotImplementedException();
+        }
     }
     private class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualityComparer {
         internal ExpressionEqualityComparer_Assign_Leftで比較(List<ParameterExpression> スコープParameters) : base(スコープParameters) {

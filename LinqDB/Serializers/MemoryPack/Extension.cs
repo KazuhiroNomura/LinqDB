@@ -16,7 +16,7 @@ public static class Extension{
     public static void WriteValue<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)where TBufferWriter :IBufferWriter<byte> =>writer.GetFormatter<T>()!.Serialize(ref writer,ref value);
     public static void ReadValue<T>(this ref Reader reader,scoped ref T? value)=>reader.GetFormatter<T>()!.Deserialize(ref reader,ref value);
     //public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
-    //public static Type ReadType(this ref Reader reader)=>Type.Instance.Deserialize().GetType(reader.ReadString())!;
+    //public static Type ReadType(this ref Reader reader)=>Type.Deserialize().GetType(reader.ReadString())!;
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
         writer.WriteString(value.AssemblyQualifiedName);
         //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
@@ -96,12 +96,10 @@ public static class Extension{
     private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
         scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
         writer.WriteValue(value);
-        //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
     }
     public static readonly MethodInfo MethodSerialize = typeof(Extension).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
     private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
         reader.ReadValue(ref value);
-        //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
     }
     public static readonly MethodInfo MethodDeserialize = typeof(Extension).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
 }

@@ -11,7 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,34 +29,6 @@ using MessagePack;
 
 namespace Serializers.MessagePack.Formatters;
 
-[Serializable,MemoryPackable,MessagePackObject(true)]
-public partial class Eventテスト:IEquatable<Eventテスト>{
-    public event Func<int,int> Event0;
-    public bool Equals(Eventテスト? other){
-        return this.Event0.Target.Equals(other.Event0.Target)&&this.Event0.Method==other.Event0.Method;
-    }
-    public override bool Equals(object? obj){
-        if(ReferenceEquals(null,obj)){
-            return false;
-        }
-        if(ReferenceEquals(this,obj)){
-            return true;
-        }
-        if(obj.GetType()!=this.GetType()){
-            return false;
-        }
-        return this.Equals((Eventテスト)obj);
-    }
-    public override int GetHashCode(){
-        return 0;
-    }
-    public static bool operator==(Eventテスト? left,Eventテスト? right){
-        return Equals(left,right);
-    }
-    public static bool operator!=(Eventテスト? left,Eventテスト? right){
-        return!Equals(left,right);
-    }
-}
 public class 色んなデータ型:共通 {
     //[Fact]public void Anonymous0(){
     //    MemoryPackFormatterProvider.Register(new Formatter2());
@@ -87,7 +58,7 @@ public class 色んなデータ型:共通 {
         //MemoryPackFormatterProvider.Register(formatter);
         this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(value);
     }
-    static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
+    static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]public void ClassDisplay(){
         var a=1;
         var body=Lambda(()=>a).Body;
@@ -250,12 +221,6 @@ public class 色んなデータ型:共通 {
         this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new{
             a=(object)new{aa=1}
         });
-    }
-    [Fact]public void Event(){
-        const int expected=12345;
-        var Eventテスト=new Eventテスト();
-        Eventテスト.Event0+=x=>expected;
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(Eventテスト);
     }
     private static int フィールド;
     [Fact]public void Field(){

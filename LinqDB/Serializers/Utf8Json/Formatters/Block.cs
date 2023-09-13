@@ -33,7 +33,7 @@ public class Block:IJsonFormatter<T> {
         var variables=reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(variables);
         reader.ReadIsValueSeparatorWithVerify();
-        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
         ListParameter.RemoveRange(ListParameter_Count,variables.Count);
         return Expressions.Expression.Block(type,variables,expressions);
     }

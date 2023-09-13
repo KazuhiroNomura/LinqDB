@@ -11,46 +11,43 @@ public class Binary:MemoryPackFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
-        Expression.Instance.Serialize(ref writer,value.Left);
-        Expression.Instance.Serialize(ref writer,value.Right);
+        Expression.Serialize(ref writer,value.Left);
+        Expression.Serialize(ref writer,value.Right);
     }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        Expression.Instance.Serialize(ref writer,value.Left);
-        Expression.Instance.Serialize(ref writer,value.Right);
-        Method.Instance.SerializeNullable(ref writer,value.Method);
+        Expression.Serialize(ref writer,value.Left);
+        Expression.Serialize(ref writer,value.Right);
+        Method.SerializeNullable(ref writer,value.Method);
     }
     internal static void InternalSerializeBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        Expression.Instance.Serialize(ref writer,value.Left);
-        Expression.Instance.Serialize(ref writer,value.Right);
+        Expression.Serialize(ref writer,value.Left);
+        Expression.Serialize(ref writer,value.Right);
         writer.WriteBoolean(value.IsLiftedToNull);
-        Method.Instance.SerializeNullable(ref writer,value.Method);
+        Method.SerializeNullable(ref writer,value.Method);
     }
     internal static (Expressions.Expression Left, Expressions.Expression Right) InternalDeserialize(ref Reader reader) {
-        var Instance = Expression.Instance;
-        var Left = Instance.Deserialize(ref reader);
-        var Right = Instance.Deserialize(ref reader);
+        var Left = Expression.Deserialize(ref reader);
+        var Right = Expression.Deserialize(ref reader);
         Debug.Assert(Left!=null);
         return (Left, Right);
     }
     internal static (Expressions.Expression Left, Expressions.Expression Right, MethodInfo? Method) InternalDeserializeMethod(ref Reader reader) {
-        var Instance = Expression.Instance;
-        var Left = Instance.Deserialize(ref reader);
-        var Right = Instance.Deserialize(ref reader);
-        var method = Method.Instance.DeserializeNullable(ref reader);
+        var Left = Expression.Deserialize(ref reader);
+        var Right = Expression.Deserialize(ref reader);
+        var method = Method.DeserializeNullable(ref reader);
         return (Left, Right, method);
     }
     internal static (Expressions.Expression Left, Expressions.Expression Right, bool IsLiftedToNull, MethodInfo? Method) InternalDeserializeBooleanMethod(ref Reader reader){
-        var Instance = Expression.Instance;
-        var Left = Instance.Deserialize(ref reader);
-        var Right = Instance.Deserialize(ref reader);
+        var Left = Expression.Deserialize(ref reader);
+        var Right = Expression.Deserialize(ref reader);
         var IsLiftedToNull =reader.ReadBoolean();
-        var method = Method.Instance.DeserializeNullable(ref reader);
+        var method = Method.DeserializeNullable(ref reader);
         return (Left, Right, IsLiftedToNull, method);
     }
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> => this.Serialize(ref writer,ref value);
-    internal T Deserialize(ref Reader reader) {
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> => Instance.Serialize(ref writer,ref value);
+    internal static T Deserialize(ref Reader reader) {
         T? value = default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){

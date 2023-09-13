@@ -39,6 +39,12 @@ using static Microsoft.FSharp.Core.ByRefKinds;
 namespace Serializers.MessagePack.Formatters;
 [Serializable,MemoryPackable,MessagePackObject(true)]
 public partial class テスト:IEquatable<テスト>{
+    public static void StaticMethod(){}
+    public static void StaticMethod(int a){}
+    public static void StaticMethod(int a,int b){}
+    public void InstanceMethod(){}
+    public void InstanceMethod(int a){}
+    public void InstanceMethod(int a,int b){}
     //[MemoryPackIgnore,IgnoreMember]
     //public Func<int,int,int,bool> Delegate=(a,b,c)=>a==b&&b==c;
     public void Action(int a,double b,string c){Trace.WriteLine("Action");}
@@ -674,6 +680,21 @@ public class Expression:共通 {
             );
         }
     }
+    [Fact]public void Label(){
+        var labelTarget=Expressions.Expression.Label();
+        this.共通Expression(Expressions.Expression.Label(labelTarget));
+        this.共通Expression(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
+    }
+    [Fact]public void LabelTarget(){
+        共通LabelTarget(Expressions.Expression.Label());
+        共通LabelTarget(Expressions.Expression.Label(typeof(int)));
+        共通LabelTarget(Expressions.Expression.Label(typeof(double),"abc"));
+        void 共通LabelTarget(Expressions.LabelTarget input){
+            Debug.Assert(input!=null,nameof(input)+" != null");
+            this.シリアライズデシリアライズ3パターン<object>(input,output=>Assert.Equal(input,(Expressions.LabelTarget)output,this.ExpressionEqualityComparer));
+            this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        }
+    }
     static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]
     public void Lambda0(){
@@ -900,24 +921,6 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]
-    public void TypeEqual(){
-        this.共通Expression(
-            Expressions.Expression.TypeEqual(
-                Expressions.Expression.Constant(1m),
-                typeof(decimal)
-            )
-        );
-    }
-    [Fact]
-    public void TypeIs(){
-        this.共通Expression(
-            Expressions.Expression.TypeIs(
-                Expressions.Expression.Constant(1m),
-                typeof(decimal)
-            )
-        );
-    }
     private static readonly Expressions.LabelTarget Label_decimal=Expressions.Expression.Label(typeof(decimal),"Label_decimal");
     private static readonly Expressions.LabelTarget Label_void=Expressions.Expression.Label("Label");
     [Fact]
@@ -1060,10 +1063,67 @@ public class Expression:共通 {
             )
         );
     }
-    [Fact]
-    public void MemberExpression(){
+    [Fact]public void MemberExpression(){
         var Point=Expressions.Expression.Parameter(typeof(Point));
         this.共通Expression(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+    }
+    [Fact]public void MemberBinding(){
+        var Type = typeof(BindCollection);
+        var Int32フィールド1 = Type.GetField(nameof(BindCollection.Int32フィールド1));
+        var Int32フィールド2 = Type.GetField(nameof(BindCollection.Int32フィールド2));
+        var BindCollectionフィールド1 = Type.GetField(nameof(BindCollection.BindCollectionフィールド1));
+        var BindCollectionフィールド2 = Type.GetField(nameof(BindCollection.BindCollectionフィールド2));
+        var Listフィールド1 = Type.GetField(nameof(BindCollection.Listフィールド1));
+        var Listフィールド2 = Type.GetField(nameof(BindCollection.Listフィールド2));
+        var Constant_1 = Expressions.Expression.Constant(1);
+        var Constant_2 = Expressions.Expression.Constant(2);
+        var ctor = Type.GetConstructor(new[] {
+            typeof(int)
+        });
+        var New = Expressions.Expression.New(
+            ctor,
+            Constant_1
+        );
+        //if(a_Bindings.Count!=b_Bindings.Count) return false;
+        this.共通Expression(
+            Expressions.Expression.MemberInit(
+                New,
+                Expressions.Expression.Bind(
+                    Int32フィールド1,
+                    Constant_1
+                ),
+                Expressions.Expression.Bind(
+                    Int32フィールド2,
+                    Constant_1
+                )
+            )
+        );
+    }
+    private static Reflection.MethodInfo M(Expressions.Expression<Action> f)=>
+        ((Expressions.MethodCallExpression)f.Body).Method;
+    private static void StaticMethod(){}
+    private static void StaticMethod(int a){}
+    private static void StaticMethod(int a,int b){}
+    private void InstanceMethod(){}
+    private void InstanceMethod(int a){}
+    private void InstanceMethod(int a,int b){}
+    [Fact]public void MethodCall(){
+        var o=new テスト();
+        var arg=Expressions.Expression.Constant(1);
+        var @this=Expressions.Expression.Constant(o);
+        this.共通Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
+        this.共通Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
+        this.共通Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.共通Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
+        this.共通Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
+        this.共通Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
+        this.共通Expression(
+            Expressions.Expression.Call(
+                M(()=>string.Concat("","")),
+                Expressions.Expression.Constant("A"),
+                Expressions.Expression.Constant("B")
+            )
+        );
     }
     //[Fact]
     //public void Null(){
@@ -1101,13 +1161,73 @@ public class Expression:共通 {
         return Method;
     }
     [Fact]
-    public void Call(){
+    public void Parameter(){
+        var p0=Expressions.Expression.Parameter(typeof(int));
+        this.共通Expression(Expressions.Expression.Lambda<Func<int,int>>(p0,p0));
+        var p1=Expressions.Expression.Parameter(typeof(int),"a");
+        this.共通Expression(Expressions.Expression.Lambda<Func<int,int>>(p1,p1));
+    }
+    [Fact]
+    public void Switch(){
         this.共通Expression(
-            Expressions.Expression.Call(
-                M(()=>string.Concat("","")),
-                Expressions.Expression.Constant("A"),
-                Expressions.Expression.Constant("B")
+            Expressions.Expression.Switch(
+                Expressions.Expression.Constant(123),
+                Expressions.Expression.Constant(0m),
+                Expressions.Expression.SwitchCase(
+                    Expressions.Expression.Constant(64m),
+                    Expressions.Expression.Constant(124)
+                )
             )
         );
+    }
+    [Fact]
+    public void Try(){
+        this.共通Expression(
+            Expressions.Expression.TryCatch(
+                Expressions.Expression.Constant(0),
+                Expressions.Expression.Catch(
+                    typeof(Exception),
+                    Expressions.Expression.Constant(0)
+                )
+            )
+        );
+        this.共通Expression(
+            Expressions.Expression.TryCatchFinally(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
+            )
+        );
+        this.共通Expression(
+            Expressions.Expression.TryFault(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
+            )
+        );
+        this.共通Expression(
+            Expressions.Expression.TryFinally(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
+            )
+        );
+    }
+    [Fact]
+    public void TypeEqual(){
+        this.共通Expression(
+            Expressions.Expression.TypeEqual(
+                Expressions.Expression.Constant(1m),
+                typeof(decimal)
+            )
+        );
+    }
+    [Fact]public void TypeIs(){
+        this.共通Expression(
+            Expressions.Expression.TypeIs(
+                Expressions.Expression.Constant(1m),
+                typeof(decimal)
+            )
+        );
+    }
+    [Fact]public void Unary(){
+        this.共通Expression(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
     }
 }

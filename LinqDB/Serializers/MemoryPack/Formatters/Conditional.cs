@@ -10,10 +10,11 @@ using C=Serializer;
 
 public class Conditional:MemoryPackFormatter<T> {
     public static readonly Conditional Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeConditional(ref Reader reader){
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T DeserializeConditional(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -21,16 +22,16 @@ public class Conditional:MemoryPackFormatter<T> {
             //writer.WriteNil();
             //return;
         }
-        Expression.Instance.Serialize(ref writer,value!.Test);
-        Expression.Instance.Serialize(ref writer,value.IfTrue);
-        Expression.Instance.Serialize(ref writer,value.IfFalse);
+        Expression.Serialize(ref writer,value!.Test);
+        Expression.Serialize(ref writer,value.IfTrue);
+        Expression.Serialize(ref writer,value.IfFalse);
         writer.WriteType(value.Type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return null!;
-        var test= Expression.Instance.Deserialize(ref reader);
-        var ifTrue= Expression.Instance.Deserialize(ref reader);
-        var ifFalse= Expression.Instance.Deserialize(ref reader);
+        var test= Expression.Deserialize(ref reader);
+        var ifTrue= Expression.Deserialize(ref reader);
+        var ifFalse= Expression.Deserialize(ref reader);
         var type=reader.ReadType();
         value=Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }

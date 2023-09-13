@@ -128,6 +128,7 @@ public abstract class 共通{
         where T:Expressions.Expression?
     {
         //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
         this.シリアライズデシリアライズ3パターン<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
@@ -167,7 +168,7 @@ public abstract class 共通{
     }
     private static readonly object lockobject=new();
     protected void シリアライズデシリアライズ3パターン<T>(T input,Action<T> AssertAction){
-        lock(lockobject){
+        lock(lockobject) {
             {
                 var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
                 var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);

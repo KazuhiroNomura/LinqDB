@@ -83,7 +83,7 @@ internal static class Extension{
     private static class StaticArrayFormatter<T>{
         public static readonly ArrayFormatter<T> Formatter=new();
     }
-    internal static T[] DeserializeArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) =>
+    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) =>
         StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
     internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();

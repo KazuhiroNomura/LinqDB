@@ -344,9 +344,9 @@ public class Dynamic:IJsonFormatter<T> {
             reader0.ReadIsValueSeparatorWithVerify();
             var ArgumentCount=reader0.ReadInt32();
             reader0.ReadIsValueSeparatorWithVerify();
-            var ArgumentNames=reader0.DeserializeArray<string>(Resolver);
+            var ArgumentNames=reader0.ReadArray<string>(Resolver);
             reader0.ReadIsValueSeparatorWithVerify();
-            var Arguments=reader0.DeserializeArray<Expressions.Expression>(Resolver);
+            var Arguments=reader0.ReadArray<Expressions.Expression>(Resolver);
             var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
             var ArgumentNames_Length=ArgumentNames.Length;
             for(var a=0;a<ArgumentNames_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,ArgumentNames[a]);

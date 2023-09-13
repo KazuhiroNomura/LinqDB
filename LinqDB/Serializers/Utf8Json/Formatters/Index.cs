@@ -27,7 +27,7 @@ public class Index:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
     }

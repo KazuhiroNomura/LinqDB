@@ -11,18 +11,18 @@ using C=Serializer;
 
 public class Member:MemoryPackFormatter<T>{
     public static readonly Member Instance=new();
-    //internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    //internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
     //    this.Serialize(ref writer,ref value);
-    //internal T DeserializeMemberInfo(ref MemoryPackReader reader){
+    //internal static T DeserializeMemberInfo(ref MemoryPackReader reader){
     //    T? value=default;
     //    this.Deserialize(ref reader,ref value);
     //    return value!;
     //}
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        this.Serialize(ref writer,ref value);
-    internal T Deserialize(ref Reader reader) {
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T Deserialize(ref Reader reader) {
         T? value = default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     //internal T? DeserializeNullable(ref MemoryPackReader reader) {
@@ -32,13 +32,13 @@ public class Member:MemoryPackFormatter<T>{
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.ReflectedType!;
-        Type.Instance.Serialize(ref writer,type);
+        Type.Serialize(ref writer,type);
         var array= C.Instance.TypeMembers.Get(type);
         var index=Array.IndexOf(array,value);
         writer.WriteVarInt(index);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var type= Type.Instance.Deserialize(ref reader);
+        var type= Type.Deserialize(ref reader);
         var array= C.Instance.TypeMembers.Get(type);
         var index=reader.ReadVarIntInt32();
         value=array[index];

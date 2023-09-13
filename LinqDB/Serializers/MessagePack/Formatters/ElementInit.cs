@@ -20,7 +20,7 @@ public class ElementInit:IMessagePackFormatter<T> {
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var addMethod= Method.Instance.Deserialize(ref reader,Resolver);
-        var arguments= reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments= reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.ElementInit(addMethod,arguments);
     }
 }

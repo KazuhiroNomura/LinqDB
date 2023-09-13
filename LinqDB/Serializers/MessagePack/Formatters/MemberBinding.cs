@@ -37,8 +37,8 @@ public class MemberBinding:IMessagePackFormatter<T> {
         var member= Member.Instance.Deserialize(ref reader,Resolver);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Instance.Deserialize(ref reader,Resolver)),
-            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.DeserializeArray<T>(Resolver)),
-            Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.DeserializeArray<Expressions.ElementInit>(Resolver)),
+            Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),
+            Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>(Resolver)),
             _=>throw new ArgumentOutOfRangeException(BindingType.ToString())
         };
         return MemberBinding;

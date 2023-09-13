@@ -57,25 +57,25 @@ public class Unary:IJsonFormatter<T> {
         writer.WriteString(value.NodeType.ToString());
         writer.WriteValueSeparator();
         switch(value.NodeType){
-            case Expressions.ExpressionType.ArrayLength        : InternalSerialize(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.ArrayLength        : 
             case Expressions.ExpressionType.Quote              : InternalSerialize(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Throw              : InternalSerializeType(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.TypeAs             : InternalSerializeType(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Throw              : 
+            case Expressions.ExpressionType.TypeAs             : 
             case Expressions.ExpressionType.Unbox              : InternalSerializeType(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Convert            : InternalSerializeTypeMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Convert            : 
             case Expressions.ExpressionType.ConvertChecked     : InternalSerializeTypeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Decrement          : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Increment          : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.IsFalse            : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.IsTrue             : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Negate             : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.NegateChecked      : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Not                : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.OnesComplement     : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PostDecrementAssign: InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PostIncrementAssign: InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PreDecrementAssign : InternalSerializeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.PreIncrementAssign : InternalSerializeMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Decrement          : 
+            case Expressions.ExpressionType.Increment          : 
+            case Expressions.ExpressionType.IsFalse            : 
+            case Expressions.ExpressionType.IsTrue             : 
+            case Expressions.ExpressionType.Negate             : 
+            case Expressions.ExpressionType.NegateChecked      : 
+            case Expressions.ExpressionType.Not                : 
+            case Expressions.ExpressionType.OnesComplement     : 
+            case Expressions.ExpressionType.PostDecrementAssign: 
+            case Expressions.ExpressionType.PostIncrementAssign: 
+            case Expressions.ExpressionType.PreDecrementAssign : 
+            case Expressions.ExpressionType.PreIncrementAssign : 
             case Expressions.ExpressionType.UnaryPlus          : InternalSerializeMethod(ref writer,value,Resolver);break;
             default:
                 throw new NotSupportedException(value.NodeType.ToString());

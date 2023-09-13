@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using Expressions=System.Linq.Expressions;
+using LinqDB.Helpers;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -48,7 +49,7 @@ public class Object:IJsonFormatter<object>{
             case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
             case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                var Formatter=Serializer.Instance.RegisterDisplay(type)??Resolver.GetFormatterDynamic(type);
+                var Formatter=Resolver.GetFormatterDynamic(type);
                 //var Formatter=Resolver.GetFormatterDynamic(type);
                 var Serialize=Formatter.GetType().GetMethod("Serialize");
                 Debug.Assert(Serialize is not null);

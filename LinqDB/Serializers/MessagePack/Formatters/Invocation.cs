@@ -27,7 +27,7 @@ public class Invocation:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var expression= Expression.Instance.Deserialize(ref reader,Resolver);
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.Invoke(expression,arguments);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

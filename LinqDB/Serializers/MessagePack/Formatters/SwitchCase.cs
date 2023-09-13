@@ -19,7 +19,7 @@ public class SwitchCase:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        var testValues=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var testValues=reader.ReadArray<Expressions.Expression>(Resolver);
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
         return Expressions.Expression.SwitchCase(body,testValues);
     }

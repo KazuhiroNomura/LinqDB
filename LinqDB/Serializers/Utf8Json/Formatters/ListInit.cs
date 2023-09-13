@@ -18,7 +18,7 @@ public class ListInit:IJsonFormatter<T> {
         reader.ReadIsBeginArrayWithVerify();
         var @new=New.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var Initializers=reader.DeserializeArray<Expressions.ElementInit>(Resolver);
+        var Initializers=reader.ReadArray<Expressions.ElementInit>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.ListInit(@new,Initializers);
     }

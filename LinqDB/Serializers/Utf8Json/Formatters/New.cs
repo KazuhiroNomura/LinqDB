@@ -28,7 +28,7 @@ public class New:IJsonFormatter<Expressions.NewExpression>{
         reader.ReadIsBeginArrayWithVerify();
         var constructor= Constructor.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.New(
             constructor,

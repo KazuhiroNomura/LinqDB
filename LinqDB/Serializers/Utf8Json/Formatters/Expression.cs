@@ -10,8 +10,11 @@ using T=Expressions.Expression;
 using C=Serializer;
 public class Expression:IJsonFormatter<T> {
     public static readonly Expression Instance=new();
+    internal static void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
+        Instance.Serialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-     //   if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         writer.WriteString(value.NodeType.ToString());
@@ -56,59 +59,60 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
             case Expressions.ExpressionType.NotEqual             :Binary.InternalSerializeBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
-
-            case Expressions.ExpressionType.ArrayLength        :
-            case Expressions.ExpressionType.Quote              :
-            case Expressions.ExpressionType.Throw              :
-            case Expressions.ExpressionType.TypeAs             :
-            case Expressions.ExpressionType.Unbox              :
-            case Expressions.ExpressionType.Convert            :
-            case Expressions.ExpressionType.ConvertChecked     :
-            case Expressions.ExpressionType.Decrement          :
-            case Expressions.ExpressionType.Increment          :
-            case Expressions.ExpressionType.IsFalse            :
-            case Expressions.ExpressionType.IsTrue             :
-            case Expressions.ExpressionType.Negate             :
-            case Expressions.ExpressionType.NegateChecked      :
-            case Expressions.ExpressionType.Not                :
-            case Expressions.ExpressionType.OnesComplement     :
-            case Expressions.ExpressionType.PostDecrementAssign:
-            case Expressions.ExpressionType.PostIncrementAssign:
-            case Expressions.ExpressionType.PreDecrementAssign :
-            case Expressions.ExpressionType.PreIncrementAssign :
-            case Expressions.ExpressionType.UnaryPlus          : Unary.InternalSerializeMethod(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
-
-            case Expressions.ExpressionType.TypeEqual          :
-            case Expressions.ExpressionType.TypeIs             : TypeBinary.InternalSerialize(ref writer,(Expressions.TypeBinaryExpression)value,Resolver); break;
-
-            case Expressions.ExpressionType.Conditional        : Conditional.Instance.Serialize(ref writer,(Expressions.ConditionalExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Constant           : Constant.Instance.Serialize(ref writer,(Expressions.ConstantExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Parameter          : Parameter.Instance.Serialize(ref writer,(Expressions.ParameterExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Lambda             : Lambda.Instance.Serialize(ref writer,(Expressions.LambdaExpression)value,Resolver); break;
-            case Expressions.ExpressionType.Call               : MethodCall.Instance.Serialize(ref writer,(Expressions.MethodCallExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Invoke             : Invocation.Instance.Serialize(ref writer,(Expressions.InvocationExpression)value,Resolver);break;
-            case Expressions.ExpressionType.New                : New.Instance.Serialize(ref writer,(Expressions.NewExpression)value,Resolver);break;
-            case Expressions.ExpressionType.NewArrayBounds     :
-            case Expressions.ExpressionType.NewArrayInit       : NewArray.Instance.Serialize(ref writer,(Expressions.NewArrayExpression)value,Resolver); break;
-            case Expressions.ExpressionType.ListInit           : ListInit.Instance.Serialize(ref writer,(Expressions.ListInitExpression)value,Resolver);break;
-            case Expressions.ExpressionType.MemberAccess       : MemberAccess.Instance.Serialize(ref writer,(Expressions.MemberExpression)value,Resolver);break;
-            case Expressions.ExpressionType.MemberInit         : MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Block              : Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
-            //case Expressions.ExpressionType.DebugInfo          :
-            case Expressions.ExpressionType.Dynamic            : Dynamic.Instance.Serialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Default            : Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Extension          :
-            case Expressions.ExpressionType.Goto               : Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Index              : Index.Instance.Serialize(ref writer,(Expressions.IndexExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Label              : Label.Instance.Serialize(ref writer,(Expressions.LabelExpression)value,Resolver);break;
-            //case Expressions.ExpressionType.RuntimeVariables   :
-            case Expressions.ExpressionType.Loop               : Loop.Instance.Serialize(ref writer,(Expressions.LoopExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Switch             : Switch.Instance.Serialize(ref writer,(Expressions.SwitchExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Try                : Try.InternalSerialize(ref writer,(Expressions.TryExpression)value,Resolver);break;            
+            case Expressions.ExpressionType.ArrayLength          : 
+            case Expressions.ExpressionType.Quote                :Unary.InternalSerialize(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Throw                : 
+            case Expressions.ExpressionType.TypeAs               : 
+            case Expressions.ExpressionType.Unbox                :Unary.InternalSerializeType(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Convert              : 
+            case Expressions.ExpressionType.ConvertChecked       :Unary.InternalSerializeTypeMethod(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Decrement            : 
+            case Expressions.ExpressionType.Increment            : 
+            case Expressions.ExpressionType.IsFalse              : 
+            case Expressions.ExpressionType.IsTrue               : 
+            case Expressions.ExpressionType.Negate               : 
+            case Expressions.ExpressionType.NegateChecked        : 
+            case Expressions.ExpressionType.Not                  : 
+            case Expressions.ExpressionType.OnesComplement       : 
+            case Expressions.ExpressionType.PostDecrementAssign  : 
+            case Expressions.ExpressionType.PostIncrementAssign  : 
+            case Expressions.ExpressionType.PreDecrementAssign   : 
+            case Expressions.ExpressionType.PreIncrementAssign   : 
+            case Expressions.ExpressionType.UnaryPlus            :Unary.InternalSerializeMethod(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.TypeEqual            :
+            case Expressions.ExpressionType.TypeIs               : TypeBinary.InternalSerialize(ref writer,(Expressions.TypeBinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Conditional          : Conditional.Instance.Serialize(ref writer,(Expressions.ConditionalExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Constant             : Constant.Instance.Serialize(ref writer,(Expressions.ConstantExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Parameter            : Parameter.Instance.Serialize(ref writer,(Expressions.ParameterExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Lambda               : Lambda.Instance.Serialize(ref writer,(Expressions.LambdaExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Call                 : MethodCall.Instance.Serialize(ref writer,(Expressions.MethodCallExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Invoke               : Invocation.Instance.Serialize(ref writer,(Expressions.InvocationExpression)value,Resolver);break;
+            case Expressions.ExpressionType.New                  : New.Instance.Serialize(ref writer,(Expressions.NewExpression)value,Resolver);break;
+            case Expressions.ExpressionType.NewArrayBounds       :
+            case Expressions.ExpressionType.NewArrayInit         : NewArray.Instance.Serialize(ref writer,(Expressions.NewArrayExpression)value,Resolver); break;
+            case Expressions.ExpressionType.ListInit             : ListInit.Instance.Serialize(ref writer,(Expressions.ListInitExpression)value,Resolver);break;
+            case Expressions.ExpressionType.MemberAccess         : MemberAccess.Instance.Serialize(ref writer,(Expressions.MemberExpression)value,Resolver);break;
+            case Expressions.ExpressionType.MemberInit           : MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Block                : Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
+            //case Expressions.ExpressionType.DebugInfo            :
+            case Expressions.ExpressionType.Dynamic              : Dynamic.Instance.Serialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Default              : Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Extension            :
+            case Expressions.ExpressionType.Goto                 : Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Index                : Index.Instance.Serialize(ref writer,(Expressions.IndexExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Label                : Label.Instance.Serialize(ref writer,(Expressions.LabelExpression)value,Resolver);break;
+            //case Expressions.ExpressionType.RuntimeVariables     :
+            case Expressions.ExpressionType.Loop                 : Loop.Instance.Serialize(ref writer,(Expressions.LoopExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Switch               : Switch.Instance.Serialize(ref writer,(Expressions.SwitchExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Try                  : Try.InternalSerialize(ref writer,(Expressions.TryExpression)value,Resolver);break;            
             default:
                 throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
         writer.WriteEndArray();
+    }
+    public static T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull())return null;
+        return Instance.Deserialize(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull())return null!;

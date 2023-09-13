@@ -44,14 +44,14 @@ public class MethodCall:IMessagePackFormatter<T> {
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
             );
         } else{
             var instance= Expression.Instance.Deserialize(ref reader,Resolver);
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,
@@ -65,7 +65,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
             Debug.Assert(count==ArrayHeader0);
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
@@ -73,7 +73,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         } else{
             Debug.Assert(count==ArrayHeader1);
             var instance= Expression.Instance.Deserialize(ref reader,Resolver);
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,

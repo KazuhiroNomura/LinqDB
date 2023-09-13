@@ -13,7 +13,7 @@ public class MethodCall:IJsonFormatter<T> {
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(method.IsStatic){
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 method,
                 arguments
@@ -21,7 +21,7 @@ public class MethodCall:IJsonFormatter<T> {
         } else{
             var instance=Expression.Instance.Deserialize(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
-            var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
                 method,

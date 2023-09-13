@@ -26,7 +26,7 @@ public class Invocation:IJsonFormatter<T> {
         //var NodeType=Enum.Parse<ExpressionType>(NodeTypeName);
         var expression=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.Invoke(expression,arguments);
     }

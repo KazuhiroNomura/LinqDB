@@ -2,6 +2,7 @@
 using MessagePack;
 using MessagePack.Formatters;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
@@ -11,33 +12,64 @@ using T=Expressions.TryExpression;
 using static Extension;
 public class Try:IMessagePackFormatter<T>{
     public static readonly Try Instance=new();
-    private const int ArrayHeader=3;
-    private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateSerialize0(ref Writer writer,T? value,int offset){
+        if(value!.Finally is not null){
+            writer.WriteArrayHeader(offset+3);
+        } else{
+            if(value.Fault is null){
+                writer.WriteArrayHeader(offset+4);
+            } else{
+                writer.WriteArrayHeader(offset+3);
+            }
+        }
+    }
+    private static void PrivateSerialize1(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Instance.Serialize(ref writer,value!.Body,Resolver);
-        Expression.Instance.Serialize(ref writer,value.Finally,Resolver);
-        writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+        Expression.SerializeNullable(ref writer,value.Finally,Resolver);
+        if(value.Finally is not null){
+            writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+        } else{
+            Expression.SerializeNullable(ref writer,value.Fault,Resolver);
+            if(value.Fault is null){
+                writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+            }
+        }
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        PrivateSerialize0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Try);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateSerialize1(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateSerialize0(ref writer,value,0);
+        PrivateSerialize1(ref writer,value,Resolver);
     }
+    [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        T value;
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
-        var @finally=Expression.Instance.Deserialize(ref reader,Resolver);
-        var handlers=reader.DeserializeArray<Expressions.CatchBlock>(Resolver);
-        return handlers is null?Expressions.Expression.TryFinally(body,@finally):Expressions.Expression.TryCatchFinally(body,@finally,handlers);
+        var @finally=Expression.DeserializeNullable(ref reader,Resolver);
+        if(@finally is not null){
+            var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
+            if(handlers.Length>0) {
+                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
+            } else {
+                value=Expressions.Expression.TryFinally(body,@finally);
+            }
+        } else{
+            var fault= Expression.DeserializeNullable(ref reader,Resolver);
+            if(fault is not null){
+                value=Expressions.Expression.TryFault(body,fault);
+            } else{
+                var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
+                value=Expressions.Expression.TryCatch(body,handlers!);
+            }
+        }
+        return value;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
         return InternalDeserialize(ref reader,Resolver);
     }
 }

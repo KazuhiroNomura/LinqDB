@@ -11,12 +11,12 @@ using C=Serializer;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        Instance.Serialize(ref writer,ref value);
     }
-    internal T DeserializeLambda(ref Reader reader){
+    internal static T DeserializeLambda(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -26,7 +26,7 @@ public class Lambda:MemoryPackFormatter<T> {
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
         writer.Serialize宣言Parameters(value.Parameters);
-        Expression.Instance.Serialize(ref writer,value.Body);
+        Expression.Serialize(ref writer,value.Body);
         writer.WriteBoolean(value.TailCall);
         
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
@@ -37,7 +37,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters();
         ListParameter.AddRange(parameters!);
-        var body = Expression.Instance.Deserialize(ref reader);
+        var body = Expression.Deserialize(ref reader);
         var tailCall = reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters!.Length);
         value=System.Linq.Expressions.Expression.Lambda(

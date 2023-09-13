@@ -11,17 +11,17 @@ using C=Serializer;
 
 public class Type:MemoryPackFormatter<T> {
     public static readonly Type Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+        Instance.Serialize(ref writer,ref value);
     }
-    internal T Deserialize(ref Reader reader){
+    internal static T Deserialize(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     //private void Register(T AnonymousType){
     //    var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-    //    var Register= C.Register.MakeGenericMethod(AnonymousType);
+    //    var Register= C.Instance.Register.MakeGenericMethod(AnonymousType);
     //    var objects2=this.objects2;
     //    objects2[0]=Activator.CreateInstance(FormatterType)!;
     //    Register.Invoke(null,objects2);

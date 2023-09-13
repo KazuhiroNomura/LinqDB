@@ -9,12 +9,11 @@ using static Extension;
 
 public class Invocation:MemoryPackFormatter<T> {
     public static readonly Invocation Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
-    }
-    internal T DeserializeInvocation(ref Reader reader){
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T DeserializeInvocation(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -22,7 +21,7 @@ public class Invocation:MemoryPackFormatter<T> {
             //writer.WriteNil();
             return;
         }
-        Expression.Instance.Serialize(ref writer,value.Expression);
+        Expression.Serialize(ref writer,value.Expression);
         writer.SerializeReadOnlyCollection(value.Arguments);
     }
     // public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref InvocationExpression? value) where TBufferWriter:IBufferWriter<byte>
@@ -31,7 +30,7 @@ public class Invocation:MemoryPackFormatter<T> {
     // }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var expression= Expression.Instance.Deserialize(ref reader);
+        var expression= Expression.Deserialize(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         value=Expressions.Expression.Invoke(expression,arguments!);
     }

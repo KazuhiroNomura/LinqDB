@@ -11,10 +11,11 @@ using static Extension;
 
 public class MethodCall:MemoryPackFormatter<T> {
     public static readonly MethodCall Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T DeserializeMethodCall(ref Reader reader){
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T DeserializeMethodCall(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -22,15 +23,15 @@ public class MethodCall:MemoryPackFormatter<T> {
             return;
         }
         var method=value.Method;
-        Method.Instance.Serialize(ref writer,method);
+        Method.Serialize(ref writer,method);
         if(!method.IsStatic){
-            Expression.Instance.Serialize(ref writer,value.Object!);
+            Expression.Serialize(ref writer,value.Object!);
         }
         writer.SerializeReadOnlyCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var method= Method.Instance.Deserialize(ref reader);
+        var method= Method.Deserialize(ref reader);
         if(method.IsStatic){
             var arguments=reader.ReadArray<Expressions.Expression>();
             value=Expressions.Expression.Call(
@@ -38,7 +39,7 @@ public class MethodCall:MemoryPackFormatter<T> {
                 arguments!
             );
         } else{
-            var instance= Expression.Instance.Deserialize(ref reader);
+            var instance= Expression.Deserialize(ref reader);
             var arguments=reader.ReadArray<Expressions.Expression>();
             value=Expressions.Expression.Call(
                 instance,

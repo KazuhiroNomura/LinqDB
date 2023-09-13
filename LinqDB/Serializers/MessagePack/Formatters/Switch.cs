@@ -33,7 +33,7 @@ public class Switch:IMessagePackFormatter<T> {
         var type=reader.ReadType();
         var switchValue= Expression.Instance.Deserialize(ref reader,Resolver);
         var comparison= Method.InternalDeserializeNullable(ref reader,Resolver);
-        var cases=reader.DeserializeArray<Expressions.SwitchCase>(Resolver);
+        var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         var defaultBody= Expression.Instance.Deserialize(ref reader,Resolver);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }

@@ -9,22 +9,22 @@ using static Extension;
 
 public class MemberInit:MemoryPackFormatter<T> {
     public static readonly MemberInit Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        Instance.Serialize(ref writer,ref value);
     }
-    internal T DeserializeMemberInit(ref Reader reader){
+    internal static T DeserializeMemberInit(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        New.Instance.Serialize(ref writer,value.NewExpression);
+        New.Serialize(ref writer,value.NewExpression);
         writer.SerializeReadOnlyCollection(value.Bindings);
         //this.Serialize(ref writer,value.Bindings);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var @new= New.Instance.DeserializeNew(ref reader);
+        var @new= New.DeserializeNew(ref reader);
         var bindings=reader.ReadArray<Expressions.MemberBinding>();
         value=Expressions.Expression.MemberInit(@new,bindings!);
     }

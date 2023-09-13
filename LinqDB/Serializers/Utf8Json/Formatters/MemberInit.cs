@@ -18,7 +18,7 @@ public class MemberInit:IJsonFormatter<T> {
         reader.ReadIsBeginArrayWithVerify();
         var @new=New.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var bindings=reader.DeserializeArray<Expressions.MemberBinding>(Resolver);
+        var bindings=reader.ReadArray<Expressions.MemberBinding>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MemberInit(@new,bindings);
     }

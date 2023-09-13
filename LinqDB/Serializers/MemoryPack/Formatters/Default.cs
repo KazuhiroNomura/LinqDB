@@ -10,12 +10,11 @@ using T=Expressions.DefaultExpression;
 using static Extension;
 public class Default:MemoryPackFormatter<T> {
     public static readonly Default Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
-    }
-    internal T Deserialize(ref Reader reader) {
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T Deserialize(ref Reader reader) {
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){

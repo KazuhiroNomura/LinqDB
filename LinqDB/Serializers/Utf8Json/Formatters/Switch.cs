@@ -30,7 +30,7 @@ public class Switch:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var comparison=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var cases=reader.DeserializeArray<Expressions.SwitchCase>(Resolver);
+        var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var defaultBody=Expression.Instance.Deserialize(ref reader,Resolver);
         var value=Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);

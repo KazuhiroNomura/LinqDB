@@ -11,44 +11,40 @@ using C=Serializer;
 public class Unary:MemoryPackFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
-        Expression.Instance.Serialize(ref writer,value.Operand);
+        Expression.Serialize(ref writer,value.Operand);
     }
     internal static void InternalSerializeType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
-        Expression.Instance.Serialize(ref writer,value.Operand);
-        Type.Instance.Serialize(ref writer,value.Type);
+        Expression.Serialize(ref writer,value.Operand);
+        Type.Serialize(ref writer,value.Type);
     }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
-        Expression.Instance.Serialize(ref writer,value.Operand);
-        Method.Instance.SerializeNullable(ref writer,value.Method);
+        Expression.Serialize(ref writer,value.Operand);
+        Method.SerializeNullable(ref writer,value.Method);
     }
     internal static void InternalSerializeOperandTypeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
-        Expression.Instance.Serialize(ref writer,value.Operand);
-        Type.Instance.Serialize(ref writer,value.Type);
-        Method.Instance.SerializeNullable(ref writer,value.Method);
+        Expression.Serialize(ref writer,value.Operand);
+        Type.Serialize(ref writer,value.Type);
+        Method.SerializeNullable(ref writer,value.Method);
     }
-    internal static Expressions.Expression InternalDeserialize(ref Reader reader) => Expression.Instance.Deserialize(ref reader);
+    internal static Expressions.Expression InternalDeserialize(ref Reader reader) => Expression.Deserialize(ref reader);
     internal static (Expressions.Expression Operand, System.Type Type) InternalDeserializeType(ref Reader reader) {
-        var operand = Expression.Instance.Deserialize(ref reader);
-        var type = Type.Instance.Deserialize(ref reader);
+        var operand = Expression.Deserialize(ref reader);
+        var type = Type.Deserialize(ref reader);
         return (operand, type);
     }
     internal static (Expressions.Expression  Operand, MethodInfo? Method) InternalDeserializeMethod(ref Reader reader) {
-        var operand = Expression.Instance.Deserialize(ref reader);
-        var method = Method.Instance.DeserializeNullable(ref reader);
+        var operand = Expression.Deserialize(ref reader);
+        var method = Method.DeserializeNullable(ref reader);
         return (operand, method);
     }
     internal static (Expressions.Expression Operand, System.Type Type, MethodInfo? Method) InternalDeserializeTypeMethod(ref Reader reader) {
-        var operand = Expression.Instance.Deserialize(ref reader);
-        var type = Type.Instance.Deserialize(ref reader);
-        var method = Method.Instance.DeserializeNullable(ref reader);
+        var operand = Expression.Deserialize(ref reader);
+        var type = Type.Deserialize(ref reader);
+        var method = Method.DeserializeNullable(ref reader);
         return (operand, type, method);
     }
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T Deserialize(ref Reader reader){
-        T? value=default;
-        this.Deserialize(ref reader,ref value);
-        return value!;
-    }
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)/*where TBufferWriter : class, IBufferWriter<byte>*/{
        if(value is null){
            return;
@@ -78,6 +74,11 @@ public class Unary:MemoryPackFormatter<T> {
            default:
                throw new NotSupportedException(value.NodeType.ToString());
        }
+    }
+    internal static T Deserialize(ref Reader reader){
+        T? value=default;
+        Instance.Deserialize(ref reader,ref value);
+        return value!;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
        //if(reader.TryReadNil()) return;

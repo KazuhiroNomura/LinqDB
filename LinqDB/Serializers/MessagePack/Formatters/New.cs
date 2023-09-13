@@ -28,7 +28,7 @@ public class New:IMessagePackFormatter<T> {
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var constructor=Constructor.Instance.Deserialize(ref reader,Resolver);
         //var constructor=reader.TryReadNil()?null:Constructor.Instance.Deserialize(ref reader,Resolver);
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.New(
             constructor,
             arguments

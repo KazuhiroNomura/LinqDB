@@ -9,12 +9,12 @@ using C=Serializer;
 
 public class Label:MemoryPackFormatter<T> {
     public static readonly Label Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        Instance.Serialize(ref writer,ref value);
     }
-    internal T DeserializeLabel(ref Reader reader){
+    internal static T DeserializeLabel(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -22,13 +22,13 @@ public class Label:MemoryPackFormatter<T> {
             //writer.WriteNil();
         //    return;
         //}
-        LabelTarget.Instance.Serialize(ref writer,value!.Target);
-        Expression.Instance.Serialize(ref writer,value.DefaultValue);
+        LabelTarget.Serialize(ref writer,value!.Target);
+        Expression.SerializeNullable(ref writer,value.DefaultValue);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         //if(reader.TryReadNil()) return;
-        var target= LabelTarget.Instance.DeserializeLabelTarget(ref reader);
-        var defaultValue= Expression.Instance.Deserialize(ref reader);
+        var target= LabelTarget.DeserializeLabelTarget(ref reader);
+        var defaultValue= Expression.DeserializeNullable(ref reader);
         value=Expressions.Expression.Label(target,defaultValue);
     }
 }

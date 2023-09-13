@@ -322,9 +322,9 @@ public class Dynamic:IMessagePackFormatter<T> {
         return value;
         (CSharpArgumentInfo[]CSharpArgumentInfos,Expressions.Expression[]Arguments)共通(ref Reader reader0){
             var ArgumentCount=reader0.ReadInt32();
-            var ArgumentNames=reader0.DeserializeArray<string>(Resolver);
+            var ArgumentNames=reader0.ReadArray<string>(Resolver);
             //ArgumentCountは()内の引数。Argumentsはthisも含んでいる
-            var Arguments=reader0.DeserializeArray<Expressions.Expression>(Resolver);
+            var Arguments=reader0.ReadArray<Expressions.Expression>(Resolver);
             var CSharpArgumentInfos=new CSharpArgumentInfo[Arguments.Length];
             var ArgumentNames_Length=ArgumentNames.Length;
             for(var a=0;a<ArgumentNames_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,ArgumentNames[a]);

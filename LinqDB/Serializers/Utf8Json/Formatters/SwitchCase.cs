@@ -16,7 +16,7 @@ public class SwitchCase:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var testValues=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var testValues=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

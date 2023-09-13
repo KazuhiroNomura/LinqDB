@@ -9,16 +9,17 @@ using C=Serializer;
 using T=ConstructorInfo;
 public class Constructor:MemoryPackFormatter<T> {
     public static readonly Constructor Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>this.Serialize(ref writer,ref value);
-    internal T Deserialize(ref Reader reader){
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T Deserialize(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         var ReflectedType=value.ReflectedType!;
-        Type.Instance.Serialize(ref writer,ReflectedType);
+        Type.Serialize(ref writer,ReflectedType);
         var array= C.Instance.TypeConstructors.Get(ReflectedType);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }

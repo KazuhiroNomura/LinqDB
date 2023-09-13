@@ -14,7 +14,7 @@ public class Label:IMessagePackFormatter<T> {
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         LabelTarget.Instance.Serialize(ref writer,value!.Target,Resolver);
-        Expression.Instance.Serialize(ref writer,value.DefaultValue,Resolver);
+        Expression.SerializeNullable(ref writer,value.DefaultValue,Resolver);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -28,7 +28,7 @@ public class Label:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
-        var defaultValue=Expression.Instance.Deserialize(ref reader,Resolver);
+        var defaultValue=Expression.DeserializeNullable(ref reader,Resolver);
         return Expressions.Expression.Label(target,defaultValue);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

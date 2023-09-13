@@ -25,7 +25,7 @@ public class NewArray:IMessagePackFormatter<T> {
     }
     private static (System.Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var type=reader.ReadType();
-        var expressions=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
         return (type,expressions);
     }
     internal static T InternalDeserializeNewArrayBounds(ref Reader reader,MessagePackSerializerOptions Resolver){

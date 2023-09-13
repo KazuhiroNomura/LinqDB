@@ -30,7 +30,7 @@ public class Index:IMessagePackFormatter<T> {
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var instance= Expression.Instance.Deserialize(ref reader,Resolver);
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
-        var arguments=reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

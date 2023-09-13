@@ -38,10 +38,13 @@ public class Serializer:Serializers.Serializer{
         MemoryPackFormatterProvider.Register(Unary.Instance);
         MemoryPackFormatterProvider.Register(SwitchCase.Instance);
         MemoryPackFormatterProvider.Register(CatchBlock.Instance);
+        
         MemoryPackFormatterProvider.Register(ElementInit.Instance);
         MemoryPackFormatterProvider.Register(MemberBinding.Instance);
         MemoryPackFormatterProvider.Register(MemberInit.Instance);
-        //MemoryPackFormatterProvider.Register(LabelTarget.Instance);
+        MemoryPackFormatterProvider.Register(LabelTarget.Instance);
+        MemoryPackFormatterProvider.Register(SwitchCase.Instance);
+
         MemoryPackFormatterProvider.Register(Type.Instance);
         MemoryPackFormatterProvider.Register(Member.Instance);
         MemoryPackFormatterProvider.Register(Constructor.Instance);
@@ -62,22 +65,23 @@ public class Serializer:Serializers.Serializer{
     //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
     //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
     //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
+    //public readonly Dictionary<System.Type,object> DictionaryTypeFormatter = new();
     private static readonly object[] objects1 = new object[1];
     internal static void RegisterAnonymousDisplay(System.Type Type) {
         if(Type.IsDisplay()){
-            if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
+            //if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
             var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
-            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-            var Register = Serializer.Register.MakeGenericMethod(Type);
+            var Instance=FormatterType.GetField("Instance")!;
             objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+            var Register = Serializer.Register.MakeGenericMethod(Type);
             Register.Invoke(null,objects1);
             //Register.Invoke(null,Array.Empty<object>());
         }else if(Type.IsGenericType) {
             if(Type.IsAnonymous()) {
                 var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
-                var Register = Serializer.Register.MakeGenericMethod(Type);
-                var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
+                var Instance=FormatterType.GetField("Instance")!;
                 objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+                var Register = Serializer.Register.MakeGenericMethod(Type);
                 Register.Invoke(null,objects1);
                 //Register.Invoke(null,Array.Empty<object>());
             }
@@ -101,6 +105,14 @@ public class Serializer:Serializers.Serializer{
     public byte[] Serialize<T>(T? value){
         this.Clear();
         if(value is not null) RegisterAnonymousDisplay(value.GetType());
+        var Type=typeof(T);
+        if(typeof(Expressions.LambdaExpression).IsAssignableFrom(Type)){
+            var FormatterType = typeof(ExpressionT<>).MakeGenericType(Type);
+            var Instance=FormatterType.GetField("Instance")!;
+            objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+            var Register = Serializer.Register.MakeGenericMethod(Type);
+            Register.Invoke(null,objects1);
+        }
         return MemoryPackSerializer.Serialize(value);
     }
     public void Serialize<T>(Stream stream,T? value){
@@ -115,7 +127,7 @@ public class Serializer:Serializers.Serializer{
     }
     public T Deserialize<T>(Stream stream){
         this.Clear();
-        //var e=MemoryPackSerializer.Instance.DeserializeAsync<T>(stream);
+        //var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
         var Task=MemoryPackSerializer.DeserializeAsync<T>(stream).AsTask();
         Task.Wait();
         return Task.Result!;

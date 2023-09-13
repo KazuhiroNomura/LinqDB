@@ -28,7 +28,7 @@ public class MemberInit:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var @new=New.Instance.Deserialize(ref reader,Resolver);
-        var bindings=reader.DeserializeArray<Expressions.MemberBinding>(Resolver);
+        var bindings=reader.ReadArray<Expressions.MemberBinding>(Resolver);
         return Expressions.Expression.MemberInit(@new,bindings);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

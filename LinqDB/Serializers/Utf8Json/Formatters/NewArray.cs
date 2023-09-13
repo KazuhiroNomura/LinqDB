@@ -28,7 +28,7 @@ public class NewArray:IJsonFormatter<Expressions.NewArrayExpression>{
         var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var expressions= reader.DeserializeArray<Expressions.Expression>(Resolver);
+        var expressions= reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();
         return NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>Expressions.Expression.NewArrayBounds(type,expressions),

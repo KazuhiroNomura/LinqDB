@@ -90,66 +90,8 @@ public partial class Serializer:Serializers.Serializer{
         //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
         var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
-    //private static readonly object[] objects1 = new object[1];
-    internal static void RegisterAnonymousDisplay(System.Type Type,MessagePackSerializerOptions Options) {
-        if(Type.IsDisplay()){
-            //あらかじめ設定してあるResolverに設定する
-            var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
-            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-            Options.WithResolver(
-                global::MessagePack.Resolvers.CompositeResolver.Create(
-                    new IMessagePackFormatter[]{(IMessagePackFormatter)Instance.GetValue(null)!},
-                    new IFormatterResolver[]{Serializer.Instance.Options.Resolver}
-                )
-            );
-            //Serializer.Instance.Options=MessagePackSerializerOptions.Standard.WithResolver(
-            //    global::MessagePack.Resolvers.CompositeResolver.Create(
-            //        new IMessagePackFormatter[]{(IMessagePackFormatter)Instance.GetValue(null)!},
-            //        new IFormatterResolver[]{Serializer.Instance.Options.Resolver}
-            //    )
-            //);
-
-            //this.Options=MessagePackSerializerOptions.Standard.WithResolver()
-            //var Register = Serializer.Register.MakeGenericMethod(Type);
-            //objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-            //Register.Invoke(null,objects1);
-            //Register.Invoke(null,Array.Empty<object>());
-        //}else if(Type.IsGenericType) {
-        //    if(Type.IsAnonymous()) {
-        //        var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
-        //        var Register = Serializer.Register.MakeGenericMethod(Type);
-        //        var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-        //        objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-        //        Register.Invoke(null,objects1);
-        //        //Register.Invoke(null,Array.Empty<object>());
-        //    }
-        //    foreach(var GenericArgument in Type.GetGenericArguments()) RegisterAnonymousDisplay(GenericArgument);
-        }
-    }
-    //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
-    //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
-    //internal readonly List<System.Type> Types=new();
-    //internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
-    //internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
-    //internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
-    //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
-    //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
-    //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
     private void Clear(){
         this.ProtectedClear();
-        //this.ListParameter.Clear();
-        //this.Dictionary_LabelTarget_int.Clear();
-        //this.LabelTargets.Clear();
-        //this.DictionaryTypeIndex.Clear();
-        //this.Types.Clear();
-        //this.TypeMembers.Clear();
-        //this.TypeConstructors.Clear();
-        //this.TypeMethods.Clear();
-        //this.TypeFields.Clear();
-        //this.TypeProperties.Clear();
-        //this.TypeEvents.Clear();
     }
     public byte[] Serialize<T>(T value){
         this.Clear();

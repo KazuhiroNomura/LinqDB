@@ -10,12 +10,11 @@ using T=Expressions.LabelTarget;
 
 public class LabelTarget:MemoryPackFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    internal void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        this.Serialize(ref writer,ref value);
-    }
-    internal T DeserializeLabelTarget(ref Reader reader){
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    internal static T DeserializeLabelTarget(ref Reader reader){
         T? value=default;
-        this.Deserialize(ref reader,ref value);
+        Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -38,7 +37,7 @@ public class LabelTarget:MemoryPackFormatter<T> {
         if(index<LabelTargets.Count){
             target=LabelTargets[index];
         } else{
-            var type= Type.Instance.Deserialize(ref reader);
+            var type= Type.Deserialize(ref reader);
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             LabelTargets.Add(target);
