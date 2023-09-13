@@ -9,16 +9,15 @@ public class MemberAccess:IJsonFormatter<T> {
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
-        //this.Serialize(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        Expression.SerializeNullable(ref writer,value.Expression,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
         var member =Member.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var expression = Expression.Instance.Deserialize(ref reader,Resolver);
+        var expression = Expression.DeserializeNullable(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MakeMemberAccess(expression,member);
     }

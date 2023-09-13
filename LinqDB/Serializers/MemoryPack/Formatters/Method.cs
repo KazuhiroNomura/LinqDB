@@ -13,7 +13,7 @@ public class Method:MemoryPackFormatter<T> {
     public static readonly Method Instance=new();
     internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
-    internal static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
+    internal static void InternalSerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
         if(value is null)writer.WriteNullObjectHeader();
         else Instance.Serialize(ref writer,ref value);
     }
@@ -22,7 +22,7 @@ public class Method:MemoryPackFormatter<T> {
         Instance.Deserialize(ref reader,ref value);
         return value!;
     }
-    internal static T? DeserializeNullable(ref Reader reader) {
+    internal static T? InternalDeserializeNullable(ref Reader reader) {
         if(reader.PeekIsNull()){
             reader.Advance(1);
             return null;

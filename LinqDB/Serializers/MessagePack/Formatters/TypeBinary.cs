@@ -10,18 +10,17 @@ using T=Expressions.UnaryExpression;
 using static Extension;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
-    internal static void PrivateSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+    private static void PrivateSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
-        writer.WriteNodeType(value!.NodeType);
+        writer.WriteNodeType(value.NodeType);
         Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
         writer.WriteType(value.TypeOperand);
     }
-    internal static void InternalSerializeExpression(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
-        PrivateSerializeExpression(ref writer,value,Resolver);
-    }
+    internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver)=>
+        PrivateSerialize(ref writer,value,Resolver);
     private const int ArrayHeader=3;
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
-        PrivateSerializeExpression(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var expression=Expression.Instance.Deserialize(ref reader,Resolver);

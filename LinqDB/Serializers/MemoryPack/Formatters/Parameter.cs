@@ -8,9 +8,9 @@ using C=Serializer;
 
 public class Parameter:MemoryPackFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
-    internal static T DeserializeParameter(ref Reader reader){
+    internal static T InternalDeserialize(ref Reader reader){
         T? value=default;
         Instance.Deserialize(ref reader,ref value);
         return value!;

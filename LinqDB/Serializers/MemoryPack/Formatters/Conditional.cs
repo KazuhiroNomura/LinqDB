@@ -10,28 +10,23 @@ using C=Serializer;
 
 public class Conditional:MemoryPackFormatter<T> {
     public static readonly Conditional Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
-    internal static T DeserializeConditional(ref Reader reader){
+    internal static T InternalDeserialize(ref Reader reader){
         T? value=default;
         Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(value is null){
-            //writer.WriteNil();
-            //return;
-        }
-        Expression.Serialize(ref writer,value!.Test);
-        Expression.Serialize(ref writer,value.IfTrue);
-        Expression.Serialize(ref writer,value.IfFalse);
+        Expression.InternalSerialize(ref writer,value!.Test);
+        Expression.InternalSerialize(ref writer,value.IfTrue);
+        Expression.InternalSerialize(ref writer,value.IfFalse);
         writer.WriteType(value.Type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        //if(reader.TryReadNil()) return null!;
-        var test= Expression.Deserialize(ref reader);
-        var ifTrue= Expression.Deserialize(ref reader);
-        var ifFalse= Expression.Deserialize(ref reader);
+        var test= Expression.InternalDeserialize(ref reader);
+        var ifTrue= Expression.InternalDeserialize(ref reader);
+        var ifFalse= Expression.InternalDeserialize(ref reader);
         var type=reader.ReadType();
         value=Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }

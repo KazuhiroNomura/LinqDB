@@ -133,30 +133,119 @@ public class Expression:共通 {
     //}
     private static readonly Expressions.ParameterExpression int8    = Expressions.Expression.Parameter(typeof(sbyte),"int8");
     private static readonly Expressions.ParameterExpression int16   = Expressions.Expression.Parameter(typeof(short),"int16");
-    private static readonly Expressions.ParameterExpression int32   = Expressions.Expression.Parameter(typeof(int),"int32");
+    private static readonly Expressions.ConstantExpression  int32   = Expressions.Expression.Constant(1);
     private static readonly Expressions.ParameterExpression int64   = Expressions.Expression.Parameter(typeof(long),"int64");
     private static readonly Expressions.ParameterExpression uint8   = Expressions.Expression.Parameter(typeof(byte),"uint8");
     private static readonly Expressions.ParameterExpression uint16  = Expressions.Expression.Parameter(typeof(ushort),"uint16");
     private static readonly Expressions.ParameterExpression uint32  = Expressions.Expression.Parameter(typeof(uint),"uint32");
     private static readonly Expressions.ParameterExpression uint64  = Expressions.Expression.Parameter(typeof(ulong),"uint64");
     private static readonly Expressions.ParameterExpression @float  = Expressions.Expression.Parameter(typeof(float),"float");
-    private static readonly Expressions.ParameterExpression @double = Expressions.Expression.Parameter(typeof(double),"double");
+    private static readonly Expressions.ConstantExpression  @double = Expressions.Expression.Constant(1.0);
     private static readonly Expressions.ParameterExpression @decimal= Expressions.Expression.Parameter(typeof(decimal),"decimal");
-    private static readonly Expressions.ParameterExpression @string = Expressions.Expression.Parameter(typeof(string),"string");
+    private static readonly Expressions.ConstantExpression @string  = Expressions.Expression.Constant("string");
+    private static readonly Expressions.ConstantExpression array    = Expressions.Expression.Constant(new int[1]);
+    private static readonly Expressions.ConstantExpression @bool    = Expressions.Expression.Constant(true);
     //private static readonly ParameterExpression[] Parameters={int8,int16,int32,int64,uint8,uint16,uint32,uint64,@float,@double,@decimal,@string};
     //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
     //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
     //private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"decimal");
-    [Fact]public void Binary(){
-        var Parameters=new[]{int16,int32,int64,uint16,uint32,uint64,@float,@double,@decimal};
-        foreach(var p in Parameters){
-            this.共通Expression(
-                Expressions.Expression.Block(
-                    new[]{p},
-                    Expressions.Expression.Add(p,p)
-                )
-            );
+    private static int _代入先int;
+    private static double _代入先double;
+    private static bool _代入先bool;
+    private static Expressions.MemberExpression 代入先int=Expressions.Expression.MakeMemberAccess(
+        null,
+        typeof(Expression).GetField(nameof(Expression._代入先int),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+    );
+    private static Expressions.MemberExpression 代入先double=Expressions.Expression.MakeMemberAccess(
+        null,
+        typeof(Expression).GetField(nameof(Expression._代入先double),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+    );
+    private static Expressions.MemberExpression 代入先bool=Expressions.Expression.MakeMemberAccess(
+        null,
+        typeof(Expression).GetField(nameof(Expression._代入先bool),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+    );
+    private static int Or(int a,int b)=>a|b;
+    private static double Multiply(double a,double b)=>a*b;
+    private static double MultiplyCheckedMetrhod(double a,double b)=>checked(a*b);
+    [Fact]
+    public void Binary(){
+        var pdouble=Expressions.Expression.Parameter(typeof(double));
+        this.共通Expression(Expressions.Expression.Assign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.Coalesce(@string,@string));
+        this.共通Expression(Expressions.Expression.ArrayIndex(array,int32));
+        this.共通Expression(Expressions.Expression.Add(int32,int32));
+        this.共通Expression(Expressions.Expression.AddAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.AddAssignChecked(代入先int,int32));
+        this.共通Expression(Expressions.Expression.AddChecked(int32,int32));
+        this.共通Expression(Expressions.Expression.And(int32,int32));
+        this.共通Expression(Expressions.Expression.AndAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.AndAlso(@bool,@bool));
+        this.共通Expression(Expressions.Expression.Divide(int32,int32));
+        this.共通Expression(Expressions.Expression.DivideAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.ExclusiveOr(int32,int32));
+        this.共通Expression(Expressions.Expression.ExclusiveOrAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.LeftShift(int32,int32));
+        this.共通Expression(Expressions.Expression.LeftShiftAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.Modulo(int32,int32));
+        this.共通Expression(Expressions.Expression.ModuloAssign(代入先int,int32));
+        this.共通Expression(Expressions.Expression.Multiply(int32,int32));
+        this.共通Expression(Expressions.Expression.MultiplyAssign(代入先int,int32));
+    }
+    [Fact]public void MultiplyAssignChecked(){
+        var pdouble=Expressions.Expression.Parameter(typeof(double),"pdouble");
+        var pint=Expressions.Expression.Parameter(typeof(int),"pint");
+        this.共通Expression(Expressions.Expression.MultiplyAssignChecked(
+            代入先double,@double,
+            typeof(Expression).GetMethod(nameof(MultiplyCheckedMetrhod),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic),
+            Expressions.Expression.Lambda<Func<double,double>>(
+                Expressions.Expression.Add(pdouble,pdouble),
+                pdouble
+            )
+            //代入先int,int32
+        ));
+        this.共通Expression(Expressions.Expression.MultiplyChecked      (int32,int32));
+        this.共通Expression(Expressions.Expression.Or                   (int32,int32));
+        this.共通Expression(Expressions.Expression.OrAssign             (
+            代入先int,int32,
+            typeof(Expression).GetMethod(nameof(Or),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic),
+            Expressions.Expression.Lambda<Func<int,int>>(
+                Expressions.Expression.Add(pint,pint),
+                pint
+            )
+        ));
+        this.共通Expression(Expressions.Expression.OrElse               (@bool,@bool));
+        this.共通Expression(Expressions.Expression.Power                (@double,@double,typeof(Math).GetMethod("Pow")));
+        this.共通Expression(Expressions.Expression.PowerAssign          (
+            代入先double,@double,
+            null,
+            //typeof(Math).GetMethod("Pow"),
+            Expressions.Expression.Lambda<Func<double,double>>(pdouble,pdouble)
+        ));
+        this.共通Expression(Expressions.Expression.RightShift           (int32,int32));
+        this.共通Expression(Expressions.Expression.RightShiftAssign     (代入先int,int32));
+        this.共通Expression(Expressions.Expression.Subtract             (int32,int32));
+        this.共通Expression(Expressions.Expression.SubtractAssign       (代入先int,int32));
+        this.共通Expression(Expressions.Expression.SubtractAssignChecked(代入先int,int32));
+        this.共通Expression(Expressions.Expression.SubtractChecked      (int32,int32));
+        this.共通Expression(Expressions.Expression.Equal                (int32,int32));
+        this.共通Expression(Expressions.Expression.GreaterThan          (int32,int32));
+        this.共通Expression(Expressions.Expression.GreaterThanOrEqual   (int32,int32));
+        this.共通Expression(Expressions.Expression.LessThan             (int32,int32));
+        this.共通Expression(Expressions.Expression.LessThanOrEqual      (int32,int32));
+        this.共通Expression(Expressions.Expression.NotEqual             (int32,int32));
+        void 共通(Expressions.BinaryExpression input){
+            this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+            this.共通Expression(input);
         }
+        //var Parameters=new[]{int16,int32,int64,uint16,uint32,uint64,@float,@double,@decimal};
+        //foreach(var p in Parameters){
+        //    this.共通Expression(
+        //        Expressions.Expression.Block(
+        //            new[]{p},
+        //            Expressions.Expression.Add(p,p)
+        //        )
+        //    );
+        //}
     }
     [Fact]public void Block0(){
         this.共通Expression(
@@ -1129,17 +1218,19 @@ public class Expression:共通 {
     //public void Null(){
     //    this.共通Expression<Expressions.Expression?>(null);
     //}
-    [Fact]
-    public void GreaterThan(){
-        this.共通Expression(Expressions.Expression.GreaterThan(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));
-    }
+    //[Fact]
+    //public void GreaterThan(){
+    //    this.共通Expression(Expressions.Expression.GreaterThan(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));
+    //}
 
-    [Fact]
-    public void Assign(){
-        this.共通Expression(Expressions.Expression.Block(new[]{@string},Expressions.Expression.Assign(@string,@string)));
-    }
+    //[Fact]
+    //public void Assign(){
+    //    var @string=Expressions.Expression.Parameter(typeof(string));
+    //    this.共通Expression(Expressions.Expression.Block(new[]{@string},Expressions.Expression.Assign(@string,@string)));
+    //}
     [Fact]
     public void Invoke(){
+        var @string=Expressions.Expression.Parameter(typeof(string));
         this.共通Expression(
             Expressions.Expression.Invoke(
                 Expressions.Expression.Lambda(@string,@string),

@@ -25,7 +25,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
         writer.Serialize宣言Parameters(value.Parameters);
-        Expression.Serialize(ref writer,value.Body);
+        Expression.InternalSerialize(ref writer,value.Body);
         writer.WriteBoolean(value.TailCall);
         
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
@@ -36,7 +36,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters();
         ListParameter.AddRange(parameters!);
-        var body = Expression.Deserialize(ref reader);
+        var body = Expression.InternalDeserialize(ref reader);
         var tailCall = reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters!.Length);
         value=(T)Expressions.Expression.Lambda(

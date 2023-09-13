@@ -128,7 +128,8 @@ public abstract class 共通{
         where T:Expressions.Expression?
     {
         //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
+        this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.シリアライズデシリアライズ3パターン<Expressions.Expression>(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         this.シリアライズデシリアライズ3パターン<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){

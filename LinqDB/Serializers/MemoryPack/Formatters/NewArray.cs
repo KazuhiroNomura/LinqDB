@@ -1,37 +1,40 @@
 ﻿using System;
 using MemoryPack;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 using System.Buffers;
 using System.Diagnostics;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
+using T=Expressions.NewArrayExpression;
 using static Extension;
-using T=NewArrayExpression;
-using C=Serializer;
 public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static T DeserializeNewArray(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        writer.WriteNodeType(value.NodeType);
-        Type.Serialize(ref writer,value.Type.GetElementType());
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        Type.Serialize(ref writer,value!.Type.GetElementType());
         writer.SerializeReadOnlyCollection(value.Expressions);
     }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        writer.WriteNodeType(value!.NodeType);
+        InternalSerialize(ref writer,value);
+    }
+    private static (System.Type type,Expressions.Expression?[]?expressions)PrivateDeserialize(ref Reader reader){
+        var type=reader.ReadType();
+        var expressions=reader.ReadArray<Expressions.Expression>();
+        return (type,expressions);
+    }
+    internal static T InternalDeserializeNewArrayBounds(ref Reader reader){
+        var (type,expressions)=PrivateDeserialize(ref reader);
+        return Expressions.Expression.NewArrayBounds(type,expressions!);
+    }
+    internal static T InternalDeserializeNewArrayInit(ref Reader reader){
+        var (type,expressions)=PrivateDeserialize(ref reader);
+        return Expressions.Expression.NewArrayInit(type,expressions!);
+    }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        //if(reader.TryReadNil()) return;
         var NodeType=reader.ReadNodeType();
-        var type= Type.Deserialize(ref reader);
-        //var expressions=global::MemoryPack.Formatters.ArrayFormatter<Expression>() Deserialize_T<Expression[]>(ref reader);
-        var expressions=reader.ReadArray<System.Linq.Expressions.Expression>();
         value=NodeType switch{
-            ExpressionType.NewArrayBounds=>System.Linq.Expressions.Expression.NewArrayBounds(type,expressions!),
-            ExpressionType.NewArrayInit=>System.Linq.Expressions.Expression.NewArrayInit(type,expressions!),
+            Expressions.ExpressionType.NewArrayBounds=>InternalDeserializeNewArrayBounds(ref reader),
+            Expressions.ExpressionType.NewArrayInit=>InternalDeserializeNewArrayInit(ref reader),
             _=>throw new NotImplementedException(NodeType.ToString())
         };
     }

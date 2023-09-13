@@ -8,12 +8,19 @@ using Reader=MemoryPackReader;
 using T=Expressions.TypeBinaryExpression;
 public class TypeBinary:MemoryPackFormatter<T> {
     public static readonly TypeBinary Instance=new();
-    internal static void InternalSerializeExpression<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        Expression.Serialize(ref writer,value.Expression);
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        Expression.InternalSerialize(ref writer,value.Expression);
         writer.WriteType(value.TypeOperand);
     }
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+        Instance.Serialize(ref writer,ref value);
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        writer.WriteVarInt((byte)value!.NodeType);
+        Expression.InternalSerialize(ref writer,value.Expression);
+        Type.Serialize(ref writer,value.TypeOperand);
+    }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
-        var expression=Expression.Deserialize(ref reader);
+        var expression=Expression.InternalDeserialize(ref reader);
         var type=reader.ReadType();
         return (expression,type);
     }
@@ -25,29 +32,11 @@ public class TypeBinary:MemoryPackFormatter<T> {
         var (expression,type)=PrivateDeserialize(ref reader);
         return Expressions.Expression.TypeIs(expression,type);
     }
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(value is null){
-            //writer.WriteNil();
-        }
-        writer.WriteVarInt((byte)value!.NodeType);
-        Expression.Serialize(ref writer,value.Expression);
-        Type.Serialize(ref writer,value.TypeOperand);
-    }
-    internal static T DeserializeTypeBinary(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        //if(reader.TryReadNil()) return;
         var NodeType=reader.ReadNodeType();
-        var expression= Expression.Deserialize(ref reader);
-        var type=Type.Deserialize(ref reader);
         value=NodeType switch{
-            Expressions.ExpressionType.TypeEqual=>Expressions.Expression.TypeEqual(expression,type),
-            Expressions.ExpressionType.TypeIs=>Expressions.Expression.TypeIs(expression,type),
+            Expressions.ExpressionType.TypeEqual=>InternalDeserializeTypeEqual(ref reader),
+            Expressions.ExpressionType.TypeIs=>InternalDeserializeTypeIs(ref reader),
             _=>throw new NotSupportedException(NodeType.ToString())
         };
     }

@@ -25,7 +25,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
         Member.Serialize(ref writer,value.Member);
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
-                Expression.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression);
+                Expression.InternalSerialize(ref writer,((Expressions.MemberAssignment)value).Expression);
                 break;
             case Expressions.MemberBindingType.MemberBinding:{
                 writer.SerializeReadOnlyCollection(((Expressions.MemberMemberBinding)value).Bindings);
@@ -44,7 +44,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
         //MemberInfo?member=default;
         var member= Member.Deserialize(ref reader);
         T MemberBinding =BindingType switch{
-            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Deserialize(ref reader)),
+            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.InternalDeserialize(ref reader)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>()!),
             Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>()!),
             _=>throw new ArgumentOutOfRangeException(BindingType.ToString())

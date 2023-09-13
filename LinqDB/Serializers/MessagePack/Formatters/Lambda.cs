@@ -10,8 +10,12 @@ using T=Expressions.LambdaExpression;
 using static Extension;
 public class Lambda:IMessagePackFormatter<T> {
     public static readonly Lambda Instance=new();
-    private const int ArrayHeader=4;
-    private const int InternalArrayHeader=ArrayHeader+1;
+    /// <summary>
+    /// 4要素
+    /// </summary>
+    /// <param name="writer"></param>
+    /// <param name="value"></param>
+    /// <param name="Resolver"></param>
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         var ListParameter=Serializer.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
@@ -24,14 +28,24 @@ public class Lambda:IMessagePackFormatter<T> {
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader-2);
+        writer.WriteArrayHeader(5);
         writer.WriteNodeType(Expressions.ExpressionType.Lambda);
         PrivateSerialize(ref writer,value,Resolver);
     }
+    internal static void InternalSerializeConversion(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(value is null)writer.WriteNil();
+        else Instance.Serialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteArrayHeader(4);
         PrivateSerialize(ref writer,value,Resolver);
     }
+    /// <summary>
+    /// 4要素。Expressionから呼ばれる。
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="Resolver"></param>
+    /// <returns></returns>
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ListParameter=Serializer.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
@@ -48,9 +62,18 @@ public class Lambda:IMessagePackFormatter<T> {
             parameters
         );
     }
+    internal static T? InternalDeserializeConversion(ref Reader reader,MessagePackSerializerOptions Resolver){
+        return reader.TryReadNil()?null:Instance.Deserialize(ref reader,Resolver);
+    }
+    /// <summary>
+    /// 自由に呼ばれる。
+    /// </summary>
+    /// <param name="reader"></param>
+    /// <param name="Resolver"></param>
+    /// <returns></returns>
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==4);
         return InternalDeserialize(ref reader,Resolver);
     }
 }

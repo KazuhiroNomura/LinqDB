@@ -9,10 +9,10 @@ using T=Expressions.TryExpression;
 
 public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Expression.Serialize(ref writer,value!.Body);
+        Expression.InternalSerialize(ref writer,value!.Body);
         Expression.SerializeNullable(ref writer,value.Finally);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers);
@@ -23,15 +23,15 @@ public class Try:MemoryPackFormatter<T> {
             }
         }
     }
-    internal static T DeserializeTry(ref Reader reader){
+    internal static T InternalDeserialize(ref Reader reader){
         T? value=default;
         Instance.Deserialize(ref reader,ref value);
         return value!;
     }
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var body= Expression.Deserialize(ref reader);
-        var @finally= Expression.DeserializeNullable(ref reader);
+        var body= Expression.InternalDeserialize(ref reader);
+        var @finally= Expression.InternalDeserializeNullable(ref reader);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>()!;
             if(handlers.Length>0) {
@@ -40,7 +40,7 @@ public class Try:MemoryPackFormatter<T> {
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
-            var fault= Expression.DeserializeNullable(ref reader);
+            var fault= Expression.InternalDeserializeNullable(ref reader);
             if(fault is not null){
                 value=Expressions.Expression.TryFault(body,fault);
             } else{
