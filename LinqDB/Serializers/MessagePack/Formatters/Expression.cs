@@ -97,7 +97,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Block                :Block.InternalSerialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
             case Expressions.ExpressionType.DebugInfo            :DebugInfo.InternalSerialize(ref writer,(Expressions.DebugInfoExpression)value,Resolver);break;
             case Expressions.ExpressionType.Dynamic              :Dynamic.InternalSerialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Default              :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Default              :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value);break;
             //case Expressions.ExpressionType.Extension            :
             case Expressions.ExpressionType.Goto                 :Goto.InternalSerialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
             case Expressions.ExpressionType.Index                :Index.InternalSerialize(ref writer,(Expressions.IndexExpression)value,Resolver);break;
@@ -376,7 +376,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Block           :value=Block.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.DebugInfo       :value=DebugInfo.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Dynamic         :value=Dynamic.InternalDeserialize(ref reader,Resolver);break;
-            case Expressions.ExpressionType.Default         :value=Default.InternalDeserialize(ref reader,Resolver);break;
+            case Expressions.ExpressionType.Default         :value=Default.InternalDeserialize(ref reader);break;
             //case Expressions.ExpressionType.Extension       :
             case Expressions.ExpressionType.Goto            :value=Goto.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Index           :value=Index.InternalDeserialize(ref reader,Resolver);break;

@@ -9,25 +9,28 @@ using static Extension;
 using T=Expressions.InvocationExpression;
 public class Invocation:IJsonFormatter<T> {
     public static readonly Invocation Instance=new();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        writer.WriteValueSeparator();
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
-        writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        InternalSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
-        reader.ReadIsBeginArrayWithVerify();
-        //var NodeTypeName=reader.ReadString();
-        //reader.ReadIsValueSeparatorWithVerify();
-        //var NodeType=Enum.Parse<ExpressionType>(NodeTypeName);
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var expression=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-        reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.Invoke(expression,arguments);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        reader.ReadIsBeginArrayWithVerify();
+        var value=InternalDeserialize(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
 }

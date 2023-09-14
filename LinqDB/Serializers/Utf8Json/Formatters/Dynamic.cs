@@ -25,10 +25,7 @@ public class Dynamic:IJsonFormatter<T> {
         var NodeTypeName=reader.ReadString();
         return Enum.Parse<BinderType>(NodeTypeName);
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-     //   if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        writer.WriteBeginArray();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         switch(value.Binder){
             case DynamicMetaObjectBinder v0:{
                 switch(v0){
@@ -155,7 +152,6 @@ public class Dynamic:IJsonFormatter<T> {
                 break;
             }
         }
-        writer.WriteEndArray();
         void 共通(ref Writer writer0,ReadOnlyCollection<Expressions.Expression>Arguments,CallInfo CallInfo){
             writer0.WriteValueSeparator();
             writer0.WriteInt32(CallInfo.ArgumentCount);
@@ -165,10 +161,15 @@ public class Dynamic:IJsonFormatter<T> {
             writer0.SerializeReadOnlyCollection(Arguments,Resolver);
         }
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+     //   if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteBeginArray();
+        InternalSerialize(ref writer,value,Resolver);
+        writer.WriteEndArray();
+    }
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
-        //if(reader.ReadIsNull()) return null!;
-        reader.ReadIsBeginArrayWithVerify();
         var BinderType=ReadBinderType(ref reader);
         reader.ReadIsValueSeparatorWithVerify();
         switch(BinderType){
@@ -338,7 +339,6 @@ public class Dynamic:IJsonFormatter<T> {
             default:
                 throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
-        reader.ReadIsEndArrayWithVerify();
         return value;
         (CSharpArgumentInfo[]CSharpArgumentInfos,Expressions.Expression[]Arguments)共通(ref Reader reader0){
             reader0.ReadIsValueSeparatorWithVerify();
@@ -355,5 +355,12 @@ public class Dynamic:IJsonFormatter<T> {
             for(var a=ArgumentNames_Length;a<CSharpArgumentInfos_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo1;
             return (CSharpArgumentInfos,Arguments);
         }
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        //if(reader.ReadIsNull()) return null!;
+        reader.ReadIsBeginArrayWithVerify();
+        var value=InternalDeserialize(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
 }

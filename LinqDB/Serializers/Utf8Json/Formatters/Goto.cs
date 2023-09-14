@@ -7,21 +7,21 @@ using static Extension;
 using T=Expressions.GotoExpression;
 public class Goto:IJsonFormatter<T> {
     public static readonly Goto Instance=new();
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        writer.WriteBeginArray();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteInt32((int)value.Kind);
         writer.WriteValueSeparator();
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
         writer.WriteValueSeparator();
         if(!writer.WriteIsNull(value.Value))Expression.Instance.Serialize(ref writer,value.Value,Resolver);
         writer.WriteValueSeparator();
-        //this.Serialize(ref writer,value.Type,Resolver);
         writer.WriteType(value.Type);
+    }
+    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteBeginArray();
+        InternalSerialize(ref writer, value,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        reader.ReadIsBeginArrayWithVerify();
-
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var kind=(Expressions.GotoExpressionKind)reader.ReadInt32();
         reader.ReadIsValueSeparatorWithVerify();
         //var target=Deserialize_T<LabelTarget>(ref reader,Resolver);
@@ -30,7 +30,12 @@ public class Goto:IJsonFormatter<T> {
         var value=reader.ReadIsNull()?null:Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
-        reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MakeGoto(kind,target,value,type);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        reader.ReadIsBeginArrayWithVerify();
+        var value=InternalDeserialize(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
 }

@@ -8,8 +8,7 @@ using Reader=JsonReader;
 using T= Expressions.BinaryExpression;
 public class Binary:IJsonFormatter<T> {
     public static readonly Binary Instance=new();
-    internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,
-        IJsonFormatterResolver Resolver){
+    internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -48,7 +47,7 @@ public class Binary:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        writer.WriteString(value.NodeType.ToString());
+        writer.WriteNodeType(value.NodeType);
         writer.WriteValueSeparator();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :

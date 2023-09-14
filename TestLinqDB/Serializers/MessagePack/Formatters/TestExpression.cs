@@ -272,9 +272,9 @@ public class TestExpression:共通 {
         var Method_double=Method(()=>double_dobuble_double(1,1));
         //var Method_bool=Method(()=>AndAlso(true,true));
         //var Method_NullableBoolean=Method(()=>bool_bool_bool(true,true));
-        共通0(Expression.ArrayIndex           (ConstantArray,Constant1));
-        共通0(Expression.Assign               (ParameterInt32,Constant1));
-        共通0(Expression.Coalesce             (ConstantString,ConstantString));
+        共通0(Expression.ArrayIndex(ConstantArray,Constant1));
+        共通0(Expression.Assign(ParameterInt32,Constant1));
+        共通0(Expression.Coalesce(ConstantString,ConstantString));
         共通0(Expression.Add                  (Constant1,Constant1));
         共通0(Expression.AddChecked           (Constant1,Constant1));
         共通0(Expression.And                  (Constant1,Constant1));

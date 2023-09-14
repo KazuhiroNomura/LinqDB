@@ -94,7 +94,7 @@ internal static class Extension{
                 writer.WriteBeginObject();
                 writer.WriteString(Parameter.Name);
                 writer.WriteNameSeparator();
-                Formatters.Type.Instance.Serialize(ref writer,Parameter.Type,Resolver);
+                writer.WriteType(Parameter.Type);
                 writer.WriteEndObject();
                 if(a==Count-1) break;
                 writer.WriteValueSeparator();

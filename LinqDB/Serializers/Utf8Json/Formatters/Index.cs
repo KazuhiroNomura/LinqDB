@@ -9,26 +9,33 @@ using T=Expressions.IndexExpression;
 using static Extension;
 public class Index:IJsonFormatter<T> {
     public static readonly Index Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        writer.WriteBeginArray();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Object,Resolver);
         writer.WriteValueSeparator();
         Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        //if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteBeginArray();
+        InternalSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
-        reader.ReadIsBeginArrayWithVerify();
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var instance= Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-        reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        //if(reader.ReadIsNull()) return null!;
+        reader.ReadIsBeginArrayWithVerify();
+        var value=InternalDeserialize(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
 }

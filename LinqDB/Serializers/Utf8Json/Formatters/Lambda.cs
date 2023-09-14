@@ -14,14 +14,11 @@ public class Lambda:IJsonFormatter<T> {
         if(writer.WriteIsNull(value)) return;
         Instance.Serialize(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         var ListParameter=C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value.Parameters;
         ListParameter.AddRange(Parameters);
-
-        writer.WriteBeginArray();
-        //this.Serialize(ref writer,value.Type,Resolver);
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
@@ -29,20 +26,20 @@ public class Lambda:IJsonFormatter<T> {
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.TailCall);
-        writer.WriteEndArray();
-        
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
+    }
+    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+        writer.WriteBeginArray();
+        InternalSerialize(ref writer,value,Resolver);
+        writer.WriteEndArray();
     }
     internal static T? InternalDeserializeConversion(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null;
         return Instance.Deserialize(ref reader,Resolver);
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var ListParameter=C.Instance.ListParameter;
         var ListParameter_Count=ListParameter.Count;
-
-        reader.ReadIsBeginArrayWithVerify();
-        //var s=reader.ReadString();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var parameters = reader.Deserialize宣言Parameters(Resolver);
@@ -52,7 +49,6 @@ public class Lambda:IJsonFormatter<T> {
         var body =Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var tailCall = reader.ReadBoolean();
-        reader.ReadIsEndArrayWithVerify();
         ListParameter.RemoveRange(ListParameter_Count,parameters.Count);
         return Expressions.Expression.Lambda(
             type,
@@ -60,5 +56,11 @@ public class Lambda:IJsonFormatter<T> {
             tailCall,
             parameters
         );
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+        reader.ReadIsBeginArrayWithVerify();
+        var value=InternalDeserialize(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
 }

@@ -16,7 +16,7 @@ public class Delegate2:IJsonFormatter<T> {
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        Type.Instance.Serialize(ref writer,value!.GetType(),Resolver);
+        writer.WriteType(value!.GetType());
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
         writer.WriteValueSeparator();
@@ -26,7 +26,7 @@ public class Delegate2:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var delegateType=Type.Instance.Deserialize(ref reader,Resolver);
+        var delegateType=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();

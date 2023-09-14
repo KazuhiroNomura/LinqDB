@@ -9,6 +9,23 @@ using T= Expressions.MethodCallExpression;
 using static Extension;
 public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        var method=value.Method;
+        Method.Instance.Serialize(ref writer,method,Resolver);
+        writer.WriteValueSeparator();
+        if(!method.IsStatic){
+            Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
+            writer.WriteValueSeparator();
+        }
+        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        //if(writer.WriteIsNull(value))return;
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        writer.WriteBeginArray();
+        InternalSerialize(ref writer,value,Resolver);
+        writer.WriteEndArray();
+    }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -29,25 +46,11 @@ public class MethodCall:IJsonFormatter<T> {
             );
         }
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        writer.WriteBeginArray();
-        var method=value.Method;
-        Method.Instance.Serialize(ref writer,method,Resolver);
-        writer.WriteValueSeparator();
-        if(!method.IsStatic){
-            Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
-            writer.WriteValueSeparator();
-        }
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
-        writer.WriteEndArray();
-    }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //i//f(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var result=InternalDeserialize(ref reader,Resolver);
+        var value=InternalDeserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return result;
+        return value;
     }
 }
