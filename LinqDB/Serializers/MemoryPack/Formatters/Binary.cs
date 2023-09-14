@@ -14,6 +14,11 @@ public class Binary:MemoryPackFormatter<T> {
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
     }
+    internal static void InternalSerializeLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.InternalSerialize(ref writer,value.Right);
+        Lambda.InternalSerializeConversion(ref writer,value.Conversion);
+    }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
@@ -36,6 +41,12 @@ public class Binary:MemoryPackFormatter<T> {
         var right = Expression.InternalDeserialize(ref reader);
         Debug.Assert(left!=null);
         return (left, right);
+    }
+    internal static (Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion) InternalDeserializeLambda(ref Reader reader) {
+        var Left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        var conversion= Lambda.InternalDeserializeConversion(ref reader);
+        return (Left, right, conversion);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method) InternalDeserializeMethod(ref Reader reader) {
         var left = Expression.InternalDeserialize(ref reader);
@@ -69,8 +80,8 @@ public class Binary:MemoryPackFormatter<T> {
         writer.WriteNodeType(value.NodeType);
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :
-            case Expressions.ExpressionType.Coalesce             :InternalSerialize(ref writer,value); break;
+            case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value); break;
+            case Expressions.ExpressionType.Coalesce             :InternalSerializeLambda(ref writer,value); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :

@@ -124,16 +124,97 @@ public abstract class 共通{
         Optimizer.IsInline=true;
         Optimizer.CreateDelegate(Lambda)();
     }
-    protected void 共通Expression<T>(T input)
-        where T:Expressions.Expression?
-    {
-        //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.シリアライズデシリアライズ3パターン(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.シリアライズデシリアライズ3パターン<Expressions.Expression>(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.シリアライズデシリアライズ3パターン<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
+    //シリアライズ。色んな方法でやってデシリアライズ成功するか
+    //実行。結果が一致するから
+    protected void シリアライズMemoryMessageJson(Expression input){
+        this.シリアライズMemoryMessageJson(input,output=>{
+            Assert.Equal(input,output,this.ExpressionEqualityComparer);
+        });
+        this.シリアライズMemoryMessageJson<Expression>(input,output=>{
+            Assert.Equal(input,output,this.ExpressionEqualityComparer);
+        });
+        this.シリアライズMemoryMessageJson<object>(input,output=>{
+            Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer);
+        });
     }
-    protected TResult 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
-        this.共通Expression<Expressions.Expression>(Lambda);
+    //リモート実行できるか。
+    protected void シリアライズMemoryMessageJsonコンパイル<T>(Expression<Func<T>> input){
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        var expected=標準();
+        this.シリアライズMemoryMessageJson(input,共通);
+        this.シリアライズMemoryMessageJson<Expression>(input,共通);
+        this.シリアライズMemoryMessageJson<object>(input,共通);
+        void 共通(object output){
+            var output0=(Expression<Func<T>>)output;
+            Assert.Equal(input,output0,this.ExpressionEqualityComparer);
+            Optimizer.IsInline=false;
+            {
+                var M=Optimizer.CreateDelegate(output0);
+                var actual=M();
+                Assert.Equal(expected,actual,this.Comparer);
+            }
+            Optimizer.IsInline=true;
+            {
+                var M=Optimizer.CreateDelegate(output0);
+                var actual=M();
+                Assert.Equal(expected,actual,this.Comparer);
+            }
+        }
+    }
+    //リモート実行できるか。
+    protected void シリアライズMemoryMessageJsonコンパイル<T,TResult>(Expression<Func<T,TResult>> input,T t){
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        var expected=標準(t);
+        this.シリアライズMemoryMessageJson(input,共通);
+        this.シリアライズMemoryMessageJson<Expression>(input,共通);
+        this.シリアライズMemoryMessageJson<object>(input,共通);
+        void 共通(object output){
+            var output0=(Expression<Func<T,TResult>>)output;
+            Assert.Equal(input,output0,this.ExpressionEqualityComparer);
+            Optimizer.IsInline=false;
+            {
+                var M=Optimizer.CreateDelegate(output0);
+                var actual=M(t);
+                Assert.Equal(expected,actual,this.Comparer);
+            }
+            Optimizer.IsInline=true;
+            {
+                var M=Optimizer.CreateDelegate(output0);
+                var actual=M(t);
+                Assert.Equal(expected,actual,this.Comparer);
+            }
+        }
+    }
+    protected void コンパイル<T>(T input) where T:Expression?{
+        //var Optimizer=this.Optimizer;
+        //var 標準=Lambda.Compile();
+        //var expected=標準();
+        //{
+        //    Optimizer.IsInline=false;
+        //    {
+        //        var M=Optimizer.CreateDelegate(Lambda);
+        //        var actual=M();
+        //        Assert.Equal(expected,actual,this.Comparer);
+        //    }
+        //    Optimizer.IsInline=true;
+        //    {
+        //        var M=Optimizer.CreateDelegate(Lambda);
+        //        var actual=M();
+        //        Assert.Equal(expected,actual,this.Comparer);
+        //    }
+        //}
+    }
+    protected void シリアライズ<T>(T input) where T:Expression?{
+    //protected void 共通Expression<T>(Expressions.Expression<Func<T>> input){
+        //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.シリアライズMemoryMessageJson(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.シリアライズMemoryMessageJson<Expression>(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.シリアライズMemoryMessageJson<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
+    }
+    protected void 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
+        //this.シリアライズ(Lambda);
         //var 標準=Lambda.Compile();
         //var Optimizer=this.Optimizer;
         //Optimizer.IsInline=false;
@@ -152,23 +233,38 @@ public abstract class 共通{
         var Optimizer=this.Optimizer;
         var 標準=Lambda.Compile();
         var expected=標準();
-        Optimizer.IsInline=false;
-        var ラムダ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
-        Optimizer.IsInline=true;
-        var ループ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
-        using var C = new Client<object>(Dns.GetHostName(),ListenerSocketポート番号);
         {
-            var actual=C.Expression(ラムダ,XmlType.Utf8Json);
-            Assert.Equal(expected,actual,this.Comparer);
+            Optimizer.IsInline=false;
+            {
+                var M=Optimizer.CreateDelegate(Lambda);
+                var actual=M();
+                Assert.Equal(expected,actual,this.Comparer);
+            }
+            Optimizer.IsInline=true;
+            {
+                var M=Optimizer.CreateDelegate(Lambda);
+                var actual=M();
+                Assert.Equal(expected,actual,this.Comparer);
+            }
         }
-        {
-            var actual=C.Expression(ループ,XmlType.MessagePack);
-            Assert.Equal(expected,actual,this.Comparer);
-        }
-        return expected;
+        //{
+        //    Optimizer.IsInline=false;
+        //    var ラムダ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        //    Optimizer.IsInline=true;
+        //    var ループ=(Expression<Func<TResult>>)Optimizer.CreateExpression(Lambda);
+        //    using var C=new Client<object>(Dns.GetHostName(),ListenerSocketポート番号);
+        //    {
+        //        var actual=C.Expression(ラムダ,XmlType.Utf8Json);
+        //        Assert.Equal(expected,actual,this.Comparer);
+        //    }
+        //    {
+        //        var actual=C.Expression(ループ,XmlType.MessagePack);
+        //        Assert.Equal(expected,actual,this.Comparer);
+        //    }
+        //}
     }
     private static readonly object lockobject=new();
-    protected void シリアライズデシリアライズ3パターン<T>(T input,Action<T> AssertAction){
+    protected void シリアライズMemoryMessageJson<T>(T input,Action<T> AssertAction){
         lock(lockobject) {
             {
                 var bytes = MemoryPack2.Serializer.Instance.Serialize(input);

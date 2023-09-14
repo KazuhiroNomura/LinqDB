@@ -21,8 +21,8 @@ public class Expression:IMessagePackFormatter<T> {
         //writer.WriteNodeType(value!.NodeType);
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :
-            case Expressions.ExpressionType.Coalesce             :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Coalesce             :Binary.InternalSerializeLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -127,8 +127,8 @@ public class Expression:IMessagePackFormatter<T> {
                 value=T.Assign(left,right);break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right)=Binary.InternalDeserialize(ref reader,Resolver);
-                value=T.Coalesce(left,right);break;
+                var (left, right,conversion)=Binary.InternalDeserializeLambda(ref reader,Resolver);
+                value=T.Coalesce(left,right,conversion);break;
             }
             case Expressions.ExpressionType.Add: {
                 var (left, right, method)=Binary.InternalDeserializeMethod(ref reader,Resolver);
@@ -248,7 +248,7 @@ public class Expression:IMessagePackFormatter<T> {
             }
             case Expressions.ExpressionType.SubtractAssignChecked: {
                 var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
-                value=T.SubtractAssignChecked(left,right,method);break;
+                value=T.SubtractAssignChecked(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.Equal: {
                 var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);

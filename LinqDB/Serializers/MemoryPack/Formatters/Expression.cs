@@ -24,8 +24,8 @@ public class Expression:MemoryPackFormatter<T> {
         writer.WriteNodeType(value!.NodeType);
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :
-            case Expressions.ExpressionType.Coalesce             :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Assign               :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Coalesce             :Binary.InternalSerializeLambda(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -132,8 +132,8 @@ public class Expression:MemoryPackFormatter<T> {
                 value=T.Assign(left,right); break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right)=Binary.InternalDeserialize(ref reader);
-                value=T.Coalesce(left,right); break;
+                var (left, right,lambda)=Binary.InternalDeserializeLambda(ref reader);
+                value=T.Coalesce(left,right,lambda); break;
             }
             case Expressions.ExpressionType.Add: {
                 var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);

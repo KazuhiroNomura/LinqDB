@@ -12,6 +12,10 @@ using LinqDB.Sets;
 //using Microsoft.CSharp.RuntimeBinder;
 //using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 using LinqDB.Helpers;
+using LinqDB.Serializers.MemoryPack.Formatters;
+using CatchBlock=System.Linq.Expressions.CatchBlock;
+using Expression=System.Linq.Expressions.Expression;
+using Type=System.Type;
 //using System.Runtime.Remoting.Messaging;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers;
@@ -245,48 +249,40 @@ partial class Optimizer {
 
         private Expression 共通BinaryAssign(BinaryExpression Binary0, ExpressionType NodeType) {
             var Binary1_Left=this.Traverse(Binary0.Left);
+            var Binary1_Right=this.Traverse(Binary0.Right);
+            Expression Binary2_Right=Expression.MakeBinary(
+                NodeType,
+                Binary1_Left,
+                Binary1_Right,
+                Binary0.IsLiftedToNull,
+                Binary0.Method,
+                null
+            );
+            if(Binary0.Conversion is not null){
+                var Binary0_Conversion=Binary0.Conversion;
+                var Binary1_Conversion_Body=this.Traverse(Binary0_Conversion.Body);
+                var p=Binary0_Conversion.Parameters[0];
+                Binary2_Right=Expression.Block(
+                    this._作業配列.Parameters設定(p),
+                    Expression.Assign(p,Binary2_Right),
+                    Binary1_Conversion_Body
+                );
+            }
             return Expression.Assign(
                 Binary1_Left,
-                Expression.MakeBinary(
-                    NodeType,
-                    Binary1_Left,
-                    this.Traverse(Binary0.Right),
-                    Binary0.IsLiftedToNull,
-                    Binary0.Method,
-                    Binary0.Conversion
-                )
+                Binary2_Right
             );
         }
         protected override Expression AddAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Add);
         protected override Expression AddAssignChecked(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.AddChecked);
-        protected override Expression AndAssign(BinaryExpression Binary0) {
-            var Binary1_Left=this.Traverse(Binary0.Left);
-            return Expression.Assign(
-                Binary1_Left,
-                Expression.And(
-                    Binary1_Left,
-                    this.Traverse(Binary0.Right),
-                    Binary0.Method
-                )
-            );
-        }
+        protected override Expression AndAssign(BinaryExpression Binary0) => this.共通BinaryAssign(Binary0, ExpressionType.And);
         protected override Expression DivideAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Divide);
         protected override Expression ExclusiveOrAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.ExclusiveOr);
         protected override Expression LeftShiftAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.LeftShift);
         protected override Expression ModuloAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Modulo);
         protected override Expression MultiplyAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Multiply);
         protected override Expression MultiplyAssignChecked(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.MultiplyChecked);
-        protected override Expression OrAssign(BinaryExpression Binary0) {
-            var Binary1_Left=this.Traverse(Binary0.Left);
-            return Expression.Assign(
-                Binary1_Left,
-                Expression.Or(
-                    Binary1_Left,
-                    this.Traverse(Binary0.Right),
-                    Binary0.Method
-                )
-            );
-        }
+        protected override Expression OrAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Or);
         protected override Expression PowerAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Power);
         protected override Expression RightShiftAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.RightShift);
         protected override Expression SubtractAssign(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.Subtract);
@@ -582,7 +578,7 @@ partial class Optimizer {
                                 GenericArgument=MethodCall1_Arguments_0_Type.GetElementType()!;
                                 GenericArguments=作業配列.Types設定(GenericArgument);
                             } else {
-                                Type? Set1 = MethodCall1_Arguments_0_Type;
+                                var Set1 = MethodCall1_Arguments_0_Type;
                                 while(true) {
                                     if(Set1 is null) {
                                         GenericArguments=IEnumerable1(MethodCall1_Arguments_0_Type).GetGenericArguments();

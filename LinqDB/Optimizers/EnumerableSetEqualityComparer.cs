@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+
+using static LinqDB.Optimizers.Optimizer;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;
@@ -238,6 +241,8 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     if(!this.Equals(x0.Target,y0.Target))return false;
                     return true;
                 }
+                case(Expression x0,Expression y0):
+                    return this.ExpressionEqualityComparer.Equals(x0,y0);
             }
             return x.Equals(y);
         }

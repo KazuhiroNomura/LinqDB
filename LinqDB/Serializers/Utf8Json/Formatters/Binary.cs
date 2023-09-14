@@ -18,6 +18,13 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method!,Resolver);
     }
+    internal static void InternalSerializeLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        writer.WriteValueSeparator();
+        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+    }
     internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
@@ -45,8 +52,8 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :
-            case Expressions.ExpressionType.Coalesce             :InternalSerialize(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.Coalesce             :InternalSerializeLambda(ref writer,value,Resolver); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -94,6 +101,14 @@ public class Binary:IJsonFormatter<T> {
         var right= Expression.Instance.Deserialize(ref reader,Resolver);
         return(left,right);
     }
+    internal static(Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion)InternalDeserializeLambda(ref Reader reader,IJsonFormatterResolver Resolver){
+        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        reader.ReadIsValueSeparatorWithVerify();
+        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        reader.ReadIsValueSeparatorWithVerify();
+        var conversion=Lambda.InternalDeserializeConversion(ref reader,Resolver);
+        return(left,right,conversion);
+    }
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo method)InternalDeserializeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
         var left= Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -138,8 +153,8 @@ public class Binary:IJsonFormatter<T> {
                 value=Expressions.Expression.Assign(left,right); break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right)=InternalDeserialize(ref reader,Resolver);
-                value=Expressions.Expression.Coalesce(left,right); break;
+                var (left, right,conversion)=InternalDeserializeLambda(ref reader,Resolver);
+                value=Expressions.Expression.Coalesce(left,right,conversion); break;
             }
             case Expressions.ExpressionType.Add: {
                 var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
