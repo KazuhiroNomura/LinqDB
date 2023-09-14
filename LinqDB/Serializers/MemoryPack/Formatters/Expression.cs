@@ -97,7 +97,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.MemberAccess         :MemberAccess.InternalSerialize(ref writer,(Expressions.MemberExpression)value);break;
             case Expressions.ExpressionType.MemberInit           :MemberInit.InternalSerialize(ref writer,(Expressions.MemberInitExpression)value);break;
             case Expressions.ExpressionType.Block                :Block.InternalSerialize(ref writer,(Expressions.BlockExpression)value);break;
-            //case Expressions.ExpressionType.DebugInfo            :
+            case Expressions.ExpressionType.DebugInfo            :DebugInfo.InternalSerialize(ref writer,(Expressions.DebugInfoExpression)value);break;
             case Expressions.ExpressionType.Dynamic              :Dynamic.InternalSerialize(ref writer,(Expressions.DynamicExpression)value);break;
             case Expressions.ExpressionType.Default              :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value);break;
             //case Expressions.ExpressionType.Extension            :
@@ -374,7 +374,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.MemberAccess       :value=MemberAccess.InternalDeserialize(ref reader);break;
             case Expressions.ExpressionType.MemberInit         :value=MemberInit.InternalDeserialize(ref reader);break;
             case Expressions.ExpressionType.Block              :value=Block.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.DebugInfo          :
+            case Expressions.ExpressionType.DebugInfo          :value=DebugInfo.InternalDeserialize(ref reader);break;
             case Expressions.ExpressionType.Dynamic            :value=Dynamic.InternalDeserialize(ref reader);break;
             case Expressions.ExpressionType.Default            :value=Default.InternalDeserialize(ref reader);break;
             case Expressions.ExpressionType.Extension          :break;

@@ -94,10 +94,10 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.MemberAccess         : MemberAccess.Instance.Serialize(ref writer,(Expressions.MemberExpression)value,Resolver);break;
             case Expressions.ExpressionType.MemberInit           : MemberInit.Instance.Serialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
             case Expressions.ExpressionType.Block                : Block.Instance.Serialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
-            //case Expressions.ExpressionType.DebugInfo            :
+            case Expressions.ExpressionType.DebugInfo            : DebugInfo.Instance.Serialize(ref writer,(Expressions.DebugInfoExpression)value,Resolver);break;
             case Expressions.ExpressionType.Dynamic              : Dynamic.Instance.Serialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
             case Expressions.ExpressionType.Default              : Default.Instance.Serialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
-            case Expressions.ExpressionType.Extension            :
+            //case Expressions.ExpressionType.Extension            :
             case Expressions.ExpressionType.Goto                 : Goto.Instance.Serialize(ref writer,(Expressions.GotoExpression)value,Resolver);break;
             case Expressions.ExpressionType.Index                : Index.Instance.Serialize(ref writer,(Expressions.IndexExpression)value,Resolver);break;
             case Expressions.ExpressionType.Label                : Label.Instance.Serialize(ref writer,(Expressions.LabelExpression)value,Resolver);break;
@@ -376,7 +376,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.MemberAccess    :value=MemberAccess.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.MemberInit      :value=MemberInit.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Block           :value=Block.Instance.Deserialize(ref reader,Resolver);break;
-            case Expressions.ExpressionType.DebugInfo       :
+            case Expressions.ExpressionType.DebugInfo       :value=DebugInfo.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Dynamic         :value=Dynamic.Instance.Deserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Default         :value=Default.Instance.Deserialize(ref reader,Resolver);break;
             //case Expressions.ExpressionType.Extension       :break;

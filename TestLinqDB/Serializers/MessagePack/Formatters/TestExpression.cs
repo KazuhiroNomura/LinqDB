@@ -30,9 +30,35 @@ public partial struct 演算子{
     public static bool operator false(演算子 x)=>!x.HasValue;
     public static 演算子 operator &(演算子 x,演算子 y)=>x.HasValue&&y.HasValue?new 演算子(x.Value&y.Value):new 演算子();
     public static 演算子 operator |(演算子 x,演算子 y)=>x.HasValue&&y.HasValue?new 演算子(x.Value|y.Value):new 演算子();
-    public static 演算子 operator ~(演算子 x)=>new 演算子(!x.Value);
-    public static 演算子 operator ++(演算子 x)=>new 演算子(x.Value);
-    public static 演算子 operator --(演算子 x)=>new 演算子(x.Value);
+    public static 演算子 operator ~(演算子 x)=>new(!x.Value);
+    public static 演算子 operator ++(演算子 x)=>new(x.Value);
+    public static 演算子 operator --(演算子 x)=>new(x.Value);
+    public static 演算子 operator -(演算子 x)=>new(x.Value);
+    public static 演算子 operator +(演算子 x)=>new(x.Value);
+    public static explicit  operator 演算子1(演算子 x)=>new(x.Value);
+    public static explicit  operator 演算子(演算子1 x)=>new(x.Value);
+}
+[Serializable,MemoryPackable,MessagePackObject(true)]
+public partial struct 演算子1{
+    public bool HasValue;
+    public bool Value;
+    public 演算子1(bool Value){
+        this.Value=Value;
+        this.HasValue=true;
+    }
+    public 演算子1(){
+        this.Value=default!;
+        this.HasValue=false;
+    }
+    public static bool operator true(演算子1 x)=>x.HasValue;
+    public static bool operator false(演算子1 x)=>!x.HasValue;
+    public static 演算子1 operator &(演算子1 x,演算子1 y)=>x.HasValue&&y.HasValue?new 演算子1(x.Value&y.Value):new 演算子1();
+    public static 演算子1 operator |(演算子1 x,演算子1 y)=>x.HasValue&&y.HasValue?new 演算子1(x.Value|y.Value):new 演算子1();
+    public static 演算子1 operator ~(演算子1 x)=>new(!x.Value);
+    public static 演算子1 operator ++(演算子1 x)=>new(x.Value);
+    public static 演算子1 operator --(演算子1 x)=>new(x.Value);
+    public static 演算子1 operator -(演算子1 x)=>new(x.Value);
+    public static 演算子1 operator +(演算子1 x)=>new(x.Value);
 }
 //public partial struct AlsoElse{
 //    public bool HasValue;
@@ -289,7 +315,6 @@ public class TestExpression:共通 {
         共通1(Expression.SubtractAssignChecked(MemberInt32 ,Constant1));
 
         共通0(Expression.Coalesce             (ConstantString,ConstantString,ConversionString));
-
 
         共通0(Expression.Add                  (Constant1,Constant1,Method_int));
         共通0(Expression.AddChecked           (Constant1,Constant1,Method_int));
@@ -1450,10 +1475,13 @@ public class TestExpression:共通 {
     }
     [Fact]public void Unary(){
         var ConstantArray = Expression.Constant(new int[10]);
+        var Constant1= Expression.Constant(1);
         var Constant1_1d= Expression.Constant(1.1);
         var ConstantTrue= Expression.Constant(true);
         var Constant演算子=Expression.Constant(new 演算子(true));
+        var Constant演算子1=Expression.Constant(new 演算子1(true));
         var Parameter演算子=Expression.Parameter(typeof(演算子));
+        var ParameterInt32=Expression.Parameter(typeof(int));
         this.シリアライズMemoryMessageJson(Expression.ArrayLength(Expression.Constant(new int[1])));
         共通1(Expression.ArrayLength(ConstantArray));
         共通1(Expression.Quote(Expression.Lambda(ConstantArray)));
@@ -1465,13 +1493,34 @@ public class TestExpression:共通 {
         共通1(Expression.IsTrue(ConstantTrue));
         共通1(Expression.Negate(Constant1_1d));
         共通1(Expression.NegateChecked(Constant1_1d));
+        共通1(Expression.OnesComplement(Constant1));
+        共通1(Expression.Decrement(Constant1_1d));
+        共通1(Expression.Increment(Constant1_1d));
+        共通0(ParameterInt32,Constant1,Expression.PostDecrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expression.PostIncrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expression.PreDecrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expression.PreIncrementAssign(ParameterInt32));
+        共通1(Expression.UnaryPlus(Constant1_1d));
+
+        共通1(Expression.Convert(Constant演算子,typeof(演算子1)));
+        共通1(Expression.ConvertChecked(Constant演算子,typeof(演算子1)));
+        共通1(Expression.Convert(Constant演算子1,typeof(演算子)));
+        共通1(Expression.ConvertChecked(Constant演算子1,typeof(演算子)));
+        共通1(Expression.Decrement(Constant演算子));
+        共通1(Expression.Increment(Constant演算子));
+        共通1(Expression.IsFalse(Constant演算子));
+        共通1(Expression.IsTrue(Constant演算子));
+        共通1(Expression.Negate(Constant演算子));
+        共通1(Expression.NegateChecked(Constant演算子));
         共通1(Expression.OnesComplement(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.Decrement(Constant演算子));
         共通1(Expression.Increment(Constant演算子));
-        共通0(Expression.PostDecrementAssign(Parameter演算子));
-        共通0(Expression.PostIncrementAssign(Parameter演算子));
-        共通0(Expression.PreDecrementAssign(Parameter演算子));
-        共通0(Expression.PreIncrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expression.PostDecrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expression.PostIncrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expression.PreDecrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expression.PreIncrementAssign(Parameter演算子));
+        共通1(Expression.UnaryPlus(Constant演算子));
+
 
         共通1(Expression.Convert(Constant1_1d,typeof(int),Method(()=>UnaryDouble(0))));
         共通1(Expression.ConvertChecked(Constant1_1d,typeof(int),Method(()=>UnaryDouble(0))));
@@ -1484,14 +1533,15 @@ public class TestExpression:共通 {
         共通1(Expression.OnesComplement(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.Decrement(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.Increment(Constant演算子,Method(nameof(Unary演算子))));
-        void 共通0(UnaryExpression a){
+        共通1(Expression.UnaryPlus(Constant演算子,Method(nameof(Unary演算子))));
+        void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
             this.シリアライズMemoryMessageJsonコンパイル(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
-                        new[]{Parameter演算子},
+                        new[]{代入先},
                         Expression.Assign(
-                            Parameter演算子,
-                            Constant演算子
+                            代入先,
+                            代入元
                         ),
                         Expression.Convert(
                             a,
@@ -1511,5 +1561,11 @@ public class TestExpression:共通 {
                 )
             );
         }
+    }
+    [Fact]public void DebugInfo(){
+        var SymbolDocument0=Expression.SymbolDocument("SymbolDocument0.cs");
+        this.シリアライズMemoryMessageJson(
+            Expression.DebugInfo(SymbolDocument0,1,1,3,10)
+        );
     }
 }

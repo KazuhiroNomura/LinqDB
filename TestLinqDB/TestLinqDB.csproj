@@ -30,4 +30,10 @@
     <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Serializers\MessagePack\Formatters\SymbolDocument0.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

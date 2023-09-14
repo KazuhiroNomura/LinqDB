@@ -646,8 +646,12 @@ public sealed partial class Optimizer:IDisposable{
             ReferenceEquals(a.Value,b.Value)||
             a.Type==b.Type&&this.ObjectComparer.Equals(a.Value,b.Value);
             //Equals(a.Value,b.Value);
+        private bool T(SymbolDocumentInfo a,SymbolDocumentInfo b) =>
+            a.DocumentType==b.DocumentType&&
+            a.Language==b.Language&&
+            a.FileName==b.FileName;
         private bool T(DebugInfoExpression a,DebugInfoExpression b) =>
-            a.Document==b.Document&&
+            this.T(a.Document,b.Document)&&
             a.StartLine==b.StartLine&&
             a.StartColumn==b.StartColumn&&
             a.EndLine==b.EndLine&&

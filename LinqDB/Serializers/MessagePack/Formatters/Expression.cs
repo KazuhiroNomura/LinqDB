@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using LinqDB.Serializers.MemoryPack.Formatters;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
@@ -94,7 +95,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.MemberAccess         :MemberAccess.InternalSerialize(ref writer,(Expressions.MemberExpression)value,Resolver);break;
             case Expressions.ExpressionType.MemberInit           :MemberInit.InternalSerialize(ref writer,(Expressions.MemberInitExpression)value,Resolver);break;
             case Expressions.ExpressionType.Block                :Block.InternalSerialize(ref writer,(Expressions.BlockExpression)value,Resolver);break;
-            //case Expressions.ExpressionType.DebugInfo            :
+            case Expressions.ExpressionType.DebugInfo            :DebugInfo.InternalSerialize(ref writer,(Expressions.DebugInfoExpression)value,Resolver);break;
             case Expressions.ExpressionType.Dynamic              :Dynamic.InternalSerialize(ref writer,(Expressions.DynamicExpression)value,Resolver);break;
             case Expressions.ExpressionType.Default              :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value,Resolver);break;
             //case Expressions.ExpressionType.Extension            :
@@ -373,7 +374,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.MemberAccess    :value=MemberAccess.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.MemberInit      :value=MemberInit.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Block           :value=Block.InternalDeserialize(ref reader,Resolver);break;
-            //case Expressions.ExpressionType.DebugInfo       :
+            case Expressions.ExpressionType.DebugInfo       :value=DebugInfo.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Dynamic         :value=Dynamic.InternalDeserialize(ref reader,Resolver);break;
             case Expressions.ExpressionType.Default         :value=Default.InternalDeserialize(ref reader,Resolver);break;
             //case Expressions.ExpressionType.Extension       :
