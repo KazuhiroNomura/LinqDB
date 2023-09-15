@@ -8,9 +8,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-
-using static LinqDB.Optimizers.Optimizer;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;

@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.LabelTarget;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.LabelTarget;
 public class LabelTarget:IMessagePackFormatter<T> {
     public static readonly LabelTarget Instance=new();
     private const int ArrayHeader0=1;
@@ -13,14 +13,14 @@ public class LabelTarget:IMessagePackFormatter<T> {
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         lock(Instance){
             //if(writer.TryWriteNil(value)) return;
-            if(Serializer.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+            if(Resolver.Serializer().Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
                 writer.WriteArrayHeader(ArrayHeader0);
                 writer.WriteInt32(index);
             } else{
                 writer.WriteArrayHeader(ArrayHeader1);
-                var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
+                var Dictionary_LabelTarget_int=Resolver.Serializer().Dictionary_LabelTarget_int;
                 index=Dictionary_LabelTarget_int.Count;
-                Serializer.Instance.LabelTargets.Add(value);
+                Resolver.Serializer().LabelTargets.Add(value);
                 Dictionary_LabelTarget_int.Add(value,index);
                 writer.WriteInt32(index);
                 writer.WriteType(value.Type);
@@ -33,7 +33,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
             //if(reader.TryReadNil()) return null!;
             var count=reader.ReadArrayHeader();
             var index=reader.ReadInt32();
-            var LabelTargets=Serializer.Instance.LabelTargets;
+            var LabelTargets=Resolver.Serializer().LabelTargets;
             T target;
             if(index<LabelTargets.Count){
                 Debug.Assert(count==ArrayHeader0);
@@ -43,7 +43,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
                 var type=reader.ReadType();
                 var name=reader.ReadString();
                 target=Expressions.Expression.Label(type,name);
-                var Dictionary_LabelTarget_int=Serializer.Instance.Dictionary_LabelTarget_int;
+                var Dictionary_LabelTarget_int=Resolver.Serializer().Dictionary_LabelTarget_int;
                 index=Dictionary_LabelTarget_int.Count;
                 LabelTargets.Add(target);
                 Dictionary_LabelTarget_int.Add(target,index);

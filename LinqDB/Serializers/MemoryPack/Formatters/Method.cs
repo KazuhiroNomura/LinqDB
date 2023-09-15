@@ -32,13 +32,13 @@ public class Method:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         var ReflectedType=value.ReflectedType!;
-        Type.Serialize(ref writer,ReflectedType);
-        var array= C.Instance.TypeMethods.Get(ReflectedType);
+        writer.WriteType(ReflectedType);
+        var array= writer.Serializer().TypeMethods.Get(ReflectedType);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ReflectedType= Type.Deserialize(ref reader);
-        var array= C.Instance.TypeMethods.Get(ReflectedType);
+        var ReflectedType= reader.ReadType();
+        var array= reader.Serializer().TypeMethods.Get(ReflectedType);
         var index=reader.ReadVarIntInt32();
         value=array[index];
     }

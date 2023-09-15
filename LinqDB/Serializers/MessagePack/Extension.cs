@@ -1,14 +1,14 @@
 ﻿//using System;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MessagePack;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using LinqDB.Serializers.MessagePack.Formatters;
 using MessagePack.Formatters;
+using MemoryPack;
+using System.Buffers;
+
 namespace LinqDB.Serializers.MessagePack;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using C=Serializer;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
 internal static class Extension{
     public static void WriteValue<T>(this ref Writer writer,T value,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,options);
     public static T ReadValue<T>(this ref Reader reader,MessagePackSerializerOptions options)=>options.Resolver.GetFormatter<T>()!.Deserialize(ref reader,options);
@@ -57,4 +57,10 @@ internal static class Extension{
         }
         return Parameters;
     }
+    public static object ReadValue(this ref Reader reader,System.Type type,MessagePackSerializerOptions Resolver){
+        var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+        return MessagePack.Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
+    }
+    public static Serializer Serializer(this MessagePackSerializerOptions Options)=>
+        (Serializer)Options.Resolver.GetFormatter<Serializer>()!;
 }

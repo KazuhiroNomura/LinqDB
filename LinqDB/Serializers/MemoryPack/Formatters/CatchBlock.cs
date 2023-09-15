@@ -15,31 +15,46 @@ public class CatchBlock:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteType(value.Test);
+
         if(value.Variable is null){
             if(value.Filter is null) {
                 writer.WriteVarInt(0);
                 Expression.InternalSerialize(ref writer,value.Body);
+                
+
+                
             } else {
                 writer.WriteVarInt(1);
                 writer.WriteType(value.Test);
                 Expression.InternalSerialize(ref writer,value.Body);
                 Expression.InternalSerialize(ref writer,value.Filter);
+
             }
         } else{
-            var ListParameter= C.Instance.ListParameter;
+            var ListParameter= writer.Serializer().ListParameter;
             ListParameter.Add(value.Variable);
             if(value.Filter is null) {
                 writer.WriteVarInt(2);
                 writer.WriteString(value.Variable.Name);
                 Expression.InternalSerialize(ref writer,value.Body);
+
+
+
             } else {
                 writer.WriteVarInt(3);
                 writer.WriteString(value.Variable.Name);
                 Expression.InternalSerialize(ref writer,value.Body);
                 Expression.InternalSerialize(ref writer,value.Filter);
+
+
+
+
+
+
             }
             ListParameter.RemoveAt(ListParameter.Count-1);
         }
+
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var test=reader.ReadType();
@@ -58,7 +73,7 @@ public class CatchBlock:MemoryPackFormatter<T> {
             }
             case 2:{
                 var name=reader.ReadString();
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=reader.Serializer().ListParameter;
                 ListParameter.Add(Expressions.Expression.Parameter(test,name));
                 var body=Expression.InternalDeserialize(ref reader);
                 ListParameter.RemoveAt(ListParameter.Count-1);
@@ -67,7 +82,7 @@ public class CatchBlock:MemoryPackFormatter<T> {
             }
             case 3:{
                 var name=reader.ReadString();
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=reader.Serializer().ListParameter;
                 ListParameter.Add(Expressions.Expression.Parameter(test,name));
                 var body=Expression.InternalDeserialize(ref reader);
                 var filter=Expression.InternalDeserialize(ref reader);
@@ -76,20 +91,5 @@ public class CatchBlock:MemoryPackFormatter<T> {
                 break;
             }
         }
-        //if(reader.ReadBoolean()){
-        //    var body=Expression.Deserialize(ref reader);
-        //    var filter=reader.TryPeekObjectHeader(out var count)?null:Expression.Deserialize(ref reader);
-        //    //var filter=reader.ReadBoolean()?null:Expression.Deserialize(ref reader);
-        //    value=Expressions.Expression.Catch(test,body,filter);
-        //} else{
-        //    var name=reader.ReadString();
-        //    var ListParameter=C.Instance.ListParameter;
-        //    ListParameter.Add(Expressions.Expression.Parameter(test,name));
-        //    var body=Expression.Deserialize(ref reader);
-        //    var filter=reader.TryPeekObjectHeader(out var count)?null:Expression.Deserialize(ref reader);
-        //    //var filter=reader.ReadBoolean()?null:Expression.Deserialize(ref reader);
-        //    ListParameter.RemoveAt(ListParameter.Count-1);
-        //    value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,filter);
-        //}
     }
 }

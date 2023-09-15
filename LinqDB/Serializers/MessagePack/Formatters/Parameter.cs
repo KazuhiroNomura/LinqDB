@@ -12,7 +12,7 @@ public class Parameter:IMessagePackFormatter<T> {
     private const int ArrayHeader=1;
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        writer.WriteInt32(Serializer.Instance.ListParameter.LastIndexOf(value));
+        writer.WriteInt32(Resolver.Serializer().ListParameter.LastIndexOf(value));
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -25,7 +25,7 @@ public class Parameter:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var index=reader.ReadInt32();
-        var Parameter= Serializer.Instance.ListParameter[index];
+        var Parameter= Resolver.Serializer().ListParameter[index];
         return Parameter;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

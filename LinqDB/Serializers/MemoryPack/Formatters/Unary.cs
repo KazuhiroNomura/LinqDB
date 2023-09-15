@@ -2,20 +2,24 @@
 using System.Reflection;
 using MemoryPack;
 using System.Buffers;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.UnaryExpression;
-using C=Serializer;
+
+using Reader = MemoryPackReader;
+using T = Expressions.UnaryExpression;
 
 public class Unary:MemoryPackFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+
+
         Expression.InternalSerialize(ref writer,value.Operand);
     }
     internal static void InternalSerializeType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+
+
         Expression.InternalSerialize(ref writer,value.Operand);
-        Type.Serialize(ref writer,value.Type);
+        writer.WriteType(value.Type);
     }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
         Expression.InternalSerialize(ref writer,value.Operand);
@@ -23,13 +27,13 @@ public class Unary:MemoryPackFormatter<T> {
     }
     internal static void InternalSerializeTypeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
         Expression.InternalSerialize(ref writer,value.Operand);
-        Type.Serialize(ref writer,value.Type);
+        writer.WriteType(value.Type);
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
     internal static Expressions.Expression InternalDeserialize(ref Reader reader) => Expression.InternalDeserialize(ref reader);
     internal static (Expressions.Expression Operand, System.Type Type) InternalDeserializeType(ref Reader reader) {
         var operand = Expression.InternalDeserialize(ref reader);
-        var type = Type.Deserialize(ref reader);
+        var type = reader.ReadType();
         return (operand, type);
     }
     internal static (Expressions.Expression  Operand, MethodInfo? Method) InternalDeserializeMethod(ref Reader reader) {
@@ -39,7 +43,7 @@ public class Unary:MemoryPackFormatter<T> {
     }
     internal static (Expressions.Expression Operand, System.Type Type, MethodInfo? Method) InternalDeserializeTypeMethod(ref Reader reader) {
         var operand = Expression.InternalDeserialize(ref reader);
-        var type = Type.Deserialize(ref reader);
+        var type = reader.ReadType();
         var method = Method.InternalDeserializeNullable(ref reader);
         return (operand, type, method);
     }

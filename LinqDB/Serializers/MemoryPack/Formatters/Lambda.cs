@@ -4,10 +4,10 @@ using System.Reflection.PortableExecutable;
 
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 using static Extension;
-using T=LambdaExpression;
-using C=Serializer;
+using T = LambdaExpression;
+using C = Serializer;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();
@@ -19,7 +19,7 @@ public class Lambda:MemoryPackFormatter<T> {
         Instance.Serialize(ref writer,ref value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= writer.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
@@ -45,7 +45,7 @@ public class Lambda:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= reader.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters();

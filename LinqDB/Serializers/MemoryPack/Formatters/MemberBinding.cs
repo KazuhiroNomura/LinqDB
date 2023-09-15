@@ -4,9 +4,8 @@ using MemoryPack;
 using System.Buffers;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.MemberBinding;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = Expressions.MemberBinding;
 using static Extension;
 
 public class MemberBinding:MemoryPackFormatter<T> {

@@ -18,7 +18,7 @@ public class Constructor:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
-        var array= Serializer.Instance.TypeConstructors.Get(type);
+        var array= Resolver.Serializer().TypeConstructors.Get(type);
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();

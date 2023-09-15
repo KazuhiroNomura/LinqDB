@@ -20,7 +20,7 @@ public class Event:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(C.Instance.TypeEvents.Get(type),value));
+        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeEvents.Get(type),value));
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -32,6 +32,6 @@ public class Event:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return C.Instance.TypeEvents.Get(type)[index];
+        return Resolver.Serializer().TypeEvents.Get(type)[index];
     }
 }

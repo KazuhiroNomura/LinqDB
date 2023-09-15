@@ -26,14 +26,14 @@ public class Event:MemoryPackFormatter<T>{
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        var ReflectedType=value.ReflectedType!;
-        Type.Serialize(ref writer,ReflectedType);
-        var array= C.Instance.TypeEvents.Get(ReflectedType);
+        var type=value.ReflectedType!;
+        writer.WriteType(type);
+        var array= writer.Serializer().TypeEvents.Get(type);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ReflectedType= Type.Deserialize(ref reader);
-        var array= C.Instance.TypeEvents.Get(ReflectedType);
+        var ReflectedType= reader.ReadType();
+        var array= reader.Serializer().TypeEvents.Get(ReflectedType);
         var Index=reader.ReadVarIntInt32();
         value=array[Index];
     }

@@ -1,16 +1,15 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using Expressions = System.Linq.Expressions;
 using Utf8Json;
-using System.Diagnostics;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 using static Extension;
-using C=Serializer;
+using C = Serializer;
 public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T>Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
@@ -26,7 +25,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         reader.ReadIsBeginArrayWithVerify();
         var type = reader.ReadType();

@@ -1,10 +1,9 @@
 ﻿using Utf8Json;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.ConstantExpression;
-using C=Serializer;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.ConstantExpression;
 using static Extension;
 public class Constant:IJsonFormatter<T> {
     public static readonly Constant Instance=new();

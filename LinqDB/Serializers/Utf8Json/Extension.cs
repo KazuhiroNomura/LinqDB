@@ -1,18 +1,16 @@
 ﻿using System;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using Utf8Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 //using LinqDB.Serializers.Utf8Json.Formatters;
 using Utf8Json.Formatters;
-using MemoryPack;
-using System.Buffers;
-using System.Diagnostics;
+using MessagePack;
 
 namespace LinqDB.Serializers.Utf8Json;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using C=Serializer;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 internal static class Extension{
     public static void WriteValue<T>(this ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static T ReadValue<T>(this ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
@@ -20,30 +18,30 @@ internal static class Extension{
     //public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
     public static void WriteType(this ref Writer writer,Type value){
         writer.WriteString(value.AssemblyQualifiedName);
-        //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+        //if(Resolver.Serializer().Dictionary_Type_int.TryGetValue(value,out var index)){
         //    writer.WriteInt32(index);
         //} else{
         //    writer.WriteBeginArray();
-        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
         //    index=Dictionary_Type_int.Count;
         //    writer.WriteInt32(index);
         //    Dictionary_Type_int.Add(value,index);
         //    Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
         //    writer.WriteValueSeparator();
         //    writer.WriteString(value.AssemblyQualifiedName);
-        //    C.Instance.Types.Add(value);
+        //    Resolver.Serializer().Types.Add(value);
         //    writer.WriteEndArray();
         //}
     }
     public static Type ReadType(this ref Reader reader){
         return Type.GetType(reader.ReadString())!;
-        //var Types=C.Instance.Types;
+        //var Types=Resolver.Serializer().Types;
         //if(!reader.ReadIsBeginArray()){
         //    var index=reader.ReadInt32();
         //    return Types[index];
         //} else{
         //    var index=reader.ReadInt32();
-        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
         //    reader.ReadIsValueSeparatorWithVerify();
         //    Debug.Assert(index==Types.Count);
         //    var AssemblyQualifiedName=reader.ReadString();
@@ -54,11 +52,11 @@ internal static class Extension{
         //    return value;
         //}
         //var index=reader.ReadInt32();
-        //var Types=C.Instance.Types;
+        //var Types=Resolver.Serializer().Types;
         //if(index<Types.Count){
         //    return Types[index];
         //} else{
-        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
+        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
         //    Debug.Assert(index==Types.Count);
         //    var AssemblyQualifiedName=reader.ReadString();
         //    var value=System.Type.GetType(AssemblyQualifiedName);
@@ -119,4 +117,16 @@ internal static class Extension{
         reader.ReadIsEndArrayWithVerify();
         return List;
     }
+    public static object ReadValue(this ref Reader reader,System.Type type,object[] Objects2,IJsonFormatterResolver Resolver){
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        var Deserialize=Formatter.GetType().GetMethod("Deserialize");
+        Debug.Assert(Deserialize is not null);
+        Objects2[0]=reader;
+        Objects2[1]=Resolver;
+        var value=Deserialize.Invoke(Formatter,Objects2)!;
+        reader=(Reader)Objects2[0];
+        return value;
+    }
+    public static Serializer Serializer(this IJsonFormatterResolver Resolver)=>
+        (Serializer)Resolver.GetFormatter<Serializer>();
 }

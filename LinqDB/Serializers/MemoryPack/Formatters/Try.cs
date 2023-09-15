@@ -2,10 +2,9 @@
 using Expressions = System.Linq.Expressions;
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
-using MemoryPack.Formatters;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.TryExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.TryExpression;
 
 public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();

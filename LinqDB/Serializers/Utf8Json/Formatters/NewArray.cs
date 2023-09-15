@@ -1,13 +1,12 @@
 ﻿using System;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using Utf8Json;
 using System.Diagnostics;
-using MessagePack;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T= Expressions.NewArrayExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.NewArrayExpression;
 using static Extension;
 public class NewArray:IJsonFormatter<T> {
     public static readonly NewArray Instance=new();

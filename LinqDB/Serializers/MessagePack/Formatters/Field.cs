@@ -16,14 +16,14 @@ public class Field:IMessagePackFormatter<T>{
         writer.WriteArrayHeader(ArrayHeader);
         var ReflectedType=value.ReflectedType!;
         writer.WriteType(ReflectedType);
-        var Methods= Serializer.Instance.TypeFields.Get(ReflectedType);
+        var Methods= Resolver.Serializer().TypeFields.Get(ReflectedType);
         writer.WriteInt32(Array.IndexOf(Methods,value));
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var results= Serializer.Instance.TypeFields.Get(type);
+        var results= Resolver.Serializer().TypeFields.Get(type);
         var Index=reader.ReadInt32();
         return results[Index];
     }

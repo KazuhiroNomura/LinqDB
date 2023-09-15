@@ -1,7 +1,9 @@
 ﻿using System;
-using Expressions=System.Linq.Expressions;
+//
 using System.Reflection;
 using Utf8Json;
+//
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -45,6 +47,9 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
     }
+    
+    
+    
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         writer.WriteNodeType(value.NodeType);
@@ -89,8 +94,7 @@ public class Binary:IJsonFormatter<T> {
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
             case Expressions.ExpressionType.NotEqual             :InternalSerializeBooleanMethod(ref writer,value,Resolver);break;
-            default:
-                throw new NotSupportedException(value.NodeType.ToString());
+            default:throw new NotSupportedException(value.NodeType.ToString());
         }
         writer.WriteEndArray();
     }

@@ -1,12 +1,11 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.IndexExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.IndexExpression;
 using static Extension;
 public class Index:IMessagePackFormatter<T> {
     public static readonly Index Instance=new();

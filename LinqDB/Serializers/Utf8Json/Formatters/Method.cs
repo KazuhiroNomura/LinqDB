@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reflection;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 using static Extension;
-using T= MethodInfo;
-using C=Serializer;
+using T = MethodInfo;
+using C = Serializer;
 public class Method:IJsonFormatter<T> {
     public static readonly Method Instance=new();
     internal void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
@@ -25,7 +24,7 @@ public class Method:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(C.Instance.TypeMethods.Get(type),value));
+        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeMethods.Get(type),value));
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -37,6 +36,6 @@ public class Method:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return C.Instance.TypeMethods.Get(type)[index];
+        return Resolver.Serializer().TypeMethods.Get(type)[index];
     }
 }

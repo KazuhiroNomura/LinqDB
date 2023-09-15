@@ -1,9 +1,8 @@
 ﻿using System;
-using Expressions=System.Linq.Expressions;
+using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;

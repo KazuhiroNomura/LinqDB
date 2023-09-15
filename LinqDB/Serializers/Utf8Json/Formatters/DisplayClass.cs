@@ -1,13 +1,12 @@
 ﻿//#define 匿名型にキーを入れる
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 internal static class DisplayClass{
     public static readonly MethodInfo WriteValueSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
     public static readonly MethodInfo WriteString=typeof(Writer).GetMethod(nameof(Writer.WriteString))!;

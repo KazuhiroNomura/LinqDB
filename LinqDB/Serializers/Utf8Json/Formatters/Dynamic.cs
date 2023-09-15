@@ -1,19 +1,15 @@
 ﻿using System;
 using Utf8Json;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using Microsoft.CSharp.RuntimeBinder;
 using System.Diagnostics;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Dynamic;
-using MemoryPack;
-using System.Buffers;
-using LinqDB.Serializers.MemoryPack;
 using System.Collections.ObjectModel;
 using LinqDB.Helpers;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.DynamicExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.DynamicExpression;
 using static Extension;
 using static Common;
 public class Dynamic:IJsonFormatter<T> {

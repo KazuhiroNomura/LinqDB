@@ -1,12 +1,9 @@
-﻿using System;
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
-using System.Diagnostics;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=System.Type;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = System.Type;
 
 
 public class Type:MemoryPackFormatter<T> {
@@ -21,7 +18,7 @@ public class Type:MemoryPackFormatter<T> {
     }
     //private void Register(T AnonymousType){
     //    var FormatterType=typeof(Anonymous<>).MakeGenericType(AnonymousType);
-    //    var Register= C.Instance.Register.MakeGenericMethod(AnonymousType);
+    //    var Register= Resolver.Serializer().Register.MakeGenericMethod(AnonymousType);
     //    var objects2=this.objects2;
     //    objects2[0]=Activator.CreateInstance(FormatterType)!;
     //    Register.Invoke(null,objects2);
@@ -49,11 +46,11 @@ public class Type:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteType(value);
         ////this.PrivateSerialize(ref writer,value);
-        //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+        //if(Resolver.Serializer().Dictionary_Type_int.TryGetValue(value,out var index)){
         //    writer.WriteVarInt(index);
         //} else{
-        //    var Dictionary_Type_int= C.Instance.Dictionary_Type_int;
-        //    C.Instance.Types.Add(value);
+        //    var Dictionary_Type_int= Resolver.Serializer().Dictionary_Type_int;
+        //    Resolver.Serializer().Types.Add(value);
         //    index=Dictionary_Type_int.Count;
         //    Dictionary_Type_int.Add(value,index);
         //    writer.WriteVarInt(index);
@@ -63,12 +60,12 @@ public class Type:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         value=reader.ReadType();
         //var index=reader.ReadVarIntInt32();
-        //var Types= C.Instance.Types;
+        //var Types= Resolver.Serializer().Types;
         //if(index<Types.Count){
         //    value=Types[index];
         //} else{
         //    value=System.Type.GetType(reader.ReadString())!;
-        //    var Dictionary_Type_int= C.Instance.Dictionary_Type_int;
+        //    var Dictionary_Type_int= Resolver.Serializer().Dictionary_Type_int;
         //    index=Dictionary_Type_int.Count;
         //    Types.Add(value);
         //    Dictionary_Type_int.Add(value,index);

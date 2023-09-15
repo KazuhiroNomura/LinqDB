@@ -5,7 +5,7 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using C=Serializer;
 using T=Expressions.LabelTarget;
-
+using static Extension;
 
 
 public class LabelTarget:MemoryPackFormatter<T> {
@@ -18,11 +18,12 @@ public class LabelTarget:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(C.Instance.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+        var s=writer.Serializer();
+        if(s.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
         } else{
-            var Dictionary_LabelTarget_int= C.Instance.Dictionary_LabelTarget_int;
-            C.Instance.LabelTargets.Add(value);
+            var Dictionary_LabelTarget_int= s.Dictionary_LabelTarget_int;
+            s.LabelTargets.Add(value);
             index=Dictionary_LabelTarget_int.Count;
             Dictionary_LabelTarget_int.Add(value,index);
             writer.WriteVarInt(index);
@@ -31,18 +32,19 @@ public class LabelTarget:MemoryPackFormatter<T> {
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        var s=reader.Serializer();
         var index=reader.ReadVarIntInt32();
-        var LabelTargets= C.Instance.LabelTargets;
+        var LabelTargets= s.LabelTargets;
         T target;
         if(index<LabelTargets.Count){
             target=LabelTargets[index];
         } else{
-            var type= Type.Deserialize(ref reader);
+            var type= reader.ReadType();
             var name=reader.ReadString();
             target=Expressions.Expression.Label(type,name);
             LabelTargets.Add(target);
             index=LabelTargets.Count;
-            C.Instance.Dictionary_LabelTarget_int.Add(target,index);
+            s.Dictionary_LabelTarget_int.Add(target,index);
         }
         value=target;
     }

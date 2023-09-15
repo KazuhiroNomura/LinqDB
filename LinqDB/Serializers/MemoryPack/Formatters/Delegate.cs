@@ -1,16 +1,12 @@
-﻿using System;
-using System.Buffers;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Buffers;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 
-using T= System.Delegate;
-using C=Serializer;
+using T = System.Delegate;
 
-public class Delegate2:MemoryPackFormatter<T> {
-    public static readonly Delegate2 Instance=new();
+public class Delegate:MemoryPackFormatter<T> {
+    public static readonly Delegate Instance=new();
     internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
     internal static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
@@ -30,12 +26,12 @@ public class Delegate2:MemoryPackFormatter<T> {
         return Deserialize(ref reader);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Type.Serialize(ref writer,value!.GetType());
+        writer.WriteType(value!.GetType());
         Method.Serialize(ref writer,value.Method);
         Object.Serialize(ref writer,value.Target);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var delegateType=Type.Deserialize(ref reader);
+        var delegateType=reader.ReadType();
         var method=Method.Deserialize(ref reader);
         var target=Object.Deserialize(ref reader);
         value=method.CreateDelegate(delegateType,target);

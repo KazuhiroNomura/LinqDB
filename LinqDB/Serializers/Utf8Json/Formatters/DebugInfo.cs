@@ -1,10 +1,9 @@
 ﻿using Utf8Json;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using static Extension;
-using T=Expressions.DebugInfoExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.DebugInfoExpression;
 public class DebugInfo:IJsonFormatter<T> {
     public static readonly DebugInfo Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){

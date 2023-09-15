@@ -1,16 +1,15 @@
 ﻿using System;
 using MemoryPack;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using System.Buffers;
-using System.Diagnostics;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.NewArrayExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.NewArrayExpression;
 using static Extension;
 public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        Type.Serialize(ref writer,value!.Type.GetElementType());
+        writer.WriteType(value!.Type.GetElementType());
         writer.SerializeReadOnlyCollection(value.Expressions);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){

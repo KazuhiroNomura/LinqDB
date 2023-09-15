@@ -14,7 +14,7 @@ public class Goto:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.Write((byte)value.Kind);
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
-        Expression.SerializeNullable(ref writer,value.Value,Resolver);
+        Expression.InternalSerializeNullable(ref writer,value.Value,Resolver);
         writer.WriteType(value.Type);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -30,7 +30,7 @@ public class Goto:IMessagePackFormatter<T> {
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var kind=(Expressions.GotoExpressionKind)reader.ReadByte();
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
-        var value=Expression.DeserializeNullable(ref reader,Resolver);
+        var value=Expression.InternalDeserializeNullable(ref reader,Resolver);
         var type=reader.ReadType();
         return Expressions.Expression.MakeGoto(kind,target,value,type);
     }

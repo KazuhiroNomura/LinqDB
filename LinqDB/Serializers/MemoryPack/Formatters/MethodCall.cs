@@ -3,9 +3,8 @@ using Expressions = System.Linq.Expressions;
 using MemoryPack;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.MethodCallExpression;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = Expressions.MethodCallExpression;
 using static Extension;
 
 

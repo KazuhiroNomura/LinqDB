@@ -17,24 +17,8 @@ internal static class DisplayClass {
     public static readonly MethodInfo MethodDeserialize = typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
     public static readonly MethodInfo WriteArrayHeader = typeof(Writer).GetMethod(nameof(Writer.WriteArrayHeader),new[] { typeof(int) })!;
     public static readonly MethodInfo ReadArrayHeader = typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
-    public static readonly Dictionary<System.Type,Delegate> DictionarySerialize = new();
+    public static readonly Dictionary<System.Type,System.Delegate> DictionarySerialize = new();
 }
-//public class DisplayClassJsonFormatter{
-//    protected static readonly MethodInfo WriteBeginArray=typeof(JsonWriter).GetMethod("WriteBeginArray")!;
-//    protected static readonly MethodInfo WriteValueSeparator=typeof(JsonWriter).GetMethod("WriteValueSeparator")!;
-//    protected static readonly MethodInfo WriteValWriteEndArrayueSeparator=typeof(JsonWriter).GetMethod("WriteEndArray")!;
-//    protected static readonly MethodInfo ReadIsBeginArrayWithVerify=typeof(JsonReader).GetMethod("ReadIsBeginArrayWithVerify")!;
-//    protected static readonly MethodInfo ReadIsValueSeparatorWithVerify=typeof(JsonReader).GetMethod("ReadIsValueSeparatorWithVerify")!;
-//    protected static readonly MethodInfo ReadIsEndArrayWithVerify=typeof(JsonReader).GetMethod("ReadIsEndArrayWithVerify")!;
-//    protected static void WriteType(ref JsonWriter writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
-//    protected static Type ReadType(ref JsonReader reader)=>Type.GetType(reader.ReadString())!;
-//    protected static void WriteType(ref MessagePackWriter writer,Type value)=>writer.Write(value.AssemblyQualifiedName);
-//    protected static Type ReadType(ref MessagePackReader reader)=>Type.GetType(reader.ReadString())!;
-//    protected static void Serialize<T>(ref JsonWriter writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-//    protected static readonly MethodInfo MethodSerialize=typeof(CommonJsonFormatter).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-//    protected static T Deserialize<T>(ref JsonReader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-//    protected static readonly MethodInfo MethodDeserialize=typeof(CommonJsonFormatter).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-//}
 public class DisplayClass<T>:IMessagePackFormatter<T>{
     public static readonly DisplayClass<T>Instance=new();
     private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);

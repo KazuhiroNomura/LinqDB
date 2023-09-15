@@ -17,7 +17,7 @@ public class TypeBinary:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteVarInt((byte)value!.NodeType);
         Expression.InternalSerialize(ref writer,value.Expression);
-        Type.Serialize(ref writer,value.TypeOperand);
+        writer.WriteType(value.TypeOperand);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
         var expression=Expression.InternalDeserialize(ref reader);

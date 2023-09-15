@@ -1,12 +1,11 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.LambdaExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.LambdaExpression;
 using static Extension;
 public class Lambda:IMessagePackFormatter<T> {
     public static readonly Lambda Instance=new();
@@ -17,7 +16,7 @@ public class Lambda:IMessagePackFormatter<T> {
     /// <param name="value"></param>
     /// <param name="Resolver"></param>
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        var ListParameter=Serializer.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
@@ -47,7 +46,7 @@ public class Lambda:IMessagePackFormatter<T> {
     /// <param name="Resolver"></param>
     /// <returns></returns>
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var ListParameter=Serializer.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         var parameters = reader.Deserialize宣言Parameters(Resolver);

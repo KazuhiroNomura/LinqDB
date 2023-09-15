@@ -1,14 +1,10 @@
-﻿using MemoryPack;
-using System.Buffers;
-
-using Utf8Json;
+﻿using Utf8Json;
 using Utf8Json.Formatters;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using static Extension;
-using T=Expressions.SymbolDocumentInfo;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.SymbolDocumentInfo;
 public class SymbolDocumentInfo:IJsonFormatter<T> {
     public static readonly SymbolDocumentInfo Instance=new();
     internal static void InternalSerialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) =>

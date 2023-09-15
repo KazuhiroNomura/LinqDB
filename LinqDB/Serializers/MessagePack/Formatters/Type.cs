@@ -1,10 +1,9 @@
 ﻿using MessagePack;
-using System.Diagnostics;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=System.Type;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = System.Type;
 
 
 public class Type:IMessagePackFormatter<T> {
@@ -12,12 +11,12 @@ public class Type:IMessagePackFormatter<T> {
     //private const int ArrayHeader0=2;
     //private const int ArrayHeader1=2;
     //private void PrivateSerialize(ref Writer writer,T value){
-    //    if(Serializer.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
+    //    if(Resolver.Serializer().Dictionary_Type_int.TryGetValue(value,out var index)){
     //        writer.WriteArrayHeader(ArrayHeader0);
     //        writer.WriteInt32(index);
     //    } else{
     //        writer.WriteArrayHeader(ArrayHeader1);
-    //        var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
+    //        var DictionaryTypeIndex=Resolver.Serializer().Dictionary_Type_int;
     //        index=DictionaryTypeIndex.Count;
     //        writer.WriteInt32(index);
     //        DictionaryTypeIndex.Add(value,index);
@@ -34,7 +33,7 @@ public class Type:IMessagePackFormatter<T> {
     //            writer.WriteString(value.AssemblyQualifiedName);
     //        }
     //        */
-    //        Serializer.Instance.Types.Add(value);
+    //        Resolver.Serializer().Types.Add(value);
     //    }
     //}
     //private readonly object[] objects2=new object[1];
@@ -45,13 +44,13 @@ public class Type:IMessagePackFormatter<T> {
     //private T PrivateDeserialize(ref Reader reader){
     //    var count=reader.ReadArrayHeader();
     //    var index=reader.ReadInt32();
-    //    var Types=Serializer.Instance.Types;
+    //    var Types=Resolver.Serializer().Types;
     //    if(index<Types.Count){
     //        Debug.Assert(count==ArrayHeader0);
     //        return Types[index];
     //    } else{
     //        Debug.Assert(count==ArrayHeader1);
-    //        var DictionaryTypeIndex=Serializer.Instance.Dictionary_Type_int;
+    //        var DictionaryTypeIndex=Resolver.Serializer().Dictionary_Type_int;
     //        Debug.Assert(index==Types.Count);
     //        var AssemblyQualifiedName=reader.ReadString();
     //        var value= T.GetType(AssemblyQualifiedName);

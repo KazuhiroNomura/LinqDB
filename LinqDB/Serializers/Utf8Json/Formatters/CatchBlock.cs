@@ -1,18 +1,17 @@
 ﻿using System;
-using Expressions=System.Linq.Expressions;
 using Utf8Json;
-using System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.CatchBlock;
-using C=Serializer;
-
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.CatchBlock;
+using C = Serializer;
 
 
 using static Extension;
 public class CatchBlock:IJsonFormatter<T> {
     public static readonly CatchBlock Instance=new();
+
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         writer.WriteType(value.Test);
@@ -22,6 +21,8 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteInt32(0);
                 writer.WriteValueSeparator();
                 Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                
+                
             } else{
                 writer.WriteInt32(1);
                 writer.WriteValueSeparator();
@@ -34,7 +35,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteInt32(2);
                 writer.WriteValueSeparator();
                 writer.WriteString(value.Variable.Name);
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(value.Variable);
                 writer.WriteValueSeparator();
                 Expression.Instance.Serialize(ref writer,value.Body,Resolver);
@@ -43,7 +44,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteInt32(3);
                 writer.WriteValueSeparator();
                 writer.WriteString(value.Variable.Name);
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(value.Variable);
                 writer.WriteValueSeparator();
                 Expression.Instance.Serialize(ref writer,value.Body,Resolver);
@@ -51,6 +52,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
                 ListParameter.RemoveAt(ListParameter.Count-1);
             }
+            
         }
         writer.WriteEndArray();
     }
@@ -77,7 +79,7 @@ public class CatchBlock:IJsonFormatter<T> {
             case 2:{
                 var name=reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body= Expression.Instance.Deserialize(ref reader,Resolver);
@@ -88,7 +90,7 @@ public class CatchBlock:IJsonFormatter<T> {
             case 3:{
                 var name=reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=C.Instance.ListParameter;
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body= Expression.Instance.Deserialize(ref reader,Resolver);

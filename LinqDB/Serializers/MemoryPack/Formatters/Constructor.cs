@@ -19,13 +19,13 @@ public class Constructor:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         var ReflectedType=value.ReflectedType!;
-        Type.Serialize(ref writer,ReflectedType);
-        var array= C.Instance.TypeConstructors.Get(ReflectedType);
+        writer.WriteType(ReflectedType);
+        var array= writer.Serializer().TypeConstructors.Get(ReflectedType);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var type=reader.ReadType();
-        var array= C.Instance.TypeConstructors.Get(type);
+        var array= reader.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadVarIntInt32();
         value=array[index];
     }

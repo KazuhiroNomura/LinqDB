@@ -1,18 +1,11 @@
-﻿using MemoryPack;
-
-using System;
-using System.Buffers;
-using System.Diagnostics;
-using System.Reflection;
-using Utf8Json;
+﻿using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 using static Extension;
-using T= System.Delegate;
-using C=Serializer;
-public class Delegate2:IJsonFormatter<T> {
-    public static readonly Delegate2 Instance =new();
+using T = System.Delegate;
+public class Delegate:IJsonFormatter<T> {
+    public static readonly Delegate Instance =new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();

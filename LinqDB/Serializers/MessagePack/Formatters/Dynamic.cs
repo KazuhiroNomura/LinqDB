@@ -1,21 +1,18 @@
 ﻿using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
-using MemoryPack;
-using System.Buffers;
 using System.Dynamic;
 using System;
 using System.Reflection;
 using Microsoft.CSharp.RuntimeBinder;
-using Binder=Microsoft.CSharp.RuntimeBinder.Binder;
-using LinqDB.Serializers.MemoryPack;
+using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 using System.Collections.ObjectModel;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.DynamicExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.DynamicExpression;
 using static Extension;
 using static Common;
 public class Dynamic:IMessagePackFormatter<T> {
@@ -25,17 +22,17 @@ public class Dynamic:IMessagePackFormatter<T> {
             case DynamicMetaObjectBinder v0:{
                 switch(v0){
                     case BinaryOperationBinder:writer.WriteArrayHeader(offset+5); break;
-                    case ConvertBinder:writer.WriteArrayHeader(offset+4); break;
-                    case CreateInstanceBinder:writer.WriteArrayHeader(offset+3); break;
-                    case DeleteIndexBinder:writer.WriteArrayHeader(offset+3); break;
-                    case DeleteMemberBinder:writer.WriteArrayHeader(offset+2); break;
-                    case GetIndexBinder:writer.WriteArrayHeader(offset+3); break;
-                    case GetMemberBinder:writer.WriteArrayHeader(offset+4); break;
-                    case InvokeBinder:writer.WriteArrayHeader(offset+3); break;
-                    case InvokeMemberBinder:writer.WriteArrayHeader(offset+2); break;
-                    case SetIndexBinder:writer.WriteArrayHeader(offset+3); break;
-                    case SetMemberBinder:writer.WriteArrayHeader(offset+5); break;
-                    case UnaryOperationBinder:writer.WriteArrayHeader(offset+4); break;
+                    case ConvertBinder        :writer.WriteArrayHeader(offset+4); break;
+                    case CreateInstanceBinder :writer.WriteArrayHeader(offset+3); break;
+                    case DeleteIndexBinder    :writer.WriteArrayHeader(offset+3); break;
+                    case DeleteMemberBinder   :writer.WriteArrayHeader(offset+2); break;
+                    case GetIndexBinder       :writer.WriteArrayHeader(offset+3); break;
+                    case GetMemberBinder      :writer.WriteArrayHeader(offset+4); break;
+                    case InvokeBinder         :writer.WriteArrayHeader(offset+3); break;
+                    case InvokeMemberBinder   :writer.WriteArrayHeader(offset+2); break;
+                    case SetIndexBinder       :writer.WriteArrayHeader(offset+3); break;
+                    case SetMemberBinder      :writer.WriteArrayHeader(offset+5); break;
+                    case UnaryOperationBinder :writer.WriteArrayHeader(offset+4); break;
                 }
                 break;
             }

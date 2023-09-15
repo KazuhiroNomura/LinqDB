@@ -1,17 +1,13 @@
 ﻿//using System;
-using Expressions=System.Linq.Expressions;
-using MemoryPack;
 using System.Buffers;
 using System.Collections.ObjectModel;
-using LinqDB.Serializers.MemoryPack.Formatters;
-using MemoryPack.Formatters;
-using System.Diagnostics;
 using System.Reflection;
 
+using MemoryPack;
+using MemoryPack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
-//using Writer=MemoryPackWriter;
-using Reader=MemoryPackReader;
-using C=Serializer;
+using Reader = MemoryPackReader;
 public static class Extension{
     public static void WriteValue<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)where TBufferWriter :IBufferWriter<byte> =>writer.GetFormatter<T>()!.Serialize(ref writer,ref value);
     public static void ReadValue<T>(this ref Reader reader,scoped ref T? value)=>reader.GetFormatter<T>()!.Deserialize(ref reader,ref value);
@@ -19,33 +15,9 @@ public static class Extension{
     //public static Type ReadType(this ref Reader reader)=>Type.Deserialize().GetType(reader.ReadString())!;
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
         writer.WriteString(value.AssemblyQualifiedName);
-        //if(C.Instance.Dictionary_Type_int.TryGetValue(value,out var index)){
-        //    writer.WriteVarInt(index);
-        //} else{
-        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
-        //    index=Dictionary_Type_int.Count;
-        //    writer.WriteVarInt(index);
-        //    Dictionary_Type_int.Add(value,index);
-        //    Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
-        //    writer.WriteString(value.AssemblyQualifiedName);
-        //    C.Instance.Types.Add(value);
-        //}
     }
     public static System.Type ReadType(this ref Reader reader){
         return System.Type.GetType(reader.ReadString())!;
-        //var index=reader.ReadVarIntInt32();
-        //var Types=C.Instance.Types;
-        //if(index<Types.Count){
-        //    return Types[index];
-        //} else{
-        //    var Dictionary_Type_int=C.Instance.Dictionary_Type_int;
-        //    Debug.Assert(index==Types.Count);
-        //    var AssemblyQualifiedName=reader.ReadString();
-        //    var value=System.Type.GetType(AssemblyQualifiedName);
-        //    Types.Add(value);
-        //    Dictionary_Type_int.Add(value,index);
-        //    return value;
-        //}
     }
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
@@ -102,4 +74,14 @@ public static class Extension{
         reader.ReadValue(ref value);
     }
     public static readonly MethodInfo MethodDeserialize = typeof(Extension).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    public static object ReadValue(this ref Reader reader,System.Type type){
+        object? value=default;
+        MemoryPack.Serializer.RegisterAnonymousDisplay(type);
+        reader.ReadValue(type,ref value);
+        return value!;
+    }
+    public static Serializer Serializer<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter:IBufferWriter<byte> =>
+        (Serializer)writer.Options.ServiceProvider!;
+    public static Serializer Serializer(this ref Reader reader)=>
+        (Serializer)reader.Options.ServiceProvider!;
 }

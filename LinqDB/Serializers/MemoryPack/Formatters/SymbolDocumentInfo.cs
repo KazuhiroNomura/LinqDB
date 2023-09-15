@@ -3,12 +3,11 @@ using MemoryPack;
 
 using System.Buffers;
 using System.Diagnostics;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.SymbolDocumentInfo;
+using Reader = MemoryPackReader;
+using T = Expressions.SymbolDocumentInfo;
 
 public class SymbolDocumentInfo:MemoryPackFormatter<T>{
     public static readonly SymbolDocumentInfo Instance=new();

@@ -2,31 +2,20 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
-using LinqDB.Serializers.MessagePack.Formatters;
 
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 internal static class DisplayClass {
-    public static readonly Dictionary<System.Type,Delegate> DictionarySerialize = new();
+    public static readonly Dictionary<System.Type,System.Delegate> DictionarySerialize = new();
 }
 public class DisplayClass<T>:MemoryPackFormatter<T>{
-    public static readonly DisplayClass<T> Instance=new();
-    //private static void Serialize2<TBufferWriter,TValue>(ref MemoryPackWriter<TBufferWriter> writer,
-    //    scoped ref TValue? value) where TBufferWriter:IBufferWriter<byte>{
-    //    writer.WriteValue(value);
-    //    //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
-    //}
-    //private static readonly MethodInfo MethodSerialize = typeof(Anonymous<T>).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    //private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value){
-    //    reader.ReadValue(ref value);
-    //    //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
-    //}
-    ////private static readonly MethodInfo MethodDeserialize = typeof(Anonymous<T>).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    public static readonly DisplayClass<T> Instance=new();//リフレクションで使われる
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
@@ -84,7 +73,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
             Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
             {
                 var objects1=this.objects1;
-                var Serialize=new DynamicMethod("Serialize",typeof(void),SerializeTypes,typeof(Anonymous<T>),true){InitLocals=false};
+                var Serialize=new DynamicMethod("Serialize",typeof(void),SerializeTypes,typeof(DisplayClass<T>),true){InitLocals=false};
                 //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
                 var I0=Serialize.GetILGenerator();
                 MethodTypes[0]=typeof(TBufferWriter);

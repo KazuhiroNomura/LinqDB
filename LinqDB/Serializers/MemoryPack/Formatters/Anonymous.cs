@@ -9,33 +9,10 @@ using LinqDB.Helpers;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
-//internal static class Anonymous{
-//    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
-//        scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
-//        writer.WriteValue(value);
-//        //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
-//    }
-//    public static readonly MethodInfo MethodSerialize = typeof(Anonymous).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-//    private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
-//        reader.ReadValue(ref value);
-//        //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
-//    }
-//    public static readonly MethodInfo MethodDeserialize = typeof(Anonymous).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-//    //public static readonly Dictionary<System.Type,Delegate> DictionarySerialize=new();
-//}
 public class Anonymous<T>:MemoryPackFormatter<T>{
-    public static readonly Anonymous<T> Instance=new();
-    //private static void Serialize2<TBufferWriter,TValue>(ref MemoryPackWriter<TBufferWriter> writer,
-    //    scoped ref TValue? value) where TBufferWriter:IBufferWriter<byte>{
-    //    writer.WriteValue(value);
-    //    //writer.GetFormatter<TValue>()!.Serialize(ref writer,ref value);
-    //}
-    //private static readonly MethodInfo MethodSerialize = typeof(Anonymous<T>).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    //private static void Deserialize2<TValue>(ref MemoryPackReader reader,scoped ref TValue? value){
-    //    reader.ReadValue(ref value);
-    //    //reader.GetFormatter<TValue>()!.Deserialize(ref reader,ref value);
-    //}
-    ////private static readonly MethodInfo MethodDeserialize = typeof(Anonymous<T>).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    public static readonly Anonymous<T> Instance=new();//リフレクションで使われる
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
@@ -74,7 +51,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
             this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
         }
     }
-    private static readonly Dictionary<System.Type,Delegate> DictionarySerialize=new();
+    private static readonly Dictionary<System.Type,System.Delegate> DictionarySerialize=new();
     private readonly System.Type[] MethodTypes = new System.Type[2];
     private readonly System.Type[] SerializeTypes = new System.Type[2];
     private readonly System.Type[] PropertyTypes = new System.Type[1];
@@ -128,7 +105,5 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
         }
         ((delegate_Serialize<TBufferWriter>)Delegate)(ref writer,ref value!);
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value) {
-        this.DelegateDeserialize(ref reader,ref value);
-    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>this.DelegateDeserialize(ref reader,ref value);
 }

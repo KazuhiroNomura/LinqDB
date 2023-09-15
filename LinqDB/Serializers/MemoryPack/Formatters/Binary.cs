@@ -5,79 +5,55 @@ using Expressions = System.Linq.Expressions;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+//
 using Reader=MemoryPackReader;
 using T= Expressions.BinaryExpression;
 public class Binary:MemoryPackFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
-
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
+        //
+        //
+        //
+        //
     }
     internal static void InternalSerializeLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
         Lambda.InternalSerializeConversion(ref writer,value.Conversion);
     }
+    
+    
+    
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
+    
+    
     internal static void InternalSerializeMethodLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
         Method.InternalSerializeNullable(ref writer,value.Method);
         Lambda.InternalSerializeConversion(ref writer,value.Conversion);
     }
+    
+    
+    
     internal static void InternalSerializeBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value.Left);
         Expression.InternalSerialize(ref writer,value.Right);
         writer.WriteBoolean(value.IsLiftedToNull);
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
-    internal static (Expressions.Expression left,Expressions.Expression right) InternalDeserialize(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
-        var right = Expression.InternalDeserialize(ref reader);
-        Debug.Assert(left!=null);
-        return (left, right);
-    }
-    internal static (Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion) InternalDeserializeLambda(ref Reader reader) {
-        var Left = Expression.InternalDeserialize(ref reader);
-        var right = Expression.InternalDeserialize(ref reader);
-        var conversion= Lambda.InternalDeserializeConversion(ref reader);
-        return (Left, right, conversion);
-    }
-    internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method) InternalDeserializeMethod(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
-        var right = Expression.InternalDeserialize(ref reader);
-        var method = Method.InternalDeserializeNullable(ref reader);
-        return (left, right, method);
-    }
-    internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion) InternalDeserializeMethodLambda(ref Reader reader) {
-        var Left = Expression.InternalDeserialize(ref reader);
-        var right = Expression.InternalDeserialize(ref reader);
-        var method = Method.InternalDeserializeNullable(ref reader);
-        var conversion= Lambda.InternalDeserializeConversion(ref reader);
-        return (Left, right, method,conversion);
-    }
-    internal static (Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method) InternalDeserializeBooleanMethod(ref Reader reader){
-        var left = Expression.InternalDeserialize(ref reader);
-        var right = Expression.InternalDeserialize(ref reader);
-        var isLiftedToNull =reader.ReadBoolean();
-        var method = Method.InternalDeserializeNullable(ref reader);
-        return (left, right, isLiftedToNull, method);
-    }
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> => Instance.Serialize(ref writer,ref value);
-    internal static T Deserialize(ref Reader reader) {
-        T? value = default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
+    
+    
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        //writer.WriteArrayHeader
         writer.WriteNodeType(value.NodeType);
+        
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value); break;
@@ -121,7 +97,54 @@ public class Binary:MemoryPackFormatter<T> {
             default:throw new NotSupportedException(value.NodeType.ToString());
         }
     }
+    
+    internal static (Expressions.Expression left,Expressions.Expression right) InternalDeserialize(ref Reader reader) {
+        var left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        Debug.Assert(left!=null);
+        return (left, right);
+    }
+    internal static (Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion) InternalDeserializeLambda(ref Reader reader) {
+        var left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        var conversion= Lambda.InternalDeserializeConversion(ref reader);
+        return (left, right, conversion);
+    }
+    
+    
+    internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method) InternalDeserializeMethod(ref Reader reader) {
+        var left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        var method = Method.InternalDeserializeNullable(ref reader);
+        return (left, right, method);
+    }
+    
+    
+    internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion) InternalDeserializeMethodLambda(ref Reader reader) {
+        var left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        var method = Method.InternalDeserializeNullable(ref reader);
+        var conversion= Lambda.InternalDeserializeConversion(ref reader);
+        return (left, right, method,conversion);
+    }
+    
+    
+    
+    internal static (Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method) InternalDeserializeBooleanMethod(ref Reader reader){
+        var left = Expression.InternalDeserialize(ref reader);
+        var right = Expression.InternalDeserialize(ref reader);
+        var isLiftedToNull =reader.ReadBoolean();
+        var method = Method.InternalDeserializeNullable(ref reader);
+        return (left, right, isLiftedToNull, method);
+    }
+    
+    
+    
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+
+
+
+
         var NodeType=reader.ReadNodeType();
         switch(NodeType) {
             case Expressions.ExpressionType.ArrayIndex: {

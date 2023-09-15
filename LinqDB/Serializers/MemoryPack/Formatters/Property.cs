@@ -36,12 +36,12 @@ public class Property:MemoryPackFormatter<T>{
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
        Debug.Assert(value!=null,nameof(value)+" != null");
        var ReflectedType=value.ReflectedType!;
-       Type.Serialize(ref writer,ReflectedType);
-       writer.WriteVarInt(Array.IndexOf(C.Instance.TypeProperties.Get(ReflectedType),value));
+       writer.WriteType(ReflectedType);
+       writer.WriteVarInt(Array.IndexOf(writer.Serializer().TypeProperties.Get(ReflectedType),value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ReflectedType= Type.Deserialize(ref reader);
-        var array=C.Instance.TypeProperties.Get(ReflectedType);
+        var ReflectedType= reader.ReadType();
+        var array=reader.Serializer().TypeProperties.Get(ReflectedType);
         var Index=reader.ReadVarIntInt32();
         value=array[Index];
     }

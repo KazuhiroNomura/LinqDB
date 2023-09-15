@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System;
 using System.Reflection;
 using MemoryPack;
+using System.Reflection.PortableExecutable;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=MemberInfo;
@@ -32,14 +34,14 @@ public class Member:MemoryPackFormatter<T>{
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.ReflectedType!;
-        Type.Serialize(ref writer,type);
-        var array= C.Instance.TypeMembers.Get(type);
+        writer.WriteType(type);
+        var array= writer.Serializer().TypeMembers.Get(type);
         var index=Array.IndexOf(array,value);
         writer.WriteVarInt(index);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var type= Type.Deserialize(ref reader);
-        var array= C.Instance.TypeMembers.Get(type);
+        var type= reader.ReadType();
+        var array= reader.Serializer().TypeMembers.Get(type);
         var index=reader.ReadVarIntInt32();
         value=array[index];
     }

@@ -16,11 +16,11 @@ public class Parameter:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        writer.WriteVarInt(C.Instance.ListParameter.LastIndexOf(value));
+        writer.WriteVarInt(writer.Serializer().ListParameter.LastIndexOf(value));
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var index=reader.ReadVarIntInt32();
-        var Parameter= C.Instance.ListParameter[index];
+        var Parameter= reader.Serializer().ListParameter[index];
         value=Parameter;
     }
 }

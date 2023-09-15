@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -15,6 +15,9 @@ public class Binary:IMessagePackFormatter<T> {
         writer.WriteNodeType(value.NodeType);
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        //
+        //
+        //
     }
     internal static void InternalSerializeLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
@@ -38,6 +41,7 @@ public class Binary:IMessagePackFormatter<T> {
         Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
         Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
     }
+    
     internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(value!.NodeType);
@@ -48,6 +52,8 @@ public class Binary:IMessagePackFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
+        
+        
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value,Resolver); break;
@@ -91,8 +97,10 @@ public class Binary:IMessagePackFormatter<T> {
             default:throw new NotSupportedException(value.NodeType.ToString());
         }
     }
+    
     internal static(Expressions.Expression left,Expressions.Expression right)InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        
         var right= Expression.Instance.Deserialize(ref reader,Resolver);
         return(left,right);
     }
@@ -102,12 +110,16 @@ public class Binary:IMessagePackFormatter<T> {
         var conversion= Lambda.InternalDeserializeConversion(ref reader,Resolver);
         return (left, right, conversion);
     }
+    
+    
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? Method)InternalDeserializeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Instance.Deserialize(ref reader,Resolver);
         var right= Expression.Instance.Deserialize(ref reader,Resolver);
         var method=Method.InternalDeserializeNullable(ref reader,Resolver);
         return(left,right,method);
     }
+    
+    
     internal static (Expressions.Expression left, Expressions.Expression right, MethodInfo? Method, Expressions.LambdaExpression? Conversion) InternalDeserializeMethodLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
         var left = Expression.Instance.Deserialize(ref reader,Resolver);
         var right = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -115,6 +127,9 @@ public class Binary:IMessagePackFormatter<T> {
         var conversion= Lambda.InternalDeserializeConversion(ref reader,Resolver);
         return (left, right, method,conversion);
     }
+    
+    
+    
     internal static(Expressions.Expression left,Expressions.Expression right,bool IsLiftedToNull,MethodInfo? Method)InternalDeserializeBooleanMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Instance.Deserialize(ref reader,Resolver);
         var right= Expression.Instance.Deserialize(ref reader,Resolver);
@@ -122,10 +137,13 @@ public class Binary:IMessagePackFormatter<T> {
         var method=Method.InternalDeserializeNullable(ref reader,Resolver);
         return(left,right,IsLiftedToNull,method);
     }
+    
+    
+    
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(3<=count&&count<=5);
+        Debug.Assert(count is >=3 and <=5);
         T value;
         var NodeType=reader.ReadNodeType();
         switch(NodeType){

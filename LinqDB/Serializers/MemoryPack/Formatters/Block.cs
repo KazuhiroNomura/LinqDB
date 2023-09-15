@@ -1,17 +1,16 @@
 ﻿using System.Buffers;
 using System.Diagnostics;
-using System.Reflection.PortableExecutable;
 //using System.Linq.Expressions;
 
 using MemoryPack;
 using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 
 using static Extension;
-using C=Serializer;
-using T=Expressions.BlockExpression;
+using C = Serializer;
+using T = Expressions.BlockExpression;
 
 public class Block:MemoryPackFormatter<T> {
     public static readonly Block Instance=new();
@@ -19,11 +18,11 @@ public class Block:MemoryPackFormatter<T> {
         Instance.Serialize(ref writer,ref value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= writer.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value!.Variables;
         ListParameter.AddRange(Variables);
-        Type.Serialize(ref writer,value.Type);
+        writer.WriteType(value.Type);
         //var Variables=value.Variables;
         writer.Serialize宣言Parameters(Variables);
         writer.SerializeReadOnlyCollection(value.Expressions);
@@ -36,9 +35,9 @@ public class Block:MemoryPackFormatter<T> {
         return value!;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var ListParameter= C.Instance.ListParameter;
+        var ListParameter= reader.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
-        var type= Type.Deserialize(ref reader);
+        var type= reader.ReadType();
         var variables= reader.Deserialize宣言Parameters();
         ListParameter.AddRange(variables!);
         var expressions=reader.ReadArray<Expressions.Expression>();

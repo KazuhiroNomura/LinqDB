@@ -2,33 +2,23 @@
 
 using System.Diagnostics;
 using System.Reflection;
-using Expressions=System.Linq.Expressions;
-using LinqDB.Helpers;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using C=Serializer;
-public class Object:IJsonFormatter<object>{
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = System.Object;
+public class Object:IJsonFormatter<T>{
     public static readonly Object Instance=new();
     private readonly object[] Objects3=new object[3];
-    public void Serialize(ref Writer writer,object? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
+      
         var type=value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
-        /*
-        if(typeof(Expressions.Expression).IsAssignableFrom(type)){
-            var Formatter= Resolver.GetFormatter<Expressions.Expression>();
-            //var Formatter = formatterResolver.GetFormatter<LambdaExpression>();
-            Formatter.Serialize(ref writer,(Expressions.Expression)(object)value, Resolver);
-            //Formatter.Serialize(ref writer,(LambdaExpression)(object)value,formatterResolver);
-            //}else if(typeof(T).IsDisplay()){
-            //    return Return(new DisplayClassJsonFormatter<T>());
-        }else 
-        */
         switch(value){
             case sbyte   v:writer.WriteSByte (v);break;
             case short   v:writer.WriteInt16 (v);break;
@@ -39,7 +29,7 @@ public class Object:IJsonFormatter<object>{
             case uint    v:writer.WriteUInt32(v);break;
             case ulong   v:writer.WriteUInt64(v);break;
             case string  v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Delegate        v:Delegate  .Instance.Serialize(ref writer,v,Resolver);break;
             case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
             case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
             case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
@@ -84,7 +74,7 @@ public class Object:IJsonFormatter<object>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString();
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Instance.Deserialize(ref reader,Resolver);
         //else if(typeof(decimal)==type)result=global::Utf8Json.Formatters.DecimalFormatter.Default.Deserialize(ref reader,Resolver);
         //else if(typeof(Guid   )==type)result=global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
@@ -96,14 +86,15 @@ public class Object:IJsonFormatter<object>{
         else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
         else{
-            var Formatter=Resolver.GetFormatterDynamic(type);
-            var Deserialize=Formatter.GetType().GetMethod("Deserialize");
-            Debug.Assert(Deserialize is not null);
-            var Objects2=this.Objects2;
-            Objects2[0]=reader;
-            Objects2[1]=Resolver;
-            value=Deserialize.Invoke(Formatter,Objects2)!;
-            reader=(Reader)Objects2[0];
+            //var Formatter=Resolver.GetFormatterDynamic(type);
+            //var Deserialize=Formatter.GetType().GetMethod("Deserialize");
+            //Debug.Assert(Deserialize is not null);
+            //var Objects2=this.Objects2;
+            //Objects2[0]=reader;
+            //Objects2[1]=Resolver;
+            //value=Deserialize.Invoke(Formatter,Objects2)!;
+            //reader=(Reader)Objects2[0];
+            value=reader.ReadValue(type,this.Objects2,Resolver);
         }
             //global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);}
             //var Formatter=reader.GetFormatter(type);

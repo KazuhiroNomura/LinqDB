@@ -18,7 +18,7 @@ public class Property:IJsonFormatter<PropertyInfo>{
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(C.Instance.TypeProperties.Get(type),value));
+        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeProperties.Get(type),value));
         writer.WriteEndArray();
     }
     public PropertyInfo Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -30,6 +30,6 @@ public class Property:IJsonFormatter<PropertyInfo>{
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return C.Instance.TypeProperties.Get(type)[index];
+        return Resolver.Serializer().TypeProperties.Get(type)[index];
     }
 }

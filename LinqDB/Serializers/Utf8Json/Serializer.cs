@@ -1,62 +1,31 @@
 ﻿
-//using System;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-//using MemoryPack_Formatters = LinqDB.Serializers.MemoryPack.Formatters;
 using Utf8Json;
-using Utf8Json.Resolvers;
-//using LinqDB.Serializers.Formatters;
 
 namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 
-using LinqDB.Helpers;
-//using LinqDB.Serializers.MemoryPack.Formatters;
 
-using System.Runtime.Serialization;
-
-//using LinqDB.Serializers.MemoryPack.Formatters;
-
-public class Serializer:Serializers.Serializer{
-    public static readonly Serializer Instance=new();
+public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
+    //public static readonly Serializer Instance=new();
     private readonly FormatterResolver Resolver=new();
-    internal IJsonFormatterResolver IResolver;
-    //public IJsonFormatter<T>? GetFormatter<T>()=>(IJsonFormatter<T>?)this.GetFormatterDynamic(typeof(T));
-    //private readonly System.Type[]Types1=new System.Type[1];
-    //public IJsonFormatter? GetFormatterDynamic(System.Type Type){
-    //    var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
-    //    if(DictionaryTypeFormatter.TryGetValue(Type,out var value)) return value;
-    //    if(Type.IsAnonymous()){
-    //        var Types1=this.Types1;
-    //        Types1[0]=Type;
-    //        value=(IJsonFormatter)Activator.CreateInstance(typeof(Anonymous<>).MakeGenericType(Types1))!;
-    //        DictionaryTypeFormatter.Add(
-    //            Type,
-    //            value
-    //        );
-    //        this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-    //            new IJsonFormatter[]{value},
-    //            new []{this.IResolver}
-    //        );
-    //    }
-    //    return value;
-    //}
-    //public void Register(Type type){
-    //    var DictionaryTypeFormatter=this.Resolver.DictionaryTypeFormatter;
-    //    if(DictionaryTypeFormatter.)
-    //}
-    private Serializer(){
+    private readonly IJsonFormatterResolver IResolver;
+    
+    public Serializer(){
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
             new IJsonFormatter[]{
                 Object.Instance,
+
                 Binary.Instance,
                 Block.Instance,
+                CatchBlock.Instance,
                 Conditional.Instance,
                 Constant.Instance,
+                DebugInfo.Instance,
                 Default.Instance,
                 Dynamic.Instance,
+                ElementInit.Instance,
                 Expression.Instance,
                 Goto.Instance,
                 Index.Instance,
@@ -67,19 +36,18 @@ public class Serializer:Serializers.Serializer{
                 ListInit.Instance,
                 Loop.Instance,
                 MemberAccess.Instance,
+                MemberBinding.Instance,
+                MemberInit.Instance,
                 MethodCall.Instance,
                 New.Instance,
                 NewArray.Instance,
                 Parameter.Instance,
                 Switch.Instance,
+                SwitchCase.Instance,
                 Try.Instance,
                 TypeBinary.Instance,
                 Unary.Instance,
-                SwitchCase.Instance,
-                CatchBlock.Instance,
-                ElementInit.Instance,
-                MemberBinding.Instance,
-                MemberInit.Instance,
+
                 Type.Instance,
                 Member.Instance,
                 Constructor.Instance,
@@ -87,8 +55,10 @@ public class Serializer:Serializers.Serializer{
                 Property.Instance,
                 Event.Instance,
                 Field.Instance,
+                this
             },
             new IJsonFormatterResolver[]{
+                //this,
                 this.Resolver,
                 //    this.AnonymousExpressionJsonFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
                 //    short
@@ -101,7 +71,8 @@ public class Serializer:Serializers.Serializer{
                 global::Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
                 //    Lazy<>
                 global::Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
-                global::Utf8Json.Resolvers.EnumResolver.Default,global::Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
+                global::Utf8Json.Resolvers.EnumResolver.Default,
+                global::Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
                 //Utf8Json.Resolvers.StandardResolver.Default,
 
                 global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//.Default,//Anonymous
@@ -187,5 +158,15 @@ public class Serializer:Serializers.Serializer{
     public T Deserialize<T>(Stream stream){
         this.Clear();
         return JsonSerializer.Deserialize<T>(stream,this.IResolver);
+    }
+
+    public IJsonFormatter<T> GetFormatter<T>(){
+        return (IJsonFormatter<T>)this;
+    }
+    public void Serialize(ref JsonWriter writer,Serializer value,IJsonFormatterResolver formatterResolver){
+        throw new System.NotImplementedException();
+    }
+    public Serializer Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
+        throw new System.NotImplementedException();
     }
 }

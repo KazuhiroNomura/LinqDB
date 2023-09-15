@@ -1,12 +1,11 @@
 ﻿using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.SymbolDocumentInfo;
-using static Extension;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.SymbolDocumentInfo;
 public class SymbolDocumentInfo:IMessagePackFormatter<T> {
     public static readonly SymbolDocumentInfo Instance=new();
     private const int ArrayHeader=4;

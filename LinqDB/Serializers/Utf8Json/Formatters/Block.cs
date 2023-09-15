@@ -9,7 +9,7 @@ using static Extension;
 public class Block:IJsonFormatter<T> {
     public static readonly Block Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        var ListParameter=C.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
         ListParameter.AddRange(Variables);
@@ -26,7 +26,7 @@ public class Block:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var ListParameter=C.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();

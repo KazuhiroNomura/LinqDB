@@ -1,8 +1,7 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
@@ -13,7 +12,7 @@ public class MemberAccess:IMessagePackFormatter<T> {
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Member.Instance.Serialize(ref writer,value!.Member,Resolver);
-        Expression.SerializeNullable(ref writer,value.Expression,Resolver);
+        Expression.InternalSerializeNullable(ref writer,value.Expression,Resolver);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -27,7 +26,7 @@ public class MemberAccess:IMessagePackFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var member=Member.Instance.Deserialize(ref reader,Resolver);
-        var expression= Expression.DeserializeNullable(ref reader,Resolver);
+        var expression= Expression.InternalDeserializeNullable(ref reader,Resolver);
         return Expressions.Expression.MakeMemberAccess(expression,member);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

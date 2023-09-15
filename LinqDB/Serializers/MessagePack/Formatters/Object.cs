@@ -2,24 +2,22 @@
 using MessagePack;
 using System.Diagnostics;
 using System.Reflection;
-using Expressions=System.Linq.Expressions;
-using LinqDB.Helpers;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=System.Object;
-public class Object:IMessagePackFormatter<object>{
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = System.Object;
+public class Object:IMessagePackFormatter<T>{
     public static readonly Object Instance=new();
     private const int ArrayHeader=2;
-    //private const int InternalArrayHeader=ArrayHeader+1;
-    public void Serialize(ref Writer writer,object? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         //if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
+        
         var type=value!.GetType();
         writer.WriteType(type);
-        //writer.WriteValue(value.Value.GetType(),value.Value);
-        //this.Serialize(ref writer,value.Type);
+
         switch(value){
             case sbyte   v:writer.Write(v);break;
             case short   v:writer.Write(v);break;
@@ -33,7 +31,7 @@ public class Object:IMessagePackFormatter<object>{
             case double  v:writer.Write(v);break;
             case bool    v:writer.Write(v);break;
             case string  v:writer.Write(v);break;
-            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Delegate        v:Delegate  .Instance.Serialize(ref writer,v,Resolver);break;
             case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
             case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
             case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
@@ -43,7 +41,7 @@ public class Object:IMessagePackFormatter<object>{
             case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
             case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                //object Formatter;
+                //T Formatter;
                 //if(type.IsDisplay()){
                 //    //あらかじめ設定してあるResolverに設定する
                 //    var FormatterType=typeof(DisplayClass<>).MakeGenericType(type);
@@ -55,26 +53,26 @@ public class Object:IMessagePackFormatter<object>{
                 var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
                 Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
                 //writer.WriteValue(value,Resolver);
-                //object Formatter;
+                //T Formatter;
                 //if(type.IsDisplay()){
                 //    if(DisplayClass.DictionarySerialize.TryGetValue(type,out var Foramtter)) return;
                 //    var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
                 //    Formatter=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
                 //} else{
-                //    Formatter=Serializer.Instance.Options.Resolver.GetFormatterDynamic(type)!;
+                //    Formatter=Resolver.Serializer().Options.Resolver.GetFormatterDynamic(type)!;
                 //}
                 break;
             }
         }
     }
-    public object Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        object value;
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        T value;
         //if(reader.TryReadNil()) return null!;
         //if(reader.TryReadNil()) value=null;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        //object? value;
+        //T? value;
         if     (typeof(sbyte  )==type)value=reader.ReadSByte();
         else if(typeof(short  )==type)value=reader.ReadInt16();
         else if(typeof(int    )==type)value=reader.ReadInt32();
@@ -87,7 +85,7 @@ public class Object:IMessagePackFormatter<object>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString()!;
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
         else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
         //else if(typeof(MemberInfo            ).IsAssignableFrom(type))value=Member     .Instance.Deserialize(ref reader,Resolver);
@@ -98,8 +96,9 @@ public class Object:IMessagePackFormatter<object>{
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
         else{
             //reader.ReadValue(ref value);
-            var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-            value=Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
+            //var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+            //value=Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
+            value=reader.ReadValue(type,Resolver);
         }
         return value;
     }

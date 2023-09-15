@@ -1,42 +1,31 @@
 ﻿using MessagePack;
 //using System.Reflection.Emit;
 using System.IO;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using LinqDB.Helpers;
-using Emit=System.Reflection.Emit;
-using LinqDB.Serializers.Formatters;
+using Emit = System.Reflection.Emit;
 using MessagePack.Formatters;
-using System.Collections.Generic;
-using System.Reflection;
-
 namespace LinqDB.Serializers.MessagePack;
 using Formatters;
-//using MessagePack;
-////using System.Reflection.Emit;
-//using System.IO;
-//using Expressions=System.Linq.Expressions;
-//using LinqDB.Helpers;
-//using Emit=System.Reflection.Emit;
-//using MessagePack.Formatters;
-//namespace LinqDB.Serializers.MessagePack;
-////using Formatters;
-//using LinqDB.Serializers.MemoryPack.Formatters;
-
-public partial class Serializer:Serializers.Serializer{
-    public static readonly Serializer Instance=new();
-    //private readonly FormatterResolver Resolver=new();
-    public MessagePackSerializerOptions Options;
-    private Serializer(){
+public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
+    //public static readonly Serializer Instance=new();
+    private readonly MessagePackSerializerOptions Options;
+    public Serializer(){
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
                 new IMessagePackFormatter[]{
+                    this,
                     Object.Instance,
+
                     Binary.Instance,
                     Block.Instance,
+                    CatchBlock.Instance,
                     Conditional.Instance,
                     Constant.Instance,
                     Default.Instance,
+                    DebugInfo.Instance,
                     Dynamic.Instance,
+                    ElementInit.Instance,
                     Expression.Instance,
                     Goto.Instance,
                     Index.Instance,
@@ -47,19 +36,18 @@ public partial class Serializer:Serializers.Serializer{
                     ListInit.Instance,
                     Loop.Instance,
                     MemberAccess.Instance,
+                    MemberBinding.Instance,
+                    MemberInit.Instance,
                     MethodCall.Instance,
                     New.Instance,
                     NewArray.Instance,
                     Parameter.Instance,
                     Switch.Instance,
+                    SwitchCase.Instance,
                     Try.Instance,
                     TypeBinary.Instance,
                     Unary.Instance,
-                    SwitchCase.Instance,
-                    CatchBlock.Instance,
-                    ElementInit.Instance,
-                    MemberBinding.Instance,
-                    MemberInit.Instance,
+
                     Type.Instance,
                     Member.Instance,
                     Constructor.Instance,
@@ -67,6 +55,7 @@ public partial class Serializer:Serializers.Serializer{
                     Property.Instance,
                     Event.Instance,
                     Field.Instance,
+                    Delegate.Instance,
                 },
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
@@ -155,5 +144,11 @@ public partial class Serializer:Serializers.Serializer{
         var Del=(DeserializeDelegate)D.CreateDelegate(typeof(DeserializeDelegate));
         var Result=Del(Formatter,ref reader,options);
         return Result;
+    }
+    public void Serialize(ref MessagePackWriter writer,Serializer value,MessagePackSerializerOptions options){
+        throw new System.NotImplementedException();
+    }
+    public Serializer Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+        throw new System.NotImplementedException();
     }
 }

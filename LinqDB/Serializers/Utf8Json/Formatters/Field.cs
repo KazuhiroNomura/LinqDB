@@ -19,7 +19,7 @@ public class Field:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        var index=Array.IndexOf(C.Instance.TypeFields.Get(type),value);
+        var index=Array.IndexOf(Resolver.Serializer().TypeFields.Get(type),value);
         writer.WriteInt32(index);
         writer.WriteEndArray();
     }
@@ -33,6 +33,6 @@ public class Field:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return C.Instance.TypeFields.Get(type)[index];
+        return Resolver.Serializer().TypeFields.Get(type)[index];
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.DefaultExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.DefaultExpression;
 public class Default:IMessagePackFormatter<T> {
     public static readonly Default Instance=new();
     private const int ArrayHeader=1;

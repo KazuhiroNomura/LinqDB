@@ -1,13 +1,12 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using Expressions = System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.TryExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.TryExpression;
 
 using static Extension;
 public class Try:IMessagePackFormatter<T>{
@@ -25,11 +24,11 @@ public class Try:IMessagePackFormatter<T>{
     }
     private static void PrivateSerialize1(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Instance.Serialize(ref writer,value!.Body,Resolver);
-        Expression.SerializeNullable(ref writer,value.Finally,Resolver);
+        Expression.InternalSerializeNullable(ref writer,value.Finally,Resolver);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
         } else{
-            Expression.SerializeNullable(ref writer,value.Fault,Resolver);
+            Expression.InternalSerializeNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
                 writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
             }
@@ -48,7 +47,7 @@ public class Try:IMessagePackFormatter<T>{
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
-        var @finally=Expression.DeserializeNullable(ref reader,Resolver);
+        var @finally=Expression.InternalDeserializeNullable(ref reader,Resolver);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
             if(handlers.Length>0) {
@@ -57,7 +56,7 @@ public class Try:IMessagePackFormatter<T>{
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
-            var fault= Expression.DeserializeNullable(ref reader,Resolver);
+            var fault= Expression.InternalDeserializeNullable(ref reader,Resolver);
             if(fault is not null){
                 value=Expressions.Expression.TryFault(body,fault);
             } else{

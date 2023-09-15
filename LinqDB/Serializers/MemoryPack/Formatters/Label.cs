@@ -1,10 +1,9 @@
 ﻿using MemoryPack;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.LabelExpression;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = Expressions.LabelExpression;
 
 
 public class Label:MemoryPackFormatter<T> {

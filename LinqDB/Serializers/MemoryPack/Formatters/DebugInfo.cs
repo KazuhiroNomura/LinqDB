@@ -2,12 +2,11 @@
 
 using System.Buffers;
 using System.Diagnostics;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.DebugInfoExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.DebugInfoExpression;
 
 public class DebugInfo:MemoryPackFormatter<T>{
     public static readonly DebugInfo Instance=new();

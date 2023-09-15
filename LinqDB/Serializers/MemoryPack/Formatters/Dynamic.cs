@@ -3,17 +3,15 @@ using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MemoryPack;
 using Microsoft.CSharp.RuntimeBinder;
-using System.Reflection;
-using Binder=Microsoft.CSharp.RuntimeBinder.Binder;
+using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 //using Binder=System.Reflection.Binder;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 
-using T= Expressions.DynamicExpression;
-using C=Serializer;
+using T = Expressions.DynamicExpression;
 using static Extension;
 using static Common;
 public class Dynamic:MemoryPackFormatter<T> {

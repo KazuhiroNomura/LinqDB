@@ -1,12 +1,11 @@
 ﻿using MemoryPack;
 
 using System.Buffers;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.GotoExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.GotoExpression;
 
 public class Goto:MemoryPackFormatter<T>{
     public static readonly Goto Instance=new();

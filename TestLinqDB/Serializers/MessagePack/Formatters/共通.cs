@@ -1,43 +1,30 @@
 ﻿using LinqDB.Optimizers;
-using LinqDB.Remote.Clients;
 using LinqDB.Remote.Servers;
-using LinqDB.Sets;
-using LinqDB;
 using static LinqDB.Helpers.Configulation;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
 using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 using MemoryPack;
 using System.Buffers;
-using System.Collections.ObjectModel;
 using System.Reflection;
 using LinqDB.Helpers;
-using Expressions = System.Linq.Expressions;
-using Newtonsoft.Json.Linq;
+using LinqDB.Serializers;
 using MessagePack;
-using Utf8Json;
+using Serializers.MessagePack.Formatters;
 using static LinqDB.Optimizers.Optimizer;
-using System.Configuration;
-using Utf8Json2=LinqDB.Serializers.Utf8Json;
-using MessagePack2=LinqDB.Serializers.MessagePack;
-using MemoryPack2=LinqDB.Serializers.MemoryPack;
-using System.Reflection.PortableExecutable;
-
+//using Utf8Json2 = LinqDB.Serializers.Utf8Json;
+//using MessagePack2 = LinqDB.Serializers.MessagePack;
+//using MemoryPack2 = LinqDB.Serializers.MemoryPack;
+//using Serializers=LinqDB.Serializers;
+//using 共通=global.Serializers.MessagePack.Formatters.共通;
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
     protected Server<string> Server;
     protected readonly EnumerableSetEqualityComparer Comparer;
     protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
+    private readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
+    private readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
+    private readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected 共通(){
         const int ReceiveTimeout = 1000;
         this.Comparer=new(this.ExpressionEqualityComparer);
@@ -95,18 +82,21 @@ public abstract class 共通{
     }
     protected void シリアライズデシリアライズ3パターン<T>(T input){
         {
-            var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
-            var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
+            var s=this.MemoryPack;
+            var bytes = s.Serialize(input);
+            var output = s.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
-            var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
+            var s=this.MessagePack;
+            var bytes =s.Serialize(input);
+            var output=s.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
         {
-            var bytes = MessagePack2.Serializer.Instance.Serialize(input);
-            var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
+            var s=this.Utf8Json;
+            var bytes =s.Serialize(input);
+            var output=s.Deserialize<T>(bytes);
             Assert.Equal(input,output,this.Comparer);
         }
     }
@@ -126,7 +116,7 @@ public abstract class 共通{
     }
     //シリアライズ。色んな方法でやってデシリアライズ成功するか
     //実行。結果が一致するから
-    protected void シリアライズMemoryMessageJson(Expression input){
+    protected void シリアライズMemoryMessageJson<T>(T input)where T:Expression{
         this.シリアライズMemoryMessageJson(input,output=>{
             Assert.Equal(input,output,this.ExpressionEqualityComparer);
         });
@@ -267,20 +257,24 @@ public abstract class 共通{
     protected void シリアライズMemoryMessageJson<T>(T input,Action<T> AssertAction){
         lock(lockobject) {
             {
-                var bytes = MemoryPack2.Serializer.Instance.Serialize(input);
-                var output = MemoryPack2.Serializer.Instance.Deserialize<T>(bytes);
+                var s=this.MemoryPack;
+                var bytes = this.MemoryPack.Serialize(input);
+                var output = s.Deserialize<T>(bytes);
                 AssertAction(output!);
             }
             {
-                var bytes = MessagePack2.Serializer.Instance.Serialize(input);
-                var s = MessagePackSerializer.ConvertToJson(bytes,MessagePack2.Serializer.Instance.Options);
-                var output = MessagePack2.Serializer.Instance.Deserialize<T>(bytes);
+                var s=this.MessagePack;
+                var bytes = s.Serialize(input);
+                dynamic a=new NonPublicAccessor(s);
+                var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
+                var output = s.Deserialize<T>(bytes);
                 AssertAction(output);
             }
             {
-                var bytes = Utf8Json2.Serializer.Instance.Serialize(input);
-                var s = Encoding.UTF8.GetString(bytes);
-                var output = Utf8Json2.Serializer.Instance.Deserialize<T>(bytes);
+                var s=this.Utf8Json;
+                var bytes = s.Serialize(input);
+                var json = Encoding.UTF8.GetString(bytes);
+                var output = s.Deserialize<T>(bytes);
                 AssertAction(output);
             }
         }

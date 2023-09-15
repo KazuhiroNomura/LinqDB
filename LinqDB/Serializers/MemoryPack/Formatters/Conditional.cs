@@ -2,11 +2,10 @@
 
 using System.Buffers;
 using System.Linq.Expressions;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T= ConditionalExpression;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = ConditionalExpression;
 
 public class Conditional:MemoryPackFormatter<T> {
     public static readonly Conditional Instance=new();

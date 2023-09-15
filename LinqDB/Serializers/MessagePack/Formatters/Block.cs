@@ -1,19 +1,18 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.BlockExpression;
-using static Extension;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.BlockExpression;
+
 public class Block:IMessagePackFormatter<T> {
     public static readonly Block Instance=new();
     private const int ArrayHeader=3;
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        var ListParameter=Serializer.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
         ListParameter.AddRange(Variables);
@@ -38,7 +37,7 @@ public class Block:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var ListParameter=Serializer.Instance.ListParameter;
+        var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         var variables= reader.Deserialize宣言Parameters(Resolver);

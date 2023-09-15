@@ -15,14 +15,14 @@ public class Event:IMessagePackFormatter<T>{
         writer.WriteArrayHeader(ArrayHeader);
         var type=value!.ReflectedType!;
         writer.WriteType(type);
-        var array= Serializer.Instance.TypeEvents.Get(type);
+        var array= Resolver.Serializer().TypeEvents.Get(type);
         writer.WriteInt32(Array.IndexOf(array,value));
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
-        var array= Serializer.Instance.TypeEvents.Get(type);
+        var array= Resolver.Serializer().TypeEvents.Get(type);
         var index=reader.ReadInt32();
         return array[index];
     }

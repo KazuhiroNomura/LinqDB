@@ -1,10 +1,9 @@
-﻿using System.Buffers;
-using MemoryPack;
+﻿using MemoryPack;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 using static Extension;
-using T=Expressions.SwitchCase;
+using T = Expressions.SwitchCase;
 
 public class SwitchCase:MemoryPackFormatter<T> {
     public static readonly SwitchCase Instance=new();

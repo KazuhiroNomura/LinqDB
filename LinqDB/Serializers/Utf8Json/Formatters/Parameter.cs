@@ -8,7 +8,7 @@ using C=Serializer;
 public class Parameter:IJsonFormatter<T> {
     public static readonly Parameter Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        writer.WriteInt32(C.Instance.ListParameter.LastIndexOf(value));
+        writer.WriteInt32(Resolver.Serializer().ListParameter.LastIndexOf(value));
     }
 
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
@@ -20,7 +20,7 @@ public class Parameter:IJsonFormatter<T> {
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var index=reader.ReadInt32();
-        var Parameter= C.Instance.ListParameter[index];
+        var Parameter= Resolver.Serializer().ListParameter[index];
         return Parameter;
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {

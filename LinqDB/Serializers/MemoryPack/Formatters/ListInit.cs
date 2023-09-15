@@ -1,11 +1,10 @@
 ﻿using System.Buffers;
 using Expressions = System.Linq.Expressions;
 using MemoryPack;
-using MemoryPack.Formatters;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.ListInitExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.ListInitExpression;
 
 
 
