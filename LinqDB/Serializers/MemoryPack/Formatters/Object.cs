@@ -28,7 +28,7 @@ public class Object:MemoryPackFormatter<object>{
             case uint                   v:writer.WriteVarInt(v);break;
             case ulong                  v:writer.WriteVarInt(v);break;
             case string                 v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate  .Serialize(ref writer,v);break;
+            case System.Delegate        v:Delegate2  .Serialize(ref writer,v);break;
             case Expressions.Expression v:Expression .InternalSerialize(ref writer,v);break;
             case System.Type            v:Type       .Serialize(ref writer,v);break;
             case ConstructorInfo        v:Constructor.Serialize(ref writer,v);break;
@@ -38,7 +38,7 @@ public class Object:MemoryPackFormatter<object>{
             case FieldInfo              v:Field      .Serialize(ref writer,v);break;
             //case MemberInfo             v:Member     .Serialize(ref writer,v);break;
             default:
-                Serializer.RegisterAnonymousDisplay(type);
+                writer.Serializer().RegisterAnonymousDisplay(type);
                 writer.WriteValue(type,value);
                 break;
         }
@@ -64,7 +64,7 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(ushort )==type)value=reader.ReadVarIntUInt16();
         else if(typeof(uint   )==type)value=reader.ReadVarIntUInt32();
         else if(typeof(ulong  )==type)value=reader.ReadVarIntUInt64();
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Deserialize(ref reader);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Deserialize(ref reader);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .InternalDeserialize(ref reader);
         else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Deserialize(ref reader);
         else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Deserialize(ref reader);

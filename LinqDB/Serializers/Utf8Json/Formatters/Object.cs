@@ -1,4 +1,5 @@
-﻿using Utf8Json;
+﻿using System;
+using Utf8Json;
 
 using System.Diagnostics;
 using System.Reflection;
@@ -10,7 +11,6 @@ using Reader = JsonReader;
 using T = System.Object;
 public class Object:IJsonFormatter<T>{
     public static readonly Object Instance=new();
-    private readonly object[] Objects3=new object[3];
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
@@ -29,7 +29,7 @@ public class Object:IJsonFormatter<T>{
             case uint    v:writer.WriteUInt32(v);break;
             case ulong   v:writer.WriteUInt64(v);break;
             case string  v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate  .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
             case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
             case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
             case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
@@ -43,18 +43,21 @@ public class Object:IJsonFormatter<T>{
                 //var Formatter=Resolver.GetFormatterDynamic(type);
                 var Serialize=Formatter.GetType().GetMethod("Serialize");
                 Debug.Assert(Serialize is not null);
-                var Objects3=this.Objects3;
+                var Objects3=new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
                 Objects3[0]=writer;
                 Objects3[1]=value;
                 Objects3[2]=Resolver;
-                Serialize.Invoke(Formatter,Objects3);
+                try{
+                    Serialize.Invoke(Formatter,Objects3);
+                } catch(ArgumentException ){
+
+                }
                 writer=(Writer)Objects3[0];
                 break;
             }
         }
         writer.WriteEndArray();
     }
-    private readonly object[] Objects2=new object[2];
     public object Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         object value;
         if(reader.ReadIsNull()) return null!;
@@ -74,7 +77,7 @@ public class Object:IJsonFormatter<T>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString();
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
         //else if(typeof(decimal)==type)result=global::Utf8Json.Formatters.DecimalFormatter.Default.Deserialize(ref reader,Resolver);
         //else if(typeof(Guid   )==type)result=global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
@@ -94,7 +97,7 @@ public class Object:IJsonFormatter<T>{
             //Objects2[1]=Resolver;
             //value=Deserialize.Invoke(Formatter,Objects2)!;
             //reader=(Reader)Objects2[0];
-            value=reader.ReadValue(type,this.Objects2,Resolver);
+            value=reader.ReadValue(type,Resolver);
         }
             //global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);}
             //var Formatter=reader.GetFormatter(type);

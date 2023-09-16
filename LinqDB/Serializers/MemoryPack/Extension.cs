@@ -74,12 +74,6 @@ public static class Extension{
         reader.ReadValue(ref value);
     }
     public static readonly MethodInfo MethodDeserialize = typeof(Extension).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    public static object ReadValue(this ref Reader reader,System.Type type){
-        object? value=default;
-        MemoryPack.Serializer.RegisterAnonymousDisplay(type);
-        reader.ReadValue(type,ref value);
-        return value!;
-    }
     public static Serializer Serializer<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter:IBufferWriter<byte> =>
         (Serializer)writer.Options.ServiceProvider!;
     public static Serializer Serializer(this ref Reader reader)=>

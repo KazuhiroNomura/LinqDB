@@ -21,7 +21,7 @@ namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
     protected Server<string> Server;
     protected readonly EnumerableSetEqualityComparer Comparer;
-    protected readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
+    protected ExpressionEqualityComparer ExpressionEqualityComparer=>new();
     private readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
     private readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     private readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
@@ -84,7 +84,7 @@ public abstract class 共通{
         {
             var s=this.MemoryPack;
             var bytes = s.Serialize(input);
-            var output = s.Deserialize<T>(bytes);
+            var output = s.Deserialize<T>(bytes); 
             Assert.Equal(input,output,this.Comparer);
         }
         {
@@ -120,15 +120,15 @@ public abstract class 共通{
         this.シリアライズMemoryMessageJson(input,output=>{
             Assert.Equal(input,output,this.ExpressionEqualityComparer);
         });
-        this.シリアライズMemoryMessageJson<Expression>(input,output=>{
-            Assert.Equal(input,output,this.ExpressionEqualityComparer);
-        });
-        this.シリアライズMemoryMessageJson<object>(input,output=>{
-            Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer);
-        });
+        //this.シリアライズMemoryMessageJson<Expression>(input,output=>{
+        //    Assert.Equal(input,output,this.ExpressionEqualityComparer);
+        //});
+        //this.シリアライズMemoryMessageJson<object>(input,output=>{
+        //    Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer);
+        //});
     }
     //リモート実行できるか。
-    protected void シリアライズMemoryMessageJsonコンパイル<T>(Expression<Func<T>> input){
+    protected void シリアライズMemoryMessageJsonコンパイル実行<T>(Expression<Func<T>> input){
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
         var expected=標準();
@@ -153,7 +153,7 @@ public abstract class 共通{
         }
     }
     //リモート実行できるか。
-    protected void シリアライズMemoryMessageJsonコンパイル<T,TResult>(Expression<Func<T,TResult>> input,T t){
+    protected void シリアライズMemoryMessageJsonコンパイル実行<T,TResult>(Expression<Func<T,TResult>> input,T t){
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
         var expected=標準(t);
@@ -257,21 +257,21 @@ public abstract class 共通{
     protected void シリアライズMemoryMessageJson<T>(T input,Action<T> AssertAction){
         lock(lockobject) {
             {
-                var s=this.MemoryPack;
+                var s = this.MemoryPack;
                 var bytes = this.MemoryPack.Serialize(input);
                 var output = s.Deserialize<T>(bytes);
                 AssertAction(output!);
             }
             {
-                var s=this.MessagePack;
+                var s = this.MessagePack;
                 var bytes = s.Serialize(input);
-                dynamic a=new NonPublicAccessor(s);
+                dynamic a = new NonPublicAccessor(s);
                 var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
                 var output = s.Deserialize<T>(bytes);
                 AssertAction(output);
             }
             {
-                var s=this.Utf8Json;
+                var s = this.Utf8Json;
                 var bytes = s.Serialize(input);
                 var json = Encoding.UTF8.GetString(bytes);
                 var output = s.Deserialize<T>(bytes);

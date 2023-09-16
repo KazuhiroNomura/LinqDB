@@ -24,16 +24,48 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
     public EnumerableSetEqualityComparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
         this.ExpressionEqualityComparer=ExpressionEqualityComparer;
     }
-    private static readonly Type[] Types1 = new Type[1];
-    private static readonly Type[] Types2 = new Type[2];
-    private static readonly Type[] Types3 = new Type[3];
-    private static readonly Type[] Types4 = new Type[4];
-    private static readonly Type[] Types5 = new Type[5];
-    private static readonly Type[] Types6 = new Type[6];
-    private static readonly Type[] Types7 = new Type[7];
-    private static readonly Type[] Types8 = new Type[8];
-    private static readonly Dictionary<Type,Func<object,object>> Dictionary_Anonymous_ValueTuple = new();
-    private static Type Get_ValueTuple(ILGenerator I,PropertyInfo[]Properties,int Index) {
+    private readonly Type[] Types1 = new Type[1];
+    private readonly Type[] Types2 = new Type[2];
+    private readonly Type[] Types3 = new Type[3];
+    private readonly Type[] Types4 = new Type[4];
+    private readonly Type[] Types5 = new Type[5];
+    private readonly Type[] Types6 = new Type[6];
+    private readonly Type[] Types7 = new Type[7];
+    private readonly Type[] Types8 = new Type[8];
+    private readonly Dictionary<Type,Func<object,object>> Dictionary_Anonymous_ValueTuple = new();
+    private Type Get_ValueTuple(ILGenerator I,PropertyInfo[]Properties,int Index) {
+        var Case = Properties.Length-Index;
+        switch(Case) {
+            case 1:
+                共通1(this.Types1);
+                return 共通2(typeof(ValueTuple<>),this.Types1);
+            case 2:
+                共通1(this.Types2);
+                //Types2[0]=Properties[Index+0].PropertyType;
+                //Types2[1]=Properties[Index+1].PropertyType;
+                return 共通2(typeof(ValueTuple<,>),this.Types2);
+            case 3:
+                共通1(this.Types3);
+                return 共通2(typeof(ValueTuple<,,>),this.Types3);
+            case 4:
+                共通1(this.Types4);
+                return 共通2(typeof(ValueTuple<,,,>),this.Types4);
+            case 5:
+                共通1(this.Types5);
+                return 共通2(typeof(ValueTuple<,,,,>),this.Types5);
+            case 6:
+                共通1(this.Types6);
+                return 共通2(typeof(ValueTuple<,,,,,>),this.Types6);
+            case 7:
+                共通1(this.Types7);
+                return 共通2(typeof(ValueTuple<,,,,,,>),this.Types7);
+            default:
+                for(var Offset = 0;Offset<7;Offset++) {
+                    this.Types8[Offset]=Properties[Index+Offset].PropertyType;
+                }
+                this.Types8[7]=this.Get_ValueTuple(I,Properties,Index+7);
+                return 共通2(typeof(ValueTuple<,,,,,,,>),this.Types8);
+        }
         Type 共通2(Type GenericTypeDifinition,Type[] GenericArguments) {
             var Result= GenericTypeDifinition.MakeGenericType(GenericArguments);
             I.Newobj(Result.GetConstructor(GenericArguments));
@@ -44,48 +76,16 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 Types[Offset]=Properties[Index+Offset].PropertyType;
             }
         }
-        var Case = Properties.Length-Index;
-        switch(Case) {
-            case 1:
-                共通1(Types1);
-                return 共通2(typeof(ValueTuple<>),Types1);
-            case 2:
-                共通1(Types2);
-                //Types2[0]=Properties[Index+0].PropertyType;
-                //Types2[1]=Properties[Index+1].PropertyType;
-                return 共通2(typeof(ValueTuple<,>),Types2);
-            case 3:
-                共通1(Types3);
-                return 共通2(typeof(ValueTuple<,,>),Types3);
-            case 4:
-                共通1(Types4);
-                return 共通2(typeof(ValueTuple<,,,>),Types4);
-            case 5:
-                共通1(Types5);
-                return 共通2(typeof(ValueTuple<,,,,>),Types5);
-            case 6:
-                共通1(Types6);
-                return 共通2(typeof(ValueTuple<,,,,,>),Types6);
-            case 7:
-                共通1(Types7);
-                return 共通2(typeof(ValueTuple<,,,,,,>),Types7);
-            default:
-                for(var Offset = 0;Offset<7;Offset++) {
-                    Types8[Offset]=Properties[Index+Offset].PropertyType;
-                }
-                Types8[7]=Get_ValueTuple(I,Properties,Index+7);
-                return 共通2(typeof(ValueTuple<,,,,,,,>),Types8);
-        }
     }
-    private static List<object> ToList(IEnumerable x) {
+    private List<object> ToList(IEnumerable x) {
         var List = new List<object>();
         var x_Enumerator = x.GetEnumerator();
         if(x_Enumerator.MoveNext()) {
             var x_Type = x_Enumerator.Current!.GetType();
             if(x_Type.IsAnonymous()) {
-                if(!Dictionary_Anonymous_ValueTuple.TryGetValue(x_Type,out var M)) {
-                    Types1[0]=typeof(object);
-                    var D = new DynamicMethod("",typeof(object),Types1,typeof(EnumerableSetEqualityComparer),true) {
+                if(!this.Dictionary_Anonymous_ValueTuple.TryGetValue(x_Type,out var M)) {
+                    this.Types1[0]=typeof(object);
+                    var D = new DynamicMethod("",typeof(object),this.Types1,typeof(EnumerableSetEqualityComparer),true) {
                         InitLocals=false
                     };
                     var I = D.GetILGenerator();
@@ -94,11 +94,11 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                         I.Ldarg_0();
                         I.Call(Property.GetMethod);
                     }
-                    var ValueTuple=Get_ValueTuple(I,Properties,0);
+                    var ValueTuple= this.Get_ValueTuple(I,Properties,0);
                     I.Box(ValueTuple);
                     I.Ret();
                     M=(Func<object,object>)D.CreateDelegate(typeof(Func<object,object>));
-                    Dictionary_Anonymous_ValueTuple.Add(x_Type,M);
+                    this.Dictionary_Anonymous_ValueTuple.Add(x_Type,M);
                 }
                 do {
                     List.Add(M(x_Enumerator.Current));
@@ -183,15 +183,15 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         if(x is null||y is null) return false;
         {
             if(x is ImmutableSet x0&&y is ImmutableSet y0) {
-                var xl = ToList(x0);
-                var yl = ToList(y0);
+                var xl = this.ToList(x0);
+                var yl = this.ToList(y0);
                 return this.比較(xl,yl);
             }
         }
         {
             if(x is IEnumerable x0&&y is IEnumerable y0) {
-                var xl = ToList(x0);
-                var yl = ToList(y0);
+                var xl = this.ToList(x0);
+                var yl = this.ToList(y0);
                 return this.比較(xl,yl);
             }
         }

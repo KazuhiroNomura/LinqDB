@@ -96,48 +96,6 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions options){
         if(writer.TryWriteNil(value)) return;
         this.DelegateSerialize(ref writer, value,options);
-//        var Parameters = typeof(T).GetConstructors()[0].GetParameters();
-//        var Parameters_Length = Parameters.Length;
-//#if 匿名型にキーを入れる
-//        writer.WriteMapHeader(Parameters_Length);
-//        for(var a = 0;a<Parameters_Length;a++) {
-//            var Parameter = Parameters[a];
-//            var Key = Parameter.Name;
-//            writer.Write(Key);
-//            SerializerConfiguration.DynamicSerialize(options.Resolver.GetFormatterDynamic(Parameter.ParameterType),ref writer,typeof(T).GetProperty(Key)!.GetMethod.Invoke(value,Array.Empty<object>()),options);
-//        }
-//#else
-//        writer.WriteArrayHeader(Parameters_Length);
-//        for(var a = 0;a<Parameters_Length;a++) {
-//            var Parameter = Parameters[a];
-//            var Key = Parameter.Name;
-//            SerializerConfiguration.DynamicSerialize(options.Resolver.GetFormatterDynamic(Parameter.ParameterType),ref writer,typeof(T).GetProperty(Key)!.GetMethod.Invoke(value,Array.Empty<object>()),options);
-//        }
-//#endif
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options){
-        if(reader.TryReadNil()) return default!;
-        return this.DelegateDeserialize(ref reader,options);
-//        var ctor = typeof(T).GetConstructors()[0];
-//        var Parameters = ctor.GetParameters();
-//#if 匿名型にキーを入れる
-//        var Length=reader.ReadMapHeader();
-//        var args=new object[Length];
-//        for(var a = 0;a<Length;a++) {
-//            var Key = reader.ReadString();
-//            Debug.Assert(Parameters[a].Name==Key);
-//            args[a]=SerializerConfiguration.DynamicDeserialize(options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType),ref reader,options);
-//        }
-//#else
-//        var Length=reader.ReadArrayHeader();
-//        var args=new object[Length];
-//        for(var a = 0;a<Length;a++) {
-//            //var Key = reader.ReadString();
-//            //Debug.Assert(Parameters[a].Name==Key);
-//            args[a]=SerializerConfiguration.DynamicDeserialize(options.Resolver.GetFormatterDynamic(Parameters[a].ParameterType),ref reader,options);
-//        }
-//#endif
-//        Debug.Assert(Length==Parameters.Length);
-//        return (T)ctor.Invoke(args);
-    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options)=>reader.TryReadNil()?default!:this.DelegateDeserialize(ref reader,options);
 }

@@ -371,7 +371,7 @@ public class TestExpression:共通 {
         共通0(Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
         共通0(Expression.NotEqual             (Constant1,Constant1,false,Method_int));
         void 共通0(BinaryExpression Binary){
-            this.シリアライズMemoryMessageJsonコンパイル(
+            this.シリアライズMemoryMessageJsonコンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{ParameterInt32},
@@ -388,7 +388,7 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(BinaryExpression Binary){
-            this.シリアライズMemoryMessageJsonコンパイル(
+            this.シリアライズMemoryMessageJsonコンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         Expression.Assign(MemberInt32,Constant0),
@@ -431,6 +431,7 @@ public class TestExpression:共通 {
         this.シリアライズMemoryMessageJson(
             Expression.Block(
                 new[] { ParameterDecimal },
+                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                 Expression.TryCatchFinally(
                     Expression.Increment(ParameterDecimal),
                     ParameterDecimal
@@ -440,6 +441,7 @@ public class TestExpression:共通 {
         this.シリアライズMemoryMessageJson(
             Expression.Block(
                 new[] { ParameterDecimal },
+                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                 Expression.TryCatchFinally(
                     Expression.Increment(ParameterDecimal),
                     Expression.Constant(2)
@@ -449,6 +451,7 @@ public class TestExpression:共通 {
         this.シリアライズMemoryMessageJson(
             Expression.Block(
                 new[] { ParameterDecimal },
+                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                 Expression.TryCatchFinally(
                     Expression.PostIncrementAssign(ParameterDecimal),
                     Expression.Constant(2)
@@ -958,10 +961,11 @@ public class TestExpression:共通 {
         //        Expressions.Expression.Constant(Catch値)
         //    )
         //);
-        this.シリアライズMemoryMessageJsonコンパイル(
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                     Expression.TryCatchFinally(
                         Expression.PostIncrementAssign(ParameterDecimal),
                         ParameterDecimal,
@@ -973,7 +977,9 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.シリアライズMemoryMessageJsonコンパイル(
+    }
+    [Fact]public void Lambda31(){
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     ParameterDecimal,
@@ -982,7 +988,9 @@ public class TestExpression:共通 {
                 ParameterDecimal
             ),1
         );
-        this.シリアライズMemoryMessageJsonコンパイル(
+    }
+    [Fact]public void Lambda32(){
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -994,10 +1002,13 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.シリアライズMemoryMessageJsonコンパイル(
+    }
+    [Fact]public void Lambda33(){
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
-                    new[] { ParameterDecimal },
+                    new[]{ParameterDecimal},
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                     Expression.TryCatchFinally(
                         Expression.PostIncrementAssign(ParameterDecimal),
                         Expression.Assign(
@@ -1009,14 +1020,13 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.シリアライズMemoryMessageJsonコンパイル(
+    }
+    [Fact]public void Lambda34(){
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(
-                        ParameterDecimal,
-                        Expression.Constant(1m)
-                    ),
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                     Expression.TryCatchFinally(
                         Expression.PostIncrementAssign(ParameterDecimal),
                         Expression.Assign(
@@ -1028,14 +1038,13 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.シリアライズMemoryMessageJsonコンパイル(
+    }
+    [Fact]public void Lambda35(){
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(
-                        ParameterDecimal,
-                        Expression.Constant(1m)
-                    ),
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                     Expression.TryCatchFinally(
                         Expression.PostIncrementAssign(ParameterDecimal),
                         Expression.Assign(
@@ -1050,7 +1059,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Lambda4(){
         var Exception=Expression.Parameter(typeof(Exception));
-        this.シリアライズMemoryMessageJsonコンパイル(
+        this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     ParameterDecimal,
@@ -1535,7 +1544,7 @@ public class TestExpression:共通 {
         共通1(Expression.Increment(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.UnaryPlus(Constant演算子,Method(nameof(Unary演算子))));
         void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
-            this.シリアライズMemoryMessageJsonコンパイル(
+            this.シリアライズMemoryMessageJsonコンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{代入先},
@@ -1552,7 +1561,7 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(UnaryExpression Unary){
-            this.シリアライズMemoryMessageJsonコンパイル(
+            this.シリアライズMemoryMessageJsonコンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Convert(
                         Unary,

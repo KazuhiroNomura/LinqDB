@@ -55,7 +55,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
                     Property.Instance,
                     Event.Instance,
                     Field.Instance,
-                    Delegate.Instance,
+                    Delegate2.Instance,
                 },
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう

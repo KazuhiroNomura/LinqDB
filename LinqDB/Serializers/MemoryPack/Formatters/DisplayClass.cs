@@ -9,13 +9,11 @@ using LinqDB.Helpers;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
-internal static class DisplayClass {
-    public static readonly Dictionary<System.Type,System.Delegate> DictionarySerialize = new();
-}
 public class DisplayClass<T>:MemoryPackFormatter<T>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     public static readonly DisplayClass<T> Instance=new();//リフレクションで使われる
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
+    private readonly Dictionary<System.Type,System.Delegate> DictionarySerialize = new();
     private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,ref T value)where TBufferWriter:IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
@@ -61,7 +59,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
     private readonly System.Type[] FieldTypes = new System.Type[1];
     private readonly object[] objects1=new object[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(!DisplayClass.DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
+        if(!this.DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
             var MethodTypes =this.MethodTypes;
             var SerializeTypes =this.SerializeTypes;
             var FieldTypes=this.FieldTypes;
@@ -69,7 +67,6 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
             SerializeTypes[1]=typeof(T).MakeByRefType();
             //var ctor=typeof(T).GetConstructors()[0];
             var Fields = typeof(T).GetFields(BindingFlags.Public|BindingFlags.Instance);
-            var Fields_Length = Fields.Length;
             Array.Sort(Fields,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
             {
                 var objects1=this.objects1;
@@ -97,7 +94,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
                 Debug.Assert(SerializeTypes[0]==typeof(delegate_Serialize<TBufferWriter>).GetMethod("Invoke")!.GetParameters()[0].ParameterType);
                 Debug.Assert(SerializeTypes[1]==typeof(delegate_Serialize<TBufferWriter>).GetMethod("Invoke")!.GetParameters()[1].ParameterType);
                 Delegate=Serialize.CreateDelegate(typeof(delegate_Serialize<TBufferWriter>));
-                DisplayClass.DictionarySerialize.Add(typeof(TBufferWriter),Delegate);
+                this.DictionarySerialize.Add(typeof(TBufferWriter),Delegate);
             }
         }
         ((delegate_Serialize<TBufferWriter>)Delegate)(ref writer,ref value!);

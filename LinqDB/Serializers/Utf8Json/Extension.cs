@@ -117,10 +117,11 @@ internal static class Extension{
         reader.ReadIsEndArrayWithVerify();
         return List;
     }
-    public static object ReadValue(this ref Reader reader,System.Type type,object[] Objects2,IJsonFormatterResolver Resolver){
+    public static object ReadValue(this ref Reader reader,System.Type type,IJsonFormatterResolver Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
+        var Objects2=new object[2];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
         Objects2[0]=reader;
         Objects2[1]=Resolver;
         var value=Deserialize.Invoke(Formatter,Objects2)!;
