@@ -28,12 +28,12 @@ public class Delegate:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteType(value!.GetType());
         Method.Serialize(ref writer,value.Method);
-        Object.Serialize(ref writer,value.Target);
+        Object.InternalSerialize(ref writer,value.Target);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var delegateType=reader.ReadType();
         var method=Method.Deserialize(ref reader);
-        var target=Object.Deserialize(ref reader);
+        var target=Object.InternalDeserialize(ref reader);
         value=method.CreateDelegate(delegateType,target);
     }
 }

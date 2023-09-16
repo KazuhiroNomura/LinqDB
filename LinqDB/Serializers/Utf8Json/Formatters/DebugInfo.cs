@@ -6,7 +6,7 @@ using Reader = JsonReader;
 using T = Expressions.DebugInfoExpression;
 public class DebugInfo:IJsonFormatter<T> {
     public static readonly DebugInfo Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         SymbolDocumentInfo.InternalSerialize(ref writer,value.Document,Resolver);
         writer.WriteValueSeparator();
         writer.WriteInt32(value.StartColumn);
@@ -17,9 +17,14 @@ public class DebugInfo:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteInt32(value.EndColumn);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

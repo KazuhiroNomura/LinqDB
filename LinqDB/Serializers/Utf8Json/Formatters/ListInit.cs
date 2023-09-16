@@ -7,14 +7,19 @@ using static Extension;
 using T=Expressions.ListInitExpression;
 public class ListInit:IJsonFormatter<T> {
     public static readonly ListInit Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         New.Instance.Serialize(ref writer,value.NewExpression,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Initializers,Resolver);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

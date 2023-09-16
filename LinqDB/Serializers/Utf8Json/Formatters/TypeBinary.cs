@@ -9,18 +9,23 @@ using Reader=JsonReader;
 using static Extension;
 public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
-    internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.TypeOperand);
+    }
+    internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,IJsonFormatterResolver Resolver){
         //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        writer.WriteString(value.NodeType.ToString());
+        writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

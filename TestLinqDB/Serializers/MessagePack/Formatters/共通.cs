@@ -117,8 +117,8 @@ public abstract class 共通{
     }
     //シリアライズ。色んな方法でやってデシリアライズ成功するか
     //実行。結果が一致するから
-    protected void MemoryMessageJsonExpression<T>(T input)where T:Expression{
-        this.MemoryMessageJson(input,output=>{
+    protected void MemoryMessageJsonExpression<T>(T input) where T : Expression {
+        this.MemoryMessageJson(input,output => {
             Assert.Equal(input,output,this.ExpressionEqualityComparer);
         });
         this.MemoryMessageJson<Expression>(input,output => {

@@ -6,14 +6,19 @@ using Reader=JsonReader;
 using T=Expressions.MemberExpression;
 public class MemberAccess:IJsonFormatter<T> {
     public static readonly MemberAccess Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
         Expression.SerializeNullable(ref writer,value.Expression,Resolver);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

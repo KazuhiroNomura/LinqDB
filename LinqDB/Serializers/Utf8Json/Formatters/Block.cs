@@ -24,13 +24,15 @@ public class Block:IJsonFormatter<T> {
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     public static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
 
 
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

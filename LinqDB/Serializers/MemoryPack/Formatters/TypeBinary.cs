@@ -9,15 +9,12 @@ using T=Expressions.TypeBinaryExpression;
 public class TypeBinary:MemoryPackFormatter<T> {
     public static readonly TypeBinary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(value);
         Expression.InternalSerialize(ref writer,value.Expression);
         writer.WriteType(value.TypeOperand);
     }
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        writer.WriteVarInt((byte)value!.NodeType);
-        Expression.InternalSerialize(ref writer,value.Expression);
-        writer.WriteType(value.TypeOperand);
+        InternalSerialize(ref writer,value);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
         var expression=Expression.InternalDeserialize(ref reader);

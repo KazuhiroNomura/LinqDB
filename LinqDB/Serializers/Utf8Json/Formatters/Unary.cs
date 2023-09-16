@@ -10,19 +10,27 @@ using Reader=JsonReader;
 public class Unary:IJsonFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
     }
     internal static void InternalSerializeType(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
     internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.SerializeNullable(ref writer,value.Method,Resolver);
     }
     internal static void InternalSerializeTypeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
@@ -33,8 +41,6 @@ public class Unary:IJsonFormatter<T> {
         //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        writer.WriteString(value.NodeType.ToString());
-        writer.WriteValueSeparator();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayLength        : 
             case Expressions.ExpressionType.Quote              : InternalSerialize(ref writer,value,Resolver);break;

@@ -9,14 +9,19 @@ using T=Expressions.DefaultExpression;
 using static Extension;
 public class Default:IJsonFormatter<T> {
     public static readonly Default Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
+    }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader){

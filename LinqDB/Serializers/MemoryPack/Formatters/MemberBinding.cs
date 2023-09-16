@@ -10,15 +10,6 @@ using static Extension;
 
 public class MemberBinding:MemoryPackFormatter<T> {
     public static readonly MemberBinding Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static T DeserializeMemberBinding(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    //private static readonly ReadOnlyCollectionFormatter<Expressions.MemberBinding>SerializeBindings=new();
-    //private static readonly ReadOnlyCollectionFormatter<Expressions.ElementInit>SerializeElementInits=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteVarInt((byte)value!.BindingType);
         Member.Serialize(ref writer,value.Member);

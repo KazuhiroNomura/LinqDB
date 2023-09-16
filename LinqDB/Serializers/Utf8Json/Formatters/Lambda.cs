@@ -13,7 +13,7 @@ public class Lambda:IJsonFormatter<T> {
         if(writer.WriteIsNull(value)) return;
         Instance.Serialize(ref writer,value,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value.Parameters;
@@ -27,9 +27,14 @@ public class Lambda:IJsonFormatter<T> {
         writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T? InternalDeserializeConversion(ref Reader reader,IJsonFormatterResolver Resolver){

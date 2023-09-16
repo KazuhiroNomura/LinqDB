@@ -16,26 +16,7 @@ using static Extension;
 using static Common;
 public class Dynamic:MemoryPackFormatter<T> {
     public static readonly Dynamic Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static void InternalSerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
-        if(value is null)writer.WriteNullObjectHeader();
-        else Instance.Serialize(ref writer,ref value);
-    }
-    private static void WriteBinderType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BinderType value) where TBufferWriter:IBufferWriter<byte>{
-        writer.WriteVarInt((byte)value);
-    }
-    //private static void WriteBindingFlags<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BindingFlags value)where TBufferWriter:IBufferWriter<byte>{
-    //    writer.WriteVarInt((sbyte)value);
-    //}
-    //private static CSharpBinderFlags ReadBindingFlags(ref Reader reader){
-    //    var v=reader.ReadVarIntByte();
-    //    return (CSharpBinderFlags)v;
-    //}
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        //Microsoft.CSharp.RuntimeBinder.CSharpInvokeConstructorBinder
-
+    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         switch(value.Binder){
             case DynamicMetaObjectBinder v0:{
                 switch(v0){
@@ -136,6 +117,29 @@ public class Dynamic:MemoryPackFormatter<T> {
             writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames);
             writer0.SerializeReadOnlyCollection(Arguments);
         }
+    }
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(Expressions.ExpressionType.Dynamic);
+        PrivateSerialize(ref writer,value);
+    }
+    internal static void InternalSerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
+        if(value is null)writer.WriteNullObjectHeader();
+        else Instance.Serialize(ref writer,ref value);
+    }
+    private static void WriteBinderType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BinderType value) where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteVarInt((byte)value);
+    }
+    //private static void WriteBindingFlags<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BindingFlags value)where TBufferWriter:IBufferWriter<byte>{
+    //    writer.WriteVarInt((sbyte)value);
+    //}
+    //private static CSharpBinderFlags ReadBindingFlags(ref Reader reader){
+    //    var v=reader.ReadVarIntByte();
+    //    return (CSharpBinderFlags)v;
+    //}
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        //Microsoft.CSharp.RuntimeBinder.CSharpInvokeConstructorBinder
+        PrivateSerialize(ref writer,value);
     }
     private static BinderType ReadBinderType(ref Reader reader){
         return (BinderType)reader.ReadVarIntByte();

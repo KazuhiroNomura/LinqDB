@@ -10,19 +10,7 @@ using T=Expressions.Expression;
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
     public static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        Instance.Serialize(ref writer,ref value);
-    }
-    public static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        if(value is null){
-            writer.WriteBoolean(false);
-            return;
-        }
-        writer.WriteBoolean(true);
-        Instance.Serialize(ref writer,ref value);
-    }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        writer.WriteNodeType(value!.NodeType);
-        switch(value.NodeType){
+        switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Coalesce             :Binary.InternalSerializeLambda(ref writer,(Expressions.BinaryExpression)value); break;
@@ -111,16 +99,19 @@ public class Expression:MemoryPackFormatter<T> {
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
+    public static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        if(value is null){
+            writer.WriteBoolean(false);
+            return;
+        }
+        writer.WriteBoolean(true);
+        InternalSerialize(ref writer,value);
+    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        InternalSerialize(ref writer,value);
+    }
     internal static T InternalDeserialize(ref Reader reader) {
         T? value = default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    internal static T? InternalDeserializeNullable(ref Reader reader) {
-        if(!reader.ReadBoolean()) return null;
-        return InternalDeserialize(ref reader);
-    }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
         var NodeType=reader.ReadNodeType();
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
@@ -387,7 +378,14 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.Try                :value=Try.InternalDeserialize(ref reader);break;
             default:throw new NotSupportedException(NodeType.ToString());
         }
-        
+        return value!;
+    }
+    internal static T? InternalDeserializeNullable(ref Reader reader) {
+        if(!reader.ReadBoolean()) return null;
+        return InternalDeserialize(ref reader);
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=InternalDeserialize(ref reader);
         //value=this.Deserialize(ref reader,options);
     }
 }

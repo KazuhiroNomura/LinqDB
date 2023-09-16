@@ -16,8 +16,6 @@ public class Expression:IJsonFormatter<T> {
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        writer.WriteString(value.NodeType.ToString());
-        writer.WriteValueSeparator();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
@@ -116,10 +114,9 @@ public class Expression:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var NodeTypeName=reader.ReadString();
+        var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
         T value;
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=Binary.InternalDeserialize(ref reader,Resolver);
@@ -383,7 +380,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.Loop            :value=Loop        .InternalDeserialize              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Switch          :value=Switch      .InternalDeserialize              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Try             :value=Try         .InternalDeserialize              (ref reader,Resolver);break;
-            default                                         :throw new NotSupportedException(NodeTypeName);
+            default                                         :throw new NotSupportedException(NodeType.ToString());
             //case Expressions.ExpressionType.Extension       :break;
             //case Expressions.ExpressionType.RuntimeVariables:break;
         }

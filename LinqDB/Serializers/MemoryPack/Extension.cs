@@ -20,6 +20,7 @@ public static class Extension{
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.ExpressionType NodeType)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)NodeType);
+    public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression Expression)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)Expression.NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader){
         var value=reader.ReadVarIntByte();
         return (Expressions.ExpressionType)value;

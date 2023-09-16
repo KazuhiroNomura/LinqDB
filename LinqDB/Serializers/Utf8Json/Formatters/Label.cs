@@ -8,15 +8,20 @@ using Reader=JsonReader;
 using T=Expressions.LabelExpression;
 public class Label:IJsonFormatter<T> {
     public static readonly Label Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
         writer.WriteValueSeparator();
         Expression.SerializeNullable(ref writer,value.DefaultValue,Resolver);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

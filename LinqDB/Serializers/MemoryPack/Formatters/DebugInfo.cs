@@ -10,15 +10,20 @@ using T = Expressions.DebugInfoExpression;
 
 public class DebugInfo:MemoryPackFormatter<T>{
     public static readonly DebugInfo Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         SymbolDocumentInfo.InternalSerialize(ref writer,value.Document);
         writer.WriteVarInt(value.StartLine);
         writer.WriteVarInt(value.StartColumn);
         writer.WriteVarInt(value.EndLine);
         writer.WriteVarInt(value.EndColumn);
+    }
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(Expressions.ExpressionType.DebugInfo);
+        PrivateSerialize(ref writer,value);
+    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        PrivateSerialize(ref writer,value);
     }
     internal static T InternalDeserialize(ref Reader reader){
         T? value=default;

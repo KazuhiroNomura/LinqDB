@@ -10,10 +10,15 @@ using T = Expressions.NewArrayExpression;
 using static Extension;
 public class NewArray:IJsonFormatter<T> {
     public static readonly NewArray Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type.GetElementType());
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
+    }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         //if(writer.WriteIsNull(value))return;
@@ -21,7 +26,7 @@ public class NewArray:IJsonFormatter<T> {
         writer.WriteBeginArray();
         writer.WriteString(value.NodeType.ToString());
         writer.WriteValueSeparator();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     private static (System.Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

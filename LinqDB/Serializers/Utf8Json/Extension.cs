@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 
@@ -19,10 +20,11 @@ internal static class Extension{
     }
     
 
-    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteByte((byte)NodeType);
+    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteString(NodeType.ToString());
+    public static void WriteNodeType(this ref Writer writer,Expressions.Expression Expression)=>writer.WriteString(Expression.NodeType.ToString());
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader){
-    	var value=reader.ReadByte();
-        return (Expressions.ExpressionType)value;
+    	var value=reader.ReadString();
+        return Enum.Parse<Expressions.ExpressionType>(value);
     }
     public static bool WriteIsNull(this ref Writer writer,object? value){
         if(value is not null){

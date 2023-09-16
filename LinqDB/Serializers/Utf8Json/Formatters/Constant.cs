@@ -1,20 +1,28 @@
-﻿using Utf8Json;
+﻿
+using Utf8Json;
+
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.ConstantExpression;
-using static Extension;
 public class Constant:IJsonFormatter<T> {
     public static readonly Constant Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Object.Instance.Serialize(ref writer,value.Value,Resolver);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

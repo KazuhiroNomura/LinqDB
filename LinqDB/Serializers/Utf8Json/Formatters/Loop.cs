@@ -6,7 +6,7 @@ using Reader=JsonReader;
 using T=Expressions.LoopExpression;
 public class Loop:IJsonFormatter<T>{
     public static readonly Loop Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value.BreakLabel)){
             writer.WriteValueSeparator();
             Expression.Instance.Serialize(ref writer,value.Body,Resolver);
@@ -23,9 +23,14 @@ public class Loop:IJsonFormatter<T>{
             }
         }
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

@@ -25,7 +25,7 @@ public class Block:MemoryPackFormatter<T> {
     }
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
 
-
+        writer.WriteNodeType(Expressions.ExpressionType.Block);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){

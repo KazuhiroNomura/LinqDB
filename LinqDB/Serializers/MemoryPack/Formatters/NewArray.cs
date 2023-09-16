@@ -9,11 +9,11 @@ using static Extension;
 public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(value!.NodeType);
         writer.WriteType(value!.Type.GetElementType());
         writer.SerializeReadOnlyCollection(value.Expressions);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        writer.WriteNodeType(value!.NodeType);
         InternalSerialize(ref writer,value);
     }
     private static (System.Type type,Expressions.Expression?[]?expressions)PrivateDeserialize(ref Reader reader){

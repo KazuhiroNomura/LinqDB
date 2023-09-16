@@ -8,21 +8,21 @@ using Reader=MessagePackReader;
 using T=Expressions.ConstantExpression;
 public class Constant:IMessagePackFormatter<T> {
     public static readonly Constant Instance=new();
-    private const int ArrayHeader=2;
-    private const int InternalArrayHeader=ArrayHeader+1;
+    //private const int ArrayHeader=2;
+    //private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteType(value!.Type);
         if(value.Value is null)writer.WriteNil();
         else Object.Instance.Serialize(ref writer,value.Value,Resolver);
     }
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteArrayHeader(2);
         writer.WriteNodeType(Expressions.ExpressionType.Constant);
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteArrayHeader(2);
         PrivateSerialize(ref writer,value,Resolver);
     }
     internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -33,7 +33,7 @@ public class Constant:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==2);
         return InternalDeserialize(ref reader,Resolver);
     }
 }

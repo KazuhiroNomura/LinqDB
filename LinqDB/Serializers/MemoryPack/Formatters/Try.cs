@@ -8,9 +8,7 @@ using T = Expressions.TryExpression;
 
 public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Expression.InternalSerialize(ref writer,value!.Body);
         Expression.SerializeNullable(ref writer,value.Finally);
         if(value.Finally is not null){
@@ -22,38 +20,35 @@ public class Try:MemoryPackFormatter<T> {
             }
         }
     }
-    internal static T InternalDeserialize(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(Expressions.ExpressionType.Try);
+        PrivateSerialize(ref writer,value);
     }
-    [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        PrivateSerialize(ref writer,value);
+    }
+    internal static T InternalDeserialize(ref Reader reader){
         var body= Expression.InternalDeserialize(ref reader);
         var @finally= Expression.InternalDeserializeNullable(ref reader);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>()!;
             if(handlers.Length>0) {
-                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
+                return Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
             } else {
-                value=Expressions.Expression.TryFinally(body,@finally);
+                return Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
             var fault= Expression.InternalDeserializeNullable(ref reader);
             if(fault is not null){
-                value=Expressions.Expression.TryFault(body,fault);
+                return Expressions.Expression.TryFault(body,fault);
             } else{
                 var handlers=reader.ReadArray<Expressions.CatchBlock>()!;
-                value=Expressions.Expression.TryCatch(body,handlers!);
+                return Expressions.Expression.TryCatch(body,handlers!);
             }
         }
-        //value=@finally is not null
-        //    ?
-        //    handlers.Length>0
-        //        ?Expressions.Expression.TryCatchFinally(body,@finally,handlers!)
-        //        :Expressions.Expression.TryFinally(body,@finally)
-        //    :fault is not null
-        //        ?Expressions.Expression.TryFault(body,fault)
-        //        :Expressions.Expression.TryCatch(body,handlers!);
+    }
+    [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=InternalDeserialize(ref reader);
     }
 }

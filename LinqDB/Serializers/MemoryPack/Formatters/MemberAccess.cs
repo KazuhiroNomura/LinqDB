@@ -8,20 +8,23 @@ using T=Expressions.MemberExpression;
 
 public class MemberAccess:MemoryPackFormatter<T> {
     public static readonly MemberAccess Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Member.Serialize(ref writer,value!.Member);
         Expression.SerializeNullable(ref writer,value.Expression);
     }
-    internal static T InternalDeserialize(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+        writer.WriteNodeType(Expressions.ExpressionType.MemberAccess);
+        PrivateSerialize(ref writer,value);
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        PrivateSerialize(ref writer,value);
+    }
+    internal static T InternalDeserialize(ref Reader reader){
         var member=Member.Deserialize(ref reader);
         var expression= Expression.InternalDeserializeNullable(ref reader);
-        value=Expressions.Expression.MakeMemberAccess(expression,member);
+        return Expressions.Expression.MakeMemberAccess(expression,member);
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=InternalDeserialize(ref reader);
     }
 }

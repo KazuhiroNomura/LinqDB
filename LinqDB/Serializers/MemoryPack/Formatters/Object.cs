@@ -8,9 +8,7 @@ using Reader = MemoryPackReader;
 using T = System.Object;
 public class Object:MemoryPackFormatter<object>{
     public static readonly Object Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value){
+    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         if(value is null){
             writer.WriteNullObjectHeader();
             return;
@@ -43,17 +41,15 @@ public class Object:MemoryPackFormatter<object>{
                 break;
         }
     }
-    internal static T Deserialize(ref Reader reader) {
-        T? value = default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value){
+        InternalSerialize(ref writer,value);
     }
-    public override void Deserialize(ref Reader reader,scoped ref object? value){
+    internal static T? InternalDeserialize(ref Reader reader) {
         if(reader.PeekIsNull()){
             reader.Advance(1);
-            value=null;
-            return;
+            return null;
         }
+        T? value = default;
         var type=reader.ReadType();
         //object? value=default;
         if     (typeof(sbyte  )==type)value=reader.ReadVarIntSByte();
@@ -73,5 +69,9 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Deserialize(ref reader);
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Deserialize(ref reader);
         else value=reader.ReadValue(type);
+        return value!;
+    }
+    public override void Deserialize(ref Reader reader,scoped ref object? value){
+        value=InternalDeserialize(ref reader);
     }
 }

@@ -13,6 +13,7 @@ public class Binary:MemoryPackFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
+        writer.WriteNodeType(value!.NodeType);
 
         Expression.InternalSerialize(ref writer,value.Left);
 
@@ -20,6 +21,7 @@ public class Binary:MemoryPackFormatter<T> {
     }
     internal static void InternalSerializeLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
+        writer.WriteNodeType(value);
 
         Expression.InternalSerialize(ref writer,value.Left);
 
@@ -29,6 +31,7 @@ public class Binary:MemoryPackFormatter<T> {
     }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
+        writer.WriteNodeType(value);
 
         Expression.InternalSerialize(ref writer,value.Left);
 
@@ -38,6 +41,7 @@ public class Binary:MemoryPackFormatter<T> {
     }
     internal static void InternalSerializeMethodLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
+        writer.WriteNodeType(value);
 
         Expression.InternalSerialize(ref writer,value.Left);
 
@@ -49,6 +53,7 @@ public class Binary:MemoryPackFormatter<T> {
     }
     internal static void InternalSerializeBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
+        writer.WriteNodeType(value);
 
         Expression.InternalSerialize(ref writer,value.Left);
         
@@ -60,7 +65,6 @@ public class Binary:MemoryPackFormatter<T> {
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        writer.WriteNodeType(value.NodeType);
         
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :

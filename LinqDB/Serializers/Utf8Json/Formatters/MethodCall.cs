@@ -9,7 +9,7 @@ using T= Expressions.MethodCallExpression;
 using static Extension;
 public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         var method=value.Method;
         Method.Instance.Serialize(ref writer,method,Resolver);
         writer.WriteValueSeparator();
@@ -19,11 +19,16 @@ public class MethodCall:IJsonFormatter<T> {
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         //if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){

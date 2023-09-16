@@ -7,8 +7,13 @@ using T=Expressions.ParameterExpression;
 using C=Serializer;
 public class Parameter:IJsonFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteInt32(Resolver.Serializer().ListParameter.LastIndexOf(value));
+    }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
     }
 
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {

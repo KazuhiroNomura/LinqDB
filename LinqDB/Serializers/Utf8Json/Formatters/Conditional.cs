@@ -1,14 +1,14 @@
-﻿using Utf8Json;
-using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
+using Utf8Json;
 
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.ConditionalExpression;
 public class Conditional:IJsonFormatter<T> {
     public static readonly Conditional Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Test,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.IfTrue,Resolver);
@@ -17,11 +17,15 @@ public class Conditional:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        PrivateSerialize(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-    //    if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        InternalSerialize(ref writer,value,Resolver);
+        PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -35,7 +39,6 @@ public class Conditional:IJsonFormatter<T> {
         return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=InternalDeserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
