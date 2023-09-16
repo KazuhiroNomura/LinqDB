@@ -5,8 +5,8 @@ using Reader = MemoryPackReader;
 
 using T = System.Delegate;
 
-public class Delegate2:MemoryPackFormatter<T> {
-    public static readonly Delegate2 Instance=new();
+public class Delegate:MemoryPackFormatter<T> {
+    public static readonly Delegate Instance=new();
     internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
     internal static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {

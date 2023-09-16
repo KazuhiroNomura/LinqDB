@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 using LinqDB.Databases;
 using System.IO;
 using System.CodeDom.Compiler;
-using LinqDB.Serializers;
 namespace LinqDB.Sets;
 
 /// <summary>

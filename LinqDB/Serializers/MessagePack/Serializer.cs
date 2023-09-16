@@ -1,14 +1,12 @@
-﻿using MessagePack;
-//using System.Reflection.Emit;
-using System.IO;
-using Expressions = System.Linq.Expressions;
+﻿using System.IO;
+using System.Reflection.Emit;
 using LinqDB.Helpers;
-using Emit = System.Reflection.Emit;
+using MessagePack;
 using MessagePack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 using Formatters;
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
-    //public static readonly Serializer Instance=new();
     private readonly MessagePackSerializerOptions Options;
     public Serializer(){
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
@@ -55,7 +53,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
                     Property.Instance,
                     Event.Instance,
                     Field.Instance,
-                    Delegate2.Instance,
+                    Delegate.Instance,
                 },
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
@@ -114,7 +112,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     public static void DynamicSerialize(object Formatter,ref MessagePackWriter writer,object value,
         MessagePackSerializerOptions options){
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
-        var D=new Emit.DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
+        var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
         I.Ldarg_0();//formatter
         I.Ldarg_1();//writer
@@ -133,7 +131,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     public static object DynamicDeserialize(object Formatter,ref MessagePackReader reader,
         MessagePackSerializerOptions options){
         var Method=Formatter.GetType().GetMethod("Deserialize")!;
-        var D=new Emit.DynamicMethod("",typeof(object),DeserializeTypes){InitLocals=false};
+        var D=new DynamicMethod("",typeof(object),DeserializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
         I.Ldarg_0();
         I.Ldarg_1();

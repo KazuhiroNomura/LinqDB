@@ -1,8 +1,9 @@
 ﻿using System;
-//
+
+
 using System.Reflection;
 using Utf8Json;
-//
+
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
@@ -10,7 +11,45 @@ using Reader=JsonReader;
 using T= Expressions.BinaryExpression;
 public class Binary:IJsonFormatter<T> {
     public static readonly Binary Instance=new();
+    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+    }
+    internal static void InternalSerializeLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        writer.WriteValueSeparator();
+        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+    }
+    internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        writer.WriteValueSeparator();
+        Method.Instance.Serialize(ref writer,value.Method,Resolver);
+    }
+    internal static void InternalSerializeMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        writer.WriteValueSeparator();
+        Method.Instance.Serialize(ref writer,value.Method,Resolver);
+        writer.WriteValueSeparator();
+        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+    }
     internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -19,37 +58,6 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method!,Resolver);
     }
-    internal static void InternalSerializeLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
-        writer.WriteValueSeparator();
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
-    }
-    internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
-        writer.WriteValueSeparator();
-        Method.Instance.Serialize(ref writer,value.Method,Resolver);
-    }
-    internal static void InternalSerializeMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
-        writer.WriteValueSeparator();
-        Method.Instance.Serialize(ref writer,value.Method,Resolver);
-        writer.WriteValueSeparator();
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
-    }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
-    }
-    
-    
-    
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         writer.WriteNodeType(value.NodeType);

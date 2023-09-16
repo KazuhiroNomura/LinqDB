@@ -1,7 +1,5 @@
 ﻿using System.Buffers;
 using System.Linq.Expressions;
-using System.Reflection.PortableExecutable;
-
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;

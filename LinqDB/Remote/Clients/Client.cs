@@ -14,7 +14,6 @@ using System.Xml;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Properties;
-using Serializers=LinqDB.Serializers;
 //using MemoryPack=LinqDB.Serializers.MemoryPack;
 //using MessagePack=LinqDB.Serializers.MessagePack;
 //using Utf8Json=LinqDB.Serializers.Utf8Json;

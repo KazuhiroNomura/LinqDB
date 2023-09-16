@@ -1,18 +1,13 @@
-﻿//using System;
-using MemoryPack;
-using Expressions = System.Linq.Expressions;
-using System.Reflection;
-using static LinqDB.Reflection.Common;
-using System.IO;
+﻿using System.IO;
+
 using LinqDB.Helpers;
-using LinqDB.Serializers.MemoryPack.Formatters;
-using Index=LinqDB.Serializers.MemoryPack.Formatters.Index;
-using Object=LinqDB.Serializers.MemoryPack.Formatters.Object;
-using Type=LinqDB.Serializers.MemoryPack.Formatters.Type;
+using MemoryPack;
+
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
+using Formatters;
 public class Serializer:Serializers.Serializer,System.IServiceProvider{
-    //public static readonly Serializer Instance=new();
-    public static readonly MethodInfo Register=M(()=>MemoryPackFormatterProvider.Register(Object.Instance));
+    public static readonly System.Reflection.MethodInfo Register=LinqDB.Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Object.Instance));
     public object? GetService(System.Type serviceType){
         throw new System.NotImplementedException();
     }
@@ -61,20 +56,8 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Event.Instance);
         MemoryPackFormatterProvider.Register(Property.Instance);
         MemoryPackFormatterProvider.Register(Field.Instance);
-        MemoryPackFormatterProvider.Register(Delegate2.Instance);
+        MemoryPackFormatterProvider.Register(Delegate.Instance);
     }
-    //internal readonly List<Expressions.ParameterExpression> ListParameter=new();
-    //internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
-    //internal readonly List<Expressions.LabelTarget> LabelTargets=new();
-    //internal readonly Dictionary<System.Type,int> DictionaryTypeIndex=new();
-    //internal readonly List<System.Type> Types=new();
-    //internal readonly Dictionary<System.Type,MemberInfo[]> TypeMembers=new();
-    //internal readonly Dictionary<System.Type,ConstructorInfo[]> TypeConstructors=new();
-    //internal readonly Dictionary<System.Type,MethodInfo[]> TypeMethods=new();
-    //internal readonly Dictionary<System.Type,FieldInfo[]> TypeFields=new();
-    //internal readonly Dictionary<System.Type,PropertyInfo[]> TypeProperties=new();
-    //internal readonly Dictionary<System.Type,EventInfo[]> TypeEvents=new();
-    //public readonly Dictionary<System.Type,object> DictionaryTypeFormatter = new();
     private readonly object[] objects1 = new object[1];
     internal void RegisterAnonymousDisplay(System.Type Type) {
         if(Type.IsDisplay()){
@@ -101,17 +84,6 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     private void Clear(){
          this.ProtectedClear();
-        //this.ListParameter.Clear();
-        //this.Dictionary_LabelTarget_int.Clear();
-        //this.LabelTargets.Clear();
-        //this.DictionaryTypeIndex.Clear();
-        //this.Types.Clear();
-        //this.TypeMembers.Clear();
-        //this.TypeConstructors.Clear();
-        //this.TypeMethods.Clear();
-        //this.TypeFields.Clear();
-        //this.TypeProperties.Clear();
-        //this.TypeEvents.Clear();
     }
     public byte[] Serialize<T>(T? value){
         this.Clear();

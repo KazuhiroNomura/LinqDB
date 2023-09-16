@@ -1,18 +1,16 @@
-﻿//using System;
-using System.Buffers;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Reflection;
 
+using System.Buffers;
 using MemoryPack;
 using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
+
 using Reader = MemoryPackReader;
 public static class Extension{
     public static void WriteValue<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)where TBufferWriter :IBufferWriter<byte> =>writer.GetFormatter<T>()!.Serialize(ref writer,ref value);
     public static void ReadValue<T>(this ref Reader reader,scoped ref T? value)=>reader.GetFormatter<T>()!.Deserialize(ref reader,ref value);
-    //public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
-    //public static Type ReadType(this ref Reader reader)=>Type.Deserialize().GetType(reader.ReadString())!;
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
         writer.WriteString(value.AssemblyQualifiedName);
     }
@@ -30,7 +28,7 @@ public static class Extension{
         if(value is not null){
             writer.WriteBoolean(false);
             return false;
-        } else{
+        }else{
             writer.WriteBoolean(true);
             return true;
         }
@@ -39,7 +37,8 @@ public static class Extension{
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
-    internal static void SerializeReadOnlyCollection<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<T>? value)where TBufferWriter :IBufferWriter<byte> =>StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,ref value!);
+    internal static void SerializeReadOnlyCollection<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<T>? value)where TBufferWriter :IBufferWriter<byte> =>
+    	StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,ref value!);
     private static class StaticArrayFormatter<T>{
         public static readonly ArrayFormatter<T> Formatter=new();
     }
@@ -50,10 +49,20 @@ public static class Extension{
     }
     public static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
         writer.WriteVarInt(value.Count);
+        
         foreach(var Parameter in value){
             writer.WriteString(Parameter.Name);
             writer.WriteType(Parameter.Type);
         }
+
+
+
+
+
+
+
+
+
     }
     public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader){
         var Count=reader.ReadVarIntInt32();
@@ -64,6 +73,10 @@ public static class Extension{
             Parameters[a]=Expressions.Expression.Parameter(type,name);
         }
         return Parameters;
+
+
+
+
     }
     private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,
         scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {

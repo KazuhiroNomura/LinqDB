@@ -1,14 +1,17 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿
+
 using Utf8Json;
+
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T= Expressions.BlockExpression;
-using C=Serializer;
-using static Extension;
 public class Block:IJsonFormatter<T> {
     public static readonly Block Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    
+
+    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -19,6 +22,11 @@ public class Block:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
+    }
+    public static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+
+
+        PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();

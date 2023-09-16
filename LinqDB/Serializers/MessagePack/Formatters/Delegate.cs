@@ -4,8 +4,8 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = System.Delegate;
-public class Delegate2:IMessagePackFormatter<T>{
-    public static readonly Delegate2 Instance=new();
+public class Delegate:IMessagePackFormatter<T>{
+    public static readonly Delegate Instance=new();
     private const int ArrayHeader=3;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);

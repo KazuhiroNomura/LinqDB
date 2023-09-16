@@ -1,88 +1,52 @@
-﻿using System;
-using Expressions = System.Linq.Expressions;
-using Utf8Json;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-//using LinqDB.Serializers.Utf8Json.Formatters;
-using Utf8Json.Formatters;
-using MessagePack;
 
+
+using Utf8Json;
+using Utf8Json.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 internal static class Extension{
     public static void WriteValue<T>(this ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static T ReadValue<T>(this ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    //public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
-    //public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
-    public static void WriteType(this ref Writer writer,Type value){
+    public static void WriteType(this ref Writer writer,System.Type value){
         writer.WriteString(value.AssemblyQualifiedName);
-        //if(Resolver.Serializer().Dictionary_Type_int.TryGetValue(value,out var index)){
-        //    writer.WriteInt32(index);
-        //} else{
-        //    writer.WriteBeginArray();
-        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
-        //    index=Dictionary_Type_int.Count;
-        //    writer.WriteInt32(index);
-        //    Dictionary_Type_int.Add(value,index);
-        //    Debug.Assert(value.AssemblyQualifiedName!=null,"value.AssemblyQualifiedName != null");
-        //    writer.WriteValueSeparator();
-        //    writer.WriteString(value.AssemblyQualifiedName);
-        //    Resolver.Serializer().Types.Add(value);
-        //    writer.WriteEndArray();
-        //}
     }
-    public static Type ReadType(this ref Reader reader){
-        return Type.GetType(reader.ReadString())!;
-        //var Types=Resolver.Serializer().Types;
-        //if(!reader.ReadIsBeginArray()){
-        //    var index=reader.ReadInt32();
-        //    return Types[index];
-        //} else{
-        //    var index=reader.ReadInt32();
-        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
-        //    reader.ReadIsValueSeparatorWithVerify();
-        //    Debug.Assert(index==Types.Count);
-        //    var AssemblyQualifiedName=reader.ReadString();
-        //    reader.ReadIsEndArrayWithVerify();
-        //    var value=System.Type.GetType(AssemblyQualifiedName);
-        //    Types.Add(value);
-        //    Dictionary_Type_int.Add(value,index);
-        //    return value;
-        //}
-        //var index=reader.ReadInt32();
-        //var Types=Resolver.Serializer().Types;
-        //if(index<Types.Count){
-        //    return Types[index];
-        //} else{
-        //    var Dictionary_Type_int=Resolver.Serializer().Dictionary_Type_int;
-        //    Debug.Assert(index==Types.Count);
-        //    var AssemblyQualifiedName=reader.ReadString();
-        //    var value=System.Type.GetType(AssemblyQualifiedName);
-        //    Types.Add(value);
-        //    Dictionary_Type_int.Add(value,index);
-        //    return value;
-        //}
+    public static System.Type ReadType(this ref Reader reader){
+        return System.Type.GetType(reader.ReadString())!;
     }
+    
+
     public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteByte((byte)NodeType);
-    public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadByte();
-    public static bool WriteIsNull(this ref Writer writer,object? value){
-        if(value is not null)return false;
-        writer.WriteNull();
-        return true;
+    public static Expressions.ExpressionType ReadNodeType(this ref Reader reader){
+    	var value=reader.ReadByte();
+        return (Expressions.ExpressionType)value;
     }
+    public static bool WriteIsNull(this ref Writer writer,object? value){
+        if(value is not null){
+        	
+        	return false;
+        }else{
+	        writer.WriteNull();
+    	    return true;
+        }
+    }
+    
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
-    internal static void SerializeReadOnlyCollection<T>(this ref Writer writer,
-        ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver) =>
+    internal static void SerializeReadOnlyCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver)=>
         StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value!,Resolver);
     private static class StaticArrayFormatter<T>{
         public static readonly ArrayFormatter<T> Formatter=new();
     }
-    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) =>
-        StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
+    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver){
+        return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
+        
+        
+    }
     internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var Count=value.Count;
@@ -100,9 +64,8 @@ internal static class Extension{
         }
         writer.WriteEndArray();
     }
-    internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,IJsonFormatterResolver Resolver){
-        var List=new List<Expressions.ParameterExpression>();
-        //var t=reader;
+    internal static System.Collections.Generic.List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,IJsonFormatterResolver Resolver){
+        var List=new System.Collections.Generic.List<Expressions.ParameterExpression>();
         reader.ReadIsBeginArrayWithVerify();
         while(reader.ReadIsBeginObject()){
             var name=reader.ReadString();
@@ -110,8 +73,6 @@ internal static class Extension{
             var type=reader.ReadType();
             List.Add(Expressions.Expression.Parameter(type,name));
             reader.ReadIsEndObjectWithVerify();
-            //var count=0;
-            //if(!t.ReadIsEndObjectWithSkipValueSeparator(ref count)) break;
             if(!reader.ReadIsValueSeparator()) break;
         }
         reader.ReadIsEndArrayWithVerify();

@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System;
 using System.Reflection;
 using MemoryPack;
-using System.Reflection.PortableExecutable;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T=MemberInfo;

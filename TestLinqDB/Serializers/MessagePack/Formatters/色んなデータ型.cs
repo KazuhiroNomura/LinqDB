@@ -58,13 +58,8 @@ public class 色んなデータ型:共通 {
         //MemoryPackFormatterProvider.Register(formatter);
         this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(value);
     }
-    static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]public void ClassDisplay(){
-        var a=1;
-        var body=Lambda(()=>a).Body;
-        var member=(Expressions.MemberExpression)body;
-        var constant=(Expressions.ConstantExpression)member.Expression;
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(constant.Value);
+        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(ClassDisplay取得());
     }
     [Fact]
     public void Anonymous002(){

@@ -1,14 +1,12 @@
-﻿
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+
+
 using Utf8Json;
+
 
 namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
-
-
 public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
-    //public static readonly Serializer Instance=new();
     private readonly FormatterResolver Resolver=new();
     private readonly IJsonFormatterResolver IResolver;
 #pragma warning disable CA2211

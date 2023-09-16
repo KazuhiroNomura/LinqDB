@@ -29,7 +29,7 @@ public class Object:IJsonFormatter<T>{
             case uint    v:writer.WriteUInt32(v);break;
             case ulong   v:writer.WriteUInt64(v);break;
             case string  v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate2  .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Delegate        v:Delegate  .Instance.Serialize(ref writer,v,Resolver);break;
             case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
             case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
             case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
@@ -77,7 +77,7 @@ public class Object:IJsonFormatter<T>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString();
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate2  .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Instance.Deserialize(ref reader,Resolver);
         //else if(typeof(decimal)==type)result=global::Utf8Json.Formatters.DecimalFormatter.Default.Deserialize(ref reader,Resolver);
         //else if(typeof(Guid   )==type)result=global::Utf8Json.Formatters.GuidFormatter.Default.Deserialize(ref reader,Resolver);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
