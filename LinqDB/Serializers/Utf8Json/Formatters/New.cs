@@ -1,7 +1,7 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using System.Diagnostics;
 using Utf8Json;
-using System.Diagnostics;
 
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;

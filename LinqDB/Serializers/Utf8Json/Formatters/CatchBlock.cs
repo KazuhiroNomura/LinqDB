@@ -59,6 +59,7 @@ public class CatchBlock:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+
         T value;
         reader.ReadIsBeginArrayWithVerify();
         var id = reader.ReadInt32();
@@ -80,8 +81,8 @@ public class CatchBlock:IJsonFormatter<T> {
             }
             case 2: {
                 var name = reader.ReadString();
-                var Variable = Expressions.Expression.Parameter(test,name);
-                var ListParameter = Resolver.Serializer().ListParameter;
+                var Variable=Expressions.Expression.Parameter(test,name);
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -91,8 +92,8 @@ public class CatchBlock:IJsonFormatter<T> {
             }
             case 3: {
                 var name = reader.ReadString();
-                var Variable = Expressions.Expression.Parameter(test,name);
-                var ListParameter = Resolver.Serializer().ListParameter;
+                var Variable=Expressions.Expression.Parameter(test,name);
+                var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -102,8 +103,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            default:
-                throw new NotSupportedException($"Utf8JsonのCatchのidが不正な{id}だった");
+            default:throw new NotSupportedException($"Utf8JsonのCatchのidが不正な{id}だった");
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

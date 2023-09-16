@@ -9,11 +9,7 @@ using Reader = JsonReader;
 using T = Expressions.Expression;
 public class Expression:IJsonFormatter<T> {
     public static readonly Expression Instance=new();
-    internal static void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
-        Instance.Serialize(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         switch(value.NodeType){
@@ -107,11 +103,14 @@ public class Expression:IJsonFormatter<T> {
         }
         writer.WriteEndArray();
     }
-    public static T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null;
-        return Instance.Deserialize(ref reader,Resolver);
+    internal static void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
+        Instance.Serialize(ref writer,value,Resolver);
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        Write(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeType=reader.ReadNodeType();
@@ -386,5 +385,12 @@ public class Expression:IJsonFormatter<T> {
         }
         reader.ReadIsEndArrayWithVerify();
         return value;
+    }
+    public static T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull())return null;
+        return Read(ref reader,Resolver);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        return Read(ref reader,Resolver);
     }
 }

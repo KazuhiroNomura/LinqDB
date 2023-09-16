@@ -11,19 +11,25 @@ using T= EventInfo;
 public class Event:IMessagePackFormatter<T>{
     public static readonly Event Instance=new();
     private const int ArrayHeader=2;
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         var type=value!.ReflectedType!;
         writer.WriteType(type);
         var array= Resolver.Serializer().TypeEvents.Get(type);
         writer.WriteInt32(Array.IndexOf(array,value));
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        Write(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
         var array= Resolver.Serializer().TypeEvents.Get(type);
         var index=reader.ReadInt32();
         return array[index];
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        return Read(ref reader,Resolver);
     }
 }

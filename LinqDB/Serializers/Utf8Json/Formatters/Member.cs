@@ -10,8 +10,7 @@ using C=Serializer;
 
 public class Member:IJsonFormatter<T> {
     public static readonly Member Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
+    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var type=value.ReflectedType;
@@ -22,7 +21,10 @@ public class Member:IJsonFormatter<T> {
         writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeMembers.Get(type),value));
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        Write(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         //var ReflectedType= this.Type.Deserialize(ref reader,Resolver);
@@ -33,5 +35,8 @@ public class Member:IJsonFormatter<T> {
         var Index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
         return Resolver.Serializer().TypeMembers.Get(ReflectedType)[Index];
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        return Read(ref reader,Resolver);
     }
 }

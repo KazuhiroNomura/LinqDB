@@ -60,6 +60,7 @@ public class CatchBlock:MemoryPackFormatter<T> {
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
 
+
         
         var id=reader.ReadVarIntInt32();
         
@@ -73,30 +74,36 @@ public class CatchBlock:MemoryPackFormatter<T> {
             }
             case 1:{
                 var body=Expression.InternalDeserialize(ref reader);
+                
                 var filter=Expression.InternalDeserialize(ref reader);
                 value=Expressions.Expression.Catch(test,body,filter);
                 break;
             }
             case 2:{
                 var name=reader.ReadString();
+                var Variable=Expressions.Expression.Parameter(test,name);
                 var ListParameter=reader.Serializer().ListParameter;
-                ListParameter.Add(Expressions.Expression.Parameter(test,name));
+                ListParameter.Add(Variable);
+                
                 var body=Expression.InternalDeserialize(ref reader);
                 ListParameter.RemoveAt(ListParameter.Count-1);
-                value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body);
+                value=Expressions.Expression.Catch(Variable,body);
                 break;
             }
             case 3:{
                 var name=reader.ReadString();
+                var Variable=Expressions.Expression.Parameter(test,name);
                 var ListParameter=reader.Serializer().ListParameter;
-                ListParameter.Add(Expressions.Expression.Parameter(test,name));
+                ListParameter.Add(Variable);
                 var body=Expression.InternalDeserialize(ref reader);
                 var filter=Expression.InternalDeserialize(ref reader);
                 ListParameter.RemoveAt(ListParameter.Count-1);
-                value=Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,filter);
+                value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
             default:throw new NotSupportedException($"CatchBlock id{id}は不正");
         }
+        
+        
     }
 }

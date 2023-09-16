@@ -12,7 +12,7 @@ public class Index:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Object,Resolver);
         writer.WriteValueSeparator();
-        Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
+        Property.Write(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
@@ -31,7 +31,7 @@ public class Index:IJsonFormatter<T> {
     internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var instance= Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var indexer= Property.Instance.Deserialize(ref reader,Resolver);
+        var indexer= Property.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);

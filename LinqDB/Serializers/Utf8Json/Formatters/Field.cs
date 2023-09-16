@@ -10,7 +10,7 @@ using static Extension;
 using C=Serializer;
 public class Field:IJsonFormatter<T> {
     public static readonly Field Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
        // if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
@@ -23,7 +23,10 @@ public class Field:IJsonFormatter<T> {
         writer.WriteInt32(index);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        Write(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         //var ReflectedType= this.Type.Deserialize(ref reader,Resolver);
@@ -34,5 +37,8 @@ public class Field:IJsonFormatter<T> {
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
         return Resolver.Serializer().TypeFields.Get(type)[index];
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        return Read(ref reader,Resolver);
     }
 }

@@ -6,7 +6,7 @@ using static Extension;
 using T = System.Delegate;
 public class Delegate:IJsonFormatter<T> {
     public static readonly Delegate Instance =new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         writer.WriteType(value!.GetType());
@@ -16,7 +16,10 @@ public class Delegate:IJsonFormatter<T> {
         Object.Instance.Serialize(ref writer,value.Target,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        Write(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var delegateType=reader.ReadType();
@@ -26,5 +29,8 @@ public class Delegate:IJsonFormatter<T> {
         var target=Object.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return method.CreateDelegate(delegateType,target);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        return Read(ref reader,Resolver);
     }
 }

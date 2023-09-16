@@ -26,7 +26,7 @@ public class Object:MemoryPackFormatter<object>{
             case uint                   v:writer.WriteVarInt(v);break;
             case ulong                  v:writer.WriteVarInt(v);break;
             case string                 v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate  .Serialize(ref writer,v);break;
+            case System.Delegate        v:Delegate   .Serialize(ref writer,v);break;
             case Expressions.Expression v:Expression .InternalSerialize(ref writer,v);break;
             case System.Type            v:Type       .Serialize(ref writer,v);break;
             case ConstructorInfo        v:Constructor.Serialize(ref writer,v);break;

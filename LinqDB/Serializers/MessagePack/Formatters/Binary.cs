@@ -14,6 +14,7 @@ public class Binary:IMessagePackFormatter<T> {
     internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
+        
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
 
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -21,6 +22,7 @@ public class Binary:IMessagePackFormatter<T> {
     internal static void InternalSerializeLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
+        
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
 
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -30,6 +32,7 @@ public class Binary:IMessagePackFormatter<T> {
     internal static void InternalSerializeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
+        
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
 
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -39,6 +42,7 @@ public class Binary:IMessagePackFormatter<T> {
     internal static void InternalSerializeMethodLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(value.NodeType);
+        
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
 
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -50,6 +54,7 @@ public class Binary:IMessagePackFormatter<T> {
     internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(value!.NodeType);
+        
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
@@ -60,8 +65,6 @@ public class Binary:IMessagePackFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
-        
-        
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value,Resolver); break;

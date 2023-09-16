@@ -21,7 +21,6 @@ public class Binary:IJsonFormatter<T> {
     }
     internal static void InternalSerializeLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
-
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
@@ -32,7 +31,6 @@ public class Binary:IJsonFormatter<T> {
     }
     internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
-
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
@@ -42,7 +40,6 @@ public class Binary:IJsonFormatter<T> {
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
     }
     internal static void InternalSerializeMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -55,10 +52,9 @@ public class Binary:IJsonFormatter<T> {
         Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
     }
     internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-
-
         Expression.Instance.Serialize(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);

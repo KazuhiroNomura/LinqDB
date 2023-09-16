@@ -65,7 +65,6 @@ public class Binary:MemoryPackFormatter<T> {
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value); break;
@@ -317,7 +316,7 @@ public class Binary:MemoryPackFormatter<T> {
             }
             default: throw new NotSupportedException(NodeType.ToString());
         }
-        
+
         
     }
 }

@@ -9,24 +9,23 @@ using C=Serializer;
 using T=ConstructorInfo;
 public class Constructor:MemoryPackFormatter<T> {
     public static readonly Constructor Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static T Deserialize(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        var ReflectedType=value.ReflectedType!;
-        writer.WriteType(ReflectedType);
-        var array= writer.Serializer().TypeConstructors.Get(ReflectedType);
+    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+        var type=value.ReflectedType!;
+        writer.WriteType(type);
+        var array= writer.Serializer().TypeConstructors.Get(type);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    internal static T Deserialize(ref Reader reader){
         var type=reader.ReadType();
         var array= reader.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadVarIntInt32();
-        value=array[index];
+        return array[index];
+    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Debug.Assert(value!=null,nameof(value)+" != null");
+        Serialize(ref writer,value);
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=Deserialize(ref reader);
     }
 }

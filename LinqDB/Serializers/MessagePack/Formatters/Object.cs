@@ -31,15 +31,15 @@ public class Object:IMessagePackFormatter<T>{
             case double  v:writer.Write(v);break;
             case bool    v:writer.Write(v);break;
             case string  v:writer.Write(v);break;
-            case System.Delegate        v:Delegate  .Instance.Serialize(ref writer,v,Resolver);break;
-            case Expressions.Expression v:Expression .Instance.Serialize(ref writer,v,Resolver);break;
-            case System.Type            v:Type       .Instance.Serialize(ref writer,v,Resolver);break;
-            case ConstructorInfo        v:Constructor.Instance.Serialize(ref writer,v,Resolver);break;
-            case MethodInfo             v:Method     .Instance.Serialize(ref writer,v,Resolver);break;
-            case PropertyInfo           v:Property   .Instance.Serialize(ref writer,v,Resolver);break;
-            case EventInfo              v:Event      .Instance.Serialize(ref writer,v,Resolver);break;
-            case FieldInfo              v:Field      .Instance.Serialize(ref writer,v,Resolver);break;
-            case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
+            case System.Delegate        v:Delegate   .Write(ref writer,v,Resolver);break;
+            case Expressions.Expression v:Expression .Write(ref writer,v,Resolver);break;
+            case System.Type            v:Type       .Write(ref writer,v,Resolver);break;
+            case ConstructorInfo        v:Constructor.Write(ref writer,v,Resolver);break;
+            case MethodInfo             v:Method     .Write(ref writer,v,Resolver);break;
+            case PropertyInfo           v:Property   .Write(ref writer,v,Resolver);break;
+            case EventInfo              v:Event      .Write(ref writer,v,Resolver);break;
+            case FieldInfo              v:Field      .Write(ref writer,v,Resolver);break;
+            //case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
                 //T Formatter;
                 //if(type.IsDisplay()){
@@ -85,14 +85,14 @@ public class Object:IMessagePackFormatter<T>{
         else if(typeof(double )==type)value=reader.ReadDouble();
         else if(typeof(bool   )==type)value=reader.ReadBoolean();
         else if(typeof(string )==type)value=reader.ReadString()!;
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Instance.Deserialize(ref reader,Resolver);
-        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Instance.Deserialize(ref reader,Resolver);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate   .Read(ref reader,Resolver);
+        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Read(ref reader,Resolver);
+        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Read(ref reader,Resolver);
+        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Read(ref reader,Resolver);
+        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Read(ref reader,Resolver);
+        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Read(ref reader,Resolver);
+        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Read(ref reader,Resolver);
+        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Read(ref reader,Resolver);
         else value=reader.ReadValue(type,Resolver);
         return value;
     }

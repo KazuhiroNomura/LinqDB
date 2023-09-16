@@ -10,11 +10,7 @@ using Reader = MessagePackReader;
 using T = Expressions.Expression;
 public class Expression:IMessagePackFormatter<T> {
     public static readonly Expression Instance=new();
-    internal static void InternalSerializeNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
-        Instance.Serialize(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         //if(writer.TryWriteNil(value)) return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         //writer.WriteArrayHeader(2);
@@ -108,15 +104,18 @@ public class Expression:IMessagePackFormatter<T> {
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
+    internal static void InternalSerializeNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
+        Write(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        Write(ref writer,value,Resolver);
+    }
     internal static T? InternalDeserializeNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null;
         return Instance.Deserialize(ref reader,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return Instance.Deserialize(ref reader,Resolver);
-    }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var ArrayHeader=reader.ReadArrayHeader();
         var NodeType=reader.ReadNodeType();
@@ -390,5 +389,8 @@ public class Expression:IMessagePackFormatter<T> {
             default:throw new NotSupportedException(NodeType.ToString());
         }
         return value;
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        return Read(ref reader,Resolver);
     }
 }

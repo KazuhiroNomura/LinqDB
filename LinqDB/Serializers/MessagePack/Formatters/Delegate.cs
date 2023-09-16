@@ -7,7 +7,7 @@ using T = System.Delegate;
 public class Delegate:IMessagePackFormatter<T>{
     public static readonly Delegate Instance=new();
     private const int ArrayHeader=3;
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         Type.Instance.Serialize(ref writer,value!.GetType(),Resolver);
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
@@ -15,12 +15,12 @@ public class Delegate:IMessagePackFormatter<T>{
     }
     internal static void InternalSerializeNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(value is null)writer.WriteNil();
-        else PrivateSerialize(ref writer,value,Resolver);
+        else Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        PrivateSerialize(ref writer,value,Resolver);
+        Write(ref writer,value,Resolver);
     }
-    private static T PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         var delegateType=Type.Instance.Deserialize(ref reader,Resolver);
         var method=Method.Instance.Deserialize(ref reader,Resolver);
@@ -28,9 +28,9 @@ public class Delegate:IMessagePackFormatter<T>{
         return method.CreateDelegate(delegateType,target);
     }
     internal static T? InternalDeserializeNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return reader.TryReadNil()?null:PrivateDeserialize(ref reader,Resolver);
+        return reader.TryReadNil()?null:Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return PrivateDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }
