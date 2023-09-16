@@ -34,7 +34,7 @@ public class Try:IMessagePackFormatter<T>{
             }
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         PrivateSerialize0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Try);
         PrivateSerialize1(ref writer,value,Resolver);
@@ -44,7 +44,7 @@ public class Try:IMessagePackFormatter<T>{
         PrivateSerialize1(ref writer,value,Resolver);
     }
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var body= Expression.Instance.Deserialize(ref reader,Resolver);
         var @finally=Expression.InternalDeserializeNullable(ref reader,Resolver);
@@ -69,6 +69,6 @@ public class Try:IMessagePackFormatter<T>{
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

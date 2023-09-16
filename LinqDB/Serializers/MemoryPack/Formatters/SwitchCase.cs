@@ -15,11 +15,11 @@ public class SwitchCase:MemoryPackFormatter<T> {
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.SerializeReadOnlyCollection(value!.TestValues);
-        Expression.InternalSerialize(ref writer,value.Body);
+        Expression.Write(ref writer,value.Body);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var testValues=reader.ReadArray<Expressions.Expression>();
-        var body= Expression.InternalDeserialize(ref reader);
+        var body= Expression.Read(ref reader);
         value=Expressions.Expression.SwitchCase(body,testValues!);
     }
 }

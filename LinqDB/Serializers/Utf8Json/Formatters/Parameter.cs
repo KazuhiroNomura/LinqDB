@@ -10,7 +10,7 @@ public class Parameter:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteInt32(Resolver.Serializer().ListParameter.LastIndexOf(value));
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -23,7 +23,7 @@ public class Parameter:IJsonFormatter<T> {
         writer.WriteType(value.Type);
         writer.WriteEndObject();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var index=reader.ReadInt32();
         var Parameter= Resolver.Serializer().ListParameter[index];
         return Parameter;

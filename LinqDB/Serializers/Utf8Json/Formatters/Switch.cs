@@ -18,7 +18,7 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.DefaultBody,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -28,7 +28,7 @@ public class Switch:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var switchValue=Expression.Instance.Deserialize(ref reader,Resolver);
@@ -43,7 +43,7 @@ public class Switch:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

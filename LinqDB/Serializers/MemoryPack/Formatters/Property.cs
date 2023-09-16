@@ -10,7 +10,7 @@ using Reader=MemoryPackReader;
 
 public class Property:MemoryPackFormatter<T>{
     public static readonly Property Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         var type=value.ReflectedType!;
         writer.WriteType(type);
         var array= writer.Serializer().TypeProperties.Get(type);
@@ -29,13 +29,13 @@ public class Property:MemoryPackFormatter<T>{
        writer.WriteType(ReflectedType);
        writer.WriteVarInt(Array.IndexOf(writer.Serializer().TypeProperties.Get(ReflectedType),value));
     }
-    internal static T Deserialize(ref Reader reader) {
+    internal static T Read(ref Reader reader) {
         var type= reader.ReadType();
         var array=reader.Serializer().TypeProperties.Get(type);
         var Index=reader.ReadVarIntInt32();
         return array[Index];
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=Deserialize(ref reader);
+        value=Read(ref reader);
     }
 }

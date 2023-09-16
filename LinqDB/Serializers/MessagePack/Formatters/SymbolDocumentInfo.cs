@@ -9,7 +9,7 @@ using T = Expressions.SymbolDocumentInfo;
 public class SymbolDocumentInfo:IMessagePackFormatter<T> {
     public static readonly SymbolDocumentInfo Instance=new();
     private const int ArrayHeader=4;
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         var Formatter=GuidFormatter.Instance;
         Debug.Assert(value!=null,nameof(value)+" != null");
@@ -19,9 +19,9 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         Formatter.Serialize(ref writer,value.DocumentType,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        InternalSerialize(ref writer,value,Resolver);
+        Write(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var Formatter=GuidFormatter.Instance;
@@ -32,6 +32,6 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

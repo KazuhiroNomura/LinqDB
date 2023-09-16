@@ -13,7 +13,7 @@ public class MethodCall:IMessagePackFormatter<T> {
     private const int ArrayHeader1=3;
     private const int InternalArrayHeader0=ArrayHeader0+1;
     private const int InternalArrayHeader1=ArrayHeader1+1;
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         //if(writer.TryWriteNil(value)) return;
         var method=value!.Method;
         if(method.IsStatic){
@@ -41,7 +41,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);

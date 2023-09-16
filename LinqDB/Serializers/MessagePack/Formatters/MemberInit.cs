@@ -15,7 +15,7 @@ public class MemberInit:IMessagePackFormatter<T> {
         New.Instance.Serialize(ref writer,value!.NewExpression,Resolver);
         writer.SerializeReadOnlyCollection(value.Bindings,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.MemberInit);
         PrivateSerialize(ref writer,value,Resolver);
@@ -25,7 +25,7 @@ public class MemberInit:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var @new=New.Instance.Deserialize(ref reader,Resolver);
         var bindings=reader.ReadArray<Expressions.MemberBinding>(Resolver);
         return Expressions.Expression.MemberInit(@new,bindings);
@@ -34,6 +34,6 @@ public class MemberInit:IMessagePackFormatter<T> {
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

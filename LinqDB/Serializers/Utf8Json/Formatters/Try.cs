@@ -12,19 +12,19 @@ public class Try:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
-        Expression.SerializeNullable(ref writer,value.Finally,Resolver);
+        Expression.WriteNullable(ref writer,value.Finally,Resolver);
         writer.WriteValueSeparator();
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
         } else{
-            Expression.SerializeNullable(ref writer,value.Fault,Resolver);
+            Expression.WriteNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
                 writer.WriteValueSeparator();
                 writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
             }
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -36,7 +36,7 @@ public class Try:IJsonFormatter<T> {
     }
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     [SuppressMessage("ReSharper","ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
         var body=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -63,7 +63,7 @@ public class Try:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

@@ -9,9 +9,9 @@ public class MemberAccess:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
-        Expression.SerializeNullable(ref writer,value.Expression,Resolver);
+        Expression.WriteNullable(ref writer,value.Expression,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -21,7 +21,7 @@ public class MemberAccess:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var member =Member.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var expression = Expression.DeserializeNullable(ref reader,Resolver);
@@ -29,7 +29,7 @@ public class MemberAccess:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

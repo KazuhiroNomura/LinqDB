@@ -9,7 +9,7 @@ using T = Expressions.TryExpression;
 public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        Expression.InternalSerialize(ref writer,value!.Body);
+        Expression.Write(ref writer,value!.Body);
         Expression.SerializeNullable(ref writer,value.Finally);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers);
@@ -20,15 +20,15 @@ public class Try:MemoryPackFormatter<T> {
             }
         }
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Try);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         PrivateSerialize(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader){
-        var body= Expression.InternalDeserialize(ref reader);
+    internal static T Read(ref Reader reader){
+        var body= Expression.Read(ref reader);
         var @finally= Expression.InternalDeserializeNullable(ref reader);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>()!;
@@ -49,6 +49,6 @@ public class Try:MemoryPackFormatter<T> {
     }
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
     }
 }

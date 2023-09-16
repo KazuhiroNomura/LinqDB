@@ -10,27 +10,27 @@ using T = Expressions.UnaryExpression;
 
 public class Unary:MemoryPackFormatter<T> {
     public static readonly Unary Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Operand);
+        Expression.Write(ref writer,value.Operand);
     }
     internal static void InternalSerializeType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Operand);
+        Expression.Write(ref writer,value.Operand);
         writer.WriteType(value.Type);
     }
     internal static void InternalSerializeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
         writer.WriteNodeType(value);
-        Expression.InternalSerialize(ref writer,value.Operand);
+        Expression.Write(ref writer,value.Operand);
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
     internal static void InternalSerializeTypeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
         writer.WriteNodeType(value);
-        Expression.InternalSerialize(ref writer,value.Operand);
+        Expression.Write(ref writer,value.Operand);
         writer.WriteType(value.Type);
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
@@ -41,7 +41,7 @@ public class Unary:MemoryPackFormatter<T> {
        //writer.WriteNodeType(value);
        switch(value.NodeType){
            case Expressions.ExpressionType.ArrayLength        : 
-           case Expressions.ExpressionType.Quote              : InternalSerialize(ref writer,value);break;
+           case Expressions.ExpressionType.Quote              : Write(ref writer,value);break;
            case Expressions.ExpressionType.Throw              : 
            case Expressions.ExpressionType.TypeAs             : 
            case Expressions.ExpressionType.Unbox              : InternalSerializeType(ref writer,value);break;
@@ -65,21 +65,21 @@ public class Unary:MemoryPackFormatter<T> {
        }
     }
     internal static Expressions.Expression InternalDeserialize(ref Reader reader){
-        var operand=Expression.InternalDeserialize(ref reader);
+        var operand=Expression.Read(ref reader);
         return operand;
     }
     internal static (Expressions.Expression Operand, System.Type Type) InternalDeserializeType(ref Reader reader) {
-        var operand = Expression.InternalDeserialize(ref reader);
+        var operand = Expression.Read(ref reader);
         var type = reader.ReadType();
         return (operand, type);
     }
     internal static (Expressions.Expression  Operand, MethodInfo? Method) InternalDeserializeMethod(ref Reader reader) {
-        var operand = Expression.InternalDeserialize(ref reader);
+        var operand = Expression.Read(ref reader);
         var method = Method.InternalDeserializeNullable(ref reader);
         return (operand, method);
     }
     internal static (Expressions.Expression Operand, System.Type Type, MethodInfo? Method) InternalDeserializeTypeMethod(ref Reader reader) {
-        var operand = Expression.InternalDeserialize(ref reader);
+        var operand = Expression.Read(ref reader);
         var type = reader.ReadType();
         var method = Method.InternalDeserializeNullable(ref reader);
         return (operand, type, method);

@@ -10,7 +10,7 @@ using C= Serializer;
 
 public class Field:MemoryPackFormatter<T>{
     public static readonly Field Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         var type=value.ReflectedType!;
         writer.WriteType(type);
         var array= writer.Serializer().TypeFields.Get(type);
@@ -27,15 +27,15 @@ public class Field:MemoryPackFormatter<T>{
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        Serialize(ref writer,value);
+        Write(ref writer,value);
     }
-    internal static T Deserialize(ref Reader reader) {
+    internal static T Read(ref Reader reader) {
         var type= reader.ReadType();
         var array= reader.Serializer().TypeFields.Get(type);
         var index=reader.ReadVarIntInt32();
         return array[index];
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=Deserialize(ref reader);
+        value=Read(ref reader);
     }
 }

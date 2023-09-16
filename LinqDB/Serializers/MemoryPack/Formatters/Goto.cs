@@ -15,14 +15,14 @@ public class Goto:MemoryPackFormatter<T>{
         Expression.SerializeNullable(ref writer,value.Value);
         writer.WriteType(value.Type);
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Goto);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         PrivateSerialize(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var kind=(Expressions.GotoExpressionKind)reader.ReadVarIntByte();
         var target= LabelTarget.DeserializeLabelTarget(ref reader);
         var value0=Expression.InternalDeserializeNullable(ref reader);
@@ -30,6 +30,6 @@ public class Goto:MemoryPackFormatter<T>{
         return Expressions.Expression.MakeGoto(kind,target,value0,type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
     }
 }

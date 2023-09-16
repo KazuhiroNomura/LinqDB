@@ -23,7 +23,7 @@ public class Loop:IJsonFormatter<T>{
             }
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -33,7 +33,7 @@ public class Loop:IJsonFormatter<T>{
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
         if(reader.ReadIsNull()){
             reader.ReadNext();
@@ -57,7 +57,7 @@ public class Loop:IJsonFormatter<T>{
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

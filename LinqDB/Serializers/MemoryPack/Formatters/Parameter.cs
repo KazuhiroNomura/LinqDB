@@ -11,14 +11,14 @@ public class Parameter:MemoryPackFormatter<T> {
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteVarInt(writer.Serializer().ListParameter.LastIndexOf(value));
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(ExpressionType.Parameter);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteVarInt(writer.Serializer().ListParameter.LastIndexOf(value));
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var index=reader.ReadVarIntInt32();
         var Parameter= reader.Serializer().ListParameter[index];
         return Parameter;

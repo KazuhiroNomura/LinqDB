@@ -17,19 +17,19 @@ public class Conditional:IMessagePackFormatter<T> {
         
         writer.WriteType(value.Type);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(Expressions.ExpressionType.Conditional);
+        
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
 
-
         PrivateSerialize(ref writer,value,Resolver);
 
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var test   = Expression.Instance.Deserialize(ref reader,Resolver);
 
         var ifTrue = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -37,13 +37,12 @@ public class Conditional:IMessagePackFormatter<T> {
         var ifFalse= Expression.Instance.Deserialize(ref reader,Resolver);
 
         var type=reader.ReadType();
-
         return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==4);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
         
     }
 }

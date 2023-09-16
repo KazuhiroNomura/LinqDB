@@ -10,44 +10,44 @@ public class Loop:MemoryPackFormatter<T>{
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         if(value.BreakLabel is null){
             writer.WriteNullObjectHeader();
-            Expression.InternalSerialize(ref writer,value.Body);
+            Expression.Write(ref writer,value.Body);
         } else{
             LabelTarget.Serialize(ref writer,value.BreakLabel);
             if(value.ContinueLabel is null){
                 writer.WriteNullObjectHeader();
-                Expression.InternalSerialize(ref writer,value.Body);
+                Expression.Write(ref writer,value.Body);
             } else{
                 LabelTarget.Serialize(ref writer,value.ContinueLabel);
-                Expression.InternalSerialize(ref writer,value.Body);
+                Expression.Write(ref writer,value.Body);
             }
         }
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Loop);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         PrivateSerialize(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         if(reader.PeekIsNull()){
             reader.Advance(1);
-            var body=Expression.InternalDeserialize(ref reader);
+            var body=Expression.Read(ref reader);
             return Expressions.Expression.Loop(body);
         } else{
             var breakLabel=LabelTarget.DeserializeLabelTarget(ref reader);
             if(reader.PeekIsNull()){
                 reader.Advance(1);
-                var body=Expression.InternalDeserialize(ref reader);
+                var body=Expression.Read(ref reader);
                 return Expressions.Expression.Loop(body,breakLabel);
             } else{
                 var continueLabel=LabelTarget.DeserializeLabelTarget(ref reader);
-                var body=Expression.InternalDeserialize(ref reader);
+                var body=Expression.Read(ref reader);
                 return Expressions.Expression.Loop(body,breakLabel,continueLabel);
             }
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
     }
 }

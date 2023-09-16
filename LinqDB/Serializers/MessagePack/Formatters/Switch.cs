@@ -19,7 +19,7 @@ public class Switch:IMessagePackFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Cases,Resolver);
         Expression.Instance.Serialize(ref writer,value.DefaultBody,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Switch);
         PrivateSerialize(ref writer,value,Resolver);
@@ -29,10 +29,10 @@ public class Switch:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var type=reader.ReadType();
         var switchValue= Expression.Instance.Deserialize(ref reader,Resolver);
-        var comparison= Method.InternalDeserializeNullable(ref reader,Resolver);
+        var comparison= Method.ReadNullable(ref reader,Resolver);
         var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         var defaultBody= Expression.Instance.Deserialize(ref reader,Resolver);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
@@ -41,6 +41,6 @@ public class Switch:IMessagePackFormatter<T> {
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

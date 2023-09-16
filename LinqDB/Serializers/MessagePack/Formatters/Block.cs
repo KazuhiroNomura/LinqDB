@@ -23,7 +23,7 @@ public class Block:IMessagePackFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Block);
         
@@ -34,7 +34,7 @@ public class Block:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
@@ -49,7 +49,7 @@ public class Block:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
         
     }
 }

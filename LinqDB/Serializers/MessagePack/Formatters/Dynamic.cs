@@ -1,19 +1,15 @@
-﻿using System.Diagnostics;
-using Expressions = System.Linq.Expressions;
+﻿using System;
+using System.Dynamic;
+using System.Diagnostics;
+using Microsoft.CSharp.RuntimeBinder;
+using System.Collections.ObjectModel;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Dynamic;
-using System;
-using System.Reflection;
-using Microsoft.CSharp.RuntimeBinder;
-using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
-using System.Collections.ObjectModel;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.DynamicExpression;
-using static Extension;
 using static Common;
 public class Dynamic:IMessagePackFormatter<T> {
     public static readonly Dynamic Instance=new();
@@ -137,7 +133,7 @@ public class Dynamic:IMessagePackFormatter<T> {
             writer0.SerializeReadOnlyCollection(Arguments,Resolver);
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         PrivateSerialize0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Dynamic);
         PrivateSerialize1(ref writer,value,Resolver);
@@ -149,9 +145,6 @@ public class Dynamic:IMessagePackFormatter<T> {
         var v=reader.ReadSByte();
         return (BinderType)v;
     }
-    private static void WriteBindingFlags(ref Writer writer,BindingFlags value){
-        writer.WriteInt8((sbyte)value);
-    }
     private static CSharpBinderFlags ReadBindingFlags(ref Reader reader){
         var v=reader.ReadSByte();
         return (CSharpBinderFlags)v;
@@ -160,7 +153,7 @@ public class Dynamic:IMessagePackFormatter<T> {
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var BinderType=ReadBinderType(ref reader);
         switch(BinderType){
@@ -334,6 +327,6 @@ public class Dynamic:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
      //   if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

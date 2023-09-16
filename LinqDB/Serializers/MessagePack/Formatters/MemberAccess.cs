@@ -14,7 +14,7 @@ public class MemberAccess:IMessagePackFormatter<T> {
         Member.Instance.Serialize(ref writer,value!.Member,Resolver);
         Expression.InternalSerializeNullable(ref writer,value.Expression,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.MemberAccess);
         PrivateSerialize(ref writer,value,Resolver);
@@ -24,7 +24,7 @@ public class MemberAccess:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var member=Member.Instance.Deserialize(ref reader,Resolver);
         var expression= Expression.InternalDeserializeNullable(ref reader,Resolver);
         return Expressions.Expression.MakeMemberAccess(expression,member);
@@ -33,6 +33,6 @@ public class MemberAccess:IMessagePackFormatter<T> {
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

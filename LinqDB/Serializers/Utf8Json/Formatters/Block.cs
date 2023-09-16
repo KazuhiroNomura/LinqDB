@@ -23,7 +23,7 @@ public class Block:IJsonFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    public static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -34,7 +34,7 @@ public class Block:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
@@ -48,7 +48,7 @@ public class Block:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

@@ -11,7 +11,7 @@ using C=Serializer;
 
 public class Method:MemoryPackFormatter<T> {
     public static readonly Method Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         Debug.Assert(value!=null,nameof(value)+" != null");
         var ReflectedType=value.ReflectedType!;
         writer.WriteType(ReflectedType);
@@ -24,9 +24,9 @@ public class Method:MemoryPackFormatter<T> {
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        Serialize(ref writer,value);
+        Write(ref writer,value);
     }
-    internal static T Deserialize(ref Reader reader) {
+    internal static T Read(ref Reader reader) {
         var type= reader.ReadType();
         var array= reader.Serializer().TypeMethods.Get(type);
         var index=reader.ReadVarIntInt32();
@@ -37,9 +37,9 @@ public class Method:MemoryPackFormatter<T> {
             reader.Advance(1);
             return null;
         }
-        return Deserialize(ref reader);
+        return Read(ref reader);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=Deserialize(ref reader);
+        value=Read(ref reader);
     }
 }

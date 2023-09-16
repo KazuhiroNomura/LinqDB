@@ -16,7 +16,7 @@ public class Goto:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer, value,Resolver);
@@ -26,7 +26,7 @@ public class Goto:IJsonFormatter<T> {
         PrivateSerialize(ref writer, value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var kind=(Expressions.GotoExpressionKind)reader.ReadInt32();
         reader.ReadIsValueSeparatorWithVerify();
         //var target=Deserialize_T<LabelTarget>(ref reader,Resolver);
@@ -39,7 +39,7 @@ public class Goto:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

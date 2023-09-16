@@ -12,19 +12,19 @@ public class Label:MemoryPackFormatter<T> {
         LabelTarget.Serialize(ref writer,value!.Target);
         Expression.SerializeNullable(ref writer,value.DefaultValue);
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Label);
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         PrivateSerialize(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var target= LabelTarget.DeserializeLabelTarget(ref reader);
         var defaultValue= Expression.InternalDeserializeNullable(ref reader);
         return Expressions.Expression.Label(target,defaultValue);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
     }
 }

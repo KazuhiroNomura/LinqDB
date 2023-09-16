@@ -14,7 +14,7 @@ public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
         writer.WriteValueSeparator();
         writer.WriteType(value.TypeOperand);
     }
-    internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);

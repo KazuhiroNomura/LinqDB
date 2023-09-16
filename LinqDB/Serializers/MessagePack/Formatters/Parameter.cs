@@ -14,7 +14,7 @@ public class Parameter:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteInt32(Resolver.Serializer().ListParameter.LastIndexOf(value));
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Parameter);
         PrivateSerialize(ref writer,value,Resolver);
@@ -23,7 +23,7 @@ public class Parameter:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var index=reader.ReadInt32();
         var Parameter= Resolver.Serializer().ListParameter[index];
         return Parameter;
@@ -31,6 +31,6 @@ public class Parameter:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

@@ -11,14 +11,14 @@ using static Extension;
 public class New:MemoryPackFormatter<T> {
     public static readonly New Instance=new();
     internal static void InternalSerializeNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
-        Constructor.Serialize(ref writer,value.Constructor!);
+        Constructor.Write(ref writer,value.Constructor!);
         writer.SerializeReadOnlyCollection(value.Arguments);
     }
     //internal static void InternalSerializeNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
     //    writer.WriteNodeType(ExpressionType.New);
     //    PrivateSerialize(ref writer,value);
     //}
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.New);
         InternalSerializeNew(ref writer,value);
     }
@@ -27,7 +27,7 @@ public class New:MemoryPackFormatter<T> {
         InternalSerializeNew(ref writer,value);
     }
     internal static T InternaDeserialize(ref Reader reader){
-        var constructor= Constructor.Deserialize(ref reader);
+        var constructor= Constructor.Read(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         return System.Linq.Expressions.Expression.New(
             constructor,

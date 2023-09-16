@@ -8,11 +8,11 @@ using T=Expressions.ElementInit;
 public class ElementInit:MemoryPackFormatter<T> {
     public static readonly ElementInit Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Method.Serialize(ref writer,value!.AddMethod);
+        Method.Write(ref writer,value!.AddMethod);
         writer.SerializeReadOnlyCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        var addMethod= Method.Deserialize(ref reader);
+        var addMethod= Method.Read(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         value=Expressions.Expression.ElementInit(addMethod,arguments!);
     }

@@ -15,7 +15,7 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
         writer.WriteType(value.TypeOperand);
     }
-    internal static void InternalSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver)=>
+    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver)=>
         PrivateSerialize(ref writer,value,Resolver);
     private const int ArrayHeader=3;
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){

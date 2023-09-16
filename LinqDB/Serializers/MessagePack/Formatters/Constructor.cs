@@ -12,9 +12,9 @@ public class Constructor:IMessagePackFormatter<T> {
     private const int ArrayHeader=2;
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
-        var ReflectedType=value.ReflectedType!;
-        writer.WriteType(ReflectedType);
-        var array= Resolver.Serializer().TypeConstructors.Get(ReflectedType!);
+        var type=value.ReflectedType!;
+        writer.WriteType(type);
+        var array= Resolver.Serializer().TypeConstructors.Get(type!);
         writer.WriteInt32(Array.IndexOf(array,value));
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -22,10 +22,11 @@ public class Constructor:IMessagePackFormatter<T> {
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
+        Debug.Assert(count==ArrayHeader);
         var array= Resolver.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadInt32();
+        
         return array[index];
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

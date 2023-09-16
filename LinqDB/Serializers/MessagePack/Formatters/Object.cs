@@ -12,7 +12,7 @@ public class Object:IMessagePackFormatter<T>{
     public static readonly Object Instance=new();
     private const int ArrayHeader=2;
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         
         var type=value!.GetType();
@@ -67,7 +67,7 @@ public class Object:IMessagePackFormatter<T>{
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         //if(reader.TryReadNil()) value=null;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);

@@ -9,10 +9,10 @@ using T=Expressions.Expression;
 
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
-    public static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :Binary.InternalSerialize(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Assign               :Binary.Write(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Coalesce             :Binary.InternalSerializeLambda(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
@@ -51,7 +51,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.LessThanOrEqual      :
             case Expressions.ExpressionType.NotEqual             :Binary.InternalSerializeBooleanMethod(ref writer,(Expressions.BinaryExpression)value);break;
             case Expressions.ExpressionType.ArrayLength          :
-            case Expressions.ExpressionType.Quote                :Unary.InternalSerialize(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Quote                :Unary.Write(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.Throw                :
             case Expressions.ExpressionType.TypeAs               :
             case Expressions.ExpressionType.Unbox                :Unary.InternalSerializeType(ref writer,(Expressions.UnaryExpression)value);break;
@@ -71,31 +71,31 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.PreIncrementAssign   :
             case Expressions.ExpressionType.UnaryPlus            :Unary.InternalSerializeMethod(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.TypeEqual            :
-            case Expressions.ExpressionType.TypeIs               :TypeBinary.InternalSerialize(ref writer,(Expressions.TypeBinaryExpression)value); break;
-            case Expressions.ExpressionType.Conditional          :Conditional.InternalSerialize(ref writer,(Expressions.ConditionalExpression)value);break;
-            case Expressions.ExpressionType.Constant             :Constant.InternalSerialize(ref writer,(Expressions.ConstantExpression)value);break;
-            case Expressions.ExpressionType.Parameter            :Parameter.InternalSerialize(ref writer,(Expressions.ParameterExpression)value);break;
-            case Expressions.ExpressionType.Lambda               :Lambda.InternalSerialize(ref writer,(Expressions.LambdaExpression)value); break;
-            case Expressions.ExpressionType.Call                 :MethodCall.InternalSerialize(ref writer,(Expressions.MethodCallExpression)value);break;
-            case Expressions.ExpressionType.Invoke               :Invocation.InternalSerialize(ref writer,(Expressions.InvocationExpression)value);break;
-            case Expressions.ExpressionType.New                  :New.InternalSerialize(ref writer,(Expressions.NewExpression)value);break;
+            case Expressions.ExpressionType.TypeIs               :TypeBinary.Write(ref writer,(Expressions.TypeBinaryExpression)value); break;
+            case Expressions.ExpressionType.Conditional          :Conditional.Write(ref writer,(Expressions.ConditionalExpression)value);break;
+            case Expressions.ExpressionType.Constant             :Constant.Write(ref writer,(Expressions.ConstantExpression)value);break;
+            case Expressions.ExpressionType.Parameter            :Parameter.Write(ref writer,(Expressions.ParameterExpression)value);break;
+            case Expressions.ExpressionType.Lambda               :Lambda.Write(ref writer,(Expressions.LambdaExpression)value); break;
+            case Expressions.ExpressionType.Call                 :MethodCall.Write(ref writer,(Expressions.MethodCallExpression)value);break;
+            case Expressions.ExpressionType.Invoke               :Invocation.Write(ref writer,(Expressions.InvocationExpression)value);break;
+            case Expressions.ExpressionType.New                  :New.Write(ref writer,(Expressions.NewExpression)value);break;
             case Expressions.ExpressionType.NewArrayBounds       :
-            case Expressions.ExpressionType.NewArrayInit         :NewArray.InternalSerialize(ref writer,(Expressions.NewArrayExpression)value);break;//this.Serialize(ref writer,(Expressions.Expressions.(NewArrayExpression)value).Expressions);break;
-            case Expressions.ExpressionType.ListInit             :ListInit.InternalSerialize(ref writer,(Expressions.ListInitExpression)value);break;
-            case Expressions.ExpressionType.MemberAccess         :MemberAccess.InternalSerialize(ref writer,(Expressions.MemberExpression)value);break;
-            case Expressions.ExpressionType.MemberInit           :MemberInit.InternalSerialize(ref writer,(Expressions.MemberInitExpression)value);break;
-            case Expressions.ExpressionType.Block                :Block.InternalSerialize(ref writer,(Expressions.BlockExpression)value);break;
-            case Expressions.ExpressionType.DebugInfo            :DebugInfo.InternalSerialize(ref writer,(Expressions.DebugInfoExpression)value);break;
-            case Expressions.ExpressionType.Dynamic              :Dynamic.InternalSerialize(ref writer,(Expressions.DynamicExpression)value);break;
-            case Expressions.ExpressionType.Default              :Default.InternalSerialize(ref writer,(Expressions.DefaultExpression)value);break;
+            case Expressions.ExpressionType.NewArrayInit         :NewArray.Write(ref writer,(Expressions.NewArrayExpression)value);break;//this.Serialize(ref writer,(Expressions.Expressions.(NewArrayExpression)value).Expressions);break;
+            case Expressions.ExpressionType.ListInit             :ListInit.Write(ref writer,(Expressions.ListInitExpression)value);break;
+            case Expressions.ExpressionType.MemberAccess         :MemberAccess.Write(ref writer,(Expressions.MemberExpression)value);break;
+            case Expressions.ExpressionType.MemberInit           :MemberInit.Write(ref writer,(Expressions.MemberInitExpression)value);break;
+            case Expressions.ExpressionType.Block                :Block.Write(ref writer,(Expressions.BlockExpression)value);break;
+            case Expressions.ExpressionType.DebugInfo            :DebugInfo.Write(ref writer,(Expressions.DebugInfoExpression)value);break;
+            case Expressions.ExpressionType.Dynamic              :Dynamic.Write(ref writer,(Expressions.DynamicExpression)value);break;
+            case Expressions.ExpressionType.Default              :Default.Write(ref writer,(Expressions.DefaultExpression)value);break;
             //case Expressions.ExpressionType.Extension            :
-            case Expressions.ExpressionType.Goto                 :Goto.InternalSerialize(ref writer,(Expressions.GotoExpression)value);break;
-            case Expressions.ExpressionType.Index                :Index.InternalSerialize(ref writer,(Expressions.IndexExpression)value);break;
-            case Expressions.ExpressionType.Label                :Label.InternalSerialize(ref writer,(Expressions.LabelExpression)value);break;
+            case Expressions.ExpressionType.Goto                 :Goto.Write(ref writer,(Expressions.GotoExpression)value);break;
+            case Expressions.ExpressionType.Index                :Index.Write(ref writer,(Expressions.IndexExpression)value);break;
+            case Expressions.ExpressionType.Label                :Label.Write(ref writer,(Expressions.LabelExpression)value);break;
             //case Expressions.ExpressionType.RuntimeVariables     :
-            case Expressions.ExpressionType.Loop                 :Loop.InternalSerialize(ref writer,(Expressions.LoopExpression)value);break;
-            case Expressions.ExpressionType.Switch               :Switch.InternalSerialize(ref writer,(Expressions.SwitchExpression)value);break;
-            case Expressions.ExpressionType.Try                  :Try.InternalSerialize(ref writer,(Expressions.TryExpression)value);break;
+            case Expressions.ExpressionType.Loop                 :Loop.Write(ref writer,(Expressions.LoopExpression)value);break;
+            case Expressions.ExpressionType.Switch               :Switch.Write(ref writer,(Expressions.SwitchExpression)value);break;
+            case Expressions.ExpressionType.Try                  :Try.Write(ref writer,(Expressions.TryExpression)value);break;
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
@@ -105,12 +105,12 @@ public class Expression:MemoryPackFormatter<T> {
             return;
         }
         writer.WriteBoolean(true);
-        InternalSerialize(ref writer,value);
+        Write(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        InternalSerialize(ref writer,value);
+        Write(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader) {
+    internal static T Read(ref Reader reader) {
         T? value = default;
         var NodeType=reader.ReadNodeType();
         switch(NodeType){
@@ -350,42 +350,42 @@ public class Expression:MemoryPackFormatter<T> {
                 var (operand, Type)=Unary.InternalDeserializeType(ref reader);
                 value=T.Unbox(operand,Type); break;
             }
-            case Expressions.ExpressionType.TypeEqual          :value=TypeBinary.InternalDeserializeTypeEqual(ref reader);break;
-            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.InternalDeserializeTypeIs(ref reader);break;
-            case Expressions.ExpressionType.Conditional        :value=Conditional.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Constant           :value=Constant.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Parameter          :value=Parameter.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Lambda             :value=Lambda.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Call               :value=MethodCall.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Invoke             :value=Invocation.InternalDeserialize(ref reader);break;
+            case Expressions.ExpressionType.TypeEqual          :value=TypeBinary.ReadTypeEqual(ref reader);break;
+            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.ReadTypeIs(ref reader);break;
+            case Expressions.ExpressionType.Conditional        :value=Conditional.Read(ref reader);break;
+            case Expressions.ExpressionType.Constant           :value=Constant.Read(ref reader);break;
+            case Expressions.ExpressionType.Parameter          :value=Parameter.Read(ref reader);break;
+            case Expressions.ExpressionType.Lambda             :value=Lambda.Read(ref reader);break;
+            case Expressions.ExpressionType.Call               :value=MethodCall.Read(ref reader);break;
+            case Expressions.ExpressionType.Invoke             :value=Invocation.Read(ref reader);break;
             case Expressions.ExpressionType.New                :value=New.InternaDeserialize(ref reader);break;
-            case Expressions.ExpressionType.NewArrayBounds     :value=NewArray.InternalDeserializeNewArrayBounds(ref reader);break;
-            case Expressions.ExpressionType.NewArrayInit       :value=NewArray.InternalDeserializeNewArrayInit(ref reader);break;
-            case Expressions.ExpressionType.ListInit           :value=ListInit.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.MemberAccess       :value=MemberAccess.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.MemberInit         :value=MemberInit.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Block              :value=Block.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.DebugInfo          :value=DebugInfo.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Dynamic            :value=Dynamic.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Default            :value=Default.InternalDeserialize(ref reader);break;
+            case Expressions.ExpressionType.NewArrayBounds     :value=NewArray.ReadNewArrayBounds(ref reader);break;
+            case Expressions.ExpressionType.NewArrayInit       :value=NewArray.ReadNewArrayInit(ref reader);break;
+            case Expressions.ExpressionType.ListInit           :value=ListInit.Read(ref reader);break;
+            case Expressions.ExpressionType.MemberAccess       :value=MemberAccess.Read(ref reader);break;
+            case Expressions.ExpressionType.MemberInit         :value=MemberInit.Read(ref reader);break;
+            case Expressions.ExpressionType.Block              :value=Block.Read(ref reader);break;
+            case Expressions.ExpressionType.DebugInfo          :value=DebugInfo.Read(ref reader);break;
+            case Expressions.ExpressionType.Dynamic            :value=Dynamic.Read(ref reader);break;
+            case Expressions.ExpressionType.Default            :value=Default.Read(ref reader);break;
             case Expressions.ExpressionType.Extension          :break;
-            case Expressions.ExpressionType.Goto               :value=Goto.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Index              :value=Index.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Label              :value=Label.InternalDeserialize(ref reader);break;
+            case Expressions.ExpressionType.Goto               :value=Goto.Read(ref reader);break;
+            case Expressions.ExpressionType.Index              :value=Index.Read(ref reader);break;
+            case Expressions.ExpressionType.Label              :value=Label.Read(ref reader);break;
             case Expressions.ExpressionType.RuntimeVariables   :break;
-            case Expressions.ExpressionType.Loop               :value=Loop.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Switch             :value=Switch.InternalDeserialize(ref reader);break;
-            case Expressions.ExpressionType.Try                :value=Try.InternalDeserialize(ref reader);break;
+            case Expressions.ExpressionType.Loop               :value=Loop.Read(ref reader);break;
+            case Expressions.ExpressionType.Switch             :value=Switch.Read(ref reader);break;
+            case Expressions.ExpressionType.Try                :value=Try.Read(ref reader);break;
             default:throw new NotSupportedException(NodeType.ToString());
         }
         return value!;
     }
     internal static T? InternalDeserializeNullable(ref Reader reader) {
         if(!reader.ReadBoolean()) return null;
-        return InternalDeserialize(ref reader);
+        return Read(ref reader);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
         //value=this.Deserialize(ref reader,options);
     }
 }

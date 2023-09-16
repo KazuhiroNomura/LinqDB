@@ -11,7 +11,7 @@ using Reader=JsonReader;
 using T= Expressions.BinaryExpression;
 public class Binary:IJsonFormatter<T> {
     public static readonly Binary Instance=new();
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -19,7 +19,7 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
     }
-    internal static void InternalSerializeLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void WriteLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -27,19 +27,9 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+        Lambda.WriteConversion(ref writer,value.Conversion,Resolver);
     }
-    internal static void InternalSerializeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
-        writer.WriteNodeType(value);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
-        writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
-        writer.WriteValueSeparator();
-        Method.Instance.Serialize(ref writer,value.Method,Resolver);
-    }
-    internal static void InternalSerializeMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void WriteMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -48,10 +38,20 @@ public class Binary:IJsonFormatter<T> {
         Expression.Instance.Serialize(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
-        writer.WriteValueSeparator();
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
     }
-    internal static void InternalSerializeBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void WriteMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        writer.WriteValueSeparator();
+        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        writer.WriteValueSeparator();
+        Method.Instance.Serialize(ref writer,value.Method,Resolver);
+        writer.WriteValueSeparator();
+        Lambda.WriteConversion(ref writer,value.Conversion,Resolver);
+    }
+    internal static void WriteBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
@@ -67,8 +67,8 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteBeginArray();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value,Resolver); break;
-            case Expressions.ExpressionType.Coalesce             :InternalSerializeLambda(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :Write(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.Coalesce             :WriteLambda(ref writer,value,Resolver); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -84,7 +84,7 @@ public class Binary:IJsonFormatter<T> {
             case Expressions.ExpressionType.Power                :
             case Expressions.ExpressionType.RightShift           :
             case Expressions.ExpressionType.Subtract             :
-            case Expressions.ExpressionType.SubtractChecked      :InternalSerializeMethod(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.SubtractChecked      :WriteMethod(ref writer,value,Resolver); break;
             case Expressions.ExpressionType.AddAssign            :
             case Expressions.ExpressionType.AddAssignChecked     :
             case Expressions.ExpressionType.DivideAssign         :
@@ -98,13 +98,13 @@ public class Binary:IJsonFormatter<T> {
             case Expressions.ExpressionType.PowerAssign          :
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
-            case Expressions.ExpressionType.SubtractAssignChecked:InternalSerializeMethodLambda(ref writer,value,Resolver); break;
+            case Expressions.ExpressionType.SubtractAssignChecked:WriteMethodLambda(ref writer,value,Resolver); break;
             case Expressions.ExpressionType.Equal                :
             case Expressions.ExpressionType.GreaterThan          :
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :InternalSerializeBooleanMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.NotEqual             :WriteBooleanMethod(ref writer,value,Resolver);break;
             default:throw new NotSupportedException(value.NodeType.ToString());
         }
         writer.WriteEndArray();

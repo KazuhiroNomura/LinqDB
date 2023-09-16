@@ -16,7 +16,7 @@ public class Index:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -28,7 +28,7 @@ public class Index:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var instance= Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var indexer= Property.Read(ref reader,Resolver);
@@ -39,7 +39,7 @@ public class Index:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Buffers;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Dynamic;
-using Expressions = System.Linq.Expressions;
-using MemoryPack;
+using System.Diagnostics;
 using Microsoft.CSharp.RuntimeBinder;
-using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
-//using Binder=System.Reflection.Binder;
+using System.Collections.ObjectModel;
+using MemoryPack;
+using System.Buffers;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader = MemoryPackReader;
 
+using Reader = MemoryPackReader;
 using T = Expressions.DynamicExpression;
-using static Extension;
 using static Common;
 public class Dynamic:MemoryPackFormatter<T> {
     public static readonly Dynamic Instance=new();
@@ -26,8 +23,8 @@ public class Dynamic:MemoryPackFormatter<T> {
                         writer.WriteNodeType(v1.Operation);
                         var Arguments=value.Arguments;
                         Debug.Assert(Arguments.Count==2);
-                        Expression.InternalSerialize(ref writer,Arguments[0]);
-                        Expression.InternalSerialize(ref writer,Arguments[1]);
+                        Expression.Write(ref writer,Arguments[0]);
+                        Expression.Write(ref writer,Arguments[1]);
                         break;
                     }
                     case ConvertBinder v1:{
@@ -37,7 +34,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                         writer.WriteType(v1.Type);
                         writer.WriteBoolean(v1.Explicit);
                         Debug.Assert(value.Arguments.Count==1);
-                        Expression.InternalSerialize(ref writer,value.Arguments[0]);
+                        Expression.Write(ref writer,value.Arguments[0]);
                         break;
                     }
                     case CreateInstanceBinder v1:{
@@ -69,7 +66,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                         WriteBinderType(ref writer,BinderType.GetMemberBinder);
                         writer.WriteType(v0.ReturnType);
                         writer.WriteString(v1.Name);
-                        Expression.InternalSerialize(ref writer,value.Arguments[0]);
+                        Expression.Write(ref writer,value.Arguments[0]);
                         break;
                     }
                     case InvokeBinder v1:{
@@ -97,15 +94,15 @@ public class Dynamic:MemoryPackFormatter<T> {
                         writer.WriteString(v1.Name);
                         var Arguments=value.Arguments;
                         Debug.Assert(Arguments.Count==2);
-                        Expression.InternalSerialize(ref writer,Arguments[0]);
-                        Expression.InternalSerialize(ref writer,Arguments[1]);
+                        Expression.Write(ref writer,Arguments[0]);
+                        Expression.Write(ref writer,Arguments[1]);
                         break;
                     }
                     case UnaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         writer.WriteType(v0.ReturnType);
                         writer.WriteNodeType(v1.Operation);
-                        Expression.InternalSerialize(ref writer,value.Arguments[0]);
+                        Expression.Write(ref writer,value.Arguments[0]);
                         break;
                     }
                 }
@@ -118,52 +115,29 @@ public class Dynamic:MemoryPackFormatter<T> {
             writer0.SerializeReadOnlyCollection(Arguments);
         }
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Dynamic);
         PrivateSerialize(ref writer,value);
-    }
-    internal static void InternalSerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
-        if(value is null)writer.WriteNullObjectHeader();
-        else Instance.Serialize(ref writer,ref value);
     }
     private static void WriteBinderType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BinderType value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteVarInt((byte)value);
     }
-    //private static void WriteBindingFlags<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BindingFlags value)where TBufferWriter:IBufferWriter<byte>{
-    //    writer.WriteVarInt((sbyte)value);
-    //}
-    //private static CSharpBinderFlags ReadBindingFlags(ref Reader reader){
-    //    var v=reader.ReadVarIntByte();
-    //    return (CSharpBinderFlags)v;
-    //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         Debug.Assert(value!=null,nameof(value)+" != null");
-        //Microsoft.CSharp.RuntimeBinder.CSharpInvokeConstructorBinder
         PrivateSerialize(ref writer,value);
     }
     private static BinderType ReadBinderType(ref Reader reader){
         return (BinderType)reader.ReadVarIntByte();
     }
-    internal static T InternalDeserialize(ref Reader reader) {
-        T? value = default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    internal T? InternalDeserializeNullable(ref Reader reader) {
-        if(reader.PeekIsNull()){
-            reader.Advance(1);
-            return null;
-        }
-        return InternalDeserialize(ref reader);
-    }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    internal static T Read(ref Reader reader){
+        T value;
         var BinderType=ReadBinderType(ref reader);
         switch(BinderType){
             case BinderType.BinaryOperationBinder:{
                 var returnType=reader.ReadType();
                 var Operation=reader.ReadNodeType();
-                var left=Expression.InternalDeserialize(ref reader);
-                var right=Expression.InternalDeserialize(ref reader);
+                var left=Expression.Read(ref reader);
+                var right=Expression.Read(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.BinaryOperation(
                         CSharpBinderFlags.None,
@@ -181,7 +155,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                 var returnType=reader.ReadType();
                 var type=reader.ReadType();
                 var Explicit=reader.ReadBoolean();
-                var operand=Expression.InternalDeserialize(ref reader);
+                var operand=Expression.Read(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.Convert(
                         Explicit?CSharpBinderFlags.ConvertExplicit:CSharpBinderFlags.None,
@@ -193,12 +167,12 @@ public class Dynamic:MemoryPackFormatter<T> {
                 );
                 break;
             }
-            case BinderType.CreateInstanceBinder:
-                break;
-            case BinderType.DeleteIndexBinder:
-                break;
-            case BinderType.DeleteMemberBinder:
-                break;
+            //case BinderType.CreateInstanceBinder:
+            //    break;
+            //case BinderType.DeleteIndexBinder:
+            //    break;
+            //case BinderType.DeleteMemberBinder:
+            //    break;
             case BinderType.GetIndexBinder:{
                 var returnType=reader.ReadType();
                 var (CSharpArgumentInfos,Arguments)=共通(ref reader);
@@ -216,7 +190,7 @@ public class Dynamic:MemoryPackFormatter<T> {
             case BinderType.GetMemberBinder:{
                 var returnType=reader.ReadType();
                 var name=reader.ReadString();
-                var operand=Expression.InternalDeserialize(ref reader);
+                var operand=Expression.Read(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.GetMember(
                         CSharpBinderFlags.None,
@@ -277,8 +251,8 @@ public class Dynamic:MemoryPackFormatter<T> {
             case BinderType.SetMemberBinder:{
                 var returnType=reader.ReadType();
                 var name=reader.ReadString();
-                var left=Expression.InternalDeserialize(ref reader);
-                var right=Expression.InternalDeserialize(ref reader);
+                var left=Expression.Read(ref reader);
+                var right=Expression.Read(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.SetMember(
                         CSharpBinderFlags.None,
@@ -295,7 +269,7 @@ public class Dynamic:MemoryPackFormatter<T> {
             case BinderType.UnaryOperationBinder:{
                 var ReturnType=reader.ReadType();
                 var Operation=reader.ReadNodeType();
-                var operand=Expression.InternalDeserialize(ref reader);
+                var operand=Expression.Read(ref reader);
                 value=Expressions.Expression.Dynamic(
                     Binder.UnaryOperation(
                         CSharpBinderFlags.None,
@@ -308,9 +282,9 @@ public class Dynamic:MemoryPackFormatter<T> {
                 );
                 break;
             }
-            default:
-                throw new ArgumentOutOfRangeException(BinderType.ToString());
+            default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
+        return value;
         static (CSharpArgumentInfo[]CSharpArgumentInfos,Expressions.Expression[]Arguments)共通(ref Reader reader0){
             var ArgumentCount=reader0.ReadVarIntInt32();
             var ArgumentNames=reader0.DeserializeArray<string>();
@@ -324,5 +298,8 @@ public class Dynamic:MemoryPackFormatter<T> {
             for(var a=ArgumentNames_Length;a<CSharpArgumentInfos_Length;a++)CSharpArgumentInfos[a]=CSharpArgumentInfo1;
             return (CSharpArgumentInfos,Arguments);
         }
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=Read(ref reader);
     }
 }

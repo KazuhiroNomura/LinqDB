@@ -29,7 +29,7 @@ public class Loop:IMessagePackFormatter<T> {
             Expression.Instance.Serialize(ref writer,value.Body,Resolver);
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         PrivateSerialize0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Loop);
         PrivateSerialize1(ref writer,value,Resolver);
@@ -38,7 +38,7 @@ public class Loop:IMessagePackFormatter<T> {
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver,int ArrayHeader){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver,int ArrayHeader){
         T value;
         if(ArrayHeader==2) {//body
             var body = Expression.Instance.Deserialize(ref reader,Resolver);
@@ -58,6 +58,6 @@ public class Loop:IMessagePackFormatter<T> {
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ArrayHeader=reader.ReadArrayHeader();
-        return InternalDeserialize(ref reader,Resolver,ArrayHeader+1);
+        return Read(ref reader,Resolver,ArrayHeader+1);
     }
 }

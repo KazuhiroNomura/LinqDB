@@ -11,21 +11,21 @@ using Reader=MemoryPackReader;
 using T= Expressions.BinaryExpression;
 public class Binary:MemoryPackFormatter<T> {
     public static readonly Binary Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(value!.NodeType);
 
-        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.Write(ref writer,value.Left);
 
-        Expression.InternalSerialize(ref writer,value.Right);
+        Expression.Write(ref writer,value.Right);
     }
     internal static void InternalSerializeLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.Write(ref writer,value.Left);
 
-        Expression.InternalSerialize(ref writer,value.Right);
+        Expression.Write(ref writer,value.Right);
 
         Lambda.InternalSerializeConversion(ref writer,value.Conversion);
     }
@@ -33,9 +33,9 @@ public class Binary:MemoryPackFormatter<T> {
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.Write(ref writer,value.Left);
 
-        Expression.InternalSerialize(ref writer,value.Right);
+        Expression.Write(ref writer,value.Right);
 
         Method.InternalSerializeNullable(ref writer,value.Method);
     }
@@ -43,9 +43,9 @@ public class Binary:MemoryPackFormatter<T> {
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.Write(ref writer,value.Left);
 
-        Expression.InternalSerialize(ref writer,value.Right);
+        Expression.Write(ref writer,value.Right);
 
         Method.InternalSerializeNullable(ref writer,value.Method);
 
@@ -55,9 +55,9 @@ public class Binary:MemoryPackFormatter<T> {
 
         writer.WriteNodeType(value);
 
-        Expression.InternalSerialize(ref writer,value.Left);
+        Expression.Write(ref writer,value.Left);
         
-        Expression.InternalSerialize(ref writer,value.Right);
+        Expression.Write(ref writer,value.Right);
         
         writer.WriteBoolean(value.IsLiftedToNull);
         
@@ -67,7 +67,7 @@ public class Binary:MemoryPackFormatter<T> {
         Debug.Assert(value!=null,nameof(value)+" != null");
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :InternalSerialize(ref writer,value); break;
+            case Expressions.ExpressionType.Assign               :Write(ref writer,value); break;
             case Expressions.ExpressionType.Coalesce             :InternalSerializeLambda(ref writer,value); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
@@ -110,31 +110,31 @@ public class Binary:MemoryPackFormatter<T> {
         
     }
     internal static (Expressions.Expression left,Expressions.Expression right) InternalDeserialize(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
+        var left = Expression.Read(ref reader);
         
-        var right = Expression.InternalDeserialize(ref reader);
+        var right = Expression.Read(ref reader);
         return (left, right);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion) InternalDeserializeLambda(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
+        var left = Expression.Read(ref reader);
 
-        var right = Expression.InternalDeserialize(ref reader);
+        var right = Expression.Read(ref reader);
 
         var conversion= Lambda.InternalDeserializeConversion(ref reader);
         return (left, right, conversion);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method) InternalDeserializeMethod(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
+        var left = Expression.Read(ref reader);
         
-        var right = Expression.InternalDeserialize(ref reader);
+        var right = Expression.Read(ref reader);
         
         var method = Method.InternalDeserializeNullable(ref reader);
         return (left, right, method);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion) InternalDeserializeMethodLambda(ref Reader reader) {
-        var left = Expression.InternalDeserialize(ref reader);
+        var left = Expression.Read(ref reader);
         
-        var right = Expression.InternalDeserialize(ref reader);
+        var right = Expression.Read(ref reader);
         
         var method = Method.InternalDeserializeNullable(ref reader);
         
@@ -142,9 +142,9 @@ public class Binary:MemoryPackFormatter<T> {
         return (left, right, method,conversion);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method) InternalDeserializeBooleanMethod(ref Reader reader){
-        var left = Expression.InternalDeserialize(ref reader);
+        var left = Expression.Read(ref reader);
         
-        var right = Expression.InternalDeserialize(ref reader);
+        var right = Expression.Read(ref reader);
         
         var isLiftedToNull =reader.ReadBoolean();
         

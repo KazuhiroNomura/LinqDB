@@ -1,25 +1,24 @@
 ﻿using System;
-using Utf8Json;
-using Expressions = System.Linq.Expressions;
-using Microsoft.CSharp.RuntimeBinder;
-using System.Diagnostics;
 using System.Dynamic;
+using System.Diagnostics;
+using Microsoft.CSharp.RuntimeBinder;
 using System.Collections.ObjectModel;
-using LinqDB.Helpers;
+using Utf8Json;
+
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.DynamicExpression;
-using static Extension;
 using static Common;
 public class Dynamic:IJsonFormatter<T> {
     public static readonly Dynamic Instance=new();
-    private static void WriteBinderType(ref Writer writer,BinderType value){
-        writer.WriteString(value.ToString());
-    }
     private static BinderType ReadBinderType(ref Reader reader){
         var NodeTypeName=reader.ReadString();
         return Enum.Parse<BinderType>(NodeTypeName);
+    }
+    private static void WriteBinderType(ref Writer writer,BinderType value){
+        writer.WriteString(value.ToString());
     }
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         switch(value.Binder){
@@ -138,10 +137,10 @@ public class Dynamic:IJsonFormatter<T> {
                         break;
                     }
                     default:{
-                        dynamic o=new NonPublicAccessor(v0);
-                        var BindingFlags=o.BindingFlags;
-                        var Name=o.Name;
-                        var TypeArguments=o.TypeArguments;
+                        //dynamic o=new LinqDB.Helpers.NonPublicAccessor(v0);
+                        //var BindingFlags=o.BindingFlags;
+                        //var Name=o.Name;
+                        //var TypeArguments=o.TypeArguments;
                         throw new NotSupportedException(v0.ToString());
                     }
                 }
@@ -157,143 +156,144 @@ public class Dynamic:IJsonFormatter<T> {
             writer0.SerializeReadOnlyCollection(Arguments,Resolver);
         }
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        switch(value.Binder){
-            case DynamicMetaObjectBinder v0:{
-                switch(v0){
-                    case BinaryOperationBinder v1:{
-                        WriteBinderType(ref writer,BinderType.BinaryOperationBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v0.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.WriteNodeType(v1.Operation);
-                        writer.WriteValueSeparator();
-                        var Arguments=value.Arguments;
-                        Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
-                        writer.WriteValueSeparator();
-                        Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
-                        break;
-                    }
-                    case ConvertBinder v1:{
-                        WriteBinderType(ref writer,BinderType.ConvertBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(value.Type);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v1.Type);
-                        writer.WriteValueSeparator();
-                        writer.WriteBoolean(v1.Explicit);
-                        writer.WriteValueSeparator();
-                        Debug.Assert(value.Arguments.Count==1);
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
-                        break;
-                    }
-                    case CreateInstanceBinder v1:{
-                        WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteInt32(v1.CallInfo.ArgumentCount);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
-                        break;
-                    }
-                    case DeleteIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteInt32(v1.CallInfo.ArgumentCount);
-                        writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
-                        break;
-                    }
-                    case DeleteMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteString(v1.Name);
-                        break;
-                    }
-                    case GetIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.GetIndexBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v1.ReturnType);
-                        共通(ref writer,value.Arguments,v1.CallInfo);
-                        break;
-                    }
-                    case GetMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.GetMemberBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v1.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.WriteString(v1.Name);
-                        writer.WriteValueSeparator();
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
-                        break;
-                    }
-                    case InvokeBinder v1:{
-                        WriteBinderType(ref writer,BinderType.InvokeBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v1.ReturnType);
-                        共通(ref writer,value.Arguments,v1.CallInfo);
-                        break;
-                    }
-                    case InvokeMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v0.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.WriteString(v1.Name);
-                        共通(ref writer,value.Arguments,v1.CallInfo);
-                        break;
-                    }
-                    case SetIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.SetIndexBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v0.ReturnType);
-                        共通(ref writer,value.Arguments,v1.CallInfo);
-                        break;
-                    }
-                    case SetMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.SetMemberBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v0.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.WriteString(v1.Name);
-                        writer.WriteValueSeparator();
-                        var Arguments=value.Arguments;
-                        Debug.Assert(Arguments.Count==2);
-                        Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
-                        writer.WriteValueSeparator();
-                        Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
-                        break;
-                    }
-                    case UnaryOperationBinder v1:{
-                        WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteType(v0.ReturnType);
-                        writer.WriteValueSeparator();
-                        writer.WriteNodeType(v1.Operation);
-                        writer.WriteValueSeparator();
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
-                        break;
-                    }
-                    default:{
-                        dynamic o=new NonPublicAccessor(v0);
-                        var BindingFlags=o.BindingFlags;
-                        var Name=o.Name;
-                        var TypeArguments=o.TypeArguments;
-                        throw new NotSupportedException(v0.ToString());
-                    }
-                }
-                break;
-            }
-        }
-        void 共通(ref Writer writer0,ReadOnlyCollection<Expressions.Expression>Arguments,CallInfo CallInfo){
-            writer0.WriteValueSeparator();
-            writer0.WriteInt32(CallInfo.ArgumentCount);
-            writer0.WriteValueSeparator();
-            writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames,Resolver);
-            writer0.WriteValueSeparator();
-            writer0.SerializeReadOnlyCollection(Arguments,Resolver);
-        }
+        PrivateSerialize(ref writer, value,Resolver);
+        //switch(value.Binder){
+        //    case DynamicMetaObjectBinder v0:{
+        //        switch(v0){
+        //            case BinaryOperationBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.BinaryOperationBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v0.ReturnType);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteNodeType(v1.Operation);
+        //                writer.WriteValueSeparator();
+        //                var Arguments=value.Arguments;
+        //                Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
+        //                writer.WriteValueSeparator();
+        //                Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
+        //                break;
+        //            }
+        //            case ConvertBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.ConvertBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(value.Type);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v1.Type);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteBoolean(v1.Explicit);
+        //                writer.WriteValueSeparator();
+        //                Debug.Assert(value.Arguments.Count==1);
+        //                Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+        //                break;
+        //            }
+        //            case CreateInstanceBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteInt32(v1.CallInfo.ArgumentCount);
+        //                writer.WriteValueSeparator();
+        //                writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
+        //                break;
+        //            }
+        //            case DeleteIndexBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteInt32(v1.CallInfo.ArgumentCount);
+        //                writer.WriteValueSeparator();
+        //                writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
+        //                break;
+        //            }
+        //            case DeleteMemberBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteString(v1.Name);
+        //                break;
+        //            }
+        //            case GetIndexBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.GetIndexBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v1.ReturnType);
+        //                共通(ref writer,value.Arguments,v1.CallInfo);
+        //                break;
+        //            }
+        //            case GetMemberBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.GetMemberBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v1.ReturnType);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteString(v1.Name);
+        //                writer.WriteValueSeparator();
+        //                Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+        //                break;
+        //            }
+        //            case InvokeBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.InvokeBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v1.ReturnType);
+        //                共通(ref writer,value.Arguments,v1.CallInfo);
+        //                break;
+        //            }
+        //            case InvokeMemberBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v0.ReturnType);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteString(v1.Name);
+        //                共通(ref writer,value.Arguments,v1.CallInfo);
+        //                break;
+        //            }
+        //            case SetIndexBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.SetIndexBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v0.ReturnType);
+        //                共通(ref writer,value.Arguments,v1.CallInfo);
+        //                break;
+        //            }
+        //            case SetMemberBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.SetMemberBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v0.ReturnType);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteString(v1.Name);
+        //                writer.WriteValueSeparator();
+        //                var Arguments=value.Arguments;
+        //                Debug.Assert(Arguments.Count==2);
+        //                Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
+        //                writer.WriteValueSeparator();
+        //                Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
+        //                break;
+        //            }
+        //            case UnaryOperationBinder v1:{
+        //                WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteType(v0.ReturnType);
+        //                writer.WriteValueSeparator();
+        //                writer.WriteNodeType(v1.Operation);
+        //                writer.WriteValueSeparator();
+        //                Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+        //                break;
+        //            }
+        //            default:{
+        //                //dynamic o=new LinqDB.Helpers/.NonPublicAccessor(v0);
+        //                //var BindingFlags=o.BindingFlags;
+        //                //var Name=o.Name;
+        //                //var TypeArguments=o.TypeArguments;
+        //                throw new NotSupportedException(v0.ToString());
+        //            }
+        //        }
+        //        break;
+        //    }
+        //}
+        //void 共通(ref Writer writer0,ReadOnlyCollection<Expressions.Expression>Arguments,CallInfo CallInfo){
+        //    writer0.WriteValueSeparator();
+        //    writer0.WriteInt32(CallInfo.ArgumentCount);
+        //    writer0.WriteValueSeparator();
+        //    writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames,Resolver);
+        //    writer0.WriteValueSeparator();
+        //    writer0.SerializeReadOnlyCollection(Arguments,Resolver);
+        //}
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
      //   if(writer.WriteIsNull(value))return;
@@ -302,7 +302,7 @@ public class Dynamic:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
         var BinderType=ReadBinderType(ref reader);
         reader.ReadIsValueSeparatorWithVerify();
@@ -493,7 +493,7 @@ public class Dynamic:IJsonFormatter<T> {
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

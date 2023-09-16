@@ -6,8 +6,8 @@ using static Extension;
 using T = System.Delegate;
 public class Delegate:IJsonFormatter<T> {
     public static readonly Delegate Instance =new();
+    
     internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         writer.WriteType(value!.GetType());
         writer.WriteValueSeparator();
@@ -20,7 +20,6 @@ public class Delegate:IJsonFormatter<T> {
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var delegateType=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();

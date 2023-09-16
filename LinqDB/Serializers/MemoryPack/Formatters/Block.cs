@@ -23,7 +23,7 @@ public class Block:MemoryPackFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Expressions);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(Expressions.ExpressionType.Block);
         
@@ -34,7 +34,7 @@ public class Block:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
         
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var ListParameter= reader.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type= reader.ReadType();
@@ -49,7 +49,7 @@ public class Block:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
 
 
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
         
     }
 }

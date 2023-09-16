@@ -8,7 +8,7 @@ using Reader = MemoryPackReader;
 using T = System.Object;
 public class Object:MemoryPackFormatter<object>{
     public static readonly Object Instance=new();
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         if(value is null){
             writer.WriteNullObjectHeader();
             return;
@@ -26,14 +26,14 @@ public class Object:MemoryPackFormatter<object>{
             case uint                   v:writer.WriteVarInt(v);break;
             case ulong                  v:writer.WriteVarInt(v);break;
             case string                 v:writer.WriteString(v);break;
-            case System.Delegate        v:Delegate   .Serialize(ref writer,v);break;
-            case Expressions.Expression v:Expression .InternalSerialize(ref writer,v);break;
-            case System.Type            v:Type       .Serialize(ref writer,v);break;
-            case ConstructorInfo        v:Constructor.Serialize(ref writer,v);break;
-            case MethodInfo             v:Method     .Serialize(ref writer,v);break;
-            case PropertyInfo           v:Property   .Serialize(ref writer,v);break;
-            case EventInfo              v:Event      .Serialize(ref writer,v);break;
-            case FieldInfo              v:Field      .Serialize(ref writer,v);break;
+            case System.Delegate        v:Delegate   .Write(ref writer,v);break;
+            case Expressions.Expression v:Expression .Write(ref writer,v);break;
+            case System.Type            v:Type       .Write(ref writer,v);break;
+            case ConstructorInfo        v:Constructor.Write(ref writer,v);break;
+            case MethodInfo             v:Method     .Write(ref writer,v);break;
+            case PropertyInfo           v:Property   .Write(ref writer,v);break;
+            case EventInfo              v:Event      .Write(ref writer,v);break;
+            case FieldInfo              v:Field      .Write(ref writer,v);break;
             //case MemberInfo             v:Member     .Serialize(ref writer,v);break;
             default:
                 writer.Serializer().RegisterAnonymousDisplay(type);
@@ -42,7 +42,7 @@ public class Object:MemoryPackFormatter<object>{
         }
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value){
-        InternalSerialize(ref writer,value);
+        Write(ref writer,value);
     }
     internal static T? InternalDeserialize(ref Reader reader) {
         if(reader.PeekIsNull()){
@@ -60,14 +60,14 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(ushort )==type)value=reader.ReadVarIntUInt16();
         else if(typeof(uint   )==type)value=reader.ReadVarIntUInt32();
         else if(typeof(ulong  )==type)value=reader.ReadVarIntUInt64();
-        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate  .Deserialize(ref reader);
-        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .InternalDeserialize(ref reader);
-        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Deserialize(ref reader);
-        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Deserialize(ref reader);
-        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Deserialize(ref reader);
-        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Deserialize(ref reader);
-        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Deserialize(ref reader);
-        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Deserialize(ref reader);
+        else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate   .Read(ref reader);
+        else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Read(ref reader);
+        else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Read(ref reader);
+        else if(typeof(ConstructorInfo       ).IsAssignableFrom(type))value=Constructor.Read(ref reader);
+        else if(typeof(MethodInfo            ).IsAssignableFrom(type))value=Method     .Read(ref reader);
+        else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Read(ref reader);
+        else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Read(ref reader);
+        else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Read(ref reader);
         else value=reader.ReadValue(type);
         return value!;
     }

@@ -17,18 +17,19 @@ public class Conditional:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
+        
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var test=Expression.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var ifTrue=Expression.Instance.Deserialize(ref reader,Resolver);
@@ -40,9 +41,8 @@ public class Conditional:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var value=InternalDeserialize(ref reader,Resolver);
+        var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
 }
-

@@ -13,17 +13,18 @@ public class Default:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value){
         writer.WriteType(value.Type);
     }
-    internal static void InternalSerialize(ref Writer writer,T value){
+    internal static void Write(ref Writer writer,T value){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Default);
+        
         PrivateSerialize(ref writer,value);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value);
+        
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var type=reader.ReadType();
         return Expressions.Expression.Default(type);
     }
@@ -31,6 +32,6 @@ public class Default:IMessagePackFormatter<T> {
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader);
+        return Read(ref reader);
     }
 }

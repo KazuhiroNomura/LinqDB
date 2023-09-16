@@ -1,14 +1,26 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
-
 using MemoryPack;
+using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 using Reader = MemoryPackReader;
+
+
+
+
+
+
+
+
+
+
+
+
 public class DisplayClass<T>:MemoryPackFormatter<T>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     public static readonly DisplayClass<T> Instance=new();//リフレクションで使われる
@@ -18,11 +30,13 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
     private delegate void delegate_Deserialize(ref Reader reader,scoped ref T?value);
     private readonly delegate_Deserialize DelegateDeserialize;
     public DisplayClass(){
-        //DisplayClassMessagePackFormatterを参考にする
         var Types1 = new System.Type[1];
         var DeserializeTypes = new System.Type[2];
         DeserializeTypes[0]=typeof(Reader).MakeByRefType();
         DeserializeTypes[1]=typeof(T).MakeByRefType();
+        
+        
+        
         var ctor = typeof(T).GetConstructors()[0];
         var Fields = typeof(T).GetFields(BindingFlags.Public|BindingFlags.Instance);
         var Fields_Length = Fields.Length;
@@ -44,8 +58,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
                     I1.Emit(OpCodes.Ldarg_1);//value
                     I1.Emit(OpCodes.Ldind_Ref);
                     I1.Emit(OpCodes.Ldflda,Field);//value.field
-                    I1.Emit(OpCodes.Call,
-                        Extension.MethodDeserialize.MakeGenericMethod(Types1));//Deserialize(ref reader,ref value.field)
+                    I1.Emit(OpCodes.Call,Extension.MethodDeserialize.MakeGenericMethod(Types1));//Deserialize(ref reader,ref value.field)
                     index++;
                     if(index==Fields_Length) break;
                 }

@@ -13,7 +13,7 @@ public class MemberInit:MemoryPackFormatter<T> {
         New.InternalSerializeNew(ref writer,value.NewExpression);
         writer.SerializeReadOnlyCollection(value.Bindings);
     }
-    internal static void InternalSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.MemberInit);
         PrivateSerialize(ref writer,value);
     }
@@ -21,12 +21,12 @@ public class MemberInit:MemoryPackFormatter<T> {
         Debug.Assert(value!=null,nameof(value)+" != null");
         PrivateSerialize(ref writer,value);
     }
-    internal static T InternalDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var @new= New.InternaDeserialize(ref reader);
         var bindings=reader.ReadArray<Expressions.MemberBinding>();
         return Expressions.Expression.MemberInit(@new,bindings!);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternalDeserialize(ref reader);
+        value=Read(ref reader);
     }
 }

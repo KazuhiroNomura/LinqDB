@@ -9,13 +9,13 @@ using T=EventInfo;
 using C=Serializer;
 public class Event:MemoryPackFormatter<T>{
     public static readonly Event Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
         Instance.Serialize(ref writer,ref value);
     //internal static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
     //    writer.WriteBoolean(value is not null);
     //    if(value is not null) this.Serialize(ref writer,ref value);
     //}
-    internal static T Deserialize(ref Reader reader) {
+    internal static T Read(ref Reader reader) {
         T? value = default;
         Instance.Deserialize(ref reader,ref value);
         return value!;

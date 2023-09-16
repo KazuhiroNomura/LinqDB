@@ -1,9 +1,11 @@
-﻿//#define 匿名型にキーを入れる
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+
+
 using Utf8Json;
+
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
@@ -11,22 +13,18 @@ internal static class DisplayClass{
     public static readonly MethodInfo WriteValueSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
     public static readonly MethodInfo WriteString=typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
     public static readonly MethodInfo WriteNameSeparator=typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
-    public static readonly MethodInfo ReadIsValueSeparatorWithVerify=
-        typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
+    public static readonly MethodInfo ReadIsValueSeparatorWithVerify=typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
     public static readonly MethodInfo ReadString=typeof(Reader).GetMethod(nameof(Reader.ReadString))!;
-    public static readonly MethodInfo ReadIsNameSeparatorWithVerify=
-        typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
-    private static void Serialize<T>(ref Writer writer,T value,IJsonFormatterResolver Resolver)=>
-        Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-    public static readonly MethodInfo MethodSerialize=
-        typeof(DisplayClass).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static T Deserialize<T>(ref Reader reader,IJsonFormatterResolver Resolver)=>
-        Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    public static readonly MethodInfo MethodDeserialize=
-        typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    public static readonly MethodInfo ReadIsNameSeparatorWithVerify=typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
+    private static void Serialize<T>(ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+    public static readonly MethodInfo MethodSerialize=typeof(DisplayClass).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static T Deserialize<T>(ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
+    public static readonly MethodInfo MethodDeserialize=typeof(DisplayClass).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
 }
 public class DisplayClass<T>:IJsonFormatter<T>{
     public static readonly DisplayClass<T> Instance=new();
+    
+    
     private delegate void delegate_Serialize(ref Writer writer,T value,IJsonFormatterResolver formatterResolver);
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver);

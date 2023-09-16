@@ -1,5 +1,4 @@
-﻿//#define 匿名型にキーを入れる
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -19,8 +18,13 @@ internal static class DisplayClass {
     public static readonly MethodInfo ReadArrayHeader = typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
     public static readonly Dictionary<System.Type,System.Delegate> DictionarySerialize = new();
 }
+
+
+
 public class DisplayClass<T>:IMessagePackFormatter<T>{
+    
     public static readonly DisplayClass<T>Instance=new();
+    
     private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);

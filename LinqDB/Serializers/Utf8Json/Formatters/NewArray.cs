@@ -15,7 +15,7 @@ public class NewArray:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
@@ -35,11 +35,11 @@ public class NewArray:IJsonFormatter<T> {
         var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
         return (type,expressions);
     }
-    internal static T InternalDeserializeNewArrayBounds(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T ReadNewArrayBounds(ref Reader reader,IJsonFormatterResolver Resolver){
         var (type,expressions)=PrivateDeserialize(ref reader,Resolver);
         return Expressions.Expression.NewArrayBounds(type,expressions);
     }
-    internal static T InternalDeserializeNewArrayInit(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T ReadNewArrayInit(ref Reader reader,IJsonFormatterResolver Resolver){
         var (type,expressions)=PrivateDeserialize(ref reader,Resolver);
         return Expressions.Expression.NewArrayInit(type,expressions);
     }
@@ -50,8 +50,8 @@ public class NewArray:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         var value=NodeType switch{
-            Expressions.ExpressionType.NewArrayBounds=>InternalDeserializeNewArrayBounds(ref reader,Resolver),
-            Expressions.ExpressionType.NewArrayInit=>InternalDeserializeNewArrayInit(ref reader,Resolver),
+            Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader,Resolver),
+            Expressions.ExpressionType.NewArrayInit=>ReadNewArrayInit(ref reader,Resolver),
             _=>throw new NotImplementedException(Resolver.ToString())
         };
         reader.ReadIsEndArrayWithVerify();

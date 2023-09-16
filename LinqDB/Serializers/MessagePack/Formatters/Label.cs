@@ -15,7 +15,7 @@ public class Label:IMessagePackFormatter<T> {
         LabelTarget.Instance.Serialize(ref writer,value!.Target,Resolver);
         Expression.InternalSerializeNullable(ref writer,value.DefaultValue,Resolver);
     }
-    internal static void InternalSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Label);
         PrivateSerialize(ref writer,value,Resolver);
@@ -25,7 +25,7 @@ public class Label:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
         var defaultValue=Expression.InternalDeserializeNullable(ref reader,Resolver);
         return Expressions.Expression.Label(target,defaultValue);
@@ -34,6 +34,6 @@ public class Label:IMessagePackFormatter<T> {
         //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
-        return InternalDeserialize(ref reader,Resolver);
+        return Read(ref reader,Resolver);
     }
 }

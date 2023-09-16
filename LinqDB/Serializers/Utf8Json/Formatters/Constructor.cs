@@ -1,18 +1,23 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
+
 using Utf8Json;
+
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=ConstructorInfo;
-using static Extension;
 public class Constructor:IJsonFormatter<T> {
     public static readonly Constructor Instance=new();
+    
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        writer.WriteType(value.ReflectedType);
+        var type=value.ReflectedType!;
+        writer.WriteType(type);
+        var array= Resolver.Serializer().TypeConstructors.Get(type!);
         writer.WriteValueSeparator();
-        writer.WriteInt32(value.MetadataToken);
+        writer.WriteInt32(Array.IndexOf(array,value));
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
@@ -21,11 +26,11 @@ public class Constructor:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
-        var array= Resolver.Serializer().TypeConstructors.Get(type);
         reader.ReadIsValueSeparatorWithVerify();
+        var array= Resolver.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).Single(p=>p.MetadataToken==index);
+        return array[index];
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         return Read(ref reader,Resolver);

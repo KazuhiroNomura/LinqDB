@@ -32,11 +32,8 @@ public class Method:IMessagePackFormatter<T>{
         var index=reader.ReadInt32();
         return array[index];
     }
-    internal static T? InternalDeserializeNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
         return reader.TryReadNil()?null:Read(ref reader,Resolver);
-    }
-    internal static T InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         return Read(ref reader,Resolver);
