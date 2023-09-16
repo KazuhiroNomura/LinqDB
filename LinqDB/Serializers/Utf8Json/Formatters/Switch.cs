@@ -10,13 +10,13 @@ public class Switch:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.SwitchValue,Resolver);
+        Expression.Write(ref writer,value.SwitchValue,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Comparison,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Cases,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.DefaultBody,Resolver);
+        Expression.Write(ref writer,value.DefaultBody,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
@@ -31,13 +31,13 @@ public class Switch:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var switchValue=Expression.Instance.Deserialize(ref reader,Resolver);
+        var switchValue=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var comparison=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var defaultBody=Expression.Instance.Deserialize(ref reader,Resolver);
+        var defaultBody=Expression.Read(ref reader,Resolver);
         var value=Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
         return value;
     }

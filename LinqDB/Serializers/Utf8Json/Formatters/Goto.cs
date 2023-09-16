@@ -12,7 +12,7 @@ public class Goto:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
         writer.WriteValueSeparator();
-        if(!writer.WriteIsNull(value.Value))Expression.Instance.Serialize(ref writer,value.Value,Resolver);
+        if(!writer.WriteIsNull(value.Value))Expression.Write(ref writer,value.Value,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
@@ -32,7 +32,7 @@ public class Goto:IJsonFormatter<T> {
         //var target=Deserialize_T<LabelTarget>(ref reader,Resolver);
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var value=reader.ReadIsNull()?null:Expression.Instance.Deserialize(ref reader,Resolver);
+        var value=reader.ReadIsNull()?null:Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return Expressions.Expression.MakeGoto(kind,target,value,type);

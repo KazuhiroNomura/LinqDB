@@ -24,7 +24,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             writer.WriteArrayHeader(InternalArrayHeader1);
             writer.WriteNodeType(Expressions.ExpressionType.Call);
             Method.InternalSerializeNullable(ref writer,method,Resolver);
-            Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
+            Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
@@ -37,7 +37,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         } else{
             writer.WriteArrayHeader(ArrayHeader1);
             Method.InternalSerializeNullable(ref writer,method,Resolver);
-            Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
+            Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
@@ -50,7 +50,7 @@ public class MethodCall:IMessagePackFormatter<T> {
                 arguments
             );
         } else{
-            var instance= Expression.Instance.Deserialize(ref reader,Resolver);
+            var instance= Expression.Read(ref reader,Resolver);
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
@@ -72,7 +72,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             );
         } else{
             Debug.Assert(count==ArrayHeader1);
-            var instance= Expression.Instance.Deserialize(ref reader,Resolver);
+            var instance= Expression.Read(ref reader,Resolver);
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,

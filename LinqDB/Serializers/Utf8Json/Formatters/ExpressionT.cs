@@ -18,7 +18,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
         writer.WriteValueSeparator();
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.TailCall);
         writer.WriteEndArray();
@@ -33,7 +33,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
         var parameters= reader.Deserialize宣言Parameters(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         ListParameter.AddRange(parameters!);
-        var body = Expression.Instance.Deserialize(ref reader,Resolver);
+        var body = Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var tailCall = reader.ReadBoolean();
         reader.ReadIsEndArrayWithVerify();

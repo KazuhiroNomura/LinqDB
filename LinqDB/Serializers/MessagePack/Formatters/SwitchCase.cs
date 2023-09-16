@@ -14,13 +14,13 @@ public class SwitchCase:IMessagePackFormatter<T> {
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         writer.SerializeReadOnlyCollection(value.TestValues,Resolver);
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var testValues=reader.ReadArray<Expressions.Expression>(Resolver);
-        var body= Expression.Instance.Deserialize(ref reader,Resolver);
+        var body= Expression.Read(ref reader,Resolver);
         return Expressions.Expression.SwitchCase(body,testValues);
     }
 }

@@ -10,7 +10,7 @@ using T=Expressions.InvocationExpression;
 public class Invocation:IJsonFormatter<T> {
     public static readonly Invocation Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
@@ -27,7 +27,7 @@ public class Invocation:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        var expression=Expression.Instance.Deserialize(ref reader,Resolver);
+        var expression=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.Invoke(expression,arguments);

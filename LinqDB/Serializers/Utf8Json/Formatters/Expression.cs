@@ -386,7 +386,7 @@ public class Expression:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public static T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+    public static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull())return null;
         return Read(ref reader,Resolver);
     }

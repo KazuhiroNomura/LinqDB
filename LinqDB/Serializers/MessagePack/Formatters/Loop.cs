@@ -19,14 +19,14 @@ public class Loop:IMessagePackFormatter<T> {
     }
     private static void PrivateSerialize1(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         if(value.BreakLabel is null){//body
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+            Expression.Write(ref writer,value.Body,Resolver);
         } else if(value.ContinueLabel is null){//break,body
             LabelTarget.Instance.Serialize(ref writer,value.BreakLabel,Resolver);
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+            Expression.Write(ref writer,value.Body,Resolver);
         } else{//break,continue,body
             LabelTarget.Instance.Serialize(ref writer,value.BreakLabel,Resolver);
             LabelTarget.Instance.Serialize(ref writer,value.ContinueLabel,Resolver);
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+            Expression.Write(ref writer,value.Body,Resolver);
         }
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -41,17 +41,17 @@ public class Loop:IMessagePackFormatter<T> {
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver,int ArrayHeader){
         T value;
         if(ArrayHeader==2) {//body
-            var body = Expression.Instance.Deserialize(ref reader,Resolver);
+            var body = Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body);
         } else if(ArrayHeader==3){//break,body
             var breakLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
-            var body = Expression.Instance.Deserialize(ref reader,Resolver);
+            var body = Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body,breakLabel);
         } else {//break,continue,body
             Debug.Assert(ArrayHeader==4);
             var breakLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
             var continueLabel = LabelTarget.Instance.Deserialize(ref reader,Resolver);
-            var body = Expression.Instance.Deserialize(ref reader,Resolver);
+            var body = Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body,breakLabel,continueLabel);
         }
         return value;

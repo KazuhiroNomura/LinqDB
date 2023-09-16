@@ -12,7 +12,7 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     private static void PrivateSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         writer.WriteNodeType(value.NodeType);
-        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteType(value.TypeOperand);
     }
     internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver)=>
@@ -22,7 +22,7 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         PrivateSerialize(ref writer,value,Resolver);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var expression=Expression.Instance.Deserialize(ref reader,Resolver);
+        var expression=Expression.Read(ref reader,Resolver);
         var type=reader.ReadType();
         return (expression,type);
     }

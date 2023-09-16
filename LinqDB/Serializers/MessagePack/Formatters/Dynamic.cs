@@ -43,8 +43,8 @@ public class Dynamic:IMessagePackFormatter<T> {
                         writer.WriteType(v0.ReturnType);
                         writer.WriteNodeType(v1.Operation);
                         var Arguments=value.Arguments;
-                        Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
-                        Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
+                        Expression.Write(ref writer,Arguments[0],Resolver);
+                        Expression.Write(ref writer,Arguments[1],Resolver);
                         break;
                     }
                     case ConvertBinder v1:{
@@ -54,7 +54,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                         writer.WriteType(v1.Type);
                         writer.WriteBoolean(v1.Explicit);
                         Debug.Assert(value.Arguments.Count==1);
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+                        Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
                     case CreateInstanceBinder v1:{
@@ -84,7 +84,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                         WriteBinderType(ref writer,BinderType.GetMemberBinder);
                         writer.WriteType(v0.ReturnType);
                         writer.Write(v1.Name);
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+                        Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
                     case InvokeBinder v1:{
@@ -112,15 +112,15 @@ public class Dynamic:IMessagePackFormatter<T> {
                         writer.Write(v1.Name);
                         var Arguments=value.Arguments;
                         Debug.Assert(Arguments.Count==2);
-                        Expression.Instance.Serialize(ref writer,Arguments[0],Resolver);
-                        Expression.Instance.Serialize(ref writer,Arguments[1],Resolver);
+                        Expression.Write(ref writer,Arguments[0],Resolver);
+                        Expression.Write(ref writer,Arguments[1],Resolver);
                         break;
                     }
                     case UnaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         writer.WriteType(v0.ReturnType);
                         writer.WriteNodeType(v1.Operation);
-                        Expression.Instance.Serialize(ref writer,value.Arguments[0],Resolver);
+                        Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
                 }
@@ -160,8 +160,8 @@ public class Dynamic:IMessagePackFormatter<T> {
             case BinderType.BinaryOperationBinder:{
                 var ReturnType=reader.ReadType();
                 var Operation=reader.ReadNodeType();
-                var left=Expression.Instance.Deserialize(ref reader,Resolver);
-                var right=Expression.Instance.Deserialize(ref reader,Resolver);
+                var left=Expression.Read(ref reader,Resolver);
+                var right=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Dynamic(
                     Binder.BinaryOperation(
                         CSharpBinderFlags.None,
@@ -179,7 +179,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                 var returnType=reader.ReadType();
                 var type=reader.ReadType();
                 var Explicit=reader.ReadBoolean();
-                var operand=Expression.Instance.Deserialize(ref reader,Resolver);
+                var operand=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Dynamic(
                     Binder.Convert(
                         Explicit?CSharpBinderFlags.ConvertExplicit:CSharpBinderFlags.None,
@@ -214,7 +214,7 @@ public class Dynamic:IMessagePackFormatter<T> {
             case BinderType.GetMemberBinder:{
                 var returnType=reader.ReadType();
                 var name=reader.ReadString();
-                var operand=Expression.Instance.Deserialize(ref reader,Resolver);
+                var operand=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Dynamic(
                     Binder.GetMember(
                         CSharpBinderFlags.None,
@@ -275,8 +275,8 @@ public class Dynamic:IMessagePackFormatter<T> {
             case BinderType.SetMemberBinder:{
                 var returnType=reader.ReadType();
                 var name=reader.ReadString();
-                var left=Expression.Instance.Deserialize(ref reader,Resolver);
-                var right=Expression.Instance.Deserialize(ref reader,Resolver);
+                var left=Expression.Read(ref reader,Resolver);
+                var right=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Dynamic(
                     Binder.SetMember(
                         CSharpBinderFlags.None,
@@ -293,7 +293,7 @@ public class Dynamic:IMessagePackFormatter<T> {
             case BinderType.UnaryOperationBinder:{
                 var ReturnType=reader.ReadType();
                 var Operation=reader.ReadNodeType();
-                var operand=Expression.Instance.Deserialize(ref reader,Resolver);
+                var operand=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Dynamic(
                     Binder.UnaryOperation(
                         CSharpBinderFlags.None,

@@ -12,26 +12,26 @@ public class Unary:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
     }
     internal static void WriteType(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
     internal static void WriteMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.SerializeNullable(ref writer,value.Method,Resolver);
     }
     internal static void WriteTypeMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
@@ -68,23 +68,23 @@ public class Unary:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static Expressions.Expression InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var Operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var Operand= Expression.Read(ref reader,Resolver);
         return Operand;
     }
     internal static (Expressions.Expression operand,System.Type type)InternalDeserializeType(ref Reader reader,IJsonFormatterResolver Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return(operand,type);
     }
     internal static (Expressions.Expression operand,MethodInfo method)InternalDeserializeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         return(operand,method);
     }
     internal static (Expressions.Expression operand,System.Type type,MethodInfo method)InternalDeserializeTypeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();

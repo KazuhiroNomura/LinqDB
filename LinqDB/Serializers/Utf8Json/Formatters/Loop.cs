@@ -9,17 +9,17 @@ public class Loop:IJsonFormatter<T>{
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value.BreakLabel)){
             writer.WriteValueSeparator();
-            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+            Expression.Write(ref writer,value.Body,Resolver);
         } else{
             LabelTarget.Instance.Serialize(ref writer,value.BreakLabel,Resolver);
             writer.WriteValueSeparator();
             if(writer.WriteIsNull(value.ContinueLabel)){
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             } else{
                 LabelTarget.Instance.Serialize(ref writer,value.ContinueLabel,Resolver);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             }
         }
     }
@@ -37,19 +37,19 @@ public class Loop:IJsonFormatter<T>{
         T value;
         if(reader.ReadIsNull()){
             reader.ReadNext();
-            var body=Expression.Instance.Deserialize(ref reader,Resolver);
+            var body=Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body);
         } else{
             var breakLabel=LabelTarget.Instance.Deserialize(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
             if(reader.ReadIsNull()){
                 reader.ReadNext();
-                var body=Expression.Instance.Deserialize(ref reader,Resolver);
+                var body=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Loop(body,breakLabel);
             } else{
                 var continueLabel=LabelTarget.Instance.Deserialize(ref reader,Resolver);
                 reader.ReadIsValueSeparatorWithVerify();
-                var body=Expression.Instance.Deserialize(ref reader,Resolver);
+                var body=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Loop(body,breakLabel,continueLabel);
             }
         }

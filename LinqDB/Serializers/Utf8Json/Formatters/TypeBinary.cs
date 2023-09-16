@@ -10,7 +10,7 @@ using static Extension;
 public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
     private static void PrivateSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Expression,Resolver);
+        Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.TypeOperand);
     }
@@ -29,7 +29,7 @@ public class TypeBinary:IJsonFormatter<Expressions.TypeBinaryExpression>{
         writer.WriteEndArray();
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var expression=Expression.Instance.Deserialize(ref reader,Resolver);
+        var expression=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return (expression,type);

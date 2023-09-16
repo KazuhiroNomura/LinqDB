@@ -22,7 +22,7 @@ public class Lambda:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
@@ -50,7 +50,7 @@ public class Lambda:IJsonFormatter<T> {
         ListParameter.AddRange(parameters);
 
         reader.ReadIsValueSeparatorWithVerify();
-        var body =Expression.Instance.Deserialize(ref reader,Resolver);
+        var body =Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var tailCall = reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters.Count);

@@ -14,10 +14,10 @@ public class Switch:IMessagePackFormatter<T> {
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteType(value!.Type);
-        Expression.Instance.Serialize(ref writer,value.SwitchValue,Resolver);
+        Expression.Write(ref writer,value.SwitchValue,Resolver);
         Method.InternalSerializeNullable(ref writer,value.Comparison,Resolver);
         writer.SerializeReadOnlyCollection(value.Cases,Resolver);
-        Expression.Instance.Serialize(ref writer,value.DefaultBody,Resolver);
+        Expression.Write(ref writer,value.DefaultBody,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
@@ -31,10 +31,10 @@ public class Switch:IMessagePackFormatter<T> {
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var type=reader.ReadType();
-        var switchValue= Expression.Instance.Deserialize(ref reader,Resolver);
+        var switchValue= Expression.Read(ref reader,Resolver);
         var comparison= Method.ReadNullable(ref reader,Resolver);
         var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
-        var defaultBody= Expression.Instance.Deserialize(ref reader,Resolver);
+        var defaultBody= Expression.Read(ref reader,Resolver);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

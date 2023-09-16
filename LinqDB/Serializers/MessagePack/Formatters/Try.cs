@@ -23,7 +23,7 @@ public class Try:IMessagePackFormatter<T>{
         }
     }
     private static void PrivateSerialize1(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        Expression.Instance.Serialize(ref writer,value!.Body,Resolver);
+        Expression.Write(ref writer,value!.Body,Resolver);
         Expression.InternalSerializeNullable(ref writer,value.Finally,Resolver);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
@@ -46,7 +46,7 @@ public class Try:IMessagePackFormatter<T>{
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
-        var body= Expression.Instance.Deserialize(ref reader,Resolver);
+        var body= Expression.Read(ref reader,Resolver);
         var @finally=Expression.InternalDeserializeNullable(ref reader,Resolver);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);

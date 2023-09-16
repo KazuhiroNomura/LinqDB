@@ -12,7 +12,7 @@ public class Invocation:IMessagePackFormatter<T> {
     private const int ArrayHeader=2;
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        Expression.Instance.Serialize(ref writer,value!.Expression,Resolver);
+        Expression.Write(ref writer,value!.Expression,Resolver);
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -26,7 +26,7 @@ public class Invocation:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var expression= Expression.Instance.Deserialize(ref reader,Resolver);
+        var expression= Expression.Read(ref reader,Resolver);
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.Invoke(expression,arguments);
     }

@@ -24,7 +24,7 @@ public class MemberAccess:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var member =Member.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var expression = Expression.DeserializeNullable(ref reader,Resolver);
+        var expression = Expression.ReadNullable(ref reader,Resolver);
         return Expressions.Expression.MakeMemberAccess(expression,member);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {

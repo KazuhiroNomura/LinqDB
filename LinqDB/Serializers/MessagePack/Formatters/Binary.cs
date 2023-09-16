@@ -15,17 +15,17 @@ public class Binary:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
         
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
 
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
     }
     internal static void InternalSerializeLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
         
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
 
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
 
         Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
     }
@@ -33,9 +33,9 @@ public class Binary:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
         
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
 
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
 
         Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
     }
@@ -43,9 +43,9 @@ public class Binary:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(value.NodeType);
         
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
 
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
 
         Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
 
@@ -55,9 +55,9 @@ public class Binary:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(value!.NodeType);
         
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
         
         writer.Write(value.IsLiftedToNull);
         
@@ -110,31 +110,31 @@ public class Binary:IMessagePackFormatter<T> {
         
     }
     internal static(Expressions.Expression left,Expressions.Expression right)InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         return(left,right);
     }
     internal static (Expressions.Expression left, Expressions.Expression right, Expressions.LambdaExpression? Conversion) InternalDeserializeLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
-        var left = Expression.Instance.Deserialize(ref reader,Resolver);
+        var left = Expression.Read(ref reader,Resolver);
 
-        var right = Expression.Instance.Deserialize(ref reader,Resolver);
+        var right = Expression.Read(ref reader,Resolver);
 
         var conversion= Lambda.InternalDeserializeConversion(ref reader,Resolver);
         return (left, right, conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? Method)InternalDeserializeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         
         var method=Method.ReadNullable(ref reader,Resolver);
         return(left,right,method);
     }
     internal static (Expressions.Expression left, Expressions.Expression right, MethodInfo? Method, Expressions.LambdaExpression? Conversion) InternalDeserializeMethodLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
-        var left = Expression.Instance.Deserialize(ref reader,Resolver);
+        var left = Expression.Read(ref reader,Resolver);
         
-        var right = Expression.Instance.Deserialize(ref reader,Resolver);
+        var right = Expression.Read(ref reader,Resolver);
         
         var method = Method.ReadNullable(ref reader,Resolver);
         
@@ -142,9 +142,9 @@ public class Binary:IMessagePackFormatter<T> {
         return (left, right, method,conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,bool IsLiftedToNull,MethodInfo? Method)InternalDeserializeBooleanMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         
         var IsLiftedToNull=reader.ReadBoolean();
         

@@ -17,7 +17,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
-                Expression.Instance.Serialize(ref writer,((Expressions.MemberAssignment)value).Expression,Resolver);
+                Expression.Write(ref writer,((Expressions.MemberAssignment)value).Expression,Resolver);
                 break;
             case Expressions.MemberBindingType.MemberBinding:
                 writer.SerializeReadOnlyCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
@@ -35,7 +35,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();
         var member= Member.Instance.Deserialize(ref reader,Resolver);
         T MemberBinding =BindingType switch{
-            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Instance.Deserialize(ref reader,Resolver)),
+            Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),
             Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>(Resolver)),
             _=>throw new ArgumentOutOfRangeException(BindingType.ToString())

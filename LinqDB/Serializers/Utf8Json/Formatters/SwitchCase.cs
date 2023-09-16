@@ -11,14 +11,14 @@ public class SwitchCase:IJsonFormatter<T> {
         writer.WriteBeginArray();
         writer.SerializeReadOnlyCollection(value.TestValues,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         reader.ReadIsBeginArrayWithVerify();
         var testValues=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var body= Expression.Instance.Deserialize(ref reader,Resolver);
+        var body= Expression.Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.SwitchCase(body,testValues);
     }

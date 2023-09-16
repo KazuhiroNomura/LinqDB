@@ -17,7 +17,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
@@ -27,7 +27,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(parameters!);
-        var body = Expression.Instance.Deserialize(ref reader,Resolver);
+        var body = Expression.Read(ref reader,Resolver);
         var tailCall = reader.ReadBoolean();
         ListParameter.RemoveRange(ListParameter_Count,parameters.Length);
         return(T)Expressions.Expression.Lambda(

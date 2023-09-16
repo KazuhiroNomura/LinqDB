@@ -14,7 +14,7 @@ public class MethodCall:IJsonFormatter<T> {
         Method.Instance.Serialize(ref writer,method,Resolver);
         writer.WriteValueSeparator();
         if(!method.IsStatic){
-            Expression.Instance.Serialize(ref writer,value.Object!,Resolver);
+            Expression.Write(ref writer,value.Object!,Resolver);
             writer.WriteValueSeparator();
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
@@ -41,7 +41,7 @@ public class MethodCall:IJsonFormatter<T> {
                 arguments
             );
         } else{
-            var instance=Expression.Instance.Deserialize(ref reader,Resolver);
+            var instance=Expression.Read(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(

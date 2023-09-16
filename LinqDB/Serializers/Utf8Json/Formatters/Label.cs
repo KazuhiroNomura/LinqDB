@@ -27,7 +27,7 @@ public class Label:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var defaultValue=Expression.DeserializeNullable(ref reader,Resolver);
+        var defaultValue=Expression.ReadNullable(ref reader,Resolver);
         return Expressions.Expression.Label(target,defaultValue);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){

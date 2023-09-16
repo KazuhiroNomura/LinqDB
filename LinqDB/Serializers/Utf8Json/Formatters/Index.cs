@@ -10,7 +10,7 @@ using static Extension;
 public class Index:IJsonFormatter<T> {
     public static readonly Index Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Object,Resolver);
+        Expression.Write(ref writer,value.Object,Resolver);
         writer.WriteValueSeparator();
         Property.Write(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
@@ -29,7 +29,7 @@ public class Index:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        var instance= Expression.Instance.Deserialize(ref reader,Resolver);
+        var instance= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var indexer= Property.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();

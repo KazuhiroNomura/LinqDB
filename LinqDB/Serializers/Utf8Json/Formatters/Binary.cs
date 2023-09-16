@@ -15,17 +15,17 @@ public class Binary:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
     }
     internal static void WriteLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Lambda.WriteConversion(ref writer,value.Conversion,Resolver);
     }
@@ -33,9 +33,9 @@ public class Binary:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
     }
@@ -43,9 +43,9 @@ public class Binary:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Method.Instance.Serialize(ref writer,value.Method,Resolver);
         writer.WriteValueSeparator();
@@ -55,9 +55,9 @@ public class Binary:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Left,Resolver);
+        Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.Right,Resolver);
+        Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.IsLiftedToNull);
         writer.WriteValueSeparator();
@@ -110,31 +110,31 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static(Expressions.Expression left,Expressions.Expression right)InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         return(left,right);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion)InternalDeserializeLambda(ref Reader reader,IJsonFormatterResolver Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var conversion=Lambda.InternalDeserializeConversion(ref reader,Resolver);
         return(left,right,conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo method)InternalDeserializeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         return(left,right,method);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo method,Expressions.LambdaExpression? conversion)InternalDeserializeMethodLambda(ref Reader reader,IJsonFormatterResolver Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -142,9 +142,9 @@ public class Binary:IJsonFormatter<T> {
         return(left,right,method,conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo method)InternalDeserializeBooleanMethod(ref Reader reader,IJsonFormatterResolver Resolver){
-        var left= Expression.Instance.Deserialize(ref reader,Resolver);
+        var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var right= Expression.Instance.Deserialize(ref reader,Resolver);
+        var right= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var isLiftedToNull=reader.ReadBoolean();
         reader.ReadIsValueSeparatorWithVerify();

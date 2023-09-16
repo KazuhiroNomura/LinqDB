@@ -13,41 +13,41 @@ public class Unary:IMessagePackFormatter<T> {
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
         writer.WriteNodeType(value.NodeType);
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
     }
     internal static void WriteType(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         Type.Instance.Serialize(ref writer,value.Type,Resolver);
     }
     internal static void WriteMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
     }
     internal static void WriteTypeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
-        Expression.Instance.Serialize(ref writer,value.Operand,Resolver);
+        Expression.Write(ref writer,value.Operand,Resolver);
         Type.Instance.Serialize(ref writer,value.Type,Resolver);
         Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
     }
     internal static Expressions.Expression InternalDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>
-        Expression.Instance.Deserialize(ref reader,Resolver);
+        Expression.Read(ref reader,Resolver);
     internal static (Expressions.Expression Operand,System.Type Type)InternalDeserializeType(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         var type=reader.ReadType();
         return(operand,type);
     }
     internal static (Expressions.Expression Operand,MethodInfo? Method)InternalDeserializeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,method);
     }
     internal static (Expressions.Expression Operand,System.Type Type,MethodInfo? Method)InternalDeserializeTypeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var operand= Expression.Instance.Deserialize(ref reader,Resolver);
+        var operand= Expression.Read(ref reader,Resolver);
         var type=reader.ReadType();
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,type,method);

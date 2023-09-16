@@ -19,16 +19,16 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteValueSeparator();
                 writer.WriteType(value.Test);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             } else {
                 
                 writer.WriteInt32(1);
                 writer.WriteValueSeparator();
                 writer.WriteType(value.Test);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+                Expression.Write(ref writer,value.Filter,Resolver);
             }
         } else {
             var ListParameter=Resolver.Serializer().ListParameter;
@@ -41,7 +41,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteValueSeparator();
                 writer.WriteString(value.Variable.Name);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             } else {
                 
                 writer.WriteInt32(3);
@@ -50,9 +50,9 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteValueSeparator();
                 writer.WriteString(value.Variable.Name);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
                 writer.WriteValueSeparator();
-                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+                Expression.Write(ref writer,value.Filter,Resolver);
             }
             ListParameter.RemoveAt(ListParameter.Count-1);
         }
@@ -68,14 +68,14 @@ public class CatchBlock:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         switch(id) {
             case 0: {
-                var body = Expression.Instance.Deserialize(ref reader,Resolver);
+                var body = Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Catch(test,body);
                 break;
             }
             case 1: {
-                var body = Expression.Instance.Deserialize(ref reader,Resolver);
+                var body = Expression.Read(ref reader,Resolver);
                 reader.ReadIsValueSeparatorWithVerify();
-                var filter = Expression.Instance.Deserialize(ref reader,Resolver);
+                var filter = Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Catch(test,body,filter);
                 break;
             }
@@ -85,7 +85,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
-                var body = Expression.Instance.Deserialize(ref reader,Resolver);
+                var body = Expression.Read(ref reader,Resolver);
                 ListParameter.RemoveAt(ListParameter.Count-1);
                 value=Expressions.Expression.Catch(Variable,body);
                 break;
@@ -96,9 +96,9 @@ public class CatchBlock:IJsonFormatter<T> {
                 var ListParameter=Resolver.Serializer().ListParameter;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
-                var body = Expression.Instance.Deserialize(ref reader,Resolver);
+                var body = Expression.Read(ref reader,Resolver);
                 reader.ReadIsValueSeparatorWithVerify();
-                var filter = Expression.Instance.Deserialize(ref reader,Resolver);
+                var filter = Expression.Read(ref reader,Resolver);
                 ListParameter.RemoveAt(ListParameter.Count-1);
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
@@ -116,15 +116,15 @@ public class CatchBlock:IJsonFormatter<T> {
     //        if(value.Filter is null){
     //            writer.WriteNull();//Variable
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
     //            writer.WriteValueSeparator();
     //            writer.WriteNull();//Filter
     //        } else{
     //            writer.WriteNull();//Variable
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+    //            Expression.Write(ref writer,value.Filter,Resolver);
     //        }
     //    } else{
     //        var ListParameter=Resolver.Serializer().ListParameter;
@@ -132,7 +132,7 @@ public class CatchBlock:IJsonFormatter<T> {
     //            writer.WriteString(value.Variable.Name);
     //            ListParameter.Add(value.Variable);
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
     //            writer.WriteValueSeparator();
     //            writer.WriteNull();//Filter
@@ -140,9 +140,9 @@ public class CatchBlock:IJsonFormatter<T> {
     //            writer.WriteString(value.Variable.Name);
     //            ListParameter.Add(value.Variable);
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
     //            writer.WriteValueSeparator();
-    //            Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+    //            Expression.Write(ref writer,value.Filter,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
     //        }
 
@@ -158,14 +158,14 @@ public class CatchBlock:IJsonFormatter<T> {
     //    reader.ReadIsValueSeparatorWithVerify();
     //    switch(id){
     //        case 0:{
-    //            var body= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var body= Expression.Read(ref reader,Resolver);
     //            value=Expressions.Expression.Catch(test,body);
     //            break;
     //        }
     //        case 1:{
-    //            var body= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var body= Expression.Read(ref reader,Resolver);
     //            reader.ReadIsValueSeparatorWithVerify();
-    //            var filter= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var filter= Expression.Read(ref reader,Resolver);
     //            value=Expressions.Expression.Catch(test,body,filter);
     //            break;
     //        }
@@ -175,7 +175,7 @@ public class CatchBlock:IJsonFormatter<T> {
     //            var ListParameter=Resolver.Serializer().ListParameter;
     //            ListParameter.Add(Variable);
     //            reader.ReadIsValueSeparatorWithVerify();
-    //            var body= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var body= Expression.Read(ref reader,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
     //            value=Expressions.Expression.Catch(Variable,body);
     //            break;
@@ -186,9 +186,9 @@ public class CatchBlock:IJsonFormatter<T> {
     //            var ListParameter=Resolver.Serializer().ListParameter;
     //            ListParameter.Add(Variable);
     //            reader.ReadIsValueSeparatorWithVerify();
-    //            var body= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var body= Expression.Read(ref reader,Resolver);
     //            reader.ReadIsValueSeparatorWithVerify();
-    //            var filter= Expression.Instance.Deserialize(ref reader,Resolver);
+    //            var filter= Expression.Read(ref reader,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
     //            value=Expressions.Expression.Catch(Variable,body,filter);
     //            break;

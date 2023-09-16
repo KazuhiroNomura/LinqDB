@@ -12,7 +12,7 @@ public class Index:IMessagePackFormatter<T> {
     private const int ArrayHeader=4;
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        Expression.Instance.Serialize(ref writer,value!.Object,Resolver);
+        Expression.Write(ref writer,value!.Object,Resolver);
         Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
@@ -27,7 +27,7 @@ public class Index:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var instance= Expression.Instance.Deserialize(ref reader,Resolver);
+        var instance= Expression.Read(ref reader,Resolver);
         var indexer= Property.Instance.Deserialize(ref reader,Resolver);
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);

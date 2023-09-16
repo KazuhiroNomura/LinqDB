@@ -9,11 +9,11 @@ using T=Expressions.ConditionalExpression;
 public class Conditional:IJsonFormatter<T> {
     public static readonly Conditional Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Test,Resolver);
+        Expression.Write(ref writer,value.Test,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.IfTrue,Resolver);
+        Expression.Write(ref writer,value.IfTrue,Resolver);
         writer.WriteValueSeparator();
-        Expression.Instance.Serialize(ref writer,value.IfFalse,Resolver);
+        Expression.Write(ref writer,value.IfFalse,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
@@ -30,11 +30,11 @@ public class Conditional:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        var test=Expression.Instance.Deserialize(ref reader,Resolver);
+        var test=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var ifTrue=Expression.Instance.Deserialize(ref reader,Resolver);
+        var ifTrue=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var ifFalse=Expression.Instance.Deserialize(ref reader,Resolver);
+        var ifFalse=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);

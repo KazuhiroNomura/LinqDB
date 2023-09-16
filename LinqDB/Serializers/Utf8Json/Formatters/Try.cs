@@ -10,7 +10,7 @@ using T=Expressions.TryExpression;
 public class Try:IJsonFormatter<T> {
     public static readonly Try Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+        Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         Expression.WriteNullable(ref writer,value.Finally,Resolver);
         writer.WriteValueSeparator();
@@ -38,9 +38,9 @@ public class Try:IJsonFormatter<T> {
     [SuppressMessage("ReSharper","ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
-        var body=Expression.Instance.Deserialize(ref reader,Resolver);
+        var body=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var @finally=Expression.DeserializeNullable(ref reader,Resolver);
+        var @finally=Expression.ReadNullable(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver)!;
@@ -50,7 +50,7 @@ public class Try:IJsonFormatter<T> {
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
-            var fault= Expression.DeserializeNullable(ref reader,Resolver);
+            var fault= Expression.ReadNullable(ref reader,Resolver);
             if(fault is not null){
                 value=Expressions.Expression.TryFault(body,fault);
             } else{

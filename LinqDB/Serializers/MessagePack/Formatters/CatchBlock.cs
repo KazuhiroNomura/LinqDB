@@ -19,16 +19,16 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 
                 writer.WriteType(value.Test);
                 
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             } else{
                 writer.WriteArrayHeader(4);
                 writer.WriteInt8(1);
                 
                 writer.WriteType(value.Test);
                 
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
                 
-                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+                Expression.Write(ref writer,value.Filter,Resolver);
             }
         } else{
             var ListParameter=Resolver.Serializer().ListParameter;
@@ -41,7 +41,7 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 
                 writer.Write(value.Variable.Name);
                 
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
             } else{
                 writer.WriteArrayHeader(5);
                 writer.WriteInt8(3);
@@ -50,9 +50,9 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 
                 writer.Write(value.Variable.Name);
                 
-                Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+                Expression.Write(ref writer,value.Body,Resolver);
                 
-                Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+                Expression.Write(ref writer,value.Filter,Resolver);
             }
             ListParameter.RemoveAt(ListParameter.Count-1);
         }
@@ -115,15 +115,15 @@ public class CatchBlock:IMessagePackFormatter<T> {
     //            writer.WriteInt32();
     //            writer.WriteNil();//Variable
                 
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
                 
     //            writer.WriteNil();//Filter
     //        } else{
     //            writer.WriteNil();//Variable
                 
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
                 
-    //            Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+    //            Expression.Write(ref writer,value.Filter,Resolver);
     //        }
     //    } else{
     //        var ListParameter=Resolver.Serializer().ListParameter;
@@ -131,7 +131,7 @@ public class CatchBlock:IMessagePackFormatter<T> {
     //            writer.Write(value.Variable.Name);
     //            ListParameter.Add(value.Variable);
                 
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
 
     //            writer.WriteNil();//Filter
@@ -139,9 +139,9 @@ public class CatchBlock:IMessagePackFormatter<T> {
     //            writer.Write(value.Variable.Name);
     //            ListParameter.Add(value.Variable);
                 
-    //            Expression.Instance.Serialize(ref writer,value.Body,Resolver);
+    //            Expression.Write(ref writer,value.Body,Resolver);
                 
-    //            Expression.Instance.Serialize(ref writer,value.Filter,Resolver);
+    //            Expression.Write(ref writer,value.Filter,Resolver);
     //            ListParameter.RemoveAt(ListParameter.Count-1);
     //        }
     //    }
@@ -152,15 +152,15 @@ public class CatchBlock:IMessagePackFormatter<T> {
     //    Debug.Assert(count==ArrayHeader);
     //    var test=reader.ReadType();
     //    if(reader.TryReadNil()){
-    //        var body= Expression.Instance.Deserialize(ref reader,Resolver);
-    //        var filter=reader.TryReadNil()?null:Expression.Instance.Deserialize(ref reader,Resolver);
+    //        var body= Expression.Read(ref reader,Resolver);
+    //        var filter=reader.TryReadNil()?null:Expression.Read(ref reader,Resolver);
     //        return Expressions.Expression.Catch(test,body,@filter);
     //    } else{
     //        var name=reader.ReadString();
     //        var ListParameter=Resolver.Serializer().ListParameter;
     //        ListParameter.Add(Expressions.Expression.Parameter(test,name));
-    //        var body= Expression.Instance.Deserialize(ref reader,Resolver);
-    //        var filter=reader.TryReadNil()?null:Expression.Instance.Deserialize(ref reader,Resolver);
+    //        var body= Expression.Read(ref reader,Resolver);
+    //        var filter=reader.TryReadNil()?null:Expression.Read(ref reader,Resolver);
     //        ListParameter.RemoveAt(ListParameter.Count-1);
     //        return Expressions.Expression.Catch(Expressions.Expression.Parameter(test,name),body,@filter);
     //    }
