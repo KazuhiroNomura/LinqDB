@@ -12,7 +12,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         writer.WriteVarInt((byte)value!.BindingType);
-        Member.Serialize(ref writer,value.Member);
+        Member.Write(ref writer,value.Member);
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
                 Expression.Write(ref writer,((Expressions.MemberAssignment)value).Expression);
@@ -32,7 +32,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         var BindingType=(Expressions.MemberBindingType)reader.ReadVarIntByte();
         //MemberInfo?member=default;
-        var member= Member.Deserialize(ref reader);
+        var member= Member.Read(ref reader);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>()!),

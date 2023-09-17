@@ -17,6 +17,7 @@ public class Delegate:IMessagePackFormatter<T>{
         
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -30,6 +31,7 @@ public class Delegate:IMessagePackFormatter<T>{
         return method.CreateDelegate(delegateType,target);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }
 }

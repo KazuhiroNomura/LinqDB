@@ -14,6 +14,7 @@ public class SwitchCase:MemoryPackFormatter<T> {
     //    return value!;
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         writer.SerializeReadOnlyCollection(value!.TestValues);
         Expression.Write(ref writer,value.Body);
     }

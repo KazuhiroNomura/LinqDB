@@ -9,9 +9,7 @@ using Reader = MessagePackReader;
 using T = Expressions.BlockExpression;
 public class Block:IMessagePackFormatter<T> {
     public static readonly Block Instance=new();
-    private const int ArrayHeader=3;
-    private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -24,14 +22,16 @@ public class Block:IMessagePackFormatter<T> {
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteArrayHeader(4);
         writer.WriteNodeType(Expressions.ExpressionType.Block);
         
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
-        PrivateSerialize(ref writer,value,Resolver);
+        if(writer.TryWriteNil(value)) return;
+
+        writer.WriteArrayHeader(3);
+        PrivateWrite(ref writer,value,Resolver);
         
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -47,8 +47,9 @@ public class Block:IMessagePackFormatter<T> {
         return Expressions.Expression.Block(type,variables,expressions);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==3);
         return Read(ref reader,Resolver);
         
     }

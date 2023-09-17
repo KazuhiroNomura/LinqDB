@@ -18,18 +18,7 @@ public class Member:MemoryPackFormatter<T>{
     //    this.Deserialize(ref reader,ref value);
     //    return value!;
     //}
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static T Deserialize(ref Reader reader) {
-        T? value = default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    //internal T? DeserializeNullable(ref MemoryPackReader reader) {
-    //    var value = reader.ReadBoolean();
-    //    return value ? this.Deserialize(ref reader) : null;
-    //}
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.ReflectedType!;
         writer.WriteType(type);
@@ -37,10 +26,22 @@ public class Member:MemoryPackFormatter<T>{
         var index=Array.IndexOf(array,value);
         writer.WriteVarInt(index);
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    //internal T? DeserializeNullable(ref MemoryPackReader reader) {
+    //    var value = reader.ReadBoolean();
+    //    return value ? this.Deserialize(ref reader) : null;
+    //}
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
+        Write(ref writer,value);
+    }
+    internal static T Read(ref Reader reader) {
         var type= reader.ReadType();
         var array= reader.Serializer().TypeMembers.Get(type);
         var index=reader.ReadVarIntInt32();
-        value=array[index];
+        return array[index];
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
+        value=Read(ref reader);
     }
 }

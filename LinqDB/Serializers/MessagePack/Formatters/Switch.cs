@@ -15,7 +15,7 @@ public class Switch:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteType(value!.Type);
         Expression.Write(ref writer,value.SwitchValue,Resolver);
-        Method.InternalSerializeNullable(ref writer,value.Comparison,Resolver);
+        Method.WriteNullable(ref writer,value.Comparison,Resolver);
         writer.SerializeReadOnlyCollection(value.Cases,Resolver);
         Expression.Write(ref writer,value.DefaultBody,Resolver);
     }
@@ -25,7 +25,7 @@ public class Switch:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
@@ -38,7 +38,7 @@ public class Switch:IMessagePackFormatter<T> {
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return Read(ref reader,Resolver);

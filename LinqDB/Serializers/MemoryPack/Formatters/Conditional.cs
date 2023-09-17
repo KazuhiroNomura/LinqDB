@@ -24,7 +24,7 @@ public class Conditional:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-
+        if(writer.TryWriteNil(value)) return;
         
         PrivateSerialize(ref writer,value);
 
@@ -40,6 +40,7 @@ public class Conditional:MemoryPackFormatter<T> {
         return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
 
 
 

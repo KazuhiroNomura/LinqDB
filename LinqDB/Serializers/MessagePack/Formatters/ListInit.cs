@@ -31,7 +31,7 @@ public class ListInit:IMessagePackFormatter<T> {
         return Expressions.Expression.ListInit(@new,Initializers);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return Read(ref reader,Resolver);

@@ -24,10 +24,10 @@ public class Property:MemoryPackFormatter<T>{
     //    return value0 ? this.Deserialize(ref reader) : null;
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-       Debug.Assert(value!=null,nameof(value)+" != null");
-       var ReflectedType=value.ReflectedType!;
-       writer.WriteType(ReflectedType);
-       writer.WriteVarInt(Array.IndexOf(writer.Serializer().TypeProperties.Get(ReflectedType),value));
+        if(writer.TryWriteNil(value)) return;
+       var type=value!.ReflectedType!;
+       writer.WriteType(type);
+       writer.WriteVarInt(Array.IndexOf(writer.Serializer().TypeProperties.Get(type),value));
     }
     internal static T Read(ref Reader reader) {
         var type= reader.ReadType();

@@ -14,29 +14,28 @@ public class MethodCall:IMessagePackFormatter<T> {
     private const int InternalArrayHeader0=ArrayHeader0+1;
     private const int InternalArrayHeader1=ArrayHeader1+1;
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
         var method=value!.Method;
         if(method.IsStatic){
             writer.WriteArrayHeader(InternalArrayHeader0);
             writer.WriteNodeType(Expressions.ExpressionType.Call);
-            Method.InternalSerializeNullable(ref writer,method,Resolver);
+            Method.WriteNullable(ref writer,method,Resolver);
         } else{
             writer.WriteArrayHeader(InternalArrayHeader1);
             writer.WriteNodeType(Expressions.ExpressionType.Call);
-            Method.InternalSerializeNullable(ref writer,method,Resolver);
+            Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         var method=value!.Method;
         if(method.IsStatic){
             writer.WriteArrayHeader(ArrayHeader0);
-            Method.InternalSerializeNullable(ref writer,method,Resolver);
+            Method.WriteNullable(ref writer,method,Resolver);
         } else{
             writer.WriteArrayHeader(ArrayHeader1);
-            Method.InternalSerializeNullable(ref writer,method,Resolver);
+            Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
@@ -60,7 +59,7 @@ public class MethodCall:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         var method= Method.Instance.Deserialize(ref reader,Resolver);
         if(method.IsStatic){

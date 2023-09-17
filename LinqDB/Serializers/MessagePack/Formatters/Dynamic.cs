@@ -150,6 +150,7 @@ public class Dynamic:IMessagePackFormatter<T> {
         return (CSharpBinderFlags)v;
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
@@ -325,7 +326,7 @@ public class Dynamic:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-     //   if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         return Read(ref reader,Resolver);
     }

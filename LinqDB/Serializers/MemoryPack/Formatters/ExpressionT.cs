@@ -9,15 +9,8 @@ using C = Serializer;
 
 public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        Instance.Serialize(ref writer,ref value);
-    }
-    internal static T DeserializeLambda(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         var ListParameter= writer.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
@@ -30,6 +23,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         var ListParameter= reader.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();

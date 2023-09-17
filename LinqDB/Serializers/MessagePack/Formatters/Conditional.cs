@@ -24,6 +24,7 @@ public class Conditional:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(4);
 
         PrivateSerialize(ref writer,value,Resolver);
@@ -40,6 +41,7 @@ public class Conditional:IMessagePackFormatter<T> {
         return Expressions.Expression.Condition(test,ifTrue,ifFalse,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==4);
         return Read(ref reader,Resolver);

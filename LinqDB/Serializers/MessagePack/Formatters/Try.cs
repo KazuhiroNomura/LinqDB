@@ -24,11 +24,11 @@ public class Try:IMessagePackFormatter<T>{
     }
     private static void PrivateSerialize1(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Write(ref writer,value!.Body,Resolver);
-        Expression.InternalSerializeNullable(ref writer,value.Finally,Resolver);
+        Expression.WriteNullable(ref writer,value.Finally,Resolver);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
         } else{
-            Expression.InternalSerializeNullable(ref writer,value.Fault,Resolver);
+            Expression.WriteNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
                 writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
             }
@@ -40,6 +40,7 @@ public class Try:IMessagePackFormatter<T>{
         PrivateSerialize1(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
@@ -47,7 +48,7 @@ public class Try:IMessagePackFormatter<T>{
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var body= Expression.Read(ref reader,Resolver);
-        var @finally=Expression.InternalDeserializeNullable(ref reader,Resolver);
+        var @finally=Expression.ReadNullable(ref reader,Resolver);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
             if(handlers.Length>0) {
@@ -56,7 +57,7 @@ public class Try:IMessagePackFormatter<T>{
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
-            var fault= Expression.InternalDeserializeNullable(ref reader,Resolver);
+            var fault= Expression.ReadNullable(ref reader,Resolver);
             if(fault is not null){
                 value=Expressions.Expression.TryFault(body,fault);
             } else{
@@ -67,7 +68,7 @@ public class Try:IMessagePackFormatter<T>{
         return value;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         return Read(ref reader,Resolver);
     }

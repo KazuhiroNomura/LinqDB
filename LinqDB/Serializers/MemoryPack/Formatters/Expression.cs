@@ -100,11 +100,7 @@ public class Expression:MemoryPackFormatter<T> {
         }
     }
     public static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        if(value is null){
-            writer.WriteBoolean(false);
-            return;
-        }
-        writer.WriteBoolean(true);
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
@@ -358,7 +354,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.Lambda             :value=Lambda.Read(ref reader);break;
             case Expressions.ExpressionType.Call               :value=MethodCall.Read(ref reader);break;
             case Expressions.ExpressionType.Invoke             :value=Invocation.Read(ref reader);break;
-            case Expressions.ExpressionType.New                :value=New.InternaDeserialize(ref reader);break;
+            case Expressions.ExpressionType.New                :value=New.Read(ref reader);break;
             case Expressions.ExpressionType.NewArrayBounds     :value=NewArray.ReadNewArrayBounds(ref reader);break;
             case Expressions.ExpressionType.NewArrayInit       :value=NewArray.ReadNewArrayInit(ref reader);break;
             case Expressions.ExpressionType.ListInit           :value=ListInit.Read(ref reader);break;
@@ -381,7 +377,7 @@ public class Expression:MemoryPackFormatter<T> {
         return value!;
     }
     internal static T? ReadNullable(ref Reader reader) {
-        if(!reader.ReadBoolean()) return null;
+        if(reader.TryReadNil()) return null;
         return Read(ref reader);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

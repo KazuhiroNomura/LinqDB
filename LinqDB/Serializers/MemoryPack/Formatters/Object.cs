@@ -9,11 +9,8 @@ using T = System.Object;
 public class Object:MemoryPackFormatter<object>{
     public static readonly Object Instance=new();
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        if(value is null){
-            writer.WriteNullObjectHeader();
-            return;
-        }
-        var type=value.GetType();
+        if(writer.TryWriteNil(value))return;
+        var type=value!.GetType();
         writer.WriteType(type);
 
         switch(value){

@@ -19,28 +19,30 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         PrivateSerialize(ref writer,value,Resolver);
     private const int ArrayHeader=3;
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value))return;
         PrivateSerialize(ref writer,value,Resolver);
     }
-    private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    private static (Expressions.Expression expression,System.Type type)PrivateRead(ref Reader reader,MessagePackSerializerOptions Resolver){
         var expression=Expression.Read(ref reader,Resolver);
         var type=reader.ReadType();
         return (expression,type);
     }
-    internal static Expressions.TypeBinaryExpression InternalDeserializeTypeEqual(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var (expression,type)=PrivateDeserialize(ref reader,Resolver);
+    internal static Expressions.TypeBinaryExpression ReadTypeEqual(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeEqual(expression,type);
     }
-    internal static Expressions.TypeBinaryExpression InternalDeserializeTypeIs(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var (expression,type)=PrivateDeserialize(ref reader,Resolver);
+    internal static Expressions.TypeBinaryExpression ReadTypeIs(ref Reader reader,MessagePackSerializerOptions Resolver){
+        var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeIs(expression,type);
     }
     public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var NodeType=reader.ReadNodeType();
         return NodeType switch{
-            Expressions.ExpressionType.TypeEqual=>InternalDeserializeTypeEqual(ref reader,Resolver),
-            Expressions.ExpressionType.TypeIs=>InternalDeserializeTypeIs(ref reader,Resolver),
+            Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
+            Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader,Resolver),
             _=>throw new NotSupportedException(NodeType.ToString())
         };
     }

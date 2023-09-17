@@ -12,9 +12,9 @@ public class Field:IMessagePackFormatter<T>{
     public static readonly Field Instance=new();
     private const int ArrayHeader=2;
     internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
-        var type=value.ReflectedType!;
+        var type=value!.ReflectedType!;
         writer.WriteType(type);
         var methods= Resolver.Serializer().TypeFields.Get(type);
         writer.WriteInt32(Array.IndexOf(methods,value));
@@ -31,6 +31,7 @@ public class Field:IMessagePackFormatter<T>{
         return results[index];
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }
 }

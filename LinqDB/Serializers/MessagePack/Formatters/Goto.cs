@@ -14,7 +14,7 @@ public class Goto:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.Write((byte)value.Kind);
         LabelTarget.Instance.Serialize(ref writer,value.Target,Resolver);
-        Expression.InternalSerializeNullable(ref writer,value.Value,Resolver);
+        Expression.WriteNullable(ref writer,value.Value,Resolver);
         writer.WriteType(value.Type);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -23,19 +23,19 @@ public class Goto:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         PrivateSerialize(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var kind=(Expressions.GotoExpressionKind)reader.ReadByte();
         var target= LabelTarget.Instance.Deserialize(ref reader,Resolver);
-        var value=Expression.InternalDeserializeNullable(ref reader,Resolver);
+        var value=Expression.ReadNullable(ref reader,Resolver);
         var type=reader.ReadType();
         return Expressions.Expression.MakeGoto(kind,target,value,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-     //   if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         return Read(ref reader,Resolver);

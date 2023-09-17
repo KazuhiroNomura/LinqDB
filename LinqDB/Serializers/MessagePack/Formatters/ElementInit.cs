@@ -12,11 +12,13 @@ public class ElementInit:IMessagePackFormatter<T> {
     public static readonly ElementInit Instance=new();
     private const int ArrayHeader=2;
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
-        Method.InternalSerializeNullable(ref writer,value.AddMethod,Resolver);
+        Method.WriteNullable(ref writer,value.AddMethod,Resolver);
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var addMethod= Method.Instance.Deserialize(ref reader,Resolver);

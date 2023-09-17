@@ -18,6 +18,7 @@ public class Constructor:MemoryPackFormatter<T> {
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     internal static T Read(ref Reader reader){
@@ -30,6 +31,7 @@ public class Constructor:MemoryPackFormatter<T> {
         return array[index];
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

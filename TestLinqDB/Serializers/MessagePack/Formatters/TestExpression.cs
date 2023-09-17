@@ -14,6 +14,8 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Xunit.Sdk;
 namespace Serializers.MessagePack.Formatters;
 using System.Linq.Expressions;
+using static Microsoft.FSharp.Core.ByRefKinds;
+
 [Serializable,MemoryPackable,MessagePackObject(true)]
 public partial struct 演算子{
     public bool HasValue;
@@ -262,11 +264,6 @@ public class TestExpression:共通 {
         var ConstantBinry= Expression.Constant(new 演算子(true));
         var ConversionInt32=Expression.Lambda<Func<int,int>>(Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
         var ConversionDouble=Expression.Lambda<Func<double,double>>(Expression.Add(ParameterDouble,ParameterDouble),ParameterDouble);
-        var call=Expression.Call(
-            Method(()=>string_string_string("","")),
-            ParameterString,
-            ParameterString
-        );
         var ConversionString=Expression.Lambda<Func<string,string>>(Expression.Call(null,Method(()=>string_string_string("","")),ParameterString,ParameterString),ParameterString);
         var Method_int=Method(()=>int_int_int(1,1));
         var Method_double=Method(()=>double_dobuble_double(1,1));
@@ -371,7 +368,7 @@ public class TestExpression:共通 {
         共通0(Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
         共通0(Expression.NotEqual             (Constant1,Constant1,false,Method_int));
         void 共通0(BinaryExpression Binary){
-            this.MemoryMessageJsonコンパイル実行(
+            this.MemoryMessageJsonジェネリック3コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{ParameterInt32},
@@ -388,7 +385,7 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(BinaryExpression Binary){
-            this.MemoryMessageJsonコンパイル実行(
+            this.MemoryMessageJsonジェネリック3コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         Expression.Assign(MemberInt32,Constant0),
@@ -679,7 +676,7 @@ public class TestExpression:共通 {
         }
     }
     [Fact]public void ClassDisplay(){
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<object>>(
                 Expression.Constant(ClassDisplay取得())
             )
@@ -970,7 +967,7 @@ public class TestExpression:共通 {
         //        Expressions.Expression.Constant(Catch値)
         //    )
         //);
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -990,19 +987,23 @@ public class TestExpression:共通 {
     [Fact]public void Lambda31(){
         this.シリアライズMemoryMessageJsonコンパイル実行(
             Expression.Lambda<Func<decimal,decimal>>(
-                Expression.TryCatchFinally(
-                    ParameterDecimal,
-                    ParameterDecimal
+                Expression.Block(
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
+                    Expression.TryCatchFinally(
+                        ParameterDecimal,
+                        ParameterDecimal
+                    )
                 ),
                 ParameterDecimal
             ),1
         );
     }
     [Fact]public void Lambda32(){
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
+                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
                     Expression.TryCatchFinally(
                         ParameterDecimal,
                         ParameterDecimal
@@ -1013,7 +1014,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda33(){
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[]{ParameterDecimal},
@@ -1031,7 +1032,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda34(){
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -1049,7 +1050,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda35(){
-        this.MemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJsonジェネリック3コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -1081,7 +1082,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Lambda5(){
         var Array2=Expression.Parameter(typeof(int[,]));
-        this.シリアライズ(
+        this.MemoryMessageJsonジェネリック3(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -1092,7 +1093,7 @@ public class TestExpression:共通 {
             )
         );
         var Array1=Expression.Parameter(typeof(int[]));
-        this.シリアライズ(
+        this.MemoryMessageJsonジェネリック3(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,
@@ -1555,7 +1556,7 @@ public class TestExpression:共通 {
         共通1(Expression.Increment(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.UnaryPlus(Constant演算子,Method(nameof(Unary演算子))));
         void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
-            this.MemoryMessageJsonコンパイル実行(
+            this.MemoryMessageJsonジェネリック3コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{代入先},
@@ -1572,7 +1573,8 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(UnaryExpression Unary){
-            this.MemoryMessageJsonコンパイル実行(
+            this.MemoryMessageJsonジェネリック3(Unary);
+            this.MemoryMessageJsonジェネリック3コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Convert(
                         Unary,

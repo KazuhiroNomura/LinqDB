@@ -22,7 +22,7 @@ public class Index:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
+        if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
@@ -37,7 +37,7 @@ public class Index:IJsonFormatter<T> {
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
+        if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

@@ -35,6 +35,7 @@ public class Loop:IMessagePackFormatter<T> {
         PrivateSerialize1(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
@@ -57,6 +58,7 @@ public class Loop:IMessagePackFormatter<T> {
         return value;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var ArrayHeader=reader.ReadArrayHeader();
         return Read(ref reader,Resolver,ArrayHeader+1);
     }

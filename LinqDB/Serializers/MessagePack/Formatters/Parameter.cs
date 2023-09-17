@@ -22,6 +22,7 @@ public class Parameter:IMessagePackFormatter<T> {
         }
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
         writer.WriteType(value.Type);
 
@@ -42,6 +43,7 @@ public class Parameter:IMessagePackFormatter<T> {
         return Parameter;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var ArrayHeader=reader.ReadArrayHeader();
         var type=reader.ReadType();
         

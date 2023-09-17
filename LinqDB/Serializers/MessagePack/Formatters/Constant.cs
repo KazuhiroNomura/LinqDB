@@ -20,6 +20,7 @@ public class Constant:IMessagePackFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
         PrivateSerialize(ref writer,value,Resolver);
         
@@ -31,6 +32,7 @@ public class Constant:IMessagePackFormatter<T> {
         return Expressions.Expression.Constant(value,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
 
         Debug.Assert(count==2);

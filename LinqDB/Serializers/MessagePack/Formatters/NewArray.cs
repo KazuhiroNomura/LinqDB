@@ -19,8 +19,7 @@ public class NewArray:IMessagePackFormatter<T> {
         writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil()) return;
-        //writer.WriteNodeType(value!.NodeType);
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     private static (System.Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -37,7 +36,7 @@ public class NewArray:IMessagePackFormatter<T> {
         return Expressions.Expression.NewArrayInit(type,expressions);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var NodeType=reader.ReadNodeType();

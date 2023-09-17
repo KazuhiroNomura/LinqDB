@@ -27,7 +27,7 @@ public class Binary:IMessagePackFormatter<T> {
 
         Expression.Write(ref writer,value.Right,Resolver);
 
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+        Lambda.WriteNullableConversion(ref writer,value.Conversion,Resolver);
     }
     internal static void WriteLeftRightMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
@@ -37,7 +37,7 @@ public class Binary:IMessagePackFormatter<T> {
 
         Expression.Write(ref writer,value.Right,Resolver);
 
-        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     internal static void WriteLeftRightMethodLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
@@ -47,9 +47,9 @@ public class Binary:IMessagePackFormatter<T> {
 
         Expression.Write(ref writer,value.Right,Resolver);
 
-        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
 
-        Lambda.InternalSerializeConversion(ref writer,value.Conversion,Resolver);
+        Lambda.WriteNullableConversion(ref writer,value.Conversion,Resolver);
     }
     internal static void WriteLeftRightBooleanMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
@@ -61,7 +61,7 @@ public class Binary:IMessagePackFormatter<T> {
         
         writer.Write(value.IsLiftedToNull);
         
-        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         switch(value.NodeType){
@@ -108,12 +108,9 @@ public class Binary:IMessagePackFormatter<T> {
         }
         
     }
-    internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        WriteNullable(ref writer,value,Resolver);
     }
     internal static(Expressions.Expression left,Expressions.Expression right)ReadLeftRight(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Read(ref reader,Resolver);
@@ -126,7 +123,7 @@ public class Binary:IMessagePackFormatter<T> {
 
         var right = Expression.Read(ref reader,Resolver);
 
-        var conversion= Lambda.InternalDeserializeConversion(ref reader,Resolver);
+        var conversion= Lambda.ReadNullableConversion(ref reader,Resolver);
         return (left, right, conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? Method)ReadLeftRightMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -144,7 +141,7 @@ public class Binary:IMessagePackFormatter<T> {
         
         var method = Method.ReadNullable(ref reader,Resolver);
         
-        var conversion= Lambda.InternalDeserializeConversion(ref reader,Resolver);
+        var conversion= Lambda.ReadNullableConversion(ref reader,Resolver);
         return (left, right, method,conversion);
     }
     internal static(Expressions.Expression left,Expressions.Expression right,bool IsLiftedToNull,MethodInfo? Method)ReadLeftRightBooleanMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -158,6 +155,7 @@ public class Binary:IMessagePackFormatter<T> {
         return(left,right,IsLiftedToNull,method);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
 
         Debug.Assert(count is >=3 and <=5);

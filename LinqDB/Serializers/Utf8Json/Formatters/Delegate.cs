@@ -17,6 +17,7 @@ public class Delegate:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -30,6 +31,7 @@ public class Delegate:IJsonFormatter<T> {
         return method.CreateDelegate(delegateType,target);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull())return null!;
         return Read(ref reader,Resolver);
     }
 }

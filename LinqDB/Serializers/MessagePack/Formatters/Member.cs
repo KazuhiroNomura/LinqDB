@@ -11,6 +11,7 @@ public class Member:IMessagePackFormatter<T>{
     public static readonly Member Instance=new();
     private const int ArrayHeader=2;
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         var ReflectedType=value!.ReflectedType!;
         writer.WriteType(ReflectedType);
@@ -18,6 +19,7 @@ public class Member:IMessagePackFormatter<T>{
         writer.WriteInt32(Array.IndexOf(array,value));
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();

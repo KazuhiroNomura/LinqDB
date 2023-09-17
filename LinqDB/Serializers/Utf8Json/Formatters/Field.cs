@@ -11,7 +11,6 @@ using C=Serializer;
 public class Field:IJsonFormatter<T> {
     public static readonly Field Instance=new();
     internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-       // if(writer.WriteIsNull(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         var type=value.ReflectedType;
@@ -24,12 +23,11 @@ public class Field:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        //var ReflectedType= this.Type.Deserialize(ref reader,Resolver);
         var type= reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var name=reader.ReadString();
@@ -39,6 +37,7 @@ public class Field:IJsonFormatter<T> {
         return Resolver.Serializer().TypeFields.Get(type)[index];
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull()) return null!;
         return Read(ref reader,Resolver);
     }
 }

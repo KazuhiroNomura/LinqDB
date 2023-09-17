@@ -64,6 +64,7 @@ public class Unary:MemoryPackFormatter<T> {
         if(!writer.TryWriteNil(value)) Write(ref writer,value!);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)/*where TBufferWriter : class, IBufferWriter<byte>*/{
+        if(writer.TryWriteNil(value)) return;
         WriteNullable(ref writer,value);
     }
     internal static Expressions.Expression ReadOperand(ref Reader reader){
@@ -77,13 +78,13 @@ public class Unary:MemoryPackFormatter<T> {
     }
     internal static (Expressions.Expression  Operand, MethodInfo? Method) ReadOperandMethod(ref Reader reader) {
         var operand = Expression.Read(ref reader);
-        var method = Method.InternalDeserializeNullable(ref reader);
+        var method = Method.ReadNullable(ref reader);
         return (operand, method);
     }
     internal static (Expressions.Expression Operand, System.Type Type, MethodInfo? Method) ReadOperandTypeMethod(ref Reader reader) {
         var operand = Expression.Read(ref reader);
         var type = reader.ReadType();
-        var method = Method.InternalDeserializeNullable(ref reader);
+        var method = Method.ReadNullable(ref reader);
         return (operand, type, method);
     }
     internal static T Read(ref Reader reader){

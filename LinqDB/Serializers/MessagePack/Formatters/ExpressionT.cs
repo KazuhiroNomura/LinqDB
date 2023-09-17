@@ -11,6 +11,7 @@ using C = Serializer;
 public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver) {
+        if(writer.TryWriteNil(value)) return;
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
@@ -22,6 +23,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver) {
+        if(reader.TryReadNil()) return null!;
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();

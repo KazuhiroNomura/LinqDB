@@ -9,8 +9,7 @@ using C = Serializer;
 using T = Expressions.LabelTarget;
 public class LabelTarget:IJsonFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
+    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         if(Resolver.Serializer().Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
@@ -28,8 +27,12 @@ public class LabelTarget:IJsonFormatter<T> {
         }
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
+    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
+        Write(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var index=reader.ReadInt32();
         var Instance=Resolver.Serializer();
@@ -53,4 +56,9 @@ public class LabelTarget:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return target;
     }
+    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull()) return null;
+        return Read(ref reader,Resolver);
+    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

@@ -18,6 +18,7 @@ public class Constructor:IMessagePackFormatter<T> {
         writer.WriteInt32(Array.IndexOf(array,value));
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){

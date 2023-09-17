@@ -11,7 +11,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
     private const int ArrayHeader0=1;
     private const int ArrayHeader1=3;
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         if(Resolver.Serializer().Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteArrayHeader(ArrayHeader0);
             writer.WriteInt32(index);
@@ -27,7 +27,7 @@ public class LabelTarget:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         var index=reader.ReadInt32();
         var LabelTargets=Resolver.Serializer().LabelTargets;

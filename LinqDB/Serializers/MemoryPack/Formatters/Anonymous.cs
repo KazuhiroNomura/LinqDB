@@ -56,6 +56,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
     private readonly System.Type[] SerializeTypes = new System.Type[2];
     private readonly System.Type[] PropertyTypes = new System.Type[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         if(!DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
             var MethodTypes =this.MethodTypes;
             var SerializeTypes =this.SerializeTypes;

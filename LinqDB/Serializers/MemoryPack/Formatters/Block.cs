@@ -30,6 +30,7 @@ public class Block:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value))return;
 
         PrivateSerialize(ref writer,value);
         
@@ -46,10 +47,5 @@ public class Block:MemoryPackFormatter<T> {
         ListParameter.RemoveRange(ListParameter_Count,variables!.Length);
         return Expressions.Expression.Block(type,variables!,expressions!);
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
-
-
-        value=Read(ref reader);
-        
-    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=reader.TryReadNil()?null:Read(ref reader);
 }

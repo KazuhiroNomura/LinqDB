@@ -10,7 +10,7 @@ using static Extension;
 
 public class New:MemoryPackFormatter<T> {
     public static readonly New Instance=new();
-    internal static void InternalSerializeNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void WriteNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         Constructor.Write(ref writer,value.Constructor!);
         writer.SerializeReadOnlyCollection(value.Arguments);
     }
@@ -20,13 +20,13 @@ public class New:MemoryPackFormatter<T> {
     //}
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.New);
-        InternalSerializeNew(ref writer,value);
+        WriteNew(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        InternalSerializeNew(ref writer,value);
+        if(writer.TryWriteNil(value)) return;
+        WriteNew(ref writer,value);
     }
-    internal static T InternaDeserialize(ref Reader reader){
+    internal static T Read(ref Reader reader){
         var constructor= Constructor.Read(ref reader);
         var arguments=reader.ReadArray<Expressions.Expression>();
         return System.Linq.Expressions.Expression.New(
@@ -35,6 +35,7 @@ public class New:MemoryPackFormatter<T> {
         );
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=InternaDeserialize(ref reader);
+        if(reader.TryReadNil()) return;
+        value=Read(ref reader);
     }
 }

@@ -25,17 +25,17 @@ public class Unary:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
         Expression.Write(ref writer,value.Operand,Resolver);
-        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     internal static void WriteTypeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value.NodeType);
         Expression.Write(ref writer,value.Operand,Resolver);
         Type.Instance.Serialize(ref writer,value.Type,Resolver);
-        Method.InternalSerializeNullable(ref writer,value.Method,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         //writer.WriteNodeType(value!.NodeType);
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayLength        :
@@ -81,9 +81,8 @@ public class Unary:IMessagePackFormatter<T> {
         return(operand,type,method);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(2<=count&&count<=4);
+        Debug.Assert(count is >=2 and <=4);
         T value;
         var NodeType=reader.ReadNodeType();
         switch(NodeType){
@@ -172,7 +171,7 @@ public class Unary:IMessagePackFormatter<T> {
         return value;
     }
     internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+        if(reader.TryReadNil()) return null;
         return Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>ReadNullable(ref reader,Resolver)!;

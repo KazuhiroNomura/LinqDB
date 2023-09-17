@@ -123,7 +123,7 @@ public class Dynamic:MemoryPackFormatter<T> {
         writer.WriteVarInt((byte)value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize(ref writer,value);
     }
     private static BinderType ReadBinderType(ref Reader reader){
@@ -300,6 +300,7 @@ public class Dynamic:MemoryPackFormatter<T> {
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

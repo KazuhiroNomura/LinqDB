@@ -17,6 +17,7 @@ public class Label:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize(ref writer,value);
     }
     internal static T Read(ref Reader reader){
@@ -25,6 +26,7 @@ public class Label:MemoryPackFormatter<T> {
         return Expressions.Expression.Label(target,defaultValue);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

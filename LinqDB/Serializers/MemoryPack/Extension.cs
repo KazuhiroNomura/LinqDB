@@ -59,14 +59,27 @@ public static class Extension{
     }
     public static bool TryWriteNil<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
         if(value is not null){
-            writer.WriteBoolean(false);
             return false;
         }else{
-            writer.WriteBoolean(true);
+            writer.WriteNullObjectHeader();
             return true;
         }
+        //if(value is not null){
+        //    writer.WriteBoolean(false);
+        //    return false;
+        //}else{
+        //    writer.WriteBoolean(true);
+        //    return true;
+        //}
     }
-    public static bool TryReadNil(this ref Reader reader)=>reader.ReadBoolean();
+    public static bool TryReadNil(this ref Reader reader){
+        if(reader.PeekIsNull()){
+            reader.Advance(1);
+            return true;
+        }
+        return false;
+        //reader.ReadBoolean();
+    }
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }

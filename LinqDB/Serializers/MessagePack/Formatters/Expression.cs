@@ -10,11 +10,7 @@ using Reader = MessagePackReader;
 using T = Expressions.Expression;
 public class Expression:IMessagePackFormatter<T> {
     public static readonly Expression Instance=new();
-    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        //writer.WriteArrayHeader(2);
-        //writer.WriteNodeType(value!.NodeType);
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
@@ -104,17 +100,15 @@ public class Expression:IMessagePackFormatter<T> {
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
-    internal static void InternalSerializeNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
-    internal static T? InternalDeserializeNullable(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null;
-        return Instance.Deserialize(ref reader,Resolver);
-    }
+    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var ArrayHeader=reader.ReadArrayHeader();
@@ -359,8 +353,8 @@ public class Expression:IMessagePackFormatter<T> {
                 value=T.Unbox(operand,Type);break;
             }
 
-            case Expressions.ExpressionType.TypeEqual       :value=TypeBinary    .InternalDeserializeTypeEqual     (ref reader,Resolver);break;
-            case Expressions.ExpressionType.TypeIs          :value=TypeBinary    .InternalDeserializeTypeIs        (ref reader,Resolver);break;
+            case Expressions.ExpressionType.TypeEqual       :value=TypeBinary    .ReadTypeEqual     (ref reader,Resolver);break;
+            case Expressions.ExpressionType.TypeIs          :value=TypeBinary    .ReadTypeIs        (ref reader,Resolver);break;
 
             case Expressions.ExpressionType.Conditional     :value=Conditional   .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Constant        :value=Constant      .Read              (ref reader,Resolver);break;
@@ -391,6 +385,6 @@ public class Expression:IMessagePackFormatter<T> {
         return value;
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return Read(ref reader,Resolver);
+        return ReadNullable(ref reader,Resolver)!;
     }
 }

@@ -12,6 +12,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private const int ArrayHeader=3;
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         writer.Write((byte)value.BindingType);
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
@@ -30,6 +31,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();

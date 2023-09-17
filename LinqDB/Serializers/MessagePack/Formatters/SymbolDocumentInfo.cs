@@ -19,6 +19,7 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         Formatter.Serialize(ref writer,value.DocumentType,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
@@ -32,6 +33,7 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }
 }

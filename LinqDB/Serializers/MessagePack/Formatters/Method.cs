@@ -17,12 +17,12 @@ public class Method:IMessagePackFormatter<T>{
         var array= Resolver.Serializer().TypeMethods.Get(type!);
         writer.WriteInt32(Array.IndexOf(array,value));
     }
-    internal static void InternalSerializeNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(value is null)writer.WriteNil();
         else Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        Write(ref writer,value,Resolver);
+        WriteNullable(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
@@ -36,6 +36,6 @@ public class Method:IMessagePackFormatter<T>{
         return reader.TryReadNil()?null:Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return Read(ref reader,Resolver);
+        return ReadNullable(ref reader,Resolver)!;
     }
 }

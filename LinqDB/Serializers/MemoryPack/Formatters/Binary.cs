@@ -126,7 +126,7 @@ public class Binary:MemoryPackFormatter<T> {
 
         var right = Expression.Read(ref reader);
 
-        var conversion= Lambda.InternalDeserializeConversion(ref reader);
+        var conversion= Lambda.ReadConversion(ref reader);
         return (left, right, conversion);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method) ReadLeftRightMethod(ref Reader reader) {
@@ -134,7 +134,7 @@ public class Binary:MemoryPackFormatter<T> {
         
         var right = Expression.Read(ref reader);
         
-        var method = Method.InternalDeserializeNullable(ref reader);
+        var method = Method.ReadNullable(ref reader);
         return (left, right, method);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion) ReadLeftRightMethodLambda(ref Reader reader) {
@@ -142,9 +142,9 @@ public class Binary:MemoryPackFormatter<T> {
         
         var right = Expression.Read(ref reader);
         
-        var method = Method.InternalDeserializeNullable(ref reader);
+        var method = Method.ReadNullable(ref reader);
         
-        var conversion= Lambda.InternalDeserializeConversion(ref reader);
+        var conversion= Lambda.ReadConversion(ref reader);
         return (left, right, method,conversion);
     }
     internal static (Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method) ReadLeftRightBooleanMethod(ref Reader reader){
@@ -154,7 +154,7 @@ public class Binary:MemoryPackFormatter<T> {
         
         var isLiftedToNull =reader.ReadBoolean();
         
-        var method = Method.InternalDeserializeNullable(ref reader);
+        var method = Method.ReadNullable(ref reader);
         return (left, right, isLiftedToNull, method);
     }
     internal static T Read(ref Reader reader){

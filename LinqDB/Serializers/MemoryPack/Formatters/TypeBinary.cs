@@ -14,6 +14,7 @@ public class TypeBinary:MemoryPackFormatter<T> {
         writer.WriteType(value.TypeOperand);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
@@ -30,6 +31,7 @@ public class TypeBinary:MemoryPackFormatter<T> {
         return Expressions.Expression.TypeIs(expression,type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         var NodeType=reader.ReadNodeType();
         value=NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader),

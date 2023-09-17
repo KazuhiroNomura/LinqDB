@@ -26,7 +26,7 @@ public class Field:MemoryPackFormatter<T>{
     //    return value0 ? this.Deserialize(ref reader) : null;
     //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     internal static T Read(ref Reader reader) {
@@ -36,6 +36,7 @@ public class Field:MemoryPackFormatter<T>{
         return array[index];
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

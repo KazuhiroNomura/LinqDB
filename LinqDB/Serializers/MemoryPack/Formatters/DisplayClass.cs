@@ -72,6 +72,7 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
     private readonly System.Type[] FieldTypes = new System.Type[1];
     private readonly object[] objects1=new object[1];
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         if(!this.DictionarySerialize.TryGetValue(typeof(TBufferWriter),out var Delegate)){
             var MethodTypes =this.MethodTypes;
             var SerializeTypes =this.SerializeTypes;

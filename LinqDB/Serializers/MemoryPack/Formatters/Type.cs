@@ -12,6 +12,7 @@ public class Type:MemoryPackFormatter<T> {
         writer.WriteType(value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteType(value);
     }
     internal static T Read(ref Reader reader){

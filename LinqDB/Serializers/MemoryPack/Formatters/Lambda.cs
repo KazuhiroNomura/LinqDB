@@ -9,10 +9,6 @@ using C = Serializer;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();
-    internal static void WriteConversion<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        if(value is null)writer.WriteNullObjectHeader();
-        else PrivateSerialize(ref writer,value);
-    }
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         var ListParameter= writer.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
@@ -29,7 +25,12 @@ public class Lambda:MemoryPackFormatter<T> {
         writer.WriteNodeType(ExpressionType.Lambda);
         PrivateSerialize(ref writer,value);
     }
+    internal static void WriteConversion<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        if(writer.TryWriteNil(value)) return;
+        PrivateSerialize(ref writer,value);
+    }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize(ref writer,value);
     }
     internal static T Read(ref Reader reader){
@@ -48,14 +49,12 @@ public class Lambda:MemoryPackFormatter<T> {
             parameters!
         );
     }
-    internal static T? InternalDeserializeConversion(ref Reader reader){
-        if(reader.PeekIsNull()){
-            reader.Advance(1);
-            return null;
-        }
+    internal static T? ReadConversion(ref Reader reader){
+        if(reader.TryReadNil()) return null;
         return Read(ref reader);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

@@ -19,17 +19,19 @@ public class Switch:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         PrivateSerialize(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var type       = reader.ReadType();
         var switchValue= Expression.Read(ref reader);
-        var comparison = Method.InternalDeserializeNullable(ref reader);
+        var comparison = Method.ReadNullable(ref reader);
         var cases      =reader.ReadArray<Expressions.SwitchCase>();
         var defaultBody= Expression.ReadNullable(ref reader);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases!);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

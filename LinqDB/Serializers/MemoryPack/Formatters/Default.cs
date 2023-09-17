@@ -20,6 +20,7 @@ public class Default:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
 
         PrivateSerialize(ref writer,value);
         
@@ -29,6 +30,7 @@ public class Default:MemoryPackFormatter<T> {
         return Expressions.Expression.Default(type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
 
 

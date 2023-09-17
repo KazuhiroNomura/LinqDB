@@ -11,6 +11,7 @@ using T=Expressions.CatchBlock;
 public class CatchBlock:IMessagePackFormatter<T> {
     public static readonly CatchBlock Instance=new();
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
 
         if(value.Variable is null){
             if(value.Filter is null){
@@ -59,6 +60,7 @@ public class CatchBlock:IMessagePackFormatter<T> {
 
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         T value;
         

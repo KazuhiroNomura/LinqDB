@@ -23,6 +23,7 @@ public class Parameter:MemoryPackFormatter<T> {
         
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
 
         writer.WriteType(value!.Type);
 
@@ -41,6 +42,7 @@ public class Parameter:MemoryPackFormatter<T> {
         return Parameter;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
 
         var type=reader.ReadType();
 

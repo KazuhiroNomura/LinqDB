@@ -18,11 +18,10 @@ public class Property:IMessagePackFormatter<T> {
         writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeProperties.Get(ReflectedType),value));
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        //if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        //if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
@@ -32,6 +31,7 @@ public class Property:IMessagePackFormatter<T> {
         return array[Index];
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }
 }

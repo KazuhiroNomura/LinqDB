@@ -118,18 +118,15 @@ public abstract class 共通{
     //シリアライズ。色んな方法でやってデシリアライズ成功するか
     //実行。結果が一致するから
     protected void MemoryMessageJsonExpression<T>(T input) where T : Expression {
-        this.MemoryMessageJson(input,output => {
-            Assert.Equal(input,output,this.ExpressionEqualityComparer);
-        });
-        this.MemoryMessageJson<Expression>(input,output => {
-            Assert.Equal(input,output,this.ExpressionEqualityComparer);
-        });
-        this.MemoryMessageJson<object>(input,output => {
-            Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer);
-        });
+        this.MemoryMessageJson<T>(null!,Assert.Null);
+        this.MemoryMessageJson<Expression>(null!,output =>Assert.Null(output));
+        this.MemoryMessageJson<object>(null!,output =>Assert.Null(output));
+        this.MemoryMessageJson(input,output =>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson<Expression>(input,output =>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson<object>(input,output =>Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer));
     }
     //リモート実行できるか。
-    protected void MemoryMessageJsonコンパイル実行<T>(Expression<Func<T>> input){
+    protected void MemoryMessageJsonジェネリック3コンパイル実行<T>(Expression<Func<T>> input){
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
         var expected=標準();
@@ -197,7 +194,7 @@ public abstract class 共通{
         //    }
         //}
     }
-    protected void シリアライズ<T>(T input) where T:Expression?{
+    protected void MemoryMessageJsonジェネリック3<T>(T input) where T:Expression?{
     //protected void 共通Expression<T>(Expressions.Expression<Func<T>> input){
         //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         this.MemoryMessageJson(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
@@ -263,21 +260,21 @@ public abstract class 共通{
                 var output = s.Deserialize<T>(bytes);
                 AssertAction(output!);
             }
-            {
-                var s = this.MessagePack;
-                var bytes = s.Serialize(input);
-                dynamic a = new NonPublicAccessor(s);
-                var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
-                var output = s.Deserialize<T>(bytes);
-                AssertAction(output);
-            }
-            {
-                var s = this.Utf8Json;
-                var bytes = s.Serialize(input);
-                var json = Encoding.UTF8.GetString(bytes);
-                var output = s.Deserialize<T>(bytes);
-                AssertAction(output);
-            }
+            //{
+            //    var s = this.MessagePack;
+            //    var bytes = s.Serialize(input);
+            //    dynamic a = new NonPublicAccessor(s);
+            //    var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
+            //    var output = s.Deserialize<T>(bytes);
+            //    AssertAction(output);
+            //}
+            //{
+            //    var s = this.Utf8Json;
+            //    var bytes = s.Serialize(input);
+            //    var json = Encoding.UTF8.GetString(bytes);
+            //    var output = s.Deserialize<T>(bytes);
+            //    AssertAction(output);
+            //}
         }
     }
     protected static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;

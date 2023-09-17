@@ -22,7 +22,7 @@ public class SymbolDocumentInfo:MemoryPackFormatter<T>{
         }
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     internal static T Read(ref Reader reader) {
