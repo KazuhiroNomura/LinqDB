@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -12,11 +13,11 @@ using Reader = JsonReader;
 internal static class Extension{
     public static void WriteValue<T>(this ref Writer writer,T value,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
     public static T ReadValue<T>(this ref Reader reader,IJsonFormatterResolver Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-    public static void WriteType(this ref Writer writer,System.Type value){
+    public static void WriteType(this ref Writer writer,Type value){
         writer.WriteString(value.AssemblyQualifiedName);
     }
-    public static System.Type ReadType(this ref Reader reader){
-        return System.Type.GetType(reader.ReadString())!;
+    public static Type ReadType(this ref Reader reader){
+        return Type.GetType(reader.ReadString())!;
     }
     
 
@@ -35,20 +36,49 @@ internal static class Extension{
     	    return true;
         }
     }
-    
-    private static class StaticReadOnlyCollectionFormatter<T>{
-        public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
+
+    private static class StaticReadOnlyCollectionFormatter<T> {
+        public static readonly ReadOnlyCollectionFormatter<T> Formatter = new();
     }
-    internal static void SerializeReadOnlyCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver)=>
+    internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver) =>
         StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value!,Resolver);
-    private static class StaticArrayFormatter<T>{
-        public static readonly ArrayFormatter<T> Formatter=new();
+    private static class StaticArrayFormatter<T> {
+        public static readonly ArrayFormatter<T> Formatter = new();
     }
-    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) {
         return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
-        
-        
     }
+    //internal static void SerializeReadOnlyCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver){
+    //    var off=writer.CurrentOffset;
+    //    writer.WriteBeginArray();
+    //    var Count=value!.Count;
+    //    if(Count>0){
+    //        var Formatter=Resolver.GetFormatter<T>();
+    //        Formatter.Serialize(ref writer,value[0],Resolver);
+    //        for(var index=1;index<Count;index++){
+    //            writer.WriteValueSeparator();
+    //            Formatter.Serialize(ref writer,value[index],Resolver);
+    //        }
+    //    }
+    //    writer.WriteEndArray();
+    //}
+    //internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver){
+    //    var off=reader.GetCurrentOffsetUnsafe();
+    //    reader.ReadIsBeginArrayWithVerify();
+    //    var value=new List<T>();
+    //    var Formatter=Resolver.GetFormatter<T>();
+    //    if(!reader.ReadIsEndArray()){
+    //        value.Add(Formatter.Deserialize(ref reader,Resolver));
+    //        while(!reader.ReadIsEndArray()){
+    //            reader.ReadIsValueSeparatorWithVerify();
+    //            value.Add(Formatter.Deserialize(ref reader,Resolver));
+    //        }
+    //    }
+    //    //reader.ReadIsEndArrayWithVerify();
+    //    return value.ToArray();
+
+
+    //}
     internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var Count=value.Count;
@@ -66,8 +96,8 @@ internal static class Extension{
         }
         writer.WriteEndArray();
     }
-    internal static System.Collections.Generic.List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,IJsonFormatterResolver Resolver){
-        var List=new System.Collections.Generic.List<Expressions.ParameterExpression>();
+    internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,IJsonFormatterResolver Resolver){
+        var List=new List<Expressions.ParameterExpression>();
         reader.ReadIsBeginArrayWithVerify();
         while(reader.ReadIsBeginObject()){
             var name=reader.ReadString();
@@ -80,7 +110,7 @@ internal static class Extension{
         reader.ReadIsEndArrayWithVerify();
         return List;
     }
-    public static object ReadValue(this ref Reader reader,System.Type type,IJsonFormatterResolver Resolver){
+    public static object ReadValue(this ref Reader reader,Type type,IJsonFormatterResolver Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);

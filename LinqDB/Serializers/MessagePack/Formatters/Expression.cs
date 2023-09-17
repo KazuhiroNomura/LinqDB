@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using Expressions = System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
@@ -13,8 +11,8 @@ public class Expression:IMessagePackFormatter<T> {
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
-            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -30,7 +28,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Power                :
             case Expressions.ExpressionType.RightShift           :
             case Expressions.ExpressionType.Subtract             :
-            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.AddAssign            :
             case Expressions.ExpressionType.AddAssignChecked     :
             case Expressions.ExpressionType.DivideAssign         :
@@ -44,13 +42,13 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.PowerAssign          :
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
-            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Equal                :
             case Expressions.ExpressionType.GreaterThan          :
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.ArrayLength          :
             case Expressions.ExpressionType.Quote                :Unary.Write(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Throw                :
@@ -99,20 +97,20 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Try                  :Try         .Write(ref writer,(Expressions.TryExpression        )value,Resolver);break;
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
+        
     }
     internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
+        if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
-        Write(ref writer,value,Resolver);
+        WriteNullable(ref writer,value,Resolver);
     }
-    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        T value;
         var ArrayHeader=reader.ReadArrayHeader();
+        T value;
         var NodeType=reader.ReadNodeType();
+        
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=Binary.ReadLeftRight(ref reader,Resolver);
@@ -270,15 +268,13 @@ public class Expression:IMessagePackFormatter<T> {
                 var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.NotEqual(left,right,isLiftedToNull,method);break;
             }
-
             case Expressions.ExpressionType.ArrayLength: {
                 var operand = Unary.ReadOperand(ref reader,Resolver);
                 value=T.ArrayLength(operand);break;
             }
             case Expressions.ExpressionType.Quote: {
                 var operand = Unary.ReadOperand(ref reader,Resolver);
-                var result = T.Quote(operand);
-                value=result;break;
+                value=T.Quote(operand);break;
             }
             case Expressions.ExpressionType.Convert: {
                 var (operand, Type, method)=Unary.ReadOperandTypeMethod(ref reader,Resolver);
@@ -352,10 +348,8 @@ public class Expression:IMessagePackFormatter<T> {
                 var (operand, Type)=Unary.ReadOperandType(ref reader,Resolver);
                 value=T.Unbox(operand,Type);break;
             }
-
             case Expressions.ExpressionType.TypeEqual       :value=TypeBinary    .ReadTypeEqual     (ref reader,Resolver);break;
             case Expressions.ExpressionType.TypeIs          :value=TypeBinary    .ReadTypeIs        (ref reader,Resolver);break;
-
             case Expressions.ExpressionType.Conditional     :value=Conditional   .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Constant        :value=Constant      .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Parameter       :value=Parameter     .Read              (ref reader,Resolver,ArrayHeader);break;
@@ -382,9 +376,9 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Try             :value=Try           .Read              (ref reader,Resolver);break;
             default:throw new NotSupportedException(NodeType.ToString());
         }
+        
         return value;
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        return ReadNullable(ref reader,Resolver)!;
-    }
+    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

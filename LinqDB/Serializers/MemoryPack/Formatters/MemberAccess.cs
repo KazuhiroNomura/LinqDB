@@ -1,11 +1,10 @@
 ﻿using System.Buffers;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 using MemoryPack;
-using System.Reflection.PortableExecutable;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=Expressions.MemberExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.MemberExpression;
 
 
 public class MemberAccess:MemoryPackFormatter<T> {

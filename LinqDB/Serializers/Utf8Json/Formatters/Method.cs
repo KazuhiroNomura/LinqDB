@@ -6,7 +6,6 @@ using Writer = JsonWriter;
 using Reader = JsonReader;
 using static Extension;
 using T = MethodInfo;
-using C = Serializer;
 public class Method:IJsonFormatter<T> {
     public static readonly Method Instance=new();
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){

@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
-using Reader=MemoryPackReader;
-using T=Expressions.DefaultExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.DefaultExpression;
 public class Default:MemoryPackFormatter<T> {
     public static readonly Default Instance=new();
     

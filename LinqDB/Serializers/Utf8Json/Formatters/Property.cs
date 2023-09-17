@@ -2,17 +2,15 @@
 using System.Diagnostics;
 using System.Reflection;
 using Utf8Json;
+
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using static Extension;
-using C=Serializer;
-public class Property:IJsonFormatter<PropertyInfo>{
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T=PropertyInfo;
+public class Property:IJsonFormatter<T> {
     public static readonly Property Instance=new();
-    internal static void Write(ref Writer writer,PropertyInfo? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.ReflectedType;
         writer.WriteType(type);
         writer.WriteValueSeparator();
@@ -21,11 +19,11 @@ public class Property:IJsonFormatter<PropertyInfo>{
         writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeProperties.Get(type),value));
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,PropertyInfo? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }
-    internal static PropertyInfo Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
+    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
@@ -35,7 +33,5 @@ public class Property:IJsonFormatter<PropertyInfo>{
         reader.ReadIsEndArrayWithVerify();
         return Resolver.Serializer().TypeProperties.Get(type)[index];
     }
-    public PropertyInfo Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        return Read(ref reader,Resolver);
-    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null!:Read(ref reader,Resolver);
 }

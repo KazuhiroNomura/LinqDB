@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using Utf8Json;
+﻿using Utf8Json;
 
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.DefaultExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.DefaultExpression;
 public class Default:IJsonFormatter<T> {
     public static readonly Default Instance=new();
     

@@ -1,18 +1,17 @@
-﻿using System.Diagnostics;
-using Utf8Json;
+﻿using Utf8Json;
 
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.NewExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.NewExpression;
 using static Extension;
 public class New:IJsonFormatter<T> {
     public static readonly New Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Constructor.Instance.Serialize(ref writer,value.Constructor!,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);

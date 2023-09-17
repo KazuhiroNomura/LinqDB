@@ -1,11 +1,9 @@
-﻿using System.Buffers;
-using Expressions = System.Linq.Expressions;
+﻿using Expressions = System.Linq.Expressions;
 
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
 using static Extension;
-using C = Serializer;
 
 public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();

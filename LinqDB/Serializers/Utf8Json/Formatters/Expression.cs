@@ -1,21 +1,19 @@
 ﻿using System;
-using Expressions = System.Linq.Expressions;
 using Utf8Json;
-using System.Diagnostics;
 
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.Expression;
 public class Expression:IJsonFormatter<T> {
     public static readonly Expression Instance=new();
-    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        Debug.Assert(value!=null,nameof(value)+" != null");
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
-            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
+            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -31,7 +29,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.Power                :
             case Expressions.ExpressionType.RightShift           :
             case Expressions.ExpressionType.Subtract             :
-            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.AddAssign            :
             case Expressions.ExpressionType.AddAssignChecked     :
             case Expressions.ExpressionType.DivideAssign         :
@@ -45,13 +43,13 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.PowerAssign          :
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
-            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Equal                :
             case Expressions.ExpressionType.GreaterThan          :
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.ArrayLength          : 
             case Expressions.ExpressionType.Quote                :Unary.Write(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Throw                : 
@@ -90,16 +88,15 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.DebugInfo            :DebugInfo   .Write      (ref writer,(Expressions.DebugInfoExpression  )value,Resolver);break;
             case Expressions.ExpressionType.Dynamic              :Dynamic     .Write      (ref writer,(Expressions.DynamicExpression    )value,Resolver);break;
             case Expressions.ExpressionType.Default              :Default     .Write      (ref writer,(Expressions.DefaultExpression    )value,Resolver);break;
+            //case Expressions.ExpressionType.Extension            :
             case Expressions.ExpressionType.Goto                 :Goto        .Write      (ref writer,(Expressions.GotoExpression       )value,Resolver);break;
             case Expressions.ExpressionType.Index                :Index       .Write      (ref writer,(Expressions.IndexExpression      )value,Resolver);break;
             case Expressions.ExpressionType.Label                :Label       .Write      (ref writer,(Expressions.LabelExpression      )value,Resolver);break;
+            //case Expressions.ExpressionType.RuntimeVariables     :
             case Expressions.ExpressionType.Loop                 :Loop        .Write      (ref writer,(Expressions.LoopExpression       )value,Resolver);break;
             case Expressions.ExpressionType.Switch               :Switch      .Write      (ref writer,(Expressions.SwitchExpression     )value,Resolver);break;
             case Expressions.ExpressionType.Try                  :Try         .Write      (ref writer,(Expressions.TryExpression        )value,Resolver);break;            
-            default:
-                throw new ArgumentOutOfRangeException(value.NodeType.ToString());
-            //case Expressions.ExpressionType.Extension            :
-            //case Expressions.ExpressionType.RuntimeVariables     :
+            default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
         writer.WriteEndArray();
     }
@@ -107,13 +104,14 @@ public class Expression:IJsonFormatter<T> {
         if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        WriteNullable(ref writer,value,Resolver);
+    }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
+        T value;
         var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
-        T value;
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=Binary.ReadLeftRight(ref reader,Resolver);
@@ -271,88 +269,86 @@ public class Expression:IJsonFormatter<T> {
                 var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.NotEqual(left,right,IsLiftedToNull,method);break;
             }
-
             case Expressions.ExpressionType.ArrayLength: {
                 var operand=Unary.InternalDeserialize(ref reader,Resolver);
-                value=T.ArrayLength(operand); break;
+                value=T.ArrayLength(operand);break;
             }
             case Expressions.ExpressionType.Quote: {
                 var operand=Unary.InternalDeserialize(ref reader,Resolver);
-                value=T.Quote(operand); break;
+                value=T.Quote(operand);break;
             }
             case Expressions.ExpressionType.Convert:{
                 var (operand, type, method)=Unary.ReadTypeMethod(ref reader,Resolver);
-                value=T.Convert(operand,type,method); break;
+                value=T.Convert(operand,type,method);break;
             }
             case Expressions.ExpressionType.ConvertChecked: {
                 var (operand, type, method)=Unary.ReadTypeMethod(ref reader,Resolver);
-                value=T.ConvertChecked(operand,type,method); break;
+                value=T.ConvertChecked(operand,type,method);break;
             }
             case Expressions.ExpressionType.Decrement: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.Decrement(operand,method); break;
+                value=T.Decrement(operand,method);break;
             }
             case Expressions.ExpressionType.Increment: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.Increment(operand,method); break;
+                value=T.Increment(operand,method);break;
             }
             case Expressions.ExpressionType.IsFalse: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.IsFalse(operand,method); break;
+                value=T.IsFalse(operand,method);break;
             }
             case Expressions.ExpressionType.IsTrue: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.IsTrue(operand,method); break;
+                value=T.IsTrue(operand,method);break;
             }
             case Expressions.ExpressionType.Negate: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.Negate(operand,method); break;
+                value=T.Negate(operand,method);break;
             }
             case Expressions.ExpressionType.NegateChecked: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.NegateChecked(operand,method); break;
+                value=T.NegateChecked(operand,method);break;
             }
             case Expressions.ExpressionType.Not: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.Not(operand,method); break;
+                value=T.Not(operand,method);break;
             }
             case Expressions.ExpressionType.OnesComplement: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.OnesComplement(operand,method); break;
+                value=T.OnesComplement(operand,method);break;
             }
             case Expressions.ExpressionType.PostDecrementAssign: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.PostDecrementAssign(operand,method); break;
+                value=T.PostDecrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PostIncrementAssign: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.PostIncrementAssign(operand,method); break;
+                value=T.PostIncrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PreDecrementAssign: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.PreDecrementAssign(operand,method); break;
+                value=T.PreDecrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PreIncrementAssign: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.PreIncrementAssign(operand,method); break;
+                value=T.PreIncrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.UnaryPlus: {
                 var (operand, method)=Unary.ReadMethod(ref reader,Resolver);
-                value=T.UnaryPlus(operand,method); break;
+                value=T.UnaryPlus(operand,method);break;
             }
             case Expressions.ExpressionType.Throw: {
                 var (operand, Type)=Unary.ReadType(ref reader,Resolver);
-                value=T.Throw(operand,Type); break;
+                value=T.Throw(operand,Type);break;
             }
             case Expressions.ExpressionType.TypeAs: {
                 var (operand, Type)=Unary.ReadType(ref reader,Resolver);
-                value=T.TypeAs(operand,Type); break;
+                value=T.TypeAs(operand,Type);break;
             }
             case Expressions.ExpressionType.Unbox: {
                 var (operand, Type)=Unary.ReadType(ref reader,Resolver);
-                value=T.Unbox(operand,Type); break;
+                value=T.Unbox(operand,Type);break;
             }
-
             case Expressions.ExpressionType.TypeEqual       :value=TypeBinary  .ReadTypeEqual     (ref reader,Resolver);break;
             case Expressions.ExpressionType.TypeIs          :value=TypeBinary  .ReadTypeIs        (ref reader,Resolver);break;
             case Expressions.ExpressionType.Conditional     :value=Conditional .Read              (ref reader,Resolver);break;

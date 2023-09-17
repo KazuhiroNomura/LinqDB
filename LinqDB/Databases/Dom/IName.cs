@@ -8,7 +8,7 @@ public interface IName{
             var s = this.Name;
             //switch(s) {
             //    case "event":
-            //    case "operator": s='@'+s; break;
+            //    case "operator": s='@'+s;break;
             //}
             return s.
                 Replace(' ','_').

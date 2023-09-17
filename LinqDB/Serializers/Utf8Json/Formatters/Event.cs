@@ -3,11 +3,10 @@ using System.Diagnostics;
 using System.Reflection;
 using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=EventInfo;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = EventInfo;
 using static Extension;
-using C=Serializer;
 
 public class Event:IJsonFormatter<T> {
     public static readonly Event Instance=new();

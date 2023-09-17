@@ -1,20 +1,16 @@
-﻿using MessagePack.Formatters;
-using MessagePack;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
+using MessagePack;
+using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = System.Object;
 public class Object:IMessagePackFormatter<T>{
     public static readonly Object Instance=new();
-    private const int ArrayHeader=2;
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
-        
+    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(2);
         var type=value!.GetType();
         writer.WriteType(type);
 
@@ -39,40 +35,31 @@ public class Object:IMessagePackFormatter<T>{
             case PropertyInfo           v:Property   .Write(ref writer,v,Resolver);break;
             case EventInfo              v:Event      .Write(ref writer,v,Resolver);break;
             case FieldInfo              v:Field      .Write(ref writer,v,Resolver);break;
-            //case MemberInfo             v:Member     .Instance.Serialize(ref writer,v,Resolver);break;
             default:{
-                //T Formatter;
-                //if(type.IsDisplay()){
-                //    //あらかじめ設定してあるResolverに設定する
-                //    var FormatterType=typeof(DisplayClass<>).MakeGenericType(type);
-                //    var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-                //    Formatter=Instance.GetValue(null)!;
-                //} else{
-                //    Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
-                //}
                 var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
                 Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
-                //writer.WriteValue(value,Resolver);
-                //T Formatter;
-                //if(type.IsDisplay()){
-                //    if(DisplayClass.DictionarySerialize.TryGetValue(type,out var Foramtter)) return;
-                //    var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
-                //    Formatter=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
-                //} else{
-                //    Formatter=Resolver.Serializer().Options.Resolver.GetFormatterDynamic(type)!;
-                //}
+                
+                
+                
+                
+                
+                
+                
                 break;
             }
         }
+        
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
+        Write(ref writer,value,Resolver);
+    }
+    internal static object Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
-        if(reader.TryReadNil()) return null!;
-        //if(reader.TryReadNil()) value=null;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==2);
         var type=reader.ReadType();
-        //T? value;
+        
         if     (typeof(sbyte  )==type)value=reader.ReadSByte();
         else if(typeof(short  )==type)value=reader.ReadInt16();
         else if(typeof(int    )==type)value=reader.ReadInt32();
@@ -94,6 +81,9 @@ public class Object:IMessagePackFormatter<T>{
         else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Read(ref reader,Resolver);
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Read(ref reader,Resolver);
         else value=reader.ReadValue(type,Resolver);
+        
         return value;
     }
+    internal static object? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

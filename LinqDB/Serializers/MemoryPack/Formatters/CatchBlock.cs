@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using MemoryPack;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
-using Reader=MemoryPackReader;
-using T=Expressions.CatchBlock;
+using Reader = MemoryPackReader;
+using T = Expressions.CatchBlock;
 public class CatchBlock:MemoryPackFormatter<T> {
     public static readonly CatchBlock Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){

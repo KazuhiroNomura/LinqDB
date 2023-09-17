@@ -13,10 +13,11 @@ public class Delegate:MemoryPackFormatter<T> {
         
         Method.Write(ref writer,value.Method);
         
-        Object.Write(ref writer,value.Target);
+        Object.WriteNullable(ref writer,value.Target);
         
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
     internal static T Read(ref Reader reader) {
@@ -25,11 +26,12 @@ public class Delegate:MemoryPackFormatter<T> {
         
         var method=Method.Read(ref reader);
         
-        var target=Object.InternalDeserialize(ref reader);
+        var target=Object.ReadNullable(ref reader);
         
         return method.CreateDelegate(delegateType,target);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=Read(ref reader);
     }
 }

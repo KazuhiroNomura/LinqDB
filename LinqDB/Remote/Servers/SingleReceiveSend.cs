@@ -673,7 +673,7 @@ internal class SingleReceiveSend:IDisposable{
                     switch(XmlType) {
                         case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
                         case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        case XmlType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object); break;
+                        case XmlType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object);break;
                         default:throw new NotSupportedException(XmlType.ToString());
                     }
                     break;
@@ -700,8 +700,8 @@ internal class SingleReceiveSend:IDisposable{
             var XmlType = シリアライズしたい.XmlType;
             switch(XmlType) {
                 case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, ex);break;
-                case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, ex); break;
-                case XmlType.MemoryPack: this.MemoryPack.Serialize<object>(MemoryStream, ex); break;
+                case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, ex);break;
+                case XmlType.MemoryPack: this.MemoryPack.Serialize<object>(MemoryStream, ex);break;
                 default:throw new NotSupportedException(XmlType.ToString());
             }
             BufferにLengthとSHA256を設定してStreamにWrite();

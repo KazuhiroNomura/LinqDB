@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using Utf8Json;
 
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.TypeBinaryExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.TypeBinaryExpression;
 public class TypeBinary:IJsonFormatter<T> {
     public static readonly TypeBinary Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){

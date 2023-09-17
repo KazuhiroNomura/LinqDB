@@ -26,7 +26,7 @@ public class Delegate:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var target=Object.Instance.Deserialize(ref reader,Resolver);
+        var target=Object.ReadNullable(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return method.CreateDelegate(delegateType,target);
     }

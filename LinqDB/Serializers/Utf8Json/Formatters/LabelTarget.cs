@@ -5,12 +5,10 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using static Extension;
-using C = Serializer;
 using T = Expressions.LabelTarget;
 public class LabelTarget:IJsonFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         if(Resolver.Serializer().Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteInt32(index);
@@ -27,7 +25,7 @@ public class LabelTarget:IJsonFormatter<T> {
         }
         writer.WriteEndArray();
     }
-    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    private static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }

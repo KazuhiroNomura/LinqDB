@@ -2,9 +2,8 @@
 using MemoryPack;
 using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using C=Serializer;
-using T=Expressions.LabelTarget;
+using Reader = MemoryPackReader;
+using T = Expressions.LabelTarget;
 using static Extension;
 
 

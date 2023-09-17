@@ -20,7 +20,7 @@ public class Block:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.Serialize宣言Parameters(value.Variables,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
+        writer.WriteCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     public static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver) {

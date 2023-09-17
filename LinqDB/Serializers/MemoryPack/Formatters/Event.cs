@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Buffers;
-using System.Diagnostics;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=EventInfo;
-using C=Serializer;
+using Reader = MemoryPackReader;
+using T = EventInfo;
 public class Event:MemoryPackFormatter<T>{
     public static readonly Event Instance=new();
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>

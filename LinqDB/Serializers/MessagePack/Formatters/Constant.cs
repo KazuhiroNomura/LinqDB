@@ -28,7 +28,7 @@ public class Constant:IMessagePackFormatter<T> {
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var type=reader.ReadType();
         
-        var value=reader.TryReadNil()?null:Object.Instance.Deserialize(ref reader,Resolver);
+        var value=reader.TryReadNil()?null:Object.ReadNullable(ref reader,Resolver);
         return Expressions.Expression.Constant(value,type);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){

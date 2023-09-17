@@ -24,9 +24,9 @@ public class Delegate:IMessagePackFormatter<T>{
         var count=reader.ReadArrayHeader();
         var delegateType=Type.Instance.Deserialize(ref reader,Resolver);
         
-        var method=Method.Instance.Deserialize(ref reader,Resolver);
+        var method=Method.Read(ref reader,Resolver);
         
-        var target=Object.Instance.Deserialize(ref reader,Resolver);
+        var target=Object.ReadNullable(ref reader,Resolver);
         
         return method.CreateDelegate(delegateType,target);
     }

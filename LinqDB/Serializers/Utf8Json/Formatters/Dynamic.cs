@@ -48,7 +48,7 @@ public class Dynamic:IJsonFormatter<T> {
                         writer.WriteValueSeparator();
                         writer.WriteInt32(v1.CallInfo.ArgumentCount);
                         writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
+                        writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
                         break;
                     }
                     case DeleteIndexBinder v1:{
@@ -56,7 +56,7 @@ public class Dynamic:IJsonFormatter<T> {
                         writer.WriteValueSeparator();
                         writer.WriteInt32(v1.CallInfo.ArgumentCount);
                         writer.WriteValueSeparator();
-                        writer.SerializeReadOnlyCollection(v1.CallInfo.ArgumentNames,Resolver);
+                        writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
                         break;
                     }
                     case DeleteMemberBinder v1:{
@@ -144,9 +144,9 @@ public class Dynamic:IJsonFormatter<T> {
             writer0.WriteValueSeparator();
             writer0.WriteInt32(CallInfo.ArgumentCount);
             writer0.WriteValueSeparator();
-            writer0.SerializeReadOnlyCollection(CallInfo.ArgumentNames,Resolver);
+            writer0.WriteCollection(CallInfo.ArgumentNames,Resolver);
             writer0.WriteValueSeparator();
-            writer0.SerializeReadOnlyCollection(Arguments,Resolver);
+            writer0.WriteCollection(Arguments,Resolver);
         }
         static void WriteBinderType(ref Writer writer,BinderType value){
             writer.WriteString(value.ToString());

@@ -1,14 +1,15 @@
-﻿using MemoryPack;
-
-using System.Buffers;
+﻿
 using System.Reflection;
+using MemoryPack;
+using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 using Reader = MemoryPackReader;
 using T = System.Object;
 public class Object:MemoryPackFormatter<object>{
     public static readonly Object Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value))return;
         var type=value!.GetType();
         writer.WriteType(type);
@@ -22,6 +23,9 @@ public class Object:MemoryPackFormatter<object>{
             case ushort                 v:writer.WriteVarInt(v);break;
             case uint                   v:writer.WriteVarInt(v);break;
             case ulong                  v:writer.WriteVarInt(v);break;
+            //float
+            //double
+            //bool
             case string                 v:writer.WriteString(v);break;
             case System.Delegate        v:Delegate   .Write(ref writer,v);break;
             case Expressions.Expression v:Expression .Write(ref writer,v);break;
@@ -31,24 +35,31 @@ public class Object:MemoryPackFormatter<object>{
             case PropertyInfo           v:Property   .Write(ref writer,v);break;
             case EventInfo              v:Event      .Write(ref writer,v);break;
             case FieldInfo              v:Field      .Write(ref writer,v);break;
-            //case MemberInfo             v:Member     .Serialize(ref writer,v);break;
-            default:
+            default:{
                 writer.Serializer().RegisterAnonymousDisplay(type);
                 writer.WriteValue(type,value);
+                
+                
+                
+                
+                
+                
+                
                 break;
+            }
         }
+        
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value){
+    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    internal static T? InternalDeserialize(ref Reader reader) {
-        if(reader.PeekIsNull()){
-            reader.Advance(1);
-            return null;
-        }
-        T? value = default;
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value)=>WriteNullable(ref writer,value);
+    internal static object Read(ref Reader reader) {
+        T value;
+        
         var type=reader.ReadType();
-        //object? value=default;
+        
         if     (typeof(sbyte  )==type)value=reader.ReadVarIntSByte();
         else if(typeof(short  )==type)value=reader.ReadVarIntInt16();
         else if(typeof(int    )==type)value=reader.ReadVarIntInt32();
@@ -57,6 +68,10 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(ushort )==type)value=reader.ReadVarIntUInt16();
         else if(typeof(uint   )==type)value=reader.ReadVarIntUInt32();
         else if(typeof(ulong  )==type)value=reader.ReadVarIntUInt64();
+        //float
+        //double
+        //bool
+        //string
         else if(typeof(System.Delegate       ).IsAssignableFrom(type))value=Delegate   .Read(ref reader);
         else if(typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Read(ref reader);
         else if(typeof(System.Type           ).IsAssignableFrom(type))value=Type       .Read(ref reader);
@@ -65,10 +80,10 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(PropertyInfo          ).IsAssignableFrom(type))value=Property   .Read(ref reader);
         else if(typeof(EventInfo             ).IsAssignableFrom(type))value=Event      .Read(ref reader);
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Read(ref reader);
-        else value=reader.ReadValue(type);
+        else value=reader.ReadValue(type)!;
+        
         return value!;
     }
-    public override void Deserialize(ref Reader reader,scoped ref object? value){
-        value=InternalDeserialize(ref reader);
-    }
+    internal static object? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref object? value)=>value=ReadNullable(ref reader);
 }

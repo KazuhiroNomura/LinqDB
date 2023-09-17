@@ -3,11 +3,9 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 
 using System.Buffers;
-using System.Diagnostics;
 using MemoryPack;
 using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 
 namespace LinqDB.Serializers.MemoryPack;
 

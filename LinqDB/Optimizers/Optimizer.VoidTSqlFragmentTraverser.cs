@@ -245,218 +245,218 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TSqlFragment(TSqlFragment x) {
             switch(x) {
-                case MultiPartIdentifier                                   y:this.SwitchMultiPartIdentifier                             (y); break;
-                case Identifier                                            y:this.SwitchIdentifier                                      (y); break;
-                case ScalarExpression                                      y:this.ScalarExpression                                      (y); break;
-                case IdentifierOrValueExpression                           y:this.IdentifierOrValueExpression                           (y); break;
-                case StatementList                                         y:this.StatementList                                         (y); break;
-                case TSqlStatement                                         y:this.TSqlStatement                                         (y); break;
-                case ExecuteOption                                         y:this.ExecuteOption                                         (y); break;
-                case ResultSetDefinition                                   y:this.ResultSetDefinition                                   (y); break;
-                case ResultColumnDefinition                                y:this.ResultColumnDefinition                                (y); break;
-                case ExecuteSpecification                                  y:this.ExecuteSpecification                                  (y); break;
-                case ExecuteContext                                        y:this.ExecuteContext                                        (y); break;
-                case ExecuteParameter                                      y:this.ExecuteParameter                                      (y); break;
-                case ExecutableEntity                                      y:this.ExecutableEntity                                      (y); break;
-                case ProcedureReferenceName                                y:this.ProcedureReferenceName                                (y); break;
-                case AdHocDataSource                                       y:this.AdHocDataSource                                       (y); break;
-                case ViewOption                                            y:this.ViewOption                                            (y); break;
-                case TriggerObject                                         y:this.TriggerObject                                         (y); break;
-                case TriggerOption                                         y:this.TriggerOption                                         (y); break;
-                case TriggerAction                                         y:this.TriggerAction                                         (y); break;
-                case ProcedureReference                                    y:this.ProcedureReference                                    (y); break;
-                case MethodSpecifier                                       y:this.MethodSpecifier                                       (y); break;
-                case ProcedureOption                                       y:this.ProcedureOption                                       (y); break;
-                case FunctionOption                                        y:this.FunctionOption                                        (y); break;
-                case XmlNamespaces                                         y:this.XmlNamespaces                                         (y); break;
-                case XmlNamespacesElement                                  y:this.XmlNamespacesElement                                  (y); break;
-                case CommonTableExpression                                 y:this.CommonTableExpression                                 (y); break;
-                case WithCtesAndXmlNamespaces                              y:this.WithCtesAndXmlNamespaces                              (y); break;
-                case FunctionReturnType                                    y:this.FunctionReturnType                                    (y); break;
-                case DataTypeReference                                     y:this.DataTypeReference                                     (y); break;
-                case TableDefinition                                       y:this.TableDefinition                                       (y); break;
-                case DeclareTableVariableBody                              y:this.DeclareTableVariableBody                              (y); break;
-                case TableReference                                        y:this.TableReference                                        (y); break;
-                case TableHint                                             y:this.TableHint                                             (y); break;
-                case BooleanExpression                                     y:this.BooleanExpression                                     (y); break;
-                case ForClause                                             y:this.ForClause                                             (y); break;
-                case OptimizerHint                                         y:this.OptimizerHint                                         (y); break;
-                case VariableValuePair                                     y:this.VariableValuePair                                     (y); break;
-                case WhenClause                                            y:this.WhenClause                                            (y); break;
-                case SchemaDeclarationItem                                 y:this.SchemaDeclarationItem                                 (y); break;
-                case CallTarget                                            y:this.CallTarget                                            (y); break;
-                case OverClause                                            y:this.OverClause                                            (y); break;
-                case AtomicBlockOption                                     y:this.AtomicBlockOption                                     (y); break;
-                case ColumnWithSortOrder                                   y:this.ColumnWithSortOrder                                   (y); break;
-                case DeclareVariableElement                                y:this.DeclareVariableElement                                (y); break;
-                case DataModificationSpecification                         y:this.DataModificationSpecification                         (y); break;
-                case Permission                                            y:this.Permission                                            (y); break;
-                case SecurityTargetObject                                  y:this.SecurityTargetObject                                  (y); break;
-                case SecurityTargetObjectName                              y:this.SecurityTargetObjectName                              (y); break;
-                case SecurityPrincipal                                     y:this.SecurityPrincipal                                     (y); break;
-                case SecurityElement80                                     y:this.SecurityElement80                                     (y); break;
-                case Privilege80                                           y:this.Privilege80                                           (y); break;
-                case SecurityUserClause80                                  y:this.SecurityUserClause80                                  (y); break;
-                case SetClause                                             y:this.SetClause                                             (y); break;
-                case InsertSource                                          y:this.InsertSource                                          (y); break;
-                case RowValue                                              y:this.RowValue                                              (y); break;
-                case LiteralRange                                          y:this.LiteralRange                                          (y); break;
-                case OptionValue                                           y:this.OptionValue                                           (y); break;
-                case IdentifierOrScalarExpression                          y:this.IdentifierOrScalarExpression                          (y); break;
-                case SchemaObjectNameOrValueExpression                     y:this.SchemaObjectNameOrValueExpression                     (y); break;
-                case SequenceOption                                        y:this.SequenceOption                                        (y); break;
-                case SecurityPredicateAction                               y:this.SecurityPredicateAction                               (y); break;
-                case SecurityPolicyOption                                  y:this.SecurityPolicyOption                                  (y); break;
-                case ColumnMasterKeyParameter                              y:this.ColumnMasterKeyParameter                              (y); break;
-                case ColumnEncryptionKeyValue                              y:this.ColumnEncryptionKeyValue                              (y); break;
-                case ColumnEncryptionKeyValueParameter                     y:this.ColumnEncryptionKeyValueParameter                     (y); break;
-                case ExternalTableOption                                   y:this.ExternalTableOption                                   (y); break;
-                case ExternalTableDistributionPolicy                       y:this.ExternalTableDistributionPolicy                       (y); break;
-                case ExternalDataSourceOption                              y:this.ExternalDataSourceOption                              (y); break;
-                case ExternalFileFormatOption                              y:this.ExternalFileFormatOption                              (y); break;
-                case AssemblyOption                                        y:this.AssemblyOption                                        (y); break;
-                case AddFileSpec                                           y:this.AddFileSpec                                           (y); break;
-                case AssemblyName                                          y:this.AssemblyName                                          (y); break;
-                case TableOption                                           y:this.TableOption                                           (y); break;
-                case DatabaseOption                                        y:this.DatabaseOption                                        (y); break;
-                case RemoteDataArchiveDatabaseSetting                      y:this.RemoteDataArchiveDatabaseSetting                      (y); break;
-                case RetentionPeriodDefinition                             y:this.RetentionPeriodDefinition                             (y); break;
-                case TableSwitchOption                                     y:this.TableSwitchOption                                     (y); break;
-                case DropClusteredConstraintOption                         y:this.DropClusteredConstraintOption                         (y); break;
-                case AlterTableDropTableElement                            y:this.AlterTableDropTableElement                            (y); break;
-                case ExecuteAsClause                                       y:this.ExecuteAsClause                                       (y); break;
-                case QueueOption                                           y:this.QueueOption                                           (y); break;
-                case RouteOption                                           y:this.RouteOption                                           (y); break;
-                case SystemTimePeriodDefinition                            y:this.SystemTimePeriodDefinition                            (y); break;
-                case IndexType                                             y:this.IndexType                                             (y); break;
-                case PartitionSpecifier                                    y:this.PartitionSpecifier                                    (y); break;
-                case FileGroupOrPartitionScheme                            y:this.FileGroupOrPartitionScheme                            (y); break;
-                case IndexOption                                           y:this.IndexOption                                           (y); break;
-                case OnlineIndexLowPriorityLockWaitOption                  y:this.OnlineIndexLowPriorityLockWaitOption                  (y); break;
-                case LowPriorityLockWaitOption                             y:this.LowPriorityLockWaitOption                             (y); break;
-                case FullTextIndexColumn                                   y:this.FullTextIndexColumn                                   (y); break;
-                case FullTextIndexOption                                   y:this.FullTextIndexOption                                   (y); break;
-                case FullTextCatalogAndFileGroup                           y:this.FullTextCatalogAndFileGroup                           (y); break;
-                case EventTypeGroupContainer                               y:this.EventTypeGroupContainer                               (y); break;
-                case EventNotificationObjectScope                          y:this.EventNotificationObjectScope                          (y); break;
-                case ApplicationRoleOption                                 y:this.ApplicationRoleOption                                 (y); break;
-                case AlterRoleAction                                       y:this.AlterRoleAction                                       (y); break;
-                case UserLoginOption                                       y:this.UserLoginOption                                       (y); break;
-                case StatisticsOption                                      y:this.StatisticsOption                                      (y); break;
-                case StatisticsPartitionRange                              y:this.StatisticsPartitionRange                              (y); break;
-                case CursorDefinition                                      y:this.CursorDefinition                                      (y); break;
-                case CursorOption                                          y:this.CursorOption                                          (y); break;
-                case CursorId                                              y:this.CursorId                                              (y); break;
-                case CryptoMechanism                                       y:this.CryptoMechanism                                       (y); break;
-                case FetchType                                             y:this.FetchType                                             (y); break;
-                case WhereClause                                           y:this.WhereClause                                           (y); break;
-                case DropIndexClauseBase                                   y:this.DropIndexClauseBase                                   (y); break;
-                case SetCommand                                            y:this.SetCommand                                            (y); break;
-                case FileDeclaration                                       y:this.FileDeclaration                                       (y); break;
-                case FileDeclarationOption                                 y:this.FileDeclarationOption                                 (y); break;
-                case FileGroupDefinition                                   y:this.FileGroupDefinition                                   (y); break;
-                case DatabaseConfigurationClearOption                      y:this.DatabaseConfigurationClearOption                      (y); break;
-                case DatabaseConfigurationSetOption                        y:this.DatabaseConfigurationSetOption                        (y); break;
-                case AlterDatabaseTermination                              y:this.AlterDatabaseTermination                              (y); break;
-                case ChangeTrackingOptionDetail                            y:this.ChangeTrackingOptionDetail                            (y); break;
-                case QueryStoreOption                                      y:this.QueryStoreOption                                      (y); break;
-                case AutomaticTuningOption                                 y:this.AutomaticTuningOption                                 (y); break;
-                case ColumnDefinitionBase                                  y:this.ColumnDefinitionBase                                  (y); break;
-                case ColumnEncryptionDefinition                            y:this.ColumnEncryptionDefinition                            (y); break;
-                case ColumnEncryptionDefinitionParameter                   y:this.ColumnEncryptionDefinitionParameter                   (y); break;
-                case IdentityOptions                                       y:this.IdentityOptions                                       (y); break;
-                case ColumnStorageOptions                                  y:this.ColumnStorageOptions                                  (y); break;
-                case ConstraintDefinition                                  y:this.ConstraintDefinition                                  (y); break;
-                case FederationScheme                                      y:this.FederationScheme                                      (y); break;
-                case TableDistributionPolicy                               y:this.TableDistributionPolicy                               (y); break;
-                case TableIndexType                                        y:this.TableIndexType                                        (y); break;
-                case PartitionSpecifications                               y:this.PartitionSpecifications                               (y); break;
-                case CompressionPartitionRange                             y:this.CompressionPartitionRange                             (y); break;
-                case GraphConnectionBetweenNodes                           y:this.GraphConnectionBetweenNodes                           (y); break;
-                case RestoreOption                                         y:this.RestoreOption                                         (y); break;
-                case BackupOption                                          y:this.BackupOption                                          (y); break;
-                case DeviceInfo                                            y:this.DeviceInfo                                            (y); break;
-                case MirrorToClause                                        y:this.MirrorToClause                                        (y); break;
-                case BackupRestoreFileInfo                                 y:this.BackupRestoreFileInfo                                 (y); break;
-                case BulkInsertOption                                      y:this.BulkInsertOption                                      (y); break;
-                case ExternalTableColumnDefinition                         y:this.ExternalTableColumnDefinition                         (y); break;
-                case InsertBulkColumnDefinition                            y:this.InsertBulkColumnDefinition                            (y); break;
-                case DbccOption                                            y:this.DbccOption                                            (y); break;
-                case DbccNamedLiteral                                      y:this.DbccNamedLiteral                                      (y); break;
-                case PartitionParameterType                                y:this.PartitionParameterType                                (y); break;
-                case RemoteServiceBindingOption                            y:this.RemoteServiceBindingOption                            (y); break;
-                case EncryptionSource                                      y:this.EncryptionSource                                      (y); break;
-                case CertificateOption                                     y:this.CertificateOption                                     (y); break;
-                case ContractMessage                                       y:this.ContractMessage                                       (y); break;
-                case EndpointAffinity                                      y:this.EndpointAffinity                                      (y); break;
-                case EndpointProtocolOption                                y:this.EndpointProtocolOption                                (y); break;
-                case IPv4                                                  y:this.IPv4                                                  (y); break;
-                case PayloadOption                                         y:this.PayloadOption                                         (y); break;
-                case KeyOption                                             y:this.KeyOption                                             (y); break;
-                case FullTextCatalogOption                                 y:this.FullTextCatalogOption                                 (y); break;
-                case ServiceContract                                       y:this.ServiceContract                                       (y); break;
-                case ComputeClause                                         y:this.ComputeClause                                         (y); break;
-                case ComputeFunction                                       y:this.ComputeFunction                                       (y); break;
-                case TableSampleClause                                     y:this.TableSampleClause                                     (y); break;
-                case ExpressionWithSortOrder                               y:this.ExpressionWithSortOrder                               (y); break;
-                case GroupByClause                                         y:this.GroupByClause                                         (y); break;
-                case GroupingSpecification                                 y:this.GroupingSpecification                                 (y); break;
-                case OutputClause                                          y:this.OutputClause                                          (y); break;
-                case OutputIntoClause                                      y:this.OutputIntoClause                                      (y); break;
-                case HavingClause                                          y:this.HavingClause                                          (y); break;
-                case OrderByClause                                         y:this.OrderByClause                                         (y); break;
-                case QueryExpression                                       y:this.QueryExpression                                       (y); break;
-                case FromClause                                            y:this.FromClause                                            (y); break;
-                case SelectElement                                         y:this.SelectElement                                         (y); break;
-                case TopRowFilter                                          y:this.TopRowFilter                                          (y); break;
-                case OffsetClause                                          y:this.OffsetClause                                          (y); break;
-                case AlterFullTextIndexAction                              y:this.AlterFullTextIndexAction                              (y); break;
-                case SearchPropertyListAction                              y:this.SearchPropertyListAction                              (y); break;
-                case CreateLoginSource                                     y:this.CreateLoginSource                                     (y); break;
-                case PrincipalOption                                       y:this.PrincipalOption                                       (y); break;
-                case DialogOption                                          y:this.DialogOption                                          (y); break;
-                case TSqlFragmentSnippet                                   y:this.TSqlFragmentSnippet                                   (y); break;
-                case TSqlScript                                            y:this.TSqlScript                                            (y); break;
-                case TSqlBatch                                             y:this.TSqlBatch                                             (y); break;
-                case MergeActionClause                                     y:this.MergeActionClause                                     (y); break;
-                case MergeAction                                           y:this.MergeAction                                           (y); break;
-                case AuditSpecificationPart                                y:this.AuditSpecificationPart                                (y); break;
-                case AuditSpecificationDetail                              y:this.AuditSpecificationDetail                              (y); break;
-                case DatabaseAuditAction                                   y:this.DatabaseAuditAction                                   (y); break;
-                case AuditTarget                                           y:this.AuditTarget                                           (y); break;
-                case AuditOption                                           y:this.AuditOption                                           (y); break;
-                case AuditTargetOption                                     y:this.AuditTargetOption                                     (y); break;
-                case ResourcePoolParameter                                 y:this.ResourcePoolParameter                                 (y); break;
-                case ResourcePoolAffinitySpecification                     y:this.ResourcePoolAffinitySpecification                     (y); break;
-                case ExternalResourcePoolParameter                         y:this.ExternalResourcePoolParameter                         (y); break;
-                case ExternalResourcePoolAffinitySpecification             y:this.ExternalResourcePoolAffinitySpecification             (y); break;
-                case WorkloadGroupParameter                                y:this.WorkloadGroupParameter                                (y); break;
-                case BrokerPriorityParameter                               y:this.BrokerPriorityParameter                               (y); break;
-                case FullTextStopListAction                                y:this.FullTextStopListAction                                (y); break;
-                case EventSessionObjectName                                y:this.EventSessionObjectName                                (y); break;
-                case EventDeclaration                                      y:this.EventDeclaration                                      (y); break;
-                case EventDeclarationSetParameter                          y:this.EventDeclarationSetParameter                          (y); break;
-                case TargetDeclaration                                     y:this.TargetDeclaration                                     (y); break;
-                case SessionOption                                         y:this.SessionOption                                         (y); break;
-                case SpatialIndexOption                                    y:this.SpatialIndexOption                                    (y); break;
-                case BoundingBoxParameter                                  y:this.BoundingBoxParameter                                  (y); break;
-                case GridParameter                                         y:this.GridParameter                                         (y); break;
-                case AlterServerConfigurationBufferPoolExtensionOption     y:this.AlterServerConfigurationBufferPoolExtensionOption     (y); break;
-                case AlterServerConfigurationDiagnosticsLogOption          y:this.AlterServerConfigurationDiagnosticsLogOption          (y); break;
-                case AlterServerConfigurationFailoverClusterPropertyOption y:this.AlterServerConfigurationFailoverClusterPropertyOption (y); break;
-                case AlterServerConfigurationHadrClusterOption             y:this.AlterServerConfigurationHadrClusterOption             (y); break;
-                case AlterServerConfigurationSoftNumaOption                y:this.AlterServerConfigurationSoftNumaOption                (y); break;
-                case AvailabilityReplica                                   y:this.AvailabilityReplica                                   (y); break;
-                case AvailabilityReplicaOption                             y:this.AvailabilityReplicaOption                             (y); break;
-                case AvailabilityGroupOption                               y:this.AvailabilityGroupOption                               (y); break;
-                case AlterAvailabilityGroupAction                          y:this.AlterAvailabilityGroupAction                          (y); break;
-                case AlterAvailabilityGroupFailoverOption                  y:this.AlterAvailabilityGroupFailoverOption                  (y); break;
-                case DiskStatementOption                                   y:this.DiskStatementOption                                   (y); break;
-                case WindowFrameClause                                     y:this.WindowFrameClause                                     (y); break;
-                case WindowDelimiter                                       y:this.WindowDelimiter                                       (y); break;
-                case WithinGroupClause                                     y:this.WithinGroupClause                                     (y); break;
-                case SelectiveXmlIndexPromotedPath                         y:this.SelectiveXmlIndexPromotedPath                         (y); break;
-                case TemporalClause                                        y:this.TemporalClause                                        (y); break;
+                case MultiPartIdentifier                                   y:this.SwitchMultiPartIdentifier                             (y);break;
+                case Identifier                                            y:this.SwitchIdentifier                                      (y);break;
+                case ScalarExpression                                      y:this.ScalarExpression                                      (y);break;
+                case IdentifierOrValueExpression                           y:this.IdentifierOrValueExpression                           (y);break;
+                case StatementList                                         y:this.StatementList                                         (y);break;
+                case TSqlStatement                                         y:this.TSqlStatement                                         (y);break;
+                case ExecuteOption                                         y:this.ExecuteOption                                         (y);break;
+                case ResultSetDefinition                                   y:this.ResultSetDefinition                                   (y);break;
+                case ResultColumnDefinition                                y:this.ResultColumnDefinition                                (y);break;
+                case ExecuteSpecification                                  y:this.ExecuteSpecification                                  (y);break;
+                case ExecuteContext                                        y:this.ExecuteContext                                        (y);break;
+                case ExecuteParameter                                      y:this.ExecuteParameter                                      (y);break;
+                case ExecutableEntity                                      y:this.ExecutableEntity                                      (y);break;
+                case ProcedureReferenceName                                y:this.ProcedureReferenceName                                (y);break;
+                case AdHocDataSource                                       y:this.AdHocDataSource                                       (y);break;
+                case ViewOption                                            y:this.ViewOption                                            (y);break;
+                case TriggerObject                                         y:this.TriggerObject                                         (y);break;
+                case TriggerOption                                         y:this.TriggerOption                                         (y);break;
+                case TriggerAction                                         y:this.TriggerAction                                         (y);break;
+                case ProcedureReference                                    y:this.ProcedureReference                                    (y);break;
+                case MethodSpecifier                                       y:this.MethodSpecifier                                       (y);break;
+                case ProcedureOption                                       y:this.ProcedureOption                                       (y);break;
+                case FunctionOption                                        y:this.FunctionOption                                        (y);break;
+                case XmlNamespaces                                         y:this.XmlNamespaces                                         (y);break;
+                case XmlNamespacesElement                                  y:this.XmlNamespacesElement                                  (y);break;
+                case CommonTableExpression                                 y:this.CommonTableExpression                                 (y);break;
+                case WithCtesAndXmlNamespaces                              y:this.WithCtesAndXmlNamespaces                              (y);break;
+                case FunctionReturnType                                    y:this.FunctionReturnType                                    (y);break;
+                case DataTypeReference                                     y:this.DataTypeReference                                     (y);break;
+                case TableDefinition                                       y:this.TableDefinition                                       (y);break;
+                case DeclareTableVariableBody                              y:this.DeclareTableVariableBody                              (y);break;
+                case TableReference                                        y:this.TableReference                                        (y);break;
+                case TableHint                                             y:this.TableHint                                             (y);break;
+                case BooleanExpression                                     y:this.BooleanExpression                                     (y);break;
+                case ForClause                                             y:this.ForClause                                             (y);break;
+                case OptimizerHint                                         y:this.OptimizerHint                                         (y);break;
+                case VariableValuePair                                     y:this.VariableValuePair                                     (y);break;
+                case WhenClause                                            y:this.WhenClause                                            (y);break;
+                case SchemaDeclarationItem                                 y:this.SchemaDeclarationItem                                 (y);break;
+                case CallTarget                                            y:this.CallTarget                                            (y);break;
+                case OverClause                                            y:this.OverClause                                            (y);break;
+                case AtomicBlockOption                                     y:this.AtomicBlockOption                                     (y);break;
+                case ColumnWithSortOrder                                   y:this.ColumnWithSortOrder                                   (y);break;
+                case DeclareVariableElement                                y:this.DeclareVariableElement                                (y);break;
+                case DataModificationSpecification                         y:this.DataModificationSpecification                         (y);break;
+                case Permission                                            y:this.Permission                                            (y);break;
+                case SecurityTargetObject                                  y:this.SecurityTargetObject                                  (y);break;
+                case SecurityTargetObjectName                              y:this.SecurityTargetObjectName                              (y);break;
+                case SecurityPrincipal                                     y:this.SecurityPrincipal                                     (y);break;
+                case SecurityElement80                                     y:this.SecurityElement80                                     (y);break;
+                case Privilege80                                           y:this.Privilege80                                           (y);break;
+                case SecurityUserClause80                                  y:this.SecurityUserClause80                                  (y);break;
+                case SetClause                                             y:this.SetClause                                             (y);break;
+                case InsertSource                                          y:this.InsertSource                                          (y);break;
+                case RowValue                                              y:this.RowValue                                              (y);break;
+                case LiteralRange                                          y:this.LiteralRange                                          (y);break;
+                case OptionValue                                           y:this.OptionValue                                           (y);break;
+                case IdentifierOrScalarExpression                          y:this.IdentifierOrScalarExpression                          (y);break;
+                case SchemaObjectNameOrValueExpression                     y:this.SchemaObjectNameOrValueExpression                     (y);break;
+                case SequenceOption                                        y:this.SequenceOption                                        (y);break;
+                case SecurityPredicateAction                               y:this.SecurityPredicateAction                               (y);break;
+                case SecurityPolicyOption                                  y:this.SecurityPolicyOption                                  (y);break;
+                case ColumnMasterKeyParameter                              y:this.ColumnMasterKeyParameter                              (y);break;
+                case ColumnEncryptionKeyValue                              y:this.ColumnEncryptionKeyValue                              (y);break;
+                case ColumnEncryptionKeyValueParameter                     y:this.ColumnEncryptionKeyValueParameter                     (y);break;
+                case ExternalTableOption                                   y:this.ExternalTableOption                                   (y);break;
+                case ExternalTableDistributionPolicy                       y:this.ExternalTableDistributionPolicy                       (y);break;
+                case ExternalDataSourceOption                              y:this.ExternalDataSourceOption                              (y);break;
+                case ExternalFileFormatOption                              y:this.ExternalFileFormatOption                              (y);break;
+                case AssemblyOption                                        y:this.AssemblyOption                                        (y);break;
+                case AddFileSpec                                           y:this.AddFileSpec                                           (y);break;
+                case AssemblyName                                          y:this.AssemblyName                                          (y);break;
+                case TableOption                                           y:this.TableOption                                           (y);break;
+                case DatabaseOption                                        y:this.DatabaseOption                                        (y);break;
+                case RemoteDataArchiveDatabaseSetting                      y:this.RemoteDataArchiveDatabaseSetting                      (y);break;
+                case RetentionPeriodDefinition                             y:this.RetentionPeriodDefinition                             (y);break;
+                case TableSwitchOption                                     y:this.TableSwitchOption                                     (y);break;
+                case DropClusteredConstraintOption                         y:this.DropClusteredConstraintOption                         (y);break;
+                case AlterTableDropTableElement                            y:this.AlterTableDropTableElement                            (y);break;
+                case ExecuteAsClause                                       y:this.ExecuteAsClause                                       (y);break;
+                case QueueOption                                           y:this.QueueOption                                           (y);break;
+                case RouteOption                                           y:this.RouteOption                                           (y);break;
+                case SystemTimePeriodDefinition                            y:this.SystemTimePeriodDefinition                            (y);break;
+                case IndexType                                             y:this.IndexType                                             (y);break;
+                case PartitionSpecifier                                    y:this.PartitionSpecifier                                    (y);break;
+                case FileGroupOrPartitionScheme                            y:this.FileGroupOrPartitionScheme                            (y);break;
+                case IndexOption                                           y:this.IndexOption                                           (y);break;
+                case OnlineIndexLowPriorityLockWaitOption                  y:this.OnlineIndexLowPriorityLockWaitOption                  (y);break;
+                case LowPriorityLockWaitOption                             y:this.LowPriorityLockWaitOption                             (y);break;
+                case FullTextIndexColumn                                   y:this.FullTextIndexColumn                                   (y);break;
+                case FullTextIndexOption                                   y:this.FullTextIndexOption                                   (y);break;
+                case FullTextCatalogAndFileGroup                           y:this.FullTextCatalogAndFileGroup                           (y);break;
+                case EventTypeGroupContainer                               y:this.EventTypeGroupContainer                               (y);break;
+                case EventNotificationObjectScope                          y:this.EventNotificationObjectScope                          (y);break;
+                case ApplicationRoleOption                                 y:this.ApplicationRoleOption                                 (y);break;
+                case AlterRoleAction                                       y:this.AlterRoleAction                                       (y);break;
+                case UserLoginOption                                       y:this.UserLoginOption                                       (y);break;
+                case StatisticsOption                                      y:this.StatisticsOption                                      (y);break;
+                case StatisticsPartitionRange                              y:this.StatisticsPartitionRange                              (y);break;
+                case CursorDefinition                                      y:this.CursorDefinition                                      (y);break;
+                case CursorOption                                          y:this.CursorOption                                          (y);break;
+                case CursorId                                              y:this.CursorId                                              (y);break;
+                case CryptoMechanism                                       y:this.CryptoMechanism                                       (y);break;
+                case FetchType                                             y:this.FetchType                                             (y);break;
+                case WhereClause                                           y:this.WhereClause                                           (y);break;
+                case DropIndexClauseBase                                   y:this.DropIndexClauseBase                                   (y);break;
+                case SetCommand                                            y:this.SetCommand                                            (y);break;
+                case FileDeclaration                                       y:this.FileDeclaration                                       (y);break;
+                case FileDeclarationOption                                 y:this.FileDeclarationOption                                 (y);break;
+                case FileGroupDefinition                                   y:this.FileGroupDefinition                                   (y);break;
+                case DatabaseConfigurationClearOption                      y:this.DatabaseConfigurationClearOption                      (y);break;
+                case DatabaseConfigurationSetOption                        y:this.DatabaseConfigurationSetOption                        (y);break;
+                case AlterDatabaseTermination                              y:this.AlterDatabaseTermination                              (y);break;
+                case ChangeTrackingOptionDetail                            y:this.ChangeTrackingOptionDetail                            (y);break;
+                case QueryStoreOption                                      y:this.QueryStoreOption                                      (y);break;
+                case AutomaticTuningOption                                 y:this.AutomaticTuningOption                                 (y);break;
+                case ColumnDefinitionBase                                  y:this.ColumnDefinitionBase                                  (y);break;
+                case ColumnEncryptionDefinition                            y:this.ColumnEncryptionDefinition                            (y);break;
+                case ColumnEncryptionDefinitionParameter                   y:this.ColumnEncryptionDefinitionParameter                   (y);break;
+                case IdentityOptions                                       y:this.IdentityOptions                                       (y);break;
+                case ColumnStorageOptions                                  y:this.ColumnStorageOptions                                  (y);break;
+                case ConstraintDefinition                                  y:this.ConstraintDefinition                                  (y);break;
+                case FederationScheme                                      y:this.FederationScheme                                      (y);break;
+                case TableDistributionPolicy                               y:this.TableDistributionPolicy                               (y);break;
+                case TableIndexType                                        y:this.TableIndexType                                        (y);break;
+                case PartitionSpecifications                               y:this.PartitionSpecifications                               (y);break;
+                case CompressionPartitionRange                             y:this.CompressionPartitionRange                             (y);break;
+                case GraphConnectionBetweenNodes                           y:this.GraphConnectionBetweenNodes                           (y);break;
+                case RestoreOption                                         y:this.RestoreOption                                         (y);break;
+                case BackupOption                                          y:this.BackupOption                                          (y);break;
+                case DeviceInfo                                            y:this.DeviceInfo                                            (y);break;
+                case MirrorToClause                                        y:this.MirrorToClause                                        (y);break;
+                case BackupRestoreFileInfo                                 y:this.BackupRestoreFileInfo                                 (y);break;
+                case BulkInsertOption                                      y:this.BulkInsertOption                                      (y);break;
+                case ExternalTableColumnDefinition                         y:this.ExternalTableColumnDefinition                         (y);break;
+                case InsertBulkColumnDefinition                            y:this.InsertBulkColumnDefinition                            (y);break;
+                case DbccOption                                            y:this.DbccOption                                            (y);break;
+                case DbccNamedLiteral                                      y:this.DbccNamedLiteral                                      (y);break;
+                case PartitionParameterType                                y:this.PartitionParameterType                                (y);break;
+                case RemoteServiceBindingOption                            y:this.RemoteServiceBindingOption                            (y);break;
+                case EncryptionSource                                      y:this.EncryptionSource                                      (y);break;
+                case CertificateOption                                     y:this.CertificateOption                                     (y);break;
+                case ContractMessage                                       y:this.ContractMessage                                       (y);break;
+                case EndpointAffinity                                      y:this.EndpointAffinity                                      (y);break;
+                case EndpointProtocolOption                                y:this.EndpointProtocolOption                                (y);break;
+                case IPv4                                                  y:this.IPv4                                                  (y);break;
+                case PayloadOption                                         y:this.PayloadOption                                         (y);break;
+                case KeyOption                                             y:this.KeyOption                                             (y);break;
+                case FullTextCatalogOption                                 y:this.FullTextCatalogOption                                 (y);break;
+                case ServiceContract                                       y:this.ServiceContract                                       (y);break;
+                case ComputeClause                                         y:this.ComputeClause                                         (y);break;
+                case ComputeFunction                                       y:this.ComputeFunction                                       (y);break;
+                case TableSampleClause                                     y:this.TableSampleClause                                     (y);break;
+                case ExpressionWithSortOrder                               y:this.ExpressionWithSortOrder                               (y);break;
+                case GroupByClause                                         y:this.GroupByClause                                         (y);break;
+                case GroupingSpecification                                 y:this.GroupingSpecification                                 (y);break;
+                case OutputClause                                          y:this.OutputClause                                          (y);break;
+                case OutputIntoClause                                      y:this.OutputIntoClause                                      (y);break;
+                case HavingClause                                          y:this.HavingClause                                          (y);break;
+                case OrderByClause                                         y:this.OrderByClause                                         (y);break;
+                case QueryExpression                                       y:this.QueryExpression                                       (y);break;
+                case FromClause                                            y:this.FromClause                                            (y);break;
+                case SelectElement                                         y:this.SelectElement                                         (y);break;
+                case TopRowFilter                                          y:this.TopRowFilter                                          (y);break;
+                case OffsetClause                                          y:this.OffsetClause                                          (y);break;
+                case AlterFullTextIndexAction                              y:this.AlterFullTextIndexAction                              (y);break;
+                case SearchPropertyListAction                              y:this.SearchPropertyListAction                              (y);break;
+                case CreateLoginSource                                     y:this.CreateLoginSource                                     (y);break;
+                case PrincipalOption                                       y:this.PrincipalOption                                       (y);break;
+                case DialogOption                                          y:this.DialogOption                                          (y);break;
+                case TSqlFragmentSnippet                                   y:this.TSqlFragmentSnippet                                   (y);break;
+                case TSqlScript                                            y:this.TSqlScript                                            (y);break;
+                case TSqlBatch                                             y:this.TSqlBatch                                             (y);break;
+                case MergeActionClause                                     y:this.MergeActionClause                                     (y);break;
+                case MergeAction                                           y:this.MergeAction                                           (y);break;
+                case AuditSpecificationPart                                y:this.AuditSpecificationPart                                (y);break;
+                case AuditSpecificationDetail                              y:this.AuditSpecificationDetail                              (y);break;
+                case DatabaseAuditAction                                   y:this.DatabaseAuditAction                                   (y);break;
+                case AuditTarget                                           y:this.AuditTarget                                           (y);break;
+                case AuditOption                                           y:this.AuditOption                                           (y);break;
+                case AuditTargetOption                                     y:this.AuditTargetOption                                     (y);break;
+                case ResourcePoolParameter                                 y:this.ResourcePoolParameter                                 (y);break;
+                case ResourcePoolAffinitySpecification                     y:this.ResourcePoolAffinitySpecification                     (y);break;
+                case ExternalResourcePoolParameter                         y:this.ExternalResourcePoolParameter                         (y);break;
+                case ExternalResourcePoolAffinitySpecification             y:this.ExternalResourcePoolAffinitySpecification             (y);break;
+                case WorkloadGroupParameter                                y:this.WorkloadGroupParameter                                (y);break;
+                case BrokerPriorityParameter                               y:this.BrokerPriorityParameter                               (y);break;
+                case FullTextStopListAction                                y:this.FullTextStopListAction                                (y);break;
+                case EventSessionObjectName                                y:this.EventSessionObjectName                                (y);break;
+                case EventDeclaration                                      y:this.EventDeclaration                                      (y);break;
+                case EventDeclarationSetParameter                          y:this.EventDeclarationSetParameter                          (y);break;
+                case TargetDeclaration                                     y:this.TargetDeclaration                                     (y);break;
+                case SessionOption                                         y:this.SessionOption                                         (y);break;
+                case SpatialIndexOption                                    y:this.SpatialIndexOption                                    (y);break;
+                case BoundingBoxParameter                                  y:this.BoundingBoxParameter                                  (y);break;
+                case GridParameter                                         y:this.GridParameter                                         (y);break;
+                case AlterServerConfigurationBufferPoolExtensionOption     y:this.AlterServerConfigurationBufferPoolExtensionOption     (y);break;
+                case AlterServerConfigurationDiagnosticsLogOption          y:this.AlterServerConfigurationDiagnosticsLogOption          (y);break;
+                case AlterServerConfigurationFailoverClusterPropertyOption y:this.AlterServerConfigurationFailoverClusterPropertyOption (y);break;
+                case AlterServerConfigurationHadrClusterOption             y:this.AlterServerConfigurationHadrClusterOption             (y);break;
+                case AlterServerConfigurationSoftNumaOption                y:this.AlterServerConfigurationSoftNumaOption                (y);break;
+                case AvailabilityReplica                                   y:this.AvailabilityReplica                                   (y);break;
+                case AvailabilityReplicaOption                             y:this.AvailabilityReplicaOption                             (y);break;
+                case AvailabilityGroupOption                               y:this.AvailabilityGroupOption                               (y);break;
+                case AlterAvailabilityGroupAction                          y:this.AlterAvailabilityGroupAction                          (y);break;
+                case AlterAvailabilityGroupFailoverOption                  y:this.AlterAvailabilityGroupFailoverOption                  (y);break;
+                case DiskStatementOption                                   y:this.DiskStatementOption                                   (y);break;
+                case WindowFrameClause                                     y:this.WindowFrameClause                                     (y);break;
+                case WindowDelimiter                                       y:this.WindowDelimiter                                       (y);break;
+                case WithinGroupClause                                     y:this.WithinGroupClause                                     (y);break;
+                case SelectiveXmlIndexPromotedPath                         y:this.SelectiveXmlIndexPromotedPath                         (y);break;
+                case TemporalClause                                        y:this.TemporalClause                                        (y);break;
             }
         }
         /// <summary>
@@ -466,7 +466,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SwitchMultiPartIdentifier(MultiPartIdentifier x) {
             switch(x) {
-                case SchemaObjectName y:this.SwitchSchemaObjectName(y); break;
+                case SchemaObjectName y:this.SwitchSchemaObjectName(y);break;
                 default: this.MultiPartIdentifier(x);break;
             }
         }
@@ -477,8 +477,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SwitchSchemaObjectName(SchemaObjectName x) {
             switch(x) {
-                case ChildObjectName y:this.ChildObjectName(y); break;
-                case SchemaObjectNameSnippet y:this.SchemaObjectNameSnippet(y); break;
+                case ChildObjectName y:this.ChildObjectName(y);break;
+                case SchemaObjectNameSnippet y:this.SchemaObjectNameSnippet(y);break;
                 default:this.SchemaObjectName(x);break;
             }
         }
@@ -515,9 +515,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SwitchIdentifier(Identifier x) {
             switch(x) {
-                case SqlCommandIdentifier y: this.SqlCommandIdentifier(y); break;
-                case IdentifierSnippet y: this.IdentifierSnippet(y); break;
-                default: this.Identifier(x); break;
+                case SqlCommandIdentifier y: this.SqlCommandIdentifier(y);break;
+                case IdentifierSnippet y: this.IdentifierSnippet(y);break;
+                default: this.Identifier(x);break;
             }
         }
         /// <summary>
@@ -544,14 +544,14 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ScalarExpression(ScalarExpression x) {
             switch(x) {
-                case PrimaryExpression y: this.PrimaryExpression(y); break;
-                case ExtractFromExpression y: this.ExtractFromExpression(y); break;
-                case OdbcConvertSpecification y: this.OdbcConvertSpecification(y); break;
-                case BinaryExpression y: this.BinaryExpression(y); break;
-                case IdentityFunctionCall y: this.IdentityFunctionCall(y); break;
-                case UnaryExpression y: this.UnaryExpression(y); break;
-                case ScalarExpressionSnippet y: this.ScalarExpressionSnippet(y); break;
-                case SourceDeclaration y: this.SourceDeclaration(y); break;
+                case PrimaryExpression y: this.PrimaryExpression(y);break;
+                case ExtractFromExpression y: this.ExtractFromExpression(y);break;
+                case OdbcConvertSpecification y: this.OdbcConvertSpecification(y);break;
+                case BinaryExpression y: this.BinaryExpression(y);break;
+                case IdentityFunctionCall y: this.IdentityFunctionCall(y);break;
+                case UnaryExpression y: this.UnaryExpression(y);break;
+                case ScalarExpressionSnippet y: this.ScalarExpressionSnippet(y);break;
+                case SourceDeclaration y: this.SourceDeclaration(y);break;
             }
         }
 
@@ -562,29 +562,29 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void PrimaryExpression(PrimaryExpression x) {
             switch(x) {
-                case ValueExpression y: this.ValueExpression(y); break;
-                case UserDefinedTypePropertyAccess y: this.UserDefinedTypePropertyAccess(y); break;
-                case CaseExpression y: this.CaseExpression(y); break;
-                case NullIfExpression y: this.NullIfExpression(y); break;
-                case CoalesceExpression y: this.CoalesceExpression(y); break;
-                case IIfCall y: this.IIfCall(y); break;
-                case ConvertCall y: this.ConvertCall(y); break;
-                case TryConvertCall y: this.TryConvertCall(y); break;
-                case ParseCall y: this.ParseCall(y); break;
-                case TryParseCall y: this.TryParseCall(y); break;
-                case CastCall y: this.CastCall(y); break;
-                case TryCastCall y: this.TryCastCall(y); break;
-                case AtTimeZoneCall y: this.AtTimeZoneCall(y); break;
-                case FunctionCall y: this.FunctionCall(y); break;
-                case LeftFunctionCall y: this.LeftFunctionCall(y); break;
-                case RightFunctionCall y: this.RightFunctionCall(y); break;
-                case PartitionFunctionCall y: this.PartitionFunctionCall(y); break;
-                case ParameterlessCall y: this.ParameterlessCall(y); break;
-                case ScalarSubquery y: this.ScalarSubquery(y); break;
-                case OdbcFunctionCall y: this.OdbcFunctionCall(y); break;
-                case ParenthesisExpression y: this.ParenthesisExpression(y); break;
-                case ColumnReferenceExpression y: this.ColumnReferenceExpression(y); break;
-                case NextValueForExpression y: this.NextValueForExpression(y); break;
+                case ValueExpression y: this.ValueExpression(y);break;
+                case UserDefinedTypePropertyAccess y: this.UserDefinedTypePropertyAccess(y);break;
+                case CaseExpression y: this.CaseExpression(y);break;
+                case NullIfExpression y: this.NullIfExpression(y);break;
+                case CoalesceExpression y: this.CoalesceExpression(y);break;
+                case IIfCall y: this.IIfCall(y);break;
+                case ConvertCall y: this.ConvertCall(y);break;
+                case TryConvertCall y: this.TryConvertCall(y);break;
+                case ParseCall y: this.ParseCall(y);break;
+                case TryParseCall y: this.TryParseCall(y);break;
+                case CastCall y: this.CastCall(y);break;
+                case TryCastCall y: this.TryCastCall(y);break;
+                case AtTimeZoneCall y: this.AtTimeZoneCall(y);break;
+                case FunctionCall y: this.FunctionCall(y);break;
+                case LeftFunctionCall y: this.LeftFunctionCall(y);break;
+                case RightFunctionCall y: this.RightFunctionCall(y);break;
+                case PartitionFunctionCall y: this.PartitionFunctionCall(y);break;
+                case ParameterlessCall y: this.ParameterlessCall(y);break;
+                case ScalarSubquery y: this.ScalarSubquery(y);break;
+                case OdbcFunctionCall y: this.OdbcFunctionCall(y);break;
+                case ParenthesisExpression y: this.ParenthesisExpression(y);break;
+                case ColumnReferenceExpression y: this.ColumnReferenceExpression(y);break;
+                case NextValueForExpression y: this.NextValueForExpression(y);break;
             }
         }
         /// <summary>
@@ -594,9 +594,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ValueExpression(ValueExpression x) {
             switch(x) {
-                case Literal y: this.Literal(y); break;
-                case VariableReference y: this.VariableReference(y); break;
-                case GlobalVariableExpression y: this.GlobalVariableExpression(y); break;
+                case Literal y: this.Literal(y);break;
+                case VariableReference y: this.VariableReference(y);break;
+                case GlobalVariableExpression y: this.GlobalVariableExpression(y);break;
             }
         }
         /// <summary>
@@ -606,17 +606,17 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void Literal(Literal x) {
             switch(x) {
-                case IdentifierLiteral y: this.IdentifierLiteral(y); break;
-                case IntegerLiteral y: this.IntegerLiteral(y); break;
-                case NumericLiteral y: this.NumericLiteral(y); break;
-                case RealLiteral y: this.RealLiteral(y); break;
-                case MoneyLiteral y: this.MoneyLiteral(y); break;
-                case BinaryLiteral y: this.BinaryLiteral(y); break;
-                case StringLiteral y: this.StringLiteral(y); break;
-                case NullLiteral y: this.NullLiteral(y); break;
-                case DefaultLiteral y: this.DefaultLiteral(y); break;
-                case MaxLiteral y: this.MaxLiteral(y); break;
-                case OdbcLiteral y: this.OdbcLiteral(y); break;
+                case IdentifierLiteral y: this.IdentifierLiteral(y);break;
+                case IntegerLiteral y: this.IntegerLiteral(y);break;
+                case NumericLiteral y: this.NumericLiteral(y);break;
+                case RealLiteral y: this.RealLiteral(y);break;
+                case MoneyLiteral y: this.MoneyLiteral(y);break;
+                case BinaryLiteral y: this.BinaryLiteral(y);break;
+                case StringLiteral y: this.StringLiteral(y);break;
+                case NullLiteral y: this.NullLiteral(y);break;
+                case DefaultLiteral y: this.DefaultLiteral(y);break;
+                case MaxLiteral y: this.MaxLiteral(y);break;
+                case OdbcLiteral y: this.OdbcLiteral(y);break;
             }
         }
         /// <summary>
@@ -740,8 +740,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CaseExpression(CaseExpression x) {
             switch(x) {
-                case SimpleCaseExpression y: this.SimpleCaseExpression(y); break;
-                case SearchedCaseExpression y: this.SearchedCaseExpression(y); break;
+                case SimpleCaseExpression y: this.SimpleCaseExpression(y);break;
+                case SearchedCaseExpression y: this.SearchedCaseExpression(y);break;
             }
         }
         /// <summary>
@@ -1034,7 +1034,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void StatementList(StatementList x) {
             switch(x) {
-                case StatementListSnippet y:this.StatementListSnippet(y); break;
+                case StatementListSnippet y:this.StatementListSnippet(y);break;
                 default:
                     foreach(var a in x.Statements)
                         this.TSqlStatement(a);
@@ -1056,166 +1056,166 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TSqlStatement(TSqlStatement x) {
             switch(x) {
-                case ExecuteStatement y: this.ExecuteStatement(y); break;
-                case ViewStatementBody y: this.ViewStatementBody(y); break;
-                case TriggerStatementBody y:this.TriggerStatementBody(y); break;
-                case ProcedureStatementBodyBase y:this.ProcedureStatementBodyBase(y); break;
-                case DeclareTableVariableStatement y:this.DeclareTableVariableStatement(y); break;
-                case StatementWithCtesAndXmlNamespaces y:this.StatementWithCtesAndXmlNamespaces(y); break;
-                case BeginEndBlockStatement y:this.BeginEndBlockStatement(y); break;
-                case TransactionStatement y: this.TransactionStatement(y); break;
-                case BreakStatement y:this.BreakStatement(y); break;
-                case ContinueStatement y:this.ContinueStatement(y); break;
-                case CreateDefaultStatement y:this.CreateDefaultStatement(y); break;
-                case CreateRuleStatement y:this.CreateRuleStatement(y); break;
-                case DeclareVariableStatement y:this.DeclareVariableStatement(y); break;
-                case GoToStatement y:this.GoToStatement(y); break;
-                case IfStatement y:this.IfStatement(y); break;
-                case LabelStatement y:this.LabelStatement(y); break;
-                case WhileStatement y:this.WhileStatement(y); break;
-                case CreateSchemaStatement y:this.CreateSchemaStatement(y); break;
-                case WaitForStatement y:this.WaitForStatement(y); break;
-                case ReadTextStatement y:this.ReadTextStatement(y); break;
-                case TextModificationStatement y:this.TextModificationStatement(y); break;
-                case LineNoStatement y:this.LineNoStatement(y); break;
-                case SecurityStatement y:this.SecurityStatement(y); break;
-                case AlterAuthorizationStatement y:this.AlterAuthorizationStatement(y); break;
-                case SecurityStatementBody80 y:this.SecurityStatementBody80(y); break;
-                case PrintStatement y:this.PrintStatement(y); break;
-                case SequenceStatement y:this.SequenceStatement(y); break;
-                case DropObjectsStatement y:this.DropObjectsStatement(y); break;
-                case SecurityPolicyStatement y:this.SecurityPolicyStatement(y); break;
-                case CreateColumnMasterKeyStatement y:this.CreateColumnMasterKeyStatement(y); break;
-                case DropUnownedObjectStatement y:this.DropUnownedObjectStatement(y); break;
-                case ColumnEncryptionKeyStatement y:this.ColumnEncryptionKeyStatement(y); break;
-                case ExternalTableStatement y:this.ExternalTableStatement(y); break;
-                case ExternalDataSourceStatement y:this.ExternalDataSourceStatement(y); break;
-                case ExternalFileFormatStatement y:this.ExternalFileFormatStatement(y); break;
-                case AssemblyStatement y:this.AssemblyStatement(y); break;
-                case CreateXmlSchemaCollectionStatement y:this.CreateXmlSchemaCollectionStatement(y); break;
-                case AlterXmlSchemaCollectionStatement y:this.AlterXmlSchemaCollectionStatement(y); break;
-                case DropXmlSchemaCollectionStatement y:this.DropXmlSchemaCollectionStatement(y); break;
-                case AlterTableStatement y:this.AlterTableStatement(y); break;
-                case EnableDisableTriggerStatement y:this.EnableDisableTriggerStatement(y); break;
-                case TryCatchStatement y:this.TryCatchStatement(y); break;
-                case CreateTypeStatement y:this.CreateTypeStatement(y); break;
-                case CreateSynonymStatement y:this.CreateSynonymStatement(y); break;
-                case RouteStatement y:this.RouteStatement(y); break;
-                case QueueStatement y:this.QueueStatement(y); break;
-                case IndexDefinition y:this.IndexDefinition(y); break;
-                case IndexStatement y:this.IndexStatement(y); break;
-                case CreateFullTextIndexStatement y:this.CreateFullTextIndexStatement(y); break;
-                case CreateEventNotificationStatement y:this.CreateEventNotificationStatement(y); break;
-                case MasterKeyStatement y:this.MasterKeyStatement(y); break;
-                case ApplicationRoleStatement y:this.ApplicationRoleStatement(y); break;
-                case RoleStatement y:this.RoleStatement(y); break;
-                case UserStatement y:this.UserStatement(y); break;
-                case CreateStatisticsStatement y:this.CreateStatisticsStatement(y); break;
-                case UpdateStatisticsStatement y:this.UpdateStatisticsStatement(y); break;
-                case ReturnStatement y:this.ReturnStatement(y); break;
-                case DeclareCursorStatement y:this.DeclareCursorStatement(y); break;
-                case SetVariableStatement y:this.SetVariableStatement(y); break;
-                case CursorStatement y:this.CursorStatement(y); break;
-                case OpenSymmetricKeyStatement y:this.OpenSymmetricKeyStatement(y); break;
-                case CloseSymmetricKeyStatement y:this.CloseSymmetricKeyStatement(y); break;
-                case OpenMasterKeyStatement y:this.OpenMasterKeyStatement(y); break;
-                case CloseMasterKeyStatement y:this.CloseMasterKeyStatement(y); break;
-                case DropDatabaseStatement y:this.DropDatabaseStatement(y); break;
-                case DropChildObjectsStatement y:this.DropChildObjectsStatement(y); break;
-                case DropIndexStatement y:this.DropIndexStatement(y); break;
-                case DropSchemaStatement y:this.DropSchemaStatement(y); break;
-                case RaiseErrorLegacyStatement y:this.RaiseErrorLegacyStatement(y); break;
-                case RaiseErrorStatement y:this.RaiseErrorStatement(y); break;
-                case ThrowStatement y:this.ThrowStatement(y); break;
-                case UseStatement y:this.UseStatement(y); break;
-                case KillStatement y:this.KillStatement(y); break;
-                case KillQueryNotificationSubscriptionStatement y:this.KillQueryNotificationSubscriptionStatement(y); break;
-                case KillStatsJobStatement y:this.KillStatsJobStatement(y); break;
-                case CheckpointStatement y:this.CheckpointStatement(y); break;
-                case ReconfigureStatement y:this.ReconfigureStatement(y); break;
-                case ShutdownStatement y:this.ShutdownStatement(y); break;
-                case SetUserStatement y:this.SetUserStatement(y); break;
-                case TruncateTableStatement y:this.TruncateTableStatement(y); break;
-                case SetOnOffStatement y:this.SetOnOffStatement(y); break;
-                case SetRowCountStatement y:this.SetRowCountStatement(y); break;
-                case SetCommandStatement y:this.SetCommandStatement(y); break;
-                case SetTransactionIsolationLevelStatement y:this.SetTransactionIsolationLevelStatement(y); break;
-                case SetTextSizeStatement y:this.SetTextSizeStatement(y); break;
-                case SetErrorLevelStatement y:this.SetErrorLevelStatement(y); break;
-                case CreateDatabaseStatement y:this.CreateDatabaseStatement(y); break;
-                case AlterDatabaseStatement y:this.AlterDatabaseStatement(y); break;
-                case AlterDatabaseScopedConfigurationStatement y:this.AlterDatabaseScopedConfigurationStatement(y); break;
-                case CreateTableStatement y:this.CreateTableStatement(y); break;
-                case BackupStatement y:this.BackupStatement(y); break;
-                case RestoreStatement y:this.RestoreStatement(y); break;
-                case BulkInsertBase y:this.BulkInsertBase(y); break;
-                case DbccStatement y:this.DbccStatement(y); break;
-                case CreateAsymmetricKeyStatement y:this.CreateAsymmetricKeyStatement(y); break;
-                case CreatePartitionFunctionStatement y:this.CreatePartitionFunctionStatement(y); break;
-                case CreatePartitionSchemeStatement y:this.CreatePartitionSchemeStatement(y); break;
-                case RemoteServiceBindingStatementBase y:this.RemoteServiceBindingStatementBase(y); break;
-                case CertificateStatementBase y:this.CertificateStatementBase(y); break;
-                case CreateContractStatement y:this.CreateContractStatement(y); break;
-                case CredentialStatement y:this.CredentialStatement(y); break;
-                case MessageTypeStatementBase y:this.MessageTypeStatementBase(y); break;
-                case CreateAggregateStatement y:this.CreateAggregateStatement(y); break;
-                case AlterCreateEndpointStatementBase y:this.AlterCreateEndpointStatementBase(y); break;
-                case SymmetricKeyStatement y:this.SymmetricKeyStatement(y); break;
-                case FullTextCatalogStatement y:this.FullTextCatalogStatement(y); break;
-                case AlterCreateServiceStatementBase y:this.AlterCreateServiceStatementBase(y); break;
-                case DropFullTextIndexStatement y:this.DropFullTextIndexStatement(y); break;
-                case DropTypeStatement y:this.DropTypeStatement(y); break;
-                case DropMasterKeyStatement y:this.DropMasterKeyStatement(y); break;
-                case AlterPartitionFunctionStatement y:this.AlterPartitionFunctionStatement(y); break;
-                case AlterPartitionSchemeStatement y:this.AlterPartitionSchemeStatement(y); break;
-                case AlterFullTextIndexStatement y:this.AlterFullTextIndexStatement(y); break;
-                case CreateSearchPropertyListStatement y:this.CreateSearchPropertyListStatement(y); break;
-                case AlterSearchPropertyListStatement y:this.AlterSearchPropertyListStatement(y); break;
-                case CreateLoginStatement y:this.CreateLoginStatement(y); break;
-                case AlterLoginStatement y:this.AlterLoginStatement(y); break;
-                case RevertStatement y:this.RevertStatement(y); break;
-                case DropQueueStatement y:this.DropQueueStatement(y); break;
-                case SignatureStatementBase y:this.SignatureStatementBase(y); break;
-                case DropEventNotificationStatement y:this.DropEventNotificationStatement(y); break;
-                case ExecuteAsStatement y:this.ExecuteAsStatement(y); break;
-                case EndConversationStatement y:this.EndConversationStatement(y); break;
-                case MoveConversationStatement y:this.MoveConversationStatement(y); break;
-                case WaitForSupportedStatement y:this.WaitForSupportedStatement(y); break;
-                case SendStatement y:this.SendStatement(y); break;
-                case AlterSchemaStatement y:this.AlterSchemaStatement(y); break;
-                case AlterAsymmetricKeyStatement y:this.AlterAsymmetricKeyStatement(y); break;
-                case AlterServiceMasterKeyStatement y:this.AlterServiceMasterKeyStatement(y); break;
-                case BeginConversationTimerStatement y:this.BeginConversationTimerStatement(y); break;
-                case BeginDialogStatement y:this.BeginDialogStatement(y); break;
-                case BackupRestoreMasterKeyStatementBase y:this.BackupRestoreMasterKeyStatementBase(y); break;
-                case TSqlStatementSnippet y:this.TSqlStatementSnippet(y); break;
-                case AuditSpecificationStatement y:this.AuditSpecificationStatement(y); break;
-                case ServerAuditStatement y:this.ServerAuditStatement(y); break;
-                case DatabaseEncryptionKeyStatement y:this.DatabaseEncryptionKeyStatement(y); break;
-                case DropDatabaseEncryptionKeyStatement y:this.DropDatabaseEncryptionKeyStatement(y); break;
-                case ResourcePoolStatement y:this.ResourcePoolStatement(y); break;
-                case ExternalResourcePoolStatement y:this.ExternalResourcePoolStatement(y); break;
-                case WorkloadGroupStatement y:this.WorkloadGroupStatement(y); break;
-                case BrokerPriorityStatement y:this.BrokerPriorityStatement(y); break;
-                case CreateFullTextStopListStatement y:this.CreateFullTextStopListStatement(y); break;
-                case AlterFullTextStopListStatement y:this.AlterFullTextStopListStatement(y); break;
-                case CreateCryptographicProviderStatement y:this.CreateCryptographicProviderStatement(y); break;
-                case AlterCryptographicProviderStatement y:this.AlterCryptographicProviderStatement(y); break;
-                case EventSessionStatement y:this.EventSessionStatement(y); break;
-                case AlterResourceGovernorStatement y:this.AlterResourceGovernorStatement(y); break;
-                case CreateSpatialIndexStatement y:this.CreateSpatialIndexStatement(y); break;
-                case AlterServerConfigurationStatement y:this.AlterServerConfigurationStatement(y); break;
-                case AlterServerConfigurationSetBufferPoolExtensionStatement y:this.AlterServerConfigurationSetBufferPoolExtensionStatement(y); break;
-                case AlterServerConfigurationSetDiagnosticsLogStatement y:this.AlterServerConfigurationSetDiagnosticsLogStatement(y); break;
-                case AlterServerConfigurationSetFailoverClusterPropertyStatement y:this.AlterServerConfigurationSetFailoverClusterPropertyStatement(y); break;
-                case AlterServerConfigurationSetHadrClusterStatement y:this.AlterServerConfigurationSetHadrClusterStatement(y); break;
-                case AlterServerConfigurationSetSoftNumaStatement y:this.AlterServerConfigurationSetSoftNumaStatement(y); break;
-                case AvailabilityGroupStatement y:this.AvailabilityGroupStatement(y); break;
-                case CreateFederationStatement y:this.CreateFederationStatement(y); break;
-                case AlterFederationStatement y:this.AlterFederationStatement(y); break;
-                case UseFederationStatement y:this.UseFederationStatement(y); break;
-                case DiskStatement y:this.DiskStatement(y); break;
-                case CreateColumnStoreIndexStatement y:this.CreateColumnStoreIndexStatement(y); break;
+                case ExecuteStatement y: this.ExecuteStatement(y);break;
+                case ViewStatementBody y: this.ViewStatementBody(y);break;
+                case TriggerStatementBody y:this.TriggerStatementBody(y);break;
+                case ProcedureStatementBodyBase y:this.ProcedureStatementBodyBase(y);break;
+                case DeclareTableVariableStatement y:this.DeclareTableVariableStatement(y);break;
+                case StatementWithCtesAndXmlNamespaces y:this.StatementWithCtesAndXmlNamespaces(y);break;
+                case BeginEndBlockStatement y:this.BeginEndBlockStatement(y);break;
+                case TransactionStatement y: this.TransactionStatement(y);break;
+                case BreakStatement y:this.BreakStatement(y);break;
+                case ContinueStatement y:this.ContinueStatement(y);break;
+                case CreateDefaultStatement y:this.CreateDefaultStatement(y);break;
+                case CreateRuleStatement y:this.CreateRuleStatement(y);break;
+                case DeclareVariableStatement y:this.DeclareVariableStatement(y);break;
+                case GoToStatement y:this.GoToStatement(y);break;
+                case IfStatement y:this.IfStatement(y);break;
+                case LabelStatement y:this.LabelStatement(y);break;
+                case WhileStatement y:this.WhileStatement(y);break;
+                case CreateSchemaStatement y:this.CreateSchemaStatement(y);break;
+                case WaitForStatement y:this.WaitForStatement(y);break;
+                case ReadTextStatement y:this.ReadTextStatement(y);break;
+                case TextModificationStatement y:this.TextModificationStatement(y);break;
+                case LineNoStatement y:this.LineNoStatement(y);break;
+                case SecurityStatement y:this.SecurityStatement(y);break;
+                case AlterAuthorizationStatement y:this.AlterAuthorizationStatement(y);break;
+                case SecurityStatementBody80 y:this.SecurityStatementBody80(y);break;
+                case PrintStatement y:this.PrintStatement(y);break;
+                case SequenceStatement y:this.SequenceStatement(y);break;
+                case DropObjectsStatement y:this.DropObjectsStatement(y);break;
+                case SecurityPolicyStatement y:this.SecurityPolicyStatement(y);break;
+                case CreateColumnMasterKeyStatement y:this.CreateColumnMasterKeyStatement(y);break;
+                case DropUnownedObjectStatement y:this.DropUnownedObjectStatement(y);break;
+                case ColumnEncryptionKeyStatement y:this.ColumnEncryptionKeyStatement(y);break;
+                case ExternalTableStatement y:this.ExternalTableStatement(y);break;
+                case ExternalDataSourceStatement y:this.ExternalDataSourceStatement(y);break;
+                case ExternalFileFormatStatement y:this.ExternalFileFormatStatement(y);break;
+                case AssemblyStatement y:this.AssemblyStatement(y);break;
+                case CreateXmlSchemaCollectionStatement y:this.CreateXmlSchemaCollectionStatement(y);break;
+                case AlterXmlSchemaCollectionStatement y:this.AlterXmlSchemaCollectionStatement(y);break;
+                case DropXmlSchemaCollectionStatement y:this.DropXmlSchemaCollectionStatement(y);break;
+                case AlterTableStatement y:this.AlterTableStatement(y);break;
+                case EnableDisableTriggerStatement y:this.EnableDisableTriggerStatement(y);break;
+                case TryCatchStatement y:this.TryCatchStatement(y);break;
+                case CreateTypeStatement y:this.CreateTypeStatement(y);break;
+                case CreateSynonymStatement y:this.CreateSynonymStatement(y);break;
+                case RouteStatement y:this.RouteStatement(y);break;
+                case QueueStatement y:this.QueueStatement(y);break;
+                case IndexDefinition y:this.IndexDefinition(y);break;
+                case IndexStatement y:this.IndexStatement(y);break;
+                case CreateFullTextIndexStatement y:this.CreateFullTextIndexStatement(y);break;
+                case CreateEventNotificationStatement y:this.CreateEventNotificationStatement(y);break;
+                case MasterKeyStatement y:this.MasterKeyStatement(y);break;
+                case ApplicationRoleStatement y:this.ApplicationRoleStatement(y);break;
+                case RoleStatement y:this.RoleStatement(y);break;
+                case UserStatement y:this.UserStatement(y);break;
+                case CreateStatisticsStatement y:this.CreateStatisticsStatement(y);break;
+                case UpdateStatisticsStatement y:this.UpdateStatisticsStatement(y);break;
+                case ReturnStatement y:this.ReturnStatement(y);break;
+                case DeclareCursorStatement y:this.DeclareCursorStatement(y);break;
+                case SetVariableStatement y:this.SetVariableStatement(y);break;
+                case CursorStatement y:this.CursorStatement(y);break;
+                case OpenSymmetricKeyStatement y:this.OpenSymmetricKeyStatement(y);break;
+                case CloseSymmetricKeyStatement y:this.CloseSymmetricKeyStatement(y);break;
+                case OpenMasterKeyStatement y:this.OpenMasterKeyStatement(y);break;
+                case CloseMasterKeyStatement y:this.CloseMasterKeyStatement(y);break;
+                case DropDatabaseStatement y:this.DropDatabaseStatement(y);break;
+                case DropChildObjectsStatement y:this.DropChildObjectsStatement(y);break;
+                case DropIndexStatement y:this.DropIndexStatement(y);break;
+                case DropSchemaStatement y:this.DropSchemaStatement(y);break;
+                case RaiseErrorLegacyStatement y:this.RaiseErrorLegacyStatement(y);break;
+                case RaiseErrorStatement y:this.RaiseErrorStatement(y);break;
+                case ThrowStatement y:this.ThrowStatement(y);break;
+                case UseStatement y:this.UseStatement(y);break;
+                case KillStatement y:this.KillStatement(y);break;
+                case KillQueryNotificationSubscriptionStatement y:this.KillQueryNotificationSubscriptionStatement(y);break;
+                case KillStatsJobStatement y:this.KillStatsJobStatement(y);break;
+                case CheckpointStatement y:this.CheckpointStatement(y);break;
+                case ReconfigureStatement y:this.ReconfigureStatement(y);break;
+                case ShutdownStatement y:this.ShutdownStatement(y);break;
+                case SetUserStatement y:this.SetUserStatement(y);break;
+                case TruncateTableStatement y:this.TruncateTableStatement(y);break;
+                case SetOnOffStatement y:this.SetOnOffStatement(y);break;
+                case SetRowCountStatement y:this.SetRowCountStatement(y);break;
+                case SetCommandStatement y:this.SetCommandStatement(y);break;
+                case SetTransactionIsolationLevelStatement y:this.SetTransactionIsolationLevelStatement(y);break;
+                case SetTextSizeStatement y:this.SetTextSizeStatement(y);break;
+                case SetErrorLevelStatement y:this.SetErrorLevelStatement(y);break;
+                case CreateDatabaseStatement y:this.CreateDatabaseStatement(y);break;
+                case AlterDatabaseStatement y:this.AlterDatabaseStatement(y);break;
+                case AlterDatabaseScopedConfigurationStatement y:this.AlterDatabaseScopedConfigurationStatement(y);break;
+                case CreateTableStatement y:this.CreateTableStatement(y);break;
+                case BackupStatement y:this.BackupStatement(y);break;
+                case RestoreStatement y:this.RestoreStatement(y);break;
+                case BulkInsertBase y:this.BulkInsertBase(y);break;
+                case DbccStatement y:this.DbccStatement(y);break;
+                case CreateAsymmetricKeyStatement y:this.CreateAsymmetricKeyStatement(y);break;
+                case CreatePartitionFunctionStatement y:this.CreatePartitionFunctionStatement(y);break;
+                case CreatePartitionSchemeStatement y:this.CreatePartitionSchemeStatement(y);break;
+                case RemoteServiceBindingStatementBase y:this.RemoteServiceBindingStatementBase(y);break;
+                case CertificateStatementBase y:this.CertificateStatementBase(y);break;
+                case CreateContractStatement y:this.CreateContractStatement(y);break;
+                case CredentialStatement y:this.CredentialStatement(y);break;
+                case MessageTypeStatementBase y:this.MessageTypeStatementBase(y);break;
+                case CreateAggregateStatement y:this.CreateAggregateStatement(y);break;
+                case AlterCreateEndpointStatementBase y:this.AlterCreateEndpointStatementBase(y);break;
+                case SymmetricKeyStatement y:this.SymmetricKeyStatement(y);break;
+                case FullTextCatalogStatement y:this.FullTextCatalogStatement(y);break;
+                case AlterCreateServiceStatementBase y:this.AlterCreateServiceStatementBase(y);break;
+                case DropFullTextIndexStatement y:this.DropFullTextIndexStatement(y);break;
+                case DropTypeStatement y:this.DropTypeStatement(y);break;
+                case DropMasterKeyStatement y:this.DropMasterKeyStatement(y);break;
+                case AlterPartitionFunctionStatement y:this.AlterPartitionFunctionStatement(y);break;
+                case AlterPartitionSchemeStatement y:this.AlterPartitionSchemeStatement(y);break;
+                case AlterFullTextIndexStatement y:this.AlterFullTextIndexStatement(y);break;
+                case CreateSearchPropertyListStatement y:this.CreateSearchPropertyListStatement(y);break;
+                case AlterSearchPropertyListStatement y:this.AlterSearchPropertyListStatement(y);break;
+                case CreateLoginStatement y:this.CreateLoginStatement(y);break;
+                case AlterLoginStatement y:this.AlterLoginStatement(y);break;
+                case RevertStatement y:this.RevertStatement(y);break;
+                case DropQueueStatement y:this.DropQueueStatement(y);break;
+                case SignatureStatementBase y:this.SignatureStatementBase(y);break;
+                case DropEventNotificationStatement y:this.DropEventNotificationStatement(y);break;
+                case ExecuteAsStatement y:this.ExecuteAsStatement(y);break;
+                case EndConversationStatement y:this.EndConversationStatement(y);break;
+                case MoveConversationStatement y:this.MoveConversationStatement(y);break;
+                case WaitForSupportedStatement y:this.WaitForSupportedStatement(y);break;
+                case SendStatement y:this.SendStatement(y);break;
+                case AlterSchemaStatement y:this.AlterSchemaStatement(y);break;
+                case AlterAsymmetricKeyStatement y:this.AlterAsymmetricKeyStatement(y);break;
+                case AlterServiceMasterKeyStatement y:this.AlterServiceMasterKeyStatement(y);break;
+                case BeginConversationTimerStatement y:this.BeginConversationTimerStatement(y);break;
+                case BeginDialogStatement y:this.BeginDialogStatement(y);break;
+                case BackupRestoreMasterKeyStatementBase y:this.BackupRestoreMasterKeyStatementBase(y);break;
+                case TSqlStatementSnippet y:this.TSqlStatementSnippet(y);break;
+                case AuditSpecificationStatement y:this.AuditSpecificationStatement(y);break;
+                case ServerAuditStatement y:this.ServerAuditStatement(y);break;
+                case DatabaseEncryptionKeyStatement y:this.DatabaseEncryptionKeyStatement(y);break;
+                case DropDatabaseEncryptionKeyStatement y:this.DropDatabaseEncryptionKeyStatement(y);break;
+                case ResourcePoolStatement y:this.ResourcePoolStatement(y);break;
+                case ExternalResourcePoolStatement y:this.ExternalResourcePoolStatement(y);break;
+                case WorkloadGroupStatement y:this.WorkloadGroupStatement(y);break;
+                case BrokerPriorityStatement y:this.BrokerPriorityStatement(y);break;
+                case CreateFullTextStopListStatement y:this.CreateFullTextStopListStatement(y);break;
+                case AlterFullTextStopListStatement y:this.AlterFullTextStopListStatement(y);break;
+                case CreateCryptographicProviderStatement y:this.CreateCryptographicProviderStatement(y);break;
+                case AlterCryptographicProviderStatement y:this.AlterCryptographicProviderStatement(y);break;
+                case EventSessionStatement y:this.EventSessionStatement(y);break;
+                case AlterResourceGovernorStatement y:this.AlterResourceGovernorStatement(y);break;
+                case CreateSpatialIndexStatement y:this.CreateSpatialIndexStatement(y);break;
+                case AlterServerConfigurationStatement y:this.AlterServerConfigurationStatement(y);break;
+                case AlterServerConfigurationSetBufferPoolExtensionStatement y:this.AlterServerConfigurationSetBufferPoolExtensionStatement(y);break;
+                case AlterServerConfigurationSetDiagnosticsLogStatement y:this.AlterServerConfigurationSetDiagnosticsLogStatement(y);break;
+                case AlterServerConfigurationSetFailoverClusterPropertyStatement y:this.AlterServerConfigurationSetFailoverClusterPropertyStatement(y);break;
+                case AlterServerConfigurationSetHadrClusterStatement y:this.AlterServerConfigurationSetHadrClusterStatement(y);break;
+                case AlterServerConfigurationSetSoftNumaStatement y:this.AlterServerConfigurationSetSoftNumaStatement(y);break;
+                case AvailabilityGroupStatement y:this.AvailabilityGroupStatement(y);break;
+                case CreateFederationStatement y:this.CreateFederationStatement(y);break;
+                case AlterFederationStatement y:this.AlterFederationStatement(y);break;
+                case UseFederationStatement y:this.UseFederationStatement(y);break;
+                case DiskStatement y:this.DiskStatement(y);break;
+                case CreateColumnStoreIndexStatement y:this.CreateColumnStoreIndexStatement(y);break;
             }
         }
         /// <summary>
@@ -1236,9 +1236,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ViewStatementBody(ViewStatementBody x) {
             switch(x) {
-                case AlterViewStatement y:this.AlterViewStatement(y); break;
-                case CreateViewStatement y:this.CreateViewStatement(y); break;
-                case CreateOrAlterViewStatement y:this.CreateOrAlterViewStatement(y); break;
+                case AlterViewStatement y:this.AlterViewStatement(y);break;
+                case CreateViewStatement y:this.CreateViewStatement(y);break;
+                case CreateOrAlterViewStatement y:this.CreateOrAlterViewStatement(y);break;
             }
         }
         /// <summary>
@@ -1281,9 +1281,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TriggerStatementBody(TriggerStatementBody x) {
             switch(x) {
-                case AlterTriggerStatement y:this.AlterTriggerStatement(y); break;
-                case CreateTriggerStatement y:this.CreateTriggerStatement(y); break;
-                case CreateOrAlterTriggerStatement y:this.CreateOrAlterTriggerStatement(y); break;
+                case AlterTriggerStatement y:this.AlterTriggerStatement(y);break;
+                case CreateTriggerStatement y:this.CreateTriggerStatement(y);break;
+                case CreateOrAlterTriggerStatement y:this.CreateOrAlterTriggerStatement(y);break;
             }
         }
         /// <summary>
@@ -1329,8 +1329,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ProcedureStatementBodyBase(ProcedureStatementBodyBase x) {
             switch(x) {
-                case ProcedureStatementBody y:this.ProcedureStatementBody(y); break;
-                case FunctionStatementBody y:this.FunctionStatementBody(y); break;
+                case ProcedureStatementBody y:this.ProcedureStatementBody(y);break;
+                case FunctionStatementBody y:this.FunctionStatementBody(y);break;
             }
         }
         /// <summary>
@@ -1340,9 +1340,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ProcedureStatementBody(ProcedureStatementBody x) {
             switch(x) {
-                case AlterProcedureStatement y:this.AlterProcedureStatement(y); break;
-                case CreateProcedureStatement y:this.CreateProcedureStatement(y); break;
-                case CreateOrAlterProcedureStatement y:this.CreateOrAlterProcedureStatement(y); break;
+                case AlterProcedureStatement y:this.AlterProcedureStatement(y);break;
+                case CreateProcedureStatement y:this.CreateProcedureStatement(y);break;
+                case CreateOrAlterProcedureStatement y:this.CreateOrAlterProcedureStatement(y);break;
             }
         }
         /// <summary>
@@ -1384,9 +1384,9 @@ public sealed partial class Optimizer {
         ///ProcedureStatementBodyBase:TriggerStatementBody:TSqlStatement:TSqlFragment
         protected virtual void FunctionStatementBody(FunctionStatementBody x) {
             switch(x) {
-                case AlterFunctionStatement y:this.AlterFunctionStatement(y); break;
-                case CreateFunctionStatement y:this.CreateFunctionStatement(y); break;
-                case CreateOrAlterFunctionStatement y:this.CreateOrAlterFunctionStatement(y); break;
+                case AlterFunctionStatement y:this.AlterFunctionStatement(y);break;
+                case CreateFunctionStatement y:this.CreateFunctionStatement(y);break;
+                case CreateOrAlterFunctionStatement y:this.CreateOrAlterFunctionStatement(y);break;
             }
         }
         /// <summary>
@@ -1444,8 +1444,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void StatementWithCtesAndXmlNamespaces(StatementWithCtesAndXmlNamespaces x) {
             switch(x) {
-                case SelectStatement y:this.SwitchSelectStatement(y); break;
-                case DataModificationStatement y:this.DataModificationStatement(y); break;
+                case SelectStatement y:this.SwitchSelectStatement(y);break;
+                case DataModificationStatement y:this.DataModificationStatement(y);break;
             }
         }
         /// <summary>
@@ -1455,7 +1455,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SwitchSelectStatement(SelectStatement x) {
             switch(x) {
-                case SelectStatementSnippet y:this.SelectStatementSnippet(y); break;
+                case SelectStatementSnippet y:this.SelectStatementSnippet(y);break;
                 default: this.SelectStatement(x);break;
             }
         }
@@ -1487,10 +1487,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DataModificationStatement(DataModificationStatement x) {
             switch(x) {
-                case DeleteStatement y:this.DeleteStatement(y); break;
-                case InsertStatement y:this.InsertStatement(y); break;
-                case UpdateStatement y:this.UpdateStatement(y); break;
-                case MergeStatement y:this.MergeStatement(y); break;
+                case DeleteStatement y:this.DeleteStatement(y);break;
+                case InsertStatement y:this.InsertStatement(y);break;
+                case UpdateStatement y:this.UpdateStatement(y);break;
+                case MergeStatement y:this.MergeStatement(y);break;
             }
         }
         /// <summary>
@@ -1540,7 +1540,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BeginEndBlockStatement(BeginEndBlockStatement x) {
             switch(x) {
-                case BeginEndAtomicBlockStatement y:this.BeginEndAtomicBlockStatement(y); break;
+                case BeginEndAtomicBlockStatement y:this.BeginEndAtomicBlockStatement(y);break;
                 default:
                     this.StatementList(x.StatementList);break;
             }
@@ -1562,10 +1562,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TransactionStatement(TransactionStatement x) {
             switch(x) {
-                case BeginTransactionStatement y: this.BeginTransactionStatement(y); break;
-                case CommitTransactionStatement y: this.CommitTransactionStatement(y); break;
-                case RollbackTransactionStatement y: this.RollbackTransactionStatement(y); break;
-                case SaveTransactionStatement y: this.SaveTransactionStatement(y); break;
+                case BeginTransactionStatement y: this.BeginTransactionStatement(y);break;
+                case CommitTransactionStatement y: this.CommitTransactionStatement(y);break;
+                case RollbackTransactionStatement y: this.RollbackTransactionStatement(y);break;
+                case SaveTransactionStatement y: this.SaveTransactionStatement(y);break;
             }
         }
         /// <summary>
@@ -1714,8 +1714,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TextModificationStatement(TextModificationStatement x) {
             switch(x) {
-                case UpdateTextStatement y:this.UpdateTextStatement(y); break;
-                case WriteTextStatement y:this.WriteTextStatement(y); break;
+                case UpdateTextStatement y:this.UpdateTextStatement(y);break;
+                case WriteTextStatement y:this.WriteTextStatement(y);break;
             }
         }
         /// <summary>
@@ -1758,9 +1758,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SecurityStatement(SecurityStatement x) {
             switch(x) {
-                case GrantStatement y:this.GrantStatement(y); break;
-                case DenyStatement y:this.DenyStatement(y); break;
-                case RevokeStatement y:this.RevokeStatement(y); break;
+                case GrantStatement y:this.GrantStatement(y);break;
+                case DenyStatement y:this.DenyStatement(y);break;
+                case RevokeStatement y:this.RevokeStatement(y);break;
             }
         }
         /// <summary>
@@ -1812,9 +1812,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SecurityStatementBody80(SecurityStatementBody80 x) {
             switch(x) {
-                case GrantStatement80 y:this.GrantStatement80(y); break;
-                case DenyStatement80 y:this.DenyStatement80(y); break;
-                case RevokeStatement80 y:this.RevokeStatement80(y); break;
+                case GrantStatement80 y:this.GrantStatement80(y);break;
+                case DenyStatement80 y:this.DenyStatement80(y);break;
+                case RevokeStatement80 y:this.RevokeStatement80(y);break;
             }
         }
         /// <summary>
@@ -1861,8 +1861,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SequenceStatement(SequenceStatement x) {
             switch(x) {
-                case CreateSequenceStatement y:this.CreateSequenceStatement(y); break;
-                case AlterSequenceStatement y:this.AlterSequenceStatement(y); break;
+                case CreateSequenceStatement y:this.CreateSequenceStatement(y);break;
+                case AlterSequenceStatement y:this.AlterSequenceStatement(y);break;
             }
         }
         /// <summary>
@@ -1890,19 +1890,19 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DropObjectsStatement(DropObjectsStatement x) {
             switch(x) {
-                case DropSequenceStatement y:this.DropSequenceStatement(y); break;
-                case DropSecurityPolicyStatement y:this.DropSecurityPolicyStatement(y); break;
-                case DropExternalTableStatement y:this.DropExternalTableStatement(y); break;
-                case DropTableStatement y:this.DropTableStatement(y); break;
-                case DropProcedureStatement y:this.DropProcedureStatement(y); break;
-                case DropFunctionStatement y:this.DropFunctionStatement(y); break;
-                case DropViewStatement y:this.DropViewStatement(y); break;
-                case DropDefaultStatement y:this.DropDefaultStatement(y); break;
-                case DropRuleStatement y:this.DropRuleStatement(y); break;
-                case DropTriggerStatement y:this.DropTriggerStatement(y); break;
-                case DropSynonymStatement y:this.DropSynonymStatement(y); break;
-                case DropAggregateStatement y:this.DropAggregateStatement(y); break;
-                case DropAssemblyStatement y:this.DropAssemblyStatement(y); break;
+                case DropSequenceStatement y:this.DropSequenceStatement(y);break;
+                case DropSecurityPolicyStatement y:this.DropSecurityPolicyStatement(y);break;
+                case DropExternalTableStatement y:this.DropExternalTableStatement(y);break;
+                case DropTableStatement y:this.DropTableStatement(y);break;
+                case DropProcedureStatement y:this.DropProcedureStatement(y);break;
+                case DropFunctionStatement y:this.DropFunctionStatement(y);break;
+                case DropViewStatement y:this.DropViewStatement(y);break;
+                case DropDefaultStatement y:this.DropDefaultStatement(y);break;
+                case DropRuleStatement y:this.DropRuleStatement(y);break;
+                case DropTriggerStatement y:this.DropTriggerStatement(y);break;
+                case DropSynonymStatement y:this.DropSynonymStatement(y);break;
+                case DropAggregateStatement y:this.DropAggregateStatement(y);break;
+                case DropAssemblyStatement y:this.DropAssemblyStatement(y);break;
             }
         }
         /// <summary>
@@ -2016,8 +2016,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SecurityPolicyStatement(SecurityPolicyStatement x) {
             switch(x) {
-                case CreateSecurityPolicyStatement y:this.CreateSecurityPolicyStatement(y); break;
-                case AlterSecurityPolicyStatement y:this.AlterSecurityPolicyStatement(y); break;
+                case CreateSecurityPolicyStatement y:this.CreateSecurityPolicyStatement(y);break;
+                case AlterSecurityPolicyStatement y:this.AlterSecurityPolicyStatement(y);break;
             }
         }
         /// <summary>
@@ -2057,41 +2057,41 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DropUnownedObjectStatement(DropUnownedObjectStatement x) {
             switch(x) {
-                case DropColumnMasterKeyStatement y:this.DropColumnMasterKeyStatement(y); break;
-                case DropColumnEncryptionKeyStatement y:this.DropColumnEncryptionKeyStatement(y); break;
-                case DropExternalDataSourceStatement y:this.DropExternalDataSourceStatement(y); break;
-                case DropExternalFileFormatStatement y:this.DropExternalFileFormatStatement(y); break;
-                case DropServerRoleStatement y:this.DropServerRoleStatement(y); break;
-                case DropPartitionFunctionStatement y:this.DropPartitionFunctionStatement(y); break;
-                case DropPartitionSchemeStatement y:this.DropPartitionSchemeStatement(y); break;
-                case DropApplicationRoleStatement y:this.DropApplicationRoleStatement(y); break;
-                case DropFullTextCatalogStatement y:this.DropFullTextCatalogStatement(y); break;
-                case DropLoginStatement y:this.DropLoginStatement(y); break;
-                case DropRoleStatement y:this.DropRoleStatement(y); break;
-                case DropUserStatement y:this.DropUserStatement(y); break;
-                case DropSymmetricKeyStatement y:this.DropSymmetricKeyStatement(y); break;
-                case DropAsymmetricKeyStatement y:this.DropAsymmetricKeyStatement(y); break;
-                case DropCertificateStatement y:this.DropCertificateStatement(y); break;
-                case DropCredentialStatement y:this.DropCredentialStatement(y); break;
-                case DropSearchPropertyListStatement y:this.DropSearchPropertyListStatement(y); break;
-                case DropContractStatement y:this.DropContractStatement(y); break;
-                case DropEndpointStatement y:this.DropEndpointStatement(y); break;
-                case DropMessageTypeStatement y:this.DropMessageTypeStatement(y); break;
-                case DropRemoteServiceBindingStatement y:this.DropRemoteServiceBindingStatement(y); break;
-                case DropRouteStatement y:this.DropRouteStatement(y); break;
-                case DropServiceStatement y:this.DropServiceStatement(y); break;
-                case DropDatabaseAuditSpecificationStatement y:this.DropDatabaseAuditSpecificationStatement(y); break;
-                case DropServerAuditSpecificationStatement y:this.DropServerAuditSpecificationStatement(y); break;
-                case DropServerAuditStatement y:this.DropServerAuditStatement(y); break;
-                case DropResourcePoolStatement y:this.DropResourcePoolStatement(y); break;
-                case DropExternalResourcePoolStatement y:this.DropExternalResourcePoolStatement(y); break;
-                case DropWorkloadGroupStatement y:this.DropWorkloadGroupStatement(y); break;
-                case DropBrokerPriorityStatement y:this.DropBrokerPriorityStatement(y); break;
-                case DropFullTextStopListStatement y:this.DropFullTextStopListStatement(y); break;
-                case DropCryptographicProviderStatement y:this.DropCryptographicProviderStatement(y); break;
-                case DropEventSessionStatement y:this.DropEventSessionStatement(y); break;
-                case DropAvailabilityGroupStatement y:this.DropAvailabilityGroupStatement(y); break;
-                case DropFederationStatement y:this.DropFederationStatement(y); break;
+                case DropColumnMasterKeyStatement y:this.DropColumnMasterKeyStatement(y);break;
+                case DropColumnEncryptionKeyStatement y:this.DropColumnEncryptionKeyStatement(y);break;
+                case DropExternalDataSourceStatement y:this.DropExternalDataSourceStatement(y);break;
+                case DropExternalFileFormatStatement y:this.DropExternalFileFormatStatement(y);break;
+                case DropServerRoleStatement y:this.DropServerRoleStatement(y);break;
+                case DropPartitionFunctionStatement y:this.DropPartitionFunctionStatement(y);break;
+                case DropPartitionSchemeStatement y:this.DropPartitionSchemeStatement(y);break;
+                case DropApplicationRoleStatement y:this.DropApplicationRoleStatement(y);break;
+                case DropFullTextCatalogStatement y:this.DropFullTextCatalogStatement(y);break;
+                case DropLoginStatement y:this.DropLoginStatement(y);break;
+                case DropRoleStatement y:this.DropRoleStatement(y);break;
+                case DropUserStatement y:this.DropUserStatement(y);break;
+                case DropSymmetricKeyStatement y:this.DropSymmetricKeyStatement(y);break;
+                case DropAsymmetricKeyStatement y:this.DropAsymmetricKeyStatement(y);break;
+                case DropCertificateStatement y:this.DropCertificateStatement(y);break;
+                case DropCredentialStatement y:this.DropCredentialStatement(y);break;
+                case DropSearchPropertyListStatement y:this.DropSearchPropertyListStatement(y);break;
+                case DropContractStatement y:this.DropContractStatement(y);break;
+                case DropEndpointStatement y:this.DropEndpointStatement(y);break;
+                case DropMessageTypeStatement y:this.DropMessageTypeStatement(y);break;
+                case DropRemoteServiceBindingStatement y:this.DropRemoteServiceBindingStatement(y);break;
+                case DropRouteStatement y:this.DropRouteStatement(y);break;
+                case DropServiceStatement y:this.DropServiceStatement(y);break;
+                case DropDatabaseAuditSpecificationStatement y:this.DropDatabaseAuditSpecificationStatement(y);break;
+                case DropServerAuditSpecificationStatement y:this.DropServerAuditSpecificationStatement(y);break;
+                case DropServerAuditStatement y:this.DropServerAuditStatement(y);break;
+                case DropResourcePoolStatement y:this.DropResourcePoolStatement(y);break;
+                case DropExternalResourcePoolStatement y:this.DropExternalResourcePoolStatement(y);break;
+                case DropWorkloadGroupStatement y:this.DropWorkloadGroupStatement(y);break;
+                case DropBrokerPriorityStatement y:this.DropBrokerPriorityStatement(y);break;
+                case DropFullTextStopListStatement y:this.DropFullTextStopListStatement(y);break;
+                case DropCryptographicProviderStatement y:this.DropCryptographicProviderStatement(y);break;
+                case DropEventSessionStatement y:this.DropEventSessionStatement(y);break;
+                case DropAvailabilityGroupStatement y:this.DropAvailabilityGroupStatement(y);break;
+                case DropFederationStatement y:this.DropFederationStatement(y);break;
             }
         }
         /// <summary>
@@ -2381,8 +2381,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ColumnEncryptionKeyStatement(ColumnEncryptionKeyStatement x) {
             switch(x) {
-                case CreateColumnEncryptionKeyStatement y:this.CreateColumnEncryptionKeyStatement(y); break;
-                case AlterColumnEncryptionKeyStatement y:this.AlterColumnEncryptionKeyStatement(y); break;
+                case CreateColumnEncryptionKeyStatement y:this.CreateColumnEncryptionKeyStatement(y);break;
+                case AlterColumnEncryptionKeyStatement y:this.AlterColumnEncryptionKeyStatement(y);break;
             }
         }
         /// <summary>
@@ -2410,7 +2410,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalTableStatement(ExternalTableStatement x) {
             switch(x) {
-                case CreateExternalTableStatement y:this.CreateExternalTableStatement(y); break;
+                case CreateExternalTableStatement y:this.CreateExternalTableStatement(y);break;
             }
         }
         /// <summary>
@@ -2432,8 +2432,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalDataSourceStatement(ExternalDataSourceStatement x) {
             switch(x) {
-                case CreateExternalDataSourceStatement y:this.CreateExternalDataSourceStatement(y); break;
-                case AlterExternalDataSourceStatement y:this.AlterExternalDataSourceStatement(y); break;
+                case CreateExternalDataSourceStatement y:this.CreateExternalDataSourceStatement(y);break;
+                case AlterExternalDataSourceStatement y:this.AlterExternalDataSourceStatement(y);break;
             }
         }
         /// <summary>
@@ -2462,7 +2462,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalFileFormatStatement(ExternalFileFormatStatement x) {
             switch(x) {
-                case CreateExternalFileFormatStatement y:this.CreateExternalFileFormatStatement(y); break;
+                case CreateExternalFileFormatStatement y:this.CreateExternalFileFormatStatement(y);break;
             }
         }
         /// <summary>
@@ -2481,8 +2481,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AssemblyStatement(AssemblyStatement x) {
             switch(x) {
-                case CreateAssemblyStatement y:this.CreateAssemblyStatement(y); break;
-                case AlterAssemblyStatement y:this.AlterAssemblyStatement(y); break;
+                case CreateAssemblyStatement y:this.CreateAssemblyStatement(y);break;
+                case AlterAssemblyStatement y:this.AlterAssemblyStatement(y);break;
             }
         }
         /// <summary>
@@ -2541,17 +2541,17 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterTableStatement(AlterTableStatement x) {
             switch(x) {
-                case AlterTableRebuildStatement y:this.AlterTableRebuildStatement(y); break;
-                case AlterTableChangeTrackingModificationStatement y:this.AlterTableChangeTrackingModificationStatement(y); break;
-                case AlterTableFileTableNamespaceStatement y:this.AlterTableFileTableNamespaceStatement(y); break;
-                case AlterTableSetStatement y:this.AlterTableSetStatement(y); break;
-                case AlterTableAddTableElementStatement y:this.AlterTableAddTableElementStatement(y); break;
-                case AlterTableConstraintModificationStatement y:this.AlterTableConstraintModificationStatement(y); break;
-                case AlterTableSwitchStatement y:this.AlterTableSwitchStatement(y); break;
-                case AlterTableDropTableElementStatement y:this.AlterTableDropTableElementStatement(y); break;
-                case AlterTableTriggerModificationStatement y:this.AlterTableTriggerModificationStatement(y); break;
-                case AlterTableAlterIndexStatement y:this.AlterTableAlterIndexStatement(y); break;
-                case AlterTableAlterColumnStatement y:this.AlterTableAlterColumnStatement(y); break;
+                case AlterTableRebuildStatement y:this.AlterTableRebuildStatement(y);break;
+                case AlterTableChangeTrackingModificationStatement y:this.AlterTableChangeTrackingModificationStatement(y);break;
+                case AlterTableFileTableNamespaceStatement y:this.AlterTableFileTableNamespaceStatement(y);break;
+                case AlterTableSetStatement y:this.AlterTableSetStatement(y);break;
+                case AlterTableAddTableElementStatement y:this.AlterTableAddTableElementStatement(y);break;
+                case AlterTableConstraintModificationStatement y:this.AlterTableConstraintModificationStatement(y);break;
+                case AlterTableSwitchStatement y:this.AlterTableSwitchStatement(y);break;
+                case AlterTableDropTableElementStatement y:this.AlterTableDropTableElementStatement(y);break;
+                case AlterTableTriggerModificationStatement y:this.AlterTableTriggerModificationStatement(y);break;
+                case AlterTableAlterIndexStatement y:this.AlterTableAlterIndexStatement(y);break;
+                case AlterTableAlterColumnStatement y:this.AlterTableAlterColumnStatement(y);break;
             }
         }
         /// <summary>
@@ -2688,9 +2688,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CreateTypeStatement(CreateTypeStatement x) {
             switch(x) {
-                case CreateTypeUdtStatement y:this.CreateTypeUdtStatement(y); break;
-                case CreateTypeUddtStatement y:this.CreateTypeUddtStatement(y); break;
-                case CreateTypeTableStatement y:this.CreateTypeTableStatement(y); break;
+                case CreateTypeUdtStatement y:this.CreateTypeUdtStatement(y);break;
+                case CreateTypeUddtStatement y:this.CreateTypeUddtStatement(y);break;
+                case CreateTypeTableStatement y:this.CreateTypeTableStatement(y);break;
             }
         }
         /// <summary>
@@ -2738,8 +2738,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RouteStatement(RouteStatement x) {
             switch(x) {
-                case CreateRouteStatement y:this.CreateRouteStatement(y); break;
-                case AlterRouteStatement y:this.AlterRouteStatement(y); break;
+                case CreateRouteStatement y:this.CreateRouteStatement(y);break;
+                case AlterRouteStatement y:this.AlterRouteStatement(y);break;
             }
         }
         /// <summary>
@@ -2768,8 +2768,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void QueueStatement(QueueStatement x) {
             switch(x) {
-                case CreateQueueStatement y:this.CreateQueueStatement(y); break;
-                case AlterQueueStatement y:this.AlterQueueStatement(y); break;
+                case CreateQueueStatement y:this.CreateQueueStatement(y);break;
+                case AlterQueueStatement y:this.AlterQueueStatement(y);break;
             }
         }
         /// <summary>
@@ -2811,10 +2811,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void IndexStatement(IndexStatement x) {
             switch(x) {
-                case AlterIndexStatement y:this.AlterIndexStatement(y); break;
-                case CreateXmlIndexStatement y:this.CreateXmlIndexStatement(y); break;
-                case CreateSelectiveXmlIndexStatement y:this.CreateSelectiveXmlIndexStatement(y); break;
-                case CreateIndexStatement y:this.CreateIndexStatement(y); break;
+                case AlterIndexStatement y:this.AlterIndexStatement(y);break;
+                case CreateXmlIndexStatement y:this.CreateXmlIndexStatement(y);break;
+                case CreateSelectiveXmlIndexStatement y:this.CreateSelectiveXmlIndexStatement(y);break;
+                case CreateIndexStatement y:this.CreateIndexStatement(y);break;
             }
         }
         /// <summary>
@@ -2900,8 +2900,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void MasterKeyStatement(MasterKeyStatement x) {
             switch(x) {
-                case CreateMasterKeyStatement y:this.CreateMasterKeyStatement(y); break;
-                case AlterMasterKeyStatement y:this.AlterMasterKeyStatement(y); break;
+                case CreateMasterKeyStatement y:this.CreateMasterKeyStatement(y);break;
+                case AlterMasterKeyStatement y:this.AlterMasterKeyStatement(y);break;
             }
         }
         /// <summary>
@@ -2937,8 +2937,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RoleStatement(RoleStatement x) {
             switch(x) {
-                case CreateRoleStatement y:this.CreateRoleStatement(y); break;
-                case AlterRoleStatement y:this.AlterRoleStatement(y); break;
+                case CreateRoleStatement y:this.CreateRoleStatement(y);break;
+                case AlterRoleStatement y:this.AlterRoleStatement(y);break;
             }
         }
         /// <summary>
@@ -2948,7 +2948,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CreateRoleStatement(CreateRoleStatement x) {
             switch(x) {
-                case CreateServerRoleStatement y:this.CreateServerRoleStatement(y); break;
+                case CreateServerRoleStatement y:this.CreateServerRoleStatement(y);break;
             }
         }
         /// <summary>
@@ -2967,7 +2967,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterRoleStatement(AlterRoleStatement x) {
             switch(x) {
-                case AlterServerRoleStatement y:this.AlterServerRoleStatement(y); break;
+                case AlterServerRoleStatement y:this.AlterServerRoleStatement(y);break;
             }
         }
         /// <summary>
@@ -2986,8 +2986,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void UserStatement(UserStatement x) {
             switch(x) {
-                case CreateUserStatement y:this.CreateUserStatement(y); break;
-                case AlterUserStatement y:this.AlterUserStatement(y); break;
+                case CreateUserStatement y:this.CreateUserStatement(y);break;
+                case AlterUserStatement y:this.AlterUserStatement(y);break;
             }
         }
         /// <summary>
@@ -3067,10 +3067,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CursorStatement(CursorStatement x) {
             switch(x) {
-                case OpenCursorStatement y:this.OpenCursorStatement(y); break;
-                case CloseCursorStatement y:this.CloseCursorStatement(y); break;
-                case DeallocateCursorStatement y:this.DeallocateCursorStatement(y); break;
-                case FetchCursorStatement y:this.FetchCursorStatement(y); break;
+                case OpenCursorStatement y:this.OpenCursorStatement(y);break;
+                case CloseCursorStatement y:this.CloseCursorStatement(y);break;
+                case DeallocateCursorStatement y:this.DeallocateCursorStatement(y);break;
+                case FetchCursorStatement y:this.FetchCursorStatement(y);break;
             }
         }
         /// <summary>
@@ -3153,7 +3153,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DropChildObjectsStatement(DropChildObjectsStatement x) {
             switch(x) {
-                case DropStatisticsStatement y:this.DropStatisticsStatement(y); break;
+                case DropStatisticsStatement y:this.DropStatisticsStatement(y);break;
             }
         }
         /// <summary>
@@ -3290,10 +3290,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SetOnOffStatement(SetOnOffStatement x) {
             switch(x) {
-                case PredicateSetStatement y:this.PredicateSetStatement(y); break;
-                case SetStatisticsStatement y:this.SetStatisticsStatement(y); break;
-                case SetOffsetsStatement y:this.SetOffsetsStatement(y); break;
-                case SetIdentityInsertStatement y:this.SetIdentityInsertStatement(y); break;
+                case PredicateSetStatement y:this.PredicateSetStatement(y);break;
+                case SetStatisticsStatement y:this.SetStatisticsStatement(y);break;
+                case SetOffsetsStatement y:this.SetOffsetsStatement(y);break;
+                case SetIdentityInsertStatement y:this.SetIdentityInsertStatement(y);break;
             }
         }
         /// <summary>
@@ -3390,16 +3390,16 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterDatabaseStatement(AlterDatabaseStatement x) {
             switch(x) {
-                case AlterDatabaseCollateStatement y:this.AlterDatabaseCollateStatement(y); break;
-                case AlterDatabaseRebuildLogStatement y:this.AlterDatabaseRebuildLogStatement(y); break;
-                case AlterDatabaseAddFileStatement y:this.AlterDatabaseAddFileStatement(y); break;
-                case AlterDatabaseAddFileGroupStatement y:this.AlterDatabaseAddFileGroupStatement(y); break;
-                case AlterDatabaseRemoveFileGroupStatement y:this.AlterDatabaseRemoveFileGroupStatement(y); break;
-                case AlterDatabaseRemoveFileStatement y:this.AlterDatabaseRemoveFileStatement(y); break;
-                case AlterDatabaseModifyNameStatement y:this.AlterDatabaseModifyNameStatement(y); break;
-                case AlterDatabaseModifyFileStatement y:this.AlterDatabaseModifyFileStatement(y); break;
-                case AlterDatabaseModifyFileGroupStatement y:this.AlterDatabaseModifyFileGroupStatement(y); break;
-                case AlterDatabaseSetStatement y:this.AlterDatabaseSetStatement(y); break;
+                case AlterDatabaseCollateStatement y:this.AlterDatabaseCollateStatement(y);break;
+                case AlterDatabaseRebuildLogStatement y:this.AlterDatabaseRebuildLogStatement(y);break;
+                case AlterDatabaseAddFileStatement y:this.AlterDatabaseAddFileStatement(y);break;
+                case AlterDatabaseAddFileGroupStatement y:this.AlterDatabaseAddFileGroupStatement(y);break;
+                case AlterDatabaseRemoveFileGroupStatement y:this.AlterDatabaseRemoveFileGroupStatement(y);break;
+                case AlterDatabaseRemoveFileStatement y:this.AlterDatabaseRemoveFileStatement(y);break;
+                case AlterDatabaseModifyNameStatement y:this.AlterDatabaseModifyNameStatement(y);break;
+                case AlterDatabaseModifyFileStatement y:this.AlterDatabaseModifyFileStatement(y);break;
+                case AlterDatabaseModifyFileGroupStatement y:this.AlterDatabaseModifyFileGroupStatement(y);break;
+                case AlterDatabaseSetStatement y:this.AlterDatabaseSetStatement(y);break;
             }
         }
         /// <summary>
@@ -3501,8 +3501,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterDatabaseScopedConfigurationStatement(AlterDatabaseScopedConfigurationStatement x) {
             switch(x) {
-                case AlterDatabaseScopedConfigurationSetStatement y:this.AlterDatabaseScopedConfigurationSetStatement(y); break;
-                case AlterDatabaseScopedConfigurationClearStatement y:this.AlterDatabaseScopedConfigurationClearStatement(y); break;
+                case AlterDatabaseScopedConfigurationSetStatement y:this.AlterDatabaseScopedConfigurationSetStatement(y);break;
+                case AlterDatabaseScopedConfigurationClearStatement y:this.AlterDatabaseScopedConfigurationClearStatement(y);break;
             }
         }
         /// <summary>
@@ -3544,8 +3544,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BackupStatement(BackupStatement x) {
             switch(x) {
-                case BackupDatabaseStatement y:this.BackupDatabaseStatement(y); break;
-                case BackupTransactionLogStatement y:this.BackupTransactionLogStatement(y); break;
+                case BackupDatabaseStatement y:this.BackupDatabaseStatement(y);break;
+                case BackupTransactionLogStatement y:this.BackupTransactionLogStatement(y);break;
             }
         }
         /// <summary>
@@ -3590,8 +3590,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BulkInsertBase(BulkInsertBase x) {
             switch(x) {
-                case BulkInsertStatement y:this.BulkInsertStatement(y); break;
-                case InsertBulkStatement y:this.InsertBulkStatement(y); break;
+                case BulkInsertStatement y:this.BulkInsertStatement(y);break;
+                case InsertBulkStatement y:this.InsertBulkStatement(y);break;
             }
         }
         /// <summary>
@@ -3663,8 +3663,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RemoteServiceBindingStatementBase(RemoteServiceBindingStatementBase x) {
             switch(x) {
-                case CreateRemoteServiceBindingStatement y:this.CreateRemoteServiceBindingStatement(y); break;
-                case AlterRemoteServiceBindingStatement y:this.AlterRemoteServiceBindingStatement(y); break;
+                case CreateRemoteServiceBindingStatement y:this.CreateRemoteServiceBindingStatement(y);break;
+                case AlterRemoteServiceBindingStatement y:this.AlterRemoteServiceBindingStatement(y);break;
             }
         }
         /// <summary>
@@ -3694,9 +3694,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CertificateStatementBase(CertificateStatementBase x) {
             switch(x) {
-                case CreateCertificateStatement y:this.CreateCertificateStatement(y); break;
-                case AlterCertificateStatement y:this.AlterCertificateStatement(y); break;
-                case BackupCertificateStatement y:this.BackupCertificateStatement(y); break;
+                case CreateCertificateStatement y:this.CreateCertificateStatement(y);break;
+                case AlterCertificateStatement y:this.AlterCertificateStatement(y);break;
+                case BackupCertificateStatement y:this.BackupCertificateStatement(y);break;
             }
         }
         /// <summary>
@@ -3755,8 +3755,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CredentialStatement(CredentialStatement x) {
             switch(x) {
-                case CreateCredentialStatement y:this.CreateCredentialStatement(y); break;
-                case AlterCredentialStatement y:this.AlterCredentialStatement(y); break;
+                case CreateCredentialStatement y:this.CreateCredentialStatement(y);break;
+                case AlterCredentialStatement y:this.AlterCredentialStatement(y);break;
             }
         }
         /// <summary>
@@ -3785,8 +3785,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void MessageTypeStatementBase(MessageTypeStatementBase x) {
             switch(x) {
-                case CreateMessageTypeStatement y:this.CreateMessageTypeStatement(y); break;
-                case AlterMessageTypeStatement y:this.AlterMessageTypeStatement(y); break;
+                case CreateMessageTypeStatement y:this.CreateMessageTypeStatement(y);break;
+                case AlterMessageTypeStatement y:this.AlterMessageTypeStatement(y);break;
             }
         }
         /// <summary>
@@ -3826,8 +3826,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterCreateEndpointStatementBase(AlterCreateEndpointStatementBase x) {
             switch(x) {
-                case CreateEndpointStatement y:this.CreateEndpointStatement(y); break;
-                case AlterEndpointStatement y:this.AlterEndpointStatement(y); break;
+                case CreateEndpointStatement y:this.CreateEndpointStatement(y);break;
+                case AlterEndpointStatement y:this.AlterEndpointStatement(y);break;
             }
         }
         /// <summary>
@@ -3859,8 +3859,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SymmetricKeyStatement(SymmetricKeyStatement x) {
             switch(x) {
-                case CreateSymmetricKeyStatement y:this.CreateSymmetricKeyStatement(y); break;
-                case AlterSymmetricKeyStatement y:this.AlterSymmetricKeyStatement(y); break;
+                case CreateSymmetricKeyStatement y:this.CreateSymmetricKeyStatement(y);break;
+                case AlterSymmetricKeyStatement y:this.AlterSymmetricKeyStatement(y);break;
             }
         }
         /// <summary>
@@ -3891,8 +3891,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FullTextCatalogStatement(FullTextCatalogStatement x) {
             switch(x) {
-                case CreateFullTextCatalogStatement y:this.CreateFullTextCatalogStatement(y); break;
-                case AlterFullTextCatalogStatement y:this.AlterFullTextCatalogStatement(y); break;
+                case CreateFullTextCatalogStatement y:this.CreateFullTextCatalogStatement(y);break;
+                case AlterFullTextCatalogStatement y:this.AlterFullTextCatalogStatement(y);break;
             }
         }
         /// <summary>
@@ -3923,8 +3923,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterCreateServiceStatementBase(AlterCreateServiceStatementBase x) {
             switch(x) {
-                case CreateServiceStatement y:this.CreateServiceStatement(y); break;
-                case AlterServiceStatement y:this.AlterServiceStatement(y); break;
+                case CreateServiceStatement y:this.CreateServiceStatement(y);break;
+                case AlterServiceStatement y:this.AlterServiceStatement(y);break;
             }
         }
         /// <summary>
@@ -4032,9 +4032,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterLoginStatement(AlterLoginStatement x) {
             switch(x) {
-                case AlterLoginOptionsStatement y:this.AlterLoginOptionsStatement(y); break;
-                case AlterLoginEnableDisableStatement y:this.AlterLoginEnableDisableStatement(y); break;
-                case AlterLoginAddDropCredentialStatement y:this.AlterLoginAddDropCredentialStatement(y); break;
+                case AlterLoginOptionsStatement y:this.AlterLoginOptionsStatement(y);break;
+                case AlterLoginEnableDisableStatement y:this.AlterLoginEnableDisableStatement(y);break;
+                case AlterLoginAddDropCredentialStatement y:this.AlterLoginAddDropCredentialStatement(y);break;
             }
         }
         /// <summary>
@@ -4086,8 +4086,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SignatureStatementBase(SignatureStatementBase x) {
             switch(x) {
-                case AddSignatureStatement y:this.AddSignatureStatement(y); break;
-                case DropSignatureStatement y:this.DropSignatureStatement(y); break;
+                case AddSignatureStatement y:this.AddSignatureStatement(y);break;
+                case DropSignatureStatement y:this.DropSignatureStatement(y);break;
             }
         }
         /// <summary>
@@ -4152,8 +4152,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void WaitForSupportedStatement(WaitForSupportedStatement x) {
             switch(x) {
-                case GetConversationGroupStatement y:this.GetConversationGroupStatement(y); break;
-                case ReceiveStatement y:this.ReceiveStatement(y); break;
+                case GetConversationGroupStatement y:this.GetConversationGroupStatement(y);break;
+                case ReceiveStatement y:this.ReceiveStatement(y);break;
             }
         }
         /// <summary>
@@ -4245,10 +4245,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BackupRestoreMasterKeyStatementBase(BackupRestoreMasterKeyStatementBase x) {
             switch(x) {
-                case BackupServiceMasterKeyStatement y:this.BackupServiceMasterKeyStatement(y); break;
-                case RestoreServiceMasterKeyStatement y:this.RestoreServiceMasterKeyStatement(y); break;
-                case BackupMasterKeyStatement y:this.BackupMasterKeyStatement(y); break;
-                case RestoreMasterKeyStatement y:this.RestoreMasterKeyStatement(y); break;
+                case BackupServiceMasterKeyStatement y:this.BackupServiceMasterKeyStatement(y);break;
+                case RestoreServiceMasterKeyStatement y:this.RestoreServiceMasterKeyStatement(y);break;
+                case BackupMasterKeyStatement y:this.BackupMasterKeyStatement(y);break;
+                case RestoreMasterKeyStatement y:this.RestoreMasterKeyStatement(y);break;
             }
         }
         /// <summary>
@@ -4302,10 +4302,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AuditSpecificationStatement(AuditSpecificationStatement x) {
             switch(x) {
-                case CreateDatabaseAuditSpecificationStatement y:this.CreateDatabaseAuditSpecificationStatement(y); break;
-                case AlterDatabaseAuditSpecificationStatement y:this.AlterDatabaseAuditSpecificationStatement(y); break;
-                case CreateServerAuditSpecificationStatement y:this.CreateServerAuditSpecificationStatement(y); break;
-                case AlterServerAuditSpecificationStatement y:this.AlterServerAuditSpecificationStatement(y); break;
+                case CreateDatabaseAuditSpecificationStatement y:this.CreateDatabaseAuditSpecificationStatement(y);break;
+                case AlterDatabaseAuditSpecificationStatement y:this.AlterDatabaseAuditSpecificationStatement(y);break;
+                case CreateServerAuditSpecificationStatement y:this.CreateServerAuditSpecificationStatement(y);break;
+                case AlterServerAuditSpecificationStatement y:this.AlterServerAuditSpecificationStatement(y);break;
             }
         }
         /// <summary>
@@ -4355,8 +4355,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ServerAuditStatement(ServerAuditStatement x) {
             switch(x) {
-                case CreateServerAuditStatement y:this.CreateServerAuditStatement(y); break;
-                case AlterServerAuditStatement y:this.AlterServerAuditStatement(y); break;
+                case CreateServerAuditStatement y:this.CreateServerAuditStatement(y);break;
+                case AlterServerAuditStatement y:this.AlterServerAuditStatement(y);break;
             }
         }
         /// <summary>
@@ -4389,8 +4389,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DatabaseEncryptionKeyStatement(DatabaseEncryptionKeyStatement x) {
             switch(x) {
-                case CreateDatabaseEncryptionKeyStatement y:this.CreateDatabaseEncryptionKeyStatement(y); break;
-                case AlterDatabaseEncryptionKeyStatement y:this.AlterDatabaseEncryptionKeyStatement(y); break;
+                case CreateDatabaseEncryptionKeyStatement y:this.CreateDatabaseEncryptionKeyStatement(y);break;
+                case AlterDatabaseEncryptionKeyStatement y:this.AlterDatabaseEncryptionKeyStatement(y);break;
             }
         }
         /// <summary>
@@ -4424,8 +4424,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ResourcePoolStatement(ResourcePoolStatement x) {
             switch(x) {
-                case CreateResourcePoolStatement y:this.CreateResourcePoolStatement(y); break;
-                case AlterResourcePoolStatement y:this.AlterResourcePoolStatement(y); break;
+                case CreateResourcePoolStatement y:this.CreateResourcePoolStatement(y);break;
+                case AlterResourcePoolStatement y:this.AlterResourcePoolStatement(y);break;
             }
         }
         /// <summary>
@@ -4453,8 +4453,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalResourcePoolStatement(ExternalResourcePoolStatement x) {
             switch(x) {
-                case CreateExternalResourcePoolStatement y:this.CreateExternalResourcePoolStatement(y); break;
-                case AlterExternalResourcePoolStatement y:this.AlterExternalResourcePoolStatement(y); break;
+                case CreateExternalResourcePoolStatement y:this.CreateExternalResourcePoolStatement(y);break;
+                case AlterExternalResourcePoolStatement y:this.AlterExternalResourcePoolStatement(y);break;
             }
         }
         /// <summary>
@@ -4482,8 +4482,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void WorkloadGroupStatement(WorkloadGroupStatement x) {
             switch(x) {
-                case CreateWorkloadGroupStatement y:this.CreateWorkloadGroupStatement(y); break;
-                case AlterWorkloadGroupStatement y:this.AlterWorkloadGroupStatement(y); break;
+                case CreateWorkloadGroupStatement y:this.CreateWorkloadGroupStatement(y);break;
+                case AlterWorkloadGroupStatement y:this.AlterWorkloadGroupStatement(y);break;
             }
         }
         /// <summary>
@@ -4514,8 +4514,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BrokerPriorityStatement(BrokerPriorityStatement x) {
             switch(x) {
-                case CreateBrokerPriorityStatement y:this.CreateBrokerPriorityStatement(y); break;
-                case AlterBrokerPriorityStatement y:this.AlterBrokerPriorityStatement(y); break;
+                case CreateBrokerPriorityStatement y:this.CreateBrokerPriorityStatement(y);break;
+                case AlterBrokerPriorityStatement y:this.AlterBrokerPriorityStatement(y);break;
             }
         }
         /// <summary>
@@ -4581,8 +4581,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void EventSessionStatement(EventSessionStatement x) {
             switch(x) {
-                case CreateEventSessionStatement y:this.CreateEventSessionStatement(y); break;
-                case AlterEventSessionStatement y:this.AlterEventSessionStatement(y); break;
+                case CreateEventSessionStatement y:this.CreateEventSessionStatement(y);break;
+                case AlterEventSessionStatement y:this.AlterEventSessionStatement(y);break;
             }
         }
         /// <summary>
@@ -4690,8 +4690,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AvailabilityGroupStatement(AvailabilityGroupStatement x) {
             switch(x) {
-                case CreateAvailabilityGroupStatement y:this.CreateAvailabilityGroupStatement(y); break;
-                case AlterAvailabilityGroupStatement y:this.AlterAvailabilityGroupStatement(y); break;
+                case CreateAvailabilityGroupStatement y:this.CreateAvailabilityGroupStatement(y);break;
+                case AlterAvailabilityGroupStatement y:this.AlterAvailabilityGroupStatement(y);break;
             }
         }
         /// <summary>
@@ -4778,7 +4778,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExecuteOption(ExecuteOption x) {
             switch(x) {
-                case ResultSetsExecuteOption y:this.ResultSetsExecuteOption(y); break;
+                case ResultSetsExecuteOption y:this.ResultSetsExecuteOption(y);break;
             }
         }
         /// <summary>
@@ -4797,8 +4797,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ResultSetDefinition(ResultSetDefinition x) {
             switch(x) {
-                case InlineResultSetDefinition y:this.InlineResultSetDefinition(y); break;
-                case SchemaObjectResultSetDefinition y:this.SchemaObjectResultSetDefinition(y); break;
+                case InlineResultSetDefinition y:this.InlineResultSetDefinition(y);break;
+                case SchemaObjectResultSetDefinition y:this.SchemaObjectResultSetDefinition(y);break;
             }
         }
         /// <summary>
@@ -4863,8 +4863,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExecutableEntity(ExecutableEntity x) {
             switch(x) {
-                case ExecutableProcedureReference y:this.ExecutableProcedureReference(y); break;
-                case ExecutableStringList y:this.ExecutableStringList(y); break;
+                case ExecutableProcedureReference y:this.ExecutableProcedureReference(y);break;
+                case ExecutableStringList y:this.ExecutableStringList(y);break;
             }
         }
         /// <summary>
@@ -4937,7 +4937,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TriggerOption(TriggerOption x) {
             switch(x) {
-                case ExecuteAsTriggerOption y:this.ExecuteAsTriggerOption(y); break;
+                case ExecuteAsTriggerOption y:this.ExecuteAsTriggerOption(y);break;
             }
         }
         /// <summary>
@@ -4985,7 +4985,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ProcedureOption(ProcedureOption x) {
             switch(x) {
-                case ExecuteAsProcedureOption y:this.ExecuteAsProcedureOption(y); break;
+                case ExecuteAsProcedureOption y:this.ExecuteAsProcedureOption(y);break;
             }
         }
         /// <summary>
@@ -5003,8 +5003,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FunctionOption(FunctionOption x) {
             switch(x) {
-                case InlineFunctionOption y:this.InlineFunctionOption(y); break;
-                case ExecuteAsFunctionOption y:this.ExecuteAsFunctionOption(y); break;
+                case InlineFunctionOption y:this.InlineFunctionOption(y);break;
+                case ExecuteAsFunctionOption y:this.ExecuteAsFunctionOption(y);break;
             }
         }
         /// <summary>
@@ -5038,8 +5038,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void XmlNamespacesElement(XmlNamespacesElement x) {
             switch(x) {
-                case XmlNamespacesDefaultElement y:this.XmlNamespacesDefaultElement(y); break;
-                case XmlNamespacesAliasElement y:this.XmlNamespacesAliasElement(y); break;
+                case XmlNamespacesDefaultElement y:this.XmlNamespacesDefaultElement(y);break;
+                case XmlNamespacesAliasElement y:this.XmlNamespacesAliasElement(y);break;
             }
         }
         /// <summary>
@@ -5085,9 +5085,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FunctionReturnType(FunctionReturnType x) {
             switch(x) {
-                case TableValuedFunctionReturnType y:this.TableValuedFunctionReturnType(y); break;
-                case ScalarFunctionReturnType y:this.ScalarFunctionReturnType(y); break;
-                case SelectFunctionReturnType y:this.SelectFunctionReturnType(y); break;
+                case TableValuedFunctionReturnType y:this.TableValuedFunctionReturnType(y);break;
+                case ScalarFunctionReturnType y:this.ScalarFunctionReturnType(y);break;
+                case SelectFunctionReturnType y:this.SelectFunctionReturnType(y);break;
             }
         }
         /// <summary>
@@ -5121,8 +5121,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DataTypeReference(DataTypeReference x) {
             switch(x) {
-                case ParameterizedDataTypeReference y:this.ParameterizedDataTypeReference(y); break;
-                case XmlDataTypeReference y:this.XmlDataTypeReference(y); break;
+                case ParameterizedDataTypeReference y:this.ParameterizedDataTypeReference(y);break;
+                case XmlDataTypeReference y:this.XmlDataTypeReference(y);break;
             }
         }
         /// <summary>
@@ -5132,8 +5132,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ParameterizedDataTypeReference(ParameterizedDataTypeReference x) {
             switch(x) {
-                case SqlDataTypeReference y:this.SqlDataTypeReference(y); break;
-                case UserDataTypeReference y:this.UserDataTypeReference(y); break;
+                case SqlDataTypeReference y:this.SqlDataTypeReference(y);break;
+                case UserDataTypeReference y:this.UserDataTypeReference(y);break;
             }
         }
         /// <summary>
@@ -5190,10 +5190,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableReference(TableReference x) {
             switch(x) {
-                case TableReferenceWithAlias y: this.TableReferenceWithAlias(y); break;
-                case JoinTableReference y: this.JoinTableReference(y); break;
-                case JoinParenthesisTableReference y: this.JoinParenthesisTableReference(y); break;
-                case OdbcQualifiedJoinTableReference y: this.OdbcQualifiedJoinTableReference(y); break;
+                case TableReferenceWithAlias y: this.TableReferenceWithAlias(y);break;
+                case JoinTableReference y: this.JoinTableReference(y);break;
+                case JoinParenthesisTableReference y: this.JoinParenthesisTableReference(y);break;
+                case OdbcQualifiedJoinTableReference y: this.OdbcQualifiedJoinTableReference(y);break;
             }
         }
         /// <summary>
@@ -5203,20 +5203,20 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableReferenceWithAlias(TableReferenceWithAlias x) {
             switch(x) {
-                case NamedTableReference y: this.NamedTableReference(y); break;
-                case TableReferenceWithAliasAndColumns y: this.TableReferenceWithAliasAndColumns(y); break;
-                case FullTextTableReference y: this.FullTextTableReference(y); break;
-                case SemanticTableReference y: this.SemanticTableReference(y); break;
-                case OpenXmlTableReference y: this.OpenXmlTableReference(y); break;
-                case OpenJsonTableReference y: this.OpenJsonTableReference(y); break;
-                case InternalOpenRowset y: this.InternalOpenRowset(y); break;
-                case OpenQueryTableReference y: this.OpenQueryTableReference(y); break;
-                case AdHocTableReference y: this.AdHocTableReference(y); break;
-                case BuiltInFunctionTableReference y: this.BuiltInFunctionTableReference(y); break;
-                case GlobalFunctionTableReference y: this.GlobalFunctionTableReference(y); break;
-                case PivotedTableReference y: this.PivotedTableReference(y); break;
-                case UnpivotedTableReference y: this.UnpivotedTableReference(y); break;
-                case VariableTableReference y: this.VariableTableReference(y); break;
+                case NamedTableReference y: this.NamedTableReference(y);break;
+                case TableReferenceWithAliasAndColumns y: this.TableReferenceWithAliasAndColumns(y);break;
+                case FullTextTableReference y: this.FullTextTableReference(y);break;
+                case SemanticTableReference y: this.SemanticTableReference(y);break;
+                case OpenXmlTableReference y: this.OpenXmlTableReference(y);break;
+                case OpenJsonTableReference y: this.OpenJsonTableReference(y);break;
+                case InternalOpenRowset y: this.InternalOpenRowset(y);break;
+                case OpenQueryTableReference y: this.OpenQueryTableReference(y);break;
+                case AdHocTableReference y: this.AdHocTableReference(y);break;
+                case BuiltInFunctionTableReference y: this.BuiltInFunctionTableReference(y);break;
+                case GlobalFunctionTableReference y: this.GlobalFunctionTableReference(y);break;
+                case PivotedTableReference y: this.PivotedTableReference(y);break;
+                case UnpivotedTableReference y: this.UnpivotedTableReference(y);break;
+                case VariableTableReference y: this.VariableTableReference(y);break;
             }
         }
         /// <summary>
@@ -5244,14 +5244,14 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableReferenceWithAliasAndColumns(TableReferenceWithAliasAndColumns x) {
             switch(x) {
-                case SchemaObjectFunctionTableReference y: this.SchemaObjectFunctionTableReference(y); break;
-                case QueryDerivedTable y: this.QueryDerivedTable(y); break;
-                case InlineDerivedTable y: this.InlineDerivedTable(y); break;
-                case BulkOpenRowset y: this.BulkOpenRowset(y); break;
-                case DataModificationTableReference y: this.DataModificationTableReference(y); break;
-                case ChangeTableChangesTableReference y: this.ChangeTableChangesTableReference(y); break;
-                case ChangeTableVersionTableReference y: this.ChangeTableVersionTableReference(y); break;
-                case VariableMethodCallTableReference y: this.VariableMethodCallTableReference(y); break;
+                case SchemaObjectFunctionTableReference y: this.SchemaObjectFunctionTableReference(y);break;
+                case QueryDerivedTable y: this.QueryDerivedTable(y);break;
+                case InlineDerivedTable y: this.InlineDerivedTable(y);break;
+                case BulkOpenRowset y: this.BulkOpenRowset(y);break;
+                case DataModificationTableReference y: this.DataModificationTableReference(y);break;
+                case ChangeTableChangesTableReference y: this.ChangeTableChangesTableReference(y);break;
+                case ChangeTableVersionTableReference y: this.ChangeTableVersionTableReference(y);break;
+                case VariableMethodCallTableReference y: this.VariableMethodCallTableReference(y);break;
             }
         }
         /// <summary>
@@ -5496,8 +5496,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void JoinTableReference(JoinTableReference x) {
             switch(x) {
-                case UnqualifiedJoin y: this.UnqualifiedJoin(y); break;
-                case QualifiedJoin y: this.QualifiedJoin(y); break;
+                case UnqualifiedJoin y: this.UnqualifiedJoin(y);break;
+                case QualifiedJoin y: this.QualifiedJoin(y);break;
             }
         }
         /// <summary>
@@ -5543,9 +5543,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableHint(TableHint x) {
             switch(x) {
-                case IndexTableHint y: this.TableHint(y); break;
-                case LiteralTableHint y: this.TableHint(y); break;
-                case ForceSeekTableHint y: this.TableHint(y); break;
+                case IndexTableHint y: this.TableHint(y);break;
+                case LiteralTableHint y: this.TableHint(y);break;
+                case ForceSeekTableHint y: this.TableHint(y);break;
                 default:break;
             }
         }
@@ -5581,23 +5581,23 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BooleanExpression(BooleanExpression x) {
             switch(x) {
-                case SubqueryComparisonPredicate y:this.SubqueryComparisonPredicate(y); break;
-                case ExistsPredicate y:this.ExistsPredicate(y); break;
-                case LikePredicate y:this.LikePredicate(y); break;
-                case InPredicate y:this.InPredicate(y); break;
-                case FullTextPredicate y:this.FullTextPredicate(y); break;
-                case UpdateCall y:this.UpdateCall(y); break;
-                case TSEqualCall y:this.TSEqualCall(y); break;
-                case BooleanNotExpression y:this.BooleanNotExpression(y); break;
-                case BooleanParenthesisExpression y:this.BooleanParenthesisExpression(y); break;
-                case BooleanComparisonExpression y:this.BooleanComparisonExpression(y); break;
-                case BooleanBinaryExpression y:this.BooleanBinaryExpression(y); break;
-                case BooleanIsNullExpression y:this.BooleanIsNullExpression(y); break;
-                case GraphMatchPredicate y:this.GraphMatchPredicate(y); break;
-                case GraphMatchExpression y:this.GraphMatchExpression(y); break;
-                case BooleanTernaryExpression y:this.BooleanTernaryExpression(y); break;
-                case BooleanExpressionSnippet y:this.BooleanExpressionSnippet(y); break;
-                case EventDeclarationCompareFunctionParameter y:this.EventDeclarationCompareFunctionParameter(y); break;
+                case SubqueryComparisonPredicate y:this.SubqueryComparisonPredicate(y);break;
+                case ExistsPredicate y:this.ExistsPredicate(y);break;
+                case LikePredicate y:this.LikePredicate(y);break;
+                case InPredicate y:this.InPredicate(y);break;
+                case FullTextPredicate y:this.FullTextPredicate(y);break;
+                case UpdateCall y:this.UpdateCall(y);break;
+                case TSEqualCall y:this.TSEqualCall(y);break;
+                case BooleanNotExpression y:this.BooleanNotExpression(y);break;
+                case BooleanParenthesisExpression y:this.BooleanParenthesisExpression(y);break;
+                case BooleanComparisonExpression y:this.BooleanComparisonExpression(y);break;
+                case BooleanBinaryExpression y:this.BooleanBinaryExpression(y);break;
+                case BooleanIsNullExpression y:this.BooleanIsNullExpression(y);break;
+                case GraphMatchPredicate y:this.GraphMatchPredicate(y);break;
+                case GraphMatchExpression y:this.GraphMatchExpression(y);break;
+                case BooleanTernaryExpression y:this.BooleanTernaryExpression(y);break;
+                case BooleanExpressionSnippet y:this.BooleanExpressionSnippet(y);break;
+                case EventDeclarationCompareFunctionParameter y:this.EventDeclarationCompareFunctionParameter(y);break;
             }
         }
         /// <summary>
@@ -5758,13 +5758,13 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ForClause(ForClause x) {
             switch(x) {
-                case BrowseForClause y:this.BrowseForClause(y); break;
-                case ReadOnlyForClause y:this.ReadOnlyForClause(y); break;
-                case XmlForClause y:this.XmlForClause(y); break;
-                case XmlForClauseOption y:this.XmlForClauseOption(y); break;
-                case JsonForClause y:this.JsonForClause(y); break;
-                case JsonForClauseOption y:this.JsonForClauseOption(y); break;
-                case UpdateForClause y:this.UpdateForClause(y); break;
+                case BrowseForClause y:this.BrowseForClause(y);break;
+                case ReadOnlyForClause y:this.ReadOnlyForClause(y);break;
+                case XmlForClause y:this.XmlForClause(y);break;
+                case XmlForClauseOption y:this.XmlForClauseOption(y);break;
+                case JsonForClause y:this.JsonForClause(y);break;
+                case JsonForClauseOption y:this.JsonForClauseOption(y);break;
+                case UpdateForClause y:this.UpdateForClause(y);break;
             }
         }
         /// <summary>
@@ -5828,10 +5828,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void OptimizerHint(OptimizerHint x) {
             switch(x) {
-                case LiteralOptimizerHint y:this.LiteralOptimizerHint(y); break;
-                case TableHintsOptimizerHint y:this.TableHintsOptimizerHint(y); break;
-                case OptimizeForOptimizerHint y:this.OptimizeForOptimizerHint(y); break;
-                case UseHintList y:this.UseHintList(y); break;
+                case LiteralOptimizerHint y:this.LiteralOptimizerHint(y);break;
+                case TableHintsOptimizerHint y:this.TableHintsOptimizerHint(y);break;
+                case OptimizeForOptimizerHint y:this.OptimizeForOptimizerHint(y);break;
+                case UseHintList y:this.UseHintList(y);break;
                 default:break;
             }
         }
@@ -5884,8 +5884,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void WhenClause(WhenClause x) {
             switch(x) {
-                case SimpleWhenClause y:this.SimpleWhenClause(y); break;
-                case SearchedWhenClause y:this.SearchedWhenClause(y); break;
+                case SimpleWhenClause y:this.SimpleWhenClause(y);break;
+                case SearchedWhenClause y:this.SearchedWhenClause(y);break;
             }
         }
         /// <summary>
@@ -5913,7 +5913,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SchemaDeclarationItem(SchemaDeclarationItem x) {
             switch(x) {
-                case SchemaDeclarationItemOpenjson y:this.SchemaDeclarationItemOpenjson(y); break;
+                case SchemaDeclarationItemOpenjson y:this.SchemaDeclarationItemOpenjson(y);break;
                 default: {
                     this.ColumnDefinitionBase(x.ColumnDefinition);
                     this.ValueExpression(x.Mapping);
@@ -5937,9 +5937,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void CallTarget(CallTarget x) {
             switch(x) {
-                case ExpressionCallTarget y:this.ExpressionCallTarget(y); break;
-                case MultiPartIdentifierCallTarget y:this.MultiPartIdentifierCallTarget(y); break;
-                case UserDefinedTypeCallTarget y:this.UserDefinedTypeCallTarget(y); break;
+                case ExpressionCallTarget y:this.ExpressionCallTarget(y);break;
+                case MultiPartIdentifierCallTarget y:this.MultiPartIdentifierCallTarget(y);break;
+                case UserDefinedTypeCallTarget y:this.UserDefinedTypeCallTarget(y);break;
             }
         }
         /// <summary>
@@ -5983,9 +5983,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AtomicBlockOption(AtomicBlockOption x) {
             switch(x) {
-                case LiteralAtomicBlockOption y: this.LiteralAtomicBlockOption(y); break;
-                case IdentifierAtomicBlockOption y: this.IdentifierAtomicBlockOption(y); break;
-                case OnOffAtomicBlockOption y: this.OnOffAtomicBlockOption(y); break;
+                case LiteralAtomicBlockOption y: this.LiteralAtomicBlockOption(y);break;
+                case IdentifierAtomicBlockOption y: this.IdentifierAtomicBlockOption(y);break;
+                case OnOffAtomicBlockOption y: this.OnOffAtomicBlockOption(y);break;
             }
         }
         /// <summary>
@@ -6026,7 +6026,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DeclareVariableElement(DeclareVariableElement x) {
             switch(x) {
-                case ProcedureParameter y:this.ProcedureParameter(y); break;
+                case ProcedureParameter y:this.ProcedureParameter(y);break;
                 default: {
                     this.DataTypeReference(x.DataType);
                     if(x.Nullable is not null) this.NullableConstraintDefinition(x.Nullable);
@@ -6054,9 +6054,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DataModificationSpecification(DataModificationSpecification x) {
             switch(x) {
-                case UpdateDeleteSpecificationBase y:this.UpdateDeleteSpecificationBase(y); break;
-                case InsertSpecification y:this.InsertSpecification(y); break;
-                case MergeSpecification y:this.MergeSpecification(y); break;
+                case UpdateDeleteSpecificationBase y:this.UpdateDeleteSpecificationBase(y);break;
+                case InsertSpecification y:this.InsertSpecification(y);break;
+                case MergeSpecification y:this.MergeSpecification(y);break;
             }
         }
         /// <summary>
@@ -6066,8 +6066,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void UpdateDeleteSpecificationBase(UpdateDeleteSpecificationBase x) {
             switch(x) {
-                case DeleteSpecification y:this.DeleteSpecification(y); break;
-                case UpdateSpecification y:this.UpdateSpecification(y); break;
+                case DeleteSpecification y:this.DeleteSpecification(y);break;
+                case UpdateSpecification y:this.UpdateSpecification(y);break;
             }
         }
         /// <summary>
@@ -6160,8 +6160,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SecurityElement80(SecurityElement80 x) {
             switch(x) {
-                case CommandSecurityElement80 y:this.CommandSecurityElement80(y); break;
-                case PrivilegeSecurityElement80 y:this.PrivilegeSecurityElement80(y); break;
+                case CommandSecurityElement80 y:this.CommandSecurityElement80(y);break;
+                case PrivilegeSecurityElement80 y:this.PrivilegeSecurityElement80(y);break;
             }
         }
         /// <summary>
@@ -6203,8 +6203,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SetClause(SetClause x) {
             switch(x) {
-                case AssignmentSetClause y:this.AssignmentSetClause(y); break;
-                case FunctionCallSetClause y:this.FunctionCallSetClause(y); break;
+                case AssignmentSetClause y:this.AssignmentSetClause(y);break;
+                case FunctionCallSetClause y:this.FunctionCallSetClause(y);break;
             }
         }
         /// <summary>
@@ -6232,9 +6232,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void InsertSource(InsertSource x) {
             switch(x) {
-                case ValuesInsertSource y:this.ValuesInsertSource(y); break;
-                case SelectInsertSource y:this.SelectInsertSource(y); break;
-                case ExecuteInsertSource y:this.ExecuteInsertSource(y); break;
+                case ValuesInsertSource y:this.ValuesInsertSource(y);break;
+                case SelectInsertSource y:this.SelectInsertSource(y);break;
+                case ExecuteInsertSource y:this.ExecuteInsertSource(y);break;
             }
         }
         /// <summary>
@@ -6276,7 +6276,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void LiteralRange(LiteralRange x) {
             switch(x) {
-                case ProcessAffinityRange y:this.ProcessAffinityRange(y); break;
+                case ProcessAffinityRange y:this.ProcessAffinityRange(y);break;
                 default: {
                     this.Literal(x.From);
                     this.Literal(x.To);
@@ -6300,8 +6300,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void OptionValue(OptionValue x) {
             switch(x) {
-                case OnOffOptionValue y:this.OnOffOptionValue(y); break;
-                case LiteralOptionValue y:this.LiteralOptionValue(y); break;
+                case OnOffOptionValue y:this.OnOffOptionValue(y);break;
+                case LiteralOptionValue y:this.LiteralOptionValue(y);break;
             }
         }
         /// <summary>
@@ -6344,8 +6344,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SequenceOption(SequenceOption x) {
             switch(x) {
-                case DataTypeSequenceOption y:this.DataTypeSequenceOption(y); break;
-                case ScalarExpressionSequenceOption y:this.ScalarExpressionSequenceOption(y); break;
+                case DataTypeSequenceOption y:this.DataTypeSequenceOption(y);break;
+                case ScalarExpressionSequenceOption y:this.ScalarExpressionSequenceOption(y);break;
             }
         }
         /// <summary>
@@ -6386,8 +6386,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ColumnMasterKeyParameter(ColumnMasterKeyParameter x) {
             switch(x) {
-                case ColumnMasterKeyStoreProviderNameParameter y:this.ColumnMasterKeyStoreProviderNameParameter(y); break;
-                case ColumnMasterKeyPathParameter y:this.ColumnMasterKeyPathParameter(y); break;
+                case ColumnMasterKeyStoreProviderNameParameter y:this.ColumnMasterKeyStoreProviderNameParameter(y);break;
+                case ColumnMasterKeyPathParameter y:this.ColumnMasterKeyPathParameter(y);break;
             }
         }
         /// <summary>
@@ -6421,9 +6421,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ColumnEncryptionKeyValueParameter(ColumnEncryptionKeyValueParameter x) {
             switch(x) {
-                case ColumnMasterKeyNameParameter y:this.ColumnMasterKeyNameParameter(y); break;
-                case ColumnEncryptionAlgorithmNameParameter y:this.ColumnEncryptionAlgorithmNameParameter(y); break;
-                case EncryptedValueParameter y:this.EncryptedValueParameter(y); break;
+                case ColumnMasterKeyNameParameter y:this.ColumnMasterKeyNameParameter(y);break;
+                case ColumnEncryptionAlgorithmNameParameter y:this.ColumnEncryptionAlgorithmNameParameter(y);break;
+                case EncryptedValueParameter y:this.EncryptedValueParameter(y);break;
             }
         }
         /// <summary>
@@ -6457,9 +6457,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalTableOption(ExternalTableOption x) {
             switch(x) {
-                case ExternalTableLiteralOrIdentifierOption y:this.ExternalTableLiteralOrIdentifierOption(y); break;
-                case ExternalTableDistributionOption y:this.ExternalTableDistributionOption(y); break;
-                case ExternalTableRejectTypeOption y:this.ExternalTableRejectTypeOption(y); break;
+                case ExternalTableLiteralOrIdentifierOption y:this.ExternalTableLiteralOrIdentifierOption(y);break;
+                case ExternalTableDistributionOption y:this.ExternalTableDistributionOption(y);break;
+                case ExternalTableRejectTypeOption y:this.ExternalTableRejectTypeOption(y);break;
             }
         }
         /// <summary>
@@ -6492,9 +6492,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalTableDistributionPolicy(ExternalTableDistributionPolicy x) {
             switch(x) {
-                case ExternalTableReplicatedDistributionPolicy y:this.ExternalTableReplicatedDistributionPolicy(y); break;
-                case ExternalTableRoundRobinDistributionPolicy y:this.ExternalTableRoundRobinDistributionPolicy(y); break;
-                case ExternalTableShardedDistributionPolicy y:this.ExternalTableShardedDistributionPolicy(y); break;
+                case ExternalTableReplicatedDistributionPolicy y:this.ExternalTableReplicatedDistributionPolicy(y);break;
+                case ExternalTableRoundRobinDistributionPolicy y:this.ExternalTableRoundRobinDistributionPolicy(y);break;
+                case ExternalTableShardedDistributionPolicy y:this.ExternalTableShardedDistributionPolicy(y);break;
             }
         }
         /// <summary>
@@ -6525,7 +6525,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalDataSourceOption(ExternalDataSourceOption x) {
             switch(x) {
-                case ExternalDataSourceLiteralOrIdentifierOption y:this.ExternalDataSourceLiteralOrIdentifierOption(y); break;
+                case ExternalDataSourceLiteralOrIdentifierOption y:this.ExternalDataSourceLiteralOrIdentifierOption(y);break;
             }
         }
         /// <summary>
@@ -6543,9 +6543,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ExternalFileFormatOption(ExternalFileFormatOption x) {
             switch(x) {
-                case ExternalFileFormatLiteralOption y:this.ExternalFileFormatLiteralOption(y); break;
-                case ExternalFileFormatUseDefaultTypeOption y:this.ExternalFileFormatUseDefaultTypeOption(y); break;
-                case ExternalFileFormatContainerOption y:this.ExternalFileFormatContainerOption(y); break;
+                case ExternalFileFormatLiteralOption y:this.ExternalFileFormatLiteralOption(y);break;
+                case ExternalFileFormatUseDefaultTypeOption y:this.ExternalFileFormatUseDefaultTypeOption(y);break;
+                case ExternalFileFormatContainerOption y:this.ExternalFileFormatContainerOption(y);break;
             }
         }
         /// <summary>
@@ -6578,8 +6578,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AssemblyOption(AssemblyOption x) {
             switch(x) {
-                case OnOffAssemblyOption y:this.OnOffAssemblyOption(y); break;
-                case PermissionSetAssemblyOption y:this.PermissionSetAssemblyOption(y); break;
+                case OnOffAssemblyOption y:this.OnOffAssemblyOption(y);break;
+                case PermissionSetAssemblyOption y:this.PermissionSetAssemblyOption(y);break;
                 default:break;
             }
         }
@@ -6622,20 +6622,20 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableOption(TableOption x) {
             switch(x) {
-                case LockEscalationTableOption y:this.LockEscalationTableOption(y); break;
-                case FileStreamOnTableOption y:this.FileStreamOnTableOption(y); break;
-                case FileTableDirectoryTableOption y:this.FileTableDirectoryTableOption(y); break;
-                case FileTableCollateFileNameTableOption y:this.FileTableCollateFileNameTableOption(y); break;
-                case FileTableConstraintNameTableOption y:this.FileTableConstraintNameTableOption(y); break;
-                case MemoryOptimizedTableOption y:this.MemoryOptimizedTableOption(y); break;
-                case DurabilityTableOption y:this.DurabilityTableOption(y); break;
-                case RemoteDataArchiveTableOption y:this.RemoteDataArchiveTableOption(y); break;
-                case RemoteDataArchiveAlterTableOption y:this.RemoteDataArchiveAlterTableOption(y); break;
-                case SystemVersioningTableOption y:this.SystemVersioningTableOption(y); break;
-                case TableDataCompressionOption y:this.TableDataCompressionOption(y); break;
-                case TableDistributionOption y:this.TableDistributionOption(y); break;
-                case TableIndexOption y:this.TableIndexOption(y); break;
-                case TablePartitionOption y:this.TablePartitionOption(y); break;
+                case LockEscalationTableOption y:this.LockEscalationTableOption(y);break;
+                case FileStreamOnTableOption y:this.FileStreamOnTableOption(y);break;
+                case FileTableDirectoryTableOption y:this.FileTableDirectoryTableOption(y);break;
+                case FileTableCollateFileNameTableOption y:this.FileTableCollateFileNameTableOption(y);break;
+                case FileTableConstraintNameTableOption y:this.FileTableConstraintNameTableOption(y);break;
+                case MemoryOptimizedTableOption y:this.MemoryOptimizedTableOption(y);break;
+                case DurabilityTableOption y:this.DurabilityTableOption(y);break;
+                case RemoteDataArchiveTableOption y:this.RemoteDataArchiveTableOption(y);break;
+                case RemoteDataArchiveAlterTableOption y:this.RemoteDataArchiveAlterTableOption(y);break;
+                case SystemVersioningTableOption y:this.SystemVersioningTableOption(y);break;
+                case TableDataCompressionOption y:this.TableDataCompressionOption(y);break;
+                case TableDistributionOption y:this.TableDistributionOption(y);break;
+                case TableIndexOption y:this.TableIndexOption(y);break;
+                case TablePartitionOption y:this.TablePartitionOption(y);break;
             }
         }
         /// <summary>
@@ -6755,26 +6755,26 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DatabaseOption(DatabaseOption x) {
             switch(x) {
-                case RemoteDataArchiveDatabaseOption y:this.RemoteDataArchiveDatabaseOption(y); break;
-                case OnOffDatabaseOption y:this.OnOffDatabaseOption(y); break;
-                case ContainmentDatabaseOption y:this.ContainmentDatabaseOption(y); break;
-                case HadrDatabaseOption y:this.HadrDatabaseOption(y); break;
-                case DelayedDurabilityDatabaseOption y:this.DelayedDurabilityDatabaseOption(y); break;
-                case CursorDefaultDatabaseOption y:this.CursorDefaultDatabaseOption(y); break;
-                case RecoveryDatabaseOption y:this.RecoveryDatabaseOption(y); break;
-                case TargetRecoveryTimeDatabaseOption y:this.TargetRecoveryTimeDatabaseOption(y); break;
-                case PageVerifyDatabaseOption y:this.PageVerifyDatabaseOption(y); break;
-                case PartnerDatabaseOption y:this.PartnerDatabaseOption(y); break;
-                case WitnessDatabaseOption y:this.WitnessDatabaseOption(y); break;
-                case ParameterizationDatabaseOption y:this.ParameterizationDatabaseOption(y); break;
-                case LiteralDatabaseOption y:this.LiteralDatabaseOption(y); break;
-                case IdentifierDatabaseOption y:this.IdentifierDatabaseOption(y); break;
-                case ChangeTrackingDatabaseOption y:this.ChangeTrackingDatabaseOption(y); break;
-                case QueryStoreDatabaseOption y:this.QueryStoreDatabaseOption(y); break;
-                case AutomaticTuningDatabaseOption y:this.AutomaticTuningDatabaseOption(y); break;
-                case FileStreamDatabaseOption y:this.FileStreamDatabaseOption(y); break;
-                case CatalogCollationOption y:this.CatalogCollationOption(y); break;
-                case MaxSizeDatabaseOption y:this.MaxSizeDatabaseOption(y); break;
+                case RemoteDataArchiveDatabaseOption y:this.RemoteDataArchiveDatabaseOption(y);break;
+                case OnOffDatabaseOption y:this.OnOffDatabaseOption(y);break;
+                case ContainmentDatabaseOption y:this.ContainmentDatabaseOption(y);break;
+                case HadrDatabaseOption y:this.HadrDatabaseOption(y);break;
+                case DelayedDurabilityDatabaseOption y:this.DelayedDurabilityDatabaseOption(y);break;
+                case CursorDefaultDatabaseOption y:this.CursorDefaultDatabaseOption(y);break;
+                case RecoveryDatabaseOption y:this.RecoveryDatabaseOption(y);break;
+                case TargetRecoveryTimeDatabaseOption y:this.TargetRecoveryTimeDatabaseOption(y);break;
+                case PageVerifyDatabaseOption y:this.PageVerifyDatabaseOption(y);break;
+                case PartnerDatabaseOption y:this.PartnerDatabaseOption(y);break;
+                case WitnessDatabaseOption y:this.WitnessDatabaseOption(y);break;
+                case ParameterizationDatabaseOption y:this.ParameterizationDatabaseOption(y);break;
+                case LiteralDatabaseOption y:this.LiteralDatabaseOption(y);break;
+                case IdentifierDatabaseOption y:this.IdentifierDatabaseOption(y);break;
+                case ChangeTrackingDatabaseOption y:this.ChangeTrackingDatabaseOption(y);break;
+                case QueryStoreDatabaseOption y:this.QueryStoreDatabaseOption(y);break;
+                case AutomaticTuningDatabaseOption y:this.AutomaticTuningDatabaseOption(y);break;
+                case FileStreamDatabaseOption y:this.FileStreamDatabaseOption(y);break;
+                case CatalogCollationOption y:this.CatalogCollationOption(y);break;
+                case MaxSizeDatabaseOption y:this.MaxSizeDatabaseOption(y);break;
                 default:break;
             }
         }
@@ -6793,7 +6793,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void OnOffDatabaseOption(OnOffDatabaseOption x) {
             switch(x) {
-                case AutoCreateStatisticsDatabaseOption y:this.AutoCreateStatisticsDatabaseOption(y); break;
+                case AutoCreateStatisticsDatabaseOption y:this.AutoCreateStatisticsDatabaseOption(y);break;
                 default:break;
             }
         }
@@ -6818,7 +6818,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void HadrDatabaseOption(HadrDatabaseOption x) {
             switch(x) {
-                case HadrAvailabilityGroupDatabaseOption y:this.HadrAvailabilityGroupDatabaseOption(y); break;
+                case HadrAvailabilityGroupDatabaseOption y:this.HadrAvailabilityGroupDatabaseOption(y);break;
                 default:break;
             }
         }
@@ -6960,9 +6960,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RemoteDataArchiveDatabaseSetting(RemoteDataArchiveDatabaseSetting x) {
             switch(x) {
-                case RemoteDataArchiveDbServerSetting y:this.RemoteDataArchiveDbServerSetting(y); break;
-                case RemoteDataArchiveDbCredentialSetting y:this.RemoteDataArchiveDbCredentialSetting(y); break;
-                case RemoteDataArchiveDbFederatedServiceAccountSetting y:this.RemoteDataArchiveDbFederatedServiceAccountSetting(y); break;
+                case RemoteDataArchiveDbServerSetting y:this.RemoteDataArchiveDbServerSetting(y);break;
+                case RemoteDataArchiveDbCredentialSetting y:this.RemoteDataArchiveDbCredentialSetting(y);break;
+                case RemoteDataArchiveDbFederatedServiceAccountSetting y:this.RemoteDataArchiveDbFederatedServiceAccountSetting(y);break;
             }
         }
         /// <summary>
@@ -7004,7 +7004,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableSwitchOption(TableSwitchOption x) {
             switch(x) {
-                case LowPriorityLockWaitTableSwitchOption y:this.LowPriorityLockWaitTableSwitchOption(y); break;
+                case LowPriorityLockWaitTableSwitchOption y:this.LowPriorityLockWaitTableSwitchOption(y);break;
             }
         }
         /// <summary>
@@ -7022,10 +7022,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DropClusteredConstraintOption(DropClusteredConstraintOption x) {
             switch(x) {
-                case DropClusteredConstraintStateOption y:this.DropClusteredConstraintStateOption(y); break;
-                case DropClusteredConstraintValueOption y:this.DropClusteredConstraintValueOption(y); break;
-                case DropClusteredConstraintMoveOption y:this.DropClusteredConstraintMoveOption(y); break;
-                case DropClusteredConstraintWaitAtLowPriorityLockOption y:this.DropClusteredConstraintWaitAtLowPriorityLockOption(y); break;
+                case DropClusteredConstraintStateOption y:this.DropClusteredConstraintStateOption(y);break;
+                case DropClusteredConstraintValueOption y:this.DropClusteredConstraintValueOption(y);break;
+                case DropClusteredConstraintMoveOption y:this.DropClusteredConstraintMoveOption(y);break;
+                case DropClusteredConstraintWaitAtLowPriorityLockOption y:this.DropClusteredConstraintWaitAtLowPriorityLockOption(y);break;
             }
         }
         /// <summary>
@@ -7084,10 +7084,10 @@ public sealed partial class Optimizer {
         protected virtual void QueueOption(QueueOption x) {
             //x.OptionKind
             switch(x) {
-                case QueueStateOption y:this.QueueStateOption(y); break;
-                case QueueProcedureOption y:this.QueueProcedureOption(y); break;
-                case QueueValueOption y:this.QueueValueOption(y); break;
-                case QueueExecuteAsOption y:this.QueueExecuteAsOption(y); break;
+                case QueueStateOption y:this.QueueStateOption(y);break;
+                case QueueProcedureOption y:this.QueueProcedureOption(y);break;
+                case QueueValueOption y:this.QueueValueOption(y);break;
+                case QueueExecuteAsOption y:this.QueueExecuteAsOption(y);break;
             }
         }
         /// <summary>
@@ -7169,15 +7169,15 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void IndexOption(IndexOption x) {
             switch(x) {
-                case IndexStateOption y:this.IndexStateOption(y); break;
-                case IndexExpressionOption y:this.IndexExpressionOption(y); break;
-                case MaxDurationOption y:this.MaxDurationOption(y); break;
-                case WaitAtLowPriorityOption y:this.WaitAtLowPriorityOption(y); break;
-                case OrderIndexOption y:this.OrderIndexOption(y); break;
-                case MoveToDropIndexOption y:this.MoveToDropIndexOption(y); break;
-                case FileStreamOnDropIndexOption y:this.FileStreamOnDropIndexOption(y); break;
-                case DataCompressionOption y:this.DataCompressionOption(y); break;
-                case CompressionDelayIndexOption y:this.CompressionDelayIndexOption(y); break;
+                case IndexStateOption y:this.IndexStateOption(y);break;
+                case IndexExpressionOption y:this.IndexExpressionOption(y);break;
+                case MaxDurationOption y:this.MaxDurationOption(y);break;
+                case WaitAtLowPriorityOption y:this.WaitAtLowPriorityOption(y);break;
+                case OrderIndexOption y:this.OrderIndexOption(y);break;
+                case MoveToDropIndexOption y:this.MoveToDropIndexOption(y);break;
+                case FileStreamOnDropIndexOption y:this.FileStreamOnDropIndexOption(y);break;
+                case DataCompressionOption y:this.DataCompressionOption(y);break;
+                case CompressionDelayIndexOption y:this.CompressionDelayIndexOption(y);break;
             }
         }
         /// <summary>
@@ -7187,8 +7187,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void IndexStateOption(IndexStateOption x) {
             switch(x) {
-                case OnlineIndexOption y:this.OnlineIndexOption(y); break;
-                case IgnoreDupKeyIndexOption y:this.IgnoreDupKeyIndexOption(y); break;
+                case OnlineIndexOption y:this.OnlineIndexOption(y);break;
+                case IgnoreDupKeyIndexOption y:this.IgnoreDupKeyIndexOption(y);break;
                 default:break;
             }
         }
@@ -7286,8 +7286,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void LowPriorityLockWaitOption(LowPriorityLockWaitOption x) {
             switch(x) {
-                case LowPriorityLockWaitMaxDurationOption y:this.LowPriorityLockWaitMaxDurationOption(y); break;
-                case LowPriorityLockWaitAbortAfterWaitOption y:this.LowPriorityLockWaitAbortAfterWaitOption(y); break;
+                case LowPriorityLockWaitMaxDurationOption y:this.LowPriorityLockWaitMaxDurationOption(y);break;
+                case LowPriorityLockWaitAbortAfterWaitOption y:this.LowPriorityLockWaitAbortAfterWaitOption(y);break;
             }
         }
         /// <summary>
@@ -7321,9 +7321,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FullTextIndexOption(FullTextIndexOption x) {
             switch(x) {
-                case ChangeTrackingFullTextIndexOption y:this.ChangeTrackingFullTextIndexOption(y); break;
-                case StopListFullTextIndexOption y:this.StopListFullTextIndexOption(y); break;
-                case SearchPropertyListFullTextIndexOption y:this.SearchPropertyListFullTextIndexOption(y); break;
+                case ChangeTrackingFullTextIndexOption y:this.ChangeTrackingFullTextIndexOption(y);break;
+                case StopListFullTextIndexOption y:this.StopListFullTextIndexOption(y);break;
+                case SearchPropertyListFullTextIndexOption y:this.SearchPropertyListFullTextIndexOption(y);break;
             }
         }
         /// <summary>
@@ -7365,8 +7365,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void EventTypeGroupContainer(EventTypeGroupContainer x) {
             switch(x) {
-                case EventTypeContainer y:this.EventTypeContainer(y); break;
-                case EventGroupContainer y:this.EventGroupContainer(y); break;
+                case EventTypeContainer y:this.EventTypeContainer(y);break;
+                case EventGroupContainer y:this.EventGroupContainer(y);break;
             }
         }
         /// <summary>
@@ -7406,9 +7406,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterRoleAction(AlterRoleAction x) {
             switch(x) {
-                case RenameAlterRoleAction y:this.RenameAlterRoleAction(y); break;
-                case AddMemberAlterRoleAction y:this.AddMemberAlterRoleAction(y); break;
-                case DropMemberAlterRoleAction y:this.DropMemberAlterRoleAction(y); break;
+                case RenameAlterRoleAction y:this.RenameAlterRoleAction(y);break;
+                case AddMemberAlterRoleAction y:this.AddMemberAlterRoleAction(y);break;
+                case DropMemberAlterRoleAction y:this.DropMemberAlterRoleAction(y);break;
             }
         }
         /// <summary>
@@ -7450,9 +7450,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void StatisticsOption(StatisticsOption x) {
             switch(x) {
-                case ResampleStatisticsOption y:this.ResampleStatisticsOption(y); break;
-                case OnOffStatisticsOption y:this.OnOffStatisticsOption(y); break;
-                case LiteralStatisticsOption y:this.LiteralStatisticsOption(y); break;
+                case ResampleStatisticsOption y:this.ResampleStatisticsOption(y);break;
+                case OnOffStatisticsOption y:this.OnOffStatisticsOption(y);break;
+                case LiteralStatisticsOption y:this.LiteralStatisticsOption(y);break;
             }
         }
         /// <summary>
@@ -7543,8 +7543,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DropIndexClauseBase(DropIndexClauseBase x) {
             switch(x) {
-                case BackwardsCompatibleDropIndexClause y:this.BackwardsCompatibleDropIndexClause(y); break;
-                case DropIndexClause y:this.DropIndexClause(y); break;
+                case BackwardsCompatibleDropIndexClause y:this.BackwardsCompatibleDropIndexClause(y);break;
+                case DropIndexClause y:this.DropIndexClause(y);break;
             }
         }
         /// <summary>
@@ -7571,8 +7571,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void SetCommand(SetCommand x) {
             switch(x) {
-                case GeneralSetCommand y:this.GeneralSetCommand(y); break;
-                case SetFipsFlaggerCommand y:this.SetFipsFlaggerCommand(y); break;
+                case GeneralSetCommand y:this.GeneralSetCommand(y);break;
+                case SetFipsFlaggerCommand y:this.SetFipsFlaggerCommand(y);break;
             }
         }
         /// <summary>
@@ -7605,11 +7605,11 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FileDeclarationOption(FileDeclarationOption x) {
             switch(x) {
-                case NameFileDeclarationOption y:this.NameFileDeclarationOption(y); break;
-                case FileNameFileDeclarationOption y:this.FileNameFileDeclarationOption(y); break;
-                case SizeFileDeclarationOption y:this.SizeFileDeclarationOption(y); break;
-                case MaxSizeFileDeclarationOption y:this.MaxSizeFileDeclarationOption(y); break;
-                case FileGrowthFileDeclarationOption y:this.FileGrowthFileDeclarationOption(y); break;
+                case NameFileDeclarationOption y:this.NameFileDeclarationOption(y);break;
+                case FileNameFileDeclarationOption y:this.FileNameFileDeclarationOption(y);break;
+                case SizeFileDeclarationOption y:this.SizeFileDeclarationOption(y);break;
+                case MaxSizeFileDeclarationOption y:this.MaxSizeFileDeclarationOption(y);break;
+                case FileGrowthFileDeclarationOption y:this.FileGrowthFileDeclarationOption(y);break;
                 default:break;
             }
         }
@@ -7677,9 +7677,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void DatabaseConfigurationSetOption(DatabaseConfigurationSetOption x) {
             switch(x) {
-                case OnOffPrimaryConfigurationOption y:this.OnOffPrimaryConfigurationOption(y); break;
-                case MaxDopConfigurationOption y:this.MaxDopConfigurationOption(y); break;
-                case GenericConfigurationOption y:this.GenericConfigurationOption(y); break;
+                case OnOffPrimaryConfigurationOption y:this.OnOffPrimaryConfigurationOption(y);break;
+                case MaxDopConfigurationOption y:this.MaxDopConfigurationOption(y);break;
+                case GenericConfigurationOption y:this.GenericConfigurationOption(y);break;
                 default: {
                     this.SwitchIdentifier(x.GenericOptionKind);
                     break;
@@ -7728,8 +7728,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ChangeTrackingOptionDetail(ChangeTrackingOptionDetail x) {
             switch(x) {
-                case AutoCleanupChangeTrackingOptionDetail y:this.AutoCleanupChangeTrackingOptionDetail(y); break;
-                case ChangeRetentionChangeTrackingOptionDetail y:this.ChangeRetentionChangeTrackingOptionDetail(y); break;
+                case AutoCleanupChangeTrackingOptionDetail y:this.AutoCleanupChangeTrackingOptionDetail(y);break;
+                case ChangeRetentionChangeTrackingOptionDetail y:this.ChangeRetentionChangeTrackingOptionDetail(y);break;
             }
         }
         /// <summary>
@@ -7754,14 +7754,14 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void QueryStoreOption(QueryStoreOption x) {
             switch(x) {
-                case QueryStoreDesiredStateOption y:this.QueryStoreDesiredStateOption(y); break;
-                case QueryStoreCapturePolicyOption y:this.QueryStoreCapturePolicyOption(y); break;
-                case QueryStoreSizeCleanupPolicyOption y:this.QueryStoreSizeCleanupPolicyOption(y); break;
-                case QueryStoreDataFlushIntervalOption y:this.QueryStoreDataFlushIntervalOption(y); break;
-                case QueryStoreIntervalLengthOption y:this.QueryStoreIntervalLengthOption(y); break;
-                case QueryStoreMaxStorageSizeOption y:this.QueryStoreMaxStorageSizeOption(y); break;
-                case QueryStoreMaxPlansPerQueryOption y:this.QueryStoreMaxPlansPerQueryOption(y); break;
-                case QueryStoreTimeCleanupPolicyOption y:this.QueryStoreTimeCleanupPolicyOption(y); break;
+                case QueryStoreDesiredStateOption y:this.QueryStoreDesiredStateOption(y);break;
+                case QueryStoreCapturePolicyOption y:this.QueryStoreCapturePolicyOption(y);break;
+                case QueryStoreSizeCleanupPolicyOption y:this.QueryStoreSizeCleanupPolicyOption(y);break;
+                case QueryStoreDataFlushIntervalOption y:this.QueryStoreDataFlushIntervalOption(y);break;
+                case QueryStoreIntervalLengthOption y:this.QueryStoreIntervalLengthOption(y);break;
+                case QueryStoreMaxStorageSizeOption y:this.QueryStoreMaxStorageSizeOption(y);break;
+                case QueryStoreMaxPlansPerQueryOption y:this.QueryStoreMaxPlansPerQueryOption(y);break;
+                case QueryStoreTimeCleanupPolicyOption y:this.QueryStoreTimeCleanupPolicyOption(y);break;
             }
         }
         /// <summary>
@@ -7832,10 +7832,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AutomaticTuningOption(AutomaticTuningOption x) {
             switch(x) {
-                case AutomaticTuningForceLastGoodPlanOption y:this.AutomaticTuningForceLastGoodPlanOption(y); break;
-                case AutomaticTuningCreateIndexOption y:this.AutomaticTuningCreateIndexOption(y); break;
-                case AutomaticTuningDropIndexOption y:this.AutomaticTuningDropIndexOption(y); break;
-                case AutomaticTuningMaintainIndexOption y:this.AutomaticTuningMaintainIndexOption(y); break;
+                case AutomaticTuningForceLastGoodPlanOption y:this.AutomaticTuningForceLastGoodPlanOption(y);break;
+                case AutomaticTuningCreateIndexOption y:this.AutomaticTuningCreateIndexOption(y);break;
+                case AutomaticTuningDropIndexOption y:this.AutomaticTuningDropIndexOption(y);break;
+                case AutomaticTuningMaintainIndexOption y:this.AutomaticTuningMaintainIndexOption(y);break;
                 default:break;
             }
         }
@@ -7878,7 +7878,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ColumnDefinitionBase(ColumnDefinitionBase x) {
             switch(x) {
-                case ColumnDefinition y:this.ColumnDefinition(y); break;
+                case ColumnDefinition y:this.ColumnDefinition(y);break;
                 default: {
                     if(x.Collation is not null)this.SwitchIdentifier(x.Collation);
                     this.SwitchIdentifier(x.ColumnIdentifier);
@@ -7920,9 +7920,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ColumnEncryptionDefinitionParameter(ColumnEncryptionDefinitionParameter x) {
             switch(x) {
-                case ColumnEncryptionKeyNameParameter y:this.ColumnEncryptionKeyNameParameter(y); break;
-                case ColumnEncryptionTypeParameter y:this.ColumnEncryptionTypeParameter(y); break;
-                case ColumnEncryptionAlgorithmParameter y:this.ColumnEncryptionAlgorithmParameter(y); break;
+                case ColumnEncryptionKeyNameParameter y:this.ColumnEncryptionKeyNameParameter(y);break;
+                case ColumnEncryptionTypeParameter y:this.ColumnEncryptionTypeParameter(y);break;
+                case ColumnEncryptionAlgorithmParameter y:this.ColumnEncryptionAlgorithmParameter(y);break;
             }
         }
         /// <summary>
@@ -7972,12 +7972,12 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void ConstraintDefinition(ConstraintDefinition x) {
             switch(x) {
-                case CheckConstraintDefinition y:this.CheckConstraintDefinition(y); break;
-                case DefaultConstraintDefinition y:this.DefaultConstraintDefinition(y); break;
-                case ForeignKeyConstraintDefinition y:this.ForeignKeyConstraintDefinition(y); break;
-                case NullableConstraintDefinition y:this.NullableConstraintDefinition(y); break;
-                case GraphConnectionConstraintDefinition y:this.GraphConnectionConstraintDefinition(y); break;
-                case UniqueConstraintDefinition y:this.UniqueConstraintDefinition(y); break;
+                case CheckConstraintDefinition y:this.CheckConstraintDefinition(y);break;
+                case DefaultConstraintDefinition y:this.DefaultConstraintDefinition(y);break;
+                case ForeignKeyConstraintDefinition y:this.ForeignKeyConstraintDefinition(y);break;
+                case NullableConstraintDefinition y:this.NullableConstraintDefinition(y);break;
+                case GraphConnectionConstraintDefinition y:this.GraphConnectionConstraintDefinition(y);break;
+                case UniqueConstraintDefinition y:this.UniqueConstraintDefinition(y);break;
             }
         }
         /// <summary>
@@ -8057,9 +8057,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableDistributionPolicy(TableDistributionPolicy x) {
             switch(x) {
-                case TableReplicateDistributionPolicy y:this.TableReplicateDistributionPolicy(y); break;
-                case TableRoundRobinDistributionPolicy y:this.TableRoundRobinDistributionPolicy(y); break;
-                case TableHashDistributionPolicy y:this.TableHashDistributionPolicy(y); break;
+                case TableReplicateDistributionPolicy y:this.TableReplicateDistributionPolicy(y);break;
+                case TableRoundRobinDistributionPolicy y:this.TableRoundRobinDistributionPolicy(y);break;
+                case TableHashDistributionPolicy y:this.TableHashDistributionPolicy(y);break;
             }
         }
         /// <summary>
@@ -8093,8 +8093,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void TableIndexType(TableIndexType x) {
             switch(x) {
-                case TableClusteredIndexType y:this.TableClusteredIndexType(y); break;
-                case TableNonClusteredIndexType y:this.TableNonClusteredIndexType(y); break;
+                case TableClusteredIndexType y:this.TableClusteredIndexType(y);break;
+                case TableNonClusteredIndexType y:this.TableNonClusteredIndexType(y);break;
             }
         }
         /// <summary>
@@ -8120,7 +8120,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void PartitionSpecifications(PartitionSpecifications x) {
             switch(x) {
-                case TablePartitionOptionSpecifications y:this.TablePartitionOptionSpecifications(y); break;
+                case TablePartitionOptionSpecifications y:this.TablePartitionOptionSpecifications(y);break;
             }
         }
         /// <summary>
@@ -8156,10 +8156,10 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RestoreOption(RestoreOption x) {
             switch(x) {
-                case ScalarExpressionRestoreOption y:this.ScalarExpressionRestoreOption(y); break;
-                case MoveRestoreOption y:this.MoveRestoreOption(y); break;
-                case StopRestoreOption y:this.StopRestoreOption(y); break;
-                case FileStreamRestoreOption y:this.FileStreamRestoreOption(y); break;
+                case ScalarExpressionRestoreOption y:this.ScalarExpressionRestoreOption(y);break;
+                case MoveRestoreOption y:this.MoveRestoreOption(y);break;
+                case StopRestoreOption y:this.StopRestoreOption(y);break;
+                case FileStreamRestoreOption y:this.FileStreamRestoreOption(y);break;
             }
         }
         /// <summary>
@@ -8203,7 +8203,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BackupOption(BackupOption x) {
             switch(x) {
-                case BackupEncryptionOption y:this.BackupEncryptionOption(y); break;
+                case BackupEncryptionOption y:this.BackupEncryptionOption(y);break;
             }
         }
         /// <summary>
@@ -8247,8 +8247,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void BulkInsertOption(BulkInsertOption x) {
             switch(x) {
-                case LiteralBulkInsertOption y:this.LiteralBulkInsertOption(y); break;
-                case OrderBulkInsertOption y:this.OrderBulkInsertOption(y); break;
+                case LiteralBulkInsertOption y:this.LiteralBulkInsertOption(y);break;
+                case OrderBulkInsertOption y:this.OrderBulkInsertOption(y);break;
             }
         }
         /// <summary>
@@ -8315,8 +8315,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void RemoteServiceBindingOption(RemoteServiceBindingOption x) {
             switch(x) {
-                case OnOffRemoteServiceBindingOption y:this.OnOffRemoteServiceBindingOption(y); break;
-                case UserRemoteServiceBindingOption y:this.UserRemoteServiceBindingOption(y); break;
+                case OnOffRemoteServiceBindingOption y:this.OnOffRemoteServiceBindingOption(y);break;
+                case UserRemoteServiceBindingOption y:this.UserRemoteServiceBindingOption(y);break;
             }
         }
         /// <summary>
@@ -8341,9 +8341,9 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void EncryptionSource(EncryptionSource x) {
             switch(x) {
-                case AssemblyEncryptionSource y:this.AssemblyEncryptionSource(y); break;
-                case FileEncryptionSource y:this.FileEncryptionSource(y); break;
-                case ProviderEncryptionSource y:this.ProviderEncryptionSource(y); break;
+                case AssemblyEncryptionSource y:this.AssemblyEncryptionSource(y);break;
+                case FileEncryptionSource y:this.FileEncryptionSource(y);break;
+                case ProviderEncryptionSource y:this.ProviderEncryptionSource(y);break;
             }
         }
         /// <summary>
@@ -8402,11 +8402,11 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void EndpointProtocolOption(EndpointProtocolOption x) {
             switch(x) {
-                case LiteralEndpointProtocolOption y:this.LiteralEndpointProtocolOption(y); break;
-                case AuthenticationEndpointProtocolOption y:this.AuthenticationEndpointProtocolOption(y); break;
-                case PortsEndpointProtocolOption y:this.PortsEndpointProtocolOption(y); break;
-                case CompressionEndpointProtocolOption y:this.CompressionEndpointProtocolOption(y); break;
-                case ListenerIPEndpointProtocolOption y:this.ListenerIPEndpointProtocolOption(y); break;
+                case LiteralEndpointProtocolOption y:this.LiteralEndpointProtocolOption(y);break;
+                case AuthenticationEndpointProtocolOption y:this.AuthenticationEndpointProtocolOption(y);break;
+                case PortsEndpointProtocolOption y:this.PortsEndpointProtocolOption(y);break;
+                case CompressionEndpointProtocolOption y:this.CompressionEndpointProtocolOption(y);break;
+                case ListenerIPEndpointProtocolOption y:this.ListenerIPEndpointProtocolOption(y);break;
             }
         }
         /// <summary>
@@ -8464,17 +8464,17 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void PayloadOption(PayloadOption x) {
             switch(x) {
-                case SoapMethod y:this.SoapMethod(y); break;
-                case EnabledDisabledPayloadOption y:this.EnabledDisabledPayloadOption(y); break;
-                case WsdlPayloadOption y:this.WsdlPayloadOption(y); break;
-                case LoginTypePayloadOption y:this.LoginTypePayloadOption(y); break;
-                case LiteralPayloadOption y:this.LiteralPayloadOption(y); break;
-                case SessionTimeoutPayloadOption y:this.SessionTimeoutPayloadOption(y); break;
-                case SchemaPayloadOption y:this.SchemaPayloadOption(y); break;
-                case CharacterSetPayloadOption y:this.CharacterSetPayloadOption(y); break;
-                case RolePayloadOption y:this.RolePayloadOption(y); break;
-                case AuthenticationPayloadOption y:this.AuthenticationPayloadOption(y); break;
-                case EncryptionPayloadOption y:this.EncryptionPayloadOption(y); break;
+                case SoapMethod y:this.SoapMethod(y);break;
+                case EnabledDisabledPayloadOption y:this.EnabledDisabledPayloadOption(y);break;
+                case WsdlPayloadOption y:this.WsdlPayloadOption(y);break;
+                case LoginTypePayloadOption y:this.LoginTypePayloadOption(y);break;
+                case LiteralPayloadOption y:this.LiteralPayloadOption(y);break;
+                case SessionTimeoutPayloadOption y:this.SessionTimeoutPayloadOption(y);break;
+                case SchemaPayloadOption y:this.SchemaPayloadOption(y);break;
+                case CharacterSetPayloadOption y:this.CharacterSetPayloadOption(y);break;
+                case RolePayloadOption y:this.RolePayloadOption(y);break;
+                case AuthenticationPayloadOption y:this.AuthenticationPayloadOption(y);break;
+                case EncryptionPayloadOption y:this.EncryptionPayloadOption(y);break;
             }
         }
         /// <summary>
@@ -8568,11 +8568,11 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void KeyOption(KeyOption x) {
             switch(x) {
-                case KeySourceKeyOption y:this.KeySourceKeyOption(y); break;
-                case AlgorithmKeyOption y:this.AlgorithmKeyOption(y); break;
-                case IdentityValueKeyOption y:this.IdentityValueKeyOption(y); break;
-                case ProviderKeyNameKeyOption y:this.ProviderKeyNameKeyOption(y); break;
-                case CreationDispositionKeyOption y:this.CreationDispositionKeyOption(y); break;
+                case KeySourceKeyOption y:this.KeySourceKeyOption(y);break;
+                case AlgorithmKeyOption y:this.AlgorithmKeyOption(y);break;
+                case IdentityValueKeyOption y:this.IdentityValueKeyOption(y);break;
+                case ProviderKeyNameKeyOption y:this.ProviderKeyNameKeyOption(y);break;
+                case CreationDispositionKeyOption y:this.CreationDispositionKeyOption(y);break;
             }
         }
         /// <summary>
@@ -8620,7 +8620,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void FullTextCatalogOption(FullTextCatalogOption x) {
             switch(x) {
-                case OnOffFullTextCatalogOption y:this.OnOffFullTextCatalogOption(y); break;
+                case OnOffFullTextCatalogOption y:this.OnOffFullTextCatalogOption(y);break;
             }
         }
         /// <summary>
@@ -9184,8 +9184,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AuditSpecificationDetail(AuditSpecificationDetail x) {
             switch(x) {
-                case AuditActionSpecification y:this.AuditActionSpecification(y); break;
-                case AuditActionGroupReference y:this.AuditActionGroupReference(y); break;
+                case AuditActionSpecification y:this.AuditActionSpecification(y);break;
+                case AuditActionGroupReference y:this.AuditActionGroupReference(y);break;
             }
         }
         /// <summary>
@@ -9221,7 +9221,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AuditOption(AuditOption x) {
             switch(x) {
-                case QueueDelayAuditOption y:this.QueueDelayAuditOption(y); break;
+                case QueueDelayAuditOption y:this.QueueDelayAuditOption(y);break;
                 case AuditGuidAuditOption y:this.AuditGuidAuditOption(y);break;
                 case OnFailureAuditOption y:this.OnFailureAuditOption(y);break;
                 case StateAuditOption     y:this.StateAuditOption    (y);break;
@@ -9530,8 +9530,8 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterServerConfigurationBufferPoolExtensionOption(AlterServerConfigurationBufferPoolExtensionOption x) {
             switch(x) {
-                case AlterServerConfigurationBufferPoolExtensionContainerOption y:this.AlterServerConfigurationBufferPoolExtensionContainerOption(y); break;
-                case AlterServerConfigurationBufferPoolExtensionSizeOption y:this.AlterServerConfigurationBufferPoolExtensionSizeOption(y); break;
+                case AlterServerConfigurationBufferPoolExtensionContainerOption y:this.AlterServerConfigurationBufferPoolExtensionContainerOption(y);break;
+                case AlterServerConfigurationBufferPoolExtensionSizeOption y:this.AlterServerConfigurationBufferPoolExtensionSizeOption(y);break;
             }
         }
         /// <summary>
@@ -9558,7 +9558,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterServerConfigurationDiagnosticsLogOption(AlterServerConfigurationDiagnosticsLogOption x) {
             switch(x) {
-                case AlterServerConfigurationDiagnosticsLogMaxSizeOption y:this.AlterServerConfigurationDiagnosticsLogMaxSizeOption(y); break;
+                case AlterServerConfigurationDiagnosticsLogMaxSizeOption y:this.AlterServerConfigurationDiagnosticsLogMaxSizeOption(y);break;
             }
         }
         /// <summary>
@@ -9659,7 +9659,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AvailabilityGroupOption(AvailabilityGroupOption x) {
             switch(x) {
-                case LiteralAvailabilityGroupOption y:this.LiteralAvailabilityGroupOption(y); break;
+                case LiteralAvailabilityGroupOption y:this.LiteralAvailabilityGroupOption(y);break;
             }
         }
         /// <summary>
@@ -9677,7 +9677,7 @@ public sealed partial class Optimizer {
         /// <returns></returns>
         protected virtual void AlterAvailabilityGroupAction(AlterAvailabilityGroupAction x) {
             switch(x) {
-                case AlterAvailabilityGroupFailoverAction y:this.AlterAvailabilityGroupFailoverAction(y); break;
+                case AlterAvailabilityGroupFailoverAction y:this.AlterAvailabilityGroupFailoverAction(y);break;
             }
         }
         /// <summary>

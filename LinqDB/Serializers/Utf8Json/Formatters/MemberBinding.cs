@@ -20,10 +20,10 @@ public class MemberBinding:IJsonFormatter<T> {
                 Expression.Write(ref writer,((Expressions.MemberAssignment)value).Expression,Resolver);
                 break;
             case Expressions.MemberBindingType.MemberBinding:
-                writer.SerializeReadOnlyCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
+                writer.WriteCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
                 break;
             case Expressions.MemberBindingType.ListBinding:
-                writer.SerializeReadOnlyCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
+                writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(value.BindingType.ToString());

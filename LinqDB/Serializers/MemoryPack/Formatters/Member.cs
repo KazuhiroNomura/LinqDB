@@ -1,23 +1,15 @@
-﻿using System.Buffers;
+﻿using System;
 using System.Diagnostics;
-using System;
 using System.Reflection;
 using MemoryPack;
+using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=MemberInfo;
-using C=Serializer;
 
-
+using Reader = MemoryPackReader;
+using T = MemberInfo;
 public class Member:MemoryPackFormatter<T>{
     public static readonly Member Instance=new();
-    //internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-    //    this.Serialize(ref writer,ref value);
-    //internal static T DeserializeMemberInfo(ref MemoryPackReader reader){
-    //    T? value=default;
-    //    this.Deserialize(ref reader,ref value);
-    //    return value!;
-    //}
+
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Debug.Assert(value!=null,nameof(value)+" != null");
         var type=value.ReflectedType!;

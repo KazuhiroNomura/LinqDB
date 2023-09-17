@@ -372,9 +372,9 @@ namespace LinqDB.Databases {
                                 case "INSERT":
                                     Trigger.InsertSQL=ACTION_STATEMENT;break;
                                 case "UPDATE":
-                                    Trigger.UpdateSQL=ACTION_STATEMENT; break;
+                                    Trigger.UpdateSQL=ACTION_STATEMENT;break;
                                 case "DELETE":
-                                    Trigger.DeleteSQL=ACTION_STATEMENT; break;
+                                    Trigger.DeleteSQL=ACTION_STATEMENT;break;
                                 default: throw new NotSupportedException(EVENT_MANIPULATION+"はトリガー対象になるテーブル操作ではない");
                             }
                         }
@@ -492,7 +492,7 @@ namespace LinqDB.Databases {
         private static String Escape(String s) {
             switch(s) {
                 case "event":
-                case "operator": s='@'+s; break;
+                case "operator": s='@'+s;break;
             }
             return s.Replace(' ','_').Replace('-','_');
         }

@@ -1413,6 +1413,12 @@ public class TestExpression:共通 {
     [Fact]public void New(){
         this.MemoryMessageJsonExpression(
             Expression.New(
+                typeof(ValueTuple<int>).GetConstructors()[0],
+                Expression.Constant(1)
+            )
+        );
+        this.MemoryMessageJsonExpression(
+            Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
                 Expression.Constant(1),
                 Expression.Constant(2)

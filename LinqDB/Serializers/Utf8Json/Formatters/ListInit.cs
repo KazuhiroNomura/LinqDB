@@ -10,7 +10,7 @@ public class ListInit:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         New.Instance.Serialize(ref writer,value.NewExpression,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Initializers,Resolver);
+        writer.WriteCollection(value.Initializers,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);

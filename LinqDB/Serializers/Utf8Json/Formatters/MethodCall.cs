@@ -1,11 +1,10 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using Expressions = System.Linq.Expressions;
 using Utf8Json;
-using System.Diagnostics;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T= Expressions.MethodCallExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.MethodCallExpression;
 using static Extension;
 public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
@@ -17,7 +16,7 @@ public class MethodCall:IJsonFormatter<T> {
             Expression.Write(ref writer,value.Object!,Resolver);
             writer.WriteValueSeparator();
         }
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);

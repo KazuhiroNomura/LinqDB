@@ -15,12 +15,12 @@ public class Try:IJsonFormatter<T> {
         Expression.WriteNullable(ref writer,value.Finally,Resolver);
         writer.WriteValueSeparator();
         if(value.Finally is not null){
-            writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+            writer.WriteCollection(value.Handlers,Resolver);
         } else{
             Expression.WriteNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
                 writer.WriteValueSeparator();
-                writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+                writer.WriteCollection(value.Handlers,Resolver);
             }
         }
     }

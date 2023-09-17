@@ -6,7 +6,6 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using static Extension;
-using C = Serializer;
 
 public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();

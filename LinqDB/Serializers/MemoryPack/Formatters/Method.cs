@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Buffers;
-using System.Diagnostics;
 using System.Reflection;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 
-using T= MethodInfo;
-using C=Serializer;
+using T = MethodInfo;
 
 public class Method:MemoryPackFormatter<T> {
     public static readonly Method Instance=new();

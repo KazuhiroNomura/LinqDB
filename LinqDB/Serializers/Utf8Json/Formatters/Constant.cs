@@ -28,7 +28,7 @@ public class Constant:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var value=Object.Instance.Deserialize(ref reader,Resolver);
+        var value=Object.ReadNullable(ref reader,Resolver);
         return Expressions.Expression.Constant(value,type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){

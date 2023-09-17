@@ -1,7 +1,6 @@
 ﻿using System;
 using Expressions = System.Linq.Expressions;
 using Utf8Json;
-using System.Diagnostics;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
@@ -13,7 +12,7 @@ public class NewArray:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type.GetElementType());
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
+        writer.WriteCollection(value.Expressions,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);

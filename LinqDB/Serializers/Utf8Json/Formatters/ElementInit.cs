@@ -12,7 +12,7 @@ public class ElementInit:IJsonFormatter<T> {
         writer.WriteBeginArray();
         Method.WriteNullable(ref writer,value!.AddMethod,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){

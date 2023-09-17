@@ -1,11 +1,10 @@
 ﻿using Utf8Json;
-using Expressions=System.Linq.Expressions;
-using System.Diagnostics;
+using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.LabelExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.LabelExpression;
 public class Label:IJsonFormatter<T> {
     public static readonly Label Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
@@ -32,7 +31,7 @@ public class Label:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null!;
-        reader.ReadIsBeginArrayWithVerify();
+        reader.ReadIsBeginArray();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;

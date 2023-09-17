@@ -256,7 +256,7 @@ public sealed partial class Optimizer{
                     case "SUM":
                         this.集約関数があるか=true;
                         break;
-                    default:base.FunctionCall(x); break;
+                    default:base.FunctionCall(x);break;
                 }
             }
         }
@@ -1632,17 +1632,17 @@ public sealed partial class Optimizer{
                             :throw new NotSupportedException(DBType)
                     };
                     //switch(DBType) {
-                    //    case "bit":value = Product.SQLServer.Reflection.value_Boolean; break;
-                    //    case "tinyint":value = Product.SQLServer.Reflection.value_SByte; break;
-                    //    case "smallint":value = Product.SQLServer.Reflection.value_Int16; break;
+                    //    case "bit":value = Product.SQLServer.Reflection.value_Boolean;break;
+                    //    case "tinyint":value = Product.SQLServer.Reflection.value_SByte;break;
+                    //    case "smallint":value = Product.SQLServer.Reflection.value_Int16;break;
                     //    case "integer":
-                    //    case "int":value = Product.SQLServer.Reflection.value_Int32; break;
-                    //    case "bigint":value = Product.SQLServer.Reflection.value_Int64; break;
+                    //    case "int":value = Product.SQLServer.Reflection.value_Int32;break;
+                    //    case "bigint":value = Product.SQLServer.Reflection.value_Int64;break;
                     //    //case //"hierarchyid":
-                    //    case "real":value = Product.SQLServer.Reflection.value_Single; break;
-                    //    case "float":value = Product.SQLServer.Reflection.value_Double; break;
+                    //    case "real":value = Product.SQLServer.Reflection.value_Single;break;
+                    //    case "float":value = Product.SQLServer.Reflection.value_Double;break;
                     //    case "money":
-                    //    case "decimal":value = Product.SQLServer.Reflection.value_Decimal; break;
+                    //    case "decimal":value = Product.SQLServer.Reflection.value_Decimal;break;
                     //    //"numeric" :value=SQLServer.Reflection.value_Decimal;break;
                     //    //"smallmoney" :value=SQLServer.Reflection.value_smallmoney;break;
                     //    //"money" :value=SQLServer.Reflection.value_money;break;
@@ -1655,7 +1655,7 @@ public sealed partial class Optimizer{
                     //    //"sysname":
                     //    //    typeof(String);break;
                     //    //"date" :value=SQLServer.Reflection.value_DateTime
-                    //    case "datetime":value = Product.SQLServer.Reflection.value_DateTime; break;
+                    //    case "datetime":value = Product.SQLServer.Reflection.value_DateTime;break;
                     //    //"datetime2" :value=SQLServer.Reflection.value_DateTime;break;
                     //    //"smalldatetime" :value=SQLServer.Reflection.value_DateTime;break;
                     //    //"datetimeoffset" :value=SQLServer.Reflection.value_DateTime;break;
@@ -1665,8 +1665,8 @@ public sealed partial class Optimizer{
                     //    //"geometry" :value=SQLServer.Reflection.value_money;break;
                     //    //"image" :value=SQLServer.Reflection.value_money;break;
                     //    //"sql_variant" :value=SQLServer.Reflection.value_money;break;
-                    //    case "xml":value = Product.SQLServer.Reflection.value_XElement; break;
-                    //    case "uniqueidentifier":value = Product.SQLServer.Reflection.value_Guid; break;
+                    //    case "xml":value = Product.SQLServer.Reflection.value_XElement;break;
+                    //    case "uniqueidentifier":value = Product.SQLServer.Reflection.value_Guid;break;
                     //    default:
                     //    if(DBType.Length >= 4)
                     //        if(DBType[..4] == "char" || DBType[..4] == "text")
@@ -7077,8 +7077,8 @@ public sealed partial class Optimizer{
         private void SelectElement(SelectElement x){
             switch(x){
                 case SelectScalarExpression y:this.SelectScalarExpression(y);break;
-                case SelectStarExpression y:this.SelectStarExpression(y); break;
-                case SelectSetVariable y:this.SelectSetVariable(y); break;
+                case SelectStarExpression y:this.SelectStarExpression(y);break;
+                case SelectSetVariable y:this.SelectSetVariable(y);break;
                 default:throw this.単純NotSupportedException(x);
             }
         }

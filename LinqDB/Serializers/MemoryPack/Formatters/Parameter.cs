@@ -20,7 +20,6 @@ public class Parameter:MemoryPackFormatter<T> {
             writer.WriteString(value.Name);
         }
         
-        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
@@ -34,8 +33,11 @@ public class Parameter:MemoryPackFormatter<T> {
         var index=reader.ReadVarIntInt32();
         var ListParameter=reader.Serializer().ListParameter;
         if(index>=0) return ListParameter[index];
+
+
         
         var type=reader.ReadType();
+        
         var name=reader.ReadString();
         var Parameter=Expressions.Expression.Parameter(type,name);
         ListParameter.Add(Parameter);

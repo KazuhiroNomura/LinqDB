@@ -14,7 +14,7 @@ public class Index:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Property.Write(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);

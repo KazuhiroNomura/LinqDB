@@ -20,7 +20,6 @@ public class Parameter:IJsonFormatter<T> {
             writer.WriteString(value.Name);
         }
         
-        
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         if(writer.WriteIsNull(value))return;
@@ -35,6 +34,8 @@ public class Parameter:IJsonFormatter<T> {
         var ListParameter=Resolver.Serializer().ListParameter;
         if(index>=0) return ListParameter[index];
         reader.ReadIsValueSeparatorWithVerify();
+        
+        
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var name=reader.ReadString();

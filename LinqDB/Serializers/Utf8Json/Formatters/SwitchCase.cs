@@ -10,7 +10,7 @@ public class SwitchCase:IJsonFormatter<T> {
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        writer.SerializeReadOnlyCollection(value!.TestValues,Resolver);
+        writer.WriteCollection(value!.TestValues,Resolver);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteEndArray();

@@ -5,7 +5,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
 using static Extension;
 using T = LambdaExpression;
-using C = Serializer;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();

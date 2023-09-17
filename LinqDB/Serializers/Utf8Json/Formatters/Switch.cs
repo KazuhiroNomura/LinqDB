@@ -1,5 +1,6 @@
-﻿using Expressions=System.Linq.Expressions;
-using Utf8Json;
+﻿using Utf8Json;
+
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer=JsonWriter;
 using Reader=JsonReader;
@@ -7,6 +8,8 @@ using static Extension;
 using T=Expressions.SwitchExpression;
 public class Switch:IJsonFormatter<T> {
     public static readonly Switch Instance=new();
+    
+    
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
@@ -14,7 +17,7 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Method.WriteNullable(ref writer,value.Comparison,Resolver);
         writer.WriteValueSeparator();
-        writer.SerializeReadOnlyCollection(value.Cases,Resolver);
+        writer.WriteCollection(value.Cases,Resolver);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.DefaultBody,Resolver);
     }
@@ -39,8 +42,7 @@ public class Switch:IJsonFormatter<T> {
         var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var defaultBody=Expression.Read(ref reader,Resolver);
-        var value=Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
-        return value;
+        return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
         if(reader.ReadIsNull())return null!;

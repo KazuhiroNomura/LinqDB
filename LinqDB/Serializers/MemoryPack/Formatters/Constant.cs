@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
-using Reader=MemoryPackReader;
-using T=Expressions.ConstantExpression;
+using Reader = MemoryPackReader;
+using T = Expressions.ConstantExpression;
 public class Constant:MemoryPackFormatter<T> {
     public static readonly Constant Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value!.Type);
         
-        Object.Write(ref writer,value.Value);
+        Object.WriteNullable(ref writer,value.Value);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -28,7 +27,7 @@ public class Constant:MemoryPackFormatter<T> {
     internal static T Read(ref Reader reader) {
         var type=reader.ReadType();
         
-        var value0=Object.InternalDeserialize(ref reader);
+        var value0=Object.ReadNullable(ref reader);
         return Expressions.Expression.Constant(value0,type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

@@ -650,9 +650,9 @@ public class Client:IDisposable {
         this.BufferにUserとPasswordHashを設定(Request);
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
-            case XmlType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object); break;
-            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object); break;
-            case XmlType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object); break;
+            case XmlType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
+            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
+            case XmlType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
             default:throw new NotSupportedException(XmlType.ToString());
         }
         //switch(XmlType) {
@@ -674,8 +674,8 @@ public class Client:IDisposable {
         //var Lambda = (LambdaExpression)Expression;
         this.MemoryStream.WriteByte((byte)XmlType);
         switch(XmlType) {
-            case XmlType.MemoryPack:this.MemoryPack.Serialize(this.MemoryStream,Expression); break;
-            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Expression); break;
+            case XmlType.MemoryPack:this.MemoryPack.Serialize(this.MemoryStream,Expression);break;
+            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Expression);break;
             case XmlType.Utf8Json:this.Utf8Json.Serialize(this.MemoryStream,Expression);break;
             default:throw new NotSupportedException(XmlType.ToString());
         }
