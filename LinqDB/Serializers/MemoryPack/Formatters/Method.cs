@@ -18,7 +18,7 @@ public class Method:MemoryPackFormatter<T> {
         var array= writer.Serializer().TypeMethods.Get(ReflectedType);
         writer.WriteVarInt(Array.IndexOf(array,value));
     }
-    internal static void InternalSerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
+    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
         if(value is null)writer.WriteNullObjectHeader();
         else Instance.Serialize(ref writer,ref value);
     }

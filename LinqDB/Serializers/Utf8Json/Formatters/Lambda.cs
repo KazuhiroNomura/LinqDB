@@ -9,11 +9,7 @@ using C = Serializer;
 using static Extension;
 public class Lambda:IJsonFormatter<T> {
     public static readonly Lambda Instance=new();
-    internal static void WriteConversion(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value)) return;
-        Instance.Serialize(ref writer,value,Resolver);
-    }
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value.Parameters;
@@ -30,16 +26,26 @@ public class Lambda:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value)) return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    internal static T? InternalDeserializeConversion(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        if(writer.WriteIsNull(value))return;
+        writer.WriteBeginArray();
+        PrivateWrite(ref writer,value,Resolver);
+        writer.WriteEndArray();
+    }
+    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
         if(reader.ReadIsNull()) return null;
-        return Instance.Deserialize(ref reader,Resolver);
+        reader.ReadIsBeginArrayWithVerify();
+        var value=Read(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
@@ -61,10 +67,7 @@ public class Lambda:IJsonFormatter<T> {
             parameters
         );
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
-        reader.ReadIsBeginArrayWithVerify();
-        var value=Read(ref reader,Resolver);
-        reader.ReadIsEndArrayWithVerify();
-        return value;
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        return ReadNullable(ref reader,Resolver)!;
     }
 }

@@ -10,11 +10,11 @@ public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Expression.Write(ref writer,value!.Body);
-        Expression.SerializeNullable(ref writer,value.Finally);
+        Expression.WriteNullable(ref writer,value.Finally);
         if(value.Finally is not null){
             writer.SerializeReadOnlyCollection(value.Handlers);
         } else{
-            Expression.SerializeNullable(ref writer,value.Fault);
+            Expression.WriteNullable(ref writer,value.Fault);
             if(value.Fault is null){
                 writer.SerializeReadOnlyCollection(value.Handlers);
             }
@@ -29,7 +29,7 @@ public class Try:MemoryPackFormatter<T> {
     }
     internal static T Read(ref Reader reader){
         var body= Expression.Read(ref reader);
-        var @finally= Expression.InternalDeserializeNullable(ref reader);
+        var @finally= Expression.ReadNullable(ref reader);
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>()!;
             if(handlers.Length>0) {
@@ -38,7 +38,7 @@ public class Try:MemoryPackFormatter<T> {
                 return Expressions.Expression.TryFinally(body,@finally);
             }
         } else{
-            var fault= Expression.InternalDeserializeNullable(ref reader);
+            var fault= Expression.ReadNullable(ref reader);
             if(fault is not null){
                 return Expressions.Expression.TryFault(body,fault);
             } else{

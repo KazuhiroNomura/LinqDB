@@ -21,10 +21,9 @@ public class NewArray:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        writer.WriteString(value.NodeType.ToString());
+        writer.WriteString(value!.NodeType.ToString());
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
@@ -44,7 +43,7 @@ public class NewArray:IJsonFormatter<T> {
         return Expressions.Expression.NewArrayInit(type,expressions);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
+        if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeTypeName=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();

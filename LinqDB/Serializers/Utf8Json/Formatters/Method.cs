@@ -9,8 +9,7 @@ using T = MethodInfo;
 using C = Serializer;
 public class Method:IJsonFormatter<T> {
     public static readonly Method Instance=new();
-    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var type=value!.ReflectedType;
         writer.WriteType(type);
@@ -20,15 +19,14 @@ public class Method:IJsonFormatter<T> {
         writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeMethods.Get(type),value));
         writer.WriteEndArray();
     }
-    internal void SerializeNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value)){
-        }else this.Serialize(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         Write(ref writer,value,Resolver);
     }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        WriteNullable(ref writer,value,Resolver);
+    }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
@@ -38,10 +36,11 @@ public class Method:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return Resolver.Serializer().TypeMethods.Get(type)[index];
     }
-    internal T? DeserializeNullable(ref Reader reader,IJsonFormatterResolver Resolver) {
-        return reader.ReadIsNull() ?null: this.Deserialize(ref reader,Resolver);
+    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull()) return null;
+        return Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        return Read(ref reader,Resolver);
+        return ReadNullable(ref reader,Resolver)!;
     }
 }

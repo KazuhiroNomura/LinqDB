@@ -9,7 +9,7 @@ using C = Serializer;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();
-    internal static void InternalSerializeConversion<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void WriteConversion<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         if(value is null)writer.WriteNullObjectHeader();
         else PrivateSerialize(ref writer,value);
     }

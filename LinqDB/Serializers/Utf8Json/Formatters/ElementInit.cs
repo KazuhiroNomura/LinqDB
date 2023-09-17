@@ -7,16 +7,18 @@ using T=Expressions.ElementInit;
 using static Extension;
 public class ElementInit:IJsonFormatter<T> {
     public static readonly ElementInit Instance=new();
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        Method.Instance.Serialize(ref writer,value.AddMethod,Resolver);
+        Method.WriteNullable(ref writer,value!.AddMethod,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var addMethod= Method.Instance.Deserialize(ref reader,Resolver);
+        var addMethod= Method.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         reader.ReadIsEndArrayWithVerify();

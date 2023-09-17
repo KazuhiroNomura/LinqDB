@@ -1,10 +1,14 @@
-﻿using System.Collections.ObjectModel;
+﻿#define 直接Type
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 using System.Buffers;
+using System.Diagnostics;
 using MemoryPack;
 using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
+
 namespace LinqDB.Serializers.MemoryPack;
 
 using Reader = MemoryPackReader;
@@ -12,10 +16,38 @@ public static class Extension{
     public static void WriteValue<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)where TBufferWriter :IBufferWriter<byte> =>writer.GetFormatter<T>()!.Serialize(ref writer,ref value);
     public static void ReadValue<T>(this ref Reader reader,scoped ref T? value)=>reader.GetFormatter<T>()!.Deserialize(ref reader,ref value);
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
+#if 直接Type
         writer.WriteString(value.AssemblyQualifiedName);
+#else
+        var Serializer=writer.Serializer();
+        if(Serializer.Dictionary_Type_int.TryGetValue(value,out var index)){
+            writer.WriteVarInt(index);
+        } else{
+            var Types=Serializer.Types;
+            index=Types.Count;
+            Serializer.Dictionary_Type_int.Add(value,index);
+            Types.Add(value);
+            writer.WriteVarInt(index);
+            writer.WriteString(value.AssemblyQualifiedName);
+            Debug.Assert(Types.Count==Serializer.Dictionary_Type_int.Count);
+        }
+#endif
     }
     public static System.Type ReadType(this ref Reader reader){
+#if 直接Type
         return System.Type.GetType(reader.ReadString())!;
+#else
+        var Serializer=reader.Serializer();
+        var index=reader.ReadVarIntInt32();
+        var Types=Serializer.Types;
+        if(index<Types.Count) return Types[index];
+        Debug.Assert(index==Types.Count);
+        Debug.Assert(index==Serializer.Dictionary_Type_int.Count);
+        var type=System.Type.GetType(reader.ReadString());
+        Serializer.Dictionary_Type_int.Add(type,index);
+        Types.Add(type);
+        return type;
+#endif
     }
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;

@@ -14,8 +14,8 @@ public class Expression:IJsonFormatter<T> {
         writer.WriteBeginArray();
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :Binary.Write(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
-            case Expressions.ExpressionType.Coalesce             :Binary.WriteLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -31,7 +31,7 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.Power                :
             case Expressions.ExpressionType.RightShift           :
             case Expressions.ExpressionType.Subtract             :
-            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
             case Expressions.ExpressionType.AddAssign            :
             case Expressions.ExpressionType.AddAssignChecked     :
             case Expressions.ExpressionType.DivideAssign         :
@@ -45,13 +45,13 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.PowerAssign          :
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
-            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
             case Expressions.ExpressionType.Equal                :
             case Expressions.ExpressionType.GreaterThan          :
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :Binary.WriteBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
+            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value,Resolver); break;
             case Expressions.ExpressionType.ArrayLength          : 
             case Expressions.ExpressionType.Quote                :Unary.Write(ref writer,(Expressions.UnaryExpression)value,Resolver);break;
             case Expressions.ExpressionType.Throw                : 
@@ -105,11 +105,9 @@ public class Expression:IJsonFormatter<T> {
     }
     internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
-        Instance.Serialize(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         Write(ref writer,value,Resolver);
     }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
@@ -118,15 +116,15 @@ public class Expression:IJsonFormatter<T> {
         T value;
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
-                var (array, index)=Binary.InternalDeserialize(ref reader,Resolver);
+                var (array, index)=Binary.ReadLeftRight(ref reader,Resolver);
                 value=T.ArrayIndex(array,index);break;
             }
             case Expressions.ExpressionType.Assign: {
-                var (left, right)=Binary.InternalDeserialize(ref reader,Resolver);
+                var (left, right)=Binary.ReadLeftRight(ref reader,Resolver);
                 value=T.Assign(left,right);break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right,conversion)=Binary.InternalDeserializeLambda(ref reader,Resolver);
+                var (left, right,conversion)=Binary.ReadLeftRightLambda(ref reader,Resolver);
                 value=T.Coalesce(left,right,conversion);break;
             }
             case Expressions.ExpressionType.Add: {
@@ -194,83 +192,83 @@ public class Expression:IJsonFormatter<T> {
                 value=T.SubtractChecked(left,right,method);break;
             }
             case Expressions.ExpressionType.AddAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.AddAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.AddAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.AddAssignChecked(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.AndAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.AndAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.DivideAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.DivideAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.ExclusiveOrAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.ExclusiveOrAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.LeftShiftAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.LeftShiftAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.ModuloAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.ModuloAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.MultiplyAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.MultiplyAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.MultiplyAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.MultiplyAssignChecked(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.OrAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.OrAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.PowerAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.PowerAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.RightShiftAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.RightShiftAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.SubtractAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.SubtractAssign(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.SubtractAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader,Resolver);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader,Resolver);
                 value=T.SubtractAssignChecked(left,right,method,conversion);break;
             }
             case Expressions.ExpressionType.Equal: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.Equal(left,right,IsLiftedToNull,method);break;
             }
             case Expressions.ExpressionType.GreaterThan: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.GreaterThan(left,right,IsLiftedToNull,method);break;
             }
             case Expressions.ExpressionType.GreaterThanOrEqual: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.GreaterThanOrEqual(left,right,IsLiftedToNull,method);break;
             }
             case Expressions.ExpressionType.LessThan: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.LessThan(left,right,IsLiftedToNull,method);break;
             }
             case Expressions.ExpressionType.LessThanOrEqual: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.LessThanOrEqual(left,right,IsLiftedToNull,method);break;
             }
             case Expressions.ExpressionType.NotEqual: {
-                var (left, right, IsLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader,Resolver);
+                var (left, right, IsLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=T.NotEqual(left,right,IsLiftedToNull,method);break;
             }
 
@@ -355,8 +353,8 @@ public class Expression:IJsonFormatter<T> {
                 value=T.Unbox(operand,Type); break;
             }
 
-            case Expressions.ExpressionType.TypeEqual       :value=TypeBinary  .InternalDeserializeTypeEqual     (ref reader,Resolver);break;
-            case Expressions.ExpressionType.TypeIs          :value=TypeBinary  .InternalDeserializeTypeIs        (ref reader,Resolver);break;
+            case Expressions.ExpressionType.TypeEqual       :value=TypeBinary  .ReadTypeEqual     (ref reader,Resolver);break;
+            case Expressions.ExpressionType.TypeIs          :value=TypeBinary  .ReadTypeIs        (ref reader,Resolver);break;
             case Expressions.ExpressionType.Conditional     :value=Conditional .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Constant        :value=Constant    .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Parameter       :value=Parameter   .Read              (ref reader,Resolver);break;
@@ -386,11 +384,6 @@ public class Expression:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null;
-        return Read(ref reader,Resolver);
-    }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        return Read(ref reader,Resolver);
-    }
+    public static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

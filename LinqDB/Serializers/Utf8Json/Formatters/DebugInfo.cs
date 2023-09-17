@@ -13,7 +13,7 @@ public class DebugInfo:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         SymbolDocumentInfo.Write(ref writer,value.Document,Resolver);
         writer.WriteValueSeparator();
-        writer.WriteInt32(value.StartColumn);
+        writer.WriteInt32(value.StartLine);
         writer.WriteValueSeparator();
         writer.WriteInt32(value.StartColumn);
         writer.WriteValueSeparator();
@@ -26,7 +26,7 @@ public class DebugInfo:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();

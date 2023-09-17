@@ -11,11 +11,28 @@ using Serializers.MessagePack.Formatters;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
 using LinqDB.Remote.Servers;
+using MemoryPack;
+using MessagePack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace Optimizers;
 
 
+//Default
+[SuppressMessage("ReSharper","MemberCanBePrivate.Global")]
+[SuppressMessage("ReSharper","MemberCanBePrivate.Local")]
+[SuppressMessage("ReSharper","FieldCanBeMadeReadOnly.Local")]
+[SuppressMessage("ReSharper","NotAccessedField.Local")]
+[Serializable,MessagePackObject(true),MemoryPackable]
+public partial struct TestDynamic<T>{
+    public T メンバー1;
+    public T メンバー2;
+
+    public TestDynamic(T メンバー1,T メンバー2){
+        this.メンバー1=メンバー1;
+        this.メンバー2=メンバー2;
+    }
+}
 public class ExpressionEqualityComparer:共通{
     [Serializable]
     public struct StructCollection:ICollection<int>{
@@ -343,27 +360,26 @@ public class ExpressionEqualityComparer:共通{
         );
     }
 
-    //Default
-    [SuppressMessage("ReSharper","MemberCanBePrivate.Global")]
-    [SuppressMessage("ReSharper","MemberCanBePrivate.Local")]
-    [SuppressMessage("ReSharper","FieldCanBeMadeReadOnly.Local")]
-    [SuppressMessage("ReSharper","NotAccessedField.Local")]
-    public struct TestDynamic<T>{
-        public readonly T メンバー1;
-        public readonly T メンバー2;
-
-        public TestDynamic(T メンバー){
-            this.メンバー1=メンバー;
-            this.メンバー2=メンバー;
-        }
-    }
 
     public static dynamic Dynamicメンバーアクセス(dynamic a){
         return a.メンバー;
     }
-    private void AssertEqual(Expression a,Expression b)=>this.MemoryMessageJson(a,b=>Assert.Equal(a,b,this.Comparer));
-
-    private void AssertNotEqual(Expression a,Expression b)=>this.MemoryMessageJson(a,b=>Assert.NotEqual(a,b,this.Comparer));
+    private void AssertEqual(Expression a,Expression b){
+        this.MemoryMessageJson(a,c=>{
+            Assert.Equal(a,b,this.Comparer);
+            Assert.Equal(a,c,this.Comparer);
+            Assert.Equal(b,c,this.Comparer);
+        });
+        this.MemoryMessageJson(b,c=>{
+            Assert.Equal(a,b,this.Comparer);
+            Assert.Equal(a,c,this.Comparer);
+            Assert.Equal(b,c,this.Comparer);
+        });
+    }
+    private void AssertNotEqual(Expression? a,Expression? b){
+        this.MemoryMessageJson(a,c=>Assert.NotEqual(c,b,this.Comparer));
+        this.MemoryMessageJson(b,c=>Assert.NotEqual(c,a,this.Comparer));
+    }
 
     [Fact]
     public void Dynamic(){
@@ -496,7 +512,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 ),
                 Expression.Dynamic(
                     Binder.Binder.GetMember(
@@ -506,7 +522,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 )
             );
         }
@@ -521,7 +537,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 ),
                 Expression.Dynamic(
                     Binder.Binder.GetMember(
@@ -531,7 +547,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 )
             );
             this.AssertEqual(
@@ -543,7 +559,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 ),
                 Expression.Dynamic(
                     Binder.Binder.GetMember(
@@ -553,7 +569,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1))
+                    Expression.Constant(new TestDynamic<int>(1,2))
                 )
             );
         }
@@ -570,7 +586,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray2
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1)),
+                    Expression.Constant(new TestDynamic<int>(1,2)),
                     Expression.Constant(2)
                 ),
                 Expression.Dynamic(
@@ -581,7 +597,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray2
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1)),
+                    Expression.Constant(new TestDynamic<int>(1,2)),
                     Expression.Constant(2)
                 )
             );
@@ -594,7 +610,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray2
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1)),
+                    Expression.Constant(new TestDynamic<int>(1,2)),
                     Expression.Constant(2)
                 ),
                 Expression.Dynamic(
@@ -605,7 +621,7 @@ public class ExpressionEqualityComparer:共通{
                         CSharpArgumentInfoArray2
                     ),
                     typeof(object),
-                    Expression.Constant(new TestDynamic<int>(1)),
+                    Expression.Constant(new TestDynamic<int>(1,2)),
                     Expression.Constant(2)
                 )
             );
@@ -912,11 +928,11 @@ public class ExpressionEqualityComparer:共通{
         this.AssertNotEqual(
             Expression.Lambda(
                 p,
-                p
+                p,q
             ),
             Expression.Lambda(
                 q,
-                p
+                p,q
             )
         );
     }
@@ -944,22 +960,23 @@ public class ExpressionEqualityComparer:共通{
         var a1=Expression.Parameter(typeof(int),"a1");
         this.AssertEqual(
             Expression.Block(
+                new[]{v0},
                 Expression.Lambda<Func<int,int>>(
                     a0,
                     a0
-                ),
-                v0
+                )
             ),
             Expression.Block(
+                new[]{v0},
                 Expression.Lambda<Func<int,int>>(
                     a1,
                     a1
-                ),
-                v0
+                )
             )
         );
         this.AssertNotEqual(
             Expression.Block(
+                new[]{v0,v1},
                 Expression.Lambda<Func<int,int>>(
                     a0,
                     a0
@@ -967,6 +984,7 @@ public class ExpressionEqualityComparer:共通{
                 v0
             ),
             Expression.Block(
+                new[]{v0,v1},
                 Expression.Lambda<Func<int,int>>(
                     a1,
                     a1
@@ -977,6 +995,7 @@ public class ExpressionEqualityComparer:共通{
         this.AssertNotEqual(
             Expression.Block(
                 typeof(void),
+                new[]{v0},
                 Expression.Lambda<Func<int,int>>(
                     a0,
                     a0
@@ -984,6 +1003,7 @@ public class ExpressionEqualityComparer:共通{
                 v0
             ),
             Expression.Block(
+                new[]{v0},
                 Expression.Lambda<Func<int,int>>(
                     a1,
                     a1
@@ -1349,29 +1369,14 @@ public class ExpressionEqualityComparer:共通{
         var p=Expression.Parameter(typeof(int));
         var q=Expression.Parameter(typeof(int));
         this.AssertNotEqual(
-            Expression.Lambda<Func<int,int,int>>(
-                p,p,q),
-            Expression.Lambda<Func<int,int,int>>(
-                q,p,q)
+            Expression.Lambda<Func<int,int,int>>(p,p,q),
+            Expression.Lambda<Func<int,int,int>>(q,p,q)
         );
-        //if(a_Index>=0) return true;
         this.AssertEqual(
-            Expression.Lambda<Func<int,int,int>>(
-                p,p,q),
-            Expression.Lambda<Func<int,int,int>>(
-                p,p,q)
+            Expression.Lambda<Func<int,int,int>>(p,p,q),
+            Expression.Lambda<Func<int,int,int>>(p,p,q)
         );
-        //this.a_Parameters.Add(a);
-        //this.b_Parameters.Add(b);
-        //return a==b;
-        this.AssertEqual(
-            p,
-            p
-        );
-        this.AssertNotEqual(
-            p,
-            q
-        );
+        this.AssertEqual(p,p);
     }
 
     //Switch

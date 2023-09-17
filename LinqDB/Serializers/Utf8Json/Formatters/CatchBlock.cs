@@ -10,9 +10,10 @@ using T = Expressions.CatchBlock;
 public class CatchBlock:IJsonFormatter<T> {
     public static readonly CatchBlock Instance = new();
 
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        if(value.Variable is null) {
+        if(value!.Variable is null) {
             if(value.Filter is null) {
 
                 writer.WriteInt32(0);
@@ -59,6 +60,7 @@ public class CatchBlock:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+        if(reader.ReadIsNull())return null!;
 
         T value;
         reader.ReadIsBeginArrayWithVerify();
@@ -108,7 +110,7 @@ public class CatchBlock:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    //public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    //public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
     //    writer.WriteBeginArray();
     //    writer.WriteType(value.Test);
     //    writer.WriteValueSeparator();

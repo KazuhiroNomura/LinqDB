@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -6,52 +7,64 @@ using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 internal static class Extension{
     private static BindingFlags Flags=BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;
-    public static MemberInfo[] Get(this Dictionary<Type,MemberInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetMembers(Flags).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static MemberInfo[] Get(this ConcurrentDictionary<Type,MemberInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                var value=type.GetMembers(Flags).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
+                return value;
+            });
         }
         return array;
     }
-    public static ConstructorInfo[] Get(this Dictionary<Type,ConstructorInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetConstructors(BindingFlags.Instance|BindingFlags.Public).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static ConstructorInfo[] Get(this ConcurrentDictionary<Type,ConstructorInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                var value=type.GetConstructors(BindingFlags.Instance|BindingFlags.Public).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+                return value;
+            });
         }
         return array;
     }
-    public static EventInfo[] Get(this Dictionary<Type,EventInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetEvents(Flags).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static EventInfo[] Get(this ConcurrentDictionary<Type,EventInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                var value=type.GetEvents(Flags).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
+                return value;
+            });
         }
         return array;
     }
-    public static FieldInfo[] Get(this Dictionary<Type,FieldInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetFields(Flags).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static FieldInfo[] Get(this ConcurrentDictionary<Type,FieldInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                var value=type.GetFields(Flags).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
+                return value;
+            });
         }
         return array;
     }
-    public static PropertyInfo[] Get(this Dictionary<Type,PropertyInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            array=ReflectedType.GetProperties(Flags).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static PropertyInfo[] Get(this ConcurrentDictionary<Type,PropertyInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                var value=type.GetProperties(Flags).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.Name,b.Name));
+                return value;
+            });
         }
         return array;
     }
-    public static MethodInfo[] Get(this Dictionary<Type,MethodInfo[]>d,Type ReflectedType){
-        if(!d.TryGetValue(ReflectedType,out var array)){
-            //NonPublicは<>cのinternalメソッドが匿名デリゲートの本体になることがあるため
-            array=ReflectedType.GetMethods(Flags|BindingFlags.NonPublic).ToArray();
-            d.Add(ReflectedType,array);
-            Array.Sort(array,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+    public static MethodInfo[] Get(this ConcurrentDictionary<Type,MethodInfo[]>d,Type type){
+        if(!d.TryGetValue(type,out var array)){
+            array=d.GetOrAdd(type,key=>{
+                //NonPublicは<>cのinternalメソッドが匿名デリゲートの本体になることがあるため
+                var value=type.GetMethods(Flags|BindingFlags.NonPublic).ToArray();
+                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+                return value;
+            });
         }
         return array;
     }

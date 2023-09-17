@@ -671,8 +671,7 @@ public sealed partial class Optimizer:IDisposable{
             Debug.Assert(a_Binder.GetType()==b_Binder.GetType(),"SequenceEqualの抜け穴パターンがあるか？");
             switch(a_Binder,b_Binder){
                 case(DynamicMetaObjectBinder a0,DynamicMetaObjectBinder b0):{
-                    Debug.Assert(a0.ReturnType==b0.ReturnType,"DynamicMetaObjectBinder ReturnTypeが違うパターンもあるんじゃないか");
-                    Debug.Assert(a0.ReturnType==b0.ReturnType,"DynamicMetaObjectBinder ReturnTypeが違うパターンもあるんじゃないか");
+                    if(a0.ReturnType!=b0.ReturnType)return false;
                     switch(a0, b0) {
                         case (BinaryOperationBinder a1, BinaryOperationBinder b1): {
                             if(a1.Operation!=b1.Operation) return false;
@@ -931,13 +930,13 @@ public sealed partial class Optimizer:IDisposable{
             var a_Index0 = this.a_Parameters.IndexOf(a);
             var b_Index0 = this.b_Parameters.IndexOf(b);
             if(a_Index0!=b_Index0)return false;
-            if(a_Index0>=0) return true;
+            //if(a_Index0>=0) return true;
             //探索開始時点の
             var スコープParameters = this.スコープParameters;
             var a_Index1 = スコープParameters.IndexOf(a);
             var b_Index1 = スコープParameters.IndexOf(b);
             if(a_Index1!=b_Index1) return false;
-            if(a_Index1>=0) return true;
+            //if(a_Index1>=0) return true;
             //Let(a=>.v),Let(b=>.w)は一致しない。
             //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
 
@@ -951,7 +950,7 @@ public sealed partial class Optimizer:IDisposable{
             if(b_ラムダ跨ぎParameters!.Contains(b))return false;
             a_ラムダ跨ぎParameters.Add(a);
             b_ラムダ跨ぎParameters.Add(b);
-            return a==b;
+            return true;
         }
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {

@@ -11,7 +11,7 @@ public class MethodCall:IJsonFormatter<T> {
     public static readonly MethodCall Instance=new();
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         var method=value.Method;
-        Method.Instance.Serialize(ref writer,method,Resolver);
+        Method.Write(ref writer,method,Resolver);
         writer.WriteValueSeparator();
         if(!method.IsStatic){
             Expression.Write(ref writer,value.Object!,Resolver);
@@ -25,14 +25,13 @@ public class MethodCall:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        //if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        var method=Method.Instance.Deserialize(ref reader,Resolver);
+        var method=Method.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(method.IsStatic){
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
@@ -52,7 +51,7 @@ public class MethodCall:IJsonFormatter<T> {
         }
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        //i//f(reader.ReadIsNull()) return null!;
+        if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

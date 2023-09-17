@@ -10,9 +10,9 @@ public class Switch:MemoryPackFormatter<T> {
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value!.Type);
         Expression.Write(ref writer,value.SwitchValue);
-        Method.InternalSerializeNullable(ref writer,value.Comparison);
+        Method.WriteNullable(ref writer,value.Comparison);
         writer.SerializeReadOnlyCollection(value.Cases);
-        Expression.SerializeNullable(ref writer,value.DefaultBody);
+        Expression.WriteNullable(ref writer,value.DefaultBody);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Switch);
@@ -26,7 +26,7 @@ public class Switch:MemoryPackFormatter<T> {
         var switchValue= Expression.Read(ref reader);
         var comparison = Method.InternalDeserializeNullable(ref reader);
         var cases      =reader.ReadArray<Expressions.SwitchCase>();
-        var defaultBody= Expression.InternalDeserializeNullable(ref reader);
+        var defaultBody= Expression.ReadNullable(ref reader);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases!);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

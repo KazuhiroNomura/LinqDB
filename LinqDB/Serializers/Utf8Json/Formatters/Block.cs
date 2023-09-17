@@ -29,7 +29,7 @@ public class Block:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();

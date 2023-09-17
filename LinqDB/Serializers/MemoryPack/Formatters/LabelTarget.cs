@@ -10,14 +10,7 @@ using static Extension;
 
 public class LabelTarget:MemoryPackFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    internal static void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte> =>
-        Instance.Serialize(ref writer,ref value);
-    internal static T DeserializeLabelTarget(ref Reader reader){
-        T? value=default;
-        Instance.Deserialize(ref reader,ref value);
-        return value!;
-    }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         var s=writer.Serializer();
         if(s.Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
             writer.WriteVarInt(index);
@@ -31,21 +24,27 @@ public class LabelTarget:MemoryPackFormatter<T> {
             writer.WriteString(value.Name);
         }
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        Write(ref writer,value);
+    }
+    internal static T Read(ref Reader reader){
         var s=reader.Serializer();
         var index=reader.ReadVarIntInt32();
         var LabelTargets= s.LabelTargets;
-        T target;
+        T value;
         if(index<LabelTargets.Count){
-            target=LabelTargets[index];
+            value=LabelTargets[index];
         } else{
             var type= reader.ReadType();
             var name=reader.ReadString();
-            target=Expressions.Expression.Label(type,name);
-            LabelTargets.Add(target);
+            value=Expressions.Expression.Label(type,name);
+            LabelTargets.Add(value);
             index=LabelTargets.Count;
-            s.Dictionary_LabelTarget_int.Add(target,index);
+            s.Dictionary_LabelTarget_int.Add(value,index);
         }
-        value=target;
+        return value;
+    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        value=Read(ref reader);
     }
 }

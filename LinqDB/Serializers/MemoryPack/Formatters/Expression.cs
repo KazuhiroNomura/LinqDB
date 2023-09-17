@@ -9,11 +9,11 @@ using T=Expressions.Expression;
 
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
-    public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
-            case Expressions.ExpressionType.Assign               :Binary.Write(ref writer,(Expressions.BinaryExpression)value); break;
-            case Expressions.ExpressionType.Coalesce             :Binary.InternalSerializeLambda(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Add                  :
             case Expressions.ExpressionType.AddChecked           :
             case Expressions.ExpressionType.And                  :
@@ -29,7 +29,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.Power                :
             case Expressions.ExpressionType.RightShift           :
             case Expressions.ExpressionType.Subtract             :
-            case Expressions.ExpressionType.SubtractChecked      :Binary.InternalSerializeMethod(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.SubtractChecked      :Binary.WriteLeftRightMethod(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.AddAssign            :
             case Expressions.ExpressionType.AddAssignChecked     :
             case Expressions.ExpressionType.DivideAssign         :
@@ -43,20 +43,20 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.PowerAssign          :
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
-            case Expressions.ExpressionType.SubtractAssignChecked:Binary.InternalSerializeMethodLambda(ref writer,(Expressions.BinaryExpression)value); break;
+            case Expressions.ExpressionType.SubtractAssignChecked:Binary.WriteLeftRightMethodLambda(ref writer,(Expressions.BinaryExpression)value); break;
             case Expressions.ExpressionType.Equal                :
             case Expressions.ExpressionType.GreaterThan          :
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :Binary.InternalSerializeBooleanMethod(ref writer,(Expressions.BinaryExpression)value);break;
+            case Expressions.ExpressionType.NotEqual             :Binary.WriteBooleanMethod(ref writer,(Expressions.BinaryExpression)value);break;
             case Expressions.ExpressionType.ArrayLength          :
-            case Expressions.ExpressionType.Quote                :Unary.Write(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Quote                :Unary.WriteOperand(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.Throw                :
             case Expressions.ExpressionType.TypeAs               :
-            case Expressions.ExpressionType.Unbox                :Unary.InternalSerializeType(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.Unbox                :Unary.WriteOperandType(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.Convert              :
-            case Expressions.ExpressionType.ConvertChecked       :Unary.InternalSerializeTypeMethod(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.ConvertChecked       :Unary.WriteOperandTypeMethod(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.Decrement            :
             case Expressions.ExpressionType.Increment            :
             case Expressions.ExpressionType.IsFalse              :
@@ -69,7 +69,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.PostIncrementAssign  :
             case Expressions.ExpressionType.PreDecrementAssign   :
             case Expressions.ExpressionType.PreIncrementAssign   :
-            case Expressions.ExpressionType.UnaryPlus            :Unary.InternalSerializeMethod(ref writer,(Expressions.UnaryExpression)value);break;
+            case Expressions.ExpressionType.UnaryPlus            :Unary.WriteOperandMethod(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.TypeEqual            :
             case Expressions.ExpressionType.TypeIs               :TypeBinary.Write(ref writer,(Expressions.TypeBinaryExpression)value); break;
             case Expressions.ExpressionType.Conditional          :Conditional.Write(ref writer,(Expressions.ConditionalExpression)value);break;
@@ -99,7 +99,7 @@ public class Expression:MemoryPackFormatter<T> {
             default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
     }
-    public static void SerializeNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    public static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         if(value is null){
             writer.WriteBoolean(false);
             return;
@@ -108,246 +108,246 @@ public class Expression:MemoryPackFormatter<T> {
         Write(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Write(ref writer,value);
+        WriteNullable(ref writer,value);
     }
     internal static T Read(ref Reader reader) {
-        T? value = default;
+        T value = default!;
         var NodeType=reader.ReadNodeType();
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
-                var (array, index)=Binary.InternalDeserialize(ref reader);
+                var (array, index)=Binary.ReadLeftRight(ref reader);
                 value=T.ArrayIndex(array,index); break;
             }
             case Expressions.ExpressionType.Assign: {
-                var (left, right)=Binary.InternalDeserialize(ref reader);
+                var (left, right)=Binary.ReadLeftRight(ref reader);
                 value=T.Assign(left,right); break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right,lambda)=Binary.InternalDeserializeLambda(ref reader);
+                var (left, right,lambda)=Binary.ReadLeftRightLambda(ref reader);
                 value=T.Coalesce(left,right,lambda); break;
             }
             case Expressions.ExpressionType.Add: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Add(left,right,method); break;
             }
             case Expressions.ExpressionType.AddChecked: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.AddChecked(left,right,method); break;
             }
             case Expressions.ExpressionType.And: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.And(left,right,method); break;
             }
             case Expressions.ExpressionType.AndAlso: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.AndAlso(left,right,method); break;
             }
             case Expressions.ExpressionType.Divide: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Divide(left,right,method); break;
             }
             case Expressions.ExpressionType.ExclusiveOr: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.ExclusiveOr(left,right,method); break;
             }
             case Expressions.ExpressionType.LeftShift: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.LeftShift(left,right,method); break;
             }
             case Expressions.ExpressionType.Modulo: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Modulo(left,right,method); break;
             }
             case Expressions.ExpressionType.Multiply: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Multiply(left,right,method); break;
             }
             case Expressions.ExpressionType.MultiplyChecked: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.MultiplyChecked(left,right,method); break;
             }
             case Expressions.ExpressionType.Or: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Or(left,right,method); break;
             }
             case Expressions.ExpressionType.OrElse: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.OrElse(left,right,method); break;
             }
             case Expressions.ExpressionType.Power: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Power(left,right,method); break;
             }
             case Expressions.ExpressionType.RightShift: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.RightShift(left,right,method); break;
             }
             case Expressions.ExpressionType.Subtract: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.Subtract(left,right,method); break;
             }
             case Expressions.ExpressionType.SubtractChecked: {
-                var (left, right, method)=Binary.InternalDeserializeMethod(ref reader);
+                var (left, right, method)=Binary.ReadLeftRightMethod(ref reader);
                 value=T.SubtractChecked(left,right,method); break;
             }
             case Expressions.ExpressionType.AddAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.AddAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.AddAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.AddAssignChecked(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.AndAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.AndAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.DivideAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.DivideAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.ExclusiveOrAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.ExclusiveOrAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.LeftShiftAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.LeftShiftAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.ModuloAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.ModuloAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.MultiplyAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.MultiplyAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.MultiplyAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.MultiplyAssignChecked(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.OrAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.OrAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.PowerAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.PowerAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.RightShiftAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.RightShiftAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.SubtractAssign: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.SubtractAssign(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.SubtractAssignChecked: {
-                var (left, right, method,conversion)=Binary.InternalDeserializeMethodLambda(ref reader);
+                var (left, right, method,conversion)=Binary.ReadLeftRightMethodLambda(ref reader);
                 value=T.SubtractAssignChecked(left,right,method,conversion); break;
             }
             case Expressions.ExpressionType.Equal: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.Equal(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.GreaterThan: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.GreaterThan(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.GreaterThanOrEqual: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.GreaterThanOrEqual(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.LessThan: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.LessThan(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.LessThanOrEqual: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.LessThanOrEqual(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.NotEqual: {
-                var (left, right, isLiftedToNull, method)=Binary.InternalDeserializeBooleanMethod(ref reader);
+                var (left, right, isLiftedToNull, method)=Binary.ReadLeftRightBooleanMethod(ref reader);
                 value=T.NotEqual(left,right,isLiftedToNull,method); break;
             }
             case Expressions.ExpressionType.ArrayLength: {
-                var operand = Unary.InternalDeserialize(ref reader);
+                var operand = Unary.ReadOperand(ref reader);
                 value=T.ArrayLength(operand); break;
             }
             case Expressions.ExpressionType.Quote: {
-                var operand = Unary.InternalDeserialize(ref reader);
+                var operand = Unary.ReadOperand(ref reader);
                 value=T.Quote(operand); break;
             }
             case Expressions.ExpressionType.Convert: {
-                var (operand, Type, method)=Unary.InternalDeserializeTypeMethod(ref reader);
+                var (operand, Type, method)=Unary.ReadOperandTypeMethod(ref reader);
                 value=T.Convert(operand,Type,method); break;
             }
             case Expressions.ExpressionType.ConvertChecked: {
-                var (operand, Type, method)=Unary.InternalDeserializeTypeMethod(ref reader);
+                var (operand, Type, method)=Unary.ReadOperandTypeMethod(ref reader);
                 value=T.ConvertChecked(operand,Type,method); break;
             }
             case Expressions.ExpressionType.Decrement: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.Decrement(operand,method); break;
             }
             case Expressions.ExpressionType.Increment: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.Increment(operand,method); break;
             }
             case Expressions.ExpressionType.IsFalse: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.IsFalse(operand,method); break;
             }
             case Expressions.ExpressionType.IsTrue: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.IsTrue(operand,method); break;
             }
             case Expressions.ExpressionType.Negate: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.Negate(operand,method); break;
             }
             case Expressions.ExpressionType.NegateChecked: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.NegateChecked(operand,method); break;
             }
             case Expressions.ExpressionType.Not: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.Not(operand,method); break;
             }
             case Expressions.ExpressionType.OnesComplement: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.OnesComplement(operand,method); break;
             }
             case Expressions.ExpressionType.PostDecrementAssign: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.PostDecrementAssign(operand,method); break;
             }
             case Expressions.ExpressionType.PostIncrementAssign: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.PostIncrementAssign(operand,method); break;
             }
             case Expressions.ExpressionType.PreDecrementAssign: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.PreDecrementAssign(operand,method); break;
             }
             case Expressions.ExpressionType.PreIncrementAssign: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.PreIncrementAssign(operand,method); break;
             }
             case Expressions.ExpressionType.UnaryPlus: {
-                var (operand, method)=Unary.InternalDeserializeMethod(ref reader);
+                var (operand, method)=Unary.ReadOperandMethod(ref reader);
                 value=T.UnaryPlus(operand,method); break;
             }
             case Expressions.ExpressionType.Throw: {
-                var (operand, Type)=Unary.InternalDeserializeType(ref reader);
+                var (operand, Type)=Unary.ReadOperandType(ref reader);
                 value=T.Throw(operand,Type); break;
             }
             case Expressions.ExpressionType.TypeAs: {
-                var (operand, Type)=Unary.InternalDeserializeType(ref reader);
+                var (operand, Type)=Unary.ReadOperandType(ref reader);
                 value=T.TypeAs(operand,Type); break;
             }
             case Expressions.ExpressionType.Unbox: {
-                var (operand, Type)=Unary.InternalDeserializeType(ref reader);
+                var (operand, Type)=Unary.ReadOperandType(ref reader);
                 value=T.Unbox(operand,Type); break;
             }
             case Expressions.ExpressionType.TypeEqual          :value=TypeBinary.ReadTypeEqual(ref reader);break;
@@ -380,12 +380,11 @@ public class Expression:MemoryPackFormatter<T> {
         }
         return value!;
     }
-    internal static T? InternalDeserializeNullable(ref Reader reader) {
+    internal static T? ReadNullable(ref Reader reader) {
         if(!reader.ReadBoolean()) return null;
         return Read(ref reader);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=Read(ref reader);
-        //value=this.Deserialize(ref reader,options);
+        value=ReadNullable(ref reader);
     }
 }

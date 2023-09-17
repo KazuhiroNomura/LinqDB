@@ -19,7 +19,7 @@ public class SymbolDocumentInfo:IJsonFormatter<T> {
         Formatter.Serialize(ref writer,value.DocumentType,Resolver);
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         Write(ref writer,value,Resolver);
         writer.WriteEndArray();

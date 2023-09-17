@@ -6,7 +6,7 @@ using Reader=JsonReader;
 using T=Expressions.LoopExpression;
 public class Loop:IJsonFormatter<T>{
     public static readonly Loop Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value.BreakLabel)){
             writer.WriteValueSeparator();
             Expression.Write(ref writer,value.Body,Resolver);
@@ -26,11 +26,12 @@ public class Loop:IJsonFormatter<T>{
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -56,6 +57,7 @@ public class Loop:IJsonFormatter<T>{
         return value;
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

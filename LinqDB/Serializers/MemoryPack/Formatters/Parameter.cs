@@ -1,29 +1,50 @@
-﻿using System.Buffers;
-using System.Linq.Expressions;
+﻿
 using MemoryPack;
+using System.Buffers;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T=ParameterExpression;
-using C=Serializer;
 
+using Reader=MemoryPackReader;
+using T=Expressions.ParameterExpression;
 public class Parameter:MemoryPackFormatter<T> {
     public static readonly Parameter Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        writer.WriteVarInt(writer.Serializer().ListParameter.LastIndexOf(value));
-    }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-        writer.WriteNodeType(ExpressionType.Parameter);
-        PrivateSerialize(ref writer,value);
+        writer.WriteNodeType(Expressions.ExpressionType.Parameter);
+        
+        var index=writer.Serializer().ListParameter.LastIndexOf(value);
+
+        writer.WriteVarInt(index);
+        if(index<0){
+            writer.WriteType(value.Type);
+            
+            writer.WriteString(value.Name);
+        }
+        
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        writer.WriteVarInt(writer.Serializer().ListParameter.LastIndexOf(value));
+
+        writer.WriteType(value!.Type);
+
+        writer.WriteString(value!.Name);
+
     }
     internal static T Read(ref Reader reader){
         var index=reader.ReadVarIntInt32();
-        var Parameter= reader.Serializer().ListParameter[index];
+        var ListParameter=reader.Serializer().ListParameter;
+        if(index>=0) return ListParameter[index];
+        
+        var type=reader.ReadType();
+        var name=reader.ReadString();
+        var Parameter=Expressions.Expression.Parameter(type,name);
+        ListParameter.Add(Parameter);
         return Parameter;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
-        Instance.Deserialize(ref reader,ref value);
+
+        var type=reader.ReadType();
+
+        var name=reader.ReadString();
+        value=Expressions.Expression.Parameter(type,name);
     }
 }

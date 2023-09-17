@@ -20,7 +20,7 @@ public class Constructor:IJsonFormatter<T> {
         writer.WriteInt32(Array.IndexOf(array,value));
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

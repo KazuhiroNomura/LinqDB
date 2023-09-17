@@ -10,10 +10,10 @@ using C=Serializer;
 
 public class Member:IJsonFormatter<T> {
     public static readonly Member Instance=new();
-    internal static void Write(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        Debug.Assert(value!=null,nameof(value)+" != null");
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+        //if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        var type=value.ReflectedType;
+        var type=value!.ReflectedType;
         writer.WriteType(type);
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
@@ -21,20 +21,19 @@ public class Member:IJsonFormatter<T> {
         writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeMembers.Get(type),value));
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         //if(reader.ReadIsNull()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        //var ReflectedType= this.Type.Deserialize(ref reader,Resolver);
-        var ReflectedType=reader.ReadType();
+        var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var Name=reader.ReadString();
+        var name=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();
-        var Index=reader.ReadInt32();
+        var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return Resolver.Serializer().TypeMembers.Get(ReflectedType)[Index];
+        return Resolver.Serializer().TypeMembers.Get(type)[index];
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         return Read(ref reader,Resolver);

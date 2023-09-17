@@ -1422,8 +1422,10 @@ public class TestExpression:共通 {
     [Fact]
     public void Parameter(){
         var p0=Expression.Parameter(typeof(int));
+        this.MemoryMessageJsonExpression(p0);
         this.MemoryMessageJsonExpression(Expression.Lambda<Func<int,int>>(p0,p0));
         var p1=Expression.Parameter(typeof(int),"a");
+        this.MemoryMessageJsonExpression(p1);
         this.MemoryMessageJsonExpression(Expression.Lambda<Func<int,int>>(p1,p1));
     }
     [Fact]

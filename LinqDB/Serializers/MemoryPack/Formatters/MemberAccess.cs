@@ -10,7 +10,7 @@ public class MemberAccess:MemoryPackFormatter<T> {
     public static readonly MemberAccess Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Member.Serialize(ref writer,value!.Member);
-        Expression.SerializeNullable(ref writer,value.Expression);
+        Expression.WriteNullable(ref writer,value.Expression);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.MemberAccess);
@@ -21,7 +21,7 @@ public class MemberAccess:MemoryPackFormatter<T> {
     }
     internal static T Read(ref Reader reader){
         var member=Member.Deserialize(ref reader);
-        var expression= Expression.InternalDeserializeNullable(ref reader);
+        var expression= Expression.ReadNullable(ref reader);
         return Expressions.Expression.MakeMemberAccess(expression,member);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

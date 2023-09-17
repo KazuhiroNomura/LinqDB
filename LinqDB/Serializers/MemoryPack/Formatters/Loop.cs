@@ -12,12 +12,12 @@ public class Loop:MemoryPackFormatter<T>{
             writer.WriteNullObjectHeader();
             Expression.Write(ref writer,value.Body);
         } else{
-            LabelTarget.Serialize(ref writer,value.BreakLabel);
+            LabelTarget.Write(ref writer,value.BreakLabel);
             if(value.ContinueLabel is null){
                 writer.WriteNullObjectHeader();
                 Expression.Write(ref writer,value.Body);
             } else{
-                LabelTarget.Serialize(ref writer,value.ContinueLabel);
+                LabelTarget.Write(ref writer,value.ContinueLabel);
                 Expression.Write(ref writer,value.Body);
             }
         }
@@ -35,13 +35,13 @@ public class Loop:MemoryPackFormatter<T>{
             var body=Expression.Read(ref reader);
             return Expressions.Expression.Loop(body);
         } else{
-            var breakLabel=LabelTarget.DeserializeLabelTarget(ref reader);
+            var breakLabel=LabelTarget.Read(ref reader);
             if(reader.PeekIsNull()){
                 reader.Advance(1);
                 var body=Expression.Read(ref reader);
                 return Expressions.Expression.Loop(body,breakLabel);
             } else{
-                var continueLabel=LabelTarget.DeserializeLabelTarget(ref reader);
+                var continueLabel=LabelTarget.Read(ref reader);
                 var body=Expression.Read(ref reader);
                 return Expressions.Expression.Loop(body,breakLabel,continueLabel);
             }

@@ -12,7 +12,7 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.SwitchValue,Resolver);
         writer.WriteValueSeparator();
-        Method.Instance.Serialize(ref writer,value.Comparison,Resolver);
+        Method.WriteNullable(ref writer,value.Comparison,Resolver);
         writer.WriteValueSeparator();
         writer.SerializeReadOnlyCollection(value.Cases,Resolver);
         writer.WriteValueSeparator();
@@ -23,7 +23,8 @@ public class Switch:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
@@ -33,7 +34,7 @@ public class Switch:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var switchValue=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var comparison=Method.Instance.Deserialize(ref reader,Resolver);
+        var comparison=Method.ReadNullable(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var cases=reader.ReadArray<Expressions.SwitchCase>(Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -42,6 +43,7 @@ public class Switch:IJsonFormatter<T> {
         return value;
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+        if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

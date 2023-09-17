@@ -8,9 +8,10 @@ using T = Expressions.MemberBinding;
 using static Extension;
 public class MemberBinding:IJsonFormatter<T> {
     public static readonly MemberBinding Instance=new();
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
-        writer.WriteString(value.BindingType.ToString());
+        writer.WriteString(value!.BindingType.ToString());
         writer.WriteValueSeparator();
         Member.Instance.Serialize(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
@@ -30,6 +31,7 @@ public class MemberBinding:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+        if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var BindingTypeName=reader.ReadString();
         var BindingType=Enum.Parse<Expressions.MemberBindingType>(BindingTypeName);

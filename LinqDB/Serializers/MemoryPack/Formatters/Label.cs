@@ -9,8 +9,8 @@ using T = Expressions.LabelExpression;
 public class Label:MemoryPackFormatter<T> {
     public static readonly Label Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        LabelTarget.Serialize(ref writer,value!.Target);
-        Expression.SerializeNullable(ref writer,value.DefaultValue);
+        LabelTarget.Write(ref writer,value!.Target);
+        Expression.WriteNullable(ref writer,value.DefaultValue);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Label);
@@ -20,8 +20,8 @@ public class Label:MemoryPackFormatter<T> {
         PrivateSerialize(ref writer,value);
     }
     internal static T Read(ref Reader reader){
-        var target= LabelTarget.DeserializeLabelTarget(ref reader);
-        var defaultValue= Expression.InternalDeserializeNullable(ref reader);
+        var target= LabelTarget.Read(ref reader);
+        var defaultValue= Expression.ReadNullable(ref reader);
         return Expressions.Expression.Label(target,defaultValue);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

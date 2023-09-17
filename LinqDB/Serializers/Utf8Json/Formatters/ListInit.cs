@@ -17,7 +17,8 @@ public class ListInit:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         PrivateSerialize(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         PrivateSerialize(ref writer,value,Resolver);
         writer.WriteEndArray();
@@ -29,6 +30,7 @@ public class ListInit:IJsonFormatter<T> {
         return Expressions.Expression.ListInit(@new,Initializers);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+        if(reader.ReadIsNull())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
