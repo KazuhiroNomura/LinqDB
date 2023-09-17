@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Diagnostics;
-using Expressions = System.Linq.Expressions;
 using MessagePack;
 using MessagePack.Formatters;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using static Extension;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
-    private static void PrivateSerialize(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
+    private static void PrivateWrite(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(3);
         writer.WriteNodeType(value.NodeType);
         Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteType(value.TypeOperand);
     }
-    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver)=>
-        PrivateSerialize(ref writer,value,Resolver);
-    private const int ArrayHeader=3;
+    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,
+        MessagePackSerializerOptions Resolver){
+        PrivateWrite(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value))return;
-        PrivateSerialize(ref writer,value,Resolver);
+        
+        
+        
+        PrivateWrite(ref writer,value,Resolver);
+        
     }
     private static (Expressions.Expression expression,System.Type type)PrivateRead(ref Reader reader,MessagePackSerializerOptions Resolver){
         var expression=Expression.Read(ref reader,Resolver);
@@ -38,7 +43,7 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==3);
         var NodeType=reader.ReadNodeType();
         return NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),

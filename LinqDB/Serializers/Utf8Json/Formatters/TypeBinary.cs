@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using System;
+﻿using System;
+using System.Diagnostics;
 using Utf8Json;
 
 using Expressions=System.Linq.Expressions;
@@ -21,7 +21,6 @@ public class TypeBinary:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();

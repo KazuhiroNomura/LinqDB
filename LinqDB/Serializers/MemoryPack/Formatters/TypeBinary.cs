@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Buffers;
-using MemoryPack;
-using Expressions=System.Linq.Expressions;
 
+using MemoryPack;
+using System.Buffers;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 using Reader=MemoryPackReader;
 using T=Expressions.TypeBinaryExpression;
 public class TypeBinary:MemoryPackFormatter<T> {

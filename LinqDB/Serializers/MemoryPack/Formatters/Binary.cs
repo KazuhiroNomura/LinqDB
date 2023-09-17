@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Buffers;
 using System.Diagnostics;
 using System.Reflection;
 using MemoryPack;
-
+using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
@@ -64,6 +63,7 @@ public class Binary:MemoryPackFormatter<T> {
         Method.WriteNullable(ref writer,value.Method);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :WriteLeftRight(ref writer,value); break;
@@ -108,12 +108,9 @@ public class Binary:MemoryPackFormatter<T> {
         }
         
     }
-    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
-        if(!writer.TryWriteNil(value))Write(ref writer,value);
-    }
-
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        WriteNullable(ref writer,value);
+        if(writer.TryWriteNil(value))return;
+        Write(ref writer,value);
     }
     internal static (Expressions.Expression left,Expressions.Expression right) ReadLeftRight(ref Reader reader) {
         var left = Expression.Read(ref reader);

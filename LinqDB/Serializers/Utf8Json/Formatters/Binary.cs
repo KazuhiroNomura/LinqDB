@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 using System.Reflection;
 using Utf8Json;
 
@@ -155,12 +154,11 @@ public class Binary:IJsonFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(left,right,isLiftedToNull,method);
     }
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    private static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var NodeTypeName=reader.ReadString();
+        var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
         T value;
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         switch(NodeType){
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=ReadLeftRight(ref reader,Resolver);
@@ -318,7 +316,7 @@ public class Binary:IJsonFormatter<T> {
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=Expressions.Expression.NotEqual(left,right,isLiftedToNull,method); break;
             }
-            default:throw new NotSupportedException(NodeTypeName);
+            default:throw new NotSupportedException(NodeType.ToString());
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

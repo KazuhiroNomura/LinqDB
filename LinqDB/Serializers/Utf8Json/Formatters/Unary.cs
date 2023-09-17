@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using Expressions=System.Linq.Expressions;
 using System.Reflection;
+using System.Diagnostics;
 using Utf8Json;
+
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using T=Expressions.UnaryExpression;
 using Writer=JsonWriter;
@@ -39,9 +40,8 @@ public class Unary:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.WriteIsNull(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        switch(value.NodeType){
+        switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayLength        : 
             case Expressions.ExpressionType.Quote              : Write(ref writer,value,Resolver);break;
             case Expressions.ExpressionType.Throw              : 
@@ -68,22 +68,22 @@ public class Unary:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static Expressions.Expression InternalDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        var Operand= Expression.Read(ref reader,Resolver);
-        return Operand;
+        var operand= Expression.Read(ref reader,Resolver);
+        return operand;
     }
-    internal static (Expressions.Expression operand,System.Type type)InternalDeserializeType(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static (Expressions.Expression operand,System.Type type)ReadType(ref Reader reader,IJsonFormatterResolver Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return(operand,type);
     }
-    internal static (Expressions.Expression operand,MethodInfo? method)InternalDeserializeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static (Expressions.Expression operand,MethodInfo? method)ReadMethod(ref Reader reader,IJsonFormatterResolver Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,method);
     }
-    internal static (Expressions.Expression operand,System.Type type,MethodInfo? method)InternalDeserializeTypeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static (Expressions.Expression operand,System.Type type,MethodInfo? method)ReadTypeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
@@ -91,10 +91,9 @@ public class Unary:IJsonFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,type,method);
     }
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    private static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var NodeTypeName=reader.ReadString();
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
+        var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
         T value;
         switch(NodeType){
@@ -104,88 +103,84 @@ public class Unary:IJsonFormatter<T> {
             }
             case Expressions.ExpressionType.Quote: {
                 var operand = InternalDeserialize(ref reader,Resolver);
-                value=Expressions.Expression.Quote(operand );
-                break;
+                value=Expressions.Expression.Quote(operand); break;
             }
             case Expressions.ExpressionType.Convert: {
-                var (operand, type, Method)=InternalDeserializeTypeMethod(ref reader,Resolver);
-                value=Expressions.Expression.Convert(operand,type,Method);break;
+                var (operand, type, method)=ReadTypeMethod(ref reader,Resolver);
+                value=Expressions.Expression.Convert(operand,type,method);break;
             }
             case Expressions.ExpressionType.ConvertChecked: {
-                var (operand, type, Method)=InternalDeserializeTypeMethod(ref reader,Resolver);
-                value=Expressions.Expression.ConvertChecked(operand,type,Method);break;
+                var (operand, type, method)=ReadTypeMethod(ref reader,Resolver);
+                value=Expressions.Expression.ConvertChecked(operand,type,method);break;
             }
             case Expressions.ExpressionType.Decrement: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.Decrement(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.Decrement(operand,method);break;
             }
             case Expressions.ExpressionType.Increment: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.Increment(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.Increment(operand,method);break;
             }
             case Expressions.ExpressionType.IsFalse: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.IsFalse(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.IsFalse(operand,method);break;
             }
             case Expressions.ExpressionType.IsTrue: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.IsTrue(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.IsTrue(operand,method);break;
             }
             case Expressions.ExpressionType.Negate: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.Negate(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.Negate(operand,method);break;
             }
             case Expressions.ExpressionType.NegateChecked: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.NegateChecked(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.NegateChecked(operand,method);break;
             }
             case Expressions.ExpressionType.Not: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.Not(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.Not(operand,method);break;
             }
             case Expressions.ExpressionType.OnesComplement: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.OnesComplement(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.OnesComplement(operand,method);break;
             }
             case Expressions.ExpressionType.PostDecrementAssign: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.PostDecrementAssign(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.PostDecrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PostIncrementAssign: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.PostIncrementAssign(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.PostIncrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PreDecrementAssign: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.PreDecrementAssign(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.PreDecrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.PreIncrementAssign: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.PreIncrementAssign(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.PreIncrementAssign(operand,method);break;
             }
             case Expressions.ExpressionType.Throw: {
-                var (operand, Type)=InternalDeserializeType(ref reader,Resolver);
-                value=Expressions.Expression.Throw(operand,Type);break;
+                var (operand, type)=ReadType(ref reader,Resolver);
+                value=Expressions.Expression.Throw(operand,type);break;
             }
             case Expressions.ExpressionType.TypeAs: {
-                var (operand, Type)=InternalDeserializeType(ref reader,Resolver);
-                value=Expressions.Expression.TypeAs(operand,Type);break;
+                var (operand, type)=ReadType(ref reader,Resolver);
+                value=Expressions.Expression.TypeAs(operand,type);break;
             }
             case Expressions.ExpressionType.UnaryPlus: {
-                var (operand, Method)=InternalDeserializeMethod(ref reader,Resolver);
-                value=Expressions.Expression.UnaryPlus(operand,Method);break;
+                var (operand, method)=ReadMethod(ref reader,Resolver);
+                value=Expressions.Expression.UnaryPlus(operand,method);break;
             }
             case Expressions.ExpressionType.Unbox: {
-                var (operand, Type)=InternalDeserializeType(ref reader,Resolver);
-                value=Expressions.Expression.Unbox(operand,Type);break;
+                var (operand, type)=ReadType(ref reader,Resolver);
+                value=Expressions.Expression.Unbox(operand,type);break;
             }
-            default:throw new NotSupportedException(NodeTypeName);
+            default:throw new NotSupportedException(NodeType.ToString());
         }
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null!;
-        return Read(ref reader,Resolver);
-    }
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null!:Read(ref reader,Resolver);
 }

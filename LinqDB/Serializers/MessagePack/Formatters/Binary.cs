@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Diagnostics;
 using System.Reflection;
 using MessagePack;
@@ -64,6 +63,7 @@ public class Binary:IMessagePackFormatter<T> {
         Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :WriteLeftRight(ref writer,value,Resolver); break;
@@ -118,7 +118,7 @@ public class Binary:IMessagePackFormatter<T> {
         var right= Expression.Read(ref reader,Resolver);
         return(left,right);
     }
-    internal static (Expressions.Expression left, Expressions.Expression right, Expressions.LambdaExpression? Conversion) ReadLeftRightLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
+    internal static (Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion) ReadLeftRightLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
         var left = Expression.Read(ref reader,Resolver);
 
         var right = Expression.Read(ref reader,Resolver);
@@ -126,7 +126,7 @@ public class Binary:IMessagePackFormatter<T> {
         var conversion= Lambda.ReadNullableConversion(ref reader,Resolver);
         return (left, right, conversion);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? Method)ReadLeftRightMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? method)ReadLeftRightMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Read(ref reader,Resolver);
         
         var right= Expression.Read(ref reader,Resolver);
@@ -134,7 +134,7 @@ public class Binary:IMessagePackFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(left,right,method);
     }
-    internal static (Expressions.Expression left, Expressions.Expression right, MethodInfo? Method, Expressions.LambdaExpression? Conversion) ReadLeftRightMethodLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
+    internal static (Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion) ReadLeftRightMethodLambda(ref Reader reader,MessagePackSerializerOptions Resolver) {
         var left = Expression.Read(ref reader,Resolver);
         
         var right = Expression.Read(ref reader,Resolver);
@@ -144,7 +144,7 @@ public class Binary:IMessagePackFormatter<T> {
         var conversion= Lambda.ReadNullableConversion(ref reader,Resolver);
         return (left, right, method,conversion);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,bool IsLiftedToNull,MethodInfo? Method)ReadLeftRightBooleanMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,bool IsLiftedToNull,MethodInfo? method)ReadLeftRightBooleanMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
         var left= Expression.Read(ref reader,Resolver);
         
         var right= Expression.Read(ref reader,Resolver);

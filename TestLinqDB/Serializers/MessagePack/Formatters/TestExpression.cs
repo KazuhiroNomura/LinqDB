@@ -368,6 +368,9 @@ public class TestExpression:共通 {
         共通0(Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
         共通0(Expression.NotEqual             (Constant1,Constant1,false,Method_int));
         void 共通0(BinaryExpression Binary){
+            this.MemoryMessageJson<BinaryExpression>(null!,Assert.Null);
+            this.MemoryMessageJson<Expression>(null!,Assert.Null);
+            this.MemoryMessageJson<object>(null!,Assert.Null);
             this.MemoryMessageJsonジェネリック3コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
