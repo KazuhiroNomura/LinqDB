@@ -11,7 +11,7 @@ public class Binary:MemoryPackFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void WriteLeftRight<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
 
         Expression.Write(ref writer,value.Left);
 

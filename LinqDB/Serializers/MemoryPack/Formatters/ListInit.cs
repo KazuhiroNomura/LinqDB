@@ -12,7 +12,7 @@ public class ListInit:MemoryPackFormatter<T> {
     public static readonly ListInit Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         New.WriteNew(ref writer,value!.NewExpression);
-        writer.SerializeReadOnlyCollection(value.Initializers);
+        writer.WriteCollection(value.Initializers);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.ListInit);

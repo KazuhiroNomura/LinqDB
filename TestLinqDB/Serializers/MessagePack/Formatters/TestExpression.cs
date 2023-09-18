@@ -5,13 +5,15 @@ using MemoryPack;
 using System.Drawing;
 using Reflection = System.Reflection;
 using System.Runtime.CompilerServices;
+using LinqDB.Helpers;
 //using System.Linq.Expressions;
 //using Expressions = System.Linq.Expressions;
-using Microsoft.CSharp.RuntimeBinder;
+using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 using MessagePack;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Xunit.Sdk;
+using Index=LinqDB.Serializers.MemoryPack.Formatters.Index;
 namespace Serializers.MessagePack.Formatters;
 using System.Linq.Expressions;
 using static Microsoft.FSharp.Core.ByRefKinds;
@@ -80,6 +82,7 @@ public partial struct 演算子1{
 //}
 [Serializable,MemoryPackable,MessagePackObject(true)]
 public partial class テスト:IEquatable<テスト>{
+    public static int StaticMethodInt32()=>0;
     public static void StaticMethod(){}
     public static void StaticMethod(int a){}
     public static void StaticMethod(int a,int b){}
@@ -93,9 +96,9 @@ public partial class テスト:IEquatable<テスト>{
         Trace.WriteLine("Func");
         return a.Equals(b)&&b.Equals(c);
     }
-    void xx(){
-       // this.Delegate(1,2,3);
-        //this.Action(a:0,1,b:3);
+    public int this[int index]{
+        get=>1;
+        set{}
     }
     public static int static_Func(int a,int b)=>a+b;
     public bool Equals(テスト? other){
@@ -206,12 +209,12 @@ public class TestExpression:共通 {
     //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
     //private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"decimal");
     private static int FieldInt32;
-    private static MemberExpression MemberInt32 =Expression.MakeMemberAccess(
+    private static readonly MemberExpression MemberInt32 =Expression.MakeMemberAccess(
         null,
         typeof(TestExpression).GetField(nameof(FieldInt32),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static double FieldDouble;
-    private static MemberExpression MemberDouble =Expression.MakeMemberAccess(
+    private static readonly MemberExpression MemberDouble =Expression.MakeMemberAccess(
         null,
         typeof(TestExpression).GetField(nameof(FieldDouble),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
@@ -368,10 +371,10 @@ public class TestExpression:共通 {
         共通0(Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
         共通0(Expression.NotEqual             (Constant1,Constant1,false,Method_int));
         void 共通0(BinaryExpression Binary){
-            this.MemoryMessageJson<BinaryExpression>(null!,Assert.Null);
-            this.MemoryMessageJson<Expression>(null!,Assert.Null);
-            this.MemoryMessageJson<object>(null!,Assert.Null);
-            this.MemoryMessageJsonジェネリック3コンパイル実行(
+            this.MemoryMessageJson_Assert<BinaryExpression>(null!,Assert.Null);
+            this.MemoryMessageJson_Assert<Expression>(null!,Assert.Null);
+            this.MemoryMessageJson_Assert<object>(null!,Assert.Null);
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{ParameterInt32},
@@ -388,7 +391,7 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(BinaryExpression Binary){
-            this.MemoryMessageJsonジェネリック3コンパイル実行(
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         Expression.Assign(MemberInt32,Constant0),
@@ -403,7 +406,7 @@ public class TestExpression:共通 {
     //private static Reflection.MethodInfo Method<T>(Func<T>e)=>e.Method;
     private static Reflection.MethodInfo Method(string Name)=>typeof(TestExpression).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
     [Fact]public void Block0(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 ParameterDecimal
@@ -412,7 +415,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Block1(){
         var q= Expression.Parameter(typeof(decimal),"q");
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal,q },
                 ParameterDecimal
@@ -420,7 +423,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Block2(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[]{Expression.Parameter(typeof(decimal),"a"),Expression.Parameter(typeof(decimal),"b"),ParameterDecimal},
                 ParameterDecimal
@@ -428,7 +431,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Block4(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
@@ -438,7 +441,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
@@ -448,7 +451,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
@@ -458,7 +461,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 Expression.TryCatchFinally(
@@ -468,7 +471,7 @@ public class TestExpression:共通 {
                 ParameterDecimal
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 new[] { ParameterDecimal },
                 Expression.TryCatchFinally(
@@ -479,7 +482,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Block10(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 Expression.Switch(
                     Expression.Constant(123),
@@ -491,7 +494,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 Expression.Switch(
                     Expression.Constant(123),
@@ -505,21 +508,21 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Condition(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(1m),
                 Expression.Constant(2m)
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.IfThenElse(
                 Expression.Constant(true),
                 Expression.Constant(1m),
                 Expression.Constant(2m)
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.IfThen(
                 Expression.Constant(true),
                 Expression.Constant(1m)
@@ -527,14 +530,14 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Constant0(){
-        this.MemoryMessageJsonExpression((Expression)Expression.Constant(null,typeof(string)));
+        this.MemoryMessageJson_Expression((Expression)Expression.Constant(null,typeof(string)));
     }
     [Fact]public void Constant1(){
-        this.MemoryMessageJsonExpression(Expression.Constant(1111m));
-        this.MemoryMessageJsonExpression(Expression.Constant(1111m,typeof(object)));
+        this.MemoryMessageJson_Expression(Expression.Constant(1111m));
+        this.MemoryMessageJson_Expression(Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.New(
                 typeof(string).GetConstructor(new System.Type[]{typeof(char),typeof(int)})!,
                 Expression.Constant('a'),
@@ -544,45 +547,48 @@ public class TestExpression:共通 {
     }
     [Fact]public void DebugInfo(){
         var SymbolDocument0=Expression.SymbolDocument("SymbolDocument0.cs");
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.DebugInfo(SymbolDocument0,1,1,3,10)
         );
     }
     [Fact]public void Default(){
-        this.MemoryMessageJsonExpression(Expression.Default(typeof(int)));
-        this.MemoryMessageJsonExpression(Expression.Default(typeof(decimal)));
+        this.MemoryMessageJson_Expression(Expression.Default(typeof(int)));
+        this.MemoryMessageJson_Expression(Expression.Default(typeof(decimal)));
     }
     //[Fact]public void Dynamic(){
     //    var CallSiteBinder=new CallSiteBinder();
     //    this.共通Expression(Expressions.Expression.Dynamic(new CallSiteBinder(); typeof(int)));
     //    this.共通Expression(Expressions.Expression.Default(typeof(decimal)));
     //}
-    private static CSharpArgumentInfo CSharpArgumentInfo1 = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
-    private static CSharpArgumentInfo[]CSharpArgumentInfoArray1 = {
+    private static readonly RuntimeBinder.CSharpArgumentInfo CSharpArgumentInfo1 = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null);
+    private static readonly RuntimeBinder.CSharpArgumentInfo[]CSharpArgumentInfoArray1 = {
         CSharpArgumentInfo1
     };
-    private static CSharpArgumentInfo[]CSharpArgumentInfoArray2 = {
-        CSharpArgumentInfo1,
-        CSharpArgumentInfo1
-    };
-    private static CSharpArgumentInfo[]CSharpArgumentInfoArray3 = {
-        CSharpArgumentInfo1,
+    private static readonly RuntimeBinder.CSharpArgumentInfo[]CSharpArgumentInfoArray2 = {
         CSharpArgumentInfo1,
         CSharpArgumentInfo1
     };
-    private static CSharpArgumentInfo[]CSharpArgumentInfoArray4 = {
-        CSharpArgumentInfo1,
+    private static readonly RuntimeBinder.CSharpArgumentInfo[]CSharpArgumentInfoArray3 = {
         CSharpArgumentInfo1,
         CSharpArgumentInfo1,
         CSharpArgumentInfo1
     };
-    [Fact]public void DynamicUnary(){
+    private static readonly RuntimeBinder.CSharpArgumentInfo[]CSharpArgumentInfoArray4 = {
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1
+    };
+    [Fact]public void DynamicUnary0(){
         var arg1=1;
-        var binder=Binder.UnaryOperation(
-            CSharpBinderFlags.None,
+        var binder=RuntimeBinder.Binder.UnaryOperation(
+            RuntimeBinder.CSharpBinderFlags.None,
             ExpressionType.Increment,
             this.GetType(),
-            CSharpArgumentInfoArray1
+            new[]{
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
+            }
         );
         var Dynamic0=Expression.Dynamic(
             binder,
@@ -592,12 +598,19 @@ public class TestExpression:共通 {
         var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
     }
+    public dynamic dddd(dynamic x){
+        return this[x];
+    }
+    public int this[int index]{
+        get=>0;
+        set{}
+    }
     //[Fact]public void DynamicCreateInstance(){
-    //    var binder=Binder.InvokeConstructor(
-    //        CSharpBinderFlags.None,
+    //    var binder=RuntimeBinder.Binder.InvokeConstructor(
+    //        RuntimeBinder.CSharpBinderFlags.None,
     //        typeof(Expression),
-    //        new CSharpArgumentInfo[]{
-    //            CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.UseCompileTimeType, null)
+    //        new RuntimeBinder.CSharpArgumentInfo[]{
+    //            RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
     //        }
     //    );
     //    var  CallSite = CallSite<Func<CallSite,System.Type,object>>.Create(binder);
@@ -611,8 +624,8 @@ public class TestExpression:共通 {
     //    }
     //    //{
     //    //    var Constant_1L = Expressions.Expression.Constant(1L);
-    //    //    var binder=Binder.Convert(
-    //    //        CSharpBinderFlags.ConvertExplicit,
+    //    //    var binder=RuntimeBinder.Binder.Convert(
+    //    //        RuntimeBinder.CSharpBinderFlags.ConvertExplicit,
     //    //        typeof(double),
     //    //        this.GetType()
     //    //    );
@@ -626,18 +639,18 @@ public class TestExpression:共通 {
     //    //}
     //}
     [Fact]public void DynamicConvertImpliccit(){
-        this.PrivateDynamicConvert<int,long>(1,CSharpBinderFlags.None);
-        this.PrivateDynamicConvert<int,double>(1,CSharpBinderFlags.None);
-        this.PrivateDynamicConvert<float,double>(1,CSharpBinderFlags.None);
+        this.PrivateDynamicConvert<int,long>(1,RuntimeBinder.CSharpBinderFlags.None);
+        this.PrivateDynamicConvert<int,double>(1,RuntimeBinder.CSharpBinderFlags.None);
+        this.PrivateDynamicConvert<float,double>(1,RuntimeBinder.CSharpBinderFlags.None);
     }
     [Fact]public void DynamicConvertExplicit(){
-        this.PrivateDynamicConvert<long,int>(1,CSharpBinderFlags.ConvertExplicit);
-        this.PrivateDynamicConvert<double,int>(1,CSharpBinderFlags.ConvertExplicit);
-        this.PrivateDynamicConvert<double,float>(1,CSharpBinderFlags.ConvertExplicit);
+        this.PrivateDynamicConvert<long,int>(1,RuntimeBinder.CSharpBinderFlags.ConvertExplicit);
+        this.PrivateDynamicConvert<double,int>(1,RuntimeBinder.CSharpBinderFlags.ConvertExplicit);
+        this.PrivateDynamicConvert<double,float>(1,RuntimeBinder.CSharpBinderFlags.ConvertExplicit);
     }
-    private void PrivateDynamicConvert<TInput,TResult>(TInput input,CSharpBinderFlags Flag){
+    private void PrivateDynamicConvert<TInput,TResult>(TInput input,RuntimeBinder.CSharpBinderFlags Flag){
         var Constant = Expression.Constant(input);
-        var binder=Binder.Convert(
+        var binder=RuntimeBinder.Binder.Convert(
             Flag,
             typeof(TResult),
             this.GetType()
@@ -649,9 +662,9 @@ public class TestExpression:共通 {
         );
         var CallSite=CallSite<Func<CallSite,object,TResult>>.Create(binder);
         var expected=CallSite.Target(CallSite,input!);
-        this.MemoryMessageJsonExpression(Dynamic0);
+        this.MemoryMessageJson_Expression(Dynamic0);
         var Lambda=Expression.Lambda<Func<TResult>>(Dynamic0);
-        this.MemoryMessageJsonExpression(Lambda);
+        this.MemoryMessageJson_Expression(Lambda);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
@@ -661,8 +674,8 @@ public class TestExpression:共通 {
         共通((int a,int b,int c)=>a==b&&a==c,2,2,2);
 
         void 共通(object オブジェクト, object a,object b,object c){
-            var binder=Binder.Invoke(
-                CSharpBinderFlags.None,
+            var binder=RuntimeBinder.Binder.Invoke(
+                RuntimeBinder.CSharpBinderFlags.None,
                 typeof(TestExpression),
                 CSharpArgumentInfoArray4
             );
@@ -679,86 +692,143 @@ public class TestExpression:共通 {
         }
     }
     [Fact]public void ClassDisplay(){
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<object>>(
                 Expression.Constant(ClassDisplay取得())
             )
         );
     }
+    static dynamic テストStaticMethod(){
+        return テスト.StaticMethodInt32();
+    }
+    static Expression<Action<object, int>> DynamicCall()
+    {
+        //CallSiteBinderの構築
+        var binder = RuntimeBinder.Binder.InvokeMember(
+            RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
+            nameof(テスト.InstanceMethod), 
+            null, 
+            typeof(TestExpression),
+            new[] { 
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
+            }
+        );
+
+        //パラメータの構築
+        var a1=new テスト();
+        var a2=11;
+        var p1 = Expression.Parameter(typeof(object), "target");
+        var p2 = Expression.Parameter(typeof(int), "arg");
+
+        //動的操作の生成
+        var Dynamic=Expression.MakeDynamic(typeof(Action<CallSite,object,int>),
+            binder,
+            p1,p2
+        );
+        var M = Expression.Lambda<Action<object,int>>(Dynamic,p1,p2).Compile();
+        M(a1,100);
+        M(a1,100);
+        var CallSite=CallSite<Action<CallSite,object,int>>.Create(binder);
+        CallSite.Target(CallSite,a1,a2);
+        return Expression.Lambda<Action<object,int>>(Dynamic,p1,p2);
+    }    
+    [Fact]
+    public void BinderTest(){
+        var arg1=new テスト();
+        var arg2=11;
+        var Dynamic = DynamicCall().Compile();
+
+        Dynamic(arg1, 100);
+        Dynamic(arg1, 200);
+        var CSharpArgumentInfos=new RuntimeBinder.CSharpArgumentInfo[]{
+            RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+            RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
+        };
+        var binder=RuntimeBinder.Binder.InvokeMember(
+            RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
+            nameof(テスト.InstanceMethod),
+            null,
+            this.GetType(),
+            CSharpArgumentInfos
+        );
+        var CallSite=CallSite<Action<CallSite,object,int>>.Create(binder);
+        CallSite.Target(CallSite,arg1,arg2);
+    }
 
     [Fact]public void DynamicInvokeMember(){
-        引数名();
+        InstanceMethod();
         Action("Action",1,2.0,"string");
+        引数名();
         Func("Func",1,2.0,"string");
 
-        void Action(string メンバー名,object @int,object @double,object @string){
-            var o=new テスト();
-            var binder=Binder.InvokeMember(
-                CSharpBinderFlags.ResultDiscarded,//Actionの時に指定
-                メンバー名,
-                //Type.EmptyTypes,
-                null,//new []{typeof(object),typeof(object),typeof(object)},
-                //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
-                typeof(TestExpression),
-                CSharpArgumentInfoArray4
+        void InstanceMethod(){
+            var arg1=new テスト();
+            var arg2=11;
+            var CSharpArgumentInfos=new RuntimeBinder.CSharpArgumentInfo[]{
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
+            };
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
+                nameof(テスト.InstanceMethod),
+                null,
+                typeof(テスト),
+                //this.GetType(),
+                CSharpArgumentInfos
             );
-            var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
-            CallSite.Target(CallSite,o,@int,@double,@string);
-            var Dynamic0 = Expression.Dynamic(
+            var Dynamic0=Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(o),
-                Expression.Constant(@int),
-                Expression.Constant(@double),
-                Expression.Constant(@string)
+                Expression.Constant(arg1),
+                Expression.Constant(arg2)
             );
-            this.MemoryMessageJsonExpression(Dynamic0);
-            var Lambda=Expression.Lambda<Action>(Dynamic0);
-            this.MemoryMessageJsonExpression(Lambda);
-            var M=Lambda.Compile();
+            dynamic d=new NonPublicAccessor(Dynamic0.Binder);
+            var CallSite=CallSite<Action<CallSite,object,int>>.Create(binder);
+            CallSite.Target(CallSite,arg1,arg2);
+            this.MemoryMessageJson_Expression(Dynamic0);
+            var Lambda = Expression.Lambda<Action>(Dynamic0);
+            this.MemoryMessageJson_Expression(Lambda);
+            var M = Lambda.Compile();
             M();
-        }
-        void Func(string メンバー名,object @int,object @double,object @string){
-            var o=new テスト();
-            var binder=Binder.InvokeMember(
-                CSharpBinderFlags.None,
-                メンバー名,
-                //Type.EmptyTypes,
-                null,//new []{typeof(object),typeof(object),typeof(object)},
-                //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
-                typeof(TestExpression),
-                CSharpArgumentInfoArray4
-            );
-            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
-            var Dynamic0 = Expression.Dynamic(
-                binder,
-                typeof(object),
-                Expression.Constant(o),
-                Expression.Constant(@int),
-                Expression.Constant(@double),
-                Expression.Constant(@string)
-            );
-            this.共通Dynamic(CallSite.Target(CallSite,o,@int,@double,@string),Dynamic0);
         }
         void 引数名(){
             var arg1=new テスト();
             var arg2=11;
             var arg3=22;
             var arg4="cc";
-            var binder=Binder.InvokeMember(
-                CSharpBinderFlags.ResultIndexed,
+            var CSharpArgumentInfos=new[]{
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                CSharpArgumentInfo1,
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"b"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"c"),
+            };
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.ResultIndexed,
                 "Func",
                 null,
-                this.GetType(),
-                new[]{
-                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                    CSharpArgumentInfo1,CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"a"),
-                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"b"),
-                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                    //CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument,"c"),
-                }
+                typeof(LinqDB.Serializers.MemoryPack.Formatters.Expression),
+                //this.GetType(),
+                CSharpArgumentInfos
             );
+            var binder0=RuntimeBinder.Binder.InvokeMember(RuntimeBinder.CSharpBinderFlags.None,"Func",null,this.GetType(),
+                CSharpArgumentInfos
+            );
+            var CallSite0=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder0);
+            var expected0=CallSite0.Target(CallSite0,arg1,arg2,arg3,arg4);
+            var binder1=RuntimeBinder.Binder.InvokeMember(RuntimeBinder.CSharpBinderFlags.ResultDiscarded,"Func",null,this.GetType(),
+                CSharpArgumentInfos
+            );
+            var CallSite1=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder1);
+            var expected1=CallSite1.Target(CallSite1,arg1,arg2,arg3,arg4);
+            var binder2=RuntimeBinder.Binder.InvokeMember(RuntimeBinder.CSharpBinderFlags.ResultIndexed,"Func",null,this.GetType(),
+                CSharpArgumentInfos
+            );
+            var CallSite2=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder2);
+            var expected2=CallSite2.Target(CallSite2,arg1,arg2,arg3,arg4);
             var Dynamic0=Expression.Dynamic(
                 binder,
                 typeof(object),
@@ -768,15 +838,103 @@ public class TestExpression:共通 {
                 Expression.Constant(arg4)
             );
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
-            this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3,arg4),Dynamic0);
+            var expected=CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
+            this.共通Dynamic(expected,Dynamic0);
+        }
+        void Action(string メンバー名,object @int,object @double,object @string){
+            var arg1=new テスト();
+            var arg2=11;
+            var arg3=22;
+            var arg4="cc";
+            var CSharpArgumentInfos=new[]{
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                CSharpArgumentInfo1,
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"b"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"c"),
+            };
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
+                "Action",
+                null,
+                typeof(LinqDB.Serializers.MemoryPack.Formatters.Expression),
+                //this.GetType(),
+                CSharpArgumentInfos
+            );
+            var Dynamic0=Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(arg1),
+                Expression.Constant(arg2),
+                Expression.Constant(arg3),
+                Expression.Constant(arg4)
+            );
+            var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
+            CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
+            this.MemoryMessageJson_Expression(Dynamic0);
+            var Lambda = Expression.Lambda<Action>(Dynamic0);
+            this.MemoryMessageJson_Expression(Lambda);
+            var M = Lambda.Compile();
+            M();
+            //var o=new テスト();
+            //var binder=RuntimeBinder.Binder.InvokeMember(
+            //    RuntimeBinder.CSharpBinderFlags.ResultDiscarded,//Actionの時に指定
+            //    メンバー名,
+            //    //Type.EmptyTypes,
+            //    null,//new []{typeof(object),typeof(object),typeof(object)},
+            //    //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
+            //    typeof(TestExpression),
+            //    CSharpArgumentInfoArray4
+            //);
+            //var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
+            //CallSite.Target(CallSite,o,@int,@double,@string);
+            //var Dynamic0 = Expression.Dynamic(
+            //    binder,
+            //    typeof(object),
+            //    Expression.Constant(o),
+            //    Expression.Constant(@int),
+            //    Expression.Constant(@double),
+            //    Expression.Constant(@string)
+            //);
+            //this.共通Dynamic(CallSite.Target(CallSite,o,@int,@double,@string),Dynamic0);
+            //this.MemoryMessageJson_Expression(Dynamic0);
+            //var Lambda=Expression.Lambda<Action>(Dynamic0);
+            //this.MemoryMessageJson_Expression(Lambda);
+            //var M=Lambda.Compile();
+            //M();
+        }
+        void Func(string メンバー名,object arg2,object arg3,object arg4){
+            var arg1=new テスト();
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.None,
+                メンバー名,
+                //Type.EmptyTypes,
+                null,//new []{typeof(object),typeof(object),typeof(object)},
+                //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
+                typeof(TestExpression),
+                CSharpArgumentInfoArray4
+            );
+            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
+            var Dynamic0 = Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(arg1),
+                Expression.Constant(arg2),
+                Expression.Constant(arg3),
+                Expression.Constant(arg4)
+            );
+            var expected=CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
+            this.共通Dynamic(expected,Dynamic0);
         }
     }
     [Fact]public void DynamicGetMember(){
         //if(a_GetMemberBinder!=null) {
         {
             var arg1=new TestDynamic<int>(1,2);
-            var binder=Binder.GetMember(
-                CSharpBinderFlags.None,
+            var binder=RuntimeBinder.Binder.GetMember(
+                RuntimeBinder.CSharpBinderFlags.None,
                 nameof(TestDynamic<int>.メンバー1),
                 this.GetType(),
                 CSharpArgumentInfoArray1
@@ -786,15 +944,15 @@ public class TestExpression:共通 {
                 typeof(object),
                 Expression.Constant(arg1)
             );
-            this.MemoryMessageJsonExpression(Dynamic0);
+            this.MemoryMessageJson_Expression(Dynamic0);
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
             this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
         //    return a_GetMemberBinder.Name.Equals(b_GetMemberBinder.Name,StringComparison.Ordinal);
         {
             var arg1=new TestDynamic<int>(1,2);
-            var binder=Binder.GetMember(
-                CSharpBinderFlags.ResultIndexed,
+            var binder=RuntimeBinder.Binder.GetMember(
+                RuntimeBinder.CSharpBinderFlags.ResultIndexed,
                 nameof(TestDynamic<int>.メンバー1),
                 this.GetType(),
                 CSharpArgumentInfoArray1
@@ -804,7 +962,7 @@ public class TestExpression:共通 {
                 typeof(object),
                 Expression.Constant(arg1)
             );
-            this.MemoryMessageJsonExpression(Dynamic0);
+            this.MemoryMessageJson_Expression(Dynamic0);
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
             this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
@@ -812,8 +970,8 @@ public class TestExpression:共通 {
     [Fact]public void DynamicSetMember(){
         var arg1=new TestDynamic<int>(1,2);
         var arg2=2;
-        var binder=Binder.SetMember(
-            CSharpBinderFlags.ResultIndexed,
+        var binder=RuntimeBinder.Binder.SetMember(
+            RuntimeBinder.CSharpBinderFlags.ResultIndexed,
             nameof(TestDynamic<int>.メンバー1),
             this.GetType(),
             CSharpArgumentInfoArray2
@@ -824,18 +982,18 @@ public class TestExpression:共通 {
             Expression.Constant(arg1),
             Expression.Constant(arg2)
         );
-        this.MemoryMessageJsonExpression(Dynamic0);
+        this.MemoryMessageJson_Expression(Dynamic0);
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
-    [Fact]public void DynamicGetIndex(){
+    [Fact]public void DynamicGetIndex0(){
         const int expected = 2;
         var arg1 = new[] {
             1,expected,3
         };
         var arg2=1;
-        var binder=Binder.GetIndex(
-            CSharpBinderFlags.None,
+        var binder=RuntimeBinder.Binder.GetIndex(
+            RuntimeBinder.CSharpBinderFlags.None,
             this.GetType(),
             CSharpArgumentInfoArray2
         );
@@ -845,18 +1003,21 @@ public class TestExpression:共通 {
             Expression.Constant(arg1),
             Expression.Constant(arg2)
         );
-        this.MemoryMessageJsonExpression(Dynamic0);
+        this.MemoryMessageJson_Expression(Dynamic0);
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
-    [Fact]public void DynamicSetIndex(){
-        var arg1= new[] {
-            1,2,3
+    [Fact]public void DynamicGetIndex1(){
+        const int expected = 10;
+        var arg1 = new[,] {
+            {1,2,3},
+            {4,expected,6},
+            { 7,8,9 },
         };
         var arg2=1;
         var arg3=1;
-        var binder=Binder.SetIndex(
-            CSharpBinderFlags.None,
+        var binder=RuntimeBinder.Binder.GetIndex(
+            RuntimeBinder.CSharpBinderFlags.None,
             this.GetType(),
             CSharpArgumentInfoArray3
         );
@@ -867,20 +1028,88 @@ public class TestExpression:共通 {
             Expression.Constant(arg2),
             Expression.Constant(arg3)
         );
-        this.MemoryMessageJsonExpression(Dynamic0);
+        this.MemoryMessageJson_Expression(Dynamic0);
         var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
+    }
+    [Fact]public void DynamicGetIndex2(){
+        var arg1=new テスト();
+        var arg2=1;
+        var binder=RuntimeBinder.Binder.GetIndex(
+            RuntimeBinder.CSharpBinderFlags.None,
+            this.GetType(),
+            new[]{
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
+            }
+        );
+        var Dynamic0=Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expression.Constant(arg1,typeof(object)),
+            Expression.Constant(arg2,typeof(object))
+        );
+        var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
+    }
+    [Fact]public void DynamicSetIndex0(){
+        var arg1= new[] {
+            1,2,3
+        };
+        var arg2=1;
+        var arg3=1;
+        var binder=RuntimeBinder.Binder.SetIndex(
+            RuntimeBinder.CSharpBinderFlags.None,
+            this.GetType(),
+            CSharpArgumentInfoArray3
+        );
+        var Dynamic0=Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expression.Constant(arg1),
+            Expression.Constant(arg2),
+            Expression.Constant(arg3)
+        );
+        this.MemoryMessageJson_Expression(Dynamic0);
+        var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
+    }
+    [Fact]public void DynamicSetIndex1(){
+        var arg1= new[,] {
+            {1,2,3},
+            {4,5,6},
+            {7,8,9},
+        };
+        var arg2=1;
+        var arg3=1;
+        var arg4=1;
+        var binder=RuntimeBinder.Binder.SetIndex(
+            RuntimeBinder.CSharpBinderFlags.None,
+            this.GetType(),
+            CSharpArgumentInfoArray4
+        );
+        var Dynamic0=Expression.Dynamic(
+            binder,
+            typeof(object),
+            Expression.Constant(arg1),
+            Expression.Constant(arg2),
+            Expression.Constant(arg3),
+            Expression.Constant(arg4)
+        );
+        this.MemoryMessageJson_Expression(Dynamic0);
+        var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
+        this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3,arg4),Dynamic0);
     }
     [Fact]public void DynamicBinary(){
         var arg1=1;
         var arg2=1;
-        var binder=Binder.BinaryOperation(
-            CSharpBinderFlags.None,
+        var binder=RuntimeBinder.Binder.BinaryOperation(
+            RuntimeBinder.CSharpBinderFlags.None,
             ExpressionType.Add,
             this.GetType(),
             new[]{
-                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null),
-                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null)
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null)
             }
         );
         var Dynamic0 = Expression.Dynamic(
@@ -893,12 +1122,12 @@ public class TestExpression:共通 {
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     private void 共通Dynamic(object expected,DynamicExpression Dynamic0){
-        this.MemoryMessageJsonExpression(Dynamic0);
+        //this.MemoryMessageJson_Expression(Dynamic0);
         var Lambda=Expression.Lambda<Func<object>>(Dynamic0);
-        this.MemoryMessageJsonExpression(Lambda);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda);
     }
     [Fact]public void ElementInit(){
         var Type=typeof(BindCollection);
@@ -922,7 +1151,7 @@ public class TestExpression:共通 {
         );
         {
             var l=new List<int>();
-            this.MemoryMessageJsonExpression(
+            this.MemoryMessageJson_Expression(
                 Expression.MemberInit(
                     New,
                     Expression.ListBind(
@@ -938,8 +1167,8 @@ public class TestExpression:共通 {
     }
     [Fact]public void Label(){
         var labelTarget=Expression.Label();
-        this.MemoryMessageJsonExpression(Expression.Label(labelTarget));
-        this.MemoryMessageJsonExpression(Expression.Label(labelTarget,Expression.Constant(1)));
+        this.MemoryMessageJson_Expression(Expression.Label(labelTarget));
+        this.MemoryMessageJson_Expression(Expression.Label(labelTarget,Expression.Constant(1)));
     }
     [Fact]public void LabelTarget(){
         共通LabelTarget(Expression.Label());
@@ -947,17 +1176,17 @@ public class TestExpression:共通 {
         共通LabelTarget(Expression.Label(typeof(double),"abc"));
         void 共通LabelTarget(LabelTarget input){
             Debug.Assert(input!=null,nameof(input)+" != null");
-            this.MemoryMessageJson<object>(input,output=>Assert.Equal(input,(LabelTarget)output,this.ExpressionEqualityComparer));
-            this.MemoryMessageJson(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
+            this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(LabelTarget)output,this.ExpressionEqualityComparer));
+            this.MemoryMessageJson_Assert(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         }
     }
     static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
     [Fact]
     public void Lambda0(){
-        this.MemoryMessageJsonExpression(Lambda(()=>1));
+        this.MemoryMessageJson_Expression(Lambda(()=>1));
     }
     [Fact]public void Lambda1(){
-        this.MemoryMessageJsonExpression(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+        this.MemoryMessageJson_Expression(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
     }
     [Fact]public void Lambda3(){
         //const decimal Catch値 = 40, Finally値 = 30;
@@ -970,7 +1199,7 @@ public class TestExpression:共通 {
         //        Expressions.Expression.Constant(Catch値)
         //    )
         //);
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -988,7 +1217,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda31(){
-        this.シリアライズMemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
@@ -1002,7 +1231,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda32(){
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -1017,7 +1246,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda33(){
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[]{ParameterDecimal},
@@ -1035,7 +1264,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda34(){
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -1053,7 +1282,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Lambda35(){
-        this.MemoryMessageJsonジェネリック3コンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { ParameterDecimal },
@@ -1072,7 +1301,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Lambda4(){
         var Exception=Expression.Parameter(typeof(Exception));
-        this.シリアライズMemoryMessageJsonコンパイル実行(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<decimal,decimal>>(
                 Expression.TryCatchFinally(
                     ParameterDecimal,
@@ -1085,7 +1314,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Lambda5(){
         var Array2=Expression.Parameter(typeof(int[,]));
-        this.MemoryMessageJsonジェネリック3(
+        this.MemoryMessageJson_TExpressionObject(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -1096,7 +1325,7 @@ public class TestExpression:共通 {
             )
         );
         var Array1=Expression.Parameter(typeof(int[]));
-        this.MemoryMessageJsonジェネリック3(
+        this.MemoryMessageJson_TExpressionObject(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,
@@ -1108,7 +1337,7 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void NewArrayInit(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.NewArrayInit(
                 typeof(int),
                 Expression.Constant(0),
@@ -1118,7 +1347,7 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void NewArrayBounds(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.NewArrayBounds(
                 typeof(int),
                 Expression.Constant(0),
@@ -1160,7 +1389,7 @@ public class TestExpression:共通 {
             ctor,
             Constant_1
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.MemberInit(
                 New,
                 Expression.Bind(
@@ -1169,7 +1398,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(
@@ -1186,7 +1415,7 @@ public class TestExpression:共通 {
     private static readonly LabelTarget Label_void=Expression.Label("Label");
     [Fact]
     public void Loop0(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Loop(
                 Expression.Block(
                     Expression.Break(Label_decimal,Expression.Constant(1m)),
@@ -1198,7 +1427,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void Loop1(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Loop(
                 Expression.Block(
                     Expression.Break(Label_decimal,Expression.Constant(1m))
@@ -1209,11 +1438,11 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void Negate(){
-        this.MemoryMessageJsonExpression(Expression.Negate(Expression.Constant(1m)));
+        this.MemoryMessageJson_Expression(Expression.Negate(Expression.Constant(1m)));
     }
     [Fact]public void Index0(){
         var List=Expression.Parameter(typeof(List<int>));
-        this.MemoryMessageJsonExpression((Expression)
+        this.MemoryMessageJson_Expression((Expression)
             Expression.Block(
                 new[] { List },
                 Expression.MakeIndex(
@@ -1226,7 +1455,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void Index1(){
         var Array1=Expression.Parameter(typeof(int[]));
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array1,
@@ -1239,7 +1468,7 @@ public class TestExpression:共通 {
     [Fact]
     public void Index2(){
         var Array2=Expression.Parameter(typeof(int[,]));
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -1253,7 +1482,7 @@ public class TestExpression:共通 {
     [Fact]
     public void Index3(){
         var Array2=Expression.Parameter(typeof(int[,,]));
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Lambda(
                 Expression.ArrayIndex(
                     Array2,
@@ -1268,7 +1497,7 @@ public class TestExpression:共通 {
     [Fact]
     public void Goto(){
         var target=Expression.Label(typeof(int),"target");
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 Expression.Label(
                     target,
@@ -1282,7 +1511,7 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Block(
                 Expression.Label(
                     target,
@@ -1317,7 +1546,7 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void ListInit(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.ListInit(
                 Expression.New(typeof(List<int>)),
                 Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expression.Constant(1))
@@ -1326,7 +1555,7 @@ public class TestExpression:共通 {
     }
     [Fact]public void MemberExpression(){
         var Point=Expression.Parameter(typeof(Point));
-        this.MemoryMessageJsonExpression(Expression.Block(new[]{Point},Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+        this.MemoryMessageJson_Expression(Expression.Block(new[]{Point},Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
     [Fact]public void MemberBinding(){
         var Type = typeof(BindCollection);
@@ -1346,7 +1575,7 @@ public class TestExpression:共通 {
             Constant_1
         );
         //if(a_Bindings.Count!=b_Bindings.Count) return false;
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.MemberInit(
                 New,
                 Expression.Bind(
@@ -1372,13 +1601,13 @@ public class TestExpression:共通 {
         var o=new テスト();
         var arg=Expression.Constant(1);
         var @this=Expression.Constant(o);
-        this.MemoryMessageJsonExpression(Expression.Call(M(()=>テスト.StaticMethod())));
-        this.MemoryMessageJsonExpression(Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
-        this.MemoryMessageJsonExpression(Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
-        this.MemoryMessageJsonExpression(Expression.Call(@this,M(()=>o.InstanceMethod())));
-        this.MemoryMessageJsonExpression(Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
-        this.MemoryMessageJsonExpression(Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod())));
+        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
+        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod())));
+        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
+        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_Expression(
             Expression.Call(
                 M(()=>string.Concat("","")),
                 Expression.Constant("A"),
@@ -1403,7 +1632,7 @@ public class TestExpression:共通 {
     [Fact]
     public void Invoke(){
         var @string=Expression.Parameter(typeof(string));
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Invoke(
                 Expression.Lambda(@string,@string),
                 Expression.Constant("B")
@@ -1411,13 +1640,13 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void New(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.New(
                 typeof(ValueTuple<int>).GetConstructors()[0],
                 Expression.Constant(1)
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
                 Expression.Constant(1),
@@ -1432,15 +1661,15 @@ public class TestExpression:共通 {
     [Fact]
     public void Parameter(){
         var p0=Expression.Parameter(typeof(int));
-        this.MemoryMessageJsonExpression(p0);
-        this.MemoryMessageJsonExpression(Expression.Lambda<Func<int,int>>(p0,p0));
+        this.MemoryMessageJson_Expression(p0);
+        this.MemoryMessageJson_Expression(Expression.Lambda<Func<int,int>>(p0,p0));
         var p1=Expression.Parameter(typeof(int),"a");
-        this.MemoryMessageJsonExpression(p1);
-        this.MemoryMessageJsonExpression(Expression.Lambda<Func<int,int>>(p1,p1));
+        this.MemoryMessageJson_Expression(p1);
+        this.MemoryMessageJson_Expression(Expression.Lambda<Func<int,int>>(p1,p1));
     }
     [Fact]
     public void Switch(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.Switch(
                 Expression.Constant(123),
                 Expression.Constant(0m),
@@ -1453,7 +1682,7 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void Try(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TryCatch(
                 Expression.Constant(0),
                 Expression.Catch(
@@ -1462,19 +1691,19 @@ public class TestExpression:共通 {
                 )
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TryCatchFinally(
                 Expression.Default(typeof(void)),
                 Expression.Default(typeof(void))
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TryFault(
                 Expression.Default(typeof(void)),
                 Expression.Default(typeof(void))
             )
         );
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TryFinally(
                 Expression.Default(typeof(void)),
                 Expression.Default(typeof(void))
@@ -1483,7 +1712,7 @@ public class TestExpression:共通 {
     }
     [Fact]
     public void TypeEqual(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TypeEqual(
                 Expression.Constant(1m),
                 typeof(decimal)
@@ -1491,7 +1720,7 @@ public class TestExpression:共通 {
         );
     }
     [Fact]public void TypeIs(){
-        this.MemoryMessageJsonExpression(
+        this.MemoryMessageJson_Expression(
             Expression.TypeIs(
                 Expression.Constant(1m),
                 typeof(decimal)
@@ -1512,7 +1741,7 @@ public class TestExpression:共通 {
         var Constant演算子1=Expression.Constant(new 演算子1(true));
         var Parameter演算子=Expression.Parameter(typeof(演算子));
         var ParameterInt32=Expression.Parameter(typeof(int));
-        this.MemoryMessageJsonExpression(Expression.ArrayLength(Expression.Constant(new int[1])));
+        this.MemoryMessageJson_Expression(Expression.ArrayLength(Expression.Constant(new int[1])));
         共通1(Expression.ArrayLength(ConstantArray));
         共通1(Expression.Quote(Expression.Lambda(ConstantArray)));
         共通1(Expression.Convert(Constant1_1d,typeof(int)));
@@ -1565,7 +1794,7 @@ public class TestExpression:共通 {
         共通1(Expression.Increment(Constant演算子,Method(nameof(Unary演算子))));
         共通1(Expression.UnaryPlus(Constant演算子,Method(nameof(Unary演算子))));
         void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
-            this.MemoryMessageJsonジェネリック3コンパイル実行(
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Block(
                         new[]{代入先},
@@ -1582,8 +1811,8 @@ public class TestExpression:共通 {
             );
         }
         void 共通1(UnaryExpression Unary){
-            this.MemoryMessageJsonジェネリック3(Unary);
-            this.MemoryMessageJsonジェネリック3コンパイル実行(
+            this.MemoryMessageJson_TExpressionObject(Unary);
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
                 Expression.Lambda<Func<object>>(
                     Expression.Convert(
                         Unary,

@@ -26,7 +26,7 @@ public class Event:IJsonFormatter<T> {
         Write(ref writer,value,Resolver);
     }
     internal static  T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        //if(reader.ReadIsNull()) return null!;
+        //if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();

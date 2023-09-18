@@ -15,7 +15,7 @@ public class ElementInit:IMessagePackFormatter<T> {
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
         Method.WriteNullable(ref writer,value.AddMethod,Resolver);
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;

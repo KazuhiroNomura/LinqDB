@@ -22,7 +22,7 @@ public class Parameter:IJsonFormatter<T> {
         
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginObject();
         writer.WriteType(value!.Type);
         writer.WriteNameSeparator();
@@ -44,7 +44,7 @@ public class Parameter:IJsonFormatter<T> {
         return Parameter;
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginObjectWithVerify();
         var type=reader.ReadType();
         reader.ReadIsNameSeparatorWithVerify();

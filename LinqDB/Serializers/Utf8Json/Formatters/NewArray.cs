@@ -20,7 +20,7 @@ public class NewArray:IJsonFormatter<T> {
         PrivateSerialize(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         writer.WriteString(value!.NodeType.ToString());
         writer.WriteValueSeparator();
@@ -42,15 +42,14 @@ public class NewArray:IJsonFormatter<T> {
         return Expressions.Expression.NewArrayInit(type,expressions);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var NodeTypeName=reader.ReadString();
+        var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         var value=NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader,Resolver),
             Expressions.ExpressionType.NewArrayInit=>ReadNewArrayInit(ref reader,Resolver),
-            _=>throw new NotImplementedException(Resolver.ToString())
+            _=>throw new NotImplementedException(NodeType.ToString())
         };
         reader.ReadIsEndArrayWithVerify();
         return value;

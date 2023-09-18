@@ -1,5 +1,7 @@
 ﻿using MessagePack;
 using MessagePack.Formatters;
+using System.Diagnostics;
+
 using Expressions = System.Linq.Expressions;
 
 namespace LinqDB.Serializers.MessagePack.Formatters;
@@ -9,8 +11,7 @@ using static Extension;
 
 public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();
-    public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver) {
-        if(writer.TryWriteNil(value)) return;
+    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
@@ -21,8 +22,17 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver) {
-        if(reader.TryReadNil()) return null!;
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(5);
+        writer.WriteNodeType(Expressions.ExpressionType.Lambda);
+        PrivateWrite(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver) {
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(4);
+        PrivateWrite(ref writer,value,Resolver);
+    }
+    private static T PrivateRead(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
@@ -37,5 +47,14 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
             tailCall,
             parameters!
         );
+    }
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+        return PrivateRead(ref reader,Resolver);
+    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver) {
+        if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==4);
+        return PrivateRead(ref reader,Resolver);
     }
 }

@@ -38,7 +38,7 @@ public class Unary:IJsonFormatter<T> {
         Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayLength        : 
@@ -181,5 +181,5 @@ public class Unary:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null!:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

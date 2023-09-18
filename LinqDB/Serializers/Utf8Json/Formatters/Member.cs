@@ -16,11 +16,13 @@ public class Member:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeMembers.Get(type),value));
+        var array= Resolver.Serializer().TypeMembers.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -31,10 +33,11 @@ public class Member:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return Resolver.Serializer().TypeMembers.Get(type)[index];
+        var array= Resolver.Serializer().TypeMembers.Get(type);
+        return array[index];
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }
 }

@@ -19,7 +19,7 @@ public class Block:MemoryPackFormatter<T> {
 
         writer.Serialize宣言Parameters(Variables);
         
-        writer.SerializeReadOnlyCollection(value.Expressions);
+        writer.WriteCollection(value.Expressions);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{

@@ -1,15 +1,16 @@
 ﻿using System;
-using Expressions = System.Linq.Expressions;
+
 using Utf8Json;
+
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.MemberBinding;
-using static Extension;
 public class MemberBinding:IJsonFormatter<T> {
     public static readonly MemberBinding Instance=new();
+    
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        if(writer.WriteIsNull(value))return;
         writer.WriteBeginArray();
         writer.WriteString(value!.BindingType.ToString());
         writer.WriteValueSeparator();
@@ -25,16 +26,14 @@ public class MemberBinding:IJsonFormatter<T> {
             case Expressions.MemberBindingType.ListBinding:
                 writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
-            default:
-                throw new ArgumentOutOfRangeException(value.BindingType.ToString());
+            default:throw new ArgumentOutOfRangeException(value.BindingType.ToString());
         }
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
-        if(reader.ReadIsNull())return null!;
+        if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var BindingTypeName=reader.ReadString();
-        var BindingType=Enum.Parse<Expressions.MemberBindingType>(BindingTypeName);
+        var BindingType=reader.Read<Expressions.MemberBindingType>();// Enum.Parse<Expressions.MemberBindingType>(reader.ReadString());
         reader.ReadIsValueSeparatorWithVerify();
         var member= Member.Instance.Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -42,7 +41,7 @@ public class MemberBinding:IJsonFormatter<T> {
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),
             Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>(Resolver)),
-            _=>throw new ArgumentOutOfRangeException(BindingTypeName)
+            _=>throw new ArgumentOutOfRangeException(BindingType.ToString())
         };
         reader.ReadIsEndArrayWithVerify();
         return MemberBinding;

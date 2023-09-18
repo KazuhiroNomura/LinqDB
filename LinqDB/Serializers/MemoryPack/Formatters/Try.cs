@@ -12,11 +12,11 @@ public class Try:MemoryPackFormatter<T> {
         Expression.Write(ref writer,value!.Body);
         Expression.WriteNullable(ref writer,value.Finally);
         if(value.Finally is not null){
-            writer.SerializeReadOnlyCollection(value.Handlers);
+            writer.WriteCollection(value.Handlers);
         } else{
             Expression.WriteNullable(ref writer,value.Fault);
             if(value.Fault is null){
-                writer.SerializeReadOnlyCollection(value.Handlers);
+                writer.WriteCollection(value.Handlers);
             }
         }
     }

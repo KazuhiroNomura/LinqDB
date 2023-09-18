@@ -14,7 +14,7 @@ public class Index:IMessagePackFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Write(ref writer,value!.Object,Resolver);
         Property.Instance.Serialize(ref writer,value.Indexer,Resolver);
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);

@@ -10,7 +10,7 @@ public class ElementInit:MemoryPackFormatter<T> {
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
         Method.Write(ref writer,value!.AddMethod);
-        writer.SerializeReadOnlyCollection(value.Arguments);
+        writer.WriteCollection(value.Arguments);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;

@@ -56,6 +56,8 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
                 Property.Instance,
                 Event.Instance,
                 Field.Instance,
+
+                CSharpArgumentInfo.Instance,
                 this
             },
             new IJsonFormatterResolver[]{

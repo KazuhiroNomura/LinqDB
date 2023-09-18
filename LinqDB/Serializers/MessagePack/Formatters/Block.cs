@@ -18,7 +18,7 @@ public class Block:IMessagePackFormatter<T> {
         
         writer.Serialize宣言Parameters(value.Variables,Resolver);
         
-        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
+        writer.WriteCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){

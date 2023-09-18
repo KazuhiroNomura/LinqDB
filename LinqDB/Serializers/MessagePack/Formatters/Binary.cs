@@ -12,7 +12,7 @@ public class Binary:IMessagePackFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void WriteLeftRight(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Left,Resolver);
 
@@ -20,7 +20,7 @@ public class Binary:IMessagePackFormatter<T> {
     }
     internal static void WriteLeftRightLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Left,Resolver);
 
@@ -30,7 +30,7 @@ public class Binary:IMessagePackFormatter<T> {
     }
     internal static void WriteLeftRightMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Left,Resolver);
 
@@ -40,7 +40,7 @@ public class Binary:IMessagePackFormatter<T> {
     }
     internal static void WriteLeftRightMethodLambda(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(5);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Left,Resolver);
 

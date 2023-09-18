@@ -7,13 +7,13 @@ using T=Expressions.LoopExpression;
 public class Loop:IJsonFormatter<T>{
     public static readonly Loop Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value.BreakLabel)){
+        if(writer.TryWriteNil(value.BreakLabel)){
             writer.WriteValueSeparator();
             Expression.Write(ref writer,value.Body,Resolver);
         } else{
             LabelTarget.Write(ref writer,value.BreakLabel,Resolver);
             writer.WriteValueSeparator();
-            if(writer.WriteIsNull(value.ContinueLabel)){
+            if(writer.TryWriteNil(value.ContinueLabel)){
                 writer.WriteValueSeparator();
                 Expression.Write(ref writer,value.Body,Resolver);
             } else{
@@ -29,21 +29,21 @@ public class Loop:IJsonFormatter<T>{
         PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         T value;
-        if(reader.ReadIsNull()){
+        if(reader.TryReadNil()){
             reader.ReadNext();
             var body=Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body);
         } else{
             var breakLabel=LabelTarget.Read(ref reader,Resolver);
             reader.ReadIsValueSeparatorWithVerify();
-            if(reader.ReadIsNull()){
+            if(reader.TryReadNil()){
                 reader.ReadNext();
                 var body=Expression.Read(ref reader,Resolver);
                 value=Expressions.Expression.Loop(body,breakLabel);
@@ -57,7 +57,7 @@ public class Loop:IJsonFormatter<T>{
         return value;
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null!;
+        if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

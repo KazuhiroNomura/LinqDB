@@ -1,4 +1,5 @@
-﻿using Utf8Json;
+﻿
+using Utf8Json;
 using Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
@@ -20,6 +21,7 @@ public class SymbolDocumentInfo:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         Write(ref writer,value,Resolver);
         writer.WriteEndArray();
@@ -36,8 +38,14 @@ public class SymbolDocumentInfo:IJsonFormatter<T> {
         var documentType=Formatter.Deserialize(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
+
+
+
+
+
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

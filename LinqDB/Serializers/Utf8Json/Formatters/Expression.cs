@@ -101,7 +101,7 @@ public class Expression:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
@@ -380,6 +380,6 @@ public class Expression:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null:Read(ref reader,Resolver);
+    public static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

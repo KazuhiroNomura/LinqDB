@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -8,22 +9,18 @@ using Reader = JsonReader;
 using T = Expressions.TypeBinaryExpression;
 public class TypeBinary:IJsonFormatter<T> {
     public static readonly TypeBinary Instance=new();
-    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
+        writer.WriteNodeType(value);
+        writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.TypeOperand);
     }
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        writer.WriteNodeType(value);
-        writer.WriteValueSeparator();
-        PrivateWrite(ref writer,value,Resolver);
-    }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        writer.WriteNodeType(value);
-        writer.WriteValueSeparator();
-        PrivateWrite(ref writer,value,Resolver);
+        Write(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     private static (Expressions.Expression expression,System.Type type)PrivateRead(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -41,17 +38,16 @@ public class TypeBinary:IJsonFormatter<T> {
         return Expressions.Expression.TypeIs(expression,type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null!;
+        if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var NodeTypeName=reader.ReadString();
+        var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
-        var NodeType=Enum.Parse<Expressions.ExpressionType>(NodeTypeName);
         var value=NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
             Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader,Resolver),
-            _=>throw new NotSupportedException(NodeTypeName)
+            _=>throw new NotSupportedException(NodeType.ToString())
         };
         reader.ReadIsEndArrayWithVerify();
-        return(reader.ReadIsNull()?null:value)!;
+        return(reader.TryReadNil()?null:value)!;
     }
 }

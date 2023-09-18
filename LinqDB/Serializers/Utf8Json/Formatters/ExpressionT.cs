@@ -8,7 +8,7 @@ using static Extension;
 public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T>Instance=new();
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
@@ -25,7 +25,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null!;
+        if(reader.TryReadNil())return null!;
         var ListParameter= Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         reader.ReadIsBeginArrayWithVerify();

@@ -12,7 +12,7 @@ public class Goto:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         LabelTarget.Write(ref writer,value.Target,Resolver);
         writer.WriteValueSeparator();
-        if(!writer.WriteIsNull(value.Value))Expression.Write(ref writer,value.Value,Resolver);
+        if(!writer.TryWriteNil(value.Value))Expression.Write(ref writer,value.Value,Resolver);
         writer.WriteValueSeparator();
         writer.WriteType(value.Type);
     }
@@ -22,7 +22,7 @@ public class Goto:IJsonFormatter<T> {
         PrivateSerialize(ref writer, value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         PrivateSerialize(ref writer, value,Resolver);
         writer.WriteEndArray();
@@ -32,13 +32,13 @@ public class Goto:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var target= LabelTarget.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var value=reader.ReadIsNull()?null:Expression.Read(ref reader,Resolver);
+        var value=reader.TryReadNil()?null:Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();
         return Expressions.Expression.MakeGoto(kind,target,value,type);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull())return null!;
+        if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

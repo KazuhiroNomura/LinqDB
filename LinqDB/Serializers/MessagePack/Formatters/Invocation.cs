@@ -13,7 +13,7 @@ public class Invocation:IMessagePackFormatter<T> {
     private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Expression.Write(ref writer,value!.Expression,Resolver);
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);

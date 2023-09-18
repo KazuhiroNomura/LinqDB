@@ -25,7 +25,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
@@ -38,7 +38,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
-        writer.SerializeReadOnlyCollection(value.Arguments,Resolver);
+        writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var method= Method.Instance.Deserialize(ref reader,Resolver);

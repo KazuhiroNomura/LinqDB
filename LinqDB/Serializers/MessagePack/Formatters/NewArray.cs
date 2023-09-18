@@ -14,9 +14,9 @@ public class NewArray:IMessagePackFormatter<T> {
     private const int ArrayHeader=3;
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         writer.WriteType(value.Type.GetElementType());
-        writer.SerializeReadOnlyCollection(value.Expressions,Resolver);
+        writer.WriteCollection(value.Expressions,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;

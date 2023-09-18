@@ -51,7 +51,7 @@ public class Object:IJsonFormatter<T>{
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         WriteNullable(ref writer,value,Resolver);
     }
     internal static object Read(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -84,6 +84,6 @@ public class Object:IJsonFormatter<T>{
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    internal static object?ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null:Read(ref reader,Resolver);
+    internal static object?ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
     public object Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

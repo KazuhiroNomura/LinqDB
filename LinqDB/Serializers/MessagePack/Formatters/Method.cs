@@ -14,8 +14,12 @@ public class Method:IMessagePackFormatter<T>{
         writer.WriteArrayHeader(ArrayHeader);
         var type=value!.ReflectedType!;
         writer.WriteType(type);
+        
+        
+        
         var array= Resolver.Serializer().TypeMethods.Get(type!);
         writer.WriteInt32(Array.IndexOf(array,value));
+
     }
     internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(value is null)writer.WriteNil();
@@ -25,11 +29,14 @@ public class Method:IMessagePackFormatter<T>{
         WriteNullable(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        var count=reader.ReadArrayHeader();Debug.Assert(count==ArrayHeader);
         var type=reader.ReadType();
+        
+        
+        
         var array= Resolver.Serializer().TypeMethods.Get(type);
         var index=reader.ReadInt32();
+        
         return array[index];
     }
     internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver){

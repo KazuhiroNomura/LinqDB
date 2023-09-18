@@ -13,7 +13,7 @@ public class Index:MemoryPackFormatter<T> {
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Expression.Write(ref writer,value!.Object);
         Property.Write(ref writer,value.Indexer);
-        writer.SerializeReadOnlyCollection(value.Arguments);
+        writer.WriteCollection(value.Arguments);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(ExpressionType.Index);

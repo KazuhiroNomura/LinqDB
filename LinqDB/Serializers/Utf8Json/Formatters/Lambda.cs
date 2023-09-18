@@ -28,19 +28,19 @@ public class Lambda:IJsonFormatter<T> {
         PrivateWrite(ref writer,value,Resolver);
     }
     internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value)) return;
+        if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null;
+        if(reader.TryReadNil()) return null;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();

@@ -10,13 +10,18 @@ using T=Expressions.TypeBinaryExpression;
 public class TypeBinary:MemoryPackFormatter<T> {
     public static readonly TypeBinary Instance=new();
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+
         writer.WriteNodeType(value);
+        
         Expression.Write(ref writer,value.Expression);
+        
         writer.WriteType(value.TypeOperand);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
+        
         Write(ref writer,value);
+        
     }
     private static (Expressions.Expression expression,System.Type type)PrivateDeserialize(ref Reader reader){
         var expression=Expression.Read(ref reader);

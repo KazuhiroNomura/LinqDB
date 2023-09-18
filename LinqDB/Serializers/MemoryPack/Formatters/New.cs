@@ -11,7 +11,7 @@ public class New:MemoryPackFormatter<T> {
     public static readonly New Instance=new();
     internal static void WriteNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         Constructor.Write(ref writer,value.Constructor!);
-        writer.SerializeReadOnlyCollection(value.Arguments);
+        writer.WriteCollection(value.Arguments);
     }
     //internal static void InternalSerializeNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
     //    writer.WriteNodeType(ExpressionType.New);

@@ -11,7 +11,7 @@ public class CatchBlock:IJsonFormatter<T> {
     public static readonly CatchBlock Instance = new();
 
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         if(value!.Variable is null) {
             if(value.Filter is null) {
@@ -60,7 +60,7 @@ public class CatchBlock:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
-        if(reader.ReadIsNull())return null!;
+        if(reader.TryReadNil())return null!;
 
         T value;
         reader.ReadIsBeginArrayWithVerify();

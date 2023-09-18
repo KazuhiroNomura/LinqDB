@@ -12,26 +12,26 @@ public class Unary:IMessagePackFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         Expression.Write(ref writer,value.Operand,Resolver);
     }
     internal static void WriteType(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         Expression.Write(ref writer,value.Operand,Resolver);
         
         writer.WriteType(value.Type);
     }
     internal static void WriteMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         Expression.Write(ref writer,value.Operand,Resolver);
         
         Method.WriteNullable(ref writer,value.Method,Resolver);
     }
     internal static void WriteTypeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(4);
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         Expression.Write(ref writer,value.Operand,Resolver);
         
         writer.WriteType(value.Type);

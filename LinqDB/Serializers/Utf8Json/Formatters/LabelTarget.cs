@@ -26,7 +26,7 @@ public class LabelTarget:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     private static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
@@ -55,7 +55,7 @@ public class LabelTarget:IJsonFormatter<T> {
         return target;
     }
     internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.ReadIsNull()) return null;
+        if(reader.TryReadNil()) return null;
         return Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;

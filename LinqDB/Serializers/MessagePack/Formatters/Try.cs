@@ -26,11 +26,11 @@ public class Try:IMessagePackFormatter<T>{
         Expression.Write(ref writer,value!.Body,Resolver);
         Expression.WriteNullable(ref writer,value.Finally,Resolver);
         if(value.Finally is not null){
-            writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+            writer.WriteCollection(value.Handlers,Resolver);
         } else{
             Expression.WriteNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
-                writer.SerializeReadOnlyCollection(value.Handlers,Resolver);
+                writer.WriteCollection(value.Handlers,Resolver);
             }
         }
     }

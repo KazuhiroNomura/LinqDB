@@ -20,7 +20,7 @@ public class Property:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.WriteIsNull(value))return;
+        if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
@@ -33,5 +33,5 @@ public class Property:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return Resolver.Serializer().TypeProperties.Get(type)[index];
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.ReadIsNull()?null!:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

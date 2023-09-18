@@ -9,9 +9,9 @@ using static Extension;
 public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        writer.WriteNodeType(value.NodeType);
+        writer.WriteNodeType(value);
         writer.WriteType(value.Type.GetElementType());
-        writer.SerializeReadOnlyCollection(value.Expressions);
+        writer.WriteCollection(value.Expressions);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;

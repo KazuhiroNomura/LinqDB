@@ -16,7 +16,7 @@ public class MethodCall:MemoryPackFormatter<T> {
         if(!method.IsStatic){
             Expression.Write(ref writer,value.Object!);
         }
-        writer.SerializeReadOnlyCollection(value.Arguments);
+        writer.WriteCollection(value.Arguments);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Call);

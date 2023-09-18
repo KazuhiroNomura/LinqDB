@@ -365,20 +365,20 @@ public class ExpressionEqualityComparer:共通{
         return a.メンバー;
     }
     private void AssertEqual(Expression a,Expression b){
-        this.MemoryMessageJson(a,c=>{
+        this.MemoryMessageJson_Assert(a,c=>{
             Assert.Equal(a,b,this.Comparer);
             Assert.Equal(a,c,this.Comparer);
             Assert.Equal(b,c,this.Comparer);
         });
-        this.MemoryMessageJson(b,c=>{
+        this.MemoryMessageJson_Assert(b,c=>{
             Assert.Equal(a,b,this.Comparer);
             Assert.Equal(a,c,this.Comparer);
             Assert.Equal(b,c,this.Comparer);
         });
     }
     private void AssertNotEqual(Expression? a,Expression? b){
-        this.MemoryMessageJson(a,c=>Assert.NotEqual(c,b,this.Comparer));
-        this.MemoryMessageJson(b,c=>Assert.NotEqual(c,a,this.Comparer));
+        this.MemoryMessageJson_Assert(a,c=>Assert.NotEqual(c,b,this.Comparer));
+        this.MemoryMessageJson_Assert(b,c=>Assert.NotEqual(c,a,this.Comparer));
     }
 
     [Fact]

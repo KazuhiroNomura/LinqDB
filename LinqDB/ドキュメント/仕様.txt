@@ -1,4 +1,14 @@
-﻿2022/06/11
+﻿        var Serializer=reader.Serializer();
+        var index=reader.ReadVarIntInt32();
+        var Types=Serializer.Types;
+        if(index<Types.Count) return Types[index];
+        Debug.Assert(index==Types.Count);
+        Debug.Assert(index==Serializer.Dictionary_Type_int.Count);
+        var type=System.Type.GetType(reader.ReadString());
+        Serializer.Dictionary_Type_int.Add(type,index);
+        Types.Add(type);
+        return type;
+2022/06/11
 IOutputSet
  IOutputSet<T>
   ImmutableSet<T>

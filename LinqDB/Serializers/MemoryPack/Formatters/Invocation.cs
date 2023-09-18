@@ -11,7 +11,7 @@ public class Invocation:MemoryPackFormatter<T> {
     public static readonly Invocation Instance=new();
     private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         Expression.Write(ref writer,value!.Expression);
-        writer.SerializeReadOnlyCollection(value.Arguments);
+        writer.WriteCollection(value.Arguments);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(ExpressionType.Invoke);

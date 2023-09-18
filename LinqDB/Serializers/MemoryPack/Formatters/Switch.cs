@@ -17,7 +17,7 @@ public class Switch:MemoryPackFormatter<T> {
         
         Method.WriteNullable(ref writer,value.Comparison);
         
-        writer.SerializeReadOnlyCollection(value.Cases);
+        writer.WriteCollection(value.Cases);
         
         Expression.WriteNullable(ref writer,value.DefaultBody);
     }

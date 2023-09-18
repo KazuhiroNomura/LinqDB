@@ -17,7 +17,7 @@ public class Switch:IMessagePackFormatter<T> {
         
         Method.WriteNullable(ref writer,value.Comparison,Resolver);
         
-        writer.SerializeReadOnlyCollection(value.Cases,Resolver);
+        writer.WriteCollection(value.Cases,Resolver);
         
         Expression.Write(ref writer,value.DefaultBody,Resolver);
     }

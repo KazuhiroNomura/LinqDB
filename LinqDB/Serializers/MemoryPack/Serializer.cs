@@ -57,6 +57,8 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Property.Instance);
         MemoryPackFormatterProvider.Register(Field.Instance);
         MemoryPackFormatterProvider.Register(Delegate.Instance);
+
+        MemoryPackFormatterProvider.Register(CSharpArgumentInfo.Instance);
     }
     private readonly object[] objects1 = new object[1];
     internal void RegisterAnonymousDisplay(System.Type Type) {
