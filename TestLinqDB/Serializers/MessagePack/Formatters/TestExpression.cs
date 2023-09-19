@@ -16,6 +16,8 @@ using Xunit.Sdk;
 using Index=LinqDB.Serializers.MemoryPack.Formatters.Index;
 namespace Serializers.MessagePack.Formatters;
 using System.Linq.Expressions;
+using System.Reflection;
+
 using static Microsoft.FSharp.Core.ByRefKinds;
 
 [Serializable,MemoryPackable,MessagePackObject(true)]
@@ -539,7 +541,7 @@ public class TestExpression:共通 {
     [Fact]public void Constructor(){
         this.MemoryMessageJson_Expression(
             Expression.New(
-                typeof(string).GetConstructor(new System.Type[]{typeof(char),typeof(int)})!,
+                typeof(string).GetConstructor(new[]{typeof(char),typeof(int)})!,
                 Expression.Constant('a'),
                 Expression.Constant(2)
             )
@@ -741,7 +743,7 @@ public class TestExpression:共通 {
 
         Dynamic(arg1, 100);
         Dynamic(arg1, 200);
-        var CSharpArgumentInfos=new RuntimeBinder.CSharpArgumentInfo[]{
+        var CSharpArgumentInfos=new[]{
             RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
             RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
         };
@@ -757,40 +759,84 @@ public class TestExpression:共通 {
     }
 
     [Fact]public void DynamicInvokeMember(){
-        InstanceMethod();
-        Action("Action",1,2.0,"string");
+        var o=new テスト();
+        Action1(o,nameof(テスト.InstanceMethod),1);
+        Action3(o,nameof(テスト.Action),1,2.0,"string");
         引数名();
-        Func("Func",1,2.0,"string");
+        Func3(o,nameof(テスト.Func),1,2.0,"string");
 
-        void InstanceMethod(){
-            var arg1=new テスト();
-            var arg2=11;
-            var CSharpArgumentInfos=new RuntimeBinder.CSharpArgumentInfo[]{
+        void Action1<T0,T1>(T0 arg0,string Name,T1 arg1){
+            var CSharpArgumentInfos=new[]{
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
             };
             var binder=RuntimeBinder.Binder.InvokeMember(
-                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
-                nameof(テスト.InstanceMethod),
-                null,
-                typeof(テスト),
-                //this.GetType(),
+                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(テスト),CSharpArgumentInfos
+            );
+            var Dynamic0=Expression.Dynamic(
+                binder,typeof(object),
+                Expression.Constant(arg0),Expression.Constant(arg1)
+            );
+            Action1後処理<T0,T1>(Dynamic0,binder,arg0,arg1);
+            Action1後処理<object,T1>(Dynamic0,binder,arg0,arg1);
+        }
+        void Action1後処理<T0,T1>(DynamicExpression Dynamic,CallSiteBinder binder,T0 @this,T1 arg1){
+            var CallSite=CallSite<Action<CallSite,T0,T1>>.Create(binder);
+            CallSite.Target(CallSite,@this,arg1);
+            this.MemoryMessageJson_Expression(Dynamic);
+            var Lambda = Expression.Lambda<Action>(Dynamic);
+            this.MemoryMessageJson_Expression(Lambda);
+            var M = Lambda.Compile();
+            M();
+        }
+        void Action3<T0,T1,T2,T3>(T0 arg0,string Name,T1 arg1,T2 arg2,T3 arg3){
+            var CSharpArgumentInfos=new[]{
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                CSharpArgumentInfo1,
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"b"),
+                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
+                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"c"),
+            };
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(LinqDB.Serializers.MemoryPack.Formatters.Expression),
                 CSharpArgumentInfos
             );
             var Dynamic0=Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg1),
-                Expression.Constant(arg2)
+                Expression.Constant(arg0),Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
             );
-            dynamic d=new NonPublicAccessor(Dynamic0.Binder);
-            var CallSite=CallSite<Action<CallSite,object,int>>.Create(binder);
-            CallSite.Target(CallSite,arg1,arg2);
-            this.MemoryMessageJson_Expression(Dynamic0);
-            var Lambda = Expression.Lambda<Action>(Dynamic0);
+            Action3後処理<T0,T1,T2,T3>(Dynamic0,binder,arg0,arg1,arg2,arg3);
+            Action3後処理<object,T1,T2,T3>(Dynamic0,binder,arg0,arg1,arg2,arg3);
+        }
+        void Action3後処理<T0,T1,T2,T3>(DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
+            var CallSite=CallSite<Action<CallSite,T0,T1,T2,T3>>.Create(binder);
+            CallSite.Target(CallSite,arg0,arg1,arg2,arg3);
+            this.MemoryMessageJson_Expression(Dynamic);
+            var Lambda = Expression.Lambda<Action>(Dynamic);
             this.MemoryMessageJson_Expression(Lambda);
             var M = Lambda.Compile();
             M();
+        }
+        void Func3<T0,T1,T2,T3>(T0 arg0,string Name,T1 arg1,T2 arg2,T3 arg3){
+            var binder=RuntimeBinder.Binder.InvokeMember(
+                RuntimeBinder.CSharpBinderFlags.None,Name,null,
+                typeof(TestExpression),CSharpArgumentInfoArray4
+            );
+            var Dynamic0 = Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(arg0),Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
+            );
+            Func3後処理<T0,T1,T2,T3,object>(Dynamic0,binder,arg0,arg1,arg2,arg3);
+            Func3後処理<object,T1,T2,T3,object>(Dynamic0,binder,arg0,arg1,arg2,arg3);
+        }
+        void Func3後処理<T0,T1,T2,T3,TResult>(DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
+            var CallSite=CallSite<Func<CallSite,T0,T1,T2,T3,TResult>>.Create(binder);
+            var expected=CallSite.Target(CallSite,arg0,arg1,arg2,arg3)!;
+            this.共通Dynamic(expected,Dynamic);
         }
         void 引数名(){
             var arg1=new テスト();
@@ -838,93 +884,6 @@ public class TestExpression:共通 {
                 Expression.Constant(arg4)
             );
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
-            var expected=CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
-            this.共通Dynamic(expected,Dynamic0);
-        }
-        void Action(string メンバー名,object @int,object @double,object @string){
-            var arg1=new テスト();
-            var arg2=11;
-            var arg3=22;
-            var arg4="cc";
-            var CSharpArgumentInfos=new[]{
-                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
-                CSharpArgumentInfo1,
-                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
-                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
-                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"b"),
-                //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
-                RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"c"),
-            };
-            var binder=RuntimeBinder.Binder.InvokeMember(
-                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
-                "Action",
-                null,
-                typeof(LinqDB.Serializers.MemoryPack.Formatters.Expression),
-                //this.GetType(),
-                CSharpArgumentInfos
-            );
-            var Dynamic0=Expression.Dynamic(
-                binder,
-                typeof(object),
-                Expression.Constant(arg1),
-                Expression.Constant(arg2),
-                Expression.Constant(arg3),
-                Expression.Constant(arg4)
-            );
-            var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
-            CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
-            this.MemoryMessageJson_Expression(Dynamic0);
-            var Lambda = Expression.Lambda<Action>(Dynamic0);
-            this.MemoryMessageJson_Expression(Lambda);
-            var M = Lambda.Compile();
-            M();
-            //var o=new テスト();
-            //var binder=RuntimeBinder.Binder.InvokeMember(
-            //    RuntimeBinder.CSharpBinderFlags.ResultDiscarded,//Actionの時に指定
-            //    メンバー名,
-            //    //Type.EmptyTypes,
-            //    null,//new []{typeof(object),typeof(object),typeof(object)},
-            //    //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
-            //    typeof(TestExpression),
-            //    CSharpArgumentInfoArray4
-            //);
-            //var CallSite=CallSite<Action<CallSite,object,object,object,object>>.Create(binder);
-            //CallSite.Target(CallSite,o,@int,@double,@string);
-            //var Dynamic0 = Expression.Dynamic(
-            //    binder,
-            //    typeof(object),
-            //    Expression.Constant(o),
-            //    Expression.Constant(@int),
-            //    Expression.Constant(@double),
-            //    Expression.Constant(@string)
-            //);
-            //this.共通Dynamic(CallSite.Target(CallSite,o,@int,@double,@string),Dynamic0);
-            //this.MemoryMessageJson_Expression(Dynamic0);
-            //var Lambda=Expression.Lambda<Action>(Dynamic0);
-            //this.MemoryMessageJson_Expression(Lambda);
-            //var M=Lambda.Compile();
-            //M();
-        }
-        void Func(string メンバー名,object arg2,object arg3,object arg4){
-            var arg1=new テスト();
-            var binder=RuntimeBinder.Binder.InvokeMember(
-                RuntimeBinder.CSharpBinderFlags.None,
-                メンバー名,
-                //Type.EmptyTypes,
-                null,//new []{typeof(object),typeof(object),typeof(object)},
-                //new []{引数0.GetType(),引数1.GetType(),引数2.GetType()},
-                typeof(TestExpression),
-                CSharpArgumentInfoArray4
-            );
-            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
-            var Dynamic0 = Expression.Dynamic(
-                binder,
-                typeof(object),
-                Expression.Constant(arg1),
-                Expression.Constant(arg2),
-                Expression.Constant(arg3),
-                Expression.Constant(arg4)
-            );
             var expected=CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
             this.共通Dynamic(expected,Dynamic0);
         }
@@ -1122,7 +1081,7 @@ public class TestExpression:共通 {
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     private void 共通Dynamic(object expected,DynamicExpression Dynamic0){
-        //this.MemoryMessageJson_Expression(Dynamic0);
+        this.MemoryMessageJson_Expression(Dynamic0);
         var Lambda=Expression.Lambda<Func<object>>(Dynamic0);
         var M=Lambda.Compile();
         var actual=M();
