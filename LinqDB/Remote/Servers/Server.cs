@@ -63,7 +63,7 @@ public class Server:IDisposable{
         /// </summary>
         /// <param name="Delegate"></param>
         /// <returns>(Response Response,Object Result)</returns>
-        internal (Response Response, object Result) Threadで実行(object Delegate) {
+        internal (Response Response, object? Result) Threadで実行(object Delegate) {
 #if クエリは同スレッドで実行
             try {
                 var MulticastDelegate = (MulticastDelegate)Delegate;
@@ -73,27 +73,23 @@ public class Server:IDisposable{
                     Method.GetParameters().Length==1||//this
                     Method.GetParameters().Length==2  //R.Expression(r=>
                 );
-                var Length = Method.IsStatic&&MulticastDelegate.Target is not null
-                    ? 1
-                    : 0;
-                var args=Method.GetParameters().Length==Length
-                    ?Array.Empty<object>()
-                    :this.args1;
-                var result=(
-                    Method.ReturnType==typeof(void)
-                        ? Response.Bytes0
-                        : Response.Object,
-                    MulticastDelegate.DynamicInvoke(args)!
-                );
-                return result;
-                //this.Result=Delegate.DynamicInvoke(
-                //    Method.GetParameters().Length==(Method.IsStatic&&Delegate.Target is not null
-                //        ? 1
-                //        : 0
-                //    )
-                //        ?null
-                //        :this.args
-                //);
+                Debug.Assert(Method.IsStatic);
+                var Length=Method.GetParameters().Length;
+                Response Response;
+                object? Result;
+                if(MulticastDelegate.Target is null)
+                    (Response,Result)=Length switch{
+                        0=>(Response.Object,MulticastDelegate.DynamicInvoke(Array.Empty<object>())),
+                        1=>(Response.Object,MulticastDelegate.DynamicInvoke(this.args1)),
+                        _=>(Response.ThrowException,new ArgumentException($"メソッド引数が{Length}だった。0-1に限る"))
+                    };
+                else
+                    (Response,Result)=Length switch{
+                        1=>(Response.Object,MulticastDelegate.DynamicInvoke(Array.Empty<object>())),
+                        2=>(Response.Object,MulticastDelegate.DynamicInvoke(this.args1)),
+                        _=>(Response.ThrowException,new ArgumentException($"メソッド引数が{Length}だった。0-1に限る"))
+                    };
+                return(Response,Result);
             } catch(TargetInvocationException ex) {
                 return (Response.ThrowException, ex.InnerException!);
 #pragma warning disable CA1031 // 一般的な例外の種類はキャッチしません
@@ -326,7 +322,7 @@ public class Server:IDisposable{
                                     }
                                     case Request.Delegate_Invoke:
                                     case Request.Expression_Invoke: {
-                                        Debug.Assert(XmlType.Head<=デシリアライズした.XmlType&&デシリアライズした.XmlType<=XmlType.Tail);
+                                        Debug.Assert(デシリアライズした.XmlType<XmlType.Tail);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
                                         var Delegate=Optimizer.CreateServerDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(

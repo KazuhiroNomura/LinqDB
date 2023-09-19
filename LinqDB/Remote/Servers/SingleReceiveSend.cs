@@ -584,9 +584,9 @@ internal class SingleReceiveSend:IDisposable{
                         //    this.SerializerConfiguration.JsonFormatterResolver);
                         //var Lambda=JsonResolver.Serializer().Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
                         var Object= XmlType switch{
-                            XmlType.Utf8Json=> this.Utf8Json.Deserialize<object>(MemoryStream),
-                            XmlType.MessagePack=> this.MessagePack.Deserialize<object>(MemoryStream),
-                            XmlType.MemoryPack=> this.MemoryPack.Deserialize<object>(MemoryStream),
+                            XmlType.Utf8Json=> this.Utf8Json.Deserialize<Expression>(MemoryStream),
+                            XmlType.MessagePack=> this.MessagePack.Deserialize<Expression>(MemoryStream),
+                            XmlType.MemoryPack=> this.MemoryPack.Deserialize<Expression>(MemoryStream),
                             _=>throw new NotSupportedException(XmlType.ToString())
                         };
                         this.Privateデシリアライズした(
@@ -671,9 +671,9 @@ internal class SingleReceiveSend:IDisposable{
                     var XmlType = シリアライズしたい.XmlType;
                     MemoryStream.WriteByte((byte)XmlType);
                     switch(XmlType) {
-                        case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
                         case XmlType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object);break;
+                        case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
+                        case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
                         default:throw new NotSupportedException(XmlType.ToString());
                     }
                     break;

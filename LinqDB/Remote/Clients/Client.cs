@@ -809,20 +809,35 @@ public class Client:IDisposable {
     /// </summary>
     /// <param name="Lambda">戻り値のあるリモート処理を行うデリゲート。</param>
     /// <param name="XmlType"></param>
-    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType) {
+    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType){
+        return (T)this.Expression((LambdaExpression)Lambda,XmlType);
+        //var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
+        //var Optimizer = this.Optimizer;
+        //Optimizer.Context=DeclaringType;
+        //var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
+        ////var s=JsonSerializer.Serialize(最適化Lambda,this.SerializerConfiguration.JsonFormatterResolver);
+        ////var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(s,this.SerializerConfiguration.JsonFormatterResolver);
+
+
+        //this.サーバーに送信(Request.Expression_Invoke,XmlType,最適化Lambda);
+        //var MemoryStream = this.MemoryStream;
+        //var Response = (Response)MemoryStream.ReadByte();
+        //return Response switch{
+        //    Response.Object=>this.ReadObject<T>(MemoryStream),
+        //    Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
+        //    _=>throw 受信ヘッダー_は不正だった(Response)
+        //};
+    }
+    public object Expression(LambdaExpression Lambda,XmlType XmlType) {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;
         var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
-        //var s=JsonSerializer.Serialize(最適化Lambda,this.SerializerConfiguration.JsonFormatterResolver);
-        //var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(s,this.SerializerConfiguration.JsonFormatterResolver);
-
-
         this.サーバーに送信(Request.Expression_Invoke,XmlType,最適化Lambda);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
-            Response.Object=>this.ReadObject<T>(MemoryStream),
+            Response.Object=>this.ReadObject<object>(MemoryStream),
             Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };

@@ -3,7 +3,7 @@
 #define クエリは同スレッドで実行
 namespace LinqDB.Remote.Servers;
 
-public class Server<T>:Server where T:class{
+public class Server<T>:Server{
     /// <summary>
     /// コンストラクタ
     /// </summary>

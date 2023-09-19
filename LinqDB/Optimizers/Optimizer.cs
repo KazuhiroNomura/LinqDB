@@ -1120,7 +1120,6 @@ public sealed partial class Optimizer:IDisposable{
         protected ReturnExpressionTraverser_Quoteを処理しない(作業配列 作業配列) : base(作業配列) { }
         //protected sealed override Expression Quote(UnaryExpression Unary0) => Unary0;
     }
-    [SuppressMessage("Globalization","CA1303:Do not pass literals as localized parameters",Justification = "<保留中>")]
     private sealed class 検証_変形状態:VoidExpressionTraverser_Quoteを処理しない{
         public void 実行(Expression e)=>this.Traverse(e);
         protected override void Traverse(Expression e) {
@@ -1966,9 +1965,6 @@ public sealed partial class Optimizer:IDisposable{
         public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray2={CSharpArgumentInfo,CSharpArgumentInfo};
         public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray3={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
         public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray4={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
-        [SuppressMessage("ReSharper","UnusedMember.Local")]
-        [SuppressMessage("Performance","CA1823:使用されていないプライベート フィールドを使用しません",Justification = "<保留中>")]
-        [SuppressMessage("ReSharper","MemberHidesStaticFromOuterClass")]
         public static class CallSites {
             public static readonly FieldInfo ObjectObjectObjectObjectTarget=typeof(CallSite<Func<CallSite,object,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object,object>>.Target))!;
             public static readonly FieldInfo ObjectObjectObjectTarget=typeof(CallSite<Func<CallSite,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object>>.Target))!;

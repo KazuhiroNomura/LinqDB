@@ -47,3 +47,4 @@ il.projのビルドプロジェクト作った今は使用していない
 NuGetでLiteを公開する方針。
     dll追加にする。
 TSQLを構文解析→LINQに変換
+MSTest→xUnitによるテストに切り替え
