@@ -4,13 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Linq;
-using LinqDB.Optimizers;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Serializers.MessagePack.Formatters;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
-using LinqDB.Remote.Servers;
 using MemoryPack;
 using MessagePack;
 //using Binder=System.Reflection.Binder;
@@ -19,10 +15,6 @@ namespace Optimizers;
 
 
 //Default
-[SuppressMessage("ReSharper","MemberCanBePrivate.Global")]
-[SuppressMessage("ReSharper","MemberCanBePrivate.Local")]
-[SuppressMessage("ReSharper","FieldCanBeMadeReadOnly.Local")]
-[SuppressMessage("ReSharper","NotAccessedField.Local")]
 [Serializable,MessagePackObject(true),MemoryPackable]
 public partial struct TestDynamic<T>{
     public T メンバー1;
@@ -33,121 +25,137 @@ public partial struct TestDynamic<T>{
         this.メンバー2=メンバー2;
     }
 }
+//[Serializable,MessagePackObject(true),MemoryPackable]
+public partial class class_演算子オーバーロード2{
+    // ReSharper disable once CollectionNeverQueried.Global
+    public readonly StructCollection StructCollectionフィールド=new();
+
+    //[MemoryPackConstructor]
+    public class_演算子オーバーロード2(){}
+}
+[Serializable,MessagePackObject(true),MemoryPackable]
+public partial struct struct_演算子オーバーロード2{
+    // ReSharper disable once CollectionNeverQueried.Global
+    // ReSharper disable once UnassignedField.Global
+    public StructCollection StructCollectionフィールド;
+}
+[Serializable,MessagePackObject(true),MemoryPackable]
+public partial struct StructCollection:ICollection<int>{
+    public IEnumerator<int> GetEnumerator(){
+        yield break;
+    }
+    IEnumerator IEnumerable.GetEnumerator(){
+        return this.GetEnumerator();
+    }
+    public void Add(int item){
+    }
+    public void Clear(){
+        throw new NotImplementedException();
+    }
+    public bool Contains(int item){
+        throw new NotImplementedException();
+    }
+    public void CopyTo(int[] array,int arrayIndex){
+        throw new NotImplementedException();
+    }
+    public bool Remove(int item){
+        throw new NotImplementedException();
+    }
+    public int Count=>0;
+    public bool IsReadOnly=>true;
+}
+[Serializable,MessagePackObject(true),MemoryPackable]
+public partial class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
+    //public class_演算子オーバーロード(){
+    //}
+    [MemoryPackInclude]
+    private int 内部の値;
+    //[global::Lite.Optimizers.NoOptimize]
+    public int _最適化されないメンバー=4;
+    public int Int32プロパティ{get;set;}
+    [MemoryPackInclude]
+    public string Stringプロパティ{get;set;}
+    public int Int32フィールド=4;
+    //public class_演算子オーバーロード(int 内部の値){
+    //    this.内部の値=内部の値;
+    //}
+    [MemoryPackInclude]
+    private bool 内部のBoolean;
+    [MemoryPackConstructor]
+    public class_演算子オーバーロード(){
+    }
+#pragma warning disable MEMPACK006 // MemoryPackObject's constructor has no matched parameter
+    public class_演算子オーバーロード(int 内部の値,bool 内部のBoolean,string Stringプロパティ){
+        this.内部の値=内部の値;
+        this.内部のBoolean=内部のBoolean;
+        this.Stringプロパティ=Stringプロパティ;
+        this.Int32フィールド=0;
+    }
+#pragma warning restore MEMPACK006 // MemoryPackObject's constructor has no matched parameter
+    public int 最適化されないメソッド()=>4;
+    [Pure]
+    public int メソッド()=>4;
+    // ReSharper disable once UnassignedField.Global
+    public static int StaticInt32フィールド;
+    public static string StaticStringフィールド="B";
+    public string Stringフィールド="A";
+    // ReSharper disable once CollectionNeverQueried.Global
+    [MemoryPackInclude]
+    public StructCollection StructCollectionフィールド=new();
+    // ReSharper disable once CollectionNeverQueried.Global
+    public List<int> Listフィールド=new();
+
+    // ReSharper disable once CollectionNeverQueried.Global
+    public List<int> Listプロパティ{get;set;}=new();
+
+    // ReSharper disable once CollectionNeverQueried.Global
+    public HashSet<int> HashSetプロパティ{get;set;}=new();
+
+    //public class_演算子オーバーロード2 class演算子オーバーロード2プロパティ{get;set;}=new();
+    //public readonly class_演算子オーバーロード2 class_演算子オーバーロード2フィールド=new();
+    //public struct_演算子オーバーロード2 Struct演算子オーバーロード2=new();
+    public static class_演算子オーバーロード operator~(class_演算子オーバーロード a)=>new(~a.内部の値,a.内部のBoolean,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator!(class_演算子オーバーロード a)=>new(-1^a.内部の値,!a.内部のBoolean,a.Stringプロパティ);
+    public static bool operator false(class_演算子オーバーロード a)=>!a.内部のBoolean;
+    public static bool operator true(class_演算子オーバーロード a)=>a is{内部のBoolean: true};
+    public static class_演算子オーバーロード operator++(class_演算子オーバーロード a)=>new(a.内部の値+1,true,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator--(class_演算子オーバーロード a)=>new(a.内部の値-1,true,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a)=>new(-a.内部の値,a.内部のBoolean,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator+(class_演算子オーバーロード a)=>new(a.内部の値,a.内部のBoolean,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a,class_演算子オーバーロード b)=>new(-a.内部の値,true,a.Stringプロパティ);
+    public static class_演算子オーバーロード operator&(class_演算子オーバーロード a,class_演算子オーバーロード b){
+        return new(a.内部の値&b.内部の値,true,a.Stringプロパティ+b.Stringプロパティ);
+    }
+    [SuppressMessage("ReSharper","ConvertIfStatementToReturnStatement")]
+    public static class_演算子オーバーロード operator|(class_演算子オーバーロード? a,class_演算子オーバーロード? b){
+        if(a==null) return b!;
+        if(b==null) return a;
+        return new class_演算子オーバーロード(a.内部の値|b.内部の値,true,a.Stringプロパティ);
+    }
+    public static explicit operator int(class_演算子オーバーロード a)=>1;
+    public static explicit operator decimal(class_演算子オーバーロード a)=>1;
+    public static explicit operator string(class_演算子オーバーロード a)=>"class_演算子オーバーロード";
+    public static explicit operator class_演算子オーバーロード(decimal a)=>new(1,true,"abc");
+    //public static explicit operator Object(class_演算子オーバーロード _Field)=>new Object();
+    public static decimal class_演算子オーバーロードからDecimalにキャスト(class_演算子オーバーロード a)=>1m;
+
+    public bool Equals(class_演算子オーバーロード? other){
+        if(ReferenceEquals(this,other)) return true;
+        if(other is null) return false;
+        return this.内部の値==other.内部の値&&this.内部のBoolean==other.内部のBoolean;
+    }
+    public override bool Equals(object? obj)=>obj is not null&&this.Equals((class_演算子オーバーロード)obj);
+    public override int GetHashCode()=>this.内部の値;
+}
 public class ExpressionEqualityComparer:共通{
-    [Serializable]
-    public struct StructCollection:ICollection<int>{
-        public IEnumerator<int> GetEnumerator(){
-            throw new NotImplementedException();
-        }
-        IEnumerator IEnumerable.GetEnumerator(){
-            return this.GetEnumerator();
-        }
-        public void Add(int item){
-        }
-        public void Clear(){
-            throw new NotImplementedException();
-        }
-        public bool Contains(int item){
-            throw new NotImplementedException();
-        }
-        public void CopyTo(int[] array,int arrayIndex){
-            throw new NotImplementedException();
-        }
-        public bool Remove(int item){
-            throw new NotImplementedException();
-        }
-        public int Count=>0;
-        public bool IsReadOnly=>true;
-    }
-    public class class_演算子オーバーロード2{
-        // ReSharper disable once CollectionNeverQueried.Global
-        public StructCollection StructCollectionフィールド=new();
-    }
-    public struct struct_演算子オーバーロード2{
-        // ReSharper disable once CollectionNeverQueried.Global
-        // ReSharper disable once UnassignedField.Global
-        public StructCollection StructCollectionフィールド;
-    }
-    [Serializable]
-    public class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
-        public class_演算子オーバーロード(){
-        }
-        private readonly int 内部の値;
-        public class_演算子オーバーロード(int 内部の値){
-            this.内部の値=内部の値;
-        }
-        private readonly bool 内部のBoolean;
-        public class_演算子オーバーロード(int 内部の値,bool 内部のBoolean){
-            this.内部の値=内部の値;
-            this.内部のBoolean=内部のBoolean;
-        }
-        //[global::Lite.Optimizers.NoOptimize]
-        public int _最適化されないメンバー=4;
-        public int Int32フィールド=4;
-        public int 最適化されないメソッド()=>4;
-        [Pure]
-        public int メソッド()=>4;
-        public int Int32プロパティ{get;set;}
-        // ReSharper disable once UnassignedField.Global
-        public static int StaticInt32フィールド;
-        public static string StaticStringフィールド="B";
-        public string Stringフィールド="A";
-        public string Stringプロパティ{get;set;}
-        // ReSharper disable once CollectionNeverQueried.Global
-        public StructCollection StructCollectionフィールド=new();
-        // ReSharper disable once CollectionNeverQueried.Global
-        public List<int> Listフィールド=new();
-
-        // ReSharper disable once CollectionNeverQueried.Global
-        public List<int> Listプロパティ{get;set;}=new();
-
-        // ReSharper disable once CollectionNeverQueried.Global
-        public HashSet<int> HashSetプロパティ{get;set;}=new();
-
-        public class_演算子オーバーロード2 class演算子オーバーロード2プロパティ{get;set;}=new();
-        public readonly class_演算子オーバーロード2 class_演算子オーバーロード2フィールド=new();
-        public struct_演算子オーバーロード2 Struct演算子オーバーロード2=new();
-        public static class_演算子オーバーロード operator~(class_演算子オーバーロード a)=>new(~a.内部の値,a.内部のBoolean);
-        public static class_演算子オーバーロード operator!(class_演算子オーバーロード a)=>new(-1^a.内部の値,!a.内部のBoolean);
-        public static bool operator false(class_演算子オーバーロード a)=>!a.内部のBoolean;
-        public static bool operator true(class_演算子オーバーロード a)=>a is{内部のBoolean: true};
-        public static class_演算子オーバーロード operator++(class_演算子オーバーロード a)=>new(a.内部の値+1);
-        public static class_演算子オーバーロード operator--(class_演算子オーバーロード a)=>new(a.内部の値-1);
-        public static class_演算子オーバーロード operator-(class_演算子オーバーロード a)=>new(-a.内部の値,a.内部のBoolean);
-        public static class_演算子オーバーロード operator+(class_演算子オーバーロード a)=>new(a.内部の値,a.内部のBoolean);
-        public static class_演算子オーバーロード operator-(class_演算子オーバーロード a,class_演算子オーバーロード b)=>new(-a.内部の値);
-        public static class_演算子オーバーロード operator&(class_演算子オーバーロード a,class_演算子オーバーロード b){
-            return new class_演算子オーバーロード(a.内部の値&b.内部の値);
-        }
-        [SuppressMessage("ReSharper","ConvertIfStatementToReturnStatement")]
-        public static class_演算子オーバーロード operator|(class_演算子オーバーロード? a,class_演算子オーバーロード? b){
-            if(a==null) return b!;
-            if(b==null) return a;
-            return new class_演算子オーバーロード(a.内部の値|b.内部の値);
-        }
-        public static explicit operator int(class_演算子オーバーロード a)=>1;
-        public static explicit operator decimal(class_演算子オーバーロード a)=>1;
-        public static explicit operator string(class_演算子オーバーロード a)=>"class_演算子オーバーロード";
-        public static explicit operator class_演算子オーバーロード(decimal a)=>new();
-        //public static explicit operator Object(class_演算子オーバーロード _Field)=>new Object();
-        public static decimal class_演算子オーバーロードからDecimalにキャスト(class_演算子オーバーロード a)=>1m;
-
-        public bool Equals(class_演算子オーバーロード? other){
-            if(ReferenceEquals(this,other)) return true;
-            if(other is null) return false;
-            return this.内部の値==other.内部の値&&this.内部のBoolean==other.内部のBoolean;
-        }
-        public override bool Equals(object? obj)=>obj is not null&&this.Equals((class_演算子オーバーロード)obj);
-        public override int GetHashCode()=>this.内部の値;
-    }
-    protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new()};
+    protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
     //リフレクションで書き換える
     // ReSharper disable once FieldCanBeMadeReadOnly.Global
-    protected static class_演算子オーバーロード _Static_class_演算子オーバーロード1=new();
-    protected readonly class_演算子オーバーロード _Instance_class_演算子オーバーロード1=new();
-    protected static readonly class_演算子オーバーロード _class_演算子オーバーロード2=new();
+    protected static class_演算子オーバーロード _Static_class_演算子オーバーロード1=new(1,true,"abc");
+    protected readonly class_演算子オーバーロード _Instance_class_演算子オーバーロード1=new(1,true,"abc");
+    protected static readonly class_演算子オーバーロード _class_演算子オーバーロード2=new(1,true,"abc");
     public struct struct_演算子オーバーロード:IEquatable<struct_演算子オーバーロード>{
         public int Int32フィールド;
         public bool Booleanフィールド;
@@ -186,102 +194,88 @@ public class ExpressionEqualityComparer:共通{
         public static explicit operator int(struct_演算子オーバーロード a)=>1;
         public bool Equals(struct_演算子オーバーロード other)=>this.Int32フィールド==other.Int32フィールド;
     }
-    protected static readonly short Int16=1;
-    protected static readonly int Int32=1;
-    protected static readonly long Int64=1;
-    protected static readonly uint UInt32=1;
-    protected static readonly ulong UInt64=1;
-    protected static readonly string String="A";
-    protected static readonly uint UInt32_1=1;
-    protected static readonly int Int32_1=1,Int32_2=2;
-    protected static readonly long Int64_1=1;
-    protected static readonly decimal Decimal_1=1,Decimal_2=2;
-    protected static readonly bool Boolean1=true,Boolean2=false;
-    protected static readonly object Object_String="A";
-    protected static readonly object Object_Int32=1;
-    protected static readonly string[] Array={"A","B"};
-
-
-    protected static readonly int _Int32=2;
-    protected static readonly bool _Boolean=true;
-    public static readonly string _String="S";
-    protected static readonly int? _NullableInt32=0;
-    protected static readonly List<int> _List=new(){1,2};
-    protected static readonly Func<int,int> _Delegate=p=>p;
-    protected static int Function()=>1;
+    private static readonly object Object_String="A";
+    private static readonly object Object_Int32=1;
+    private static readonly string[] Array={"A","B"};
+    private static readonly int _Int32=2;
+    private static readonly bool _Boolean=true;
+    private static readonly int? _NullableInt32=0;
+    private static readonly List<int> _List=new(){1,2};
+    private static readonly Func<int,int> _Delegate=p=>p;
+    private static int Function()=>1;
     [Fact]
-    public void Add()=>this.実行結果が一致するか確認(()=>_Int32+_Int32);
+    public void Add()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32+_Int32);
     [Fact]
-    public void AddChecked()=>this.実行結果が一致するか確認(()=>checked(_Int32+_Int32));
+    public void AddChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>checked(_Int32+_Int32));
     [Fact]
-    public void Subtract()=>this.実行結果が一致するか確認(()=>_Int32-_Int32);
+    public void Subtract()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32-_Int32);
     [Fact]
-    public void SubtractChecked()=>this.実行結果が一致するか確認(()=>checked(_Int32-_Int32));
+    public void SubtractChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>checked(_Int32-_Int32));
     [Fact]
-    public void Multiply()=>this.実行結果が一致するか確認(()=>_Int32*_Int32);
+    public void Multiply()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32*_Int32);
     [Fact]
-    public void MultiplyChecked()=>this.実行結果が一致するか確認(()=>checked(_Int32*_Int32));
+    public void MultiplyChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>checked(_Int32*_Int32));
     [Fact]
-    public void Divide()=>this.実行結果が一致するか確認(()=>_Int32/_Int32);
+    public void Divide()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32/_Int32);
     [Fact]
-    public void Modulo()=>this.実行結果が一致するか確認(()=>_Int32%_Int32);
+    public void Modulo()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32%_Int32);
     [Fact]
-    public void And()=>this.実行結果が一致するか確認(()=>_Boolean&_Boolean);
+    public void And()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean&_Boolean);
     [Fact]
-    public void Or()=>this.実行結果が一致するか確認(()=>_Boolean|_Boolean);
+    public void Or()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean|_Boolean);
     [Fact]
-    public void AndChecked()=>this.実行結果が一致するか確認(()=>_Boolean&_Boolean);
+    public void AndChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean&_Boolean);
     [Fact]
-    public void ExclusiveOr()=>this.実行結果が一致するか確認(()=>_Boolean^_Boolean);
+    public void ExclusiveOr()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean^_Boolean);
     [Fact]
-    public void AndAlso()=>this.実行結果が一致するか確認(()=>_Boolean&&_Boolean);
+    public void AndAlso()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean&&_Boolean);
     [Fact]
-    public void OrElse()=>this.実行結果が一致するか確認(()=>_Boolean||_Boolean);
+    public void OrElse()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Boolean||_Boolean);
     [Fact]
-    public void Equal()=>this.実行結果が一致するか確認(()=>_Int32==3);
+    public void Equal()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32==3);
     [Fact]
-    public void NotEqual()=>this.実行結果が一致するか確認(()=>_Int32!=3);
+    public void NotEqual()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32!=3);
     [Fact]
-    public void GreaterThan()=>this.実行結果が一致するか確認(()=>_Int32>3);
+    public void GreaterThan()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32>3);
     [Fact]
-    public void GreaterThanOrEqual()=>this.実行結果が一致するか確認(()=>_Int32>=3);
+    public void GreaterThanOrEqual()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32>=3);
     [Fact]
-    public void LessThan()=>this.実行結果が一致するか確認(()=>_Int32<3);
+    public void LessThan()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32<3);
     [Fact]
-    public void LessThanOrEqual()=>this.実行結果が一致するか確認(()=>_Int32<=3);
+    public void LessThanOrEqual()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32<=3);
     [Fact]
-    public void LeftShift()=>this.実行結果が一致するか確認(()=>_Int32<<3);
+    public void LeftShift()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32<<3);
     [Fact]
-    public void RightShift()=>this.実行結果が一致するか確認(()=>_Int32>> 3);
+    public void RightShift()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Int32>> 3);
     [Fact]
-    public void ArrayIndex()=>this.実行結果が一致するか確認(()=>Array[0]);
+    public void ArrayIndex()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>Array[0]);
     [Fact]
-    public void ArrayLength()=>this.実行結果が一致するか確認(()=>Array.Length);
+    public void ArrayLength()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>Array.Length);
     [Fact]
-    public void Convert()=>this.実行結果が一致するか確認(()=>(double)_Int32+(double)_Int32);
+    public void Convert()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(double)_Int32+(double)_Int32);
     [Fact]
-    public void ConvertChecked()=>this.実行結果が一致するか確認(()=>(double)_Int32+(double)_Int32);
+    public void ConvertChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(double)_Int32+(double)_Int32);
     //[Fact] public void Increment         ()=>this._変数Cache.AssertExecute(()=>_Int32+1);
     //[Fact] public void Decrement         ()=>this._変数Cache.AssertExecute(()=>_Int32-1);
     //[Fact] public void IsFalse           ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2--);
     //[Fact] public void IsTrue            ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2++);
     [Fact]
-    public void Negate()=>this.実行結果が一致するか確認(()=>-_Int32+-_Int32);
+    public void Negate()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>-_Int32+-_Int32);
     [Fact]
-    public void NegateChecked()=>this.実行結果が一致するか確認(()=>checked(-_Int32)+checked(-_Int32));
+    public void NegateChecked()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>checked(-_Int32)+checked(-_Int32));
     [Fact]
-    public void Not()=>this.実行結果が一致するか確認(()=>!_Boolean&&!_Boolean);
+    public void Not()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>!_Boolean&&!_Boolean);
     [Fact]
-    public void OnesComplement()=>this.実行結果が一致するか確認(()=>~_Int32+~_Int32);
+    public void OnesComplement()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>~_Int32+~_Int32);
 
     [Fact]
-    public void TypeAs()=>this.実行結果が一致するか確認(()=>(Object_String as string)+(Object_String as string));
+    public void TypeAs()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(Object_String as string)+(Object_String as string));
 
     [Fact]
-    public void UnaryPlus()=>this.実行結果が一致するか確認(()=>+_Static_class_演算子オーバーロード1-+_Static_class_演算子オーバーロード1);
+    public void UnaryPlus()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>+_Static_class_演算子オーバーロード1-+_Static_class_演算子オーバーロード1);
 
     [Fact]
-    public void Unbox()=>this.実行結果が一致するか確認(()=>(int)Object_Int32+(int)Object_Int32);
+    public void Unbox()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(int)Object_Int32+(int)Object_Int32);
 
     [Fact]
     public void Block(){
@@ -324,10 +318,10 @@ public class ExpressionEqualityComparer:共通{
     }
 
     [Fact]
-    public void Conditional()=>this.実行結果が一致するか確認(()=>(_Boolean?_Int32:10)+(_Boolean?_Int32:10));
+    public void Conditional()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(_Boolean?_Int32:10)+(_Boolean?_Int32:10));
 
     [Fact]
-    public void Constant()=>this.実行結果が一致するか確認(()=>_List[1]+_List[1]);
+    public void Constant()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_List[1]+_List[1]);
 
     [Fact]
     public void DebugInfo(){
@@ -364,7 +358,7 @@ public class ExpressionEqualityComparer:共通{
     public static dynamic Dynamicメンバーアクセス(dynamic a){
         return a.メンバー;
     }
-    private void AssertEqual(Expression a,Expression b){
+    private void AssertEqual(Expression? a,Expression? b){
         this.MemoryMessageJson_Assert(a,c=>{
             Assert.Equal(a,b,this.Comparer);
             Assert.Equal(a,c,this.Comparer);
@@ -710,7 +704,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void Goto00(){
         var Label1=Expression.Label(typeof(int),"Label1");
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     Expression.Goto(Label1,Expression.Constant(1)),
@@ -724,7 +718,7 @@ public class ExpressionEqualityComparer:共通{
         //a.Target==b.Target&&this.Equals(a.Value,b.Value);
         var Label1=Expression.Label(typeof(int),"Label1");
         var Label2=Expression.Label(typeof(int),"Label2");
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -743,7 +737,7 @@ public class ExpressionEqualityComparer:共通{
     public void Goto1(){
         var Label1=Expression.Label(typeof(int),"Label1");
         var Label2=Expression.Label(typeof(int),"Label2");
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -761,7 +755,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void Goto2(){
         var Label1=Expression.Label(typeof(int),"Label1");
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     Expression.Goto(Label1,Expression.Constant(1)),
@@ -910,7 +904,7 @@ public class ExpressionEqualityComparer:共通{
     //}
 
     [Fact]
-    public void Invoke()=>this.実行結果が一致するか確認(()=>_Delegate(4)+_Delegate(4));
+    public void Invoke()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>_Delegate(4)+_Delegate(4));
     [Fact]
     public void Lambda0(){
         var p=Expression.Parameter(typeof(int));
@@ -1013,7 +1007,7 @@ public class ExpressionEqualityComparer:共通{
         );
     }
     [Fact]
-    public void ListInit()=>this.実行結果が一致するか確認(()=>new{a=new List<int>{1,2},b=new List<int>{1,2}});
+    public void ListInit()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=new List<int>{1,2},b=new List<int>{1,2}});
 
     [Fact]
     public void Loop(){
@@ -1341,27 +1335,27 @@ public class ExpressionEqualityComparer:共通{
 
     [Fact]
     public void MemberAccess()=>
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             ()=>_Static_class_演算子オーバーロード1.Int32フィールド+_Static_class_演算子オーバーロード1.Int32フィールド);
 
     [Fact]
     public void MemberInit()=>
-        this.実行結果が一致するか確認(()=>new{a=new class_演算子オーバーロード{Int32フィールド=3},b=new class_演算子オーバーロード{Int32フィールド=3}});
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=new class_演算子オーバーロード{Int32フィールド=3},b=new class_演算子オーバーロード{Int32フィールド=3}});
 
     [Fact]
-    public void Call()=>this.実行結果が一致するか確認(()=>Function()+Function());
+    public void Call()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>Function()+Function());
 
     [Fact]
-    public void NewArrayBounds()=>this.実行結果が一致するか確認(()=>new{a=new int[10],b=new int[10]});
+    public void NewArrayBounds()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=new int[10],b=new int[10]});
 
     [Fact]
-    public void NewArrayInit()=>this.実行結果が一致するか確認(()=>new{a=new[]{1,2,3},b=new[]{1,2,3}});
+    public void NewArrayInit()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=new[]{1,2,3},b=new[]{1,2,3}});
 
     [Fact]
-    public void New()=>this.実行結果が一致するか確認(()=>new{a=new class_演算子オーバーロード(),b=new class_演算子オーバーロード()});
+    public void New()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=new class_演算子オーバーロード(),b=new class_演算子オーバーロード()});
 
     [Fact]
-    public void Calesce()=>this.実行結果が一致するか確認(()=>(_NullableInt32??4)+(_NullableInt32??4));
+    public void Calesce()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>(_NullableInt32??4)+(_NullableInt32??4));
     //共通部分式でParameterは最速なので先行評価しないため、カバレッジが出来方法が思いつかない。
     [Fact]
     public void Parameter(){
@@ -1384,7 +1378,7 @@ public class ExpressionEqualityComparer:共通{
     //実際どんな式か分からない。
     [Fact]
     public void TypeEqual(){
-        this.実行結果が一致するか確認(()=>
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>
             // ReSharper disable once OperatorIsCanBeUsed
             Object_Int32.GetType()==typeof(int)&&
             // ReSharper disable once OperatorIsCanBeUsed
@@ -1393,14 +1387,14 @@ public class ExpressionEqualityComparer:共通{
     }
 
     [Fact]
-    public void TypeIs()=>this.実行結果が一致するか確認(()=>Object_Int32 is int||Object_Int32 is int);
+    public void TypeIs()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>Object_Int32 is int||Object_Int32 is int);
 
     private static double L(Func<double> f)=>f();
 
     [Fact]
     public void Default(){
         var Method=typeof(ExpressionEqualityComparer).GetMethod(nameof(L),BindingFlags.Static|BindingFlags.NonPublic)!;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<double>>(
                 Expression.Add(
                     Expression.Call(
@@ -1622,7 +1616,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryFinally(){
         //if(!this.PrivateEquals(a.Finally,b.Finally)) return false;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryFinally(
                     Expression.Constant(0),
@@ -1697,7 +1691,7 @@ public class ExpressionEqualityComparer:共通{
     public void TryCatch_Handler_Body(){
         //for(var c=0;c<a_Handlers_Count;c++) {
         //    if(!this.PrivateEquals(a_Handler.Body  ,b_Handler.Body  )) return false;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1720,7 +1714,7 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void TryCatch_Filter0(){
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -1739,7 +1733,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Filter1(){
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1768,7 +1762,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Filter2(){
         var Variable=Expression.Parameter(typeof(Exception));
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1804,7 +1798,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Test(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1830,7 +1824,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1850,7 +1844,7 @@ public class ExpressionEqualityComparer:共通{
                 )
             )
         );
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Action>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1873,7 +1867,7 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void TryCatchFinally(){
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatchFinally(
                     Expression.Constant(0),
@@ -1923,7 +1917,7 @@ public class ExpressionEqualityComparer:共通{
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant=Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsTrue(Constant),
@@ -1943,7 +1937,7 @@ public class ExpressionEqualityComparer:共通{
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant=Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.実行結果が一致するか確認(
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsFalse(Constant),

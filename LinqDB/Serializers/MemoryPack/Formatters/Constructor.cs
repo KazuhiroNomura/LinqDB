@@ -12,8 +12,9 @@ public class Constructor:MemoryPackFormatter<T> {
         var type=value.ReflectedType!;
         writer.WriteType(type);
         
-        var array= writer.Serializer().TypeConstructors.Get(type);
-        writer.WriteVarInt(Array.IndexOf(array,value));
+        var array=writer.Serializer().TypeConstructors.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteVarInt(index);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
@@ -23,13 +24,10 @@ public class Constructor:MemoryPackFormatter<T> {
         
         var type=reader.ReadType();
         
-        var array= reader.Serializer().TypeConstructors.Get(type);
+        var array=reader.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadVarIntInt32();
         
         return array[index];
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
-        if(reader.TryReadNil()) return;
-        value=Read(ref reader);
-    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=reader.TryReadNil()?null:Read(ref reader);
 }

@@ -1,33 +1,5 @@
-﻿using LinqDB.Optimizers;
-using LinqDB.Remote.Clients;
-using LinqDB.Remote.Servers;
-using LinqDB.Sets;
-using LinqDB;
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Contracts;
-using System.Diagnostics;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using LinqDB.Serializers;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
-using LinqDB.Serializers.MemoryPack.Formatters;
-using MemoryPack;
-using System.Buffers;
-using System.Collections.ObjectModel;
-using System.Reflection;
-using LinqDB.Helpers;
+﻿using MemoryPack;
 using MessagePack;
-using Expressions=System.Linq.Expressions;
-using Newtonsoft.Json.Linq;
-
 namespace Serializers.MessagePack.Formatters;
 
 [Serializable,MessagePackObject(true),MemoryPackable]

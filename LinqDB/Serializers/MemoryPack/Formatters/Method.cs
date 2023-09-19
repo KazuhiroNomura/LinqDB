@@ -17,8 +17,9 @@ public class Method:MemoryPackFormatter<T> {
 
 
 
-        var array= writer.Serializer().TypeMethods.Get(type);
-        writer.WriteVarInt(Array.IndexOf(array,value));
+        var array=writer.Serializer().TypeMethods.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteVarInt(index);
 
     }
     internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter : IBufferWriter<byte> {
@@ -34,16 +35,11 @@ public class Method:MemoryPackFormatter<T> {
         var type= reader.ReadType();
 
         
-        var array= reader.Serializer().TypeMethods.Get(type);
+        var array=reader.Serializer().TypeMethods.Get(type);
         var index=reader.ReadVarIntInt32();
         
         return array[index];
     }
-    internal static T? ReadNullable(ref Reader reader){
-        if(reader.TryReadNil()) return null;
-        return Read(ref reader);
-    }
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=Read(ref reader);
-    }
+    internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=Read(ref reader);
 }

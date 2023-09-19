@@ -8,10 +8,7 @@ using MemoryPack;
 using System.Buffers;
 using System.Reflection;
 using LinqDB.Helpers;
-using LinqDB.Serializers;
 using MessagePack;
-using Serializers.MessagePack.Formatters;
-
 using static LinqDB.Optimizers.Optimizer;
 //using Utf8Json2 = LinqDB.Serializers.Utf8Json;
 //using MessagePack2 = LinqDB.Serializers.MessagePack;
@@ -126,97 +123,65 @@ public abstract class 共通{
         this.MemoryMessageJson_Assert<object>(input,output =>Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer));
     }
     //リモート実行できるか。
-    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<T>(Expression<Func<T>> input){
+    private void 共通MemoryMessageJson_TExpressionObject_コンパイル実行<T>(LambdaExpression inputLambda,Func<Delegate,T>x){
         var Optimizer=this.Optimizer;
-        var 標準=input.Compile();
-        var expected0=標準();
-        T expected1,expected2;
+        var 標準=inputLambda.Compile();
+        var expected0=x(標準);
         Optimizer.IsInline=false;
-        {
-            var M=Optimizer.CreateDelegate(input);
-            expected1=M();
-            Assert.Equal(expected0,expected1,this.Comparer);
-        }
+        var expected1=x(Optimizer.CreateDelegate(inputLambda));
+        Assert.Equal(expected0,expected1,this.Comparer);
         Optimizer.IsInline=true;
-        {
-            var M=Optimizer.CreateDelegate(input);
-            expected2=M();
-            Assert.Equal(expected0,expected2,this.Comparer);
-        }
-        this.MemoryMessageJson_Assert(input,共通);
-        this.MemoryMessageJson_Assert<Expression>(input,共通);
-        this.MemoryMessageJson_Assert<object>(input,共通);
+        var expected2=x(Optimizer.CreateDelegate(inputLambda));
+        Assert.Equal(expected0,expected2,this.Comparer);
+        this.MemoryMessageJson_Assert(inputLambda,共通);
+        this.MemoryMessageJson_Assert<Expression>(inputLambda,共通);
+        this.MemoryMessageJson_Assert<object>(inputLambda,共通);
         void 共通(object output){
-            var output0=(Expression<Func<T>>)output;
-            var M0=input.Compile();
-            {
-                var actual=M0();
-                Assert.Equal(expected0,actual,this.Comparer);
-            }
-            {
-                var M=output0.Compile();
-                var actual=M();
-                Assert.Equal(expected0,actual,this.Comparer);
-            }
-            Assert.Equal(input,output0,this.ExpressionEqualityComparer);
+            Assert.Equal(expected0,x(inputLambda.Compile()),this.Comparer);
+            var outputLambda=(LambdaExpression)output;
+            Assert.Equal(inputLambda,outputLambda,this.ExpressionEqualityComparer);
+            var actual0=x(outputLambda.Compile());
+            Assert.Equal(expected0,actual0,this.Comparer);
+            Assert.Equal(expected1,actual0,this.Comparer);
+            Assert.Equal(expected2,actual0,this.Comparer);
             Optimizer.IsInline=false;
-            {
-                var M=Optimizer.CreateDelegate(output0);
-                var actual=M();
-                Assert.Equal(expected0,actual,this.Comparer);
-            }
+            var actual1=x(Optimizer.CreateDelegate(outputLambda));
+            Assert.Equal(expected0,actual1,this.Comparer);
+            Assert.Equal(expected1,actual1,this.Comparer);
+            Assert.Equal(expected2,actual1,this.Comparer);
             Optimizer.IsInline=true;
-            {
-                var M=Optimizer.CreateDelegate(output0);
-                var actual=M();
-                Assert.Equal(expected0,actual,this.Comparer);
-            }
+            var actual2=x(Optimizer.CreateDelegate(outputLambda));
+            Assert.Equal(expected0,actual2,this.Comparer);
+            Assert.Equal(expected1,actual2,this.Comparer);
+            Assert.Equal(expected2,actual2,this.Comparer);
         }
     }
-    //リモート実行できるか。
-    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<T,TResult>(Expression<Func<T,TResult>> input,T t){
+    protected void MemoryMessageJson_TExpressionObject_コンパイル実行(Expression<Action> inputLambda){
         var Optimizer=this.Optimizer;
-        var 標準=input.Compile();
-        var expected=標準(t);
-        this.MemoryMessageJson_Assert(input,共通);
-        this.MemoryMessageJson_Assert<Expression>(input,共通);
-        this.MemoryMessageJson_Assert<object>(input,共通);
+        var 標準=inputLambda.Compile();
+        標準();
+        Optimizer.IsInline=false;
+        Optimizer.CreateDelegate(inputLambda)();
+        Optimizer.IsInline=true;
+        Optimizer.CreateDelegate(inputLambda)();
+        this.MemoryMessageJson_Assert(inputLambda,共通);
+        this.MemoryMessageJson_Assert<Expression>(inputLambda,共通);
+        this.MemoryMessageJson_Assert<object>(inputLambda,共通);
         void 共通(object output){
-            var output0=(Expression<Func<T,TResult>>)output;
-            Assert.Equal(input,output0,this.ExpressionEqualityComparer);
+            var outputLambda=(LambdaExpression)output;
+            Assert.Equal(inputLambda,outputLambda,this.ExpressionEqualityComparer);
+            (Optimizer.CreateDelegate(inputLambda))();
             Optimizer.IsInline=false;
-            {
-                var M=Optimizer.CreateDelegate(output0);
-                var actual=M(t);
-                Assert.Equal(expected,actual,this.Comparer);
-            }
+            (Optimizer.CreateDelegate(inputLambda))();
             Optimizer.IsInline=true;
-            {
-                var M=Optimizer.CreateDelegate(output0);
-                var actual=M(t);
-                Assert.Equal(expected,actual,this.Comparer);
-            }
+            (Optimizer.CreateDelegate(inputLambda))();
         }
     }
-    protected void コンパイル<T>(T input) where T:Expression?{
-        //var Optimizer=this.Optimizer;
-        //var 標準=Lambda.Compile();
-        //var expected=標準();
-        //{
-        //    Optimizer.IsInline=false;
-        //    {
-        //        var M=Optimizer.CreateDelegate(Lambda);
-        //        var actual=M();
-        //        Assert.Equal(expected,actual,this.Comparer);
-        //    }
-        //    Optimizer.IsInline=true;
-        //    {
-        //        var M=Optimizer.CreateDelegate(Lambda);
-        //        var actual=M();
-        //        Assert.Equal(expected,actual,this.Comparer);
-        //    }
-        //}
-    }
+    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<TResult>(Expression<Func<TResult>> input)=>
+        this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<TResult>)Delegate)());
+    //リモート実行できるか。
+    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<T,TResult>(Expression<Func<T,TResult>> input,T t)=>
+        this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<T,TResult>)Delegate)(t));
     protected void MemoryMessageJson_TExpressionObject<T>(T input) where T:Expression?{
     //protected void 共通Expression<T>(Expressions.Expression<Func<T>> input){
         //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
@@ -224,7 +189,7 @@ public abstract class 共通{
         this.MemoryMessageJson_Assert<Expression>(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
-    protected void 実行結果が一致するか確認<TResult>(Expression<Func<TResult>> Lambda){
+    protected void MemoryMessageJson_TExpressionObject2_コンパイル実行<TResult>(Expression<Func<TResult>> Lambda){
         //this.シリアライズ(Lambda);
         //var 標準=Lambda.Compile();
         //var Optimizer=this.Optimizer;

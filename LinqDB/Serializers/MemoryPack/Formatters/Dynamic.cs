@@ -365,7 +365,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                 
                 var name=reader.ReadString();
                 
-                var arguments=reader.ReadArray<Expressions.Expression>();
+                var arguments=reader.ReadArray<Expressions.Expression>();//var argumentInfo2=CreateCSharpArgumentInfo(arguments!);//argumentInfo=argumentInfo2;
                 value=Expressions.Expression.Dynamic(
                     RuntimeBinder.Binder.InvokeMember(
                         flags,

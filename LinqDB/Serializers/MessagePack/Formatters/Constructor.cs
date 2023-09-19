@@ -9,23 +9,22 @@ using Reader = MessagePackReader;
 using T = ConstructorInfo;
 public class Constructor:IMessagePackFormatter<T> {
     public static readonly Constructor Instance=new();
-    private const int ArrayHeader=2;
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
-        var type=value.ReflectedType!;
+        writer.WriteArrayHeader(2);
+        var type=value.ReflectedType;
         writer.WriteType(type);
-        var array= Resolver.Serializer().TypeConstructors.Get(type!);
-        writer.WriteInt32(Array.IndexOf(array,value));
+        var array=Resolver.Serializer().TypeConstructors.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var count=reader.ReadArrayHeader();
+        var count=reader.ReadArrayHeader();Debug.Assert(count==2);
         var type=reader.ReadType();
-        Debug.Assert(count==ArrayHeader);
-        var array= Resolver.Serializer().TypeConstructors.Get(type);
+        var array=Resolver.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadInt32();
         
         return array[index];

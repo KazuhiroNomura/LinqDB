@@ -38,6 +38,7 @@ public class Object:IMessagePackFormatter<T>{
             default:{
                 var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
                 Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
+
                 
                 
                 

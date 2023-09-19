@@ -9,29 +9,36 @@ using Reader=MessagePackReader;
 using T=PropertyInfo;
 public class Property:IMessagePackFormatter<T> {
     public static readonly Property Instance=new();
-    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
         var type=value!.ReflectedType!;
         writer.WriteType(type);
         
-        writer.Write(value.Name);
+
         
-        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeProperties.Get(type),value));
+        var array=Resolver.Serializer().TypeProperties.Get(type!);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
         
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        WriteNullable(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();Debug.Assert(count==3);
         var type=reader.ReadType();
         
-        var name=reader.ReadString();
+
         
+        var array=Resolver.Serializer().TypeProperties.Get(type);
         var index=reader.ReadInt32();
 
-        return Resolver.Serializer().TypeProperties.Get(type)[index];
+        return array[index];
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
+    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

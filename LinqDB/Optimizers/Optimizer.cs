@@ -930,27 +930,29 @@ public sealed partial class Optimizer:IDisposable{
             var a_Index0 = this.a_Parameters.IndexOf(a);
             var b_Index0 = this.b_Parameters.IndexOf(b);
             if(a_Index0!=b_Index0)return false;
-            //if(a_Index0>=0) return true;
+            if(a_Index0>=0) return true;
             //探索開始時点の
             var スコープParameters = this.スコープParameters;
             var a_Index1 = スコープParameters.IndexOf(a);
             var b_Index1 = スコープParameters.IndexOf(b);
             if(a_Index1!=b_Index1) return false;
-            //if(a_Index1>=0) return true;
+            if(a_Index1>=0) return true;
             //Let(a=>.v),Let(b=>.w)は一致しない。
             //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
 
             var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
             var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
-            Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
-            if(a_ラムダ跨ぎParameters is null){
-                return false;
-            }
-            if(a_ラムダ跨ぎParameters.Contains(a))return b_ラムダ跨ぎParameters!.Contains(b);
-            if(b_ラムダ跨ぎParameters!.Contains(b))return false;
+            //Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
+            //if(a_ラムダ跨ぎParameters is null){
+            //    return false;
+            //}
+            if(a_ラムダ跨ぎParameters.Contains(a))return b_ラムダ跨ぎParameters.Contains(b);
+            if(b_ラムダ跨ぎParameters.Contains(b))return false;
             a_ラムダ跨ぎParameters.Add(a);
             b_ラムダ跨ぎParameters.Add(b);
             return true;
+            //if(a_Index0>=0||a_Index1>=0) return true;
+            //return a==b;
         }
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {
@@ -976,12 +978,9 @@ public sealed partial class Optimizer:IDisposable{
             return true;
         }
         private bool T(TryExpression a,TryExpression b) {
-            if(!this.PrivateEquals(a.Body,b.Body))
-                return false;
-            if(!this.PrivateEqualsNullable(a.Fault,b.Fault))
-                return false;
-            if(!this.PrivateEqualsNullable(a.Finally,b.Finally))
-                return false;
+            if(!this.PrivateEquals(a.Body,b.Body))return false;
+            if(!this.PrivateEqualsNullable(a.Fault,b.Fault))return false;
+            if(!this.PrivateEqualsNullable(a.Finally,b.Finally))return false;
             var a_Handlers = a.Handlers;
             var b_Handlers = b.Handlers;
             var a_Handlers_Count = a_Handlers.Count;
@@ -990,12 +989,24 @@ public sealed partial class Optimizer:IDisposable{
             for(var c = 0;c<a_Handlers_Count;c++) {
                 var a_Handler = a_Handlers[c];
                 var b_Handler = b_Handlers[c];
-                if(!this.PrivateEquals(a_Handler.Body,b_Handler.Body))
-                    return false;
-                if(!this.PrivateEqualsNullable(a_Handler.Filter,b_Handler.Filter))
-                    return false;
-                if(a_Handler.Test!=b_Handler.Test)
-                    return false;
+                if(a_Handler.Test!=b_Handler.Test)return false;
+                var a_Handler_Variable=a_Handler.Variable;
+                var b_Handler_Variable=b_Handler.Variable;
+                if(a_Handler_Variable is null^b_Handler_Variable is null) return false;
+                var a_Parameters = this.a_Parameters;
+                var b_Parameters = this.b_Parameters;
+                var a_Parameters_Count = a_Parameters.Count;
+                Debug.Assert(a_Parameters_Count==b_Parameters.Count);
+                if(a_Handler_Variable is not null){
+                    a_Parameters.Add(a_Handler_Variable);
+                    b_Parameters.Add(b_Handler_Variable);
+                }
+                if(!this.PrivateEquals(a_Handler.Body,b_Handler.Body))return false;
+                if(!this.PrivateEqualsNullable(a_Handler.Filter,b_Handler.Filter))return false;
+                if(a_Handler_Variable is not null) {
+                    a_Parameters.RemoveAt(a_Parameters_Count);
+                    b_Parameters.RemoveAt(a_Parameters_Count);
+                }
             }
             return true;
         }

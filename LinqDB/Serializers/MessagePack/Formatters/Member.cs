@@ -11,12 +11,12 @@ public class Member:IMessagePackFormatter<T>{
     public static readonly Member Instance=new();
     internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
-        var ReflectedType=value!.ReflectedType!;
-        writer.WriteType(ReflectedType);
+        var type=value!.ReflectedType;
+        writer.WriteType(type);
 
 
         
-        var array= Resolver.Serializer().TypeMembers.Get(ReflectedType);
+        var array=Resolver.Serializer().TypeMembers.Get(type);
         var index=Array.IndexOf(array,value);
         writer.WriteInt32(index);
         
@@ -33,11 +33,8 @@ public class Member:IMessagePackFormatter<T>{
 
         var index=reader.ReadInt32();
 
-        var array= Resolver.Serializer().TypeMembers.Get(type);
+        var array=Resolver.Serializer().TypeMembers.Get(type);
         return array[index];
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
-        return Read(ref reader,Resolver);
-    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

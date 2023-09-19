@@ -1,37 +1,40 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
-using System.Diagnostics;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=FieldInfo;
 public class Field:IMessagePackFormatter<T>{
     public static readonly Field Instance=new();
-    private const int ArrayHeader=2;
-    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
-        var type=value!.ReflectedType!;
+    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+        writer.WriteArrayHeader(2);
+        var type=value.ReflectedType;
         writer.WriteType(type);
-        var methods= Resolver.Serializer().TypeFields.Get(type);
-        writer.WriteInt32(Array.IndexOf(methods,value));
+        
+        
+        
+        var array=Resolver.Serializer().TypeFields.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
+        
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+        if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        var count=reader.ReadArrayHeader();Debug.Assert(count==2);
         var type=reader.ReadType();
-        var results= Resolver.Serializer().TypeFields.Get(type);
+        
+
+
+        var array=Resolver.Serializer().TypeFields.Get(type);
         var index=reader.ReadInt32();
-        return results[index];
+        
+        return array[index];
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
-        return Read(ref reader,Resolver);
-    }
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

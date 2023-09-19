@@ -9,29 +9,29 @@ using T=Expressions.IndexExpression;
 using static Extension;
 public class Index:IJsonFormatter<T> {
     public static readonly Index Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Write(ref writer,value.Object,Resolver);
         writer.WriteValueSeparator();
-        Property.Write(ref writer,value.Indexer,Resolver);
+        Property.WriteNullable(ref writer,value.Indexer,Resolver);
         writer.WriteValueSeparator();
         writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         var instance= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var indexer= Property.Read(ref reader,Resolver);
+        var indexer= Property.ReadNullable(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.MakeIndex(instance,indexer,arguments);

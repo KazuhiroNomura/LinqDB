@@ -14,9 +14,10 @@ public class Constructor:IJsonFormatter<T> {
         writer.WriteBeginArray();
         var type=value.ReflectedType!;
         writer.WriteType(type);
-        var array= Resolver.Serializer().TypeConstructors.Get(type!);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(array,value));
+        var array=Resolver.Serializer().TypeConstructors.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
@@ -27,7 +28,7 @@ public class Constructor:IJsonFormatter<T> {
         reader.ReadIsBeginArrayWithVerify();
         var type= reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var array= Resolver.Serializer().TypeConstructors.Get(type);
+        var array=Resolver.Serializer().TypeConstructors.Get(type);
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
         return array[index];

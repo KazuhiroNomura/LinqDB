@@ -16,12 +16,17 @@ public class Property:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
         writer.WriteValueSeparator();
-        writer.WriteInt32(Array.IndexOf(Resolver.Serializer().TypeProperties.Get(type),value));
+        var array=Resolver.Serializer().TypeProperties.Get(type);
+        var index=Array.IndexOf(array,value);
+        writer.WriteInt32(index);
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
+    }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+        WriteNullable(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
@@ -29,9 +34,11 @@ public class Property:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var name=reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();
+        var array=Resolver.Serializer().TypeProperties.Get(type);
         var index=reader.ReadInt32();
         reader.ReadIsEndArrayWithVerify();
-        return Resolver.Serializer().TypeProperties.Get(type)[index];
+        return array[index];
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
+    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using Expressions=System.Linq.Expressions;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 using LinqDB.Helpers;
 
@@ -78,6 +80,12 @@ internal static class Common {
     public static readonly CSharpArgumentInfo[]CSharpArgumentInfos2={CSharpArgumentInfo1,CSharpArgumentInfo1};
     public static readonly CSharpArgumentInfo[]CSharpArgumentInfos3={CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
     public static readonly CSharpArgumentInfo[]CSharpArgumentInfos4={CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
+    public static CSharpArgumentInfo[]CreateCSharpArgumentInfo(Expressions.Expression[] Arguments){
+        var Length=Arguments.Length;
+        var value=new CSharpArgumentInfo[Length];
+        for(var a=0;a<Length;a++) value[a]=CSharpArgumentInfo1;
+        return value;
+    }
     public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(BinaryOperationBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
