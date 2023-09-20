@@ -55,7 +55,7 @@ public class Object:IMessagePackFormatter<T>{
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
-    internal static object Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    private static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         T value;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==2);
@@ -85,6 +85,6 @@ public class Object:IMessagePackFormatter<T>{
         
         return value;
     }
-    internal static object? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    internal static T? ReadNullable(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
     public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

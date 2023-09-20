@@ -11,7 +11,7 @@ public class Constant:IJsonFormatter<T> {
     private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
-        Object.Instance.Serialize(ref writer,value.Value,Resolver);
+        Object.WriteNullable(ref writer,value.Value,Resolver);
     }
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
 

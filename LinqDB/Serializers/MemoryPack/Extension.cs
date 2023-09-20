@@ -3,6 +3,7 @@ using System.Reflection;
 
 
 using System.Buffers;
+using LinqDB.Databases;
 using MemoryPack;
 using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -122,5 +123,7 @@ public static class Extension{
     public static Serializer Serializer<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter:IBufferWriter<byte> =>
         (Serializer)writer.Options.ServiceProvider!;
     public static Serializer Serializer(this ref Reader reader)=>
+        (Serializer)reader.Options.ServiceProvider!;
+    public static Serializer Container<TContainer>(this ref Reader reader)where TContainer:Container=>
         (Serializer)reader.Options.ServiceProvider!;
 }

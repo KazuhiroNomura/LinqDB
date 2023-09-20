@@ -2,10 +2,11 @@
 using Expressions = System.Linq.Expressions;
 using MemoryPack;
 using System.Linq.Expressions;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
-using T= IndexExpression;
+using Reader = MemoryPackReader;
+using T = IndexExpression;
 using static Extension;
 public class Index:MemoryPackFormatter<T> {
     public static readonly Index Instance=new();

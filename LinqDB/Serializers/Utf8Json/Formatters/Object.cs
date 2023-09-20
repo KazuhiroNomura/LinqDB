@@ -9,7 +9,7 @@ using Reader = JsonReader;
 using T = System.Object;
 public class Object:IJsonFormatter<T>{
     public static readonly Object Instance=new();
-    internal static void WriteNullable(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var type=value!.GetType();
         writer.WriteType(type);
@@ -50,11 +50,12 @@ public class Object:IJsonFormatter<T>{
         }
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void WriteNullable(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
-        WriteNullable(ref writer,value,Resolver);
+        Write(ref writer,value,Resolver);
     }
-    internal static object Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
+    private static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         object value;
         reader.ReadIsBeginArrayWithVerify();
 
@@ -84,6 +85,6 @@ public class Object:IJsonFormatter<T>{
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    internal static object?ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
-    public object Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
+    internal static T?ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null:Read(ref reader,Resolver);
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

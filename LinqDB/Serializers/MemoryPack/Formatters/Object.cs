@@ -3,15 +3,16 @@ using System.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 using Reader = MemoryPackReader;
 using T = System.Object;
-public class Object:MemoryPackFormatter<object>{
+public class Object:MemoryPackFormatter<T>{
     public static readonly Object Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
-        if(writer.TryWriteNil(value))return;
-        var type=value!.GetType();
+    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+        var type=value.GetType();
         writer.WriteType(type);
 
         switch(value){
@@ -55,7 +56,7 @@ public class Object:MemoryPackFormatter<object>{
         Write(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref object? value)=>WriteNullable(ref writer,value);
-    internal static object Read(ref Reader reader) {
+    private static T Read(ref Reader reader) {
         T value;
         
         var type=reader.ReadType();
@@ -82,8 +83,8 @@ public class Object:MemoryPackFormatter<object>{
         else if(typeof(FieldInfo             ).IsAssignableFrom(type))value=Field      .Read(ref reader);
         else value=reader.ReadValue(type)!;
         
-        return value!;
+        return value;
     }
-    internal static object? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
-    public override void Deserialize(ref Reader reader,scoped ref object? value)=>value=ReadNullable(ref reader);
+    internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=ReadNullable(ref reader);
 }

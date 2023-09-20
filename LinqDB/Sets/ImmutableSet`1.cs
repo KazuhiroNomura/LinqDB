@@ -10,7 +10,9 @@ using System.Runtime.Serialization;
 using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
-using Utf8Json;
+//using MemoryPack;
+//using MessagePack.Resolvers;
+//using Utf8Json;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ArrangeStaticMemberQualifier
 namespace LinqDB.Sets;
@@ -19,7 +21,7 @@ namespace LinqDB.Sets;
 /// 関係集合。
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[Serializable]
+//[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 [DebuggerDisplay("Count = {"+nameof(Count)+"}")]
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
 public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<ImmutableSet<T>>,ISerializable{
@@ -46,7 +48,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <returns></returns>
     internal TreeNode? InternalHashCodeに一致するTreeNodeを取得する(long HashCode) {
         Debug.Assert(this.TreeRoot is not null);
-        TreeNode? TreeNode = this.TreeRoot;
+        var TreeNode = this.TreeRoot;
         long 下限 = 初期下限, 上限 = 初期上限;
         do {
             var CurrentHashCode = (下限+上限)>>1;
@@ -64,7 +66,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         return null;
     }
     private readonly Random Random = new(1);
-    private List<T> List = new();
+    //private List<T> List = new();
     [IgnoreDataMember]
     public T Sampling {
         get{
@@ -114,35 +116,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             return null;
         }
     }
-    private void PrivateSampling() {
-        var List = this.List;
-        List.Clear();
-        do {
-            var Level = 0;
-            var Random = this.Random;
-            TreeNode? TreeNode = this.TreeRoot;
-            while(TreeNode is not null) {
-                for(var a = TreeNode.LinkedNodeItem;a is not null;a=a.LinkedNodeItem)
-                    List.Add(a.Item);
-                TreeNode=Random.Next(2)==0
-                    ?TreeNode.L??TreeNode.R
-                    :TreeNode.R??TreeNode.L;
-                Level++;
-            }
-        } while(List.Count==0);
-    }
-    //public T Sampling{
-    //    get {
-    //        this.PrivateSampling();
-    //        var List = this.List;
-    //        if(List.Count==0) return default!;
-    //        this.PrivateSampling();
-    //        var List_Count =List.Count;
-    //        var Random = this.Random;
-    //        var index = Random.Next(List_Count);
-    //        return List[index];
-    //    }
-    //}
     [IgnoreDataMember]
     public T SamplingNullable=> this.Count==0 ? default! : this.Sampling;
     /// <summary>
@@ -433,6 +406,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         }
         public void Dispose() {
         }
+        [NonSerialized]
         internal T InternalCurrent;
         public T Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -756,7 +730,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// 性能のために値型の列挙子を表す
     /// </summary>
-    [NonSerialized]
     protected internal Enumerator 変数Enumerator;
     /// <summary>
     /// 値の列挙子
@@ -1318,7 +1291,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         try {
             while(true) {
                 this.InternalAdd(
-                    JsonSerializer.Deserialize<T>(Reader)
+                    Utf8Json.JsonSerializer.Deserialize<T>(Reader)
                 );
                 Count++;
             }

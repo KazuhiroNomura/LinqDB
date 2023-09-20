@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Utf8Json;
 
 namespace LinqDB.Sets;
 
@@ -16,11 +15,35 @@ namespace LinqDB.Sets;
 /// 関係集合。
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[Serializable]
-public class Set<T>:ImmutableSet<T>,ICollection<T>{
+//[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
+public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
+    //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>>{
+    //    public static readonly Formatter Instance = new();
+    //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value){
+    //        var Count=value!.Count;
+    //        var Formatter=writer.GetFormatter<T>();
+    //        writer.WriteVarInt(Count);
+    //        foreach(var item in value){
+    //            var item0=item;
+    //            Formatter.Serialize(ref writer,ref item0);
+    //        }
+    //    }
+    //    public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value){
+    //        var set=new Set<T>();
+    //        var Count=reader.ReadVarIntInt64();
+    //        var Formatter=reader.GetFormatter<T>();
+    //        T? item=default;
+    //        for(long a=0;a<Count;a++){
+    //            Formatter.Deserialize(ref reader,ref item);
+    //            set.Add(item);
+    //        }
+    //        value=set;
+    //    }
+    //}
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。
     /// </summary>
+    [MemoryPack.MemoryPackConstructor]
     public Set(){
     }
     /// <summary>
@@ -53,63 +76,63 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
     public Set(ImmutableSet<T> source,IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
-        public sealed class JsonFormatter:IJsonFormatter<Set<T>>{
-            public static readonly JsonFormatter Instance=new();
-            public void Serialize(ref JsonWriter writer,Set<T> value,IJsonFormatterResolver formatterResolver){
-                var Formatter=formatterResolver.GetFormatter<T>();
-                writer.WriteBeginArray();
-                var 二度目以降の出力か=false;
-                var TreeNode = value.TreeRoot;
-            LinkedNodeItem走査:
-                for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
-                    if(二度目以降の出力か)writer.WriteValueSeparator();
-                    二度目以降の出力か=true;
-                    Formatter.Serialize(ref writer,LinkedNodeItem.Item,formatterResolver);
-                }
-                if(TreeNode.L is not null) {
-                    TreeNode=TreeNode.L;
-                    goto LinkedNodeItem走査;
-                }
-                右に移動:
-                if(TreeNode.R is not null) {
-                    TreeNode=TreeNode.R;
-                    goto LinkedNodeItem走査;
-                }
-                //上に移動
-                while(!(TreeNode.P is null)) {
-                    var 旧TreeNode_P = TreeNode.P;
-                    if(旧TreeNode_P.L==TreeNode) {
-                        TreeNode=旧TreeNode_P;
-                        goto 右に移動;
-                    }
+    public sealed class JsonFormatter:Utf8Json.IJsonFormatter<Set<T>>{
+        public static readonly JsonFormatter Instance=new();
+        public void Serialize(ref Utf8Json.JsonWriter writer,Set<T> value,Utf8Json.IJsonFormatterResolver formatterResolver){
+            var Formatter=formatterResolver.GetFormatter<T>();
+            writer.WriteBeginArray();
+            var 二度目以降の出力か=false;
+            var TreeNode = value.TreeRoot;
+        LinkedNodeItem走査:
+            for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
+                if(二度目以降の出力か)writer.WriteValueSeparator();
+                二度目以降の出力か=true;
+                Formatter.Serialize(ref writer,LinkedNodeItem.Item,formatterResolver);
+            }
+            if(TreeNode.L is not null) {
+                TreeNode=TreeNode.L;
+                goto LinkedNodeItem走査;
+            }
+            右に移動:
+            if(TreeNode.R is not null) {
+                TreeNode=TreeNode.R;
+                goto LinkedNodeItem走査;
+            }
+            //上に移動
+            while(!(TreeNode.P is null)) {
+                var 旧TreeNode_P = TreeNode.P;
+                if(旧TreeNode_P.L==TreeNode) {
                     TreeNode=旧TreeNode_P;
+                    goto 右に移動;
                 }
-                writer.WriteEndArray();
+                TreeNode=旧TreeNode_P;
             }
-            public Set<T> Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
-                var result=new Set<T>();
-                var Formatter=formatterResolver.GetFormatter<T>();
-                reader.ReadIsBeginArrayWithVerify();
-                while(true){
-                    var value=(T)Formatter.Deserialize(ref reader,formatterResolver);
-                    result.IsAdded(value);
-                    var s=reader.ReadIsValueSeparator();
-                    if(!s) break;
-                }
-                return result;
-            }
+            writer.WriteEndArray();
         }
-        //public sealed class MessagePackFormatter:IMessagePackFormatter<T>{
-        //    public static readonly MessagePackFormatter Instance=new();
-        //    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
-        //        Debug.Assert(value!=null,nameof(value)+" != null");
-        //        writer.Write(value.a);
-        //        writer.Write(value.b);
-        //    }
-        //    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
-        //        return new sealed_classキーあり{a=reader.ReadInt32(),b=reader.ReadString()};
-        //    }
-        //}
+        public Set<T> Deserialize(ref Utf8Json.JsonReader reader,Utf8Json.IJsonFormatterResolver formatterResolver){
+            var result=new Set<T>();
+            var Formatter=formatterResolver.GetFormatter<T>();
+            reader.ReadIsBeginArrayWithVerify();
+            while(true){
+                var value=(T)Formatter.Deserialize(ref reader,formatterResolver);
+                result.IsAdded(value);
+                var s=reader.ReadIsValueSeparator();
+                if(!s) break;
+            }
+            return result;
+        }
+    }
+    //public sealed class MessagePackFormatter:IMessagePackFormatter<T>{
+    //    public static readonly MessagePackFormatter Instance=new();
+    //    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
+    //        Debug.Assert(value!=null,nameof(value)+" != null");
+    //        writer.Write(value.a);
+    //        writer.Write(value.b);
+    //    }
+    //    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
+    //        return new sealed_classキーあり{a=reader.ReadInt32(),b=reader.ReadString()};
+    //    }
+    //}
     protected Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext):base(SerializationInfo,StreamingContext) {
     }
     /// <summary>
@@ -187,7 +210,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     private static void WriteObject(string フォルダ名,object value) {
         var フィールドに対応するファイル名 = フォルダ名+@"\"+DateTimeOffset.Now.ToString("yyyyMMddHHmmssff",CultureInfo.CurrentCulture)+".tlg";
         using var FileStream = new FileStream(フィールドに対応するファイル名,FileMode.Create,FileAccess.Write,FileShare.Read);
-        JsonSerializer.Serialize(FileStream,value);
+        Utf8Json.JsonSerializer.Serialize(FileStream,value);
         //var Writer = XmlDictionaryWriter.CreateTextWriter(FileStream,Encoding.UTF8,false);
         //ExpressionSurrogateSelector.serializer.WriteObject(Writer,value);
         //Writer.Flush();
@@ -519,7 +542,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <param name="predicate">削除条件</param>
     /// <returns></returns>
     public long DeleteWith(Func<T,bool> predicate) {
-        TreeNode? TreeRoot = this.TreeRoot;
+        var TreeRoot = this.TreeRoot;
         var Remove数 = PrivateDeleteWith(predicate,ref TreeRoot,0,Environment.ProcessorCount);
         this._Count-=Remove数;
         return Remove数;

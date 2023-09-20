@@ -3,14 +3,16 @@
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Serializers.MemoryPack.Formatters;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
-using Reader=MemoryPackReader;
-using T=Expressions.Expression;
+using Reader = MemoryPackReader;
+using T = Expressions.Expression;
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
     public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        switch(value!.NodeType){
+        switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value);break;
             case Expressions.ExpressionType.Coalesce             :Binary.WriteLeftRightLambda(ref writer,(Expressions.BinaryExpression)value);break;
@@ -378,7 +380,7 @@ public class Expression:MemoryPackFormatter<T> {
             default:throw new NotSupportedException(NodeType.ToString());
         }
         
-        return value!;
+        return value;
     }
     internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
     public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=ReadNullable(ref reader);

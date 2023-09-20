@@ -13,7 +13,7 @@ public class Delegate:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         Method.Write(ref writer,value.Method,Resolver);
         writer.WriteValueSeparator();
-        Object.Instance.Serialize(ref writer,value.Target,Resolver);
+        Object.WriteNullable(ref writer,value.Target,Resolver);
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){

@@ -18,9 +18,10 @@ namespace LinqDB.Optimizers;
 /// </summary>
 /// </summary>
 public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
-    //public EnumerableSetEqualityComparer(){
-    //}
     private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer;
+    public EnumerableSetEqualityComparer(){
+        this.ExpressionEqualityComparer=new();
+    }
     public EnumerableSetEqualityComparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
         this.ExpressionEqualityComparer=ExpressionEqualityComparer;
     }

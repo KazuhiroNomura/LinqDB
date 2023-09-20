@@ -59,6 +59,8 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
                 },
                 new IFormatterResolver[]{
                     //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
+                    global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
+
                     global::MessagePack.Resolvers.BuiltinResolver.Instance,
                     global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
                     //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,

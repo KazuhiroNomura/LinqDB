@@ -24,9 +24,9 @@ public abstract class 共通{
     //protected Server<string> Server;
     protected readonly EnumerableSetEqualityComparer Comparer;
     protected ExpressionEqualityComparer ExpressionEqualityComparer=>new();
-    private readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
-    private readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
-    private readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
+    protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
+    protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
+    protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected 共通(){
         this.Comparer=new(this.ExpressionEqualityComparer);
         //var Server = this.Server=new Server<string>("",1,ListenerSocketポート番号) { ReadTimeout=receiveTimeout };
