@@ -1,4 +1,6 @@
-﻿using LinqDB.Sets;
+﻿using System.Linq.Expressions;
+using LinqDB.Sets;
+using Microsoft.Build.Execution;
 using Serializers.MessagePack.Formatters;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
@@ -53,15 +55,22 @@ public class 変換_KeySelectorの匿名型をValueTuple:共通{
             )
         );
     }
+    static T F<T>(T t)=>t;
+    //static T Anonymous<T>(T t)=>F(new{key=t});
+    static LambdaExpression L<T,TResult>(Expression<Func<T,TResult>> i)=>i;
+    static Func<T,TResult> Anonymous<T,TResult>(Func<T,TResult> i)=>i;
     [Fact]public void Call(){
-        {
-            var s=new Set<int>();
-            //s.Select(i=>i);
-            this.Optimizer.IsInline=true;
-            //this.共通コンパイル実行(()=>s.Select(i=>i));
-
-            this.共通コンパイル実行(()=>s.Join(s,o=>o,i=>i,(o,i)=>o+i));
-            //this.共通コンパイル実行(()=>s.Join(s,o=>o,i=>i,(o,i)=>new{o,i}));
-        }
+        var s=new Set<int>();
+        this.共通コンパイル実行(() => s.ToString());
+        this.共通コンパイル実行(() => s.Join(s,o => new { key = o },i => new { key = i },(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => new { key0 = o,key1 = o },i => new { key0 = i,key1 = i },(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => new { key = o },i => F(new { key = i }),(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => F(new { key = o }),i => new { key = i },(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => F(new { key = o }),i => F(new { key = i }),(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => new { key = o },Anonymous((int i) => new { key = i }),(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,Anonymous((int o) => new { key = o }),i => new { key = i },(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,Anonymous((int o) => new { key = o }),Anonymous((int i) => new { key = i }),(o,i) => o+i));
+        this.共通コンパイル実行(() => s.Join(s,o => o,i => i,(o,i) => o+i));
+        this.共通コンパイル実行(()=>s.Union(s));
     }
 }

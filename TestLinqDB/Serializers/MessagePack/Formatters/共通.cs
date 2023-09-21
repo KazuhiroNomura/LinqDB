@@ -79,7 +79,7 @@ public abstract class 共通{
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
         var expected0=標準();
-        //Optimizer.IsInline=true;
+        Optimizer.IsInline=true;
         var expected2=(Optimizer.CreateDelegate(input)());
         Assert.Equal(expected0,expected2,this.Comparer);
     }
