@@ -5,9 +5,14 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\kazuh\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_be882858\CoverageData\_LinqDB-TestLinqDB.371183822\Snapshot\snapshot.utdcvr</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b32a6087_002D2cba_002D4f1f_002D9f92_002Db6b3b0115494/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;And&gt;&#xD;
-    &lt;Namespace&gt;Serializers.MessagePack.Formatters&lt;/Namespace&gt;&#xD;
-    &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
-  &lt;/And&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;And&gt;&#xD;
+      &lt;Namespace&gt;Serializers.MessagePack.Formatters&lt;/Namespace&gt;&#xD;
+      &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
+    &lt;/And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_KeySelectorの匿名型をValueTuple&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/HangingTestRunnerResponse/@EntryValue">WaitForExit</s:String></wpf:ResourceDictionary>

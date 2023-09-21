@@ -67,7 +67,29 @@ public abstract class 共通{
         this.MemoryMessageJson_Assert<Expression>(input,output =>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         this.MemoryMessageJson_Assert<object>(input,output =>Assert.Equal(input,(Expression)output,this.ExpressionEqualityComparer));
     }
-    //リモート実行できるか。
+    protected void 共通コンパイル実行<T,TResult>(Expression<Func<T,TResult>> input,T t){
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        var expected0=標準(t);
+        Optimizer.IsInline=true;
+        var expected2=(Optimizer.CreateDelegate(input)(t));
+        Assert.Equal(expected0,expected2,this.Comparer);
+    }
+    protected void 共通コンパイル実行<TResult>(Expression<Func<TResult>> input){
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        var expected0=標準();
+        //Optimizer.IsInline=true;
+        var expected2=(Optimizer.CreateDelegate(input)());
+        Assert.Equal(expected0,expected2,this.Comparer);
+    }
+    protected void 共通コンパイル実行(Expression<Action> input){
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        標準();
+        Optimizer.IsInline=true;
+        Optimizer.CreateDelegate(input)();
+    }
     private void 共通MemoryMessageJson_TExpressionObject_コンパイル実行<T>(LambdaExpression input,Func<Delegate,T>x){
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();

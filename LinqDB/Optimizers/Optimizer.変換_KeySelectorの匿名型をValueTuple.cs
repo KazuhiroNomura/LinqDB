@@ -27,22 +27,14 @@ partial class Optimizer {
         protected override Expression Block(BlockExpression Block0) {
             var Block0_Expressions=Block0.Expressions;
             var Block0_Expressions_Count = Block0_Expressions.Count;
-            var Block1_Expressions = new List<Expression>();
-            for(var a = 0;a<Block0_Expressions_Count;a++) {
-                var Block1_Expression=this.Traverse(Block0_Expressions[a]);
-                if(Block1_Expression.NodeType==ExpressionType.Default&&Block1_Expression.Type==typeof(void)) {
-                } else {
-                    Block1_Expressions.Add(Block1_Expression);
-                }
-            }
-            if(Block0.Variables.Count==0&&Block1_Expressions.Count==1) {
-                return Block1_Expressions[0];
-            } else {
-                return Expression.Block(
-                    Block0.Variables,
-                    Block1_Expressions
-                );
-            }
+            if(Block0_Expressions_Count==0) return Default_void;
+            if(Block0.Variables.Count==0&&Block0_Expressions_Count==1) return this.Traverse(Block0_Expressions[0]);
+            var Block1_Expressions = new Expression[Block0_Expressions_Count];
+            for(var a = 0;a<Block0_Expressions_Count;a++)Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
+            return Expression.Block(
+                Block0.Variables,
+                Block1_Expressions
+            );
         }
         protected override Expression Call(MethodCallExpression MethodCall0) {
             var MethodCall0_Method=MethodCall0.Method;

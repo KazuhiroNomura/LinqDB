@@ -64,16 +64,6 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
 
     }
     private readonly object[] objects1 = new object[1];
-    private static bool 基底クラスにあるか(System.Type 検索されるType,System.Type 検索キーTypeDifinition){
-        System.Diagnostics.Debug.Assert(検索キーTypeDifinition.IsGenericTypeDefinition);
-        while(typeof(object)!=検索されるType){
-            if(検索されるType.IsGenericType){
-                if(検索されるType.GetGenericTypeDefinition()==検索キーTypeDifinition) return true;
-            }
-            検索されるType=検索されるType.BaseType!;
-        }
-        return false;
-    }
     internal void RegisterAnonymousDisplay(System.Type Type) {
         if(Type.IsDisplay()){
             //if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
@@ -83,7 +73,6 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
             objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
             var Register = Serializer.Register.MakeGenericMethod(Type);
             Register.Invoke(null,objects1);
-            //Register.Invoke(null,Array.Empty<object>());
         }else if(Type.IsGenericType) {
             if(Type.IsAnonymous()) {
                 var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
@@ -92,7 +81,6 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
                 objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
                 var Register = Serializer.Register.MakeGenericMethod(Type);
                 Register.Invoke(null,objects1);
-                //Register.Invoke(null,Array.Empty<object>());
             } else{
                 var 検索されるType=Type;
                 while(typeof(object)!=検索されるType){

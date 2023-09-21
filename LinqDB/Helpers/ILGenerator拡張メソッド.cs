@@ -45,7 +45,8 @@ public static class ILGenerator拡張メソッド {
             I.Emit(通常形,Label);
         //上にジャンプ
         else if(-128<=LabelPos-I.ILOffset-2)//-2はBr_S,オフセット(Byte)
-            I.Emit(短縮形,Label);
+            I.Emit(通常形,Label);
+            //I.Emit(短縮形,Label);
         else
             I.Emit(通常形,Label);
     }
