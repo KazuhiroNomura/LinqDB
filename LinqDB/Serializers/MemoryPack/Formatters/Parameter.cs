@@ -15,11 +15,11 @@ public class Parameter:MemoryPackFormatter<T> {
 
         writer.WriteVarInt(index);
         if(index<0){
+            
             writer.WriteType(value.Type);
             
             writer.WriteString(value.Name);
         }
-        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;

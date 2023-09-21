@@ -3,12 +3,13 @@ using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 using T=Expressions.ParameterExpression;
 public class Parameter:IMessagePackFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
         var index=Resolver.Serializer().ListParameter.LastIndexOf(value);
         if(index>=0){
             writer.WriteArrayHeader(2);
@@ -20,8 +21,9 @@ public class Parameter:IMessagePackFormatter<T> {
             writer.WriteType(value.Type);
             writer.Write(value.Name);
         }
+        
     }
-    public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
         writer.WriteType(value.Type);
@@ -29,7 +31,7 @@ public class Parameter:IMessagePackFormatter<T> {
         writer.Write(value.Name);
         
     }
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver,int ArrayHeader){
+    internal static T Read(ref Reader reader,O Resolver,int ArrayHeader){
         var ListParameter=Resolver.Serializer().ListParameter;
         if(ArrayHeader==2){
             var index=reader.ReadInt32();
@@ -43,12 +45,13 @@ public class Parameter:IMessagePackFormatter<T> {
         ListParameter.Add(Parameter);
         return Parameter;
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var ArrayHeader=reader.ReadArrayHeader();
         var type=reader.ReadType();
         
         var name=reader.ReadString();
         return Expressions.Expression.Parameter(type,name);
+        
     }
 }

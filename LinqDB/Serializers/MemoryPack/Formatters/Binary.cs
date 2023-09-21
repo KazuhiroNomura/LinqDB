@@ -51,7 +51,7 @@ public class Binary:MemoryPackFormatter<T> {
 
         Lambda.WriteNullable(ref writer,value.Conversion);
     }
-    internal static void WriteBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void WriteLeftRightBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(value);
 
@@ -104,7 +104,7 @@ public class Binary:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :WriteBooleanMethod(ref writer,value);break;
+            case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value);break;
             default:throw new NotSupportedException(value.NodeType.ToString());
         }
         
@@ -156,10 +156,10 @@ public class Binary:MemoryPackFormatter<T> {
         return (left, right, isLiftedToNull, method);
     }
     internal static T Read(ref Reader reader){
+
+
+
         T value;
-
-
-
         var NodeType=reader.ReadNodeType();
         switch(NodeType) {
             case Expressions.ExpressionType.ArrayIndex: {
@@ -320,11 +320,8 @@ public class Binary:MemoryPackFormatter<T> {
             }
             default: throw new NotSupportedException(NodeType.ToString());
         }
+        
         return value;
-
     }
-    internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
-    public override void Deserialize(ref Reader reader,scoped ref T? value){
-        value=ReadNullable(ref reader);
-    }
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=reader.TryReadNil()?null:Read(ref reader);
 }

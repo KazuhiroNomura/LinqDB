@@ -1,14 +1,15 @@
-﻿using Expressions = System.Linq.Expressions;
+﻿
 using Utf8Json;
 
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.LambdaExpression;
-using static Extension;
 public class Lambda:IJsonFormatter<T> {
     public static readonly Lambda Instance=new();
-    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver) {
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value.Parameters;
@@ -21,39 +22,27 @@ public class Lambda:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.TailCall);
         ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
+        writer.WriteEndArray();
     }
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver) {
+    internal static void Write(ref Writer writer,T value,O Resolver) {
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateWrite(ref writer,value,Resolver);
     }
-    internal static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    internal static void WriteNullable(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         PrivateWrite(ref writer,value,Resolver);
-        writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
-        if(writer.TryWriteNil(value))return;
-        writer.WriteBeginArray();
-        PrivateWrite(ref writer,value,Resolver);
-        writer.WriteEndArray();
-    }
-    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.TryReadNil()) return null;
-        reader.ReadIsBeginArrayWithVerify();
-        var value=Read(ref reader,Resolver);
-        reader.ReadIsEndArrayWithVerify();
-        return value;
-    }
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
+    internal static T Read(ref Reader reader,O Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var parameters = reader.Deserialize宣言Parameters(Resolver);
         ListParameter.AddRange(parameters);
-
         reader.ReadIsValueSeparatorWithVerify();
         var body =Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
@@ -66,7 +55,12 @@ public class Lambda:IJsonFormatter<T> {
             parameters
         );
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        return ReadNullable(ref reader,Resolver)!;
+    internal static T? ReadNullable(ref Reader reader,O Resolver){
+        if(reader.TryReadNil()) return null;
+        reader.ReadIsBeginArrayWithVerify();
+        var value=Read(ref reader,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        return value;
     }
+    public T Deserialize(ref Reader reader,O Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

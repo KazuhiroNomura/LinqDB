@@ -529,6 +529,9 @@ public class TestExpression:共通 {
         this.MemoryMessageJson_Expression(Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
+        this.MemoryMessageJson_Assert(
+            typeof(string).GetConstructor(new[]{typeof(char),typeof(int)}),Assert.NotNull
+        );
         this.MemoryMessageJson_Expression(
             Expression.New(
                 typeof(string).GetConstructor(new[]{typeof(char),typeof(int)})!,

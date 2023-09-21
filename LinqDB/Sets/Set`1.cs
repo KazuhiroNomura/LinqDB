@@ -337,7 +337,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         }
         return false;
     }
-    int ICollection<T>.Count=>(int)base.Count;
+    int ICollection<T>.Count=>(int)Count;
     public bool IsReadOnly=>false;
     /// <summary>
     /// 要素を削除する。失敗は無視する。

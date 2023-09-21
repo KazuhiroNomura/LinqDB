@@ -117,7 +117,7 @@ partial class Optimizer {
                 }
                 case ExpressionType.Call: {
                     var MethodCall = (MethodCallExpression)Expression0;
-                    if(nameof(object.Equals)==MethodCall.Method.Name) {
+                    if(nameof(Equals)==MethodCall.Method.Name) {
                         if(Reflection.Object.Equals_==MethodCall.Method) {
                             return this.等号が出現した時にDictionaryHashとEqualに分離(
                                 Expression0,

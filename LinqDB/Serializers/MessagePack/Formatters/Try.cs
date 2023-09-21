@@ -1,14 +1,12 @@
-﻿using Expressions = System.Linq.Expressions;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using System.Diagnostics.CodeAnalysis;
-
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.TryExpression;
-
-using static Extension;
 public class Try:IMessagePackFormatter<T>{
     public static readonly Try Instance=new();
     private static void PrivateSerialize0(ref Writer writer,T? value,int offset){
@@ -22,33 +20,41 @@ public class Try:IMessagePackFormatter<T>{
             }
         }
     }
-    private static void PrivateSerialize1(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateSerialize1(ref Writer writer,T? value,O Resolver){
         Expression.Write(ref writer,value!.Body,Resolver);
+        
         Expression.WriteNullable(ref writer,value.Finally,Resolver);
+        
         if(value.Finally is not null){
             writer.WriteCollection(value.Handlers,Resolver);
         } else{
             Expression.WriteNullable(ref writer,value.Fault,Resolver);
             if(value.Fault is null){
+                
                 writer.WriteCollection(value.Handlers,Resolver);
             }
         }
     }
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
+        
         PrivateSerialize0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Try);
         PrivateSerialize1(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
+        
         PrivateSerialize0(ref writer,value,0);
         PrivateSerialize1(ref writer,value,Resolver);
     }
+    
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,O Resolver){
         T value;
         var body= Expression.Read(ref reader,Resolver);
+        
         var @finally=Expression.ReadNullable(ref reader,Resolver);
+        
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
             if(handlers.Length>0) {
@@ -61,15 +67,19 @@ public class Try:IMessagePackFormatter<T>{
             if(fault is not null){
                 value=Expressions.Expression.TryFault(body,fault);
             } else{
+                
                 var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
                 value=Expressions.Expression.TryCatch(body,handlers!);
             }
         }
         return value;
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         return Read(ref reader,Resolver);
+        
+        
+        
     }
 }

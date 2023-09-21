@@ -42,7 +42,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case BinaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.BinaryOperationBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -62,7 +62,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                         WriteBinderType(ref writer,BinderType.ConvertBinder);
                         
                         Debug.Assert(v0.ReturnType==v1.Type);
-                        var CallingContext=GetBinder(v1);
+                        var CallingContext=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteType(value.Type);
@@ -78,7 +78,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case CreateInstanceBinder v1:{
                         WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -88,7 +88,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     }
                     case DeleteIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteArray(CSharpArgumentInfos);
                         writer.WriteVarInt(Flags);
@@ -97,7 +97,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     }
                     case DeleteMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteArray(CSharpArgumentInfos);
                         writer.WriteVarInt(Flags);
@@ -108,7 +108,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case GetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -121,7 +121,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case GetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetMemberBinder);
 
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -136,7 +136,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case InvokeBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -149,7 +149,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case InvokeMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos,Flags)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos,Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -166,7 +166,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case SetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetIndexBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -179,7 +179,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case SetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetMemberBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos);
@@ -198,7 +198,7 @@ public class Dynamic:MemoryPackFormatter<T> {
                     case UnaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
 
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
 
                         writer.WriteArray(CSharpArgumentInfos);

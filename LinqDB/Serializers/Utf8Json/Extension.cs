@@ -1,44 +1,36 @@
-﻿using System.Collections.ObjectModel;
-using System;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 using Utf8Json;
 using Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
-using MessagePack;
-
 namespace LinqDB.Serializers.Utf8Json;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 internal static class Extension{
-    public static void WriteType(this ref Writer writer,Type value){
-        writer.WriteString(value.AssemblyQualifiedName);
-    }
-    public static Type ReadType(this ref Reader reader){
-        return Type.GetType(reader.ReadString())!;
-    }
+    public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
+    public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
     
 
-    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.Write(NodeType);
-    public static void WriteNodeType(this ref Writer writer,Expressions.Expression Expression)=>writer.Write(Expression.NodeType);
+    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteString(NodeType.ToString());
+    public static void WriteNodeType(this ref Writer writer,Expressions.Expression Expression)=>writer.WriteNodeType(Expression.NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>Enum.Parse<Expressions.ExpressionType>(reader.ReadString());
-    public static void Write<T>(this ref Writer writer,T value)where T:struct,Enum=>writer.WriteString(value.ToString());
-    public static T Read<T>(this ref Reader reader)where T:struct,Enum=>Enum.Parse<T>(reader.ReadString());
     public static bool TryWriteNil(this ref Writer writer,object? value){
         if(value is not null)return false;
         writer.WriteNull();
         return true;
     }
-    public static bool TryReadNil(this ref Reader reader){
-        return reader.ReadIsNull();
+    public static bool TryReadNil(this ref Reader reader)=>reader.ReadIsNull();
 
 
 
 
-    }
-    internal static void WriteArray<T>(this ref Writer writer,T[] value,IJsonFormatterResolver Resolver)=>
-        StaticArrayFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
+
+
+
+
     private static class StaticReadOnlyCollectionFormatter<T> {
         public static readonly ReadOnlyCollectionFormatter<T> Formatter = new();
     }
@@ -47,40 +39,13 @@ internal static class Extension{
     private static class StaticArrayFormatter<T> {
         public static readonly ArrayFormatter<T> Formatter = new();
     }
+    internal static void WriteArray<T>(this ref Writer writer,T[] value,IJsonFormatterResolver Resolver)=>
+        StaticArrayFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
     internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) {
 
         return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
 
     }
-    //internal static void SerializeReadOnlyCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver){
-    //    var off=writer.CurrentOffset;
-    //    writer.WriteBeginArray();
-    //    var Count=value!.Count;
-    //    if(Count>0){
-    //        var Formatter=Resolver.GetFormatter<T>();
-    //        Formatter.Serialize(ref writer,value[0],Resolver);
-    //        for(var index=1;index<Count;index++){
-    //            writer.WriteValueSeparator();
-    //            Formatter.Serialize(ref writer,value[index],Resolver);
-    //        }
-    //    }
-    //    writer.WriteEndArray();
-    //}
-    //internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver){
-    //    var off=reader.GetCurrentOffsetUnsafe();
-    //    reader.ReadIsBeginArrayWithVerify();
-    //    var value=new List<T>();
-    //    var Formatter=Resolver.GetFormatter<T>();
-    //    if(!reader.ReadIsEndArray()){
-    //        value.Add(Formatter.Deserialize(ref reader,Resolver));
-    //        while(!reader.ReadIsEndArray()){
-    //            reader.ReadIsValueSeparatorWithVerify();
-    //            value.Add(Formatter.Deserialize(ref reader,Resolver));
-    //        }
-    //    }
-    //    //reader.ReadIsEndArrayWithVerify();
-    //    return value.ToArray();
-    //}
     internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var Count=value.Count;

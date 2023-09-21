@@ -3,25 +3,24 @@ using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.DefaultExpression;
 public class Default:IMessagePackFormatter<T> {
     public static readonly Default Instance=new();
-    private const int ArrayHeader=1;
-    private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateWrite(ref Writer writer,T value){
         writer.WriteType(value.Type);
     }
     internal static void Write(ref Writer writer,T value){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteArrayHeader(2);
         writer.WriteNodeType(Expressions.ExpressionType.Default);
         
         PrivateWrite(ref writer,value);
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteArrayHeader(1);
         PrivateWrite(ref writer,value);
         
     }
@@ -29,10 +28,11 @@ public class Default:IMessagePackFormatter<T> {
         var type=reader.ReadType();
         return Expressions.Expression.Default(type);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==1);
         return Read(ref reader);
+        
     }
 }

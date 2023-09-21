@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Reflection;
-
-
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Buffers;
+using System.Reflection;
 using LinqDB.Databases;
 using MemoryPack;
 using MemoryPack.Formatters;
@@ -11,19 +10,13 @@ namespace LinqDB.Serializers.MemoryPack;
 
 using Reader = MemoryPackReader;
 public static class Extension{
-    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,System.Type value)where TBufferWriter :IBufferWriter<byte>{
-        writer.WriteString(value.AssemblyQualifiedName);
-    }
-    public static System.Type ReadType(this ref Reader reader){
-        return System.Type.GetType(reader.ReadString())!;
-    }
+    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
+    public static Type ReadType(this ref Reader reader)=>System.Type.GetType(reader.ReadString())!;
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.ExpressionType NodeType)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)NodeType);
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression Expression)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)Expression.NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadVarIntByte();
-
-
     public static bool TryWriteNil<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
         if(value is not null)return false;
         writer.WriteNullObjectHeader();
@@ -36,6 +29,8 @@ public static class Extension{
         }
         return false;
     }
+    
+    
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
@@ -44,47 +39,20 @@ public static class Extension{
     private static class StaticArrayFormatter<T>{
         public static readonly ArrayFormatter<T> Formatter=new();
     }
+    
+    
     internal static T[] ReadArray<T>(this ref Reader reader){
         T[] value=default!;
         StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,ref value!);
         return value;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
         writer.WriteVarInt(value.Count);
-        
         foreach(var Parameter in value){
             writer.WriteString(Parameter.Name);
             writer.WriteType(Parameter.Type);
         }
+
 
 
 
@@ -109,14 +77,14 @@ public static class Extension{
         
         return Parameters;
     }
-    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
-        writer.WriteValue(value);
-    }
-    public static readonly MethodInfo MethodSerialize = typeof(Extension).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
-        reader.ReadValue(ref value);
-    }
-    public static readonly MethodInfo MethodDeserialize = typeof(Extension).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+
+
+
+
+
+
+
+
 
 
 
@@ -126,4 +94,12 @@ public static class Extension{
         (Serializer)reader.Options.ServiceProvider!;
     public static Serializer Container<TContainer>(this ref Reader reader)where TContainer:Container=>
         (Serializer)reader.Options.ServiceProvider!;
+    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
+        writer.WriteValue(value);
+    }
+    public static readonly MethodInfo MethodSerialize = typeof(Extension).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static void Deserialize2<TValue>(ref Reader reader,scoped ref TValue? value) {
+        reader.ReadValue(ref value);
+    }
+    public static readonly MethodInfo MethodDeserialize = typeof(Extension).GetMethod(nameof(Deserialize2),BindingFlags.Static|BindingFlags.NonPublic)!;
 }

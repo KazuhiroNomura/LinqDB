@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader=MemoryPackReader;
 using T= InvocationExpression;
-using static Extension;
 
 public class Invocation:MemoryPackFormatter<T> {
     public static readonly Invocation Instance=new();

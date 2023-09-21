@@ -23,17 +23,17 @@ public class TypeBinary:MemoryPackFormatter<T> {
         Write(ref writer,value);
         
     }
-    private static (Expressions.Expression expression,Type type)PrivateDeserialize(ref Reader reader){
+    private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader){
         var expression=Expression.Read(ref reader);
         var type=reader.ReadType();
         return (expression,type);
     }
     internal static T ReadTypeEqual(ref Reader reader){
-        var (expression,type)=PrivateDeserialize(ref reader);
+        var (expression,type)=PrivateRead(ref reader);
         return Expressions.Expression.TypeEqual(expression,type);
     }
     internal static T ReadTypeIs(ref Reader reader){
-        var (expression,type)=PrivateDeserialize(ref reader);
+        var (expression,type)=PrivateRead(ref reader);
         return Expressions.Expression.TypeIs(expression,type);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){

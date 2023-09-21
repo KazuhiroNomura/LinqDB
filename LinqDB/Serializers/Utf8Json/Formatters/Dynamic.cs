@@ -2,11 +2,11 @@
 using System.Dynamic;
 using System.Diagnostics;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
-//using System.Collections.ObjectModel;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.DynamicExpression;
@@ -34,15 +34,14 @@ public class Dynamic:IJsonFormatter<T> {
     
     
     
-    
-    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         switch(value.Binder){
             case DynamicMetaObjectBinder v0:{
                 switch(v0){
                     case BinaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.BinaryOperationBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext, CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -62,7 +61,7 @@ public class Dynamic:IJsonFormatter<T> {
                         WriteBinderType(ref writer,BinderType.ConvertBinder);
                         writer.WriteValueSeparator();
                         Debug.Assert(v0.ReturnType==v1.Type);
-                        var CallingContext=GetBinder(v1);
+                        var CallingContext=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteType(value.Type);
@@ -78,7 +77,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case CreateInstanceBinder v1:{
                         WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -108,7 +107,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case GetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -121,7 +120,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case GetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetMemberBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -136,7 +135,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case InvokeBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -149,7 +148,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case InvokeMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -166,7 +165,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case SetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetIndexBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -179,7 +178,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case SetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetMemberBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -198,7 +197,7 @@ public class Dynamic:IJsonFormatter<T> {
                     case UnaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         writer.WriteValueSeparator();
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         writer.WriteValueSeparator();
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -215,14 +214,16 @@ public class Dynamic:IJsonFormatter<T> {
                 break;
             }
         }
-        static void WriteBinderType(ref Writer writer,BinderType value)=>writer.Write(value);
+        static void WriteBinderType(ref Writer writer,BinderType value)=>writer.WriteByte((byte)value);
     }
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         PrivateWrite(ref writer, value,Resolver);
+        writer.WriteEndArray(); 
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
@@ -237,9 +238,9 @@ public class Dynamic:IJsonFormatter<T> {
     
     
     
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T Read(ref Reader reader,O Resolver){
         T value;
-        var BinderType=reader.Read<BinderType>();
+        var BinderType=(BinderType)reader.ReadByte();
         reader.ReadIsValueSeparatorWithVerify();
         switch(BinderType){
             case BinderType.BinaryOperationBinder:{
@@ -449,7 +450,7 @@ public class Dynamic:IJsonFormatter<T> {
         }
         return value;
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);

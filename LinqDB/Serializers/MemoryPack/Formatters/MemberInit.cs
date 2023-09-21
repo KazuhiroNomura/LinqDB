@@ -9,7 +9,8 @@ using T = Expressions.MemberInitExpression;
 public class MemberInit:MemoryPackFormatter<T> {
     public static readonly MemberInit Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        New.WriteNew(ref writer,value.NewExpression);
+        New.WriteNodeTypeなし(ref writer,value.NewExpression);
+        
         writer.WriteCollection(value.Bindings);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
@@ -25,6 +26,7 @@ public class MemberInit:MemoryPackFormatter<T> {
     }
     internal static T Read(ref Reader reader){
         var @new= New.Read(ref reader);
+        
         var bindings=reader.ReadArray<Expressions.MemberBinding>();
         return Expressions.Expression.MemberInit(@new,bindings!);
     }

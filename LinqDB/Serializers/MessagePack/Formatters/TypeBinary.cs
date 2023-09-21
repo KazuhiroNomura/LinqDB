@@ -4,12 +4,12 @@ using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
-using static Extension;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
-    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,O Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value);
         
@@ -17,34 +17,38 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         
         writer.WriteType(value.TypeOperand);
     }
-    public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         
         Write(ref writer,value,Resolver);
         
     }
-    private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader,MessagePackSerializerOptions Resolver){
+    private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader,O Resolver){
         var expression=Expression.Read(ref reader,Resolver);
+        
         var type=reader.ReadType();
         return (expression,type);
     }
-    internal static Expressions.TypeBinaryExpression ReadTypeEqual(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static Expressions.TypeBinaryExpression ReadTypeEqual(ref Reader reader,O Resolver){
         var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeEqual(expression,type);
     }
-    internal static Expressions.TypeBinaryExpression ReadTypeIs(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static Expressions.TypeBinaryExpression ReadTypeIs(ref Reader reader,O Resolver){
         var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeIs(expression,type);
     }
-    public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==3);
         var NodeType=reader.ReadNodeType();
+        
         return NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
             Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader,Resolver),
             _=>throw new NotSupportedException(NodeType.ToString())
         };
+        
+        
     }
 }

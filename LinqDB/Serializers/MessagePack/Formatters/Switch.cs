@@ -1,17 +1,16 @@
 ﻿using System.Diagnostics;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using Reflection;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.SwitchExpression;
 public class Switch:IMessagePackFormatter<T> {
     public static readonly Switch Instance=new();
-    private const int ArrayHeader=5;
-    private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T? value,O Resolver){
         writer.WriteType(value!.Type);
         
         Expression.Write(ref writer,value.SwitchValue,Resolver);
@@ -22,18 +21,20 @@ public class Switch:IMessagePackFormatter<T> {
         
         Expression.Write(ref writer,value.DefaultBody,Resolver);
     }
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+    internal static void Write(ref Writer writer,T value,O Resolver){
+        writer.WriteArrayHeader(6);
         writer.WriteNodeType(Expressions.ExpressionType.Switch);
-        PrivateWrite(ref writer,value,Resolver);
-    }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
+        
         PrivateWrite(ref writer,value,Resolver);
         
     }
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(5);
+        PrivateWrite(ref writer,value,Resolver);
+        
+    }
+    internal static T Read(ref Reader reader,O Resolver){
         var type=reader.ReadType();
         
         var switchValue= Expression.Read(ref reader,Resolver);
@@ -45,10 +46,10 @@ public class Switch:IMessagePackFormatter<T> {
         var defaultBody= Expression.Read(ref reader,Resolver);
         return Expressions.Expression.Switch(type,switchValue,defaultBody,comparison,cases);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==5);
         
         return Read(ref reader,Resolver);
     }

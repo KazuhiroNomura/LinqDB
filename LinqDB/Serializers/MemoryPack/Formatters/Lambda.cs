@@ -3,7 +3,6 @@ using System.Linq.Expressions;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
-using static Extension;
 using T = LambdaExpression;
 
 public class Lambda:MemoryPackFormatter<T> {

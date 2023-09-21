@@ -13,12 +13,12 @@ public class SymbolDocumentInfo:MemoryPackFormatter<T>{
         
         writer.WriteString(value.FileName);
         
-        共通(ref writer,Formatter,value.Language);
+        Formatter_Serialize(ref writer,Formatter,value.Language);
 
-        共通(ref writer,Formatter,value.LanguageVendor);
+        Formatter_Serialize(ref writer,Formatter,value.LanguageVendor);
 
-        共通(ref writer,Formatter,value.DocumentType);
-        static void 共通(ref MemoryPackWriter<TBufferWriter> writer,IMemoryPackFormatter<Guid> Formatter,Guid value)=>Formatter.Serialize(ref writer,ref value);
+        Formatter_Serialize(ref writer,Formatter,value.DocumentType);// ReSharper disable once InconsistentNaming
+        static void Formatter_Serialize(ref MemoryPackWriter<TBufferWriter> writer,IMemoryPackFormatter<Guid> Formatter,Guid value)=>Formatter.Serialize(ref writer,ref value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
@@ -31,14 +31,15 @@ public class SymbolDocumentInfo:MemoryPackFormatter<T>{
         
         var fileName=reader.ReadString();
         
-        var language=共通(ref reader,Formatter);
+        var language=Formatter_Deserialize(ref reader,Formatter);
         
-        var languageVendor=共通(ref reader,Formatter);
+        var languageVendor=Formatter_Deserialize(ref reader,Formatter);
         
-        var documentType=共通(ref reader,Formatter);
+        var documentType=Formatter_Deserialize(ref reader,Formatter);
         
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
-        static Guid 共通(ref Reader reader,IMemoryPackFormatter<Guid> Formatter){
+        // ReSharper disable once InconsistentNaming
+        static Guid Formatter_Deserialize(ref Reader reader,IMemoryPackFormatter<Guid> Formatter){
             Guid value=default!;
             Formatter.Deserialize(ref reader,ref value);
             return value;

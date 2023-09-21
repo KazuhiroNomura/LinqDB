@@ -4,12 +4,13 @@ using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.BlockExpression;
 public class Block:IMessagePackFormatter<T> {
     public static readonly Block Instance=new();
-    private static void PrivateWrite(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -21,20 +22,20 @@ public class Block:IMessagePackFormatter<T> {
         writer.WriteCollection(value.Expressions,Resolver);
         ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
     }
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(Expressions.ExpressionType.Block);
         
         PrivateWrite(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T value,O Resolver){
         if(writer.TryWriteNil(value)) return;
 
         writer.WriteArrayHeader(3);
         PrivateWrite(ref writer,value,Resolver);
         
     }
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,O Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
@@ -46,7 +47,7 @@ public class Block:IMessagePackFormatter<T> {
         ListParameter.RemoveRange(ListParameter_Count,variables.Length);
         return Expressions.Expression.Block(type,variables,expressions);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==3);

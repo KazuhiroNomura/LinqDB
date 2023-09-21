@@ -12,7 +12,7 @@ public class CSharpArgumentInfo : MemoryPackFormatter<T>
     public static readonly CSharpArgumentInfo Instance = new();
     private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T? value) where TBufferWriter : IBufferWriter<byte>
     {
-        var (flags, name)=GetFlagsName(value);
+        var (flags, name)=value.GetFlagsName();
         writer.WriteVarInt((int)flags);
         writer.WriteString(name);
     }

@@ -108,7 +108,7 @@ partial class Optimizer {
                         }
                         if(this.IfTrueまたはIfFalse外部か){
                             this.共通for_Dictionary一度出現したExpression_二度出現したExpressionの一度目();
-                            base.TraverseNulllable(Label.DefaultValue);
+                            TraverseNulllable(Label.DefaultValue);
                         }else{
                             var (HashSet一度出現したExpression1,HashSet一度出現したExpression,IfTrueまたはIfFalse外部か)=this.Stack_HashSet一度出現したExpression.Pop();
                             var HashSet一度出現したExpression2=this.HashSet一度出現したExpression;
@@ -121,7 +121,7 @@ partial class Optimizer {
                                 HashSet一度出現したExpression.IntersectWith(HashSet一度出現したExpression1);
                             }
                             this.IfTrueまたはIfFalse外部か=IfTrueまたはIfFalse外部か;
-                            base.TraverseNulllable(Label.DefaultValue);
+                            TraverseNulllable(Label.DefaultValue);
                         }
                         return;
                     }

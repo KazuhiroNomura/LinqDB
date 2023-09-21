@@ -4,7 +4,6 @@ using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
 using T = Expressions.LabelTarget;
-using static Extension;
 
 
 public class LabelTarget:MemoryPackFormatter<T> {
@@ -23,6 +22,10 @@ public class LabelTarget:MemoryPackFormatter<T> {
             writer.WriteString(value.Name);
         }
     }
+    //private static void WriteNullable(ref MemoryPackWriter<TBufferWriter>writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    //    if(writer.TryWriteNil(value))return;
+    //    Write(ref writer,value,Resolver);
+    //}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);

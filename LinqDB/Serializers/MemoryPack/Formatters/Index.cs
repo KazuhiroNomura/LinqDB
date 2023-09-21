@@ -7,7 +7,6 @@ using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
 using T = IndexExpression;
-using static Extension;
 public class Index:MemoryPackFormatter<T> {
     public static readonly Index Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{

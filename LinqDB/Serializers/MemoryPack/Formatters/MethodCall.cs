@@ -6,7 +6,6 @@ using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
 using T = Expressions.MethodCallExpression;
-using static Extension;
 
 
 public class MethodCall:MemoryPackFormatter<T> {

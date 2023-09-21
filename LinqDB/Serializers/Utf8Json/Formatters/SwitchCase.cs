@@ -2,12 +2,13 @@
 
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer=JsonWriter;
 using Reader=JsonReader;
 using T=Expressions.SwitchCase;
 public class SwitchCase:IJsonFormatter<T> {
     public static readonly SwitchCase Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,O Resolver) {
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         writer.WriteCollection(value!.TestValues,Resolver);
@@ -15,7 +16,7 @@ public class SwitchCase:IJsonFormatter<T> {
         Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+    public T Deserialize(ref Reader reader,O Resolver) {
         if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var testValues=reader.ReadArray<Expressions.Expression>(Resolver);

@@ -5,7 +5,6 @@ using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
-using static Extension;
 using T = Expressions.SwitchExpression;
 public class Switch:MemoryPackFormatter<T> {
     public static readonly Switch Instance=new();

@@ -1,16 +1,18 @@
 ﻿using System.Diagnostics;
-using Expressions = System.Linq.Expressions;
 using Utf8Json;
+
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using static Extension;
 using T = Expressions.LabelTarget;
 public class LabelTarget:IJsonFormatter<T> {
     public static readonly LabelTarget Instance=new();
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteBeginArray();
         if(Resolver.Serializer().Dictionary_LabelTarget_int.TryGetValue(value,out var index)){
+            
             writer.WriteInt32(index);
         } else{
             var Dictionary_LabelTarget_int=Resolver.Serializer().Dictionary_LabelTarget_int;
@@ -25,12 +27,12 @@ public class LabelTarget:IJsonFormatter<T> {
         }
         writer.WriteEndArray();
     }
-    private static void WriteNullable(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    private static void WriteNullable(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
+    internal static T Read(ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var index=reader.ReadInt32();
         var Instance=Resolver.Serializer();
@@ -54,9 +56,9 @@ public class LabelTarget:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return target;
     }
-    internal static T? ReadNullable(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static T? ReadNullable(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null;
         return Read(ref reader,Resolver);
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>ReadNullable(ref reader,Resolver)!;
+    public T Deserialize(ref Reader reader,O Resolver)=>ReadNullable(ref reader,Resolver)!;
 }

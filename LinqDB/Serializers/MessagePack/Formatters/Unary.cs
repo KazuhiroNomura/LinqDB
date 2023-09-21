@@ -4,53 +4,60 @@ using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
-
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.UnaryExpression;
 using Reflection;
 public class Unary:IMessagePackFormatter<T> {
     public static readonly Unary Instance=new();
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void WriteOperand(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(2);
         writer.WriteNodeType(value);
+        
         Expression.Write(ref writer,value.Operand,Resolver);
+        
     }
-    internal static void WriteType(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void WriteOperandType(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value);
+        
         Expression.Write(ref writer,value.Operand,Resolver);
         
         writer.WriteType(value.Type);
+        
     }
-    internal static void WriteMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void WriteOperandMethod(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value);
+        
         Expression.Write(ref writer,value.Operand,Resolver);
         
         Method.WriteNullable(ref writer,value.Method,Resolver);
+        
     }
-    internal static void WriteTypeMethod(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void WriteOperandTypeMethod(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(4);
         writer.WriteNodeType(value);
+        
         Expression.Write(ref writer,value.Operand,Resolver);
         
         writer.WriteType(value.Type);
         
         Method.WriteNullable(ref writer,value.Method,Resolver);
+        
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-
         switch(value!.NodeType){
             case Expressions.ExpressionType.ArrayLength        :
-            case Expressions.ExpressionType.Quote              :Write(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Quote              :WriteOperand(ref writer,value,Resolver);break;
             case Expressions.ExpressionType.Throw              :
             case Expressions.ExpressionType.TypeAs             :
-            case Expressions.ExpressionType.Unbox              :WriteType(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Unbox              :WriteOperandType(ref writer,value,Resolver);break;
             case Expressions.ExpressionType.Convert            :
-            case Expressions.ExpressionType.ConvertChecked     :WriteTypeMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.ConvertChecked     :WriteOperandTypeMethod(ref writer,value,Resolver);break;
             case Expressions.ExpressionType.Decrement          :
             case Expressions.ExpressionType.Increment          :
             case Expressions.ExpressionType.IsFalse            :
@@ -63,29 +70,28 @@ public class Unary:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.PostIncrementAssign:
             case Expressions.ExpressionType.PreDecrementAssign :
             case Expressions.ExpressionType.PreIncrementAssign :
-            case Expressions.ExpressionType.UnaryPlus          :WriteMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.UnaryPlus          :WriteOperandMethod(ref writer,value,Resolver);break;
             default:
                 throw new NotSupportedException(value.NodeType.ToString());
         }
-        
     }
-    internal static Expressions.Expression ReadOperand(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static Expressions.Expression ReadOperand(ref Reader reader,O Resolver){
         var operand=Expression.Read(ref reader,Resolver);
         return operand;
     }
-    internal static (Expressions.Expression Operand,System.Type Type)ReadOperandType(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static (Expressions.Expression Operand,System.Type Type)ReadOperandType(ref Reader reader,O Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         
         var type=reader.ReadType();
         return(operand,type);
     }
-    internal static (Expressions.Expression Operand,MethodInfo? Method)ReadOperandMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static (Expressions.Expression Operand,MethodInfo? Method)ReadOperandMethod(ref Reader reader,O Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,method);
     }
-    internal static (Expressions.Expression Operand,System.Type Type,MethodInfo? Method)ReadOperandTypeMethod(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static (Expressions.Expression Operand,System.Type Type,MethodInfo? Method)ReadOperandTypeMethod(ref Reader reader,O Resolver){
         var operand= Expression.Read(ref reader,Resolver);
         
         var type=reader.ReadType();
@@ -93,12 +99,12 @@ public class Unary:IMessagePackFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,type,method);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
-        if(reader.TryReadNil()) return null!;
+    private static T Read(ref Reader reader,O Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count is >=2 and <=4);
-        T value;
         var NodeType=reader.ReadNodeType();
+        
+        T value;
         switch(NodeType){
             case Expressions.ExpressionType.ArrayLength: {
                 var operand = ReadOperand(ref reader,Resolver);
@@ -164,10 +170,6 @@ public class Unary:IMessagePackFormatter<T> {
                 var (operand,method)=ReadOperandMethod(ref reader,Resolver);
                 value=Expressions.Expression.PreIncrementAssign(operand,method);break;
             }
-            case Expressions.ExpressionType.UnaryPlus: {
-                var (operand,method)=ReadOperandMethod(ref reader,Resolver);
-                value=Expressions.Expression.UnaryPlus(operand,method);break;
-            }
             case Expressions.ExpressionType.Throw: {
                 var (operand,type)=ReadOperandType(ref reader,Resolver);
                 value=Expressions.Expression.Throw(operand,type);break;
@@ -176,12 +178,18 @@ public class Unary:IMessagePackFormatter<T> {
                 var (operand,type)=ReadOperandType(ref reader,Resolver);
                 value=Expressions.Expression.TypeAs(operand,type);break;
             }
+            case Expressions.ExpressionType.UnaryPlus: {
+                var (operand,method)=ReadOperandMethod(ref reader,Resolver);
+                value=Expressions.Expression.UnaryPlus(operand,method);break;
+            }
             case Expressions.ExpressionType.Unbox: {
                 var (operand,type)=ReadOperandType(ref reader,Resolver);
                 value=Expressions.Expression.Unbox(operand,type);break;
             }
             default:throw new NotSupportedException(NodeType.ToString());
         }
+        
         return value;
     }
+    public T Deserialize(ref Reader reader,O Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

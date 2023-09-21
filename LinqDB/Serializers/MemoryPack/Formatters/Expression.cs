@@ -1,10 +1,7 @@
 ﻿using System;
-
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
-using LinqDB.Serializers.MemoryPack.Formatters;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 using Reader = MemoryPackReader;
@@ -12,6 +9,7 @@ using T = Expressions.Expression;
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
     public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value);break;
@@ -51,7 +49,7 @@ public class Expression:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.GreaterThanOrEqual   :
             case Expressions.ExpressionType.LessThan             :
             case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :Binary.WriteBooleanMethod(ref writer,(Expressions.BinaryExpression)value);break;
+            case Expressions.ExpressionType.NotEqual             :Binary.WriteLeftRightBooleanMethod(ref writer,(Expressions.BinaryExpression)value);break;
             case Expressions.ExpressionType.ArrayLength          :
             case Expressions.ExpressionType.Quote                :Unary.WriteOperand(ref writer,(Expressions.UnaryExpression)value);break;
             case Expressions.ExpressionType.Throw                :

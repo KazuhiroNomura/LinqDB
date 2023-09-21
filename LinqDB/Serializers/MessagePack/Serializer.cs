@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
+
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -8,75 +9,81 @@ namespace LinqDB.Serializers.MessagePack;
 using Formatters;
 using Formatters.Others;
 using LinqDB.Serializers.MessagePack.Formatters.Reflection;
-
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
+    
+    
+    
+    
     private readonly MessagePackSerializerOptions Options;
     public Serializer(){
+        var Formatters=new IMessagePackFormatter[]{
+            this,
+            Object.Instance,
+
+            Binary.Instance,
+            Block.Instance,
+            CatchBlock.Instance,
+            Conditional.Instance,
+            Constant.Instance,
+            Default.Instance,
+            DebugInfo.Instance,
+            Dynamic.Instance,
+            ElementInit.Instance,
+            Expression.Instance,
+            Goto.Instance,
+            Index.Instance,
+            Invocation.Instance,
+            Label.Instance,
+            LabelTarget.Instance,
+            Lambda.Instance,
+            ListInit.Instance,
+            Loop.Instance,
+            MemberAccess.Instance,
+            MemberBinding.Instance,
+            MemberInit.Instance,
+            MethodCall.Instance,
+            New.Instance,
+            NewArray.Instance,
+            Parameter.Instance,
+            Switch.Instance,
+            SwitchCase.Instance,
+            Try.Instance,
+            TypeBinary.Instance,
+            Unary.Instance,
+
+            Type.Instance,
+            Member.Instance,
+            Constructor.Instance,
+            Method.Instance,
+            Property.Instance,
+            Event.Instance,
+            Field.Instance,
+            Delegate.Instance,
+
+            CSharpArgumentInfo.Instance
+            
+        };
+        var Resolvers=new IFormatterResolver[]{
+            //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
+            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
+
+            global::MessagePack.Resolvers.BuiltinResolver.Instance,
+            global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
+            //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
+            //MessagePack.Resolvers.DynamicEnumResolver.Instance,
+            //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
+            global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
+            FormatterResolver.Instance
+            //this.Resolver,
+            //MessagePack.Resolvers.StandardResolver.Instance,
+            //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
+            //MessagePack.Resolvers.StandardResolver.Instance,//
+            //this.AnonymousExpressionMessagePackFormatterResolver,
+        };
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
-                new IMessagePackFormatter[]{
-                    this,
-                    Object.Instance,
-
-                    Binary.Instance,
-                    Block.Instance,
-                    CatchBlock.Instance,
-                    Conditional.Instance,
-                    Constant.Instance,
-                    Default.Instance,
-                    DebugInfo.Instance,
-                    Dynamic.Instance,
-                    ElementInit.Instance,
-                    Expression.Instance,
-                    Goto.Instance,
-                    Index.Instance,
-                    Invocation.Instance,
-                    Label.Instance,
-                    LabelTarget.Instance,
-                    Lambda.Instance,
-                    ListInit.Instance,
-                    Loop.Instance,
-                    MemberAccess.Instance,
-                    MemberBinding.Instance,
-                    MemberInit.Instance,
-                    MethodCall.Instance,
-                    New.Instance,
-                    NewArray.Instance,
-                    Parameter.Instance,
-                    Switch.Instance,
-                    SwitchCase.Instance,
-                    Try.Instance,
-                    TypeBinary.Instance,
-                    Unary.Instance,
-
-                    Type.Instance,
-                    Member.Instance,
-                    Constructor.Instance,
-                    Method.Instance,
-                    Property.Instance,
-                    Event.Instance,
-                    Field.Instance,
-                    Delegate.Instance,
-
-                    CSharpArgumentInfo.Instance
-                },
-                new IFormatterResolver[]{
-                    //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
-                    global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-
-                    global::MessagePack.Resolvers.BuiltinResolver.Instance,
-                    global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
-                    //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
-                    //MessagePack.Resolvers.DynamicEnumResolver.Instance,
-                    //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
-                    global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
-                    FormatterResolver.Instance
-                    //this.Resolver,
-                    //MessagePack.Resolvers.StandardResolver.Instance,
-                    //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-                    //MessagePack.Resolvers.StandardResolver.Instance,//
-                    //this.AnonymousExpressionMessagePackFormatterResolver,
-                }
+                Formatters,
+                Resolvers
             )
         );
         //var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();
@@ -84,8 +91,37 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
         //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
         var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private void Clear(){
         this.ProtectedClear();
+        
     }
     public byte[] Serialize<T>(T value){
         this.Clear();

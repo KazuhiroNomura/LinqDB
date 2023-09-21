@@ -3,7 +3,6 @@
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
-using static Extension;
 
 public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();

@@ -1,32 +1,37 @@
-﻿using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+﻿
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.NewExpression;
-using static Extension;
+using Reflection;
 public class New:IJsonFormatter<T> {
     public static readonly New Instance=new();
-    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        Constructor.Instance.Serialize(ref writer,value.Constructor!,Resolver);
-        writer.WriteValueSeparator();
-        writer.WriteCollection(value.Arguments,Resolver);
-    }
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateWrite(ref writer,value,Resolver);
+        Constructor.Write(ref writer,value.Constructor!,Resolver);
+        writer.WriteValueSeparator();
+        writer.WriteCollection(value.Arguments,Resolver);
+        writer.WriteEndArray(); 
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        if(writer.TryWriteNil(value))return;
+    internal static void WriteNew(ref Writer writer,T value,O Resolver){
         writer.WriteBeginArray();
-        PrivateWrite(ref writer,value,Resolver);
-        writer.WriteEndArray();
+        Constructor.Write(ref writer,value.Constructor!,Resolver);
+        writer.WriteValueSeparator();
+        writer.WriteCollection(value.Arguments,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
-        var constructor= Constructor.Instance.Deserialize(ref reader,Resolver);
+    public void Serialize(ref Writer writer,T? value,O Resolver){
+        if(writer.TryWriteNil(value))return;
+        WriteNew(ref writer,value,Resolver);
+    }
+    internal static T Read(ref Reader reader,O Resolver){
+        var constructor= Constructor.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
         return Expressions.Expression.New(
@@ -34,11 +39,16 @@ public class New:IJsonFormatter<T> {
             arguments
         );
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.TryReadNil()) return null!;
+    internal static T ReadNew(ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var value=Read(ref reader,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
+    }
+    public T Deserialize(ref Reader reader,O Resolver){
+        if(reader.TryReadNil()) return null!;
+        return ReadNew(ref reader,Resolver);
+        
+        
     }
 }

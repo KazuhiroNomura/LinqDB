@@ -1,15 +1,16 @@
-﻿using Expressions = System.Linq.Expressions;
+﻿
 using Utf8Json;
-using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
+using Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.ElementInit;
-using static Extension;
 public class ElementInit:IJsonFormatter<T> {
     public static readonly ElementInit Instance=new();
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         Method.WriteNullable(ref writer,value!.AddMethod,Resolver);
@@ -17,7 +18,7 @@ public class ElementInit:IJsonFormatter<T> {
         writer.WriteCollection(value.Arguments,Resolver);
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
         var addMethod= Method.Read(ref reader,Resolver);

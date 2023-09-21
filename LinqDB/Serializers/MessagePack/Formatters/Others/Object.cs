@@ -8,17 +8,14 @@ namespace LinqDB.Serializers.MessagePack.Formatters.Others;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = System.Object;
-public class Object : IMessagePackFormatter<T>
-{
+public class Object : IMessagePackFormatter<T>{
     public static readonly Object Instance = new();
-    internal static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver)
-    {
+    internal static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
         var type = value!.GetType();
         writer.WriteType(type);
 
-        switch (value)
-        {
+        switch (value){
             case sbyte v: writer.Write(v); break;
             case short v: writer.Write(v); break;
             case int v: writer.Write(v); break;
@@ -56,13 +53,12 @@ public class Object : IMessagePackFormatter<T>
         }
 
     }
-    public void Serialize(ref Writer writer, T? value, MessagePackSerializerOptions Resolver)
-    {
+    internal static void WriteNullable(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
         if (writer.TryWriteNil(value)) return;
         Write(ref writer, value, Resolver);
     }
-    private static T Read(ref Reader reader, MessagePackSerializerOptions Resolver)
-    {
+    public void Serialize(ref Writer writer, T? value, MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer, value, Resolver);
+    private static T Read(ref Reader reader, MessagePackSerializerOptions Resolver){
         T value;
         var count = reader.ReadArrayHeader();
         Debug.Assert(count==2);

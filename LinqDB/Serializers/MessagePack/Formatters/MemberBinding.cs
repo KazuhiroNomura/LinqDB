@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Diagnostics;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
+using Reflection;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.MemberBinding;
 public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private const int ArrayHeader=3;
-    public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
+    public void Serialize(ref Writer writer,T value,O Resolver){
+        writer.WriteArrayHeader(3);
         writer.Write((byte)value.BindingType);
         
-        Member.Instance.Serialize(ref writer,value.Member,Resolver);
+        Member.Write(ref writer,value.Member,Resolver);
 
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
@@ -31,12 +32,12 @@ public class MemberBinding:IMessagePackFormatter<T> {
         }
         
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==ArrayHeader);
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();
         
-        var member= Member.Instance.Deserialize(ref reader,Resolver);
+        var member= Member.Read(ref reader,Resolver);
         
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),

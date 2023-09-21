@@ -1,48 +1,56 @@
 ﻿using System.Diagnostics;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using Reflection;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.MethodCallExpression;
-using static Extension;
 public class MethodCall:IMessagePackFormatter<T> {
     public static readonly MethodCall Instance=new();
-    private const int ArrayHeader0=2;
-    private const int ArrayHeader1=3;
-    private const int InternalArrayHeader0=ArrayHeader0+1;
-    private const int InternalArrayHeader1=ArrayHeader1+1;
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+
+
+
+
+
+
+
+
+
+
+
+    internal static void Write(ref Writer writer,T value,O Resolver){
         var method=value!.Method;
         if(method.IsStatic){
-            writer.WriteArrayHeader(InternalArrayHeader0);
+            writer.WriteArrayHeader(3);
             writer.WriteNodeType(Expressions.ExpressionType.Call);
             Method.WriteNullable(ref writer,method,Resolver);
         } else{
-            writer.WriteArrayHeader(InternalArrayHeader1);
+            writer.WriteArrayHeader(4);
             writer.WriteNodeType(Expressions.ExpressionType.Call);
             Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.WriteCollection(value.Arguments,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         var method=value!.Method;
         if(method.IsStatic){
-            writer.WriteArrayHeader(ArrayHeader0);
+            writer.WriteArrayHeader(2);
             Method.WriteNullable(ref writer,method,Resolver);
         } else{
-            writer.WriteArrayHeader(ArrayHeader1);
+            writer.WriteArrayHeader(3);
             Method.WriteNullable(ref writer,method,Resolver);
             Expression.Write(ref writer,value.Object!,Resolver);
         }
         writer.WriteCollection(value.Arguments,Resolver);
     }
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
-        var method= Method.Instance.Deserialize(ref reader,Resolver);
+    internal static T Read(ref Reader reader,O Resolver){
+        var method=Method.Read(ref reader,Resolver);
+        
         if(method.IsStatic){
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
@@ -51,6 +59,7 @@ public class MethodCall:IMessagePackFormatter<T> {
             );
         } else{
             var instance= Expression.Read(ref reader,Resolver);
+            
             var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
             return Expressions.Expression.Call(
                 instance,
@@ -59,26 +68,27 @@ public class MethodCall:IMessagePackFormatter<T> {
             );
         }
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        var method= Method.Instance.Deserialize(ref reader,Resolver);
-        if(method.IsStatic){
-            Debug.Assert(count==ArrayHeader0);
-            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-            return Expressions.Expression.Call(
-                method,
-                arguments
-            );
-        } else{
-            Debug.Assert(count==ArrayHeader1);
-            var instance= Expression.Read(ref reader,Resolver);
-            var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-            return Expressions.Expression.Call(
-                instance,
-                method,
-                arguments
-            );
-        }
+        return Read(ref reader,Resolver);
+        //var method= Method.Read(ref reader,Resolver);
+        //if(method.IsStatic){
+        //    Debug.Assert(count==2);
+        //    var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
+        //    return Expressions.Expression.Call(
+        //        method,
+        //        arguments
+        //    );
+        //} else{
+        //    Debug.Assert(count==3);
+        //    var instance= Expression.Read(ref reader,Resolver);
+        //    var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
+        //    return Expressions.Expression.Call(
+        //        instance,
+        //        method,
+        //        arguments
+        //    );
+        //}
     }
 }

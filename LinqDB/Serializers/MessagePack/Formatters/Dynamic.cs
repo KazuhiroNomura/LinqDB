@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Diagnostics;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
-//using System.Collections.ObjectModel;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.DynamicExpression;
@@ -35,14 +34,14 @@ public class Dynamic:IMessagePackFormatter<T> {
             }
         }
     }
-    private static void PrivateWrite(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         switch(value.Binder){
             case DynamicMetaObjectBinder v0:{
                 switch(v0){
                     case BinaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.BinaryOperationBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -62,7 +61,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                         WriteBinderType(ref writer,BinderType.ConvertBinder);
                         
                         Debug.Assert(v0.ReturnType==v1.Type);
-                        var CallingContext=GetBinder(v1);
+                        var CallingContext=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteType(value.Type);
@@ -78,7 +77,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case CreateInstanceBinder v1:{
                         WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -108,7 +107,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case GetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -121,7 +120,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case GetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetMemberBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -136,7 +135,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case InvokeBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -149,7 +148,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case InvokeMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.InvokeMemberBinder);
 
-                        var (CallingContext, CSharpArgumentInfos, Flags)=GetBinder(v1);
+                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
                         writer.WriteType(CallingContext);
 
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -166,7 +165,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case SetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetIndexBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
 
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -179,7 +178,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case SetMemberBinder v1:{
                         WriteBinderType(ref writer,BinderType.SetMemberBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
                         
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -198,7 +197,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                     case UnaryOperationBinder v1:{
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         
-                        var (CallingContext,CSharpArgumentInfos)=GetBinder(v1);
+                        var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
                         writer.WriteType(CallingContext);
 
                         writer.WriteArray(CSharpArgumentInfos,Resolver);
@@ -215,29 +214,25 @@ public class Dynamic:IMessagePackFormatter<T> {
                 break;
             }
         }
+        static void WriteBinderType(ref Writer writer,BinderType value)=>writer.WriteInt8((sbyte)value);
     }
-    internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
         PrivateWriteArrayHeader(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Dynamic);
+        
         PrivateWrite(ref writer,value,Resolver);
-    }
-    private static void WriteBinderType(ref Writer writer,BinderType value){
-        writer.WriteInt8((sbyte)value);
-    }
-    private static BinderType ReadBinderType(ref Reader reader){
-        var v=reader.ReadSByte();
-        return (BinderType)v;
+        
     }
     private static RuntimeBinder.CSharpBinderFlags ReadBindingFlags(ref Reader reader){
         var v=reader.ReadSByte();
         return (RuntimeBinder.CSharpBinderFlags)v;
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         PrivateWriteArrayHeader(ref writer,value,0);
         PrivateWrite(ref writer,value,Resolver);
     }
-    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,O Resolver){
         T value;
         var BinderType=ReadBinderType(ref reader);
         
@@ -448,8 +443,12 @@ public class Dynamic:IMessagePackFormatter<T> {
             default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
         return value;
+        static BinderType ReadBinderType(ref Reader reader){
+            var v=reader.ReadSByte();
+            return (BinderType)v;
+        }
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         return Read(ref reader,Resolver);

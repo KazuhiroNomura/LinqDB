@@ -1,20 +1,22 @@
 ﻿using System;
-using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
+using Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.MemberBinding;
 public class MemberBinding:IJsonFormatter<T> {
     public static readonly MemberBinding Instance=new();
     
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
+    public void Serialize(ref Writer writer,T? value,O Resolver) {
         writer.WriteBeginArray();
         writer.WriteString(value!.BindingType.ToString());
         writer.WriteValueSeparator();
-        Member.Instance.Serialize(ref writer,value.Member,Resolver);
+        Member.Write(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
         switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
@@ -30,12 +32,12 @@ public class MemberBinding:IJsonFormatter<T> {
         }
         writer.WriteEndArray();
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver) {
+    public T Deserialize(ref Reader reader,O Resolver) {
         if(reader.TryReadNil())return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var BindingType=reader.Read<Expressions.MemberBindingType>();// Enum.Parse<Expressions.MemberBindingType>(reader.ReadString());
+        var BindingType=Enum.Parse<Expressions.MemberBindingType>(reader.ReadString());
         reader.ReadIsValueSeparatorWithVerify();
-        var member= Member.Instance.Deserialize(ref reader,Resolver);
+        var member= Member.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),

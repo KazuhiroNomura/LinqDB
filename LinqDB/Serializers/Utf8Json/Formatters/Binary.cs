@@ -6,21 +6,23 @@ using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.BinaryExpression;
 public class Binary:IJsonFormatter<T> {
     public static readonly Binary Instance=new();
-    internal static void WriteLeftRight(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
+    internal static void WriteLeftRight(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Left,Resolver);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Right,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static void WriteLeftRightLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
+    internal static void WriteLeftRightLambda(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Left,Resolver);
@@ -28,9 +30,10 @@ public class Binary:IJsonFormatter<T> {
         Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Lambda.WriteNullable(ref writer,value.Conversion,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static void WriteLeftRightMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
+    internal static void WriteLeftRightMethod(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Left,Resolver);
@@ -38,9 +41,10 @@ public class Binary:IJsonFormatter<T> {
         Expression.Write(ref writer,value.Right,Resolver);
         writer.WriteValueSeparator();
         Method.WriteNullable(ref writer,value.Method,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static void WriteLeftRightMethodLambda(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
+    internal static void WriteLeftRightMethodLambda(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Left,Resolver);
@@ -50,9 +54,10 @@ public class Binary:IJsonFormatter<T> {
         Method.WriteNullable(ref writer,value.Method,Resolver);
         writer.WriteValueSeparator();
         Lambda.WriteNullable(ref writer,value.Conversion,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static void WriteLeftRightBooleanMethod(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-
+    internal static void WriteLeftRightBooleanMethod(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Left,Resolver);
@@ -61,10 +66,10 @@ public class Binary:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.IsLiftedToNull);
         writer.WriteValueSeparator();
-        Method.WriteNullable(ref writer,value.Method!,Resolver);
+        Method.WriteNullable(ref writer,value.Method,Resolver);
+        writer.WriteEndArray(); 
     }
-    internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
-        writer.WriteBeginArray();
+    internal static void Write(ref Writer writer,T value,O Resolver){
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :WriteLeftRight(ref writer,value,Resolver);break;
@@ -107,19 +112,18 @@ public class Binary:IJsonFormatter<T> {
             case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
             default:throw new NotSupportedException(value.NodeType.ToString());
         }
-        writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right)ReadLeftRight(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right)ReadLeftRight(ref Reader reader,O Resolver){
         var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var right= Expression.Read(ref reader,Resolver);
         return(left,right);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion)ReadLeftRightLambda(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,Expressions.LambdaExpression? conversion)ReadLeftRightLambda(ref Reader reader,O Resolver){
         var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var right= Expression.Read(ref reader,Resolver);
@@ -127,7 +131,7 @@ public class Binary:IJsonFormatter<T> {
         var conversion=Lambda.ReadNullable(ref reader,Resolver);
         return(left,right,conversion);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? method)InternalDeserializeMethod(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? method)ReadLeftRightMethod(ref Reader reader,O Resolver){
         var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var right= Expression.Read(ref reader,Resolver);
@@ -135,7 +139,7 @@ public class Binary:IJsonFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(left,right,method);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion)ReadLeftRightMethodLambda(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,MethodInfo? method,Expressions.LambdaExpression? conversion)ReadLeftRightMethodLambda(ref Reader reader,O Resolver){
         var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var right= Expression.Read(ref reader,Resolver);
@@ -145,7 +149,7 @@ public class Binary:IJsonFormatter<T> {
         var conversion=Lambda.ReadNullable(ref reader,Resolver);
         return(left,right,method,conversion);
     }
-    internal static(Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method)ReadLeftRightBooleanMethod(ref Reader reader,IJsonFormatterResolver Resolver){
+    internal static(Expressions.Expression left,Expressions.Expression right,bool isLiftedToNull,MethodInfo? method)ReadLeftRightBooleanMethod(ref Reader reader,O Resolver){
         var left= Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var right= Expression.Read(ref reader,Resolver);
@@ -155,7 +159,7 @@ public class Binary:IJsonFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(left,right,isLiftedToNull,method);
     }
-    private static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    private static T Read(ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
@@ -174,67 +178,67 @@ public class Binary:IJsonFormatter<T> {
                 value=Expressions.Expression.Coalesce(left,right,conversion);break;
             }
             case Expressions.ExpressionType.Add: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Add(left,right,method);break;
             }
             case Expressions.ExpressionType.AddChecked: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.AddChecked(left,right,method);break;
             }
             case Expressions.ExpressionType.And: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.And(left,right,method);break;
             }
             case Expressions.ExpressionType.AndAlso: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.AndAlso(left,right,method);break;
             }
             case Expressions.ExpressionType.Divide: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Divide(left,right,method);break;
             }
             case Expressions.ExpressionType.ExclusiveOr: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.ExclusiveOr(left,right,method);break;
             }
             case Expressions.ExpressionType.LeftShift: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.LeftShift(left,right,method);break;
             }
             case Expressions.ExpressionType.Modulo: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Modulo(left,right,method);break;
             }
             case Expressions.ExpressionType.Multiply: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Multiply(left,right,method);break;
             }
             case Expressions.ExpressionType.MultiplyChecked: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.MultiplyChecked(left,right,method);break;
             }
             case Expressions.ExpressionType.Or: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Or(left,right,method);break;
             }
             case Expressions.ExpressionType.OrElse: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.OrElse(left,right,method);break;
             }
             case Expressions.ExpressionType.Power: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Power(left,right,method);break;
             }
             case Expressions.ExpressionType.RightShift: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.RightShift(left,right,method);break;
             }
             case Expressions.ExpressionType.Subtract: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.Subtract(left,right,method);break;
             }
             case Expressions.ExpressionType.SubtractChecked: {
-                var (left, right, method)=InternalDeserializeMethod(ref reader,Resolver);
+                var (left, right, method)=ReadLeftRightMethod(ref reader,Resolver);
                 value=Expressions.Expression.SubtractChecked(left,right,method);break;
             }
             case Expressions.ExpressionType.AddAssign: {
@@ -322,8 +326,5 @@ public class Binary:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
-        if(reader.TryReadNil())return null!;
-        return Read(ref reader,Resolver);
-    }
+    public T Deserialize(ref Reader reader,O Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }
