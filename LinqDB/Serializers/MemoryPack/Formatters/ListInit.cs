@@ -10,17 +10,17 @@ using T = Expressions.ListInitExpression;
 
 public class ListInit:MemoryPackFormatter<T> {
     public static readonly ListInit Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         New.WriteNew(ref writer,value!.NewExpression);
         writer.WriteCollection(value.Initializers);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.ListInit);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var @new=New.Read(ref reader);

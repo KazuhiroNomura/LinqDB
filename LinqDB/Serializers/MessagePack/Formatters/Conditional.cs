@@ -8,7 +8,7 @@ using Reader=MessagePackReader;
 using T=Expressions.ConditionalExpression;
 public class Conditional:IMessagePackFormatter<T> {
     public static readonly Conditional Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         Expression.Write(ref writer,value.Test,Resolver);
         
         Expression.Write(ref writer,value.IfTrue,Resolver);
@@ -21,13 +21,13 @@ public class Conditional:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(5);
         writer.WriteNodeType(Expressions.ExpressionType.Conditional);
         
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(4);
 
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
 
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){

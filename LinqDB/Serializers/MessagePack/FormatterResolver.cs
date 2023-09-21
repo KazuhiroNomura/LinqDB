@@ -3,6 +3,8 @@ using LinqDB.Helpers;
 
 using MessagePack;
 using MessagePack.Formatters;
+using LinqDB.Serializers.MessagePack.Formatters.Others;
+
 namespace LinqDB.Serializers.MessagePack;
 internal sealed class FormatterResolver:IFormatterResolver {
     public static readonly FormatterResolver Instance = new();
@@ -11,8 +13,8 @@ internal sealed class FormatterResolver:IFormatterResolver {
         var type=typeof(T);
         if(type.IsDisplay()){
             //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter)) return(IMessagePackFormatter<T>)Formatter;
-            var FormatterType = typeof(Formatters.DisplayClass<>).MakeGenericType(type);
-            var Instance=FormatterType.GetField(nameof(Formatters.DisplayClass<int>.Instance))!;
+            var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
+            var Instance=FormatterType.GetField(nameof(DisplayClass<int>.Instance))!;
             var FormatterT=(IMessagePackFormatter<T>)Instance.GetValue(null)!;
             //this.DictionaryTypeFormatter.Add(type,FormatterT);
             return FormatterT;

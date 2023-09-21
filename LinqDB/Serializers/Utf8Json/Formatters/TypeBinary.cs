@@ -23,7 +23,7 @@ public class TypeBinary:IJsonFormatter<T> {
         Write(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    private static (Expressions.Expression expression,System.Type type)PrivateRead(ref Reader reader,IJsonFormatterResolver Resolver){
+    private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader,IJsonFormatterResolver Resolver){
         var expression=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var type=reader.ReadType();

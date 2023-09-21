@@ -9,7 +9,7 @@ public class DebugInfo:MemoryPackFormatter<T>{
     public static readonly DebugInfo Instance=new();
     
     
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         SymbolDocumentInfo.Write(ref writer,value.Document);
         
         writer.WriteVarInt(value.StartLine);
@@ -23,12 +23,12 @@ public class DebugInfo:MemoryPackFormatter<T>{
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(Expressions.ExpressionType.DebugInfo);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
 
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
         
     }
     internal static T Read(ref Reader reader){

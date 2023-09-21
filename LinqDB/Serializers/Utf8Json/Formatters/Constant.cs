@@ -1,4 +1,5 @@
 ﻿
+using LinqDB.Serializers.Utf8Json.Formatters.Others;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -8,7 +9,7 @@ using Reader = JsonReader;
 using T = Expressions.ConstantExpression;
 public class Constant:IJsonFormatter<T> {
     public static readonly Constant Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Object.WriteNullable(ref writer,value.Value,Resolver);
@@ -17,12 +18,12 @@ public class Constant:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

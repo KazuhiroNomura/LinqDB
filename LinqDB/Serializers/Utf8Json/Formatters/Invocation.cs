@@ -9,7 +9,7 @@ using static Extension;
 using T=Expressions.InvocationExpression;
 public class Invocation:IJsonFormatter<T> {
     public static readonly Invocation Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Write(ref writer,value.Expression,Resolver);
         writer.WriteValueSeparator();
         writer.WriteCollection(value.Arguments,Resolver);
@@ -17,13 +17,13 @@ public class Invocation:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

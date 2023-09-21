@@ -7,7 +7,7 @@ using T = Expressions.LoopExpression;
 
 public class Loop:MemoryPackFormatter<T>{
     public static readonly Loop Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         if(value.BreakLabel is null){
             writer.WriteNullObjectHeader();
             Expression.Write(ref writer,value.Body);
@@ -24,11 +24,11 @@ public class Loop:MemoryPackFormatter<T>{
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Loop);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         if(reader.PeekIsNull()){

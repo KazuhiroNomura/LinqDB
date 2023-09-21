@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -41,26 +42,26 @@ public class Unary:IJsonFormatter<T> {
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         switch(value!.NodeType){
-            case Expressions.ExpressionType.ArrayLength        : 
-            case Expressions.ExpressionType.Quote              : Write(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Throw              : 
-            case Expressions.ExpressionType.TypeAs             : 
-            case Expressions.ExpressionType.Unbox              : WriteType(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Convert            : 
-            case Expressions.ExpressionType.ConvertChecked     : WriteTypeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Decrement          : 
-            case Expressions.ExpressionType.Increment          : 
-            case Expressions.ExpressionType.IsFalse            : 
-            case Expressions.ExpressionType.IsTrue             : 
-            case Expressions.ExpressionType.Negate             : 
-            case Expressions.ExpressionType.NegateChecked      : 
-            case Expressions.ExpressionType.Not                : 
-            case Expressions.ExpressionType.OnesComplement     : 
-            case Expressions.ExpressionType.PostDecrementAssign: 
-            case Expressions.ExpressionType.PostIncrementAssign: 
-            case Expressions.ExpressionType.PreDecrementAssign : 
-            case Expressions.ExpressionType.PreIncrementAssign : 
-            case Expressions.ExpressionType.UnaryPlus          : WriteMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.ArrayLength        :
+            case Expressions.ExpressionType.Quote              :Write(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Throw              :
+            case Expressions.ExpressionType.TypeAs             :
+            case Expressions.ExpressionType.Unbox              :WriteType(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Convert            :
+            case Expressions.ExpressionType.ConvertChecked     :WriteTypeMethod(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Decrement          :
+            case Expressions.ExpressionType.Increment          :
+            case Expressions.ExpressionType.IsFalse            :
+            case Expressions.ExpressionType.IsTrue             :
+            case Expressions.ExpressionType.Negate             :
+            case Expressions.ExpressionType.NegateChecked      :
+            case Expressions.ExpressionType.Not                :
+            case Expressions.ExpressionType.OnesComplement     :
+            case Expressions.ExpressionType.PostDecrementAssign:
+            case Expressions.ExpressionType.PostIncrementAssign:
+            case Expressions.ExpressionType.PreDecrementAssign :
+            case Expressions.ExpressionType.PreIncrementAssign :
+            case Expressions.ExpressionType.UnaryPlus          :WriteMethod(ref writer,value,Resolver);break;
             default:
                 throw new NotSupportedException(value.NodeType.ToString());
         }
@@ -90,7 +91,8 @@ public class Unary:IJsonFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,type,method);
     }
-    private static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
+    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+        if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var NodeType=reader.ReadNodeType();
         reader.ReadIsValueSeparatorWithVerify();
@@ -181,5 +183,4 @@ public class Unary:IJsonFormatter<T> {
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    public T Deserialize(ref Reader reader,IJsonFormatterResolver Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

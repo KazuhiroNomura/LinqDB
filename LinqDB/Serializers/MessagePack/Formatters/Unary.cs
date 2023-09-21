@@ -3,11 +3,13 @@ using System.Reflection;
 using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
+
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.UnaryExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.UnaryExpression;
+using Reflection;
 public class Unary:IMessagePackFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
@@ -91,7 +93,8 @@ public class Unary:IMessagePackFormatter<T> {
         var method=Method.ReadNullable(ref reader,Resolver);
         return(operand,type,method);
     }
-    private static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count is >=2 and <=4);
         T value;
@@ -181,5 +184,4 @@ public class Unary:IMessagePackFormatter<T> {
         }
         return value;
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver)=>reader.TryReadNil()?null!:Read(ref reader,Resolver);
 }

@@ -12,7 +12,7 @@ public class Block : MemoryPackFormatter<T>
     public static readonly Block Instance = new();
 
 
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T? value) where TBufferWriter : IBufferWriter<byte>
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T? value) where TBufferWriter : IBufferWriter<byte>
     {
         var ListParameter = writer.Serializer().ListParameter;
         var ListParameter_Count = ListParameter.Count;
@@ -30,13 +30,13 @@ public class Block : MemoryPackFormatter<T>
 
         writer.WriteNodeType(Expressions.ExpressionType.Block);
 
-        PrivateSerialize(ref writer, value);
+        PrivateWrite(ref writer, value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref T? value)
     {
         if (writer.TryWriteNil(value)) return;
 
-        PrivateSerialize(ref writer, value);
+        PrivateWrite(ref writer, value);
 
     }
     internal static T Read(ref Reader reader)

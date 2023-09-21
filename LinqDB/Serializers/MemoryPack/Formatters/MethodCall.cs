@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
 using Expressions = System.Linq.Expressions;
 using MemoryPack;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 using Reader = MemoryPackReader;
@@ -10,7 +11,7 @@ using static Extension;
 
 public class MethodCall:MemoryPackFormatter<T> {
     public static readonly MethodCall Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         var method=value!.Method;
         Method.Write(ref writer,method);
         if(!method.IsStatic){
@@ -20,11 +21,11 @@ public class MethodCall:MemoryPackFormatter<T> {
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Call);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var method= Method.Read(ref reader);

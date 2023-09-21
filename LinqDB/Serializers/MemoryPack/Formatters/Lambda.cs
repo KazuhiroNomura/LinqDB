@@ -8,7 +8,7 @@ using T = LambdaExpression;
 
 public class Lambda:MemoryPackFormatter<T> {
     public static readonly Lambda Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         var ListParameter= writer.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
@@ -22,16 +22,13 @@ public class Lambda:MemoryPackFormatter<T> {
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(ExpressionType.Lambda);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
-    internal static void WriteConversion<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
-    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)=>WriteNullable(ref writer,value);
     internal static T Read(ref Reader reader){
         var ListParameter= reader.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;

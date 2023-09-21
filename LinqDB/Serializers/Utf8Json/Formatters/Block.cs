@@ -11,7 +11,7 @@ public class Block:IJsonFormatter<T> {
     public static readonly Block Instance=new();
     
 
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         var ListParameter=Resolver.Serializer().ListParameter;
         var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
@@ -27,12 +27,12 @@ public class Block:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

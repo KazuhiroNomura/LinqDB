@@ -1,16 +1,17 @@
 ﻿
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader=MemoryPackReader;
+using Reader = MemoryPackReader;
 using static Extension;
-using T=Expressions.SwitchExpression;
+using T = Expressions.SwitchExpression;
 public class Switch:MemoryPackFormatter<T> {
     public static readonly Switch Instance=new();
     
     
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value!.Type);
         
         Expression.Write(ref writer,value.SwitchValue);
@@ -24,12 +25,12 @@ public class Switch:MemoryPackFormatter<T> {
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         
         writer.WriteNodeType(Expressions.ExpressionType.Switch);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
         
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
         
     }
     internal static T Read(ref Reader reader){

@@ -103,9 +103,7 @@ public class Expression:IMessagePackFormatter<T> {
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        WriteNullable(ref writer,value,Resolver);
-    }
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var ArrayHeader=reader.ReadArrayHeader();
         T value;

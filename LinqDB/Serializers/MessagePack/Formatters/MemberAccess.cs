@@ -1,28 +1,29 @@
 ﻿using System.Diagnostics;
+using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.MemberExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.MemberExpression;
 public class MemberAccess:IMessagePackFormatter<T> {
     public static readonly MemberAccess Instance=new();
     private const int ArrayHeader=2;
     private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         Member.Instance.Serialize(ref writer,value!.Member,Resolver);
         Expression.WriteNullable(ref writer,value.Expression,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.MemberAccess);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var member=Member.Instance.Deserialize(ref reader,Resolver);

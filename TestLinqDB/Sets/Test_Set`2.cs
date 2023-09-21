@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections;
+using System.Diagnostics;
 using LinqDB.Sets;
 using System.Text;
 using System.Globalization;
@@ -39,7 +40,7 @@ public class SerializeEntityBase{
 public partial class SerializeEntity:SerializeEntityBase{
     [MessagePack.Key(1)]public string? _Name;
     [MessagePack.IgnoreMember]
-    public string? Name{get=>this._Name;set=>value=this._Name;}
+    public string? Name{get=>this._Name;set=>this._Name=value;}
     public override bool Equals(object? obj)=>obj is SerializeEntity other&&this.Name==other.Name;
     public override int GetHashCode()=>this.Name is not null?this.Name.GetHashCode():0;
 }
@@ -66,7 +67,7 @@ public partial class SerializeContainer {
 public partial class SerializeSchema {
     public string? Name;//=> nameof(シリアライズSchema);
     //public Set<シリアライズEntity> シリアライズSet1{get;}=new();
-    [MessagePack.IgnoreMember,MemoryPack.MemoryPackIgnore]
+    //[MessagePack.IgnoreMember,MemoryPack.MemoryPackIgnore]
     public Set<SerializeEntity> SerializeEntitySet1=>this._SerializeEntitySet1;
     [MessagePack.Key(0),MemoryPack.MemoryPackAllowSerialize]        
     private readonly Set<SerializeEntity> _SerializeEntitySet1= new();
@@ -318,7 +319,19 @@ public class Test_Set2:共通 {
             var o=output.Count;
         });
     }
-    [Fact]public void Serialize2(){
+    [Fact]public void Serialize20(){
+        var expected=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
+        //var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
+        //var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
+        //Assert.Equal(expected,actual);
+        this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
+    }
+    [Fact]public void Serialize21(){
         var expected=new TestSet<SerializeEntity>{new SerializeEntity{Name = "A"}};
         var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
         var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);

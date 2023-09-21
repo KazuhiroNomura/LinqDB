@@ -8,7 +8,7 @@ using T = Expressions.TryExpression;
 
 public class Try:MemoryPackFormatter<T> {
     public static readonly Try Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         Expression.Write(ref writer,value!.Body);
         Expression.WriteNullable(ref writer,value.Finally);
         if(value.Finally is not null){
@@ -22,11 +22,11 @@ public class Try:MemoryPackFormatter<T> {
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Try);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var body= Expression.Read(ref reader);

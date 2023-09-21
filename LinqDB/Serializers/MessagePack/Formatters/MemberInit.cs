@@ -8,19 +8,19 @@ using Reader=MessagePackReader;
 using T=Expressions.MemberInitExpression;
 public class MemberInit:IMessagePackFormatter<T> {
     public static readonly MemberInit Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         New.Instance.Serialize(ref writer,value!.NewExpression,Resolver);
         writer.WriteCollection(value.Bindings,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(Expressions.ExpressionType.MemberInit);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){

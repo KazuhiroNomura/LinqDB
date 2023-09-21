@@ -7,7 +7,7 @@ using static Extension;
 using T=Expressions.GotoExpression;
 public class Goto:IJsonFormatter<T> {
     public static readonly Goto Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteInt32((int)value.Kind);
         writer.WriteValueSeparator();
         LabelTarget.Write(ref writer,value.Target,Resolver);
@@ -19,12 +19,12 @@ public class Goto:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer, value,Resolver);
+        PrivateWrite(ref writer, value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer, value,Resolver);
+        PrivateWrite(ref writer, value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

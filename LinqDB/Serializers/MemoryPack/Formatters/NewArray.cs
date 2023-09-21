@@ -17,7 +17,7 @@ public class NewArray:MemoryPackFormatter<T> {
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    private static (System.Type type,Expressions.Expression?[]?expressions)PrivateDeserialize(ref Reader reader){
+    private static (Type type,Expressions.Expression?[]?expressions)PrivateDeserialize(ref Reader reader){
         var type=reader.ReadType();
         var expressions=reader.ReadArray<Expressions.Expression>();
         return (type,expressions);

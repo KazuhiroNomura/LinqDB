@@ -7,7 +7,7 @@ using Reader = JsonReader;
 using T = Expressions.ConditionalExpression;
 public class Conditional:IJsonFormatter<T> {
     public static readonly Conditional Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Write(ref writer,value.Test,Resolver);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.IfTrue,Resolver);
@@ -20,13 +20,13 @@ public class Conditional:IJsonFormatter<T> {
 
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

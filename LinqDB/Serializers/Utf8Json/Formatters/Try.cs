@@ -9,7 +9,7 @@ using static Extension;
 using T=Expressions.TryExpression;
 public class Try:IJsonFormatter<T> {
     public static readonly Try Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         Expression.WriteNullable(ref writer,value.Finally,Resolver);
@@ -27,12 +27,12 @@ public class Try:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     [SuppressMessage("ReSharper","ConvertIfStatementToConditionalTernaryExpression")]

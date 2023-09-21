@@ -7,10 +7,11 @@ using MemoryPack;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
 using Formatters;
+using Formatters.Others;
 using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 public class Serializer:Serializers.Serializer,System.IServiceProvider{
-    public static readonly System.Reflection.MethodInfo Register=LinqDB.Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Object.Instance));
+    public static readonly System.Reflection.MethodInfo Register=Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Object.Instance));
     public object GetService(System.Type serviceType){
         throw new System.NotImplementedException();
     }

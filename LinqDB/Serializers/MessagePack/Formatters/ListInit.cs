@@ -11,19 +11,19 @@ public class ListInit:IMessagePackFormatter<T> {
     public static readonly ListInit Instance=new();
     private const int ArrayHeader=2;
     private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         New.Instance.Serialize(ref writer,value!.NewExpression,Resolver);
         writer.WriteCollection(value.Initializers,Resolver);
     }
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.ListInit);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var @new=New.Instance.Deserialize(ref reader,Resolver);

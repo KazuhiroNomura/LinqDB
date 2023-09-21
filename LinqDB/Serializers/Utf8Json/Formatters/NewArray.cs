@@ -9,7 +9,7 @@ using T = Expressions.NewArrayExpression;
 using static Extension;
 public class NewArray:IJsonFormatter<T> {
     public static readonly NewArray Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type.GetElementType());
         writer.WriteValueSeparator();
         writer.WriteCollection(value.Expressions,Resolver);
@@ -17,17 +17,17 @@ public class NewArray:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
         writer.WriteString(value!.NodeType.ToString());
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    private static (System.Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
+    private static (Type type,Expressions.Expression[]expressions)PrivateDeserialize(ref Reader reader,IJsonFormatterResolver Resolver){
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var expressions=reader.ReadArray<Expressions.Expression>(Resolver);

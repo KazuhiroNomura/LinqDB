@@ -9,7 +9,7 @@ using T = Expressions.GotoExpression;
 
 public class Goto:MemoryPackFormatter<T>{
     public static readonly Goto Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteVarInt((byte)value!.Kind);
         LabelTarget.Write(ref writer,value.Target);
         Expression.WriteNullable(ref writer,value.Value);
@@ -17,11 +17,11 @@ public class Goto:MemoryPackFormatter<T>{
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteNodeType(Expressions.ExpressionType.Goto);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var kind=(Expressions.GotoExpressionKind)reader.ReadVarIntByte();

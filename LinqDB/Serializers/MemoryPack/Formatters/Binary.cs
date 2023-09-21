@@ -3,6 +3,8 @@ using System.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 using Reader = MemoryPackReader;
@@ -25,7 +27,7 @@ public class Binary:MemoryPackFormatter<T> {
 
         Expression.Write(ref writer,value.Right);
 
-        Lambda.WriteConversion(ref writer,value.Conversion);
+        Lambda.WriteNullable(ref writer,value.Conversion);
     }
     internal static void WriteLeftRightMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -47,7 +49,7 @@ public class Binary:MemoryPackFormatter<T> {
 
         Method.WriteNullable(ref writer,value.Method);
 
-        Lambda.WriteConversion(ref writer,value.Conversion);
+        Lambda.WriteNullable(ref writer,value.Conversion);
     }
     internal static void WriteBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 

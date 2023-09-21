@@ -104,9 +104,7 @@ public class Expression:IJsonFormatter<T> {
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
-    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
-        WriteNullable(ref writer,value,Resolver);
-    }
+    public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){
         reader.ReadIsBeginArrayWithVerify();
         T value;

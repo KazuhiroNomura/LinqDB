@@ -1,12 +1,14 @@
-﻿using Expressions=System.Linq.Expressions;
+﻿using Expressions = System.Linq.Expressions;
 using Utf8Json;
+using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
-using T=Expressions.MemberExpression;
+using Writer = JsonWriter;
+using Reader = JsonReader;
+using T = Expressions.MemberExpression;
 public class MemberAccess:IJsonFormatter<T> {
     public static readonly MemberAccess Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         Member.Write(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();
         Expression.WriteNullable(ref writer,value.Expression,Resolver);
@@ -14,12 +16,12 @@ public class MemberAccess:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

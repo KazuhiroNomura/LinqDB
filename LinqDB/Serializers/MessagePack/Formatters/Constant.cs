@@ -1,14 +1,15 @@
 ﻿using System.Diagnostics;
+using LinqDB.Serializers.MessagePack.Formatters.Others;
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using Writer=MessagePackWriter;
-using Reader=MessagePackReader;
-using T=Expressions.ConstantExpression;
+using Writer = MessagePackWriter;
+using Reader = MessagePackReader;
+using T = Expressions.ConstantExpression;
 public class Constant:IMessagePackFormatter<T> {
     public static readonly Constant Instance=new();
-    private static void PrivateSerialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
+    private static void PrivateWrite(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteType(value!.Type);
 
         Object.Instance.Serialize(ref writer,value.Value,Resolver);
@@ -17,12 +18,12 @@ public class Constant:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(2);
         writer.WriteNodeType(Expressions.ExpressionType.Constant);
         
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         
     }
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){

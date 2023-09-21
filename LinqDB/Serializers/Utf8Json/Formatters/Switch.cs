@@ -1,16 +1,17 @@
-﻿using Utf8Json;
+﻿using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+using Utf8Json;
 
-using Expressions=System.Linq.Expressions;
+using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using Writer=JsonWriter;
-using Reader=JsonReader;
+using Writer = JsonWriter;
+using Reader = JsonReader;
 using static Extension;
-using T=Expressions.SwitchExpression;
+using T = Expressions.SwitchExpression;
 public class Switch:IJsonFormatter<T> {
     public static readonly Switch Instance=new();
     
     
-    private static void PrivateSerialize(ref Writer writer,T value,IJsonFormatterResolver Resolver){
+    private static void PrivateWrite(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.SwitchValue,Resolver);
@@ -24,12 +25,12 @@ public class Switch:IJsonFormatter<T> {
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteNodeType(value);
         writer.WriteValueSeparator();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
     }
     public void Serialize(ref Writer writer,T? value,IJsonFormatterResolver Resolver) {
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();
-        PrivateSerialize(ref writer,value,Resolver);
+        PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,IJsonFormatterResolver Resolver){

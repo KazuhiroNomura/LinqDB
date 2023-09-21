@@ -106,9 +106,7 @@ public class Expression:MemoryPackFormatter<T> {
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        WriteNullable(ref writer,value);
-    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)=>WriteNullable(ref writer,value);
     internal static T Read(ref Reader reader) {
         
         T value = default!;

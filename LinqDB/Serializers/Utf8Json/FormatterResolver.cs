@@ -3,6 +3,7 @@ using LinqDB.Helpers;
 using LinqDB.Serializers.Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
 using Utf8Json;
+using LinqDB.Serializers.Utf8Json.Formatters.Others;
 
 namespace LinqDB.Serializers.Utf8Json;
 internal sealed class FormatterResolver:IJsonFormatterResolver{

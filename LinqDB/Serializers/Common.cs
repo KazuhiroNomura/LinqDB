@@ -86,62 +86,62 @@ internal static class Common {
         for(var a=0;a<Length;a++) value[a]=CSharpArgumentInfo1;
         return value;
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(BinaryOperationBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(BinaryOperationBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static System.Type GetBinder(ConvertBinder v1){
+    public static Type GetBinder(ConvertBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return d._callingContext;
     }
-    public static (System.Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(CreateInstanceBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(CreateInstanceBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo,0);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(DeleteIndexBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(DeleteIndexBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo,0);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(DeleteMemberBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos,int Flags) GetBinder(DeleteMemberBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo,0);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(GetIndexBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(GetIndexBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(GetMemberBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(GetMemberBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(InvokeBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(InvokeBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos,int CSharpBinderFlags) GetBinder(InvokeMemberBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos,int CSharpBinderFlags) GetBinder(InvokeMemberBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         var s = d.Flags.ToString();
         var m_argumentInfo = d._argumentInfo;
         var value = s switch {
-            "None" => RuntimeBinder.CSharpBinderFlags.None,
-            "ResultDiscarded" => RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
+            "None" => CSharpBinderFlags.None,
+            "ResultDiscarded" => CSharpBinderFlags.ResultDiscarded,
             _ => throw new NotSupportedException(s)
         };
         return (d.CallingContext, m_argumentInfo,(int)value);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(SetIndexBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(SetIndexBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(SetMemberBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(SetMemberBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (System.Type CallingContext, RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(UnaryOperationBinder v1){
+    public static (Type CallingContext, CSharpArgumentInfo[] CSharpArgumentInfos) GetBinder(UnaryOperationBinder v1){
         dynamic d = new NonPublicAccessor(v1);
         return(d._callingContext,d._argumentInfo);
     }
-    public static (RuntimeBinder.CSharpArgumentInfoFlags flags, string name) GetFlagsName(CSharpArgumentInfo v1){
+    public static (CSharpArgumentInfoFlags flags, string name) GetFlagsName(CSharpArgumentInfo v1){
         dynamic d=new NonPublicAccessor(v1);
         return(d.Flags,d.Name);
     }

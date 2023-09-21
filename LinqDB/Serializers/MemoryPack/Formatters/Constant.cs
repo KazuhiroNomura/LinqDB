@@ -1,4 +1,5 @@
-﻿using MemoryPack;
+﻿using LinqDB.Serializers.MemoryPack.Formatters.Others;
+using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
@@ -7,7 +8,7 @@ using Reader = MemoryPackReader;
 using T = Expressions.ConstantExpression;
 public class Constant:MemoryPackFormatter<T> {
     public static readonly Constant Instance=new();
-    private static void PrivateSerialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value!.Type);
         
         Object.WriteNullable(ref writer,value.Value);
@@ -16,12 +17,12 @@ public class Constant:MemoryPackFormatter<T> {
 
         writer.WriteNodeType(Expressions.ExpressionType.Constant);
         
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
 
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
         
     }
     internal static T Read(ref Reader reader) {

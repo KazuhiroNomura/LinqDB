@@ -10,19 +10,19 @@ public class Default:IMessagePackFormatter<T> {
     public static readonly Default Instance=new();
     private const int ArrayHeader=1;
     private const int InternalArrayHeader=ArrayHeader+1;
-    private static void PrivateSerialize(ref Writer writer,T value){
+    private static void PrivateWrite(ref Writer writer,T value){
         writer.WriteType(value.Type);
     }
     internal static void Write(ref Writer writer,T value){
         writer.WriteArrayHeader(InternalArrayHeader);
         writer.WriteNodeType(Expressions.ExpressionType.Default);
         
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
     }
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(ArrayHeader);
-        PrivateSerialize(ref writer,value);
+        PrivateWrite(ref writer,value);
         
     }
     internal static T Read(ref Reader reader){
