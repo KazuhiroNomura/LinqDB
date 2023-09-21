@@ -233,17 +233,14 @@ partial class Optimizer {
         }
         internal Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
         protected override Expression Constant(ConstantExpression Constant0) {
-            if(!ILで直接埋め込めるか(Constant0.Type)&&!this.DictionaryConstant.ContainsKey(Constant0))
-                this.DictionaryConstant.Add(Constant0,default!);
+            if(!ILで直接埋め込めるか(Constant0.Type))
+                this.DictionaryConstant.TryAdd(Constant0,default!);
             return Constant0;
         }
         protected override Expression Quote(UnaryExpression Unary0){
             var Constant=Expression.Constant(Unary0.Operand);
-            if(!this.DictionaryConstant.ContainsKey(Constant))
-                this.DictionaryConstant.Add(Constant,default!);
+            this.DictionaryConstant.TryAdd(Constant,default!);
             return Constant;
-            //this.Dictionary_Quote_Member.Add(Unary0,default!);
-            //return Unary0;
         }
 
         private Expression 共通BinaryAssign(BinaryExpression Binary0, ExpressionType NodeType) {
@@ -341,13 +338,6 @@ partial class Optimizer {
                     :Try0;
             }
         }
-        private Expression 共通Pre(UnaryExpression Unary0, ExpressionType NodeType) {
-            var Unary1_Operand=this.Traverse(Unary0.Operand);
-            return Expression.Assign(
-                Unary1_Operand,
-                Expression.MakeUnary(NodeType,Unary1_Operand,Unary0.Type,Unary0.Method)
-            );
-        }
         private Expression 共通Post(UnaryExpression Unary0, ExpressionType NodeType) {
             var Unary1_Operand=this.Traverse(Unary0.Operand);
             var 変数=Expression.Parameter(Unary0.Operand.Type);
@@ -366,6 +356,13 @@ partial class Optimizer {
         }
         protected override Expression PostDecrementAssign(UnaryExpression Unary0)=> this.共通Post(Unary0, ExpressionType.Decrement);
         protected override Expression PostIncrementAssign(UnaryExpression Unary0)=> this.共通Post(Unary0, ExpressionType.Increment);
+        private Expression 共通Pre(UnaryExpression Unary0, ExpressionType NodeType) {
+            var Unary1_Operand=this.Traverse(Unary0.Operand);
+            return Expression.Assign(
+                Unary1_Operand,
+                Expression.MakeUnary(NodeType,Unary1_Operand,Unary0.Type,Unary0.Method)
+            );
+        }
         protected override Expression PreDecrementAssign(UnaryExpression Unary0)=> this.共通Pre(Unary0, ExpressionType.Decrement);
         protected override Expression PreIncrementAssign(UnaryExpression Unary0)=> this.共通Pre(Unary0, ExpressionType.Increment);
         protected override Expression Lambda(LambdaExpression Lambda0) {
@@ -373,21 +370,6 @@ partial class Optimizer {
             var Lambda1_Body=this.Traverse(Lambda0.Body);
             return Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda0.Name,Lambda0.TailCall,Lambda0_Parameters);
         }
-        //protected override Expression Block(BlockExpression Block0) {
-        //    var Block0_Variables=Block0.Variables;
-        //    var Block0_Expressions=Block0.Expressions;
-        //    var Block0_Expressions_Count=Block0_Expressions.Count;
-        //    var Block1_Expressions=new Expression[Block0_Expressions_Count];
-        //    for(var a=0;a<Block0_Expressions_Count;a++){
-        //        var Block0_Expression=Block0_Expressions[a];
-        //        if(Block0_Expression.Type!=typeof(void)&&Block0_Expression is ConditionalExpression Conditional){
-        //            if(Labelで終わるか(Conditional.IfTrue))
-        //        }
-        //        Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
-        //    }
-        //    return Expression.Block(Block0_Variables,Block1_Expressions);
-        //    base.Block()
-        //}
         /// <summary>
         /// !(!(a))→a
         /// </summary>
@@ -420,14 +402,12 @@ partial class Optimizer {
             if(Unary0_Type==Unary0_Operand_Type&&Unary0_Operand.NodeType!=ExpressionType.Lambda)return this.Traverse(Unary0_Operand);
             if(Unary0.Method is null)return base.Convert(Unary0);
             Debug.Assert(Unary0.Method.GetParameters().Length==1);
-            if(
-                Unary0_Type==typeof(IntPtr) && (Unary0_Operand_Type==typeof(int) || 
-                                                Unary0_Operand_Type==typeof(long)) ||
-                Unary0_Type==typeof(UIntPtr) && (Unary0_Operand_Type==typeof(uint) || 
-                                                 Unary0_Operand_Type==typeof(ulong)) ||
-                (Unary0_Type==typeof(int) || Unary0_Type==typeof(long)) && Unary0_Operand_Type==typeof(IntPtr) ||
-                (Unary0_Type==typeof(uint) || Unary0_Type==typeof(ulong)) && Unary0_Operand_Type==typeof(UIntPtr)
-            )return Expression.MakeUnary(NodeType,this.Traverse(Unary0_Operand),Unary0_Type);
+            //if(
+            //    Unary0_Type==typeof(nint) && (Unary0_Operand_Type==typeof(int) ||Unary0_Operand_Type==typeof(long)) ||
+            //    Unary0_Type==typeof(nuint) && (Unary0_Operand_Type==typeof(uint) ||Unary0_Operand_Type==typeof(ulong)) ||
+            //    (Unary0_Type==typeof(int) || Unary0_Type==typeof(long)) && Unary0_Operand_Type==typeof(nint) ||
+            //    (Unary0_Type==typeof(uint) || Unary0_Type==typeof(ulong)) && Unary0_Operand_Type==typeof(nuint)
+            //)return Expression.MakeUnary(NodeType,this.Traverse(Unary0_Operand),Unary0_Type);
             var Unary1_Operand=this.Traverse(Unary0_Operand);
             if(Unary0_Operand==Unary1_Operand) return Unary0;
             return Expression.MakeUnary(NodeType,Unary1_Operand,Unary0_Type,Unary0.Method);

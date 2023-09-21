@@ -1,4 +1,5 @@
-﻿using LinqDB.Optimizers;
+﻿using Reflection = System.Reflection;
+using LinqDB.Optimizers;
 using LinqDB.Remote.Servers;
 using static LinqDB.Helpers.Configulation;
 using System.Diagnostics;
@@ -196,12 +197,14 @@ public abstract class 共通{
             }
         }
     }
-    protected static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
+    protected static LambdaExpression GetLambda<T>(Expression<Func<T>> e)=>e;
     protected static object ClassDisplay取得(){
         var a=1;
-        var body=Lambda(()=>a).Body;
+        var body=GetLambda(()=>a).Body;
         var member=(MemberExpression)body;
         var constant=(ConstantExpression)member.Expression!;
         return constant.Value;
     }
+    protected static Reflection.MethodInfo GetMethod<T>(Expression<Func<T>>e)=>((MethodCallExpression)e.Body).Method;
+    protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(TestExpression).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
 }

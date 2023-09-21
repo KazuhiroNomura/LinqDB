@@ -259,9 +259,9 @@ public class TestExpression:共通 {
         var ConstantBinry= Expression.Constant(new 演算子(true));
         var ConversionInt32=Expression.Lambda<Func<int,int>>(Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
         var ConversionDouble=Expression.Lambda<Func<double,double>>(Expression.Add(ParameterDouble,ParameterDouble),ParameterDouble);
-        var ConversionString=Expression.Lambda<Func<string,string>>(Expression.Call(null,Method(()=>string_string_string("","")),ParameterString,ParameterString),ParameterString);
-        var Method_int=Method(()=>int_int_int(1,1));
-        var Method_double=Method(()=>double_dobuble_double(1,1));
+        var ConversionString=Expression.Lambda<Func<string,string>>(Expression.Call(null,GetMethod(()=>string_string_string("","")),ParameterString,ParameterString),ParameterString);
+        var Method_int=GetMethod(()=>int_int_int(1,1));
+        var Method_double=GetMethod(()=>double_dobuble_double(1,1));
         //var Method_bool=Method(()=>AndAlso(true,true));
         //var Method_NullableBoolean=Method(()=>bool_bool_bool(true,true));
         共通0(Expression.ArrayIndex(ConstantArray,Constant1));
@@ -320,7 +320,7 @@ public class TestExpression:共通 {
         共通0(Expression.MultiplyChecked      (Constant1,Constant1,Method_int));
         共通0(Expression.Or                   (Constant1,Constant1,Method_int));
         共通0(Expression.OrElse               (ConstantBinry,ConstantBinry,typeof(演算子).GetMethod("op_BitwiseAnd")));
-        共通0(Expression.Power                (Constant1d,Constant1d,Method(()=>Math.Pow(1,1))));
+        共通0(Expression.Power                (Constant1d,Constant1d,GetMethod(()=>Math.Pow(1,1))));
         共通0(Expression.RightShift           (Constant1,Constant1,Method_int));
         共通0(Expression.Subtract             (Constant1,Constant1,Method_int));
         共通0(Expression.SubtractChecked      (Constant1,Constant1,Method_int));
@@ -393,10 +393,6 @@ public class TestExpression:共通 {
             );
         }
     }
-    private static Reflection.MethodInfo Method<T>(Expression<Func<T>>e)=>((MethodCallExpression)e.Body).Method;
-    //private static Reflection.MethodInfo Method<T,TResult>(Func<T,TResult>e)=>e.Method;
-    //private static Reflection.MethodInfo Method<T>(Func<T>e)=>e.Method;
-    private static Reflection.MethodInfo Method(string Name)=>typeof(TestExpression).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
     [Fact]public void Block0(){
         this.MemoryMessageJson_Expression(
             Expression.Block(
@@ -1681,7 +1677,7 @@ public class TestExpression:共通 {
         共通1(Expression.IsTrue(Constant演算子));
         共通1(Expression.Negate(Constant演算子));
         共通1(Expression.NegateChecked(Constant演算子));
-        共通1(Expression.OnesComplement(Constant演算子,Method(nameof(Unary演算子))));
+        共通1(Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通1(Expression.Decrement(Constant演算子));
         共通1(Expression.Increment(Constant演算子));
         共通0(Parameter演算子,Constant演算子,Expression.PostDecrementAssign(Parameter演算子));
@@ -1691,18 +1687,18 @@ public class TestExpression:共通 {
         共通1(Expression.UnaryPlus(Constant演算子));
 
 
-        共通1(Expression.Convert(Constant1_1d,typeof(int),Method(()=>UnaryDouble(0))));
-        共通1(Expression.ConvertChecked(Constant1_1d,typeof(int),Method(()=>UnaryDouble(0))));
-        共通1(Expression.Decrement(Constant1_1d,Method(()=>UnaryDouble(0))));
-        共通1(Expression.Increment(Constant1_1d,Method(()=>UnaryDouble(0))));
-        共通1(Expression.IsFalse(Constant演算子,Method(nameof(IsTrue演算子))));
-        共通1(Expression.IsTrue(Constant演算子,Method(nameof(IsTrue演算子))));
-        共通1(Expression.Negate(Constant1_1d,Method(()=>UnaryDouble(0))));
-        共通1(Expression.NegateChecked(Constant1_1d,Method(()=>UnaryDouble(0))));
-        共通1(Expression.OnesComplement(Constant演算子,Method(nameof(Unary演算子))));
-        共通1(Expression.Decrement(Constant演算子,Method(nameof(Unary演算子))));
-        共通1(Expression.Increment(Constant演算子,Method(nameof(Unary演算子))));
-        共通1(Expression.UnaryPlus(Constant演算子,Method(nameof(Unary演算子))));
+        共通1(Expression.Convert(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.ConvertChecked(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.Decrement(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.Increment(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.IsFalse(Constant演算子,GetMethod(nameof(IsTrue演算子))));
+        共通1(Expression.IsTrue(Constant演算子,GetMethod(nameof(IsTrue演算子))));
+        共通1(Expression.Negate(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.NegateChecked(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
         void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
             this.MemoryMessageJson_TExpressionObject_コンパイル実行(
                 Expression.Lambda<Func<object>>(
