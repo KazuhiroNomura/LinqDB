@@ -491,4 +491,61 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
             Assert.Equal(expected0,expected2);
         }
     }
+    [Fact]public void Convert(){
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<sbyte>>(
+                Expression.Convert(
+                    Expression.Constant(1000),
+                    typeof(sbyte)
+                )
+            )
+        );
+    }
+    [Fact]public void ConvertChecked(){
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<sbyte>>(
+                Expression.ConvertChecked(
+                    Expression.Constant(1000),
+                    typeof(sbyte)
+                )
+            )
+        );
+    }
+    [Fact]public void Call_Average(){
+        var s=new int[10];
+        this.共通コンパイル実行(()=>s.Select(p=>(decimal)p).Average());
+        this.共通コンパイル実行(()=>s.Select(p=>(double)p).Average());
+        this.共通コンパイル実行(()=>s.Select(p=>(decimal?)p).Average());
+        this.共通コンパイル実行(()=>s.Select(p=>(double?)p).Average());
+    }
+    private static IEnumerable<T> そのまま<T>(IEnumerable<T> i)=>i;
+    [Fact]public void Call_Any(){
+        var s=new int[10];
+        this.共通コンパイル実行(()=>s.Select(p=>p+p).Any());
+        this.共通コンパイル実行(()=>s.GroupJoin(s,o=>o,i=>i,(o,i)=>new{o,i}).Any());
+        this.共通コンパイル実行(()=>そのまま(s).Any());
+        this.共通コンパイル実行(()=>s.Except(s).Any());
+        this.共通コンパイル実行(()=>s.Any(p=>p==0));
+    }
+    [Fact]public void Call_Contains(){
+        this.共通コンパイル実行(()=>new int[10].Contains(0));
+        this.共通コンパイル実行(()=>((IEnumerable<int>)new List<int>()).Contains(0));
+        this.共通コンパイル実行(()=>new decimal[10].Contains(0));
+        this.共通コンパイル実行(()=>new decimal[10].Select(p=>(object)p).Contains(0m));
+    }
+    [Fact]public void Call_Delete(){
+        this.共通コンパイル実行(()=>new Set<int>().SelectMany(p=>new Set<int>()).Delete(p=>true));
+        this.共通コンパイル実行(()=>new Set<int>().SelectMany(p=>new Set<int>()).Delete((Func<int,bool>)(p=>true)));
+    }
+    [Fact]public void Call_GroupBy(){
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
+        this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
+    }
 }

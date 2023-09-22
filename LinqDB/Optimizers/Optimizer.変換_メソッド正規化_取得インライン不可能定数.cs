@@ -412,28 +412,28 @@ partial class Optimizer {
             if(Unary0_Operand==Unary1_Operand) return Unary0;
             return Expression.MakeUnary(NodeType,Unary1_Operand,Unary0_Type,Unary0.Method);
         }
-        //protected override Expression Convert(UnaryExpression Unary0)=> this.共通ConvertConvertChecked(Unary0, ExpressionType.Convert);
-        protected override Expression Convert(UnaryExpression Unary0) {
-            var Unary0_Type = Unary0.Type;
-            var Unary0_Operand = Unary0.Operand;
-            if(Unary0_Operand is ConstantExpression Constant&&Unary0_Operand.Type==typeof(string)) {
-                var Constant_Value=Constant.Value!;
-                if(Unary0_Type==typeof(sbyte         ))return Expression.Constant(sbyte         .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(short         ))return Expression.Constant(short         .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(int           ))return Expression.Constant(int           .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(long          ))return Expression.Constant(long          .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(byte          ))return Expression.Constant(byte          .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(ushort        ))return Expression.Constant(ushort        .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(uint          ))return Expression.Constant(uint          .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(ulong         ))return Expression.Constant(ulong         .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(DateTime      ))return Expression.Constant(DateTime      .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(DateTimeOffset))return Expression.Constant(DateTimeOffset.Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(Guid          ))return Expression.Constant(Guid          .Parse((string)Constant_Value));
-                if(Unary0_Type==typeof(object))return Constant;
-                Debug.Fail("ありえない");
-            }
-            return this.共通ConvertConvertChecked(Unary0,ExpressionType.Convert);
-        }
+        protected override Expression Convert(UnaryExpression Unary0)=> this.共通ConvertConvertChecked(Unary0, ExpressionType.Convert);
+        //protected override Expression Convert(UnaryExpression Unary0) {
+        //    var Unary0_Type = Unary0.Type;
+        //    var Unary0_Operand = Unary0.Operand;
+        //    if(Unary0_Operand is ConstantExpression Constant&&Unary0_Operand.Type==typeof(string)) {
+        //        var Constant_Value=Constant.Value!;
+        //        if(Unary0_Type==typeof(sbyte         ))return Expression.Constant(sbyte         .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(short         ))return Expression.Constant(short         .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(int           ))return Expression.Constant(int           .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(long          ))return Expression.Constant(long          .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(byte          ))return Expression.Constant(byte          .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(ushort        ))return Expression.Constant(ushort        .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(uint          ))return Expression.Constant(uint          .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(ulong         ))return Expression.Constant(ulong         .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(DateTime      ))return Expression.Constant(DateTime      .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(DateTimeOffset))return Expression.Constant(DateTimeOffset.Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(Guid          ))return Expression.Constant(Guid          .Parse((string)Constant_Value));
+        //        if(Unary0_Type==typeof(object))return Constant;
+        //        Debug.Fail("ありえない");
+        //    }
+        //    return this.共通ConvertConvertChecked(Unary0,ExpressionType.Convert);
+        //}
         protected override Expression ConvertChecked(UnaryExpression Unary0)=> this.共通ConvertConvertChecked(Unary0, ExpressionType.ConvertChecked);
 
         /// <summary>
@@ -463,6 +463,7 @@ partial class Optimizer {
                     var 作業配列 = this._作業配列;
                     switch(MethodCall0_Method.Name) {
                         case nameof(Enumerable.Average): {
+                            //s.Average()→s.Average(p=>p)
                             if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
                                 return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageDecimal_selector);
                             if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
@@ -471,25 +472,27 @@ partial class Optimizer {
                                 return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageNullableDecimal_selector);
                             if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
                                 return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageNullableDouble_selector);
+                            break;
                             MethodCallExpression 集約を集約_selectorに変換TSource(MethodCallExpression MethodCall00,Type SourceType,MethodInfo 集約_selector) {
-                                var 作業配列 = this._作業配列;
+                                var 作業配列0 = this._作業配列;
                                 var p = Expression.Parameter(SourceType,$"Averageﾟ{this.番号++}");
                                 var MethodCall01_Arguments_0 = this.Traverse(MethodCall00.Arguments[0]);
                                 return Expression.Call(
-                                    作業配列.MakeGenericMethod(
+                                    作業配列0.MakeGenericMethod(
                                         集約_selector,
                                         SourceType
                                     ),
                                     MethodCall01_Arguments_0,
                                     Expression.Lambda(
                                         p,
-                                        作業配列.Parameters設定(p)
+                                        作業配列0.Parameters設定(p)
                                     )
                                 );
                             }
-                            break;
                         }
                         case nameof(Enumerable.Any): {
+                            //s.Select().Any()→s.Any()
+                            //s.GroupJoin().Any()→s.Any()
                             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
                             var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
                             while(MethodCall1_Arguments_0 is MethodCallExpression MethodCall){
@@ -500,33 +503,11 @@ partial class Optimizer {
                                         break;
                                 } else
                                     break;
-
                             }
-                            //while(ループ展開可能メソッドか(MethodCall1_Arguments_0)){
-                            //    //MethodCall1_Arguments_0=MethodCall1_MethodCall1.Arguments[0];
-                            //    var MethodCall1_MethodCall0_Method=MethodCall1_MethodCall1.Method;
-                            //    while(MethodCall1_MethodCall0_Method.Name==nameof(Enumerable.GroupJoin)||
-                            //          MethodCall1_MethodCall0_Method.Name==nameof(Enumerable.Select)){
-                            //        MethodCall1_MethodCall1=MethodCall1_Arguments_0;
-                            //        Debug.Assert(MethodCall1_MethodCall1.Arguments[0] is not null);
-                            //        if(MethodCall1_MethodCall1.Arguments[0] is MethodCallExpression x){
-                            //            MethodCall1_MethodCall1=x;
-                            //            //O.GroupJoin().Select().Any()
-                            //            //O.Select().GroupJoin().Any()
-                            //            MethodCall1_Arguments_0=MethodCall1_MethodCall1;
-                            //            MethodCall1_MethodCall0_Method=MethodCall1_MethodCall1.Method;
-                            //        } else{
-                            //            //O.GroupJoin().Any()
-                            //            //O.Select().Any()
-                            //            break;
-                            //        }
-                            //    }
-                            //    break;
-                            //}
-
                             var GenericArguments = this._作業配列.GetGenericArguments(MethodCall1_Arguments_0.Type);
                             MethodCallExpression MethodCall1;
                             if(Reflection.ExtensionEnumerable.Any_predicate==MethodCall0_GenericMethodDefinition) {
+                                //s.Any(p)→s.Where(p).Any()
                                 MethodCall1=Expression.Call(
                                     Reflection.ExtensionEnumerable.Any.MakeGenericMethod(GenericArguments),
                                     Expression.Call(
@@ -540,7 +521,6 @@ partial class Optimizer {
                                     Reflection.ExtensionSet.Any==MethodCall0_GenericMethodDefinition||
                                     Reflection.ExtensionEnumerable.Any==MethodCall0_GenericMethodDefinition
                                 );
-                                //break先で共通処理だがCallのオーバーロードが1引数なので
                                 MethodCall1=Expression.Call(
                                     MethodCall0_GenericMethodDefinition.MakeGenericMethod(GenericArguments),
                                     MethodCall1_Arguments_0
@@ -549,6 +529,7 @@ partial class Optimizer {
                             return MethodCall1;
                         }
                         case nameof(Enumerable.Contains): {
+                            //s.Contains(x)→s.Where(p=>p.Equals(x)).Any()
                             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                             var MethodCall1_Arguments_0_Type = MethodCall1_Arguments_0.Type;
                             Type[] GenericArguments;
@@ -557,22 +538,23 @@ partial class Optimizer {
                                 GenericArgument=MethodCall1_Arguments_0_Type.GetElementType()!;
                                 GenericArguments=作業配列.Types設定(GenericArgument);
                             } else {
-                                var Set1 = MethodCall1_Arguments_0_Type;
-                                while(true) {
-                                    if(Set1 is null) {
-                                        GenericArguments=IEnumerable1(MethodCall1_Arguments_0_Type).GetGenericArguments();
-                                        break;
-                                    }
-                                    var GenericTypeDefinition = Set1;
-                                    if(GenericTypeDefinition.IsGenericType) {
-                                        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-                                    }
-                                    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
-                                        GenericArguments=Set1.GetGenericArguments();
-                                        break;
-                                    }
-                                    Set1=Set1.BaseType;
-                                }
+                                GenericArguments=IEnumerable1(MethodCall1_Arguments_0_Type).GetGenericArguments();
+                                //while(true) {
+                                //    var GenericTypeDefinition = Set1;
+                                //    if(GenericTypeDefinition.IsGenericType) {
+                                //        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                                //    }
+                                //    ////Set.Containsはインラインではない
+                                //    //if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
+                                //    //    GenericArguments=Set1.GetGenericArguments();
+                                //    //    break;
+                                //    //}
+                                //    Set1=Set1.BaseType;
+                                //    if(Set1 is null) {
+                                //        GenericArguments=IEnumerable1(MethodCall1_Arguments_0_Type).GetGenericArguments();
+                                //        break;
+                                //    }
+                                //}
                                 GenericArgument=GenericArguments[0];
                             }
                             Debug.Assert(GenericArgument is not null,"GenericArgument != null");
@@ -593,6 +575,7 @@ partial class Optimizer {
                             //aは上位クラスでもいい。
                             Debug.Assert(p_Type.IsAssignableFrom(q.Type));
                             if(p_Type.IsPrimitive) {
+                                //Contains(primitive)
                                 EqualExpression=Expression.Equal(
                                     p,
                                     q
@@ -600,6 +583,7 @@ partial class Optimizer {
                             } else {
                                 var IEquatableType = typeof(IEquatable<>).MakeGenericType(GenericArguments);
                                 if(IEquatableType.IsAssignableFrom(p_Type)) {
+                                    //Contains(decimal)
                                     var InterfaceMap = p_Type.GetInterfaceMap(IEquatableType);
                                     Debug.Assert(InterfaceMap.InterfaceMethods[0]==
                                                  IEquatableType.GetMethod(nameof(IEquatable<int>.Equals)));
@@ -609,12 +593,12 @@ partial class Optimizer {
                                         作業配列.Expressions設定(q)
                                     );
                                 } else {
-                                    if(q_Type.IsValueType) {
-                                        q=Expression.Convert(
-                                            q,
-                                            typeof(object)
-                                        );
-                                    }
+                                    //if(q_Type.IsValueType) {
+                                    //    q=Expression.Convert(
+                                    //        q,
+                                    //        typeof(object)
+                                    //    );
+                                    //}
                                     EqualExpression=Expression.Call(
                                         p,
                                         Reflection.Object.Equals_,
@@ -635,6 +619,7 @@ partial class Optimizer {
                             );
                         }
                         case nameof(ExtensionSet.Delete): {
+                            //s.Delete()
                             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
                             var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
@@ -644,6 +629,7 @@ partial class Optimizer {
                             );
                             if(SelectMany is not null) return SelectMany;
                             if(MethodCall1_Arguments_1 is LambdaExpression MethodCall1_predicate) {
+                                //s.Delete(x)→s.Where(p=>!x.Equals(p))
                                 return Expression.Call(
                                     Reflection.ExtensionSet.Where.MakeGenericMethod(MethodCall0_Method.GetGenericArguments()),
                                     MethodCall1_Arguments_0,
@@ -660,7 +646,8 @@ partial class Optimizer {
                                 MethodCall1_Arguments_1
                             );
                         }
-                        case nameof(Enumerable.GroupBy): {
+                        case nameof(Enumerable.GroupBy):{
+                            //GroupBy(keySelector,resultSelector)→GroupBy(keySelector,(key,g)=>resultSelector(g))
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
                             } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
@@ -668,6 +655,21 @@ partial class Optimizer {
                             } else if(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector);
                             }
+                            if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
+                            } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector);
+                            } else if(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector);
+                            }
+                            if(Reflection.ExtensionEnumerable.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector);
+                            } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_comparer==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer);
+                            } else if(Reflection.ExtensionSet.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
+                                return GroupBy_keySelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector);
+                            }
+                            break;
                             Expression GroupBy_keySelector_resultSelector(MethodInfo GroupBy_keySelector,MethodInfo Select_selector) {
                                 //source.GroupBy(x => x.Id).Select(g =>new{Id=g.Key,Count=g.Count()})
                                 //source.GroupBy(x => x.Id,   (Key,g)=>new{Id=  Key,Count=g.Count()})
@@ -691,6 +693,7 @@ partial class Optimizer {
                                 );
                                 MethodCallExpression GroupBy;
                                 if(MethodCall0_Arguments.Count==3) {
+                                    //compareなし
                                     GroupBy=Expression.Call(
                                         GroupBy_keySelector,
                                         MethodCall1_Arguments_0,
@@ -698,6 +701,7 @@ partial class Optimizer {
                                         elementSelector
                                     );
                                 } else {
+                                    //compareあり
                                     GroupBy=Expression.Call(
                                         GroupBy_keySelector,
                                         MethodCall1_Arguments_0,
@@ -749,16 +753,9 @@ partial class Optimizer {
                                     )
                                 );
                             }
-                            if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
-                            } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector);
-                            } else if(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector);
-                            }
                             Expression GroupBy_keySelector_elementSelector_resultSelector(MethodInfo GroupBy_keySelector_elementSelector,MethodInfo Select_selector) {
                                 //source.GroupBy<TSource,TKey,TElemnt,TResult>(keySelector,elementSelector,resultSelector)
-                                //source.GroupBy<TSource,TKey,TElemnt>(keySelector,elementSelector).Select<TGropuing,TResult>(IGrouping)=>resultSelect(IGrouping.Key,IGrouping))
+                                //source.GroupBy<TSource,TKey,TElemnt>(keySelector,elementSelector).Select<TGropuing,TResult>(IGrouping=>resultSelect(IGrouping.Key,IGrouping))
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
                                 var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments[2]);
@@ -800,8 +797,8 @@ partial class Optimizer {
                                 var p_Source = p;
                                 Expression selector_Body;
                                 if(MethodCall1_Arguments_3 is LambdaExpression resultSelector) {
-                                    //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                        (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
-                                    //O.GroupBy<TSource,TKey>        (MethodCall1_Arguments_1).Select<TResult>((IGrouping<TKey,TSource>Grouping=>new{Id=Grouping.Key,Count=Grouping.Count()})
+                                    //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                         (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
+                                    //O.GroupBy<TSource,TKey>        (MethodCall1_Arguments_1).Select<TResult>((IGrouping<TKey,TSource>Grouping)=>new{Id=Grouping.Key,Count=Grouping.Count()})
                                     var resultSelector_Parameters = resultSelector.Parameters;
                                     selector_Body=this.変換_旧Parameterを新Expression2.実行(
                                         resultSelector.Body,
@@ -834,16 +831,9 @@ partial class Optimizer {
                                     )
                                 );
                             }
-                            if(Reflection.ExtensionEnumerable.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector);
-                            } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_comparer==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer);
-                            } else if(Reflection.ExtensionSet.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector);
-                            }
                             Expression GroupBy_keySelector(MethodInfo GroupBy_keySelector_elementSelector) {
                                 //source.GroupBy<TSource,TKey,TElemnt,TResult>(keySelector,elementSelector,resultSelector)
-                                //source.GroupBy<TSource,TKey,TElemnt>(keySelector,elementSelector).Select<TGropuing,TResult>(IGrouping)=>resultSelect(IGrouping.Key,IGrouping))
+                                //source.GroupBy<TSource,TKey,TElemnt>(keySelector,elementSelector).Select<TGropuing,TResult>(IGrouping=>resultSelect(IGrouping.Key,IGrouping))
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
                                 var GenericArguments = MethodCall0_Method.GetGenericArguments();
@@ -877,7 +867,6 @@ partial class Optimizer {
                                     );
                                 }
                             }
-                            break;
                         }
                         case nameof(Enumerable.GroupJoin): {
                             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
