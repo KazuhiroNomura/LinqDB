@@ -16,6 +16,7 @@
     &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_メソッド正規化_取得インライン不可能定数.Call_GroupBy&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_メソッド正規化_取得インライン不可能定数.Call_GroupJoin&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_メソッド正規化_取得インライン不可能定数.Call_Intersect&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_メソッド正規化_取得インライン不可能定数.Call_Join&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b32a6087_002D2cba_002D4f1f_002D9f92_002Db6b3b0115494/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

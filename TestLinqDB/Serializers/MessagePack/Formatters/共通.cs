@@ -22,6 +22,10 @@ using static Microsoft.FSharp.Core.ByRefKinds;
 //using 共通=global.Serializers.MessagePack.Formatters.共通;
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
+    private static int ポート番号;
+    static 共通(){
+        ポート番号=ListenerSocketポート番号;
+    }
     //protected Server<string> Server;
     protected readonly EnumerableSetEqualityComparer Comparer;
     protected ExpressionEqualityComparer ExpressionEqualityComparer=>new();
@@ -147,22 +151,30 @@ public abstract class 共通{
     }
     protected void MemoryMessageJson_TExpressionObject_コンパイル実行<TResult>(Expression<Func<TResult>> input){
         const int receiveTimeout = 1000;
-        using var Server =new Server(1,ListenerSocketポート番号);
+        var port=Interlocked.Increment(ref ポート番号);
+        using var Server =new Server(1,port);
         Server.ReadTimeout=receiveTimeout;
         Server.Open();
-        using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
-        R.Expression(input,XmlType.Utf8Json);
-        this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<TResult>)Delegate)());
+        using var R = new Client(Dns.GetHostName(),port);
+        R.Expression(input,SerializeType.MemoryPack);
+        R.Expression(input,SerializeType.MessagePack);
+        R.Expression(input,SerializeType.Utf8Json);
+        Server.Close();
+        //this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<TResult>)Delegate)());
     }
     //リモート実行できるか。
     protected void MemoryMessageJson_TExpressionObject_コンパイル実行<T,TResult>(Expression<Func<T,TResult>> input,T t){
         const int receiveTimeout = 1000;
-        using var Server = new Server<T>(t,1,ListenerSocketポート番号);
+        var port=Interlocked.Increment(ref ポート番号);
+        using var Server = new Server<T>(t,1,port);
         Server.ReadTimeout=receiveTimeout;
         Server.Open();
-        using var R = new Client(Dns.GetHostName(),ListenerSocketポート番号);
-        R.Expression(input,XmlType.Utf8Json);
-        this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<T,TResult>)Delegate)(t));
+        using var R = new Client(Dns.GetHostName(),port);
+        R.Expression(input,SerializeType.MemoryPack);
+        R.Expression(input,SerializeType.MessagePack);
+        R.Expression(input,SerializeType.Utf8Json);
+        Server.Close();
+        //this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<T,TResult>)Delegate)(t));
     }
     protected void MemoryMessageJson_TExpressionObject<T>(T input) where T:Expression?{
     //protected void 共通Expression<T>(Expressions.Expression<Func<T>> input){

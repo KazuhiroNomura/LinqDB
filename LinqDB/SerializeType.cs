@@ -2,7 +2,7 @@
 /// <summary>
 /// クライアント、サーバーがどのような形式で送信するか。
 /// </summary>
-public enum XmlType:byte {
+public enum SerializeType:byte {
     /// <summary>
     /// 無効
     /// </summary>
@@ -19,5 +19,5 @@ public enum XmlType:byte {
     /// MemoryPack.MemoryPackSerializer
     /// </summary>
     MemoryPack,
-    Tail= MessagePack
+    Tail= MemoryPack
 }

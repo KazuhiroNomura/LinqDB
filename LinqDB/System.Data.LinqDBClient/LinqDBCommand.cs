@@ -26,7 +26,7 @@ public class LinqDBCommand:DbCommand {
     public override void Prepare() => throw new NotImplementedException();
     protected override DbParameter CreateDbParameter() => throw new NotImplementedException();
     protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) {
-        var Result = this.Client.Expression(this.CommandText,LinqDB.XmlType.Utf8Json);
+        var Result = this.Client.Expression(this.CommandText,LinqDB.SerializeType.Utf8Json);
         return new LinqDBDataReader(((IEnumerable)Result).GetEnumerator());
     }
 }

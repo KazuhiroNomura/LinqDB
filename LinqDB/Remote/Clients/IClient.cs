@@ -7,8 +7,8 @@ public interface IClient {
     /// SQLリモート処理する。
     /// </summary>
     /// <param name="SQL">SQL文</param>
-    /// <param name="XmlType"></param>
-    object Expression(string SQL,XmlType XmlType);
+    /// <param name="SerializeType"></param>
+    object Expression(string SQL,SerializeType SerializeType);
     /// <summary>
     /// 接続先
     /// </summary>

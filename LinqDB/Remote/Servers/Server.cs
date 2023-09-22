@@ -303,7 +303,7 @@ public class Server:IDisposable{
                             SingleReceiveSend.送信(
                                 Response.ThrowException,
                                 new TimeoutException("テスト"),
-                                デシリアライズした.XmlType
+                                デシリアライズした.SerializeType
                             );
                             break;
                         }
@@ -316,13 +316,13 @@ public class Server:IDisposable{
                                         SingleReceiveSend.送信(
                                             Response.Object,
                                             デシリアライズした.Object!,
-                                            デシリアライズした.XmlType
+                                            デシリアライズした.SerializeType
                                         );
                                         break;
                                     }
                                     case Request.Delegate_Invoke:
                                     case Request.Expression_Invoke: {
-                                        Debug.Assert(デシリアライズした.XmlType<XmlType.Tail);
+                                        Debug.Assert(デシリアライズした.SerializeType<=SerializeType.Tail);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
                                         var Delegate=Optimizer.CreateServerDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
@@ -331,26 +331,26 @@ public class Server:IDisposable{
                                         SingleReceiveSend.送信(
                                             ResponseType,
                                             Result,
-                                            デシリアライズした.XmlType
+                                            デシリアライズした.SerializeType
                                         );
-                                        //if(デシリアライズした.XmlType==XmlType.Utf8Json) {
+                                        //if(デシリアライズした.SerializeType==SerializeType.Utf8Json) {
                                         //    var ScriptRunner = (ScriptRunner<object>)デシリアライズした.Object!;
                                         //    var e = ScriptRunner(this.Proxy);
                                         //    e.Wait();
                                         //    SingleReceiveSend.送信(
                                         //        Response.Object,
                                         //        e.Result,
-                                        //        デシリアライズした.XmlType
+                                        //        デシリアライズした.SerializeType
                                         //    );
                                         //} else {
-                                        //    Debug.Assert(デシリアライズした.XmlType==XmlType.MessagePack);
+                                        //    Debug.Assert(デシリアライズした.SerializeType==SerializeType.MessagePack);
                                         //    var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
                                         //        デシリアライズした.Object!
                                         //    );
                                         //    SingleReceiveSend.送信(
                                         //        ResponseType,
                                         //        Result,
-                                        //        デシリアライズした.XmlType
+                                        //        デシリアライズした.SerializeType
                                         //    );
                                         //}
                                         break;
@@ -360,7 +360,7 @@ public class Server:IDisposable{
                                 SingleReceiveSend.送信(
                                     Response.ThrowException,
                                     ex,
-                                    デシリアライズした.XmlType
+                                    デシリアライズした.SerializeType
                                 );
                             }
                             break;
@@ -380,7 +380,7 @@ public class Server:IDisposable{
                     SingleReceiveSend.送信(
                         Response.ThrowException,
                         ex,
-                        デシリアライズした.XmlType
+                        デシリアライズした.SerializeType
                     );
                     Trace_WriteLine(3,$"Server.Function実行 catch({MethodBase.GetCurrentMethod()}){ex.Message} {ex.StackTrace}");
                     throw;
@@ -464,7 +464,7 @@ public class Server:IDisposable{
                 //this.RequestResponseSingleReceiveSends.Dispose()するとToken待ちのTokenがCancelしたとき例外が発生する。
                 this.CountdownEvent.Dispose();
                 //Open前に終了した場合
-                this.CancellationTokenSourceループRequestResponse?.Dispose();
+                this.CancellationTokenSourceループRequestResponse.Dispose();
                 //Debug.Assert(this.CancellationTokenSource is not null);
                 //this.CancellationTokenSource!.Dispose();
                 this.RequestResponseSingleReceiveSends.Dispose();

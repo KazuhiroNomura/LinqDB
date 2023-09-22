@@ -35,9 +35,9 @@ public sealed class Client<TContainer>:Client, IClient {
     /// 戻り値のないリモート処理を行う。
     /// </summary>
     /// <param name="リモート先で実行させるExpression"></param>
-    /// <param name="XmlType"></param>
-    public void Expression(Expression<サーバーで実行する式木> リモート先で実行させるExpression, XmlType XmlType=XmlType.Utf8Json) {
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,this.Optimizer.Lambda最適化(リモート先で実行させるExpression));
+    /// <param name="SerializeType"></param>
+    public void Expression(Expression<サーバーで実行する式木> リモート先で実行させるExpression, SerializeType SerializeType=SerializeType.Utf8Json) {
+        this.サーバーに送信(Request.Expression_Invoke,SerializeType,this.Optimizer.Lambda最適化(リモート先で実行させるExpression));
         var MemoryStream = this.MemoryStream;
         var Response =(Response)MemoryStream.ReadByte();
         switch (Response) {
@@ -56,12 +56,12 @@ public sealed class Client<TContainer>:Client, IClient {
     /// TResultを戻り値にするリモート処理を行う。
     /// </summary>
     /// <param name="リモート先で実行させるLambda"></param>
-    /// <param name="XmlType"></param>
+    /// <param name="SerializeType"></param>
     /// <typeparam name="TResult"></typeparam>
     /// <returns>戻り値</returns>
-    public TResult Expression<TResult>(Expression<サーバーで実行するEntities式木<TResult>> リモート先で実行させるLambda,XmlType XmlType=XmlType.Utf8Json){
+    public TResult Expression<TResult>(Expression<サーバーで実行するEntities式木<TResult>> リモート先で実行させるLambda,SerializeType SerializeType=SerializeType.Utf8Json){
         var Lambda=this.Optimizer.Lambda最適化(リモート先で実行させるLambda);
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,Lambda);
+        this.サーバーに送信(Request.Expression_Invoke,SerializeType,Lambda);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
@@ -74,14 +74,14 @@ public sealed class Client<TContainer>:Client, IClient {
     /// SQLリモート処理する。
     /// </summary>
     /// <param name="SQL">SQL文</param>
-    /// <param name="XmlType"></param>
-    public object Expression(string SQL,XmlType XmlType) {
+    /// <param name="SerializeType"></param>
+    public object Expression(string SQL,SerializeType SerializeType) {
         var Optimizer = this.Optimizer;
         Optimizer.Context=typeof(Client<TContainer>);
         var Container_Parameter=System.Linq.Expressions.Expression.Parameter(typeof(TContainer),"this");
         var リモート先で実行させるLambda_Body= Optimizer.SQLToExpression(Container_Parameter,SQL);
         var リモート先で実行させるLambda = System.Linq.Expressions.Expression.Lambda<サーバーで実行するEntities式木<object>>(リモート先で実行させるLambda_Body,Container_Parameter);
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,Optimizer.Lambda最適化(リモート先で実行させるLambda));
+        this.サーバーに送信(Request.Expression_Invoke,SerializeType,Optimizer.Lambda最適化(リモート先で実行させるLambda));
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{

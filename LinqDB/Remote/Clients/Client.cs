@@ -499,26 +499,26 @@ public class Client:IDisposable {
     /// <param name="ReadStream"></param>
     /// <returns></returns>
     internal T ReadObject<T>(MemoryStream ReadStream) {
-        var XmlType = (XmlType)ReadStream.ReadByte();
-        return XmlType switch{
-            XmlType.MemoryPack=>(T)this.MemoryPack.Deserialize<object>(ReadStream),
-            XmlType.MessagePack=>(T)this.MessagePack.Deserialize<object>(ReadStream),
-            XmlType.Utf8Json=>(T)this.Utf8Json.Deserialize<object>(ReadStream),
-            _=>throw new NotSupportedException(XmlType.ToString())
+        var SerializeType = (SerializeType)ReadStream.ReadByte();
+        return SerializeType switch{
+            SerializeType.MemoryPack=>(T)this.MemoryPack.Deserialize<object>(ReadStream),
+            SerializeType.MessagePack=>(T)this.MessagePack.Deserialize<object>(ReadStream),
+            SerializeType.Utf8Json=>(T)this.Utf8Json.Deserialize<object>(ReadStream),
+            _=>throw new NotSupportedException(SerializeType.ToString())
         };
         //object o;
         //T Result;
-        //switch(XmlType) {
-        //    case XmlType.Utf8Json: 
+        //switch(SerializeType) {
+        //    case SerializeType.Utf8Json: 
         //        o=JsonResolver.Serializer().Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver); 
         //        Result=(T)o;
         //        break;
-        //    case XmlType.MessagePack: 
+        //    case SerializeType.MessagePack: 
         //        o=MessagePackResolver.Serializer().Deserialize<object>(ReadStream); 
         //        Result=(T)o;
         //        break;
         //    default: {
-        //        throw new NotSupportedException(XmlType.ToString());
+        //        throw new NotSupportedException(SerializeType.ToString());
         //    }
         //}
         //return Result;
@@ -555,7 +555,7 @@ public class Client:IDisposable {
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
     /// <returns>TimeoutException</returns>
-    public TimeoutException SendTimeoutException(XmlType WriteXmlの表現形式){
+    public TimeoutException SendTimeoutException(SerializeType WriteXmlの表現形式){
         this.BufferにUserとPasswordHashを設定(Request.TimeoutException_ThrowException);
         var MemoryStream=this.MemoryStream;
         MemoryStream.WriteByte((byte)WriteXmlの表現形式);
@@ -645,42 +645,42 @@ public class Client:IDisposable {
     /// <param name="送信">送信したオブジェクト。</param>
     /// <typeparam name="T"></typeparam>
     /// <returns>受信したオブジェクト。</returns>
-    public T XmlSendReceive<T>(T 送信)=>this.XmlSendReceive(送信,XmlType.MessagePack);
-    private void サーバーに送信(Request Request,XmlType XmlType,object Object) {
+    public T XmlSendReceive<T>(T 送信)=>this.XmlSendReceive(送信,SerializeType.MessagePack);
+    private void サーバーに送信(Request Request,SerializeType SerializeType,object Object) {
         this.BufferにUserとPasswordHashを設定(Request);
-        this.MemoryStream.WriteByte((byte)XmlType);
-        switch(XmlType) {
-            case XmlType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
-            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
-            case XmlType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
-            default:throw new NotSupportedException(XmlType.ToString());
+        this.MemoryStream.WriteByte((byte)SerializeType);
+        switch(SerializeType) {
+            case SerializeType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
+            case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
+            case SerializeType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
+            default:throw new NotSupportedException(SerializeType.ToString());
         }
-        //switch(XmlType) {
-        //    case XmlType.Utf8Json:
+        //switch(SerializeType) {
+        //    case SerializeType.Utf8Json:
         //        //this.SerializerConfiguration.Clear();
         //        JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.JsonFormatterResolver);
         //        break;
-        //    case XmlType.MessagePack:
+        //    case SerializeType.MessagePack:
         //        this.SerializerConfiguration.Clear();
         //        MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.MessagePackSerializerOptions);
         //        break;
-        //    default:throw new NotSupportedException(XmlType.ToString());
+        //    default:throw new NotSupportedException(SerializeType.ToString());
         //}
         this.Bufferをサーバーに送信してBufferに受信();
     }
     private readonly Optimizer.取得_CSharp 取得_CSharp = new();
-    internal void サーバーに送信(Request Request,XmlType XmlType,Expression Expression) {
+    internal void サーバーに送信(Request Request,SerializeType SerializeType,Expression Expression) {
         this.BufferにUserとPasswordHashを設定(Request);
         //var Lambda = (LambdaExpression)Expression;
-        this.MemoryStream.WriteByte((byte)XmlType);
-        switch(XmlType) {
-            case XmlType.MemoryPack:this.MemoryPack.Serialize(this.MemoryStream,Expression);break;
-            case XmlType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Expression);break;
-            case XmlType.Utf8Json:this.Utf8Json.Serialize(this.MemoryStream,Expression);break;
-            default:throw new NotSupportedException(XmlType.ToString());
+        this.MemoryStream.WriteByte((byte)SerializeType);
+        switch(SerializeType) {
+            case SerializeType.MemoryPack:this.MemoryPack.Serialize(this.MemoryStream,Expression);break;
+            case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Expression);break;
+            case SerializeType.Utf8Json:this.Utf8Json.Serialize(this.MemoryStream,Expression);break;
+            default:throw new NotSupportedException(SerializeType.ToString());
         }
-        //switch(XmlType) {
-        //    case XmlType.Utf8Json:
+        //switch(SerializeType) {
+        //    case SerializeType.Utf8Json:
         //        this.SerializerConfiguration.Clear();
         //        var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
         //        JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
@@ -689,7 +689,7 @@ public class Client:IDisposable {
         //        this.SerializerConfiguration.Clear();
         //        JsonSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.JsonFormatterResolver);
         //        break;
-        //    case XmlType.MessagePack:{
+        //    case SerializeType.MessagePack:{
         //        this.SerializerConfiguration.Clear();
         //        MessagePackSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.MessagePackSerializerOptions);
         //        //var Lambda_Parameters = Lambda.Parameters;
@@ -715,9 +715,9 @@ public class Client:IDisposable {
         //        break;
         //    }
         //    default: {
-        //        throw new NotSupportedException(XmlType.ToString());
+        //        throw new NotSupportedException(SerializeType.ToString());
         //    }
-        //    //default: throw new NotSupportedException(XmlType.ToString());
+        //    //default: throw new NotSupportedException(SerializeType.ToString());
         //}
         this.Bufferをサーバーに送信してBufferに受信();
     }
@@ -740,14 +740,14 @@ public class Client:IDisposable {
     /// オブジェクトをNetContractSerializerで送信し、受信する。
     /// </summary>
     /// <param name="送信">送信したオブジェクト。</param>
-    /// <param name="XmlType"></param>
+    /// <param name="SerializeType"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns>受信したオブジェクト。</returns>
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
     /// <exception cref="XmlException"></exception>
-    public T XmlSendReceive<T>(T 送信,XmlType XmlType) {
-        this.サーバーに送信(Request.Object_Object,XmlType,送信!);
+    public T XmlSendReceive<T>(T 送信,SerializeType SerializeType) {
+        this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
         var MemoryStream = this.MemoryStream;
         var Response =(Response)MemoryStream.ReadByte();
         // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
@@ -777,13 +777,13 @@ public class Client:IDisposable {
     /// シリアライズを送信して同じデータを受信する。
     /// </summary>
     /// <param name="送信">これをシリアライズする。</param>
-    /// <param name="XmlType">送信プロトコルを指定</param>
+    /// <param name="SerializeType">送信プロトコルを指定</param>
     /// <typeparam name="T"></typeparam>
     /// <returns>送信した値が返ってくる。</returns>
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
-    public T SerializeSendReceive<T>(T 送信,XmlType XmlType) {
-        this.サーバーに送信(Request.Object_Object,XmlType,送信!);
+    public T SerializeSendReceive<T>(T 送信,SerializeType SerializeType) {
+        this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         if(Response!=Response.Object)throw 受信ヘッダー_は不正だった(Response);
@@ -808,9 +808,9 @@ public class Client:IDisposable {
     /// 戻り値のあるリモート処理を行う。
     /// </summary>
     /// <param name="Lambda">戻り値のあるリモート処理を行うデリゲート。</param>
-    /// <param name="XmlType"></param>
-    public T Expression<T>(Expression<Func<T>> Lambda,XmlType XmlType){
-        return (T)this.Expression((LambdaExpression)Lambda,XmlType);
+    /// <param name="SerializeType"></param>
+    public T Expression<T>(Expression<Func<T>> Lambda,SerializeType SerializeType){
+        return (T)this.Expression((LambdaExpression)Lambda,SerializeType);
         //var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         //var Optimizer = this.Optimizer;
         //Optimizer.Context=DeclaringType;
@@ -819,7 +819,7 @@ public class Client:IDisposable {
         ////var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(s,this.SerializerConfiguration.JsonFormatterResolver);
 
 
-        //this.サーバーに送信(Request.Expression_Invoke,XmlType,最適化Lambda);
+        //this.サーバーに送信(Request.Expression_Invoke,SerializeType,最適化Lambda);
         //var MemoryStream = this.MemoryStream;
         //var Response = (Response)MemoryStream.ReadByte();
         //return Response switch{
@@ -828,12 +828,12 @@ public class Client:IDisposable {
         //    _=>throw 受信ヘッダー_は不正だった(Response)
         //};
     }
-    public object Expression(LambdaExpression Lambda,XmlType XmlType) {
+    public object Expression(LambdaExpression Lambda,SerializeType SerializeType) {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;
         var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
-        this.サーバーに送信(Request.Expression_Invoke,XmlType,最適化Lambda);
+        this.サーバーに送信(Request.Expression_Invoke,SerializeType,最適化Lambda);
         var MemoryStream = this.MemoryStream;
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{

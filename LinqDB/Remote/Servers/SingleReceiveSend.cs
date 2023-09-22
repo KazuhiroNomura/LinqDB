@@ -129,7 +129,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         LinqDB.Request.Exception_ThrowException,
                         ExceptionのString(new InvalidOperationException("SSL接続を要求したが証明書が無かった。")),
-                        XmlType.Utf8Json
+                        SerializeType.Utf8Json
                     );
                     return;
                 }
@@ -153,7 +153,7 @@ internal class SingleReceiveSend:IDisposable{
                 this.Privateデシリアライズした(
                     LinqDB.Request.Exception_ThrowException,
                     ExceptionのString(new InvalidOperationException("Length0が負だった。")),
-                    XmlType.Utf8Json
+                    SerializeType.Utf8Json
                 );
                 return;
             }
@@ -166,7 +166,7 @@ internal class SingleReceiveSend:IDisposable{
                             $"Lengthが{受信データとハッシュのバイト数}バイトで{ServerMemoryStreamBufferSize}({nameof(ServerMemoryStreamBufferSize)})を超えてはいけない。"
                         )
                     ),
-                    XmlType.Utf8Json
+                    SerializeType.Utf8Json
                 );
                 return;
             }
@@ -205,7 +205,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         LinqDB.Request.Exception_ThrowException,
                         ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
-                        XmlType.Utf8Json
+                        SerializeType.Utf8Json
                     );
                     return;
                 }
@@ -224,7 +224,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.Bytes0_Bytes0,
                         default(object),
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
@@ -235,7 +235,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.Byte_Byte,
                         (byte)result,
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
@@ -251,48 +251,48 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.BytesN_BytesN,
                         List,
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
                 case Request.TimeoutException_ThrowException: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType.Head<=SerializeType&&SerializeType<=SerializeType.Tail);
                     throw new TimeoutException("テスト");
                 }
                 case Request.Object_Object: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType.Head<=SerializeType&&SerializeType<=SerializeType.Tail);
                     try {
-                        var Object =XmlType switch{
-                            XmlType.MemoryPack=>this.MemoryPack.Deserialize<string>(MemoryStream),
-                            XmlType.MessagePack=>this.MessagePack.Deserialize<string>(MemoryStream),
-                            XmlType.Utf8Json=>this.Utf8Json.Deserialize<string>(MemoryStream),
-                            _=>throw new NotSupportedException(XmlType.ToString())
+                        var Object =SerializeType switch{
+                            SerializeType.MemoryPack=>this.MemoryPack.Deserialize<string>(MemoryStream),
+                            SerializeType.MessagePack=>this.MessagePack.Deserialize<string>(MemoryStream),
+                            SerializeType.Utf8Json=>this.Utf8Json.Deserialize<string>(MemoryStream),
+                            _=>throw new NotSupportedException(SerializeType.ToString())
                         };
                         this.Privateデシリアライズした(
                             Request,
                             Object,
-                            XmlType
+                            SerializeType
                         );
                     } catch(SerializationException ex) {
                         Trace_WriteLine(3,"Server.Function受信 catch(SerializationException)");
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
                             ExceptionのString(ex),
-                            XmlType
+                            SerializeType
                         );
                     }
                     break;
                 }
                 case Request.Delegate_Invoke:
                 case Request.Expression_Invoke: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType.Head<=SerializeType&&SerializeType<=SerializeType.Tail);
                     try {
                         ////パラメーター_ステートメント パラメーター_ステートメント;
                         ////String パラメーター,ステートメント;
-                        ////if(XmlType==XmlType.Utf8Json) {
+                        ////if(SerializeType==SerializeType.Utf8Json) {
                         ////    パラメーター_ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<パラメーター_ステートメント>(MemoryStream);
                         ////    //ParameterName =Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
                         ////    //ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
@@ -323,23 +323,23 @@ internal class SingleReceiveSend:IDisposable{
                         ////e.Wait();
                         ////var input = e.Result;
                         //break;
-                        var Object= XmlType switch{
-                            XmlType.Utf8Json   => this.Utf8Json.Deserialize<LambdaExpression>(MemoryStream),
-                            XmlType.MessagePack=> this.MessagePack.Deserialize<LambdaExpression>(MemoryStream),
-                            XmlType.MemoryPack => this.MemoryPack.Deserialize<LambdaExpression>(MemoryStream),
-                            _=>throw new NotSupportedException(XmlType.ToString())
+                        var Object= SerializeType switch{
+                            SerializeType.Utf8Json   => this.Utf8Json.Deserialize<LambdaExpression>(MemoryStream),
+                            SerializeType.MessagePack=> this.MessagePack.Deserialize<LambdaExpression>(MemoryStream),
+                            SerializeType.MemoryPack => this.MemoryPack.Deserialize<LambdaExpression>(MemoryStream),
+                            _=>throw new NotSupportedException(SerializeType.ToString())
                         };
                         this.Privateデシリアライズした(
                             Request,
                             Object,
-                            XmlType
+                            SerializeType
                         );
                     } catch(SerializationException ex) {
                         Trace_WriteLine(4,"Server.Function受信 catch(SerializationException)");
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
                             ex,
-                            XmlType
+                            SerializeType
                         );
                     }
                     break;
@@ -349,7 +349,7 @@ internal class SingleReceiveSend:IDisposable{
                     //this.Privateデシリアライズした(
                     //    Request.Exception_ThrowException,
                     //    new OutOfMemoryException("サーバー側で発生"),
-                    //    XmlType.Utf8Json
+                    //    SerializeType.Utf8Json
                     //);
                     //break;
                 }
@@ -371,7 +371,7 @@ internal class SingleReceiveSend:IDisposable{
             this.Privateデシリアライズした(
                 Request.Exception_ThrowException,
                 ex,
-                XmlType.Utf8Json
+                SerializeType.Utf8Json
             );
             Trace_WriteLine(8,$"Server.Function受信 catch({ex.GetType().FullName})");
             //throw;
@@ -408,7 +408,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         LinqDB.Request.Exception_ThrowException,
                         ExceptionのString(new InvalidOperationException("SSL接続を要求したが証明書が無かった。")),
-                        XmlType.Utf8Json
+                        SerializeType.Utf8Json
                     );
                     return;
                 }
@@ -432,7 +432,7 @@ internal class SingleReceiveSend:IDisposable{
                 this.Privateデシリアライズした(
                     LinqDB.Request.Exception_ThrowException,
                     ExceptionのString(new InvalidOperationException("Length0が負だった。")),
-                    XmlType.Utf8Json
+                    SerializeType.Utf8Json
                 );
                 return;
             }
@@ -445,7 +445,7 @@ internal class SingleReceiveSend:IDisposable{
                             $"Lengthが{受信データとハッシュのバイト数}バイトで{ServerMemoryStreamBufferSize}({nameof(ServerMemoryStreamBufferSize)})を超えてはいけない。"
                         )
                     ),
-                    XmlType.Utf8Json
+                    SerializeType.Utf8Json
                 );
                 return;
             }
@@ -488,7 +488,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         LinqDB.Request.Exception_ThrowException,
                         ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
-                        XmlType.Utf8Json
+                        SerializeType.Utf8Json
                     );
                     return;
                 }
@@ -507,7 +507,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.Bytes0_Bytes0,
                         default(object),
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
@@ -518,7 +518,7 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.Byte_Byte,
                         (byte)result,
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
@@ -534,47 +534,47 @@ internal class SingleReceiveSend:IDisposable{
                     this.Privateデシリアライズした(
                         Request.BytesN_BytesN,
                         List,
-                        XmlType.Head
+                        SerializeType.Head
                     );
                     break;
                 }
                 case Request.TimeoutException_ThrowException: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType.Head<=SerializeType&&SerializeType<=SerializeType.Tail);
                     throw new TimeoutException("テスト");
                 }
                 case Request.Object_Object: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType.Head<=SerializeType&&SerializeType<=SerializeType.Tail);
                     try{
-                        var Object= XmlType switch{
-                            XmlType.Utf8Json=> this.Utf8Json.Deserialize<object>(MemoryStream),
-                            XmlType.MessagePack=> this.MessagePack.Deserialize<object>(MemoryStream),
-                            XmlType.MemoryPack=> this.MemoryPack.Deserialize<object>(MemoryStream),
-                            _=>throw new NotSupportedException(XmlType.ToString())
+                        var Object= SerializeType switch{
+                            SerializeType.Utf8Json=> this.Utf8Json.Deserialize<object>(MemoryStream),
+                            SerializeType.MessagePack=> this.MessagePack.Deserialize<object>(MemoryStream),
+                            SerializeType.MemoryPack=> this.MemoryPack.Deserialize<object>(MemoryStream),
+                            _=>throw new NotSupportedException(SerializeType.ToString())
                         };
-                        //var Object=XmlType==XmlType.Utf8Json
+                        //var Object=SerializeType==SerializeType.Utf8Json
                         //    ?JsonResolver.Serializer().Deserialize<object>(MemoryStream,this.CustomSerializerUtf8Json.Resolver)
                         //    :MessagePackResolver.Serializer().Deserialize<object>(MemoryStream,this.CustomSerializerMessagePack.Options,CancellationToken);
                         this.Privateデシリアライズした(
                             Request,
                             Object,
-                            XmlType
+                            SerializeType
                         );
                     } catch(SerializationException ex) {
                         Trace_WriteLine(3,"Server.Function受信 catch(SerializationException)");
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
                             ExceptionのString(ex),
-                            XmlType
+                            SerializeType
                         );
                     }
                     break;
                 }
                 case Request.Delegate_Invoke:
                 case Request.Expression_Invoke: {
-                    var XmlType = (XmlType)MemoryStream.ReadByte();
-                    Debug.Assert(XmlType.Head<=XmlType&&XmlType<=XmlType.Tail);
+                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    Debug.Assert(SerializeType<=SerializeType.Tail);
                     try {
                         //string s = Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
                         //    (int)(this.MemoryStream.Length-this.MemoryStream.Position));
@@ -583,23 +583,23 @@ internal class SingleReceiveSend:IDisposable{
                         //var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(MemoryStream,
                         //    this.SerializerConfiguration.JsonFormatterResolver);
                         //var Lambda=JsonResolver.Serializer().Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
-                        var Object= XmlType switch{
-                            XmlType.Utf8Json=> this.Utf8Json.Deserialize<Expression>(MemoryStream),
-                            XmlType.MessagePack=> this.MessagePack.Deserialize<Expression>(MemoryStream),
-                            XmlType.MemoryPack=> this.MemoryPack.Deserialize<Expression>(MemoryStream),
-                            _=>throw new NotSupportedException(XmlType.ToString())
+                        var Object= SerializeType switch{
+                            SerializeType.Utf8Json=> this.Utf8Json.Deserialize<Expression>(MemoryStream),
+                            SerializeType.MessagePack=> this.MessagePack.Deserialize<Expression>(MemoryStream),
+                            SerializeType.MemoryPack=> this.MemoryPack.Deserialize<Expression>(MemoryStream),
+                            _=>throw new NotSupportedException(SerializeType.ToString())
                         };
                         this.Privateデシリアライズした(
                             Request,
                             Object,
-                            XmlType
+                            SerializeType
                         );
                     } catch(SerializationException ex) {
                         Trace_WriteLine(4,"Server.Function受信 catch(SerializationException)");
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
                             ex,
-                            XmlType
+                            SerializeType
                         );
                     }
                     break;
@@ -609,7 +609,7 @@ internal class SingleReceiveSend:IDisposable{
                     //this.Privateデシリアライズした(
                     //    Request.Exception_ThrowException,
                     //    new OutOfMemoryException("サーバー側で発生"),
-                    //    XmlType.Utf8Json
+                    //    SerializeType.Utf8Json
                     //);
                     //break;
                 }
@@ -631,7 +631,7 @@ internal class SingleReceiveSend:IDisposable{
             this.Privateデシリアライズした(
                 Request.Exception_ThrowException,
                 ex,
-                XmlType.Utf8Json
+                SerializeType.Utf8Json
             );
             Trace_WriteLine(8,$"Server.Function受信 catch({ex.GetType().FullName})");
             //throw;
@@ -668,13 +668,13 @@ internal class SingleReceiveSend:IDisposable{
                 }
                 case Response.Object:
                 case Response.ThrowException: {
-                    var XmlType = シリアライズしたい.XmlType;
-                    MemoryStream.WriteByte((byte)XmlType);
-                    switch(XmlType) {
-                        case XmlType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object);break;
-                        case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        default:throw new NotSupportedException(XmlType.ToString());
+                    var SerializeType = シリアライズしたい.SerializeType;
+                    MemoryStream.WriteByte((byte)SerializeType);
+                    switch(SerializeType) {
+                        case SerializeType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object);break;
+                        case SerializeType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
+                        case SerializeType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
+                        default:throw new NotSupportedException(SerializeType.ToString());
                     }
                     break;
                 }
@@ -697,12 +697,12 @@ internal class SingleReceiveSend:IDisposable{
             //        ex
             //    );
             //}
-            var XmlType = シリアライズしたい.XmlType;
-            switch(XmlType) {
-                case XmlType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, ex);break;
-                case XmlType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, ex);break;
-                case XmlType.MemoryPack: this.MemoryPack.Serialize<object>(MemoryStream, ex);break;
-                default:throw new NotSupportedException(XmlType.ToString());
+            var SerializeType = シリアライズしたい.SerializeType;
+            switch(SerializeType) {
+                case SerializeType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, ex);break;
+                case SerializeType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, ex);break;
+                case SerializeType.MemoryPack: this.MemoryPack.Serialize<object>(MemoryStream, ex);break;
+                default:throw new NotSupportedException(SerializeType.ToString());
             }
             BufferにLengthとSHA256を設定してStreamにWrite();
         } catch(ObjectDisposedException) {
@@ -829,20 +829,20 @@ internal class SingleReceiveSend:IDisposable{
     internal デシリアライズした デシリアライズした;
     //internal Logic Logic=>this.MultiReceiveSend.Logic;
     internal Server Server => this.MultiReceiveSend.Server;
-    private void Privateデシリアライズした(Request Request,object? Object,XmlType XmlType) {
+    private void Privateデシリアライズした(Request Request,object? Object,SerializeType SerializeType) {
         this.デシリアライズした=new デシリアライズした(
             this,
             Request,
             Object,
-            XmlType
+            SerializeType
         );
         this.Server.Add(this);
     }
-    private void Privateデシリアライズした(Request Request,Exception Exception,XmlType XmlType)=>
+    private void Privateデシリアライズした(Request Request,Exception Exception,SerializeType SerializeType)=>
         this.Privateデシリアライズした(
             Request,
             ExceptionのString(Exception),
-            XmlType
+            SerializeType
         );
     //private readonly Optimizer.作成_DynamicMethodによるDelegate 作成DynamicMethodによるDelegate=new Optimizer.作成_DynamicMethodによるDelegate(
     //    new Optimizer.作業配列(),
@@ -931,23 +931,23 @@ internal class SingleReceiveSend:IDisposable{
     /// </summary>
     /// <param name="Response"></param>
     /// <param name="Object"></param>
-    /// <param name="XmlType"></param>
-    //internal void 送信(Response Response,Object? Object,XmlType XmlType = XmlType.Utf8Json) => this.AsyncResult送信=this.Delegate送信.BeginInvoke(
+    /// <param name="SerializeType"></param>
+    //internal void 送信(Response Response,Object? Object,SerializeType SerializeType = SerializeType.Utf8Json) => this.AsyncResult送信=this.Delegate送信.BeginInvoke(
     //    new シリアライズしたい(
     //        this,
     //        Response,
-    //        XmlType,
+    //        SerializeType,
     //        Object
     //    ),
     //    this.Delegate送信終了,
     //    null
     //);
-    internal void 送信(Response Response,object? Object,XmlType XmlType = XmlType.Utf8Json) => this.Task送信=Task.Run(
+    internal void 送信(Response Response,object? Object,SerializeType SerializeType = SerializeType.Utf8Json) => this.Task送信=Task.Run(
         ()=>this.Function送信(
             new シリアライズしたい(
                 this,
                 Response,
-                XmlType,
+                SerializeType,
                 Object
             )
         )

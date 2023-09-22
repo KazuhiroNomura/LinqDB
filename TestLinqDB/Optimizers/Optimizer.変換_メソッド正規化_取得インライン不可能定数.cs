@@ -558,13 +558,25 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,IEnumerable<int>,int>)((o,i)=>o+i.Count())));
     }
-    private static Set<int>x()=>new Set<int>();
-    [Fact]
-    public void Call_Intersect(){
-        this.共通コンパイル実行(()=>x().Intersect(x()).Where(p=>p==0));
-        this.共通コンパイル実行(()=>x().SelectMany(o=>x().SelectMany(i=>x())).Intersect(x()));
-        this.共通コンパイル実行(()=>x().SelectMany(o=>x()).Intersect(x()));
-        this.共通コンパイル実行(()=>x().Intersect(x().Where(p=>true)));
-        this.共通コンパイル実行(()=>x().Intersect(x(),EqualityComparer<int>.Default));
+    private static Set<int>CreateSet()=>new();
+    [Fact]public void Call_Intersect(){
+        this.共通コンパイル実行(()=>CreateSet().Intersect(CreateSet()).Where(p=>p==0));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Intersect(CreateSet()));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Intersect(CreateSet()));
+        this.共通コンパイル実行(()=>CreateSet().Intersect(CreateSet().Where(p=>true)));
+        this.共通コンパイル実行(()=>CreateSet().Intersect(CreateSet(),EqualityComparer<int>.Default));
+    }
+    private static List<int>CreateEnum()=>new();
+    [Fact]public void Call_Join(){
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>CreateEnum().Join(CreateEnum(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(Func<int,int,int>)((o,i)=>o+i)));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(Func<int,int,int>)((o,i)=>o+i)));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
+        this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i),EqualityComparer<int>.Default));
     }
 }

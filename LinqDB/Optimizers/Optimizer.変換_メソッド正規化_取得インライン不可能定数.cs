@@ -1068,271 +1068,269 @@ partial class Optimizer {
                             Expression Equals_Argument;
                             IEnumerable<ParameterExpression> predicate_Parameters;
                             ParameterExpression o;
-                            {
-                                if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
-                                    o=outerKeySelector.Parameters[0];
-                                    if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
-                                        Equals_Argument=innerKeySelector.Body;
-                                        var innerKeySelector_Parameters = innerKeySelector.Parameters;
-                                        predicate_Parameters=innerKeySelector_Parameters;
-                                        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    o0=>o0*o0                       outerKeySelector
-                                            //    i0=>i0*i0                       innerKeySelector
-                                            //    (o1,i1)=>{o1,i1}
-                                            //SelectMany
-                                            //    O
-                                            //    o0=>                            outerKeySelector.Parameters
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i0=>                innerKeySelector.Parameters
-                                            //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
-                                            //                        i0*i0       Equals_Argument=innerKeySelector.Body
-                                            //                    )
-                                            //            i1=>                    resultSelector
-                                            //                {o0,i1}
-                                            selector=Expression.Lambda(
-                                                this.変換_旧Parameterを新Expression1.実行(
-                                                    resultSelector.Body,
-                                                    resultSelector.Parameters[0],
-                                                    o
-                                                ),
-                                                作業配列.Parameters設定(resultSelector.Parameters[1])
-                                            );
-                                        } else {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    o0=>o0*o0                       outerKeySelector
-                                            //    i0=>i0*i0                       innerKeySelector
-                                            //    resultSelector
-                                            //SelectMany
-                                            //    O
-                                            //    o0=>                            outerKeySelector.Parameters
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i0=>                innerKeySelector.Parameters
-                                            //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
-                                            //                        i0*i0       Equals_Argument=innerKeySelector.Body
-                                            //                    )
-                                            //            i0=>                    resultSelector
-                                            //                resultSelector(o0,i0)
-                                            selector=Expression.Lambda(
-                                                Expression.Invoke(
-                                                    MethodCall1_Arguments_4,
-                                                    作業配列.Expressions設定(
-                                                        o,
-                                                        innerKeySelector_Parameters[0]
-                                                    )
-                                                ),
-                                                innerKeySelector_Parameters
-                                            );
-                                        }
-                                    } else {
-                                        ParameterExpression i;
-                                        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    o0=>o0*o0                                outerKeySelector
-                                            //    innerKeySelector
-                                            //    (o1,i1)=>{o1,i1}                         resultSelector
-                                            //SelectMany
-                                            //    O
-                                            //    o0=>                                     outerKeySelector.Parameters
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i1=>
-                                            //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
-                                            //                        innerKeySelector(i1) innerKeySelector(i2)
-                                            //                    )
-                                            //            i1=>{o0,i1}
-                                            var resultSelector_Parameters = resultSelector.Parameters;
-                                            i=resultSelector_Parameters[1];
-                                            selector=Expression.Lambda(
-                                                this.変換_旧Parameterを新Expression1.実行(
-                                                    resultSelector.Body,
-                                                    resultSelector_Parameters[0],
-                                                    o
-                                                ),
-                                                作業配列.Parameters設定(i)
-                                            );
-                                        } else {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    o0=>o0*o0
-                                            //    innerKeySelector
-                                            //    resultSelector
-                                            //SelectMany
-                                            //    O
-                                            //    o0=>
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i2=>
-                                            //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
-                                            //                        innerKeySelector(i2) Equals_Argument=innerKeySelector(i2)
-                                            //                    )
-                                            //            i2=>resultSelector(o0,i2)
-                                            i=Expression.Parameter(TInner,"i2");
-                                            selector=Expression.Lambda(
-                                                Expression.Invoke(
-                                                    MethodCall1_Arguments_4,
-                                                    作業配列.Expressions設定(
-                                                        o,
-                                                        i
-                                                    )
-                                                ),
-                                                作業配列.Parameters設定(i)
-                                            );
-                                        }
-                                        Equals_Argument=Expression.Invoke(
-                                            MethodCall1_Arguments_3,
-                                            i
-                                        );
-                                        predicate_Parameters=作業配列.Parameters設定(i);
-                                    }
-                                    Equals_this=outerKeySelector.Body;
-                                } else {
-                                    if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
-                                        var innerKeySelector_Parameters = innerKeySelector.Parameters;
-                                        predicate_Parameters=innerKeySelector.Parameters;
-                                        var innerKeySelector_Body = innerKeySelector.Body;
-                                        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    outerKeySelector
-                                            //    i0=>i0*i0
-                                            //    (o1,i1)=>{o1,i1}
-                                            //SelectMany
-                                            //    O
-                                            //    o0=>
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i0=>
-                                            //                    outerKeySelector(o0).Equals(
-                                            //                        i0*i0
-                                            //                    )
-                                            //            i1=>{o0,i1}
-                                            o=resultSelector.Parameters[0];
-                                            selector=Expression.Lambda(
-                                                this.変換_旧Parameterを新Expression1.実行(
-                                                    resultSelector.Body,
-                                                    resultSelector.Parameters[0],
-                                                    o
-                                                ),
-                                                作業配列.Parameters設定(resultSelector.Parameters[1])
-                                            );
-                                        } else {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    outerKeySelector
-                                            //    i0=>i0*i0
-                                            //    resultSelector
-                                            //SelectMany
-                                            //    O
-                                            //    o2=>
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i0=>
-                                            //                    outerKeySelector(o2).Equals(
-                                            //                        i0*i0
-                                            //                    )
-                                            //            i0=>resultSelector(o2,i0)
-                                            o=Expression.Parameter(TOuter,"o2");
-                                            selector=Expression.Lambda(
-                                                Expression.Invoke(
-                                                    MethodCall1_Arguments_4,
-                                                    作業配列.Expressions設定(
-                                                        o,
-                                                        innerKeySelector_Parameters[0]
-                                                    )
-                                                ),
-                                                innerKeySelector_Parameters
-                                            );
-                                        }
-                                        Equals_Argument=innerKeySelector_Body;
-                                    } else {
-                                        var Parameters1 = 作業配列.Parameters1;
-                                        predicate_Parameters=Parameters1;
-                                        ParameterExpression i;
-                                        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    outerKeySelector
-                                            //    innerKeySelector
-                                            //    (o1,i1)=>{o1,i1}
-                                            //SelectMany
-                                            //    O
-                                            //    o1=>
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i1=>
-                                            //                    outerKeySelector(o2).Equals(
-                                            //                        innerKeySelector(i1)
-                                            //                    )
-                                            //            i1=>{o1,i1}
-                                            var resultSelector_Parameters = resultSelector.Parameters;
-                                            o=resultSelector_Parameters[0];
-                                            i=resultSelector_Parameters[1];
-                                            selector=Expression.Lambda(
+                            if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
+                                o=outerKeySelector.Parameters[0];
+                                if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
+                                    Equals_Argument=innerKeySelector.Body;
+                                    var innerKeySelector_Parameters = innerKeySelector.Parameters;
+                                    predicate_Parameters=innerKeySelector_Parameters;
+                                    if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    o0=>o0*o0                       outerKeySelector
+                                        //    i0=>i0*i0                       innerKeySelector
+                                        //    (o1,i1)=>{o1,i1}
+                                        //SelectMany
+                                        //    O
+                                        //    o0=>                            outerKeySelector.Parameters
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i0=>                innerKeySelector.Parameters
+                                        //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
+                                        //                        i0*i0       Equals_Argument=innerKeySelector.Body
+                                        //                    )
+                                        //            i1=>                    resultSelector
+                                        //                {o0,i1}
+                                        selector=Expression.Lambda(
+                                            this.変換_旧Parameterを新Expression1.実行(
                                                 resultSelector.Body,
-                                                作業配列.Parameters設定(i)
-                                            );
-                                        } else {
-                                            //Join
-                                            //    O
-                                            //    I
-                                            //    outerKeySelector
-                                            //    innerKeySelector
-                                            //    resultSelector
-                                            //SelectMany
-                                            //    O
-                                            //    o2=>
-                                            //        Select
-                                            //            Where
-                                            //                I
-                                            //                i2=>
-                                            //                    outerKeySelector(o2).Equals(
-                                            //                        innerKeySelector(i2)
-                                            //                    )
-                                            //            i2=>resultSelector(o2,i2)
-                                            o=Expression.Parameter(TOuter,"o2");
-                                            i=Expression.Parameter(TInner,"i2");
-                                            selector=Expression.Lambda(
-                                                Expression.Invoke(
-                                                    MethodCall1_Arguments_4,
-                                                    作業配列.Expressions設定(
-                                                        o,
-                                                        i
-                                                    )
-                                                ),
-                                                作業配列.Parameters設定(i)
-                                            );
-                                        }
-                                        Parameters1[0]=i;
-                                        Equals_Argument=Expression.Invoke(
-                                            MethodCall1_Arguments_3,
-                                            i
+                                                resultSelector.Parameters[0],
+                                                o
+                                            ),
+                                            作業配列.Parameters設定(resultSelector.Parameters[1])
+                                        );
+                                    } else {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    o0=>o0*o0                       outerKeySelector
+                                        //    i0=>i0*i0                       innerKeySelector
+                                        //    resultSelector
+                                        //SelectMany
+                                        //    O
+                                        //    o0=>                            outerKeySelector.Parameters
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i0=>                innerKeySelector.Parameters
+                                        //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
+                                        //                        i0*i0       Equals_Argument=innerKeySelector.Body
+                                        //                    )
+                                        //            i0=>                    resultSelector
+                                        //                resultSelector(o0,i0)
+                                        selector=Expression.Lambda(
+                                            Expression.Invoke(
+                                                MethodCall1_Arguments_4,
+                                                作業配列.Expressions設定(
+                                                    o,
+                                                    innerKeySelector_Parameters[0]
+                                                )
+                                            ),
+                                            innerKeySelector_Parameters
                                         );
                                     }
-                                    Equals_this=Expression.Invoke(
-                                        MethodCall1_Arguments_2,
-                                        o
+                                } else {
+                                    ParameterExpression i;
+                                    if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    o0=>o0*o0                                outerKeySelector
+                                        //    innerKeySelector
+                                        //    (o1,i1)=>{o1,i1}                         resultSelector
+                                        //SelectMany
+                                        //    O
+                                        //    o0=>                                     outerKeySelector.Parameters
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i1=>
+                                        //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
+                                        //                        innerKeySelector(i1) innerKeySelector(i2)
+                                        //                    )
+                                        //            i1=>{o0,i1}
+                                        var resultSelector_Parameters = resultSelector.Parameters;
+                                        i=resultSelector_Parameters[1];
+                                        selector=Expression.Lambda(
+                                            this.変換_旧Parameterを新Expression1.実行(
+                                                resultSelector.Body,
+                                                resultSelector_Parameters[0],
+                                                o
+                                            ),
+                                            作業配列.Parameters設定(i)
+                                        );
+                                    } else {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    o0=>o0*o0
+                                        //    innerKeySelector
+                                        //    resultSelector
+                                        //SelectMany
+                                        //    O
+                                        //    o0=>
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i2=>
+                                        //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
+                                        //                        innerKeySelector(i2) Equals_Argument=innerKeySelector(i2)
+                                        //                    )
+                                        //            i2=>resultSelector(o0,i2)
+                                        i=Expression.Parameter(TInner,"i2");
+                                        selector=Expression.Lambda(
+                                            Expression.Invoke(
+                                                MethodCall1_Arguments_4,
+                                                作業配列.Expressions設定(
+                                                    o,
+                                                    i
+                                                )
+                                            ),
+                                            作業配列.Parameters設定(i)
+                                        );
+                                    }
+                                    Equals_Argument=Expression.Invoke(
+                                        MethodCall1_Arguments_3,
+                                        i
+                                    );
+                                    predicate_Parameters=作業配列.Parameters設定(i);
+                                }
+                                Equals_this=outerKeySelector.Body;
+                            } else {
+                                if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
+                                    var innerKeySelector_Parameters = innerKeySelector.Parameters;
+                                    predicate_Parameters=innerKeySelector.Parameters;
+                                    var innerKeySelector_Body = innerKeySelector.Body;
+                                    if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    outerKeySelector
+                                        //    i0=>i0*i0
+                                        //    (o1,i1)=>{o1,i1}
+                                        //SelectMany
+                                        //    O
+                                        //    o0=>
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i0=>
+                                        //                    outerKeySelector(o0).Equals(
+                                        //                        i0*i0
+                                        //                    )
+                                        //            i1=>{o0,i1}
+                                        o=resultSelector.Parameters[0];
+                                        selector=Expression.Lambda(
+                                            this.変換_旧Parameterを新Expression1.実行(
+                                                resultSelector.Body,
+                                                resultSelector.Parameters[0],
+                                                o
+                                            ),
+                                            作業配列.Parameters設定(resultSelector.Parameters[1])
+                                        );
+                                    } else {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    outerKeySelector
+                                        //    i0=>i0*i0
+                                        //    resultSelector
+                                        //SelectMany
+                                        //    O
+                                        //    o2=>
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i0=>
+                                        //                    outerKeySelector(o2).Equals(
+                                        //                        i0*i0
+                                        //                    )
+                                        //            i0=>resultSelector(o2,i0)
+                                        o=Expression.Parameter(TOuter,"o2");
+                                        selector=Expression.Lambda(
+                                            Expression.Invoke(
+                                                MethodCall1_Arguments_4,
+                                                作業配列.Expressions設定(
+                                                    o,
+                                                    innerKeySelector_Parameters[0]
+                                                )
+                                            ),
+                                            innerKeySelector_Parameters
+                                        );
+                                    }
+                                    Equals_Argument=innerKeySelector_Body;
+                                } else {
+                                    var Parameters1 = 作業配列.Parameters1;
+                                    predicate_Parameters=Parameters1;
+                                    ParameterExpression i;
+                                    if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    outerKeySelector
+                                        //    innerKeySelector
+                                        //    (o1,i1)=>{o1,i1}
+                                        //SelectMany
+                                        //    O
+                                        //    o1=>
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i1=>
+                                        //                    outerKeySelector(o2).Equals(
+                                        //                        innerKeySelector(i1)
+                                        //                    )
+                                        //            i1=>{o1,i1}
+                                        var resultSelector_Parameters = resultSelector.Parameters;
+                                        o=resultSelector_Parameters[0];
+                                        i=resultSelector_Parameters[1];
+                                        selector=Expression.Lambda(
+                                            resultSelector.Body,
+                                            作業配列.Parameters設定(i)
+                                        );
+                                    } else {
+                                        //Join
+                                        //    O
+                                        //    I
+                                        //    outerKeySelector
+                                        //    innerKeySelector
+                                        //    resultSelector
+                                        //SelectMany
+                                        //    O
+                                        //    o2=>
+                                        //        Select
+                                        //            Where
+                                        //                I
+                                        //                i2=>
+                                        //                    outerKeySelector(o2).Equals(
+                                        //                        innerKeySelector(i2)
+                                        //                    )
+                                        //            i2=>resultSelector(o2,i2)
+                                        o=Expression.Parameter(TOuter,"o2");
+                                        i=Expression.Parameter(TInner,"i2");
+                                        selector=Expression.Lambda(
+                                            Expression.Invoke(
+                                                MethodCall1_Arguments_4,
+                                                作業配列.Expressions設定(
+                                                    o,
+                                                    i
+                                                )
+                                            ),
+                                            作業配列.Parameters設定(i)
+                                        );
+                                    }
+                                    Parameters1[0]=i;
+                                    Equals_Argument=Expression.Invoke(
+                                        MethodCall1_Arguments_3,
+                                        i
                                     );
                                 }
+                                Equals_this=Expression.Invoke(
+                                    MethodCall1_Arguments_2,
+                                    o
+                                );
                             }
                             Expression predicate_Body;
                             if(MethodCall1_Arguments_5 is not null) {
