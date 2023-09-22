@@ -1798,12 +1798,17 @@ partial class Optimizer {
                         case nameof(Enumerable.ToArray): {
                             Debug.Assert(Reflection.ExtensionEnumerable.ToArray==MethodCall0_GenericMethodDefinition);
                             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
-                            return MethodCall1_Arguments_0.Type.IsArray
-                                ? MethodCall1_Arguments_0
-                                : Expression.Call(
-                                    MethodCall0_Method,
-                                    MethodCall1_Arguments_0
-                                );
+                            if(MethodCall1_Arguments_0.Type.IsArray)return MethodCall1_Arguments_0;
+                            return Expression.Call(
+                                MethodCall0_Method,
+                                MethodCall1_Arguments_0
+                            );
+                            //return MethodCall1_Arguments_0.Type.IsArray
+                            //    ? MethodCall1_Arguments_0
+                            //    : Expression.Call(
+                            //        MethodCall0_Method,
+                            //        MethodCall1_Arguments_0
+                            //    );
                         }
                         case nameof(Enumerable.Except):
                         case nameof(Enumerable.Union): {
