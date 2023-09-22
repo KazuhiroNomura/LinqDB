@@ -976,8 +976,9 @@ partial class Optimizer {
                                 );
                             }
                         } else {
+                            Debug.Assert(Method==MethodCall0.Method);
                             return Expression.Call(
-                                MethodCall0.Method,
+                                Method,
                                 this.Traverse(MethodCall0_Arguments_0)
                             );
                         }
@@ -2149,15 +2150,15 @@ partial class Optimizer {
                                 );
                             }
                         );
-                        Expression 要素なしifTrue;
-                        if(nameof(ExtensionSet.SingleOrDefault)==Name){
-                            要素なしifTrue=MethodCall0_Arguments.Count==1?Expression.Default(ElementType):this.Traverse(MethodCall0_Arguments[1]);
-                        } else {
-                            要素なしifTrue=Expression.Throw(
+                        //Expression 要素なしifTrue;
+                        var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
+                            ?MethodCall0_Arguments.Count==1
+                                ?Expression.Default(ElementType)
+                                :this.Traverse(MethodCall0_Arguments[1])
+                            :Expression.Throw(
                                 New_ZeroTupleException,
                                 ElementType
                             );
-                        }
                         return Expression.Block(
                             作業配列.Parameters設定(要素なし,Item0,Item1),
                             作業配列.Expressions設定(

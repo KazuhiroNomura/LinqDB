@@ -46,6 +46,7 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo AverageInt32_selector = M(() => _Int32.Average(p => 0));
     public static readonly MethodInfo Cast = M(() => _Int32.Cast<int>());
     public static readonly MethodInfo Contains_value = M(() => _Int32.Contains(0));
+    public static readonly MethodInfo Count = M(() => _Int32.Count());
     public static readonly MethodInfo DefaultIfEmpty = M(() => _Int32.DefaultIfEmpty());
     public static readonly MethodInfo DefaultIfEmpty_defaultValue = M(() => _Int32.DefaultIfEmpty(0));
     public static readonly MethodInfo Except = M(() => _Int32.Except(default!));
@@ -108,6 +109,7 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo SelectMany_collectionSelector_resultSelector = M(() => _Int32.SelectMany(p => _Int32,(p,q) => 0));        //変形で削除される
     public static readonly MethodInfo Single = M(() => _Int32.Single());
     public static readonly MethodInfo SingleOrDefault = M(() => _Int32.SingleOrDefault());
+    public static readonly MethodInfo SingleOrDefault_defaultValue = M(() => _Int32.SingleOrDefault(0));
     public static readonly MethodInfo SumNullableDecimal = M(() => _Int32.Cast<decimal?>().Sum());
     public static readonly MethodInfo SumDecimal = M(() => _Int32.Cast<decimal>().Sum());
     public static readonly MethodInfo SumNullableDouble = M(() => _Int32.Cast<double?>().Sum());
@@ -154,6 +156,7 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo SelectMany_indexCollectionSelector_resultSelector = M(() => _Int32.SelectMany((p,i) => _Int32,(a,b) => a));//変形で削除される
     public static readonly MethodInfo Single_predicate = M(() => _Int32.Single(null!));
     public static readonly MethodInfo SingleOrDefault_predicate = M(() => _Int32.SingleOrDefault(null!));
+    public static readonly MethodInfo SingleOrDefault_predicate_defaultValue = M(() => _Int32.SingleOrDefault(p=>true,0));
     public static readonly MethodInfo Take = M(() => _Int32.Take(0));
     public static readonly MethodInfo TakeWhile = M(() => _Int32.TakeWhile(p => true));
     public static readonly MethodInfo TakeWhile_index = M(() => _Int32.TakeWhile((p,i) => true));

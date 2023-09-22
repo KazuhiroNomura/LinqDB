@@ -1773,6 +1773,25 @@ partial class Optimizer {
                                         MethodCall1_Arguments_1
                                     )
                                 );
+                                //A.SingleOrDefault(predicate,defaultValue)は無視する
+                            }else if(Reflection.ExtensionEnumerable.SingleOrDefault_predicate_defaultValue==MethodCall0_GenericMethodDefinition){
+                                var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
+                                var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
+                                var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments[2]);
+                                //A.SingleOrDefault(predicate)
+                                //A.Where(predicate).SingleOrDefault()
+                                return Expression.Call(
+                                    Reflection.ExtensionEnumerable.SingleOrDefault_defaultValue.MakeGenericMethod(MethodCall0_Method.GetGenericArguments()),
+                                    Expression.Call(
+                                        作業配列.ElementTypeからMakeGenericMethod(
+                                            Reflection.ExtensionEnumerable.Where,
+                                            MethodCall1_Arguments_0.Type
+                                        ),
+                                        MethodCall1_Arguments_0,
+                                        MethodCall1_Arguments_1
+                                    ),
+                                    MethodCall1_Arguments_2
+                                );
                             }
                             break;
                         }
