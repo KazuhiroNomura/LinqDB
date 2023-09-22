@@ -385,6 +385,7 @@ public class Client:IDisposable {
         var Length = (int)MemoryStream.Length;
         var Length除外全体バイト数 = Length-4;
         var 送信データとハッシュのバイト数 = Length除外全体バイト数+ハッシュバイト数;
+        //Debug.Assert(送信データとハッシュのバイト数<=ServerMemoryStreamBufferSize);
         //送信データのバイト数
         Provider.ComputeHash(Buffer,4,Length除外全体バイト数);
         Buffer[0]=(byte)(送信データとハッシュのバイト数>>0);
@@ -679,46 +680,6 @@ public class Client:IDisposable {
             case SerializeType.Utf8Json:this.Utf8Json.Serialize(this.MemoryStream,Expression);break;
             default:throw new NotSupportedException(SerializeType.ToString());
         }
-        //switch(SerializeType) {
-        //    case SerializeType.Utf8Json:
-        //        this.SerializerConfiguration.Clear();
-        //        var JsonStream = new FileStream("Json.json",FileMode.Create,FileAccess.Write,FileShare.ReadWrite);
-        //        JsonSerializer.Serialize(JsonStream,Lambda,this.SerializerConfiguration.JsonFormatterResolver);
-        //        JsonStream.Close();
-
-        //        this.SerializerConfiguration.Clear();
-        //        JsonSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.JsonFormatterResolver);
-        //        break;
-        //    case SerializeType.MessagePack:{
-        //        this.SerializerConfiguration.Clear();
-        //        MessagePackSerializer.Serialize(MemoryStream,Expression,this.SerializerConfiguration.MessagePackSerializerOptions);
-        //        //var Lambda_Parameters = Lambda.Parameters;
-        //        //var ParameterName = Lambda_Parameters.Count==0 ? "" : Lambda_Parameters[0].Name;
-        //        //var Statement = this.取得_CSharp.実行(Lambda);
-        //        //using var w = new BinaryWriter(MemoryStream);
-        //        ////Utf8Json.JsonSerializer.Serialize(MemoryStream,ps);
-        //        ////var m = new System.IO.MemoryStream();
-        //        //w.Write(ParameterName);
-        //        //w.Write(Statement);
-        //        //w.Flush();
-
-        //        //var Buffer =Utf8Json.JsonSerializer.Serialize(パラメーター_ステートメント);
-        //        //MemoryStream.Write(Buffer,0,Buffer.Length);
-        //        //var Utf8Json.JsonSerializer.Serialize(ParameterName);
-        //        //Utf8Json.JsonSerializer.Serialize(m,Statement);
-        //        //m.Position=0;
-        //        //var s1=Utf8Json.JsonResolver.Serializer().Deserialize<Object>(m);
-        //        //var s2 = Utf8Json.JsonResolver.Serializer().Deserialize<String>(m);
-        //        //Utf8Json.JsonSerializer.Serialize(MemoryStream,ParameterName);
-        //        //Utf8Json.JsonSerializer.Serialize(MemoryStream,Statement);
-        //        //Utf8Json.JsonSerializer.Serialize(m,パラメーター_ステートメント);
-        //        break;
-        //    }
-        //    default: {
-        //        throw new NotSupportedException(SerializeType.ToString());
-        //    }
-        //    //default: throw new NotSupportedException(SerializeType.ToString());
-        //}
         this.Bufferをサーバーに送信してBufferに受信();
     }
     private protected static InvalidDataException 受信ヘッダー_は不正だった(Response Response) =>new(

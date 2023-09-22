@@ -23,10 +23,9 @@ using static Microsoft.FSharp.Core.ByRefKinds;
 namespace Serializers.MessagePack.Formatters;
 public abstract class 共通{
     private static int ポート番号;
-    static 共通(){
+    static 共通() {
         ポート番号=ListenerSocketポート番号;
     }
-    //protected Server<string> Server;
     protected readonly EnumerableSetEqualityComparer Comparer;
     protected ExpressionEqualityComparer ExpressionEqualityComparer=>new();
     protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();

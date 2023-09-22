@@ -393,11 +393,13 @@ internal class SingleReceiveSend:IDisposable{
             };
             var Buffer=this.Buffer;
             Stream Stream;
-            NetworkStream.Read(Buffer,0,4);
-            var SslProtocol0=Buffer[0];
-            var SslProtocol1=Buffer[1];
-            var SslProtocol2=Buffer[2];
-            var SslProtocol3=Buffer[3];
+            //NetworkStream.ReadByte()
+            //var バイト数=NetworkStream.Read(Buffer,0,4);
+            //Debug.Assert(バイト数==4);
+            var SslProtocol0=NetworkStream.ReadByte();
+            var SslProtocol1=NetworkStream.ReadByte();
+            var SslProtocol2=NetworkStream.ReadByte();
+            var SslProtocol3=NetworkStream.ReadByte();
             //var SslProtocol = (SslProtocols)NetworkStream.ReadByte();
 #pragma warning disable CA5397 // SslProtocols の非推奨の値を使用しない
             var SslProtocol = (SslProtocols)((SslProtocol0<<0)|(SslProtocol1<<8)|(SslProtocol2<<16)|(SslProtocol3<<24));
