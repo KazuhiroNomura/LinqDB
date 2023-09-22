@@ -606,6 +606,16 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new int[1].ToArray().ToArray());
         this.共通コンパイル実行(()=>((IEnumerable<int>)new int[1]).ToArray());
     }
+    [Fact]public void Call_Except(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet()));
+    }
+    [Fact]public void Call_Union(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet()));
+    }
     static Func<T,TResult> Anonymous<T,TResult>(Func<T,TResult> i)=>i;
     [Fact]public void Call_SelectMany(){
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>new{a=p,b=p*2}));

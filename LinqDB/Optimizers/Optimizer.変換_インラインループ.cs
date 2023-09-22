@@ -519,8 +519,10 @@ partial class Optimizer {
                 case nameof(Enumerable.Except): {
                     Debug.Assert(
                         Reflection.ExtensionSet.Except==GenericMethodDefinition||
-                        Reflection.ExtensionEnumerable.Except==GenericMethodDefinition
+                        Reflection.ExtensionEnumerable.Except==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.Except_comparer==GenericMethodDefinition
                     );
+                    //Except_comparerの対応が不明
                     var second = MethodCall0_Arguments[1];
                     Type 作業_Type;
                     ParameterExpression 作業;
@@ -541,10 +543,21 @@ partial class Optimizer {
                             作業_Type,
                             $"{変数名}{nameof(作業)}"
                         );
+                        NewExpression New;
+                        if(Reflection.ExtensionEnumerable.Except_comparer==GenericMethodDefinition){
+                            var IEqualityComparer=typeof(IEqualityComparer<>).MakeGenericType(Method.GetGenericArguments());
+                            var ctor=作業配列.GetConstructor(作業_Type,IEqualityComparer);
+                            New=Expression.New(
+                                ctor,
+                                this.Traverse(MethodCall0_Arguments[2])
+                            );
+                        } else{
+                            New=Expression.New(作業_Type);
+                        }
                         Expression0=Expression.Block(
                             Expression.Assign(
                                 作業,
-                                Expression.New(作業_Type)
+                                New
                             ),
                             this.ループ展開(
                                 second,
