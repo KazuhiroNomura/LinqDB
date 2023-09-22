@@ -503,11 +503,13 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         );
     }
     [Fact]public void ConvertChecked(){
-        this.共通コンパイル実行(
-            Expression.Lambda<Func<sbyte>>(
-                Expression.ConvertChecked(
-                    Expression.Constant(1000),
-                    typeof(sbyte)
+        Assert.Throws<OverflowException>(()=>
+            this.共通コンパイル実行(
+                Expression.Lambda<Func<sbyte>>(
+                    Expression.ConvertChecked(
+                        Expression.Constant(1000),
+                        typeof(sbyte)
+                    )
                 )
             )
         );
@@ -578,5 +580,26 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
         this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i),EqualityComparer<int>.Default));
+    }
+    [Fact]public void Call_OfType(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        this.共通コンパイル実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
+        this.共通コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
+    }
+    [Fact]public void Call_Select(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        this.共通コンパイル実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
+        this.共通コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
+    }
+    [Fact]public void Call_Single(){
+        this.共通コンパイル実行(()=>new int[1].Single(p=>true));
+        this.共通コンパイル実行(()=>new int[1].Single());
+    }
+    static Func<T,TResult> Anonymous<T,TResult>(Func<T,TResult> i)=>i;
+    [Fact]public void Call_SelectMany(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>new{a=p,b=p*2}));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(Anonymous((int o) => new { key = o })));
     }
 }

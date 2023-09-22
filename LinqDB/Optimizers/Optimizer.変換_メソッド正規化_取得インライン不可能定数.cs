@@ -619,9 +619,10 @@ partial class Optimizer {
                             );
                         }
                         case nameof(ExtensionSet.Delete): {
-                            //s.Delete()
                             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
+                            //O.SelectMany(o=>I).Delete(x)→O.SelectMany(o=>I.Delete(x))
+                            //O.SelectMany(selector).Delete(x)→O.SelectMany(o=>selector(o).Delete(x))
                             var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
                                 MethodCall0_Method,
                                 MethodCall1_Arguments_0,
@@ -989,11 +990,8 @@ partial class Optimizer {
                             //        x
                             //        MethodCall1_Arguments_1
                             if(typeof(ExtensionSet)==MethodCall0_Method.DeclaringType) {
-                                //Enumerable.Intersect
-                                //    Enumerable.SelectMany
-                                //Enumerable.SelectMany
-                                //    Enumerable.Intersect
-                                //SelectManyは重複を許しIntersectは重複除去されるので結果が異なる
+                                //O.SelectMany(o=>I).Intersect(X)→O.SelectMany(o=>I.Intersect(X))
+                                //O.SelectMany(selector).Intersect(X)→O.SelectMany(o=>selector(o).Intersect(X))
                                 var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
                                     MethodCall0_Method,
                                     MethodCall1_Arguments_0,
@@ -1390,7 +1388,7 @@ partial class Optimizer {
                                     作業配列.Parameters設定(o)
                                 )
                             );
-                            //todo goto SelectMany;
+                            //SelectManyにgotoするのと本質的に同じだと思う。;
                             Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
                             return this.Call(SelectMany);
                         }
@@ -1403,9 +1401,7 @@ partial class Optimizer {
                             if(SelectMany is not null) return SelectMany;
                             //Strings.OfType<Object>()
                             //Strings
-                            if(MethodCall0.Type.IsAssignableFrom(MethodCall1_Arguments_0.Type)) {
-                                return MethodCall1_Arguments_0;
-                            }
+                            if(MethodCall0.Type.IsAssignableFrom(MethodCall1_Arguments_0.Type)) return MethodCall1_Arguments_0;
                             return Expression.Call(
                                 MethodCall0_Method,
                                 MethodCall1_Arguments_0
@@ -1743,6 +1739,7 @@ partial class Optimizer {
                         }
                         case nameof(Enumerable.Single): {
                             if(Reflection.ExtensionEnumerable.Single_predicate==MethodCall0_GenericMethodDefinition) {
+                                //O.Single(predicate)→O.Where(predicate).Single()
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
                                 return Expression.Call(
@@ -1799,8 +1796,13 @@ partial class Optimizer {
                                     Reflection.ExtensionEnumerable.Union_comparer==MethodCall0_GenericMethodDefinition
                                 );
                                 var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments[2]);
+                                //O.SelectMany(o=>I).Union(x,comparer)→O.SelectMany(o=>I.Union(x,comparer))
+                                //O.SelectMany(selector).comparer(x,comparer)→O.SelectMany(o=>selector(o).Union(x,comparer))
                                 var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
-                                    MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2
+                                    MethodCall0_Method,
+                                    MethodCall1_Arguments_0,
+                                    MethodCall1_Arguments_1,
+                                    MethodCall1_Arguments_2
                                 );
                                 if(SelectMany is not null) return SelectMany;
                                 return Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
@@ -1811,8 +1813,12 @@ partial class Optimizer {
                                     Reflection.ExtensionSet.Except==MethodCall0_GenericMethodDefinition||
                                     Reflection.ExtensionSet.Union==MethodCall0_GenericMethodDefinition
                                 );
+                                //O.SelectMany(o=>I).Union(x)→O.SelectMany(o=>I.Union(x))
+                                //O.SelectMany(selector).Union(x)→O.SelectMany(o=>selector(o).Union(x))
                                 var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
-                                    MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1
+                                    MethodCall0_Method,
+                                    MethodCall1_Arguments_0,
+                                    MethodCall1_Arguments_1
                                 );
                                 if(SelectMany is not null) return SelectMany;
                                 return Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
@@ -1862,32 +1868,59 @@ partial class Optimizer {
                                 //        i=>o==i&&i==1
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                                {
-                                    if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
-                                        //O.SelectMany(o=>I.Where(i=>o==0&&i==0))
-                                        //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
-                                        //に出来るが
-                                        //O.SelectMany(o=>I.Where(i=>o==0&&i==0).GroupJoin.Join)
-                                        //は処理できない。引数0を再帰で呼び出しWhereがあるところまで戻って処理すればいい
-                                        //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
+                                if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+                                    //O.SelectMany(o=>I.Where(i=>o==0&&i==0))
+                                    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
+                                    //に出来るが
+                                    //O.SelectMany(o=>I.Where(i=>o==0&&i==0).GroupJoin.Join)
+                                    //は処理できない。引数0を再帰で呼び出しWhereがあるところまで戻って処理すればいい
+                                    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
 
-                                        switch(MethodCall1_MethodCall.Method.Name) {
-                                            case nameof(ExtensionSet.SelectMany): {
-                                                if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-                                                    var SelectMany = this.内部SelectManyのselector_Bodyに外部メソッドを入れる(
-                                                        MethodCall0_Method,
-                                                        MethodCall1_MethodCall,
-                                                        MethodCall1_Arguments_1
-                                                    );
-                                                    //todo goto SelectMany;
-                                                    Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
-                                                    return this.Call(SelectMany);
-                                                }
-                                                break;
+                                    switch(MethodCall1_MethodCall.Method.Name) {
+                                        case nameof(ExtensionSet.SelectMany): {
+                                            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+                                                var SelectMany = this.内部SelectManyのselector_Bodyに外部メソッドを入れる(
+                                                    MethodCall0_Method,
+                                                    MethodCall1_MethodCall,
+                                                    MethodCall1_Arguments_1
+                                                );
+                                                //todo goto SelectMany;
+                                                Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
+                                                return this.Call(SelectMany);
                                             }
+                                            break;
                                         }
                                     }
                                 }
+                                if(MethodCall1_Arguments_1 is LambdaExpression selector&&ループ展開可能メソッドか(selector.Body,out _)) {
+                                    var selector_Parameters = selector.Parameters;
+                                    Expression? OuterPredicate = null;
+                                    var Body=共通(
+                                        selector.Parameters,
+                                        ref OuterPredicate,
+                                        selector.Body
+                                    );
+                                    if(OuterPredicate is not null) {
+                                        MethodCall1_Arguments_0=this.Outer又はInnerにWhereを付ける(
+                                            MethodCall1_Arguments_0,
+                                            MethodCall1_Arguments_0.Type.GetInterface(CommonLibrary.IOutputSet1_FullName) is not null
+                                                ? Reflection.ExtensionSet.Where
+                                                : Reflection.ExtensionEnumerable.Where,
+                                            selector_Parameters[0].Type,
+                                            selector_Parameters,
+                                            OuterPredicate
+                                        );
+                                    }
+                                    MethodCall1_Arguments_1=Expression.Lambda(
+                                        Body,
+                                        selector_Parameters
+                                    );
+                                }
+                                return Expression.Call(
+                                    MethodCall0_Method,//SelectMany_selector
+                                    MethodCall1_Arguments_0,
+                                    MethodCall1_Arguments_1
+                                );
                                 Expression 共通(IList<ParameterExpression> selector_Parameters,ref Expression? ref_OuterPredicate,Expression InputBody) {
                                     if(ループ展開可能メソッドか(InputBody,out var MethodCall)) {
                                         var MethodCall_Method = MethodCall.Method;
@@ -1929,37 +1962,6 @@ partial class Optimizer {
                                     }
                                     return InputBody;
                                 }
-                                {
-                                    if(MethodCall1_Arguments_1 is LambdaExpression selector&&ループ展開可能メソッドか(selector.Body,out _)) {
-                                        var selector_Parameters = selector.Parameters;
-                                        Expression? OuterPredicate = null;
-                                        var Body=共通(
-                                            selector.Parameters,
-                                            ref OuterPredicate,
-                                            selector.Body
-                                        );
-                                        if(OuterPredicate is not null) {
-                                            MethodCall1_Arguments_0=this.Outer又はInnerにWhereを付ける(
-                                                MethodCall1_Arguments_0,
-                                                MethodCall1_Arguments_0.Type.GetInterface(CommonLibrary.IOutputSet1_FullName) is not null
-                                                    ? Reflection.ExtensionSet.Where
-                                                    : Reflection.ExtensionEnumerable.Where,
-                                                selector_Parameters[0].Type,
-                                                selector_Parameters,
-                                                OuterPredicate
-                                            );
-                                        }
-                                        MethodCall1_Arguments_1=Expression.Lambda(
-                                            Body,
-                                            selector_Parameters
-                                        );
-                                    }
-                                }
-                                return Expression.Call(
-                                    MethodCall0_Method,//SelectMany_selector
-                                    MethodCall1_Arguments_0,
-                                    MethodCall1_Arguments_1
-                                );
                             } else {
                                 Debug.Assert(MethodCall0_Arguments.Count==3);
                                 //SelectMany<TSource,ICollection,TResult>
@@ -2389,6 +2391,12 @@ partial class Optimizer {
                 );
             }
         }
+        /// <summary>
+        /// OfType()
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_Arguments_0"></param>
+        /// <returns></returns>
         private Expression? 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,Expression MethodCall1_Arguments_0) {
             if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
                 switch(MethodCall1_MethodCall.Method.Name) {
@@ -2406,6 +2414,13 @@ partial class Optimizer {
             }
             return null;
         }
+        /// <summary>
+        /// Delete(predicate),Intersect(second),Union(second),Except(second)
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_Arguments_0"></param>
+        /// <param name="MethodCall1_Arguments_1"></param>
+        /// <returns></returns>
         private Expression? 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,Expression MethodCall1_Arguments_0,Expression MethodCall1_Arguments_1) {
             if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)){
                 switch(MethodCall1_MethodCall.Method.Name) {
@@ -2424,6 +2439,14 @@ partial class Optimizer {
             }
             return null;
         }
+        /// <summary>
+        /// Intersect(second,comparer),Union(second,comparer),Except(second,comparer)
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_Arguments_0"></param>
+        /// <param name="MethodCall1_Arguments_1"></param>
+        /// <param name="MethodCall1_Arguments_2"></param>
+        /// <returns></returns>
         private Expression? 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,Expression MethodCall1_Arguments_0,Expression MethodCall1_Arguments_1,Expression MethodCall1_Arguments_2) {
             if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
                 switch(MethodCall1_MethodCall.Method.Name) {
@@ -2443,53 +2466,103 @@ partial class Optimizer {
             }
             return null;
         }
+        /// <summary>
+        /// SelectMany.OfType
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_MethodCall"></param>
+        /// <returns></returns>
         private MethodCallExpression 内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,MethodCallExpression MethodCall1_MethodCall) {
             var MethodCall1_MethodCall_Arguments = MethodCall1_MethodCall.Arguments;
             Debug.Assert(MethodCall1_MethodCall_Arguments.Count==2);
             LambdaExpression selector1;
+            Expression selector1_Body;
             if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
                 Debug.Assert(
                     Reflection.ExtensionSet.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()||
                     Reflection.ExtensionEnumerable.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()
                 );
-                //MethodCall0_Method
+                //MethodCall0_Method                          OfType
                 //    MethodCall1_MethodCall_Method           SelectMany
-                //        MethodCall1_MethodCall_Arguments[0]
+                //        MethodCall1_MethodCall_Arguments[0] O
                 //        o=>                                 selector0.Parameters
                 //            I                               selector0.Body
                 //MethodCall1_MethodCall_Method               SelectMany
-                //    MethodCall1_MethodCall_Arguments[0]
+                //    MethodCall1_MethodCall_Arguments[0]     O
                 //    o=>                                     selector0.Parameters
-                //        MethodCall0_Method
+                //        MethodCall0_Method                  OfType
                 //            I                               selector0.Body
-                var selector0_Body = Expression.Call(MethodCall0_Method,selector0.Body);
-                var selector1_Body = this.Call(selector0_Body);
-                selector1=Expression.Lambda(selector1_Body,selector0.Parameters);
-            } else {
-                //MethodCall0_Method
-                //    MethodCall1_MethodCall_Method           SelectMany
-                //        MethodCall1_MethodCall_Arguments[0]
-                //        MethodCall1_MethodCall_Arguments[1]
-                //MethodCall1_MethodCall_Method               SelectMany
-                //    MethodCall1_MethodCall_Arguments[0]
-                //    o=>
-                //        MethodCall0_Method
-                //            MethodCall1_MethodCall_Arguments[1].Invoke(o)
-                var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
-                var 作業配列 = this._作業配列;
+                //O.SelectMany(o=>I).OfType<T>()→O.SelectMany(o=>I.OfType<T>())
                 var selector0_Body = Expression.Call(
                     MethodCall0_Method,
-                    Expression.Invoke(MethodCall1_MethodCall_Arguments[1],作業配列.Expressions設定(o))
+                    selector0.Body
                 );
-                var selector1_Body = this.Call(selector0_Body);
-                selector1=Expression.Lambda(selector1_Body,作業配列.Parameters設定(o));
+                selector1_Body = this.Call(selector0_Body);
+                selector1=Expression.Lambda(
+                    selector1_Body,
+                    selector0.Parameters
+                );
+            } else {
+                //MethodCall0_Method                                        OfType
+                //    MethodCall1_MethodCall_Method                         SelectMany
+                //        MethodCall1_MethodCall_Arguments[0]               O
+                //        MethodCall1_MethodCall_Arguments[1]               selector0
+                //MethodCall1_MethodCall_Method                             SelectMany
+                //    MethodCall1_MethodCall_Arguments[0]                   O
+                //    o=>
+                //        MethodCall0_Method                                OfType<T>
+                //            MethodCall1_MethodCall_Arguments[1].Invoke(o) selector0
+                //O.SelectMany(selector).OfType<T>()→O.SelectMany(o=>selector(O).OfType<T>())
+                var 作業配列 = this._作業配列;
+                var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
+                var Invoke=Expression.Invoke(
+                    MethodCall1_MethodCall_Arguments[1],
+                    作業配列.Expressions設定(o)
+                );
+                var selector0_Body = Expression.Call(
+                    MethodCall0_Method,
+                    Invoke
+                );
+                selector1_Body = this.Call(selector0_Body);
+                selector1=Expression.Lambda(
+                    selector1_Body,
+                    作業配列.Parameters設定(o)
+                );
             }
+            var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
+            var MethodCall1_MethodCall_GenericMethodDefinition=MethodCall1_MethodCall_Method.GetGenericMethodDefinition();
+            if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
+                var Set1 = selector1_Body.Type;
+                while(true) {
+                    var GenericTypeDefinition = Set1;
+                    if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                    if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
+                    if(Set1.BaseType is null) {
+                        //IEnumerable<>
+                        if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+                            MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
+                        break;
+                    }
+                    Set1=Set1.BaseType;
+                }
+            }
+            var MethodCall1_MethodCall_Arguments_0 = MethodCall1_MethodCall_Arguments[0];
+            var GenericArguments=MethodCall1_MethodCall_Method.GetGenericArguments();
+            GenericArguments[1]=IEnumerable1のT(selector1.ReturnType);
             return Expression.Call(
-                MethodCall1_MethodCall.Method,
-                MethodCall1_MethodCall_Arguments[0],
+                MethodCall1_MethodCall_GenericMethodDefinition.MakeGenericMethod(GenericArguments),
+                MethodCall1_MethodCall_Arguments_0,
                 selector1
             );
         }
+        /// <summary>
+        /// SelectMany.Where
+        /// SelectMany.Select
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_MethodCall"></param>
+        /// <param name="MethodCall1_Arguments_1"></param>
+        /// <returns></returns>
         private MethodCallExpression 内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,MethodCallExpression MethodCall1_MethodCall,Expression MethodCall1_Arguments_1) {
             var MethodCall1_MethodCall_Arguments = MethodCall1_MethodCall.Arguments;
             Debug.Assert(MethodCall1_MethodCall_Arguments.Count==2);
@@ -2501,19 +2574,19 @@ partial class Optimizer {
                     Reflection.ExtensionEnumerable.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()||
                     Reflection.ExtensionSet.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()
                 );
-                //MethodCall0_Method
+                //MethodCall0_Method                          Select
                 //    MethodCall1_MethodCall_Method           SelectMany
-                //        MethodCall1_MethodCall_Arguments[0]
-                //        o=>                                 selector0.Parameters
-                //            I                               selector0.Body
-                //    MethodCall1_Arguments[1]
+                //        MethodCall1_MethodCall_Arguments[0] O
+                //        o=>                                 SelectMany_selector0.Parameters
+                //            I                               SelectMany_selector0.Body
+                //    MethodCall1_Arguments_1                 Select_selector
                 //MethodCall1_MethodCall_Method               SelectMany
-                //    MethodCall1_MethodCall_Arguments[0]
-                //    o=>                                     selector0.Parameters
-                //        MethodCall0_Method
-                //            I                               selector0.Body
-                //            MethodCall1_Arguments[1]
-                //Types2[0]=IEnumerable1のT(selector0.ReturnType);
+                //    MethodCall1_MethodCall_Arguments[0]     O
+                //    o=>                                     SelectMany_selector0.Parameters
+                //        MethodCall0_Method                  Select
+                //            I                               I
+                //            MethodCall1_Arguments_1         Select_selector
+                //O.SelectMany(o=>I).Select(Select_selector)→O.SelectMany(o=>I.Select(Select_selector))
                 var selector0_Body = Expression.Call(
                     MethodCall0_Method,
                     selector0.Body,
@@ -2556,24 +2629,6 @@ partial class Optimizer {
             var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
             var MethodCall1_MethodCall_GenericMethodDefinition=MethodCall1_MethodCall_Method.GetGenericMethodDefinition();
             if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
-                //Type? Set1 = selector1_Body.Type;
-                //while(true) {
-                //    if(Set1 is null) {
-                //        //IEnumerable<>
-                //        if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector) {
-                //            MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
-                //        }
-                //        break;
-                //    }
-                //    var GenericTypeDefinition = Set1;
-                //    if(GenericTypeDefinition.IsGenericType) {
-                //        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-                //    }
-                //    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
-                //        break;
-                //    }
-                //    Set1=Set1.BaseType;
-                //}
                 var Set1 = selector1_Body.Type;
                 while(true) {
                     var GenericTypeDefinition = Set1;
@@ -2597,6 +2652,14 @@ partial class Optimizer {
                 selector1
             );
         }
+        /// <summary>
+        /// Except(second,comparer),Union(second,comparer)
+        /// </summary>
+        /// <param name="MethodCall0_Method"></param>
+        /// <param name="MethodCall1_MethodCall"></param>
+        /// <param name="MethodCall1_Arguments_1"></param>
+        /// <param name="MethodCall1_Arguments_2"></param>
+        /// <returns></returns>
         private MethodCallExpression 内部SelectManyのselector_Bodyに外部メソッドを入れる(MethodInfo MethodCall0_Method,MethodCallExpression MethodCall1_MethodCall,Expression MethodCall1_Arguments_1,Expression MethodCall1_Arguments_2) {
             var MethodCall1_MethodCall_Arguments = MethodCall1_MethodCall.Arguments;
             Debug.Assert(MethodCall1_MethodCall_Arguments.Count==2);
@@ -2607,20 +2670,20 @@ partial class Optimizer {
                     Reflection.ExtensionSet.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()||
                     Reflection.ExtensionEnumerable.SelectMany_selector==MethodCall1_MethodCall.Method.GetGenericMethodDefinition()
                 );
-                //MethodCall0_Method
+                //MethodCall0_Method                          Except
                 //    MethodCall1_MethodCall_Method           SelectMany
-                //        MethodCall1_MethodCall_Arguments[0]
+                //        MethodCall1_MethodCall_Arguments[0] O
                 //        o=>                                 selector0.Parameters
                 //            I                               selector0.Body
-                //    MethodCall1_Arguments[1]
-                //    MethodCall1_Arguments[2]
+                //    MethodCall1_Arguments[1]                second
+                //    MethodCall1_Arguments[2]                comparer
                 //MethodCall1_MethodCall_Method               SelectMany
-                //    MethodCall1_MethodCall_Arguments[0]
+                //    MethodCall1_MethodCall_Arguments[0]     O
                 //    o=>                                     selector0.Parameters
-                //        MethodCall0_Method
+                //        MethodCall0_Method                  Except
                 //            I                               selector0.Body
-                //            MethodCall1_Arguments[1]
-                //            MethodCall1_Arguments[2]
+                //            MethodCall1_Arguments[1]        second
+                //            MethodCall1_Arguments[2]        comparer
                 var selector0_Body = Expression.Call(
                     MethodCall0_Method,
                     selector0.Body,
@@ -2633,27 +2696,28 @@ partial class Optimizer {
                     selector0.Parameters
                 );
             } else {
-                //MethodCall0_Method
-                //    MethodCall1_MethodCall_Method           SelectMany
-                //        MethodCall1_MethodCall_Arguments[0]
-                //        MethodCall1_MethodCall_Arguments[1]
-                //    MethodCall1_Arguments[1]
-                //    MethodCall1_Arguments[2]
-                //MethodCall1_MethodCall_Method               SelectMany
-                //    MethodCall1_MethodCall_Arguments[0]
+                //MethodCall0_Method                                        Except
+                //    MethodCall1_MethodCall_Method                         SelectMany
+                //        MethodCall1_MethodCall_Arguments[0]               O
+                //        MethodCall1_MethodCall_Arguments[1]               selector
+                //    MethodCall1_Arguments[1]                              second
+                //    MethodCall1_Arguments[2]                              comparer
+                //MethodCall1_MethodCall_Method                             SelectMany
+                //    MethodCall1_MethodCall_Arguments[0]                   O
                 //    o=>
-                //        MethodCall0_Method
+                //        MethodCall0_Method                                Except
                 //            MethodCall1_MethodCall_Arguments[1].Invoke(o)
-                //            MethodCall1_Arguments[1]
-                //            MethodCall1_Arguments[2]
-                var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
+                //            MethodCall1_Arguments[1]                      second
+                //            MethodCall1_Arguments[2]                      comparer
                 var 作業配列 = this._作業配列;
+                var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
+                var Invoke=Expression.Invoke(
+                    MethodCall1_MethodCall_Arguments[1],
+                    作業配列.Expressions設定(o)
+                );
                 var selector0_Body = Expression.Call(
                     MethodCall0_Method,
-                    Expression.Invoke(
-                        MethodCall1_MethodCall_Arguments[1],
-                        作業配列.Expressions設定(o)
-                    ),
+                    Invoke,
                     MethodCall1_Arguments_1,
                     MethodCall1_Arguments_1
                 );

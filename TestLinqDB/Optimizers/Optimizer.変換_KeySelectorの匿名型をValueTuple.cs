@@ -56,7 +56,6 @@ public class 変換_KeySelectorの匿名型をValueTuple:共通{
         );
     }
     static T F<T>(T t)=>t;
-    //static T Anonymous<T>(T t)=>F(new{key=t});
     static LambdaExpression L<T,TResult>(Expression<Func<T,TResult>> i)=>i;
     static Func<T,TResult> Anonymous<T,TResult>(Func<T,TResult> i)=>i;
     [Fact]public void Call(){
