@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Linq.Expressions;
 using LinqDB.Sets;
 using Microsoft.Build.Execution;
@@ -547,5 +548,23 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
         this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
+    }
+    [Fact]public void Call_GroupJoin(){
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,IEnumerable<int>,int>)((o,i)=>o+i.Count())));
+    }
+    private static Set<int>x()=>new Set<int>();
+    [Fact]
+    public void Call_Intersect(){
+        this.共通コンパイル実行(()=>x().Intersect(x()).Where(p=>p==0));
+        this.共通コンパイル実行(()=>x().SelectMany(o=>x().SelectMany(i=>x())).Intersect(x()));
+        this.共通コンパイル実行(()=>x().SelectMany(o=>x()).Intersect(x()));
+        this.共通コンパイル実行(()=>x().Intersect(x().Where(p=>true)));
+        this.共通コンパイル実行(()=>x().Intersect(x(),EqualityComparer<int>.Default));
     }
 }

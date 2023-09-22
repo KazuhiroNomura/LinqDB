@@ -832,7 +832,7 @@ partial class Optimizer {
                                 first,
                                 argument => Expression.Call(
                                     作業,
-                                    作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalAdd),Instance_NonPublic_Public)!,
+                                    作業_Type.GetMethod(nameof(Set<int>.InternalAdd),Instance_NonPublic_Public)!,
                                     argument
                                 )
                             );
@@ -889,7 +889,7 @@ partial class Optimizer {
                             first,
                             argument => Expression.Call(
                                 作業,
-                                作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalAdd),Instance_NonPublic_Public)!,
+                                作業_Type.GetMethod(nameof(HashSet<int>.Add))!,
                                 argument
                             )
                         );
@@ -898,7 +898,7 @@ partial class Optimizer {
                             argument => Expression.IfThenElse(
                                 Expression.Call(
                                     作業,
-                                    作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalContains),Instance_NonPublic_Public),
+                                    作業_Type.GetMethod(nameof(HashSet<int>.Contains)),
                                     argument
                                 ),
                                 ループの内部処理(argument),

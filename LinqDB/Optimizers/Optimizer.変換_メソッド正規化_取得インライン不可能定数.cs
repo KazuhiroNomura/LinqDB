@@ -1003,9 +1003,7 @@ partial class Optimizer {
                             }
                             if(ループ展開可能なSetのCall(MethodCall1_Arguments_1) is null) {
                                 //A.Intersect(B).Where(predicate)のWhere
-                                var t = MethodCall1_Arguments_0;
-                                MethodCall1_Arguments_0=MethodCall1_Arguments_1;
-                                MethodCall1_Arguments_1=t;
+                                (MethodCall1_Arguments_0,MethodCall1_Arguments_1)=(MethodCall1_Arguments_1,MethodCall1_Arguments_0);
                             }
                             if(MethodCall0_Arguments.Count==3) {
                                 Debug.Assert(Reflection.ExtensionEnumerable.Intersect_comparer==MethodCall0_GenericMethodDefinition);

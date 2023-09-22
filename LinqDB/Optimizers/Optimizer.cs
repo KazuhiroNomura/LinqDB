@@ -305,8 +305,7 @@ public sealed partial class Optimizer:IDisposable{
         if(e.NodeType!=ExpressionType.Call)
             return null;
         var MethodCall = (MethodCallExpression)e;
-        var GenericMethodDefinition = MethodCall.Method.GetGenericMethodDefinition();
-        return GenericMethodDefinition.DeclaringType==typeof(Sets.ExtensionSet)
+        return MethodCall.Method.DeclaringType==typeof(Sets.ExtensionSet)
             ? MethodCall
             : null;
     }
