@@ -1892,30 +1892,36 @@ partial class Optimizer {
                                 //        i=>o==i&&i==1
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                                if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
-                                    //O.SelectMany(o=>I.Where(i=>o==0&&i==0))
-                                    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
-                                    //に出来るが
-                                    //O.SelectMany(o=>I.Where(i=>o==0&&i==0).GroupJoin.Join)
-                                    //は処理できない。引数0を再帰で呼び出しWhereがあるところまで戻って処理すればいい
-                                    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
-
-                                    switch(MethodCall1_MethodCall.Method.Name) {
-                                        case nameof(ExtensionSet.SelectMany): {
-                                            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-                                                var SelectMany = this.内部SelectManyのselector_Bodyに外部メソッドを入れる(
-                                                    MethodCall0_Method,
-                                                    MethodCall1_MethodCall,
-                                                    MethodCall1_Arguments_1
-                                                );
-                                                //todo goto SelectMany;
-                                                Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
-                                                return this.Call(SelectMany);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
+                                var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
+                                    MethodCall0_Method,
+                                    MethodCall1_Arguments_0,
+                                    MethodCall1_Arguments_1
+                                );
+                                if(SelectMany is not null)
+                                    return SelectMany;
+                                //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+                                //    //O.SelectMany(o=>I.Where(i=>o==0&&i==0))
+                                //    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
+                                //    //に出来るが
+                                //    //O.SelectMany(o=>I.Where(i=>o==0&&i==0).GroupJoin.Join)
+                                //    //は処理できない。引数0を再帰で呼び出しWhereがあるところまで戻って処理すればいい
+                                //    //O.Where(o=>o==0).SelectMany(o=>I.Where(i=>i==0))
+                                //    switch(MethodCall1_MethodCall.Method.Name) {
+                                //        case nameof(ExtensionSet.SelectMany): {
+                                //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+                                //                var SelectMany = this.内部SelectManyのselector_Bodyに外部メソッドを入れる(
+                                //                    MethodCall0_Method,
+                                //                    MethodCall1_MethodCall,
+                                //                    MethodCall1_Arguments_1
+                                //                );
+                                //                //todo goto SelectMany;
+                                //                Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
+                                //                return this.Call(SelectMany);
+                                //            }
+                                //            break;
+                                //        }
+                                //    }
+                                //}
                                 if(MethodCall1_Arguments_1 is LambdaExpression selector&&ループ展開可能メソッドか(selector.Body,out _)) {
                                     var selector_Parameters = selector.Parameters;
                                     Expression? OuterPredicate = null;

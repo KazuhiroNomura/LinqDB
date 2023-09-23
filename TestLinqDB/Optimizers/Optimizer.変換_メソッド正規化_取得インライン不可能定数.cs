@@ -6,6 +6,7 @@ using Microsoft.Build.Execution;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Serializers.MessagePack.Formatters;
+using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
@@ -616,9 +617,40 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet()));
     }
-    static Func<T,TResult> Anonymous<T,TResult>(Func<T,TResult> i)=>i;
+    static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
+    static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
     [Fact]public void Call_SelectMany(){
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>new{a=p,b=p*2}));
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(Anonymous((int o) => new { key = o })));
+        //if(MethodCall0_Arguments.Count==2) {
+        //    if(SelectMany is not null)
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).SelectMany(i=>CreateSet()));
+        //this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).SelectMany(i=>CreateSet()));
+        //    if(MethodCall1_Arguments_1 is LambdaExpression selector&&ループ展開可能メソッドか(selector.Body,out _)) {
+        //        if(OuterPredicate is not null) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        //        }
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
+        //    } else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().ToArray()));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int o)=>CreateSet())));
+        //} else {
+        //    if(Reflection.ExtensionEnumerable.SelectMany_collectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateEnum(),(o,i)=>o+i));
+        //    } else if(Reflection.ExtensionEnumerable.SelectMany_indexCollectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i));
+        //    }else{
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o+i));
+        //    if(MethodCall1_Arguments_1 is LambdaExpression collectionSelector) {
+        //        if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o*i));
+        //        }else{
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),Anonymous((int o,int i)=>o*i)));
+        //    }else{
+        //        if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),(o,i)=>o*i));
+        //        }else{
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),Anonymous((int o,int i)=>o*i)));
+        //        if(indexSelectorか) {
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany((Func<int,IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
     }
 }
