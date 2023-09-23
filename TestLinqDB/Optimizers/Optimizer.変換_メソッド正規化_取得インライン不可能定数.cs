@@ -653,8 +653,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
         this.共通コンパイル実行(()=>CreateSet().SelectMany((Func<int,IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
     }
-    [Fact]
-    public void Call_Where(){
+    [Fact]public void Call_Where(){
         //if(Reflection.ExtensionEnumerable.Where_index!=MethodCall0_GenericMethodDefinition) {
         //    if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
         //        switch(MethodCall1_MethodCall_Method.Name) {
@@ -691,5 +690,29 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //                        }else{
         this.共通コンパイル実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(Anonymous((int p)=>p==2)));
         //                        }
+    }
+    class Base{
+        public virtual string M()=>"A";
+    }
+    class Derived0:Base{
+        public override string M()=>"A";
+    }
+    sealed class IsSealed:Base{
+        public override string M()=>"A";
+    }
+    class IsFinal:Base{
+        public sealed override string M()=>"A";
+    }
+    sealed class IsSealedIsFinal:Base{
+        public sealed override string M()=>"A";
+    }
+    [Fact]
+    public void Call(){
+        //foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
+        //    if((ChildMethod.IsFinal||MethodCall1_Object_Type.IsSealed)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
+        this.共通コンパイル実行(()=>new Derived0().M());
+        this.共通コンパイル実行(()=>new IsSealed().M());
+        this.共通コンパイル実行(()=>new IsFinal().M());
+        this.共通コンパイル実行(()=>new IsSealedIsFinal().M());
     }
 }

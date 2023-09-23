@@ -633,7 +633,7 @@ public sealed partial class Optimizer{
                 if(typeof(float  )==Right_Type)return(e.Expression.Property(Left,Reflection.DateTimeOffset.Ticks),this.Convertデータ型を合わせるNullableは想定しない(Right,typeof(long)));
                 if(typeof(double )==Right_Type)return(e.Expression.Property(Left,Reflection.DateTimeOffset.Ticks),this.Convertデータ型を合わせるNullableは想定しない(Right,typeof(long)));
                 if(typeof(decimal)==Right_Type)return(e.Expression.Property(Left,Reflection.DateTimeOffset.Ticks),this.Convertデータ型を合わせるNullableは想定しない(Right,typeof(long)));
-                if(typeof(string )==Right_Type)return(Left,e.Expression.Call(Reflection.DateTimeOffset.Parse_input,Right));
+                if(typeof(string )==Right_Type)return(Left,e.Expression.Call(Reflection.DateTimeOffset.Parse_s,Right));
             } else if(typeof(Guid)==Left_Type) { 
                 if(typeof(string )==Right_Type)return(Left,e.Expression.Call(Reflection.Guid.Parse_s,Right));
             } else if(typeof(string)==Left_Type) { 
@@ -656,7 +656,7 @@ public sealed partial class Optimizer{
                 if(typeof(decimal       )==Right_Type)return(e.Expression.Call(Reflection.Decimal       .Parse_s,Left),Right);
                 if(typeof(bool          )==Right_Type)return(e.Expression.Call(Reflection.Boolean       .Parse_s,Left),Right);
                 if(typeof(DateTime      )==Right_Type)return(e.Expression.Call(Reflection.DateTime      .Parse_input,Left),Right);
-                if(typeof(DateTimeOffset)==Right_Type)return(e.Expression.Call(Reflection.DateTimeOffset.Parse_input,Left),Right);
+                if(typeof(DateTimeOffset)==Right_Type)return(e.Expression.Call(Reflection.DateTimeOffset.Parse_s,Left),Right);
                 if(typeof(Guid          )==Right_Type)return(e.Expression.Call(Reflection.Guid          .Parse_s,Left),Right);
                 if(typeof(byte[]        )==Right_Type)return(e.Expression.Call(this.Encoding,this.Encoding_GetBytes,Left),Right);
             } else if(typeof(byte[]     )==Left_Type) { 
@@ -869,7 +869,7 @@ public sealed partial class Optimizer{
                 if(typeof(bool          )==変更先_Type)return e.Expression.NotEqual(e.Expression.Call(Reflection.Int32.Parse_s,変更元),Constant_0);
                 //if(typeof(string) == 変更先_Type) return e.Expression.Call(Reflection.Decimal.ToString_,変更元);
                 if(typeof(DateTime      )==変更先_Type)return e.Expression.Call(Reflection.DateTime      .Parse_input,変更元);
-                if(typeof(DateTimeOffset)==変更先_Type)return e.Expression.Call(Reflection.DateTimeOffset.Parse_input,変更元);
+                if(typeof(DateTimeOffset)==変更先_Type)return e.Expression.Call(Reflection.DateTimeOffset.Parse_s,変更元);
                 if(typeof(Guid          )==変更先_Type)return e.Expression.Call(Reflection.Guid.Parse_s,変更元);
                 if(typeof(byte[]        )==変更先_Type)return e.Expression.Call(this.Encoding,this.Encoding_GetBytes,変更元);
                 //XDocument
@@ -919,7 +919,7 @@ public sealed partial class Optimizer{
                 if(typeof(string        )==変更先_Type) return e.Expression.Call(Reflection.BitConverter.ToString_,変更元,Constant_0);
                 if(typeof(bool          )==変更先_Type) return e.Expression.NotEqual(e.Expression.Call(Reflection.Int32.Parse_s,変更元),Constant_0);
                 if(typeof(DateTime      )==変更先_Type) return e.Expression.Call(Reflection.DateTime      .Parse_input,変更元);
-                if(typeof(DateTimeOffset)==変更先_Type) return e.Expression.Call(Reflection.DateTimeOffset.Parse_input,変更元);
+                if(typeof(DateTimeOffset)==変更先_Type) return e.Expression.Call(Reflection.DateTimeOffset.Parse_s,変更元);
                 if(typeof(Guid          )==変更先_Type) return e.Expression.Call(Reflection.Guid.Parse_s,変更元);
                 //if(typeof(byte[]) == 変更先_Type) return e.Expression.Call(Reflection.BitConverter.ToString_,変更元);
                 //XDocument

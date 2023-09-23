@@ -12,7 +12,7 @@ internal static class DateTimeOffset{
     public static readonly MethodInfo TryGetValue2 = typeof(System.DateTimeOffset).GetMethod(nameof(System.DateTimeOffset.TryParse),new[] { typeof(string),typeof(System.DateTimeOffset).MakeByRefType() })!;
     //public static readonly MethodInfo Parse1 = typeof(System.DateTimeOffset).GetMethod(nameof(System.DateTimeOffset.Parse),BindingFlags.Static|BindingFlags.Public,null,new[] { typeof(String) },null);
 #pragma warning disable CA1305 // Specify IFormatProvider
-    public static readonly MethodInfo Parse_input = M(() => System.DateTimeOffset.Parse(""));
+    public static readonly MethodInfo Parse_s = M(() => System.DateTimeOffset.Parse(""));
     public static readonly MethodInfo ParseExact_input_formats_formatProvider_styles = M(() => System.DateTimeOffset.ParseExact("",new string[3],null,DateTimeStyles.None));
     public static readonly MethodInfo Parse_input_provider = M(() => System.DateTimeOffset.Parse("",System.Globalization.CultureInfo.CurrentCulture));
 #pragma warning restore CA1305 // Specify IFormatProvider
