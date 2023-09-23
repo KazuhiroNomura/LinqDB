@@ -672,7 +672,7 @@ partial class Optimizer {
                                 return GroupBy_keySelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector);
                             }
                             break;
-                            Expression GroupBy_keySelector_resultSelector(MethodInfo GroupBy_keySelector,MethodInfo Select_selector) {
+                            Expression GroupBy_keySelector_resultSelector(MethodInfo Method,MethodInfo Select_selector) {
                                 //source.GroupBy(x => x.Id).Select(g =>new{Id=g.Key,Count=g.Count()})
                                 //source.GroupBy(x => x.Id,   (Key,g)=>new{Id=  Key,Count=g.Count()})
                                 var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -682,8 +682,8 @@ partial class Optimizer {
                                 var TSource = GenericArguments[0];
                                 var TKey = GenericArguments[1];
                                 var TResult = GenericArguments[2];
-                                GroupBy_keySelector=作業配列.MakeGenericMethod(
-                                    GroupBy_keySelector,
+                                Method=作業配列.MakeGenericMethod(
+                                    Method,
                                     TSource,
                                     TKey,
                                     TSource
@@ -697,22 +697,21 @@ partial class Optimizer {
                                 if(MethodCall1_Arguments.Count==3) {
                                     //compareなし
                                     GroupBy=Expression.Call(
-                                        GroupBy_keySelector,
+                                        Method,
                                         MethodCall1_Arguments_0,
                                         MethodCall1_Arguments_1,
                                         elementSelector
                                     );
                                 } else {
-                                    //compareあり
                                     GroupBy=Expression.Call(
-                                        GroupBy_keySelector,
+                                        Method,
                                         MethodCall1_Arguments_0,
                                         MethodCall1_Arguments_1,
                                         elementSelector,
                                         MethodCall1_Arguments[3]
                                     );
                                 }
-                                var TGrouping = GroupBy_keySelector.ReturnType.GetGenericArguments()[0];
+                                var TGrouping = Method.ReturnType.GetGenericArguments()[0];
                                 var p = Expression.Parameter(TGrouping,"p");
                                 var p_Key = Expression.Property(
                                     p,
@@ -767,7 +766,7 @@ partial class Optimizer {
                                 var TKey = GenericArguments[1];
                                 var TElement = GenericArguments[2];
                                 var TResult = GenericArguments[3];
-                                var GroupBy_keySelector = 作業配列.MakeGenericMethod(
+                                var Method = 作業配列.MakeGenericMethod(
                                     GroupBy_keySelector_elementSelector,
                                     TSource,
                                     TKey,
@@ -776,21 +775,21 @@ partial class Optimizer {
                                 MethodCallExpression GroupBy;
                                 if(MethodCall1_Arguments.Count==4) {
                                     GroupBy=Expression.Call(
-                                        GroupBy_keySelector,
+                                        Method,
                                         MethodCall1_Arguments_0,
                                         MethodCall1_Arguments_1,
                                         MethodCall1_Arguments_2
                                     );
                                 } else {
                                     GroupBy=Expression.Call(
-                                        GroupBy_keySelector,
+                                        Method,
                                         MethodCall1_Arguments_0,
                                         MethodCall1_Arguments_1,
                                         MethodCall1_Arguments_2,
                                         MethodCall1_Arguments[4]
                                     );
                                 }
-                                var TGrouping = GroupBy_keySelector.ReturnType.GetGenericArguments()[0];
+                                var TGrouping = Method.ReturnType.GetGenericArguments()[0];
                                 var p = Expression.Parameter(TGrouping,"p");
                                 var p_Key = Expression.Property(
                                     p,

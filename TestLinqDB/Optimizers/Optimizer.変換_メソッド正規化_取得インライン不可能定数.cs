@@ -517,10 +517,15 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     [Fact]public void Call_Average(){
         var s=new int[10];
+        //if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
         this.共通コンパイル実行(()=>s.Select(p=>(decimal)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
         this.共通コンパイル実行(()=>s.Select(p=>(double)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageNullableDecimal==MethodCall0_GenericMethodDefinition)
         this.共通コンパイル実行(()=>s.Select(p=>(decimal?)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
         this.共通コンパイル実行(()=>s.Select(p=>(double?)p).Average());
+        this.共通コンパイル実行(()=>new Set<int>{1}.Select(p=>(decimal)p).Average());
     }
     private static IEnumerable<T> そのまま<T>(IEnumerable<T> i)=>i;
     [Fact]public void Call_Any(){
@@ -551,6 +556,37 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
         this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
+    }
+    [Fact]public void Call_GroupBy_GroupBy_keySelector_resultSelector(){
+        //if(MethodCall1_Arguments.Count==3) {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        //} else {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        //}
+        //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        //} else {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,Anonymous((int key,IEnumerable<int>g)=>key+g.Count())));
+        //}
+    }
+    [Fact]public void Call_GroupBy_GroupBy_keySelector_elementSelector_resultSelector(){
+        //if(MethodCall1_Arguments.Count==4) {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        //} else {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        //}
+        //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        //} else {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,p=>p+p,Anonymous((int key,IEnumerable<int>g)=>key+g.Count())));
+        //}
+    }
+    [Fact]public void Call_GroupBy_GroupBy_keySelector(){
+        //if(MethodCall1_Arguments.Count==2) {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
+        //} else {
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p));
+        //}
     }
     [Fact]public void Call_GroupJoin(){
         this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
