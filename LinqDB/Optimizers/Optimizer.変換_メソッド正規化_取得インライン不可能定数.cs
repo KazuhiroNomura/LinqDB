@@ -35,111 +35,111 @@ partial class Optimizer {
                 }
             }
         }
-        /// <summary>
-        /// GroupJoin.WhereのWhereのAnd条件を葉に移動。ORも移動するがそれは正しいか不明。
-        /// </summary>
-        private sealed class 取得_New_OuterPredicate_InnerPredicate {
-            private sealed class 判定_New_葉に移動したいPredicate:判定_葉に移動したいPredicate {
-                public bool 実行(NewExpression New,Expression e,ParameterExpression? 許可するParameter) {
-                    this.New0=New;
-                    this.許可するParameter=許可するParameter;
-                    this.移動出来る=true;
-                    this.Traverse(e);
-                    return this.移動出来る;
-                }
+//        /// <summary>
+//        /// GroupJoin.WhereのWhereのAnd条件を葉に移動。ORも移動するがそれは正しいか不明。
+//        /// </summary>
+//        private sealed class 取得_New_OuterPredicate_InnerPredicate {
+//            private sealed class 判定_New_葉に移動したいPredicate:判定_葉に移動したいPredicate {
+//                public bool 実行(NewExpression New,Expression e,ParameterExpression? 許可するParameter) {
+//                    this.New0=New;
+//                    this.許可するParameter=許可するParameter;
+//                    this.移動出来る=true;
+//                    this.Traverse(e);
+//                    return this.移動出来る;
+//                }
 
-                private NewExpression? New0;
-                protected override void New(NewExpression New) {
-                    if(New.Type.IsAnonymousValueTuple()) {
-                        var 旧New = this.New0;
-                        base.New(New);
-                        this.New0=旧New;
-                    } else {
-                        base.New(New);
-                    }
-                }
-                protected override void MemberAccess(MemberExpression Member) {
-                    var Member_Expression = Member.Expression;
-                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
-                        var New = this.New0!;
-                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
-                        var Name = Member.Member.Name;
-                        for(var a = 0;a<Parameters.Length;a++) {
-                            if(Parameters[a].Name==Name) {
-                                this.Traverse(New.Arguments[a]);
-                                return;
-                            }
-                        }
-#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-                        throw new InvalidProgramException("ここは実行されないはず");
-#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-                    }
-                    base.MemberAccess(Member);
-                }
-            }
-            private readonly 判定_New_葉に移動したいPredicate _判定_New_葉に移動したいPredicate=new();
-            private Expression? OuterPredicate, InnerPredicate;
-            private ParameterExpression? Outer;
-            private NewExpression? New;
-            public (Expression? OuterPredicate, Expression? InnerPredicate) 実行(NewExpression New,Expression Predicate,ParameterExpression Outer) {
-                this.New=New;
-                this.Outer=Outer;
-                this.OuterPredicate=this.InnerPredicate=null;
-                this.Traverse(Predicate);
-                return (this.OuterPredicate, this.InnerPredicate);
-            }
-            private void 共通(Expression e) {
-                if(this._判定_New_葉に移動したいPredicate.実行(this.New!,e,this.Outer!)) {
-                    this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,e);
-                } else {
-                    this.InnerPredicate=AndAlsoで繋げる(this.InnerPredicate,e);
-                }
-            }
-            private void Traverse(Expression e) {
-                var 判定_New_葉に移動したいPredicate = this._判定_New_葉に移動したいPredicate;
-                if(e.NodeType==ExpressionType.AndAlso) {
-                    var Binary = (BinaryExpression)e;
-                    var Binary_Left = Binary.Left;
-                    var Binary_Right = Binary.Right;
-                    var Left葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Left,this.Outer!);
-                    var Right葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Right,this.Outer!);
-                    if(Left葉Outerに移動する) {
-                        if(Right葉Outerに移動する) {
-                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary);
-                        } else {
-                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Left);
-                            this.Traverse(Binary_Right);
-                        }
-                    } else if(Right葉Outerに移動する) {
-                        this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Right);
-                        this.Traverse(Binary_Left);
-                    } else {
-                        this.Traverse(Binary_Left);
-                        this.Traverse(Binary_Right);
-                    }
-                } else if(e.NodeType==ExpressionType.MemberAccess) {
-                    var Member = (MemberExpression)e;
-                    var Member_Expression = Member.Expression;
-                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
-                        var New = this.New!;
-                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
-                        var Name = Member.Member.Name;
-                        for(var a = 0;a<Parameters.Length;a++) {
-                            if(Parameters[a].Name==Name) {
-                                this.共通(New.Arguments[a]);
-                                return;
-                            }
-                        }
-#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-                        throw new InvalidProgramException("ここは実行されないはず");
-#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-                    }
-                } else {
-                    this.共通(e);
-                }
-            }
-        }
-        private readonly 取得_New_OuterPredicate_InnerPredicate _取得_New_OuterPredicate_InnerPredicate=new();
+//                private NewExpression? New0;
+//                protected override void New(NewExpression New) {
+//                    if(New.Type.IsAnonymousValueTuple()) {
+//                        var 旧New = this.New0;
+//                        base.New(New);
+//                        this.New0=旧New;
+//                    } else {
+//                        base.New(New);
+//                    }
+//                }
+//                protected override void MemberAccess(MemberExpression Member) {
+//                    var Member_Expression = Member.Expression;
+//                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
+//                        var New = this.New0!;
+//                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
+//                        var Name = Member.Member.Name;
+//                        for(var a = 0;a<Parameters.Length;a++) {
+//                            if(Parameters[a].Name==Name) {
+//                                this.Traverse(New.Arguments[a]);
+//                                return;
+//                            }
+//                        }
+//#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
+//                        throw new InvalidProgramException("ここは実行されないはず");
+//#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
+//                    }
+//                    base.MemberAccess(Member);
+//                }
+//            }
+//            private readonly 判定_New_葉に移動したいPredicate _判定_New_葉に移動したいPredicate=new();
+//            private Expression? OuterPredicate, InnerPredicate;
+//            private ParameterExpression? Outer;
+//            private NewExpression? New;
+//            public (Expression? OuterPredicate, Expression? InnerPredicate) 実行(NewExpression New,Expression Predicate,ParameterExpression Outer) {
+//                this.New=New;
+//                this.Outer=Outer;
+//                this.OuterPredicate=this.InnerPredicate=null;
+//                this.Traverse(Predicate);
+//                return (this.OuterPredicate, this.InnerPredicate);
+//            }
+//            private void 共通(Expression e) {
+//                if(this._判定_New_葉に移動したいPredicate.実行(this.New!,e,this.Outer!)) {
+//                    this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,e);
+//                } else {
+//                    this.InnerPredicate=AndAlsoで繋げる(this.InnerPredicate,e);
+//                }
+//            }
+//            private void Traverse(Expression e) {
+//                var 判定_New_葉に移動したいPredicate = this._判定_New_葉に移動したいPredicate;
+//                if(e.NodeType==ExpressionType.AndAlso) {
+//                    var Binary = (BinaryExpression)e;
+//                    var Binary_Left = Binary.Left;
+//                    var Binary_Right = Binary.Right;
+//                    var Left葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Left,this.Outer!);
+//                    var Right葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Right,this.Outer!);
+//                    if(Left葉Outerに移動する) {
+//                        if(Right葉Outerに移動する) {
+//                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary);
+//                        } else {
+//                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Left);
+//                            this.Traverse(Binary_Right);
+//                        }
+//                    } else if(Right葉Outerに移動する) {
+//                        this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Right);
+//                        this.Traverse(Binary_Left);
+//                    } else {
+//                        this.Traverse(Binary_Left);
+//                        this.Traverse(Binary_Right);
+//                    }
+//                } else if(e.NodeType==ExpressionType.MemberAccess) {
+//                    var Member = (MemberExpression)e;
+//                    var Member_Expression = Member.Expression;
+//                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
+//                        var New = this.New!;
+//                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
+//                        var Name = Member.Member.Name;
+//                        for(var a = 0;a<Parameters.Length;a++) {
+//                            if(Parameters[a].Name==Name) {
+//                                this.共通(New.Arguments[a]);
+//                                return;
+//                            }
+//                        }
+//#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
+//                        throw new InvalidProgramException("ここは実行されないはず");
+//#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
+//                    }
+//                } else {
+//                    this.共通(e);
+//                }
+//            }
+//        }
+//        private readonly 取得_New_OuterPredicate_InnerPredicate _取得_New_OuterPredicate_InnerPredicate=new();
         //private sealed class 取得_New_OuterPredicate_InnerPredicate_OtherPredicate:取得_New_OuterPredicate_InnerPredicate {
         //    public 取得_New_OuterPredicate_InnerPredicate_OtherPredicate(判定_New_葉に移動したいPredicate 判定_New_葉に移動したいPredicate):base(判定_New_葉に移動したいPredicate){
         //    }
@@ -2142,10 +2142,6 @@ partial class Optimizer {
                             }
                         }
                         case nameof(Enumerable.Where): {
-                            //A.Where((a)=>a==1).xxx()
-                            //A.Where((a,index)=>a==index).xxx()
-                            //A.Where((a,index)=>a==index).xxx()
-                            //変えない。
                             if(Reflection.ExtensionEnumerable.Where_index!=MethodCall0_GenericMethodDefinition) {
                                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
@@ -2165,69 +2161,71 @@ partial class Optimizer {
                                                 Expression.Call(MethodCall0_Method,MethodCall0_MethodCall0_Arguments[1],MethodCall1_Arguments_1)
                                             );
                                         }
-                                        case nameof(ExtensionSet.GroupJoin): {
-                                            if(
-                                                MethodCall1_Arguments_1 is LambdaExpression predicate&&
-                                                MethodCall1_MethodCall.Arguments[3] is LambdaExpression resultSelector&&
-                                                resultSelector.Body is NewExpression New&&
-                                                New.Type.IsAnonymousValueTuple()
-                                            ) {
-                                                //Where
-                                                //    GroupJoin
-                                                //        O
-                                                //        I
-                                                //        outerKeySelector
-                                                //        innerKeySelector
-                                                //        (o,i)=>new{o,i=i.Count()}
-                                                //    oi=>oi.o==1&&oi.i==2
-                                                //Where
-                                                //    GroupJoin
-                                                //        Where
-                                                //            O
-                                                //            o=>o==1
-                                                //        I
-                                                //        outerKeySelector
-                                                //        innerKeySelector
-                                                //        (o,i)=>new{o,i=i.Count()}
-                                                //        oi=>oi.i==2
-                                                var predicate_Parameters = predicate.Parameters;
-                                                var resultSelector_Parameters = resultSelector.Parameters;
-                                                var resultSelector_o = resultSelector_Parameters[0];
-                                                var (OuterPredicate, OtherPredicate)=this._取得_New_OuterPredicate_InnerPredicate.実行(
-                                                    New,
-                                                    predicate.Body,
-                                                    resultSelector_o
-                                                );
-                                                var MethodCall1_MethodCall_Arguments = MethodCall1_MethodCall.Arguments;
-                                                var Outer = MethodCall1_MethodCall_Arguments[0];
-                                                var Inner = MethodCall1_MethodCall_Arguments[1];
-                                                if(OuterPredicate is not null) {
-                                                    Outer=this.Outer又はInnerにWhereを付ける(
-                                                        Outer,
-                                                        MethodCall0_GenericMethodDefinition,
-                                                        resultSelector_o.Type,
-                                                        作業配列.Parameters設定(resultSelector_o),
-                                                        OuterPredicate
-                                                    );
-                                                }
-                                                var GroupJoin = Expression.Call(
-                                                    MethodCall1_MethodCall.Method,
-                                                    Outer,
-                                                    Inner,
-                                                    MethodCall1_MethodCall_Arguments[2],//o=>,i=>
-                                                    resultSelector//(o,i)=>
-                                                );
-                                                if(OtherPredicate is not null) {
-                                                    GroupJoin=Expression.Call(
-                                                        MethodCall0_Method,
-                                                        GroupJoin,
-                                                        Expression.Lambda(OtherPredicate,predicate_Parameters)
-                                                    );
-                                                }
-                                                return GroupJoin;
-                                            }
-                                            break;
-                                        }
+                                        //ここでGroupiJoinはWhereに置き換えられているので存在しない
+
+                                        //case nameof(ExtensionSet.GroupJoin): {
+                                        //    if(
+                                        //        MethodCall1_Arguments_1 is LambdaExpression predicate&&
+                                        //        MethodCall1_MethodCall.Arguments[3] is LambdaExpression resultSelector&&
+                                        //        resultSelector.Body is NewExpression New&&
+                                        //        New.Type.IsAnonymousValueTuple()
+                                        //    ) {
+                                        //        //Where
+                                        //        //    GroupJoin
+                                        //        //        O
+                                        //        //        I
+                                        //        //        outerKeySelector
+                                        //        //        innerKeySelector
+                                        //        //        (o,i)=>new{o,i=i.Count()}
+                                        //        //    oi=>oi.o==1&&oi.i==2
+                                        //        //Where
+                                        //        //    GroupJoin
+                                        //        //        Where
+                                        //        //            O
+                                        //        //            o=>o==1
+                                        //        //        I
+                                        //        //        outerKeySelector
+                                        //        //        innerKeySelector
+                                        //        //        (o,i)=>new{o,i=i.Count()}
+                                        //        //        oi=>oi.i==2
+                                        //        var predicate_Parameters = predicate.Parameters;
+                                        //        var resultSelector_Parameters = resultSelector.Parameters;
+                                        //        var resultSelector_o = resultSelector_Parameters[0];
+                                        //        var (OuterPredicate, OtherPredicate)=this._取得_New_OuterPredicate_InnerPredicate.実行(
+                                        //            New,
+                                        //            predicate.Body,
+                                        //            resultSelector_o
+                                        //        );
+                                        //        var MethodCall1_MethodCall_Arguments = MethodCall1_MethodCall.Arguments;
+                                        //        var Outer = MethodCall1_MethodCall_Arguments[0];
+                                        //        var Inner = MethodCall1_MethodCall_Arguments[1];
+                                        //        if(OuterPredicate is not null) {
+                                        //            Outer=this.Outer又はInnerにWhereを付ける(
+                                        //                Outer,
+                                        //                MethodCall0_GenericMethodDefinition,
+                                        //                resultSelector_o.Type,
+                                        //                作業配列.Parameters設定(resultSelector_o),
+                                        //                OuterPredicate
+                                        //            );
+                                        //        }
+                                        //        var GroupJoin = Expression.Call(
+                                        //            MethodCall1_MethodCall.Method,
+                                        //            Outer,
+                                        //            Inner,
+                                        //            MethodCall1_MethodCall_Arguments[2],//o=>,i=>
+                                        //            resultSelector//(o,i)=>
+                                        //        );
+                                        //        if(OtherPredicate is not null) {
+                                        //            GroupJoin=Expression.Call(
+                                        //                MethodCall0_Method,
+                                        //                GroupJoin,
+                                        //                Expression.Lambda(OtherPredicate,predicate_Parameters)
+                                        //            );
+                                        //        }
+                                        //        return GroupJoin;
+                                        //    }
+                                        //    break;
+                                        //}
                                         case nameof(ExtensionSet.Select): {
                                             if(MethodCall1_Arguments_1 is LambdaExpression predicate) {
                                                 if(MethodCall1_MethodCall.Arguments[1] is LambdaExpression selector) {
