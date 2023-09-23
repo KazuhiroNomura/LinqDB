@@ -2155,30 +2155,6 @@ partial class Optimizer {
                 );
             }
             return 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(MethodCall1_MethodCall,selector1_Body,MethodCall1_MethodCall_Arguments,selector1);
-            //var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
-            //var MethodCall1_MethodCall_GenericMethodDefinition=MethodCall1_MethodCall_Method.GetGenericMethodDefinition();
-            //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
-            //    var Set1 = selector1_Body.Type!;
-            //    while(true) {
-            //        var GenericTypeDefinition = Set1;
-            //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-            //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
-            //        //if(Set1.BaseType is null) {
-            //        //    //IEnumerable<>
-            //        //    if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
-            //        //        MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
-            //        //    break;
-            //        //}
-            //    }
-            //}
-            //var MethodCall1_MethodCall_Arguments_0 = MethodCall1_MethodCall_Arguments[0];
-            //var GenericArguments=MethodCall1_MethodCall_Method.GetGenericArguments();
-            //GenericArguments[1]=IEnumerable1のT(selector1.ReturnType);
-            //return Expression.Call(
-            //    MethodCall1_MethodCall_GenericMethodDefinition.MakeGenericMethod(GenericArguments),
-            //    MethodCall1_MethodCall_Arguments_0,
-            //    selector1
-            //);
         }
         /// <summary>
         /// SelectMany.Where
@@ -2252,31 +2228,6 @@ partial class Optimizer {
                 );
             }
             return 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(MethodCall1_MethodCall,selector1_Body,MethodCall1_MethodCall_Arguments,selector1);
-            //var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
-            //var MethodCall1_MethodCall_GenericMethodDefinition=MethodCall1_MethodCall_Method.GetGenericMethodDefinition();
-            //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
-            //    var Set1 = selector1_Body.Type;
-            //    while(true) {
-            //        var GenericTypeDefinition = Set1;
-            //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-            //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
-            //        if(Set1.BaseType is null) {
-            //            //IEnumerable<>
-            //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
-            //                MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
-            //            break;
-            //        }
-            //        Set1=Set1.BaseType;
-            //    }
-            //}
-            //var MethodCall1_MethodCall_Arguments_0 = MethodCall1_MethodCall_Arguments[0];
-            //var GenericArguments=MethodCall1_MethodCall_Method.GetGenericArguments();
-            //GenericArguments[1]=IEnumerable1のT(selector1.ReturnType);
-            //return Expression.Call(
-            //    MethodCall1_MethodCall_GenericMethodDefinition.MakeGenericMethod(GenericArguments),
-            //    MethodCall1_MethodCall_Arguments_0,
-            //    selector1
-            //);
         }
         /// <summary>
         /// Except(second,comparer),Union(second,comparer)
@@ -2354,70 +2305,17 @@ partial class Optimizer {
                 );
             }
             return 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(MethodCall1_MethodCall,selector1_Body,MethodCall1_MethodCall_Arguments,selector1);
-            //var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
-            //if(typeof(ExtensionSet)==MethodCall1_MethodCall_Method.DeclaringType) {
-            //    //Type? Set1 = selector1_Body.Type;
-            //    //while(true) {
-            //    //    if(Set1 is null) {
-            //    //        //IEnumerable<>
-            //    //        if(MethodCall1_MethodCall_Method.GetGenericMethodDefinition()==Reflection.ExtensionSet.SelectMany_selector) {
-            //    //            MethodCall1_MethodCall_Method=Reflection.ExtensionEnumerable.SelectMany_selector.MakeGenericMethod(MethodCall1_MethodCall_Method.GetGenericArguments());
-            //    //        }
-            //    //        break;
-            //    //    }
-            //    //    var GenericTypeDefinition = Set1;
-            //    //    if(GenericTypeDefinition.IsGenericType) {
-            //    //        GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-            //    //    }
-            //    //    if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
-            //    //        break;
-            //    //    }
-            //    //    Set1=Set1.BaseType;
-            //    //}
-            //    var Set1 = selector1_Body.Type;
-            //    while(true) {
-            //        var GenericTypeDefinition = Set1;
-            //        if(GenericTypeDefinition.IsGenericType) {
-            //            GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-            //        }
-            //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) {
-            //            break;
-            //        }
-            //        if(Set1.BaseType is null) {
-            //            //IEnumerable<>
-            //            if(MethodCall1_MethodCall_Method.GetGenericMethodDefinition()==Reflection.ExtensionSet.SelectMany_selector) {
-            //                MethodCall1_MethodCall_Method=Reflection.ExtensionEnumerable.SelectMany_selector.MakeGenericMethod(MethodCall1_MethodCall_Method.GetGenericArguments());
-            //            }
-            //            break;
-            //        }
-            //        Set1=Set1.BaseType;
-            //    }
-            //}
-            //return Expression.Call(
-            //    MethodCall1_MethodCall_Method,
-            //    MethodCall1_MethodCall_Arguments[0],
-            //    selector1
-            //);
         }
         private static MethodCallExpression 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(MethodCallExpression SelectMany,Expression selector1_Body,ReadOnlyCollection<Expression> MethodCall1_MethodCall_Arguments,LambdaExpression selector1){
             //Enumerable.Except(ExtensionSet.SelectMany(CreateSet(),o=>CreateSet()),CreateSet(),EqualityComparer<int>.Default));
             //Enumerable.SelectMany(CreateSet(),o=>Enumerable.Except(CreateSet(),CreateSet(),EqualityComparer<int>.Default));
             var SelectMany_Method=SelectMany.Method;
             var SelectMany_GenericMethodDefinition=SelectMany_Method.GetGenericMethodDefinition();
-            if(typeof(ExtensionSet)==SelectMany_GenericMethodDefinition.DeclaringType) {
-                var Set1 = selector1_Body.Type!;
-                while(true) {
-                    var GenericTypeDefinition = Set1;
-                    if(GenericTypeDefinition.IsGenericType) GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-                    if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
-                    if(Set1.BaseType is null) {
-                        //IEnumerable<>
-                        if(SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
-                            SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
-                        break;
-                    }
-                }
-            }
+            //インターフェースのBaseType is nullは決まっている
+            if(typeof(ExtensionSet)==SelectMany_GenericMethodDefinition.DeclaringType&&
+               selector1_Body.Type.BaseType is null&&
+               SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector) 
+                SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
             var MethodCall1_MethodCall_Arguments_0=MethodCall1_MethodCall_Arguments[0];
             var GenericArguments=SelectMany_Method.GetGenericArguments();
             GenericArguments[1]=IEnumerable1のT(selector1.ReturnType);

@@ -1,11 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
+using LinqDB.Databases.Tables;
 using LinqDB.Sets;
 using Microsoft.Build.Execution;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Serializers.MessagePack.Formatters;
+using Sets;
 using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
@@ -859,35 +861,56 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateEnum().Except(CreateEnum(),EqualityComparer<int>.Default));
     }
     [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
-        //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
         this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
-        //} else {
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
-        //}
-        //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
-        //    while(true) {
-        //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
-        //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
-        this.共通コンパイル実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
-        //        if(Set1.BaseType is null) {
-        //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
-        //        }
-        //    }
-        //}
-        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
-        //    switch(MethodCall1_MethodCall.Method.Name) {
-        //        case nameof(ExtensionSet.SelectMany): {
-        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
-        //            }
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
-        //        }
-        //    }
-        //}
-        this.共通コンパイル実行(()=>CreateEnum().OfType<object>());
     }
+    [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる1(){
+        //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
+        //} else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet()));
+        //}
+    }
+    [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる2(){
+        //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
+        //} else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet(),EqualityComparer<int>.Default));
+        //}
+    }
+    //[Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる(){
+    //    //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
+    //    this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+    //    //} else {
+    //    this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+    //    //}
+    //    //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
+    //    //    while(true) {
+    //    //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+    //    this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+    //    //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
+    //    this.共通コンパイル実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+    //    //        if(Set1.BaseType is null) {
+    //    //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+    //    //        }
+    //    //    }
+    //    //}
+    //    //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+    //    //    switch(MethodCall1_MethodCall.Method.Name) {
+    //    //        case nameof(ExtensionSet.SelectMany): {
+    //    //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+    //    this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+    //    //            }
+    //    this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
+    //    //        }
+    //    //    }
+    //    //}
+    //    this.共通コンパイル実行(()=>CreateEnum().OfType<object>());
+    //}
+
     [Fact]public void 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(){
+        var Tables = new Set<Table,LinqDB.Databases.PrimaryKeys.Reflection>();
+        this.共通コンパイル実行(()=>Tables.SelectMany(o=>Tables).Except(Tables));
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum().Select(q=>new{p,q,index})).Select(p=>p.p+p.q+p.index));
         //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
         //    while(true) {
