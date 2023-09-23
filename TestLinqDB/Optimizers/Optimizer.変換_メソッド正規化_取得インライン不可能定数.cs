@@ -542,10 +542,6 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new decimal[10].Contains(0));
         this.共通コンパイル実行(()=>new decimal[10].Select(p=>(object)p).Contains(0m));
     }
-    [Fact]public void Call_Delete(){
-        this.共通コンパイル実行(()=>new Set<int>().SelectMany(p=>new Set<int>()).Delete(p=>true));
-        this.共通コンパイル実行(()=>new Set<int>().SelectMany(p=>new Set<int>()).Delete((Func<int,bool>)(p=>true)));
-    }
     [Fact]public void Call_GroupBy(){
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
@@ -759,42 +755,45 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(p=>p+1)));
     }
     [Fact]public void Call_Where(){
-        //if(Reflection.ExtensionEnumerable.Where_index!=MethodCall0_GenericMethodDefinition) {
-        //    if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
-        //        switch(MethodCall1_MethodCall_Method.Name) {
-        //            case nameof(ExtensionSet.Except):
+        //if(Reflection.ExtensionEnumerable.Where_index=MethodCall0_GenericMethodDefinition)break;
+        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //    switch(MethodCall1_MethodCall_Method.Name) {
+        //        case nameof(ExtensionSet.Except):
         this.共通コンパイル実行(() => CreateSet().Except(CreateSet()).Where(p => true));
-        //            case nameof(ExtensionSet.Intersect):
+        //        case nameof(ExtensionSet.Intersect):
         this.共通コンパイル実行(() => CreateSet().Intersect(CreateSet()).Where(p => true));
-        //            case nameof(ExtensionSet.Union):
+        //        case nameof(ExtensionSet.Union):
         this.共通コンパイル実行(() => CreateSet().Union(CreateSet()).Where(p => true));
-        //            case nameof(ExtensionSet.Select): {
-        //                if(MethodCall1_Arguments_1 is LambdaExpression predicate) {
-        //                    if(MethodCall1_MethodCall.Arguments[1] is LambdaExpression selector) {
+        //        case nameof(ExtensionSet.Select): {
+        //            if(MethodCall1_Arguments_1 is LambdaExpression predicate) {
+        //                if(MethodCall1_MethodCall.Arguments[1] is LambdaExpression selector) {
         this.共通コンパイル実行(()=>CreateSet().Select(p=>new{p}).Where(p=>true));
-        //                    }
+        //                }
         this.共通コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>new{p})).Where(p=>true));
-        //                }
+        //            }
         this.共通コンパイル実行(()=>CreateSet().Select(p=>p*p).Where(Anonymous((int p)=>true)));
-        //            case nameof(ExtensionSet.SelectMany): {
-        //                if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+        //        case nameof(ExtensionSet.SelectMany): {
+        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
         this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Where(p=>p==4));
-        //                }
+        //            }
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i).Where(p=>p==4));
-        //            case nameof(ExtensionSet.Where): {
-        //                if(Reflection.ExtensionEnumerable.Where_index!=MethodCall1_MethodCall_Method.GetGenericMethodDefinition()) {
-        //                    if(MethodCall1_Arguments_1 is LambdaExpression predicate外) {
-        //                        if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
+        //        case nameof(ExtensionSet.Where): {
+        //            if(Reflection.ExtensionEnumerable.Where_index==MethodCall1_MethodCall_Method.GetGenericMethodDefinition())break;
+        this.共通コンパイル実行(()=>CreateSet().Where((int p,int index)=>p==1).Where(p=>p==1));
+        //            if(MethodCall1_Arguments_1 is LambdaExpression predicate外) {
+        //                if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
         this.共通コンパイル実行(()=>CreateSet().Where(p=>p==1).Where(p=>p==2));
-        //                        }else{
+        //                }else{
         this.共通コンパイル実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(p=>p==2));
-        //                        }
-        //                    }else{
-        //                        if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
+        //                }
+        //            }else{
+        //                if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
         this.共通コンパイル実行(()=>CreateSet().Where(p=>p==1).Where(Anonymous((int p)=>p==2)));
-        //                        }else{
+        //                }else{
         this.共通コンパイル実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(Anonymous((int p)=>p==2)));
-        //                        }
+        //                }
+        //            }
+        //        }
     }
     class Base{
         public virtual string M()=>"A";

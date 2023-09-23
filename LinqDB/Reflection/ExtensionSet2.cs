@@ -17,6 +17,5 @@ public static class ExtensionSet2 {
     }
 #endif
     private const Set<int> _Int32 = null!;
-    public static readonly MethodInfo Insert = M(() => _Int32.Insert(_Int32));
     public static readonly MethodInfo SymmetricExcept = M(() => _Int32.SymmetricExcept(_Int32));
 }

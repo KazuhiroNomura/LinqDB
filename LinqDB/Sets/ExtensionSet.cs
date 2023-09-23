@@ -482,25 +482,7 @@ public static class ExtensionSet{
                 }
             }
         };
-    /// <summary>
-    /// 削除集合を返す。
-    /// </summary>
-    /// <param name="source">元データ。</param>
-    /// <param name="predicate">削除条件。</param>
-    /// <typeparam name="TSource"></typeparam>
-    /// <returns>削除結果。</returns>
-    public static ImmutableSet<TSource> Delete<TSource>(this ImmutableSet<TSource> source,Func<TSource,bool> predicate) {
-        var r = new Set<TSource>();
-        long Count = 0;
-        foreach(var a in source){
-            if(predicate(a)) continue;
-            var b = r.InternalAdd(a);
-            Debug.Assert(b);
-            Count++;
-        }
-        r._Count=Count;
-        return r;
-    }
+
     /// <summary>
     /// 最適化Optimizer内で使用されるデータ構造。
     /// </summary>

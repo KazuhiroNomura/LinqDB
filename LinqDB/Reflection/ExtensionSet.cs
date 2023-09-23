@@ -137,7 +137,6 @@ public static class ExtensionSet {
 
     //ExtensionSet独自メソッド
     public static readonly MethodInfo AvedevDouble_selector = M(() => _Int32.Avedev(p => 1d));
-    public static readonly MethodInfo Delete = M(() => _Int32.Delete(p => true));
     public static readonly MethodInfo DUnion = M(() => _Int32.DUnion(_Int32));
     public static readonly MethodInfo GeomeanNullableDouble_selector = M(() => _Int32.Geomean(p => default(double?)));
     public static readonly MethodInfo GeomeanDouble_selector = M(() => _Int32.Geomean(p => 0.0));

@@ -1439,38 +1439,6 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(ExtensionSet.Delete): {
-                    Debug.Assert(Reflection.ExtensionSet.Delete==GenericMethodDefinition);
-                    return this.ループ展開(
-                        MethodCall0_Arguments[0],
-                        argument => {
-                            Debug.Assert(MethodCall0_Arguments[1].NodeType!=ExpressionType.Lambda);
-                            var p = Expression.Parameter(
-                                argument.Type,
-                                $"{変数名}p"
-                            );
-                            Debug.Assert(typeof(Delegate).IsAssignableFrom(MethodCall0_Arguments[1].Type));
-                            var Expression1 = Expression.IfThenElse(
-                                Expression.Invoke(//Lambda展開出来た場合はWhereに置き換えられている
-                                    this.Traverse(MethodCall0_Arguments[1]),
-                                    p
-                                ),
-                                Default_void,
-                                ループの内部処理(p)
-                            );
-                            return Expression.Block(
-                                作業配列.Parameters設定(p),
-                                作業配列.Expressions設定(
-                                    Expression.Assign(
-                                        p,
-                                        argument
-                                    ),
-                                    Expression1
-                                )
-                            );
-                        }
-                    );
-                }
                 //case nameof(ExtensionSet.Having):
                 case nameof(Enumerable.Where): {
                     if(Reflection.ExtensionEnumerable.Where_index==GenericMethodDefinition) {

@@ -201,44 +201,6 @@ public class Tables{
             );
         }
     }
-    [Fact]
-    public void Delete(){
-        foreach(var a in EnumerateData){
-            Assert.True(SetData.Delete(p=>p==a).Count==SetData.Count-1);
-            Assert.True(SetData.Where(p=>p!=a).Delete(q=>q.ID1%2==0).Count>0);
-            Assert.True(
-                Comparer.Equals(
-                    EnumerateData.Where(p=>p!=a),
-                    SetData.Delete(p=>p==a)
-                )
-            );
-        }
-        {
-            var d=new Set<Int>{
-                0,
-                1,
-                2,
-                3,
-                16,
-                17
-            };
-            Assert.Equal(d,d.Delete(p=>p==4));
-            Assert.Equal(new Set<Int>{
-                0,
-                1,
-                2,
-                3,
-                17
-            },d.Delete(p=>p==16));
-            Assert.Equal(new Set<Int>{
-                0,
-                1,
-                2,
-                3,
-                16
-            },d.Delete(p=>p==17));
-        }
-    }
     private static Entity[] UnionExceptIntersectのEntity(Random r){
         var dn1=new Entity[r.Next(10)];
         var low1=0;
@@ -917,16 +879,6 @@ public class Tables{
         }.SymmetricExcept(new Set<int>{
             4,5,6,7
         }));
-    }
-    [Fact]
-    public void Insert(){
-        var d=new Set<Int>{
-            1,2
-        };
-        var i=new Set<Int>{
-            3,4
-        };
-        Assert.Equal(2L,d.Insert(i));
     }
     [Fact]
     public void Union(){
