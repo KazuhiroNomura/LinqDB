@@ -238,7 +238,24 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]
     public void Lambda()=>this.共通コンパイル実行(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     [Fact]
-    public void Not()=>this.共通Unary(ExpressionType.Not);
+    public void Not(){
+        //this.共通Unary(ExpressionType.Not);
+        //if(Unary1_Operand.NodeType==ExpressionType.Not)return ((UnaryExpression)Unary1_Operand).Operand;
+        //if(Unary0_Operand==Unary1_Operand)return Unary0;
+        var ParameterInt32=Expression.Parameter(typeof(int),"int32");
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Not(Expression.Not(ParameterInt32)),
+                ParameterInt32
+            ),1
+        );
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Not(Expression.Not(Expression.Not(ParameterInt32))),
+                ParameterInt32
+            ),1
+        );
+    }
     [Fact]
     public void MakeAssign()=>this.共通BinaryAssign(ExpressionType.AddAssign);
     [Fact]
@@ -927,6 +944,86 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default)));
         //        }
         //    }
+        //}
+    }
+    [Fact]
+    public void Select_Where再帰で匿名型を走査(){
+        //if(匿名 is NewExpression NewExpression) {
+        //    if(IsAnonymous||IsValueTuple) {
+        //        if(IsAnonymous) {
+        //            for(var a = 0;a<NewExpression_Arguments_Count;a++) {
+        this.共通コンパイル実行(() => CreateSet().Select(p => new { p }).Where(p => p.p==0));
+        //            }
+        //        } else {
+        //            foreach(var NewExpression_Argument in NewExpression.Arguments) {
+        //                switch(Index) {
+        //                    case 0: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item1)),対象); Index=1;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int>(p)).Where(p => p.Item1==0));
+        //                    case 1: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item2)),対象); Index=2;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int>(p,p)).Where(p => p.Item2==0));
+        //                    case 2: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item3)),対象); Index=3;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int>(p,p,p)).Where(p => p.Item3==0));
+        //                    case 3: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item4)),対象); Index=4;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int>(p,p,p,p)).Where(p => p.Item4==0));
+        //                    case 4: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item5)),対象); Index=5;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int>(p,p,p,p,p)).Where(p => p.Item5==0));
+        //                    case 5: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item6)),対象); Index=6;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int>(p,p,p,p,p,p)).Where(p => p.Item6==0));
+        //                    case 6: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item7)),対象); Index=7;break;
+        this.共通コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(p => p.Item7==0));
+        //                    default: Instance=Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Rest)); goto case 0;
+        this.共通コンパイル実行(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>>(p,p,p,p,p,p,p,new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>(p,p,p,p,p,p,p,new ValueTuple<int>(p)))).Where(
+            p=>
+                p.Item1==0&&
+                p.Item2==0&&
+                p.Item3==0&&
+                p.Item4==0&&
+                p.Item5==0&&
+                p.Item6==0&&
+                p.Item7==0&&
+                p.Rest.Item1==0&&
+                p.Rest.Item2==0&&
+                p.Rest.Item3==0&&
+                p.Rest.Item4==0&&
+                p.Rest.Item5==0&&
+                p.Rest.Item6==0&&
+                p.Rest.Item7==0&&
+                p.Rest.Rest.Item1==0
+            )
+        );
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(() => CreateSet().Select(p =>new{a=new ValueTuple<int,int>(p+1,p+2)}).Where(p => p.a.Item1==0));
+        this.共通コンパイル実行(
+            () => CreateSet().Select(
+                p =>new{
+                    a=new ValueTuple<ValueTuple<int,int>,ValueTuple<int,int>>(
+                        new ValueTuple<int,int>(p+1,p+2),new ValueTuple<int,int>(p+1,p+2)
+                    )
+                }
+            ).Where(p => p.a.Item1.Item2==0)
+        );
+    }
+    [Fact]public void Call_取得_Parameter_OuterPredicate_InnerPredicate(){
+        //if(e.NodeType==ExpressionType.AndAlso) {
+        //    if(Left葉Outerに移動する) {
+        //        if(Right葉Outerに移動する) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&4==o)));
+        //        } else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&i==3)));
+        //        }
+        //    } else if(Right葉Outerに移動する) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==3&&o==3)));
+        //    } else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==o&&o==i)));
+        //    }
+        //} else if(this._判定_Parameter_葉に移動したいPredicate.実行(e,this.Outer!)) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        //} else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
         //}
     }
 }

@@ -27,15 +27,15 @@ partial class Optimizer {
     /// decimal.Parse("1111")→1111mに変換する
     /// </summary>
     private sealed class 変換_メソッド正規化_取得インライン不可能定数:ReturnExpressionTraverser_Quoteを処理しない {
-        private abstract class 判定_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
-            protected ParameterExpression? 許可するParameter;
-            protected bool 移動出来る;
-            protected override void Parameter(ParameterExpression Parameter) {
-                if(Parameter!=this.許可するParameter) {
-                    this.移動出来る=false;
-                }
-            }
-        }
+        //private abstract class 判定_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
+        //    protected ParameterExpression? 許可するParameter;
+        //    protected bool 移動出来る;
+        //    protected override void Parameter(ParameterExpression Parameter) {
+        //        if(Parameter!=this.許可するParameter) {
+        //            this.移動出来る=false;
+        //        }
+        //    }
+        //}
 //        /// <summary>
 //        /// GroupJoin.WhereのWhereのAnd条件を葉に移動。ORも移動するがそれは正しいか不明。
 //        /// </summary>
@@ -166,12 +166,19 @@ partial class Optimizer {
         //}
         //private readonly 取得_New_OuterPredicate_InnerPredicate_OtherPredicate _取得_New_OuterPredicate_InnerPredicate_OtherPredicate;
         private sealed class 取得_Parameter_OuterPredicate_InnerPredicate {
-            private sealed class 判定_Parameter_葉に移動したいPredicate:判定_葉に移動したいPredicate {
+            private sealed class 判定_Parameter_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
+                protected ParameterExpression? 許可するParameter;
+                protected bool 移動出来る;
                 public bool 実行(Expression e,ParameterExpression? 許可するParameter) {
                     this.許可するParameter=許可するParameter;
                     this.移動出来る=true;
                     this.Traverse(e);
                     return this.移動出来る;
+                }
+                protected override void Parameter(ParameterExpression Parameter) {
+                    if(Parameter!=this.許可するParameter) {
+                        this.移動出来る=false;
+                    }
                 }
             }
             private readonly 判定_Parameter_葉に移動したいPredicate _判定_Parameter_葉に移動したいPredicate=new();
@@ -379,19 +386,9 @@ partial class Optimizer {
         protected override Expression Not(UnaryExpression Unary0) {
             var Unary0_Operand = Unary0.Operand;
             var Unary1_Operand = this.Traverse(Unary0_Operand);
-            if(Unary0_Operand==Unary1_Operand)return Unary0;
             if(Unary1_Operand.NodeType==ExpressionType.Not)return ((UnaryExpression)Unary1_Operand).Operand;
+            if(Unary0_Operand==Unary1_Operand)return Unary0;
             return Expression.Not(Unary1_Operand);
-        }
-        protected override Expression MakeAssign(BinaryExpression Binary0, ExpressionType NodeType) {
-            var Binary0_Left=Binary0.Left;
-            var Binary0_Right=Binary0.Right;
-            var Binary0_Conversion=Binary0.Conversion;
-            var Binary1_Left=this.Traverse(Binary0_Left);
-            var Binary1_Right=this.Traverse(Binary0_Right);
-            var Binary1_Conversion= this.TraverseNullable(Binary0_Conversion);
-            if(Binary0_Left==Binary1_Left && Binary0_Right==Binary1_Right && Binary0_Conversion==Binary1_Conversion) return Binary0;
-            return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
         }
         private Expression 共通ConvertConvertChecked(UnaryExpression Unary0, ExpressionType NodeType) {
             Debug.Assert(NodeType==ExpressionType.Convert||NodeType==ExpressionType.ConvertChecked);
@@ -2348,53 +2345,54 @@ partial class Optimizer {
         /// <summary>
         /// ローカル関数にするとビルドがフリーズする。
         /// </summary>
-        /// <param name="匿名"></param>
-        /// <param name="メンバー参照"></param>
+        /// <param name="selector_Body"></param>
+        /// <param name="Instance"></param>
         /// <param name="対象"></param>
         /// <returns></returns>
-        private Expression Select_Where再帰で匿名型を走査(Expression 匿名,Expression メンバー参照,Expression 対象) {
-            if(匿名 is NewExpression NewExpression) {
-                var NewExpression_Type = NewExpression.Type;
-                var IsAnonymous = NewExpression_Type.IsAnonymous();
-                var IsValueTuple = NewExpression_Type.IsValueTuple();
+        private Expression Select_Where再帰で匿名型を走査(Expression selector_Body,Expression Instance,Expression 対象) {
+            if(selector_Body is NewExpression New) {
+                var New_Type = New.Type;
+                var IsAnonymous = New_Type.IsAnonymous();
+                var IsValueTuple = New_Type.IsValueTuple();
                 if(IsAnonymous||IsValueTuple) {
-                    Debug.Assert(NewExpression.Constructor!=null);
-                    var NewExpression_Constructor_GetParameters = NewExpression.Constructor.GetParameters();
+                    Debug.Assert(New.Constructor!=null);
                     if(IsAnonymous) {
-                        var NewExpression_Arguments = NewExpression.Arguments;
-                        var NewExpression_Arguments_Count = NewExpression_Arguments.Count;
-                        Debug.Assert(NewExpression_Constructor_GetParameters.Length==NewExpression_Arguments_Count);
-                        for(var a = 0;a<NewExpression_Arguments_Count;a++) {
-                            var NewExpression_Argument = NewExpression_Arguments[a];
+                        var New_Arguments = New.Arguments;
+                        var New_Arguments_Count = New_Arguments.Count;
+                        var New_Constructor_GetParameters = New.Constructor.GetParameters();
+                        Debug.Assert(New_Constructor_GetParameters.Length==New_Arguments_Count);
+                        for(var a = 0;a<New_Arguments_Count;a++) {
+                            var NewExpression_Argument = New_Arguments[a];
                             対象=this.Select_Where再帰で匿名型を走査(
                                 NewExpression_Argument,
                                 Expression.Property(
-                                    メンバー参照,
-                                    NewExpression_Constructor_GetParameters[a].Name
+                                    Instance,
+                                    New_Constructor_GetParameters[a].Name
                                 ),
                                 対象
                             );
                         }
                     } else {
                         Debug.Assert(IsValueTuple);
-                        var Instance = メンバー参照;
                         var Index = 0;
-                        foreach(var NewExpression_Argument in NewExpression.Arguments) {
-                            switch(Index) {
-                                case 0: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item1)),対象); Index=1;break;
-                                case 1: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item2)),対象); Index=2;break;
-                                case 2: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item3)),対象); Index=3;break;
-                                case 3: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item4)),対象); Index=4;break;
-                                case 4: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item5)),対象); Index=5;break;
-                                case 5: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item6)),対象); Index=6;break;
-                                case 6: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item7)),対象); Index=7;break;
-                                default: Instance=Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Rest)); goto case 0;
-                            }
+                        foreach(var New_Argument in New.Arguments){
+                            対象=Index switch{
+                                0=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item1)),対象),
+                                1=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item2)),対象),
+                                2=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item3)),対象),
+                                3=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item4)),対象),
+                                4=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item5)),対象),
+                                5=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item6)),対象),
+                                6=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item7)),対象),
+                                _=>this.Select_Where再帰で匿名型を走査(New_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Rest)),対象)
+                            };
+                            Index++;
+                            if(Index==8) Index=0;
                         }
                     }
                 }
             }
-            return this.変換_旧Expressionを新Expression1.実行(対象,メンバー参照,匿名);
+            return this.変換_旧Expressionを新Expression1.実行(対象,Instance,selector_Body);
         }
     }
 }
