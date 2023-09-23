@@ -556,6 +556,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
         this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
+        this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p*p));
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector_resultSelector(){
         //if(MethodCall1_Arguments.Count==3) {
@@ -625,10 +626,42 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
     }
     [Fact]public void Call_Select(){
+        //this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
+        //this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
+        //this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
+        //this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet()).Select(p=>p+p));
+        //if(Reflection.ExtensionEnumerable.Select_indexSelector!=MethodCall0_GenericMethodDefinition) {
+        //    if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //        switch(MethodCall1_MethodCall_Method.Name) {
+        //            case nameof(Enumerable.SelectMany): {
+        //                if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()){
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
+        //                }
         this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
-        this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet()).Select(p=>p+p));
+        //            }
+        //            case nameof(Enumerable.Select): {
+        //                if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression selector1) {
+        //                    if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
+        this.共通コンパイル実行(()=>CreateSet().Select(p=>p+p).Select(p=>p+p));
+        //                                } else {
+        this.共通コンパイル実行(()=>CreateSet().Select(p=>p+p).Select(Anonymous((int p)=>p+p)));
+        //                    }
+        //                } else {
+        //                    if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
+        this.共通コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(p=>p+p));
+        //                                } else {
+        this.共通コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(Anonymous((int p)=>p+p)));
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    if(MethodCall1_Arguments_1 is LambdaExpression MethodCall1_selector&&MethodCall1_selector.Parameters[0]==MethodCall1_selector.Body) {
+        this.共通コンパイル実行(()=>CreateSet().Select(p=>p));
+        this.共通コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p)));
+        this.共通コンパイル実行(()=>CreateSet().Select(p=>p+p));
+        //}
+        this.共通コンパイル実行(()=>CreateSet().Select((p,index)=>p+index));
     }
     [Fact]public void Call_Single(){
         this.共通コンパイル実行(()=>new int[1].Single(p=>true));

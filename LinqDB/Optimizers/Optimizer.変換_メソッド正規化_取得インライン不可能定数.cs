@@ -1428,295 +1428,77 @@ partial class Optimizer {
                                             break;
                                         }
                                         case nameof(Enumerable.Select): {
-                                            if(Reflection.ExtensionEnumerable.Select_indexSelector!=MethodCall0_GenericMethodDefinition) {
-                                                Debug.Assert(
-                                                    Reflection.ExtensionEnumerable.Select_selector==MethodCall0_GenericMethodDefinition||
-                                                    Reflection.ExtensionSet.Select_selector==MethodCall0_GenericMethodDefinition
-                                                );
-                                                //A.Select(selector1).Select(selector0)
-                                                //A.Select(selector0(selector1))
-                                                var MethodCall1_MethodCall_Arguments_1 = MethodCall1_MethodCall.Arguments[1];
-                                                LambdaExpression Lambda;
-                                                if(Reflection.ExtensionEnumerable.Select_indexSelector==MethodCall1_MethodCall_GenericMethodDefinition) {
-                                                    if(Reflection.ExtensionEnumerable.Select_indexSelector==MethodCall0_GenericMethodDefinition) {
-                                                        if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression indexSelector1) {
-                                                            var indexSelector1_Parameters = indexSelector1.Parameters;
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression indexSelector0) {
-                                                                //O.Select_indexSelector((p1,index1)=>p1+index1).Select_indexSelector((p0,index0)=>p0*index0)
-                                                                //O.Select_indexSelector((p1,index1)=>(p1+index1)*index0)
-                                                                //O.Select_indexSelector((p0,index0)=>(p0+index0)*index0)
-                                                                var indexSelector0_Parameters = indexSelector0.Parameters;
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression2.実行(
-                                                                        indexSelector0.Body,
-                                                                        indexSelector0_Parameters[0],
-                                                                        indexSelector1.Body,
-                                                                        indexSelector0_Parameters[1],
-                                                                        indexSelector1_Parameters[1]
-                                                                    ),
-                                                                    indexSelector1_Parameters
-                                                                );
-                                                            } else {
-                                                                //O.Select_indexSelector((p1,index1)=>p1+index1).Select_indexSelector(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector((p1,index1)=>MethodCall1_Arguments_1(p1+index1,index1))
-                                                                var index1 = indexSelector1_Parameters[1];
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        作業配列.Expressions設定(
-                                                                            indexSelector1.Body,
-                                                                            index1
-                                                                        )
-                                                                    ),
-                                                                    indexSelector1_Parameters
-                                                                );
-                                                            }
-                                                        } else {
-                                                            var p = Expression.Parameter(MethodCall0_Method.GetGenericArguments()[0],"p");
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression indexSelector0) {
-                                                                //O.Select_indexSelector(MethodCall1_MethodCall_Arguments_1).Select_indexSelector((p0,index0)=>p0+index0)
-                                                                //O.Select_indexSelector((p,index0)=>MethodCall1_MethodCall_Arguments_1(p,index0)+index0)
-                                                                var indexSelector0_Parameters = indexSelector0.Parameters;
-                                                                var index0 = indexSelector0_Parameters[1];
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        indexSelector0.Body,
-                                                                        indexSelector0_Parameters[0],
-                                                                        Expression.Invoke(
-                                                                            MethodCall1_MethodCall_Arguments_1,
-                                                                            作業配列.Expressions設定(
-                                                                                p,
-                                                                                index0
-                                                                            )
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p,indexSelector0_Parameters[1])
-                                                                );
-                                                            } else {
-                                                                //O.Select_indexSelector(MethodCall1_MethodCall_Arguments_1).Select_indexSelector(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector((p,index)=>MethodCall1_Arguments_1(MethodCall1_MethodCall_Arguments_1(p,index),index))
-                                                                var index = Expression.Parameter(typeof(int),"index");
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        作業配列.Expressions設定(
-                                                                            Expression.Invoke(
-                                                                                MethodCall1_MethodCall_Arguments_1,
-                                                                                作業配列.Expressions設定(
-                                                                                    p,
-                                                                                    index
-                                                                                )
-                                                                            ),
-                                                                            index
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p,index)
-                                                                );
-                                                            }
-                                                        }
-                                                    } else {
-                                                        if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression indexSelector1) {
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-                                                                //O.Select_indexSelector((p1,index1)=>p1+index1).Select_selector(p0=>p0*p0)
-                                                                //O.Select_indexSelector((p1,index1)=>(p1+index1)*(p1+index1))
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        selector0.Body,
-                                                                        selector0.Parameters[0],
-                                                                        indexSelector1.Body
-                                                                    ),
-                                                                    indexSelector1.Parameters
-                                                                );
-                                                            } else {
-                                                                //O.Select_indexSelector((p1,index1)=>p1+index1).Select_selector(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector((p1,index1)=>MethodCall1_Arguments_1(p1+index1))
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(MethodCall1_Arguments_1,indexSelector1.Body),
-                                                                    indexSelector1.Parameters
-                                                                );
-                                                            }
-                                                        } else {
-                                                            var p = Expression.Parameter(MethodCall0_Method.GetGenericArguments()[0],"p");
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-                                                                //O.Select_indexSelector(MethodCall1_MethodCall_Arguments_1).Select_selector(p0=>p0+p0)
-                                                                //O.Select_indexSelector((p,index)=>MethodCall1_MethodCall_Arguments_1(p,index)+MethodCall1_MethodCall_Arguments_1(p,index))
-                                                                var selector0_Parameters = selector0.Parameters;
-                                                                var index = Expression.Parameter(typeof(int),"index");
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        selector0.Body,
-                                                                        selector0_Parameters[0],
-                                                                        Expression.Invoke(
-                                                                            MethodCall1_MethodCall_Arguments_1,
-                                                                            作業配列.Expressions設定(p,index)
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p,index)
-                                                                );
-                                                                MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.Select_indexSelector;
-                                                            } else {
-                                                                //O.Select_indexSelector(MethodCall1_MethodCall_Arguments_1).Select_selector(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector((p,index)=>MethodCall1_Arguments_1(MethodCall1_MethodCall_Arguments_1(p,index))
-                                                                var index = Expression.Parameter(typeof(int),"index");
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        作業配列.Expressions設定(
-                                                                            Expression.Invoke(
-                                                                                MethodCall1_MethodCall_Arguments_1,
-                                                                                作業配列.Expressions設定(p,index)
-                                                                            )
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p,index)
-                                                                );
-                                                            }
-                                                        }
-                                                    }
+                                            Debug.Assert(
+                                                Reflection.ExtensionEnumerable.Select_selector==MethodCall0_GenericMethodDefinition||
+                                                Reflection.ExtensionSet.Select_selector==MethodCall0_GenericMethodDefinition
+                                            );
+                                            //A.Select(selector1).Select(selector0)
+                                            //A.Select(selector0(selector1))
+                                            var MethodCall1_MethodCall_Arguments_1 = MethodCall1_MethodCall.Arguments[1];
+                                            LambdaExpression Lambda;
+                                            if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression selector1) {
+                                                if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
+                                                    //O.Select_selector(p1=>p1+p1).Select_selector(p0=>p0*p0)
+                                                    //O.Select_selector(p1=>(p1+p1)*(p1+p1))
+                                                    Lambda=Expression.Lambda(
+                                                        this.変換_旧Parameterを新Expression1.実行(
+                                                            selector0.Body,
+                                                            selector0.Parameters[0],
+                                                            selector1.Body
+                                                        ),
+                                                        selector1.Parameters
+                                                    );
                                                 } else {
-                                                    if(Reflection.ExtensionEnumerable.Select_indexSelector==MethodCall0_GenericMethodDefinition) {
-                                                        if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression selector1) {
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression indexSelector0) {
-                                                                //O.Select_selector(p1=>p1+p1).Select_indexSelector((p0,index0)=>p0*index0)
-                                                                //O.Select_indexSelector((p1,index0)=>(p1+p1)*index0)
-                                                                var indexSelector0_Parameters = indexSelector0.Parameters;
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        indexSelector0.Body,
-                                                                        indexSelector0_Parameters[0],
-                                                                        selector1.Body
-                                                                    ),
-                                                                    作業配列.Parameters設定(
-                                                                        selector1.Parameters[0],
-                                                                        indexSelector0_Parameters[1]
-                                                                    )
-                                                                );
-                                                            } else {
-                                                                //O.Select_selector(p1=>p1+p1).Select_indexSelector(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector((p1,index)=>MethodCall1_Arguments_1(p1+p1,index))
-                                                                var index = Expression.Parameter(typeof(int),"index");
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        作業配列.Expressions設定(
-                                                                            selector1.Body,
-                                                                            index
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(
-                                                                        selector1.Parameters[0],
-                                                                        index
-                                                                    )
-                                                                );
-                                                            }
-                                                        } else {
-                                                            var p = Expression.Parameter(MethodCall1_MethodCall_Method.GetGenericArguments()[0],"p");
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression indexSelector0) {
-                                                                //O.Select_selector(MethodCall1_MethodCall_Arguments_1).Select_indexSelector((p0,index0)=>p0*index0)
-                                                                //O.Select_indexSelector(p,index0)=>MethodCall1_MethodCall_Arguments_1(p)*index0)
-                                                                var indexSelector0_Parameters = indexSelector0.Parameters;
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        indexSelector0.Body,
-                                                                        indexSelector0_Parameters[0],
-                                                                        Expression.Invoke(
-                                                                            MethodCall1_MethodCall_Arguments_1,
-                                                                            作業配列.Expressions設定(p)
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(
-                                                                        p,
-                                                                        indexSelector0_Parameters[1]
-                                                                    )
-                                                                );
-                                                            } else {
-                                                                //O.Select_selector<Int32,Int32>(MethodCall1_MethodCall_Arguments_1).Select_indexSelector<Int32,Double>(MethodCall1_Arguments_1)
-                                                                //O.Select_indexSelector<Int32,Double>((p,index)=>MethodCall1_Arguments_1(MethodCall1_Arguments_1(p),index))
-                                                                var index = Expression.Parameter(typeof(int),"index");
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        作業配列.Expressions設定(
-                                                                            Expression.Invoke(
-                                                                                MethodCall1_MethodCall_Arguments_1,
-                                                                                作業配列.Expressions設定(p)
-                                                                            ),
-                                                                            index
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p,index)
-                                                                );
-                                                            }
-                                                        }
-                                                        MethodCall1_MethodCall_GenericMethodDefinition=Reflection.ExtensionEnumerable.Select_indexSelector;
-                                                    } else {
-                                                        if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression selector1) {
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-                                                                //O.Select_selector(p1=>p1+p1).Select_selector(p0=>p0*p0)
-                                                                //O.Select_selector(p1=>(p1+p1)*(p1+p1))
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        selector0.Body,
-                                                                        selector0.Parameters[0],
-                                                                        selector1.Body
-                                                                    ),
-                                                                    selector1.Parameters
-                                                                );
-                                                            } else {
-                                                                //O.Select_selector(p1=>p1+p1).Select_selector(MethodCall1_Arguments_1)
-                                                                //O.Select_selector(p1=>MethodCall1_Arguments_1(p1+p1))
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        selector1.Body
-                                                                    ),
-                                                                    selector1.Parameters
-                                                                );
-                                                            }
-                                                        } else {
-                                                            var p1 = Expression.Parameter(MethodCall1_MethodCall_Method.GetGenericArguments()[0],"p1");
-                                                            if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-                                                                //O.Select_selector(MethodCall1_MethodCall_Arguments_1).Select_selector(p0=>p0+p0)
-                                                                //O.Select_selector(p1=>MethodCall1_MethodCall_Arguments_1(p1)+MethodCall1_MethodCall_Arguments_1(p1)))
-                                                                Lambda=Expression.Lambda(
-                                                                    this.変換_旧Parameterを新Expression1.実行(
-                                                                        selector0.Body,
-                                                                        selector0.Parameters[0],
-                                                                        Expression.Invoke(
-                                                                            MethodCall1_MethodCall_Arguments_1,
-                                                                            作業配列.Expressions設定(p1)
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p1)
-                                                                );
-                                                            } else {
-                                                                //O.Select_selector(selector1).Select_selector(selector0)
-                                                                //O.Select_selector(p1=>selector0(selector1(p1)))
-                                                                Lambda=Expression.Lambda(
-                                                                    Expression.Invoke(
-                                                                        MethodCall1_Arguments_1,
-                                                                        Expression.Invoke(
-                                                                            MethodCall1_MethodCall_Arguments_1,
-                                                                            作業配列.Expressions設定(p1)
-                                                                        )
-                                                                    ),
-                                                                    作業配列.Parameters設定(p1)
-                                                                );
-                                                            }
-                                                        }
-                                                    }
+                                                    //O.Select_selector(p1=>p1+p1).Select_selector(MethodCall1_Arguments_1)
+                                                    //O.Select_selector(p1=>MethodCall1_Arguments_1(p1+p1))
+                                                    Lambda=Expression.Lambda(
+                                                        Expression.Invoke(
+                                                            MethodCall1_Arguments_1,
+                                                            selector1.Body
+                                                        ),
+                                                        selector1.Parameters
+                                                    );
                                                 }
-                                                return Expression.Call(
-                                                    作業配列.MakeGenericMethod(
-                                                        MethodCall1_MethodCall_GenericMethodDefinition,
-                                                        MethodCall1_MethodCall_Method.GetGenericArguments()[0],
-                                                        MethodCall0_Method.GetGenericArguments()[1]
-                                                    ),
-                                                    MethodCall1_MethodCall.Arguments[0],
-                                                    Lambda
-                                                );
+                                            } else {
+                                                var p1 = Expression.Parameter(MethodCall1_MethodCall_Method.GetGenericArguments()[0],"p1");
+                                                if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
+                                                    //O.Select_selector(MethodCall1_MethodCall_Arguments_1).Select_selector(p0=>p0+p0)
+                                                    //O.Select_selector(p1=>MethodCall1_MethodCall_Arguments_1(p1)+MethodCall1_MethodCall_Arguments_1(p1)))
+                                                    Lambda=Expression.Lambda(
+                                                        this.変換_旧Parameterを新Expression1.実行(
+                                                            selector0.Body,
+                                                            selector0.Parameters[0],
+                                                            Expression.Invoke(
+                                                                MethodCall1_MethodCall_Arguments_1,
+                                                                作業配列.Expressions設定(p1)
+                                                            )
+                                                        ),
+                                                        作業配列.Parameters設定(p1)
+                                                    );
+                                                } else {
+                                                    //O.Select_selector(selector1).Select_selector(selector0)
+                                                    //O.Select_selector(p1=>selector0(selector1(p1)))
+                                                    Lambda=Expression.Lambda(
+                                                        Expression.Invoke(
+                                                            MethodCall1_Arguments_1,
+                                                            Expression.Invoke(
+                                                                MethodCall1_MethodCall_Arguments_1,
+                                                                作業配列.Expressions設定(p1)
+                                                            )
+                                                        ),
+                                                        作業配列.Parameters設定(p1)
+                                                    );
+                                                }
                                             }
-                                            break;
+                                            return Expression.Call(
+                                                作業配列.MakeGenericMethod(
+                                                    MethodCall1_MethodCall_GenericMethodDefinition,
+                                                    MethodCall1_MethodCall_Method.GetGenericArguments()[0],
+                                                    MethodCall0_Method.GetGenericArguments()[1]
+                                                ),
+                                                MethodCall1_MethodCall.Arguments[0],
+                                                Lambda
+                                            );
                                         }
                                     }
                                 }
