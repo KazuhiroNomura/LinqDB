@@ -1882,19 +1882,6 @@ public static class ExtensionSet{
         r.UnionWith(second);
         return r;
     }
-    /// <summary>
-    /// 更新結果を返す。
-    /// </summary>
-    /// <param name="source">元データ。</param>
-    /// <param name="predicate">更新タプルの条件。</param>
-    /// <param name="setSelector">置換先の式</param>
-    /// <typeparam name="TSource"></typeparam>
-    /// <returns>更新結果。</returns>
-    public static ImmutableSet<TSource> Update<TSource>(this ImmutableSet<TSource> source,Func<TSource,bool> predicate,Func<TSource,TSource> setSelector) {
-        var r = new Set<TSource>(source);
-        r.UpdateWith(setSelector,predicate);
-        return r;
-    }
     /// <summary>述語に基づいて値の集合をフィルター処理します。</summary>
     /// <returns>条件を満たす、入力集合の要素を含む <see cref="ImmutableSet{TSource}" />。</returns>
     /// <param name="source">フィルター処理する <see cref="ImmutableSet{TSource}" />。</param>

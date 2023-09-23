@@ -929,18 +929,6 @@ public class Tables{
         Assert.Equal(2L,d.Insert(i));
     }
     [Fact]
-    public void Update(){
-        var d=new Set<Int>{
-            1,2,3
-        };
-        Assert.Equal(d.Update(p=>p==2,p=>p+2),new Set<Int>{
-            1,3,4
-        });
-        Assert.Equal(d.Update(p=>p==2,p=>p+1),new Set<Int>{
-            1,3
-        });
-    }
-    [Fact]
     public void Union(){
         Assert.Equal(new Set<Int>{
             1,2,3

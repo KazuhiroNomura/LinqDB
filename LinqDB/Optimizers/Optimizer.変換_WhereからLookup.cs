@@ -32,7 +32,6 @@ partial class Optimizer {
         protected override Expression Call(MethodCallExpression MethodCall0) {
             var MethodCall0_Method = MethodCall0.Method;
             if(ループ展開可能メソッドか(MethodCall0)) {
-                Debug.Assert(ExtensionSet.Update!=GetGenericMethodDefinition(MethodCall0_Method));
                 if(nameof(Sets.ExtensionSet.Where)==MethodCall0_Method.Name) {
                     var MethodCall0_Arguments = MethodCall0.Arguments;
                     var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);

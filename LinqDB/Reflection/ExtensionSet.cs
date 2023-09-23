@@ -156,5 +156,5 @@ public static class ExtensionSet {
     public static readonly MethodInfo Inline1 = M(() => Extension.Inline(() => 0));
     public static readonly MethodInfo Inline2 = M(() => new object().Inline(p => 0));
     public static readonly MethodInfo Lookup = M(() => _Int32.Lookup(p => p));
-    public static readonly MethodInfo Update = M(() => _Int32.Update(p => true,p => 0));
+    //public static readonly MethodInfo Update = M(() => _Int32.Update(p => true,p => 0));
 }

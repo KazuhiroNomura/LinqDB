@@ -589,10 +589,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
     }
     [Fact]public void Call_Select(){
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
-        this.共通コンパイル実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
-        this.共通コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet()).Select(p=>p+p));
     }
     [Fact]public void Call_Single(){
         this.共通コンパイル実行(()=>new int[1].Single(p=>true));
@@ -616,6 +616,12 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet()));
+    }
+    [Fact]public void Call_UnionBy(){
+        var a=new[]{3,5,7};
+        var b=new[]{4,6,8};
+        var c=a.UnionBy(b,k=>k/2).ToArray();
+        this.共通コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o));
     }
     static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
     static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
@@ -652,6 +658,36 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //        if(indexSelectorか) {
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
         this.共通コンパイル実行(()=>CreateSet().SelectMany((Func<int,IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
+    }
+    [Fact]public void Call_SelectMany_共通(){
+        //if(ループ展開可能メソッドか(InputBody,out var MethodCall)) {
+        //    switch(MethodCall_Method.Name) {
+        //        case nameof(Enumerable.Where): {
+        //            if(MethodCall.Arguments[1] is LambdaExpression predicate) {
+        //                if(OuterPredicate is not null) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        //                }
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
+        //                if(OtherPredicate is not null) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0&&o==3)));
+        //                }
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        //            }
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(Anonymous((int i)=>i==0))));
+        //        }
+        //        default: {
+        //            for(var a = 1;a<MethodCall.Arguments.Count;a++) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(i=>o==0)));
+        //            }
+        //            if(ループ展開可能メソッドか(MethodCall.Arguments[0],out var MethodCall2)){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==9).Select(i=>o==0)));
+        //            }else{
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().OfType<object>()));
+        //            }
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(p=>p+1)));
     }
     [Fact]public void Call_Where(){
         //if(Reflection.ExtensionEnumerable.Where_index!=MethodCall0_GenericMethodDefinition) {
@@ -714,5 +750,92 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new IsSealed().M());
         this.共通コンパイル実行(()=>new IsFinal().M());
         this.共通コンパイル実行(()=>new IsSealedIsFinal().M());
+    }
+    [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
+        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //    switch(MethodCall1_MethodCall.Method.Name) {
+        //        case nameof(ExtensionSet.SelectMany): {
+        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        //            }
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(()=>CreateEnum().OfType<object>());
+    }
+    [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる1(){
+        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //    switch(MethodCall1_MethodCall.Method.Name) {
+        //        case nameof(ExtensionSet.SelectMany): {
+        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
+        //            }
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum()));
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(()=>CreateEnum().Except(CreateEnum()));
+    }
+    [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる2(){
+        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //    switch(MethodCall1_MethodCall.Method.Name) {
+        //        case nameof(ExtensionSet.SelectMany): {
+        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany(p=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
+        //            }
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(()=>CreateEnum().Except(CreateEnum(),EqualityComparer<int>.Default));
+    }
+    [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
+        //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        //} else {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        //}
+        //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
+        //    while(true) {
+        //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
+        this.共通コンパイル実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        //        if(Set1.BaseType is null) {
+        //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+        //        }
+        //    }
+        //}
+        //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
+        //    switch(MethodCall1_MethodCall.Method.Name) {
+        //        case nameof(ExtensionSet.SelectMany): {
+        //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        //            }
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(()=>CreateEnum().OfType<object>());
+    }
+    [Fact]public void 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(){
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum().Select(q=>new{p,q,index})).Select(p=>p.p+p.q+p.index));
+        //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
+        //    while(true) {
+        //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany(Anonymous((int p)=>CreateEnum())).OfType<string>());
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
+        this.共通コンパイル実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        //        if(Set1.BaseType is null) {
+        //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateEnum()));
+
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default)));
+        //        }
+        //    }
+        //}
     }
 }

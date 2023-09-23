@@ -404,8 +404,7 @@ partial class Optimizer {
             var 作業配列 = this._作業配列;
             Debug.Assert(
                 nameof(Enumerable.Join)!=Name&&
-                nameof(Enumerable.GroupJoin)!=Name&&
-                Reflection.ExtensionSet.Update!=GenericMethodDefinition
+                nameof(Enumerable.GroupJoin)!=Name
             );
             var MethodCall0_Arguments = MethodCall0.Arguments;
             switch(Name) {

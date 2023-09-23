@@ -315,6 +315,12 @@ public sealed partial class Optimizer:IDisposable{
         if(typeof(Enumerable)==DeclaringType) {
             var Name = GenericMethodDefinition.Name;
             if(
+                nameof(Enumerable.DistinctBy)==Name||
+                nameof(Enumerable.ExceptBy)==Name||
+                nameof(Enumerable.IntersectBy)==Name||
+                nameof(Enumerable.UnionBy)==Name||
+                nameof(Enumerable.MaxBy)==Name||
+                nameof(Enumerable.MinBy)==Name||
                 nameof(Enumerable.Empty)==Name||
                 nameof(Enumerable.OrderBy)==Name||nameof(Enumerable.OrderByDescending)==Name||
                 nameof(Enumerable.ThenBy)==Name||nameof(Enumerable.ThenByDescending)==Name
