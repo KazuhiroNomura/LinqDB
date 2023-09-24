@@ -125,19 +125,19 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     }
     public byte[] Serialize<T>(T value){
         this.Clear();
-        return MessagePackSerializer.Serialize(value,this.Options);
+        return MessagePackSerializer.Serialize<object>(value,this.Options);
     }
     public void Serialize<T>(Stream stream,T value){
         this.Clear();
-        MessagePackSerializer.Serialize(stream,value,this.Options);
+        MessagePackSerializer.Serialize<object>(stream,value,this.Options);
     }
     public T Deserialize<T>(byte[] bytes){
         this.Clear();
-        return MessagePackSerializer.Deserialize<T>(bytes,this.Options);
+        return (T)MessagePackSerializer.Deserialize<object>(bytes,this.Options);
     }
     public T Deserialize<T>(Stream stream){
         this.Clear();
-        return MessagePackSerializer.Deserialize<T>(stream,this.Options);
+        return (T)MessagePackSerializer.Deserialize<object>(stream,this.Options);
     }
 
     private delegate void SerializeDelegate(object Formatter,ref MessagePackWriter writer,object value,

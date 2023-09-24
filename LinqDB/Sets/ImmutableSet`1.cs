@@ -25,6 +25,29 @@ namespace LinqDB.Sets;
 [DebuggerDisplay("Count = {"+nameof(Count)+"}")]
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
 public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<ImmutableSet<T>>,ISerializable{
+    //public class Formatter:MemoryPack.MemoryPackFormatter<ImmutableSet<T>> {
+    //    public static readonly Formatter Instance = new();
+    //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref ImmutableSet<T>? value) {
+    //        var Count = value!.Count;
+    //        var Formatter = writer.GetFormatter<T>();
+    //        writer.WriteVarInt(Count);
+    //        foreach(var item in value) {
+    //            var item0 = item;
+    //            Formatter.Serialize(ref writer,ref item0);
+    //        }
+    //    }
+    //    public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref ImmutableSet<T>? value) {
+    //        var set = new ImmutableSet<T>();
+    //        var Count = reader.ReadVarIntInt64();
+    //        var Formatter = reader.GetFormatter<T>();
+    //        T? item = default;
+    //        for(long a = 0;a<Count;a++) {
+    //            Formatter.Deserialize(ref reader,ref item);
+    //            set.Add(item);
+    //        }
+    //        value=set;
+    //    }
+    //}
     /// <summary>
     /// 要素のルート
     /// </summary>

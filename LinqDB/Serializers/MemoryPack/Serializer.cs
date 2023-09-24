@@ -113,18 +113,23 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public byte[] Serialize<T>(T? value){
         this.Clear();
-        this.RegisterAnonymousDisplay(typeof(T));
-        var Type=typeof(T);
-        if(typeof(Expressions.LambdaExpression).IsAssignableFrom(Type)) {
-            //この処理はExpression,objectでは使われない。Expression<T>はここでのみ必要。
-            var FormatterType = typeof(ExpressionT<>).MakeGenericType(Type);
-            var Instance = FormatterType.GetField("Instance")!;
-            var objects1 = this.objects1;
-            objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-            var Register = Serializer.Register.MakeGenericMethod(Type);
-            Register.Invoke(null,objects1);
-        }
-        return MemoryPackSerializer.Serialize(value,this.Options);
+        //this.RegisterAnonymousDisplay(typeof(T));
+        //var Type=typeof(T);
+        //if(typeof(Expressions.LambdaExpression).IsAssignableFrom(Type)) {
+        //    //この処理はExpression,objectでは使われない。Expression<T>はここでのみ必要。
+        //    var FormatterType = typeof(ExpressionT<>).MakeGenericType(Type);
+        //    var Instance = FormatterType.GetField("Instance")!;
+        //    var objects1 = this.objects1;
+        //    objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+        //    var Register = Serializer.Register.MakeGenericMethod(Type);
+        //    Register.Invoke(null,objects1);
+        //}
+        //if(global::MemoryPack.MemoryPackFormatterProvider.IsRegistered<T>()){
+        //    return MemoryPackSerializer.Serialize(value,this.Options);
+        //} else{
+        //    return MemoryPackSerializer.Serialize(value,this.Options);
+        //}
+        return MemoryPackSerializer.Serialize<object>(value,this.Options);
     }
     public void Serialize<T>(Stream stream,T? value){
         this.Clear();
@@ -134,7 +139,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public T Deserialize<T>(byte[] bytes){
         this.Clear();
-        return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
+        return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
     }
     public T Deserialize<T>(Stream stream){
         this.Clear();

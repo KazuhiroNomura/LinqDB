@@ -124,19 +124,19 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
     }
     public byte[] Serialize<T>(T value){
         this.Clear();
-        return JsonSerializer.Serialize(value,this.IResolver);
+        return JsonSerializer.Serialize<object>(value,this.IResolver);
     }
     public void Serialize<T>(Stream stream,T value){
         this.Clear();
-        JsonSerializer.Serialize(stream,value,this.IResolver);
+        JsonSerializer.Serialize<object>(stream,value,this.IResolver);
     }
     public T Deserialize<T>(byte[] bytes){
         this.Clear();
-        return JsonSerializer.Deserialize<T>(bytes,this.IResolver);
+        return (T)JsonSerializer.Deserialize<object>(bytes,this.IResolver);
     }
     public T Deserialize<T>(Stream stream){
         this.Clear();
-        return JsonSerializer.Deserialize<T>(stream,this.IResolver);
+        return (T)JsonSerializer.Deserialize<object>(stream,this.IResolver);
     }
 
     public IJsonFormatter<T> GetFormatter<T>(){

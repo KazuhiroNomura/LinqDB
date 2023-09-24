@@ -184,7 +184,8 @@ public abstract class 共通{
     }
     private static readonly object Lockobject=new();
     protected void MemoryMessageJson_Assert<T>(T input,Action<T> AssertAction){
-        lock(Lockobject) {
+        //lock(Lockobject) 
+        {
             {
                 var s = this.MemoryPack;
                 var bytes = this.MemoryPack.Serialize(input);

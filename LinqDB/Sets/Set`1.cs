@@ -15,31 +15,34 @@ namespace LinqDB.Sets;
 /// 関係集合。
 /// </summary>
 /// <typeparam name="T"></typeparam>
-//[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
+[Serializable,MessagePack.MessagePackObject]
 public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
-    //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>>{
-    //    public static readonly Formatter Instance = new();
-    //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value){
-    //        var Count=value!.Count;
-    //        var Formatter=writer.GetFormatter<T>();
-    //        writer.WriteVarInt(Count);
-    //        foreach(var item in value){
-    //            var item0=item;
-    //            Formatter.Serialize(ref writer,ref item0);
-    //        }
-    //    }
-    //    public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value){
-    //        var set=new Set<T>();
-    //        var Count=reader.ReadVarIntInt64();
-    //        var Formatter=reader.GetFormatter<T>();
-    //        T? item=default;
-    //        for(long a=0;a<Count;a++){
-    //            Formatter.Deserialize(ref reader,ref item);
-    //            set.Add(item);
-    //        }
-    //        value=set;
-    //    }
-    //}
+    static Set(){
+        MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
+    }
+    public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
+        public static readonly Formatter Instance = new();
+        public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {
+            var Count = value!.Count;
+            var Formatter = writer.GetFormatter<T>();
+            writer.WriteVarInt(Count);
+            foreach(var item in value) {
+                var item0 = item;
+                Formatter.Serialize(ref writer,ref item0);
+            }
+        }
+        public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value) {
+            var set = new Set<T>();
+            var Count = reader.ReadVarIntInt64();
+            var Formatter = reader.GetFormatter<T>();
+            T? item = default;
+            for(long a = 0;a<Count;a++) {
+                Formatter.Deserialize(ref reader,ref item);
+                set.Add(item);
+            }
+            value=set;
+        }
+    }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。
     /// </summary>

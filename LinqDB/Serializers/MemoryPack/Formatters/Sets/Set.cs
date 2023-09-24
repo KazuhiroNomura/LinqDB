@@ -38,8 +38,8 @@ public class Set<TValue>:MemoryPackFormatter<Sets.Set<TValue>>{
             var Formatter=reader.GetFormatter<TValue>();
             var value=new Sets.Set<TValue>();
             var Count=reader.ReadVarIntInt64();
-            TValue? item=default;
             for(long a=0;a<Count;a++){
+                TValue? item=default;//ここでnull入れないと内部で作られない
                 Formatter.Deserialize(ref reader,ref item);
                 value.Add(item);
             }
