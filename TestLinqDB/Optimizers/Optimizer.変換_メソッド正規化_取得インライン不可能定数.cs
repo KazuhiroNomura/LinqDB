@@ -60,31 +60,31 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]
     public void AddAssign()=>this.共通BinaryAssign(ExpressionType.AddAssign);
     [Fact]
-    public void AddAssignChecked()=>this.共通BinaryAssign(ExpressionType.AddChecked);
+    public void AddAssignChecked()=>this.共通BinaryAssign(ExpressionType.AddAssignChecked);
     [Fact]
-    public void AndAssign()=>this.共通BinaryAssign(ExpressionType.And);
+    public void AndAssign()=>this.共通BinaryAssign(ExpressionType.AndAssign);
     [Fact]
-    public void DivideAssign()=>this.共通BinaryAssign(ExpressionType.Divide);
+    public void DivideAssign()=>this.共通BinaryAssign(ExpressionType.DivideAssign);
     [Fact]
-    public void ExclusiveOrAssign()=>this.共通BinaryAssign(ExpressionType.ExclusiveOr);
+    public void ExclusiveOrAssign()=>this.共通BinaryAssign(ExpressionType.ExclusiveOrAssign);
     [Fact]
-    public void LeftShiftAssign()=>this.共通BinaryAssign(ExpressionType.LeftShift);
+    public void LeftShiftAssign()=>this.共通BinaryAssign(ExpressionType.LeftShiftAssign);
     [Fact]
-    public void ModuloAssign()=>this.共通BinaryAssign(ExpressionType.Modulo);
+    public void ModuloAssign()=>this.共通BinaryAssign(ExpressionType.ModuloAssign);
     [Fact]
-    public void MultiplyAssign()=>this.共通BinaryAssign(ExpressionType.Multiply);
+    public void MultiplyAssign()=>this.共通BinaryAssign(ExpressionType.MultiplyAssign);
     [Fact]
-    public void MultiplyAssignChecked()=>this.共通BinaryAssign(ExpressionType.MultiplyChecked);
+    public void MultiplyAssignChecked()=>this.共通BinaryAssign(ExpressionType.MultiplyAssignChecked);
     [Fact]
-    public void OrAssign()=>this.共通BinaryAssign(ExpressionType.Or);
+    public void OrAssign()=>this.共通BinaryAssign(ExpressionType.OrAssign);
     [Fact]
-    public void PowerAssign()=>this.共通BinaryAssign(ExpressionType.Power);
+    public void PowerAssign()=>this.共通BinaryAssign(ExpressionType.PowerAssign);
     [Fact]
-    public void RightShiftAssign()=>this.共通BinaryAssign(ExpressionType.RightShift);
+    public void RightShiftAssign()=>this.共通BinaryAssign(ExpressionType.RightShiftAssign);
     [Fact]
-    public void SubtractAssign()=>this.共通BinaryAssign(ExpressionType.Subtract);
+    public void SubtractAssign()=>this.共通BinaryAssign(ExpressionType.SubtractAssign);
     [Fact]
-    public void SubtractAssignChecked()=>this.共通BinaryAssign(ExpressionType.SubtractChecked);
+    public void SubtractAssignChecked()=>this.共通BinaryAssign(ExpressionType.SubtractAssignChecked);
     [Fact]
     public void Try(){
         var ParameterInt32=Expression.Parameter(typeof(int),"int32");
@@ -605,6 +605,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //}
     }
     [Fact]public void Call_GroupJoin(){
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
@@ -831,12 +832,67 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     [Fact]
     public void Call(){
-        //foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
-        //    if((ChildMethod.IsFinal||MethodCall1_Object_Type.IsSealed)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
+        //if(MethodCall0_Method.IsStatic){
+        //}else{
+        //    if(IsAnonymous||IsValueTuple) {
+        //        if(IsAnonymous) {
+        //            if(Reflection.Object.Equals_==MethodCall0_Method.GetBaseDefinition())
+        this.共通コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
+        this.共通コンパイル実行(()=>new{a="a",b="b"}.ToString());
+        //        } else {
+        //            Debug.Assert(IsValueTuple);
+        //            if(MethodCall1_Object_Type.GetInterface(CommonLibrary.IEquatable_FullName) is not null)
+        this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).ToString());
+        //        }
+        //    }
+        ////    if(MethodCall1_Object_Type.IsAnonymousValueTuple()) {
+        ////        if(Reflection.Object.Equals_==MethodCall0_Method.GetBaseDefinition()){
+        ////            if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
+        ////                for(var a = 1;a<LNew_Arguments_Count;a++) {
+        //this.共通コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
+        //this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        ////            }
+        //this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
+        ////        }
+        //    }
+        //}
+        //    foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
+        //        if((ChildMethod.IsFinal||MethodCall1_Object_Type.IsSealed)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
         this.共通コンパイル実行(()=>new Derived0().M());
         this.共通コンパイル実行(()=>new IsSealed().M());
         this.共通コンパイル実行(()=>new IsFinal().M());
         this.共通コンパイル実行(()=>new IsSealedIsFinal().M());
+    }
+    //[Fact]public void Call_Anonymous最適化(){
+    //    //if(Member0_Expression is null)return Member0;
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>StaticProperty));
+    //    //if(Member0_Expression.Type.IsAnonymous()){
+    //    //    if(Member1_Expression is NewExpression New1) {
+    //    //        for(var Index = 0;Index<Parameters_Length;Index++)
+    //    //            if(Parameters[Index].Name==Member0_Member_Name)return New1.Arguments[Index];
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>new{a=p,b=p}.a));
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>new{a=p,b=p}.b));
+    //    //    } else
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>F(new{p}).p));
+    //    //}else if(Member0_Expression.Type.IsValueTuple()){
+    //    //    if(Member1_Expression is NewExpression New1) {
+    //    //        for(var Index = 0;Index<Parameters_Length;Index++)
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>new ValueTuple<int,int>(p,p).Item1));
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>new ValueTuple<int,int>(p,p).Item2));
+    //    //    } else
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>F(new ValueTuple<int,int>(p,p)).Item2));
+    //    //}
+    //    this.共通コンパイル実行(()=>CreateSet().Select(p=>this.InstanceProperty));
+    //}
+    [Fact]public void 共通AnonymousValueTuple(){
+        //if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
+        //    for(var a = 1;a<LNew_Arguments_Count;a++) {
+        this.共通コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
+        this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        //    }
+        //}
+        this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
     }
     [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
         //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
@@ -1026,4 +1082,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
         //}
     }
+    private static int StaticProperty=>1;
+    private int InstanceProperty=>1;
+    static T F<T>(T t)=>t;
 }

@@ -1193,7 +1193,6 @@ public sealed partial class Optimizer:IDisposable{
     /// </summary>
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
     private readonly 変換_跨ぎParameterの不要置換復元 _変換_跨ぎParameterの不要置換復元;
-    private readonly 変換_Anonymousをnewしてメンバーを参照している式の省略 _変換_Anonymousをnewしてメンバーを参照している式の省略;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
     private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
@@ -1296,7 +1295,6 @@ public sealed partial class Optimizer:IDisposable{
         var 変換_旧Parameterを新Expression2                              =new 変換_旧Parameterを新Expression2(作業配列);
         this._変換_メソッド正規化_取得インライン不可能定数               =new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
         this._変換_WhereからLookup                                       =new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
-        this._変換_Anonymousをnewしてメンバーを参照している式の省略      =new(作業配列);
         var Listループ跨ぎParameter                                      =this.Listループ跨ぎParameter;
         this._変換_跨ぎParameterの先行評価                               =new(作業配列,ExpressionEqualityComparer,Listループ跨ぎParameter);
         this._変換_跨ぎParameterの不要置換復元                           =new(作業配列);
@@ -2380,13 +2378,12 @@ public sealed partial class Optimizer:IDisposable{
         //以下で更新されるコレクション
         //DictionaryConstant read
         var Lambda02=this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda01);
-        var Lambda03 =this._変換_Anonymousをnewしてメンバーを参照している式の省略.実行(Lambda02);
         //プロファイル=false;
         //var List計測 = new List<A計測>();
         //var ConstantList計測 = Expression.Constant(List計測);
         //プロファイル=false;
         //if(プロファイル)HashSetConstant.Add(ConstantList計測);
-        var Lambda04 = this._変換_WhereからLookup.実行(Lambda03);
+        var Lambda04 = this._変換_WhereからLookup.実行(Lambda02);
 
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);

@@ -27,148 +27,10 @@ partial class Optimizer {
     /// decimal.Parse("1111")→1111mに変換する
     /// </summary>
     private sealed class 変換_メソッド正規化_取得インライン不可能定数:ReturnExpressionTraverser_Quoteを処理しない {
-        //private abstract class 判定_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
-        //    protected ParameterExpression? 許可するParameter;
-        //    protected bool 移動出来る;
-        //    protected override void Parameter(ParameterExpression Parameter) {
-        //        if(Parameter!=this.許可するParameter) {
-        //            this.移動出来る=false;
-        //        }
-        //    }
-        //}
-//        /// <summary>
-//        /// GroupJoin.WhereのWhereのAnd条件を葉に移動。ORも移動するがそれは正しいか不明。
-//        /// </summary>
-//        private sealed class 取得_New_OuterPredicate_InnerPredicate {
-//            private sealed class 判定_New_葉に移動したいPredicate:判定_葉に移動したいPredicate {
-//                public bool 実行(NewExpression New,Expression e,ParameterExpression? 許可するParameter) {
-//                    this.New0=New;
-//                    this.許可するParameter=許可するParameter;
-//                    this.移動出来る=true;
-//                    this.Traverse(e);
-//                    return this.移動出来る;
-//                }
-
-//                private NewExpression? New0;
-//                protected override void New(NewExpression New) {
-//                    if(New.Type.IsAnonymousValueTuple()) {
-//                        var 旧New = this.New0;
-//                        base.New(New);
-//                        this.New0=旧New;
-//                    } else {
-//                        base.New(New);
-//                    }
-//                }
-//                protected override void MemberAccess(MemberExpression Member) {
-//                    var Member_Expression = Member.Expression;
-//                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
-//                        var New = this.New0!;
-//                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
-//                        var Name = Member.Member.Name;
-//                        for(var a = 0;a<Parameters.Length;a++) {
-//                            if(Parameters[a].Name==Name) {
-//                                this.Traverse(New.Arguments[a]);
-//                                return;
-//                            }
-//                        }
-//#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-//                        throw new InvalidProgramException("ここは実行されないはず");
-//#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-//                    }
-//                    base.MemberAccess(Member);
-//                }
-//            }
-//            private readonly 判定_New_葉に移動したいPredicate _判定_New_葉に移動したいPredicate=new();
-//            private Expression? OuterPredicate, InnerPredicate;
-//            private ParameterExpression? Outer;
-//            private NewExpression? New;
-//            public (Expression? OuterPredicate, Expression? InnerPredicate) 実行(NewExpression New,Expression Predicate,ParameterExpression Outer) {
-//                this.New=New;
-//                this.Outer=Outer;
-//                this.OuterPredicate=this.InnerPredicate=null;
-//                this.Traverse(Predicate);
-//                return (this.OuterPredicate, this.InnerPredicate);
-//            }
-//            private void 共通(Expression e) {
-//                if(this._判定_New_葉に移動したいPredicate.実行(this.New!,e,this.Outer!)) {
-//                    this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,e);
-//                } else {
-//                    this.InnerPredicate=AndAlsoで繋げる(this.InnerPredicate,e);
-//                }
-//            }
-//            private void Traverse(Expression e) {
-//                var 判定_New_葉に移動したいPredicate = this._判定_New_葉に移動したいPredicate;
-//                if(e.NodeType==ExpressionType.AndAlso) {
-//                    var Binary = (BinaryExpression)e;
-//                    var Binary_Left = Binary.Left;
-//                    var Binary_Right = Binary.Right;
-//                    var Left葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Left,this.Outer!);
-//                    var Right葉Outerに移動する = 判定_New_葉に移動したいPredicate.実行(this.New!,Binary_Right,this.Outer!);
-//                    if(Left葉Outerに移動する) {
-//                        if(Right葉Outerに移動する) {
-//                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary);
-//                        } else {
-//                            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Left);
-//                            this.Traverse(Binary_Right);
-//                        }
-//                    } else if(Right葉Outerに移動する) {
-//                        this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,Binary_Right);
-//                        this.Traverse(Binary_Left);
-//                    } else {
-//                        this.Traverse(Binary_Left);
-//                        this.Traverse(Binary_Right);
-//                    }
-//                } else if(e.NodeType==ExpressionType.MemberAccess) {
-//                    var Member = (MemberExpression)e;
-//                    var Member_Expression = Member.Expression;
-//                    if(Member_Expression is not null&&Member_Expression.Type.IsAnonymousValueTuple()) {
-//                        var New = this.New!;
-//                        var Parameters = New.Type.GetConstructors()[0].GetParameters();
-//                        var Name = Member.Member.Name;
-//                        for(var a = 0;a<Parameters.Length;a++) {
-//                            if(Parameters[a].Name==Name) {
-//                                this.共通(New.Arguments[a]);
-//                                return;
-//                            }
-//                        }
-//#pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-//                        throw new InvalidProgramException("ここは実行されないはず");
-//#pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-//                    }
-//                } else {
-//                    this.共通(e);
-//                }
-//            }
-//        }
-//        private readonly 取得_New_OuterPredicate_InnerPredicate _取得_New_OuterPredicate_InnerPredicate=new();
-        //private sealed class 取得_New_OuterPredicate_InnerPredicate_OtherPredicate:取得_New_OuterPredicate_InnerPredicate {
-        //    public 取得_New_OuterPredicate_InnerPredicate_OtherPredicate(判定_New_葉に移動したいPredicate 判定_New_葉に移動したいPredicate):base(判定_New_葉に移動したいPredicate){
-        //    }
-        //    private Expression? OtherPredicate;
-        //    private ParameterExpression? Inner;
-        //    public (Expression? OuterPredicate, Expression? InnerPredicate, Expression? OtherPredicate) 実行(NewExpression New,Expression Predicate,ParameterExpression Outer,ParameterExpression Inner) {
-        //        this.New=New;
-        //        this.Outer=Outer;
-        //        this.Inner=Inner;
-        //        this.OuterPredicate=this.InnerPredicate=this.OtherPredicate=null;
-        //        this.Traverse(Predicate);
-        //        return (this.OuterPredicate, this.InnerPredicate, this.OtherPredicate);
-        //    }
-        //    private protected override void 共通(Expression e) {
-        //        if(this.判定_New_葉に移動したいPredicate.実行(this.New!,e,this.Outer!)) {
-        //            this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,e);
-        //        } else if(this.判定_New_葉に移動したいPredicate.実行(this.New!,e,this.Inner!)) {
-        //            this.InnerPredicate=AndAlsoで繋げる(this.InnerPredicate,e);
-        //        } else {
-        //            this.OtherPredicate=AndAlsoで繋げる(this.OtherPredicate,e);
-        //        }
-        //    }
-        //}
-        //private readonly 取得_New_OuterPredicate_InnerPredicate_OtherPredicate _取得_New_OuterPredicate_InnerPredicate_OtherPredicate;
         private sealed class 取得_Parameter_OuterPredicate_InnerPredicate {
             private sealed class 判定_Parameter_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
-                protected ParameterExpression? 許可するParameter;
-                protected bool 移動出来る;
+                private ParameterExpression? 許可するParameter;
+                private bool 移動出来る;
                 public bool 実行(Expression e,ParameterExpression? 許可するParameter) {
                     this.許可するParameter=許可するParameter;
                     this.移動出来る=true;
@@ -843,6 +705,9 @@ partial class Optimizer {
                             var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
                             var MethodCall1_Arguments_3 = MethodCall1_Arguments[3];
                             var MethodCall1_Arguments_4 = MethodCall1_Arguments[4];
+                            var MethodCall1_Arguments_5=MethodCall1_Arguments.Count==6//引数5にはComparerがあるのでそれで比較する。
+                                ?MethodCall1_Arguments[5]
+                                :null;
                             var GenericArguments = MethodCall0_Method.GetGenericArguments();
                             var TOuter = GenericArguments[0];
                             var TInner = GenericArguments[1];
@@ -890,6 +755,34 @@ partial class Optimizer {
                                 Where_predicate=Reflection.ExtensionSet.Where;
                                 Select_selector=Reflection.ExtensionSet.Select_selector;
                             }
+                            Expression predicate_Body;
+                            if(MethodCall1_Arguments_5 is not null) {
+                                //引数5にはComparerがあるのでそれで比較する。
+                                //O.GroupJoin(I,o=>o,i=>i,???)
+                                //O.Select(o=>I.Where(i=>EqualityComparer.Equal(i,o).???)
+                                var MethodCall1_Arguments_5_Type = MethodCall1_Arguments_5.Type;
+                                var T = MethodCall1_Arguments_5_Type.GetInterface(CommonLibrary.IEqualityComparer_FullName)!.GetGenericArguments()[0];
+                                predicate_Body=Expression.Call(
+                                    MethodCall1_Arguments_5,
+                                    作業配列.GetMethod(
+                                        MethodCall1_Arguments_5_Type,
+                                        nameof(IEqualityComparer<int>.Equals),
+                                        T,
+                                        T
+                                    ),
+                                    Equals_this,
+                                    Equals_Argument
+                                );
+                            } else {
+                                predicate_Body=Expression.Call(
+                                    作業配列.MakeGenericMethod(
+                                        Reflection.Helpers.EqualityComparer_Equals,
+                                        TKey
+                                    ),
+                                    Equals_this,
+                                    Equals_Argument
+                                );
+                            }
                             var Where = Expression.Call(
                                 作業配列.MakeGenericMethod(
                                     Where_predicate,
@@ -897,14 +790,7 @@ partial class Optimizer {
                                 ),
                                 MethodCall1_Arguments_1,
                                 Expression.Lambda(
-                                    Expression.Call(
-                                        作業配列.MakeGenericMethod(
-                                            Reflection.Helpers.EqualityComparer_Equals,
-                                            TKey
-                                        ),
-                                        Equals_this,
-                                        Equals_Argument
-                                    ),
+                                    predicate_Body,
                                     作業配列.Parameters設定(i)
                                 )
                             );
@@ -931,7 +817,7 @@ partial class Optimizer {
                                     )
                                 );
                             }
-                            return Expression.Call(
+                            var Select=Expression.Call(
                                 作業配列.MakeGenericMethod(
                                     Select_selector,
                                     TOuter,
@@ -943,6 +829,7 @@ partial class Optimizer {
                                     作業配列.Parameters設定(o)
                                 )
                             );
+                            return this.Call(Select);//Selectを作ったのでそれの形を最適化する。
                         }
                         case nameof(Enumerable.Intersect): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -994,24 +881,9 @@ partial class Optimizer {
                             var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
                             var MethodCall1_Arguments_3 = MethodCall1_Arguments[3];
                             var MethodCall1_Arguments_4 = MethodCall1_Arguments[4];
-                            var MethodCall1_Arguments_5=MethodCall1_Arguments.Count==6
-                                //引数5にはComparerがあるのでそれで比較する。
+                            var MethodCall1_Arguments_5=MethodCall1_Arguments.Count==6//引数5にはComparerがあるのでそれで比較する。
                                 ?MethodCall1_Arguments[5]
                                 :null;
-                            //Join
-                            //    O
-                            //    I
-                            //    o=>
-                            //    i=>
-                            //    (o,i)=>
-                            //SelectMany
-                            //    O
-                            //    o=>
-                            //        Select
-                            //            Where
-                            //                I
-                            //                i=>o.Equals(i)
-                            //            i=>o/i
                             MethodInfo SelectMany_selector, Select_selector, Where_predicate;
                             //Join,SelectManyのresultSelectorが(o,i)=>new { o,i }でなければそれに置換する
                             if(Reflection.ExtensionSet.Join==MethodCall0_GenericMethodDefinition) {
@@ -1041,24 +913,8 @@ partial class Optimizer {
                                     var innerKeySelector_Parameters = innerKeySelector.Parameters;
                                     predicate_Parameters=innerKeySelector_Parameters;
                                     if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    o0=>o0*o0                       outerKeySelector
-                                        //    i0=>i0*i0                       innerKeySelector
-                                        //    (o1,i1)=>{o1,i1}
-                                        //SelectMany
-                                        //    O
-                                        //    o0=>                            outerKeySelector.Parameters
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i0=>                innerKeySelector.Parameters
-                                        //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
-                                        //                        i0*i0       Equals_Argument=innerKeySelector.Body
-                                        //                    )
-                                        //            i1=>                    resultSelector
-                                        //                {o0,i1}
+                                        //O.Join      <TOuter,TInner,TKey,TResult>(I,o=>o*o,i=>i*o,(o,i)=>new{o,i})
+                                        //O.SelectMany<TOuter,            TResult>(o=>I.Where<TInner>(i=>(o*o).Equals(i*i).Select<TInner,TResult>(i=>new{o,i})
                                         selector=Expression.Lambda(
                                             this.変換_旧Parameterを新Expression1.実行(
                                                 resultSelector.Body,
@@ -1068,24 +924,8 @@ partial class Optimizer {
                                             作業配列.Parameters設定(resultSelector.Parameters[1])
                                         );
                                     } else {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    o0=>o0*o0                       outerKeySelector
-                                        //    i0=>i0*i0                       innerKeySelector
-                                        //    resultSelector
-                                        //SelectMany
-                                        //    O
-                                        //    o0=>                            outerKeySelector.Parameters
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i0=>                innerKeySelector.Parameters
-                                        //                    (o0*o0).Equals( Equals_this=outerKeySelector.Body
-                                        //                        i0*i0       Equals_Argument=innerKeySelector.Body
-                                        //                    )
-                                        //            i0=>                    resultSelector
-                                        //                resultSelector(o0,i0)
+                                        //O.Join      <TOuter,TInner,TKey,TResult>(I,o=>o*o,i=>i*o,resultSelector)
+                                        //O.SelectMany<TOuter,            TResult>(o=>I.Where<TInner>(i=>(o*o).Equals(i*i).Select<TInner,TResult>(i=>resultSelector(o,i))
                                         selector=Expression.Lambda(
                                             Expression.Invoke(
                                                 MethodCall1_Arguments_4,
@@ -1100,23 +940,8 @@ partial class Optimizer {
                                 } else {
                                     ParameterExpression i;
                                     if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    o0=>o0*o0                                outerKeySelector
-                                        //    innerKeySelector
-                                        //    (o1,i1)=>{o1,i1}                         resultSelector
-                                        //SelectMany
-                                        //    O
-                                        //    o0=>                                     outerKeySelector.Parameters
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i1=>
-                                        //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
-                                        //                        innerKeySelector(i1) innerKeySelector(i2)
-                                        //                    )
-                                        //            i1=>{o0,i1}
+                                        //O.Join      <TOuter,TInner,TKey,TResult>(I,o=>o*o,innerKeySelector,(o,i)=>new{o,i})
+                                        //O.SelectMany<TOuter,            TResult>(o=>I.Where<TInner>(i=>(o*o).Equals(innerKeySelector(i)).Select<TInner,TResult>(i=>new{o,i})
                                         var resultSelector_Parameters = resultSelector.Parameters;
                                         i=resultSelector_Parameters[1];
                                         selector=Expression.Lambda(
@@ -1128,23 +953,8 @@ partial class Optimizer {
                                             作業配列.Parameters設定(i)
                                         );
                                     } else {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    o0=>o0*o0
-                                        //    innerKeySelector
-                                        //    resultSelector
-                                        //SelectMany
-                                        //    O
-                                        //    o0=>
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i2=>
-                                        //                    (o0*o0).Equals(          Equals_this=outerKeySelector.Body
-                                        //                        innerKeySelector(i2) Equals_Argument=innerKeySelector(i2)
-                                        //                    )
-                                        //            i2=>resultSelector(o0,i2)
+                                        //O.Join      <TOuter,TInner,TKey,TResult>(I,o=>o*o,innerKeySelector,resultSelector)
+                                        //O.SelectMany<TOuter,            TResult>(o=>I.Where<TInner>(i=>(o*o).Equals(innerKeySelector(i)).Select<TInner,TResult>(i=>resultSelector(o,i))
                                         i=Expression.Parameter(TInner,"i2");
                                         selector=Expression.Lambda(
                                             Expression.Invoke(
@@ -1170,23 +980,8 @@ partial class Optimizer {
                                     predicate_Parameters=innerKeySelector.Parameters;
                                     var innerKeySelector_Body = innerKeySelector.Body;
                                     if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    outerKeySelector
-                                        //    i0=>i0*i0
-                                        //    (o1,i1)=>{o1,i1}
-                                        //SelectMany
-                                        //    O
-                                        //    o0=>
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i0=>
-                                        //                    outerKeySelector(o0).Equals(
-                                        //                        i0*i0
-                                        //                    )
-                                        //            i1=>{o0,i1}
+                                        //O.Join      <TOuter,TInner,TKey,TResult>(I,outerKeySelector,i0=>i0*i0,(o,i)=>{o,i)
+                                        //O.SelectMany<TOuter,            TResult>(o=>I.Where<TInner>(i=>outerKeySelector(o).Equals(i*i).Select<TInner,TResult>(i=>(o,i)=>{o,i})
                                         o=resultSelector.Parameters[0];
                                         selector=Expression.Lambda(
                                             this.変換_旧Parameterを新Expression1.実行(
@@ -1197,23 +992,8 @@ partial class Optimizer {
                                             作業配列.Parameters設定(resultSelector.Parameters[1])
                                         );
                                     } else {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    outerKeySelector
-                                        //    i0=>i0*i0
-                                        //    resultSelector
-                                        //SelectMany
-                                        //    O
-                                        //    o2=>
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i0=>
-                                        //                    outerKeySelector(o2).Equals(
-                                        //                        i0*i0
-                                        //                    )
-                                        //            i0=>resultSelector(o2,i0)
+                                        //O.Join(I,outerKeySelector,i0=>i0*i0,resultSelector)
+                                        //O.SelectMany(o=>I.Where(i=>outerKeySelector(o).Equals(i*i).Select<TInner,TResult>(i=>resultSelector(o,i))
                                         o=Expression.Parameter(TOuter,"o2");
                                         selector=Expression.Lambda(
                                             Expression.Invoke(
@@ -1232,23 +1012,8 @@ partial class Optimizer {
                                     predicate_Parameters=Parameters1;
                                     ParameterExpression i;
                                     if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    outerKeySelector
-                                        //    innerKeySelector
-                                        //    (o1,i1)=>{o1,i1}
-                                        //SelectMany
-                                        //    O
-                                        //    o1=>
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i1=>
-                                        //                    outerKeySelector(o2).Equals(
-                                        //                        innerKeySelector(i1)
-                                        //                    )
-                                        //            i1=>{o1,i1}
+                                        //O.Join(I,outerKeySelector,innerKeySelector,(o,i)=>{o,i})
+                                        //O.SelectMany(o=>I.Where(i=>outerKeySelector(o).Equals(innerKeySelector(i)).Select<TInner,TResult>(i=>(o,i)=>{o,i})
                                         var resultSelector_Parameters = resultSelector.Parameters;
                                         o=resultSelector_Parameters[0];
                                         i=resultSelector_Parameters[1];
@@ -1257,23 +1022,8 @@ partial class Optimizer {
                                             作業配列.Parameters設定(i)
                                         );
                                     } else {
-                                        //Join
-                                        //    O
-                                        //    I
-                                        //    outerKeySelector
-                                        //    innerKeySelector
-                                        //    resultSelector
-                                        //SelectMany
-                                        //    O
-                                        //    o2=>
-                                        //        Select
-                                        //            Where
-                                        //                I
-                                        //                i2=>
-                                        //                    outerKeySelector(o2).Equals(
-                                        //                        innerKeySelector(i2)
-                                        //                    )
-                                        //            i2=>resultSelector(o2,i2)
+                                        //O.Join(I,outerKeySelector,innerKeySelector,resultSelector)
+                                        //O.SelectMany(o=>I.Where(i=>outerKeySelector(o).Equals(innerKeySelector(i)).Select<TInner,TResult>(i=>resultSelector(o,i))
                                         o=Expression.Parameter(TOuter,"o2");
                                         i=Expression.Parameter(TInner,"i2");
                                         selector=Expression.Lambda(
@@ -1301,6 +1051,8 @@ partial class Optimizer {
                             Expression predicate_Body;
                             if(MethodCall1_Arguments_5 is not null) {
                                 //引数5にはComparerがあるのでそれで比較する。
+                                //O.Group     (I,o=>o,i=>i,???)
+                                //O.SelectMany(o=>I.Where(i=>EqualityComparer.Equal(i,o).???)
                                 var MethodCall1_Arguments_5_Type = MethodCall1_Arguments_5.Type;
                                 var T = MethodCall1_Arguments_5_Type.GetInterface(CommonLibrary.IEqualityComparer_FullName)!.GetGenericArguments()[0];
                                 predicate_Body=Expression.Call(
@@ -1358,7 +1110,7 @@ partial class Optimizer {
                             );
                             //SelectManyにgotoするのと本質的に同じだと思う。;
                             Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
-                            return this.Call(SelectMany);
+                            return this.Call(SelectMany);//SelectManyを作ったのでそれの形を最適化する。
                         }
                         case nameof(Enumerable.OfType): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -1999,6 +1751,18 @@ partial class Optimizer {
                 Debug.Assert(MethodCall0.Object!=null,"MethodCall0.Object != null");
                 var MethodCall1_Object = this.Traverse(MethodCall0.Object);
                 var MethodCall1_Object_Type = MethodCall1_Object.Type;
+                var IsAnonymous = MethodCall1_Object_Type.IsAnonymous();
+                var IsValueTuple = MethodCall1_Object_Type.IsValueTuple();
+                if(IsAnonymous||IsValueTuple) {
+                    if(IsAnonymous) {
+                        if(MethodCall0_Method.Name==nameof(object.Equals))
+                            return this.共通AnonymousValueTuple(MethodCall1_Object,MethodCall0_Method,MethodCall0.Arguments[0]);
+                    } else {
+                        Debug.Assert(IsValueTuple);
+                        if(MethodCall0_Method.Name==nameof(ValueTuple<int>.Equals))
+                            return this.共通AnonymousValueTuple(MethodCall1_Object,MethodCall0_Method,MethodCall0.Arguments[0]);
+                    }
+                }
                 //インスタンスメソッドで、仮想メソッドの場合よりインスタンスの変数の型一致していてsealedの場合それを選ぶ。
                 foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
                     if((MethodCall1_Object_Type.IsSealed||ChildMethod.IsFinal)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
@@ -2012,6 +1776,33 @@ partial class Optimizer {
                     MethodCall1_Arguments
                 );
             }
+        }
+        private Expression 共通AnonymousValueTuple(Expression MethodCall1_Object,MethodInfo MethodCall0_Method,Expression MethodCall0_Arguments_0) {
+            var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
+            if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
+                var 作業配列 = this._作業配列;
+                var LNew_Arguments = LNew.Arguments;
+                var RNew_Arguments = RNew.Arguments;
+                var LNew_Arguments_0 = LNew_Arguments[0];
+                var RNew_Arguments_0 = RNew_Arguments[0];
+                var LNew_Arguments_0_Type = LNew_Arguments_0.Type;
+                Expression Result = Expression.Call(LNew_Arguments_0,作業配列.GetMethod(LNew_Arguments_0_Type,nameof(Equals),LNew_Arguments_0_Type),RNew_Arguments_0);
+                var LNew_Arguments_Count = LNew_Arguments.Count;
+                for(var a = 1;a<LNew_Arguments_Count;a++) {
+                    var LNew_Arguments_a = LNew_Arguments[a];
+                    var LNew_Arguments_a_Type = LNew_Arguments_a.Type;
+                    Result=Expression.AndAlso(
+                        Result,
+                        Expression.Call(
+                            LNew_Arguments_a,
+                            作業配列.GetMethod(LNew_Arguments_a_Type,nameof(Equals),LNew_Arguments_a_Type),
+                            RNew_Arguments[a]
+                        )
+                    );
+                }
+                return Result;
+            }
+            return Expression.Call(MethodCall1_Object,MethodCall0_Method,this._作業配列.Expressions設定(MethodCall1_Arguments_0));
         }
         /// <summary>
         /// OfType()
