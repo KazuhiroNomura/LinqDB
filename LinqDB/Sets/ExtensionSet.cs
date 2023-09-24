@@ -460,8 +460,8 @@ public static class ExtensionSet{
         :new Set<TSource?> {
             _Count=1,
             TreeRoot={
-                R = new Set<TSource?>.TreeNode(null){
-                    _LinkedNodeItem = new Set<TSource?>.LinkedNodeItem(default)
+                R = new Set<TSource?>.TreeNodeT(null){
+                    _LinkedNodeItem = new Set<TSource?>.LinkedNodeItemT(default)
                 }
             }
         };
@@ -477,8 +477,8 @@ public static class ExtensionSet{
         ?source:new Set<TSource> {
             _Count=1,
             TreeRoot={
-                R = new Set<TSource>.TreeNode(null){
-                    _LinkedNodeItem = new Set<TSource>.LinkedNodeItem(defaultValue)
+                R = new Set<TSource>.TreeNodeT(null){
+                    _LinkedNodeItem = new Set<TSource>.LinkedNodeItemT(defaultValue)
                 }
             }
         };

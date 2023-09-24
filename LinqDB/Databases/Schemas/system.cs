@@ -1,4 +1,6 @@
 ﻿using LinqDB.Sets;
+
+using System;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 namespace LinqDB.Databases.Schemas;

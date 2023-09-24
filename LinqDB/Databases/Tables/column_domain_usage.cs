@@ -2,8 +2,8 @@
 using System.Text;
 using LinqDB.Sets;
 namespace LinqDB.Databases.Tables;
-[Serializable]
-public class column_domain_usage:Entity, IEquatable<column_domain_usage> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class column_domain_usage:Entity, IEquatable<column_domain_usage> {
     public readonly string domain_catalog;
     public readonly string domain_schema;
     public readonly string domain_name;
@@ -35,8 +35,8 @@ public class column_domain_usage:Entity, IEquatable<column_domain_usage> {
 
     public override int GetHashCode() => HashCode.Combine(this.domain_catalog,this.domain_schema,this.domain_name,this.table_catalog,this.table_schema,this.table_name,this.column_name);
 
-    public static bool operator ==(column_domain_usage a,column_domain_usage b) => a.Equals(b);
-    public static bool operator !=(column_domain_usage a,column_domain_usage b) => !a.Equals(b);
+    //public static bool operator ==(column_domain_usage a,column_domain_usage b) => a.Equals(b);
+    //public static bool operator !=(column_domain_usage a,column_domain_usage b) => !a.Equals(b);
     protected override void ToStringBuilder(StringBuilder sb) {
         ProtectedToStringBuilder(sb,nameof(this.domain_catalog),this.domain_catalog);
         ProtectedToStringBuilder(sb,nameof(this.domain_schema),this.domain_schema);

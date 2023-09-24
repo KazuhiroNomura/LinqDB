@@ -3,8 +3,10 @@ using System.Diagnostics;
 using LinqDB.Sets;
 using System.Text;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.InteropServices.ObjectiveC;
 using System.Runtime.Serialization;
+using LinqDB.Databases.Tables;
 //using MemoryPack;
 using Serializers.MessagePack.Formatters;
 using テスト;
@@ -134,59 +136,6 @@ public partial class シリアライズ対象:IEquatable<シリアライズ対�
 
 public class Test_Set2:共通 {
     private const int 要素数 = 100;
-    [Fact]
-    public void Difference1() {
-        const string ファイル名 = "Difference.txt";
-        using var Container = new Container();
-        var List削除HashCode = new List<uint>();
-        var Entity1 = Container.dbo.Entity1;
-        var Entity1_Copy = new Set<Entity1, テスト.PrimaryKeys.dbo.Entity1, Container>(Container);
-        Set<Entity1,テスト.PrimaryKeys.dbo.Entity1,Container> LastSet = new(Container);
-        //var actual = new Set<Value,Key,Container>(Container);
-        //var options = new JsonSerializerOptions {
-        //    WriteIndented=true,
-        //    IgnoreNullValues=true,
-        //    //IgnoreReadOnlyProperties=true
-        //};
-        //options.Converters.Add(new SetConverter<Entity1,テスト.PrimaryKeys.dbo.Entity1,Container>(Container));
-        string s;
-        using(var m = new FileStream(ファイル名,FileMode.Create)) {
-            using var w = new BinaryWriter(m,Encoding.UTF8);
-            //using var w = new StreamWriter(m,Encoding.UTF8);
-            {
-                w.Write(DateTimeOffset.Now.Ticks);
-                Entity1.Clear();
-                for(var b = 0;b<要素数;b++) {
-                    Entity1.Add(new Entity1(b));
-                }
-                Entity1.BinaryWrite(w);
-            }
-            //for(var a = 0;a<100;a++) {
-            //    Entity1_Copy.Clear();
-            //    for(var b = 0;b<要素数;b++) {
-            //        Entity1_Copy.VoidAdd(new Entity1(a+b));
-            //    }
-            //    Entity1.WriteDifference(m,Entity1_Copy);
-            //    LastSet=Entity1_Copy;
-            //    var t = Entity1;
-            //    Entity1=Entity1_Copy;
-            //    Entity1_Copy=t;
-            //    w.Flush();
-            //}
-        }
-        using(var m = new FileStream(ファイル名,FileMode.Open)) {
-            using var r = new BinaryReader(m,Encoding.UTF8);
-            while(true) {
-                s=r.ReadString();
-                var Now=global::Utf8Json.JsonSerializer.Deserialize<DateTimeOffset>(s);
-                var actual= new Set<Entity1,テスト.PrimaryKeys.dbo.Entity1,Container>(Container);
-                //s=r.ReadString();
-                //actual.Read(r);
-            }
-            Assert.True(Entity1.SetEquals(LastSet));
-            Trace.WriteLine(LastSet.GetInformation());
-        }
-    }
     [MessagePack.MessagePackObject]
     public class シリアライズMessagePack{
         [MessagePack.Key(0)]private int privateKey;
@@ -377,6 +326,23 @@ public class Test_Set2:共通 {
         this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
     }
     [Fact]public void Serialize7() {
+        var expected = new Set<SerializeEntity>();
+        for(var a=0;a<10;a++){
+            expected.Add(new SerializeEntity{Name=a.ToString()});
+        }
+        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+    }
+
+    [Fact]public void Serialize8(){
+        var Container=new LinqDB.Databases.Container();
+        var expected =Container.information_schema.tables.ToArray();
+        //var expected = new Set<LinqDB.Databases.Tables.Table,LinqDB.Databases.PrimaryKeys.Reflection>();
+        //for(var a=0;a<10;a++){
+        //    expected.Add(new Table(default(PropertyInfo)!,new LinqDB.Databases.Tables.Schema(default(PropertyInfo)!)));
+        //}
+        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+    }
+    [Fact]public void Serialize9() {
         var expected = new Set<SerializeEntity>();
         for(var a=0;a<10;a++){
             expected.Add(new SerializeEntity{Name=a.ToString()});

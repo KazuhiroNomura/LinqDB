@@ -143,7 +143,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="source"></param>
     public virtual void Assign(ImmutableSet<T> source) {
-        this.変数Enumerator.TreeNode=new TreeNode(null);
+        this.変数Enumerator.TreeNode=new TreeNodeT(null);
         this.PrivateProtectedImport(source);
     }
     //private void Difference(TreeNode 旧TreeNode,TreeNode 新TreeNode,Int64 下限 ,Int64 上限,List<T> 削除Item,List<T> 追加Item) {
@@ -241,7 +241,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         var HashCode = (long)(uint)Item.GetHashCode();
         if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = this.Comparer;
-            LinkedNode LinkedNode = TreeNode;
+            LinkedNodeT LinkedNode = TreeNode;
             while(true) {
                 var LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNodeItem is null)return false;
@@ -363,9 +363,9 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate) {
         var TreeNode = this.TreeRoot;
         var Remove数 = 0L;
-        LinkedNodeItem? RemoveLinkedNodeItem = null;
+        LinkedNodeItemT? RemoveLinkedNodeItem = null;
     LinkedNodeItem走査:
-        LinkedNode 前LinkedNodeItem = TreeNode;
+        LinkedNodeT 前LinkedNodeItem = TreeNode;
         var LinkedNodeItem = TreeNode._LinkedNodeItem;
         while(LinkedNodeItem is not null) {
             if(predicate(LinkedNodeItem.Item)) {
@@ -418,9 +418,9 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector) {
         var TreeNode = this.TreeRoot;
         var Remove数 = 0L;
-        LinkedNodeItem? RemoveLinkedNodeItem = null;
+        LinkedNodeItemT? RemoveLinkedNodeItem = null;
     LinkedNodeItem走査:
-        LinkedNode 前LinkedNodeItem = TreeNode;
+        LinkedNodeT 前LinkedNodeItem = TreeNode;
         var LinkedNodeItem = TreeNode._LinkedNodeItem;
         while(LinkedNodeItem is not null) {
             //predicateの違いだけ
@@ -461,7 +461,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         this._Count-=Remove数-Add数;
         return (Remove数, Add数);
     }
-    private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNode? ref_TreeNode,int スレッド先頭,int スレッド末尾) {
+    private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNodeT? ref_TreeNode,int スレッド先頭,int スレッド末尾) {
         Debug.Assert(スレッド先頭<スレッド末尾);
         var TreeNode = ref_TreeNode;
         if(TreeNode is null) {
@@ -483,7 +483,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
             Remove数=Remove数0+Remove数1;
         }
         //ノードのリーフを走査する。
-        LinkedNode 前TreeNode = TreeNode;
+        LinkedNodeT 前TreeNode = TreeNode;
         for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem)
             if(predicate(LinkedNodeItem.Item)) {
                 前TreeNode._LinkedNodeItem=LinkedNodeItem._LinkedNodeItem;
@@ -494,13 +494,13 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
             ref_TreeNode=null;
         return Remove数;
     }
-    private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNode? ref_TreeNode) {
+    private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNodeT? ref_TreeNode) {
         var TreeNode = ref_TreeNode;
         if(TreeNode is null)
             return 0;
         var Remove数 = 0L;
     LinkedNodeItem走査:
-        LinkedNode 前TreeNode = TreeNode;
+        LinkedNodeT 前TreeNode = TreeNode;
         for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;
             LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
             if(predicate(LinkedNodeItem.Item)) {

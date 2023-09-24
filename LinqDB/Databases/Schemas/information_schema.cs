@@ -1,9 +1,11 @@
 ﻿using LinqDB.Sets;
 using LinqDB.Databases.Tables;
+using System;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 namespace LinqDB.Databases.Schemas;
-public class information_schema {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+public partial class information_schema {
     /// <summary>
     /// テーブル情報
     /// </summary>

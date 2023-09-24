@@ -30,11 +30,11 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
         var HashCode = (long)(uint)Key!.GetHashCode();
         if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var KeyComparer = this.KeyComparer;
-            LinkedNode LinkedNode = TreeNode;
+            LinkedNodeT LinkedNode = TreeNode;
             while(true) {
                 var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNode_LinkedNodeItem is null) {
-                    LinkedNode._LinkedNodeItem=new LinkedNodeItem(this.InternalKeyValue(Key,Value));
+                    LinkedNode._LinkedNodeItem=new LinkedNodeItemT(this.InternalKeyValue(Key,Value));
                     this._Count++;
                     return;
                 }
@@ -50,7 +50,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
             上限,
             TreeNode,
             HashCode,
-            new LinkedNodeItem(this.InternalKeyValue(Key,Value))
+            new LinkedNodeItemT(this.InternalKeyValue(Key,Value))
         );
         this._Count++;
     }

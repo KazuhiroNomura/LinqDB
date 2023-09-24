@@ -2,8 +2,8 @@
 using System.Text;
 using LinqDB.Sets;
 namespace LinqDB.Databases.Tables;
-[Serializable]
-public class referential_constraints:Entity, IEquatable<referential_constraints> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class referential_constraints:Entity, IEquatable<referential_constraints> {
     public readonly string constraint_catalog;
     public readonly string constraint_schema;
     public readonly string constraint_name;
@@ -38,8 +38,8 @@ public class referential_constraints:Entity, IEquatable<referential_constraints>
 
     public override int GetHashCode() => HashCode.Combine(this.constraint_catalog,this.constraint_schema,this.constraint_name,this.unique_constraint_catalog,this.unique_constraint_schema,this.unique_constraint_name,(int)this.update_rule,(int)this.delete_rule);
 
-    public static bool operator ==(referential_constraints a,referential_constraints b) => a.Equals(b);
-    public static bool operator !=(referential_constraints a,referential_constraints b) => !a.Equals(b);
+    //public static bool operator ==(referential_constraints a,referential_constraints b) => a.Equals(b);
+    //public static bool operator !=(referential_constraints a,referential_constraints b) => !a.Equals(b);
     protected override void ToStringBuilder(StringBuilder sb) {
         ProtectedToStringBuilder(sb,nameof(this.constraint_catalog),this.constraint_catalog);
         ProtectedToStringBuilder(sb,nameof(this.constraint_schema),this.constraint_schema);

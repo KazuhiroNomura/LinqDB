@@ -2,8 +2,8 @@
 using System.Text;
 using LinqDB.Sets;
 namespace LinqDB.Databases.Tables;
-[Serializable]
-public class column_privileges:Entity, IEquatable<column_privileges> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class column_privileges:Entity, IEquatable<column_privileges> {
     public readonly string grantor;
     public readonly string grantee;
     public readonly string table_catalog;
@@ -34,8 +34,8 @@ public class column_privileges:Entity, IEquatable<column_privileges> {
     }
     public override bool Equals(object? obj) => obj is column_privileges other&&this.Equals(other);
     public override int GetHashCode() => HashCode.Combine(this.grantor,this.grantee,this.table_catalog,this.table_schema,this.table_name,this.column_name,this.privilege_type,this.is_grantable);
-    public static bool operator ==(column_privileges a,column_privileges b) => a.Equals(b);
-    public static bool operator !=(column_privileges a,column_privileges b) => !a.Equals(b);
+    //public static bool operator ==(column_privileges a,column_privileges b) => a.Equals(b);
+    //public static bool operator !=(column_privileges a,column_privileges b) => !a.Equals(b);
     protected override void ToStringBuilder(StringBuilder sb) {
         ProtectedToStringBuilder(sb,nameof(this.grantor),this.grantor);
         ProtectedToStringBuilder(sb,nameof(this.grantee),this.grantee);

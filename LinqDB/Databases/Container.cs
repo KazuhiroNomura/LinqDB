@@ -4,14 +4,15 @@ using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
 /// <summary>
 /// エンティティの基底クラス
 /// </summary>
-[Serializable]
-public abstract class Container:IDisposable {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class Container:IDisposable {
     /// <summary>
     /// リレーションシップ制約
     /// </summary>
@@ -35,14 +36,18 @@ public abstract class Container:IDisposable {
     ///// </summary>
     //[field: NonSerialized]
     //public Stream? Writer { get; private set; }
-    [field: NonSerialized]
+    //[field: NonSerialized]
     public Schemas.information_schema information_schema { get;}
-    [field: NonSerialized]
-    public Schemas.system system { get; }
+    [MemoryPack.MemoryPackIgnore,MemoryPack.MemoryPackAllowSerialize,MessagePack.IgnoreMember, NonSerialized]
+    private Schemas.system _system;
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember]
+    public Schemas.system system=>this._system;
+    public int prop {get;}
     /// <summary>
     /// 既定コンストラクタ。
     /// </summary>
-    protected Container(){
+    [MemoryPack.MemoryPackConstructor]
+    public Container(){
         var tables = new Set<tables>();
         var columns = new Set<columns>();
         var referential_constraints = new Set<referential_constraints>();
@@ -52,13 +57,13 @@ public abstract class Container:IDisposable {
         var Views = new Set<View,PrimaryKeys.Reflection>();
         var TableColumns = new Set<TableColumn,PrimaryKeys.Reflection>();
         var ViewColumns = new Set<ViewColumn,PrimaryKeys.Reflection>();
-        this.system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
+        this._system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
         var Container_Type = this.GetType();
-        var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
-        if(FieldInfoParent is null) {
-            return;
-        }
-        var ContainerType = FieldInfoParent!.FieldType;
+        //var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
+        //if(FieldInfoParent is null) {
+        //    return;
+        //}
+        var ContainerType=this.GetType();// FieldInfoParent!.FieldType;
         static string Catalog取得(string Name) => Name[..Name.IndexOf('.')];
         var catalog = Catalog取得(ContainerType.FullName!);
         var ChildExtensions = ContainerType.Assembly.GetType(catalog+".ChildExtensions");
@@ -141,7 +146,7 @@ public abstract class Container:IDisposable {
                         Table.Name,
                         Table.Name,
                         Column.Name,
-                        0,
+                        //0,
                         false,
                         Column.PropertyType
                     )
@@ -174,6 +179,7 @@ public abstract class Container:IDisposable {
     /// <summary>
     /// 破棄されているか
     /// </summary>
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember]
     public bool IsDisposed { get; private set; }
     /// <summary>
     /// 継承先のファイナライザでthis.Dispose(false)を呼び出す

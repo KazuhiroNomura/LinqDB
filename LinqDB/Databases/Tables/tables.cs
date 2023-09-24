@@ -2,8 +2,8 @@
 using System.Text;
 using LinqDB.Sets;
 namespace LinqDB.Databases.Tables;
-[Serializable]
-public class tables:Entity, IEquatable<tables> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+public partial class tables:Entity, IEquatable<tables> {
     public readonly string table_catalog;
     public readonly string table_schema;
     public readonly string table_name;
@@ -27,8 +27,8 @@ public class tables:Entity, IEquatable<tables> {
     public override int GetHashCode()=>
         HashCode.Combine(this.table_catalog,this.table_schema,this.table_name,(int)this.table_type);
 
-    public static bool operator ==(tables a,tables b) => a.Equals(b);
-    public static bool operator !=(tables a,tables b) => !a.Equals(b);
+    //public static bool operator ==(tables a,tables b) => a.Equals(b);
+    //public static bool operator !=(tables a,tables b) => !a.Equals(b);
     protected override void ToStringBuilder(StringBuilder sb) {
         ProtectedToStringBuilder(sb,nameof(this.table_catalog),this.table_catalog);
         ProtectedToStringBuilder(sb,nameof(this.table_schema),this.table_schema);

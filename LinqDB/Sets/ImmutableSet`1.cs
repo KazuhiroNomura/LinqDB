@@ -22,8 +22,9 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 //[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
-[DebuggerDisplay("Count = {"+nameof(Count)+"}")]
+//[DebuggerDisplay("Count = {"+nameof(Count)+"}")]
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
+[MessagePack.MessagePackObject,Serializable]
 public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<ImmutableSet<T>>,ISerializable{
     //public class Formatter:MemoryPack.MemoryPackFormatter<ImmutableSet<T>> {
     //    public static readonly Formatter Instance = new();
@@ -51,7 +52,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// 要素のルート
     /// </summary>
-    internal TreeNode TreeRoot => this.変数Enumerator.TreeNode;
+    internal TreeNodeT TreeRoot => this.変数Enumerator.TreeNode;
     [IgnoreDataMember]
     public (long TreeNode数, long LinkedNode数) 衝突数 => this.変数Enumerator.TreeNode.衝突数;
     /// <summary>
@@ -69,7 +70,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// </summary>
     /// <param name="HashCode"></param>
     /// <returns></returns>
-    internal TreeNode? InternalHashCodeに一致するTreeNodeを取得する(long HashCode) {
+    internal TreeNodeT? InternalHashCodeに一致するTreeNodeを取得する(long HashCode) {
         Debug.Assert(this.TreeRoot is not null);
         var TreeNode = this.TreeRoot;
         long 下限 = 初期下限, 上限 = 初期上限;
@@ -103,7 +104,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             }
         }
     }
-    private LinkedNodeItem? GetSampling(TreeNode TreeNode,int Level) {
+    private LinkedNodeItemT? GetSampling(TreeNodeT TreeNode,int Level) {
         if(Level<0)return 共通();
         var 範囲 = 1L<<Level;
         var 値 = (long)(this.Random.NextDouble()*((double)範囲+1+範囲));
@@ -124,7 +125,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             Debug.Assert(値==範囲+範囲);
         }
         return 共通();
-        LinkedNodeItem? 共通() {
+        LinkedNodeItemT? 共通() {
             var Count = 0;
             for(var LinkedNodeItem = TreeNode.LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem.LinkedNodeItem) {
                 Count++;
@@ -150,7 +151,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <param name="HashCode"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal bool InternalAdd前半(out long 下限,out long 上限,out TreeNode out_TreeNode,long HashCode) {
+    internal bool InternalAdd前半(out long 下限,out long 上限,out TreeNodeT out_TreeNode,long HashCode) {
         Debug.Assert(this.TreeRoot is not null);
         var TreeNode = this.TreeRoot;
         long 下限1 = 初期下限, 上限1 = 初期上限;
@@ -161,7 +162,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 if(TreeNode!.L is null) {
                     下限=下限1;
                     上限=上限1;
-                    out_TreeNode=TreeNode.L=new TreeNode(TreeNode);
+                    out_TreeNode=TreeNode.L=new TreeNodeT(TreeNode);
                     return false;
                 }
                 TreeNode=TreeNode.L;
@@ -170,7 +171,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 if(TreeNode!.R is null) {
                     下限=下限1;
                     上限=上限1;
-                    out_TreeNode=TreeNode.R=new TreeNode(TreeNode);
+                    out_TreeNode=TreeNode.R=new TreeNodeT(TreeNode);
                     return false;
                 }
                 TreeNode=TreeNode.R;
@@ -189,10 +190,10 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <param name="上限"></param>
     /// <param name="TreeNode"></param>
     /// <param name="HashCode"></param>
-    /// <param name="LinkedNodeItem"></param>
+    /// <param name="LinkedNodeItemT"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static void InternalAdd後半(long 下限,long 上限,TreeNode TreeNode,long HashCode,LinkedNodeItem LinkedNodeItem) {
+    internal static void InternalAdd後半(long 下限,long 上限,TreeNodeT TreeNode,long HashCode,LinkedNodeItemT LinkedNodeItemT) {
         while(true) {
             var CurrentHashCode = (下限+上限)>>1;
             /*
@@ -216,14 +217,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             if(HashCode<CurrentHashCode) {
                 上限=CurrentHashCode-1;
                 Debug.Assert(TreeNode.L is null);
-                TreeNode=TreeNode.L=new TreeNode(TreeNode);
+                TreeNode=TreeNode.L=new TreeNodeT(TreeNode);
             } else if(HashCode>CurrentHashCode) {
                 下限=CurrentHashCode+1;
                 Debug.Assert(TreeNode.R is null);
-                TreeNode=TreeNode.R=new TreeNode(TreeNode);
+                TreeNode=TreeNode.R=new TreeNodeT(TreeNode);
             } else {
                 Debug.Assert(TreeNode._LinkedNodeItem is null);
-                TreeNode._LinkedNodeItem=LinkedNodeItem;
+                TreeNode._LinkedNodeItem=LinkedNodeItemT;
                 break;
             }
         }
@@ -237,17 +238,17 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     internal virtual bool InternalAdd(T Item) {
         if(Item is null) {
             Debug.Assert(this._Count==0);
-            this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItem(default!);
+            this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItemT(default!);
         } else {
             var HashCode = (long)(uint)Item.GetHashCode();
             if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
                 var Comparer = this.Comparer;
-                LinkedNode LinkedNode = TreeNode;
+                LinkedNodeT LinkedNode = TreeNode;
                 while(true) {
                     var LinkedNodeItem = LinkedNode._LinkedNodeItem;
                     if(LinkedNodeItem is null) {
                         this.AddRelationship(Item);
-                        LinkedNode._LinkedNodeItem=new LinkedNodeItem(Item);
+                        LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
                         return true;
                     }
                     if(Comparer.Equals(LinkedNodeItem.Item,Item)) {
@@ -257,7 +258,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 }
             }
             this.AddRelationship(Item);
-            InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItem(Item));
+            InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         }
         return true;
     }
@@ -280,45 +281,45 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// データを格納するコンテナの葉
     /// </summary>
-    [Serializable]
-    public class LinkedNode {
+    //[Serializable]
+    public class LinkedNodeT {
         /// <summary>
         /// 同一HashCodeの値を管理する
         /// </summary>
-        internal LinkedNodeItem? _LinkedNodeItem;
+        internal LinkedNodeItemT? _LinkedNodeItem;
         /// <summary>
         /// 同一HashCodeの値を管理する
         /// </summary>
-        public LinkedNodeItem? LinkedNodeItem => this._LinkedNodeItem;
+        public LinkedNodeItemT? LinkedNodeItem => this._LinkedNodeItem;
         /// <summary>
         /// スーパーコンストラクタ
         /// </summary>
         /// <param name="LinkedNodeItem" />
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal LinkedNode(LinkedNodeItem? LinkedNodeItem) => this._LinkedNodeItem=LinkedNodeItem;
+        internal LinkedNodeT(LinkedNodeItemT? LinkedNodeItem) => this._LinkedNodeItem=LinkedNodeItem;
     }
     /// <summary>
     /// データを格納するコンテナの葉
     /// </summary>
-    [Serializable, DebuggerDisplay("{Item.ToString()}")]
-    public sealed class LinkedNodeItem:LinkedNode {
+    //[Serializable, DebuggerDisplay("{Item.ToString()}")]
+    public sealed class LinkedNodeItemT:LinkedNodeT {
         /// <summary>
         /// 格納している値
         /// </summary>
         public readonly T Item;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal LinkedNodeItem(T Item,LinkedNodeItem? LinkedNodeItem) : base(LinkedNodeItem) => this.Item=Item;
+        internal LinkedNodeItemT(T Item,LinkedNodeItemT? LinkedNodeItem) : base(LinkedNodeItem) => this.Item=Item;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal LinkedNodeItem(T Item) : base(null) => this.Item=Item;
+        internal LinkedNodeItemT(T Item) : base(null) => this.Item=Item;
     }
     /// <summary>
     /// データを格納するコンテナの先頭葉
     /// </summary>
     [Serializable/*, DebuggerDisplay("{this.ToString()}")*/]
-    public sealed class TreeNode:LinkedNode {
-        internal TreeNode? L, R, P;
+    public sealed class TreeNodeT:LinkedNodeT {
+        internal TreeNodeT? L, R, P;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal TreeNode(TreeNode? P) : base(null) => this.P=P;
+        internal TreeNodeT(TreeNodeT? P) : base(null) => this.P=P;
         /// <summary>
         /// 次のノードを返す。
         /// </summary>
@@ -344,7 +345,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         /// 部分木の衝突数。
         /// </summary>
         public (long TreeNode数, long LinkedNode数) 衝突数 => this.Private衝突数(this);
-        private (long TreeNode数, long LinkedNode数) Private衝突数(TreeNode? TreeNode) {
+        private (long TreeNode数, long LinkedNode数) Private衝突数(TreeNodeT? TreeNode) {
             if(TreeNode is null)
                 return (0, 0);
             var LinkedNode数 = 0L;
@@ -389,8 +390,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// </summary>
     public struct Enumerator:IEnumerator<T> {
         //走査順はthis,L,R
-        internal LinkedNodeItem? LinkedNodeItem;
-        internal TreeNode TreeNode;
+        internal LinkedNodeItemT? LinkedNodeItem;
+        internal TreeNodeT TreeNode;
         public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
         /// <summary>
         /// 要素が存在するかどうかの判定に使う
@@ -442,314 +443,314 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         }
     }
-    /// <summary>
-    /// バッファ経由でバッファへの書き込みは別スレッドで行う。列挙子。値型なのでメソッド呼び出しがCallなので早い。
-    /// </summary>
-    public class Write1Read1Enumerator:IEnumerator<T> {
-        internal LinkedNodeItem? LinkedNodeItem;
-        internal TreeNode TreeNode;
-        private bool 終了;
-        private readonly BlockingCollection<T> BlockingCollection = new(10);
-        //private readonly CancellationToken CancellationToken=new CancellationToken();
-        public Write1Read1Enumerator(Enumerator Enumerator) {
-            this.TreeNode=Enumerator.TreeNode;
-            this.LinkedNodeItem=Enumerator.LinkedNodeItem;
-            this.終了=false;
-            this.InternalCurrent=default!;
-            //バッファに書き込む
-            ThreadPool.QueueUserWorkItem(_ => {
-                var BlockingCollection=this.BlockingCollection;
-                //var CancellationToken = this.CancellationToken;
-                var TreeNode=this.TreeNode;
-                var LinkedNodeItem=this.LinkedNodeItem;
-            LinkedNodeItem走査:
-                if(LinkedNodeItem is not null) {
-                    BlockingCollection.Add(LinkedNodeItem.Item);
-                    LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
-                    goto LinkedNodeItem走査;
-                }
-                if(TreeNode.L is not null) {
-                    TreeNode=TreeNode.L;
-                    LinkedNodeItem=TreeNode.LinkedNodeItem;
-                    goto LinkedNodeItem走査;
-                }
-            右に移動:
-                if(TreeNode.R is not null) {
-                    TreeNode=TreeNode.R;
-                    LinkedNodeItem=TreeNode.LinkedNodeItem;
-                    goto LinkedNodeItem走査;
-                }
-                //上に移動
-                while(TreeNode.P is not null) {
-                    var P = TreeNode.P;
-                    if(P.L==TreeNode) {
-                        //右上に移動
-                        TreeNode=P;
-                        goto 右に移動;
-                    }
-                    TreeNode=P;
-                }
-                this.終了=true;
-            },this);
-        }
-        public void Reset() {
-            var BlockingCollection=this.BlockingCollection;
-            while(BlockingCollection.TryTake(out var _)) { }
-        }
-        /// <summary>
-        /// 要素が存在するかどうかの判定に使う
-        /// </summary>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool MoveNext() {
-            try {
-                while(true) {
-                    if(this.BlockingCollection.TryTake(out this.InternalCurrent!)) {
-                        return true;
-                    } else if(this.終了) {
-                        return false;
-                    }
-                }
-            } catch(OperationCanceledException) {
-                return false;
-            }
-        }
-#pragma warning disable CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
-        public void Dispose() {
-#pragma warning restore CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
-            this.BlockingCollection.Dispose();
-        }
-        internal T InternalCurrent;
-        public T Current {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => this.InternalCurrent;
-        }
-        object IEnumerator.Current {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-#pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-            get => this.InternalCurrent;
-#pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
-        }
-    }
-    public struct Enumerator1{
-        internal LinkedNodeItem? LinkedNodeItem;
-        internal TreeNode TreeNode;
-        public Enumerator1(Enumerator Enumerator) {
-            this.TreeNode=Enumerator.TreeNode;
-            this.LinkedNodeItem=Enumerator.LinkedNodeItem;
-            this.InternalCurrent=default!;
-        }
-        public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
-        /// <summary>
-        /// 要素が存在するかどうかの判定に使う
-        /// </summary>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool MoveNext() {
-            ////Enumeratorの速度2593ms
-            ////Enumerator1の速度2807ms
-            //LinkedNodeItem走査:
-            //if(this.LinkedNodeItem is not null) {
-            //    var LinkedNodeItem = this.LinkedNodeItem;
-            //    this.InternalCurrent=LinkedNodeItem.Item;
-            //    this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
-            //    return true;
-            //}
-            //if(this.TreeNode.L is not null) {
-            //    var TreeNode_L=this.TreeNode.L;
-            //    this.TreeNode=TreeNode_L;
-            //    this.LinkedNodeItem=TreeNode_L.LinkedNodeItem;
-            //    goto LinkedNodeItem走査;
-            //}
-            //右に移動:
-            //if(this.TreeNode.R is not null) {
-            //    var TreeNode_R=this.TreeNode.R;
-            //    this.TreeNode=TreeNode_R;
-            //    this.LinkedNodeItem=TreeNode_R.LinkedNodeItem;
-            //    goto LinkedNodeItem走査;
-            //}
-            ////上に移動
-            //var TreeNode = this.TreeNode;
-            //while(TreeNode.P is not null) {
-            //    var P = TreeNode.P;
-            //    if(P.L==TreeNode) {
-            //        //右上に移動
-            //        this.TreeNode=P;
-            //        goto 右に移動;
-            //    }
-            //    TreeNode=P;
-            //}
-            //this.TreeNode=TreeNode;
+    ///// <summary>
+    ///// バッファ経由でバッファへの書き込みは別スレッドで行う。列挙子。値型なのでメソッド呼び出しがCallなので早い。
+    ///// </summary>
+//    public class Write1Read1Enumerator:IEnumerator<T> {
+//        internal LinkedNodeItemT? LinkedNodeItem;
+//        internal TreeNodeT TreeNode;
+//        private bool 終了;
+//        private readonly BlockingCollection<T> BlockingCollection = new(10);
+//        //private readonly CancellationToken CancellationToken=new CancellationToken();
+//        public Write1Read1Enumerator(Enumerator Enumerator) {
+//            this.TreeNode=Enumerator.TreeNode;
+//            this.LinkedNodeItem=Enumerator.LinkedNodeItem;
+//            this.終了=false;
+//            this.InternalCurrent=default!;
+//            //バッファに書き込む
+//            ThreadPool.QueueUserWorkItem(_ => {
+//                var BlockingCollection=this.BlockingCollection;
+//                //var CancellationToken = this.CancellationToken;
+//                var TreeNode=this.TreeNode;
+//                var LinkedNodeItem=this.LinkedNodeItem;
+//            LinkedNodeItem走査:
+//                if(LinkedNodeItem is not null) {
+//                    BlockingCollection.Add(LinkedNodeItem.Item);
+//                    LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
+//                    goto LinkedNodeItem走査;
+//                }
+//                if(TreeNode.L is not null) {
+//                    TreeNode=TreeNode.L;
+//                    LinkedNodeItem=TreeNode.LinkedNodeItem;
+//                    goto LinkedNodeItem走査;
+//                }
+//            右に移動:
+//                if(TreeNode.R is not null) {
+//                    TreeNode=TreeNode.R;
+//                    LinkedNodeItem=TreeNode.LinkedNodeItem;
+//                    goto LinkedNodeItem走査;
+//                }
+//                //上に移動
+//                while(TreeNode.P is not null) {
+//                    var P = TreeNode.P;
+//                    if(P.L==TreeNode) {
+//                        //右上に移動
+//                        TreeNode=P;
+//                        goto 右に移動;
+//                    }
+//                    TreeNode=P;
+//                }
+//                this.終了=true;
+//            },this);
+//        }
+//        public void Reset() {
+//            var BlockingCollection=this.BlockingCollection;
+//            while(BlockingCollection.TryTake(out var _)) { }
+//        }
+//        /// <summary>
+//        /// 要素が存在するかどうかの判定に使う
+//        /// </summary>
+//        /// <returns></returns>
+//        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//        public bool MoveNext() {
+//            try {
+//                while(true) {
+//                    if(this.BlockingCollection.TryTake(out this.InternalCurrent!)) {
+//                        return true;
+//                    } else if(this.終了) {
+//                        return false;
+//                    }
+//                }
+//            } catch(OperationCanceledException) {
+//                return false;
+//            }
+//        }
+//#pragma warning disable CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
+//        public void Dispose() {
+//#pragma warning restore CA1816 // Dispose メソッドは、SuppressFinalize を呼び出す必要があります
+//            this.BlockingCollection.Dispose();
+//        }
+//        internal T InternalCurrent;
+//        public T Current {
+//            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//            get => this.InternalCurrent;
+//        }
+//        object IEnumerator.Current {
+//            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//#pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
+//            get => this.InternalCurrent;
+//#pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
+//        }
+//    }
+//    public struct Enumerator1{
+//        internal LinkedNodeItemT? LinkedNodeItem;
+//        internal TreeNodeT TreeNode;
+//        public Enumerator1(Enumerator Enumerator) {
+//            this.TreeNode=Enumerator.TreeNode;
+//            this.LinkedNodeItem=Enumerator.LinkedNodeItem;
+//            this.InternalCurrent=default!;
+//        }
+//        public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
+//        /// <summary>
+//        /// 要素が存在するかどうかの判定に使う
+//        /// </summary>
+//        /// <returns></returns>
+//        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//        public bool MoveNext() {
+//            ////Enumeratorの速度2593ms
+//            ////Enumerator1の速度2807ms
+//            //LinkedNodeItem走査:
+//            //if(this.LinkedNodeItem is not null) {
+//            //    var LinkedNodeItem = this.LinkedNodeItem;
+//            //    this.InternalCurrent=LinkedNodeItem.Item;
+//            //    this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
+//            //    return true;
+//            //}
+//            //if(this.TreeNode.L is not null) {
+//            //    var TreeNode_L=this.TreeNode.L;
+//            //    this.TreeNode=TreeNode_L;
+//            //    this.LinkedNodeItem=TreeNode_L.LinkedNodeItem;
+//            //    goto LinkedNodeItem走査;
+//            //}
+//            //右に移動:
+//            //if(this.TreeNode.R is not null) {
+//            //    var TreeNode_R=this.TreeNode.R;
+//            //    this.TreeNode=TreeNode_R;
+//            //    this.LinkedNodeItem=TreeNode_R.LinkedNodeItem;
+//            //    goto LinkedNodeItem走査;
+//            //}
+//            ////上に移動
+//            //var TreeNode = this.TreeNode;
+//            //while(TreeNode.P is not null) {
+//            //    var P = TreeNode.P;
+//            //    if(P.L==TreeNode) {
+//            //        //右上に移動
+//            //        this.TreeNode=P;
+//            //        goto 右に移動;
+//            //    }
+//            //    TreeNode=P;
+//            //}
+//            //this.TreeNode=TreeNode;
 
-            ////Enumeratorの速度2614ms
-            ////Enumerator1の速度2729ms
-            //var LinkedNodeItem = this.LinkedNodeItem;
-            //LinkedNodeItem走査:
-            //if(LinkedNodeItem is not null) {
-            //    this.InternalCurrent=LinkedNodeItem.Item;
-            //    this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
-            //    return true;
-            //}
-            //if(this.TreeNode.L is not null) {
-            //    var TreeNode_L = this.TreeNode.L;
-            //    this.TreeNode=TreeNode_L;
-            //    LinkedNodeItem=TreeNode_L.LinkedNodeItem;
-            //    goto LinkedNodeItem走査;
-            //}
-            //右に移動:
-            //if(this.TreeNode.R is not null) {
-            //    var TreeNode_R = this.TreeNode.R;
-            //    this.TreeNode=TreeNode_R;
-            //    LinkedNodeItem=TreeNode_R.LinkedNodeItem;
-            //    goto LinkedNodeItem走査;
-            //}
-            ////上に移動
-            //var TreeNode = this.TreeNode;
-            //while(TreeNode.P is not null) {
-            //    var P = TreeNode.P;
-            //    if(P.L==TreeNode) {
-            //        //右上に移動
-            //        this.TreeNode=P;
-            //        goto 右に移動;
-            //    }
-            //    TreeNode=P;
-            //}
-            //this.TreeNode=TreeNode;
+//            ////Enumeratorの速度2614ms
+//            ////Enumerator1の速度2729ms
+//            //var LinkedNodeItem = this.LinkedNodeItem;
+//            //LinkedNodeItem走査:
+//            //if(LinkedNodeItem is not null) {
+//            //    this.InternalCurrent=LinkedNodeItem.Item;
+//            //    this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
+//            //    return true;
+//            //}
+//            //if(this.TreeNode.L is not null) {
+//            //    var TreeNode_L = this.TreeNode.L;
+//            //    this.TreeNode=TreeNode_L;
+//            //    LinkedNodeItem=TreeNode_L.LinkedNodeItem;
+//            //    goto LinkedNodeItem走査;
+//            //}
+//            //右に移動:
+//            //if(this.TreeNode.R is not null) {
+//            //    var TreeNode_R = this.TreeNode.R;
+//            //    this.TreeNode=TreeNode_R;
+//            //    LinkedNodeItem=TreeNode_R.LinkedNodeItem;
+//            //    goto LinkedNodeItem走査;
+//            //}
+//            ////上に移動
+//            //var TreeNode = this.TreeNode;
+//            //while(TreeNode.P is not null) {
+//            //    var P = TreeNode.P;
+//            //    if(P.L==TreeNode) {
+//            //        //右上に移動
+//            //        this.TreeNode=P;
+//            //        goto 右に移動;
+//            //    }
+//            //    TreeNode=P;
+//            //}
+//            //this.TreeNode=TreeNode;
 
-            var LinkedNodeItem = this.LinkedNodeItem;
-        LinkedNodeItem走査:
-            if(LinkedNodeItem is not null) {
-                this.InternalCurrent=LinkedNodeItem.Item;
-                this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
-                return true;
-            }
-            var TreeNode = this.TreeNode;
-            if(TreeNode.L is not null) {
-                TreeNode=TreeNode.L;
-                this.TreeNode=TreeNode;
-                LinkedNodeItem=TreeNode.LinkedNodeItem;
-                goto LinkedNodeItem走査;
-            }
-        右に移動:
-            if(TreeNode.R is not null) {
-                TreeNode=TreeNode.R;
-                this.TreeNode=TreeNode;
-                LinkedNodeItem=TreeNode.LinkedNodeItem;
-                goto LinkedNodeItem走査;
-            }
-            //上に移動
-            while(TreeNode.P is not null) {
-                var P = TreeNode.P;
-                if(P.L==TreeNode) {
-                    //右上に移動
-                    TreeNode=P;
-                    goto 右に移動;
-                }
-                TreeNode=P;
-            }
-            this.TreeNode=TreeNode;
-            return false;
-        }
-        internal T InternalCurrent;
-        public T Current {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => this.InternalCurrent;
-        }
-    }
-    /// <summary>
-    /// 部分木により分割された範囲が指定された列挙子。値型なのでメソッド呼び出しがCallなので早い。
-    /// </summary>
-    public struct RangeEnumerator:IEnumerator<T> {
-        //走査順はthis,L,R
-        private LinkedNodeItem? LinkedNodeItem;
-        private TreeNode RootNode;
-        internal TreeNode TreeNode;
-        internal TreeNode 番兵Node;
-        public void ctor(TreeNode 番兵Node,TreeNode TreeNode) {
-            this.番兵Node=番兵Node;
-            this.TreeNode=TreeNode;
-        }
-        /// <summary>
-        /// Ⅹ(ダミー)───────────────────────────┐
-        /// 　　　　　　　　　　　　　　　　┌───────────────０(Root)
-        /// 　　　　　　　　┌───────０───────┐
-        /// 　　　　┌───０───┐　　　　　　　┌───４───┐
-        /// 　　┌─０─┐　　　┌─２─┐　　　┌─４─┐　　　┌─６─┐
-        /// 　┌０┐　┌１┐　┌２┐　┌３┐　┌４┐　┌５┐　┌６┐　┌７┐この段からスレッドスタート
-        /// 例えば１が開始ノードだとしたらそこより上に行くときは右上なら出力する。左上なら終了。
-        /// スレッド数は２の倍数でないとうまくスケールしない。
-        /// </summary>
-        /// <param name="スレッド番号"></param>
-        /// <param name="スレッド数"></param>
-        /// <param name="TreeNode"></param>
-        public void Init(int スレッド番号,int スレッド数,TreeNode TreeNode) {
-            var 左スレッド番号 = 0;
-            var スレッド範囲 = スレッド数;
-            while(true) {
-                var 中スレッド番号 = (左スレッド番号+スレッド範囲)/2;
-                if(スレッド番号<中スレッド番号) {
-                    TreeNode=TreeNode!.L!;
-                    スレッド範囲<<=1;
-                } else if(中スレッド番号<スレッド番号) {
-                    TreeNode=TreeNode!.R!;
-                    スレッド範囲<<=1;
-                    左スレッド番号+=スレッド範囲;
-                } else {
-                    this.TreeNode=this.RootNode=TreeNode;
-                    break;
-                }
-            }
-        }
-        public void Reset() {
-            this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
-        }
-        /// <summary>
-        /// 要素が存在するかどうかの判定に使う
-        /// </summary>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public bool MoveNext() {
-        LinkedNodeItem走査:
-            if(this.LinkedNodeItem is not null) {
-                this.InternalCurrent=this.LinkedNodeItem.Item;
-                this.LinkedNodeItem=this.LinkedNodeItem.LinkedNodeItem;
-                return true;
-            }
-            if(this.TreeNode.L is not null) {
-                this.TreeNode=this.TreeNode.L;
-                this.LinkedNodeItem=this.TreeNode.LinkedNodeItem;
-                goto LinkedNodeItem走査;
-            }
-        右に移動:
-            if(this.TreeNode.R is not null) {
-                this.TreeNode=this.TreeNode.R;
-                this.LinkedNodeItem=this.TreeNode.LinkedNodeItem;
-                goto LinkedNodeItem走査;
-            }
-            //上に移動
-            while(this.TreeNode.P!=this.番兵Node) {
-                var P = this.TreeNode.P!;
-                if(P.L==this.TreeNode) {
-                    //右上に移動
-                    this.TreeNode=P;
-                    goto 右に移動;
-                }
-                this.TreeNode=P;
-            }
-            return false;
-        }
-        public void Dispose() {
-        }
-        internal T InternalCurrent;
-        public T Current {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => this.InternalCurrent;
-        }
-        object IEnumerator.Current {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => this.InternalCurrent!;
-        }
-    }
+//            var LinkedNodeItem = this.LinkedNodeItem;
+//        LinkedNodeItem走査:
+//            if(LinkedNodeItem is not null) {
+//                this.InternalCurrent=LinkedNodeItem.Item;
+//                this.LinkedNodeItem=LinkedNodeItem.LinkedNodeItem;
+//                return true;
+//            }
+//            var TreeNode = this.TreeNode;
+//            if(TreeNode.L is not null) {
+//                TreeNode=TreeNode.L;
+//                this.TreeNode=TreeNode;
+//                LinkedNodeItem=TreeNode.LinkedNodeItem;
+//                goto LinkedNodeItem走査;
+//            }
+//        右に移動:
+//            if(TreeNode.R is not null) {
+//                TreeNode=TreeNode.R;
+//                this.TreeNode=TreeNode;
+//                LinkedNodeItem=TreeNode.LinkedNodeItem;
+//                goto LinkedNodeItem走査;
+//            }
+//            //上に移動
+//            while(TreeNode.P is not null) {
+//                var P = TreeNode.P;
+//                if(P.L==TreeNode) {
+//                    //右上に移動
+//                    TreeNode=P;
+//                    goto 右に移動;
+//                }
+//                TreeNode=P;
+//            }
+//            this.TreeNode=TreeNode;
+//            return false;
+//        }
+//        internal T InternalCurrent;
+//        public T Current {
+//            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//            get => this.InternalCurrent;
+//        }
+//    }
+//    /// <summary>
+//    /// 部分木により分割された範囲が指定された列挙子。値型なのでメソッド呼び出しがCallなので早い。
+//    /// </summary>
+//    public struct RangeEnumerator:IEnumerator<T> {
+//        //走査順はthis,L,R
+//        private LinkedNodeItemT? LinkedNodeItem;
+//        private TreeNodeT RootNode;
+//        internal TreeNodeT TreeNode;
+//        internal TreeNodeT 番兵Node;
+//        public void ctor(TreeNodeT 番兵Node,TreeNodeT TreeNode) {
+//            this.番兵Node=番兵Node;
+//            this.TreeNode=TreeNode;
+//        }
+//        /// <summary>
+//        /// Ⅹ(ダミー)───────────────────────────┐
+//        /// 　　　　　　　　　　　　　　　　┌───────────────０(Root)
+//        /// 　　　　　　　　┌───────０───────┐
+//        /// 　　　　┌───０───┐　　　　　　　┌───４───┐
+//        /// 　　┌─０─┐　　　┌─２─┐　　　┌─４─┐　　　┌─６─┐
+//        /// 　┌０┐　┌１┐　┌２┐　┌３┐　┌４┐　┌５┐　┌６┐　┌７┐この段からスレッドスタート
+//        /// 例えば１が開始ノードだとしたらそこより上に行くときは右上なら出力する。左上なら終了。
+//        /// スレッド数は２の倍数でないとうまくスケールしない。
+//        /// </summary>
+//        /// <param name="スレッド番号"></param>
+//        /// <param name="スレッド数"></param>
+//        /// <param name="TreeNode"></param>
+//        public void Init(int スレッド番号,int スレッド数,TreeNodeT TreeNode) {
+//            var 左スレッド番号 = 0;
+//            var スレッド範囲 = スレッド数;
+//            while(true) {
+//                var 中スレッド番号 = (左スレッド番号+スレッド範囲)/2;
+//                if(スレッド番号<中スレッド番号) {
+//                    TreeNode=TreeNode!.L!;
+//                    スレッド範囲<<=1;
+//                } else if(中スレッド番号<スレッド番号) {
+//                    TreeNode=TreeNode!.R!;
+//                    スレッド範囲<<=1;
+//                    左スレッド番号+=スレッド範囲;
+//                } else {
+//                    this.TreeNode=this.RootNode=TreeNode;
+//                    break;
+//                }
+//            }
+//        }
+//        public void Reset() {
+//            this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
+//        }
+//        /// <summary>
+//        /// 要素が存在するかどうかの判定に使う
+//        /// </summary>
+//        /// <returns></returns>
+//        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//        public bool MoveNext() {
+//        LinkedNodeItem走査:
+//            if(this.LinkedNodeItem is not null) {
+//                this.InternalCurrent=this.LinkedNodeItem.Item;
+//                this.LinkedNodeItem=this.LinkedNodeItem.LinkedNodeItem;
+//                return true;
+//            }
+//            if(this.TreeNode.L is not null) {
+//                this.TreeNode=this.TreeNode.L;
+//                this.LinkedNodeItem=this.TreeNode.LinkedNodeItem;
+//                goto LinkedNodeItem走査;
+//            }
+//        右に移動:
+//            if(this.TreeNode.R is not null) {
+//                this.TreeNode=this.TreeNode.R;
+//                this.LinkedNodeItem=this.TreeNode.LinkedNodeItem;
+//                goto LinkedNodeItem走査;
+//            }
+//            //上に移動
+//            while(this.TreeNode.P!=this.番兵Node) {
+//                var P = this.TreeNode.P!;
+//                if(P.L==this.TreeNode) {
+//                    //右上に移動
+//                    this.TreeNode=P;
+//                    goto 右に移動;
+//                }
+//                this.TreeNode=P;
+//            }
+//            return false;
+//        }
+//        public void Dispose() {
+//        }
+//        internal T InternalCurrent;
+//        public T Current {
+//            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//            get => this.InternalCurrent;
+//        }
+//        object IEnumerator.Current {
+//            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+//            get => this.InternalCurrent!;
+//        }
+//    }
     /// <summary>
     /// 性能のために値型の列挙子を表す
     /// </summary>
@@ -762,14 +763,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         this.変数Enumerator.Reset();
         return this.変数Enumerator;
     }
-    public Write1Read1Enumerator GetWrite1Read1Enumerator() {
-        this.変数Enumerator.Reset();
-        return new Write1Read1Enumerator(this.変数Enumerator);
-    }
-    public Enumerator1 GetEnumerator1() {
-        this.変数Enumerator.Reset();
-        return new Enumerator1(this.変数Enumerator);
-    }
+    //public Write1Read1Enumerator GetWrite1Read1Enumerator() {
+    //    this.変数Enumerator.Reset();
+    //    return new Write1Read1Enumerator(this.変数Enumerator);
+    //}
+    //public Enumerator1 GetEnumerator1() {
+    //    this.変数Enumerator.Reset();
+    //    return new Enumerator1(this.変数Enumerator);
+    //}
     IEnumerator<T> IEnumerable<T>.GetEnumerator() =>this.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     /// <summary>
@@ -842,7 +843,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
     protected ImmutableSet(IEqualityComparer<T> Comparer) {
-        this.変数Enumerator.TreeNode=new TreeNode(null);
+        this.変数Enumerator.TreeNode=new TreeNodeT(null);
         this.Comparer=Comparer;
     }
     /// <summary>
@@ -925,10 +926,10 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         var 先TreeNode = this.変数Enumerator.TreeNode;
         var 元TreeRoot = 元TreeNode!.P;
     LinkedNodeItem走査:
-        LinkedNode 先LinkedNode = 先TreeNode;
+        LinkedNodeT 先LinkedNode = 先TreeNode;
         for(var 元LinkedNodeItem = 元TreeNode._LinkedNodeItem;元LinkedNodeItem is not null;元LinkedNodeItem=元LinkedNodeItem._LinkedNodeItem) {
             var 元LinkedNodeItem_Item = 元LinkedNodeItem.Item;
-            var 先LinkedNodeItem_LinkedNodeItem = new LinkedNodeItem(元LinkedNodeItem_Item);
+            var 先LinkedNodeItem_LinkedNodeItem = new LinkedNodeItemT(元LinkedNodeItem_Item);
             //Debug.Assert(先LinkedNode is not null);
             先LinkedNode._LinkedNodeItem=先LinkedNodeItem_LinkedNodeItem;
             先LinkedNode=先LinkedNodeItem_LinkedNodeItem;
@@ -936,14 +937,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         if(元TreeNode.L is not null) {
             元TreeNode=元TreeNode.L;
             //Debug.Assert(先TreeNode != null);
-            先TreeNode=先TreeNode.L=new TreeNode(先TreeNode);
+            先TreeNode=先TreeNode.L=new TreeNodeT(先TreeNode);
             goto LinkedNodeItem走査;
         }
     右に移動:
         if(元TreeNode.R is not null) {
             元TreeNode=元TreeNode.R;
             //Debug.Assert(先TreeNode != null);
-            先TreeNode=先TreeNode!.R=new TreeNode(先TreeNode);
+            先TreeNode=先TreeNode!.R=new TreeNodeT(先TreeNode);
             goto LinkedNodeItem走査;
         }
         //上に移動
@@ -992,11 +993,11 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 AddTreeNode(ref TreeNode!,ref TreeNode!.R);
             } else {
                 var Comparer = this.Comparer;
-                LinkedNode LinkedNode = TreeNode!;
+                LinkedNodeT LinkedNode = TreeNode!;
                 while(true) {
                     var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                     if(LinkedNode_LinkedNodeItem is null) {
-                        LinkedNode._LinkedNodeItem=new LinkedNodeItem(Item);
+                        LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
                         return;
                     }
                     Debug.Assert(!Comparer.Equals(LinkedNode_LinkedNodeItem.Item,Item));
@@ -1005,8 +1006,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             }
         }
     }
-    private static void AddTreeNode(ref TreeNode TreeNode,ref TreeNode? TreeNode_LR){
-        TreeNode_LR??=new TreeNode(TreeNode);
+    private static void AddTreeNode(ref TreeNodeT TreeNode,ref TreeNodeT? TreeNode_LR){
+        TreeNode_LR??=new TreeNodeT(TreeNode);
         TreeNode=TreeNode_LR;
     }
     ///// <summary>
@@ -1230,14 +1231,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             nameof(this.Comparer),
             typeof(IEqualityComparer<T>)
         )!;
-        var RootNode=this.変数Enumerator.TreeNode=(TreeNode)SerializationInfo.GetValue(
+        var RootNode=this.変数Enumerator.TreeNode=(TreeNodeT)SerializationInfo.GetValue(
             nameof(this.TreeRoot),
-            typeof(TreeNode)
+            typeof(TreeNodeT)
         )!;
-        static long 検証とカウント(TreeNode? TreeNode,long 下限,long 上限){
+        static long 検証とカウント(TreeNodeT? TreeNode,long 下限,long 上限){
             if(TreeNode is null) return 0;
             var Count = 0L;
-            LinkedNode LinkedNode = TreeNode;
+            LinkedNodeT LinkedNode = TreeNode;
             while(true) {
                 var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNode_LinkedNodeItem is null) {
@@ -1338,7 +1339,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         SerializationInfo.AddValue(
             nameof(this.TreeRoot),
             this.TreeRoot,
-            typeof(TreeNode)
+            typeof(TreeNodeT)
         );
         SerializationInfo.AddValue(
             nameof(this.Count),
@@ -1356,7 +1357,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Item!.GetHashCode());
         if(TreeNode is not null){
             var Comparer=this.Comparer;
-            LinkedNode LinkedNode =TreeNode;
+            LinkedNodeT LinkedNode =TreeNode;
             for(var a=TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem){
                 if(Comparer.Equals(a.Item,Item)){
                     this.RemoveRelationship(Item);
@@ -1420,7 +1421,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         Debug.Assert(空Node数+有Node数>=1);
         return (Leaf数, 空Node数+有Node数, 空Node数, 有Node数);
     }
-    private static (long TreeNode数, long LinkedNode数) PrivateGetMemoryBytes(TreeNode? TreeNode) {
+    private static (long TreeNode数, long LinkedNode数) PrivateGetMemoryBytes(TreeNodeT? TreeNode) {
         if(TreeNode is null) {
             return (0, 0);
         }
@@ -1655,7 +1656,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// ILで<see cref="ImmutableSet{T}" />,<see cref="IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
     /// </summary>
     internal struct FILO:IEnumerator<T> {
-        private LinkedNodeItem? LinkedListNode;
+        private LinkedNodeItemT? LinkedListNode;
         /// <summary>
         /// 要素数
         /// </summary>
@@ -1678,7 +1679,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         /// <param name="Item"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add(T Item) {
-            this.LinkedListNode=new LinkedNodeItem(Item,this.LinkedListNode);
+            this.LinkedListNode=new LinkedNodeItemT(Item,this.LinkedListNode);
             this.Count++;
         }
         /// <summary>
@@ -1704,9 +1705,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// ILで<see cref="ImmutableSet{T}" />,<see cref="IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
     /// </summary>
     internal struct FIFO:IEnumerator<T>{
-        private LinkedNode FirstNode;
-        private LinkedNode LastNode;
-        private LinkedNode CurrentNode;
+        private LinkedNodeT FirstNode;
+        private LinkedNodeT LastNode;
+        private LinkedNodeT CurrentNode;
         public T Current {
             get; private set;
         }
@@ -1717,14 +1718,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         /// structは引数なしコンストラクタの代わり
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void Constructor() => this.LastNode=this.FirstNode=new LinkedNode(null);
+        internal void Constructor() => this.LastNode=this.FirstNode=new LinkedNodeT(null);
         /// <summary>
         /// 要素を追加
         /// </summary>
         /// <param name="Item"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Add(T Item) {
-            var Last = new LinkedNodeItem(Item);
+            var Last = new LinkedNodeItemT(Item);
             this.LastNode._LinkedNodeItem=Last;
             this.LastNode=Last;
         }

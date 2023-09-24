@@ -2,8 +2,8 @@
 using System.Text;
 using LinqDB.Sets;
 namespace LinqDB.Databases.Tables;
-[Serializable]
-public class check_constraints:Entity, IEquatable<check_constraints> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class check_constraints:Entity, IEquatable<check_constraints> {
     public readonly string constraint_catalog;
     public readonly string constraint_schema;
     public readonly string constraint_name;
@@ -28,8 +28,8 @@ public class check_constraints:Entity, IEquatable<check_constraints> {
         this.constraint_schema,
         this.constraint_name,
         this.check_clause);
-    public static bool operator ==(check_constraints a,check_constraints b) => a.Equals(b);
-    public static bool operator !=(check_constraints a,check_constraints b) => !a.Equals(b);
+    //public static bool operator ==(check_constraints a,check_constraints b) => a.Equals(b);
+    //public static bool operator !=(check_constraints a,check_constraints b) => !a.Equals(b);
     protected override void ToStringBuilder(StringBuilder sb) {
         ProtectedToStringBuilder(sb,nameof(this.constraint_catalog),this.constraint_catalog);
         ProtectedToStringBuilder(sb,nameof(this.constraint_schema),this.constraint_schema);

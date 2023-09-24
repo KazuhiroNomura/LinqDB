@@ -67,7 +67,7 @@ public class Set<TValue, TKey>:Set<TValue>
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is null)
             return false;
-        LinkedNode LinkedNode = TreeNode;
+        LinkedNodeT LinkedNode = TreeNode;
         for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
             if(a.Item.PrimaryKey.Equals(Key)) {
                 this.RemoveRelationship(a.Item);
@@ -146,12 +146,12 @@ public class Set<TValue, TKey>:Set<TValue>
         var HashCode = (long)(uint)Item.GetHashCode();
         if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = EqualityComparer<TKey>.Default;
-            LinkedNode LinkedNode = TreeNode;
+            LinkedNodeT LinkedNode = TreeNode;
             while(true) {
                 var LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNodeItem is null) {
                     this.AddRelationship(Item);
-                    LinkedNode._LinkedNodeItem=new LinkedNodeItem(Item);
+                    LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
                     return true;
                 }
                 if(Comparer.Equals(LinkedNodeItem.Item.PrimaryKey,Item.PrimaryKey)) {
@@ -162,7 +162,7 @@ public class Set<TValue, TKey>:Set<TValue>
             }
         }
         this.AddRelationship(Item);
-        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItem(Item));
+        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         return true;
     }
 }
