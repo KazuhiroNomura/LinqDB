@@ -19,15 +19,15 @@ internal sealed class FormatterResolver:IFormatterResolver {
             //this.DictionaryTypeFormatter.Add(type,FormatterT);
             return FormatterT;
         }
-        //if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)){
-        //    //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter)) return(IMessagePackFormatter<T>)Formatter;
-        //    var FormatterType = typeof(Formatters.ExpressionT<>).MakeGenericType(type);
-        //    var Instance=FormatterType.GetField("Instance")!;
-        //    var FormatterT=(IMessagePackFormatter<T>)Instance.GetValue(null)!;
-        //    //this.DictionaryTypeFormatter.Add(type,FormatterT);
-        //    return FormatterT;
+        if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
+            //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter)) return(IMessagePackFormatter<T>)Formatter;
+            var FormatterType = typeof(Formatters.ExpressionT<>).MakeGenericType(type);
+            var Instance = FormatterType.GetField("Instance")!;
+            var FormatterT = (IMessagePackFormatter<T>)Instance.GetValue(null)!;
+            //this.DictionaryTypeFormatter.Add(type,FormatterT);
+            return FormatterT;
 
-        //}
+        }
         return default!;
     }
     //public void Clear() {

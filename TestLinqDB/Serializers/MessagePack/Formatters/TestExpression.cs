@@ -9,7 +9,24 @@ using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 //using MessagePack;
 namespace Serializers.MessagePack.Formatters;
-using System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
+class BindCollection
+{
+    public int Int32フィールド1;
+    public int Int32フィールド2;
+    public BindCollection BindCollectionフィールド1;
+    public BindCollection BindCollectionフィールド2;
+    public readonly List<int> Listフィールド1 = new();
+    public readonly List<int> Listフィールド2 = new();
+
+    public BindCollection(int v)
+    {
+        this.Int32フィールド1 = 0;
+        this.Int32フィールド2 = 0;
+        this.BindCollectionフィールド1 = null;
+        this.BindCollectionフィールド2 = null;
+    }
+}
 [Serializable,global::MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true)]
 public partial struct 演算子{
     public bool HasValue;
@@ -167,56 +184,56 @@ public class Serializer:共通 {
     //        )
     //    );
     //}
-    //private static readonly Expressions.ParameterExpression int8    = Expressions.Expression.Parameter(typeof(sbyte),"int8");
-    //private static readonly Expressions.ParameterExpression int16   = Expressions.Expression.Parameter(typeof(short),"int16");
-    //private static readonly Expressions.ConstantExpression  int32   = Expressions.Expression.Constant(1);
-    //private static readonly Expressions.ParameterExpression int64   = Expressions.Expression.Parameter(typeof(long),"int64");
-    //private static readonly Expressions.ParameterExpression uint8   = Expressions.Expression.Parameter(typeof(byte),"uint8");
-    //private static readonly Expressions.ParameterExpression uint16  = Expressions.Expression.Parameter(typeof(ushort),"uint16");
-    //private static readonly Expressions.ParameterExpression uint32  = Expressions.Expression.Parameter(typeof(uint),"uint32");
-    //private static readonly Expressions.ParameterExpression uint64  = Expressions.Expression.Parameter(typeof(ulong),"uint64");
-    //private static readonly Expressions.ParameterExpression @float  = Expressions.Expression.Parameter(typeof(float),"float");
-    //private static readonly Expressions.ConstantExpression  @double = Expressions.Expression.Constant(1.0);
-    //private static readonly Expressions.ConstantExpression @string  = Expressions.Expression.Constant("string");
-    //private static readonly Expressions.ConstantExpression array    = Expressions.Expression.Constant(new int[1]);
-    //private static readonly Expressions.ConstantExpression @bool    = Expressions.Expression.Constant(true);
-    private static readonly ParameterExpression ParameterDecimal = Expression.Parameter(typeof(decimal),"decimal");
+    //private static readonly Expressions.Expressions.ParameterExpression int8    = Expressions.Expression.Parameter(typeof(sbyte),"int8");
+    //private static readonly Expressions.Expressions.ParameterExpression int16   = Expressions.Expression.Parameter(typeof(short),"int16");
+    //private static readonly Expressions.Expressions.ConstantExpression  int32   = Expressions.Expression.Constant(1);
+    //private static readonly Expressions.Expressions.ParameterExpression int64   = Expressions.Expression.Parameter(typeof(long),"int64");
+    //private static readonly Expressions.Expressions.ParameterExpression uint8   = Expressions.Expression.Parameter(typeof(byte),"uint8");
+    //private static readonly Expressions.Expressions.ParameterExpression uint16  = Expressions.Expression.Parameter(typeof(ushort),"uint16");
+    //private static readonly Expressions.Expressions.ParameterExpression uint32  = Expressions.Expression.Parameter(typeof(uint),"uint32");
+    //private static readonly Expressions.Expressions.ParameterExpression uint64  = Expressions.Expression.Parameter(typeof(ulong),"uint64");
+    //private static readonly Expressions.Expressions.ParameterExpression @float  = Expressions.Expression.Parameter(typeof(float),"float");
+    //private static readonly Expressions.Expressions.ConstantExpression  @double = Expressions.Expression.Constant(1.0);
+    //private static readonly Expressions.Expressions.ConstantExpression @string  = Expressions.Expressions.Expression.Constant("string");
+    //private static readonly Expressions.Expressions.ConstantExpression array    = Expressions.Expressions.Expression.Constant(new int[1]);
+    //private static readonly Expressions.Expressions.ConstantExpression @bool    = Expressions.Expressions.Expression.Constant(true);
+    private static readonly Expressions.ParameterExpression ParameterDecimal = Expressions.Expression.Parameter(typeof(decimal),"decimal");
 
-    private static readonly ConstantExpression int8 = Expression.Constant((sbyte)1);
-    private static readonly ConstantExpression int16 = Expression.Constant((short)1);
-    private static readonly ConstantExpression int32 = Expression.Constant(1);
-    private static readonly ConstantExpression int64 = Expression.Constant((long)1);
-    private static readonly ConstantExpression uint8 = Expression.Constant((byte)1);
-    private static readonly ConstantExpression uint16 = Expression.Constant((ushort)1);
-    private static readonly ConstantExpression uint32 = Expression.Constant((uint)1);
-    private static readonly ConstantExpression uint64 = Expression.Constant((ulong)1);
-    private static readonly ConstantExpression @float = Expression.Constant((float)1);
-    private static readonly ConstantExpression Constant1d = Expression.Constant(1.0);
-    //private static readonly Expressions.ConstantExpression @decimal = Expressions.Expression.Constant(typeof(decimal),"decimal");
-    private static readonly ConstantExpression @string = Expression.Constant("string");
-    private static readonly ConstantExpression array = Expression.Constant(new int[10]);
-    private static readonly ConstantExpression @bool = Expression.Constant(true);
-    //private static readonly ParameterExpression[] Parameters={int8,int16,int32,int64,uint8,uint16,uint32,uint64,@float,@double,@decimal,@string};
-    //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
-    //private static readonly ParameterExpression @int = Expressions.Expression.Parameter(typeof(decimal),"int");
-    //private static readonly ParameterExpression @decimal = Expressions.Expression.Parameter(typeof(decimal),"decimal");
+    private static readonly Expressions.ConstantExpression int8 = Expressions.Expression.Constant((sbyte)1);
+    private static readonly Expressions.ConstantExpression int16 = Expressions.Expression.Constant((short)1);
+    private static readonly Expressions.ConstantExpression int32 = Expressions.Expression.Constant(1);
+    private static readonly Expressions.ConstantExpression int64 = Expressions.Expression.Constant((long)1);
+    private static readonly Expressions.ConstantExpression uint8 = Expressions.Expression.Constant((byte)1);
+    private static readonly Expressions.ConstantExpression uint16 = Expressions.Expression.Constant((ushort)1);
+    private static readonly Expressions.ConstantExpression uint32 = Expressions.Expression.Constant((uint)1);
+    private static readonly Expressions.ConstantExpression uint64 = Expressions.Expression.Constant((ulong)1);
+    private static readonly Expressions.ConstantExpression @float = Expressions.Expression.Constant((float)1);
+    private static readonly Expressions.ConstantExpression Constant1d = Expressions.Expression.Constant(1.0);
+    //private static readonly Expressions.Expressions.ConstantExpression @decimal = Expressions.Expressions.Expression.Constant(typeof(decimal),"decimal");
+    private static readonly Expressions.ConstantExpression @string = Expressions.Expression.Constant("string");
+    private static readonly Expressions.ConstantExpression array = Expressions.Expression.Constant(new int[10]);
+    private static readonly Expressions.ConstantExpression @bool = Expressions.Expression.Constant(true);
+    //private static readonly Expressions.ParameterExpression[] Parameters={int8,int16,int32,int64,uint8,uint16,uint32,uint64,@float,@double,@decimal,@string};
+    //private static readonly Expressions.ParameterExpression @int = Expressions.Expressions.Expression.Parameter(typeof(decimal),"int");
+    //private static readonly Expressions.ParameterExpression @int = Expressions.Expressions.Expression.Parameter(typeof(decimal),"int");
+    //private static readonly Expressions.ParameterExpression @decimal = Expressions.Expressions.Expression.Parameter(typeof(decimal),"decimal");
     private static int FieldInt32;
-    private static readonly MemberExpression MemberInt32 =Expression.MakeMemberAccess(
+    private static readonly Expressions.MemberExpression MemberInt32 =Expressions.Expression.MakeMemberAccess(
         null,
         typeof(Serializer).GetField(nameof(FieldInt32),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static double FieldDouble;
-    private static readonly MemberExpression MemberDouble =Expression.MakeMemberAccess(
+    private static readonly Expressions.MemberExpression MemberDouble =Expressions.Expression.MakeMemberAccess(
         null,
         typeof(Serializer).GetField(nameof(FieldDouble),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static string FieldString;
-    private static MemberExpression MemberString=Expression.MakeMemberAccess(
+    private static Expressions.MemberExpression MemberString=Expressions.Expression.MakeMemberAccess(
         null,
         typeof(Serializer).GetField(nameof(FieldString),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static bool FieldBoolean;
-    private static MemberExpression MemberBoolean =Expression.MakeMemberAccess(
+    private static Expressions.MemberExpression MemberBoolean =Expressions.Expression.MakeMemberAccess(
         null,
         typeof(Serializer).GetField(nameof(FieldBoolean),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
@@ -247,134 +264,134 @@ public class Serializer:共通 {
     private static double double_dobuble_double(double a,double b)=>Math.Pow(a,b);
     [Fact]
     public void Binary(){
-        var ParameterDouble=Expression.Parameter(typeof(double));
-        var ParameterInt32= Expression.Parameter(typeof(int),"int32");
-        var ParameterString= Expression.Parameter(typeof(string),"string");
-        var ConstantString = Expression.Constant("string");
-        //var ConstantStringNull=Expression.Constant(null,typeof(string));
-        var ConstantArray = Expression.Constant(new int[10]);
-        var Constant0= Expression.Constant(0);
-        var Constant1= Expression.Constant(1);
-        var ConstantTrue = Expression.Constant(true);
-        var ConstantBinry= Expression.Constant(new 演算子(true));
-        var ConversionInt32=Expression.Lambda<Func<int,int>>(Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
-        var ConversionDouble=Expression.Lambda<Func<double,double>>(Expression.Add(ParameterDouble,ParameterDouble),ParameterDouble);
-        var ConversionString=Expression.Lambda<Func<string,string>>(Expression.Call(null,GetMethod(()=>string_string_string("","")),ParameterString,ParameterString),ParameterString);
+        var ParameterDouble=Expressions.Expression.Parameter(typeof(double));
+        var ParameterInt32= Expressions.Expression.Parameter(typeof(int),"int32");
+        var ParameterString= Expressions.Expression.Parameter(typeof(string),"string");
+        var ConstantString = Expressions.Expression.Constant("string");
+        //var ConstantStringNull=Expressions.Expression.Constant(null,typeof(string));
+        var ConstantArray = Expressions.Expression.Constant(new int[10]);
+        var Constant0= Expressions.Expression.Constant(0);
+        var Constant1= Expressions.Expression.Constant(1);
+        var ConstantTrue = Expressions.Expression.Constant(true);
+        var ConstantBinry= Expressions.Expression.Constant(new 演算子(true));
+        var ConversionInt32=Expressions.Expression.Lambda<Func<int,int>>(Expressions.Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
+        var ConversionDouble=Expressions.Expression.Lambda<Func<double,double>>(Expressions.Expression.Add(ParameterDouble,ParameterDouble),ParameterDouble);
+        var ConversionString=Expressions.Expression.Lambda<Func<string,string>>(Expressions.Expression.Call(null,GetMethod(()=>string_string_string("","")),ParameterString,ParameterString),ParameterString);
         var Method_int=GetMethod(()=>int_int_int(1,1));
         var Method_double=GetMethod(()=>double_dobuble_double(1,1));
         //var Method_bool=Method(()=>AndAlso(true,true));
         //var Method_NullableBoolean=Method(()=>bool_bool_bool(true,true));
-        共通0(Expression.ArrayIndex(ConstantArray,Constant1));
-        共通0(Expression.Assign(ParameterInt32,Constant1));
-        共通0(Expression.Coalesce(ConstantString,ConstantString));
-        共通0(Expression.Add                  (Constant1,Constant1));
-        共通0(Expression.AddChecked           (Constant1,Constant1));
-        共通0(Expression.And                  (Constant1,Constant1));
-        共通0(Expression.AndAlso              (ConstantBinry,ConstantBinry));
-        共通0(Expression.Divide               (Constant1,Constant1));
-        共通0(Expression.ExclusiveOr          (Constant1,Constant1));
-        共通0(Expression.LeftShift            (Constant1,Constant1));
-        共通0(Expression.Modulo               (Constant1,Constant1));
-        共通0(Expression.Multiply             (Constant1,Constant1));
-        共通0(Expression.MultiplyChecked      (Constant1,Constant1));
-        共通0(Expression.Or                   (Constant1,Constant1));
-        共通0(Expression.OrElse               (ConstantTrue,ConstantTrue));
-        共通0(Expression.Power                (Constant1d,Constant1d));
-        共通0(Expression.RightShift           (Constant1,Constant1));
-        共通0(Expression.Subtract             (Constant1,Constant1));
-        共通0(Expression.SubtractChecked      (Constant1,Constant1));
-        共通0(Expression.Equal                (Constant1,Constant1));
-        共通0(Expression.GreaterThan          (Constant1,Constant1));
-        共通0(Expression.GreaterThanOrEqual   (Constant1,Constant1));
-        共通0(Expression.LessThan             (Constant1,Constant1));
-        共通0(Expression.LessThanOrEqual      (Constant1,Constant1));
-        共通0(Expression.NotEqual             (Constant1,Constant1));
-        共通0(Expression.LessThanOrEqual      (Constant1,Constant1));
-        共通0(Expression.NotEqual             (Constant1,Constant1));
-        共通1(Expression.AddAssign            (MemberInt32 ,Constant1));
-        共通1(Expression.AddAssignChecked     (MemberInt32 ,Constant1));
-        共通1(Expression.AndAssign            (MemberInt32 ,Constant1));
-        共通1(Expression.DivideAssign         (MemberInt32 ,Constant1));
-        共通1(Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1));
-        共通1(Expression.LeftShiftAssign      (MemberInt32 ,Constant1));
-        共通1(Expression.ModuloAssign         (MemberInt32 ,Constant1));
-        共通1(Expression.MultiplyAssign       (MemberInt32 ,Constant1));
-        共通1(Expression.MultiplyAssignChecked(MemberInt32 ,Constant1));
-        共通1(Expression.OrAssign             (MemberInt32 ,Constant1));
-        共通1(Expression.PowerAssign          (MemberDouble,Constant1d));
-        共通1(Expression.RightShiftAssign     (MemberInt32 ,Constant1));
-        共通1(Expression.SubtractAssign       (MemberInt32 ,Constant1));
-        共通1(Expression.SubtractAssignChecked(MemberInt32 ,Constant1));
+        共通0(Expressions.Expression.ArrayIndex(ConstantArray,Constant1));
+        共通0(Expressions.Expression.Assign(ParameterInt32,Constant1));
+        共通0(Expressions.Expression.Coalesce(ConstantString,ConstantString));
+        共通0(Expressions.Expression.Add                  (Constant1,Constant1));
+        共通0(Expressions.Expression.AddChecked           (Constant1,Constant1));
+        共通0(Expressions.Expression.And                  (Constant1,Constant1));
+        共通0(Expressions.Expression.AndAlso              (ConstantBinry,ConstantBinry));
+        共通0(Expressions.Expression.Divide               (Constant1,Constant1));
+        共通0(Expressions.Expression.ExclusiveOr          (Constant1,Constant1));
+        共通0(Expressions.Expression.LeftShift            (Constant1,Constant1));
+        共通0(Expressions.Expression.Modulo               (Constant1,Constant1));
+        共通0(Expressions.Expression.Multiply             (Constant1,Constant1));
+        共通0(Expressions.Expression.MultiplyChecked      (Constant1,Constant1));
+        共通0(Expressions.Expression.Or                   (Constant1,Constant1));
+        共通0(Expressions.Expression.OrElse               (ConstantTrue,ConstantTrue));
+        共通0(Expressions.Expression.Power                (Constant1d,Constant1d));
+        共通0(Expressions.Expression.RightShift           (Constant1,Constant1));
+        共通0(Expressions.Expression.Subtract             (Constant1,Constant1));
+        共通0(Expressions.Expression.SubtractChecked      (Constant1,Constant1));
+        共通0(Expressions.Expression.Equal                (Constant1,Constant1));
+        共通0(Expressions.Expression.GreaterThan          (Constant1,Constant1));
+        共通0(Expressions.Expression.GreaterThanOrEqual   (Constant1,Constant1));
+        共通0(Expressions.Expression.LessThan             (Constant1,Constant1));
+        共通0(Expressions.Expression.LessThanOrEqual      (Constant1,Constant1));
+        共通0(Expressions.Expression.NotEqual             (Constant1,Constant1));
+        共通0(Expressions.Expression.LessThanOrEqual      (Constant1,Constant1));
+        共通0(Expressions.Expression.NotEqual             (Constant1,Constant1));
+        共通1(Expressions.Expression.AddAssign            (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.AddAssignChecked     (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.AndAssign            (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.DivideAssign         (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.LeftShiftAssign      (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.ModuloAssign         (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.MultiplyAssign       (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.MultiplyAssignChecked(MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.OrAssign             (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.PowerAssign          (MemberDouble,Constant1d));
+        共通1(Expressions.Expression.RightShiftAssign     (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.SubtractAssign       (MemberInt32 ,Constant1));
+        共通1(Expressions.Expression.SubtractAssignChecked(MemberInt32 ,Constant1));
 
-        共通0(Expression.Coalesce             (ConstantString,ConstantString,ConversionString));
+        共通0(Expressions.Expression.Coalesce             (ConstantString,ConstantString,ConversionString));
 
-        共通0(Expression.Add                  (Constant1,Constant1,Method_int));
-        共通0(Expression.AddChecked           (Constant1,Constant1,Method_int));
-        共通0(Expression.And                  (Constant1,Constant1,Method_int));
-        共通0(Expression.AndAlso              (ConstantBinry,ConstantBinry,typeof(演算子).GetMethod("op_BitwiseAnd")));
-        共通0(Expression.Divide               (Constant1,Constant1,Method_int));
-        共通0(Expression.ExclusiveOr          (Constant1,Constant1,Method_int));
-        共通0(Expression.LeftShift            (Constant1,Constant1,Method_int));
-        共通0(Expression.Modulo               (Constant1,Constant1,Method_int));
-        共通0(Expression.Multiply             (Constant1,Constant1,Method_int));
-        共通0(Expression.MultiplyChecked      (Constant1,Constant1,Method_int));
-        共通0(Expression.Or                   (Constant1,Constant1,Method_int));
-        共通0(Expression.OrElse               (ConstantBinry,ConstantBinry,typeof(演算子).GetMethod("op_BitwiseAnd")));
-        共通0(Expression.Power                (Constant1d,Constant1d,GetMethod(()=>Math.Pow(1,1))));
-        共通0(Expression.RightShift           (Constant1,Constant1,Method_int));
-        共通0(Expression.Subtract             (Constant1,Constant1,Method_int));
-        共通0(Expression.SubtractChecked      (Constant1,Constant1,Method_int));
-        共通1(Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.AddAssignChecked     (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.AndAssign            (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.DivideAssign         (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.LeftShiftAssign      (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.ModuloAssign         (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.MultiplyAssign       (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.MultiplyAssignChecked(MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.OrAssign             (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.PowerAssign          (MemberDouble,Constant1d,Method_double));
-        共通1(Expression.PowerAssign          (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.RightShiftAssign     (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.SubtractAssign       (MemberInt32 ,Constant1 ,Method_int));
-        共通1(Expression.SubtractAssignChecked(MemberInt32 ,Constant1 ,Method_int));
+        共通0(Expressions.Expression.Add                  (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.AddChecked           (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.And                  (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.AndAlso              (ConstantBinry,ConstantBinry,typeof(演算子).GetMethod("op_BitwiseAnd")));
+        共通0(Expressions.Expression.Divide               (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.ExclusiveOr          (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.LeftShift            (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.Modulo               (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.Multiply             (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.MultiplyChecked      (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.Or                   (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.OrElse               (ConstantBinry,ConstantBinry,typeof(演算子).GetMethod("op_BitwiseAnd")));
+        共通0(Expressions.Expression.Power                (Constant1d,Constant1d,GetMethod(()=>Math.Pow(1,1))));
+        共通0(Expressions.Expression.RightShift           (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.Subtract             (Constant1,Constant1,Method_int));
+        共通0(Expressions.Expression.SubtractChecked      (Constant1,Constant1,Method_int));
+        共通1(Expressions.Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.AddAssignChecked     (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.AndAssign            (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.DivideAssign         (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.LeftShiftAssign      (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.ModuloAssign         (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.MultiplyAssign       (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.MultiplyAssignChecked(MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.OrAssign             (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.PowerAssign          (MemberDouble,Constant1d,Method_double));
+        共通1(Expressions.Expression.PowerAssign          (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.RightShiftAssign     (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.SubtractAssign       (MemberInt32 ,Constant1 ,Method_int));
+        共通1(Expressions.Expression.SubtractAssignChecked(MemberInt32 ,Constant1 ,Method_int));
 
-        共通1(Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.AddAssignChecked     (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.AndAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.DivideAssign         (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.LeftShiftAssign      (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.ModuloAssign         (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.MultiplyAssign       (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.MultiplyAssignChecked(MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.OrAssign             (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.PowerAssign          (MemberDouble,Constant1d,Method_double,ConversionDouble));
-        共通1(Expression.PowerAssign          (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.RightShiftAssign     (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.SubtractAssign       (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
-        共通1(Expression.SubtractAssignChecked(MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.AddAssignChecked     (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.AndAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.DivideAssign         (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.ExclusiveOrAssign    (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.LeftShiftAssign      (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.ModuloAssign         (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.MultiplyAssign       (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.MultiplyAssignChecked(MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.OrAssign             (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.PowerAssign          (MemberDouble,Constant1d,Method_double,ConversionDouble));
+        共通1(Expressions.Expression.PowerAssign          (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.RightShiftAssign     (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.SubtractAssign       (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        共通1(Expressions.Expression.SubtractAssignChecked(MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
 
-        共通0(Expression.Equal                (Constant1,Constant1,false,Method_int));
-        共通0(Expression.GreaterThan          (Constant1,Constant1,false,Method_int));
-        共通0(Expression.GreaterThanOrEqual   (Constant1,Constant1,false,Method_int));
-        共通0(Expression.LessThan             (Constant1,Constant1,false,Method_int));
-        共通0(Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
-        共通0(Expression.NotEqual             (Constant1,Constant1,false,Method_int));
-        void 共通0(BinaryExpression Binary){
-            this.MemoryMessageJson_Assert<BinaryExpression>(null!,Assert.Null);
-            this.MemoryMessageJson_Assert<Expression>(null!,Assert.Null);
+        共通0(Expressions.Expression.Equal                (Constant1,Constant1,false,Method_int));
+        共通0(Expressions.Expression.GreaterThan          (Constant1,Constant1,false,Method_int));
+        共通0(Expressions.Expression.GreaterThanOrEqual   (Constant1,Constant1,false,Method_int));
+        共通0(Expressions.Expression.LessThan             (Constant1,Constant1,false,Method_int));
+        共通0(Expressions.Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
+        共通0(Expressions.Expression.NotEqual             (Constant1,Constant1,false,Method_int));
+        void 共通0(Expressions.BinaryExpression Binary){
+            this.MemoryMessageJson_Assert<Expressions.BinaryExpression>(null!,Assert.Null);
+            this.MemoryMessageJson_Assert<Expressions.Expression>(null!,Assert.Null);
             this.MemoryMessageJson_Assert<object>(null!,Assert.Null);
             this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-                Expression.Lambda<Func<object>>(
-                    Expression.Block(
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Block(
                         new[]{ParameterInt32},
-                        Expression.Assign(
+                        Expressions.Expression.Assign(
                             ParameterInt32,
-                            Expression.Constant(0)
+                            Expressions.Expression.Constant(0)
                         ),
-                        Expression.Convert(
+                        Expressions.Expression.Convert(
                             Binary,
                             typeof(object)
                         )
@@ -382,12 +399,12 @@ public class Serializer:共通 {
                 )
             );
         }
-        void 共通1(BinaryExpression Binary){
+        void 共通1(Expressions.BinaryExpression Binary){
             this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-                Expression.Lambda<Func<object>>(
-                    Expression.Block(
-                        Expression.Assign(MemberInt32,Constant0),
-                        Expression.Convert(Binary,typeof(object))
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Block(
+                        Expressions.Expression.Assign(MemberInt32,Constant0),
+                        Expressions.Expression.Convert(Binary,typeof(object))
                     )
                 )
             );
@@ -395,16 +412,16 @@ public class Serializer:共通 {
     }
     [Fact]public void Block0(){
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 ParameterDecimal
             )
         );
     }
     [Fact]public void Block1(){
-        var q= Expression.Parameter(typeof(decimal),"q");
+        var q= Expressions.Expression.Parameter(typeof(decimal),"q");
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal,q },
                 ParameterDecimal
             )
@@ -412,47 +429,47 @@ public class Serializer:共通 {
     }
     [Fact]public void Block2(){
         this.MemoryMessageJson_Expression(
-            Expression.Block(
-                new[]{Expression.Parameter(typeof(decimal),"a"),Expression.Parameter(typeof(decimal),"b"),ParameterDecimal},
+            Expressions.Expression.Block(
+                new[]{Expressions.Expression.Parameter(typeof(decimal),"a"),Expressions.Expression.Parameter(typeof(decimal),"b"),ParameterDecimal},
                 ParameterDecimal
             )
         );
     }
     [Fact]public void Block4(){
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
-                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                Expression.TryCatchFinally(
-                    Expression.Increment(ParameterDecimal),
+                Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                Expressions.Expression.TryCatchFinally(
+                    Expressions.Expression.Increment(ParameterDecimal),
                     ParameterDecimal
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
-                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                Expression.TryCatchFinally(
-                    Expression.Increment(ParameterDecimal),
-                    Expression.Constant(2)
+                Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                Expressions.Expression.TryCatchFinally(
+                    Expressions.Expression.Increment(ParameterDecimal),
+                    Expressions.Expression.Constant(2)
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
-                Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                Expression.TryCatchFinally(
-                    Expression.PostIncrementAssign(ParameterDecimal),
-                    Expression.Constant(2)
+                Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                Expressions.Expression.TryCatchFinally(
+                    Expressions.Expression.PostIncrementAssign(ParameterDecimal),
+                    Expressions.Expression.Constant(2)
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
-                Expression.TryCatchFinally(
+                Expressions.Expression.TryCatchFinally(
                     ParameterDecimal,
                     ParameterDecimal
                 ),
@@ -460,10 +477,10 @@ public class Serializer:共通 {
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
+            Expressions.Expression.Block(
                 new[] { ParameterDecimal },
-                Expression.TryCatchFinally(
-                    Expression.Constant(2),
+                Expressions.Expression.TryCatchFinally(
+                    Expressions.Expression.Constant(2),
                     ParameterDecimal
                 )
             )
@@ -471,25 +488,25 @@ public class Serializer:共通 {
     }
     [Fact]public void Block10(){
         this.MemoryMessageJson_Expression(
-            Expression.Block(
-                Expression.Switch(
-                    Expression.Constant(123),
-                    Expression.Constant(0m),
-                    Expression.SwitchCase(
-                        Expression.Constant(64m),
-                        Expression.Constant(124)
+            Expressions.Expression.Block(
+                Expressions.Expression.Switch(
+                    Expressions.Expression.Constant(123),
+                    Expressions.Expression.Constant(0m),
+                    Expressions.Expression.SwitchCase(
+                        Expressions.Expression.Constant(64m),
+                        Expressions.Expression.Constant(124)
                     )
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
-                Expression.Switch(
-                    Expression.Constant(123),
-                    Expression.Constant(0m),
-                    Expression.SwitchCase(
-                        Expression.Constant(64m),
-                        Expression.Constant(124)
+            Expressions.Expression.Block(
+                Expressions.Expression.Switch(
+                    Expressions.Expression.Constant(123),
+                    Expressions.Expression.Constant(0m),
+                    Expressions.Expression.SwitchCase(
+                        Expressions.Expression.Constant(64m),
+                        Expressions.Expression.Constant(124)
                     )
                 )
             )
@@ -497,59 +514,59 @@ public class Serializer:共通 {
     }
     [Fact]public void Condition(){
         this.MemoryMessageJson_Expression(
-            Expression.Condition(
-                Expression.Constant(true),
-                Expression.Constant(1m),
-                Expression.Constant(2m)
+            Expressions.Expression.Condition(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m),
+                Expressions.Expression.Constant(2m)
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.IfThenElse(
-                Expression.Constant(true),
-                Expression.Constant(1m),
-                Expression.Constant(2m)
+            Expressions.Expression.IfThenElse(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m),
+                Expressions.Expression.Constant(2m)
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.IfThen(
-                Expression.Constant(true),
-                Expression.Constant(1m)
+            Expressions.Expression.IfThen(
+                Expressions.Expression.Constant(true),
+                Expressions.Expression.Constant(1m)
             )
         );
     }
     [Fact]public void Constant0(){
-        this.MemoryMessageJson_Expression((Expression)Expression.Constant(null,typeof(string)));
+        this.MemoryMessageJson_Expression((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
     }
     [Fact]public void Constant1(){
-        this.MemoryMessageJson_Expression(Expression.Constant(1111m));
-        this.MemoryMessageJson_Expression(Expression.Constant(1111m,typeof(object)));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Constant(1111m));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
         this.MemoryMessageJson_Assert(
             typeof(string).GetConstructor(new[]{typeof(char),typeof(int)}),Assert.NotNull
         );
         this.MemoryMessageJson_Expression(
-            Expression.New(
+            Expressions.Expression.New(
                 typeof(string).GetConstructor(new[]{typeof(char),typeof(int)})!,
-                Expression.Constant('a'),
-                Expression.Constant(2)
+                Expressions.Expression.Constant('a'),
+                Expressions.Expression.Constant(2)
             )
         );
     }
     [Fact]public void DebugInfo(){
-        var SymbolDocument0=Expression.SymbolDocument("SymbolDocument0.cs");
+        var SymbolDocument0=Expressions.Expression.SymbolDocument("SymbolDocument0.cs");
         this.MemoryMessageJson_Expression(
-            Expression.DebugInfo(SymbolDocument0,1,1,3,10)
+            Expressions.Expression.DebugInfo(SymbolDocument0,1,1,3,10)
         );
     }
     [Fact]public void Default(){
-        this.MemoryMessageJson_Expression(Expression.Default(typeof(int)));
-        this.MemoryMessageJson_Expression(Expression.Default(typeof(decimal)));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Default(typeof(int)));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Default(typeof(decimal)));
     }
     //[Fact]public void Dynamic(){
     //    var CallSiteBinder=new CallSiteBinder();
-    //    this.共通Expression(Expressions.Expression.Dynamic(new CallSiteBinder(); typeof(int)));
-    //    this.共通Expression(Expressions.Expression.Default(typeof(decimal)));
+    //    this.共通Expressions.Expression(Expressions.Expressions.Expression.Dynamic(new CallSiteBinder(); typeof(int)));
+    //    this.共通Expressions.Expression(Expressions.Expressions.Expression.Default(typeof(decimal)));
     //}
     private static readonly RuntimeBinder.CSharpArgumentInfo CSharpArgumentInfo1 = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null);
     private static readonly RuntimeBinder.CSharpArgumentInfo[]CSharpArgumentInfoArray1 = {
@@ -574,17 +591,17 @@ public class Serializer:共通 {
         var arg1=1;
         var binder=RuntimeBinder.Binder.UnaryOperation(
             RuntimeBinder.CSharpBinderFlags.None,
-            ExpressionType.Increment,
+            Expressions.ExpressionType.Increment,
             this.GetType(),
             new[]{
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
                 //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
             }
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1,typeof(object))
+            Expressions.Expression.Constant(arg1,typeof(object))
         );
         var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
@@ -599,28 +616,28 @@ public class Serializer:共通 {
     //[Fact]public void DynamicCreateInstance(){
     //    var binder=RuntimeBinder.Binder.InvokeConstructor(
     //        RuntimeBinder.CSharpBinderFlags.None,
-    //        typeof(Expression),
+    //        typeof(Expressions.Expression),
     //        new RuntimeBinder.CSharpArgumentInfo[]{
     //            RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
     //        }
     //    );
     //    var  CallSite = CallSite<Func<CallSite,System.Type,object>>.Create(binder);
     //    {
-    //        var Dynamic0 = Expressions.Expression.Dynamic(
+    //        var Dynamic0 = Expressions.Expressions.Expression.Dynamic(
     //            binder,
     //            typeof(object),
-    //            Expressions.Expression.Constant(typeof(テスト))
+    //            Expressions.Expressions.Expression.Constant(typeof(テスト))
     //        );
     //        this.共通Dynamic(CallSite.Target(CallSite,typeof(テスト)),Dynamic0);
     //    }
     //    //{
-    //    //    var Constant_1L = Expressions.Expression.Constant(1L);
+    //    //    var Constant_1L = Expressions.Expressions.Expression.Constant(1L);
     //    //    var binder=RuntimeBinder.Binder.Convert(
     //    //        RuntimeBinder.CSharpBinderFlags.ConvertExplicit,
     //    //        typeof(double),
     //    //        this.GetType()
     //    //    );
-    //    //    var Dynamic0=Expressions.Expression.Dynamic(
+    //    //    var Dynamic0=Expressions.Expressions.Expression.Dynamic(
     //    //        binder,
     //    //        typeof(object),
     //    //        Constant_1L
@@ -640,13 +657,13 @@ public class Serializer:共通 {
         this.PrivateDynamicConvert<double,float>(1,RuntimeBinder.CSharpBinderFlags.ConvertExplicit);
     }
     private void PrivateDynamicConvert<TInput,TResult>(TInput input,RuntimeBinder.CSharpBinderFlags Flag){
-        var Constant = Expression.Constant(input);
+        var Constant = Expressions.Expression.Constant(input);
         var binder=RuntimeBinder.Binder.Convert(
             Flag,
             typeof(TResult),
             this.GetType()
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(TResult),
             Constant
@@ -654,7 +671,7 @@ public class Serializer:共通 {
         var CallSite=CallSite<Func<CallSite,object,TResult>>.Create(binder);
         var expected=CallSite.Target(CallSite,input!);
         this.MemoryMessageJson_Expression(Dynamic0);
-        var Lambda=Expression.Lambda<Func<TResult>>(Dynamic0);
+        var Lambda=Expressions.Expression.Lambda<Func<TResult>>(Dynamic0);
         this.MemoryMessageJson_Expression(Lambda);
         var M=Lambda.Compile();
         var actual=M();
@@ -671,28 +688,28 @@ public class Serializer:共通 {
                 CSharpArgumentInfoArray4
             );
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
-            var Dynamic0 = Expression.Dynamic(
+            var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(オブジェクト),
-                Expression.Constant(a),
-                Expression.Constant(b),
-                Expression.Constant(c)
+                Expressions.Expression.Constant(オブジェクト),
+                Expressions.Expression.Constant(a),
+                Expressions.Expression.Constant(b),
+                Expressions.Expression.Constant(c)
             );
             this.共通Dynamic(CallSite.Target(CallSite,オブジェクト,a,b,c),Dynamic0);
         }
     }
     [Fact]public void ClassDisplay(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<object>>(
-                Expression.Constant(ClassDisplay取得())
+            Expressions.Expression.Lambda<Func<object>>(
+                Expressions.Expression.Constant(ClassDisplay取得())
             )
         );
     }
     static dynamic テストStaticMethod(){
         return テスト.StaticMethodInt32();
     }
-    static Expression<Action<object, int>> DynamicCall()
+    static Expressions.Expression<Action<object, int>> DynamicCall()
     {
         //CallSiteBinderの構築
         var binder = RuntimeBinder.Binder.InvokeMember(
@@ -709,20 +726,20 @@ public class Serializer:共通 {
         //パラメータの構築
         var a1=new テスト();
         var a2=11;
-        var p1 = Expression.Parameter(typeof(object), "target");
-        var p2 = Expression.Parameter(typeof(int), "arg");
+        var p1 = Expressions.Expression.Parameter(typeof(object), "target");
+        var p2 = Expressions.Expression.Parameter(typeof(int), "arg");
 
         //動的操作の生成
-        var Dynamic=Expression.MakeDynamic(typeof(Action<CallSite,object,int>),
+        var Dynamic=Expressions.Expression.MakeDynamic(typeof(Action<CallSite,object,int>),
             binder,
             p1,p2
         );
-        var M = Expression.Lambda<Action<object,int>>(Dynamic,p1,p2).Compile();
+        var M = Expressions.Expression.Lambda<Action<object,int>>(Dynamic,p1,p2).Compile();
         M(a1,100);
         M(a1,100);
         var CallSite=CallSite<Action<CallSite,object,int>>.Create(binder);
         CallSite.Target(CallSite,a1,a2);
-        return Expression.Lambda<Action<object,int>>(Dynamic,p1,p2);
+        return Expressions.Expression.Lambda<Action<object,int>>(Dynamic,p1,p2);
     }    
     [Fact]
     public void BinderTest(){
@@ -762,18 +779,18 @@ public class Serializer:共通 {
             var binder=RuntimeBinder.Binder.InvokeMember(
                 RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(テスト),CSharpArgumentInfos
             );
-            var Dynamic0=Expression.Dynamic(
+            var Dynamic0=Expressions.Expression.Dynamic(
                 binder,typeof(object),
-                Expression.Constant(arg0),Expression.Constant(arg1)
+                Expressions.Expression.Constant(arg0),Expressions.Expression.Constant(arg1)
             );
             Action1後処理<T0,T1>(Dynamic0,binder,arg0,arg1);
             Action1後処理<object,T1>(Dynamic0,binder,arg0,arg1);
         }
-        void Action1後処理<T0,T1>(DynamicExpression Dynamic,CallSiteBinder binder,T0 @this,T1 arg1){
+        void Action1後処理<T0,T1>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 @this,T1 arg1){
             var CallSite=CallSite<Action<CallSite,T0,T1>>.Create(binder);
             CallSite.Target(CallSite,@this,arg1);
             this.MemoryMessageJson_Expression(Dynamic);
-            var Lambda = Expression.Lambda<Action>(Dynamic);
+            var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
             this.MemoryMessageJson_Expression(Lambda);
             var M = Lambda.Compile();
             M();
@@ -790,19 +807,19 @@ public class Serializer:共通 {
                 RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(LinqDB.Serializers.MemoryPack.Formatters.Expression),
                 CSharpArgumentInfos
             );
-            var Dynamic0=Expression.Dynamic(
+            var Dynamic0=Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg0),Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
+                Expressions.Expression.Constant(arg0),Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3)
             );
             Action3後処理<T0,T1,T2,T3>(Dynamic0,binder,arg0,arg1,arg2,arg3);
             Action3後処理<object,T1,T2,T3>(Dynamic0,binder,arg0,arg1,arg2,arg3);
         }
-        void Action3後処理<T0,T1,T2,T3>(DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
+        void Action3後処理<T0,T1,T2,T3>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
             var CallSite=CallSite<Action<CallSite,T0,T1,T2,T3>>.Create(binder);
             CallSite.Target(CallSite,arg0,arg1,arg2,arg3);
             this.MemoryMessageJson_Expression(Dynamic);
-            var Lambda = Expression.Lambda<Action>(Dynamic);
+            var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
             this.MemoryMessageJson_Expression(Lambda);
             var M = Lambda.Compile();
             M();
@@ -812,15 +829,15 @@ public class Serializer:共通 {
                 RuntimeBinder.CSharpBinderFlags.None,Name,null,
                 typeof(Serializer),CSharpArgumentInfoArray4
             );
-            var Dynamic0 = Expression.Dynamic(
+            var Dynamic0 = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg0),Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
+                Expressions.Expression.Constant(arg0),Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3)
             );
             Func3後処理<T0,T1,T2,T3,object>(Dynamic0,binder,arg0,arg1,arg2,arg3);
             Func3後処理<object,T1,T2,T3,object>(Dynamic0,binder,arg0,arg1,arg2,arg3);
         }
-        void Func3後処理<T0,T1,T2,T3,TResult>(DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
+        void Func3後処理<T0,T1,T2,T3,TResult>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
             var CallSite=CallSite<Func<CallSite,T0,T1,T2,T3,TResult>>.Create(binder);
             var expected=CallSite.Target(CallSite,arg0,arg1,arg2,arg3)!;
             this.共通Dynamic(expected,Dynamic);
@@ -843,10 +860,10 @@ public class Serializer:共通 {
                 this.GetType(),
                 CSharpArgumentInfos
             );
-            var Dynamic0=Expression.Dynamic(
+            var Dynamic0=Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3),Expression.Constant(arg4)
+                Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3),Expressions.Expression.Constant(arg4)
             );
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
             var expected=CallSite.Target(CallSite,arg1,arg2,arg3,arg4);
@@ -863,10 +880,10 @@ public class Serializer:共通 {
                 this.GetType(),
                 CSharpArgumentInfoArray1
             );
-            var Dynamic0=Expression.Dynamic(
+            var Dynamic0=Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg1)
+                Expressions.Expression.Constant(arg1)
             );
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
             this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
@@ -879,10 +896,10 @@ public class Serializer:共通 {
                 this.GetType(),
                 CSharpArgumentInfoArray1
             );
-            var Dynamic0=Expression.Dynamic(
+            var Dynamic0=Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
-                Expression.Constant(arg1)
+                Expressions.Expression.Constant(arg1)
             );
             this.MemoryMessageJson_Expression(Dynamic0);
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
@@ -898,11 +915,11 @@ public class Serializer:共通 {
             this.GetType(),
             CSharpArgumentInfoArray2
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1),
-            Expression.Constant(arg2)
+            Expressions.Expression.Constant(arg1),
+            Expressions.Expression.Constant(arg2)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
@@ -918,10 +935,10 @@ public class Serializer:共通 {
             this.GetType(),
             CSharpArgumentInfoArray2
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1),Expression.Constant(arg2)
+            Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
@@ -940,10 +957,10 @@ public class Serializer:共通 {
             this.GetType(),
             CSharpArgumentInfoArray3
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
+            Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
@@ -959,10 +976,10 @@ public class Serializer:共通 {
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
             }
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1,typeof(object)),Expression.Constant(arg2,typeof(object))
+            Expressions.Expression.Constant(arg1,typeof(object)),Expressions.Expression.Constant(arg2,typeof(object))
         );
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
@@ -978,10 +995,10 @@ public class Serializer:共通 {
             this.GetType(),
             CSharpArgumentInfoArray3
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3)
+            Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
@@ -1000,10 +1017,10 @@ public class Serializer:共通 {
             this.GetType(),
             CSharpArgumentInfoArray4
         );
-        var Dynamic0=Expression.Dynamic(
+        var Dynamic0=Expressions.Expression.Dynamic(
             binder,
             typeof(object),
-            Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3),Expression.Constant(arg4)
+            Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3),Expressions.Expression.Constant(arg4)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3,arg4),Dynamic0);
@@ -1013,23 +1030,23 @@ public class Serializer:共通 {
         var arg2=1;
         var binder=RuntimeBinder.Binder.BinaryOperation(
             RuntimeBinder.CSharpBinderFlags.None,
-            ExpressionType.Add,
+            Expressions.ExpressionType.Add,
             this.GetType(),
             new[]{
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null),
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null)
             }
         );
-        var Dynamic0 = Expression.Dynamic(
+        var Dynamic0 = Expressions.Expression.Dynamic(
             binder,typeof(object),
-            Expression.Constant(arg1),Expression.Constant(arg2)
+            Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2)
         );
         var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
-    private void 共通Dynamic(object expected,DynamicExpression Dynamic0){
+    private void 共通Dynamic(object expected,Expressions.DynamicExpression Dynamic0){
         this.MemoryMessageJson_Expression(Dynamic0);
-        var Lambda=Expression.Lambda<Func<object>>(Dynamic0);
+        var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
@@ -1043,26 +1060,26 @@ public class Serializer:共通 {
         var BindCollectionフィールド2=Type.GetField(nameof(BindCollection.BindCollectionフィールド2));
         var Listフィールド1=Type.GetField(nameof(BindCollection.Listフィールド1));
         var Listフィールド2=Type.GetField(nameof(BindCollection.Listフィールド2));
-        var Constant_1=Expression.Constant(1);
-        var Constant_2=Expression.Constant(2);
+        var Constant_1=Expressions.Expression.Constant(1);
+        var Constant_2=Expressions.Expression.Constant(2);
         var ctor=Type.GetConstructor(new[]{typeof(int)});
-        var New=Expression.New(
+        var New=Expressions.Expression.New(
             ctor,
             Constant_1
         );
         var Add=typeof(List<int>).GetMethod("Add");
-        Expression.ElementInit(
+        Expressions.Expression.ElementInit(
             Add,
             Constant_1
         );
         {
             var l=new List<int>();
             this.MemoryMessageJson_Expression(
-                Expression.MemberInit(
+                Expressions.Expression.MemberInit(
                     New,
-                    Expression.ListBind(
+                    Expressions.Expression.ListBind(
                         Listフィールド2,
-                        Expression.ElementInit(
+                        Expressions.Expression.ElementInit(
                             Add,
                             Constant_1
                         )
@@ -1072,48 +1089,48 @@ public class Serializer:共通 {
         }
     }
     [Fact]public void Label(){
-        var labelTarget=Expression.Label();
-        this.MemoryMessageJson_Expression(Expression.Label(labelTarget));
-        this.MemoryMessageJson_Expression(Expression.Label(labelTarget,Expression.Constant(1)));
+        var labelTarget=Expressions.Expression.Label();
+        this.MemoryMessageJson_Expression(Expressions.Expression.Label(labelTarget));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
     }
     [Fact]public void LabelTarget(){
-        共通LabelTarget(Expression.Label());
-        共通LabelTarget(Expression.Label(typeof(int)));
-        共通LabelTarget(Expression.Label(typeof(double),"abc"));
-        void 共通LabelTarget(LabelTarget input){
+        共通LabelTarget(Expressions.Expression.Label());
+        共通LabelTarget(Expressions.Expression.Label(typeof(int)));
+        共通LabelTarget(Expressions.Expression.Label(typeof(double),"abc"));
+        void 共通LabelTarget(Expressions.LabelTarget input){
             Debug.Assert(input!=null,nameof(input)+" != null");
-            this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(LabelTarget)output,this.ExpressionEqualityComparer));
+            this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(Expressions.LabelTarget)output,this.ExpressionEqualityComparer));
             this.MemoryMessageJson_Assert(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
         }
     }
-    static LambdaExpression Lambda<T>(Expression<Func<T>> e)=>e;
+    static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]
     public void Lambda0(){
         this.MemoryMessageJson_Expression(Lambda(()=>1));
     }
     [Fact]public void Lambda1(){
-        this.MemoryMessageJson_Expression(Expression.Lambda<Func<decimal>>(Expression.Constant(2m)));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
     }
     [Fact]public void Lambda3(){
         //const decimal Catch値 = 40, Finally値 = 30;
-        //Expressions.Expression.TryCatchFinally(
-        //    //Expressions.Expression.PostIncrementAssign(@decimal),
-        //    Expressions.Expression.Constant(Finally値),
-        //    Expressions.Expression.Constant(Finally値),
-        //    Expressions.Expression.Catch(
+        //Expressions.Expressions.Expression.TryCatchFinally(
+        //    //Expressions.Expressions.Expression.PostIncrementAssign(@decimal),
+        //    Expressions.Expressions.Expression.Constant(Finally値),
+        //    Expressions.Expressions.Expression.Constant(Finally値),
+        //    Expressions.Expressions.Expression.Catch(
         //        typeof(Exception),
-        //        Expressions.Expression.Constant(Catch値)
+        //        Expressions.Expressions.Expression.Constant(Catch値)
         //    )
         //);
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal>>(
-                Expression.Block(
+            Expressions.Expression.Lambda<Func<decimal>>(
+                Expressions.Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
-                        Expression.PostIncrementAssign(ParameterDecimal),
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
+                        Expressions.Expression.PostIncrementAssign(ParameterDecimal),
                         ParameterDecimal,
-                        Expression.Catch(
+                        Expressions.Expression.Catch(
                             typeof(Exception),
                             ParameterDecimal
                         )
@@ -1124,10 +1141,10 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda31(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal,decimal>>(
-                Expression.Block(
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
+            Expressions.Expression.Lambda<Func<decimal,decimal>>(
+                Expressions.Expression.Block(
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
                         ParameterDecimal,
                         ParameterDecimal
                     )
@@ -1138,11 +1155,11 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda32(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal>>(
-                Expression.Block(
+            Expressions.Expression.Lambda<Func<decimal>>(
+                Expressions.Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
                         ParameterDecimal,
                         ParameterDecimal
                     ),
@@ -1153,15 +1170,15 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda33(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal>>(
-                Expression.Block(
+            Expressions.Expression.Lambda<Func<decimal>>(
+                Expressions.Expression.Block(
                     new[]{ParameterDecimal},
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
-                        Expression.PostIncrementAssign(ParameterDecimal),
-                        Expression.Assign(
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
+                        Expressions.Expression.PostIncrementAssign(ParameterDecimal),
+                        Expressions.Expression.Assign(
                             ParameterDecimal,
-                            Expression.Constant(2m)
+                            Expressions.Expression.Constant(2m)
                         )
                     ),
                     ParameterDecimal
@@ -1171,15 +1188,15 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda34(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal>>(
-                Expression.Block(
+            Expressions.Expression.Lambda<Func<decimal>>(
+                Expressions.Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
-                        Expression.PostIncrementAssign(ParameterDecimal),
-                        Expression.Assign(
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
+                        Expressions.Expression.PostIncrementAssign(ParameterDecimal),
+                        Expressions.Expression.Assign(
                             ParameterDecimal,
-                            Expression.Constant(2m)
+                            Expressions.Expression.Constant(2m)
                         )
                     ),
                     ParameterDecimal
@@ -1189,15 +1206,15 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda35(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal>>(
-                Expression.Block(
+            Expressions.Expression.Lambda<Func<decimal>>(
+                Expressions.Expression.Block(
                     new[] { ParameterDecimal },
-                    Expression.Assign(ParameterDecimal,Expression.Constant(0m)),
-                    Expression.TryCatchFinally(
-                        Expression.PostIncrementAssign(ParameterDecimal),
-                        Expression.Assign(
+                    Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
+                    Expressions.Expression.TryCatchFinally(
+                        Expressions.Expression.PostIncrementAssign(ParameterDecimal),
+                        Expressions.Expression.Assign(
                             ParameterDecimal,
-                            Expression.Constant(2m)
+                            Expressions.Expression.Constant(2m)
                         )
                     ),
                     ParameterDecimal
@@ -1206,36 +1223,36 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda4(){
-        var Exception=Expression.Parameter(typeof(Exception));
+        var Exception=Expressions.Expression.Parameter(typeof(Exception));
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expression.Lambda<Func<decimal,decimal>>(
-                Expression.TryCatchFinally(
+            Expressions.Expression.Lambda<Func<decimal,decimal>>(
+                Expressions.Expression.TryCatchFinally(
                     ParameterDecimal,
                     ParameterDecimal,
-                    Expression.Catch(Exception,ParameterDecimal,Expression.Constant(true))
+                    Expressions.Expression.Catch(Exception,ParameterDecimal,Expressions.Expression.Constant(true))
                 ),
                 ParameterDecimal
             ),1
         );
     }
     [Fact]public void Lambda5(){
-        var Array2=Expression.Parameter(typeof(int[,]));
+        var Array2=Expressions.Expression.Parameter(typeof(int[,]));
         this.MemoryMessageJson_TExpressionObject(
-            Expression.Lambda(
-                Expression.ArrayIndex(
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
                     Array2,
-                    Expression.Constant(0),
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0)
                 ),
                 Array2
             )
         );
-        var Array1=Expression.Parameter(typeof(int[]));
+        var Array1=Expressions.Expression.Parameter(typeof(int[]));
         this.MemoryMessageJson_TExpressionObject(
-            Expression.Lambda(
-                Expression.ArrayIndex(
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
                     Array1,
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0)
                 ),
                 Array1
             )
@@ -1244,39 +1261,22 @@ public class Serializer:共通 {
     [Fact]
     public void NewArrayInit(){
         this.MemoryMessageJson_Expression(
-            Expression.NewArrayInit(
+            Expressions.Expression.NewArrayInit(
                 typeof(int),
-                Expression.Constant(0),
-                Expression.Constant(1)
+                Expressions.Expression.Constant(0),
+                Expressions.Expression.Constant(1)
             )
         );
     }
     [Fact]
     public void NewArrayBounds(){
         this.MemoryMessageJson_Expression(
-            Expression.NewArrayBounds(
+            Expressions.Expression.NewArrayBounds(
                 typeof(int),
-                Expression.Constant(0),
-                Expression.Constant(1)
+                Expressions.Expression.Constant(0),
+                Expressions.Expression.Constant(1)
             )
         );
-    }
-    class BindCollection
-    {
-        public int Int32フィールド1;
-        public int Int32フィールド2;
-        public BindCollection BindCollectionフィールド1;
-        public BindCollection BindCollectionフィールド2;
-        public readonly List<int> Listフィールド1 = new();
-        public readonly List<int> Listフィールド2 = new();
-
-        public BindCollection(int v)
-        {
-            this.Int32フィールド1 = 0;
-            this.Int32フィールド2 = 0;
-            this.BindCollectionフィールド1 = null;
-            this.BindCollectionフィールド2 = null;
-        }
     }
     [Fact]
     public void MemberInit(){
@@ -1287,29 +1287,29 @@ public class Serializer:共通 {
         Assert.NotNull(Listフィールド1);
         var Listフィールド2 = Type.GetField(nameof(BindCollection.Listフィールド2))!;
         Assert.NotNull(Listフィールド2);
-        var Constant_1 = Expression.Constant(1);
+        var Constant_1 = Expressions.Expression.Constant(1);
         var ctor = Type.GetConstructor(new[] {
             typeof(int)
         });
-        var New = Expression.New(
+        var New = Expressions.Expression.New(
             ctor,
             Constant_1
         );
         this.MemoryMessageJson_Expression(
-            Expression.MemberInit(
+            Expressions.Expression.MemberInit(
                 New,
-                Expression.Bind(
+                Expressions.Expression.Bind(
                     Int32フィールド1,
                     Constant_1
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.MemberInit(
+            Expressions.Expression.MemberInit(
                 New,
-                Expression.ListBind(
+                Expressions.Expression.ListBind(
                     Listフィールド2,
-                    Expression.ElementInit(
+                    Expressions.Expression.ElementInit(
                         typeof(List<int>).GetMethod("Add")!,
                         Constant_1
                     )
@@ -1317,15 +1317,15 @@ public class Serializer:共通 {
             )
         );
     }
-    private static readonly LabelTarget Label_decimal=Expression.Label(typeof(decimal),"Label_decimal");
-    private static readonly LabelTarget Label_void=Expression.Label("Label");
+    private static readonly Expressions.LabelTarget Label_decimal=Expressions.Expression.Label(typeof(decimal),"Label_decimal");
+    private static readonly Expressions.LabelTarget Label_void=Expressions.Expression.Label("Label");
     [Fact]
     public void Loop0(){
         this.MemoryMessageJson_Expression(
-            Expression.Loop(
-                Expression.Block(
-                    Expression.Break(Label_decimal,Expression.Constant(1m)),
-                    Expression.Continue(Label_void)
+            Expressions.Expression.Loop(
+                Expressions.Expression.Block(
+                    Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m)),
+                    Expressions.Expression.Continue(Label_void)
                 ),
                 Label_decimal,
                 Label_void
@@ -1334,9 +1334,9 @@ public class Serializer:共通 {
     }
     [Fact]public void Loop1(){
         this.MemoryMessageJson_Expression(
-            Expression.Loop(
-                Expression.Block(
-                    Expression.Break(Label_decimal,Expression.Constant(1m))
+            Expressions.Expression.Loop(
+                Expressions.Expression.Block(
+                    Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m))
                 ),
                 Label_decimal
             )
@@ -1344,28 +1344,28 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Negate(){
-        this.MemoryMessageJson_Expression(Expression.Negate(Expression.Constant(1m)));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
     }
     [Fact]public void Index0(){
-        var List=Expression.Parameter(typeof(List<int>));
-        this.MemoryMessageJson_Expression((Expression)
-            Expression.Block(
+        var List=Expressions.Expression.Parameter(typeof(List<int>));
+        this.MemoryMessageJson_Expression((Expressions.Expression)
+            Expressions.Expression.Block(
                 new[] { List },
-                Expression.MakeIndex(
+                Expressions.Expression.MakeIndex(
                     List,
                     typeof(List<int>).GetProperty("Item"),
-                    new []{Expression.Constant(0)}
+                    new []{Expressions.Expression.Constant(0)}
                 )
             )
         );
     }
     [Fact]public void Index1(){
-        var Array1=Expression.Parameter(typeof(int[]));
+        var Array1=Expressions.Expression.Parameter(typeof(int[]));
         this.MemoryMessageJson_Expression(
-            Expression.Lambda(
-                Expression.ArrayIndex(
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
                     Array1,
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0)
                 ),
                 Array1
             )
@@ -1373,13 +1373,13 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Index2(){
-        var Array2=Expression.Parameter(typeof(int[,]));
+        var Array2=Expressions.Expression.Parameter(typeof(int[,]));
         this.MemoryMessageJson_Expression(
-            Expression.Lambda(
-                Expression.ArrayIndex(
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
                     Array2,
-                    Expression.Constant(0),
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0)
                 ),
                 Array2
             )
@@ -1387,14 +1387,14 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Index3(){
-        var Array2=Expression.Parameter(typeof(int[,,]));
+        var Array2=Expressions.Expression.Parameter(typeof(int[,,]));
         this.MemoryMessageJson_Expression(
-            Expression.Lambda(
-                Expression.ArrayIndex(
+            Expressions.Expression.Lambda(
+                Expressions.Expression.ArrayIndex(
                     Array2,
-                    Expression.Constant(0),
-                    Expression.Constant(0),
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0),
+                    Expressions.Expression.Constant(0)
                 ),
                 Array2
             )
@@ -1402,49 +1402,49 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Goto(){
-        var target=Expression.Label(typeof(int),"target");
+        var target=Expressions.Expression.Label(typeof(int),"target");
         this.MemoryMessageJson_Expression(
-            Expression.Block(
-                Expression.Label(
+            Expressions.Expression.Block(
+                Expressions.Expression.Label(
                     target,
-                    Expression.Constant(1)
+                    Expressions.Expression.Constant(1)
                 ),
-                Expression.MakeGoto(
-                    GotoExpressionKind.Return,
+                Expressions.Expression.MakeGoto(
+                    Expressions.GotoExpressionKind.Return,
                     target,
-                    Expression.Constant(5),
+                    Expressions.Expression.Constant(5),
                     typeof(byte)
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.Block(
-                Expression.Label(
+            Expressions.Expression.Block(
+                Expressions.Expression.Label(
                     target,
-                    Expression.Constant(1)
+                    Expressions.Expression.Constant(1)
                 ),
-                Expression.MakeGoto(
-                    GotoExpressionKind.Goto,
+                Expressions.Expression.MakeGoto(
+                    Expressions.GotoExpressionKind.Goto,
                     target,
-                    Expression.Constant(2),
+                    Expressions.Expression.Constant(2),
                     typeof(double)
                 ),
-                Expression.MakeGoto(
-                    GotoExpressionKind.Break,
+                Expressions.Expression.MakeGoto(
+                    Expressions.GotoExpressionKind.Break,
                     target,
-                    Expression.Constant(3),
+                    Expressions.Expression.Constant(3),
                     typeof(decimal)
                 ),
-                Expression.MakeGoto(
-                    GotoExpressionKind.Continue,
+                Expressions.Expression.MakeGoto(
+                    Expressions.GotoExpressionKind.Continue,
                     target,
-                    Expression.Constant(4),
+                    Expressions.Expression.Constant(4),
                     typeof(float)
                 ),
-                Expression.MakeGoto(
-                    GotoExpressionKind.Return,
+                Expressions.Expression.MakeGoto(
+                    Expressions.GotoExpressionKind.Return,
                     target,
-                    Expression.Constant(5),
+                    Expressions.Expression.Constant(5),
                     typeof(byte)
                 )
             )
@@ -1453,15 +1453,15 @@ public class Serializer:共通 {
     [Fact]
     public void ListInit(){
         this.MemoryMessageJson_Expression(
-            Expression.ListInit(
-                Expression.New(typeof(List<int>)),
-                Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expression.Constant(1))
+            Expressions.Expression.ListInit(
+                Expressions.Expression.New(typeof(List<int>)),
+                Expressions.Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expressions.Expression.Constant(1))
             )
         );
     }
     [Fact]public void MemberExpression(){
-        var Point=Expression.Parameter(typeof(Point));
-        this.MemoryMessageJson_Expression(Expression.Block(new[]{Point},Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+        var Point=Expressions.Expression.Parameter(typeof(Point));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
     [Fact]public void MemberBinding(){
         var Type = typeof(BindCollection);
@@ -1471,32 +1471,32 @@ public class Serializer:共通 {
         var BindCollectionフィールド2 = Type.GetField(nameof(BindCollection.BindCollectionフィールド2));
         var Listフィールド1 = Type.GetField(nameof(BindCollection.Listフィールド1));
         var Listフィールド2 = Type.GetField(nameof(BindCollection.Listフィールド2));
-        var Constant_1 = Expression.Constant(1);
-        var Constant_2 = Expression.Constant(2);
+        var Constant_1 = Expressions.Expression.Constant(1);
+        var Constant_2 = Expressions.Expression.Constant(2);
         var ctor = Type.GetConstructor(new[] {
             typeof(int)
         });
-        var New = Expression.New(
+        var New = Expressions.Expression.New(
             ctor,
             Constant_1
         );
         //if(a_Bindings.Count!=b_Bindings.Count) return false;
         this.MemoryMessageJson_Expression(
-            Expression.MemberInit(
+            Expressions.Expression.MemberInit(
                 New,
-                Expression.Bind(
+                Expressions.Expression.Bind(
                     Int32フィールド1,
                     Constant_1
                 ),
-                Expression.Bind(
+                Expressions.Expression.Bind(
                     Int32フィールド2,
                     Constant_1
                 )
             )
         );
     }
-    private static Reflection.MethodInfo M(Expression<Action> f)=>
-        ((MethodCallExpression)f.Body).Method;
+    private static Reflection.MethodInfo M(Expressions.Expression<Action> f)=>
+        ((Expressions.MethodCallExpression)f.Body).Method;
     private static void StaticMethod(){}
     private static void StaticMethod(int a){}
     private static void StaticMethod(int a,int b){}
@@ -1505,83 +1505,83 @@ public class Serializer:共通 {
     private void InstanceMethod(int a,int b){}
     [Fact]public void MethodCall(){
         var o=new テスト();
-        var arg=Expression.Constant(1);
-        var @this=Expression.Constant(o);
-        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod())));
-        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
-        this.MemoryMessageJson_Expression(Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod())));
-        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
-        this.MemoryMessageJson_Expression(Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
+        var arg=Expressions.Expression.Constant(1);
+        var @this=Expressions.Expression.Constant(o);
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
         this.MemoryMessageJson_Expression(
-            Expression.Call(
+            Expressions.Expression.Call(
                 M(()=>string.Concat("","")),
-                Expression.Constant("A"),
-                Expression.Constant("B")
+                Expressions.Expression.Constant("A"),
+                Expressions.Expression.Constant("B")
             )
         );
     }
     //[Fact]
     //public void Null(){
-    //    this.共通Expression<Expressions.Expression?>(null);
+    //    this.共通Expressions.Expression<Expressions.Expressions.Expression?>(null);
     //}
     //[Fact]
     //public void GreaterThan(){
-    //    this.共通Expression(Expressions.Expression.GreaterThan(Expressions.Expression.Constant(1m),Expressions.Expression.Constant(1m)));
+    //    this.共通Expressions.Expression(Expressions.Expressions.Expression.GreaterThan(Expressions.Expressions.Expression.Constant(1m),Expressions.Expressions.Expression.Constant(1m)));
     //}
 
     //[Fact]
     //public void Assign(){
-    //    var @string=Expressions.Expression.Parameter(typeof(string));
-    //    this.共通Expression(Expressions.Expression.Block(new[]{@string},Expressions.Expression.Assign(@string,@string)));
+    //    var @string=Expressions.Expressions.Expression.Parameter(typeof(string));
+    //    this.共通Expressions.Expression(Expressions.Expressions.Expression.Block(new[]{@string},Expressions.Expressions.Expression.Assign(@string,@string)));
     //}
     [Fact]
     public void Invoke(){
-        var @string=Expression.Parameter(typeof(string));
+        var @string=Expressions.Expression.Parameter(typeof(string));
         this.MemoryMessageJson_Expression(
-            Expression.Invoke(
-                Expression.Lambda(@string,@string),
-                Expression.Constant("B")
+            Expressions.Expression.Invoke(
+                Expressions.Expression.Lambda(@string,@string),
+                Expressions.Expression.Constant("B")
             )
         );
     }
     [Fact]public void New(){
         this.MemoryMessageJson_Expression(
-            Expression.New(
+            Expressions.Expression.New(
                 typeof(ValueTuple<int>).GetConstructors()[0],
-                Expression.Constant(1)
+                Expressions.Expression.Constant(1)
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.New(
+            Expressions.Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
-                Expression.Constant(1),
-                Expression.Constant(2)
+                Expressions.Expression.Constant(1),
+                Expressions.Expression.Constant(2)
             )
         );
     }
-    static Reflection.MethodInfo M<T>(Expression<Func<T>> e){
-        var Method=((MethodCallExpression)e.Body).Method;
+    static Reflection.MethodInfo M<T>(Expressions.Expression<Func<T>> e){
+        var Method=((Expressions.MethodCallExpression)e.Body).Method;
         return Method;
     }
     [Fact]
     public void Parameter(){
-        var p0=Expression.Parameter(typeof(int));
+        var p0=Expressions.Expression.Parameter(typeof(int));
         this.MemoryMessageJson_Expression(p0);
-        this.MemoryMessageJson_Expression(Expression.Lambda<Func<int,int>>(p0,p0));
-        var p1=Expression.Parameter(typeof(int),"a");
+        this.MemoryMessageJson_Expression(Expressions.Expression.Lambda<Func<int,int>>(p0,p0));
+        var p1=Expressions.Expression.Parameter(typeof(int),"a");
         this.MemoryMessageJson_Expression(p1);
-        this.MemoryMessageJson_Expression(Expression.Lambda<Func<int,int>>(p1,p1));
+        this.MemoryMessageJson_Expression(Expressions.Expression.Lambda<Func<int,int>>(p1,p1));
     }
     [Fact]
     public void Switch(){
         this.MemoryMessageJson_Expression(
-            Expression.Switch(
-                Expression.Constant(123),
-                Expression.Constant(0m),
-                Expression.SwitchCase(
-                    Expression.Constant(64m),
-                    Expression.Constant(124)
+            Expressions.Expression.Switch(
+                Expressions.Expression.Constant(123),
+                Expressions.Expression.Constant(0m),
+                Expressions.Expression.SwitchCase(
+                    Expressions.Expression.Constant(64m),
+                    Expressions.Expression.Constant(124)
                 )
             )
         );
@@ -1589,46 +1589,46 @@ public class Serializer:共通 {
     [Fact]
     public void Try(){
         this.MemoryMessageJson_Expression(
-            Expression.TryCatch(
-                Expression.Constant(0),
-                Expression.Catch(
+            Expressions.Expression.TryCatch(
+                Expressions.Expression.Constant(0),
+                Expressions.Expression.Catch(
                     typeof(Exception),
-                    Expression.Constant(0)
+                    Expressions.Expression.Constant(0)
                 )
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.TryCatchFinally(
-                Expression.Default(typeof(void)),
-                Expression.Default(typeof(void))
+            Expressions.Expression.TryCatchFinally(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.TryFault(
-                Expression.Default(typeof(void)),
-                Expression.Default(typeof(void))
+            Expressions.Expression.TryFault(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
             )
         );
         this.MemoryMessageJson_Expression(
-            Expression.TryFinally(
-                Expression.Default(typeof(void)),
-                Expression.Default(typeof(void))
+            Expressions.Expression.TryFinally(
+                Expressions.Expression.Default(typeof(void)),
+                Expressions.Expression.Default(typeof(void))
             )
         );
     }
     [Fact]
     public void TypeEqual(){
         this.MemoryMessageJson_Expression(
-            Expression.TypeEqual(
-                Expression.Constant(1m),
+            Expressions.Expression.TypeEqual(
+                Expressions.Expression.Constant(1m),
                 typeof(decimal)
             )
         );
     }
     [Fact]public void TypeIs(){
         this.MemoryMessageJson_Expression(
-            Expression.TypeIs(
-                Expression.Constant(1m),
+            Expressions.Expression.TypeIs(
+                Expressions.Expression.Constant(1m),
                 typeof(decimal)
             )
         );
@@ -1639,76 +1639,77 @@ public class Serializer:共通 {
         return (int)a;
     }
     [Fact]public void Unary(){
-        var ConstantArray = Expression.Constant(new int[10]);
-        var Constant1= Expression.Constant(1);
-        var Constant1_1d= Expression.Constant(1.1);
-        var ConstantTrue= Expression.Constant(true);
-        var Constant演算子=Expression.Constant(new 演算子(true));
-        var Constant演算子1=Expression.Constant(new 演算子1(true));
-        var Parameter演算子=Expression.Parameter(typeof(演算子));
-        var ParameterInt32=Expression.Parameter(typeof(int));
-        this.MemoryMessageJson_Expression(Expression.ArrayLength(Expression.Constant(new int[1])));
-        共通1(Expression.ArrayLength(ConstantArray));
-        共通1(Expression.Quote(Expression.Lambda(ConstantArray)));
-        共通1(Expression.Convert(Constant1_1d,typeof(int)));
-        共通1(Expression.ConvertChecked(Constant1_1d,typeof(int)));
-        共通1(Expression.Decrement(Constant1_1d));
-        共通1(Expression.Increment(Constant1_1d));
-        共通1(Expression.IsFalse(ConstantTrue));
-        共通1(Expression.IsTrue(ConstantTrue));
-        共通1(Expression.Negate(Constant1_1d));
-        共通1(Expression.NegateChecked(Constant1_1d));
-        共通1(Expression.OnesComplement(Constant1));
-        共通1(Expression.Decrement(Constant1_1d));
-        共通1(Expression.Increment(Constant1_1d));
-        共通0(ParameterInt32,Constant1,Expression.PostDecrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expression.PostIncrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expression.PreDecrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expression.PreIncrementAssign(ParameterInt32));
-        共通1(Expression.UnaryPlus(Constant1_1d));
+        var ConstantArray = Expressions.Expression.Constant(new int[10]);
+        var Constant1= Expressions.Expression.Constant(1);
+        var Constant1_1d= Expressions.Expression.Constant(1.1);
+        var ConstantTrue= Expressions.Expression.Constant(true);
+        var Constant演算子=Expressions.Expression.Constant(new 演算子(true));
+        var Constant演算子1=Expressions.Expression.Constant(new 演算子1(true));
+        var Parameter演算子=Expressions.Expression.Parameter(typeof(演算子));
+        var ParameterInt32=Expressions.Expression.Parameter(typeof(int));
+        this.MemoryMessageJson_Expression(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
+        共通1(Expressions.Expression.ArrayLength(ConstantArray));
+        共通1(Expressions.Expression.Quote(Expressions.Expression.Lambda(ConstantArray)));
+        共通1(Expressions.Expression.Convert(Constant1_1d,typeof(int)));
+        共通1(Expressions.Expression.ConvertChecked(Constant1_1d,typeof(int)));
+        共通1(Expressions.Expression.Decrement(Constant1_1d));
+        共通1(Expressions.Expression.Increment(Constant1_1d));
+        共通1(Expressions.Expression.IsFalse(ConstantTrue));
+        共通1(Expressions.Expression.IsTrue(ConstantTrue));
+        共通1(Expressions.Expression.Negate(Constant1_1d));
+        共通1(Expressions.Expression.NegateChecked(Constant1_1d));
+        共通1(Expressions.Expression.Not(Constant1));
+        共通1(Expressions.Expression.OnesComplement(Constant1));
+        共通1(Expressions.Expression.Decrement(Constant1_1d));
+        共通1(Expressions.Expression.Increment(Constant1_1d));
+        共通0(ParameterInt32,Constant1,Expressions.Expression.PostDecrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expressions.Expression.PostIncrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expressions.Expression.PreDecrementAssign(ParameterInt32));
+        共通0(ParameterInt32,Constant1,Expressions.Expression.PreIncrementAssign(ParameterInt32));
+        共通1(Expressions.Expression.UnaryPlus(Constant1_1d));
 
-        共通1(Expression.Convert(Constant演算子,typeof(演算子1)));
-        共通1(Expression.ConvertChecked(Constant演算子,typeof(演算子1)));
-        共通1(Expression.Convert(Constant演算子1,typeof(演算子)));
-        共通1(Expression.ConvertChecked(Constant演算子1,typeof(演算子)));
-        共通1(Expression.Decrement(Constant演算子));
-        共通1(Expression.Increment(Constant演算子));
-        共通1(Expression.IsFalse(Constant演算子));
-        共通1(Expression.IsTrue(Constant演算子));
-        共通1(Expression.Negate(Constant演算子));
-        共通1(Expression.NegateChecked(Constant演算子));
-        共通1(Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
-        共通1(Expression.Decrement(Constant演算子));
-        共通1(Expression.Increment(Constant演算子));
-        共通0(Parameter演算子,Constant演算子,Expression.PostDecrementAssign(Parameter演算子));
-        共通0(Parameter演算子,Constant演算子,Expression.PostIncrementAssign(Parameter演算子));
-        共通0(Parameter演算子,Constant演算子,Expression.PreDecrementAssign(Parameter演算子));
-        共通0(Parameter演算子,Constant演算子,Expression.PreIncrementAssign(Parameter演算子));
-        共通1(Expression.UnaryPlus(Constant演算子));
+        共通1(Expressions.Expression.Convert(Constant演算子,typeof(演算子1)));
+        共通1(Expressions.Expression.ConvertChecked(Constant演算子,typeof(演算子1)));
+        共通1(Expressions.Expression.Convert(Constant演算子1,typeof(演算子)));
+        共通1(Expressions.Expression.ConvertChecked(Constant演算子1,typeof(演算子)));
+        共通1(Expressions.Expression.Decrement(Constant演算子));
+        共通1(Expressions.Expression.Increment(Constant演算子));
+        共通1(Expressions.Expression.IsFalse(Constant演算子));
+        共通1(Expressions.Expression.IsTrue(Constant演算子));
+        共通1(Expressions.Expression.Negate(Constant演算子));
+        共通1(Expressions.Expression.NegateChecked(Constant演算子));
+        共通1(Expressions.Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expressions.Expression.Decrement(Constant演算子));
+        共通1(Expressions.Expression.Increment(Constant演算子));
+        共通0(Parameter演算子,Constant演算子,Expressions.Expression.PostDecrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expressions.Expression.PostIncrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expressions.Expression.PreDecrementAssign(Parameter演算子));
+        共通0(Parameter演算子,Constant演算子,Expressions.Expression.PreIncrementAssign(Parameter演算子));
+        共通1(Expressions.Expression.UnaryPlus(Constant演算子));
 
 
-        共通1(Expression.Convert(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.ConvertChecked(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.Decrement(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.Increment(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.IsFalse(Constant演算子,GetMethod(nameof(IsTrue演算子))));
-        共通1(Expression.IsTrue(Constant演算子,GetMethod(nameof(IsTrue演算子))));
-        共通1(Expression.Negate(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.NegateChecked(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
-        共通1(Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
-        共通1(Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
-        共通1(Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
-        共通1(Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
-        void 共通0(ParameterExpression 代入先,ConstantExpression 代入元,UnaryExpression a){
+        共通1(Expressions.Expression.Convert(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.ConvertChecked(Constant1_1d,typeof(int),GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.Decrement(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.Increment(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.IsFalse(Constant演算子,GetMethod(nameof(IsTrue演算子))));
+        共通1(Expressions.Expression.IsTrue(Constant演算子,GetMethod(nameof(IsTrue演算子))));
+        共通1(Expressions.Expression.Negate(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.NegateChecked(Constant1_1d,GetMethod(()=>UnaryDouble(0))));
+        共通1(Expressions.Expression.OnesComplement(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expressions.Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
+        共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
+        void 共通0(Expressions.ParameterExpression 代入先,Expressions.ConstantExpression 代入元,Expressions.UnaryExpression a){
             this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-                Expression.Lambda<Func<object>>(
-                    Expression.Block(
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Block(
                         new[]{代入先},
-                        Expression.Assign(
+                        Expressions.Expression.Assign(
                             代入先,
                             代入元
                         ),
-                        Expression.Convert(
+                        Expressions.Expression.Convert(
                             a,
                             typeof(object)
                         )
@@ -1716,11 +1717,11 @@ public class Serializer:共通 {
                 )
             );
         }
-        void 共通1(UnaryExpression Unary){
+        void 共通1(Expressions.UnaryExpression Unary){
             this.MemoryMessageJson_TExpressionObject(Unary);
             this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-                Expression.Lambda<Func<object>>(
-                    Expression.Convert(
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Convert(
                         Unary,
                         typeof(object)
                     )

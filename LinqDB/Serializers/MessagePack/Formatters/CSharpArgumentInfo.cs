@@ -11,7 +11,7 @@ public class CSharpArgumentInfo:IMessagePackFormatter<T>{
     public static readonly CSharpArgumentInfo Instance=new();
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(3);
+        writer.WriteArrayHeader(2);
         var (flags,name)=value.GetFlagsName();
         writer.WriteInt32((int)flags);
         
