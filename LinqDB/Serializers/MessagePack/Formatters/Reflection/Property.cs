@@ -10,7 +10,7 @@ using T = PropertyInfo;
 public class Property:IMessagePackFormatter<T>{
     public static readonly Property Instance=new();
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(3);
+        writer.WriteArrayHeader(2);
         var type=value!.ReflectedType!;
         writer.WriteType(type);
 
@@ -28,7 +28,7 @@ public class Property:IMessagePackFormatter<T>{
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);
+        Debug.Assert(count==2);
         var type=reader.ReadType();
 
 

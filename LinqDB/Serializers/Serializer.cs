@@ -5,7 +5,8 @@ using System.Reflection;
 namespace LinqDB.Serializers;
 using Expressions = System.Linq.Expressions;
 public class Serializer{
-    internal readonly List<Expressions.ParameterExpression> ListParameter=new();
+    internal readonly List<Expressions.ParameterExpression> ラムダ跨ぎParameters=new();
+    internal readonly List<Expressions.ParameterExpression> Parameters=new();
     internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
     internal readonly List<Expressions.LabelTarget> LabelTargets=new();
     internal readonly Dictionary<Type,int> Dictionary_Type_int=new();
@@ -17,7 +18,8 @@ public class Serializer{
     internal readonly ConcurrentDictionary<Type,PropertyInfo   []>TypeProperties  =new();
     internal readonly ConcurrentDictionary<Type,EventInfo      []>TypeEvents      =new();
     protected void ProtectedClear(){
-        this.ListParameter.Clear();
+        this.ラムダ跨ぎParameters.Clear();
+        this.Parameters.Clear();
         this.Dictionary_LabelTarget_int.Clear();
         this.LabelTargets.Clear();
         this.Dictionary_Type_int.Clear();

@@ -9,9 +9,8 @@ using Reader = MessagePackReader;
 using T = MethodInfo;
 public class Method:IMessagePackFormatter<T>{
     public static readonly Method Instance=new();
-    private const int ArrayHeader=2;
     internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
-        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteArrayHeader(2);
         var type=value!.ReflectedType;
         writer.WriteType(type);
 
@@ -29,7 +28,7 @@ public class Method:IMessagePackFormatter<T>{
     public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==2);
         var type=reader.ReadType();
 
 

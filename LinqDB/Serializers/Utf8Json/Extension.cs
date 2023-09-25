@@ -7,6 +7,7 @@ using Utf8Json;
 using Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 internal static class Extension{
@@ -34,50 +35,83 @@ internal static class Extension{
     private static class StaticReadOnlyCollectionFormatter<T> {
         public static readonly ReadOnlyCollectionFormatter<T> Formatter = new();
     }
-    internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,IJsonFormatterResolver Resolver) =>
+    internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,O Resolver) =>
         StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value!,Resolver);
     private static class StaticArrayFormatter<T> {
         public static readonly ArrayFormatter<T> Formatter = new();
     }
-    internal static void WriteArray<T>(this ref Writer writer,T[] value,IJsonFormatterResolver Resolver)=>
+    internal static void WriteArray<T>(this ref Writer writer,T[] value,O Resolver)=>
         StaticArrayFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
-    internal static T[] ReadArray<T>(this ref Reader reader,IJsonFormatterResolver Resolver) {
+    internal static T[] ReadArray<T>(this ref Reader reader,O Resolver) {
 
         return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
 
     }
-    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,IJsonFormatterResolver Resolver){
+    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,O Resolver){
         writer.WriteBeginArray();
+        var Serializer=Resolver.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         var Count=value.Count;
         if(Count>0){
             for(var a=0;;a++){
                 var Parameter=value[a];
-                writer.WriteBeginObject();
-                writer.WriteString(Parameter.Name);
-                writer.WriteNameSeparator();
-                writer.WriteType(Parameter.Type);
-                writer.WriteEndObject();
+                var index0=Serializer_Parameters.LastIndexOf(Parameter);
+                if(index0<0){
+                    var index1=Serializer_ラムダ跨ぎParameters.LastIndexOf(Parameter);
+                    if(index1<0){
+                        writer.WriteBeginObject();
+                        writer.WriteString(Parameter.Name);
+                        writer.WriteNameSeparator();
+                        writer.WriteType(Parameter.Type);
+                        writer.WriteEndObject();
+                    } else{
+                        writer.WriteInt32(-1);
+                        writer.WriteNameSeparator();
+                        writer.WriteInt32(index1);
+                    }
+                } else{
+                    writer.WriteInt32(index0);
+                }
                 if(a==Count-1) break;
                 writer.WriteValueSeparator();
             }
         }
         writer.WriteEndArray();
     }
-    internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,IJsonFormatterResolver Resolver){
-        var Parameters=new List<Expressions.ParameterExpression>();
+    internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        while(reader.ReadIsBeginObject()){
-            var name=reader.ReadString();
-            reader.ReadIsNameSeparatorWithVerify();
-            var type=reader.ReadType();
-            Parameters.Add(Expressions.Expression.Parameter(type,name));
-            reader.ReadIsEndObjectWithVerify();
-            if(!reader.ReadIsValueSeparator()) break;
+        var Serializer=Resolver.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
+        var Parameters=new List<Expressions.ParameterExpression>();
+        if(!reader.ReadIsEndArray()){
+            while(true){
+                if(reader.ReadIsBeginObject()){//{
+                    var name=reader.ReadString();
+                    reader.ReadIsNameSeparatorWithVerify();
+                    var type=reader.ReadType();
+                    Parameters.Add(Expressions.Expression.Parameter(type,name));
+                    reader.ReadIsEndObjectWithVerify();
+                } else{
+                    var index0=reader.ReadInt32();
+                    if(index0<0){
+                        reader.ReadIsValueSeparatorWithVerify();
+                        var index1=reader.ReadInt32();
+                        Parameters.Add(Serializer_ラムダ跨ぎParameters[index1]);
+                    } else{
+                        Parameters.Add(Serializer_Parameters[index0]);
+                    }
+                }
+                if(!reader.ReadIsValueSeparator()){
+                    reader.ReadIsEndArrayWithVerify();
+                    break;
+                }
+            }
         }
-        reader.ReadIsEndArrayWithVerify();
         return Parameters;
     }
-    public static object ReadValue(this ref Reader reader,Type type,IJsonFormatterResolver Resolver){
+    public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
@@ -88,6 +122,6 @@ internal static class Extension{
         reader=(Reader)Objects2[0];
         return value;
     }
-    public static Serializer Serializer(this IJsonFormatterResolver Resolver)=>
+    public static Serializer Serializer(this O Resolver)=>
         (Serializer)Resolver.GetFormatter<Serializer>();
 }

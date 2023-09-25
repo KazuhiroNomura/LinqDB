@@ -7,20 +7,20 @@ namespace LinqDB.Serializers.Utf8Json.Formatters;
 using O=IJsonFormatterResolver;
 using Writer=JsonWriter;
 using Reader=JsonReader;
-using T= Expressions.BlockExpression;
+using T=Expressions.BlockExpression;
 public class Block:IJsonFormatter<T> {
     public static readonly Block Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
-        ListParameter.AddRange(Variables);
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
-        writer.Serialize宣言Parameters(value.Variables,Resolver);
+        writer.Serialize宣言Parameters(Variables,Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        Parameters.AddRange(Variables);
         writer.WriteValueSeparator();
         writer.WriteCollection(value.Expressions,Resolver);
-        ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
+        Parameters.RemoveRange(Parameters_Count,Variables.Count);
     }
     public static void Write(ref Writer writer,T value,O Resolver) {
         writer.WriteBeginArray();
@@ -36,15 +36,15 @@ public class Block:IJsonFormatter<T> {
         writer.WriteEndArray();
     }
     internal static T Read(ref Reader reader,O Resolver){
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var variables=reader.Deserialize宣言Parameters(Resolver);
-        ListParameter.AddRange(variables);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        Parameters.AddRange(variables);
         reader.ReadIsValueSeparatorWithVerify();
         var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
-        ListParameter.RemoveRange(ListParameter_Count,variables.Count);
+        Parameters.RemoveRange(Parameters_Count,variables.Count);
         return Expressions.Expression.Block(type,variables,expressions);
     }
     public T Deserialize(ref Reader reader,O Resolver) {

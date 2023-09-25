@@ -1,27 +1,27 @@
 ﻿
 using Utf8Json;
 
-using Expressions = System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using O=IJsonFormatterResolver;
-using Writer = JsonWriter;
-using Reader = JsonReader;
-using T = Expressions.LambdaExpression;
+using Writer=JsonWriter;
+using Reader=JsonReader;
+using T=Expressions.LambdaExpression;
 public class Lambda:IJsonFormatter<T> {
     public static readonly Lambda Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver) {
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
-        var Parameters=value.Parameters;
-        ListParameter.AddRange(Parameters);
         writer.WriteType(value.Type);
         writer.WriteValueSeparator();
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        var value_Parameters=value.Parameters;
+        Parameters.AddRange(value_Parameters);
         writer.WriteValueSeparator();
         Expression.Write(ref writer,value.Body,Resolver);
         writer.WriteValueSeparator();
         writer.WriteBoolean(value.TailCall);
-        ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
+        Parameters.RemoveRange(Parameters_Count,value_Parameters.Count);
         writer.WriteEndArray();
     }
     internal static void Write(ref Writer writer,T value,O Resolver) {
@@ -37,17 +37,17 @@ public class Lambda:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,O Resolver){
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var parameters = reader.Deserialize宣言Parameters(Resolver);
-        ListParameter.AddRange(parameters);
+        var parameters=reader.Deserialize宣言Parameters(Resolver);
+        Parameters.AddRange(parameters);
         reader.ReadIsValueSeparatorWithVerify();
-        var body =Expression.Read(ref reader,Resolver);
+        var body=Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var tailCall = reader.ReadBoolean();
-        ListParameter.RemoveRange(ListParameter_Count,parameters.Count);
+        var tailCall=reader.ReadBoolean();
+        Parameters.RemoveRange(Parameters_Count,parameters.Count);
         return Expressions.Expression.Lambda(
             type,
             body,

@@ -2,25 +2,25 @@
 using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions = System.Linq.Expressions;
+using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
 using O=MessagePackSerializerOptions;
-using Writer = MessagePackWriter;
-using Reader = MessagePackReader;
-using T = Expressions.BlockExpression;
+using Writer=MessagePackWriter;
+using Reader=MessagePackReader;
+using T=Expressions.BlockExpression;
 public class Block:IMessagePackFormatter<T> {
     public static readonly Block Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
         var Variables=value.Variables;
-        ListParameter.AddRange(Variables);
         writer.WriteType(value.Type);
         
-        writer.Serialize宣言Parameters(value.Variables,Resolver);
+        writer.Serialize宣言Parameters(Variables,Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        Parameters.AddRange(Variables);
         
         writer.WriteCollection(value.Expressions,Resolver);
-        ListParameter.RemoveRange(ListParameter_Count,Variables.Count);
+        Parameters.RemoveRange(Parameters_Count,Variables.Count);
     }
     internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(4);
@@ -36,15 +36,15 @@ public class Block:IMessagePackFormatter<T> {
         
     }
     internal static T Read(ref Reader reader,O Resolver){
-        var ListParameter=Resolver.Serializer().ListParameter;
-        var ListParameter_Count=ListParameter.Count;
         var type=reader.ReadType();
         
-        var variables= reader.Deserialize宣言Parameters(Resolver);
+        var variables=reader.Deserialize宣言Parameters(Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
         
-        ListParameter.AddRange(variables);
+        Parameters.AddRange(variables);
         var expressions=reader.ReadArray<Expressions.Expression>(Resolver);
-        ListParameter.RemoveRange(ListParameter_Count,variables.Length);
+        Parameters.RemoveRange(Parameters_Count,variables.Length);
         return Expressions.Expression.Block(type,variables,expressions);
     }
     public T Deserialize(ref Reader reader,O Resolver){

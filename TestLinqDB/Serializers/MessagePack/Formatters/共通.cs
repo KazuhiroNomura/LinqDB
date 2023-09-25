@@ -2,19 +2,14 @@
 using LinqDB.Optimizers;
 using LinqDB.Remote.Servers;
 using static LinqDB.Helpers.Configulation;
-using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Text;
-using MemoryPack;
-using System.Buffers;
-using System.Reflection;
 using LinqDB.Helpers;
 using MessagePack;
 using static LinqDB.Optimizers.Optimizer;
 using LinqDB.Remote.Clients;
 using System.Net;
 using LinqDB;
-using static Microsoft.FSharp.Core.ByRefKinds;
 //using Utf8Json2 = LinqDB.Serializers.Utf8Json;
 //using MessagePack2 = LinqDB.Serializers.MessagePack;
 //using MemoryPack2 = LinqDB.Serializers.MemoryPack;
@@ -151,6 +146,13 @@ public abstract class 共通{
     protected void MemoryMessageJson_TExpressionObject_コンパイル実行<TResult>(Expression<Func<TResult>> input){
         const int receiveTimeout = 1000;
         var port=Interlocked.Increment(ref ポート番号);
+        var Optimizer=this.Optimizer;
+        var 標準=input.Compile();
+        標準();
+        Optimizer.IsInline=false;
+        Optimizer.CreateDelegate(input)();
+        Optimizer.IsInline=true;
+        Optimizer.CreateDelegate(input)();
         using var Server =new Server(1,port);
         Server.ReadTimeout=receiveTimeout;
         Server.Open();
@@ -218,5 +220,5 @@ public abstract class 共通{
         return constant.Value;
     }
     protected static Reflection.MethodInfo GetMethod<T>(Expression<Func<T>>e)=>((MethodCallExpression)e.Body).Method;
-    protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(TestExpression).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
+    protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(Serializer).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
 }

@@ -8,6 +8,7 @@ using MemoryPack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
 
+
 using Reader = MemoryPackReader;
 public static class Extension{
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
@@ -48,9 +49,20 @@ public static class Extension{
     }
     public static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
         writer.WriteVarInt(value.Count);
+        var Serializer=writer.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         foreach(var Parameter in value){
-            writer.WriteString(Parameter.Name);
-            writer.WriteType(Parameter.Type);
+            var index0=Serializer_Parameters.LastIndexOf(Parameter);
+            writer.WriteVarInt(index0);
+            if(index0<0){
+                var index1=Serializer_ラムダ跨ぎParameters.LastIndexOf(Parameter);
+                writer.WriteVarInt(index1);
+                if(index1<0){
+                    writer.WriteString(Parameter.Name);
+                    writer.WriteType(Parameter.Type);
+                }
+            }
         }
 
 
@@ -65,15 +77,28 @@ public static class Extension{
     }
     public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader){
         var Count=reader.ReadVarIntInt32();
+        var Serializer=reader.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         var Parameters=new Expressions.ParameterExpression[Count];
         for(var a=0;a<Count;a++){
-            var name=reader.ReadString();
+            var index0=reader.ReadVarIntInt32();
+            if(index0<0){
+                var index1=reader.ReadVarIntInt32();
+                if(index1<0){
+                    var name=reader.ReadString();
+
+                    var type=reader.ReadType();
+                    Parameters[a]=Expressions.Expression.Parameter(type,name);
+
+                } else{
+                    Parameters[a]=Serializer_ラムダ跨ぎParameters[index1];
+                }
+            }else{
+                Parameters[a]=Serializer_Parameters[index0];
+            }
             
-            var type=reader.ReadType();
-            Parameters[a]=Expressions.Expression.Parameter(type,name);
         }
-        
-        
         
         return Parameters;
     }

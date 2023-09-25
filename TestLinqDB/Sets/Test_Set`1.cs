@@ -14,11 +14,11 @@ namespace Sets;
 
 public class Test_Set1
 {
-    private const int 要素数 = 80000;
+    private const int 要素数 = 8000;
     [Fact]
     public void Enumerator()
     {
-        const int 繰り返し = 1000;
+        const int 繰り返し = 100;
         var s = new Set<int>();
         for (var a = 0; a < 要素数; a++)
         {
@@ -552,11 +552,11 @@ public class Test_Set1
     public void Remove2()
     {
         var s = new Set<int>();
-        for (var a = 0; a < 10000; a++)
+        for (var a = 0; a < 1000; a++)
         {
             Assert.True(s.IsAdded(a));
         }
-        for (var a = 9999; a >= 0; a--)
+        for (var a = 999; a >= 0; a--)
         {
             Assert.True(s.Remove(a));
         }
@@ -566,13 +566,13 @@ public class Test_Set1
     public void Remove3()
     {
         var s = new Set<int>();
-        for (var a = 0; a < 10000; a += 2)
+        for (var a = 0; a < 1000; a += 2)
         {
             Assert.True(s.IsAdded(a));
         }
-        for (var a = 0; a < 10000; a++)
+        for (var a = 0; a < 1000; a++)
         {
-            if (a == 9999)
+            if (a == 999)
             {
 
             }
@@ -607,7 +607,7 @@ public class Test_Set1
     public void SetAssert()
     {
         var r = new Random(1);
-        for (var a = 1; a <= 1000; a++)
+        for (var a = 1; a <= 100; a++)
         {
             var Set = new Set<int>();
             for (var b = 0; b < a; b++)

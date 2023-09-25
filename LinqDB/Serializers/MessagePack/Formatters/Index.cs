@@ -18,7 +18,7 @@ public class Index:IMessagePackFormatter<T> {
         writer.WriteCollection(value.Arguments,Resolver);
     }
     internal static void Write(ref Writer writer,T value,O Resolver){
-        writer.WriteArrayHeader(5);
+        writer.WriteArrayHeader(4);
         writer.WriteNodeType(Expressions.ExpressionType.Index);
         
         PrivateWrite(ref writer,value,Resolver);
@@ -26,7 +26,7 @@ public class Index:IMessagePackFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(4);
+        writer.WriteArrayHeader(3);
         PrivateWrite(ref writer,value,Resolver);
         
     }

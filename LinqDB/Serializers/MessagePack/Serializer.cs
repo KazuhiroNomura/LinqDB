@@ -10,7 +10,7 @@ using Formatters;
 using Formatters.Others;
 using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
-    
+    //IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
     
     
     
@@ -91,18 +91,6 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
         //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
         var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     

@@ -127,12 +127,7 @@ partial class Optimizer {
             if(Binary0.Conversion is not null){
                 var Binary0_Conversion=Binary0.Conversion;
                 var Binary1_Conversion_Body=this.Traverse(Binary0_Conversion.Body);
-                var p=Binary0_Conversion.Parameters[0];
-                Binary2_Right=Expression.Block(
-                    this._作業配列.Parameters設定(p),
-                    Expression.Assign(p,Binary2_Right),
-                    Binary1_Conversion_Body
-                );
+                Binary2_Right=this.変換_旧Expressionを新Expression1.実行(Binary1_Conversion_Body,Binary0_Conversion.Parameters[0],Binary2_Right);
             }
             return Expression.Assign(
                 Binary1_Left,

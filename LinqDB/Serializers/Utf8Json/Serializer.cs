@@ -107,17 +107,6 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     private void Clear(){
         this.ProtectedClear();
         this.Resolver.Clear();

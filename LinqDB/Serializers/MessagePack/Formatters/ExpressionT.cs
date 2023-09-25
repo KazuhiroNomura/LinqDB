@@ -11,7 +11,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
     public void Serialize(ref Writer writer,T? value,O Resolver) {
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(4);
-        var ListParameter= Resolver.Serializer().ListParameter;
+        var ListParameter= Resolver.Serializer().Parameters;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
@@ -29,7 +29,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==4);
-        var ListParameter= Resolver.Serializer().ListParameter;
+        var ListParameter= Resolver.Serializer().Parameters;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters(Resolver);

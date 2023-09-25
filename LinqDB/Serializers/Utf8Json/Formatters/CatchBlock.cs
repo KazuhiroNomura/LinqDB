@@ -32,7 +32,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 Expression.Write(ref writer,value.Filter,Resolver);
             }
         } else {
-            var ListParameter=Resolver.Serializer().ListParameter;
+            var ListParameter=Resolver.Serializer().Parameters;
             ListParameter.Add(value.Variable);
             if(value.Filter is null) {
                 
@@ -84,7 +84,7 @@ public class CatchBlock:IJsonFormatter<T> {
             case 2: {
                 var name = reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=Resolver.Serializer().ListParameter;
+                var ListParameter=Resolver.Serializer().Parameters;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Read(ref reader,Resolver);
@@ -95,7 +95,7 @@ public class CatchBlock:IJsonFormatter<T> {
             case 3: {
                 var name = reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=Resolver.Serializer().ListParameter;
+                var ListParameter=Resolver.Serializer().Parameters;
                 ListParameter.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Read(ref reader,Resolver);

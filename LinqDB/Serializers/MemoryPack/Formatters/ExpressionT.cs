@@ -8,7 +8,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
     public static readonly ExpressionT<T> Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        var ListParameter= writer.Serializer().ListParameter;
+        var ListParameter= writer.Serializer().Parameters;
         var ListParameter_Count=ListParameter.Count;
         var Parameters=value!.Parameters;
         ListParameter.AddRange(Parameters);
@@ -21,7 +21,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
-        var ListParameter= reader.Serializer().ListParameter;
+        var ListParameter= reader.Serializer().Parameters;
         var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
         var parameters= reader.Deserialize宣言Parameters();

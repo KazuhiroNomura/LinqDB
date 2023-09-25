@@ -136,7 +136,7 @@ public partial struct TestDynamic<T>
         this.メンバー2 = メンバー2;
     }
 }
-public class TestExpression:共通 {
+public class Serializer:共通 {
     //private readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected readonly IJsonFormatterResolver JsonFormatterResolver;
     //protected readonly MessagePackSerializerOptions MessagePackSerializerOptions;
@@ -203,22 +203,22 @@ public class TestExpression:共通 {
     private static int FieldInt32;
     private static readonly MemberExpression MemberInt32 =Expression.MakeMemberAccess(
         null,
-        typeof(TestExpression).GetField(nameof(FieldInt32),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+        typeof(Serializer).GetField(nameof(FieldInt32),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static double FieldDouble;
     private static readonly MemberExpression MemberDouble =Expression.MakeMemberAccess(
         null,
-        typeof(TestExpression).GetField(nameof(FieldDouble),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+        typeof(Serializer).GetField(nameof(FieldDouble),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static string FieldString;
     private static MemberExpression MemberString=Expression.MakeMemberAccess(
         null,
-        typeof(TestExpression).GetField(nameof(FieldString),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+        typeof(Serializer).GetField(nameof(FieldString),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     private static bool FieldBoolean;
     private static MemberExpression MemberBoolean =Expression.MakeMemberAccess(
         null,
-        typeof(TestExpression).GetField(nameof(FieldBoolean),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
+        typeof(Serializer).GetField(nameof(FieldBoolean),Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!
     );
     
     private static string string_string_string(string? a,string b)=>a??b;
@@ -667,7 +667,7 @@ public class TestExpression:共通 {
         void 共通(object オブジェクト, object a,object b,object c){
             var binder=RuntimeBinder.Binder.Invoke(
                 RuntimeBinder.CSharpBinderFlags.None,
-                typeof(TestExpression),
+                typeof(Serializer),
                 CSharpArgumentInfoArray4
             );
             var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
@@ -699,7 +699,7 @@ public class TestExpression:共通 {
             RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
             nameof(テスト.InstanceMethod), 
             null, 
-            typeof(TestExpression),
+            typeof(Serializer),
             new[] { 
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null),
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
@@ -810,7 +810,7 @@ public class TestExpression:共通 {
         void Func3<T0,T1,T2,T3>(T0 arg0,string Name,T1 arg1,T2 arg2,T3 arg3){
             var binder=RuntimeBinder.Binder.InvokeMember(
                 RuntimeBinder.CSharpBinderFlags.None,Name,null,
-                typeof(TestExpression),CSharpArgumentInfoArray4
+                typeof(Serializer),CSharpArgumentInfoArray4
             );
             var Dynamic0 = Expression.Dynamic(
                 binder,

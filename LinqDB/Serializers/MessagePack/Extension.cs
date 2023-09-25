@@ -7,6 +7,7 @@ using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 internal static class Extension{
@@ -34,23 +35,47 @@ internal static class Extension{
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
-    internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T> value,MessagePackSerializerOptions Resolver)=>
+    internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T> value,O Resolver)=>
         StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
     private static class StaticArrayFormatter<T>{
         public static readonly ArrayFormatter<T> Formatter=new();
     }
-    internal static void WriteArray<T>(this ref Writer writer,T[] value,MessagePackSerializerOptions Resolver)=>
+    internal static void WriteArray<T>(this ref Writer writer,T[] value,O Resolver)=>
         StaticArrayFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
-    internal static T[] ReadArray<T>(this ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T[] ReadArray<T>(this ref Reader reader,O Resolver){
 
         return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
 
     }
-    public static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression>value,MessagePackSerializerOptions Resolver) {
-        writer.WriteArrayHeader(value.Count);
+    public static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression>value,O Resolver){
+        var Serializer=Resolver.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
+        var Count=1;
         foreach(var Parameter in value){
-            writer.Write(Parameter.Name);
-            writer.WriteType(Parameter.Type);
+            var index0=Serializer_Parameters.LastIndexOf(Parameter);
+            Count++;
+            if(index0<0){
+                var index1=Serializer_ラムダ跨ぎParameters.LastIndexOf(Parameter);
+                Count++;
+                if(index1<0){
+                    Count+=2;
+                }
+            }
+        }
+        writer.WriteArrayHeader(Count);
+        writer.WriteInt32(value.Count);
+        foreach(var Parameter in value){
+            var index0=Serializer_Parameters.LastIndexOf(Parameter);
+            writer.WriteInt32(index0);
+            if(index0<0){
+                var index1=Serializer_ラムダ跨ぎParameters.LastIndexOf(Parameter);
+                writer.WriteInt32(index1);
+                if(index1<0){
+                    writer.Write(Parameter.Name);
+                    writer.WriteType(Parameter.Type);
+                }
+            }
         }
 
 
@@ -63,21 +88,38 @@ internal static class Extension{
 
 
     }
-    public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,MessagePackSerializerOptions Resolver){
-        var Count=reader.ReadArrayHeader();
-        var Parameters=new Expressions.ParameterExpression[Count];
-        for(var a=0;a<Count;a++){
-            var name=reader.ReadString();
-            
-            var type=reader.ReadType();
-            Parameters[a]=Expressions.Expression.Parameter(type,name);
+    public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,O Resolver){
+        var ArrayHeader=reader.ReadArrayHeader()-1;
+        var Serializer=Resolver.Serializer();
+        var Serializer_Parameters=Serializer.Parameters;
+        var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
+        var Parameters_Length=reader.ReadInt32();
+        var Parameters=new Expressions.ParameterExpression[Parameters_Length];
+        var a=0;
+        while(ArrayHeader>0){
+            var index0=reader.ReadInt32();
+            if(index0<0){
+                ArrayHeader--;
+                var index1=reader.ReadInt32();
+                if(index1<0){
+                    ArrayHeader-=2;
+                    var name=reader.ReadString();
+                    var type=reader.ReadType();
+                    Parameters[a]=Expressions.Expression.Parameter(type,name);
+                    
+                } else{
+                    Parameters[a]=Serializer_ラムダ跨ぎParameters[index1];
+                }
+            }else{
+                Parameters[a]=Serializer_Parameters[index0];
+            }
+            ArrayHeader--;
+            a++;
         }
-        
-        
         
         return Parameters;
     }
-    public static object ReadValue(this ref Reader reader,Type type,MessagePackSerializerOptions Resolver){
+    public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
         return MessagePack.Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
     }
@@ -88,6 +130,6 @@ internal static class Extension{
     
     
     
-    public static Serializer Serializer(this MessagePackSerializerOptions Options)=>
+    public static Serializer Serializer(this O Options)=>
         (Serializer)Options.Resolver.GetFormatter<Serializer>()!;
 }
