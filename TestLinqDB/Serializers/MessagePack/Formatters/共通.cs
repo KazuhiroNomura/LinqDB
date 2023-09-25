@@ -185,31 +185,31 @@ public abstract class 共通{
         this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(T)output,this.ExpressionEqualityComparer));
     }
     private static readonly object Lockobject=new();
+    protected void Memory_Assert<T>(T input,Action<T> AssertAction){
+        var s = this.MemoryPack;
+        var bytes = this.MemoryPack.Serialize(input);
+        var output = s.Deserialize<T>(bytes);
+        AssertAction(output!);
+    }
+    protected void MessagePack_Assert<T>(T input,Action<T> AssertAction){
+        var s = this.MessagePack;
+        var bytes = s.Serialize(input);
+        dynamic a = new NonPublicAccessor(s);
+        var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
+        var output = s.Deserialize<T>(bytes);
+        AssertAction(output);
+    }
+    protected void Utf8Json_Assert<T>(T input,Action<T> AssertAction){
+        var s = this.Utf8Json;
+        var bytes = s.Serialize(input);
+        var json = Encoding.UTF8.GetString(bytes);
+        var output = s.Deserialize<T>(bytes);
+        AssertAction(output);
+    }
     protected void MemoryMessageJson_Assert<T>(T input,Action<T> AssertAction){
-        //lock(Lockobject) 
-        {
-            {
-                var s = this.MemoryPack;
-                var bytes = this.MemoryPack.Serialize(input);
-                var output = s.Deserialize<T>(bytes);
-                AssertAction(output!);
-            }
-            {
-                var s = this.MessagePack;
-                var bytes = s.Serialize(input);
-                dynamic a = new NonPublicAccessor(s);
-                var json = MessagePackSerializer.ConvertToJson(bytes,a.Options);
-                var output = s.Deserialize<T>(bytes);
-                AssertAction(output);
-            }
-            {
-                var s = this.Utf8Json;
-                var bytes = s.Serialize(input);
-                var json = Encoding.UTF8.GetString(bytes);
-                var output = s.Deserialize<T>(bytes);
-                AssertAction(output);
-            }
-        }
+        this.Memory_Assert(input,AssertAction);
+        this.MessagePack_Assert(input,AssertAction);
+        this.Utf8Json_Assert(input,AssertAction);
     }
     protected static LambdaExpression GetLambda<T>(Expression<Func<T>> e)=>e;
     protected static object ClassDisplay取得(){
