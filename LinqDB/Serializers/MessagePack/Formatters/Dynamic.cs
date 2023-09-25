@@ -19,9 +19,9 @@ public class Dynamic:IMessagePackFormatter<T> {
                 switch(v0){
                     case BinaryOperationBinder:writer.WriteArrayHeader(offset+5);break;
                     case ConvertBinder        :writer.WriteArrayHeader(offset+4);break;
-                    case CreateInstanceBinder :writer.WriteArrayHeader(offset+3);break;
-                    case DeleteIndexBinder    :writer.WriteArrayHeader(offset+3);break;
-                    case DeleteMemberBinder   :writer.WriteArrayHeader(offset+2);break;
+                    //case CreateInstanceBinder :writer.WriteArrayHeader(offset+3);break;
+                    //case DeleteIndexBinder    :writer.WriteArrayHeader(offset+3);break;
+                    //case DeleteMemberBinder   :writer.WriteArrayHeader(offset+2);break;
                     case GetIndexBinder       :writer.WriteArrayHeader(offset+3);break;
                     case GetMemberBinder      :writer.WriteArrayHeader(offset+4);break;
                     case InvokeBinder         :writer.WriteArrayHeader(offset+3);break;
@@ -74,32 +74,32 @@ public class Dynamic:IMessagePackFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
-                    case CreateInstanceBinder v1:{
-                        WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
+                    //case CreateInstanceBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
-                        writer.WriteType(CallingContext);
+                    //    var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
+                    //    writer.WriteType(CallingContext);
                         
-                        writer.WriteArray(CSharpArgumentInfos,Resolver);
+                    //    writer.WriteArray(CSharpArgumentInfos,Resolver);
                         
-                        writer.WriteInt32(Flags);
-                        break;
-                    }
-                    case DeleteIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
+                    //    writer.WriteInt32(Flags);
+                    //    break;
+                    //}
+                    //case DeleteIndexBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
                         
-                        writer.WriteInt32(v1.CallInfo.ArgumentCount);
+                    //    writer.WriteInt32(v1.CallInfo.ArgumentCount);
                         
-                        writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
-                        break;
-                    }
+                    //    writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
+                    //    break;
+                    //}
                     
-                    case DeleteMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
+                    //case DeleteMemberBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
                         
-                        writer.Write(v1.Name);
-                        break;
-                    }
+                    //    writer.Write(v1.Name);
+                    //    break;
+                    //}
                     
                     
                     
@@ -222,10 +222,6 @@ public class Dynamic:IMessagePackFormatter<T> {
         
         PrivateWrite(ref writer,value,Resolver);
         
-    }
-    private static RuntimeBinder.CSharpBinderFlags ReadBindingFlags(ref Reader reader){
-        var v=reader.ReadSByte();
-        return (RuntimeBinder.CSharpBinderFlags)v;
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;

@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -92,7 +92,8 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 value=Expressions.Expression.Catch(Variable,body);
                 break;
             }
-            case 3:{
+            default:{
+                Debug.Assert(id==3);
                 var name=reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
                 var ListParameter=Resolver.Serializer().Parameters;
@@ -105,7 +106,6 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            default:throw new NotSupportedException($"CatchBlock id{id}は不正");
         }
         
         return value;

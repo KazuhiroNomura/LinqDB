@@ -11,6 +11,13 @@ using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 namespace Serializers.MessagePack.Formatters;
 using System.Linq.Expressions;
 public class Block:共通 {
+    [Fact]public void Serialize(){
+        var Constant1= Expression.Constant(1m);
+        var input1=Expression.Block(Constant1);
+        this.MessagePack_Assert(new{a=input1},output=>{});
+        this.MessagePack_Assert(new{a=default(BlockExpression)},output=>{});
+
+    }
     [Fact]public void Block0(){
         var ParameterDecimmal=Expression.Parameter(typeof(decimal));
         共通0(
