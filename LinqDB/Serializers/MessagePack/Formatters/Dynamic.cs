@@ -194,7 +194,9 @@ public class Dynamic:IMessagePackFormatter<T> {
                         Expression.Write(ref writer,Arguments[1],Resolver);
                         break;
                     }
-                    case UnaryOperationBinder v1:{
+                    //case UnaryOperationBinder v1:
+                    default:{
+                        var v1=(UnaryOperationBinder)v0;
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         
                         var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
@@ -209,7 +211,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
-                    default:throw new NotSupportedException(v0.ToString());
+                    //default:throw new NotSupportedException(v0.ToString());
                 }
                 break;
             }
@@ -414,7 +416,10 @@ public class Dynamic:IMessagePackFormatter<T> {
                 );
                 break;
             }
-            case BinderType.UnaryOperationBinder:{
+            //case BinderType.UnaryOperationBinder:
+            default:
+            {
+                Debug.Assert(BinderType==BinderType.UnaryOperationBinder);
                 var context=reader.ReadType();
                 
                 var argumentInfo=reader.ReadArray<RuntimeBinder.CSharpArgumentInfo>(Resolver);
@@ -436,7 +441,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                 );
                 break;
             }
-            default:throw new ArgumentOutOfRangeException(BinderType.ToString());
+            //default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
         return value;
         static BinderType ReadBinderType(ref Reader reader){

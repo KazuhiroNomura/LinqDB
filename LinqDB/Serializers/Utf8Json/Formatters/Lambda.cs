@@ -37,11 +37,11 @@ public class Lambda:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,O Resolver){
-        var Parameters=Resolver.Serializer().Parameters;
-        var Parameters_Count=Parameters.Count;
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var parameters=reader.Deserialize宣言Parameters(Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
         Parameters.AddRange(parameters);
         reader.ReadIsValueSeparatorWithVerify();
         var body=Expression.Read(ref reader,Resolver);

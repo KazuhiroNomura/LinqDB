@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions=System.Linq.Expressions;
@@ -43,11 +44,10 @@ public class NewArray:IMessagePackFormatter<T> {
         var count=reader.ReadArrayHeader();
         System.Diagnostics.Debug.Assert(3==count);
         var NodeType=reader.ReadNodeType();
-        
+        Debug.Assert(NodeType is Expressions.ExpressionType.NewArrayBounds or Expressions.ExpressionType.NewArrayInit);
         return NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader,Resolver),
-            Expressions.ExpressionType.NewArrayInit=>ReadNewArrayInit(ref reader,Resolver),
-            _=>throw new NotImplementedException(Resolver.ToString())
+            _=>ReadNewArrayInit(ref reader,Resolver)
         };
         
         

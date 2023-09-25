@@ -11,35 +11,36 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
     public void Serialize(ref Writer writer,T? value,O Resolver) {
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(4);
-        var ListParameter= Resolver.Serializer().Parameters;
-        var ListParameter_Count=ListParameter.Count;
-        var Parameters=value!.Parameters;
-        ListParameter.AddRange(Parameters);
-        writer.WriteType(value.Type);
+        writer.WriteType(value!.Type);
         
         writer.Serialize宣言Parameters(value.Parameters,Resolver);
+        var Parameters= Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        var value_Parameters=value.Parameters;
+        Parameters.AddRange(value_Parameters);
         
         Expression.Write(ref writer,value.Body,Resolver);
         
         writer.WriteBoolean(value.TailCall);
         
-        ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
+        Parameters.RemoveRange(Parameters_Count,value_Parameters.Count);
     }
     public T Deserialize(ref Reader reader,O Resolver) {
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==4);
-        var ListParameter= Resolver.Serializer().Parameters;
-        var ListParameter_Count=ListParameter.Count;
         var type = reader.ReadType();
-        var parameters= reader.Deserialize宣言Parameters(Resolver);
         
-        ListParameter.AddRange(parameters!);
+        var parameters= reader.Deserialize宣言Parameters(Resolver);
+        Debug.Assert(count==4);
+        var Parameters= Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        
+        Parameters.AddRange(parameters!);
         var body = Expression.Read(ref reader,Resolver);
         
         var tailCall = reader.ReadBoolean();
         
-        ListParameter.RemoveRange(ListParameter_Count,parameters.Length);
+        Parameters.RemoveRange(Parameters_Count,parameters.Length);
         return(T)Expressions.Expression.Lambda(
             type,
             body,

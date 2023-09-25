@@ -47,6 +47,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             Parameter.Instance,
             Switch.Instance,
             SwitchCase.Instance,
+            SymbolDocumentInfo.Instance,
             Try.Instance,
             TypeBinary.Instance,
             Unary.Instance,

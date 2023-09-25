@@ -6,19 +6,18 @@ using Expressions = System.Linq.Expressions;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 namespace Serializers.MessagePack.Formatters;
 using Sets;
-public class Goto:共通 {
+public class Index:共通 {
     [Fact]public void Serialize(){
-        this.MessagePack_Assert(new{a=default(Expressions.GotoExpression)},output=>{});
-        var target=Expressions.Expression.Label(typeof(int),"target");
-        var input=Expressions.Expression.MakeGoto(
-            Expressions.GotoExpressionKind.Return,
-            target,
-            Expressions.Expression.Constant(5),
-            typeof(byte)
+        var List=Expressions.Expression.Parameter(typeof(List<int>));
+        this.MessagePack_Assert(new{a=default(Expressions.IndexExpression)},output=>{});
+        var input=Expressions.Expression.MakeIndex(
+            List,
+            typeof(List<int>).GetProperty("Item"),
+            new[]{Expressions.Expression.Constant(0)}
         );
         this.MessagePack_Assert(
             new{
-                a=input,b=input
+                a=input,b=(Expressions.Expression)input
             },output=>{}
         );
     }

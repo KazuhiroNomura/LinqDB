@@ -21,7 +21,7 @@ public class ElementInit:共通 {
         );
         var Add=typeof(List<int>).GetMethod("Add");
         {
-            this.MessagePack_Assert(new{a=default(Expressions.MemberInitExpression)},output=>{});
+            this.MessagePack_Assert(new{a=default(Expressions.ElementInit)},output=>{});
             this.MessagePack_Assert(
                 new{
                     a=Expressions.Expression.MemberInit(

@@ -20,6 +20,7 @@ public class Parameter:IMessagePackFormatter<T> {
                 writer.WriteInt32(-2);
                 writer.WriteType(value.Type);
                 writer.Write(value.Name);
+                Serializer.ラムダ跨ぎParameters.Add(value);
             }else{
                 writer.WriteArrayHeader(3);
                 writer.WriteNodeType(Expressions.ExpressionType.Parameter);
@@ -34,10 +35,25 @@ public class Parameter:IMessagePackFormatter<T> {
     }
     public void Serialize(ref Writer writer,T value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(2);
-        writer.WriteType(value.Type);
-
-        writer.Write(value.Name);
+        var Serializer=Resolver.Serializer();
+        var index0=Serializer.Parameters.LastIndexOf(value);
+        if(index0<0){
+            var index1=Serializer.ラムダ跨ぎParameters.LastIndexOf(value);
+            if(index1<0){
+                writer.WriteArrayHeader(3);
+                writer.WriteInt32(-2);
+                writer.WriteType(value.Type);
+                writer.Write(value.Name);
+                Serializer.ラムダ跨ぎParameters.Add(value);
+            }else{
+                writer.WriteArrayHeader(2);
+                writer.WriteInt32(-1);
+                writer.Write(index1);
+            }
+        }else{
+            writer.WriteArrayHeader(1);
+            writer.Write(index0);
+        }
         
     }
     internal static T Read(ref Reader reader,O Resolver,int ArrayHeader){
@@ -67,7 +83,28 @@ public class Parameter:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var ArrayHeader=reader.ReadArrayHeader();
-        return Read(ref reader,Resolver,ArrayHeader);
+        var index0=reader.ReadInt32();
+        var Serializer=Resolver.Serializer();
+        if(ArrayHeader!=1){
+            
+            
+            if(ArrayHeader!=2){
+                Debug.Assert(index0==-2);
+                var type=reader.ReadType();
+            
+                var name=reader.ReadString();
+                var Parameter=Expressions.Expression.Parameter(type,name);
+                Serializer.ラムダ跨ぎParameters.Add(Parameter);
+                return Parameter;
+            }else{
+                Debug.Assert(index0==-1);
+                var index1=reader.ReadInt32();
+                return Serializer.ラムダ跨ぎParameters[index1];
+            }
+        }else{
+            
+            return Serializer.Parameters[index0];
+        }
         
 
 

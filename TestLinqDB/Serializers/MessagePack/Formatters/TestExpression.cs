@@ -1495,8 +1495,6 @@ public class Serializer:共通 {
             )
         );
     }
-    private static Reflection.MethodInfo M(Expressions.Expression<Action> f)=>
-        ((Expressions.MethodCallExpression)f.Body).Method;
     private static void StaticMethod(){}
     private static void StaticMethod(int a){}
     private static void StaticMethod(int a,int b){}

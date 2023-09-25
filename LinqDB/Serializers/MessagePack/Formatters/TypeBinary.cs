@@ -42,11 +42,10 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         var count=reader.ReadArrayHeader();
         Debug.Assert(count==3);
         var NodeType=reader.ReadNodeType();
-        
+        Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
         return NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
-            Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader,Resolver),
-            _=>throw new NotSupportedException(NodeType.ToString())
+            _=>ReadTypeIs(ref reader,Resolver)
         };
         
         

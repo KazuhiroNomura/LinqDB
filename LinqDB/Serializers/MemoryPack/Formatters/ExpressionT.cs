@@ -1,34 +1,46 @@
-﻿using Expressions = System.Linq.Expressions;
-
+﻿
 using MemoryPack;
-namespace LinqDB.Serializers.MemoryPack.Formatters;
-using Reader = MemoryPackReader;
 
+using Expressions = System.Linq.Expressions;
+namespace LinqDB.Serializers.MemoryPack.Formatters;
+
+
+using Reader = MemoryPackReader;
 public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpression {
     public static readonly ExpressionT<T> Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        var ListParameter= writer.Serializer().Parameters;
-        var ListParameter_Count=ListParameter.Count;
-        var Parameters=value!.Parameters;
-        ListParameter.AddRange(Parameters);
-        writer.WriteType(value.Type);
+
+        writer.WriteType(value!.Type);
+
         writer.Serialize宣言Parameters(value.Parameters);
+        var Parameters= writer.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        var value_Parameters=value.Parameters;
+        Parameters.AddRange(value_Parameters);
+        
         Expression.Write(ref writer,value.Body);
+        
         writer.WriteBoolean(value.TailCall);
         
-        ListParameter.RemoveRange(ListParameter_Count,Parameters.Count);
+        Parameters.RemoveRange(Parameters_Count,value_Parameters.Count);
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
-        var ListParameter= reader.Serializer().Parameters;
-        var ListParameter_Count=ListParameter.Count;
+
         var type = reader.ReadType();
+
         var parameters= reader.Deserialize宣言Parameters();
-        ListParameter.AddRange(parameters!);
+
+        var Parameters= reader.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
+        
+        Parameters.AddRange(parameters!);
         var body = Expression.Read(ref reader);
+        
         var tailCall = reader.ReadBoolean();
-        ListParameter.RemoveRange(ListParameter_Count,parameters!.Length);
+        
+        Parameters.RemoveRange(Parameters_Count,parameters.Length);
         value=(T)Expressions.Expression.Lambda(
             type,
             body,

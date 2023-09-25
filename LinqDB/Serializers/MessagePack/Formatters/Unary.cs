@@ -58,21 +58,21 @@ public class Unary:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Unbox              :WriteOperandType(ref writer,value,Resolver);break;
             case Expressions.ExpressionType.Convert            :
             case Expressions.ExpressionType.ConvertChecked     :WriteOperandTypeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Decrement          :
-            case Expressions.ExpressionType.Increment          :
-            case Expressions.ExpressionType.IsFalse            :
-            case Expressions.ExpressionType.IsTrue             :
-            case Expressions.ExpressionType.Negate             :
-            case Expressions.ExpressionType.NegateChecked      :
-            case Expressions.ExpressionType.Not                :
-            case Expressions.ExpressionType.OnesComplement     :
-            case Expressions.ExpressionType.PostDecrementAssign:
-            case Expressions.ExpressionType.PostIncrementAssign:
-            case Expressions.ExpressionType.PreDecrementAssign :
-            case Expressions.ExpressionType.PreIncrementAssign :
-            case Expressions.ExpressionType.UnaryPlus          :WriteOperandMethod(ref writer,value,Resolver);break;
-            default:
-                throw new NotSupportedException(value.NodeType.ToString());
+            //case Expressions.ExpressionType.Decrement          :
+            //case Expressions.ExpressionType.Increment          :
+            //case Expressions.ExpressionType.IsFalse            :
+            //case Expressions.ExpressionType.IsTrue             :
+            //case Expressions.ExpressionType.Negate             :
+            //case Expressions.ExpressionType.NegateChecked      :
+            //case Expressions.ExpressionType.Not                :
+            //case Expressions.ExpressionType.OnesComplement     :
+            //case Expressions.ExpressionType.PostDecrementAssign:
+            //case Expressions.ExpressionType.PostIncrementAssign:
+            //case Expressions.ExpressionType.PreDecrementAssign :
+            //case Expressions.ExpressionType.PreIncrementAssign :
+            //case Expressions.ExpressionType.UnaryPlus          :WriteOperandMethod(ref writer,value,Resolver);break;
+            default                                            :WriteOperandMethod(ref writer,value,Resolver);break;
+                //throw new NotSupportedException(value.NodeType.ToString());
         }
     }
     internal static Expressions.Expression ReadOperand(ref Reader reader,O Resolver){
@@ -182,11 +182,15 @@ public class Unary:IMessagePackFormatter<T> {
                 var (operand,method)=ReadOperandMethod(ref reader,Resolver);
                 value=Expressions.Expression.UnaryPlus(operand,method);break;
             }
-            case Expressions.ExpressionType.Unbox: {
+            //case Expressions.ExpressionType.Unbox: {
+            //    var (operand,type)=ReadOperandType(ref reader,Resolver);
+            //    value=Expressions.Expression.Unbox(operand,type);break;
+            //}
+            default: {
+                Debug.Assert(NodeType==Expressions.ExpressionType.Unbox);
                 var (operand,type)=ReadOperandType(ref reader,Resolver);
                 value=Expressions.Expression.Unbox(operand,type);break;
             }
-            default:throw new NotSupportedException(NodeType.ToString());
         }
         
         return value;

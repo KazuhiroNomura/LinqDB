@@ -41,7 +41,7 @@ public class Index:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==4);
+        Debug.Assert(count==3);
         return Read(ref reader,Resolver);
         
     }

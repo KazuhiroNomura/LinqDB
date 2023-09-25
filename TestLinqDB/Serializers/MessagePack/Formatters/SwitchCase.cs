@@ -6,19 +6,21 @@ using Expressions = System.Linq.Expressions;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 namespace Serializers.MessagePack.Formatters;
 using Sets;
-public class Goto:共通 {
+public class SwitchCase:共通 {
     [Fact]public void Serialize(){
-        this.MessagePack_Assert(new{a=default(Expressions.GotoExpression)},output=>{});
-        var target=Expressions.Expression.Label(typeof(int),"target");
-        var input=Expressions.Expression.MakeGoto(
-            Expressions.GotoExpressionKind.Return,
-            target,
-            Expressions.Expression.Constant(5),
-            typeof(byte)
+        var input=Expressions.Expression.SwitchCase(
+            Expressions.Expression.Constant(64m),
+            Expressions.Expression.Constant(124)
+        );
+        this.MessagePack_Assert(new{a=default(Expressions.SwitchCase)},output=>{});
+        this.MessagePack_Assert(
+            new{
+                a=input
+            },output=>{}
         );
         this.MessagePack_Assert(
             new{
-                a=input,b=input
+                a=(object)input
             },output=>{}
         );
     }

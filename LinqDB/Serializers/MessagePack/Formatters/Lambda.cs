@@ -37,11 +37,11 @@ public class Lambda:IMessagePackFormatter<T> {
     }
     public void Serialize(ref Writer writer,T value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
     internal static T Read(ref Reader reader,O Resolver){
-        var Parameters=Resolver.Serializer().Parameters;
-        var Parameters_Count=Parameters.Count;
         var type=reader.ReadType();
         
         var parameters=reader.Deserialize宣言Parameters(Resolver);
+        var Parameters=Resolver.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
         Parameters.AddRange(parameters);
         
         var body=Expression.Read(ref reader,Resolver);

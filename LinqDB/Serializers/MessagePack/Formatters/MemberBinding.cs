@@ -11,9 +11,7 @@ using Reader = MessagePackReader;
 using T = Expressions.MemberBinding;
 public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
-    private const int ArrayHeader=3;
-    public void Serialize(ref Writer writer,T value,O Resolver){
-        writer.WriteArrayHeader(3);
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         writer.Write((byte)value.BindingType);
         
         Member.Write(ref writer,value.Member,Resolver);
@@ -25,27 +23,44 @@ public class MemberBinding:IMessagePackFormatter<T> {
             case Expressions.MemberBindingType.MemberBinding:
                 writer.WriteCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
                 break;
-            case Expressions.MemberBindingType.ListBinding:
+            default:
+                Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
                 writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
-            default:throw new ArgumentOutOfRangeException(value.BindingType.ToString());
         }
         
     }
-    public T Deserialize(ref Reader reader,O Resolver){
-        var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+    //internal static void Write(ref Writer writer,T value,O Resolver){
+    //    writer.WriteArrayHeader(4);
+    //    writer.WriteNodeType(Expressions.ExpressionType.Label);
+        
+    //    PrivateWrite(ref writer,value,Resolver);
+        
+    //}
+    public void Serialize(ref Writer writer,T value,O Resolver){
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteArrayHeader(3);
+        PrivateWrite(ref writer,value,Resolver);
+        
+    }
+    internal static T Read(ref Reader reader,O Resolver){
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();
         
         var member= Member.Read(ref reader,Resolver);
-        
+        Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),
-            Expressions.MemberBindingType.ListBinding=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>(Resolver)),
-            _=>throw new ArgumentOutOfRangeException(BindingType.ToString())
+            _=>Expressions.Expression.ListBind(member,reader.ReadArray<Expressions.ElementInit>(Resolver))
         };
         
         return MemberBinding;
+    }
+    public T Deserialize(ref Reader reader,O Resolver){
+        if(reader.TryReadNil()) return null!;
+        var count=reader.ReadArrayHeader();
+        Debug.Assert(count==3);
+        
+        return Read(ref reader,Resolver);
     }
 }

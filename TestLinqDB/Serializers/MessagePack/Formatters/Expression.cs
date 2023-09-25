@@ -100,10 +100,10 @@ public class Expression:共通 {
         共通1(Expressions.Expression.OnesComplement(Constant1));
         共通1(Expressions.Expression.Decrement(Constant1_1d));
         共通1(Expressions.Expression.Increment(Constant1_1d));
-        共通0(ParameterInt32,Constant1,Expressions.Expression.PostDecrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expressions.Expression.PostIncrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expressions.Expression.PreDecrementAssign(ParameterInt32));
-        共通0(ParameterInt32,Constant1,Expressions.Expression.PreIncrementAssign(ParameterInt32));
+        共通0(Expressions.Expression.PostDecrementAssign(ParameterInt32));
+        共通0(Expressions.Expression.PostIncrementAssign(ParameterInt32));
+        共通0(Expressions.Expression.PreDecrementAssign(ParameterInt32));
+        共通0(Expressions.Expression.PreIncrementAssign(ParameterInt32));
         共通1(Expressions.Expression.UnaryPlus(Constant1_1d));
 
         //共通1(Expressions.Expression.Convert(Constant演算子,typeof(演算子1)));
@@ -138,7 +138,7 @@ public class Expression:共通 {
         //共通1(Expressions.Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
         //共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         //共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
-        void 共通0(Expressions.ParameterExpression 代入先,Expressions.ConstantExpression 代入元,Expressions.UnaryExpression a)=>this.MessagePack_Assert(new{a},output=>{});
-        void 共通1(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary},output=>{});
+        void 共通0(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
+        void 共通1(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
     }
 }

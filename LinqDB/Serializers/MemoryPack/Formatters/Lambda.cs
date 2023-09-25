@@ -37,11 +37,11 @@ public class Lambda:MemoryPackFormatter<T> {
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)=>WriteNullable(ref writer,value);
     internal static T Read(ref Reader reader){
-        var Parameters=reader.Serializer().Parameters;
-        var Parameters_Count=Parameters.Count;
         var type=reader.ReadType();
         
         var parameters=reader.Deserialize宣言Parameters();
+        var Parameters=reader.Serializer().Parameters;
+        var Parameters_Count=Parameters.Count;
         Parameters.AddRange(parameters);
         
         

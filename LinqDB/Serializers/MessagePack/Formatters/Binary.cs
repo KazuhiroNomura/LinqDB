@@ -104,13 +104,13 @@ public class Binary:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
             case Expressions.ExpressionType.SubtractAssignChecked:WriteLeftRightMethodLambda(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Equal                :
-            case Expressions.ExpressionType.GreaterThan          :
-            case Expressions.ExpressionType.GreaterThanOrEqual   :
-            case Expressions.ExpressionType.LessThan             :
-            case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
-            default:throw new NotSupportedException(value.NodeType.ToString());
+            //case Expressions.ExpressionType.Equal                :
+            //case Expressions.ExpressionType.GreaterThan          :
+            //case Expressions.ExpressionType.GreaterThanOrEqual   :
+            //case Expressions.ExpressionType.LessThan             :
+            //case Expressions.ExpressionType.LessThanOrEqual      :
+            //case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
+            default                                              :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
         }
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
@@ -317,11 +317,14 @@ public class Binary:IMessagePackFormatter<T> {
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=Expressions.Expression.LessThanOrEqual(left,right,isLiftedToNull,method);break;
             }
-            case Expressions.ExpressionType.NotEqual: {
+            //case Expressions.ExpressionType.NotEqual: 
+            default:
+            {
+                Debug.Assert(NodeType==Expressions.ExpressionType.NotEqual);
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=Expressions.Expression.NotEqual(left,right,isLiftedToNull,method);break;
             }
-            default: throw new NotSupportedException(NodeType.ToString());
+            //default: throw new NotSupportedException(NodeType.ToString());
         }
 
         return value;

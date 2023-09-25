@@ -7,7 +7,7 @@ using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 namespace Serializers.MessagePack.Formatters;
 using Sets;
 public class Dynamic:共通 {
-    private static Expressions.Expression PrivateDynamicConvert<TInput,TResult>(TInput input,RuntimeBinder.CSharpBinderFlags Flag){
+    private static Expressions.DynamicExpression PrivateDynamicConvert<TInput,TResult>(TInput input,RuntimeBinder.CSharpBinderFlags Flag){
         var Constant = Expressions.Expression.Constant(input);
         var binder=RuntimeBinder.Binder.Convert(
             Flag,
@@ -65,9 +65,10 @@ public class Dynamic:共通 {
         }
         //case BinderType.ConvertBinder:{
         {
+            var input=PrivateDynamicConvert<int,long>(1,RuntimeBinder.CSharpBinderFlags.None);
             this.MessagePack_Assert(
                 new{
-                    a=PrivateDynamicConvert<int,long>(1,RuntimeBinder.CSharpBinderFlags.None)
+                    a=input,b=(Expressions.Expression)input
                 },output=>{}
             );
         }
