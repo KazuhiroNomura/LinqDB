@@ -16,6 +16,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using LinqDB.Serializers;
 using Array = System.Array;
 //using Microsoft.CSharp.RuntimeBinder;
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
@@ -26,6 +27,7 @@ using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
+using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 /// <summary>
@@ -379,7 +381,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>{
+    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>,IEqualityComparer<CatchBlock>,IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>{
         private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
@@ -439,13 +441,15 @@ public sealed partial class Optimizer:IDisposable{
         /// <param name="b"></param>
         /// <returns></returns>
         public bool Equals(Expression? a,Expression? b) {
+            if(a==b) return true;
+            if(a==null&&b!=null||a!=null&&b==null) return false;
             this.a_ラムダ跨ぎParameters.Clear();
             this.b_ラムダ跨ぎParameters.Clear();
             this.a_Parameters.Clear();
             this.b_Parameters.Clear();
             this.a_LabelTargets.Clear();
             this.b_LabelTargets.Clear();
-            var r=this.PrivateEqualsNullable(a,b);
+            var r=this.InternalEquals(a,b);
             return r;
         }
 
@@ -455,7 +459,7 @@ public sealed partial class Optimizer:IDisposable{
         /// <param name="Expression0"></param>
         /// <returns></returns>
         protected virtual Expression Assignの比較対象(Expression Expression0)=>Expression0;
-        private bool PrivateEqualsNullable(Expression? a0,Expression? b0) {
+        private bool InternalEquals(Expression? a0,Expression? b0) {
             if(a0 is null)
                 return b0 is null;
             if(b0 is null)
@@ -524,7 +528,7 @@ public sealed partial class Optimizer:IDisposable{
                     if(a_Left.NodeType!=ExpressionType.Parameter) return this.T(a_Assign,b_Assign);
                     if(!this.PrivateEquals(a_Assign.Right,b_Assign.Right))
                         return false;
-                    if(!this.PrivateEqualsNullable(a_Assign.Conversion,b_Assign.Conversion))
+                    if(!this.InternalEquals(a_Assign.Conversion,b_Assign.Conversion))
                         return false;
                     var a_Parameter= (ParameterExpression)a_Left;
                     var b_Parameter= (ParameterExpression)b_Left;
@@ -623,7 +627,7 @@ public sealed partial class Optimizer:IDisposable{
                     throw new NotSupportedException($"{a1.NodeType}はサポートされていない");
             }
         }
-        private bool T(BinaryExpression a,BinaryExpression b) => a.Method==b.Method&&this.PrivateEquals(a.Left,b.Left)&&this.PrivateEquals(a.Right,b.Right)&&this.PrivateEqualsNullable(a.Conversion,b.Conversion);
+        private bool T(BinaryExpression a,BinaryExpression b) => a.Method==b.Method&&this.PrivateEquals(a.Left,b.Left)&&this.PrivateEquals(a.Right,b.Right)&&this.InternalEquals(a.Conversion,b.Conversion);
         private bool T(BlockExpression a,BlockExpression b){
             //if(!this.T(a.Variables,b.Variables)) return false;
             //return this.SequenceEqual(a.Expressions,b.Expressions);
@@ -832,7 +836,7 @@ public sealed partial class Optimizer:IDisposable{
             Debug.Assert(a_LabelTargets_Count==b_LabelTargets_Count);
             a_LabelTargets.Add(a.Target);
             b_LabelTargets.Add(b.Target);
-            var r = this.PrivateEqualsNullable(a.DefaultValue,b.DefaultValue);
+            var r = this.InternalEquals(a.DefaultValue,b.DefaultValue);
             a_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             b_LabelTargets.RemoveRange(a_LabelTargets_Count,1);
             return r;
@@ -894,7 +898,7 @@ public sealed partial class Optimizer:IDisposable{
             b_LabelTargets.RemoveRange(b_LabelTargets_Count,b_LabelTargets.Count-b_LabelTargets_Count);
             return r;
         }
-        private bool T(MemberExpression a,MemberExpression b) => a.Member==b.Member&&this.PrivateEqualsNullable(a.Expression,b.Expression);
+        private bool T(MemberExpression a,MemberExpression b) => a.Member==b.Member&&this.InternalEquals(a.Expression,b.Expression);
         private bool T(IndexExpression a,IndexExpression b) =>
             a.Indexer==b.Indexer&&
             this.PrivateEquals(a.Object,b.Object)&&
@@ -909,7 +913,7 @@ public sealed partial class Optimizer:IDisposable{
                 return this.SequenceEqual(a.Arguments,b.Arguments);
             }
             return a.Method==b.Method&&
-                   this.PrivateEqualsNullable(a.Object,b.Object)&&
+                   this.InternalEquals(a.Object,b.Object)&&
                    this.SequenceEqual(a.Arguments,b.Arguments);
         }
         private bool T(InvocationExpression a,InvocationExpression b) =>
@@ -917,7 +921,7 @@ public sealed partial class Optimizer:IDisposable{
             this.SequenceEqual(a.Arguments,b.Arguments);
         private bool T(GotoExpression a,GotoExpression b) =>
             this.a_LabelTargets.IndexOf(a.Target)==this.b_LabelTargets.IndexOf(b.Target)&&
-            this.PrivateEqualsNullable(a.Value,b.Value);
+            this.InternalEquals(a.Value,b.Value);
         private bool SequenceEqual(IList<Expression> a,IList<Expression> b) {
             var a_Count = a.Count;
             if(a_Count!=b.Count)
@@ -984,8 +988,8 @@ public sealed partial class Optimizer:IDisposable{
         }
         private bool T(TryExpression a,TryExpression b) {
             if(!this.PrivateEquals(a.Body,b.Body))return false;
-            if(!this.PrivateEqualsNullable(a.Fault,b.Fault))return false;
-            if(!this.PrivateEqualsNullable(a.Finally,b.Finally))return false;
+            if(!this.InternalEquals(a.Fault,b.Fault))return false;
+            if(!this.InternalEquals(a.Finally,b.Finally))return false;
             var a_Handlers = a.Handlers;
             var b_Handlers = b.Handlers;
             var a_Handlers_Count = a_Handlers.Count;
@@ -1007,7 +1011,7 @@ public sealed partial class Optimizer:IDisposable{
                     b_Parameters.Add(b_Handler_Variable);
                 }
                 if(!this.PrivateEquals(a_Handler.Body,b_Handler.Body))return false;
-                if(!this.PrivateEqualsNullable(a_Handler.Filter,b_Handler.Filter))return false;
+                if(!this.InternalEquals(a_Handler.Filter,b_Handler.Filter))return false;
                 if(a_Handler_Variable is not null) {
                     a_Parameters.RemoveAt(a_Parameters_Count);
                     b_Parameters.RemoveAt(a_Parameters_Count);
@@ -1026,6 +1030,52 @@ public sealed partial class Optimizer:IDisposable{
 
 
         public int GetHashCode([DisallowNull] LabelTarget obj) {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(CatchBlock? a,CatchBlock? b) {
+            if(a==b) return true;
+            if(a==null&&b!=null||a!=null&&b==null) return false;
+            if(a!.Test!=b!.Test)return false;
+            var a_Variable=a.Variable;
+            var b_Variable=b.Variable;
+            if(a_Variable is null^b_Variable is null) return false;
+            var a_Parameters = this.a_Parameters;
+            var b_Parameters = this.b_Parameters;
+            var a_Parameters_Count = a_Parameters.Count;
+            Debug.Assert(a_Parameters_Count==b_Parameters.Count);
+            if(a_Variable is not null){
+                a_Parameters.Add(a_Variable);
+                b_Parameters.Add(b_Variable);
+            }
+            if(!this.PrivateEquals(a.Body,b.Body))return false;
+            if(!this.InternalEquals(a.Filter,b.Filter))return false;
+            if(a_Variable is not null) {
+                a_Parameters.RemoveAt(a_Parameters_Count);
+                b_Parameters.RemoveAt(a_Parameters_Count);
+            }
+            return true;
+        }
+
+        public int GetHashCode([DisallowNull] CatchBlock obj) {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(CSharpArgumentInfo? x,CSharpArgumentInfo? y) {
+            if(x==y) return true;
+            if(x==null&&y!=null||x!=null&&y==null) return false;
+            dynamic x0=new NonPublicAccessor(x),y0=new NonPublicAccessor(y);
+            if(x0.Flags             !=y0.Flags             ) return false;
+            if(x0.IsByRefOrOut      !=y0.IsByRefOrOut      ) return false;
+            if(x0.IsStaticType      !=y0.IsStaticType      ) return false;
+            if(x0.LiteralConstant   !=y0.LiteralConstant   ) return false;
+            if(x0.Name              !=y0.Name              ) return false;
+            if(x0.NamedArgument     !=y0.NamedArgument     ) return false;
+            if(x0.UseCompileTimeType!=y0.UseCompileTimeType) return false;
+            return true;
+        }
+
+        public int GetHashCode([DisallowNull] CSharpArgumentInfo obj) {
             throw new NotImplementedException();
         }
     }

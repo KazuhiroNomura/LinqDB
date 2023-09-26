@@ -8,7 +8,7 @@ namespace Serializers.MessagePack.Formatters;
 using Sets;
 public class Goto:共通 {
     [Fact]public void Serialize(){
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.GotoExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.GotoExpression)});
         var target=Expressions.Expression.Label(typeof(int),"target");
         var input=Expressions.Expression.MakeGoto(
             Expressions.GotoExpressionKind.Return,
@@ -19,7 +19,7 @@ public class Goto:共通 {
         this.MemoryMessageJson_Assert(
             new{
                 a=input,b=input
-            },output=>{}
+            }
         );
     }
 }

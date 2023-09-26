@@ -60,7 +60,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
         //case BinderType.ConvertBinder:{
@@ -69,7 +69,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=input,b=(Expressions.Expression)input
-                },output=>{}
+                }
             );
         }
         //case BinderType.GetIndexBinder:{
@@ -92,7 +92,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
         //case BinderType.GetMemberBinder:{
@@ -112,7 +112,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
         //case BinderType.InvokeBinder:{
@@ -137,7 +137,7 @@ public class Dynamic:共通 {
                 this.MemoryMessageJson_Assert(
                     new{
                         a=Dynamic0
-                    },output=>{}
+                    }
                 );
             }
         }
@@ -157,7 +157,7 @@ public class Dynamic:共通 {
                 this.MemoryMessageJson_Assert(
                     new{
                         a=Dynamic0
-                    },output=>{}
+                    }
                 );
             }
         }
@@ -184,7 +184,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
         //}
@@ -206,7 +206,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
         //case BinderType.UnaryOperationBinder:{
@@ -229,13 +229,13 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
     }
     [Fact]public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.DynamicExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.DynamicExpression)});
         {
             var arg1=1;
             var arg2=1;
@@ -255,7 +255,7 @@ public class Dynamic:共通 {
             this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
-                },output=>{}
+                }
             );
         }
     }

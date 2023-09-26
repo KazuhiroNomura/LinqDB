@@ -12,11 +12,11 @@ public class Label:共通 {
         //this.MemoryMessageJson_Expression(Expressions.Expression.Label(labelTarget));
         //this.MemoryMessageJson_Expression(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
         var input=Expressions.Expression.Label(labelTarget);
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.LabelExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.LabelExpression)});
         this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
-            },output=>{}
+            }
         );
     }
 }

@@ -12,7 +12,7 @@ public class Conditional:共通 {
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.ConditionalExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.ConditionalExpression)});
         this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Condition(
@@ -20,7 +20,7 @@ public class Conditional:共通 {
                     Expressions.Expression.Constant(true),
                     Expressions.Expression.Constant(true)
                 )
-            },output=>{}
+            }
         );
     }
 }

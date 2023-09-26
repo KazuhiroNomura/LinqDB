@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
+using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;
@@ -239,8 +240,15 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     if(!this.Equals(x0.Target,y0.Target))return false;
                     return true;
                 }
+                case(LabelTarget x0,LabelTarget y0):
+                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
+                case(CSharpArgumentInfo x0,CSharpArgumentInfo y0):
+                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
+                case(CatchBlock x0,CatchBlock y0):
+                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
+                    //return((IEqualityComparer<CatchBlock>)this).Equals(x0,y0);
                 case(Expression x0,Expression y0):
-                    return this.ExpressionEqualityComparer.Equals(x0,y0);
+                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
             }
             return x.Equals(y);
         }

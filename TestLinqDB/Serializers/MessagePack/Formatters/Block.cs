@@ -14,8 +14,8 @@ public class Block:共通 {
     [Fact]public void Serialize(){
         var Constant1= Expressions.Expression.Constant(1m);
         var input1=Expressions.Expression.Block(Constant1);
-        this.MemoryMessageJson_Assert(new{a=input1},output=>{});
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.BlockExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=input1});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.BlockExpression)});
 
     }
     [Fact]public void Block0(){

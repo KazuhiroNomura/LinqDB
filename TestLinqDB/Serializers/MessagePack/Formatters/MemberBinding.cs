@@ -45,11 +45,11 @@ public class MemberBinding:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.MemberBinding)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.MemberBinding)});
         this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
-            },output=>{}
+            }
         );
     }
 }

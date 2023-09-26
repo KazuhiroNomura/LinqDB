@@ -12,16 +12,16 @@ public class SwitchCase:共通 {
             Expressions.Expression.Constant(64m),
             Expressions.Expression.Constant(124)
         );
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.SwitchCase)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.SwitchCase)});
         this.MemoryMessageJson_Assert(
             new{
                 a=input
-            },output=>{}
+            }
         );
         this.MemoryMessageJson_Assert(
             new{
                 a=(object)input
-            },output=>{}
+            }
         );
     }
 }

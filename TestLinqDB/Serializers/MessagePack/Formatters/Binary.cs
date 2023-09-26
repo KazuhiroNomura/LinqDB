@@ -12,16 +12,16 @@ public class Binary:共通 {
     [Fact]public void Serialize(){
         var Constant1= Expressions.Expression.Constant(1m);
         var input1=Expressions.Expression.Add(Constant1,Constant1);
-        this.MemoryMessageJson_Assert(new{a=input1},output=>{});
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=input1});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression)});
 
     }
     private void PrivateWrite<T>(Expressions.ExpressionType NodeType){
         var Constant= Expressions.Expression.Constant(default(T));
         var Parameter= Expressions.Expression.Parameter(typeof(T),typeof(T).Name);
         var input1=Expressions.Expression.MakeBinary(NodeType,Parameter,Constant);
-        this.MemoryMessageJson_Assert(new{a=input1},output=>{});
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression) },output=>{});
+        this.MemoryMessageJson_Assert(new{a=input1});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression) });
 
     }
     [Fact]public void Write(){
@@ -30,8 +30,8 @@ public class Binary:共通 {
             var Parameter= Expressions.Expression.Parameter(typeof(int[]));
             var Constant= Expressions.Expression.Constant(default(int));
             var input=Expressions.Expression.ArrayIndex(Parameter,Constant);
-            this.MemoryMessageJson_Assert(new{a=input},output=>{});
-            this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression) },output=>{});
+            this.MemoryMessageJson_Assert(new{a=input});
+            this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression) });
 
         }
         this.PrivateWrite<int>(Expressions.ExpressionType.Assign            );

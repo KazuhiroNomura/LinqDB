@@ -11,7 +11,7 @@ public class CatchBlock:共通 {
     [Fact]public void Serialize(){
         var Variable=Expressions.Expression.Parameter(typeof(Exception));
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.CatchBlock)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.CatchBlock)});
         //if(value.Variable is null){
         //    if(value.Filter is null){
         this.MemoryMessageJson_Assert(
@@ -20,7 +20,7 @@ public class CatchBlock:共通 {
                     typeof(Exception),
                     Expressions.Expression.Default(typeof(void))
                 )
-            },output=>{}
+            }
         );
         //    } else{
         this.MemoryMessageJson_Assert(
@@ -30,7 +30,7 @@ public class CatchBlock:共通 {
                     Expressions.Expression.Constant(0),
                     Expressions.Expression.Constant(true)
                 )
-            },output=>{}
+            }
         );
         //    }
         //} else{
@@ -41,7 +41,7 @@ public class CatchBlock:共通 {
                     Variable,
                     Expressions.Expression.Default(typeof(void))
                 )
-            },output=>{}
+            }
         );
         //    } else{
         this.MemoryMessageJson_Assert(
@@ -51,7 +51,7 @@ public class CatchBlock:共通 {
                     Expressions.Expression.Constant(0),
                     Expressions.Expression.Constant(true)
                 )
-            },output=>{}
+            }
         );
         //    }
         //}

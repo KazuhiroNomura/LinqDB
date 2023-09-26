@@ -11,13 +11,13 @@ using Sets;
 public class Parameter:共通 {
     [Fact]public void Write(){
         var p=Expressions.Expression.Parameter(typeof(int),"p");
-        ////if(index0<0){
-        ////    if(index1<0){
-        //this.MessagePack_Assert(new { a = Expressions.Expression.Block(p) },output => { });
-        ////    }else{
-        //this.MessagePack_Assert(new { a = Expressions.Expression.Block(p,p) },output => { });
-        ////    }
-        ////}else{
+        //if(index0<0){
+        //    if(index1<0){
+        this.MemoryMessageJson_Assert(new { a = Expressions.Expression.Block(p) });
+        //    }else{
+        this.MemoryMessageJson_Assert(new { a = Expressions.Expression.Block(p,p) });
+        //    }
+        //}else{
         this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Lambda<Func<int,object>>(
@@ -27,12 +27,12 @@ public class Parameter:共通 {
                     p
                 )
 
-            },output=>{}
+            }
         );
         //}
     }
     [Fact]public void Serialize(){
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.ParameterExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.ParameterExpression)});
         var input = Expressions.Expression.Parameter(typeof(int));
         //if(index0<0){
         //    if(index1<0){

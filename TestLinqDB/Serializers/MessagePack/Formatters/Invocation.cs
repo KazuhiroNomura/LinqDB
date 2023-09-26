@@ -13,11 +13,11 @@ public class Invocation:共通 {
             Expressions.Expression.Lambda(@string,@string),
             Expressions.Expression.Constant("B")
         );
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.InvocationExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.InvocationExpression)});
         this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
-            },output=>{}
+            }
         );
     }
 }

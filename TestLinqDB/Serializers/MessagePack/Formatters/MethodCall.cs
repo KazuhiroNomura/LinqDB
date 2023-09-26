@@ -25,12 +25,12 @@ public class MethodCall:共通 {
         //        Expressions.Expression.Constant("B")
         //    )
         //);
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.MethodCallExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.MethodCallExpression)});
         this.MemoryMessageJson_Assert(
             new{
                 StaticMethod,StaticMethodExpression=(Expressions.Expression)StaticMethod,
                 InstanceMethod,InstanceMethodExpression=(Expressions.Expression)InstanceMethod
-            },output=>{}
+            }
         );
     }
 }

@@ -211,6 +211,11 @@ public abstract class 共通{
         this.MessagePack_Assert(input,AssertAction);
         this.Utf8Json_Assert(input,AssertAction);
     }
+    protected void MemoryMessageJson_Assert<T>(T input){
+        this.Memory_Assert(input,actual=>Assert.Equal(input,actual,this.Comparer));
+        this.MessagePack_Assert(input,actual=>Assert.Equal(input,actual,this.Comparer));
+        this.Utf8Json_Assert(input,actual=>Assert.Equal(input,actual,this.Comparer));
+    }
     protected static Expressions.LambdaExpression GetLambda<T>(Expressions.Expression<Func<T>> e)=>e;
     protected static object ClassDisplay取得(){
         var a=1;
