@@ -5,13 +5,15 @@ using MemoryPack;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader = MemoryPackReader;
 using T = Expressions.CatchBlock;
 public class CatchBlock:MemoryPackFormatter<T> {
     public static readonly CatchBlock Instance=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
-        Debug.Assert(value!=null,nameof(value)+" != null");
-        if(value.Variable is null){
+        if(writer.TryWriteNil(value)) return;
+        
+        if(value!.Variable is null){
             if(value.Filter is null) {
 
                 writer.WriteVarInt(0);
@@ -58,6 +60,7 @@ public class CatchBlock:MemoryPackFormatter<T> {
 
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
 
 
         
@@ -81,26 +84,27 @@ public class CatchBlock:MemoryPackFormatter<T> {
             case 2:{
                 var name=reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=reader.Serializer().Parameters;
-                ListParameter.Add(Variable);
+                var Parameters=reader.Serializer().Parameters;
+                Parameters.Add(Variable);
                 
                 var body=Expression.Read(ref reader);
-                ListParameter.RemoveAt(ListParameter.Count-1);
+                Parameters.RemoveAt(Parameters.Count-1);
                 value=Expressions.Expression.Catch(Variable,body);
                 break;
             }
-            case 3:{
+            default:{
+                Debug.Assert(id==3);
                 var name=reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=reader.Serializer().Parameters;
-                ListParameter.Add(Variable);
+                var Parameters=reader.Serializer().Parameters;
+                Parameters.Add(Variable);
                 var body=Expression.Read(ref reader);
                 var filter=Expression.Read(ref reader);
-                ListParameter.RemoveAt(ListParameter.Count-1);
+                Parameters.RemoveAt(Parameters.Count-1);
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            default:throw new NotSupportedException($"CatchBlock id{id}は不正");
+            //default:throw new NotSupportedException($"CatchBlock id{id}は不正");
         }
         
         

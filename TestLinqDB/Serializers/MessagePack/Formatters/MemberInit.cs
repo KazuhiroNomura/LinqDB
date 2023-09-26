@@ -30,8 +30,8 @@ public class MemberInit:共通 {
                 Constant_1
             )
         );
-        this.MessagePack_Assert(new{a=default(Expressions.MemberInitExpression)},output=>{});
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.MemberInitExpression)},output=>{});
+        this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
             },output=>{}

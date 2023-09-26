@@ -12,8 +12,8 @@ public class Conditional:共通 {
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MessagePack_Assert(new{a=default(Expressions.ConditionalExpression)},output=>{});
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.ConditionalExpression)},output=>{});
+        this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Condition(
                     Expressions.Expression.Constant(true),

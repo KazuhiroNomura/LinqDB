@@ -12,8 +12,8 @@ public class New:共通 {
             typeof(ValueTuple<int>).GetConstructors()[0],
             Expressions.Expression.Constant(1)
         );
-        this.MessagePack_Assert(new{a=default(Expressions.NewExpression)},output=>{});
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.NewExpression)},output=>{});
+        this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
             },output=>{}

@@ -27,10 +27,10 @@ public class Block:IMessagePackFormatter<T> {
         writer.WriteNodeType(Expressions.ExpressionType.Block);
         
         PrivateWrite(ref writer,value,Resolver);
+        
     }
     public void Serialize(ref Writer writer,T value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-
         writer.WriteArrayHeader(3);
         PrivateWrite(ref writer,value,Resolver);
         

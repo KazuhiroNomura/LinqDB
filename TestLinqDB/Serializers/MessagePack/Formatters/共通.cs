@@ -191,7 +191,7 @@ public abstract class 共通{
         var output = s.Deserialize<T>(bytes);
         AssertAction(output!);
     }
-    protected void MessagePack_Assert<T>(T input,Action<T> AssertAction){
+    protected void MessagePack_Assert<T>(T input,Action<T> AssertAction) {
         var s = this.MessagePack;
         var bytes = s.Serialize(input);
         dynamic a = new NonPublicAccessor(s);

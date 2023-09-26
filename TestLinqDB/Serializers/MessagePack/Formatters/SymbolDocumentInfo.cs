@@ -9,14 +9,14 @@ namespace Serializers.MessagePack.Formatters;
 using Sets;
 public class SymbolDocumentInfo:共通 {
     [Fact]
-    public void Serialize(){
+    public void Serialize() {
         //if(writer.TryWriteNil(value)) return;
-        this.MessagePack_Assert(new{a=default(Expressions.SymbolDocumentInfo)},output=>{});
-        var input=Expressions.Expression.SymbolDocument("ソースファイル名0.cs");
-        this.MessagePack_Assert(
-            new{
-                a=input,b=(object)input
-            },output=>{}
+        this.MemoryMessageJson_Assert(new { a = default(Expressions.SymbolDocumentInfo) },output => { });
+        var SymbolDocument = Expressions.Expression.SymbolDocument("ソースファイル名0.cs");
+        this.MemoryMessageJson_Assert(
+            new {
+                SymbolDocument,SymbolDocumentObject = (object)SymbolDocument
+            },output => { }
         );
     }
 }

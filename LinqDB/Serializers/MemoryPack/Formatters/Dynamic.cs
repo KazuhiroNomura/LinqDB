@@ -75,36 +75,36 @@ public class Dynamic:MemoryPackFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0]);
                         break;
                     }
-                    case CreateInstanceBinder v1:{
-                        WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
+                    //case CreateInstanceBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
                         
-                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
-                        writer.WriteType(CallingContext);
+                    //    var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
+                    //    writer.WriteType(CallingContext);
                         
-                        writer.WriteArray(CSharpArgumentInfos);
+                    //    writer.WriteArray(CSharpArgumentInfos);
                         
-                        writer.WriteVarInt(Flags);
-                        break;
-                    }
-                    case DeleteIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
-                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
-                        writer.WriteType(CallingContext);
-                        writer.WriteArray(CSharpArgumentInfos);
-                        writer.WriteVarInt(Flags);
-                        writer.WriteType(v0.ReturnType);
-                        break;
-                    }
-                    case DeleteMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
-                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
-                        writer.WriteType(CallingContext);
-                        writer.WriteArray(CSharpArgumentInfos);
-                        writer.WriteVarInt(Flags);
-                        writer.WriteType(v0.ReturnType);
-                        writer.WriteString(v1.Name);
-                        break;
-                    }
+                    //    writer.WriteVarInt(Flags);
+                    //    break;
+                    //}
+                    //case DeleteIndexBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
+                    //    var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
+                    //    writer.WriteType(CallingContext);
+                    //    writer.WriteArray(CSharpArgumentInfos);
+                    //    writer.WriteVarInt(Flags);
+                    //    writer.WriteType(v0.ReturnType);
+                    //    break;
+                    //}
+                    //case DeleteMemberBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
+                    //    var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
+                    //    writer.WriteType(CallingContext);
+                    //    writer.WriteArray(CSharpArgumentInfos);
+                    //    writer.WriteVarInt(Flags);
+                    //    writer.WriteType(v0.ReturnType);
+                    //    writer.WriteString(v1.Name);
+                    //    break;
+                    //}
                     case GetIndexBinder v1:{
                         WriteBinderType(ref writer,BinderType.GetIndexBinder);
                         

@@ -37,6 +37,12 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         var documentType=Formatter.Deserialize(ref reader,Resolver);
         
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
+        
+        
+        
+        
+        
+        
     }
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;

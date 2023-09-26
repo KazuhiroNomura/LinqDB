@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Diagnostics;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -84,28 +84,29 @@ public class CatchBlock:IJsonFormatter<T> {
             case 2: {
                 var name = reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=Resolver.Serializer().Parameters;
-                ListParameter.Add(Variable);
+                var Parameters=Resolver.Serializer().Parameters;
+                Parameters.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Read(ref reader,Resolver);
-                ListParameter.RemoveAt(ListParameter.Count-1);
+                Parameters.RemoveAt(Parameters.Count-1);
                 value=Expressions.Expression.Catch(Variable,body);
                 break;
             }
-            case 3: {
+            default:{
+                Debug.Assert(id==3);
                 var name = reader.ReadString();
                 var Variable=Expressions.Expression.Parameter(test,name);
-                var ListParameter=Resolver.Serializer().Parameters;
-                ListParameter.Add(Variable);
+                var Parameters=Resolver.Serializer().Parameters;
+                Parameters.Add(Variable);
                 reader.ReadIsValueSeparatorWithVerify();
                 var body = Expression.Read(ref reader,Resolver);
                 reader.ReadIsValueSeparatorWithVerify();
                 var filter = Expression.Read(ref reader,Resolver);
-                ListParameter.RemoveAt(ListParameter.Count-1);
+                Parameters.RemoveAt(Parameters.Count-1);
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            default:throw new NotSupportedException($"Utf8JsonのCatchのidが不正な{id}だった");
+            //default:throw new NotSupportedException($"Utf8JsonのCatchのidが不正な{id}だった");
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

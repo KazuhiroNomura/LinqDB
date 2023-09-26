@@ -11,10 +11,10 @@ public class CatchBlock:共通 {
     [Fact]public void Serialize(){
         var Variable=Expressions.Expression.Parameter(typeof(Exception));
         //if(writer.TryWriteNil(value)) return;
-        this.MessagePack_Assert(new{a=default(Expressions.CatchBlock)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.CatchBlock)},output=>{});
         //if(value.Variable is null){
         //    if(value.Filter is null){
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Catch(
                     typeof(Exception),
@@ -23,7 +23,7 @@ public class CatchBlock:共通 {
             },output=>{}
         );
         //    } else{
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Catch(
                     typeof(Exception),
@@ -35,7 +35,7 @@ public class CatchBlock:共通 {
         //    }
         //} else{
         //    if(value.Filter is null){
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Catch(
                     Variable,
@@ -44,7 +44,7 @@ public class CatchBlock:共通 {
             },output=>{}
         );
         //    } else{
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=Expressions.Expression.Catch(
                     Variable,

@@ -14,8 +14,8 @@ public class Expression:共通 {
             var Parameter= Expressions.Expression.Parameter(typeof(int[]));
             var Constant= Expressions.Expression.Constant(default(int));
             var input=Expressions.Expression.ArrayIndex(Parameter,Constant);
-            this.MessagePack_Assert(new{a=input},output=>{});
-            this.MessagePack_Assert(new{a=default(Expressions.BinaryExpression) },output=>{});
+            this.MemoryMessageJson_Assert(new{a=input},output=>{});
+            this.MemoryMessageJson_Assert(new{a=default(Expressions.BinaryExpression) },output=>{});
 
         }
         共通<int>(Expressions.ExpressionType.Assign            );
@@ -60,7 +60,7 @@ public class Expression:共通 {
             var Constant= Expressions.Expression.Constant(default(T));
             var Parameter= Expressions.Expression.Parameter(typeof(T),typeof(T).Name);
             Expressions.Expression input=Expressions.Expression.MakeBinary(NodeType,Parameter,Constant);
-            this.MessagePack_Assert(new{a=input},output=>{});
+            this.MemoryMessageJson_Assert(new{a=input},output=>{});
         }
     }
     [Fact]
@@ -138,7 +138,7 @@ public class Expression:共通 {
         //共通1(Expressions.Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
         //共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         //共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
-        void 共通0(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
-        void 共通1(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
+        void 共通0(Expressions.UnaryExpression Unary)=>this.MemoryMessageJson_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
+        void 共通1(Expressions.UnaryExpression Unary)=>this.MemoryMessageJson_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
     }
 }

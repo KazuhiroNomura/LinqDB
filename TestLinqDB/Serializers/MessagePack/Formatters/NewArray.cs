@@ -8,7 +8,7 @@ namespace Serializers.MessagePack.Formatters;
 using Sets;
 public class NewArray:共通 {
     [Fact]public void Serialize(){
-        this.MessagePack_Assert(new{a=default(Expressions.NewArrayExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.NewArrayExpression)},output=>{});
         var NewArrayBounds=Expressions.Expression.NewArrayBounds(
                 typeof(int),
                 Expressions.Expression.Constant(0),
@@ -19,7 +19,7 @@ public class NewArray:共通 {
             Expressions.Expression.Constant(2),
             Expressions.Expression.Constant(1)
         );
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 NewArrayBounds,NewArrayBoundsExpression=(Expressions.Expression)NewArrayBounds,NewArrayBoundsObject=(object)NewArrayBounds,
                 NewArrayInit,NewArrayInitExpression=(Expressions.Expression)NewArrayInit,NewArrayInitObject=(object)NewArrayInit,

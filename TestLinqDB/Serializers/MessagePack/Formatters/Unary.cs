@@ -79,7 +79,7 @@ public class Unary:共通 {
         共通1(Expressions.Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
-        void 共通0(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
-        void 共通1(Expressions.UnaryExpression Unary)=>this.MessagePack_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
+        void 共通0(Expressions.UnaryExpression Unary)=>this.MemoryMessageJson_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
+        void 共通1(Expressions.UnaryExpression Unary)=>this.MemoryMessageJson_Assert(new{Unary,UnaryExpression=(Expressions.Expression)Unary,UnaryObject=(object)Unary},output=>{});
     }
 }

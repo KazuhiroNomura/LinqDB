@@ -12,7 +12,7 @@ using Sets;
 public class Loop:共通 {
     [Fact]
     public void PrivateWrite(){
-        this.MessagePack_Assert(new{a=default(Expressions.LoopExpression)},output=>{});
+        //this.MemoryMessageJson_Assert(new{a=default(Expressions.LoopExpression)},output=>{});
         var Label_decimal=Expressions.Expression.Label(typeof(decimal),"Label_decimal");
         var Label_void=Expressions.Expression.Label("Label");
         //if(value.BreakLabel is null) {//body
@@ -20,8 +20,10 @@ public class Loop:共通 {
             var input=Expressions.Expression.Loop(
                 Expressions.Expression.Default(typeof(void))
             );
-            this.MessagePack_Assert(
-                new{a=input,b=(Expressions.Expression)input},output=>{}
+            //var expected=new{a=input};
+            var expected=new{a=input,b=(Expressions.Expression)input};
+            this.MemoryMessageJson_Assert(
+                expected,actual=>Assert.Equal(expected,actual,this.Comparer)
             );
         }
         //} else {
@@ -33,7 +35,7 @@ public class Loop:共通 {
                 ),
                 Label_decimal
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{a=input,b=(Expressions.Expression)input},output=>{}
             );
         }
@@ -47,7 +49,7 @@ public class Loop:共通 {
                 Label_decimal,
                 Label_void
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{a=input,b=(Expressions.Expression)input},output=>{}
             );
         }

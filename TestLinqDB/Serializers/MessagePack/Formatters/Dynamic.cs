@@ -57,7 +57,7 @@ public class Dynamic:共通 {
                 binder,typeof(object),
                 Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -66,7 +66,7 @@ public class Dynamic:共通 {
         //case BinderType.ConvertBinder:{
         {
             var input=PrivateDynamicConvert<int,long>(1,RuntimeBinder.CSharpBinderFlags.None);
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=input,b=(Expressions.Expression)input
                 },output=>{}
@@ -89,7 +89,7 @@ public class Dynamic:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -109,7 +109,7 @@ public class Dynamic:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -134,7 +134,7 @@ public class Dynamic:共通 {
                     Expressions.Expression.Constant(b),
                     Expressions.Expression.Constant(c)
                 );
-                this.MessagePack_Assert(
+                this.MemoryMessageJson_Assert(
                     new{
                         a=Dynamic0
                     },output=>{}
@@ -154,7 +154,7 @@ public class Dynamic:共通 {
                     binder,typeof(object),
                     Expressions.Expression.Constant(arg0),Expressions.Expression.Constant(arg1)
                 );
-                this.MessagePack_Assert(
+                this.MemoryMessageJson_Assert(
                     new{
                         a=Dynamic0
                     },output=>{}
@@ -181,7 +181,7 @@ public class Dynamic:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2),Expressions.Expression.Constant(arg3),Expressions.Expression.Constant(arg4)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -203,7 +203,7 @@ public class Dynamic:共通 {
                 Expressions.Expression.Constant(arg1),
                 Expressions.Expression.Constant(arg2)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -226,7 +226,7 @@ public class Dynamic:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1,typeof(object))
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}
@@ -235,7 +235,7 @@ public class Dynamic:共通 {
     }
     [Fact]public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MessagePack_Assert(new{a=default(Expressions.DynamicExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.DynamicExpression)},output=>{});
         {
             var arg1=1;
             var arg2=1;
@@ -252,7 +252,7 @@ public class Dynamic:共通 {
                 binder,typeof(object),
                 Expressions.Expression.Constant(arg1),Expressions.Expression.Constant(arg2)
             );
-            this.MessagePack_Assert(
+            this.MemoryMessageJson_Assert(
                 new{
                     a=Dynamic0
                 },output=>{}

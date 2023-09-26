@@ -11,7 +11,7 @@ public class TypeBinary:共通 {
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MessagePack_Assert(new{a=default(Expressions.TypeBinaryExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.TypeBinaryExpression)},output=>{});
         var TypeIs=Expressions.Expression.TypeIs(
                 Expressions.Expression.Constant(1m),
                 typeof(decimal)
@@ -20,7 +20,7 @@ public class TypeBinary:共通 {
             Expressions.Expression.Constant(1m),
             typeof(decimal)
         );
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 TypeIs,TypeIsExpression=(Expressions.Expression)TypeIs,TypeIsObject=(object)TypeIs,
                 TypeEqual,TypeEqualExpression=(Expressions.Expression)TypeIs,TypeEqualObject=(object)TypeIs,

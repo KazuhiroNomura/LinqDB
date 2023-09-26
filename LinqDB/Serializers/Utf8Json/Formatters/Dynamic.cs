@@ -74,32 +74,32 @@ public class Dynamic:IJsonFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
-                    case CreateInstanceBinder v1:{
-                        WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
-                        writer.WriteValueSeparator();
-                        var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
-                        writer.WriteType(CallingContext);
-                        writer.WriteValueSeparator();
-                        writer.WriteArray(CSharpArgumentInfos,Resolver);
-                        writer.WriteValueSeparator();
-                        writer.WriteInt32(Flags);
-                        break;
-                    }
-                    case DeleteIndexBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteInt32(v1.CallInfo.ArgumentCount);
-                        writer.WriteValueSeparator();
-                        writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
-                        break;
-                    }
+                    //case CreateInstanceBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.CreateInstanceBinder);
+                    //    writer.WriteValueSeparator();
+                    //    var (CallingContext, CSharpArgumentInfos, Flags)=v1.GetBinder();
+                    //    writer.WriteType(CallingContext);
+                    //    writer.WriteValueSeparator();
+                    //    writer.WriteArray(CSharpArgumentInfos,Resolver);
+                    //    writer.WriteValueSeparator();
+                    //    writer.WriteInt32(Flags);
+                    //    break;
+                    //}
+                    //case DeleteIndexBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteIndexBinder);
+                    //    writer.WriteValueSeparator();
+                    //    writer.WriteInt32(v1.CallInfo.ArgumentCount);
+                    //    writer.WriteValueSeparator();
+                    //    writer.WriteCollection(v1.CallInfo.ArgumentNames,Resolver);
+                    //    break;
+                    //}
                     
-                    case DeleteMemberBinder v1:{
-                        WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
-                        writer.WriteValueSeparator();
-                        writer.WriteString(v1.Name);
-                        break;
-                    }
+                    //case DeleteMemberBinder v1:{
+                    //    WriteBinderType(ref writer,BinderType.DeleteMemberBinder);
+                    //    writer.WriteValueSeparator();
+                    //    writer.WriteString(v1.Name);
+                    //    break;
+                    //}
                     
                     
                     
@@ -194,7 +194,9 @@ public class Dynamic:IJsonFormatter<T> {
                         Expression.Write(ref writer,Arguments[1],Resolver);
                         break;
                     }
-                    case UnaryOperationBinder v1:{
+                    //case UnaryOperationBinder v1:
+                    default:{
+                        var v1=(UnaryOperationBinder)v0;
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
                         writer.WriteValueSeparator();
                         var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
@@ -209,7 +211,6 @@ public class Dynamic:IJsonFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
-                    default:throw new NotSupportedException(v0.ToString());
                 }
                 break;
             }

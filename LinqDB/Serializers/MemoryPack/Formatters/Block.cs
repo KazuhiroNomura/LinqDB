@@ -5,12 +5,11 @@ using MemoryPack;
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader=MemoryPackReader;
 using T=Expressions.BlockExpression;
 public class Block:MemoryPackFormatter<T>{
     public static readonly Block Instance=new();
-
-
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         var Variables=value!.Variables;
         writer.WriteType(value.Type);
@@ -28,6 +27,7 @@ public class Block:MemoryPackFormatter<T>{
         writer.WriteNodeType(Expressions.ExpressionType.Block);
 
         PrivateWrite(ref writer,value);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;

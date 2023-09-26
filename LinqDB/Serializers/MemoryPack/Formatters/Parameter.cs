@@ -4,15 +4,12 @@ using System.Buffers;
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader=MemoryPackReader;
 using T=Expressions.ParameterExpression;
 public class Parameter:MemoryPackFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
-
-        writer.WriteNodeType(Expressions.ExpressionType.Parameter);
-
-
+    internal static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         var Serializer=writer.Serializer();
         var index0=Serializer.Parameters.LastIndexOf(value);
         writer.WriteVarInt(index0);
@@ -25,20 +22,27 @@ public class Parameter:MemoryPackFormatter<T> {
                 writer.WriteType(value.Type);
                 
                 writer.WriteString(value.Name);
+                Serializer.ラムダ跨ぎParameters.Add(value);
             }
         }
+
+
+
+
+
+
         
     }
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
 
-
-
+        writer.WriteNodeType(Expressions.ExpressionType.Parameter);
+ 
+        PrivateWrite(ref writer,value);
+    }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-
-        writer.WriteType(value!.Type);
-
-        writer.WriteString(value!.Name);
-
+        PrivateWrite(ref writer,value);
+        
     }
     internal static T Read(ref Reader reader){
         var Serializer=reader.Serializer();

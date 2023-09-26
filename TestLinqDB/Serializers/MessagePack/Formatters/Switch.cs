@@ -16,13 +16,13 @@ public class Switch:共通 {
                 Expressions.Expression.Constant(124)
             )
         );
-        this.MessagePack_Assert(new{a=default(Expressions.SwitchExpression)},output=>{});
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.SwitchExpression)},output=>{});
+        this.MemoryMessageJson_Assert(
             new{
                 a=input
             },output=>{}
         );
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=(Expressions.Expression)input
             },output=>{}

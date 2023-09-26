@@ -12,11 +12,12 @@ using T = Expressions.MemberBinding;
 public class MemberBinding:IMessagePackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
+ 
         writer.Write((byte)value.BindingType);
         
         Member.Write(ref writer,value.Member,Resolver);
 
-        switch(value.BindingType){
+       switch(value.BindingType){
             case Expressions.MemberBindingType.Assignment:
                 Expression.Write(ref writer,((Expressions.MemberAssignment)value).Expression,Resolver);
                 break;
@@ -30,23 +31,17 @@ public class MemberBinding:IMessagePackFormatter<T> {
         }
         
     }
-    //internal static void Write(ref Writer writer,T value,O Resolver){
-    //    writer.WriteArrayHeader(4);
-    //    writer.WriteNodeType(Expressions.ExpressionType.Label);
-        
-    //    PrivateWrite(ref writer,value,Resolver);
-        
-    //}
     public void Serialize(ref Writer writer,T value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(3);
         PrivateWrite(ref writer,value,Resolver);
-        
     }
     internal static T Read(ref Reader reader,O Resolver){
+        
         var BindingType=(Expressions.MemberBindingType)reader.ReadByte();
         
         var member= Member.Read(ref reader,Resolver);
+        
         Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
@@ -59,8 +54,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);
-        
+        Debug.Assert(count==3);        
         return Read(ref reader,Resolver);
     }
 }

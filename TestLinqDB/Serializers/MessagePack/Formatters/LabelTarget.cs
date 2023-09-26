@@ -9,8 +9,8 @@ using Sets;
 public class LabelTarget:共通 {
     [Fact]public void Serialize(){
         var input=Expressions.Expression.Label();
-        this.MessagePack_Assert(new{a=default(Expressions.LabelTarget)},output=>{});
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.LabelTarget)},output=>{});
+        this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(object)input
             },output=>{}

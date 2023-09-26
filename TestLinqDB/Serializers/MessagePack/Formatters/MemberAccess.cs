@@ -15,12 +15,12 @@ public class MemberAccess:共通 {
     [Fact]public void Serialize(){
 
         var Point=Expressions.Expression.Parameter(typeof(Point));
-        this.MessagePack_Assert(new{a=default(Expressions.MemberExpression)},output=>{});
+        this.MemoryMessageJson_Assert(new{a=default(Expressions.MemberExpression)},output=>{});
         var input=Expressions.Expression.MakeMemberAccess(
             Expressions.Expression.Constant(new MemberAccess対象()),
             typeof(MemberAccess対象).GetProperty(nameof(MemberAccess対象.property))!
         );
-        this.MessagePack_Assert(
+        this.MemoryMessageJson_Assert(
             new{
                 a=input,b=(Expressions.Expression)input
             },output=>{}

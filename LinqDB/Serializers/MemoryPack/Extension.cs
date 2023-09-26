@@ -37,16 +37,16 @@ public static class Extension{
     }
     internal static void WriteCollection<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<T>? value)where TBufferWriter :IBufferWriter<byte> =>
     	StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,ref value!);
-    private static class StaticArrayFormatter<T>{
-        public static readonly ArrayFormatter<T> Formatter=new();
-    }
+    //private static class StaticArrayFormatter<T>{
+    //    public static readonly ArrayFormatter<T> Formatter=new();
+    //}
     
     
-    internal static T[] ReadArray<T>(this ref Reader reader){
-        T[] value=default!;
-        StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,ref value!);
-        return value;
-    }
+    //internal static T[] ReadArray<T>(this ref Reader reader){
+    //    T[] value=default!;
+    //    StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,ref value!);
+    //    return value;
+    //}
     public static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
         writer.WriteVarInt(value.Count);
         var Serializer=writer.Serializer();
@@ -117,8 +117,8 @@ public static class Extension{
         (Serializer)writer.Options.ServiceProvider!;
     public static Serializer Serializer(this ref Reader reader)=>
         (Serializer)reader.Options.ServiceProvider!;
-    public static Serializer Container<TContainer>(this ref Reader reader)where TContainer:Container=>
-        (Serializer)reader.Options.ServiceProvider!;
+    //public static Serializer Container<TContainer>(this ref Reader reader)where TContainer:Container=>
+    //    (Serializer)reader.Options.ServiceProvider!;
     private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
         writer.WriteValue(value);
     }

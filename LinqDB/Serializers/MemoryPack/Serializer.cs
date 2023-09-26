@@ -47,6 +47,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Parameter.Instance);
         MemoryPackFormatterProvider.Register(Switch.Instance);
         MemoryPackFormatterProvider.Register(SwitchCase.Instance);
+        MemoryPackFormatterProvider.Register(SymbolDocumentInfo.Instance);
         MemoryPackFormatterProvider.Register(Try.Instance);
         MemoryPackFormatterProvider.Register(TypeBinary.Instance);
         MemoryPackFormatterProvider.Register(Unary.Instance);
@@ -64,25 +65,33 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
 
     }
     private readonly object[] objects1 = new object[1];
-    internal void RegisterAnonymousDisplay(System.Type Type) {
-        if(Type.IsDisplay()){
+    internal void RegisterAnonymousDisplay(System.Type type) {
+        if(type.IsDisplay()){
             //if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
-            var FormatterType = typeof(DisplayClass<>).MakeGenericType(Type);
+            var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
             var Instance=FormatterType.GetField("Instance")!;
             var objects1=this.objects1;
             objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-            var Register = Serializer.Register.MakeGenericMethod(Type);
+            var Register = Serializer.Register.MakeGenericMethod(type);
             Register.Invoke(null,objects1);
-        }else if(Type.IsGenericType) {
-            if(Type.IsAnonymous()) {
-                var FormatterType = typeof(Anonymous<>).MakeGenericType(Type);
+        }else if(type.IsGenericType) {
+            if(type.IsAnonymous()) {
+                var FormatterType = typeof(Anonymous<>).MakeGenericType(type);
                 var Instance=FormatterType.GetField("Instance")!;
                 var objects1=this.objects1;
                 objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-                var Register = Serializer.Register.MakeGenericMethod(Type);
+                var Register = Serializer.Register.MakeGenericMethod(type);
                 Register.Invoke(null,objects1);
-            } else{
-                var 検索されるType=Type;
+            } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
+                //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter)) return(IMessagePackFormatter<T>)Formatter;
+                var FormatterType = typeof(ExpressionT<>).MakeGenericType(type);
+                var Instance = FormatterType.GetField("Instance")!;
+                var objects1=this.objects1;
+                objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
+                var Register = Serializer.Register.MakeGenericMethod(type);
+                Register.Invoke(null,objects1);
+            }else{
+                var 検索されるType=type;
                 while(typeof(object)!=検索されるType){
                     if(検索されるType.IsGenericType){
                         if(GetValue(typeof(Set<,,>),typeof(Formatters.Sets.Set<,,>)))break;
@@ -92,11 +101,11 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
                     検索されるType=検索されるType.BaseType!;
                     bool GetValue(System.Type 検索したいキーTypeDifinition,System.Type FormatterTypeDifinition){
                         if(検索されるType.GetGenericTypeDefinition()==検索したいキーTypeDifinition){
-                            var FormatterType=FormatterTypeDifinition.MakeGenericType(Type.GetGenericArguments());
+                            var FormatterType=FormatterTypeDifinition.MakeGenericType(type.GetGenericArguments());
                             var Instance=FormatterType.GetField("Instance")!;
                             var objects1=this.objects1;
                             objects1[0]=Instance.GetValue(null)!;
-                            var Register=Serializer.Register.MakeGenericMethod(Type);
+                            var Register=Serializer.Register.MakeGenericMethod(type);
                             Register.Invoke(null,objects1);
                             return true;
                         }
@@ -104,7 +113,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
                     }
                 }
             }
-            foreach(var GenericArgument in Type.GetGenericArguments()) this.RegisterAnonymousDisplay(GenericArgument);
+            foreach(var GenericArgument in type.GetGenericArguments()) this.RegisterAnonymousDisplay(GenericArgument);
         }
     }
     private void Clear(){

@@ -1,11 +1,12 @@
 ﻿using System;
+
 using System.Reflection;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
-using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.BinaryExpression;
@@ -18,6 +19,7 @@ public class Binary:MemoryPackFormatter<T> {
         Expression.Write(ref writer,value.Left);
 
         Expression.Write(ref writer,value.Right);
+        
     }
     internal static void WriteLeftRightLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -28,6 +30,7 @@ public class Binary:MemoryPackFormatter<T> {
         Expression.Write(ref writer,value.Right);
 
         Lambda.WriteNullable(ref writer,value.Conversion);
+        
     }
     internal static void WriteLeftRightMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -38,6 +41,7 @@ public class Binary:MemoryPackFormatter<T> {
         Expression.Write(ref writer,value.Right);
 
         Method.WriteNullable(ref writer,value.Method);
+        
     }
     internal static void WriteLeftRightMethodLambda<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -50,6 +54,7 @@ public class Binary:MemoryPackFormatter<T> {
         Method.WriteNullable(ref writer,value.Method);
 
         Lambda.WriteNullable(ref writer,value.Conversion);
+        
     }
     internal static void WriteLeftRightBooleanMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
@@ -62,9 +67,9 @@ public class Binary:MemoryPackFormatter<T> {
         writer.WriteBoolean(value.IsLiftedToNull);
         
         Method.WriteNullable(ref writer,value.Method);
+        
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        
         switch(value.NodeType) {
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :WriteLeftRight(ref writer,value);break;
@@ -99,13 +104,14 @@ public class Binary:MemoryPackFormatter<T> {
             case Expressions.ExpressionType.RightShiftAssign     :
             case Expressions.ExpressionType.SubtractAssign       :
             case Expressions.ExpressionType.SubtractAssignChecked:WriteLeftRightMethodLambda(ref writer,value);break;
-            case Expressions.ExpressionType.Equal                :
-            case Expressions.ExpressionType.GreaterThan          :
-            case Expressions.ExpressionType.GreaterThanOrEqual   :
-            case Expressions.ExpressionType.LessThan             :
-            case Expressions.ExpressionType.LessThanOrEqual      :
-            case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value);break;
-            default:throw new NotSupportedException(value.NodeType.ToString());
+            //case Expressions.ExpressionType.Equal                :
+            //case Expressions.ExpressionType.GreaterThan          :
+            //case Expressions.ExpressionType.GreaterThanOrEqual   :
+            //case Expressions.ExpressionType.LessThan             :
+            //case Expressions.ExpressionType.LessThanOrEqual      :
+            //case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value);break;
+            default                                              :WriteLeftRightBooleanMethod(ref writer,value);break;
+            //default:throw new NotSupportedException(value.NodeType.ToString());
         }
         
     }

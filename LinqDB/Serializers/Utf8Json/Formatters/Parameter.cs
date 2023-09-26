@@ -9,10 +9,7 @@ using Reader=JsonReader;
 using T=Expressions.ParameterExpression;
 public class Parameter:IJsonFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void Write(ref Writer writer,T value,O Resolver){
-        writer.WriteBeginArray();
-        writer.WriteNodeType(Expressions.ExpressionType.Parameter);
-        writer.WriteValueSeparator();
+    private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         var Serializer=Resolver.Serializer();
         var index0=Serializer.Parameters.LastIndexOf(value);
         writer.WriteInt32(index0);
@@ -20,25 +17,32 @@ public class Parameter:IJsonFormatter<T> {
             writer.WriteValueSeparator();
             var index1=Serializer.ラムダ跨ぎParameters.LastIndexOf(value);
             writer.WriteInt32(index1);
-            if(index0<0){
+            if(index1<0){
                 writer.WriteValueSeparator();
                 writer.WriteType(value.Type);
                 writer.WriteValueSeparator();
                 writer.WriteString(value.Name);
+                Serializer.ラムダ跨ぎParameters.Add(value);
             }
         }
         writer.WriteEndArray(); 
+        
+        
+        
+        
+        
+        
     }
-    
-    
-    
+    internal static void Write(ref Writer writer,T value,O Resolver){
+        writer.WriteBeginArray();
+        writer.WriteNodeType(Expressions.ExpressionType.Parameter);
+        writer.WriteValueSeparator();
+        PrivateWrite(ref writer,value,Resolver);
+    }
     public void Serialize(ref Writer writer,T? value,O Resolver) {
         if(writer.TryWriteNil(value))return;
-        writer.WriteBeginObject();
-        writer.WriteType(value!.Type);
-        writer.WriteNameSeparator();
-        writer.WriteString(value.Name);
-        writer.WriteEndObject();
+        writer.WriteBeginArray();
+        PrivateWrite(ref writer,value,Resolver);
     }
     internal static T Read(ref Reader reader,O Resolver){
         var Serializer=Resolver.Serializer();
@@ -66,9 +70,9 @@ public class Parameter:IJsonFormatter<T> {
     }
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
-        reader.ReadIsBeginObjectWithVerify();
+        reader.ReadIsBeginArray();
         var value=Read(ref reader,Resolver);
-        reader.ReadIsEndObjectWithVerify();
+        reader.ReadIsEndArrayWithVerify();
         return value;
     }
 }
