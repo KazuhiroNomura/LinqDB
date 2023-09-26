@@ -1,29 +1,33 @@
-﻿
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reflection;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.NewExpression;
-using Reflection;
 public class New:MemoryPackFormatter<T> {
     public static readonly New Instance=new();
-    internal static void WriteNodeTypeなし<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
-        Constructor.Write(ref writer,value.Constructor!);
-        
-        writer.WriteCollection(value.Arguments);
-    }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
         
         writer.WriteNodeType(Expressions.ExpressionType.New);
-        WriteNodeTypeなし(ref writer, value);
+
+        Constructor.Write(ref writer,value.Constructor!);
+        
+        writer.WriteCollection(value.Arguments);
+
+    }
+    internal static void WriteNew<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
+        
+        Constructor.Write(ref writer,value.Constructor!);
+        
+        writer.WriteCollection(value.Arguments);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        
-        WriteNodeTypeなし(ref writer,value);
-        
+        WriteNew(ref writer,value);
     }
     internal static T Read(ref Reader reader){
         var constructor= Constructor.Read(ref reader);
@@ -34,6 +38,12 @@ public class New:MemoryPackFormatter<T> {
             arguments!
         );
     }
+    internal static T ReadNew(ref Reader reader)=>Read(ref reader);
+
+
+
+
+
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
         value=Read(ref reader);

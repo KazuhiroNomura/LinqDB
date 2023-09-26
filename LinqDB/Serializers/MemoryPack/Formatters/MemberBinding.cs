@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
-
 using Reflection;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.MemberBinding;
@@ -25,7 +24,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
                 writer.WriteCollection(((Expressions.MemberMemberBinding)value).Bindings);
                 break;
             default:
-                Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
+                System.Diagnostics.Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
                 writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers);
                 break;
         }
@@ -42,7 +41,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
         
         var member= Member.Read(ref reader);
         
-        Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
+        System.Diagnostics.Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>()!),

@@ -211,7 +211,6 @@ public class Dynamic:IMessagePackFormatter<T> {
                         Expression.Write(ref writer,value.Arguments[0],Resolver);
                         break;
                     }
-                    //default:throw new NotSupportedException(v0.ToString());
                 }
                 break;
             }
@@ -229,11 +228,12 @@ public class Dynamic:IMessagePackFormatter<T> {
         if(writer.TryWriteNil(value)) return;
         PrivateWriteArrayHeader(ref writer,value,0);
         PrivateWrite(ref writer,value,Resolver);
+        
     }
     internal static T Read(ref Reader reader,O Resolver){
         T value;
-        var BinderType=ReadBinderType(ref reader);
-        
+        var BinderType=(BinderType)reader.ReadSByte();
+            
         switch(BinderType){
             case BinderType.BinaryOperationBinder:{
                 var context=reader.ReadType();
@@ -417,8 +417,7 @@ public class Dynamic:IMessagePackFormatter<T> {
                 break;
             }
             //case BinderType.UnaryOperationBinder:
-            default:
-            {
+            default:{
                 Debug.Assert(BinderType==BinderType.UnaryOperationBinder);
                 var context=reader.ReadType();
                 
@@ -441,13 +440,8 @@ public class Dynamic:IMessagePackFormatter<T> {
                 );
                 break;
             }
-            //default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
         return value;
-        static BinderType ReadBinderType(ref Reader reader){
-            var v=reader.ReadSByte();
-            return (BinderType)v;
-        }
     }
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;

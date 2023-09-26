@@ -1,5 +1,4 @@
-﻿
-using Utf8Json;
+﻿using Utf8Json;
 
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
@@ -9,11 +8,6 @@ using Reader=JsonReader;
 using T=Expressions.LoopExpression;
 public class Loop:IJsonFormatter<T>{
     public static readonly Loop Instance=new();
-    
-    
-    
-    
-    
     
     
     

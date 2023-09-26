@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
@@ -33,12 +32,15 @@ public class Loop:IMessagePackFormatter<T> {
     internal static void Write(ref Writer writer,T value,O Resolver){
         PrivateWrite0(ref writer,value,1);
         writer.WriteNodeType(Expressions.ExpressionType.Loop);
+        
         PrivateWrite1(ref writer,value,Resolver);
+        
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         PrivateWrite0(ref writer,value,0);
         PrivateWrite1(ref writer,value,Resolver);
+        
     }
     internal static T Read(ref Reader reader,O Resolver,int ArrayHeader){
         T value;
@@ -50,7 +52,7 @@ public class Loop:IMessagePackFormatter<T> {
             var body = Expression.Read(ref reader,Resolver);
             value=Expressions.Expression.Loop(body,breakLabel);
         } else {//break,continue,body
-            Debug.Assert(ArrayHeader==4);
+            //Debug.Assert(ArrayHeader==4);
             var breakLabel = LabelTarget.Read(ref reader,Resolver);
             var continueLabel=LabelTarget.Read(ref reader,Resolver);
             var body = Expression.Read(ref reader,Resolver);
@@ -58,6 +60,11 @@ public class Loop:IMessagePackFormatter<T> {
         }
         return value;
     }
+    
+    
+    
+    
+    
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var ArrayHeader=reader.ReadArrayHeader();

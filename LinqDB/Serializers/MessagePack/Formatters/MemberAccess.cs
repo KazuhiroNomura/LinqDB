@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
@@ -37,7 +36,6 @@ public class MemberAccess:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==2);
         return Read(ref reader,Resolver);
         
     }

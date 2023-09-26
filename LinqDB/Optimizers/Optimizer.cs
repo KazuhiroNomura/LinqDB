@@ -381,7 +381,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>,IEqualityComparer<CatchBlock>,IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>{
+    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>,IEqualityComparer<CatchBlock>,IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>,IEqualityComparer<SwitchCase>{
         private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
@@ -1077,6 +1077,14 @@ public sealed partial class Optimizer:IDisposable{
 
         public int GetHashCode([DisallowNull] CSharpArgumentInfo obj) {
             throw new NotImplementedException();
+        }
+        public bool Equals(SwitchCase? x,SwitchCase? y){
+            if(x==y) return true;
+            if(x==null&&y!=null||x!=null&&y==null) return false;
+            return this.PrivateEquals(x!.Body,y!.Body)&&x.TestValues.SequenceEqual(y.TestValues,this);
+        }
+        public int GetHashCode(SwitchCase obj){
+            return HashCode.Combine(obj.Body,obj.TestValues);
         }
     }
     private class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualityComparer {

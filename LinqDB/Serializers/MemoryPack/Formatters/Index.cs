@@ -1,12 +1,12 @@
-﻿using System.Buffers;
+﻿using MemoryPack;
+using System.Buffers;
 using Expressions = System.Linq.Expressions;
-using MemoryPack;
-using System.Linq.Expressions;
-using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+using Reflection;
+
+
 using Reader = MemoryPackReader;
-using T = IndexExpression;
+using T = Expressions.IndexExpression;
 public class Index:MemoryPackFormatter<T> {
     public static readonly Index Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
@@ -18,9 +18,10 @@ public class Index:MemoryPackFormatter<T> {
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         
-        writer.WriteNodeType(ExpressionType.Index);
+        writer.WriteNodeType(Expressions.ExpressionType.Index);
         
         PrivateWrite(ref writer,value);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;

@@ -9,8 +9,6 @@ using Reader = MessagePackReader;
 using T = Expressions.DebugInfoExpression;
 public class DebugInfo:IMessagePackFormatter<T>{
     public static readonly DebugInfo Instance=new();
-    private const int ArrayHeader=5;
-    private const int InternalArrayHeader=ArrayHeader+1;
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         SymbolDocumentInfo.Write(ref writer,value.Document,Resolver);
         
@@ -21,9 +19,10 @@ public class DebugInfo:IMessagePackFormatter<T>{
         writer.WriteInt32(value.EndLine);
         
         writer.WriteInt32(value.EndColumn);
+        
     }
     internal static void Write(ref Writer writer,T value,O Resolver){
-        writer.WriteArrayHeader(InternalArrayHeader);
+        writer.WriteArrayHeader(5);
         writer.WriteNodeType(Expressions.ExpressionType.DebugInfo);
 
         PrivateWrite(ref writer,value,Resolver);
@@ -31,7 +30,7 @@ public class DebugInfo:IMessagePackFormatter<T>{
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(ArrayHeader);
+        writer.WriteArrayHeader(4);
         PrivateWrite(ref writer,value,Resolver);
         
     }
@@ -50,7 +49,7 @@ public class DebugInfo:IMessagePackFormatter<T>{
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==ArrayHeader);
+        Debug.Assert(count==4);
         return Read(ref reader,Resolver);
 
     }

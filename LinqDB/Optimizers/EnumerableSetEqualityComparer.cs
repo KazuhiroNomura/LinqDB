@@ -244,6 +244,8 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
                 case(CSharpArgumentInfo x0,CSharpArgumentInfo y0):
                     return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
+                case(SwitchCase x0,SwitchCase y0):
+                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
                 case(CatchBlock x0,CatchBlock y0):
                     return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
                     //return((IEqualityComparer<CatchBlock>)this).Equals(x0,y0);

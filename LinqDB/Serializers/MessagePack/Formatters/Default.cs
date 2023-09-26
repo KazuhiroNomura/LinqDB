@@ -17,6 +17,7 @@ public class Default:IMessagePackFormatter<T> {
         writer.WriteNodeType(Expressions.ExpressionType.Default);
         
         PrivateWrite(ref writer,value);
+        
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;

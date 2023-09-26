@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -25,7 +24,7 @@ public class MemberBinding:IJsonFormatter<T> {
                 writer.WriteCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
                 break;
             default:
-                Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
+                System.Diagnostics.Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
                 writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
         }
@@ -42,7 +41,7 @@ public class MemberBinding:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var member= Member.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
+        System.Diagnostics.Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),

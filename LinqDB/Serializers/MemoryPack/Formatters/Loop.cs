@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
@@ -24,13 +23,24 @@ public class Loop:MemoryPackFormatter<T>{
             Expression.Write(ref writer,value.Body);
         }
     }
+    
+    
+    
+    
+    
+    
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        
         writer.WriteNodeType(Expressions.ExpressionType.Loop);
+        
         PrivateWrite(ref writer,value);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
+        
         PrivateWrite(ref writer,value);
+        
     }
     internal static T Read(ref Reader reader){
         var ArrayHeader=reader.ReadVarIntInt32();
@@ -43,7 +53,7 @@ public class Loop:MemoryPackFormatter<T>{
             var body=Expression.Read(ref reader);
             value=Expressions.Expression.Loop(body,breakLabel);
         } else{
-            Debug.Assert(ArrayHeader==4);
+            //Debug.Assert(ArrayHeader==4);
             var breakLabel=LabelTarget.Read(ref reader);
             var continueLabel=LabelTarget.Read(ref reader);
             var body=Expression.Read(ref reader);
@@ -51,6 +61,10 @@ public class Loop:MemoryPackFormatter<T>{
         }
         return value;
     }
+    
+    
+    
+    
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
         value=Read(ref reader);

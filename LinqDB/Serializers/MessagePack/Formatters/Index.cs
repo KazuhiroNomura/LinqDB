@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using Reflection;
 using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
@@ -41,7 +40,6 @@ public class Index:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);
         return Read(ref reader,Resolver);
         
     }

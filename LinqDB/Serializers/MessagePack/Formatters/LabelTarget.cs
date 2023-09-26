@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
@@ -41,10 +40,8 @@ public class LabelTarget:IMessagePackFormatter<T> {
         var LabelTargets=Serializer.LabelTargets;
         T value;
         if(index<LabelTargets.Count){
-            Debug.Assert(count==1);
             value=LabelTargets[index];
         } else{
-            Debug.Assert(count==3);
             var type=reader.ReadType();
             
             var name=reader.ReadString();

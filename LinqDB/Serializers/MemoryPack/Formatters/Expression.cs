@@ -4,12 +4,12 @@ using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader = MemoryPackReader;
 using T = Expressions.Expression;
 public class Expression:MemoryPackFormatter<T> {
     public static readonly Expression Instance=new();
     public static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value);break;
@@ -95,10 +95,9 @@ public class Expression:MemoryPackFormatter<T> {
             //case Expressions.ExpressionType.RuntimeVariables     :
             case Expressions.ExpressionType.Loop                 :Loop.Write(ref writer,(Expressions.LoopExpression)value);break;
             case Expressions.ExpressionType.Switch               :Switch.Write(ref writer,(Expressions.SwitchExpression)value);break;
-            case Expressions.ExpressionType.Try                  :Try.Write(ref writer,(Expressions.TryExpression)value);break;
-            default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
+            //case Expressions.ExpressionType.Try                  :Try.Write(ref writer,(Expressions.TryExpression)value);break;
+            default                                              :Try.Write(ref writer,(Expressions.TryExpression)value);break;
         }
-        
     }
     public static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value))return;
@@ -347,33 +346,33 @@ public class Expression:MemoryPackFormatter<T> {
                 var (operand, Type)=Unary.ReadOperandType(ref reader);
                 value=T.Unbox(operand,Type);break;
             }
-            case Expressions.ExpressionType.TypeEqual          :value=TypeBinary.ReadTypeEqual(ref reader);break;
-            case Expressions.ExpressionType.TypeIs             :value=TypeBinary.ReadTypeIs(ref reader);break;
-            case Expressions.ExpressionType.Conditional        :value=Conditional.Read(ref reader);break;
-            case Expressions.ExpressionType.Constant           :value=Constant.Read(ref reader);break;
-            case Expressions.ExpressionType.Parameter          :value=Parameter.Read(ref reader);break;
-            case Expressions.ExpressionType.Lambda             :value=Lambda.Read(ref reader);break;
-            case Expressions.ExpressionType.Call               :value=MethodCall.Read(ref reader);break;
-            case Expressions.ExpressionType.Invoke             :value=Invocation.Read(ref reader);break;
-            case Expressions.ExpressionType.New                :value=New.Read(ref reader);break;
-            case Expressions.ExpressionType.NewArrayBounds     :value=NewArray.ReadNewArrayBounds(ref reader);break;
-            case Expressions.ExpressionType.NewArrayInit       :value=NewArray.ReadNewArrayInit(ref reader);break;
-            case Expressions.ExpressionType.ListInit           :value=ListInit.Read(ref reader);break;
-            case Expressions.ExpressionType.MemberAccess       :value=MemberAccess.Read(ref reader);break;
-            case Expressions.ExpressionType.MemberInit         :value=MemberInit.Read(ref reader);break;
-            case Expressions.ExpressionType.Block              :value=Block.Read(ref reader);break;
-            case Expressions.ExpressionType.DebugInfo          :value=DebugInfo.Read(ref reader);break;
-            case Expressions.ExpressionType.Dynamic            :value=Dynamic.Read(ref reader);break;
-            case Expressions.ExpressionType.Default            :value=Default.Read(ref reader);break;
-            case Expressions.ExpressionType.Extension          :break;
-            case Expressions.ExpressionType.Goto               :value=Goto.Read(ref reader);break;
-            case Expressions.ExpressionType.Index              :value=Index.Read(ref reader);break;
-            case Expressions.ExpressionType.Label              :value=Label.Read(ref reader);break;
-            case Expressions.ExpressionType.RuntimeVariables   :break;
-            case Expressions.ExpressionType.Loop               :value=Loop.Read(ref reader);break;
-            case Expressions.ExpressionType.Switch             :value=Switch.Read(ref reader);break;
-            case Expressions.ExpressionType.Try                :value=Try.Read(ref reader);break;
-            default:throw new NotSupportedException(NodeType.ToString());
+            case Expressions.ExpressionType.TypeEqual       :value=TypeBinary.ReadTypeEqual(ref reader);break;
+            case Expressions.ExpressionType.TypeIs          :value=TypeBinary.ReadTypeIs(ref reader);break;
+            case Expressions.ExpressionType.Conditional     :value=Conditional.Read(ref reader);break;
+            case Expressions.ExpressionType.Constant        :value=Constant.Read(ref reader);break;
+            case Expressions.ExpressionType.Parameter       :value=Parameter.Read(ref reader);break;
+            case Expressions.ExpressionType.Lambda          :value=Lambda.Read(ref reader);break;
+            case Expressions.ExpressionType.Call            :value=MethodCall.Read(ref reader);break;
+            case Expressions.ExpressionType.Invoke          :value=Invocation.Read(ref reader);break;
+            case Expressions.ExpressionType.New             :value=New.Read(ref reader);break;
+            case Expressions.ExpressionType.NewArrayBounds  :value=NewArray.ReadNewArrayBounds(ref reader);break;
+            case Expressions.ExpressionType.NewArrayInit    :value=NewArray.ReadNewArrayInit(ref reader);break;
+            case Expressions.ExpressionType.ListInit        :value=ListInit.Read(ref reader);break;
+            case Expressions.ExpressionType.MemberAccess    :value=MemberAccess.Read(ref reader);break;
+            case Expressions.ExpressionType.MemberInit      :value=MemberInit.Read(ref reader);break;
+            case Expressions.ExpressionType.Block           :value=Block.Read(ref reader);break;
+            case Expressions.ExpressionType.DebugInfo       :value=DebugInfo.Read(ref reader);break;
+            case Expressions.ExpressionType.Dynamic         :value=Dynamic.Read(ref reader);break;
+            case Expressions.ExpressionType.Default         :value=Default.Read(ref reader);break;
+            //case Expressions.ExpressionType.Extension       :break;
+            case Expressions.ExpressionType.Goto            :value=Goto.Read(ref reader);break;
+            case Expressions.ExpressionType.Index           :value=Index.Read(ref reader);break;
+            case Expressions.ExpressionType.Label           :value=Label.Read(ref reader);break;
+            //case Expressions.ExpressionType.RuntimeVariables:break;
+            case Expressions.ExpressionType.Loop            :value=Loop.Read(ref reader);break;
+            case Expressions.ExpressionType.Switch          :value=Switch.Read(ref reader);break;
+            //case Expressions.ExpressionType.Try             :value=Try.Read(ref reader);break;
+            default                                         :value=Try.Read(ref reader);break;
         }
         
         return value;

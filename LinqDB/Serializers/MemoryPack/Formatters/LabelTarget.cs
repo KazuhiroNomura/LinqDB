@@ -1,5 +1,4 @@
-﻿
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;

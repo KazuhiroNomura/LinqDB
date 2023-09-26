@@ -4,6 +4,7 @@ using MemoryPack;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader = MemoryPackReader;
 using T = Expressions.ConditionalExpression;
 public class Conditional:MemoryPackFormatter<T> {
@@ -22,9 +23,11 @@ public class Conditional:MemoryPackFormatter<T> {
         writer.WriteNodeType(Expressions.ExpressionType.Conditional);
         
         PrivateWrite(ref writer,value);
+
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
+
         
         PrivateWrite(ref writer,value);
 
@@ -42,8 +45,8 @@ public class Conditional:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
 
-
-
         value=Read(ref reader);
+        
+        
     }
 }

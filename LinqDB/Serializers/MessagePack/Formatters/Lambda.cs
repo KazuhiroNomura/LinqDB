@@ -58,7 +58,6 @@ public class Lambda:IMessagePackFormatter<T> {
     internal static T? ReadNullable(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==4);
         return Read(ref reader,Resolver);
     }
     public T Deserialize(ref Reader reader,O Resolver)=>ReadNullable(ref reader,Resolver)!;

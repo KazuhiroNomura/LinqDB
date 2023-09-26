@@ -95,8 +95,8 @@ public class Expression:IJsonFormatter<T> {
             //case Expressions.ExpressionType.RuntimeVariables     :
             case Expressions.ExpressionType.Loop                 :Loop        .Write      (ref writer,(Expressions.LoopExpression       )value,Resolver);break;
             case Expressions.ExpressionType.Switch               :Switch      .Write      (ref writer,(Expressions.SwitchExpression     )value,Resolver);break;
-            case Expressions.ExpressionType.Try                  :Try         .Write      (ref writer,(Expressions.TryExpression        )value,Resolver);break;            
-            default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
+            //case Expressions.ExpressionType.Try                  :Try         .Write      (ref writer,(Expressions.TryExpression        )value,Resolver);break;
+            default                                              :Try         .Write      (ref writer,(Expressions.TryExpression        )value,Resolver);break;
         }
     }
     internal static void WriteNullable(ref Writer writer,T? value,O Resolver){
@@ -364,15 +364,15 @@ public class Expression:IJsonFormatter<T> {
             case Expressions.ExpressionType.DebugInfo       :value=DebugInfo   .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Dynamic         :value=Dynamic     .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Default         :value=Default     .Read              (ref reader         );break;
+            //case Expressions.ExpressionType.Extension       :break;
             case Expressions.ExpressionType.Goto            :value=Goto        .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Index           :value=Index       .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Label           :value=Label       .Read              (ref reader,Resolver);break;
+            //case Expressions.ExpressionType.RuntimeVariables:break;
             case Expressions.ExpressionType.Loop            :value=Loop        .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Switch          :value=Switch      .Read              (ref reader,Resolver);break;
-            case Expressions.ExpressionType.Try             :value=Try         .Read              (ref reader,Resolver);break;
-            default                                         :throw new NotSupportedException(NodeType.ToString());
-            //case Expressions.ExpressionType.Extension       :break;
-            //case Expressions.ExpressionType.RuntimeVariables:break;
+            //case Expressions.ExpressionType.Try             :value=Try         .Read              (ref reader,Resolver);break;
+            default                                         :value=Try         .Read              (ref reader,Resolver);break;
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

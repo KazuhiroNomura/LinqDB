@@ -113,7 +113,6 @@ public class Binary:MemoryPackFormatter<T> {
             default                                              :WriteLeftRightBooleanMethod(ref writer,value);break;
             //default:throw new NotSupportedException(value.NodeType.ToString());
         }
-        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value))return;
@@ -161,12 +160,11 @@ public class Binary:MemoryPackFormatter<T> {
         var method = Method.ReadNullable(ref reader);
         return (left, right, isLiftedToNull, method);
     }
-    internal static T Read(ref Reader reader){
+    private static T Read(ref Reader reader){
 
-
+        var NodeType=reader.ReadNodeType();
 
         T value;
-        var NodeType=reader.ReadNodeType();
         switch(NodeType) {
             case Expressions.ExpressionType.ArrayIndex: {
                 var (array, index)=ReadLeftRight(ref reader);
@@ -320,11 +318,12 @@ public class Binary:MemoryPackFormatter<T> {
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader);
                 value=Expressions.Expression.LessThanOrEqual(left,right,isLiftedToNull,method);break;
             }
-            case Expressions.ExpressionType.NotEqual: {
+            //case Expressions.ExpressionType.NotEqual: 
+            default:{
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader);
                 value=Expressions.Expression.NotEqual(left,right,isLiftedToNull,method);break;
             }
-            default: throw new NotSupportedException(NodeType.ToString());
+            //default: throw new NotSupportedException(NodeType.ToString());
         }
         
         return value;

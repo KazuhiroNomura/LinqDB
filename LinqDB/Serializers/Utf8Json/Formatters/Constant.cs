@@ -1,9 +1,9 @@
 ﻿
-using LinqDB.Serializers.Utf8Json.Formatters.Others;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using Others;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;

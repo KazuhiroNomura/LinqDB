@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -11,7 +10,6 @@ using T = Expressions.Expression;
 public class Expression:IMessagePackFormatter<T> {
     public static readonly Expression Instance=new();
     internal static void Write(ref Writer writer,T value,O Resolver){
-        
         switch(value.NodeType){
             case Expressions.ExpressionType.ArrayIndex           :
             case Expressions.ExpressionType.Assign               :Binary.WriteLeftRight(ref writer,(Expressions.BinaryExpression)value,Resolver);break;
@@ -99,11 +97,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Switch               :Switch      .Write(ref writer,(Expressions.SwitchExpression     )value,Resolver);break;
             //case Expressions.ExpressionType.Try                  :Try         .Write(ref writer,(Expressions.TryExpression        )value,Resolver);break;
             default                                              :Try         .Write(ref writer,(Expressions.TryExpression        )value,Resolver);break;
-                //Debug.Assert(value.NodeType==Expressions.ExpressionType.Try);
-                                                                  
-            //default:throw new ArgumentOutOfRangeException(value.NodeType.ToString());
         }
-        
     }
     internal static void WriteNullable(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
@@ -378,10 +372,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Loop            :value=Loop          .Read              (ref reader,Resolver,ArrayHeader);break;
             case Expressions.ExpressionType.Switch          :value=Switch        .Read              (ref reader,Resolver);break;
             //case Expressions.ExpressionType.Try             :value=Try           .Read              (ref reader,Resolver);break;
-            default:
-                //Debug.Assert(NodeType==Expressions.ExpressionType.Try);
-                                                             value=Try           .Read              (ref reader,Resolver);break;
-            //default:throw new NotSupportedException(NodeType.ToString());
+            default                                         :value=Try           .Read              (ref reader,Resolver);break;
         }
         
         return value;

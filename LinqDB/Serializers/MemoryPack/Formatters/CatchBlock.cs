@@ -32,8 +32,8 @@ public class CatchBlock:MemoryPackFormatter<T> {
                 Expression.Write(ref writer,value.Filter);
             }
         } else{
-            var ListParameter= writer.Serializer().Parameters;
-            ListParameter.Add(value.Variable);
+            var Parameters= writer.Serializer().Parameters;
+            Parameters.Add(value.Variable);
             if(value.Filter is null) {
                 
                 writer.WriteVarInt(2);
@@ -55,7 +55,7 @@ public class CatchBlock:MemoryPackFormatter<T> {
                 
                 Expression.Write(ref writer,value.Filter);
             }
-            ListParameter.RemoveAt(ListParameter.Count-1);
+            Parameters.RemoveAt(Parameters.Count-1);
         }
 
     }
@@ -98,13 +98,14 @@ public class CatchBlock:MemoryPackFormatter<T> {
                 var Variable=Expressions.Expression.Parameter(test,name);
                 var Parameters=reader.Serializer().Parameters;
                 Parameters.Add(Variable);
+                
                 var body=Expression.Read(ref reader);
+                
                 var filter=Expression.Read(ref reader);
                 Parameters.RemoveAt(Parameters.Count-1);
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            //default:throw new NotSupportedException($"CatchBlock id{id}は不正");
         }
         
         

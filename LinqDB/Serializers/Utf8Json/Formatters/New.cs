@@ -1,18 +1,17 @@
-﻿
-using Utf8Json;
+﻿using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
+using Reflection;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.NewExpression;
-using Reflection;
 public class New:IJsonFormatter<T> {
     public static readonly New Instance=new();
     internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteBeginArray();
-        writer.WriteNodeType(value);
+        writer.WriteNodeType(Expressions.ExpressionType.New);
         writer.WriteValueSeparator();
         Constructor.Write(ref writer,value.Constructor!,Resolver);
         writer.WriteValueSeparator();

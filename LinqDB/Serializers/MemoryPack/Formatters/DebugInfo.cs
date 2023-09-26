@@ -1,14 +1,14 @@
-﻿using MemoryPack;
+﻿
+using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.DebugInfoExpression;
 public class DebugInfo:MemoryPackFormatter<T>{
     public static readonly DebugInfo Instance=new();
-    
-    
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         SymbolDocumentInfo.Write(ref writer,value.Document);
         
@@ -19,11 +19,14 @@ public class DebugInfo:MemoryPackFormatter<T>{
         writer.WriteVarInt(value.EndLine);
         
         writer.WriteVarInt(value.EndColumn);
+        
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(Expressions.ExpressionType.DebugInfo);
+        
         PrivateWrite(ref writer,value);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;

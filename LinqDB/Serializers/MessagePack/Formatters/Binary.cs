@@ -111,6 +111,7 @@ public class Binary:IMessagePackFormatter<T> {
             //case Expressions.ExpressionType.LessThanOrEqual      :
             //case Expressions.ExpressionType.NotEqual             :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
             default                                              :WriteLeftRightBooleanMethod(ref writer,value,Resolver);break;
+            //default:throw new NotSupportedException(value.NodeType.ToString());
         }
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
@@ -318,9 +319,7 @@ public class Binary:IMessagePackFormatter<T> {
                 value=Expressions.Expression.LessThanOrEqual(left,right,isLiftedToNull,method);break;
             }
             //case Expressions.ExpressionType.NotEqual: 
-            default:
-            {
-                Debug.Assert(NodeType==Expressions.ExpressionType.NotEqual);
+            default:{
                 var (left, right, isLiftedToNull, method)=ReadLeftRightBooleanMethod(ref reader,Resolver);
                 value=Expressions.Expression.NotEqual(left,right,isLiftedToNull,method);break;
             }

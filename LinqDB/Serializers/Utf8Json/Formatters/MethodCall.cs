@@ -1,5 +1,4 @@
-﻿
-using Utf8Json;
+﻿using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
@@ -27,14 +26,6 @@ public class MethodCall:IJsonFormatter<T> {
         writer.WriteValueSeparator();
         PrivateWrite(ref writer,value,Resolver);
     }
-    
-
-
-
-
-
-
-
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         writer.WriteBeginArray();

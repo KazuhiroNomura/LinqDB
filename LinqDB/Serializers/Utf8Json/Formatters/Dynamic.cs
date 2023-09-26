@@ -226,19 +226,10 @@ public class Dynamic:IJsonFormatter<T> {
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
-        Debug.Assert(value!=null,nameof(value)+" != null");
         writer.WriteBeginArray();
         PrivateWrite(ref writer,value,Resolver);
         writer.WriteEndArray();
     }
-    
-    
-    
-    
-    
-    
-    
-    
     internal static T Read(ref Reader reader,O Resolver){
         T value;
         var BinderType=(BinderType)reader.ReadByte();
@@ -425,7 +416,9 @@ public class Dynamic:IJsonFormatter<T> {
                 );
                 break;
             }
-            case BinderType.UnaryOperationBinder:{
+            //case BinderType.UnaryOperationBinder:
+            default:{
+                Debug.Assert(BinderType==BinderType.UnaryOperationBinder);
                 var context=reader.ReadType();
                 reader.ReadIsValueSeparatorWithVerify();
                 var argumentInfo=reader.ReadArray<RuntimeBinder.CSharpArgumentInfo>(Resolver);
@@ -447,7 +440,6 @@ public class Dynamic:IJsonFormatter<T> {
                 );
                 break;
             }
-            default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
         return value;
     }

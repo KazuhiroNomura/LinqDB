@@ -2,11 +2,11 @@
 using System.Dynamic;
 using System.Diagnostics;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
-
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.DynamicExpression;
@@ -28,7 +28,6 @@ public class Dynamic:MemoryPackFormatter<T> {
     
     
     
-
 
 
     
@@ -195,7 +194,9 @@ public class Dynamic:MemoryPackFormatter<T> {
                         Expression.Write(ref writer,Arguments[1]);
                         break;
                     }
-                    case UnaryOperationBinder v1:{
+                    //case UnaryOperationBinder v1:
+                    default:{
+                        var v1=(UnaryOperationBinder)v0;
                         WriteBinderType(ref writer,BinderType.UnaryOperationBinder);
 
                         var (CallingContext,CSharpArgumentInfos)=v1.GetBinder();
@@ -214,32 +215,24 @@ public class Dynamic:MemoryPackFormatter<T> {
                 break;
             }
         }
+        static void WriteBinderType(ref MemoryPackWriter<TBufferWriter> writer,BinderType value)=>writer.WriteVarInt((byte)value);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
+        
         writer.WriteNodeType(Expressions.ExpressionType.Dynamic);
+        
         PrivateWrite(ref writer,value);
-    }
-    private static void WriteBinderType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,BinderType value) where TBufferWriter:IBufferWriter<byte>{
-        writer.WriteVarInt((byte)value);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
+        
         PrivateWrite(ref writer,value);
+        
     }
-    private static BinderType ReadBinderType(ref Reader reader){
-        return (BinderType)reader.ReadVarIntByte();
-    }
-    
-    
-    
-    
-    
-    
-    
-    
     internal static T Read(ref Reader reader){
         T value;
-        var BinderType=ReadBinderType(ref reader);
+        var BinderType=(BinderType)reader.ReadVarIntByte();
         
         switch(BinderType){
             case BinderType.BinaryOperationBinder:{
@@ -423,7 +416,9 @@ public class Dynamic:MemoryPackFormatter<T> {
                 );
                 break;
             }
-            case BinderType.UnaryOperationBinder:{
+            //case BinderType.UnaryOperationBinder:
+            default:{
+                Debug.Assert(BinderType==BinderType.UnaryOperationBinder);
                 var context=reader.ReadType();
                 
                 var argumentInfo=reader.ReadArray<RuntimeBinder.CSharpArgumentInfo>();
@@ -445,14 +440,13 @@ public class Dynamic:MemoryPackFormatter<T> {
                 );
                 break;
             }
-            default:throw new ArgumentOutOfRangeException(BinderType.ToString());
         }
         return value;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
+        
         value=Read(ref reader);
-
 
 
     }

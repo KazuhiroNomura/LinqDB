@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
@@ -10,17 +9,6 @@ using Reader = MessagePackReader;
 using T = Expressions.MethodCallExpression;
 public class MethodCall:IMessagePackFormatter<T> {
     public static readonly MethodCall Instance=new();
-
-
-
-
-
-
-
-
-
-
-
     internal static void Write(ref Writer writer,T value,O Resolver){
         var method=value!.Method;
         if(method.IsStatic){
@@ -35,6 +23,9 @@ public class MethodCall:IMessagePackFormatter<T> {
         }
         writer.WriteCollection(value.Arguments,Resolver);
     }
+
+
+
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         var method=value!.Method;
@@ -72,23 +63,5 @@ public class MethodCall:IMessagePackFormatter<T> {
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         return Read(ref reader,Resolver);
-        //var method= Method.Read(ref reader,Resolver);
-        //if(method.IsStatic){
-        //    Debug.Assert(count==2);
-        //    var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-        //    return Expressions.Expression.Call(
-        //        method,
-        //        arguments
-        //    );
-        //} else{
-        //    Debug.Assert(count==3);
-        //    var instance= Expression.Read(ref reader,Resolver);
-        //    var arguments=reader.ReadArray<Expressions.Expression>(Resolver);
-        //    return Expressions.Expression.Call(
-        //        instance,
-        //        method,
-        //        arguments
-        //    );
-        //}
     }
 }

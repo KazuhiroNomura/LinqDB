@@ -32,8 +32,8 @@ public class CatchBlock:IJsonFormatter<T> {
                 Expression.Write(ref writer,value.Filter,Resolver);
             }
         } else {
-            var ListParameter=Resolver.Serializer().Parameters;
-            ListParameter.Add(value.Variable);
+            var Parameters=Resolver.Serializer().Parameters;
+            Parameters.Add(value.Variable);
             if(value.Filter is null) {
                 
                 writer.WriteInt32(2);
@@ -55,7 +55,7 @@ public class CatchBlock:IJsonFormatter<T> {
                 writer.WriteValueSeparator();
                 Expression.Write(ref writer,value.Filter,Resolver);
             }
-            ListParameter.RemoveAt(ListParameter.Count-1);
+            Parameters.RemoveAt(Parameters.Count-1);
         }
         writer.WriteEndArray();
     }
@@ -106,7 +106,6 @@ public class CatchBlock:IJsonFormatter<T> {
                 value=Expressions.Expression.Catch(Variable,body,filter);
                 break;
             }
-            //default:throw new NotSupportedException($"Utf8JsonのCatchのidが不正な{id}だった");
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

@@ -9,8 +9,6 @@ using Reader = JsonReader;
 using T = Expressions.DebugInfoExpression;
 public class DebugInfo:IJsonFormatter<T> {
     public static readonly DebugInfo Instance=new();
-    
-    
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
         SymbolDocumentInfo.Write(ref writer,value.Document,Resolver);
         //Resolver.GetFormatter<Expressions.SymbolDocumentInfo>().Serialize(ref writer,value.Document,Resolver);
@@ -38,7 +36,6 @@ public class DebugInfo:IJsonFormatter<T> {
     }
     internal static T Read(ref Reader reader,O Resolver){
         var document=SymbolDocumentInfo.Read(ref reader,Resolver);
-        //var document=Resolver.GetFormatter<Expressions.SymbolDocumentInfo>().Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var startLine=reader.ReadInt32();
         reader.ReadIsValueSeparatorWithVerify();

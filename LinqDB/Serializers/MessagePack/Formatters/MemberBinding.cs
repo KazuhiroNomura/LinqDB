@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
-using O=MessagePackSerializerOptions;
 using Reflection;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.MemberBinding;
@@ -25,7 +24,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
                 writer.WriteCollection(((Expressions.MemberMemberBinding)value).Bindings,Resolver);
                 break;
             default:
-                Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
+                System.Diagnostics.Debug.Assert(value.BindingType==Expressions.MemberBindingType.ListBinding);
                 writer.WriteCollection(((Expressions.MemberListBinding)value).Initializers,Resolver);
                 break;
         }
@@ -42,7 +41,7 @@ public class MemberBinding:IMessagePackFormatter<T> {
         
         var member= Member.Read(ref reader,Resolver);
         
-        Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
+        System.Diagnostics.Debug.Assert(BindingType is Expressions.MemberBindingType.Assignment or Expressions.MemberBindingType.MemberBinding or Expressions.MemberBindingType.ListBinding);
         T MemberBinding =BindingType switch{
             Expressions.MemberBindingType.Assignment=>Expressions.Expression.Bind(member,Expression.Read(ref reader,Resolver)),
             Expressions.MemberBindingType.MemberBinding=>Expressions.Expression.MemberBind(member,reader.ReadArray<T>(Resolver)),
@@ -54,7 +53,6 @@ public class MemberBinding:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);        
         return Read(ref reader,Resolver);
     }
 }

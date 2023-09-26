@@ -3,8 +3,8 @@ using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
-using O=IJsonFormatterResolver;
 using Reflection;
+using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.ElementInit;

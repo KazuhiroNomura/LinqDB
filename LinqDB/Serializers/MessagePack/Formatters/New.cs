@@ -1,13 +1,12 @@
-﻿using System.Diagnostics;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters;
+using Reflection;
 using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.NewExpression;
-using Reflection;
 public class New:IMessagePackFormatter<T> {
     public static readonly New Instance=new();
     internal static void Write(ref Writer writer,T value,O Resolver){
@@ -41,14 +40,13 @@ public class New:IMessagePackFormatter<T> {
     }
     internal static T ReadNew(ref Reader reader,O Resolver){
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==2);
+
         return Read(ref reader,Resolver);
 
     }
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==2);
         return Read(ref reader,Resolver);
     }
 }

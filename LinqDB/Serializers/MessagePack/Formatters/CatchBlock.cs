@@ -32,8 +32,8 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 Expression.Write(ref writer,value.Filter,Resolver);
             }
         } else{
-            var ListParameter=Resolver.Serializer().Parameters;
-            ListParameter.Add(value.Variable);
+            var Parameters=Resolver.Serializer().Parameters;
+            Parameters.Add(value.Variable);
             if(value.Filter is null){
                 writer.WriteArrayHeader(4);
                 writer.WriteInt8(2);
@@ -55,7 +55,7 @@ public class CatchBlock:IMessagePackFormatter<T> {
                 
                 Expression.Write(ref writer,value.Filter,Resolver);
             }
-            ListParameter.RemoveAt(ListParameter.Count-1);
+            Parameters.RemoveAt(Parameters.Count-1);
         }
 
     }

@@ -1,5 +1,4 @@
-﻿
-using Utf8Json;
+﻿using Utf8Json;
 
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
