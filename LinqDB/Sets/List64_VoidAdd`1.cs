@@ -17,18 +17,10 @@ public abstract class List64_VoidAdd<T>:ICollection<T> {
     /// </summary>
     /// <param name="Item"></param>
     public void Add(T Item) => this.委譲.Add(Item);
-    public void Clear(){
-        throw new System.NotImplementedException();
-    }
-    public bool Contains(T item){
-        throw new System.NotImplementedException();
-    }
-    public void CopyTo(T[] array,int arrayIndex){
-        throw new System.NotImplementedException();
-    }
-    public bool Remove(T item){
-        throw new System.NotImplementedException();
-    }
+    public void Clear()=>this.委譲.Clear();
+    public bool Contains(T item)=>this.委譲.Contains(item);
+    public void CopyTo(T[] array,int arrayIndex)=>this.委譲.CopyTo(array,arrayIndex);
+    public bool Remove(T item)=>this.委譲.Remove(item);
     int ICollection<T>.Count=>(int)this.Count;
     public bool IsReadOnly=>false;
 

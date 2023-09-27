@@ -12,7 +12,7 @@ public class MemberBinding:MemoryPackFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
-        writer.WriteVarInt((byte)value!.BindingType);
+        writer.WriteVarInt((byte)value.BindingType);
 
         Member.Write(ref writer,value.Member);
         

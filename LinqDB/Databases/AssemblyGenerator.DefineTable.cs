@@ -22,12 +22,12 @@ public partial class AssemblyGenerator {
         //4 V,TF
         var ISchema = Object.Schema;
         var ISchema_EscapedName = ISchema.EscapedName;
-        var IContainer_EscapedName = ISchema.Container!.EscapedName;
+        var IContainer_EscapedName = ISchema.Container.EscapedName;
         var Key_TypeBuilder=ModuleBuilder.DefineType(
             $"{IContainer_EscapedName}.PrimaryKeys.{ISchema_EscapedName}.{EscapedName}",
             TypeAttributes.Public|TypeAttributes.SequentialLayout|TypeAttributes.Serializable,
             typeof(ValueType)
-        )!;
+        );
         //これがあるとCore系列では保存できない
         //Key_TypeBuilder.SetCustomAttribute(Common.IsReadOnlyAttribute_ctor,Array.Empty<Byte>());
         //Key_TypeBuilder.SetCustomAttribute(Common.IsReadOnlyAttribute_ctor,Array.Empty<Byte>());
@@ -43,7 +43,7 @@ public partial class AssemblyGenerator {
         Types2[1]=Container_TypeBuilder;
         var Entity2 = typeof(Entity<,>).MakeGenericType(Types2);
         var Entity2_ProtectedPrimaryKey = TypeBuilder.GetField(Entity2,AssemblyGenerator.Entity2_ProtectedPrimaryKey);
-        var Object_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2)!;
+        var Object_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);

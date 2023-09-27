@@ -58,7 +58,7 @@ public class Try:IMessagePackFormatter<T>{
         if(@finally is not null){
             var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
             if(handlers.Length>0) {
-                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
+                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers);
             } else {
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
@@ -69,7 +69,7 @@ public class Try:IMessagePackFormatter<T>{
             } else{
                 
                 var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
-                value=Expressions.Expression.TryCatch(body,handlers!);
+                value=Expressions.Expression.TryCatch(body,handlers);
             }
         }
         return value;

@@ -35,7 +35,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
         var Parameters= Resolver.Serializer().Parameters;
         var Parameters_Count=Parameters.Count;
         reader.ReadIsValueSeparatorWithVerify();
-        Parameters.AddRange(parameters!);
+        Parameters.AddRange(parameters);
         var body = Expression.Read(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var tailCall = reader.ReadBoolean();
@@ -45,7 +45,7 @@ public class ExpressionT<T>:IJsonFormatter<T>where T:Expressions.LambdaExpressio
             type,
             body,
             tailCall,
-            parameters!
+            parameters
         );
     }
 }

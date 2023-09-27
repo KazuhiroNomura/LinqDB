@@ -25,7 +25,7 @@ public class LinqDBConnetion:DbConnection {
         }
     }
     public override string Database => throw new NotImplementedException();
-    public override string DataSource => this.Client.DnsEndPoint!.Host;
+    public override string DataSource => this.Client.DnsEndPoint.Host;
     public override string ServerVersion => throw new NotImplementedException();
     public override ConnectionState State => throw new NotImplementedException();
     public override void ChangeDatabase(string databaseName) => throw new NotImplementedException();

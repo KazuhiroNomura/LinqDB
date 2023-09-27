@@ -35,7 +35,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
         var Parameters= Resolver.Serializer().Parameters;
         var Parameters_Count=Parameters.Count;
         
-        Parameters.AddRange(parameters!);
+        Parameters.AddRange(parameters);
         var body = Expression.Read(ref reader,Resolver);
         
         var tailCall = reader.ReadBoolean();
@@ -45,7 +45,7 @@ public class ExpressionT<T>:IMessagePackFormatter<T>where T:Expressions.LambdaEx
             type,
             body,
             tailCall,
-            parameters!
+            parameters
         );
     }
 }

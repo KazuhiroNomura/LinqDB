@@ -79,10 +79,10 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             Debug.Assert(TreeNode is not null);
             if(HashCode<CurrentHashCode) {
                 上限=CurrentHashCode-1L;
-                TreeNode=TreeNode!.L;
+                TreeNode=TreeNode.L;
             } else if(HashCode>CurrentHashCode) {
                 下限=CurrentHashCode+1L;
-                TreeNode=TreeNode!.R;
+                TreeNode=TreeNode.R;
             } else {
                 return TreeNode;
             }
@@ -236,30 +236,49 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal virtual bool InternalAdd(T Item) {
-        if(Item is null) {
-            Debug.Assert(this._Count==0);
-            this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItemT(default!);
-        } else {
-            var HashCode = (long)(uint)Item.GetHashCode();
-            if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
-                var Comparer = this.Comparer;
-                LinkedNodeT LinkedNode = TreeNode;
-                while(true) {
-                    var LinkedNodeItem = LinkedNode._LinkedNodeItem;
-                    if(LinkedNodeItem is null) {
-                        this.AddRelationship(Item);
-                        LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
-                        return true;
-                    }
-                    if(Comparer.Equals(LinkedNodeItem.Item,Item)) {
-                        return false;
-                    }
-                    LinkedNode=LinkedNodeItem;
+        //if(Item is null) {
+        //    Debug.Assert(this._Count==0);
+        //    this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItemT(default!);
+        //} else {
+        //    var HashCode = (long)(uint)Item.GetHashCode();
+        //    if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+        //        var Comparer = this.Comparer;
+        //        LinkedNodeT LinkedNode = TreeNode;
+        //        while(true) {
+        //            var LinkedNodeItem = LinkedNode._LinkedNodeItem;
+        //            if(LinkedNodeItem is null) {
+        //                this.AddRelationship(Item);
+        //                LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
+        //                return true;
+        //            }
+        //            if(Comparer.Equals(LinkedNodeItem.Item,Item)) {
+        //                return false;
+        //            }
+        //            LinkedNode=LinkedNodeItem;
+        //        }
+        //    }
+        //    this.AddRelationship(Item);
+        //    InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
+        //}
+        var HashCode = typeof(T).IsNullable()?(long)(uint)Item!.GetHashCode():Item is not null?(long)(uint)Item.GetHashCode():0;
+        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+            var Comparer = this.Comparer;
+            LinkedNodeT LinkedNode = TreeNode;
+            while(true) {
+                var LinkedNodeItem = LinkedNode._LinkedNodeItem;
+                if(LinkedNodeItem is null) {
+                    this.AddRelationship(Item);
+                    LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
+                    return true;
                 }
+                if(Comparer.Equals(LinkedNodeItem.Item,Item)) {
+                    return false;
+                }
+                LinkedNode=LinkedNodeItem;
             }
-            this.AddRelationship(Item);
-            InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         }
+        this.AddRelationship(Item);
+        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         return true;
     }
     /// <summary>既定の等値比較子を使用して、指定した要素が集合に含まれているかどうかを判断します。</summary>
@@ -924,7 +943,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     private protected void PrivateProtectedImport(ImmutableSet<T> source) {
         var 元TreeNode = source.変数Enumerator.TreeNode;
         var 先TreeNode = this.変数Enumerator.TreeNode;
-        var 元TreeRoot = 元TreeNode!.P;
+        var 元TreeRoot = 元TreeNode.P;
     LinkedNodeItem走査:
         LinkedNodeT 先LinkedNode = 先TreeNode;
         for(var 元LinkedNodeItem = 元TreeNode._LinkedNodeItem;元LinkedNodeItem is not null;元LinkedNodeItem=元LinkedNodeItem._LinkedNodeItem) {
@@ -944,7 +963,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         if(元TreeNode.R is not null) {
             元TreeNode=元TreeNode.R;
             //Debug.Assert(先TreeNode != null);
-            先TreeNode=先TreeNode!.R=new TreeNodeT(先TreeNode);
+            先TreeNode=先TreeNode.R=new TreeNodeT(先TreeNode);
             goto LinkedNodeItem走査;
         }
         //上に移動
@@ -954,12 +973,12 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             if(元TreeNode_P.L==元TreeNode) {
                 元TreeNode=元TreeNode_P;
                 Debug.Assert(先TreeNode is not null&&先TreeNode.P is not null);
-                先TreeNode=先TreeNode!.P!;
+                先TreeNode=先TreeNode.P!;
                 goto 右に移動;
             }
             元TreeNode=元TreeNode_P;
             Debug.Assert(先TreeNode is not null&&先TreeNode.P is not null);
-            先TreeNode=先TreeNode!.P!;
+            先TreeNode=先TreeNode.P!;
         }
         this._Count=source._Count;
     }
@@ -987,13 +1006,13 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             Debug.Assert(TreeNode is not null);
             if(HashCode<CurrentHashCode) {
                 上限=CurrentHashCode-1;
-                AddTreeNode(ref TreeNode!,ref TreeNode!.L);
+                AddTreeNode(ref TreeNode,ref TreeNode.L);
             } else if(HashCode>CurrentHashCode) {
                 下限=CurrentHashCode+1;
-                AddTreeNode(ref TreeNode!,ref TreeNode!.R);
+                AddTreeNode(ref TreeNode,ref TreeNode.R);
             } else {
                 var Comparer = this.Comparer;
-                LinkedNodeT LinkedNode = TreeNode!;
+                LinkedNodeT LinkedNode = TreeNode;
                 while(true) {
                     var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                     if(LinkedNode_LinkedNodeItem is null) {
@@ -1001,7 +1020,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                         return;
                     }
                     Debug.Assert(!Comparer.Equals(LinkedNode_LinkedNodeItem.Item,Item));
-                    LinkedNode=LinkedNode_LinkedNodeItem!;
+                    LinkedNode=LinkedNode_LinkedNodeItem;
                 }
             }
         }
@@ -1244,7 +1263,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
                 if(LinkedNode_LinkedNodeItem is null) {
                     break;
                 }
-                LinkedNode=LinkedNode_LinkedNodeItem!;
+                LinkedNode=LinkedNode_LinkedNodeItem;
                 Count++;
             }
             var 中間=(下限+上限)>>1;
@@ -1354,7 +1373,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal virtual bool InternalRemove(T Item) {
         Debug.Assert(Item is not null);
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Item!.GetHashCode());
+        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Item.GetHashCode());
         if(TreeNode is not null){
             var Comparer=this.Comparer;
             LinkedNodeT LinkedNode =TreeNode;

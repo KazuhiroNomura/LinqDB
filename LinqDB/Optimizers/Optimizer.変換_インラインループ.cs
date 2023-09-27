@@ -749,7 +749,7 @@ partial class Optimizer {
                             Result,
                             argument => {
                                 var u = this.LambdaExpressionを展開2(
-                                    this.Traverse(resultSelector!),
+                                    this.Traverse(resultSelector),
                                     Expression.Property(
                                         argument,
                                         nameof(ImmutableGroupingSet<int,int>.Key)
@@ -766,7 +766,7 @@ partial class Optimizer {
                             Result,
                             argument => ループの内部処理(
                                 this.LambdaExpressionを展開2(
-                                    this.Traverse(resultSelector!),
+                                    this.Traverse(resultSelector),
                                     Expression.Property(
                                         argument,
                                         nameof(ImmutableGroupingSet<int,int>.Key)

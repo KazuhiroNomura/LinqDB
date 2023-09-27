@@ -9,7 +9,7 @@ using T= Expressions.InvocationExpression;
 public class Invocation:MemoryPackFormatter<T> {
     public static readonly Invocation Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter:IBufferWriter<byte>{
-        Expression.Write(ref writer,value!.Expression);
+        Expression.Write(ref writer,value.Expression);
         
         writer.WriteCollection(value.Arguments);
     }

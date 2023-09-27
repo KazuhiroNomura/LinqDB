@@ -14,7 +14,7 @@ public class Object : IJsonFormatter<T>
     internal static void Write(ref Writer writer, T value, IJsonFormatterResolver Resolver)
     {
         writer.WriteBeginArray();
-        var type = value!.GetType();
+        var type = value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
         switch (value)

@@ -25,7 +25,7 @@ public sealed partial class Optimizer {
 
         protected override void Traverse(Expression e) {
             base.Traverse(e);
-            if(!this.List出力TableExpression!.Contains(e)&&this.指定TableExpressions!.Contains(e,this.ExpressionEqualityComparer))
+            if(!this.List出力TableExpression.Contains(e)&&this.指定TableExpressions!.Contains(e,this.ExpressionEqualityComparer))
                 this.List出力TableExpression.Add(e);
         }
     }

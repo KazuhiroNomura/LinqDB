@@ -16,7 +16,7 @@ public partial class AssemblyGenerator {
         var Entity2 = typeof(Entity);
         //2 T,V,TF,SF
         var EscapedName           =Object.EscapedName;
-        var Object_TypeBuilder    =ModuleBuilder     .DefineType      ($"{Object.Schema.Container.EscapedName}.Views.{Schema_TypeBuilder.Name}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2)!;
+        var Object_TypeBuilder    =ModuleBuilder     .DefineType      ($"{Object.Schema.Container.EscapedName}.Views.{Schema_TypeBuilder.Name}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
         var Disp_TypeBuilder      =Schema_TypeBuilder.DefineNestedType(EscapedName,TypeAttributes.NestedPrivate);
         var Disp_FieldBuilder     =Schema_TypeBuilder.DefineField     (EscapedName,Disp_TypeBuilder,FieldAttributes.Private);
         var Impl_TypeBuilder      =Disp_TypeBuilder.DefineNestedType  ("Impl",TypeAttributes.NestedPublic|TypeAttributes.Sealed|TypeAttributes.Abstract);

@@ -9,7 +9,7 @@ using T=Expressions.ListInitExpression;
 public class ListInit:IMessagePackFormatter<T> {
     public static readonly ListInit Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver){
-        New.WriteNew(ref writer,value!.NewExpression,Resolver);
+        New.WriteNew(ref writer,value.NewExpression,Resolver);
         
         writer.WriteCollection(value.Initializers,Resolver);
     }

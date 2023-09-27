@@ -435,7 +435,7 @@ public class Client:IDisposable {
             X509CertificateCollection.Clear();
             X509CertificateCollection.Add(this.X509Certificate);
             Debug.Assert(this.DnsEndPoint is not null);
-            SslStream.AuthenticateAsClient(this.DnsEndPoint!.Host,X509CertificateCollection,this.SslProtocol,true);
+            SslStream.AuthenticateAsClient(this.DnsEndPoint.Host,X509CertificateCollection,this.SslProtocol,true);
             //                SslStream.AuthenticateAsClient(this.Endpoint.ToString(),null,SslProtocols.Tls12,true);
             Stream=SslStream;
         } else {

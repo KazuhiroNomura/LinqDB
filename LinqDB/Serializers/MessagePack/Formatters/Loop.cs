@@ -9,7 +9,7 @@ using T=Expressions.LoopExpression;
 public class Loop:IMessagePackFormatter<T> {
     public static readonly Loop Instance=new();
     private static void PrivateWrite0(ref Writer writer,T value,int offset){
-        if(value!.BreakLabel is null){//body
+        if(value.BreakLabel is null){//body
             writer.WriteArrayHeader(offset+1);
         } else if(value.ContinueLabel is null){//break,body
             writer.WriteArrayHeader(offset+2);

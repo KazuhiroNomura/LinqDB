@@ -35,7 +35,7 @@ public interface ISchema:IName {
         //internal Type? Type { get; private set; }
         internal FieldInfo? Containerに定義されるSchema_Field;
         public void CreateType(Type Container_Type) {
-            this.TypeBuilder!.CreateType();
+            this.TypeBuilder.CreateType();
             this.TypeBuilder=default!;
             this.Containerに定義されるSchema_Field=Container_Type.GetField(this.Containerに定義されるSchema_FieldBuilder.Name,BindingFlags.Instance|BindingFlags.NonPublic);
         }

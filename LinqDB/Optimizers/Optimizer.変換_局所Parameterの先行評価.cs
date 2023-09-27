@@ -464,7 +464,7 @@ partial class Optimizer {
                     }
                     case ExpressionType.Block:{
                         if(this.置換中&&this.Enumerator.MoveNext())
-                            return this.Enumerator.Current!;
+                            return this.Enumerator.Current;
                         this.このLabelが出現するまでスキップする=null;
                         break;
                     }
@@ -496,7 +496,7 @@ partial class Optimizer {
                 }
                 if(Expression0.NodeType!=ExpressionType.Block){
                     if(this.置換中&&this.Enumerator.MoveNext())
-                        return this.Enumerator.Current!;
+                        return this.Enumerator.Current;
                     this.このLabelが出現するまでスキップする=null;
                 }
                 //if
@@ -536,7 +536,7 @@ partial class Optimizer {
                         Block1_Expressions[a]=this.Label(Label);
                         this.置換中=Label.Target==this.このLabelが出現するまでスキップする;
                     }else if(Block0_Expression.NodeType!=ExpressionType.Block&&this.置換中&&this.Enumerator.MoveNext()){
-                        Block1_Expressions[a]=this.Enumerator.Current!;
+                        Block1_Expressions[a]=this.Enumerator.Current;
                     } else{
                         Block1_Expressions[a]=this.Traverse(Block0_Expression);
                     }
@@ -617,7 +617,7 @@ partial class Optimizer {
                     if(Block0_Expression.NodeType!=ExpressionType.Block&&this.Enumerator.MoveNext()){
                         this.index++;
                         Debug.Assert(Block0_Expression.NodeType!=ExpressionType.Label);
-                        Block1_Expressions[a]=this.Traverse(this.Enumerator.Current!);
+                        Block1_Expressions[a]=this.Traverse(this.Enumerator.Current);
                     } else{
                         Block1_Expressions[a]=this.Traverse(Block0_Expression);
                     }

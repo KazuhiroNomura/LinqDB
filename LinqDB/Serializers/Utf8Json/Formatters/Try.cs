@@ -56,9 +56,9 @@ public class Try:IJsonFormatter<T> {
         var @finally=Expression.ReadNullable(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         if(@finally is not null){
-            var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver)!;
+            var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
             if(handlers.Length>0) {
-                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers!);
+                value=Expressions.Expression.TryCatchFinally(body,@finally,handlers);
             } else {
                 value=Expressions.Expression.TryFinally(body,@finally);
             }
@@ -68,8 +68,8 @@ public class Try:IJsonFormatter<T> {
                 value=Expressions.Expression.TryFault(body,fault);
             } else{
                 reader.ReadIsValueSeparatorWithVerify();
-                var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver)!;
-                value=Expressions.Expression.TryCatch(body,handlers!);
+                var handlers=reader.ReadArray<Expressions.CatchBlock>(Resolver);
+                value=Expressions.Expression.TryCatch(body,handlers);
             }
         }
         return value;

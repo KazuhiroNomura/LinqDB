@@ -35,7 +35,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
         var Parameters= reader.Serializer().Parameters;
         var Parameters_Count=Parameters.Count;
         
-        Parameters.AddRange(parameters!);
+        Parameters.AddRange(parameters);
         var body = Expression.Read(ref reader);
         
         var tailCall = reader.ReadBoolean();
@@ -45,7 +45,7 @@ public class ExpressionT<T>:MemoryPackFormatter<T>where T:Expressions.LambdaExpr
             type,
             body,
             tailCall,
-            parameters!
+            parameters
         );
     }
 }

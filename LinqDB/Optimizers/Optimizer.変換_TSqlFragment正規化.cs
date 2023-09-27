@@ -168,7 +168,7 @@ public sealed partial class Optimizer{
                 var SchemaObject=NamedTableReference.SchemaObject;
                 Debug.Assert(SchemaObject is not null);
                 if(SchemaObject.SchemaIdentifier is not null&&string.Equals(SchemaObject.SchemaIdentifier.Value,"sys",StringComparison.CurrentCultureIgnoreCase)) {
-                    var Value=SchemaObject!.BaseIdentifier.Value;
+                    var Value=SchemaObject.BaseIdentifier.Value;
                     if(string.Equals("objects$",Value,StringComparison.CurrentCultureIgnoreCase)){
                         return 共通0("objects$",
                             new QuerySpecification {

@@ -58,7 +58,7 @@ public class Binary:IMessagePackFormatter<T> {
     }
     internal static void WriteLeftRightBooleanMethod(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(5);
-        writer.WriteNodeType(value!.NodeType);
+        writer.WriteNodeType(value.NodeType);
         
         Expression.Write(ref writer,value.Left,Resolver);
         

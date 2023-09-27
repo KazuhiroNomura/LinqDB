@@ -24,8 +24,8 @@ public readonly struct KeyValueCollection<TValue,TKey, TCollection>:IEquatable<K
     }
     public bool Equals(KeyValueCollection<TValue,TKey,TCollection> other) => EqualityComparer<TKey>.Default.Equals(this.Key,other.Key);
     public override bool Equals(object? obj) => obj is KeyValueCollection<TValue,TKey,TCollection> other&&this.Equals(other);
-    public IEnumerator<TValue> GetEnumerator() => throw new NotImplementedException();
-    IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
+    public IEnumerator<TValue> GetEnumerator() =>this.Collection.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() =>this.Collection.GetEnumerator();
     public override int GetHashCode() => this.Key!.GetHashCode();
     public void Add(TValue Item) => this.Collection.Add(Item);
     //IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();

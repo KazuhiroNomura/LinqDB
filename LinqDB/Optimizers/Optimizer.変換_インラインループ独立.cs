@@ -687,7 +687,7 @@ partial class Optimizer {
                                     Expression.Divide(
                                         Sum,
                                         Convert必要なら(
-                                            Average_Int64Count!,
+                                            Average_Int64Count,
                                             Sum_Type
                                         )
                                     ),
@@ -1009,7 +1009,7 @@ partial class Optimizer {
                             var Int64Count = Expression.Parameter(
                                 typeof(long),
                                 $"{変数名}Int64Count"
-                            )!;
+                            );
                             ListParameter.Add(Int64Count);
                             ListExpression.Add(
                                 Expression.Assign(
@@ -1021,7 +1021,7 @@ partial class Optimizer {
                             var Sum = Expression.Parameter(
                                 Sum_Type,
                                 $"{変数名}Sum"
-                            )!;
+                            );
                             ListParameter.Add(Sum);
                             ListExpression.Add(
                                 Expression.Assign(

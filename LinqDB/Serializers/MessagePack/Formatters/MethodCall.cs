@@ -10,7 +10,7 @@ using T = Expressions.MethodCallExpression;
 public class MethodCall:IMessagePackFormatter<T> {
     public static readonly MethodCall Instance=new();
     internal static void Write(ref Writer writer,T value,O Resolver){
-        var method=value!.Method;
+        var method=value.Method;
         if(method.IsStatic){
             writer.WriteArrayHeader(3);
             writer.WriteNodeType(Expressions.ExpressionType.Call);

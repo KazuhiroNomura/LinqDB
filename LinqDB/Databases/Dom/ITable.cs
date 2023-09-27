@@ -36,7 +36,7 @@ public interface ITable:IName,IColumns{
             this.AddRelationship_I.Ret();
             this.RemoveRelationship_I.Ret();
             this.ctor_I.Ret();
-            this.TypeBuilder!.CreateType();
+            this.TypeBuilder.CreateType();
             this.TypeBuilder=default!;
         }
     }

@@ -11,12 +11,12 @@ public class Property:IMessagePackFormatter<T>{
     public static readonly Property Instance=new();
     internal static void Write(ref Writer writer,T value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
-        var type=value!.ReflectedType!;
+        var type=value.ReflectedType!;
         writer.WriteType(type);
 
 
 
-        var array=Resolver.Serializer().TypeProperties.Get(type!);
+        var array=Resolver.Serializer().TypeProperties.Get(type);
         var index=Array.IndexOf(array,value);
         writer.WriteInt32(index);
 

@@ -68,7 +68,7 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     public static bool All<TSource>(this ImmutableSet<TSource> source,Func<TSource,bool> predicate) {
         foreach(var a in source)
-            if(!predicate!(a))
+            if(!predicate(a))
                 return false;
         return true;
     }
@@ -203,12 +203,12 @@ public static class ExtensionSet{
     /// <param name="source">平均値計算の対象となる <see cref="int" /> 値の集合。</param>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static int Average(this ImmutableSet<int> source) {
+    public static double Average(this ImmutableSet<int> source) {
         var Int64Count = source.Count;
         if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         var Sum = 0;
         foreach(var a in source)Sum+=a;
-        return (int)(Sum/Int64Count);
+        return (double)Sum/Int64Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する null 許容の <see cref="decimal" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
@@ -374,7 +374,7 @@ public static class ExtensionSet{
         return (int)(Sum/Count);
     }
     private static (decimal[] Array, decimal 合計) 合計値を求める<TSource>(ImmutableSet<TSource> source,Func<TSource,decimal> selector,long Count,MethodBase Method) {
-        if(Count==0)throw シーケンスに要素が含まれていません(Method!);
+        if(Count==0)throw シーケンスに要素が含まれていません(Method);
         var Array = new decimal[Count];
         decimal Sum = 0;
         var index = 0;
@@ -386,7 +386,7 @@ public static class ExtensionSet{
         return (Array, Sum);
     }
     private static (double[] Array, double 合計) 合計値を求める<TSource>(ImmutableSet<TSource> source,Func<TSource,double> selector,long Count,MethodBase Method) {
-        if(Count==0)throw シーケンスに要素が含まれていません(Method!);
+        if(Count==0)throw シーケンスに要素が含まれていません(Method);
         var Array = new double[Count];
         double Sum = 0;
         var index = 0;
@@ -412,7 +412,7 @@ public static class ExtensionSet{
         //解答：算術平均値は (2+3+4+7+9) / 5=5 
         //平均偏差は (|2−5|+|3−5|+|4−5|+|7−5|+|9−5|)/5=(3+2+1+2+4) / 5=2.4
         var Count = source.Count;
-        var (Array, Sum)=合計値を求める(source,selector!,Count,MethodBase.GetCurrentMethod()!);
+        var (Array, Sum)=合計値を求める(source,selector,Count,MethodBase.GetCurrentMethod()!);
         double DoubleCount = Count;
         var Average = Sum/DoubleCount;
         Sum=0;
@@ -508,7 +508,7 @@ public static class ExtensionSet{
     public static ImmutableSet<TSource> DUnion<TSource>(this ImmutableSet<TSource> source,ImmutableSet<TSource> second) {
         var r = new Set<TSource>(source);
         long Count = 0;
-        foreach(var a in second!) {
+        foreach(var a in second) {
             if(!r.InternalAdd(a)) throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
             Count++;
         }
@@ -522,8 +522,8 @@ public static class ExtensionSet{
     /// <param name="second">最初の集合にも含まれ、返された集合からは削除される要素を含む <see cref="ImmutableSet{TSource}" />。</param>
     /// <typeparam name="TSource">入力集合の要素の型。</typeparam>
     public static ImmutableSet<TSource> Except<TSource>(this ImmutableSet<TSource> first,ImmutableSet<TSource> second) {
-        var r = new Set<TSource>(first!);
-        r.ExceptWith(second!);
+        var r = new Set<TSource>(first);
+        r.ExceptWith(second);
         return r;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="double" /> 値の集合の平均値を計算します。</summary>

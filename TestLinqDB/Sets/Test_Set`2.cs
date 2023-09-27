@@ -3,17 +3,10 @@ using System.Diagnostics;
 using LinqDB.Sets;
 using System.Text;
 using System.Globalization;
-using System.Reflection;
-using System.Runtime.InteropServices.ObjectiveC;
-using System.Runtime.Serialization;
-using LinqDB.Databases.Tables;
 //using MemoryPack;
-using Serializers.MessagePack.Formatters;
 using テスト;
-using テスト.Tables.dbo;
 using LinqDB.Helpers;
-using MessagePack;
-
+using Serializers.Formatters;
 namespace Sets;
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 public partial class Serialize継承しない{

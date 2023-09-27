@@ -13,7 +13,7 @@ public class New:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(Expressions.ExpressionType.New);
         
-        Constructor.Write(ref writer,value!.Constructor!,Resolver);
+        Constructor.Write(ref writer,value.Constructor!,Resolver);
         
         writer.WriteCollection(value.Arguments,Resolver);
         

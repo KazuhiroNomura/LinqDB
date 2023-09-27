@@ -12,7 +12,7 @@ public class MemberBinding:IJsonFormatter<T> {
     public static readonly MemberBinding Instance=new();
     private static void PrivateWrite(ref Writer writer,T value,O Resolver) {
         writer.WriteBeginArray();
-        writer.WriteString(value!.BindingType.ToString());
+        writer.WriteString(value.BindingType.ToString());
         writer.WriteValueSeparator();
         Member.Write(ref writer,value.Member,Resolver);
         writer.WriteValueSeparator();

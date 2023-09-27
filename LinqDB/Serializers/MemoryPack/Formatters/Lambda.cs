@@ -52,7 +52,7 @@ public class Lambda:MemoryPackFormatter<T> {
             type,
             body,
             tailCall,
-            parameters!
+            parameters
         );
     }
     internal static T? ReadConversion(ref Reader reader){

@@ -1,6 +1,7 @@
 ﻿#pragma warning disable CS8618 // Null 非許容フィールドは初期化されていません。null 許容として宣言することを検討してください。
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 namespace LinqDB.Sets;
 
@@ -9,7 +10,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TKey">ディクショナリ内のキーの型。</typeparam>
 /// <typeparam name="TCollection">TValueのIAddを継承した型</typeparam>
 [Serializable]
-public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>where TCollection:ICollection<TValue> {
+public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>,ILookup<TKey,TValue>where TCollection:ICollection<TValue> {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
@@ -131,4 +132,23 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
         return false;
     }
     internal abstract KeyValueCollection<TValue,TKey,TCollection> InternalKeyValue(TKey Key,TValue Value);
+
+    int ILookup<TKey,TValue>.Count => throw new NotImplementedException();
+
+    public IEnumerable<TValue> this[TKey key]{
+        get{
+            TCollection value=default!;
+            if(this.TryGetValue(key,ref value)) return value;
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public bool Contains(TKey key)=>this.ContainsKey(key);
+
+    IEnumerator<IGrouping<TKey,TValue>> IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator(){
+        foreach(var a in this){
+            yield return a;
+        }
+    }
 }

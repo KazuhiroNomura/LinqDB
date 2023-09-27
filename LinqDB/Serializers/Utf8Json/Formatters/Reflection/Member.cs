@@ -11,7 +11,7 @@ public class Member:IJsonFormatter<T>{
     public static readonly Member Instance=new();
     internal static void Write(ref Writer writer,T value,IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
-        var type=value!.ReflectedType;
+        var type=value.ReflectedType;
         writer.WriteType(type);
         writer.WriteValueSeparator();
         writer.WriteString(value.Name);
