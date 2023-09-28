@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection.Metadata;
+using System.Text;
 namespace LinqDB.Sets;
 
 /// <summary>
@@ -7,6 +8,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TValue">値</typeparam>
 /// <typeparam name="TKey">キー</typeparam>
 public sealed class GroupingAscList<TKey,TValue>:AscList<TValue>, System.Linq.IGrouping<TKey,TValue>{
+    public GroupingAscList()=>this.Key=default!;
     /// <summary>キーを取得します。</summary>
     /// <returns>キー。</returns>
     public TKey Key{get;}

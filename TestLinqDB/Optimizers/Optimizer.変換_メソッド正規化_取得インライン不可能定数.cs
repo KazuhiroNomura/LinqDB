@@ -1,8 +1,10 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection;
 using LinqDB.Databases.Tables;
+using LinqDB.Helpers;
 using LinqDB.Sets;
 using Serializers.Formatters;
-using Exception=System.Exception;
+//using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
@@ -540,7 +542,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>s.Select(p=>(double?)p).Average());
         this.共通コンパイル実行(()=>new Set<int>{1}.Select(p=>(decimal)p).Average());
     }
-    private static IEnumerable<T> そのまま<T>(IEnumerable<T> i)=>i;
+    private static System.Collections.Generic.IEnumerable<T> そのまま<T>(System.Collections.Generic.IEnumerable<T> i)=>i;
     [Fact]public void Call_Any(){
         var s=new int[10];
         this.共通コンパイル実行(()=>s.Select(p=>p+p).Any());
@@ -551,7 +553,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     [Fact]public void Call_Contains(){
         this.共通コンパイル実行(()=>new int[10].Contains(0));
-        this.共通コンパイル実行(()=>((IEnumerable<int>)new List<int>()).Contains(0));
+        this.共通コンパイル実行(()=>((System.Collections.Generic.IEnumerable<int>)new List<int>()).Contains(0));
         this.共通コンパイル実行(()=>new decimal[10].Contains(0));
         this.共通コンパイル実行(()=>new decimal[10].Select(p=>(object)p).Contains(0m));
     }
@@ -576,7 +578,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
         //} else {
-        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,Anonymous((int key,IEnumerable<int>g)=>key+g.Count())));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
         //}
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector_elementSelector_resultSelector(){
@@ -588,7 +590,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
         //} else {
-        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,p=>p+p,Anonymous((int key,IEnumerable<int>g)=>key+g.Count())));
+        this.共通コンパイル実行(()=>new int[10].GroupBy(p=>p,p=>p+p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
         //}
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector(){
@@ -606,7 +608,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,i=>i,(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
         this.共通コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
-        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,IEnumerable<int>,int>)((o,i)=>o+i.Count())));
+        this.共通コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,System.Collections.Generic.IEnumerable<int>,int>)((o,i)=>o+i.Count())));
     }
     private static Set<int>CreateSet()=>new();
     [Fact]public void Call_Intersect(){
@@ -630,6 +632,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_OfType(){
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).OfType<string>());
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
         this.共通コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
         this.共通コンパイル実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
@@ -684,17 +687,28 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     [Fact]public void Call_ToArray(){
         this.共通コンパイル実行(()=>new int[1].ToArray().ToArray());
-        this.共通コンパイル実行(()=>((IEnumerable<int>)new int[1]).ToArray());
+        this.共通コンパイル実行(()=>((System.Collections.Generic.IEnumerable<int>)new int[1]).ToArray());
     }
     [Fact]public void Call_Except(){
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet()));
     }
+    static Set<int> CreateSet0()=>CreateSet();
+    static Set<int> CreateSet1()=>CreateSet();
     [Fact]public void Call_Union(){
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        //CommonLibrary.
+        //CommonLibrary.IsImplement()
+        var x=typeof(Set<int>).IsImplement(typeof(LinqDB.Sets.IEnumerable<>));
+            //.GetInterfaces().GetInterface(typeof(LinqDB.Sets.IEnumerable<int>).FullName);
+
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet0()).Union(CreateSet1()));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateEnum()));
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateEnum()).Union(CreateSet()));
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateSet()).Union(CreateEnum()));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateEnum()).Union(CreateSet()));
         this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
-        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet()));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_UnionBy(){
         var a=new[]{3,5,7};
@@ -735,8 +749,8 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //        }else{
         this.共通コンパイル実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),Anonymous((int o,int i)=>o*i)));
         //        if(indexSelectorか) {
-        this.共通コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
-        this.共通コンパイル実行(()=>CreateSet().SelectMany((Func<int,IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
+        this.共通コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,System.Collections.Generic.IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
+        this.共通コンパイル実行(()=>CreateSet().SelectMany((Func<int,System.Collections.Generic.IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
     }
     [Fact]public void Call_SelectMany_共通(){
         //if(ループ展開可能メソッドか(InputBody,out var MethodCall)) {

@@ -14,6 +14,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test共通", "Test共通\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLinqDB", "TestLinqDB\TestLinqDB.csproj", "{9C144205-1B32-4F7F-8507-71653455E70E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{CF6888B7-1AD0-4CF6-87B2-D7D51F07062D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF6888B7-1AD0-4CF6-87B2-D7D51F07062D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF6888B7-1AD0-4CF6-87B2-D7D51F07062D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF6888B7-1AD0-4CF6-87B2-D7D51F07062D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF6888B7-1AD0-4CF6-87B2-D7D51F07062D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

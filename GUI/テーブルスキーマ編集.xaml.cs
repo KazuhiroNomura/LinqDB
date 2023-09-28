@@ -174,15 +174,15 @@ public partial class テーブルスキーマ編集:Window {
         //this.SQLServer保存("AdventureWorks2008R2");
         //this.SQLServer保存("Pubs");
         //this.SQLServer保存("単純");
-        this.SQLServer保存("実験_new");
-        this.SQLServer保存("実験");
+        //this.SQLServer保存("実験_new");
+        //this.SQLServer保存("実験");
         //this.データベース保存("VIEWテスト");
         //this.データベース保存("TPC_C");
         //this.データベース保存("TPC_H");
         //this.データベース保存("TPC_E");
-        //foreach (var Database in Databases){
-        //    this.SQLServer保存(Database);
-        //}
+        foreach (var Database in Databases){
+            this.SQLServer保存(Database);
+        }
         //foreach (var Database in Databases){
         //}
         //this.データベース保存("AdventureWorks2017");

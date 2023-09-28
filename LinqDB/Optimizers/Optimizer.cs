@@ -2,8 +2,6 @@
 using LinqDB.Helpers;
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -28,8 +26,10 @@ using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.CSharp.RuntimeBinder;
+using Collections=System.Collections;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
+using Generic=Collections.Generic;
 /// <summary>
 /// Expressionを最適化する
 /// </summary>
@@ -119,7 +119,7 @@ public sealed partial class Optimizer:IDisposable{
             Type
         )
         : e;
-    private static (Expression プローブ,Expression ビルド)ValueTupleでNewする(作業配列 作業配列,IList<(Expression プローブ, Expression ビルド)> Listプローブビルド,int Offset) {
+    private static (Expression プローブ,Expression ビルド)ValueTupleでNewする(作業配列 作業配列,Generic.IList<(Expression プローブ, Expression ビルド)> Listプローブビルド,int Offset) {
         var 残りType数 = Listプローブビルド.Count-Offset;
         switch(残りType数) {
             case 1:return (
@@ -291,7 +291,7 @@ public sealed partial class Optimizer:IDisposable{
             }
         }
     }
-    private static NewExpression ValueTupleでNewする(作業配列 作業配列,IList<Expression> Arguments) {
+    private static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> Arguments) {
         return CommonLibrary.ValueTupleでNewする(作業配列,Arguments);
     }
     private static bool ILで直接埋め込めるか(Type Type) =>
@@ -367,7 +367,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// ビルド,プローブ式木の等価を比較する
     /// </summary>
-    public class ブローブビルドExpressionEqualityComparer:IEqualityComparer<(Expression ビルド,Expression プローブ)> {
+    public class ブローブビルドExpressionEqualityComparer:Generic.IEqualityComparer<(Expression ビルド,Expression プローブ)> {
         private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
         public ブローブビルドExpressionEqualityComparer(ExpressionEqualityComparer ExpressionEqualityComparer) => this.ExpressionEqualityComparer=ExpressionEqualityComparer;
         public bool Equals((Expression ビルド,Expression プローブ) x,(Expression ビルド,Expression プローブ) y) {
@@ -381,21 +381,21 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:IEqualityComparer<Expression>,IEqualityComparer<LabelTarget>,IEqualityComparer<CatchBlock>,IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>,IEqualityComparer<SwitchCase>{
+    public class ExpressionEqualityComparer:Generic.IEqualityComparer<Expression>,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>{
         private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
         /// </summary>
-        internal readonly IList<ParameterExpression> スコープParameters;
+        internal readonly Generic.IList<ParameterExpression> スコープParameters;
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="スコープParameters"></param>
-        public ExpressionEqualityComparer(IList<ParameterExpression> スコープParameters){
+        public ExpressionEqualityComparer(Generic.IList<ParameterExpression> スコープParameters){
             this.スコープParameters=スコープParameters;
             this.ObjectComparer=new(this);
         }
-        public ExpressionEqualityComparer():this(new List<ParameterExpression>()){
+        public ExpressionEqualityComparer():this(new Generic.List<ParameterExpression>()){
         }
 
         /// <summary>
@@ -428,12 +428,12 @@ public sealed partial class Optimizer:IDisposable{
         }
         //private readonly List<int> a_Indexes= new();
         //private readonly List<int> b_Indexes= new();
-        private List<ParameterExpression> a_ラムダ跨ぎParameters= new();
-        private List<ParameterExpression> b_ラムダ跨ぎParameters= new();
-        private readonly List<ParameterExpression> a_Parameters = new();
-        private readonly List<ParameterExpression> b_Parameters = new();
-        private readonly List<LabelTarget> a_LabelTargets = new();
-        private readonly List<LabelTarget> b_LabelTargets = new();
+        private Generic.List<ParameterExpression> a_ラムダ跨ぎParameters= new();
+        private Generic.List<ParameterExpression> b_ラムダ跨ぎParameters= new();
+        private readonly Generic.List<ParameterExpression> a_Parameters = new();
+        private readonly Generic.List<ParameterExpression> b_Parameters = new();
+        private readonly Generic.List<LabelTarget> a_LabelTargets = new();
+        private readonly Generic.List<LabelTarget> b_LabelTargets = new();
         /// <summary>
         /// 式木同士が一致するか。
         /// </summary>
@@ -922,7 +922,7 @@ public sealed partial class Optimizer:IDisposable{
         private bool T(GotoExpression a,GotoExpression b) =>
             this.a_LabelTargets.IndexOf(a.Target)==this.b_LabelTargets.IndexOf(b.Target)&&
             this.InternalEquals(a.Value,b.Value);
-        private bool SequenceEqual(IList<Expression> a,IList<Expression> b) {
+        private bool SequenceEqual(Generic.IList<Expression> a,Generic.IList<Expression> b) {
             var a_Count = a.Count;
             if(a_Count!=b.Count)
                 return false;
@@ -1088,7 +1088,7 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualityComparer {
-        internal ExpressionEqualityComparer_Assign_Leftで比較(List<ParameterExpression> スコープParameters) : base(スコープParameters) {
+        internal ExpressionEqualityComparer_Assign_Leftで比較(Generic.List<ParameterExpression> スコープParameters) : base(スコープParameters) {
         }
         protected override Expression Assignの比較対象(Expression Expression0){
             if(Expression0.NodeType==ExpressionType.Assign){
@@ -1104,7 +1104,7 @@ public sealed partial class Optimizer:IDisposable{
                 : e
         );
     }
-    private sealed class ConstantParameterEqualityComparer:IEqualityComparer<Expression> {
+    private sealed class ConstantParameterEqualityComparer:Generic.IEqualityComparer<Expression> {
         public int GetHashCode(Expression obj) => (int)obj.NodeType+obj.Type.GetHashCode();
         public bool Equals(Expression? a,Expression? b){
             Debug.Assert(ReferenceEquals(a,b)==(a==b));
@@ -1130,38 +1130,38 @@ public sealed partial class Optimizer:IDisposable{
     private readonly 作業配列 _作業配列 = new();
 
     private static Type IEnumerable1(Type Type) {
-        var IEnumerable1 = typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()
+        var IEnumerable1 = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
             ? Type
-            : Type.GetInterface(CommonLibrary.IEnumerable1_FullName);
+            : Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
         if(IEnumerable1 is not null) {
             return IEnumerable1;
         }
-        return typeof(IEnumerable)==Type
+        return typeof(Collections.IEnumerable)==Type
             ? Type
-            : Type.GetInterface(CommonLibrary.IEnumerable_FullName)!;
+            : Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName)!;
     }
     private static Type IEnumerable1のT(Type Type)
     {
         //if(Type==typeof(XDocument)) return typeof(XDocument);
-        var IEnumerable1 = Type.GetInterface(CommonLibrary.IEnumerable1_FullName);
+        var IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
         if(IEnumerable1 is not null) {
             return IEnumerable1.GetGenericArguments()[0];
         }
-        if(Type.IsGenericType&&typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
+        if(Type.IsGenericType&&typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()) {
             return Type.GetGenericArguments()[0];
         }
-        var IEnumerable = Type.GetInterface(CommonLibrary.IEnumerable_FullName);
-        if(IEnumerable is not null||typeof(IEnumerable)==Type) {
+        var IEnumerable = Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName);
+        if(IEnumerable is not null||typeof(Collections.IEnumerable)==Type) {
             return typeof(object);
         }
         throw new NotSupportedException();
     }
     private static Type[] IEnumerable1のGenericArguments(Type Type) {
-        var IEnumerable1 = Type.GetInterface(CommonLibrary.IEnumerable1_FullName);
+        var IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
         if(IEnumerable1 is not null) {
             return IEnumerable1.GetGenericArguments();
         }
-        if(Type.IsGenericType&&typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
+        if(Type.IsGenericType&&typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()) {
             return Type.GetGenericArguments();
         }
         throw new NotSupportedException();
@@ -1237,9 +1237,9 @@ public sealed partial class Optimizer:IDisposable{
         }
     }
     private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
-    private readonly List<ParameterExpression> ListスコープParameter = new();
+    private readonly Generic.List<ParameterExpression> ListスコープParameter = new();
     private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
-    private readonly List<ParameterExpression> Listループ跨ぎParameter = new();
+    private readonly Generic.List<ParameterExpression> Listループ跨ぎParameter = new();
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
     private readonly 変換_TSqlFragmentからExpression _変換_TSqlFragmentからExpression;
@@ -1266,7 +1266,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// IL生成時に使う。変換_跨ぎParameterをBlock_Variablesに、
     /// </summary>
-    private Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
+    private Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant{
         get=>this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
         set{
             this._取得_Dictionary.DictionaryConstant=value;
@@ -1278,7 +1278,7 @@ public sealed partial class Optimizer:IDisposable{
             //this._作成_DynamicAssembly.DictionaryConstant=value;
         }
     }
-    private Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic{
+    private Generic.Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic{
         get=>this._取得_Dictionary.DictionaryDynamic;
         set{
             this._取得_Dictionary.DictionaryDynamic=value;
@@ -1286,7 +1286,7 @@ public sealed partial class Optimizer:IDisposable{
             this._作成_DynamicAssembly.DictionaryDynamic=value;
         }
     }
-    private Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
+    private Generic.Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)> DictionaryLambda{
         get=>this._取得_Dictionary.DictionaryLambda;
         set{
             this._取得_Dictionary.DictionaryLambda=value;
@@ -1294,7 +1294,7 @@ public sealed partial class Optimizer:IDisposable{
             this._作成_DynamicAssembly.DictionaryLambda=value;
         }
     }
-    private Dictionary<ParameterExpression, (FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
+    private Generic.Dictionary<ParameterExpression, (FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
         get=>this._取得_Dictionary.Dictionaryラムダ跨ぎParameter;
         set{
             this._取得_Dictionary.Dictionaryラムダ跨ぎParameter=value;
@@ -2287,10 +2287,10 @@ public sealed partial class Optimizer:IDisposable{
         //変換前=変換前.Replace("System.Collections.","");
         //変換前=変換前.Replace("System.","");
         変換前=変換前.Replace("\r\n{","{");
-        var KeyValues = new List<(string Key, List<string> Values)>();
+        var KeyValues = new Generic.List<(string Key,Generic.List<string> Values)>();
         {
             var r = new StringReader(変換前);
-            var ラムダ式定義 = new List<string>();
+            var ラムダ式定義 = new Generic.List<string>();
             var ラムダ定義の1行目 = new Regex(@"^\.Lambda .*\(.*$",RegexOptions.Compiled);
             while(true) {
                 var Line = r.ReadLine();
@@ -2306,7 +2306,7 @@ public sealed partial class Optimizer:IDisposable{
                     break;
                 if(ラムダ定義の1行目.IsMatch(Line)) {
                     var Key = Line[..Line.IndexOf("(",StringComparison.Ordinal)];
-                    ラムダ式定義=new List<string>();
+                    ラムダ式定義=new Generic.List<string>();
                     KeyValues.Add((Key, ラムダ式定義));
                     ラムダ式定義.Add(Line);
                 } else if(string.Equals(Line,"}",StringComparison.Ordinal)) {

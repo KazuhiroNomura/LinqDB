@@ -1,8 +1,7 @@
 ﻿#define 並列化
 using System;
 using System.Text;
-using System.Collections;
-using System.Collections.Generic;
+using Collections=System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -10,12 +9,15 @@ using System.Runtime.Serialization;
 using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
+using LinqDB.CRC;
+//using System.Collections;
 //using MemoryPack;
 //using MessagePack.Resolvers;
 //using Utf8Json;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable ArrangeStaticMemberQualifier
 namespace LinqDB.Sets;
+using Generic=Collections.Generic;
 
 /// <summary>
 /// 関係集合。
@@ -25,7 +27,7 @@ namespace LinqDB.Sets;
 //[DebuggerDisplay("Count = {"+nameof(Count)+"}")]
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
 [MessagePack.MessagePackObject,Serializable]
-public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<ImmutableSet<T>>,ISerializable{
+public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IEnumerable<T>>{
     //public class Formatter:MemoryPack.MemoryPackFormatter<ImmutableSet<T>> {
     //    public static readonly Formatter Instance = new();
     //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref ImmutableSet<T>? value) {
@@ -89,12 +91,13 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         } while(TreeNode is not null);
         return null;
     }
+    [NonSerialized]
     private readonly Random Random = new(1);
     //private List<T> List = new();
     [IgnoreDataMember]
     public T Sampling {
         get{
-            if(this.Count==0) throw new NotSupportedException();
+            if(this._LongCount==0) throw new NotSupportedException();
             var 試行回数=0;
             while(true) {
                 var LinkedNodeItem = this.GetSampling(this.TreeRoot,31);
@@ -141,7 +144,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         }
     }
     [IgnoreDataMember]
-    public T SamplingNullable=> this.Count==0 ? default! : this.Sampling;
+    public T SamplingNullable=> this._LongCount==0 ? default! : this.Sampling;
     /// <summary>
     /// Add時の前半処理。目的のノードを探索する。存在しなければ作る。
     /// </summary>
@@ -283,19 +286,43 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     }
     /// <summary>既定の等値比較子を使用して、指定した要素が集合に含まれているかどうかを判断します。</summary>
     /// <returns>指定した値を持つ要素がソース 集合に含まれている場合は true。それ以外は false。</returns>
-    /// <param name="Value">集合内で検索する値。</param>
-    internal bool InternalContains(T Value) {
-        Debug.Assert(Value is not null);
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Value.GetHashCode());
+    /// <param name="item">集合内で検索する値。</param>
+    internal bool InternalContains(T item) {
+        Debug.Assert(item is not null);
+        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)item.GetHashCode());
         if(TreeNode is not null) {
             var Comparer = this.Comparer;
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(Comparer.Equals(a.Item,Value)) {
+                if(Comparer.Equals(a.Item,item)) {
                     return true;
                 }
             }
         }
         return false;
+    }
+    //internal bool InternalContains(T Item){
+    //    if(Item is null) return false;
+    //    var HashCode = (long)(uint)Item.GetHashCode();
+    //    if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+    //        var Comparer = this.Comparer;
+    //        LinkedNodeT LinkedNode = TreeNode;
+    //        while(true) {
+    //            var LinkedNodeItem = LinkedNode._LinkedNodeItem;
+    //            if(LinkedNodeItem is null)return false;
+    //            if(Comparer.Equals(LinkedNodeItem.Item,Item))return true;
+    //            LinkedNode=LinkedNodeItem;
+    //        }
+    //    }
+    //    return false;
+    //}
+    /// <summary>
+    /// 全要素削除します。
+    /// </summary>
+    internal void InternalClear() {
+        var TreeRoot = this.TreeRoot;
+        TreeRoot.L=TreeRoot.R=null;
+        TreeRoot._LinkedNodeItem=null;
+        this._LongCount=0;
     }
     /// <summary>
     /// データを格納するコンテナの葉
@@ -407,9 +434,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// 列挙子。値型なのでメソッド呼び出しがCallなので早い。
     /// </summary>
-    public struct Enumerator:IEnumerator<T> {
+    public struct Enumerator:Generic.IEnumerator<T> {
         //走査順はthis,L,R
-        internal LinkedNodeItemT? LinkedNodeItem;
+        private LinkedNodeItemT? LinkedNodeItem;
         internal TreeNodeT TreeNode;
         public void Reset() => this.LinkedNodeItem=this.TreeNode._LinkedNodeItem;
         /// <summary>
@@ -455,7 +482,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
         }
-        object IEnumerator.Current {
+        object Collections.IEnumerator.Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
             get => this.InternalCurrent;
@@ -773,6 +800,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// 性能のために値型の列挙子を表す
     /// </summary>
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,IgnoreDataMember]
+    [NonSerialized]
     protected internal Enumerator 変数Enumerator;
     /// <summary>
     /// 値の列挙子
@@ -782,6 +811,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         this.変数Enumerator.Reset();
         return this.変数Enumerator;
     }
+    Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator()=>this.GetEnumerator();
+    //Collections.IEnumerator Collections.IEnumerable.GetEnumerator()=>this.GetEnumerator();
     //public Write1Read1Enumerator GetWrite1Read1Enumerator() {
     //    this.変数Enumerator.Reset();
     //    return new Write1Read1Enumerator(this.変数Enumerator);
@@ -790,13 +821,11 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     //    this.変数Enumerator.Reset();
     //    return new Enumerator1(this.変数Enumerator);
     //}
-    IEnumerator<T> IEnumerable<T>.GetEnumerator() =>this.GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     /// <summary>
     /// EnumeratorをASetに返す。
     /// </summary>
     /// <returns></returns>
-    private protected override IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
+    private protected override Collections.IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
     ///// <summary>
     ///// ┌０┐
     ///// 　┌─０─┐
@@ -850,18 +879,19 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// タプル同士の比較方法。
     /// </summary>
-    internal IEqualityComparer<T> Comparer {
+    internal Generic.IEqualityComparer<T> Comparer {
         get;
         set;
     }
+
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    protected ImmutableSet():this(EqualityComparer<T>.Default){
+    protected ImmutableSet():this(Generic.EqualityComparer<T>.Default){
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(IEqualityComparer<T> Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(Generic.IEqualityComparer<T> Comparer) {
         this.変数Enumerator.TreeNode=new TreeNodeT(null);
         this.Comparer=Comparer;
     }
@@ -869,19 +899,19 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。
     /// </summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    protected ImmutableSet(IEnumerable<T> source):this(source,EqualityComparer<T>.Default) {}
+    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source):this(source,Generic.EqualityComparer<T>.Default) {}
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(IEnumerable<T> source,IEqualityComparer<T> Comparer):this(Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer):this(Comparer) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(T[] source,IEqualityComparer<T> Comparer):this(Comparer){
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(T[] source,Generic.IEqualityComparer<T> Comparer):this(Comparer){
         this.PrivateProtectedImport(source);
     }
     ///// <summary>
@@ -980,21 +1010,21 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             Debug.Assert(先TreeNode is not null&&先TreeNode.P is not null);
             先TreeNode=先TreeNode.P!;
         }
-        this._Count=source._Count;
+        this._LongCount=source._LongCount;
     }
     private protected void PrivateProtectedImport(T[] source) {
         for(var a = 0;a<source.Length;a++) {
             this.PrivateImport(source[a]);
         }
-        this._Count=source.LongLength;
+        this._LongCount=source.LongLength;
     }
-    private protected void PrivateProtectedImport(IEnumerable<T> source) {
+    private protected void PrivateProtectedImport(System.Collections.Generic.IEnumerable<T> source) {
         var Count = 0L;
         foreach(var Item in source) {
             this.PrivateImport(Item);
             Count++;
         }
-        this._Count=Count;
+        this._LongCount=Count;
     }
     private void PrivateImport(T Item) {
         var HashCode = (long)(uint)Item!.GetHashCode();
@@ -1246,9 +1276,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     ///   <see cref="ImmutableSet{T}" /> オブジェクトに関連付けられているシリアル化ストリームの転送元および転送先を格納する <see cref="StreamingContext" /> 構造体。</param>
     /// 
         protected ImmutableSet(SerializationInfo SerializationInfo,StreamingContext StreamingContext) {
-        this.Comparer=(IEqualityComparer<T>)SerializationInfo.GetValue(
+        this.Comparer=(Generic.IEqualityComparer<T>)SerializationInfo.GetValue(
             nameof(this.Comparer),
-            typeof(IEqualityComparer<T>)
+            typeof(Generic.IEqualityComparer<T>)
         )!;
         var RootNode=this.変数Enumerator.TreeNode=(TreeNodeT)SerializationInfo.GetValue(
             nameof(this.TreeRoot),
@@ -1269,9 +1299,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             var 中間=(下限+上限)>>1;
             return 検証とカウント(TreeNode.L,下限,中間)+検証とカウント(TreeNode.R,中間,上限)+Count;
         }
-        var _Count=SerializationInfo.GetInt64(nameof(this.Count));
-        this._Count=検証とカウント(RootNode,初期下限,初期上限);
-        Debug.Assert(this._Count==_Count);
+        var _Count=SerializationInfo.GetInt64(nameof(this._LongCount));
+        this._LongCount=検証とカウント(RootNode,初期下限,初期上限);
+        Debug.Assert(this._LongCount==_Count);
         this.Assert();
     }
     ///// <summary>
@@ -1341,29 +1371,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
 #pragma warning disable CA1031 // 一般的な例外の種類はキャッチしません
         } catch(Exception) {
 #pragma warning restore CA1031 // 一般的な例外の種類はキャッチしません
-            this._Count=Count;
+            this._LongCount=Count;
         }
-    }
-    /// <summary>
-    /// シリアライザから呼び出されるコンストラクタ。内部データをシリアライズしやすいように変換する。
-    /// </summary>
-    /// <param name="SerializationInfo">データ書き込み先</param>
-    /// <param name="StreamingContext"></param>
-    public void GetObjectData(SerializationInfo SerializationInfo,StreamingContext StreamingContext) {
-        SerializationInfo.AddValue(
-            nameof(this.Comparer),
-            this.Comparer,
-            typeof(IEqualityComparer<T>)
-        );
-        SerializationInfo.AddValue(
-            nameof(this.TreeRoot),
-            this.TreeRoot,
-            typeof(TreeNodeT)
-        );
-        SerializationInfo.AddValue(
-            nameof(this.Count),
-            this.Count
-        );
     }
     /// <summary>
     /// 要素を削除する。this.Count--はしない。
@@ -1517,25 +1526,223 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         }
         Debug.Assert(Level==0);
         Debug.Assert(存在してはいけないNode数==0,"存在してはいけないNode数が"+存在してはいけないNode数);
-        Debug.Assert(Count==this._Count);
+        Debug.Assert(Count==this._LongCount);
     }
+    /// <summary>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションのサブセットであるかどうかを判断します。</summary>
+    /// <returns>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> のサブセットである場合は true。それ以外の場合は false。</returns>
+    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
+    public bool IsSubsetOf(ImmutableSet<T> other) {
+        foreach(var a in this) {
+            if(!other.Contains(a)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /// <summary>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションの真のサブセット (真部分集合) であるかどうかを判断します。</summary>
+    /// <returns>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> の真のサブセットである場合は true。それ以外の場合は false。</returns>
+    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
+    public bool IsProperSubsetOf(ImmutableSet<T> other) {
+        if(this._LongCount==other._LongCount) {
+            return false;
+        }
+        foreach(var a in this) {
+            if(!other.Contains(a)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /// <summary>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションのスーパーセットであるかどうかを判断します。</summary>
+    /// <returns>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> のスーパーセットである場合は true。それ以外の場合は false。</returns>
+    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
+    public bool IsSupersetOf(ImmutableSet<T> other) {
+        foreach(var a in other) {
+            if(!this.Contains(a)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /// <summary>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションの真のスーパーセット (真上位集合) であるかどうかを判断します。</summary>
+    /// <returns>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> の真のスーパーセットである場合は true。それ以外の場合は false。</returns>
+    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
+    public bool IsProperSupersetOf(ImmutableSet<T> other) {
+        if(this._LongCount==other._LongCount) {
+            return false;
+        }
+        foreach(var a in other) {
+            if(!this.Contains(a)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /// <summary>現在の <see cref="ImmutableSet{T}" /> オブジェクトと指定されたコレクションとが共通の要素を共有しているかどうかを判断します。</summary>
+    /// <returns>
+    ///   <see cref="ImmutableSet{T}" /> オブジェクトと <paramref name="other" /> との間に共通する要素が 1 つでも存在する場合は true。それ以外の場合は false。</returns>
+    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
+    public bool Overlaps(ImmutableSet<T> other) {
+        foreach(var a in other) {
+            if(this.Contains(a)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /// <summary>
+    /// 集合としての等価。
+    /// </summary>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public bool SetEquals(IEnumerable<T> other) {
+        if(ReferenceEquals(this,other)) {
+            return true;
+        }
+        if(this.LongCount!=other.LongCount) {
+            return false;
+        }
+        if(this.GetHashCode()!=other.GetHashCode()) {
+            return false;
+        }
+        foreach(var a in this){
+            if(!other.Contains(a)){
+                return false;
+            }
+        }
+        foreach(var a in other){
+            if(!this.Contains(a)){
+                return false;
+            }
+        }
+        return true;
+        //var Comparer=this.Comparer;
+        //var second=(Set<T>)other;
+        //var TreeNode0 = this.TreeRoot;
+        //var TreeNode1=second.TreeRoot;
+        //while(true){
+        //    if(LinkedNodeItem探索(TreeNode0,TreeNode1,Comparer)) return false;
+        //    if(LinkedNodeItem探索(TreeNode1,TreeNode0,Comparer)) return false;
+        //    //for(var LinkedNodeItem0 = TreeNode0._LinkedNodeItem;LinkedNodeItem0 is not null;LinkedNodeItem0=LinkedNodeItem0._LinkedNodeItem) {
+        //    //    for(var LinkedNodeItem1 = TreeNode1!._LinkedNodeItem;LinkedNodeItem1 is not null;LinkedNodeItem1=LinkedNodeItem1._LinkedNodeItem){
+        //    //        if(Comparer.Equals(LinkedNodeItem0.Item,LinkedNodeItem1.Item)) goto 一致;
+        //    //    }
+        //    //    return false;
+        //    //    一致: ;
+        //    //}
+        //    //for(var LinkedNodeItem1 = TreeNode1!._LinkedNodeItem;LinkedNodeItem1 is not null;LinkedNodeItem1=LinkedNodeItem1._LinkedNodeItem){
+        //    //    for(var LinkedNodeItem0 = TreeNode0._LinkedNodeItem;LinkedNodeItem0 is not null;LinkedNodeItem0=LinkedNodeItem0._LinkedNodeItem) {
+        //    //        if(Comparer.Equals(LinkedNodeItem0.Item,LinkedNodeItem1.Item)) goto 一致;
+        //    //    }
+        //    //    return false;
+        //    //    一致: ;
+        //    //}
+        //    if(TreeNode探索(ref TreeNode0)){
+        //        if(TreeNode探索(ref TreeNode1))
+        //            return true;
+        //        else
+        //            return TreeNode1._LinkedNodeItem is null;
+        //    } else if(TreeNode探索(ref TreeNode1)){
+        //        return TreeNode0._LinkedNodeItem is null;
+        //    }
+        //}
+        //////return false;
+        ////if(TreeNode0.L is not null) {
+        ////    TreeNode0=TreeNode0.L;
+        ////    goto TreeNode0発見;
+        ////}
+        ////右に移動0:
+        ////if(TreeNode0.R is not null) {
+        ////    TreeNode0=TreeNode0.R;
+        ////    goto TreeNode0発見;
+        ////}
+        //////上に移動
+        ////while(TreeNode0.P is not null){
+        ////    var 旧TreeNode0_P = TreeNode0.P;
+        ////    if(旧TreeNode0_P.L==TreeNode0) {
+        ////        TreeNode0=旧TreeNode0_P;
+        ////        goto 右に移動0;
+        ////    }
+        ////    TreeNode0=旧TreeNode0_P;
+        ////}
+        ////TreeNode0発見:
+        ////if(TreeNode1.L is not null) {
+        ////    TreeNode1=TreeNode1.L;
+        ////    goto TreeNode1発見;
+        ////}
+        ////右に移動1:
+        ////if(TreeNode1.R is not null) {
+        ////    TreeNode1=TreeNode1.R;
+        ////    goto TreeNode1発見;
+        ////}
+        //////上に移動
+        ////while(TreeNode1.P is not null){
+        ////    var 旧TreeNode1_P = TreeNode1.P;
+        ////    if(旧TreeNode1_P.L==TreeNode1) {
+        ////        TreeNode1=旧TreeNode1_P;
+        ////        goto 右に移動1;
+        ////    }
+        ////    TreeNode1=旧TreeNode1_P;
+        ////}
+        //static bool LinkedNodeItem探索(TreeNodeT TreeNode0,TreeNodeT TreeNode1, Generic.IEqualityComparer<T> Comparer){
+        //    for(var LinkedNodeItem0 = TreeNode0._LinkedNodeItem;LinkedNodeItem0 is not null;LinkedNodeItem0=LinkedNodeItem0._LinkedNodeItem) {
+        //        for(var LinkedNodeItem1 = TreeNode1!._LinkedNodeItem;LinkedNodeItem1 is not null;LinkedNodeItem1=LinkedNodeItem1._LinkedNodeItem){
+        //            if(Comparer.Equals(LinkedNodeItem0.Item,LinkedNodeItem1.Item)) goto 一致;
+        //        }
+        //        return true;
+        //        一致: ;
+        //    }
+        //    return false;
+        //}
+        //static bool TreeNode探索(ref TreeNodeT TreeNode){
+        //    if(TreeNode.L is not null) {
+        //        TreeNode=TreeNode.L;
+        //        return false;
+        //    }
+        //    右に移動:
+        //    if(TreeNode.R is not null) {
+        //        TreeNode=TreeNode.R;
+        //        return false;
+        //    }
+        //    //上に移動
+        //    while(TreeNode.P is not null){
+        //        var 旧TreeNode0_P = TreeNode.P;
+        //        if(旧TreeNode0_P.L==TreeNode) {
+        //            TreeNode=旧TreeNode0_P;
+        //            goto 右に移動;
+        //        }
+        //        TreeNode=旧TreeNode0_P;
+        //    }
+        //    return true;
+        //}
+    }
+    public bool Equals(IEnumerable<T>? other)=>other is not null&&this.SetEquals(other);
+    public override bool Equals(object? obj)=>obj is IEnumerable<T>other&&this.SetEquals(other);
     /// <summary>コレクションの集合としてのHashCode</summary>
     /// <returns>コレクションの集合としてのHashCode</returns>
-    public override int GetHashCode() {
-        var CRC = new CRC.CRC32();
+    public override int GetHashCode(){
+        var CRC = new CRC32();
         var TreeNode = this.TreeRoot;
-    LinkedNodeItem走査:
+LinkedNodeItem走査:
         var HashCode = 0;
         for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
             Debug.Assert(LinkedNodeItem.Item is not null);
-            HashCode^=LinkedNodeItem.Item!.GetHashCode();
+            CRC.Input(LinkedNodeItem.Item);
         }
         CRC.Input(HashCode);
         if(TreeNode.L is not null) {
             TreeNode=TreeNode.L;
             goto LinkedNodeItem走査;
         }
-    右に移動:
+右に移動:
         if(TreeNode.R is not null) {
             TreeNode=TreeNode.R;
             goto LinkedNodeItem走査;
@@ -1552,110 +1759,11 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         return CRC.GetHashCode();
     }
     /// <summary>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションのサブセットであるかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> のサブセットである場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool IsSubsetOf(ImmutableSet<T> other) {
-        foreach(var a in this) {
-            if(!ExtensionSet.Contains(other,a)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /// <summary>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションの真のサブセット (真部分集合) であるかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> の真のサブセットである場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool IsProperSubsetOf(ImmutableSet<T> other) {
-        if(this.Count==other.Count) {
-            return false;
-        }
-        foreach(var a in this) {
-            if(!ExtensionSet.Contains(other,a)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /// <summary>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションのスーパーセットであるかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> のスーパーセットである場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool IsSupersetOf(ImmutableSet<T> other) {
-        foreach(var a in other) {
-            if(!ExtensionSet.Contains(this,a)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /// <summary>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが、指定されたコレクションの真のスーパーセット (真上位集合) であるかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> の真のスーパーセットである場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool IsProperSupersetOf(ImmutableSet<T> other) {
-        if(this.Count==other.Count) {
-            return false;
-        }
-        foreach(var a in other) {
-            if(!ExtensionSet.Contains(this,a)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /// <summary>現在の <see cref="ImmutableSet{T}" /> オブジェクトと指定されたコレクションとが共通の要素を共有しているかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトと <paramref name="other" /> との間に共通する要素が 1 つでも存在する場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool Overlaps(ImmutableSet<T> other) {
-        foreach(var a in other) {
-            if(ExtensionSet.Contains(this,a)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    /// <summary>
-    /// 集合としての等価。
-    /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
-    public bool SetEquals(ImmutableSet<T> other) {
-        if(ReferenceEquals(this,other)) {
-            return true;
-        }
-        if(this.Count!=other.Count) {
-            return false;
-        }
-        if(this.GetHashCode()!=other.GetHashCode()) {
-            return false;
-        }
-        foreach(var a in this) {
-            if(!ExtensionSet.Contains(other,a)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /// <summary>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトと指定されたコレクションに同じ要素が存在するかどうかを判断します。</summary>
-    /// <returns>
-    ///   <see cref="ImmutableSet{T}" /> オブジェクトが <paramref name="other" /> と等しい場合は true。それ以外の場合は false。</returns>
-    /// <param name="other">現在の <see cref="ImmutableSet{T}" /> オブジェクトと比較するコレクション。</param>
-    public bool Equals(ImmutableSet<T>? other) => this.SetEquals(other);
-    public override bool Equals(object? obj) => obj is ImmutableSet<T> other&&this.Equals(other);
-    /// <summary>
     /// 配列に変換する。
     /// </summary>
     /// <returns></returns>
     public T[] ToArray() {
-        var array = new T[this.Count];
+        var array = new T[this._LongCount];
         var ArrayIndex = 0L;
         foreach(var a in this) {
             array[ArrayIndex++]=a;
@@ -1665,16 +1773,19 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
     /// <summary>
     /// 濃度0の集合。
     /// </summary>
-    public static readonly ImmutableSet<T> EmptySet = new Set<T>();
+    public static readonly IEnumerable<T> EmptySet = new Set<T>();
     /// <summary>
     /// <see cref="ImmutableSet{T}" />の文字列表現
     /// </summary>
     /// <returns></returns>
-    public override string ToString() => $"{nameof(this.Count)}:{this.Count}";
+    public override string ToString() => $"{nameof(this.LongCount)}:{this.LongCount}";
+
+
+
     /// <summary>
-    /// ILで<see cref="ImmutableSet{T}" />,<see cref="IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
+    /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
     /// </summary>
-    internal struct FILO:IEnumerator<T> {
+    internal struct FILO:Generic.IEnumerator<T> {
         private LinkedNodeItemT? LinkedListNode;
         /// <summary>
         /// 要素数
@@ -1682,7 +1793,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         internal long Count;
         public T Current{get;private set;}
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object IEnumerator.Current => this.Current;
+        object Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1716,14 +1827,14 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         }
         public void Dispose() {
         }
-        bool IEnumerator.MoveNext() => this.MoveNext();
+        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
         public void Reset() {
         }
     }
     /// <summary>
-    /// ILで<see cref="ImmutableSet{T}" />,<see cref="IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
+    /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
     /// </summary>
-    internal struct FIFO:IEnumerator<T>{
+    internal struct FIFO:Generic.IEnumerator<T>{
         private LinkedNodeT FirstNode;
         private LinkedNodeT LastNode;
         private LinkedNodeT CurrentNode;
@@ -1731,7 +1842,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
             get; private set;
         }
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object IEnumerator.Current => this.Current;
+        object Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1768,9 +1879,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IOutputSet<T>, IEquatable<Im
         }
         public void Dispose() {
         }
-        bool IEnumerator.MoveNext() => this.MoveNext();
+        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
         public bool SequenceEqual(FIFO other) {
-            var EqualityComparer=EqualityComparer<T>.Default;
+            var EqualityComparer=Generic.EqualityComparer<T>.Default;
             var a =this.FirstNode._LinkedNodeItem;
             var b = other.FirstNode._LinkedNodeItem;
             while(a is not null&&b is not null) {

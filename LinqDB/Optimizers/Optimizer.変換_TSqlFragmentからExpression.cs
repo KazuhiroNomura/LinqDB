@@ -41,7 +41,7 @@ public sealed partial class Optimizer{
             }
             return null;
         }
-        private IEnumerable<e.ParameterExpression>Variables=>this.List_ScalarVariable.Concat(
+        private System.Collections.Generic.IEnumerable<e.ParameterExpression>Variables=>this.List_ScalarVariable.Concat(
             this.List_定義型TableVariable
         ).Concat(
             this.List_匿名型TableVariable.Select(p=>p.Variable)
@@ -1597,7 +1597,7 @@ public sealed partial class Optimizer{
                 case "VALUE":{
                     Debug.Assert(x_Parameters.Count == 2);
                     //'nvarchar'のようにリテラルなのでシングルクォートなので削除するべき
-                    var DBType = this.SQL取得(x_Parameters[1])[1..^1];
+                    var DBType = this.SQL取得(x_Parameters[1])[1..^1].ToUpperInvariant();
                     //Typeに合うようにExpressionを変形する()
                     var value=DBType switch{
                         "BIT"             =>Product.SQLServer.Reflection.value_Boolean,
@@ -1888,7 +1888,7 @@ public sealed partial class Optimizer{
                         )
                     ) return MethodCall;
                     break;
-                    bool 共通(IEnumerable<MethodInfo> Methods,ref e.MethodCallExpression MethodCall) {
+                    bool 共通(System.Collections.Generic.IEnumerable<MethodInfo> Methods,ref e.MethodCallExpression MethodCall) {
                         var List_Method=Methods.ToList();
                         if(List_Method.Count!=1) return false;
                         var Method= List_Method[0];
@@ -3372,7 +3372,7 @@ public sealed partial class Optimizer{
             if(Right.Type.IsArray) {
             }else if(Right.Type==typeof(string)) {
             } else { 
-                var IEnumerable1 = Right.Type.GetInterface(CommonLibrary.IEnumerable1_FullName);
+                var IEnumerable1 = Right.Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
                 if(IEnumerable1 is not null) {
                     //var SingleOrDefault=e.Expression.Call(Reflection.ExtensionSet.SingleOrDefault.MakeGenericMethod(IEnumerable1.GetGenericArguments()),Right);
                     //return e.Expression.Call(作業配列.MakeGenericMethod(Reflection.ExtensionSet.SingleOrDefault,Lambda_Body_Type),MethodCall);

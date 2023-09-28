@@ -22,7 +22,7 @@ public class Set<TValue>:MemoryPackFormatter<Sets.Set<TValue>>{
     private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         writer.WriteType(value!.GetType());
-        var Count=value.Count;
+        var Count=value.LongCount;
         var Formatter=writer.GetFormatter<TValue>();
         writer.WriteVarInt(Count);
         foreach(var item in value){
@@ -64,7 +64,7 @@ public class Set<TValue,TKey>:MemoryPackFormatter<Sets.Set<TValue,TKey>>
     private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue,TKey>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         writer.WriteType(value!.GetType());
-        var Count=value.Count;
+        var Count=value.LongCount;
         var Formatter=writer.GetFormatter<TValue>();
         writer.WriteVarInt(Count);
         foreach(var item in value){
@@ -106,7 +106,7 @@ public class Set<TValue,TKey,TContainer>:MemoryPackFormatter<Sets.Set<TValue,TKe
 #pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
     private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue,TKey,TContainer> value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value.GetType());
-        var Count=value.Count;
+        var Count=value.LongCount;
         var Formatter=writer.GetFormatter<TValue>();
         writer.WriteVarInt(Count);
         foreach(var item in value){

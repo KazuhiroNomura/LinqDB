@@ -24,7 +24,7 @@ public static class ExtensionEnumerable{
     //    Debug.Assert(source is not null&&aggregatesSelector is not null);
     //    return aggregatesSelector(source);
     //}
-    private static LookupList<TValue,TKey> PrivateDictionaryList<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,TKey> keySelector,IEqualityComparer<TKey> comparer) {
+    private static LookupList<TValue,TKey> PrivateDictionaryList<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,TKey> keySelector,IEqualityComparer<TKey> comparer) {
         var r = new LookupList<TValue,TKey>(comparer);
         foreach(var value in source)
             r.AddKeyValue(
@@ -41,7 +41,7 @@ public static class ExtensionEnumerable{
     /// <typeparam name="TValue"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,TKey> keySelector) => PrivateDictionaryList(source,keySelector,EqualityComparer<TKey>.Default);
+    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,TKey> keySelector) => PrivateDictionaryList(source,keySelector,EqualityComparer<TKey>.Default);
     /// <summary>
     /// ハッシュアルゴリズムに使う。comparerで比較する。
     /// </summary>
@@ -51,8 +51,8 @@ public static class ExtensionEnumerable{
     /// <typeparam name="TValue"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,TKey> keySelector,IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
-    private static LookupList<TValue,TKey> PrivateDictionaryList<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector,IEqualityComparer<TKey> comparer) {
+    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,TKey> keySelector,IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
+    private static LookupList<TValue,TKey> PrivateDictionaryList<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector,IEqualityComparer<TKey> comparer) {
         var r = new LookupList<TValue,TKey>(comparer);
         var Index=0;
         foreach(var value in source)
@@ -70,7 +70,7 @@ public static class ExtensionEnumerable{
     /// <typeparam name="TValue"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector) => PrivateDictionaryList(source,keySelector,EqualityComparer<TKey>.Default);
+    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector) => PrivateDictionaryList(source,keySelector,EqualityComparer<TKey>.Default);
     /// <summary>
     /// ハッシュアルゴリズムに使う。comparerで比較する。
     /// </summary>
@@ -80,7 +80,7 @@ public static class ExtensionEnumerable{
     /// <typeparam name="TValue"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector,IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
+    public static LookupList<TValue,TKey> Lookup<TValue, TKey>(this System.Collections.Generic.IEnumerable<TValue> source,Func<TValue,int,TKey> keySelector,IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
     ///// <summary>
     ///// キーが等しいかどうかに基づいて 2つの集合の要素を相互に関連付け、その結果をグループ化します。
     ///// </summary>

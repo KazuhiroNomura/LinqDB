@@ -307,7 +307,7 @@ public class Transaction {
     [Fact]
     public void Transactionログ1(){
         {
-            IEnumerable<int>set = new int[]{
+            System.Collections.Generic.IEnumerable<int>set = new int[]{
                 1,2,3
             };
         }
@@ -336,13 +336,13 @@ public class Transaction {
             for(var b = 0;b<回数;b++) {
                 新規Container0.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
             }
-            Assert.Equal(0,新規Container.dbo.Entity1.Count);
-            var expected=新規Container0.dbo.Entity1.Count;
+            Assert.Equal(0,新規Container.dbo.Entity1.LongCount);
+            var expected=新規Container0.dbo.Entity1.LongCount;
             Assert.NotEqual(0,expected);
             新規Container0.Commit();
             //Writerがないので書き込めない。ログを読み込むことはできても書き込まない設定はどうすれば
-            Assert.Equal(expected,新規Container.dbo.Entity1.Count);
-            Assert.Equal(expected,新規Container0.dbo.Entity1.Count);
+            Assert.Equal(expected,新規Container.dbo.Entity1.LongCount);
+            Assert.Equal(expected,新規Container0.dbo.Entity1.LongCount);
             新規Container.Commit();
             //w0.Close();
             s0.Close();
@@ -480,7 +480,7 @@ public class Transaction {
             return new JsonFormatter<T>();
         }
     }
-    private static Expression<Func<int[],IEnumerable<int>>> シリアライズデータ=>
+    private static Expression<Func<int[],System.Collections.Generic.IEnumerable<int>>> シリアライズデータ=>
         入力=>
             from a in 入力
             join b in 入力 on a equals b

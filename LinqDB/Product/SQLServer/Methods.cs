@@ -671,7 +671,7 @@ public static class Methods {
     //テキストとイメージ関数	テキスト入力値、イメージ入力値、または列に対して操作を実行し、値についての情報を返します。
     //バイナリー
     public static ImmutableSet<XElement> nodes(XDocument XDocument,string XPath) => new Set<XElement>(XDocument.XPathSelectElements(XPath));
-    public static IEnumerable<XElement> query(XNode XNode,string? XPath) => XNode.XPathSelectElements(XPath);
+    public static System.Collections.Generic.IEnumerable<XElement> query(XNode XNode,string? XPath) => XNode.XPathSelectElements(XPath);
     public static bool? value_Boolean(XDocument XDocument,string XPath)
     {
         var Element = XDocument.XPathSelectElement(XPath);

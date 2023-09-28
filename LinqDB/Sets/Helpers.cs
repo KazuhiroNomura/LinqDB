@@ -49,7 +49,7 @@ public static class Helpers {
     /// <param name="values">元データ</param>
     /// <typeparam name="T">要素の型</typeparam>
     /// <returns>作られたSet</returns>
-    public static Set<T> ToSet<T>(this IEnumerable<T> values)=> new(values);
+    public static Set<T> ToSet<T>(this System.Collections.Generic.IEnumerable<T> values)=> new(values);
     /// <summary>
     /// valuesからSetを作る
     /// </summary>

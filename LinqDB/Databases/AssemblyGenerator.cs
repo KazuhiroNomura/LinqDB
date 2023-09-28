@@ -615,7 +615,7 @@ public partial class AssemblyGenerator {
         var 子Table_Information = Dictionary_Table[子Table];
         var 子Table_TypeBuilder = 子Table_Information.TypeBuilder;
         Types1[0]=子Table_TypeBuilder;
-        var ImmutableSet1 = typeof(ImmutableSet<>).MakeGenericType(Types1);
+        var ImmutableSet1 = typeof(Sets.IEnumerable<>).MakeGenericType(Types1);
         Types1[0]=親Table_TypeBuilder;
         var ChildExtensions_Method = ChildExtensions.DefineMethod(Name,Public_HideBySig_Static,ImmutableSet1,Types1);
         ChildExtensions_Method.InitLocals=false;

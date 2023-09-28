@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Generic=System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -24,7 +24,7 @@ public static class ExtensionSet{
     /// <param name="func">各要素に対して呼び出すアキュムレータ関数。</param>
     /// <typeparam name="TSource"></typeparam>
     /// <returns>集約結果。</returns>
-    public static TSource Aggregate<TSource>(this ImmutableSet<TSource> source,Func<TSource,TSource,TSource> func) {
+    public static TSource Aggregate<TSource>(this IEnumerable<TSource> source,Func<TSource,TSource,TSource> func) {
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext())throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var seed = Enumerator.Current;
@@ -40,7 +40,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TAccumulate"></typeparam>
     /// <returns>集約結果。</returns>
-    public static TAccumulate Aggregate<TSource, TAccumulate>(this ImmutableSet<TSource> source,TAccumulate seed,Func<TAccumulate,TSource,TAccumulate> func) {
+    public static TAccumulate Aggregate<TSource, TAccumulate>(this IEnumerable<TSource> source,TAccumulate seed,Func<TAccumulate,TSource,TAccumulate> func) {
         foreach(var a in source)seed=func(seed,a);
         return seed;
     }
@@ -55,18 +55,18 @@ public static class ExtensionSet{
     /// <typeparam name="TAccumulate"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <returns>集約結果。</returns>
-    public static TResult Aggregate<TSource, TAccumulate, TResult>(this ImmutableSet<TSource> source,TAccumulate seed,Func<TAccumulate,TSource,TAccumulate> func,Func<TAccumulate,TResult> resultSelector) {
+    public static TResult Aggregate<TSource, TAccumulate, TResult>(this IEnumerable<TSource> source,TAccumulate seed,Func<TAccumulate,TSource,TAccumulate> func,Func<TAccumulate,TResult> resultSelector) {
         foreach(var a in source)seed=func(seed,a);
         return resultSelector(seed);
     }
 
     /// <summary>集合のすべての要素が条件を満たしているかどうかを判断します。</summary>
     /// <returns>指定された述語でソース 集合のすべての要素がテストに合格する場合は true。それ以外の場合は false。</returns>
-    /// <param name="source">述語を適用する要素を格納している <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">述語を適用する要素を格納している <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="predicate">各要素が条件を満たしているかどうかをテストする関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static bool All<TSource>(this ImmutableSet<TSource> source,Func<TSource,bool> predicate) {
+    public static bool All<TSource>(this IEnumerable<TSource> source,Func<TSource,bool> predicate) {
         foreach(var a in source)
             if(!predicate(a))
                 return false;
@@ -74,15 +74,15 @@ public static class ExtensionSet{
     }
     /// <summary>集合に要素が含まれているかどうかを判断します。</summary>
     /// <returns>ソース 集合に要素が含まれている場合は true。それ以外の場合は false。</returns>
-    /// <param name="source">空かどうかを確認する <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">空かどうかを確認する <see cref="IEnumerable{TSource}" />。</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool Any<T>(this ImmutableSet<T> source)=>source.Count>0;
+    public static bool Any<T>(this IEnumerable<T> source)=>source.LongCount>0;
 
     /// <summary>null 許容の <see cref="decimal?" /> 値の集合の算術平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="decimal?" /> 値の集合。</param>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal? Average(this ImmutableSet<decimal?> source) {
+    public static decimal? Average(this IEnumerable<decimal?> source) {
         decimal Sum = 0;
         long Int64Count = 0;
         foreach(var a in source){
@@ -99,8 +99,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Average(this ImmutableSet<decimal> source) {
-        var Int64Count = source.Count;
+    public static decimal Average(this IEnumerable<decimal> source) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         decimal Sum = 0;
         foreach(var a in source)Sum+=a;
@@ -109,7 +109,7 @@ public static class ExtensionSet{
     /// <summary>null 許容の <see cref="double?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="double?" /> 値の集合。</param>
-    public static double? Average(this ImmutableSet<double?> source) {
+    public static double? Average(this IEnumerable<double?> source) {
         double Sum = 0;
         long Int64Count = 0;
         foreach(var a in source){
@@ -125,8 +125,8 @@ public static class ExtensionSet{
     /// <param name="source">平均値計算の対象となる <see cref="double" /> 値の集合。</param>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Average(this ImmutableSet<double> source) {
-        var Int64Count = source.Count;
+    public static double Average(this IEnumerable<double> source) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         double Sum = 0;
         foreach(var a in source)Sum+=a;
@@ -135,7 +135,7 @@ public static class ExtensionSet{
     /// <summary>null 許容の <see cref="float?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="float?" /> 値の集合。</param>
-    public static float? Average(this ImmutableSet<float?> source) {
+    public static float? Average(this IEnumerable<float?> source) {
         double Sum = 0;
         long Int64Count = 0;
         foreach(var a in source){
@@ -151,8 +151,8 @@ public static class ExtensionSet{
     /// <param name="source">平均値計算の対象となる <see cref="float" /> 値の集合。</param>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static float Average(this ImmutableSet<float> source) {
-        var Int64Count = source.Count;
+    public static float Average(this IEnumerable<float> source) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         double Sum = 0;
         foreach(var a in source)Sum+=a;
@@ -161,7 +161,7 @@ public static class ExtensionSet{
     /// <summary>null 許容の <see cref="long?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="long?" /> 値の集合。</param>
-    public static double? Average(this ImmutableSet<long?> source) {
+    public static double? Average(this IEnumerable<long?> source) {
         long Sum = 0;
         long Int64Count = 0;
         foreach(var a in source){
@@ -177,8 +177,8 @@ public static class ExtensionSet{
     /// <param name="source">平均値計算の対象となる <see cref="long" /> 値の集合。</param>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Average(this ImmutableSet<long> source) {
-        var Count = source.Count;
+    public static double Average(this IEnumerable<long> source) {
+        var Count = source.LongCount;
         if(Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         long Sum = 0;
         foreach(var a in source)Sum+=a;
@@ -187,7 +187,7 @@ public static class ExtensionSet{
     /// <summary>null 許容の <see cref="int?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="int?" /> 値の集合。</param>
-    public static int? Average(this ImmutableSet<int?> source) {
+    public static int? Average(this IEnumerable<int?> source) {
         var Sum = 0;
         var Int64Count = 0;
         foreach(var a in source){
@@ -203,8 +203,8 @@ public static class ExtensionSet{
     /// <param name="source">平均値計算の対象となる <see cref="int" /> 値の集合。</param>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Average(this ImmutableSet<int> source) {
-        var Int64Count = source.Count;
+    public static double Average(this IEnumerable<int> source) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         var Sum = 0;
         foreach(var a in source)Sum+=a;
@@ -217,7 +217,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal? Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal?> selector) {
+    public static decimal? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         decimal Sum = 0;
         long Int64Count = 0;
         foreach(var a in source) {
@@ -237,8 +237,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
-        var Count = source.Count;
+    public static decimal Average<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
+        var Count = source.LongCount;
         if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         decimal Sum = 0;
         foreach(var a in source)Sum+=selector(a);
@@ -251,7 +251,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static double? Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         double Sum = 0;
         long Int64Count = 0;
         foreach(var a in source) {
@@ -270,8 +270,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.Count;
+    public static double Average<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         foreach(var a in source)Sum+=selector(a);
@@ -283,7 +283,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static float? Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,float?> selector) {
+    public static float? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,float?> selector) {
         float Sum = 0;
         long Int64Count = 0;
         foreach(var a in source) {
@@ -302,8 +302,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static float Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,float> selector) {
-        var Int64Count = source.Count;
+    public static float Average<TSource>(this IEnumerable<TSource> source,Func<TSource,float> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         float Sum = 0;
         foreach(var a in source)Sum+=selector(a);
@@ -315,7 +315,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static long? Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,long?> selector) {
+    public static long? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
         var Sum = 0L;
         var Int64Count = 0L;
         foreach(var a in source) {
@@ -334,8 +334,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static long Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,long> selector) {
-        var Int64Count = source.Count;
+    public static long Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Sum = 0L;
         foreach(var a in source)Sum+=selector(a);
@@ -347,7 +347,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static int? Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,int?> selector) {
+    public static int? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
         var Sum = 0;
         var Int64Count = 0L;
         foreach(var a in source) {
@@ -366,14 +366,14 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static int Average<TSource>(this ImmutableSet<TSource> source,Func<TSource,int> selector) {
-        var Count = source.Count;
+    public static int Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
+        var Count = source.LongCount;
         if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Sum = 0L;
         foreach(var a in source)Sum+=selector(a);
         return (int)(Sum/Count);
     }
-    private static (decimal[] Array, decimal 合計) 合計値を求める<TSource>(ImmutableSet<TSource> source,Func<TSource,decimal> selector,long Count,MethodBase Method) {
+    private static (decimal[] Array, decimal 合計) 合計値を求める<TSource>(IEnumerable<TSource> source,Func<TSource,decimal> selector,long Count,MethodBase Method) {
         if(Count==0)throw シーケンスに要素が含まれていません(Method);
         var Array = new decimal[Count];
         decimal Sum = 0;
@@ -385,7 +385,7 @@ public static class ExtensionSet{
         }
         return (Array, Sum);
     }
-    private static (double[] Array, double 合計) 合計値を求める<TSource>(ImmutableSet<TSource> source,Func<TSource,double> selector,long Count,MethodBase Method) {
+    private static (double[] Array, double 合計) 合計値を求める<TSource>(IEnumerable<TSource> source,Func<TSource,double> selector,long Count,MethodBase Method) {
         if(Count==0)throw シーケンスに要素が含まれていません(Method);
         var Array = new double[Count];
         double Sum = 0;
@@ -408,10 +408,10 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Avedev<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
+    public static double Avedev<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
         //解答：算術平均値は (2+3+4+7+9) / 5=5 
         //平均偏差は (|2−5|+|3−5|+|4−5|+|7−5|+|9−5|)/5=(3+2+1+2+4) / 5=2.4
-        var Count = source.Count;
+        var Count = source.LongCount;
         var (Array, Sum)=合計値を求める(source,selector,Count,MethodBase.GetCurrentMethod()!);
         double DoubleCount = Count;
         var Average = Sum/DoubleCount;
@@ -424,22 +424,22 @@ public static class ExtensionSet{
         return Sum/DoubleCount;
     }
     /// <summary>
-    ///   <see cref="ImmutableSet" /> の要素を、指定した型に変換します。</summary>
-    /// <returns>指定した型に変換されたソース 集合の各要素が格納されている <see cref="ImmutableSet{TResult}" />。</returns>
-    /// <param name="source">変換する要素が格納されている <see cref="ImmutableSet" />。</param>
+    ///   <see cref="IEnumerable" /> の要素を、指定した型に変換します。</summary>
+    /// <returns>指定した型に変換されたソース 集合の各要素が格納されている <see cref="IEnumerable{TResult}" />。</returns>
+    /// <param name="source">変換する要素が格納されている <see cref="IEnumerable" />。</param>
     /// <typeparam name="TResult">
     ///   <paramref name="source" /> の要素の変換後の型。</typeparam>
     /// <exception cref="InvalidCastException">集合の要素を <paramref>
     ///         <name>TResult</name>
     ///     </paramref>
     ///     型にキャストできません。</exception>
-    public static ImmutableSet<TResult> Cast<TResult>(this ImmutableSet source) {
+    public static IEnumerable<TResult> Cast<TResult>(this IEnumerable source) {
         var r = new Set<TResult>();
         long Int64Count = 0;
         foreach(var a in source)
             if(r.InternalAdd((TResult)a!))
                 Int64Count++;
-        r._Count=Int64Count;
+        r._LongCount=Int64Count;
         return r;
     }
     /// <summary>既定の等値比較子を使用して、指定した要素が集合に含まれているかどうかを判断します。</summary>
@@ -448,34 +448,34 @@ public static class ExtensionSet{
     /// <param name="value">集合内で検索する値。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static bool Contains<TSource>(this ImmutableSet<TSource> source,TSource value) => source.InternalContains(value);
+    public static bool Contains<TSource>(this IEnumerable<TSource> source,TSource value)=>source is ImmutableSet<TSource> Set&&Set.InternalContains(value);
     /// <summary>指定された集合の要素を返します。集合が空の場合はシングルトン コレクションにある型パラメーターの既定値を返します。</summary>
     /// <returns>
-    ///   <paramref name="source" /> が空の場合は<see cref="ImmutableSet{TSource}" />。それ以外の場合は <paramref name="source" />。</returns>
+    ///   <paramref name="source" /> が空の場合は<see cref="IEnumerable{TSource}" />。それ以外の場合は <paramref name="source" />。</returns>
     /// <param name="source">集合が空の場合に、指定された値を返す集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static ImmutableSet<TSource?> DefaultIfEmpty<TSource>(this ImmutableSet<TSource?> source)=>source.Count>0
+    public static IEnumerable<TSource?> DefaultIfEmpty<TSource>(this IEnumerable<TSource?> source)=>source.LongCount>0
         ?source
         :new Set<TSource?> {
-            _Count=1,
+            _LongCount=1,
             TreeRoot={
                 R = new Set<TSource?>.TreeNodeT(null){
                     _LinkedNodeItem = new Set<TSource?>.LinkedNodeItemT(default)
                 }
             }
         };
-    //=> (ImmutableSet<TSource?>)DefaultIfEmpty(source,default!);
+    //=> (IEnumerable<TSource?>)DefaultIfEmpty(source,default!);
     /// <summary>指定された集合の要素を返します。集合が空の場合はシングルトン コレクションにある型パラメーターの既定値を返します。</summary>
     /// <returns>
-    ///   <paramref name="source" /> が空の場合は <paramref name="defaultValue" /> が格納されている <see cref="ImmutableSet{TSource}" />。それ以外の場合は <paramref name="source" />。</returns>
+    ///   <paramref name="source" /> が空の場合は <paramref name="defaultValue" /> が格納されている <see cref="IEnumerable{TSource}" />。それ以外の場合は <paramref name="source" />。</returns>
     /// <param name="source">集合が空の場合に、指定された値を返す集合。</param>
     /// <param name="defaultValue">集合が空の場合に返す値。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static ImmutableSet<TSource> DefaultIfEmpty<TSource>(this ImmutableSet<TSource> source,TSource defaultValue)=>source.Count>0
+    public static IEnumerable<TSource> DefaultIfEmpty<TSource>(this IEnumerable<TSource> source,TSource defaultValue)=>source.LongCount>0
         ?source:new Set<TSource> {
-            _Count=1,
+            _LongCount=1,
             TreeRoot={
                 R = new Set<TSource>.TreeNodeT(null){
                     _LinkedNodeItem = new Set<TSource>.LinkedNodeItemT(defaultValue)
@@ -492,7 +492,7 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">キー型</typeparam>
     /// <returns></returns>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Global
-    public static LookupSet<TSource,TKey> Lookup<TSource, TKey>(this ImmutableSet<TSource> source,Func<TSource,TKey> keySelector) {
+    public static LookupSet<TSource,TKey> Lookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
         var r = new LookupSet<TSource,TKey>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
         return r;
@@ -505,23 +505,23 @@ public static class ExtensionSet{
     /// <typeparam name="TSource"></typeparam>
     /// <returns>和集合。</returns>
     /// <exception cref="OneTupleException"></exception>
-    public static ImmutableSet<TSource> DUnion<TSource>(this ImmutableSet<TSource> source,ImmutableSet<TSource> second) {
+    public static IEnumerable<TSource> DUnion<TSource>(this IEnumerable<TSource> source,IEnumerable<TSource> second) {
         var r = new Set<TSource>(source);
         long Count = 0;
         foreach(var a in second) {
             if(!r.InternalAdd(a)) throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
             Count++;
         }
-        r._Count+=Count;
+        r._LongCount+=Count;
         return r;
     }
     /// <summary>既定の等値比較子を使用して値を比較することにより、2 つの集合の差集合を生成します。</summary>
     /// <returns>2 つの集合の要素の差集合が格納されている集合。</returns>
     /// <param name="first">
-    ///   <paramref name="second" /> には含まれていないが、返される要素を含む <see cref="ImmutableSet{TSource}" />。</param>
-    /// <param name="second">最初の集合にも含まれ、返された集合からは削除される要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    ///   <paramref name="second" /> には含まれていないが、返される要素を含む <see cref="IEnumerable{TSource}" />。</param>
+    /// <param name="second">最初の集合にも含まれ、返された集合からは削除される要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">入力集合の要素の型。</typeparam>
-    public static ImmutableSet<TSource> Except<TSource>(this ImmutableSet<TSource> first,ImmutableSet<TSource> second) {
+    public static IEnumerable<TSource> Except<TSource>(this IEnumerable<TSource> first,IEnumerable<TSource> second) {
         var r = new Set<TSource>(first);
         r.ExceptWith(second);
         return r;
@@ -531,7 +531,7 @@ public static class ExtensionSet{
     /// <param name="selector"></param>
     /// <typeparam name="TSource"></typeparam>
     /// <returns>値の集合の幾何平均値。</returns>
-    public static double? Geomean<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Geomean<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         //A,B,Cのデータがあった場合、
         //理論上は、
         //Math.Pow(
@@ -558,8 +558,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Geomean<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.Count;
+    public static double Geomean<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         //A,B,Cのデータがあった場合、
@@ -575,7 +575,7 @@ public static class ExtensionSet{
     /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TElement>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TElement))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、<paramref>
     ///<name>TElement</name>
     ///</paramref>型のオブジェクトのコレクション、およびキーが格納されています。</returns>
-    /// <param name="source">グループ化する要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
     /// <param name="elementSelector">ソースの各要素を <see cref="GroupingSet{TKey, TElement}" /> の要素に割り当てる関数。</param>
     /// <typeparam name="TSource">
@@ -583,32 +583,32 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TElement">
-    ///   <see cref="IGroupingSet{TKey, TElement}" /> の要素の型。</typeparam>
-    public static ImmutableSet<GroupingSet<TKey,TElement>> GroupBy<TSource, TKey, TElement>(this ImmutableSet<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
+    ///   <see cref="IGrouping{TKey, TElement}" /> の要素の型。</typeparam>
+    public static IEnumerable<GroupingSet<TKey,TElement>> GroupBy<TSource, TKey, TElement>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
         var r = new SetGroupingSet<TKey,TElement>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
-        Debug.Assert(r.Count<=source.Count);
+        Debug.Assert(r.LongCount<=source.LongCount);
         return r;
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化します。</summary>
-    /// <returns>C# では ImmutableSet&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では ImmutableSet(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
+    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="resultSelector" /> によって返される結果値の型。</typeparam>
-    public static ImmutableSet<TResult> GroupBy<TSource,TKey, TResult>(this ImmutableSet<TSource> source,Func<TSource,TKey> keySelector,Func<TKey,ImmutableSet<TSource>,TResult> resultSelector) {
+    public static IEnumerable<TResult> GroupBy<TSource,TKey, TResult>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TKey,IEnumerable<TSource>,TResult> resultSelector) {
         var r = new SetGroupingSet<TKey,TSource>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
-        Debug.Assert(r.Count<=source.Count);
+        Debug.Assert(r.LongCount<=source.LongCount);
         var r0 = new Set<TResult>();
         foreach(var a in r)r0.Add(resultSelector(a.Key,a));
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化します。</summary>
-    /// <returns>C# では ImmutableSet&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では ImmutableSet(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
-    /// <param name="source">グループ化する要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
+    /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
     /// <param name="elementSelector"></param>
     /// <param name="resultSelector"></param>
@@ -617,33 +617,33 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TElement">
-    ///   <see cref="IGroupingSet{TKey, TElement}" /> の要素の型。</typeparam>
+    ///   <see cref="IGrouping{TKey, TElement}" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="resultSelector" /> によって返される結果値の型。</typeparam>
-    public static ImmutableSet<TResult> GroupBy<TSource, TKey, TElement, TResult>(this ImmutableSet<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector,Func<TKey,ImmutableSet<TElement>,TResult> resultSelector) {
+    public static IEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector,Func<TKey,IEnumerable<TElement>,TResult> resultSelector) {
         var r = new SetGroupingSet<TKey,TElement>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
-        Debug.Assert(r.Count<=source.Count);
+        Debug.Assert(r.LongCount<=source.LongCount);
         var r0 = new Set<TResult>();
         foreach(var a in r)r0.Add(resultSelector(a.Key,a));
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従ってシーケンスの要素をグループ化し、各グループとそのキーから結果値を作成します。</summary>
     /// <returns>C# では IEnumerable&lt;IGrouping&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
-    /// <param name="source">グループ化する要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
-    public static ImmutableSet<GroupingSet<TKey,TSource>> GroupBy<TSource, TKey>(this ImmutableSet<TSource> source,Func<TSource,TKey> keySelector) {
+    public static IEnumerable<GroupingSet<TKey,TSource>> GroupBy<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
         var r = new SetGroupingSet<TKey,TSource>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
-        Debug.Assert(r.Count<=source.Count);
+        Debug.Assert(r.LongCount<=source.LongCount);
         return r;
     }
     /// <summary>キーが等しいかどうかに基づいて 2 つの集合の要素を相互に関連付け、その結果をグループ化します。</summary>
-    /// <returns>2つの集合に対してグループ化結合を実行して取得する、TResult型の要素が格納されている <see cref="ImmutableSet{TResult}" />。</returns>
+    /// <returns>2つの集合に対してグループ化結合を実行して取得する、TResult型の要素が格納されている <see cref="IEnumerable{TResult}" />。</returns>
     /// <param name="outer">結合する最初の集合。</param>
     /// <param name="inner">最初の集合に結合する集合。</param>
     /// <param name="outerKeySelector">最初の集合の各要素から結合キーを抽出する関数。</param>
@@ -653,7 +653,7 @@ public static class ExtensionSet{
     /// <typeparam name="TInner">2番目の集合の要素の型。</typeparam>
     /// <typeparam name="TKey">キー セレクター関数によって返されるキーの型。</typeparam>
     /// <typeparam name="TResult">結果の要素の型。</typeparam>
-    public static ImmutableSet<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this ImmutableSet<TOuter> outer,ImmutableSet<TInner> inner,Func<TOuter,TKey> outerKeySelector,Func<TInner,TKey> innerKeySelector,Func<TOuter,ImmutableSet<TInner>,TResult> resultSelector) {
+    public static IEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IEnumerable<TOuter> outer,IEnumerable<TInner> inner,Func<TOuter,TKey> outerKeySelector,Func<TInner,TKey> innerKeySelector,Func<TOuter,IEnumerable<TInner>,TResult> resultSelector) {
         var EmptySet = ImmutableSet<TInner>.EmptySet;
         var Dictionary = inner.Lookup(innerKeySelector);
         Set<TInner> innerValue = null!;
@@ -667,8 +667,8 @@ public static class ExtensionSet{
                         : resultSelector(a,EmptySet)
                 )
             )count++;
-        r._Count=count;
-        Debug.Assert(r.Count<=outer.Count);
+        r._LongCount=count;
+        Debug.Assert(r.LongCount<=outer.LongCount);
         return r;
     }
     /// <summary>
@@ -677,7 +677,7 @@ public static class ExtensionSet{
     /// <param name="source">操作対象</param>
     /// <param name="selector">調和平均の1要素の計算式</param>
     /// <returns>調和平均値</returns>
-    public static decimal? Harmean<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal?> selector) {
+    public static decimal? Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         decimal Sum = 0;
         long Int64Count = 0;
         foreach(var a in source) {
@@ -698,8 +698,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static decimal Harmean<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
-        var Int64Count = source.Count;
+    public static decimal Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         decimal Sum = 0;
         foreach(var a in source)Sum+=1/selector(a);
@@ -711,7 +711,7 @@ public static class ExtensionSet{
     /// <param name="source">操作対象</param>
     /// <param name="selector">調和平均の1要素の計算式</param>
     /// <returns>調和平均値</returns>
-    public static double? Harmean<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         double Sum = 0;
         long Int64Count = 0;
         foreach(var a in source) {
@@ -732,8 +732,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Harmean<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.Count;
+    public static double Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Int64Count = source.LongCount;
         if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         foreach(var a in source)Sum+=1/selector(a);
@@ -742,10 +742,10 @@ public static class ExtensionSet{
     /// <summary>既定の等値比較子を使用して値を比較することにより、2 つの集合の積集合を生成します。</summary>
     /// <returns>2 つの集合の積集合を構成する要素が格納されている集合。</returns>
     /// <param name="first">
-    ///   <paramref name="second" /> にも含まれる、返される一意の要素を含む <see cref="ImmutableSet{TSource}" />。</param>
-    /// <param name="second">最初の集合にも含まれる、返される一意の要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    ///   <paramref name="second" /> にも含まれる、返される一意の要素を含む <see cref="IEnumerable{TSource}" />。</param>
+    /// <param name="second">最初の集合にも含まれる、返される一意の要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">入力集合の要素の型。</typeparam>
-    public static ImmutableSet<TSource> Intersect<TSource>(this ImmutableSet<TSource> first,ImmutableSet<TSource> second) {
+    public static IEnumerable<TSource> Intersect<TSource>(this IEnumerable<TSource> first,IEnumerable<TSource> second) {
         var r = new Set<TSource>(first);
         r.IntersectWith(second);
         return r;
@@ -753,7 +753,7 @@ public static class ExtensionSet{
     /// <summary>
     /// 一致するキーに基づいて 2 つの集合の要素を相互に関連付けます。キーの比較には既定の等値比較子が使用されます。
     /// </summary>
-    /// <returns>2 つの集合に対して内部結合を実行して取得する、TResult型の要素が格納されている <see cref="ImmutableSet{TResult}" />。</returns>
+    /// <returns>2 つの集合に対して内部結合を実行して取得する、TResult型の要素が格納されている <see cref="IEnumerable{TResult}" />。</returns>
     /// <param name="outer">結合する最初の集合。</param>
     /// <param name="inner">最初の集合に結合する集合。</param>
     /// <param name="outerKeySelector">最初の集合の各要素から結合キーを抽出する関数。</param>
@@ -764,10 +764,10 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">キー セレクター関数によって返されるキーの型。</typeparam>
     /// <typeparam name="TResult">結果の要素の型。</typeparam>
     /// <example>SetA.Join(SetB,o=>o+o,i=>i+i,(o,i)=>new{o,i})</example>
-    public static ImmutableSet<TResult> Join<TOuter, TInner, TKey, TResult>(this ImmutableSet<TOuter> outer,ImmutableSet<TInner> inner,Func<TOuter,TKey> outerKeySelector,Func<TInner,TKey> innerKeySelector,Func<TOuter,TInner,TResult> resultSelector) {
+    public static IEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(this IEnumerable<TOuter> outer,IEnumerable<TInner> inner,Func<TOuter,TKey> outerKeySelector,Func<TInner,TKey> innerKeySelector,Func<TOuter,TInner,TResult> resultSelector) {
         var r = new Set<TResult>();
         long count = 0;
-        if(inner.Count<outer.Count) {
+        if(inner.LongCount<outer.LongCount) {
             var outerDictionary = outer.Lookup(outerKeySelector);
             Set<TOuter> outer2 = null!;
             foreach(var innerValue in inner)
@@ -782,31 +782,31 @@ public static class ExtensionSet{
                     foreach(var innerValue in inner2)
                         if(r.InternalAdd(resultSelector(outerValue,innerValue)))count++;
         }
-        r._Count=count;
+        r._LongCount=count;
         return r;
     }
     /// <summary>集合内の要素の合計数を表す <see cref="int" /> を返します。</summary>
     /// <returns>ソース 集合の要素数。</returns>
-    /// <param name="source">カウントする要素が格納されている <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">カウントする要素が格納されている <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static int Count<TSource>(this ImmutableSet<TSource> source) => (int)source.Count;
+    public static int Count<TSource>(this IEnumerable<TSource> source) => (int)source.LongCount;
     /// <summary>集合内の要素の合計数を表す <see cref="long" /> を返します。</summary>
     /// <returns>ソース 集合の要素数。</returns>
-    /// <param name="source">カウントする要素が格納されている <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">カウントする要素が格納されている <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static long LongCount<TSource>(this ImmutableSet<TSource> source) => source.Count;
+    public static long LongCount<TSource>(this IEnumerable<TSource> source) => source.LongCount;
     /// <summary>ジェネリック 集合の最大値を返します。</summary>
     /// <returns>集合の最大値。</returns>
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static TSource Max<TSource>(this ImmutableSet<TSource> source) {
+    public static TSource Max<TSource>(this IEnumerable<TSource> source) {
         var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
-        var Default = Comparer<TSource>.Default;
+        var Default =Generic.Comparer<TSource>.Default;
         while(Enumerator.MoveNext())
             if(Default.Compare(Result,Enumerator.Current)<0)Result=Enumerator.Current;
         return Result;
@@ -816,15 +816,15 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static TSource Min<TSource>(this ImmutableSet<TSource> source) {
+    public static TSource Min<TSource>(this IEnumerable<TSource> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
-        var Default = Comparer<TSource>.Default;
+        var Default =Generic.Comparer<TSource>.Default;
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext())
             if(Default.Compare(Result,Enumerator.Current)>0)Result=Enumerator.Current;
         return Result;
     }
-    private static (IEnumerator<TSource?> Enumerator, TSource? Result) PrivateMaxMin<TSource>(this ImmutableSet<TSource?> source) where TSource : struct {
+    private static (Generic.IEnumerator<TSource?> Enumerator, TSource? Result) PrivateMaxMin<TSource>(this IEnumerable<TSource?> source) where TSource : struct {
         TSource? Result = null;
         var Enumerator = source.GetEnumerator();
         while(Enumerator.MoveNext()) {
@@ -838,7 +838,7 @@ public static class ExtensionSet{
     /// <summary>decimal? 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する decimal? 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる decimal? 値の集合。</param>
-    public static decimal? Max(this ImmutableSet<decimal?> source) {
+    public static decimal? Max(this IEnumerable<decimal?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -849,7 +849,7 @@ public static class ExtensionSet{
     /// <summary>decimal? 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する decimal? 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる decimal? 値の集合。</param>
-    public static decimal? Min(this ImmutableSet<decimal?> source) {
+    public static decimal? Min(this IEnumerable<decimal?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -860,7 +860,7 @@ public static class ExtensionSet{
     /// <summary>double? 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する double? 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる double? 値の集合。</param>
-    public static double? Max(this ImmutableSet<double?> source) {
+    public static double? Max(this IEnumerable<double?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -871,7 +871,7 @@ public static class ExtensionSet{
     /// <summary>double? 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する double? 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる double? 値の集合。</param>
-    public static double? Min(this ImmutableSet<double?> source) {
+    public static double? Min(this IEnumerable<double?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -882,7 +882,7 @@ public static class ExtensionSet{
     /// <summary>float? 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する float? 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる float? 値の集合。</param>
-    public static float? Max(this ImmutableSet<float?> source) {
+    public static float? Max(this IEnumerable<float?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -893,7 +893,7 @@ public static class ExtensionSet{
     /// <summary>float? 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する float? 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる float? 値の集合。</param>
-    public static float? Min(this ImmutableSet<float?> source) {
+    public static float? Min(this IEnumerable<float?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -904,7 +904,7 @@ public static class ExtensionSet{
     /// <summary>long? 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する long? 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる long? 値の集合。</param>
-    public static long? Max(this ImmutableSet<long?> source) {
+    public static long? Max(this IEnumerable<long?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -915,7 +915,7 @@ public static class ExtensionSet{
     /// <summary>long? 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する long? 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる long? 値の集合。</param>
-    public static long? Min(this ImmutableSet<long?> source) {
+    public static long? Min(this IEnumerable<long?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -926,7 +926,7 @@ public static class ExtensionSet{
     /// <summary>int? 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する int? 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる int? 値の集合。</param>
-    public static int? Max(this ImmutableSet<int?> source) {
+    public static int? Max(this IEnumerable<int?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -937,7 +937,7 @@ public static class ExtensionSet{
     /// <summary>int? 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する int? 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる int? 値の集合。</param>
-    public static int? Min(this ImmutableSet<int?> source) {
+    public static int? Min(this IEnumerable<int?> source) {
         var (Enumerator, Result)=PrivateMaxMin(source);
         while(Enumerator.MoveNext()) {
             var Item = Enumerator.Current;
@@ -945,14 +945,14 @@ public static class ExtensionSet{
         }
         return Result;
     }
-    private static bool PrivateMaxMin<TSource>(this ImmutableSet<TSource> source,out IEnumerator<TSource> Enumerator) {
+    private static bool PrivateMaxMin<TSource>(this IEnumerable<TSource> source,out Generic.IEnumerator<TSource> Enumerator) {
         Enumerator = source.GetEnumerator();
         return Enumerator.MoveNext();
     }
     /// <summary>decimal 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する decimal 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる decimal 値の集合。</param>
-    public static decimal Max(this ImmutableSet<decimal> source) {
+    public static decimal Max(this IEnumerable<decimal> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result= Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -964,7 +964,7 @@ public static class ExtensionSet{
     /// <summary>decimal 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する decimal 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる decimal 値の集合。</param>
-    public static decimal Min(this ImmutableSet<decimal> source) {
+    public static decimal Min(this IEnumerable<decimal> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -976,7 +976,7 @@ public static class ExtensionSet{
     /// <summary>double 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する double 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる double 値の集合。</param>
-    public static double Max(this ImmutableSet<double> source) {
+    public static double Max(this IEnumerable<double> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -988,7 +988,7 @@ public static class ExtensionSet{
     /// <summary>double 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する double 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる double 値の集合。</param>
-    public static double Min(this ImmutableSet<double> source) {
+    public static double Min(this IEnumerable<double> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1000,7 +1000,7 @@ public static class ExtensionSet{
     /// <summary>float 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する float 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる float 値の集合。</param>
-    public static float Max(this ImmutableSet<float> source) {
+    public static float Max(this IEnumerable<float> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1012,7 +1012,7 @@ public static class ExtensionSet{
     /// <summary>float 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する float 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる float 値の集合。</param>
-    public static float Min(this ImmutableSet<float> source) {
+    public static float Min(this IEnumerable<float> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1024,7 +1024,7 @@ public static class ExtensionSet{
     /// <summary>long 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する long 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる long 値の集合。</param>
-    public static long Max(this ImmutableSet<long> source) {
+    public static long Max(this IEnumerable<long> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1036,7 +1036,7 @@ public static class ExtensionSet{
     /// <summary>long 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する long 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる long 値の集合。</param>
-    public static long Min(this ImmutableSet<long> source) {
+    public static long Min(this IEnumerable<long> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1048,7 +1048,7 @@ public static class ExtensionSet{
     /// <summary>int 値の集合の最大値を返します。</summary>
     /// <returns>集合の最大値に対応する int 型の値。</returns>
     /// <param name="source">最大値を確認する対象となる int 値の集合。</param>
-    public static int Max(this ImmutableSet<int> source) {
+    public static int Max(this IEnumerable<int> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1060,7 +1060,7 @@ public static class ExtensionSet{
     /// <summary>int 値の集合の最小値を返します。</summary>
     /// <returns>集合の最小値に対応する int 型の値。</returns>
     /// <param name="source">最小値を確認する対象となる int 値の集合。</param>
-    public static int Min(this ImmutableSet<int> source) {
+    public static int Min(this IEnumerable<int> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext()) {
@@ -1077,9 +1077,9 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
-    public static TResult Max<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult> selector) {
+    public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
-        var Default = Comparer<TResult>.Default;
+        var Default =Generic.Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             while(Enumerator.MoveNext()) {
@@ -1098,9 +1098,9 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
-    public static TResult? Max<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
+    public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
         using var Enumerator = source.GetEnumerator();
-        var Default = Comparer<TResult>.Default;
+        var Default =Generic.Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
@@ -1120,9 +1120,9 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
-    public static TResult Min<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult> selector) {
+    public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
-        var Default = Comparer<TResult>.Default;
+        var Default =Generic.Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             while(Enumerator.MoveNext()) {
@@ -1141,9 +1141,9 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
-    public static TResult? Min<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
+    public static TResult? Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
         using var Enumerator = source.GetEnumerator();
-        var Default = Comparer<TResult>.Default;
+        var Default =Generic.Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
@@ -1156,7 +1156,7 @@ public static class ExtensionSet{
         }
         return default;
     }
-    private static bool PrivateMaxMin<TSource,TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult?> selector,out IEnumerator<TSource> Enumerator,out TResult? Result) where TResult:struct{
+    private static bool PrivateMaxMin<TSource,TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector,out Generic.IEnumerator<TSource> Enumerator,out TResult? Result) where TResult:struct{
         var Enumerator0 = source.GetEnumerator();
         while(Enumerator0.MoveNext()) {
             var value = selector(Enumerator0.Current);
@@ -1174,7 +1174,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する decimal? 型の値。</returns>
-    public static decimal? Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal?> selector) {
+    public static decimal? Max<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var Item = selector(Enumerator.Current);
@@ -1187,7 +1187,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する decimal? 型の値。</returns>
-    public static decimal? Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal?> selector) {
+    public static decimal? Min<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var Item = selector(Enumerator.Current);
@@ -1200,7 +1200,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する double? 型の値。</returns>
-    public static double? Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Max<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1213,7 +1213,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する double? 型の値。</returns>
-    public static double? Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Min<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1226,7 +1226,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する float? 型の値。</returns>
-    public static float? Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,float?> selector) {
+    public static float? Max<TSource>(this IEnumerable<TSource> source,Func<TSource,float?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1239,7 +1239,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する float? 型の値。</returns>
-    public static float? Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,float?> selector) {
+    public static float? Min<TSource>(this IEnumerable<TSource> source,Func<TSource,float?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1252,7 +1252,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する long? 型の値。</returns>
-    public static long? Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,long?> selector) {
+    public static long? Max<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1265,7 +1265,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する long? 型の値。</returns>
-    public static long? Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,long?> selector) {
+    public static long? Min<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1278,7 +1278,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する int? 型の値。</returns>
-    public static int? Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,int?> selector) {
+    public static int? Max<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1291,7 +1291,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する int? 型の値。</returns>
-    public static int? Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,int?> selector) {
+    public static int? Min<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1304,7 +1304,7 @@ public static class ExtensionSet{
     ///// <param name="source">最大値を確認する対象となる値の集合。</param>
     ///// <param name="selector">各要素に適用する変換関数。</param>
     ///// <returns>集合の最大値に対応する object 型の値。</returns>
-    //public static object Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,object> selector) {
+    //public static object Max<TSource>(this IEnumerable<TSource> source,Func<TSource,object> selector) {
     //    if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
     //    var Default=Comparer<object>.Default;
     //    while(Enumerator.MoveNext()) {
@@ -1318,7 +1318,7 @@ public static class ExtensionSet{
     ///// <param name="source">最小値を確認する対象となる値の集合。</param>
     ///// <param name="selector">各要素に適用する変換関数。</param>
     ///// <returns>集合の最小値に対応する object 型の値。</returns>
-    //public static object Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,object> selector) {
+    //public static object Min<TSource>(this IEnumerable<TSource> source,Func<TSource,object> selector) {
     //    if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) return Result;
     //    var Default=Comparer<object>.Default;
     //    while(Enumerator.MoveNext()) {
@@ -1327,8 +1327,8 @@ public static class ExtensionSet{
     //    }
     //    return Result;
     //}
-    private static bool PrivateMaxMin<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult> selector,out IEnumerator<TSource> Enumerator,out TResult Result) {
-        //private static Boolean PrivateMaxMin<TSource, TResult>(this IOutImmutableSet<TSource> source,Func<TSource,TResult> selector,out IOutImmutableSet<TSource>.Enumerator Enumerator,out TResult Result){
+    private static bool PrivateMaxMin<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector,out Generic.IEnumerator<TSource> Enumerator,out TResult Result) {
+        //private static Boolean PrivateMaxMin<TSource, TResult>(this IOutIEnumerable<TSource> source,Func<TSource,TResult> selector,out IOutIEnumerable<TSource>.Enumerator Enumerator,out TResult Result){
         var Enumerator0 = source.GetEnumerator();
         if(Enumerator0.MoveNext()) {
             Result=selector(Enumerator0.Current);
@@ -1344,7 +1344,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する decimal 型の値。</returns>
-    public static decimal Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
+    public static decimal Max<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var Item = selector(Enumerator.Current);
@@ -1357,7 +1357,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する decimal 型の値。</returns>
-    public static decimal Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
+    public static decimal Min<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var Item = selector(Enumerator.Current);
@@ -1370,7 +1370,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する double 型の値。</returns>
-    public static double Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
+    public static double Max<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1383,7 +1383,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する double 型の値。</returns>
-    public static double Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
+    public static double Min<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1396,7 +1396,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する float 型の値。</returns>
-    public static float Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,float> selector) {
+    public static float Max<TSource>(this IEnumerable<TSource> source,Func<TSource,float> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1409,7 +1409,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する float 型の値。</returns>
-    public static float Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,float> selector) {
+    public static float Min<TSource>(this IEnumerable<TSource> source,Func<TSource,float> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1422,7 +1422,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する long 型の値。</returns>
-    public static long Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,long> selector) {
+    public static long Max<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1435,7 +1435,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する long 型の値。</returns>
-    public static long Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,long> selector) {
+    public static long Min<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1448,7 +1448,7 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最大値に対応する int 型の値。</returns>
-    public static int Max<TSource>(this ImmutableSet<TSource> source,Func<TSource,int> selector) {
+    public static int Max<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1461,7 +1461,7 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <returns>集合の最小値に対応する int 型の値。</returns>
-    public static int Min<TSource>(this ImmutableSet<TSource> source,Func<TSource,int> selector) {
+    public static int Min<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
         if(!PrivateMaxMin(source,selector,out var Enumerator,out var Result)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         while(Enumerator.MoveNext()) {
             var value = selector(Enumerator.Current);
@@ -1469,12 +1469,12 @@ public static class ExtensionSet{
         }
         return Result;
     }
-    /// <summary>指定された型に基づいて <see cref="ImmutableSet" /> の要素をフィルター処理します。</summary>
+    /// <summary>指定された型に基づいて <see cref="IEnumerable" /> の要素をフィルター処理します。</summary>
     /// <returns>
-    ///   TResult型の入力集合の要素を格納する <see cref="ImmutableSet{TSource}" />。</returns>
-    /// <param name="source">フィルター処理する要素を含む <see cref="ImmutableSet" />。</param>
+    ///   TResult型の入力集合の要素を格納する <see cref="IEnumerable{TSource}" />。</returns>
+    /// <param name="source">フィルター処理する要素を含む <see cref="IEnumerable" />。</param>
     /// <typeparam name="TResult">集合の要素をフィルター処理する型。</typeparam>
-    public static ImmutableSet<TResult> OfType<TResult>(this ImmutableSet source) {
+    public static IEnumerable<TResult> OfType<TResult>(this IEnumerable source) {
         var Result = new Set<TResult>();
         long Count = 0;
         foreach(var a in source) {
@@ -1484,7 +1484,7 @@ public static class ExtensionSet{
                 Count++;
             }
         }
-        Result._Count=Count;
+        Result._LongCount=Count;
         return Result;
     }
     /// <summary>
@@ -1493,36 +1493,36 @@ public static class ExtensionSet{
     /// <param name="start">シーケンス内の最初の整数の値。</param>
     /// <param name="count">生成する連続した整数の数。</param>
     /// <returns>連続した整数の範囲を含む IEnumerable&lt;Int32> (C# の場合) または IEnumerable(Of Int32) (Visual Basicの場合)。</returns>
-    public static ImmutableSet<int> Range(int start,int count) {
+    public static IEnumerable<int> Range(int start,int count) {
         Debug.Assert(count>=0);
         var r = new Set<int>();
         var index = count;
         while(index-->0)r.InternalAdd(start++);
-        r._Count=count;
+        r._LongCount=count;
         return r;
     }
     /// <summary>集合の各要素を新しいフォームに射影します。</summary>
     /// <returns>
-    ///   <paramref name="source" /> の各要素に対して変換関数を呼び出した結果として得られる要素を含む <see cref="ImmutableSet{TResult}" />。</returns>
+    ///   <paramref name="source" /> の各要素に対して変換関数を呼び出した結果として得られる要素を含む <see cref="IEnumerable{TResult}" />。</returns>
     /// <param name="source">変換関数を呼び出す対象となる値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
-    public static ImmutableSet<TResult> Select<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,TResult> selector) {
+    public static IEnumerable<TResult> Select<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         var r = new Set<TResult>();
         var Count = 0L;
         foreach(var a in source)
             if(r.InternalAdd(selector(a)))Count++;
-        r._Count=Count;
+        r._LongCount=Count;
         return r;
     }
     /// <summary>
-    /// 集合の各要素を <see cref="ImmutableSet{TResult}" />に射影し、結果の集合を 1つの集合に平坦化して、その各要素に対して結果のセレクター関数を呼び出します。
+    /// 集合の各要素を <see cref="IEnumerable{TResult}" />に射影し、結果の集合を 1つの集合に平坦化して、その各要素に対して結果のセレクター関数を呼び出します。
     /// </summary>
     /// <returns>
-    ///   <paramref name="source" /> の各要素で一対多の変換関数 <paramref name="collectionSelector" /> を呼び出し、こうした集合の各要素とそれに対応するソース要素を結果の要素に割り当てた結果として得られる要素を含む <see cref="ImmutableSet{TResult}" />。</returns>
+    ///   <paramref name="source" /> の各要素で一対多の変換関数 <paramref name="collectionSelector" /> を呼び出し、こうした集合の各要素とそれに対応するソース要素を結果の要素に割り当てた結果として得られる要素を含む <see cref="IEnumerable{TResult}" />。</returns>
     /// <param name="source">射影する値の集合。</param>
     /// <param name="collectionSelector">入力集合の各要素に適用する変換関数。</param>
     /// <param name="resultSelector">中間集合の各要素に適用する変換関数。</param>
@@ -1531,39 +1531,39 @@ public static class ExtensionSet{
     /// <typeparam name="TCollection">
     ///   <paramref name="collectionSelector" /> によって収集される中間要素の型。</typeparam>
     /// <typeparam name="TResult">結果の集合の要素の型。</typeparam>
-    public static ImmutableSet<TResult> SelectMany<TSource, TCollection, TResult>(this ImmutableSet<TSource> source,Func<TSource,ImmutableSet<TCollection>> collectionSelector,Func<TSource,TCollection,TResult> resultSelector) {
+    public static IEnumerable<TResult> SelectMany<TSource, TCollection, TResult>(this IEnumerable<TSource> source,Func<TSource,IEnumerable<TCollection>> collectionSelector,Func<TSource,TCollection,TResult> resultSelector) {
         var r = new Set<TResult>();
         var Count = 0L;
         foreach(var a in source)
             foreach(var b in collectionSelector(a))
                 if(r.InternalAdd(resultSelector(a,b)))Count++;
-        r._Count=Count;
+        r._LongCount=Count;
         return r;
     }
-    /// <summary>集合の各要素を <see cref="ImmutableSet{TResult}" /> に射影し、結果の集合を 1つの集合に平坦化します。</summary>
-    /// <returns>入力集合の各要素に対して一対多の変換関数を呼び出した結果として得られる要素を含む <see cref="ImmutableSet{TResult}" />。</returns>
+    /// <summary>集合の各要素を <see cref="IEnumerable{TResult}" /> に射影し、結果の集合を 1つの集合に平坦化します。</summary>
+    /// <returns>入力集合の各要素に対して一対多の変換関数を呼び出した結果として得られる要素を含む <see cref="IEnumerable{TResult}" />。</returns>
     /// <param name="source">射影する値の集合。</param>
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される集合の要素の型。</typeparam>
-    public static ImmutableSet<TResult> SelectMany<TSource, TResult>(this ImmutableSet<TSource> source,Func<TSource,ImmutableSet<TResult>> selector) {
+    public static IEnumerable<TResult> SelectMany<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,IEnumerable<TResult>> selector) {
         var r = new Set<TResult>();
         var Count = 0L;
         foreach(var a in source)
             foreach(var b in selector(a))
                 if(r.InternalAdd(b))Count++;
-        r._Count=Count;
+        r._LongCount=Count;
         return r;
     }
     /// <summary>集合の唯一の要素を返します。集合内の要素が 1つだけではない場合は、例外をスローします。</summary>
     /// <returns>入力集合の 1つの要素。</returns>
-    /// <param name="source">1つの要素を返す <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">1つの要素を返す <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">入力集合に複数の要素が含まれています。または入力集合が空です。</exception>
-    public static TSource Single<TSource>(this ImmutableSet<TSource> source) {
+    public static TSource Single<TSource>(this IEnumerable<TSource> source) {
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
@@ -1572,10 +1572,10 @@ public static class ExtensionSet{
     }
     /// <summary>集合の唯一の要素を返します。集合が空の場合、既定値を返します。集合内に要素が複数ある場合、このメソッドは例外をスローします。</summary>
     /// <returns>入力集合の 1つの要素。集合に要素が含まれない場合は default (<paramref name="source" />)。</returns>
-    /// <param name="source">1つの要素を返す <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">1つの要素を返す <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static TSource SingleOrDefault<TSource>(this ImmutableSet<TSource> source){//where TSource:class {
+    public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source){//where TSource:class {
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) return default!;
         var Result = Enumerator.Current;
@@ -1584,11 +1584,11 @@ public static class ExtensionSet{
     }
     /// <summary>集合の唯一の要素を返します。集合が空の場合、既定値を返します。集合内に要素が複数ある場合、このメソッドは例外をスローします。</summary>
     /// <returns>入力集合の 1つの要素。集合に要素が含まれない場合は default (<paramref name="source" />)。</returns>
-    /// <param name="source">1つの要素を返す <see cref="ImmutableSet{TSource}" />。</param>
+    /// <param name="source">1つの要素を返す <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="defaultValue">要素が空の場合の規定値</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static TSource SingleOrDefault<TSource>(this ImmutableSet<TSource> source,TSource defaultValue) {
+    public static TSource SingleOrDefault<TSource>(this IEnumerable<TSource> source,TSource defaultValue) {
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) return defaultValue;
         var Result = Enumerator.Current;
@@ -1602,8 +1602,8 @@ public static class ExtensionSet{
     /// <returns>値の集合の標準偏差値。</returns>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Stdev(this ImmutableSet<double> source) {
-        var Count = source.Count;
+    public static double Stdev(this IEnumerable<double> source) {
+        var Count = source.LongCount;
         if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Array = new double[Count];
         double sum = 0;
@@ -1631,8 +1631,8 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static double Stdev<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Count = source.Count;
+    public static double Stdev<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Count = source.LongCount;
         var (Array, sum)=合計値を求める(source,selector,Count,MethodBase.GetCurrentMethod()!);
         double DoubleCount = Count;
         var average = sum/DoubleCount;
@@ -1648,7 +1648,7 @@ public static class ExtensionSet{
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="decimal" /> 値の集合。</param>
     /// <exception cref="OverflowException">合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal? Sum(this ImmutableSet<decimal?> source) {
+    public static decimal? Sum(this IEnumerable<decimal?> source) {
         decimal? sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1658,7 +1658,7 @@ public static class ExtensionSet{
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="decimal" /> 値の集合。</param>
     /// <exception cref="OverflowException">合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Sum(this ImmutableSet<decimal> source) {
+    public static decimal Sum(this IEnumerable<decimal> source) {
         decimal sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1667,7 +1667,7 @@ public static class ExtensionSet{
     ///   <see cref="double?" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="double" /> 値の集合。</param>
-    public static double? Sum(this ImmutableSet<double?> source) {
+    public static double? Sum(this IEnumerable<double?> source) {
         double? sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1676,7 +1676,7 @@ public static class ExtensionSet{
     ///   <see cref="double" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="double" /> 値の集合。</param>
-    public static double Sum(this ImmutableSet<double> source) {
+    public static double Sum(this IEnumerable<double> source) {
         double sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1685,7 +1685,7 @@ public static class ExtensionSet{
     ///   <see cref="float?" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="float?" /> 値の集合。</param>
-    public static float? Sum(this ImmutableSet<float?> source) {
+    public static float? Sum(this IEnumerable<float?> source) {
         float? sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1694,7 +1694,7 @@ public static class ExtensionSet{
     ///   <see cref="float" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="float" /> 値の集合。</param>
-    public static float Sum(this ImmutableSet<float> source) {
+    public static float Sum(this IEnumerable<float> source) {
         float sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1703,7 +1703,7 @@ public static class ExtensionSet{
     ///   <see cref="int?" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="int?" /> 値の集合。</param>
-    public static int? Sum(this ImmutableSet<int?> source) {
+    public static int? Sum(this IEnumerable<int?> source) {
         int? sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1712,7 +1712,7 @@ public static class ExtensionSet{
     ///   <see cref="int" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="int" /> 値の集合。</param>
-    public static int Sum(this ImmutableSet<int> source) {
+    public static int Sum(this IEnumerable<int> source) {
         var sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1721,7 +1721,7 @@ public static class ExtensionSet{
     ///   <see cref="long?" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="long?" /> 値の集合。</param>
-    public static long? Sum(this ImmutableSet<long?> source) {
+    public static long? Sum(this IEnumerable<long?> source) {
         long? sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1730,7 +1730,7 @@ public static class ExtensionSet{
     ///   <see cref="long" /> 値の集合の合計を計算します。</summary>
     /// <returns>集合の値の合計。</returns>
     /// <param name="source">合計を計算する対象となる <see cref="long" /> 値の集合。</param>
-    public static long Sum(this ImmutableSet<long> source) {
+    public static long Sum(this IEnumerable<long> source) {
         long sum = 0;
         foreach(var a in source)sum+=a;
         return sum;
@@ -1744,7 +1744,7 @@ public static class ExtensionSet{
     /// <exception cref="ArgumentNullException">
     ///   <paramref name="source" /> または <paramref name="selector" /> が null です。</exception>
     /// <exception cref="OverflowException">合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal? Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal?> selector) {
+    public static decimal? Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         var num = 0m;
         foreach(var current in source) {
             var v = selector(current);
@@ -1759,7 +1759,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="OverflowException">合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
+    public static decimal Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
         decimal sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1770,7 +1770,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static double? Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,double?> selector) {
+    public static double? Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         double? sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1781,7 +1781,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static double Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
+    public static double Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
         double sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1792,7 +1792,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static float? Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,float?> selector) {
+    public static float? Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,float?> selector) {
         float? sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1803,7 +1803,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static float Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,float> selector) {
+    public static float Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,float> selector) {
         float sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1815,7 +1815,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="OverflowException">合計が <see cref="int.MaxValue" /> を超えています。</exception>
-    public static int? Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,int?> selector) {
+    public static int? Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
         int? sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1827,7 +1827,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="OverflowException">合計が <see cref="int.MaxValue" /> を超えています。</exception>
-    public static int Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,int> selector) {
+    public static int Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
         var sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1838,7 +1838,7 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static long? Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,long?> selector) {
+    public static long? Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
         long? sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
@@ -1849,28 +1849,28 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static long Sum<TSource>(this ImmutableSet<TSource> source,Func<TSource,long> selector) {
+    public static long Sum<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
         long sum = 0;
         foreach(var a in source)sum+=selector(a);
         return sum;
     }
     /// <summary>既定の等値比較子を使用して、2 つの集合の和集合を生成します。</summary>
-    /// <returns>2 つの入力集合の要素 (重複する要素は除く) を格納している <see cref="ImmutableSet{TSource}" />。</returns>
-    /// <param name="first">和集合の最初のセットを形成する一意の要素を含む <see cref="ImmutableSet{TSource}" />。</param>
-    /// <param name="second">和集合の 2番目のセットを形成する一意の要素を含む <see cref="ImmutableSet{TSource}" />。</param>
+    /// <returns>2 つの入力集合の要素 (重複する要素は除く) を格納している <see cref="IEnumerable{TSource}" />。</returns>
+    /// <param name="first">和集合の最初のセットを形成する一意の要素を含む <see cref="IEnumerable{TSource}" />。</param>
+    /// <param name="second">和集合の 2番目のセットを形成する一意の要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <typeparam name="TSource">入力集合の要素の型。</typeparam>
-    public static ImmutableSet<TSource> Union<TSource>(this ImmutableSet<TSource> first,ImmutableSet<TSource> second) {
+    public static IEnumerable<TSource> Union<TSource>(this IEnumerable<TSource> first,IEnumerable<TSource> second) {
         var r = new Set<TSource>(first);
         r.UnionWith(second);
         return r;
     }
     /// <summary>述語に基づいて値の集合をフィルター処理します。</summary>
-    /// <returns>条件を満たす、入力集合の要素を含む <see cref="ImmutableSet{TSource}" />。</returns>
-    /// <param name="source">フィルター処理する <see cref="ImmutableSet{TSource}" />。</param>
+    /// <returns>条件を満たす、入力集合の要素を含む <see cref="IEnumerable{TSource}" />。</returns>
+    /// <param name="source">フィルター処理する <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="predicate">各要素が条件を満たしているかどうかをテストする関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static ImmutableSet<TSource> Where<TSource>(this ImmutableSet<TSource> source,Func<TSource,bool> predicate) {
+    public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source,Func<TSource,bool> predicate) {
         var r = new Set<TSource>();
         long Count = 0;
         foreach(var a in source){
@@ -1879,7 +1879,7 @@ public static class ExtensionSet{
             Debug.Assert(b);
             Count++;
         }
-        r._Count=Count;
+        r._LongCount=Count;
         return r;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="decimal" /> 値の集合の標本分散を計算します。</summary>
@@ -1891,8 +1891,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Var<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
-        var Count = source.Count;
+    public static decimal Var<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
+        var Count = source.LongCount;
         return PrivateVariance(source,selector,Count,Count-1);
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="double" /> 値の集合の標本分散を計算します。</summary>
@@ -1904,8 +1904,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static double Var<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Count = source.Count;
+    public static double Var<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Count = source.LongCount;
         return PrivateVariance(source,selector,Count,Count-1);
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="decimal" /> 値の集合の母分散を計算します。</summary>
@@ -1917,8 +1917,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static decimal Varp<TSource>(this ImmutableSet<TSource> source,Func<TSource,decimal> selector) {
-        var Count = source.Count;
+    public static decimal Varp<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
+        var Count = source.LongCount;
         return PrivateVariance(source,selector,Count,Count);
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="double" /> 値の集合の母分散を計算します。</summary>
@@ -1930,8 +1930,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
-    public static double Varp<TSource>(this ImmutableSet<TSource> source,Func<TSource,double> selector) {
-        var Count = source.Count;
+    public static double Varp<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
+        var Count = source.LongCount;
         return PrivateVariance(source,selector,Count,Count);
     }
     /// <summary>
@@ -1950,7 +1950,7 @@ public static class ExtensionSet{
     /// <typeparam name="TResult"></typeparam>
     /// <returns>デリゲートの戻り値</returns>
     public static TResult Inline<TResult>(Func<TResult> func) => func();
-    private static decimal PrivateVariance<TSource>(ImmutableSet<TSource> source,Func<TSource,decimal> selector,long Count,long 割る数) {
+    private static decimal PrivateVariance<TSource>(IEnumerable<TSource> source,Func<TSource,decimal> selector,long Count,long 割る数) {
         var (Array, 合計)=合計値を求める(source,selector,Count,MethodBase.GetCurrentMethod()!);
         var 算術平均 = 合計/Count;
         合計=0;
@@ -1960,7 +1960,7 @@ public static class ExtensionSet{
         }
         return 合計/割る数;
     }
-    private static double PrivateVariance<TSource>(ImmutableSet<TSource> source,Func<TSource,double> selector,long Count,long 割る数) {
+    private static double PrivateVariance<TSource>(IEnumerable<TSource> source,Func<TSource,double> selector,long Count,long 割る数) {
         var (Array, 合計)=合計値を求める(source,selector,Count,MethodBase.GetCurrentMethod()!);
         var 算術平均 = 合計/Count;
         合計=0;

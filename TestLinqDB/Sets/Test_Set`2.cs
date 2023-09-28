@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using LinqDB.Sets;
 using System.Text;
 using System.Globalization;
@@ -224,16 +223,16 @@ public class Test_Set2:共通 {
         //    var o=this.MemoryPack.Deserialize<object>(b);
         //}
         this.MemoryMessageJson_Assert(expected,output=>{
-            var i=expected.Count;
-            var o=output.Count;
+            var i=expected.LongCount;
+            var o=output.LongCount;
         });
         this.MemoryMessageJson_Assert((ImmutableSet<int>)expected,output=>{
-            var i=expected.Count;
-            var o=output.Count;
+            var i=expected.LongCount;
+            var o=output.LongCount;
         });
         this.MemoryMessageJson_Assert((ImmutableSet)expected,output=>{
-            var i=expected.Count;
-            var o=output.Count;
+            var i=expected.LongCount;
+            var o=output.LongCount;
         });
     }
     [Fact]public void Serialize01(){
@@ -284,8 +283,8 @@ public class Test_Set2:共通 {
         //Assert.Equal(expected,actual);
         this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
     }

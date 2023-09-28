@@ -17,7 +17,7 @@ public static class ExtensionEnumerable {
             System.Diagnostics.Debug.Assert(HashSet.Add(Field.MetadataToken));
     }
 #endif
-    private const IEnumerable<int> _Int32 = null!;
+    private const System.Collections.Generic.IEnumerable<int> _Int32 = null!;
     //ExtensionSet,Enumerable共通のインラインメソッド
     public static readonly MethodInfo Aggregate_func = M(() => _Int32.Aggregate((a,b) => 0));
     public static readonly MethodInfo Aggregate_seed_func = M(() => _Int32.Aggregate(0,(a,b) => 0));

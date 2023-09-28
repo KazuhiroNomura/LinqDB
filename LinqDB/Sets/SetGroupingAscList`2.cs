@@ -17,6 +17,6 @@ public sealed class SetGroupingAscList<TKey,TValue>:SetGrouping<TKey,TValue,Grou
     /// 比較方法を指定したコンストラクタ
     /// </summary>
     /// <param name="KeyComparer">比較方法</param>
-    public SetGroupingAscList(IEqualityComparer<TKey> KeyComparer) : base(KeyComparer) { }
+    public SetGroupingAscList(IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
     internal override GroupingAscList<TKey,TValue> InternalKeyValue(TKey Key,TValue Value)=>new(Key,Value);
 }

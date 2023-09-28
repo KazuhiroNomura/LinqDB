@@ -44,7 +44,7 @@ public partial class AssemblyGenerator {
         }
         //4 SF
         Types1[0]=Object_TypeBuilder;
-        var ReturnType = typeof(ImmutableSet<>).MakeGenericType(Types1);
+        var ReturnType = typeof(Sets.IEnumerable<>).MakeGenericType(Types1);
         //5 V,TF
         var SchemaのMethod=Schema_TypeBuilder.DefineMethod(EscapedName,Public_HideBySig,ReturnType,InstanceParameterTypes);
         SchemaのMethod.InitLocals=false;

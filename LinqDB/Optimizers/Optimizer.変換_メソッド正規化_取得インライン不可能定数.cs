@@ -3,20 +3,20 @@
  * a.Except(a)→Empty
  */
 using System;
-using System.Collections.Generic;
+using Generic=System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Sets;
 //using Microsoft.CSharp.RuntimeBinder;
 //using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
 using LinqDB.Helpers;
-using CatchBlock = System.Linq.Expressions.CatchBlock;
-using Expression = System.Linq.Expressions.Expression;
+//using CatchBlock = System.Linq.Expressions.CatchBlock;
+//using Expression = System.Linq.Expressions.Expression;
 using Type = System.Type;
 //using System.Runtime.Remoting.Messaging;
+using Linq=System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers;
 partial class Optimizer {
@@ -101,7 +101,7 @@ partial class Optimizer {
             this.DictionaryConstant.Clear();
             return this.Traverse(e);
         }
-        internal Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
+        internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
         protected override Expression Constant(ConstantExpression Constant0) {
             if(!ILで直接埋め込めるか(Constant0.Type))
                 this.DictionaryConstant.TryAdd(Constant0,default!);
@@ -318,7 +318,7 @@ partial class Optimizer {
                     //        i=>o==i&&i==1
                     var 作業配列 = this._作業配列;
                     switch(MethodCall0_Method.Name) {
-                        case nameof(Enumerable.Average): {
+                        case nameof(Linq.Enumerable.Average): {
                             //s.Average()→s.Average(p=>p)
                             if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
                                 return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageDecimal_selector);
@@ -346,13 +346,13 @@ partial class Optimizer {
                                 );
                             }
                         }
-                        case nameof(Enumerable.Any): {
+                        case nameof(Linq.Enumerable.Any): {
                             //s.Select().Any()→s.Any()
                             //s.GroupJoin().Any()→s.Any()
                             var MethodCall1_Arguments_0=MethodCall1_Arguments[0];
                             while(MethodCall1_Arguments_0 is MethodCallExpression MethodCall){
                                 if(ループ展開可能メソッドか(MethodCall)){
-                                    if(MethodCall.Method.Name is nameof(Enumerable.GroupJoin) or nameof(Enumerable.Select)){
+                                    if(MethodCall.Method.Name is nameof(Linq.Enumerable.GroupJoin) or nameof(Linq.Enumerable.Select)){
                                         MethodCall1_Arguments_0=MethodCall.Arguments[0];
                                     } else
                                         break;
@@ -383,7 +383,7 @@ partial class Optimizer {
                             }
                             return MethodCall1;
                         }
-                        case nameof(Enumerable.Contains): {
+                        case nameof(Linq.Enumerable.Contains): {
                             //s.Contains(x)→s.Where(p=>p.Equals(x)).Any()
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_0_Type = MethodCall1_Arguments_0.Type;
@@ -473,7 +473,7 @@ partial class Optimizer {
                                 )
                             );
                         }
-                        case nameof(Enumerable.GroupBy):{
+                        case nameof(Linq.Enumerable.GroupBy):{
                             //GroupBy(keySelector,resultSelector)→GroupBy(keySelector,(key,g)=>resultSelector(g))
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
@@ -694,7 +694,7 @@ partial class Optimizer {
                                 }
                             }
                         }
-                        case nameof(Enumerable.GroupJoin): {
+                        case nameof(Linq.Enumerable.GroupJoin): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                             var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
@@ -742,7 +742,7 @@ partial class Optimizer {
                             }
                             MethodInfo Where_predicate;
                             MethodInfo Select_selector;
-                            if(typeof(Enumerable)==MethodCall0_Method.DeclaringType) {
+                            if(typeof(Linq.Enumerable)==MethodCall0_Method.DeclaringType) {
                                 Where_predicate=Reflection.ExtensionEnumerable.Where;
                                 Select_selector=Reflection.ExtensionEnumerable.Select_selector;
                             } else {
@@ -761,7 +761,7 @@ partial class Optimizer {
                                     MethodCall1_Arguments_5,
                                     作業配列.GetMethod(
                                         MethodCall1_Arguments_5_Type,
-                                        nameof(IEqualityComparer<int>.Equals),
+                                        nameof(Generic.IEqualityComparer<int>.Equals),
                                         T,
                                         T
                                     ),
@@ -826,7 +826,7 @@ partial class Optimizer {
                             );
                             return this.Call(Select);//Selectを作ったのでそれの形を最適化する。
                         }
-                        case nameof(Enumerable.Intersect): {
+                        case nameof(Linq.Enumerable.Intersect): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                             //Intersect
@@ -870,7 +870,7 @@ partial class Optimizer {
                                 );
                             }
                         }
-                        case nameof(Enumerable.Join): {
+                        case nameof(Linq.Enumerable.Join): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                             var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
@@ -886,7 +886,7 @@ partial class Optimizer {
                                 Select_selector=Reflection.ExtensionSet.Select_selector;
                                 Where_predicate=Reflection.ExtensionSet.Where;
                             } else {
-                                Debug.Assert(typeof(Enumerable)==MethodCall0_GenericMethodDefinition.DeclaringType);
+                                Debug.Assert(typeof(Linq.Enumerable)==MethodCall0_GenericMethodDefinition.DeclaringType);
                                 SelectMany_selector=Reflection.ExtensionEnumerable.SelectMany_selector;
                                 Select_selector=Reflection.ExtensionEnumerable.Select_selector;
                                 Where_predicate=Reflection.ExtensionEnumerable.Where;
@@ -899,7 +899,7 @@ partial class Optimizer {
                             LambdaExpression selector;
                             Expression Equals_this;
                             Expression Equals_Argument;
-                            IEnumerable<ParameterExpression> predicate_Parameters;
+                            System.Collections.Generic.IEnumerable<ParameterExpression> predicate_Parameters;
                             ParameterExpression o;
                             if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
                                 o=outerKeySelector.Parameters[0];
@@ -1054,7 +1054,7 @@ partial class Optimizer {
                                     MethodCall1_Arguments_5,
                                     作業配列.GetMethod(
                                         MethodCall1_Arguments_5_Type,
-                                        nameof(IEqualityComparer<int>.Equals),
+                                        nameof(Generic.IEqualityComparer<int>.Equals),
                                         T,
                                         T
                                     ),
@@ -1107,7 +1107,7 @@ partial class Optimizer {
                             Debug.Assert(Reflection.ExtensionEnumerable.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionEnumerable.SelectMany_indexSelector==SelectMany.Method.GetGenericMethodDefinition()||Reflection.ExtensionSet.SelectMany_selector==SelectMany.Method.GetGenericMethodDefinition());
                             return this.Call(SelectMany);//SelectManyを作ったのでそれの形を最適化する。
                         }
-                        case nameof(Enumerable.OfType): {
+                        case nameof(Linq.Enumerable.OfType): {
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var SelectMany = this.条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる(
                                 MethodCall0_Method,
@@ -1122,16 +1122,16 @@ partial class Optimizer {
                                 MethodCall1_Arguments_0
                             );
                         }
-                        case nameof(Enumerable.Select):{
+                        case nameof(Linq.Enumerable.Select):{
                             if(Reflection.ExtensionEnumerable.Select_indexSelector==MethodCall0_GenericMethodDefinition) break;
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                             if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
                                 var MethodCall1_MethodCall_Method = MethodCall1_MethodCall.Method;
                                 var MethodCall1_MethodCall_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall1_MethodCall_Method);
-                                Debug.Assert(nameof(Enumerable.Join)!=MethodCall1_MethodCall_Method.Name);
+                                Debug.Assert(nameof(Linq.Enumerable.Join)!=MethodCall1_MethodCall_Method.Name);
                                 switch(MethodCall1_MethodCall_Method.Name) {
-                                    case nameof(Enumerable.SelectMany): {
+                                    case nameof(Linq.Enumerable.SelectMany): {
                                         if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()){
                                             var SelectMany=this.内部SelectManyのselector_Bodyに外部メソッドを入れる(
                                                 MethodCall0_Method,
@@ -1142,7 +1142,7 @@ partial class Optimizer {
                                         }
                                         break;
                                     }
-                                    case nameof(Enumerable.Select): {
+                                    case nameof(Linq.Enumerable.Select): {
                                         Debug.Assert(
                                             Reflection.ExtensionEnumerable.Select_selector==MethodCall0_GenericMethodDefinition||
                                             Reflection.ExtensionSet.Select_selector==MethodCall0_GenericMethodDefinition
@@ -1229,7 +1229,7 @@ partial class Optimizer {
                                 MethodCall1_Arguments_1
                             );
                         }
-                        case nameof(Enumerable.Single): {
+                        case nameof(Linq.Enumerable.Single): {
                             if(Reflection.ExtensionEnumerable.Single_predicate==MethodCall0_GenericMethodDefinition) {
                                 //O.Single(predicate)→O.Where(predicate).Single()
                                 var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -1248,7 +1248,7 @@ partial class Optimizer {
                             }
                             break;
                         }
-                        case nameof(Enumerable.SingleOrDefault): {
+                        case nameof(Linq.Enumerable.SingleOrDefault): {
                             if(Reflection.ExtensionEnumerable.SingleOrDefault_predicate==MethodCall0_GenericMethodDefinition) {
                                 var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                                 var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
@@ -1285,7 +1285,7 @@ partial class Optimizer {
                             }
                             break;
                         }
-                        case nameof(Enumerable.ToArray): {
+                        case nameof(Linq.Enumerable.ToArray): {
                             Debug.Assert(Reflection.ExtensionEnumerable.ToArray==MethodCall0_GenericMethodDefinition);
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             if(MethodCall1_Arguments_0.Type.IsArray)return MethodCall1_Arguments_0;
@@ -1294,8 +1294,8 @@ partial class Optimizer {
                                 MethodCall1_Arguments_0
                             );
                         }
-                        case nameof(Enumerable.Except):
-                        case nameof(Enumerable.Union): {
+                        case nameof(Linq.Enumerable.Except):
+                        case nameof(Linq.Enumerable.Union): {
                             if(MethodCall1_Arguments.Count==3) {
                                 Debug.Assert(
                                     Reflection.ExtensionEnumerable.Except_comparer==MethodCall0_GenericMethodDefinition||
@@ -1334,7 +1334,7 @@ partial class Optimizer {
                                 return Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
                             }
                         }
-                        case nameof(Enumerable.SelectMany): {
+                        case nameof(Linq.Enumerable.SelectMany): {
                             if(MethodCall1_Arguments.Count==2) {
                                 //SelectManyの内部のWhereをSelectManyのsource,selectorに分離する。
                                 //SelectMany<TSource,TResult>
@@ -1363,7 +1363,7 @@ partial class Optimizer {
                                     if(OuterPredicate is not null) {
                                         MethodCall1_Arguments_0=this.Outer又はInnerにWhereを付ける(
                                             MethodCall1_Arguments_0,
-                                            MethodCall1_Arguments_0.Type.GetInterface(CommonLibrary.IOutputSet1_FullName) is not null
+                                            MethodCall1_Arguments_0.Type.IsImplement(typeof(IEnumerable<>))
                                                 ? Reflection.ExtensionSet.Where
                                                 : Reflection.ExtensionEnumerable.Where,
                                             selector_Parameters[0].Type,
@@ -1381,10 +1381,10 @@ partial class Optimizer {
                                     MethodCall1_Arguments_0,
                                     MethodCall1_Arguments_1
                                 );
-                                (Expression body,Expression? predicate) 共通(IList<ParameterExpression> selector_Parameters,MethodCallExpression MethodCall) {
+                                (Expression body,Expression? predicate) 共通(Generic.IList<ParameterExpression> selector_Parameters,MethodCallExpression MethodCall) {
                                     var MethodCall_Method = MethodCall.Method;
                                     switch(MethodCall_Method.Name) {
-                                        case nameof(Enumerable.Where): {
+                                        case nameof(Linq.Enumerable.Where): {
                                             if(MethodCall.Arguments[1] is LambdaExpression predicate) {
                                                 var o = selector_Parameters[0];
                                                 var predicate_Parameters = predicate.Parameters;
@@ -1460,7 +1460,7 @@ partial class Optimizer {
                                 }
                                 SelectMany=作業配列.MakeGenericMethod(SelectMany,TSource,TResult);
                                 Select=作業配列.MakeGenericMethod(Select,TCollection,TResult);
-                                IEnumerable<ParameterExpression> SelectMany_Parameters;
+                                System.Collections.Generic.IEnumerable<ParameterExpression> SelectMany_Parameters;
                                 Expression Select_source, Select_selector;
                                 if(MethodCall1_Arguments_1 is LambdaExpression collectionSelector) {
                                     var collectionSelector_Parameters = collectionSelector.Parameters;
@@ -1573,7 +1573,7 @@ partial class Optimizer {
                                 );
                             }
                         }
-                        case nameof(Enumerable.Where):{
+                        case nameof(Linq.Enumerable.Where):{
                             if(Reflection.ExtensionEnumerable.Where_index==MethodCall0_GenericMethodDefinition) break;
                             var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                             var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
@@ -2095,10 +2095,20 @@ partial class Optimizer {
             var SelectMany_Method=SelectMany.Method;
             var SelectMany_GenericMethodDefinition=SelectMany_Method.GetGenericMethodDefinition();
             //インターフェースのBaseType is nullは決まっている
-            if(typeof(ExtensionSet)==SelectMany_GenericMethodDefinition.DeclaringType&&
-               selector1_Body.Type.BaseType is null&&
-               SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector) 
-                SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
+            if(typeof(ExtensionSet)==SelectMany_GenericMethodDefinition.DeclaringType)
+                if(SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
+                    if(
+                        (selector1_Body.Type.IsGenericType&&selector1_Body.Type.GetGenericTypeDefinition()==typeof(Sets.IEnumerable<>))||
+                        selector1_Body.Type.IsImplement(typeof(Sets.IEnumerable<>))){
+                    }else{
+                        SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
+                    }
+                    //if(
+                    //    (selector1_Body.Type.IsGenericType&&selector1_Body.Type.GetGenericTypeDefinition()==typeof(Generic.IEnumerable<>))||
+                    //    !selector1_Body.Type.IsImplement(typeof(Sets.IEnumerable<>))
+                    //    //selector1_Body.Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)is null
+                    //)
+                    //    SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
             var MethodCall1_MethodCall_Arguments_0=MethodCall1_MethodCall_Arguments[0];
             var GenericArguments=SelectMany_Method.GetGenericArguments();
             GenericArguments[1]=IEnumerable1のT(selector1.ReturnType);
@@ -2117,7 +2127,7 @@ partial class Optimizer {
         /// <param name="Where_Parameters"></param>
         /// <param name="OuterPredicate又はInnerPredicate"></param>
         /// <returns></returns>
-        private Expression Outer又はInnerにWhereを付ける(Expression outer又はinner,MethodInfo Where,Type Where_T,IEnumerable<ParameterExpression> Where_Parameters,Expression OuterPredicate又はInnerPredicate) => Expression.Call(
+        private Expression Outer又はInnerにWhereを付ける(Expression outer又はinner,MethodInfo Where,Type Where_T,System.Collections.Generic.IEnumerable<ParameterExpression> Where_Parameters,Expression OuterPredicate又はInnerPredicate) => Expression.Call(
             this._作業配列.MakeGenericMethod(
                 Where,
                 Where_T

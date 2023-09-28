@@ -13,7 +13,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TContainer"></typeparam>
 [Serializable]
-public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContainer>, IWriteRead<TValue>
+public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet2<TContainer>, IWriteRead<TValue>
     where TValue : Entity<TKey,TContainer>, IWriteRead<TValue>
     where TKey : struct, IEquatable<TKey>
     where TContainer : Container{
@@ -40,7 +40,7 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContain
     ///   <see cref="Set{TValue,TKey,TContainer}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
     /// <param name="Container"></param>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    public Set(TContainer Container,IEnumerable<TValue> source) : this(Container) {
+    public Set(TContainer Container,System.Collections.Generic.IEnumerable<TValue> source) : this(Container) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
@@ -48,7 +48,7 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContain
     /// <param name="Container"></param>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(TContainer Container,IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : this(Container,Comparer) {
+    public Set(TContainer Container,System.Collections.Generic.IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : this(Container,Comparer) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
@@ -133,7 +133,7 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContain
         //var List追加Value=(List<TValue>)ExpressionSurrogateSelector.serializer.ReadObject(Reader);
         var List削除Key =  Utf8Json.JsonSerializer.Deserialize<List<TKey>>(Reader);
         var List追加Value =Utf8Json.JsonSerializer.Deserialize<List<TValue>>(Reader);
-        var Count = this.Count;
+        var Count = this.LongCount;
         foreach(var 削除Key in List削除Key) {
             if(!this.RemoveKey(削除Key)) {
                 throw new InvalidDataException("トランザクションログに存在しないキーを削除するという不整合が発生した。");
@@ -145,10 +145,10 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet<TContain
                 throw new InvalidDataException("トランザクションログに追加に重複という不整合が発生した。");
             }
         }
-        this._Count=Count+List追加Value.Count;
+        this._LongCount=Count+List追加Value.Count;
     }
     public void BinaryWrite(BinaryWriter Writer) {
-        Writer.Write(this.Count);
+        Writer.Write(this.LongCount);
         foreach(var a in this) {
             a.BinaryWrite(Writer);
         }

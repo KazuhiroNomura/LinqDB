@@ -86,7 +86,14 @@ public class ExtensionEnumerable:共通{
             Assert.Equal(expected,actual);
         }
     }
+    interface I0<T>{}
+    interface I1<T>:I0<T>{}
+
+    static void m<T>(I0<T>e){}
+    static void  m<T>(I1<T>e){}
     [Fact]public void AverageSingle(){
+        m(default(I0<int>)!);
+        m(default(I1<int>)!);
         for(var a=1;a<Count;a++){
             var s=DoubleSet(a).Select(p=>(float)p);
             var e=s.AsEnumerable();

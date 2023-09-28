@@ -5,6 +5,7 @@ using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 
 using System.Text;
+using IEnumerable=System.Collections.IEnumerable;
 // ReSharper disable LocalizableElement
 
 namespace Sets;
@@ -39,7 +40,7 @@ public class Test_Set1
             var m = Stopwatch.StartNew();
             for (var i = 0; i < 繰り返し; i++)
             {
-                foreach (var a in (IEnumerable<int>)s)
+                foreach (var a in (System.Collections.Generic.IEnumerable<int>)s)
                 {
                     count += a;
                 }
@@ -66,7 +67,7 @@ public class Test_Set1
         var s = new Set<int>();
         for (var a = 0; a < 要素数; a++)
             Assert.True(s.IsAdded(a));
-        Assert.Equal(s.Count, 要素数);
+        Assert.Equal(s.LongCount, 要素数);
     }
     private readonly struct EntityKey : IEquatable<EntityKey>
     {
@@ -180,7 +181,7 @@ public class Test_Set1
         {
             Assert.Fail(a + "は不要");
         }
-        Assert.Equal(s.Count, 0);
+        Assert.Equal(s.LongCount, 0);
     }
 
 
@@ -381,7 +382,7 @@ public class Test_Set1
     public void ToString0()
     {
         var d = new Set<int> { 1, 2 };
-        Assert.Equal("Count:2", d.ToString());
+        Assert.Equal($"{nameof(ImmutableSet.LongCount)}:2", d.ToString());
     }
     [Fact]
     public void UpdateWith()
@@ -529,7 +530,7 @@ public class Test_Set1
             Assert.True(s.IsAdded(a));
         for (var a = 0; a < 要素数; a++)
             Assert.True(s.Remove(a));
-        Assert.Equal(s.Count, 0);
+        Assert.Equal(s.LongCount, 0);
     }
     [Fact]
     public void Remove1()

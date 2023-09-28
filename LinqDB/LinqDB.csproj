@@ -41,6 +41,10 @@
   <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
+    <Compile Remove="Sets\IGroupingSet`2.cs" />
+    <Compile Remove="Sets\ImmutableGroupingSet`2.cs" />
+    <Compile Remove="Sets\IOutputSet.cs" />
+    <Compile Remove="Sets\IOutputSet`1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />

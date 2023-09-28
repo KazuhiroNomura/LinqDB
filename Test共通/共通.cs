@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using LinqDB.Sets;
 using LinqDB.Optimizers;
+using IEnumerable=System.Collections.IEnumerable;
 public abstract class 共通 {
     protected static readonly EnumerableSetEqualityComparer ProtectedComparer=new(ExpressionEqualityComparer);
     protected static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
@@ -104,7 +105,7 @@ public abstract class 共通 {
         //OptimizeLevel=OptimizeLevels.デバッグ^OptimizeLevels.プロファイル,
         AssemblyFileName = "共通.dll"
     };
-    protected static void 比較<T>(Expression<Func<IEnumerable<T>>> LINQ,SqlCommand Command,string SQL,Func<SqlDataReader,T> SQLSelector) {
+    protected static void 比較<T>(Expression<Func<System.Collections.Generic.IEnumerable<T>>> LINQ,SqlCommand Command,string SQL,Func<SqlDataReader,T> SQLSelector) {
         var LINQ結果 = o.Execute(LINQ);
         var SQL結果 = SQL実行(
             Command,
@@ -127,7 +128,7 @@ public abstract class 共通 {
         WriteLine($"{ComparerElapsedMilliseconds,7}ms");
     }
     private static readonly Random r = new(1);
-    protected static int ID<T>(Set<T> Set) => r.Next(((int)Set.Count+1)*2);
+    protected static int ID<T>(Set<T> Set) => r.Next(((int)Set.LongCount+1)*2);
     [DebuggerDisplay("{"+nameof(Display)+"}")]
     protected struct 情報 {
         public string Display => $"{this.成功},{this.重複},{this.例外}";
@@ -155,7 +156,7 @@ public abstract class 共通 {
         //where TValue : Entity<TKey,TContainer>, IPrimaryKey<TKey>, IEquatable<TValue>//,IWriteRead<TValue>
         where TKey : struct, IEquatable<TKey>
         where TContainer : LinqDB.Databases.Container {
-        if(Set.Count==0) return;
+        if(Set.LongCount==0) return;
         try {
             var Sampling = Set.Sampling;
             if(Set.RemoveKey(Sampling.PrimaryKey)) {
@@ -196,13 +197,13 @@ public abstract class 共通 {
         var s2 = Stopwatch.StartNew();
         foreach(var a in (IEnumerable)Result) Count2++;
         s2.Stop();
-        Debug.Assert(Count0==Result.Count);
+        Debug.Assert(Count0==Result.LongCount);
         Debug.Assert(Count0==Count1);
         Debug.Assert(Count0==Count2);
         var t = Lambda.ToString();
-        Console.WriteLine($"{t.Substring(t.LastIndexOf('.')+1),30}{Result.Count,7} Set<T>{s0.ElapsedMilliseconds,7}ms IEnumerable<T>{s1.ElapsedMilliseconds,7}ms IEnumerable{s2.ElapsedMilliseconds,7}ms");
+        Console.WriteLine($"{t.Substring(t.LastIndexOf('.')+1),30}{Result.LongCount,7} Set<T>{s0.ElapsedMilliseconds,7}ms IEnumerable<T>{s1.ElapsedMilliseconds,7}ms IEnumerable{s2.ElapsedMilliseconds,7}ms");
     }
-    protected static void E<T>(IEnumerable<T> Set,Action<T> Action){
+    protected static void E<T>(System.Collections.Generic.IEnumerable<T> Set,Action<T> Action){
         var Count=0L;
         Debug.Assert(Set!=null,nameof(Set)+" != null");
         foreach(var a in Set!) {

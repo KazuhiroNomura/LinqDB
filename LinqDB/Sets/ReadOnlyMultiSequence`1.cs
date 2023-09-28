@@ -71,7 +71,7 @@ public sealed class ReadOnlyMultiSequence<T>{
     [NonSerialized]
     private Enumerator 変数Enumerator;
     public ReadOnlyMultiSequence(ImmutableSet<T>source) {
-        var Count=source.Count;
+        var Count=source.LongCount;
         var ArrayIndex = 0;
         var ArrayCount = Count/ArrayLength;
         var Enumerator=source.GetEnumerator();

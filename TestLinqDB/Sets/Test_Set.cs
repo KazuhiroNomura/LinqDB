@@ -321,14 +321,14 @@ public class Tables{
                 EnumerateData[b]=new Entity(ID1,ID2,ID3);
                 low1=value+1;
             }
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).ToSet().Count>0);
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).ToSet().LongCount>0);
             var SetData=EnumerateData.ToSet();
             Assert.True(EnumerateData.GroupBy(p=>p.ID1).Count()>0);
             Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).Count()>0);
             Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
-            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).Count>0);
+            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).LongCount>0);
             Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
-            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).Count>0);
+            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).LongCount>0);
         }
     }
     [Fact]
@@ -369,41 +369,41 @@ public class Tables{
                 1
             },_=>false),o=>o,i=>i,(o,i)=>new{
                 o,i
-            }).Count()>0);
+            }).Any());
             Assert.True(k1.GroupJoin(k1,o=>o.PrimaryKey,i=>i.PrimaryKey,(outer,inner)=>new{
                 outer,inner
-            }).Count()>0);
-            Assert.True(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(_,inner)=>inner).Count()>0);
-            Assert.True(k3.GroupJoin(k3,o=>o.PrimaryKey,i=>i.PrimaryKey,(_,inner)=>inner).Count()>0);
+            }).Any());
+            Assert.True(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(_,inner)=>inner).Any());
+            Assert.True(k3.GroupJoin(k3,o=>o.PrimaryKey,i=>i.PrimaryKey,(_,inner)=>inner).Any());
         }
         var expected=Set作成(
             new{
-                o=0L,i=(ImmutableSet<long>)new Set<long>()
+                o=0L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
             },
             new{
-                o=1L,i=(ImmutableSet<long>)new Set<long>()
+                o=1L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
             },
             new{
                 o=2L,
-                i=(ImmutableSet<long>)new Set<long>{
+                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
                     2,3
                 }
             },
             new{
                 o=3L,
-                i=(ImmutableSet<long>)new Set<long>{
+                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
                     2,3
                 }
             },
             new{
                 o=4L,
-                i=(ImmutableSet<long>)new Set<long>{
+                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
                     4,5
                 }
             },
             new{
                 o=5L,
-                i=(ImmutableSet<long>)new Set<long>{
+                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
                     4,5
                 }
             }
@@ -425,10 +425,7 @@ public class Tables{
         },o=>o/2,i=>i/2,(o,i)=>new{
             o,i
         });
-        Assert.Equal(
-            expected,
-            actual
-        );
+        Assert.Equal(expected,actual);
     }
     [Fact]
     public void Geomean(){
@@ -847,7 +844,7 @@ public class Tables{
             foreach(var _ in expected){
                 c++;
             }
-            Assert.Equal(expected.Count,c);
+            Assert.Equal(expected.LongCount,c);
         }
         expected.Assert();
     }
@@ -1369,4 +1366,11 @@ public class Tables{
     [Fact]public void Single_2行ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.Single());
     [Fact]public void SingleOrDefault0_ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.SingleOrDefault());
     [Fact]public void SingleOrDefault1_ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.SingleOrDefault(long.MaxValue));
+    [Fact]
+    public void SetEquals(){
+        var expected=new Set<Int>{1};
+        var actual=new Set<Int>{1}.Union(new Set<Int>{1});
+        var r=expected.SetEquals(actual);
+        Assert.Equal(expected,actual);
+    }
 }

@@ -1,34 +1,32 @@
-﻿using System.Collections.Generic;
-namespace LinqDB.Sets;
+﻿using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// Enumerable.GroupJoin,Enumerable.Joinなどのハッシュ結合で使うDictionaryコレクション
-/// </summary>
-/// <typeparam name="TValue">値のType</typeparam>
-/// <typeparam name="TKey">結合式のType</typeparam>
-public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,AscList<TValue>>{
-    /// <summary>
-    /// 既定コンストラクタ
-    /// </summary>
-    public LookupList() {
+using Collections =System.Collections;
+namespace LinqDB.Sets;
+using Linq= System.Linq;
+using Generic=Collections.Generic;
+public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,AscList<TValue>>,Linq.ILookup<TKey,TValue>{
+    public LookupList():this(Generic.EqualityComparer<TKey>.Default){}
+    public LookupList(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
+
+    Generic.IEnumerable<TValue> Linq.ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
+
+    public int Count =>checked((int)this._LongCount);
+
+
+    internal override KeyValueCollection<TValue,TKey,AscList<TValue>> InternalKeyValue(TKey Key,TValue Value)=>new(Key,new(){Value});
+
+    bool Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+
+    IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
+        foreach(var a in this) yield return a;
     }
-    /// <summary>
-    /// 比較方法を指定したコンストラクタ
-    /// </summary>
-    /// <param name="KeyComparer">比較方法</param>
-    public LookupList(IEqualityComparer<TKey> KeyComparer):base(KeyComparer) {
-    }
-    private static readonly AscList<TValue> EmptyCollection =new();
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public IEnumerable<TValue> GetTKeyValue(TKey Key) => this.GetValue(Key,EmptyCollection);
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public IEnumerable<TValue> GetObjectValue(object Key) => this.GetValue(Key,EmptyCollection);
-    internal override KeyValueCollection<TValue,TKey,AscList<TValue>> InternalKeyValue(TKey Key,TValue Value) {
-        var AscList = new AscList<TValue>{Value};
-        return new KeyValueCollection<TValue,TKey,AscList<TValue>>(Key,AscList);
-    }
+    /*
+bool Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator(){
+   foreach(var a in this) yield return a;
+}
+int Linq.ILookup<TKey,TValue>.Count =>(int)this.LongCount;
+Generic.IEnumerable<TValue> Linq.ILookup<TKey,TValue>.this[TKey key]=>this.GetIndex(key);
+*/
 }

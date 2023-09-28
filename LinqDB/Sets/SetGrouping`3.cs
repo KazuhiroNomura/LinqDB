@@ -1,9 +1,10 @@
 ﻿#pragma warning disable CS8618 // Null 非許容フィールドは初期化されていません。null 許容として宣言することを検討してください。
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using Linq=System.Linq;
 using System.Runtime.Serialization;
+using Collections=System.Collections;
 namespace LinqDB.Sets;
+using Generic=Collections.Generic;
 
 /// <summary>
 /// GroupByの結果。タプルはIGrouping{TKey,TValue}。
@@ -12,22 +13,22 @@ namespace LinqDB.Sets;
 /// <typeparam name="TValue">値のType</typeparam>
 /// <typeparam name="TGrouping"></typeparam>
 [Serializable]
-public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGrouping>where TGrouping : IGrouping<TKey,TValue>, ICollection<TValue> {
+public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGrouping>where TGrouping : Linq.IGrouping<TKey,TValue>, Generic.ICollection<TValue> {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
-    protected readonly IEqualityComparer<TKey> KeyComparer;
+    protected readonly Generic.IEqualityComparer<TKey> KeyComparer;
     protected SetGrouping(SerializationInfo SerializationInfo,StreamingContext StreamingContext) : base(SerializationInfo,StreamingContext) {
     }
     /// <summary>
     /// 既定コンストラクタ
     /// </summary>
-    protected SetGrouping(): this(EqualityComparer<TKey>.Default) { }
+    protected SetGrouping(): this(Generic.EqualityComparer<TKey>.Default) { }
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="KeyComparer">キーの比較時に使用する <see cref="EqualityComparer{TKey}" /> 実装。キーの型の既定の <see cref="EqualityComparer{TKey}" /> を使用する場合は null。</param>
-    protected SetGrouping(IEqualityComparer<TKey> KeyComparer) => this.KeyComparer=KeyComparer;
+    /// <param name="KeyComparer">キーの比較時に使用する <see cref="Generic.EqualityComparer{TKey}" /> 実装。キーの型の既定の <see cref="Generic.EqualityComparer{TKey}" /> を使用する場合は null。</param>
+    protected SetGrouping(Generic.IEqualityComparer<TKey> KeyComparer) => this.KeyComparer=KeyComparer;
     /// <summary>
     /// 指定したキーと値をディクショナリに追加する。
     /// KeyがなければTGrouping(Key,Value)
@@ -44,7 +45,7 @@ public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGroupin
                 var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNode_LinkedNodeItem is null) {
                     LinkedNode._LinkedNodeItem=new LinkedNodeItemT(this.InternalKeyValue(Key,Value));
-                    this._Count++;
+                    this._LongCount++;
                     return;
                 }
                 if(KeyComparer.Equals(LinkedNode_LinkedNodeItem.Item.Key,Key)) {
@@ -61,7 +62,10 @@ public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGroupin
             HashCode,
             new LinkedNodeItemT(this.InternalKeyValue(Key,Value))
         );
-        this._Count++;
+        this._LongCount++;
     }
     internal abstract TGrouping InternalKeyValue(TKey Key,TValue Value);
+    //public override int GetHashCode()=>this.key
+    //    return base.GetHashCode();
+    //}
 }

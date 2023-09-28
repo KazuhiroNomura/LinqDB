@@ -1,32 +1,47 @@
-﻿using System.Collections.Generic;
-namespace LinqDB.Sets;
+﻿using System;
+using System.Collections.Generic;
 
-/// <summary>
-/// ExtensionSet.GroupJoin,ExtensionSet.Joinなどのハッシュ結合で使うDictionaryコレクション
-/// </summary>
-/// <typeparam name="TValue">値のType</typeparam>
-/// <typeparam name="TKey">結合式のType</typeparam>
-public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>{
-    /// <summary>
-    /// 既定コンストラクタ
-    /// </summary>
-    public LookupSet(){
+using Collections=System.Collections;
+namespace LinqDB.Sets;
+using Linq=System.Linq;
+using Generic=Collections.Generic;
+public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILookup<TKey,TValue>{
+    public LookupSet()  { }
+    public LookupSet(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
+
+    Generic.IEnumerable<TValue> Linq.ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
+
+    //IEnumerable<TValue> ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
+
+    public int Count => throw new NotImplementedException();
+
+    public bool Contains(TKey key) {
+        throw new NotImplementedException();
     }
-    /// <summary>
-    /// 比較方法を指定したコンストラクタ
-    /// </summary>
-    /// <param name="KeyComparer">比較方法</param>
-    public LookupSet(IEqualityComparer<TKey> KeyComparer):base(KeyComparer){
+
+    internal override KeyValueCollection<TValue,TKey,Set<TValue>> InternalKeyValue(TKey Key,TValue Value)=>new(Key,new(){ Value });
+
+    //bool ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+    IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
+        foreach(var a in this) yield return a;
     }
-    private static readonly Set<TValue> EmptyCollection = new();
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public ImmutableSet<TValue> GetTKeyValue(TKey Key) => this.GetValue(Key,EmptyCollection);
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public ImmutableSet<TValue> GetObjectValue(object Key) => this.GetValue(Key,EmptyCollection);
-    internal override KeyValueCollection<TValue,TKey,Set<TValue>> InternalKeyValue(TKey Key,TValue Value) =>
-        new(Key,new Set<TValue> { Value });
+
+    IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
+        throw new NotImplementedException();
+    }
+    /*
+public int Count{get;}
+
+IEnumerable<TValue> ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
+public IEnumerable<TValue> this[TKey key]=>throw new NotImplementedException();
+public bool Contains(TKey key){
+throw new NotImplementedException();
+}
+bool ILookup<TKey,TValue>.Contains(TKey key) {
+throw new NotImplementedException();
+}
+Generic.IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
+foreach(var a in this) yield return a;
+}
+*/
 }

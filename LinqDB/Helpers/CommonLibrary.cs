@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using Linq=System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Sockets;
@@ -10,14 +10,14 @@ using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Collections;
-using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Runtime.CompilerServices;
 using LinqDB.Optimizers;
 using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
+using Collections=System.Collections;
 namespace LinqDB.Helpers;
+using Generic=Collections.Generic;
 
 /// <summary>
 /// 設定と定数。
@@ -241,11 +241,15 @@ public static class CommonLibrary {
     //internal const String IGrouping2_FullName = "System.Linq.IGrouping`2";
     //internal const String IOutputSet1_FullName = "LinqDB.Sets.IOutputSet`1";
     //internal const String IGroupingSet2_FullName = "LinqDB.Sets.IGroupingSet`2";
-    internal static readonly string IEnumerable1_FullName = typeof(IEnumerable<>).FullName!;
-    internal static readonly string IEnumerable_FullName = typeof(IEnumerable).FullName!;
-    internal static readonly string IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
-    internal static readonly string IOutputSet1_FullName = typeof(IOutputSet<>).FullName!;
-    internal static readonly string IGroupingSet2_FullName = typeof(IGroupingSet<,>).FullName!;
+    internal static readonly string Generic_IEnumerable1_FullName = typeof(Generic.IEnumerable<>).FullName!;
+    internal static readonly string Collections_IEnumerable_FullName = typeof(Collections.IEnumerable).FullName!;
+    internal static readonly string Linq_IGrouping2_FullName = typeof(Linq.IGrouping<,>).FullName!;
+    internal static readonly string Sets_IEnumerable1_FullName = typeof(IEnumerable<>).FullName!;
+    internal static readonly string Sets_IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
+    public static bool IsImplement(this Type 検索されるType,Type 検索したいTypeDifinition){
+        if(検索されるType.IsGenericType&&検索されるType.GetGenericTypeDefinition()==検索したいTypeDifinition)return true;
+        return Linq.Enumerable.Contains(Linq.Enumerable.Select(検索されるType.GetInterfaces(),p=>p.IsGenericType?p.GetGenericTypeDefinition():p),検索したいTypeDifinition);
+    }
     //internal const int CS匿名型名_Length18= 18;
     //internal const string CS匿名型名="<>f__AnonymousType";
     //internal const int VB匿名型名_Length16 = 16;
@@ -255,7 +259,7 @@ public static class CommonLibrary {
     //internal const int VBクロージャー_Length11 = 11;
     //internal const string VBクロージャー="_Closure$__";
     internal static readonly string IEquatable_FullName = typeof(IEquatable<>).FullName!;
-    internal static readonly string IEqualityComparer_FullName = typeof(IEqualityComparer<>).FullName!;
+    internal static readonly string IEqualityComparer_FullName = typeof(Generic.IEqualityComparer<>).FullName!;
     private const string CS匿名型名="<>f__AnonymousType";
     private const string VB匿名型名="VB$AnonymousType";
     //private sealed class <>c{
@@ -387,11 +391,11 @@ public static class CommonLibrary {
     //    }
     //    return New;
     //}
-    internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> 旧Arguments)=>
+    internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,Generic.IList<Expression> 旧Arguments)=>
         旧Arguments.Count==0
             ?Expression.New(Reflection.ValueTuple.ValueTuple0)
             :ValueTupleでNewする(作業配列,旧Arguments,0);
-    private static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,IList<Expression> 旧Arguments,int Offset) {
+    private static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,Generic.IList<Expression> 旧Arguments,int Offset) {
         var 残りType数 = 旧Arguments.Count-Offset;
         switch(残りType数) {
             case 1:

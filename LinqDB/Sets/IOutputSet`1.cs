@@ -8,7 +8,7 @@ namespace LinqDB.Sets;
 /// 具象Typeでインターフェース探索と既定クラス探索を別に行うのは大変なのでそのインターフェース。
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IOutputSet<out T>:IEnumerable<T>,IOutputSet {
+public interface IOutputSet<out T>:System.Collections.Generic.IEnumerable<T>,IOutputSet {
     //new ImmutableSet<T>.Enumerator GetEnumerator();
     T Sampling { get; }
     //ImmutableSet<T>.TreeNode TreeRoot { get; }

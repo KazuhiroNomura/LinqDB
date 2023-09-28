@@ -93,7 +93,7 @@ public sealed partial class Optimizer{
             var 作業配列 = this.作業配列;
             var keySelector_Body = ValueTupleでNewする(作業配列,keySelector_Expressions);
             var Key = Expressions.Expression.Parameter(keySelector_Body.Type,"Key");
-            var Group = Expressions.Expression.Parameter(作業配列.MakeGenericType(typeof(ImmutableSet<>),Element_Type),"Group");
+            var Group = Expressions.Expression.Parameter(作業配列.MakeGenericType(typeof(IEnumerable<>),Element_Type),"Group");
             var x_InColumns=x.InColumns;
             {
                 var Item番号 = 1;

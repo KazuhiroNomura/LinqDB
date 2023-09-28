@@ -72,7 +72,7 @@ public sealed class ReadOnlySingleSequence<T> {
     private Enumerator 変数Enumerator;
     //private readonly T[] Array;
     public ReadOnlySingleSequence(ImmutableSet<T> source) {
-        var Count = source.Count;
+        var Count = source.LongCount;
         this.変数Enumerator.Count=Count;
         var Array=new T[Count];
         this.変数Enumerator.Array=Array;

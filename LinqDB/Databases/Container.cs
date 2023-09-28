@@ -30,7 +30,7 @@ public partial class Container:IDisposable {
     /// <summary>
     /// 1要素集合
     /// </summary>
-    public static ImmutableSet<AttributeEmpty> TABLE_DEE { get; } = new Set<AttributeEmpty> { new() };
+    public static Sets.IEnumerable<AttributeEmpty> TABLE_DEE { get; } = new Set<AttributeEmpty> { new() };
     ///// <summary>
     ///// ログ書き込みに使うXmlDictionaryWriter
     ///// </summary>
@@ -132,7 +132,7 @@ public partial class Container:IDisposable {
                         table_type.base_type
                     )
                 );
-                var IEnumerable1 = Table.PropertyType.GetInterface(CommonLibrary.IEnumerable1_FullName);
+                var IEnumerable1 = Table.PropertyType.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
                 if(IEnumerable1 is not null) {
                     Table処理(catalog,tables,columns,IEnumerable1.GetGenericArguments()[0]);
                 }

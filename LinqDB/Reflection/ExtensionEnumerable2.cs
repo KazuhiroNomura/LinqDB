@@ -18,7 +18,7 @@ public static class ExtensionEnumerable2 {
             System.Diagnostics.Debug.Assert(HashSet.Add(Field.MetadataToken));
     }
 #endif
-    private const IEnumerable<int> _Int32 = null!;
+    private const System.Collections.Generic.IEnumerable<int> _Int32 = null!;
     //Enumerable独自非インラインメソッド
     public static readonly MethodInfo Concat = M(() => _Int32.Concat(default!));
     public static readonly MethodInfo Contains_value_comparer = M(() => _Int32.Contains(0,null));

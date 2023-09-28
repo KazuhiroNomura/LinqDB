@@ -22,13 +22,13 @@ public class Set<TValue, TKey>:Set<TValue>
     /// <summary>
     ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    public Set(IEnumerable<TValue> source) : base(source) {
+    public Set(System.Collections.Generic.IEnumerable<TValue> source) : base(source) {
     }
     /// <summary>
     ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+    public Set(System.Collections.Generic.IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
     }
     /// <summary>
     ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
@@ -82,7 +82,7 @@ public class Set<TValue, TKey>:Set<TValue>
                     }
                     TreeNode=P;
                 }
-                this._Count--;
+                this._LongCount--;
                 return true;
             }
             LinkedNode=a;
@@ -112,7 +112,7 @@ public class Set<TValue, TKey>:Set<TValue>
     /// </summary>
     /// <param name="Key"></param>
     /// <returns>値が取得出来たか</returns>
-    public ImmutableSet<TValue> GetSet(TKey Key) {
+    public IEnumerable<TValue> GetSet(TKey Key) {
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {

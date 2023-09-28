@@ -1,6 +1,10 @@
 ﻿using LinqDB.Sets.Exceptions;
+using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
+
 using System;
+using System.Collections;
 using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -8,7 +12,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-
+using Generic=System.Collections.Generic;
 namespace LinqDB.Sets;
 
 /// <summary>
@@ -23,7 +27,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
         public static readonly Formatter Instance = new();
         public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {
-            var Count = value!.Count;
+            var Count = value!.LongCount;
             var Formatter = writer.GetFormatter<T>();
             writer.WriteVarInt(Count);
             foreach(var item in value) {
@@ -52,32 +56,32 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <summary>
     /// <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には等値比較子が使用されます。
     /// </summary>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    public Set(IEqualityComparer<T> Comparer):base(Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    public Set(Generic.IEqualityComparer<T> Comparer):base(Comparer) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    public Set(IEnumerable<T> source):base(source,EqualityComparer<T>.Default) {
+    public Set(System.Collections.Generic.IEnumerable<T> source):base(source,Generic.EqualityComparer<T>.Default) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    public Set(IEnumerable<T> source,IEqualityComparer<T> Comparer) : base(source,Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    public Set(System.Collections.Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer) : base(source,Comparer) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
-    public Set(T[] source,IEqualityComparer<T> Comparer) :base(source,Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    public Set(T[] source,Generic.IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{T}" /> の実装。</param>
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
-    public Set(ImmutableSet<T> source,IEqualityComparer<T> Comparer) :base(source,Comparer) {
+    public Set(ImmutableSet<T> source,Generic.IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
     public sealed class JsonFormatter:Utf8Json.IJsonFormatter<Set<T>>{
         public static readonly JsonFormatter Instance=new();
@@ -234,23 +238,23 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     //    ExpressionSurrogateSelector.serializer.WriteObject(Writer,追加Item);
     //}
     public void Add(T item){
-        if(this.InternalAdd(item)) this._Count++;
+        if(this.InternalAdd(item)) this._LongCount++;
     }
-    public bool Contains(T Item){
-        if(Item is null) return false;
-        var HashCode = (long)(uint)Item.GetHashCode();
-        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
-            var Comparer = this.Comparer;
-            LinkedNodeT LinkedNode = TreeNode;
-            while(true) {
-                var LinkedNodeItem = LinkedNode._LinkedNodeItem;
-                if(LinkedNodeItem is null)return false;
-                if(Comparer.Equals(LinkedNodeItem.Item,Item))return true;
-                LinkedNode=LinkedNodeItem;
-            }
-        }
-        return false;
-    }
+    public bool Contains(T Item)=>this.InternalContains(Item);
+    //    if(Item is null) return false;
+    //    var HashCode = (long)(uint)Item.GetHashCode();
+    //    if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+    //        var Comparer = this.Comparer;
+    //        LinkedNodeT LinkedNode = TreeNode;
+    //        while(true) {
+    //            var LinkedNodeItem = LinkedNode._LinkedNodeItem;
+    //            if(LinkedNodeItem is null)return false;
+    //            if(Comparer.Equals(LinkedNodeItem.Item,Item))return true;
+    //            LinkedNode=LinkedNodeItem;
+    //        }
+    //    }
+    //    return false;
+    //}
     public void CopyTo(T[] array,int arrayIndex){
         throw new NotImplementedException();
     }
@@ -261,7 +265,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         var TreeRoot = this.TreeRoot;
         TreeRoot.L=TreeRoot.R=null;
         TreeRoot._LinkedNodeItem=null;
-        this._Count=0;
+        this._LongCount=0;
     }
     /// <summary>
     /// 要素の追加処理。
@@ -271,7 +275,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void AddOrThrow(T Item) {
         if(this.InternalAdd(Item)) {
-            this._Count++;
+            this._LongCount++;
         } else {
             throw new ArgumentException(Item!.ToString());
         }
@@ -284,7 +288,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAdded(T Item) {
         if(this.InternalAdd(Item)) {
-            this._Count++;
+            this._LongCount++;
             return true;
         } else {
             return false;
@@ -295,14 +299,14 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="source">追加したい集合</param>
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
-    public void AddRange(IEnumerable<T>source) {
-        var Count = this._Count;
+    public void AddRange(System.Collections.Generic.IEnumerable<T>source) {
+        var Count = this._LongCount;
         foreach(var Item in source) {
             if(this.InternalAdd(Item)) {
                 Count++;
             }
         }
-        this._Count+=Count;
+        this._LongCount+=Count;
     }
     //public Boolean AddRange(ImmutableSet<T> source) {
     //    foreach(var Item in source) {
@@ -326,7 +330,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         foreach(var Item in source) {
             this.InternalAdd(Item);
         }
-        this._Count+=source.Count;
+        this._LongCount+=source._LongCount;
     }
     /// <summary>
     /// 要素を削除する。
@@ -335,19 +339,22 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <returns>要素がなければfalse、あればtrue</returns>
     public bool Remove(T Item){
         if(this.InternalRemove(Item)) {
-            this._Count--;
+            this._LongCount--;
             return true;
         }
         return false;
     }
-    int ICollection<T>.Count=>(int)this.Count;
-    public bool IsReadOnly=>false;
+    public bool IsReadOnly=>true;
+
+    public int Count => checked((int)this.LongCount);
+
+
     /// <summary>
     /// 要素を削除する。失敗は無視する。
     /// </summary>
     /// <param name="Item">削除したい値</param>
     public void VoidRemove(T Item) {
-        if(this.InternalRemove(Item))this._Count--;
+        if(this.InternalRemove(Item))this._LongCount--;
     }
     /// <summary>
     /// 要素を削除する。ConcurrentRemoveで並列化できる失敗は無視する。
@@ -407,7 +414,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
             if(this.InternalAdd(setSelector(Node.Item)))
                 Add数++;
-        this._Count-=Remove数-Add数;
+        this._LongCount-=Remove数-Add数;
         return (Remove数, Add数);
     }
     /// <summary>
@@ -458,7 +465,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
         for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
             if(this.InternalAdd(setSelector(Node.Item)))
                 Add数++;
-        this._Count-=Remove数-Add数;
+        this._LongCount-=Remove数-Add数;
         return (Remove数, Add数);
     }
     private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNodeT? ref_TreeNode,int スレッド先頭,int スレッド末尾) {
@@ -547,29 +554,29 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     public long DeleteWith(Func<T,bool> predicate) {
         var TreeRoot = this.TreeRoot;
         var Remove数 = PrivateDeleteWith(predicate,ref TreeRoot,0,Environment.ProcessorCount);
-        this._Count-=Remove数;
+        this._LongCount-=Remove数;
         return Remove数;
     }
     /// <summary>現在の <see cref="Set{T}" /> オブジェクトを、そのオブジェクトと指定されたコレクションの両方に存在する要素だけが格納されるように変更します。</summary>
     /// <param name="other">現在の <see cref="Set{T}" /> オブジェクトと比較するコレクション。</param>
-    public long IntersectWith(ImmutableSet<T> other) {
+    public long IntersectWith(IEnumerable<T> other) {
         var r = new Set<T>();
         long Count = 0;
         foreach(var a in other)
             if(ExtensionSet.Contains(this,a)&&r.InternalAdd(a))
                 Count++;
         this.変数Enumerator=r.変数Enumerator;
-        return this._Count=Count;
+        return this._LongCount=Count;
     }
     /// <summary>
     /// 現在の <see cref="Set{T}" /> オブジェクトを、そのオブジェクトと指定されたコレクションに存在するすべての要素が格納されるように変更します。</summary>
     /// <param name="other">現在の <see cref="Set{T}" /> オブジェクトと比較するコレクション。</param>
-    public long UnionWith(ImmutableSet<T> other) {
+    public long UnionWith(IEnumerable<T> other) {
         long Count = 0;
         foreach(var a in other)
             if(this.InternalAdd(a))
                 Count++;
-        this._Count+=Count;
+        this._LongCount+=Count;
         return Count;
     }
     /// <summary>
@@ -578,34 +585,51 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <param name="other"></param>
     /// <returns></returns>
     /// <exception cref="OneTupleException"></exception>
-    public long DUnionWith(ImmutableSet<T> other) {
+    public long DUnionWith(IEnumerable<T> other) {
         long Count = 0;
         foreach(var a in other) {
             if(!this.InternalAdd(a))
                 throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
             Count++;
         }
-        this._Count+=Count;
+        this._LongCount+=Count;
         return Count;
     }
     /// <summary>現在の <see cref="Set{T}" /> オブジェクトから、指定されたコレクションに含まれる要素をすべて削除します。</summary>
     /// <param name="other">
     ///   <see cref="Set{T}" /> オブジェクトから削除する項目のコレクション。</param>
-    public long ExceptWith(ImmutableSet<T> other) {
+    public long ExceptWith(IEnumerable<T> other) {
         long Count = 0;
         foreach(var a in other)
             if(this.InternalRemove(a))
                 Count++;
-        this._Count-=Count;
+        this._LongCount-=Count;
         return Count;
     }
     /// <summary>
     /// 完全差集合。
     /// </summary>
     /// <param name="other"></param>
-    public void SymmetricExceptWith(ImmutableSet<T> other) {
-        var result = this.SymmetricExcept(other);
-        this.変数Enumerator=result.変数Enumerator;
-        this._Count=result.Count;
+    public void SymmetricExceptWith(IEnumerable<T> other) {
+        var second=(Set<T>)other;
+        var Result = new Set<T>();
+        var Count = 0L;
+        foreach(var a in this) {
+            if(!second.InternalContains(a)) {
+                var r = Result.InternalAdd(a);
+                Debug.Assert(r);
+                Count++;
+            }
+        }
+        foreach(var a in second) {
+            if(!this.InternalContains(a)) {
+                var r = Result.InternalAdd(a);
+                Debug.Assert(r);
+                Count++;
+            }
+        }
+        Result._LongCount=Count;
+        this.変数Enumerator=Result.変数Enumerator;
+        this._LongCount=Result._LongCount;
     }
 }

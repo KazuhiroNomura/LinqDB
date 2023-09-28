@@ -68,7 +68,7 @@ public sealed partial class Optimizer {
                 //Source.GroupBy(ss=>,(Key,Group)=>Group.Sum(ge=>))
                 //Element_Type=Source.Type.GetGenericArguments()[0];
                 var Group = Expressions.Expression.Parameter(
-                    作業配列.MakeGenericType(typeof(ImmutableSet<>),Element_Type),
+                    作業配列.MakeGenericType(typeof(IEnumerable<>),Element_Type),
                     "Group"
                 );
                 RefPeek.集約関数のParameter=ss;
@@ -83,6 +83,15 @@ public sealed partial class Optimizer {
                 var Item番号 = 1;
                 for(var a = 0;a<RefPeek_List_GroupByExpression_Count;a++)
                     resultSelector_Body=変換_旧Expressionを新Expression1.実行(resultSelector_Body,RefPeek_List_GroupByExpression[a],ValueTuple_Item(ref ValueTuple,ref Item番号));
+                var x0=作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,Element_Type,keySelector_Body.Type,resultSelector_Body.Type);
+                var y=Expressions.Expression.Lambda(
+                    keySelector_Body,
+                    作業配列.Parameters設定(ss)
+                );
+                var z=Expressions.Expression.Lambda(
+                    resultSelector_Body,
+                    作業配列.Parameters設定(Key,Group)
+                );
                 var GroupBy = Expressions.Expression.Call(
                     作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,Element_Type,keySelector_Body.Type,resultSelector_Body.Type),
                     Source,

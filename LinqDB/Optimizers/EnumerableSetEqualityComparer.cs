@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+//using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
 using Microsoft.CSharp.RuntimeBinder;
+using IEnumerable=System.Collections.IEnumerable;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;
@@ -114,7 +115,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         return List;
     }
     private static bool Groupingか(Type Type)=>
-        Type.GetInterface(CommonLibrary.IGrouping2_FullName) is not null;
+        Type.IsImplement(typeof(System.Linq.IGrouping<,>));
     private bool 比較(List<object> List_x, List<object> List_y){
         var List_x_Count=List_x.Count;
         if(List_x_Count!=List_y.Count) return false;

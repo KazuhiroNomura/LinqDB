@@ -1,25 +1,25 @@
 ﻿#pragma warning disable CS8618 // Null 非許容フィールドは初期化されていません。null 許容として宣言することを検討してください。
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
+using Collections=System.Collections;
 namespace LinqDB.Sets;
+using Generic=Collections.Generic;
 
 /// <summary>キーと値のペアのジェネリック コレクションを表します。ハッシュジョインで使う</summary>
 /// <typeparam name="TValue">ディクショナリ内の値の型。</typeparam>
 /// <typeparam name="TKey">ディクショナリ内のキーの型。</typeparam>
 /// <typeparam name="TCollection">TValueのIAddを継承した型</typeparam>
 [Serializable]
-public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>,ILookup<TKey,TValue>where TCollection:ICollection<TValue> {
+public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>,ILookup<TKey,TValue>where TCollection:class,Generic.ICollection<TValue>,new() {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
-    protected readonly IEqualityComparer<TKey> KeyComparer;
+    protected readonly Generic.IEqualityComparer<TKey> KeyComparer;
     /// <summary>空で、既定の初期量を備え、キーの型の既定の等値比較子を使用する、<see cref="Lookup{TValue, TKey, TCollection}" /> クラスの新しいインスタンスを初期化します。</summary>
-    protected Lookup() : this(EqualityComparer<TKey>.Default) { }
+    protected Lookup() : this(Generic.EqualityComparer<TKey>.Default) { }
     /// <summary>コンストラクタ</summary>
-    /// <param name="KeyComparer">キーの比較時に使用する <see cref="IEqualityComparer{T}" /> 実装。キーの型の既定の <see cref="EqualityComparer{T}" /> を使用する場合は null。</param>
-    protected Lookup(IEqualityComparer<TKey> KeyComparer) => this.KeyComparer=KeyComparer;
+    /// <param name="KeyComparer">キーの比較時に使用する <see cref="Generic.IEqualityComparer{T}" /> 実装。キーの型の既定の <see cref="Generic.EqualityComparer{T}" /> を使用する場合は null。</param>
+    protected Lookup(Generic.IEqualityComparer<TKey> KeyComparer) => this.KeyComparer=KeyComparer;
     /// <summary>
     /// 指定したキーと値をディクショナリに追加する。
     /// KeyがなければTGrouping(Key,Value)
@@ -36,7 +36,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
                 var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNode_LinkedNodeItem is null) {
                     LinkedNode._LinkedNodeItem=new LinkedNodeItemT(this.InternalKeyValue(Key,Value));
-                    this._Count++;
+                    this._LongCount++;
                     return;
                 }
                 if(KeyComparer.Equals(LinkedNode_LinkedNodeItem.Item.Key,Key)) {
@@ -53,24 +53,31 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
             HashCode,
             new LinkedNodeItemT(this.InternalKeyValue(Key,Value))
         );
-        this._Count++;
+        this._LongCount++;
+    }
+    private TCollection?GetCollection(TKey Key){
+        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key!.GetHashCode());
+        if(TreeNode is not null) {
+            var KeyComparer = this.KeyComparer;
+            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem){
+                if(KeyComparer.Equals(a.Item.Key,Key)) return a.Item.Collection;
+            }
+        }
+        return null;
     }
     /// <summary>指定したキーが格納されているかどうかを判断します。</summary>
     /// <returns>指定したキーが格納されている場合はtrue。それ以外の場合は false。</returns>
     /// <param name="Key">
     ///   <see cref="Lookup{TValue, TKey, TCollection}" /> 内で検索されるキー。</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsKey(TKey Key){
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key!.GetHashCode());
-        if(TreeNode is not null) {
-            var KeyComparer = this.KeyComparer;
-            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) { 
-                if(KeyComparer.Equals(a.Item.Key,Key)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public bool ContainsKey(TKey Key)=>this.GetCollection(Key) is not null;
+    bool System.Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+    Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
+        foreach(var a in this) yield return a;
+    }
+
+    Generic.IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
+        foreach(var a in this) yield return a;
     }
     /// <summary>
     /// 指定したキーに関連付けられている値を取得します。
@@ -79,17 +86,9 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     /// <param name="Key"></param>
     /// <param name="Default"></param>
     /// <returns></returns>
-    protected TCollection GetValue(TKey Key,TCollection Default) {
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key!.GetHashCode());
-        if(TreeNode is not null){
-            var KeyComparer = this.KeyComparer;
-            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) { 
-                if(KeyComparer.Equals(a.Item.Key,Key)){
-                    return a.Item.Collection;
-                }
-            }
-        }
-        return Default;
+    private TCollection GetValue(TKey Key,TCollection Default){
+        var Collection=this.GetCollection(Key);
+        return Collection??Default;
     }
     /// <summary>
     /// 指定したキーに関連付けられている値を取得します。
@@ -101,6 +100,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     protected TCollection GetValue(object Key,TCollection Default) {
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
+            var KeyComparer = this.KeyComparer;
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
                 if(a.Item.Key!.Equals(Key)) {
                     return a.Item.Collection;
@@ -119,36 +119,37 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool TryGetValue(TKey Key,ref TCollection Collection){
         if(Key is null) return false;
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
-        if(TreeNode is not null) {
-            var KeyComparer = this.KeyComparer;
-            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(KeyComparer.Equals(a.Item.Key,Key)) {
-                    Collection=a.Item.Collection;
-                    return true;
-                }
-            }
+        var Item=this.GetCollection(Key);
+        if(Item is not null){
+            Collection=Item;
+            return true;
         }
         return false;
     }
     internal abstract KeyValueCollection<TValue,TKey,TCollection> InternalKeyValue(TKey Key,TValue Value);
 
-    int ILookup<TKey,TValue>.Count => throw new NotImplementedException();
+    //int ILookup<TKey,TValue>.Count => throw new NotImplementedException();
 
-    public IEnumerable<TValue> this[TKey key]{
-        get{
-            TCollection value=default!;
-            if(this.TryGetValue(key,ref value)) return value;
-            throw new NotImplementedException();
-        }
+    protected TCollection GetIndex(TKey key){
+        TCollection value=default!;
+        if(this.TryGetValue(key,ref value)) return value;
+        throw new NotImplementedException();
     }
+    public TCollection this[TKey key]=>this.GetIndex(key);
+    private static readonly TCollection EmptyCollection =new();
 
 
-    public bool Contains(TKey key)=>this.ContainsKey(key);
+    int System.Linq.ILookup<TKey,TValue>.Count=>checked((int)this._LongCount);
 
-    IEnumerator<IGrouping<TKey,TValue>> IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator(){
-        foreach(var a in this){
-            yield return a;
-        }
-    }
+    Generic.IEnumerable<TValue> System.Linq.ILookup<TKey,TValue>.this[TKey key]=>this.GetIndex(key);
+
+    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
+    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
+    /// <param name="Key"></param>
+    public TCollection GetTKeyValue(TKey Key) => this.GetValue(Key,EmptyCollection);
+    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
+    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
+    /// <param name="Key"></param>
+    public TCollection GetObjectValue(object Key) => this.GetValue(Key,EmptyCollection);
+
 }
