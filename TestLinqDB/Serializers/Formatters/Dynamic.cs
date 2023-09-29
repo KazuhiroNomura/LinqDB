@@ -1,9 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using Expressions = System.Linq.Expressions;
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
-namespace Serializers.Formatters;
-
-using Serializers;
+namespace TestLinqDB.Serializers.Formatters;
 public class Dynamic : 共通
 {
     private static Expressions.DynamicExpression PrivateDynamicConvert<TInput, TResult>(TInput input, RuntimeBinder.CSharpBinderFlags Flag)

@@ -1,15 +1,13 @@
 ﻿using System.Linq.Expressions;
-using System.Reflection;
 using LinqDB.Databases.Tables;
 using LinqDB.Helpers;
 using LinqDB.Sets;
-using Serializers.Formatters;
 //using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace Optimizers;
+namespace TestLinqDB.Optimizers;
 public class 変換_メソッド正規化_取得インライン不可能定数:共通{
     [Fact]
     public void Constant(){

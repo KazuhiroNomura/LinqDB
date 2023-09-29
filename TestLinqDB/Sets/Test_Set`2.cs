@@ -5,8 +5,7 @@ using System.Globalization;
 //using MemoryPack;
 using テスト;
 using LinqDB.Helpers;
-using Serializers.Formatters;
-namespace Sets;
+namespace TestLinqDB.Sets;
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 public partial class Serialize継承しない{
     [MessagePack.Key(0)]

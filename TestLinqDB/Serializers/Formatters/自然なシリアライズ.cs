@@ -1,8 +1,6 @@
 ﻿using MemoryPack;
 using MessagePack;
-using Serializers.Formatters;
-
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 
 [Serializable,MessagePackObject(true),MemoryPackable]
 public partial record シリアライズ対象(
@@ -15,6 +13,6 @@ public class 自然なシリアライズ:共通{
         //var FormatterType=typeof(Anonymous<>).MakeGenericType(value.GetType());
         //dynamic formatter=Activator.CreateInstance(FormatterType)!;
         //MemoryPackFormatterProvider.Register(formatter);
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(value);
+        this.MemoryMessageJson_TObject(value);
     }
 }

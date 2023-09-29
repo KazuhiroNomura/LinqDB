@@ -149,8 +149,8 @@ public static class CommonLibrary {
     /// データの完全性をチェックするハッシュ関数によって出力されたハッシュバイト長
     /// </summary>
     internal const int ハッシュバイト数 = 256/8;
-    internal const string シーケンスに要素が含まれていません_NoElements = "シーケンスに要素が含まれていません";
-    internal static ZeroTupleException シーケンスに要素が含まれていません(MethodBase Method) => new($"{Method}:{シーケンスに要素が含まれていません_NoElements}");
+    internal const string シーケンスに要素が含まれていません_NoElements = "Sequence contains no elements";//"シーケンスに要素が含まれていません";
+    internal static InvalidOperationException シーケンスに要素が含まれていません(MethodBase Method) => new($"{Method}:{シーケンスに要素が含まれていません_NoElements}");
     internal const string シーケンスに複数の要素が含まれています_MoreThanOneElement = "シーケンスに複数の要素が含まれています";
     internal static ManyTupleException シーケンスに複数の要素が含まれています(MethodBase Method) => new($"{Method}:{シーケンスに複数の要素が含まれています_MoreThanOneElement}");
     /// <summary>

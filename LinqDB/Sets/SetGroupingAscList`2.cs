@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace LinqDB.Sets;
 
 /// <summary>
-/// Enumerable.GroupByの結果の実体。
+/// Enumerable.GroupByの結果。要素はGroupingAscList。
 /// </summary>
 /// <typeparam name="TKey">結合式のType</typeparam>
 /// <typeparam name="TValue">値のType</typeparam>
@@ -18,5 +18,5 @@ public sealed class SetGroupingAscList<TKey,TValue>:SetGrouping<TKey,TValue,Grou
     /// </summary>
     /// <param name="KeyComparer">比較方法</param>
     public SetGroupingAscList(IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
-    internal override GroupingAscList<TKey,TValue> InternalKeyValue(TKey Key,TValue Value)=>new(Key,Value);
+    internal override GroupingAscList<TKey,TValue> InternalKeyValue(TKey Key,TValue Value)=>new GroupingAscList<TKey,TValue>(Key,Value);
 }

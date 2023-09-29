@@ -15,31 +15,31 @@ namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 
 using Reader = MemoryPackReader;
 using Sets = LinqDB.Sets;
-public class Set<TValue>:MemoryPackFormatter<Sets.Set<TValue>>{
+public class Set<T>:MemoryPackFormatter<Sets.Set<T>>{
 #pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
-    public static readonly Set<TValue> Instance=new();//リフレクションで使われる
+    public static readonly Set<T> Instance=new();//リフレクションで使われる
 #pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue>? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<T>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         writer.WriteType(value!.GetType());
         var Count=value.LongCount;
-        var Formatter=writer.GetFormatter<TValue>();
+        var Formatter=writer.GetFormatter<T>();
         writer.WriteVarInt(Count);
         foreach(var item in value){
             var item0=item;
             Formatter.Serialize(ref writer,ref item0);
         }
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<TValue>? value)=>WriteNullable(ref writer,value);
-    private static Sets.Set<TValue>? ReadNullable(ref Reader reader){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<T>? value)=>WriteNullable(ref writer,value);
+    private static Sets.Set<T>? ReadNullable(ref Reader reader){
         if(reader.TryReadNil())return null;
         var type=reader.ReadType();
-        if(typeof(Sets.Set<TValue>)==type){
-            var Formatter=reader.GetFormatter<TValue>();
-            var value=new Sets.Set<TValue>();
+        if(typeof(Sets.Set<T>)==type){
+            var Formatter=reader.GetFormatter<T>();
+            var value=new Sets.Set<T>();
             var Count=reader.ReadVarIntInt64();
             for(long a=0;a<Count;a++){
-                TValue? item=default;//ここでnull入れないと内部で作られない
+                T? item=default;//ここでnull入れないと内部で作られない
                 Formatter.Deserialize(ref reader,ref item);
                 value.Add(item);
             }
@@ -50,38 +50,36 @@ public class Set<TValue>:MemoryPackFormatter<Sets.Set<TValue>>{
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             object? @object=default;
             Formatter.Deserialize(ref reader,ref @object);
-            return(Sets.Set<TValue>)@object!;
+            return(Sets.Set<T>)@object!;
         }
     }
-    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TValue>? value)=>value=ReadNullable(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<T>? value)=>value=ReadNullable(ref reader);
 }
-public class Set<TValue,TKey>:MemoryPackFormatter<Sets.Set<TValue,TKey>>
-    where TValue:IPrimaryKey<TKey>
+public class Set<TElement,TKey>:MemoryPackFormatter<Sets.Set<TElement,TKey>>
+    where TElement:IPrimaryKey<TKey>
     where TKey : struct, IEquatable<TKey>{
-#pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
-    public static readonly Set<TValue,TKey> Instance=new();//リフレクションで使われる
-#pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue,TKey>? value) where TBufferWriter:IBufferWriter<byte>{
+    public static readonly Set<TElement,TKey> Instance=new();//リフレクションで使われる
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TElement,TKey>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         writer.WriteType(value!.GetType());
         var Count=value.LongCount;
-        var Formatter=writer.GetFormatter<TValue>();
+        var Formatter=writer.GetFormatter<TElement>();
         writer.WriteVarInt(Count);
         foreach(var item in value){
             var item0=item;
             Formatter.Serialize(ref writer,ref item0);
         }
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<TValue,TKey>? value)=>WriteNullable(ref writer,value);
-    private static Sets.Set<TValue,TKey>? ReadNullable(ref Reader reader){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<TElement,TKey>? value)=>WriteNullable(ref writer,value);
+    private static Sets.Set<TElement,TKey>? ReadNullable(ref Reader reader){
         if(reader.TryReadNil())return null;
         var type=reader.ReadType();
-        if(typeof(Sets.Set<TValue,TKey>)==type){
-            var Formatter=reader.GetFormatter<TValue>();
-            var value=new Sets.Set<TValue,TKey>();
+        if(typeof(Sets.Set<TElement,TKey>)==type){
+            var Formatter=reader.GetFormatter<TElement>();
+            var value=new Sets.Set<TElement,TKey>();
             var Count=reader.ReadVarIntInt64();
             for(long a=0;a<Count;a++){
-                TValue? item=default;
+                TElement? item=default;
                 Formatter.Deserialize(ref reader,ref item);
                 value.Add(item);
             }
@@ -92,42 +90,40 @@ public class Set<TValue,TKey>:MemoryPackFormatter<Sets.Set<TValue,TKey>>
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             object? @object=default;
             Formatter.Deserialize(ref reader,ref @object);
-            return(Sets.Set<TValue,TKey>)@object!;
+            return(Sets.Set<TElement,TKey>)@object!;
         }
     }
-    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TValue,TKey>? value)=>value=ReadNullable(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TElement,TKey>? value)=>value=ReadNullable(ref reader);
 }
-public class Set<TValue,TKey,TContainer>:MemoryPackFormatter<Sets.Set<TValue,TKey,TContainer>>
-    where TValue : Entity<TKey,TContainer>, IWriteRead<TValue>
+public class Set<TElement,TKey,TContainer>:MemoryPackFormatter<Sets.Set<TElement,TKey,TContainer>>
+    where TElement : Entity<TKey,TContainer>, IWriteRead<TElement>
     where TKey : struct, IEquatable<TKey>
     where TContainer : Container{
-#pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
-    public static readonly Set<TValue,TKey,TContainer> Instance=new();//リフレクションで使われる
-#pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
-    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue,TKey,TContainer> value)where TBufferWriter:IBufferWriter<byte>{
+    public static readonly Set<TElement,TKey,TContainer> Instance=new();//リフレクションで使われる
+    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TElement,TKey,TContainer> value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value.GetType());
         var Count=value.LongCount;
-        var Formatter=writer.GetFormatter<TValue>();
+        var Formatter=writer.GetFormatter<TElement>();
         writer.WriteVarInt(Count);
         foreach(var item in value){
             var item0=item;
             Formatter.Serialize(ref writer,ref item0);
         }
     }
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TValue,TKey,TContainer>? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.Set<TElement,TKey,TContainer>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<TValue,TKey,TContainer>? value)=>WriteNullable(ref writer,value);
-    private static Sets.Set<TValue,TKey,TContainer>? ReadNullable(ref Reader reader){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.Set<TElement,TKey,TContainer>? value)=>WriteNullable(ref writer,value);
+    private static Sets.Set<TElement,TKey,TContainer>? ReadNullable(ref Reader reader){
         if(reader.TryReadNil())return null;
         var type=reader.ReadType();
-        if(typeof(Sets.Set<TValue,TKey,TContainer>)==type){
-            var Formatter=reader.GetFormatter<TValue>();
-            var value=new Sets.Set<TValue,TKey,TContainer>(null!);
+        if(typeof(Sets.Set<TElement,TKey,TContainer>)==type){
+            var Formatter=reader.GetFormatter<TElement>();
+            var value=new Sets.Set<TElement,TKey,TContainer>(null!);
             var Count=reader.ReadVarIntInt64();
             for(long a=0;a<Count;a++){
-                TValue? item=default;
+                TElement? item=default;
                 Formatter.Deserialize(ref reader,ref item);
                 value.Add(item);
             }
@@ -138,8 +134,8 @@ public class Set<TValue,TKey,TContainer>:MemoryPackFormatter<Sets.Set<TValue,TKe
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             object? @object=default;
             Formatter.Deserialize(ref reader,ref @object);
-            return(Sets.Set<TValue,TKey,TContainer>)@object!;
+            return(Sets.Set<TElement,TKey,TContainer>)@object!;
         }
     }
-    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TValue,TKey,TContainer>? value)=>value=ReadNullable(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TElement,TKey,TContainer>? value)=>value=ReadNullable(ref reader);
 }

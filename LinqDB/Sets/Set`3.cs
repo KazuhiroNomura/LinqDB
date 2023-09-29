@@ -84,7 +84,6 @@ public sealed class Set<TValue, TKey, TContainer>:Set<TValue,TKey>,ISet2<TContai
     /// <param name="Container"></param>
     /// <returns></returns>
     public Set<TValue,TKey,TContainer> Copy(TContainer Container) => new(Container,this);
-    private Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext) : base(SerializationInfo,StreamingContext) => this.Container=null!;
     /// <summary>
     /// デシリアライズした後や一括追加した後のリレーションシップ作成。
     /// </summary>

@@ -1,7 +1,7 @@
 ﻿using LinqDB.Helpers;
 using LinqDB.Sets;
 
-namespace Sets;
+namespace TestLinqDB.Sets;
 
 
 public class Test_DecList

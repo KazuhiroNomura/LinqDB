@@ -1,14 +1,5 @@
-﻿using LinqDB.Helpers;
-using LinqDB.Sets;
-
-using System.Collections;
-using System.Text;
-using LinqDB.Databases;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-using Serializers.Formatters;
-namespace Sets;
+﻿using LinqDB.Sets;
+namespace TestLinqDB.Sets;
 
 
 public class ExtensionEnumerable:共通{

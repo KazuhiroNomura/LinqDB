@@ -1,5 +1,5 @@
 ﻿using Expressions = System.Linq.Expressions;
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 public class Constant : 共通
 {
     [Fact]

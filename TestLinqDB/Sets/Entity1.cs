@@ -1,10 +1,6 @@
 ﻿using LinqDB.Helpers;
-using LinqDB.Sets;
-
-using System.Collections;
-using System.Text;
 using LinqDB.Databases;
-namespace Sets;
+namespace TestLinqDB.Sets;
 
 
 public class Entity1{

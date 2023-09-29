@@ -1,8 +1,8 @@
-﻿using Serializers.Formatters;
+﻿
 //using System.Linq.Expressions;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 //using MessagePack;
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
 public class Unary : 共通
 {
@@ -23,7 +23,7 @@ public class Unary : 共通
         var Constant演算子1 = Expressions.Expression.Constant(new 演算子1(true));
         var Parameter演算子 = Expressions.Expression.Parameter(typeof(演算子));
         var ParameterInt32 = Expressions.Expression.Parameter(typeof(int));
-        this.MemoryMessageJson_Expression(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
+        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
         共通1(Expressions.Expression.ArrayLength(ConstantArray));
         共通1(Expressions.Expression.Quote(Expressions.Expression.Lambda(ConstantArray)));
         共通1(Expressions.Expression.Throw(Expressions.Expression.New(typeof(InvalidOperationException).GetConstructor(Type.EmptyTypes)!)));

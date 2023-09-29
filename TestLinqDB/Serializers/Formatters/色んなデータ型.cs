@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
-
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 
 public class 色んなデータ型 : 共通
 {
@@ -33,37 +32,37 @@ public class 色んなデータ型 : 共通
         //var FormatterType=typeof(Anonymous<>).MakeGenericType(value.GetType());
         //dynamic formatter=Activator.CreateInstance(FormatterType)!;
         //MemoryPackFormatterProvider.Register(formatter);
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(value);
+        this.MemoryMessageJson_TObject(value);
     }
     [Fact]
     public void ClassDisplay()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(ClassDisplay取得());
+        this.MemoryMessageJson_TObject(ClassDisplay取得());
     }
     [Fact]
     public void Anonymous002()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new { a = (object)1 });
+        this.MemoryMessageJson_TObject(new { a = (object)1 });
     }
     [Fact]
     public void Anonymous003()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new { a = (object)new { aa = 11 } });
+        this.MemoryMessageJson_TObject(new { a = (object)new { aa = 11 } });
     }
     [Fact]
     public void Anonymous004()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new { a = (object)new { aa = 1 } });
+        this.MemoryMessageJson_TObject(new { a = (object)new { aa = 1 } });
     }
     [Fact]
     public void Anonymous022()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new { x = new { a = 111 } });
+        this.MemoryMessageJson_TObject(new { x = new { a = 111 } });
     }
     [Fact]
     public void Anonymous023()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             new
             {
                 x = new
@@ -80,14 +79,14 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous030()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             Tuple.Create(1)
         );
     }
     [Fact]
     public void Anonymous031()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             Tuple.Create(
                 new
                 {
@@ -99,7 +98,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous032()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             Tuple.Create<object>(
                 new
                 {
@@ -111,7 +110,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous033()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             Tuple.Create(
                 new
                 {
@@ -127,7 +126,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous040()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new
+        this.MemoryMessageJson_TObject(new
         {
             a = new { aa = 1 },
             b = new { aa = 1 }
@@ -136,7 +135,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous041()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new
+        this.MemoryMessageJson_TObject(new
         {
             a = new { aa = 1 },
             b = (object)new { aa = 1 }
@@ -145,7 +144,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous05()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             Tuple.Create(
                 new
                 {
@@ -157,7 +156,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous06()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             new
             {
                 a = (object)new
@@ -170,7 +169,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous07()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             new[]{
                 new{
                     a=1111
@@ -181,10 +180,19 @@ public class 色んなデータ型 : 共通
             }
         );
     }
-    [Fact]
-    public void Anonymous08()
+    [Fact]public void Anonymous080()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
+            new[]{
+                new{
+                    a=1111
+                }
+            }
+        );
+    }
+    [Fact]public void Anonymous081()
+    {
+        this.MemoryMessageJson_TObject(
             new[]{
                 new{
                     a=1111
@@ -198,7 +206,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous09()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             new[]{
                 new{
                     a=1111
@@ -212,7 +220,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous10()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(
+        this.MemoryMessageJson_TObject(
             (object)new
             {
                 a = 1111
@@ -222,7 +230,7 @@ public class 色んなデータ型 : 共通
     [Fact]
     public void Anonymous11()
     {
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(new
+        this.MemoryMessageJson_TObject(new
         {
             a = (object)new { aa = 1 }
         });
@@ -232,25 +240,25 @@ public class 色んなデータ型 : 共通
     public void Field()
     {
         var f = typeof(色んなデータ型).GetField(nameof(フィールド), BindingFlags.Static|BindingFlags.NonPublic);
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(f);
+        this.MemoryMessageJson_TObject(f);
     }
     [Fact]
     public void Member()
     {
         MemberInfo f = typeof(色んなデータ型).GetField(nameof(フィールド), BindingFlags.Static|BindingFlags.NonPublic);
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(f);
+        this.MemoryMessageJson_TObject(f);
     }
     [Fact]
     public void Method()
     {
         var f = typeof(色んなデータ型).GetMethod("Method");
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(f);
+        this.MemoryMessageJson_TObject(f);
     }
     private static int プロパティ { get; set; }
     [Fact]
     public void Property()
     {
         var f = typeof(色んなデータ型).GetProperty(nameof(プロパティ), BindingFlags.Static|BindingFlags.NonPublic);
-        this.シリアライズデシリアライズ3パターンジェネリクス非ジェネリクス(f);
+        this.MemoryMessageJson_TObject(f);
     }
 }

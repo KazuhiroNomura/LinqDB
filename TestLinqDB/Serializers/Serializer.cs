@@ -1,11 +1,10 @@
 ﻿//using System.Linq.Expressions;
 using MessagePack;
-using Serializers.Formatters;
 //using System.Linq.Expressions;
 //using Expressions = System.Linq.Expressions;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 //using MessagePack;
-namespace Serializers;
+namespace TestLinqDB.Serializers;
 public class Serializer : 共通
 {
     [Fact]

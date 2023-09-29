@@ -11,7 +11,8 @@ using Generic=Collections.Generic;
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TCollection"></typeparam>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage","CA2231:値型 Equals のオーバーライドで、演算子 equals をオーバーロードします",Justification = "<保留中>")]
-public readonly struct KeyValueCollection<TValue,TKey, TCollection>:IEquatable<KeyValueCollection<TValue,TKey,TCollection>>, IGrouping<TKey,TValue>,ICollection<TValue> where TCollection:Generic.ICollection<TValue> {
+//public readonly struct KeyValueCollection<TValue,TKey, TCollection>:IEquatable<KeyValueCollection<TValue,TKey,TCollection>>, IGrouping<TKey,TValue>,ICollection<TValue> where TCollection:Generic.ICollection<TValue> {
+public class KeyValueCollection<TValue,TKey, TCollection>:IEquatable<KeyValueCollection<TValue,TKey,TCollection>>, IGrouping<TKey,TValue>,ICollection<TValue> where TCollection:Generic.ICollection<TValue> {
     //internal TKey Key;
     public TKey Key { get; }
     internal readonly TCollection Collection;
@@ -21,8 +22,8 @@ public readonly struct KeyValueCollection<TValue,TKey, TCollection>:IEquatable<K
         this.Key=Key;
         this.Collection=Collection;
     }
-    public bool Equals(KeyValueCollection<TValue,TKey,TCollection> other) => Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key);
-    public override bool Equals(object? obj) => obj is KeyValueCollection<TValue,TKey,TCollection> other&&this.Equals(other);
+    public bool Equals(KeyValueCollection<TValue,TKey,TCollection>? other) =>other is not null&&Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key);
+    public override bool Equals(object? obj) => this.Equals(obj as KeyValueCollection<TValue,TKey,TCollection>);
     public Generic.IEnumerator<TValue> GetEnumerator() =>this.Collection.GetEnumerator();
     Collections.IEnumerator Collections.IEnumerable.GetEnumerator() =>this.Collection.GetEnumerator();
     public override int GetHashCode() => this.Key!.GetHashCode();

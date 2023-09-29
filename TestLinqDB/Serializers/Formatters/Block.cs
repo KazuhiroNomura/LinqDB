@@ -3,7 +3,7 @@
 //using Expressions = System.Linq.Expressions;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 //using MessagePack;
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
 public class Block : 共通
 {

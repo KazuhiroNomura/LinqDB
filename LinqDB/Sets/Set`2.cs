@@ -42,8 +42,6 @@ public class Set<TValue, TKey>:Set<TValue>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
     public Set(ImmutableSet<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
     }
-    protected Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext) : base(SerializationInfo,StreamingContext) {
-    }
     /// <summary>
     /// キーから値を取得する。
     /// </summary>

@@ -1,13 +1,5 @@
-﻿using System.Diagnostics;
-//using System.Linq.Expressions;
-using System.Drawing;
-using Reflection = System.Reflection;
-using System.Runtime.CompilerServices;
-using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
-
-namespace Serializers.Formatters;
-using Sets;
-
+﻿//using System.Linq.Expressions;
+namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
 public class Conditional : 共通
 {

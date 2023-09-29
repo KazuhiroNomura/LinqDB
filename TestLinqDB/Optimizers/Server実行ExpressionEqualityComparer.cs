@@ -4,84 +4,83 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Optimizers;
-using Serializers.Formatters;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace Optimizers;
-    //public class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
-    //    public class_演算子オーバーロード(){
-    //    }
-    //    private readonly int 内部の値;
-    //    public class_演算子オーバーロード(int 内部の値){
-    //        this.内部の値=内部の値;
-    //    }
-    //    private readonly bool 内部のBoolean;
-    //    public class_演算子オーバーロード(int 内部の値,bool 内部のBoolean){
-    //        this.内部の値=内部の値;
-    //        this.内部のBoolean=内部のBoolean;
-    //    }
-    //    //[global::Lite.Optimizers.NoOptimize]
-    //    public int _最適化されないメンバー=4;
-    //    public int Int32フィールド=4;
-    //    public int 最適化されないメソッド()=>4;
-    //    [Pure]
-    //    public int メソッド()=>4;
-    //    public int Int32プロパティ{get;set;}
-    //    // ReSharper disable once UnassignedField.Global
-    //    public static int StaticInt32フィールド;
-    //    public static string StaticStringフィールド="B";
-    //    public string Stringフィールド="A";
-    //    public string Stringプロパティ{get;set;}
-    //    // ReSharper disable once CollectionNeverQueried.Global
-    //    public StructCollection StructCollectionフィールド=new();
-    //    // ReSharper disable once CollectionNeverQueried.Global
-    //    public List<int> Listフィールド=new();
+namespace TestLinqDB.Optimizers;
+//public class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
+//    public class_演算子オーバーロード(){
+//    }
+//    private readonly int 内部の値;
+//    public class_演算子オーバーロード(int 内部の値){
+//        this.内部の値=内部の値;
+//    }
+//    private readonly bool 内部のBoolean;
+//    public class_演算子オーバーロード(int 内部の値,bool 内部のBoolean){
+//        this.内部の値=内部の値;
+//        this.内部のBoolean=内部のBoolean;
+//    }
+//    //[global::Lite.Optimizers.NoOptimize]
+//    public int _最適化されないメンバー=4;
+//    public int Int32フィールド=4;
+//    public int 最適化されないメソッド()=>4;
+//    [Pure]
+//    public int メソッド()=>4;
+//    public int Int32プロパティ{get;set;}
+//    // ReSharper disable once UnassignedField.Global
+//    public static int StaticInt32フィールド;
+//    public static string StaticStringフィールド="B";
+//    public string Stringフィールド="A";
+//    public string Stringプロパティ{get;set;}
+//    // ReSharper disable once CollectionNeverQueried.Global
+//    public StructCollection StructCollectionフィールド=new();
+//    // ReSharper disable once CollectionNeverQueried.Global
+//    public List<int> Listフィールド=new();
 
-    //    // ReSharper disable once CollectionNeverQueried.Global
-    //    public List<int> Listプロパティ{get;set;}=new();
+//    // ReSharper disable once CollectionNeverQueried.Global
+//    public List<int> Listプロパティ{get;set;}=new();
 
-    //    // ReSharper disable once CollectionNeverQueried.Global
-    //    public HashSet<int> HashSetプロパティ{get;set;}=new();
+//    // ReSharper disable once CollectionNeverQueried.Global
+//    public HashSet<int> HashSetプロパティ{get;set;}=new();
 
-    //    public class_演算子オーバーロード2 class演算子オーバーロード2プロパティ{get;set;}=new();
-    //    public readonly class_演算子オーバーロード2 class_演算子オーバーロード2フィールド=new();
-    //    public struct_演算子オーバーロード2 Struct演算子オーバーロード2=new();
-    //    public static class_演算子オーバーロード operator~(class_演算子オーバーロード a)=>new(~a.内部の値,a.内部のBoolean);
-    //    public static class_演算子オーバーロード operator!(class_演算子オーバーロード a)=>new(-1^a.内部の値,!a.内部のBoolean);
-    //    public static bool operator false(class_演算子オーバーロード a)=>!a.内部のBoolean;
-    //    public static bool operator true(class_演算子オーバーロード a)=>a is{内部のBoolean: true};
-    //    public static class_演算子オーバーロード operator++(class_演算子オーバーロード a)=>new(a.内部の値+1);
-    //    public static class_演算子オーバーロード operator--(class_演算子オーバーロード a)=>new(a.内部の値-1);
-    //    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a)=>new(-a.内部の値,a.内部のBoolean);
-    //    public static class_演算子オーバーロード operator+(class_演算子オーバーロード a)=>new(a.内部の値,a.内部のBoolean);
-    //    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a,class_演算子オーバーロード b)=>new(-a.内部の値);
-    //    public static class_演算子オーバーロード operator&(class_演算子オーバーロード a,class_演算子オーバーロード b){
-    //        return new class_演算子オーバーロード(a.内部の値&b.内部の値);
-    //    }
-    //    [SuppressMessage("ReSharper","ConvertIfStatementToReturnStatement")]
-    //    public static class_演算子オーバーロード operator|(class_演算子オーバーロード? a,class_演算子オーバーロード? b){
-    //        if(a==null) return b!;
-    //        if(b==null) return a;
-    //        return new class_演算子オーバーロード(a.内部の値|b.内部の値);
-    //    }
-    //    public static explicit operator int(class_演算子オーバーロード a)=>1;
-    //    public static explicit operator decimal(class_演算子オーバーロード a)=>1;
-    //    public static explicit operator string(class_演算子オーバーロード a)=>"class_演算子オーバーロード";
-    //    public static explicit operator class_演算子オーバーロード(decimal a)=>new();
-    //    //public static explicit operator Object(class_演算子オーバーロード _Field)=>new Object();
-    //    public static decimal class_演算子オーバーロードからDecimalにキャスト(class_演算子オーバーロード a)=>1m;
+//    public class_演算子オーバーロード2 class演算子オーバーロード2プロパティ{get;set;}=new();
+//    public readonly class_演算子オーバーロード2 class_演算子オーバーロード2フィールド=new();
+//    public struct_演算子オーバーロード2 Struct演算子オーバーロード2=new();
+//    public static class_演算子オーバーロード operator~(class_演算子オーバーロード a)=>new(~a.内部の値,a.内部のBoolean);
+//    public static class_演算子オーバーロード operator!(class_演算子オーバーロード a)=>new(-1^a.内部の値,!a.内部のBoolean);
+//    public static bool operator false(class_演算子オーバーロード a)=>!a.内部のBoolean;
+//    public static bool operator true(class_演算子オーバーロード a)=>a is{内部のBoolean: true};
+//    public static class_演算子オーバーロード operator++(class_演算子オーバーロード a)=>new(a.内部の値+1);
+//    public static class_演算子オーバーロード operator--(class_演算子オーバーロード a)=>new(a.内部の値-1);
+//    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a)=>new(-a.内部の値,a.内部のBoolean);
+//    public static class_演算子オーバーロード operator+(class_演算子オーバーロード a)=>new(a.内部の値,a.内部のBoolean);
+//    public static class_演算子オーバーロード operator-(class_演算子オーバーロード a,class_演算子オーバーロード b)=>new(-a.内部の値);
+//    public static class_演算子オーバーロード operator&(class_演算子オーバーロード a,class_演算子オーバーロード b){
+//        return new class_演算子オーバーロード(a.内部の値&b.内部の値);
+//    }
+//    [SuppressMessage("ReSharper","ConvertIfStatementToReturnStatement")]
+//    public static class_演算子オーバーロード operator|(class_演算子オーバーロード? a,class_演算子オーバーロード? b){
+//        if(a==null) return b!;
+//        if(b==null) return a;
+//        return new class_演算子オーバーロード(a.内部の値|b.内部の値);
+//    }
+//    public static explicit operator int(class_演算子オーバーロード a)=>1;
+//    public static explicit operator decimal(class_演算子オーバーロード a)=>1;
+//    public static explicit operator string(class_演算子オーバーロード a)=>"class_演算子オーバーロード";
+//    public static explicit operator class_演算子オーバーロード(decimal a)=>new();
+//    //public static explicit operator Object(class_演算子オーバーロード _Field)=>new Object();
+//    public static decimal class_演算子オーバーロードからDecimalにキャスト(class_演算子オーバーロード a)=>1m;
 
-    //    public bool Equals(class_演算子オーバーロード? other){
-    //        if(ReferenceEquals(this,other)) return true;
-    //        if(other is null) return false;
-    //        return this.内部の値==other.内部の値&&this.内部のBoolean==other.内部のBoolean;
-    //    }
-    //    public override bool Equals(object? obj)=>obj is not null&&this.Equals((class_演算子オーバーロード)obj);
-    //    public override int GetHashCode()=>this.内部の値;
-    //}
+//    public bool Equals(class_演算子オーバーロード? other){
+//        if(ReferenceEquals(this,other)) return true;
+//        if(other is null) return false;
+//        return this.内部の値==other.内部の値&&this.内部のBoolean==other.内部のBoolean;
+//    }
+//    public override bool Equals(object? obj)=>obj is not null&&this.Equals((class_演算子オーバーロード)obj);
+//    public override int GetHashCode()=>this.内部の値;
+//}
 public class Server実行ExpressionEqualityComparer:共通{
     [Serializable]
     public struct StructCollection:ICollection<int>{

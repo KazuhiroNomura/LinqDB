@@ -1,6 +1,7 @@
 ﻿using System;
 using Generic=System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using LinqDB.Sets.Exceptions;
@@ -84,13 +85,13 @@ public static class ExtensionSet{
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
     public static decimal? Average(this IEnumerable<decimal?> source) {
         decimal Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source){
             if(!a.HasValue) continue;
             Sum+=a.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(decimal?):Sum/Int64Count;
+        return Count==0 ? null:Sum/Count;
     }
     /// <summary>
     ///   <see cref="decimal" /> 値の集合の平均値を計算します。</summary>
@@ -100,24 +101,24 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
     public static decimal Average(this IEnumerable<decimal> source) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
+        var Count = source.LongCount;
+        if(Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         decimal Sum = 0;
         foreach(var a in source)Sum+=a;
-        return Sum/Int64Count;
+        return Sum/Count;
     }
     /// <summary>null 許容の <see cref="double?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="double?" /> 値の集合。</param>
     public static double? Average(this IEnumerable<double?> source) {
         double Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source){
             if(!a.HasValue) continue;
             Sum+=a.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(double?) : Sum/Int64Count;
+        return Count==0 ? null:Sum/Count;
     }
     /// <summary>
     ///   <see cref="double" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
@@ -126,24 +127,24 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static double Average(this IEnumerable<double> source) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
+        var Count = source.LongCount;
+        if(Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         double Sum = 0;
         foreach(var a in source)Sum+=a;
-        return Sum/Int64Count;
+        return Sum/Count;
     }
     /// <summary>null 許容の <see cref="float?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="float?" /> 値の集合。</param>
     public static float? Average(this IEnumerable<float?> source) {
         double Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source){
             if(!a.HasValue) continue;
             Sum+=a.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(float?):(float)(Sum/Int64Count);
+        return Count==0 ? null:(float)(Sum/Count);
     }
     /// <summary>
     ///   <see cref="float" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
@@ -152,24 +153,24 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static float Average(this IEnumerable<float> source) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
+        var Count = source.LongCount;
+        if(Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
         double Sum = 0;
         foreach(var a in source)Sum+=a;
-        return (float)(Sum/Int64Count);
+        return (float)(Sum/Count);
     }
     /// <summary>null 許容の <see cref="long?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="long?" /> 値の集合。</param>
     public static double? Average(this IEnumerable<long?> source) {
         long Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source){
             if(!a.HasValue) continue;
             Sum+=a.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(double?) : (double)Sum/Int64Count;
+        return Count==0 ? null:(double)Sum/Count;
     }
     /// <summary>
     ///   <see cref="long" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
@@ -187,15 +188,15 @@ public static class ExtensionSet{
     /// <summary>null 許容の <see cref="int?" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
     /// <param name="source">平均値計算の対象となる null 許容の <see cref="int?" /> 値の集合。</param>
-    public static int? Average(this IEnumerable<int?> source) {
+    public static double? Average(this IEnumerable<int?> source) {
         var Sum = 0;
-        var Int64Count = 0;
+        var Count = 0L;
         foreach(var a in source){
             if(!a.HasValue) continue;
             Sum+=a.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(int?): Sum/Int64Count;
+        return Count==0 ? null:(double)Sum/Count;
     }
     /// <summary>
     ///   <see cref="int" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
@@ -204,11 +205,11 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static double Average(this IEnumerable<int> source) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
-        var Sum = 0;
+        var Count = source.LongCount;
+        if(Count==0)throw new InvalidOperationException(MethodBase.GetCurrentMethod()!.Name);
+        var Sum = 0L;
         foreach(var a in source)Sum+=a;
-        return (double)Sum/Int64Count;
+        return (double)Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する null 許容の <see cref="decimal" /> 値の集合の算術平均を計算します。一般的に平均と言えばこれ。Selectorがないので重複除去してから集計する。</summary>
     /// <returns>値の集合の平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
@@ -219,14 +220,14 @@ public static class ExtensionSet{
     /// <exception cref="OverflowException">集合内の要素の合計が <see cref="decimal.MaxValue" /> を超えています。</exception>
     public static decimal? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         decimal Sum = 0;
-        long Int64Count = 0;
+        var Count = 0L;
         foreach(var a in source) {
             var value = selector(a);
             if(!value.HasValue) continue;
             Sum+=value.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(decimal?) : Sum/Int64Count;
+        return Count==0 ? null:Sum/(decimal)Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="decimal" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の平均値。</returns>
@@ -253,14 +254,14 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     public static double? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         double Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source) {
             var SelectorNullable = selector(a);
             if(!SelectorNullable.HasValue) continue;
             Sum+=SelectorNullable.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(double?) : Sum/Int64Count;
+        return Count==0 ? null:Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="double" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。</returns>
@@ -271,11 +272,11 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static double Average<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         foreach(var a in source)Sum+=selector(a);
-        return Sum/Int64Count;
+        return Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する null 許容の <see cref="float?" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
@@ -285,14 +286,14 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     public static float? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,float?> selector) {
         float Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source) {
             var value = selector(a);
             if(!value.HasValue) continue;
             Sum+=value.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(float?):(float)((double)Sum/Int64Count);
+        return Count==0 ? null:(float)((double)Sum/Count);
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="float" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。</returns>
@@ -303,11 +304,11 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static float Average<TSource>(this IEnumerable<TSource> source,Func<TSource,float> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         float Sum = 0;
         foreach(var a in source)Sum+=selector(a);
-        return (float)((double)Sum/Int64Count);
+        return (float)((double)Sum/Count);
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する null 許容の <see cref="long?" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
@@ -315,16 +316,16 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static long? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
+    public static double? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long?> selector) {
         var Sum = 0L;
-        var Int64Count = 0L;
+        var Count = 0L;
         foreach(var a in source) {
             var SelectorNullable = selector(a);
             if(!SelectorNullable.HasValue) continue;
             Sum+=SelectorNullable.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(long?) : Sum/Int64Count;
+        return Count==0 ? null:(double)Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="long" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。</returns>
@@ -334,12 +335,12 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static long Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+    public static double Average<TSource>(this IEnumerable<TSource> source,Func<TSource,long> selector) {
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Sum = 0L;
         foreach(var a in source)Sum+=selector(a);
-        return Sum/Int64Count;
+        return (double)Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する null 許容の <see cref="int?" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。ソース 集合が空か null 値のみを含む場合は null。</returns>
@@ -347,16 +348,16 @@ public static class ExtensionSet{
     /// <param name="selector">各要素に適用する変換関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static int? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
+    public static double? Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int?> selector) {
         var Sum = 0;
-        var Int64Count = 0L;
+        var Count = 0L;
         foreach(var a in source) {
             var value = selector(a);
             if(!value.HasValue) continue;
             Sum+=value.Value;
-            Int64Count++;
+            Count++;
         }
-        return Int64Count==0 ? default(int?) : (int)(Sum/Int64Count);
+        return Count==0 ? null: (double)Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="int" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の算術平均値。</returns>
@@ -366,12 +367,12 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
-    public static int Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
+    public static double Average<TSource>(this IEnumerable<TSource> source,Func<TSource,int> selector) {
         var Count = source.LongCount;
         if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Sum = 0L;
         foreach(var a in source)Sum+=selector(a);
-        return (int)(Sum/Count);
+        return (double)Sum/Count;
     }
     private static (decimal[] Array, decimal 合計) 合計値を求める<TSource>(IEnumerable<TSource> source,Func<TSource,decimal> selector,long Count,MethodBase Method) {
         if(Count==0)throw シーケンスに要素が含まれていません(Method);
@@ -435,11 +436,11 @@ public static class ExtensionSet{
     ///     型にキャストできません。</exception>
     public static IEnumerable<TResult> Cast<TResult>(this IEnumerable source) {
         var r = new Set<TResult>();
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source)
             if(r.InternalAdd((TResult)a!))
-                Int64Count++;
-        r._LongCount=Int64Count;
+                Count++;
+        r._LongCount=Count;
         return r;
     }
     /// <summary>既定の等値比較子を使用して、指定した要素が集合に含まれているかどうかを判断します。</summary>
@@ -455,16 +456,10 @@ public static class ExtensionSet{
     /// <param name="source">集合が空の場合に、指定された値を返す集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
-    public static IEnumerable<TSource?> DefaultIfEmpty<TSource>(this IEnumerable<TSource?> source)=>source.LongCount>0
-        ?source
-        :new Set<TSource?> {
-            _LongCount=1,
-            TreeRoot={
-                R = new Set<TSource?>.TreeNodeT(null){
-                    _LinkedNodeItem = new Set<TSource?>.LinkedNodeItemT(default)
-                }
-            }
-        };
+    public static IEnumerable<TSource?> DefaultIfEmpty<TSource>(this IEnumerable<TSource> source){
+        if(source.LongCount>0) return source;
+        return new Set<TSource?>{_LongCount=1,TreeRoot={R=new Set<TSource?>.TreeNodeT(null){_LinkedNodeItem=new Set<TSource?>.LinkedNodeItemT(default)}}};
+    }
     //=> (IEnumerable<TSource?>)DefaultIfEmpty(source,default!);
     /// <summary>指定された集合の要素を返します。集合が空の場合はシングルトン コレクションにある型パラメーターの既定値を返します。</summary>
     /// <returns>
@@ -539,14 +534,14 @@ public static class ExtensionSet{
         //  (Math.Log2(A)+Math.Log2(B)+Math.Log2(C))/3,
         //)
         double Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source) {
             var SelectNullable = selector(a);
             if(!SelectNullable.HasValue) continue;
-            Int64Count++;
+            Count++;
             Sum+=Math.Log10(SelectNullable.Value);
         }
-        return Int64Count==0 ? default(double?):Math.Pow(10,Sum/Int64Count);
+        return Count==0 ? null:Math.Pow(10,Sum/Count);
     }
     /// <summary>
     /// 相乗平均。幾何平均ともいう。成長率、増加率の平均に適している。
@@ -559,8 +554,8 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static double Geomean<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         //A,B,Cのデータがあった場合、
         //理論上は、
@@ -569,7 +564,7 @@ public static class ExtensionSet{
         //  (Math.Log2(A)+Math.Log2(B)+Math.Log2(C))/3,
         //)
         foreach(var a in source)Sum+=Math.Log10(selector(a));
-        return Math.Pow(10,Sum/Int64Count);
+        return Math.Pow(10,Sum/Count);
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化し、指定された関数を使用して各グループの要素を射影します。</summary>
     /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TElement>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TElement))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、<paramref>
@@ -584,7 +579,7 @@ public static class ExtensionSet{
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TElement">
     ///   <see cref="IGrouping{TKey, TElement}" /> の要素の型。</typeparam>
-    public static IEnumerable<GroupingSet<TKey,TElement>> GroupBy<TSource, TKey, TElement>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
+    public static IEnumerable<IGrouping<TKey,TElement>> GroupBy<TSource, TKey, TElement>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
         var r = new SetGroupingSet<TKey,TElement>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
         Debug.Assert(r.LongCount<=source.LongCount);
@@ -636,7 +631,7 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
-    public static IEnumerable<GroupingSet<TKey,TSource>> GroupBy<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
+    public static IEnumerable<IGrouping<TKey,TSource>> GroupBy<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
         var r = new SetGroupingSet<TKey,TSource>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
         Debug.Assert(r.LongCount<=source.LongCount);
@@ -679,14 +674,14 @@ public static class ExtensionSet{
     /// <returns>調和平均値</returns>
     public static decimal? Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal?> selector) {
         decimal Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source) {
             var SelecterNullable = selector(a);
             if(!SelecterNullable.HasValue) continue;
-            Int64Count++;
+            Count++;
             Sum+=1/SelecterNullable.Value;
         }
-        return Int64Count==0 ? default(decimal?) : Int64Count/Sum;
+        return Count==0 ? null : Count/Sum;
     }
     /// <summary>
     /// 調和平均。行きは40km/h、帰りは60km/h。その平均速度を求めるときに使える。
@@ -699,11 +694,11 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static decimal Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,decimal> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         decimal Sum = 0;
         foreach(var a in source)Sum+=1/selector(a);
-        return Int64Count/Sum;
+        return Count/Sum;
     }
     /// <summary>
     /// 調和平均。行きは40km/h、帰りは60km/h。その平均速度を求めるときに使える。
@@ -713,14 +708,14 @@ public static class ExtensionSet{
     /// <returns>調和平均値</returns>
     public static double? Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,double?> selector) {
         double Sum = 0;
-        long Int64Count = 0;
+        long Count = 0;
         foreach(var a in source) {
             var SelecterNullable = selector(a);
             if(!SelecterNullable.HasValue) continue;
-            Int64Count++;
+            Count++;
             Sum+=1/SelecterNullable.Value;
         }
-        return Int64Count==0 ? default(double?): Int64Count/Sum;
+        return Count==0 ? null: Count/Sum;
     }
     /// <summary>
     /// 調和平均。行きは40km/h、帰りは60km/h。その平均速度を求めるときに使える。
@@ -733,11 +728,11 @@ public static class ExtensionSet{
     /// <exception cref="InvalidOperationException">
     ///   <paramref name="source" /> に要素が含まれていません。</exception>
     public static double Harmean<TSource>(this IEnumerable<TSource> source,Func<TSource,double> selector) {
-        var Int64Count = source.LongCount;
-        if(Int64Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+        var Count = source.LongCount;
+        if(Count==0)throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         double Sum = 0;
         foreach(var a in source)Sum+=1/selector(a);
-        return Int64Count/Sum;
+        return Count/Sum;
     }
     /// <summary>既定の等値比較子を使用して値を比較することにより、2 つの集合の積集合を生成します。</summary>
     /// <returns>2 つの集合の積集合を構成する要素が格納されている集合。</returns>

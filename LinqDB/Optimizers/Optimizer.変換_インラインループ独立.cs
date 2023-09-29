@@ -571,8 +571,7 @@ partial class Optimizer {
                                 Constant_0L
                             )
                         );
-                        Type Sum_Type;
-                        Sum_Type=MethodCall0_Type.IsNullable()?MethodCall0_Type.GetGenericArguments()[0]:MethodCall0_Type;
+                        var Sum_Type=MethodCall0_Type.IsNullable()?MethodCall0_Type.GetGenericArguments()[0]:MethodCall0_Type;
                         Sum_Type=Sum_Type==typeof(float)
                             ? typeof(double) : Sum_Type==typeof(int)
                                 ? typeof(long) : Sum_Type;
@@ -593,11 +592,10 @@ partial class Optimizer {
                                 argument => {
                                     ParameterExpression[]? Parameters0;
                                     Expression[] Expressions0;
-                                    ParameterExpression selector;
                                     Expression 共通argument;
                                     if(MethodCall0_Arguments.Count==2) {
                                         var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
-                                        selector=Expression.Parameter(
+                                        var selector=Expression.Parameter(
                                             MethodCall0_Arguments_1.Type.GetMethod(nameof(Action.Invoke))!.ReturnType,
                                             $"{変数名}source"
                                         );
@@ -659,23 +657,9 @@ partial class Optimizer {
                                 }
                             )
                         );
-                        Expression.Convert(
-                            Convert必要なら(
-                                Expression.Divide(
-                                    Sum,
-                                    Convert必要なら(
-                                        Average_Int64Count,
-                                        Sum_Type
-                                    )
-                                ),
-                                Sum_Type
-                            ),
-                            MethodCall0_Type
-                        );
-                        var 行数0の処理 = Average_Int64Count is not null
-                            ? (Expression)Expression.New(MethodCall0_Type)
+                        var 行数0の処理 = MethodCall0_Type.IsNullable()
+                            ? (Expression)Expression.Default(MethodCall0_Type)
                             : Throw_ZeroTuple(Method);
-                        Debug.Assert(Average_Int64Count is not null);
                         ListExpression.Add(
                             Expression.Condition(
                                 Expression.Equal(

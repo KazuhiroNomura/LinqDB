@@ -1,8 +1,7 @@
 ﻿//using System.Linq.Expressions;
 //using Binder = Microsoft.CSharp.RuntimeBinder;
 //using MessagePack;
-using Serializers.Formatters;
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
 public class Binary : 共通
 {
@@ -90,7 +89,7 @@ public class Binary : 共通
         var ConstantBinry = Expressions.Expression.Constant(new 演算子(true));
         var ConversionInt32 = Expressions.Expression.Lambda<Func<int, int>>(Expressions.Expression.Add(ParameterInt32, ParameterInt32), ParameterInt32);
         var ConversionDouble = Expressions.Expression.Lambda<Func<double, double>>(Expressions.Expression.Add(ParameterDouble, ParameterDouble), ParameterDouble);
-        this.MemoryMessageJson_Expression(Expressions.Expression.Assign(ParameterInt32, Constant1));
+        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Assign(ParameterInt32, Constant1));
     }
     private static string string_string_string(string? a, string b) => a??b;
     [Fact]
@@ -99,13 +98,13 @@ public class Binary : 共通
         var ParameterString = Expressions.Expression.Parameter(typeof(string), "string");
         var ConstantString = Expressions.Expression.Constant("string");
         var ConversionString = Expressions.Expression.Lambda<Func<string, string>>(Expressions.Expression.Call(null, GetMethod(() => string_string_string("", "")), ParameterString, ParameterString), ParameterString);
-        this.MemoryMessageJson_Expression(Expressions.Expression.Coalesce(ConstantString, ConstantString, ConversionString));
+        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Coalesce(ConstantString, ConstantString, ConversionString));
     }
     [Fact]
     public void WriteLeftRightMethod()
     {
         var Constant1 = Expressions.Expression.Constant(1m);
-        this.MemoryMessageJson_Expression(Expressions.Expression.Add(Constant1, Constant1));
+        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Add(Constant1, Constant1));
     }
     [Fact]
     public void WriteLeftRightMethodLambda()
@@ -114,7 +113,7 @@ public class Binary : 共通
         var Constant1 = Expressions.Expression.Constant(1m);
         var ConversionDecimal = Expressions.Expression.Lambda<Func<decimal, decimal>>(Expressions.Expression.Add(ParameterDecimmal, ParameterDecimmal), ParameterDecimmal);
         var input1 = Expressions.Expression.AddAssign(ParameterDecimmal, Constant1, typeof(decimal).GetMethod("op_Addition"), ConversionDecimal);
-        this.MemoryMessageJson_Expression(
+        this.MemoryMessageJson_TExpressionObject(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimmal },

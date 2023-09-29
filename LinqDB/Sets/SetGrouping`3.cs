@@ -18,8 +18,6 @@ public abstract class SetGrouping<TKey, TValue, TGrouping>:ImmutableSet<TGroupin
     /// キー比較用EqualityComparer
     /// </summary>
     protected readonly Generic.IEqualityComparer<TKey> KeyComparer;
-    protected SetGrouping(SerializationInfo SerializationInfo,StreamingContext StreamingContext) : base(SerializationInfo,StreamingContext) {
-    }
     /// <summary>
     /// 既定コンストラクタ
     /// </summary>

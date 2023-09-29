@@ -1,6 +1,5 @@
-﻿using Serializers.Formatters;
-using Expressions = System.Linq.Expressions;
-namespace Serializers.Formatters;
+﻿using Expressions = System.Linq.Expressions;
+namespace TestLinqDB.Serializers.Formatters;
 public class MemberInit : 共通
 {
     [Fact]

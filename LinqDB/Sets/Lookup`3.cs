@@ -10,7 +10,7 @@ using Generic=Collections.Generic;
 /// <typeparam name="TKey">ディクショナリ内のキーの型。</typeparam>
 /// <typeparam name="TCollection">TValueのIAddを継承した型</typeparam>
 [Serializable]
-public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>,ILookup<TKey,TValue>where TCollection:class,Generic.ICollection<TValue>,new() {
+public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>where TCollection:class,Generic.ICollection<TValue>,new() {
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
@@ -71,14 +71,17 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     ///   <see cref="Lookup{TValue, TKey, TCollection}" /> 内で検索されるキー。</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool ContainsKey(TKey Key)=>this.GetCollection(Key) is not null;
-    bool System.Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
-    Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
-        foreach(var a in this) yield return a;
-    }
+    //bool System.Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+    //Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
+    //    foreach(var a in this) yield return a;
+    //}
 
-    Generic.IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
-        foreach(var a in this) yield return a;
-    }
+    //Generic.IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
+    //    foreach(var a in this) yield return a;
+    //}
+    //int System.Linq.ILookup<TKey,TValue>.Count=>checked((int)this._LongCount);
+
+    //Generic.IEnumerable<TValue> System.Linq.ILookup<TKey,TValue>.this[TKey key]=>this.GetIndex(key);
     /// <summary>
     /// 指定したキーに関連付けられている値を取得します。
     /// </summary>
@@ -139,9 +142,6 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     private static readonly TCollection EmptyCollection =new();
 
 
-    int System.Linq.ILookup<TKey,TValue>.Count=>checked((int)this._LongCount);
-
-    Generic.IEnumerable<TValue> System.Linq.ILookup<TKey,TValue>.this[TKey key]=>this.GetIndex(key);
 
     /// <summary>指定したキーに関連付けられている値を取得します。</summary>
     /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>

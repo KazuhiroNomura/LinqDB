@@ -1,11 +1,10 @@
 ﻿using System.Linq.Expressions;
 using LinqDB.Sets;
-using Serializers.Formatters;
 using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace Optimizers;
+namespace TestLinqDB.Optimizers;
 public class 変換_KeySelectorの匿名型をValueTuple:共通{
     [Fact]public void Block(){
         this.共通コンパイル実行(

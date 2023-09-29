@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
-using Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
-namespace Serializers.Formatters;
+namespace TestLinqDB.Serializers.Formatters;
 [MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true)]
 public partial class MemberAccess対象:IEquatable<MemberAccess対象>{
     public int property=>1;

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using LinqDB.Optimizers;
 using LinqDB.Sets;
-namespace Sets;
+namespace TestLinqDB.Sets;
 
 [Serializable]
 public abstract class Test_ATest

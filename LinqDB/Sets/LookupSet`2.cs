@@ -29,6 +29,17 @@ public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILoo
     IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
         throw new NotImplementedException();
     }
+    bool System.Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+    //Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
+    //    foreach(var a in this) yield return a;
+    //}
+
+    //Generic.IEnumerator<IGrouping<TKey,TValue>> Generic.IEnumerable<IGrouping<TKey,TValue>>.GetEnumerator() {
+    //    foreach(var a in this) yield return a;
+    //}
+    //int System.Linq.ILookup<TKey,TValue>.Count=>checked((int)this._LongCount);
+
+    //Generic.IEnumerable<TValue> System.Linq.ILookup<TKey,TValue>.this[TKey key]=>this.GetIndex(key);
     /*
 public int Count{get;}
 

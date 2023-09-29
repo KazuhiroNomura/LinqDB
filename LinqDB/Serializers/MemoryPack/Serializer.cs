@@ -74,6 +74,8 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
             objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
             var Register = Serializer.Register.MakeGenericMethod(type);
             Register.Invoke(null,objects1);
+        }else if(type.IsArray) {
+            this.RegisterAnonymousDisplay(type.GetElementType());
         }else if(type.IsGenericType) {
             if(type.IsAnonymous()) {
                 var FormatterType = typeof(Anonymous<>).MakeGenericType(type);

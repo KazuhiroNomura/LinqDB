@@ -1,4 +1,4 @@
-﻿namespace Serializers.Formatters;
+﻿namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
 public class CatchBlock : 共通
 {

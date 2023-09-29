@@ -33,6 +33,9 @@ public interface ICollection<T> : IEnumerable<T>,Generic.ICollection<T>
 public interface IGrouping<out TKey, out TElement> :Linq.IGrouping<TKey,TElement>,IEnumerable<TElement>
 {
 }
+public interface IGroupingCollection<out TKey,TElement> :IGrouping<TKey,TElement>,ICollection<TElement>
+{
+}
 //KeyValueCollection<TValue,TKey, TCollection>:IGrouping<TKey,TValue>,ICollection<TValue> where TCollection:ICollection<TValue> {
 // ReSharper disable once PossibleInterfaceMemberAmbiguity
 public interface ILookup<TKey,TElement>:Linq.ILookup<TKey,TElement>,IEnumerable<IGrouping<TKey,TElement>>{

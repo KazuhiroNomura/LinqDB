@@ -10,7 +10,7 @@ using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 
 // ReSharper disable EqualExpressionComparison
-namespace Sets;
+namespace TestLinqDB.Sets;
 
 public class Container2:Container<Container2>{
 }
@@ -1354,15 +1354,15 @@ public class Tables{
             })
         );
     }
-    [Fact]public void StdevDouble_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<double>().Stdev(p=>p));
-    [Fact]public void AverageDecimal_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<decimal>().Average(p=>p));
-    [Fact]public void AverageDouble_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<double>().Average(p=>p));
-    [Fact]public void GeomeanDouble_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<double>().Geomean(p=>p));
-    [Fact]public void HarmeanDecimal_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<decimal>().Harmean(p=>p));
-    [Fact]public void HarmeanDouble_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<double>().Harmean(p=>p));
-    [Fact]public void Max_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<long>().Max(p=>p/2));
-    [Fact]public void Min_ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<long>().Min(p=>p/2));
-    [Fact]public void Single_0行ZeroTupleException()=>Assert.Throws<ZeroTupleException>(()=>new Set<long>().Single());
+    [Fact]public void StdevDouble_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<double>().Stdev(p=>p));
+    [Fact]public void AverageDecimal_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<decimal>().Average(p=>p));
+    [Fact]public void AverageDouble_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<double>().Average(p=>p));
+    [Fact]public void GeomeanDouble_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<double>().Geomean(p=>p));
+    [Fact]public void HarmeanDecimal_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<decimal>().Harmean(p=>p));
+    [Fact]public void HarmeanDouble_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<double>().Harmean(p=>p));
+    [Fact]public void Max_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<long>().Max(p=>p/2));
+    [Fact]public void Min_ZeroTupleException()=>Assert.Throws<InvalidOperationException>(()=>new Set<long>().Min(p=>p/2));
+    [Fact]public void Single_0行InvalidOperationException()=>Assert.Throws<InvalidOperationException>(()=>new Set<long>().Single());
     [Fact]public void Single_2行ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.Single());
     [Fact]public void SingleOrDefault0_ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.SingleOrDefault());
     [Fact]public void SingleOrDefault1_ManyTupleException()=>Assert.Throws<ManyTupleException>(()=>new Set<long>{0,1}.SingleOrDefault(long.MaxValue));

@@ -1,7 +1,7 @@
 ﻿using LinqDB.Sets;
 using LinqDB.Helpers;
 
-namespace Sets;
+namespace TestLinqDB.Sets;
 
 
 public class Test_AscList

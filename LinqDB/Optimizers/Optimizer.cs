@@ -1104,29 +1104,6 @@ public sealed partial class Optimizer:IDisposable{
                 : e
         );
     }
-    private sealed class ConstantParameterEqualityComparer:Generic.IEqualityComparer<Expression> {
-        public int GetHashCode(Expression obj) => (int)obj.NodeType+obj.Type.GetHashCode();
-        public bool Equals(Expression? a,Expression? b){
-            Debug.Assert(ReferenceEquals(a,b)==(a==b));
-            if(a is null)
-                return b is null;
-            if(a.NodeType!=b?.NodeType)
-                return false;
-            // ReSharper disable once SwitchStatementMissingSomeCases
-            return a.NodeType switch
-            {
-                ExpressionType.Constant => this.T((ConstantExpression)a,(ConstantExpression)b),
-                ExpressionType.Parameter => this.T((ParameterExpression)a,(ParameterExpression)b),
-                ExpressionType.Quote => a==b,
-                _ => throw new NotSupportedException(a.NodeType.ToString()),
-            };
-        }
-
-        private bool T(ConstantExpression a,ConstantExpression b)
-            => ReferenceEquals(a.Value,b.Value)||a.Type==b.Type&&Equals(a.Value,b.Value);
-
-        private bool T(ParameterExpression a,ParameterExpression b) => a==b;
-    }
     private readonly 作業配列 _作業配列 = new();
 
     private static Type IEnumerable1(Type Type) {
@@ -1622,17 +1599,6 @@ public sealed partial class Optimizer:IDisposable{
         var Lambda=this.Lambda最適化(Expression.Lambda(Body,Array.Empty<ParameterExpression>()));
         return (Func<object>)this.DynamicMethod(Container.GetType(),Lambda);
     }
-    //public bool ループか{get;set;}
-    ///// <summary>
-    ///// SQLから最適化した式木を返す
-    ///// </summary>
-    ///// <param name="ContainerType"></param>
-    ///// <param name="SQL"></param>
-    ///// <returns></returns>
-    //public Expression CreateExpression(Type ContainerType,String SQL) {
-    //    var Expression = this._変換_TSqlFragmentからExpression.実行(ContainerType,SQL);
-    //    return this.コンパイルに必要な情報を作成(Expression).Expression;
-    //}
     /// <summary>
     /// 最適化した式木を返す
     /// </summary>
@@ -2457,44 +2423,6 @@ public sealed partial class Optimizer:IDisposable{
         //DictionaryLambda,DictionaryDynamic add
         return (LambdaExpression)Lambda08;
     }
-    //internal void Dictionary取得(Expression Lambda00) {
-    //    var DictionaryConstant = this.DictionaryConstant;
-    //    var DictionaryDynamic=this.DictionaryDynamic;
-    //    var DictionaryLambda=this.DictionaryLambda;
-    //    var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
-    //    DictionaryConstant.Clear();
-    //    DictionaryDynamic.Clear();
-    //    DictionaryLambda.Clear();
-    //    Dictionaryラムダ跨ぎParameter.Clear();
-    //    this.ListスコープParameter.Clear();
-    //    //分離するアイデア。ここで以下を取得する
-    //    //DictionaryConstant add
-
-    //    var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);
-    //    //以下で更新されるコレクション
-    //    //DictionaryConstant read
-    //    var Lambda02=this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda01);
-    //    var Lambda03 =this._変換_Anonymousをnewしてメンバーを参照している式の省略.実行(Lambda02);
-    //    //プロファイル=false;
-    //    //var List計測 = new List<A計測>();
-    //    //var ConstantList計測 = Expression.Constant(List計測);
-    //    //プロファイル=false;
-    //    //if(プロファイル)HashSetConstant.Add(ConstantList計測);
-    //    var Lambda04 = this._変換_WhereからLookup.実行(Lambda03);
-
-    //    //Dictionaryラムダ跨ぎParameter add
-    //    var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
-    //    var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
-    //    var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
-    //    this._検証_変形状態.実行(Lambda07);
-    //    var Lambda08 =this.IsInline?this._変換_インラインループ独立.実行(Lambda07):Lambda07;
-    //    //DictionaryDynamic add
-    //    //DictionaryLambda  add
-    //    //Dictionaryラムダ跨ぎParameter read
-    //    var Lambda09=this._変換_跨ぎParameterをBlock_Variablesに.実行(Lambda08);
-    //    //分離するアイデア。ここで以下を取得する
-    //    //DictionaryLambda,DictionaryDynamic add
-    //}
     private static bool equals(object obj) => obj is string&&obj.Equals("ABC");
 }
 //2122 20220516

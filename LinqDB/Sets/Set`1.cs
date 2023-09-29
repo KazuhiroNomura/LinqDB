@@ -129,19 +129,6 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
             return result;
         }
     }
-    //public sealed class MessagePackFormatter:IMessagePackFormatter<T>{
-    //    public static readonly MessagePackFormatter Instance=new();
-    //    public void Serialize(ref MessagePackWriter writer,T value,MessagePackSerializerOptions options){
-    //        Debug.Assert(value!=null,nameof(value)+" != null");
-    //        writer.Write(value.a);
-    //        writer.Write(value.b);
-    //    }
-    //    public T Deserialize(ref MessagePackReader reader,MessagePackSerializerOptions options){
-    //        return new sealed_classキーあり{a=reader.ReadInt32(),b=reader.ReadString()};
-    //    }
-    //}
-    protected Set(SerializationInfo SerializationInfo,StreamingContext StreamingContext):base(SerializationInfo,StreamingContext) {
-    }
     /// <summary>
     /// 代入元からコピーする。代入元はDisposeする。
     /// </summary>

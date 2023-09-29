@@ -1,12 +1,5 @@
-﻿using LinqDB.Helpers;
-using LinqDB.Sets;
-
-using System.Collections;
-using System.Text;
-using LinqDB.Databases;
-using Newtonsoft.Json.Linq;
-
-namespace Sets;
+﻿using LinqDB.Databases;
+namespace TestLinqDB.Sets;
 
 
 public class Entity2{
