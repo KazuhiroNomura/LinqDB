@@ -112,19 +112,19 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
         this.ProtectedClear();
         
     }
-    public byte[] Serialize<T>(T value){
+    public override byte[] Serialize<T>(T value){
         this.Clear();
         return MessagePackSerializer.Serialize<object>(value,this.Options);
     }
-    public void Serialize<T>(Stream stream,T value){
+    public override void Serialize<T>(Stream stream,T value){
         this.Clear();
         MessagePackSerializer.Serialize<object>(stream,value,this.Options);
     }
-    public T Deserialize<T>(byte[] bytes){
+    public override T Deserialize<T>(byte[] bytes){
         this.Clear();
         return (T)MessagePackSerializer.Deserialize<object>(bytes,this.Options);
     }
-    public T Deserialize<T>(Stream stream){
+    public override T Deserialize<T>(Stream stream){
         this.Clear();
         return (T)MessagePackSerializer.Deserialize<object>(stream,this.Options);
     }

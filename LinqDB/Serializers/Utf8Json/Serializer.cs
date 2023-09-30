@@ -65,7 +65,8 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
             this
         };
         var Resolvers=new[]{
-            this.Resolver,global::Utf8Json.Resolvers.BuiltinResolver.Instance,//int,byte,double[],List<>,よく使う型
+            this.Resolver,
+            global::Utf8Json.Resolvers.BuiltinResolver.Instance,//int,byte,double[],List<>,よく使う型
             global::Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
             global::Utf8Json.Resolvers.EnumResolver.Default,
             global::Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
@@ -112,26 +113,23 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
         this.ProtectedClear();
         this.Resolver.Clear();
     }
-    public byte[] Serialize<T>(T value){
+    public override byte[] Serialize<T>(T value){
         this.Clear();
         return JsonSerializer.Serialize<object>(value,this.IResolver);
     }
-    public void Serialize<T>(Stream stream,T value){
+    public override void Serialize<T>(Stream stream,T value){
         this.Clear();
         JsonSerializer.Serialize<object>(stream,value,this.IResolver);
     }
-    public T Deserialize<T>(byte[] bytes){
+    public override T Deserialize<T>(byte[] bytes){
         this.Clear();
         return (T)JsonSerializer.Deserialize<object>(bytes,this.IResolver);
     }
-    public T Deserialize<T>(Stream stream){
+    public override T Deserialize<T>(Stream stream){
         this.Clear();
         return (T)JsonSerializer.Deserialize<object>(stream,this.IResolver);
     }
 
-    public IJsonFormatter<T> GetFormatter<T>(){
-        return (IJsonFormatter<T>)this;
-    }
     public void Serialize(ref JsonWriter writer,Serializer value,IJsonFormatterResolver formatterResolver){
         throw new System.NotImplementedException();
     }

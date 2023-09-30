@@ -59,6 +59,7 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     /// <param name="LogStream"></param>
     protected virtual void Commit(Stream LogStream) {
     }
+
     /// <summary>
     /// コンテナのメンバーのディープコピー処理。
     /// </summary>
@@ -69,8 +70,10 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
         if(this.Parent is null) {
             if(this.LogStream is not null) {
                 var LogStream = this.LogStream;
-                var buffer = Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString("yyyy/MM/dd HH:mm:ss.ff",CultureInfo.CurrentCulture));
-                LogStream.Write(buffer,0,buffer.Length);
+                this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
+                //var Serializer=new Serializers.Utf8Json.Serializer();
+                //var buffer = Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString("yyyy/MM/dd HH:mm:ss.ff",CultureInfo.CurrentCulture));
+                //LogStream.Write(buffer,0,buffer.Length);
                 //Writer.WriteStartElement("Container");
                 //Writer.WriteAttributeString("DateTimeOffset",DateTimeOffset.Now.ToString("yyyy/MM/dd HH:mm:ss.ff",CultureInfo.CurrentCulture));
                 this.Commit(LogStream);

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 namespace LinqDB.Serializers;
 using Expressions = System.Linq.Expressions;
-public class Serializer{
+public abstract class Serializer{
     internal readonly List<Expressions.ParameterExpression> ラムダ跨ぎParameters=new();
     internal readonly List<Expressions.ParameterExpression> Parameters=new();
     internal readonly Dictionary<Expressions.LabelTarget,int> Dictionary_LabelTarget_int=new();
@@ -31,4 +32,9 @@ public class Serializer{
         this.TypeProperties.Clear();
         this.TypeEvents.Clear();
     }
+    public abstract byte[] Serialize<T>(T value);
+    public abstract void Serialize<T>(Stream stream,T value);
+    public abstract T Deserialize<T>(byte[] bytes);
+    public abstract T Deserialize<T>(Stream stream);
+
 }

@@ -5,9 +5,9 @@ namespace System.Data.LinqDBClient;
 /// <summary>
 /// 利用予定なし。
 /// </summary>
-public class LinqDBTransaction:DbTransaction {
+public class LinqDbTransaction:DbTransaction {
     private readonly LinqDBConnetion LinqDBConnetion;
-    internal LinqDBTransaction(LinqDBConnetion LinqDBConnetion) {
+    internal LinqDbTransaction(LinqDBConnetion LinqDBConnetion) {
         this.LinqDBConnetion=LinqDBConnetion;
     }
     public override IsolationLevel IsolationLevel { get; }

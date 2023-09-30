@@ -32,7 +32,7 @@ public static class PrimaryKeys{
             if(!this.ID2.Equals(other.ID2)) return false;
             return true;
         }
-        public override bool Equals(object other){
+        public override bool Equals(object? other){
             Contract.Assert(other!=null,"obj != null");
             return this.Equals((Entity)other);
         }

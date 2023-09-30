@@ -7,11 +7,14 @@ using System.Diagnostics;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
+using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
 /// <summary>
 /// エンティティの基底クラス
 /// </summary>
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
-public partial class Container:IDisposable {
+public partial class Container:IDisposable{
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember, NonSerialized]
+    public readonly Serializer Serializer=new();
     /// <summary>
     /// リレーションシップ制約
     /// </summary>
@@ -203,14 +206,14 @@ public partial class Container:IDisposable {
     /// <summary>
     /// 全メンバーの読み込み。
     /// </summary>
-    /// <param name="LogStream"></param>
-    protected virtual void Read(Stream LogStream) {
+    /// <param name="reader"></param>
+    protected virtual void Read(Stream reader) {
     }
     /// <summary>
     /// 全メンバーの書き込み。
     /// </summary>
-    /// <param name="Writer"></param>
-    protected virtual void Write(Stream Writer) {
+    /// <param name="writer"></param>
+    protected virtual void Write(Stream writer) {
     }
     /// <summary>
     /// AssociateSet`3,EntitySet`3間のリレーションを作る。

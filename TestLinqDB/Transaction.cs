@@ -9,8 +9,9 @@ using System.Xml;
 using LinqDB.CRC;
 using LinqDB.Databases;
 using LinqDB.Sets;
-using Utf8Json;
-using Utf8Json.Resolvers;
+using Serializers=LinqDB.Serializers;
+//using MessagePack=LinqDB.Serializers.MessagePack;
+using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
 // ReSharper disable ConvertIfStatementToReturnStatement
 [Serializable]
 public struct Struct比較対象にEquals {
@@ -58,11 +59,7 @@ namespace テスト {
             this.dbo=new Schemas.dbo(this);
         }
         protected override void Read(Stream Reader) {
-            try{
-                this.dbo.Read(Reader);
-            } catch(JsonParsingException ex){
-
-            }
+            this.dbo.Read(Reader);
         }
         protected override void Write(Stream Writer) {
             Contract.Requires(Writer!=null);
@@ -96,28 +93,23 @@ namespace テスト {
                 this._Entity1=new Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>(this.Container);
                 this._Entity2=new Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>(this.Container);
             }
-            internal void Read(Stream Reader) {
-                this._Entity1=JsonSerializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
-                this._Entity2=JsonSerializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
-                this.struct比較対象にEquals=JsonSerializer.Deserialize<Struct比較対象にEquals>(Reader);
-                this.struct比較対象にIEquatableEquals=JsonSerializer.Deserialize<Struct比較対象にIEquatableEquals>(Reader);
-                this.Objectstruct比較対象にEquals=JsonSerializer.Deserialize<object>(Reader);
-                this.Objectstruct比較対象にIEquatableEquals=JsonSerializer.Deserialize<object>(Reader);
+            internal void Read(Stream Reader){
+                var Serializer=this.Container.Serializer;
+                this._Entity1=Serializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
+                this._Entity2=Serializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
+                this.struct比較対象にEquals=Serializer.Deserialize<Struct比較対象にEquals>(Reader);
+                this.struct比較対象にIEquatableEquals=Serializer.Deserialize<Struct比較対象にIEquatableEquals>(Reader);
+                this.Objectstruct比較対象にEquals=Serializer.Deserialize<object>(Reader);
+                this.Objectstruct比較対象にIEquatableEquals=Serializer.Deserialize<object>(Reader);
             }
             internal void Write(Stream Writer){
-                var s=JsonSerializer.Serialize(this.Entity1);
-                w(JsonSerializer.Serialize(this.Entity1));
-                w(JsonSerializer.Serialize(this.Entity2));
-                w(JsonSerializer.Serialize(this.struct比較対象にEquals));
-                w(JsonSerializer.Serialize(this.struct比較対象にIEquatableEquals));
-                w(JsonSerializer.Serialize(this.Objectstruct比較対象にEquals));
-                w(JsonSerializer.Serialize(this.Objectstruct比較対象にIEquatableEquals));
-
-                void w(byte[] bytes)
-                {
-                    Writer.Write(bytes,0,bytes.Length);
-
-                }
+                var Serializer=this.Container.Serializer;
+                Serializer.Serialize(Writer,this.Entity1);
+                Serializer.Serialize(Writer,this.Entity2);
+                Serializer.Serialize(Writer,this.struct比較対象にEquals);
+                Serializer.Serialize(Writer,this.struct比較対象にIEquatableEquals);
+                Serializer.Serialize(Writer,this.Objectstruct比較対象にEquals);
+                Serializer.Serialize(Writer,this.Objectstruct比較対象にIEquatableEquals);
             }
 
             internal void RelationValidate() {
@@ -269,62 +261,8 @@ public class Transaction {
         return result;
     }
     private static readonly OnXmlDictionaryReaderClose OnXmlDictionaryReaderClose = _ => { };
-    public sealed class SetFormatter<T>:IJsonFormatter<ImmutableSet<T>>, IJsonFormatter {
-        // Token: 0x06000450 RID: 1104 RVA: 0x00016368 File Offset: 0x00014568
-        public void Serialize(ref JsonWriter writer,ImmutableSet<T> value,IJsonFormatterResolver FormatterResolver) {
-            writer.WriteBeginArray();
-            var Formatter=FormatterResolver!.GetFormatter<T>();
-            using var Enumerator=value.GetEnumerator();
-            if(Enumerator.MoveNext()){
-                Formatter.Serialize(ref writer,Enumerator.Current,FormatterResolver);
-                while(Enumerator.MoveNext()){
-                    writer.WriteValueSeparator();
-                    Formatter.Serialize(ref writer,Enumerator.Current,FormatterResolver);
-                }
-            }
-            writer.WriteEndArray();
-        }
-
-        // Token: 0x06000451 RID: 1105 RVA: 0x000163B8 File Offset: 0x000145B8
-        public ImmutableSet<T> Deserialize(ref JsonReader reader,IJsonFormatterResolver FormatterResolver) {
-            var Result=new Set<T>();
-            var Formatter = FormatterResolver!.GetFormatter<T>();
-            reader.ReadIsBeginArrayWithVerify();
-            var num = 0;
-            while(!reader.ReadIsEndArrayWithSkipValueSeparator(ref num)) {
-                Result.IsAdded(Formatter.Deserialize(ref reader,FormatterResolver));
-            }
-            return Result;
-        }
-
-        // Token: 0x06000452 RID: 1106 RVA: 0x0001640E File Offset: 0x0001460E
-
-        // Token: 0x06000453 RID: 1107 RVA: 0x00016416 File Offset: 0x00014616
-        // Note: this type is marked as 'beforefieldinit'.
-
-        // Token: 0x04000174 RID: 372
-    }
     [Fact]
     public void Transactionログ1(){
-        {
-            System.Collections.Generic.IEnumerable<int>set = new int[]{
-                1,2,3
-            };
-        }
-        {
-            CompositeResolver.RegisterAndSetAsDefault(
-                new IJsonFormatter[] { new SetFormatter<int>() },
-                new[] { StandardResolver.Default });
-            var set =new Set<int>{
-                1,2,3
-            };
-            var s=JsonSerializer.Serialize(set);
-            var Formatter = new SetFormatter<int>();
-            var m = new MemoryStream();
-            JsonSerializer.Serialize(m,set);
-            m.Position=0;
-            var o=JsonSerializer.Deserialize<Set<int>>(m);
-        }
         const string ファイル名 = "Transaction.xml";
         const int 回数 = 100;
         var rnd = new Random(1);
@@ -454,73 +392,11 @@ public class Transaction {
         }
     }
 
-    private class JsonFormatter<T>:IJsonFormatter<T> {
-        public T Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver) {
-            var Formatter=Utf8Json.Resolvers.BuiltinResolver.Instance.GetFormatter<T>();
-            if(Formatter!=null) return Formatter.Deserialize(ref reader,formatterResolver);
-            var Type = typeof(T);
-            if(Type.IsSubclassOf(typeof(Expression))) {
-            }
-            throw new NotSupportedException();
-        }
-        public void Serialize(ref JsonWriter writer,T value,IJsonFormatterResolver formatterResolver) {
-            var Formatter = Utf8Json.Resolvers.BuiltinResolver.Instance.GetFormatter<T>();
-            if(Formatter!=null) {
-                Formatter.Serialize(ref writer,value,formatterResolver);
-            } else {
-
-            }
-        }
-    }
-    class JsonFormatterResolver:IJsonFormatterResolver {
-        public IJsonFormatter<T> GetFormatter<T>() {
-            //var r = Utf8Json.Resolvers.StandardResolver.Default.GetFormatter<T>();
-            var r = Utf8Json.Resolvers.BuiltinResolver.Instance.GetFormatter<T>();
-            if(r!=null) return r;
-            return new JsonFormatter<T>();
-        }
-    }
     private static Expression<Func<int[],System.Collections.Generic.IEnumerable<int>>> シリアライズデータ=>
         入力=>
             from a in 入力
             join b in 入力 on a equals b
             select a+b;
-    [Fact]
-    public void Utf8Json動作の確認() {
-        //const string タグ1 = nameof(タグ1);
-        //const string タグ2 = nameof(タグ2);
-        const string 値 = nameof(値);
-        //Utf8Json.JsonSerializer.Serialize();
-        //var w = new MessagePack.MessagePackSerializer();
-        //MessagePack.MessagePackSerializer.Serialize()
-        //MessagePack.MessagePackWriter.()
-        var d = シリアライズデータ;
-        //var d = "ABC";
-        //var d = typeof(String);
-        using var s = new MemoryStream();
-        var w = new JsonWriter(new byte[1000]);
-        //using var w = CommonLibrary.CreateXmlWriter(s,global::LinqDB.XmlType.Binary);
-        var JsonFormatterResolver = new JsonFormatterResolver();
-        //JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.def);
-        //JsonSerializer.Serialize(s,d);
-        //JsonSerializer.Serialize(s,d,JsonFormatterResolver);
-        //JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.DynamicGenericResolver.Instance);
-        JsonSerializer.Serialize(s,new { a = 3,b = 4 },JsonFormatterResolver);
-        JsonSerializer.Serialize(s,d,JsonFormatterResolver);
-        JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.StandardResolver.Default);
-        //try {
-        //    JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.CompositeResolver.Instance);
-        //} catch {
-        //}
-        //try {
-        //    JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.DynamicGenericResolver.Instance);
-        //} catch {
-        //}
-        //try {
-        //    JsonSerializer.Serialize(s,d,Utf8Json.Resolvers.DynamicObjectResolver.Default);
-        //} catch {
-        //}
-    }
     [Fact]
     public void MessagePack動作の確認() {
         const string タグ1 = nameof(タグ1);

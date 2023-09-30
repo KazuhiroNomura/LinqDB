@@ -17,32 +17,30 @@ namespace LinqDB.Sets;
 /// <typeparam name="T"></typeparam>
 [Serializable,MessagePack.MessagePackObject]
 public class Set<T>:ImmutableSet<T>,ICollection<T>{
-    static Set(){
-        MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
-    }
-    public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
-        public static readonly Formatter Instance = new();
-        public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {
-            var Count = value!.LongCount;
-            var Formatter = writer.GetFormatter<T>();
-            writer.WriteVarInt(Count);
-            foreach(var item in value) {
-                var item0 = item;
-                Formatter.Serialize(ref writer,ref item0);
-            }
-        }
-        public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value) {
-            var set = new Set<T>();
-            var Count = reader.ReadVarIntInt64();
-            var Formatter = reader.GetFormatter<T>();
-            T? item = default;
-            for(long a = 0;a<Count;a++) {
-                Formatter.Deserialize(ref reader,ref item);
-                set.Add(item);
-            }
-            value=set;
-        }
-    }
+    static Set()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
+    //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
+    //    public static readonly Formatter Instance = new();
+    //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {
+    //        var Count = value!.LongCount;
+    //        var Formatter = writer.GetFormatter<T>();
+    //        writer.WriteVarInt(Count);
+    //        foreach(var item in value) {
+    //            var item0 = item;
+    //            Formatter.Serialize(ref writer,ref item0);
+    //        }
+    //    }
+    //    public override void Deserialize(ref MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value) {
+    //        var set = new Set<T>();
+    //        var Count = reader.ReadVarIntInt64();
+    //        var Formatter = reader.GetFormatter<T>();
+    //        T? item = default;
+    //        for(long a = 0;a<Count;a++) {
+    //            Formatter.Deserialize(ref reader,ref item);
+    //            set.Add(item);
+    //        }
+    //        value=set;
+    //    }
+    //}
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。
     /// </summary>
@@ -58,13 +56,13 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    public Set(System.Collections.Generic.IEnumerable<T> source):base(source,Generic.EqualityComparer<T>.Default) {
+    public Set(Generic.IEnumerable<T> source):base(source,Generic.EqualityComparer<T>.Default) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
-    public Set(System.Collections.Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer) : base(source,Comparer) {
+    public Set(Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer) : base(source,Comparer) {
     }
     /// <summary>
     ///   <see cref="Set{T}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
@@ -79,52 +77,52 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
     public Set(ImmutableSet<T> source,Generic.IEqualityComparer<T> Comparer) :base(source,Comparer) {
     }
-    public sealed class JsonFormatter:Utf8Json.IJsonFormatter<Set<T>>{
-        public static readonly JsonFormatter Instance=new();
-        public void Serialize(ref Utf8Json.JsonWriter writer,Set<T> value,Utf8Json.IJsonFormatterResolver formatterResolver){
-            var Formatter=formatterResolver.GetFormatter<T>();
-            writer.WriteBeginArray();
-            var 二度目以降の出力か=false;
-            var TreeNode = value.TreeRoot;
-        LinkedNodeItem走査:
-            for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
-                if(二度目以降の出力か)writer.WriteValueSeparator();
-                二度目以降の出力か=true;
-                Formatter.Serialize(ref writer,LinkedNodeItem.Item,formatterResolver);
-            }
-            if(TreeNode.L is not null) {
-                TreeNode=TreeNode.L;
-                goto LinkedNodeItem走査;
-            }
-            右に移動:
-            if(TreeNode.R is not null) {
-                TreeNode=TreeNode.R;
-                goto LinkedNodeItem走査;
-            }
-            //上に移動
-            while(!(TreeNode.P is null)) {
-                var 旧TreeNode_P = TreeNode.P;
-                if(旧TreeNode_P.L==TreeNode) {
-                    TreeNode=旧TreeNode_P;
-                    goto 右に移動;
-                }
-                TreeNode=旧TreeNode_P;
-            }
-            writer.WriteEndArray();
-        }
-        public Set<T> Deserialize(ref Utf8Json.JsonReader reader,Utf8Json.IJsonFormatterResolver formatterResolver){
-            var result=new Set<T>();
-            var Formatter=formatterResolver.GetFormatter<T>();
-            reader.ReadIsBeginArrayWithVerify();
-            while(true){
-                var value=Formatter.Deserialize(ref reader,formatterResolver);
-                result.IsAdded(value);
-                var s=reader.ReadIsValueSeparator();
-                if(!s) break;
-            }
-            return result;
-        }
-    }
+    //public sealed class JsonFormatter:Utf8Json.IJsonFormatter<Set<T>>{
+    //    public static readonly JsonFormatter Instance=new();
+    //    public void Serialize(ref Utf8Json.JsonWriter writer,Set<T> value,Utf8Json.IJsonFormatterResolver formatterResolver){
+    //        var Formatter=formatterResolver.GetFormatter<T>();
+    //        writer.WriteBeginArray();
+    //        var 二度目以降の出力か=false;
+    //        var TreeNode = value.TreeRoot;
+    //    LinkedNodeItem走査:
+    //        for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
+    //            if(二度目以降の出力か)writer.WriteValueSeparator();
+    //            二度目以降の出力か=true;
+    //            Formatter.Serialize(ref writer,LinkedNodeItem.Item,formatterResolver);
+    //        }
+    //        if(TreeNode.L is not null) {
+    //            TreeNode=TreeNode.L;
+    //            goto LinkedNodeItem走査;
+    //        }
+    //        右に移動:
+    //        if(TreeNode.R is not null) {
+    //            TreeNode=TreeNode.R;
+    //            goto LinkedNodeItem走査;
+    //        }
+    //        //上に移動
+    //        while(!(TreeNode.P is null)) {
+    //            var 旧TreeNode_P = TreeNode.P;
+    //            if(旧TreeNode_P.L==TreeNode) {
+    //                TreeNode=旧TreeNode_P;
+    //                goto 右に移動;
+    //            }
+    //            TreeNode=旧TreeNode_P;
+    //        }
+    //        writer.WriteEndArray();
+    //    }
+    //    public Set<T> Deserialize(ref Utf8Json.JsonReader reader,Utf8Json.IJsonFormatterResolver formatterResolver){
+    //        var result=new Set<T>();
+    //        var Formatter=formatterResolver.GetFormatter<T>();
+    //        reader.ReadIsBeginArrayWithVerify();
+    //        while(true){
+    //            var value=Formatter.Deserialize(ref reader,formatterResolver);
+    //            result.IsAdded(value);
+    //            var s=reader.ReadIsValueSeparator();
+    //            if(!s) break;
+    //        }
+    //        return result;
+    //    }
+    //}
     /// <summary>
     /// 代入元からコピーする。代入元はDisposeする。
     /// </summary>
@@ -282,7 +280,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="source">追加したい集合</param>
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
-    public void AddRange(System.Collections.Generic.IEnumerable<T>source) {
+    public void AddRange(Generic.IEnumerable<T>source) {
         var Count = this._LongCount;
         foreach(var Item in source) {
             if(this.InternalAdd(Item)) {
@@ -597,19 +595,17 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         var second=(Set<T>)other;
         var Result = new Set<T>();
         var Count = 0L;
-        foreach(var a in this) {
-            if(!second.InternalContains(a)) {
-                var r = Result.InternalAdd(a);
-                Debug.Assert(r);
-                Count++;
-            }
+        foreach(var a in this){
+            if(second.InternalContains(a))continue;
+            var r = Result.InternalAdd(a);
+            Debug.Assert(r);
+            Count++;
         }
-        foreach(var a in second) {
-            if(!this.InternalContains(a)) {
-                var r = Result.InternalAdd(a);
-                Debug.Assert(r);
-                Count++;
-            }
+        foreach(var a in second){
+            if(this.InternalContains(a))continue;
+            var r = Result.InternalAdd(a);
+            Debug.Assert(r);
+            Count++;
         }
         Result._LongCount=Count;
         this.変数Enumerator=Result.変数Enumerator;

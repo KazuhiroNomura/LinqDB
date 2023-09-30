@@ -31,6 +31,6 @@ public class LinqDBConnetion:DbConnection {
     public override void ChangeDatabase(string databaseName) => throw new NotImplementedException();
     public override void Close() => throw new NotImplementedException();
     public override void Open() => throw new NotImplementedException();
-    protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel) => new LinqDBTransaction(this);
+    protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel) => new LinqDbTransaction(this);
     protected override DbCommand CreateDbCommand()=>new LinqDBCommand(this.Client);
 }

@@ -66,7 +66,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         } while(TreeNode is not null);
         return null;
     }
-    [NonSerialized]
+    [IgnoreDataMember]
     private readonly Random Random = new(1);
     //private List<T> List = new();
     [IgnoreDataMember]
@@ -537,10 +537,18 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// タプル同士の比較方法。
     /// </summary>
-    internal Generic.IEqualityComparer<T> Comparer {
-        get;
-        set;
+    [IgnoreDataMember]
+    private protected Generic.IEqualityComparer<T> Comparer{
+        get=>Generic.EqualityComparer<T>.Default;
+        //set{}
     }
+    //[NonSerialized]
+    //private protected readonly Generic.IEqualityComparer<T> Comparer;
+    //[field:NonSerialized]
+    //internal Generic.IEqualityComparer<T> Comparer {
+    //    get;
+    //    set;
+    //}
 
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
@@ -551,7 +559,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
     protected ImmutableSet(Generic.IEqualityComparer<T> Comparer) {
         this.変数Enumerator.TreeNode=new TreeNodeT(null);
-        this.Comparer=Comparer;
+        //this.Comparer=Comparer;
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。

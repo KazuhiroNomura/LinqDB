@@ -38,6 +38,7 @@ public class Set<T>:MemoryPackFormatter<Sets.Set<T>>{
             }
             return value;
         } else{
+            //GroupingSet<>,Set<,>など
             reader.Serializer().RegisterAnonymousDisplay(type);
             var Formatter=reader.GetFormatter(type);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -131,4 +132,35 @@ public class Set<TElement,TKey,TContainer>:MemoryPackFormatter<Sets.Set<TElement
         }
     }
     public override void Deserialize(ref Reader reader,scoped ref Sets.Set<TElement,TKey,TContainer>? value)=>value=ReadNullable(ref reader);
+}
+public class GroupingSet<TKey,TElement>:MemoryPackFormatter<Sets.GroupingSet<TKey,TElement>>{
+#pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
+    public static readonly GroupingSet<TKey,TElement> Instance=new();//リフレクションで使われる
+#pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,Sets.GroupingSet<TKey,TElement>? value) where TBufferWriter:IBufferWriter<byte>{
+        if(writer.TryWriteNil(value)) return;
+        writer.WriteValue(value!.Key);
+        var Count=value.LongCount;
+        var Formatter=writer.GetFormatter<TElement>();
+        writer.WriteVarInt(Count);
+        foreach(var item in value){
+            var item0=item;
+            Formatter.Serialize(ref writer,ref item0);
+        }
+    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.GroupingSet<TKey,TElement>? value)=>WriteNullable(ref writer,value);
+    private static Sets.GroupingSet<TKey,TElement>? ReadNullable(ref Reader reader){
+        if(reader.TryReadNil())return null;
+        var Formatter=reader.GetFormatter<TElement>();
+        var Key=reader.ReadValue<TKey>();
+        var value=new Sets.GroupingSet<TKey,TElement>(Key);
+        var Count=reader.ReadVarIntInt64();
+        for(long a=0;a<Count;a++){
+            TElement? item=default;//ここでnull入れないと内部で作られない
+            Formatter.Deserialize(ref reader,ref item);
+            value.Add(item);
+        }
+        return value;
+    }
+    public override void Deserialize(ref Reader reader,scoped ref Sets.GroupingSet<TKey,TElement>? value)=>value=ReadNullable(ref reader);
 }
