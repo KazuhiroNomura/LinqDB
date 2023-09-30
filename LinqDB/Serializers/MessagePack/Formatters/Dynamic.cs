@@ -1,5 +1,4 @@
-﻿using System;
-using System.Dynamic;
+﻿using System.Dynamic;
 using System.Diagnostics;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 using MessagePack;
@@ -10,7 +9,6 @@ using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.DynamicExpression;
-using static Common;
 public class Dynamic:IMessagePackFormatter<T> {
     public static readonly Dynamic Instance=new();
     private static void PrivateWriteArrayHeader(ref Writer writer,T value,int offset){

@@ -4,7 +4,6 @@ using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;

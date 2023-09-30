@@ -65,8 +65,7 @@ public abstract class 共通
     protected readonly Optimizer Optimizer = new() { IsGenerateAssembly=false, Context=typeof(共通), AssemblyFileName="デバッグ.dll" };
     //シリアライズ。色んな方法でやってデシリアライズ成功するか
     //実行。結果が一致するから
-    protected void MemoryMessageJson_TExpressionObject<T>(T input) where T : Expressions.Expression
-    {
+    protected void MemoryMessageJson_TExpressionObject<T>(T input) where T : Expressions.Expression{
         this.MemoryMessageJson_Assert<T>(null!, Assert.Null);
         this.MemoryMessageJson_Assert<Expressions.Expression>(null!, Assert.Null);
         this.MemoryMessageJson_Assert<object>(null!, Assert.Null);
@@ -74,8 +73,7 @@ public abstract class 共通
         this.MemoryMessageJson_Assert<Expressions.Expression>(input, output => Assert.Equal(input, output, this.ExpressionEqualityComparer));
         this.MemoryMessageJson_Assert<object>(input, output => Assert.Equal(input, (Expressions.Expression)output, this.ExpressionEqualityComparer));
     }
-    protected void 共通コンパイル実行<T, TResult>(Expressions.Expression<Func<T, TResult>> input, T t)
-    {
+    protected void 共通コンパイル実行<T, TResult>(Expressions.Expression<Func<T, TResult>> input, T t){
         var Optimizer = this.Optimizer;
         var 標準 = input.Compile();
         var expected0 = 標準(t);
@@ -91,8 +89,7 @@ public abstract class 共通
         Optimizer.IsInline=true;
         AssertAction(Optimizer.CreateDelegate(input)());
     }
-    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<LinqDB.Sets.IEnumerable<TResult>>> input0,Expressions.Expression<Func<Generic.IEnumerable<TResult>>> input1)
-    {
+    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<LinqDB.Sets.IEnumerable<TResult>>> input0,Expressions.Expression<Func<Generic.IEnumerable<TResult>>> input1){
         var Optimizer = this.Optimizer;
         var 標準0 = input0.Compile();
         var 標準1 = input1.Compile();
@@ -106,10 +103,8 @@ public abstract class 共通
         var actual1=Del1();
         Assert.True(actual0.SequenceEqual(actual1));
         Assert.True(expected0.SequenceEqual(actual0));
-        //Assert.True(expected1.SequenceEqual(actual1));
     }
-    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input0,Expressions.Expression<Func<TResult>> input1)
-    {
+    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input0,Expressions.Expression<Func<TResult>> input1){
         var Optimizer = this.Optimizer;
         var 標準0 = input0.Compile();
         var 標準1 = input1.Compile();
@@ -124,8 +119,7 @@ public abstract class 共通
         Assert.Equal(expected0,actual0);
         Assert.Equal(expected1,actual1);
     }
-    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input)
-    {
+    protected void 共通コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input){
         var Optimizer = this.Optimizer;
         var 標準 = input.Compile();
         var expected0 = 標準();
@@ -133,8 +127,7 @@ public abstract class 共通
         var expected2 = Optimizer.CreateDelegate(input)();
         Assert.Equal(expected0, expected2, this.Comparer);
     }
-    protected void 共通コンパイル実行(Expressions.Expression<Action> input)
-    {
+    protected void 共通コンパイル実行(Expressions.Expression<Action> input){
         var Optimizer = this.Optimizer;
         var 標準 = input.Compile();
         標準();

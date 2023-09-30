@@ -246,9 +246,18 @@ public static class CommonLibrary {
     internal static readonly string Linq_IGrouping2_FullName = typeof(Linq.IGrouping<,>).FullName!;
     internal static readonly string Sets_IEnumerable1_FullName = typeof(IEnumerable<>).FullName!;
     internal static readonly string Sets_IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
-    public static bool IsImplement(this Type 検索されるType,Type 検索したいTypeDifinition){
-        if(検索されるType.IsGenericType&&検索されるType.GetGenericTypeDefinition()==検索したいTypeDifinition)return true;
-        return Linq.Enumerable.Contains(Linq.Enumerable.Select(検索されるType.GetInterfaces(),p=>p.IsGenericType?p.GetGenericTypeDefinition():p),検索したいTypeDifinition);
+    private static Type? PrivateGetInterface(this Type 検索されるInterface,Type 検索したいInterfaceDifinition){
+        if(検索されるInterface.IsGenericType&&検索されるInterface.GetGenericTypeDefinition()==検索したいInterfaceDifinition)return 検索されるInterface;
+        foreach(var Interface in 検索されるInterface.GetInterfaces()){
+            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==検索したいInterfaceDifinition)return Interface;
+        }
+        return null;
+    }
+    public static bool IsInheritInterface(this Type 検索されるInterface,Type 検索したいInterfaceDifinition)=>検索されるInterface.PrivateGetInterface(検索したいInterfaceDifinition)is not null;
+    public static Type GetInterface(this Type 検索されるInterface,Type 検索したいInterfaceDifinition){
+        var Interface=検索されるInterface.PrivateGetInterface(検索したいInterfaceDifinition);
+        if(Interface is not null) return Interface;
+        throw new Generic.KeyNotFoundException($"{検索されるInterface}には{検索したいInterfaceDifinition}インターフェースは継承していない。");
     }
     //internal const int CS匿名型名_Length18= 18;
     //internal const string CS匿名型名="<>f__AnonymousType";

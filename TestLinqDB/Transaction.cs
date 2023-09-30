@@ -50,7 +50,7 @@ namespace テスト {
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         public Container()=>this.Init();
         public Container(Container? Parent) : base(Parent)=>this.Init();
-        public Container(Stream logStream) : base(logStream) { }
+        public Container(Stream logStream) : base(logStream)=>this.Init();
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         //public Container(Stream Reader) : base(Reader) { }
         //public Container(Stream Writer) : base(Writer) { }

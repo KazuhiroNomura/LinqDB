@@ -1,5 +1,4 @@
-﻿using System;
-using System.Dynamic;
+﻿using System.Dynamic;
 using System.Diagnostics;
 using RuntimeBinder=Microsoft.CSharp.RuntimeBinder;
 using MemoryPack;
@@ -10,7 +9,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 using Reader = MemoryPackReader;
 using T = Expressions.DynamicExpression;
-using static Common;
 public class Dynamic:MemoryPackFormatter<T> {
     public static readonly Dynamic Instance=new();
     

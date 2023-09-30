@@ -6,7 +6,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 using Reader = MemoryPackReader;
 using T = RuntimeBinder.CSharpArgumentInfo;
-using static Common;
 public class CSharpArgumentInfo : MemoryPackFormatter<T>
 {
     public static readonly CSharpArgumentInfo Instance = new();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 //using System.Linq;
@@ -115,7 +114,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         return List;
     }
     private static bool Groupingか(Type Type)=>
-        Type.IsImplement(typeof(System.Linq.IGrouping<,>));
+        Type.IsInheritInterface(typeof(System.Linq.IGrouping<,>));
     private bool 比較(List<object> List_x, List<object> List_y){
         var List_x_Count=List_x.Count;
         if(List_x_Count!=List_y.Count) return false;

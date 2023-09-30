@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CS8618 // Null 非許容フィールドは初期化されていません。null 許容として宣言することを検討してください。
 using System;
 using Linq=System.Linq;
-using System.Runtime.Serialization;
 using Collections=System.Collections;
 namespace LinqDB.Sets;
 using Generic=Collections.Generic;

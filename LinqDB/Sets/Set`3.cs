@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using LinqDB.Databases;
 using System.IO;
 using System.CodeDom.Compiler;

@@ -14,7 +14,6 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using LinqDB.Serializers;
 using Array = System.Array;
 //using Microsoft.CSharp.RuntimeBinder;
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
@@ -466,14 +465,7 @@ public sealed partial class Optimizer:IDisposable{
                 return false;
             return this.PrivateEquals(a0,b0);
         }
-        private static int count;
         private bool PrivateEquals(Expression? a0,Expression? b0){
-            var s=new StackTrace();
-            var frames=s.GetFrames();
-            if(count<frames.Length){
-                count=frames.Length;
-                Trace.WriteLine(count);
-            }
             var a1=this.Assignの比較対象(a0);
             var b1=this.Assignの比較対象(b0);
             if(a1.NodeType!=b1?.NodeType||a1.Type!=b1.Type)

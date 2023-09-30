@@ -2,11 +2,9 @@
 using System;
 using System.Text;
 using Collections=System.Collections;
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Threading;
 using LinqDB.Helpers;
 using System.IO;
 using LinqDB.CRC;
@@ -983,7 +981,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="other"></param>
     /// <returns></returns>
     public bool SetEquals(IEnumerable<T> other)=>ReferenceEquals(this,other)||this.PrivateProtectedSetEquals(other);
-    public bool Equals(IEnumerable<T>? other)=>this.SetEquals(other);
+    public bool Equals(IEnumerable<T>? other)=>other is not null&&this.SetEquals(other);
     public override bool Equals(object? obj)=>this.Equals(obj as IEnumerable<T>);
     /// <summary>コレクションの集合としてのHashCode</summary>
     /// <returns>コレクションの集合としてのHashCode</returns>

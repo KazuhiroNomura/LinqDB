@@ -1,6 +1,4 @@
-﻿using System;
-
-using System.Reflection;
+﻿using System.Reflection;
 using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using MemoryPack;
 using System.Buffers;

@@ -2,9 +2,6 @@
 using Collections=System.Collections;
 using System.Diagnostics;
 using Linq=System.Linq;
-using Microsoft.FSharp.Linq.RuntimeHelpers;
-using System.Linq;
-using Microsoft.Build.Construction;
 //using System.Linq;
 
 namespace LinqDB.Sets;

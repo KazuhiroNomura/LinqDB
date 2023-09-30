@@ -1,7 +1,6 @@
 ﻿using System;
 using Generic=System.Collections.Generic;
 using Linq=System.Linq;
-using System.Runtime.Serialization;
 namespace LinqDB.Sets;
 /// <summary>
 /// Set.GroupByの結果。要素はGroupingSet。Set.GroupJoin,Set.Joinのビルド結果で使うDictionaryコレクション

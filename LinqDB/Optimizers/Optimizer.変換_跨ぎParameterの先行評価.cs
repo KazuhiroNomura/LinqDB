@@ -5,7 +5,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
-using System.Security.AccessControl;
 using LinqDB.Sets;
 namespace LinqDB.Optimizers;
 using Generic=System.Collections.Generic;

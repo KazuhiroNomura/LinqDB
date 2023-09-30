@@ -17,6 +17,7 @@ using LinqDB.Helpers;
 using Type = System.Type;
 //using System.Runtime.Remoting.Messaging;
 using Linq=System.Linq;
+using System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers;
 partial class Optimizer {
@@ -476,18 +477,18 @@ partial class Optimizer {
                         case nameof(Linq.Enumerable.GroupBy):{
                             //GroupBy(keySelector,resultSelector)→GroupBy(keySelector,(key,g)=>resultSelector(g))
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
+                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector);
+                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector);
+                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(Sets.IGrouping<,>));
                             }
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector);
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector);
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector);
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(Sets.IGrouping<,>));
                             }
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector);
@@ -497,7 +498,7 @@ partial class Optimizer {
                                 return GroupBy_keySelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector);
                             }
                             break;
-                            Expression GroupBy_keySelector_resultSelector(MethodInfo Method,MethodInfo Select_selector) {
+                            Expression GroupBy_keySelector_resultSelector(MethodInfo Method,MethodInfo Select_selector,Type IGrouping) {
                                 //source.GroupBy(x => x.Id).Select(g =>new{Id=g.Key,Count=g.Count()})
                                 //source.GroupBy(x => x.Id,   (Key,g)=>new{Id=  Key,Count=g.Count()})
                                 var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -536,13 +537,15 @@ partial class Optimizer {
                                         MethodCall1_Arguments[3]
                                     );
                                 }
-                                var TGrouping = Method.ReturnType.GetGenericArguments()[0];
+                                //var TGrouping = Method.ReturnType.GetGenericArguments()[0];
+                                //var T=Method.ReturnType.GetGenericArguments()[0];
+                                var TGrouping=Method.ReturnType.GetGenericArguments()[0].GetInterface(IGrouping);
                                 var p = Expression.Parameter(TGrouping,"p");
-                                var p_Key = Expression.Property(
-                                    p,
-                                    nameof(IGrouping<int,int>.Key)
-                                );
-                                var p_Source = p;
+                                var Property=IGrouping==typeof(Linq.IGrouping<,>)
+                                    ?TGrouping.GetProperty(nameof(Linq.IGrouping<int,int>.Key))
+                                    :typeof(Linq.IGrouping<,>).MakeGenericType(TGrouping.GetGenericArguments()).GetProperty(nameof(Linq.IGrouping<int,int>.Key));
+                                var p_Key = Expression.Property(p,Property);
+                                //var p_Source = p;
                                 Expression selector_Body;
                                 if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
                                     //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                        (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
@@ -553,7 +556,7 @@ partial class Optimizer {
                                         resultSelector_Parameters[0],
                                         p_Key,
                                         resultSelector_Parameters[1],
-                                        p_Source
+                                        p
                                     );
                                 } else {
                                     //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                     resultSelector         )
@@ -562,7 +565,7 @@ partial class Optimizer {
                                         MethodCall1_Arguments_2,
                                         作業配列.Expressions設定(
                                             p_Key,
-                                            p_Source
+                                            p
                                         )
                                     );
                                 }
@@ -579,7 +582,9 @@ partial class Optimizer {
                                     )
                                 );
                             }
-                            Expression GroupBy_keySelector_elementSelector_resultSelector(MethodInfo GroupBy_keySelector_elementSelector,MethodInfo Select_selector) {
+                            Expression GroupBy_keySelector_elementSelector_resultSelector(MethodInfo GroupBy_keySelector_elementSelector,MethodInfo Select_selector,Type IGrouping) {
+                                //source.GroupBy(x => x.Id).Select(g =>new{Id=g.Key,Count=g.Count()})
+                                //source.GroupBy(x => x.Id,   (Key,g)=>new{Id=  Key,Count=g.Count()})
                                 //source.GroupBy<TSource,TKey,TElemnt,TResult>(keySelector,elementSelector,resultSelector)
                                 //source.GroupBy<TSource,TKey,TElemnt>(keySelector,elementSelector).Select<TGropuing,TResult>(IGrouping=>resultSelect(IGrouping.Key,IGrouping))
                                 var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
@@ -616,11 +621,10 @@ partial class Optimizer {
                                 }
                                 var TGrouping = Method.ReturnType.GetGenericArguments()[0];
                                 var p = Expression.Parameter(TGrouping,"p");
-                                var p_Key = Expression.Property(
-                                    p,
-                                    nameof(IGrouping<int,int>.Key)
-                                );
-                                var p_Source = p;
+                                var Property=IGrouping==typeof(Linq.IGrouping<,>)
+                                    ?TGrouping.GetProperty(nameof(Linq.IGrouping<int,int>.Key))
+                                    :typeof(Linq.IGrouping<,>).MakeGenericType(TGrouping.GetGenericArguments()).GetProperty(nameof(Linq.IGrouping<int,int>.Key));
+                                var p_Key = Expression.Property(p,Property);
                                 Expression selector_Body;
                                 if(MethodCall1_Arguments_3 is LambdaExpression resultSelector) {
                                     //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                         (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
@@ -631,7 +635,7 @@ partial class Optimizer {
                                         resultSelector_Parameters[0],
                                         p_Key,
                                         resultSelector_Parameters[1],
-                                        p_Source
+                                        p
                                     );
                                 } else {
                                     //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                     resultSelector         )
@@ -640,7 +644,7 @@ partial class Optimizer {
                                         MethodCall1_Arguments_3,
                                         作業配列.Expressions設定(
                                             p_Key,
-                                            p_Source
+                                            p
                                         )
                                     );
                                 }
@@ -1363,7 +1367,7 @@ partial class Optimizer {
                                     if(OuterPredicate is not null) {
                                         MethodCall1_Arguments_0=this.Outer又はInnerにWhereを付ける(
                                             MethodCall1_Arguments_0,
-                                            MethodCall1_Arguments_0.Type.IsImplement(typeof(IEnumerable<>))
+                                            MethodCall1_Arguments_0.Type.IsInheritInterface(typeof(IEnumerable<>))
                                                 ? Reflection.ExtensionSet.Where
                                                 : Reflection.ExtensionEnumerable.Where,
                                             selector_Parameters[0].Type,
@@ -2099,7 +2103,7 @@ partial class Optimizer {
                 if(SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
                     if(
                         (selector1_Body.Type.IsGenericType&&selector1_Body.Type.GetGenericTypeDefinition()==typeof(Sets.IEnumerable<>))||
-                        selector1_Body.Type.IsImplement(typeof(Sets.IEnumerable<>))){
+                        selector1_Body.Type.IsInheritInterface(typeof(Sets.IEnumerable<>))){
                     }else{
                         SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
                     }

@@ -5,6 +5,7 @@ using Collections=System.Collections;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 using Microsoft.Build.Framework;
 namespace TestLinqDB.Sets;
@@ -18,7 +19,7 @@ public class ExtensionSet:共通{
         for(var i=0;i<number;i++) a++;
         return a;
     }
-    private static (Sets.IEnumerable<T>e,Generic.IEnumerable<T>s)数列範囲<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+    private static (Sets.IEnumerable<T>s,Generic.IEnumerable<T>e)数列範囲<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         var 下限0=数値<T>(下限);
         var 上限0=数値<T>(上限);
         var value=new Set<T>();
@@ -27,18 +28,26 @@ public class ExtensionSet:共通{
         }
         return (value,value);
     }
-    private static (Sets.IEnumerable<T>e,Generic.IEnumerable<T>s)数列<T>(int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+    private static (Sets.IEnumerable<T>s,Generic.IEnumerable<T>e)データ<T>(int 上限数,int 上限値)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         var value=new Set<T>();
-        var 上限0=数値<T>(上限);
+        var 上限0=数値<T>(上限数);
         for(var a=default(T);a<上限0;a++){
             value.Add(a);
         }
         return (value,value);
     }
-    private static (Sets.IEnumerable<T?>e,Generic.IEnumerable<T?>s)数列Nullable<T>(int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
-        var 上限0=数値<T>(上限);
-        var value=new Set<T?>();
+    private static (Sets.IEnumerable<T>s,Generic.IEnumerable<T>e)データ<T>(int 上限数)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        var value=new Set<T>();
+        var 上限0=数値<T>(上限数);
         for(var a=default(T);a<上限0;a++){
+            value.Add(a);
+        }
+        return (value,value);
+    }
+    private static (Sets.IEnumerable<T?>s,Generic.IEnumerable<T?>e)データNullable<T>(int 上限数)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        var 上限数0=数値<T>(上限数);
+        var value=new Set<T?>();
+        for(var a=default(T);a<上限数0;a++){
             if(r.Next(2)==0)
                 value.Add(a);
             else
@@ -46,17 +55,28 @@ public class ExtensionSet:共通{
         }
         return (value,value);
     }
-    private static void 集約関数<T>(int 下限,int 上限,Action<LinqDB.Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+    private static void 集約関数<T>(int 上限,Action<Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool> =>
+        集約関数<T>(0,上限,action);
+    private static void 集約関数<T>(int 下限,int 上限,Action<Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         for(var a=下限;a<上限;a++){
-            var (s,e)=数列<T>(a);
+            var (s,e)=データ<T>(a);
             action(s,e);
         }
     }
-    private static void 集約関数Nullable<T>(int 上限,Action<LinqDB.Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action) where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool> =>
-        集約関数Nullable<T>(上限,action);
-    private static void 集約関数Nullable<T>(int 下限,int 上限,Action<LinqDB.Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+    private static void 集約関数Random数<T>(int 上限数,int 上限値,Action<Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool> =>
+        集約関数Random数<T>(0,上限数,action);
+    private static void 集約関数Random数<T>(int 下限数,int 上限数,int 上限値,Action<Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        var 上限数0=r.Next(下限数,上限数);
+        for(var a=下限数;a<=上限数0;a++){
+            var (s,e)=データ<T>(a);
+            action(s,e);
+        }
+    }
+    private static void 集約関数Nullable<T>(int 上限,Action<Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action) where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool> =>
+        集約関数Nullable<T>(0,上限,action);
+    private static void 集約関数Nullable<T>(int 下限,int 上限,Action<Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         for(var a=下限;a<上限;a++){
-            var (s,e)=数列Nullable<T>(a);
+            var (s,e)=データNullable<T>(a);
             action(s,e);
         }
     }
@@ -268,7 +288,7 @@ public class ExtensionSet:共通{
         集約関数<decimal>(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
         集約関数<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
-    Sets.IEnumerable<T> m<T>(LinqDB.Sets.IEnumerable<T> i)=>i;
+    Sets.IEnumerable<T> m<T>(Sets.IEnumerable<T> i)=>i;
     Generic.IEnumerable<T> m<T>(Generic.IEnumerable<T> i)=>i;
     [Fact]public void Cast(){
         集約関数<sbyte  >(1  ,10 ,(s,e)=>this.共通コンパイル実行(()=>s.Cast<object>().Cast<sbyte>(),()=>e.Cast<object>().Cast<sbyte>()));
@@ -350,10 +370,8 @@ public class ExtensionSet:共通{
         共通<double >(最大値);
         共通<decimal>(最大値);
         共通<char   >(最大値);
-        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T>{
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>(Sets.IEnumerable <Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
-            //集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>(Generic.IEnumerable <System.Linq.IGrouping<T,T>>)s.Lookup(p=>p),()=>(Generic.IEnumerable <System.Linq.IGrouping<T,T>>)e.Lookup(p=>p)));
-        }
+        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
+            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
     }
     //private Sets.IEnumerable<T> データ<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
     //    T 下限0=default,上限0=default;
@@ -377,63 +395,112 @@ public class ExtensionSet:共通{
     [Fact]public void Except(){
         const int 最大値=10;
         共通<sbyte  >(最大値);
-        共通<short  >(最大値);
-        共通<int    >(最大値);
-        共通<long   >(最大値);
-        共通<byte   >(最大値);
-        共通<ushort >(最大値);
-        共通<uint   >(最大値);
-        共通<ulong  >(最大値);
-        共通<float  >(最大値);
-        共通<double >(最大値);
-        共通<decimal>(最大値);
-        共通<char   >(最大値);
-        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T>{
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.Except(s),()=>e.Except(e)));
-        }
+        //共通<short  >(最大値);
+        //共通<int    >(最大値);
+        //共通<long   >(最大値);
+        //共通<byte   >(最大値);
+        //共通<ushort >(最大値);
+        //共通<uint   >(最大値);
+        //共通<ulong  >(最大値);
+        //共通<float  >(最大値);
+        //共通<double >(最大値);
+        //共通<decimal>(最大値);
+        //共通<char   >(最大値);
+        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
+            集約関数<T>(最大値,(s0,s1,e0,e1)=>this.共通コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
     }
     [Fact]public void GroupBy_keySelector_elementSelector(){
         const int 最大値=10;
-        共通<sbyte  >(最大値);
-        共通<short  >(最大値);
-        共通<int    >(最大値);
-        共通<long   >(最大値);
-        共通<byte   >(最大値);
-        共通<ushort >(最大値);
-        共通<uint   >(最大値);
-        共通<ulong  >(最大値);
-        共通<float  >(最大値);
-        共通<double >(最大値);
-        共通<decimal>(最大値);
-        共通<char   >(最大値);
-        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IDivisionOperators<T,T,T>{
-            集約関数<T>(0,Count,(s,e)=>{
-                if(s.LongCount==2){
-                    var Set_IGrouping1=s.GroupBy(p=>++p);//.Select(p=>p.Key);
-                    var Enumerable_IGrouping2=e.GroupBy(p=>++p);
-                    var Array_IGrouping1 = Set_IGrouping1.ToArray();
-                    var Array_IGrouping2 = Enumerable_IGrouping2.ToArray();
-                    for(var a = 0;a<Array_IGrouping1.Length;a++) {
-                        Sets.IGrouping<T,T> IGrouping1 = Array_IGrouping1[a];
-                        System.Linq.IGrouping<T,T> IGrouping2 = Array_IGrouping2[a];
-                        var IGrouping1_Key = IGrouping1.Key;
-                        var IGrouping2_Key = IGrouping2.Key;
-                        var IGrouping1_ToArray = IGrouping1.ToArray();
-                        foreach(var b in IGrouping1) {
-
-                        }
-                        var IGrouping2_ToArray = IGrouping2.ToArray();
-                        for(var b = 0;b<IGrouping1_ToArray.Length;b++) {
-                            var Element1 = IGrouping1_ToArray[b];
-                            var Element2 = IGrouping2_ToArray[b];
-                            //Assert.True(s2,e2);
-                        }
-                    }
-                    Assert.True(Set_IGrouping1.Equals(Enumerable_IGrouping2));
-                    Assert.Equal(Set_IGrouping1,Enumerable_IGrouping2);
-                }
-            });
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p),()=>e.GroupBy(p=>p)));
+        集約関数<sbyte  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<short  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<int    >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<long   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<byte   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ushort >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<uint   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ulong  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<float  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<double >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<decimal>(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<char   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+    }
+    [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
+    private static void 集約関数<T>(int 数,Action<Sets.IEnumerable<T>,Sets.IEnumerable<T>,Generic.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        for(var a=0;a<数;a++){
+            var (sn,en)=データ2<T>(0,数);
+            var (s0,e0)=データ2<T>(0,0);
+            {
+                //0,1,2
+                //0,1,2
+                var (s,e)=データ2<T>(0,数);
+                共通(sn,s,en,e);
+                //0,1,2
+                //0
+                var (s左,e左)=データ2<T>(0,1);
+                共通(s左,s,e左,e);
+                //0,1,2
+                //    2
+                var (s右,e右)=データ2<T>(数-1,1);
+                共通(s右,s,e右,e);
+                共通(s,s0,e,e0);
+            }
+            {
+                //0,1,2
+                //    2,3,4
+                var (s,e)=データ2<T>(数-1,数);
+                共通(sn,s,en,e);
+                //0,1,2
+                //    2
+                var (s左,e左)=データ2<T>(数-1,1);
+                共通(s左,s,e左,e);
+                //0,1,2
+                //        4
+                var (s右,e右)=データ2<T>(数+数-2,1);
+                共通(s右,s,e右,e);
+                共通(s,s0,e,e0);
+            }
+            {
+                //0,1,2
+                //      3,4,5
+                var (s,e)=データ2<T>(数,数);
+                共通(sn,s,en,e);
+                //0,1,2
+                //      3
+                var (s左,e左)=データ2<T>(数,1);
+                共通(s左,s,e左,e);
+                //0,1,2
+                //          5
+                var (s右,e右)=データ2<T>(数+数-1,1);
+                共通(s右,s,e右,e);
+                共通(s,s0,e,e0);
+            }
+            {
+                //0,1,2
+                //        4,5,6
+                var (s,e)=データ2<T>(数+1,数);
+                //0,1,2
+                //        4
+                var (s左,e左)=データ2<T>(数+1,1);
+                共通(s左,s,e左,e);
+                //0,1,2
+                //            6
+                var (s右,e右)=データ2<T>(数+数,1);
+                共通(s右,s,e右,e);
+                共通(sn,s,en,e);
+            }
         }
+        void 共通(Sets.IEnumerable<T>s0,Sets.IEnumerable<T>s1,Generic.IEnumerable<T>e0,Generic.IEnumerable<T>e1){
+            action(s1,s0,e1,e0);
+            action(s0,s1,e0,e1);
+        }
+    }
+    private static (Sets.IEnumerable<T> s,Generic.IEnumerable<T> e)データ2<T>(int 値オフセット,int 上限数)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        var value=new Set<T>();
+        var 下限0=数値<T>(値オフセット);
+        var 上限0=数値<T>(値オフセット+上限数);
+        for(var a=下限0;a<上限0;a++){
+            value.Add(a);
+        }
+        return (value,value);
     }
 }

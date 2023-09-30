@@ -1,16 +1,12 @@
 ﻿using LinqDB.Sets.Exceptions;
-using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 //using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Generic=System.Collections.Generic;
 namespace LinqDB.Sets;
@@ -20,7 +16,7 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 [Serializable,MessagePack.MessagePackObject]
-public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
+public class Set<T>:ImmutableSet<T>,ICollection<T>{
     static Set(){
         MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
     }
@@ -121,7 +117,7 @@ public partial class Set<T>:ImmutableSet<T>,ICollection<T>{
             var Formatter=formatterResolver.GetFormatter<T>();
             reader.ReadIsBeginArrayWithVerify();
             while(true){
-                var value=(T)Formatter.Deserialize(ref reader,formatterResolver);
+                var value=Formatter.Deserialize(ref reader,formatterResolver);
                 result.IsAdded(value);
                 var s=reader.ReadIsValueSeparator();
                 if(!s) break;
