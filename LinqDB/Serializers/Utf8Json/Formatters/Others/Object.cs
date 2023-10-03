@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -8,17 +7,15 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Others;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = System.Object;
-public class Object : IJsonFormatter<T>
-{
+using Reflection;
+public class Object : IJsonFormatter<T>{
     public static readonly Object Instance = new();
-    internal static void Write(ref Writer writer, T value, IJsonFormatterResolver Resolver)
-    {
+    private static void Write(ref Writer writer, T value, IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
         var type = value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
-        switch (value)
-        {
+        switch (value){
             case sbyte v: writer.WriteSByte(v); break;
             case short v: writer.WriteInt16(v); break;
             case int v: writer.WriteInt32(v); break;
@@ -39,19 +36,19 @@ public class Object : IJsonFormatter<T>
             case PropertyInfo v: Property.Write(ref writer, v, Resolver); break;
             case EventInfo v: Event.Write(ref writer, v, Resolver); break;
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
-            default:
-                {
-                    var Formatter = Resolver.GetFormatterDynamic(type);
-                    var Serialize = Formatter.GetType().GetMethod("Serialize");
-                    Debug.Assert(Serialize is not null);
-                    var Objects3 = new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
-                    Objects3[0]=writer;
-                    Objects3[1]=value;
-                    Objects3[2]=Resolver;
-                    Serialize.Invoke(Formatter, Objects3);
-                    writer=(Writer)Objects3[0];
-                    break;
-                }
+            default:{
+                writer.WriteValue(type,value,Resolver);
+                //var Formatter = Resolver.GetFormatterDynamic(type);
+                //var Serialize = Formatter.GetType().GetMethod("Serialize");
+                //Debug.Assert(Serialize is not null);
+                //var Objects3 = new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
+                //Objects3[0]=writer;
+                //Objects3[1]=value;
+                //Objects3[2]=Resolver;
+                //Serialize.Invoke(Formatter, Objects3);
+                //writer=(Writer)Objects3[0];
+                break;
+            }
         }
         writer.WriteEndArray();
     }

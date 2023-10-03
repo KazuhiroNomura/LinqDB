@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -8,9 +7,10 @@ namespace LinqDB.Serializers.MessagePack.Formatters.Others;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = System.Object;
+using Reflection;
 public class Object : IMessagePackFormatter<T>{
     public static readonly Object Instance = new();
-    internal static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
+    private static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
         var type = value!.GetType();
         writer.WriteType(type);
@@ -36,10 +36,9 @@ public class Object : IMessagePackFormatter<T>{
             case PropertyInfo v: Property.Write(ref writer, v, Resolver); break;
             case EventInfo v: Event.Write(ref writer, v, Resolver); break;
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
-            default:
-                {
-                    var Formatter = Resolver.Resolver.GetFormatterDynamic(type)!;
-                    Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
+            default:{
+                var Formatter = Resolver.Resolver.GetFormatterDynamic(type)!;
+                Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
 
 
 
@@ -48,8 +47,8 @@ public class Object : IMessagePackFormatter<T>{
 
 
 
-                    break;
-                }
+                break;
+            }
         }
 
     }

@@ -93,24 +93,24 @@ public partial class AssemblyGenerator {
         var ImmutableSet = typeof(ImmutableSet<>).MakeGenericType(Types1);
         var (Table_IEquatable_Equals, Table_IEquatable_Equals_I)=メソッド開始引数名(Object_TypeBuilder,nameof(IEquatable<int>.Equals),Public_Final_NewSlot_HideBySig_Virtual,typeof(bool),Types1,"other");
         Object_TypeBuilder.DefineMethodOverride(Table_IEquatable_Equals,TypeBuilder.GetMethod(Table_IEquatable,IEquatable_Equals));
-        {
-            var Table_IWriteRead = typeof(IWriteRead<>).MakeGenericType(Types1);
-            Object_TypeBuilder.AddInterfaceImplementation(Table_IWriteRead);
-            Types1[0]=typeof(BinaryWriter);
-            var (IWriteRead_BinaryWrite, IWriteRead_BinaryWrite_I)=メソッド開始引数名(Object_TypeBuilder,nameof(IWriteRead<int>.BinaryWrite),Public_Final_NewSlot_HideBySig_Virtual,typeof(void),Types1,"Writer");
-            Object_TypeBuilder.DefineMethodOverride(IWriteRead_BinaryWrite,TypeBuilder.GetMethod(Table_IWriteRead,AssemblyGenerator.IWriteRead_BinaryWrite));
-            IWriteRead_BinaryWrite_I.Ret();
-            Types2[0]=typeof(BinaryReader);
-            Types1[0]=Object_TypeBuilder;
-            Types2[1]=typeof(Func<>).MakeGenericType(Types1);
-            var IWriteRead_BinaryRead = Object_TypeBuilder.DefineMethod(nameof(IWriteRead<int>.BinaryRead),Public_Final_NewSlot_HideBySig_Virtual,typeof(void),Types2);
-            IWriteRead_BinaryRead.InitLocals=false;
-            IWriteRead_BinaryRead.DefineParameter(1,ParameterAttributes.None,"Reader");
-            IWriteRead_BinaryRead.DefineParameter(2,ParameterAttributes.None,"Create");
-            Object_TypeBuilder.DefineMethodOverride(IWriteRead_BinaryRead,TypeBuilder.GetMethod(Table_IWriteRead,AssemblyGenerator.IWriteRead_BinaryRead));
-            var IWriteRead_BinaryRead_I = IWriteRead_BinaryRead.GetILGenerator();
-            IWriteRead_BinaryRead_I.Ret();
-        }
+        //{
+        //    var Table_IWriteRead = typeof(IWriteRead<>).MakeGenericType(Types1);
+        //    Object_TypeBuilder.AddInterfaceImplementation(Table_IWriteRead);
+        //    Types1[0]=typeof(BinaryWriter);
+        //    var (IWriteRead_BinaryWrite, IWriteRead_BinaryWrite_I)=メソッド開始引数名(Object_TypeBuilder,nameof(IWriteRead<int>.BinaryWrite),Public_Final_NewSlot_HideBySig_Virtual,typeof(void),Types1,"Writer");
+        //    Object_TypeBuilder.DefineMethodOverride(IWriteRead_BinaryWrite,TypeBuilder.GetMethod(Table_IWriteRead,AssemblyGenerator.IWriteRead_BinaryWrite));
+        //    IWriteRead_BinaryWrite_I.Ret();
+        //    Types2[0]=typeof(BinaryReader);
+        //    Types1[0]=Object_TypeBuilder;
+        //    Types2[1]=typeof(Func<>).MakeGenericType(Types1);
+        //    var IWriteRead_BinaryRead = Object_TypeBuilder.DefineMethod(nameof(IWriteRead<int>.BinaryRead),Public_Final_NewSlot_HideBySig_Virtual,typeof(void),Types2);
+        //    IWriteRead_BinaryRead.InitLocals=false;
+        //    IWriteRead_BinaryRead.DefineParameter(1,ParameterAttributes.None,"Reader");
+        //    IWriteRead_BinaryRead.DefineParameter(2,ParameterAttributes.None,"Create");
+        //    Object_TypeBuilder.DefineMethodOverride(IWriteRead_BinaryRead,TypeBuilder.GetMethod(Table_IWriteRead,AssemblyGenerator.IWriteRead_BinaryRead));
+        //    var IWriteRead_BinaryRead_I = IWriteRead_BinaryRead.GetILGenerator();
+        //    IWriteRead_BinaryRead_I.Ret();
+        //}
         var KeyTable_Equalsでfalseの時 = Key_IEquatable_Equals_I.DefineLabel();
         var KeyTable_GetHashCode_CRC = Key_GetHashCode_I.DeclareLocal(typeof(CRC32));
         var Table_IEquatable_Equalsでfalseの時 = Table_IEquatable_Equals_I.DefineLabel();
@@ -291,8 +291,8 @@ public partial class AssemblyGenerator {
         }
         共通override_Object_Equals終了(Object_TypeBuilder,Table_IEquatable_Equals,OpCodes.Isinst);
         var Types3 = this.Types3;
-        Types3[0]=Object_TypeBuilder;
-        Types3[1]=Key_TypeBuilder;
+        Types3[0]=Key_TypeBuilder;
+        Types3[1]=Object_TypeBuilder;
         Types3[2]=Container_TypeBuilder;
         var Set3 = typeof(Set<,,>).MakeGenericType(Types3);
         var (Tables_FieldBuilder,Tables_MethodBuilder) = PrivateField実装Property実装GetMethod実装(Schema_TypeBuilder,Set3,Object_TypeBuilder.Name,Set3);

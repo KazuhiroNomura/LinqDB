@@ -1,54 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 namespace LinqDB.Sets;
 
 /// <summary>
-/// TKeyキーを含むTValueのSetコレクション。
+/// TKeyキーを含むTElementのSetコレクション。
 /// </summary>
-/// <typeparam name="TValue"></typeparam>
+/// <typeparam name="TElement"></typeparam>
 /// <typeparam name="TKey"></typeparam>
-[Serializable]
-public class Set<TValue, TKey>:Set<TValue>
-    where TValue:IPrimaryKey<TKey>
+public class Set<TKey,TElement>:Set<TElement>
+    where TElement:IPrimaryKey<TKey>
     where TKey : struct, IEquatable<TKey>{
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement> InstanceMessagePack=new();
+    internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement> InstanceUtf8Json=new();
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
+    static Set()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
     public Set() { }
     /// <summary>
-    ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(IEqualityComparer<TValue> Comparer) : base(Comparer) {
+    ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>
+    public Set(IEqualityComparer<TElement> Comparer) : base(Comparer) {
     }
     /// <summary>
-    ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
+    ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    public Set(System.Collections.Generic.IEnumerable<TValue> source) : base(source) {
+    public Set(System.Collections.Generic.IEnumerable<TElement> source) : base(source) {
     }
     /// <summary>
-    ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+    ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(System.Collections.Generic.IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>
+    public Set(System.Collections.Generic.IEnumerable<TElement> source,IEqualityComparer<TElement> Comparer) : base(source,Comparer) {
     }
     /// <summary>
-    ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+    ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(TValue[] source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>
+    public Set(TElement[] source,IEqualityComparer<TElement> Comparer) : base(source,Comparer) {
     }
     /// <summary>
-    ///   <see cref="Set{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+    ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(ImmutableSet<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>
+    public Set(ImmutableSet<TElement> source,IEqualityComparer<TElement> Comparer) : base(source,Comparer) {
     }
     /// <summary>
     /// キーから値を取得する。
     /// </summary>
     /// <param name="key"></param>
     /// <exception cref="KeyNotFoundException"></exception>
-    public TValue this[TKey key] {
+    [IgnoreDataMember]
+    public TElement this[TKey key] {
         get {
-            TValue value = default!;
+            TElement value = default!;
             if(this.TryGetValue(key,ref value)) {
                 return value;
             }
@@ -92,7 +98,7 @@ public class Set<TValue, TKey>:Set<TValue>
     /// <param name="Key"></param>
     /// <param name="Value"></param>
     /// <returns>値が取得出来たか</returns>
-    public bool TryGetValue(TKey Key,ref TValue Value) {
+    public bool TryGetValue(TKey Key,ref TElement Value) {
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
@@ -109,12 +115,12 @@ public class Set<TValue, TKey>:Set<TValue>
     /// </summary>
     /// <param name="Key"></param>
     /// <returns>値が取得出来たか</returns>
-    public IEnumerable<TValue> GetSet(TKey Key) {
+    public IEnumerable<TElement> GetSet(TKey Key) {
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
                 if(a.Item.PrimaryKey.Equals(Key)) {
-                    var Result = new Set<TValue> {
+                    var Result = new Set<TElement> {
                         a.Item
                     };
                     return Result;
@@ -139,7 +145,7 @@ public class Set<TValue, TKey>:Set<TValue>
         }
         return false;
     }
-    internal override bool InternalAdd(TValue Item) {
+    internal override bool InternalAdd(TElement Item) {
         var HashCode = (long)(uint)Item.GetHashCode();
         if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = EqualityComparer<TKey>.Default;

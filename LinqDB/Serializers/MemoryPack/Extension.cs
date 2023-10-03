@@ -112,6 +112,15 @@ public static class Extension{
 
 
 
+    public static void Write<T,TBufferWriter>(this IMemoryPackFormatter<T>Formatter,ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
+        var value0=value;
+        Formatter.Serialize(ref writer,ref value0);
+    }
+    public static T Read<T>(this IMemoryPackFormatter<T>Formatter,ref MemoryPackReader reader){
+        T? value=default;
+        Formatter.Deserialize(ref reader,ref value);
+        return value!;
+    }
     public static Serializer Serializer<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter:IBufferWriter<byte> =>
         (Serializer)writer.Options.ServiceProvider!;
     public static Serializer Serializer(this ref Reader reader)=>

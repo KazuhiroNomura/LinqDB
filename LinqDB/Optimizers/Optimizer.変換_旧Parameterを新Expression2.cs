@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers;
 

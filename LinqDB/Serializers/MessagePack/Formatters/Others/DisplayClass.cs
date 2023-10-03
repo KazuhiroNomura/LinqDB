@@ -31,7 +31,7 @@ public class DisplayClass<T> : IMessagePackFormatter<T>
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader, MessagePackSerializerOptions options);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public DisplayClass()
+    private DisplayClass()
     {
         var Types1 = new Type[1];
         var Types2 = new Type[2];

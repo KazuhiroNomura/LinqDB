@@ -3,22 +3,19 @@ using System.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
-using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters.Others;
 
 using Reader = MemoryPackReader;
 using T = System.Object;
-public class Object : MemoryPackFormatter<T>
-{
+using Reflection;
+public class Object : MemoryPackFormatter<T>{
     public static readonly Object Instance = new();
-    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter : IBufferWriter<byte>
-    {
+    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter : IBufferWriter<byte>    {
+
         var type = value.GetType();
         writer.WriteType(type);
 
-        switch (value)
-        {
+        switch (value){
             case sbyte v: writer.WriteVarInt(v); break;
             case short v: writer.WriteVarInt(v); break;
             case int v: writer.WriteVarInt(v); break;
@@ -39,10 +36,9 @@ public class Object : MemoryPackFormatter<T>
             case PropertyInfo v: Property.Write(ref writer, v); break;
             case EventInfo v: Event.Write(ref writer, v); break;
             case FieldInfo v: Field.Write(ref writer, v); break;
-            default:
-                {
-                    writer.Serializer().RegisterAnonymousDisplay(type);
-                    writer.WriteValue(type, value);
+            default:{
+                FormatterResolver.GetFormatter(type);
+                writer.WriteValue(type, value);
 
 
 
@@ -50,8 +46,8 @@ public class Object : MemoryPackFormatter<T>
 
 
 
-                    break;
-                }
+                break;
+            }
         }
 
     }

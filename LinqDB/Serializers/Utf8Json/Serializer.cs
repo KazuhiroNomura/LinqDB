@@ -9,7 +9,10 @@ namespace LinqDB.Serializers.Utf8Json;
 using Formatters;
 using Formatters.Others;
 using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+using System.Collections.Generic;
+
 public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
+    internal readonly Dictionary<Type,IJsonFormatter> TypeFormatter=new();
     private readonly FormatterResolver Resolver=new();
     private readonly IJsonFormatterResolver IResolver;
 
@@ -112,6 +115,7 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
     private void Clear(){
         this.ProtectedClear();
         this.Resolver.Clear();
+        this.TypeFormatter.Clear();
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();

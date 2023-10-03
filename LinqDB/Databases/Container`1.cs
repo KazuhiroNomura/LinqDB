@@ -1,8 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Globalization;
-using System.Text;
-
 namespace LinqDB.Databases;
 
 /// <summary>

@@ -17,7 +17,6 @@ using LinqDB.Helpers;
 using Type = System.Type;
 //using System.Runtime.Remoting.Messaging;
 using Linq=System.Linq;
-using System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers;
 partial class Optimizer {

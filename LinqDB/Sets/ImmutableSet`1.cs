@@ -4,7 +4,6 @@ using System.Text;
 using Collections=System.Collections;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using LinqDB.Helpers;
 using System.IO;
 using LinqDB.CRC;
@@ -24,13 +23,11 @@ using Generic=Collections.Generic;
 //[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 //[DebuggerDisplay("Count = {"+nameof(Count)+"}")]
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
-[MessagePack.MessagePackObject,Serializable]
 public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IEnumerable<T>>{
     /// <summary>
     /// 要素のルート
     /// </summary>
     internal TreeNodeT TreeRoot => this.変数Enumerator.TreeNode;
-    [IgnoreDataMember]
     public (long TreeNode数, long LinkedNode数) 衝突数 => this.変数Enumerator.TreeNode.衝突数;
     /// <summary>
     /// タプルを追加した時に参照関係を作る。
@@ -66,10 +63,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         } while(TreeNode is not null);
         return null;
     }
-    [IgnoreDataMember]
     private readonly Random Random = new(1);
     //private List<T> List = new();
-    [IgnoreDataMember]
     public T Sampling {
         get{
             if(this._LongCount==0) throw new NotSupportedException();
@@ -118,7 +113,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
             return null;
         }
     }
-    [IgnoreDataMember]
     public T SamplingNullable=> this._LongCount==0 ? default! : this.Sampling;
     /// <summary>
     /// Add時の前半処理。目的のノードを探索する。存在しなければ作る。
@@ -467,8 +461,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// 性能のために値型の列挙子を表す
     /// </summary>
-    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,IgnoreDataMember]
-    [NonSerialized]
     protected internal Enumerator 変数Enumerator;
     /// <summary>
     /// 値の列挙子
@@ -537,7 +529,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// タプル同士の比較方法。
     /// </summary>
-    [IgnoreDataMember]
     private protected Generic.IEqualityComparer<T> Comparer{
         get=>Generic.EqualityComparer<T>.Default;
         //set{}

@@ -992,7 +992,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     //}
 
     [Fact]public void 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(){
-        var Tables = new Set<Table,LinqDB.Databases.PrimaryKeys.Reflection>();
+        var Tables = new Set<LinqDB.Databases.PrimaryKeys.Reflection,Table>();
         this.共通コンパイル実行(()=>Tables.SelectMany(o=>Tables).Except(Tables));
         this.共通コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum().Select(q=>new{p,q,index})).Select(p=>p.p+p.q+p.index));
         //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {

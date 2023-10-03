@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace LinqDB.Sets;
 
 /// <summary>
 /// Setの基底クラス
 /// </summary>
-[Serializable,MessagePack.MessagePackObject]
 public abstract partial class ImmutableSet:IEnumerable {
     internal const long 初期下限 = 0;
     internal const long 初期上限 = uint.MaxValue+(long)uint.MaxValue;
     /// <summary>
     /// Interlockedで使用するためプロパティではいけない
     /// </summary>
-    [MessagePack.Key(0)]
     protected internal long _LongCount;
 
     public long LongCount =>this._LongCount;

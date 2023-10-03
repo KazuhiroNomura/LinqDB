@@ -51,8 +51,8 @@ public partial class AssemblyGenerator {
     private static readonly MethodInfo Set1_Remove = typeof(Set<>).GetMethod(nameof(Set<int>.Remove));
     private static readonly MethodInfo CRC32_GetHashCode = typeof(CRC32).GetMethod(nameof(CRC32.GetHashCode));
     private static readonly MethodInfo IEquatable_Equals = typeof(IEquatable<>).GetMethod(nameof(IEquatable<int>.Equals));
-    private static readonly MethodInfo IWriteRead_BinaryWrite = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryWrite));
-    private static readonly MethodInfo IWriteRead_BinaryRead = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryRead));
+    //private static readonly MethodInfo IWriteRead_BinaryWrite = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryWrite));
+    //private static readonly MethodInfo IWriteRead_BinaryRead = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryRead));
     private static readonly ConstructorInfo Set1_ctor = typeof(Set<>).GetConstructor(Type.EmptyTypes);
     private static readonly ConstructorInfo Set3_ctor = typeof(Set<,,>).GetConstructor(Types(typeof(Set<,,>).GetGenericArguments()[2]));
     private static readonly ConstructorInfo Entity2_ctor = typeof(Entity<,>).GetConstructors(BindingFlags.NonPublic|BindingFlags.Instance)[0];
@@ -657,8 +657,8 @@ public partial class AssemblyGenerator {
             AssemblyGenerator.Entity2_ProtectedPrimaryKey
         );
         var 子Table_FieldBuilder = 子Table_Information.Tables_FieldBuilder;
-        Types2[0]=子Table_TypeBuilder;
-        Types2[1]=子Table_Key_TypeBuilder;
+        Types2[0]=子Table_Key_TypeBuilder;
+        Types2[1]=子Table_TypeBuilder;
         //var Set2 = typeof(Set<,>).MakeGenericType(Types2);
         //var Set3 = 子Table_FieldBuilder.FieldType;
         var Dictionary_Schema = this.Dictionary_Schema;
@@ -705,8 +705,8 @@ public partial class AssemblyGenerator {
                 AssemblyGenerator.Entity2_ProtectedPrimaryKey
             )
         );
-        Types2[0]=親Table_TypeBuilder;
-        Types2[1]=親Table_Information.Key_TypeBuilder;
+        Types2[0]=親Table_Information.Key_TypeBuilder;
+        Types2[1]=親Table_TypeBuilder;
         Container_RelationValidate_I.Call(
             TypeBuilder.GetMethod(
                 typeof(Set<,>).MakeGenericType(Types2),
@@ -718,8 +718,8 @@ public partial class AssemblyGenerator {
         Container_RelationValidate_I.Newobj(Reflection.Exception.RelationshipException_ctor);
         Container_RelationValidate_I.Throw();
         var 親Schema_FieldBuilder =親Table_ISchema_Information.Containerに定義されるSchema_FieldBuilder;
-        Types2[0]=親Table_TypeBuilder;
-        Types2[1]=親Table_Information.Key_TypeBuilder;
+        Types2[0]=親Table_Information.Key_TypeBuilder;
+        Types2[1]=親Table_TypeBuilder;
         var Set2_TryGetValue = TypeBuilder.GetMethod(typeof(Set<,>).MakeGenericType(Types2),AssemblyGenerator.Set2_TryGetValue);
         Types1[0]=子Table_TypeBuilder;
         var Set1 = typeof(Set<>).MakeGenericType(Types1);

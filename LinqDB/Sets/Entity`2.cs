@@ -1,6 +1,5 @@
 ﻿using System;
 using LinqDB.Databases;
-using System.Text.Json.Serialization;
 namespace LinqDB.Sets;
 
 /// <summary>
@@ -8,12 +7,13 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TContainer"></typeparam>
-[Serializable]
+[MessagePack.MessagePackObject(true),Serializable]
 public abstract class Entity<TKey,TContainer>:Entity<TContainer>, IPrimaryKey<TKey>
     where TKey : struct, IEquatable<TKey>
     where TContainer:Container{
+    //[IgnoreDataMember]
     protected readonly TKey ProtectedPrimaryKey;
-    [JsonIgnore]
+    //[IgnoreDataMember]
     public TKey PrimaryKey=>this.ProtectedPrimaryKey;
     /// <summary>
     /// 既定コンストラクタ

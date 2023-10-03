@@ -6,7 +6,10 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\kazuh\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_be882858\CoverageData\_LinqDB-TestLinqDB.371183822\Snapshot\snapshot.utdcvr</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60ac39f7_002Ddeaa_002D4e05_002Da15c_002Da95f6c8cc709/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AverageDecimal" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60ac39f7_002Ddeaa_002D4e05_002Da15c_002Da95f6c8cc709/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AverageDecimal" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6d394bbc_002Df431_002D4a0d_002Dab5c_002D15d5f5446947/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;TestLinqDB&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
@@ -31,6 +34,9 @@
       &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::Optimizers.変換_メソッド正規化_取得インライン不可能定数.PostDecrementAssign&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=be75aa7e_002D6b8c_002D45e0_002Dab67_002Da5b8cb7ff195/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="WriteNullable" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestRunner/HangingTestRunnerResponse/@EntryValue">WaitForExit</s:String>
 	<s:String x:Key="/Default/Profiling/Configurations/=2/@EntryIndexedValue">&lt;data&gt;&lt;HostParameters type="LocalHostParameters" /&gt;&lt;Argument type="StandaloneArgument"&gt;&lt;Arguments IsNull="False"&gt;&lt;/Arguments&gt;&lt;FileName IsNull="False"&gt;&lt;/FileName&gt;&lt;WorkingDirectory IsNull="False"&gt;&lt;/WorkingDirectory&gt;&lt;Scope&gt;&lt;ProcessFilters /&gt;&lt;/Scope&gt;&lt;/Argument&gt;&lt;Info type="PerformanceInfo"&gt;&lt;MeasureType&gt;TracingInject&lt;/MeasureType&gt;&lt;MeterKind&gt;Rdtsc&lt;/MeterKind&gt;&lt;InjectInfo&gt;&lt;SymbolSearch&gt;&lt;SearchPaths /&gt;&lt;/SymbolSearch&gt;&lt;Scope&gt;&lt;PatternFilters /&gt;&lt;DenyAttributeFilters /&gt;&lt;/Scope&gt;&lt;/InjectInfo&gt;&lt;/Info&gt;&lt;CoreOptions type="CoreOptions"&gt;&lt;CoreTempPath IsNull="False"&gt;&lt;/CoreTempPath&gt;&lt;RemoteEndPoint IsNull="False"&gt;&lt;/RemoteEndPoint&gt;&lt;AdditionalEnvironmentVariables&gt;&lt;Item&gt;&lt;Key&gt;RESHARPER_HOST_VERSION&lt;/Key&gt;&lt;Value&gt;232.0.20230919.80758&lt;/Value&gt;&lt;/Item&gt;&lt;Item&gt;&lt;Key&gt;RESHARPER_TESTRUNNER&lt;/Key&gt;&lt;Value&gt;Profile&lt;/Value&gt;&lt;/Item&gt;&lt;Item&gt;&lt;Key&gt;RESHARPER_HOST&lt;/Key&gt;&lt;Value&gt;ReSharperPlatformVs17&lt;/Value&gt;&lt;/Item&gt;&lt;/AdditionalEnvironmentVariables&gt;&lt;/CoreOptions&gt;&lt;HostOptions type="HostOptions"&gt;&lt;HostTempPath IsNull="False"&gt;&lt;/HostTempPath&gt;&lt;ReprofileDisableReason&gt;LaunchedByReSharperUnitTestRunner&lt;/ReprofileDisableReason&gt;&lt;/HostOptions&gt;&lt;/data&gt;</s:String></wpf:ResourceDictionary>

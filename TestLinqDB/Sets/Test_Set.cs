@@ -47,7 +47,7 @@ public static class PrimaryKeys{
 
 public class Tables{
     [Serializable]
-    public class Entity:Entity<PrimaryKeys.Entity,Container>,IEquatable<Entity>, IWriteRead<Entity> {
+    public class Entity:Entity<PrimaryKeys.Entity,Container>,IEquatable<Entity>{
         public decimal ID1=>this.PrimaryKey.ID1;
         public decimal ID2=>this.PrimaryKey.ID2;
         public readonly decimal ID3;
@@ -791,7 +791,7 @@ public class Tables{
         var expected=new Entity(1,2,2);
         var not_expected=new Entity(2,1,3);
         var key=new PrimaryKeys.Entity(1,2);
-        var data=new Set<Entity,PrimaryKeys.Entity,Container>(null){
+        var data=new Set<PrimaryKeys.Entity,Entity,Container>(null){
             new(1,1,1),expected,not_expected,new(2,2,4)
         };
         var r=data[key];

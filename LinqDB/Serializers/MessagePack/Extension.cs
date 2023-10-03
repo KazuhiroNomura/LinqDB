@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.ObjectModel;
 
 
@@ -31,7 +32,12 @@ internal static class Extension{
 
 
 
-
+    public static void Write<T>(this IMessagePackFormatter<T>Formatter,ref Writer writer,T value,O Resolver){
+        Formatter.Serialize(ref writer,value,Resolver);
+    }
+    public static T Read<T>(this IMessagePackFormatter<T>Formatter,ref Reader reader,O Resolver){
+        return Formatter.Deserialize(ref reader,Resolver);
+    }
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
@@ -118,6 +124,10 @@ internal static class Extension{
         }
         
         return Parameters;
+    }
+    public static void WriteValue(this ref Writer writer,Type type,object? value,O Resolver) {
+        var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
+        MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
     }
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type);

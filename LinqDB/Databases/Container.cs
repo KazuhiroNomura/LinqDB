@@ -4,6 +4,7 @@ using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
@@ -11,7 +12,7 @@ using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
 /// <summary>
 /// エンティティの基底クラス
 /// </summary>
-[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject]
 public partial class Container:IDisposable{
     [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember, NonSerialized]
     public readonly Serializer Serializer=new();
@@ -39,12 +40,12 @@ public partial class Container:IDisposable{
     //[field: NonSerialized]
     //public Stream? Writer { get; private set; }
     //[field: NonSerialized]
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,IgnoreDataMember]
     public Schemas.information_schema information_schema { get;}
     [MemoryPack.MemoryPackIgnore,MemoryPack.MemoryPackAllowSerialize,MessagePack.IgnoreMember, NonSerialized]
     private Schemas.system _system;
     [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember]
     public Schemas.system system=>this._system;
-    public int prop {get;}
     /// <summary>
     /// 既定コンストラクタ。
     /// </summary>
@@ -54,11 +55,11 @@ public partial class Container:IDisposable{
         var columns = new Set<columns>();
         var referential_constraints = new Set<referential_constraints>();
         this.information_schema=new Schemas.information_schema(tables,columns,referential_constraints);
-        var Schemas = new Set<Tables.Schema,PrimaryKeys.Reflection>();
-        var Tables = new Set<Table,PrimaryKeys.Reflection>();
-        var Views = new Set<View,PrimaryKeys.Reflection>();
-        var TableColumns = new Set<TableColumn,PrimaryKeys.Reflection>();
-        var ViewColumns = new Set<ViewColumn,PrimaryKeys.Reflection>();
+        var Schemas      = new Set<PrimaryKeys.Reflection,Tables.Schema>();
+        var Tables       = new Set<PrimaryKeys.Reflection,Table>();
+        var Views        = new Set<PrimaryKeys.Reflection,View>();
+        var TableColumns = new Set<PrimaryKeys.Reflection,TableColumn>();
+        var ViewColumns  = new Set<PrimaryKeys.Reflection,ViewColumn>();
         this._system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
         var Container_Type = this.GetType();
         //var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
@@ -156,6 +157,7 @@ public partial class Container:IDisposable{
             }
         }
     }
+    [MessagePack.IgnoreMember]
     protected Stream? LogStream;
     /// <summary>
     /// 上位トランザクションがない基底となるコンストラクタ。

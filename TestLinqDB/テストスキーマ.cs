@@ -1,0 +1,30 @@
+﻿//using System.Linq.Expressions;
+//using Binder = Microsoft.CSharp.RuntimeBinder;
+//using MessagePack;
+using System.Collections.ObjectModel;
+using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
+using LinqDB.Databases;
+using LinqDB.Sets;
+namespace TestLinqDB{
+    namespace Keys{
+        [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+        public readonly partial struct Key:IEquatable<Key>{
+            public readonly int a;
+            public Key(int a)=>this.a=a;
+            public bool Equals(Key other)=>this.a==other.a;
+        }
+    }
+    namespace Tables{
+        [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+        public partial class Table:Entity<Keys.Key,Container>,IEquatable<Table>{
+            //public Keys.Key PrimaryKey{get;}
+            public Table():base(default){}
+            [MemoryPack.MemoryPackConstructor]
+            public Table(Keys.Key PrimaryKey):base(PrimaryKey){}
+            public Table(int a):base(new Keys.Key(a)){}
+            public bool Equals(Table? other)=>other!=null&&this.PrimaryKey.Equals(other.PrimaryKey);
+            public override bool Equals(object? obj)=>obj is Table other&&this.PrimaryKey.Equals(other.PrimaryKey);
+        }
+    }
+}

@@ -1,149 +1,170 @@
-﻿//using System.Linq.Expressions;
-//using Binder = Microsoft.CSharp.RuntimeBinder;
-//using MessagePack;
-using System.Collections.ObjectModel;
+﻿using S = LinqDB.Sets;
+using E = System.Collections.Generic;
+using Q = System.Linq;
+using LinqDB.Sets;
+//using Microsoft.SqlServer.Dac.Deployment;
+//using System.Diagnostics;
+//using System.Runtime.Serialization;
+
+//using static Microsoft.FSharp.Core.ByRefKinds;
+
 namespace TestLinqDB.Serializers.Formatters.Sets;
-using Expressions = System.Linq.Expressions;
-public class Set:共通{
-    [Fact]public void WriteNullable(){
-        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<int>()});
-        this.MemoryMessageJson_Assert(new { a = default(LinqDB.Sets.Set<int>) });
+public class Set1:共通{
+    [Fact]
+    public void WriteNullable(){
+        this.MemoryMessageJson_Assert(new{a=new LinqDB.Sets.Set<Tables.Table>{new(1)}});
+        this.MemoryMessageJson_Assert(new{a=default(LinqDB.Sets.Set<Tables.Table>)});
     }
-    [Fact]public void ReadNullable(){
+    [Fact]
+    public void ReadNullable(){
         //if(typeof(Sets.Set<T>)==type){
-        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<int>()});
+        this.MemoryMessageJson_Assert(new{a=new LinqDB.Sets.Set<Tables.Table>{new(1)}});
         //}else{
-        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.GroupingSet<int,int>(1)});
+        //this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.GroupingSet<int,int>(1)});
     }
-    private void PrivateWrite<T>(Expressions.ExpressionType NodeType)
-    {
-        var Constant = Expressions.Expression.Constant(default(T));
-        var Parameter = Expressions.Expression.Parameter(typeof(T), typeof(T).Name);
-        var input1 = Expressions.Expression.MakeBinary(NodeType, Parameter, Constant);
-        this.MemoryMessageJson_Assert(new { a = input1 });
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.BinaryExpression) });
+}
+//[Serializable,MessagePack.MessagePackObject(true)]
+//public class Set2<TValue, TKey>:Set<TValue>
+//    where TValue:IPrimaryKey<TKey>
+//    where TKey : struct, IEquatable<TKey>{
+//    public Set2() { }
+//    /// <summary>
+//    ///   <see cref="Set2{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
+//    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
+//    public Set2(IEqualityComparer<TValue> Comparer) : base(Comparer) {
+//    }
+//    /// <summary>
+//    ///   <see cref="Set2{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納されますます。</summary>
+//    /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
+//    public Set2(System.Collections.Generic.IEnumerable<TValue> source) : base(source) {
+//    }
+//    /// <summary>
+//    ///   <see cref="Set2{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+//    /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
+//    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
+//    public Set2(System.Collections.Generic.IEnumerable<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+//    }
+//    /// <summary>
+//    ///   <see cref="Set2{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+//    /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
+//    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
+//    public Set2(TValue[] source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+//    }
+//    /// <summary>
+//    ///   <see cref="Set2{TValue,TKey}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
+//    /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
+//    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
+//    public Set2(ImmutableSet<TValue> source,IEqualityComparer<TValue> Comparer) : base(source,Comparer) {
+//    }
+//    /// <summary>
+//    /// キーから値を取得する。
+//    /// </summary>
+//    /// <param name="key"></param>
+//    /// <exception cref="KeyNotFoundException"></exception>
+//    [IgnoreDataMember]
+//    public TValue this[TKey key] {
+//        get {
+//            TValue value = default!;
+//            if(this.TryGetValue(key,ref value)) {
+//                return value;
+//            }
+//            throw new KeyNotFoundException();
+//        }
+//    }
+//    /// <summary>
+//    /// 集合からキーに一致する値を削除する。
+//    /// </summary>
+//    /// <param name="Key"></param>
+//    /// <returns></returns>
+//    public bool RemoveKey(TKey Key) {
+//        return false;
+//    }
+//    /// <summary>
+//    /// キーから値を取得する。
+//    /// </summary>
+//    /// <param name="Key"></param>
+//    /// <param name="Value"></param>
+//    /// <returns>値が取得出来たか</returns>
+//    public bool TryGetValue(TKey Key,ref TValue Value) {
+//        return false;
+//    }
+//    /// <summary>
+//    /// キーから集合を取得する。
+//    /// </summary>
+//    /// <param name="Key"></param>
+//    /// <returns>値が取得出来たか</returns>
+//    public System.Collections.Generic.IEnumerable<TValue> GetSet(TKey Key) {
+//        return EmptySet;
+//    }
+//    /// <summary>
+//    /// キーに一致する値を削除する。
+//    /// </summary>
+//    /// <param name="Key"></param>
+//    /// <returns></returns>
+//    public bool ContainsKey(TKey Key) {
+//        return false;
+//    }
+//}
+public class Set2:共通 {
+    [Fact]
+    public void WriteNullable() {
+        //var input = new { a = new Set<Keys.Key,Tables.Table> { new(1) } };
+        //this.Utf8Json_Assert(input,actual => Assert.Equal(input,actual,this.Comparer));
+        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<Keys.Key,Tables.Table> { new(1) } });
+        this.MemoryMessageJson_Assert(new { a = default(LinqDB.Sets.Set<Keys.Key,Tables.Table>) });
+    }
+    [Fact]
+    public void ReadNullable() {
+        //if(typeof(Sets.Set<T>)==type){
+        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<int> { 1 } });
+        //}else{
+        //this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.GroupingSet<int,int>(1)});
+    }
+}
+public class Set3:共通 {
+    [Fact]
+    public void WriteNullable(){
+        var C=new LinqDB.Databases.Container();
+        this.MemoryMessageJson_Assert(new { a = new Tables.Table(1)});
+        //var input = new { a = new Set<Keys.Key,Tables.Table> { new(1) } };
+        //this.Utf8Json_Assert(input,actual => Assert.Equal(input,actual,this.Comparer));
+        this.MemoryMessageJson_Assert(new LinqDB.Sets.Set<Keys.Key,Tables.Table,LinqDB.Databases.Container>(C) { new(1) } );
+        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<Keys.Key,Tables.Table,LinqDB.Databases.Container>(C) { new(1) } });
+        this.MemoryMessageJson_Assert(new { a = default(LinqDB.Sets.Set<Keys.Key,Tables.Table,LinqDB.Databases.Container>) });
+    }
+    [Fact]
+    public void ReadNullable() {
+        //if(typeof(Sets.Set<T>)==type){
+        this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<int> { 1 } });
+        //}else{
+        //this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.GroupingSet<int,int>(1)});
+    }
+}
+public class SetGroupingSet:共通 {
+    [Fact]public void WriteNullable0(){
+        var s=new LinqDB.Sets.Set<Tables.Table>{new(1),new(2)};
+        var input=s.GroupBy(p=>p);
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable1(){
+        var s=new S.Set<Tables.Table>{new(1),new(2)};
 
+        var input=s.GroupBy(p=>new{p});
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable2(){
+        var C=new LinqDB.Databases.Container();
+        var s=new S.Set<Tables.Table>{new(1),new(2)};
+        var GroupBy=s.GroupBy(p=>new{p});
+        var input=new{a=GroupBy,b=(S.IEnumerable)GroupBy,c=(object)GroupBy};
+        this.MessagePack_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
     }
     [Fact]
-    public void Write()
-    {
-
-        {
-            var Parameter = Expressions.Expression.Parameter(typeof(int[]));
-            var Constant = Expressions.Expression.Constant(default(int));
-            var input = Expressions.Expression.ArrayIndex(Parameter, Constant);
-            this.MemoryMessageJson_Assert(new { a = input });
-            this.MemoryMessageJson_Assert(new { a = default(Expressions.BinaryExpression) });
-
-        }
-        this.PrivateWrite<int>(Expressions.ExpressionType.Assign);
-        this.PrivateWrite<string>(Expressions.ExpressionType.Coalesce);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Add);
-        this.PrivateWrite<int>(Expressions.ExpressionType.AddChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.And);
-        this.PrivateWrite<bool>(Expressions.ExpressionType.AndAlso);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Divide);
-        this.PrivateWrite<int>(Expressions.ExpressionType.ExclusiveOr);
-        this.PrivateWrite<int>(Expressions.ExpressionType.LeftShift);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Modulo);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Multiply);
-        this.PrivateWrite<int>(Expressions.ExpressionType.MultiplyChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Or);
-        this.PrivateWrite<bool>(Expressions.ExpressionType.OrElse);
-        this.PrivateWrite<double>(Expressions.ExpressionType.Power);
-        this.PrivateWrite<int>(Expressions.ExpressionType.RightShift);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Subtract);
-        this.PrivateWrite<int>(Expressions.ExpressionType.SubtractChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.AddAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.AddAssignChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.DivideAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.AndAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.ExclusiveOrAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.LeftShiftAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.ModuloAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.MultiplyAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.MultiplyAssignChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.OrAssign);
-        this.PrivateWrite<double>(Expressions.ExpressionType.PowerAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.RightShiftAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.SubtractAssign);
-        this.PrivateWrite<int>(Expressions.ExpressionType.SubtractAssignChecked);
-        this.PrivateWrite<int>(Expressions.ExpressionType.Equal);
-        this.PrivateWrite<int>(Expressions.ExpressionType.GreaterThan);
-        this.PrivateWrite<int>(Expressions.ExpressionType.GreaterThanOrEqual);
-        this.PrivateWrite<int>(Expressions.ExpressionType.LessThan);
-        this.PrivateWrite<int>(Expressions.ExpressionType.LessThanOrEqual);
-        this.PrivateWrite<int>(Expressions.ExpressionType.NotEqual);
-    }
-    [Fact]
-    public void WriteLeftRight()
-    {
-        var ParameterDouble = Expressions.Expression.Parameter(typeof(double));
-        var ParameterInt32 = Expressions.Expression.Parameter(typeof(int), "int32");
-        var ParameterString = Expressions.Expression.Parameter(typeof(string), "string");
-        var ConstantString = Expressions.Expression.Constant("string");
-        //var ConstantStringNull=Expressions.Expression.Constant(null,typeof(string));
-        var ConstantArray = Expressions.Expression.Constant(new int[10]);
-        var Constant0 = Expressions.Expression.Constant(0);
-        var Constant1 = Expressions.Expression.Constant(1);
-        var ConstantTrue = Expressions.Expression.Constant(true);
-        var ConstantBinry = Expressions.Expression.Constant(new 演算子(true));
-        var ConversionInt32 = Expressions.Expression.Lambda<Func<int, int>>(Expressions.Expression.Add(ParameterInt32, ParameterInt32), ParameterInt32);
-        var ConversionDouble = Expressions.Expression.Lambda<Func<double, double>>(Expressions.Expression.Add(ParameterDouble, ParameterDouble), ParameterDouble);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Assign(ParameterInt32, Constant1));
-    }
-    private static string string_string_string(string? a, string b) => a??b;
-    [Fact]
-    public void WriteLeftRightLambda()
-    {
-        var ParameterString = Expressions.Expression.Parameter(typeof(string), "string");
-        var ConstantString = Expressions.Expression.Constant("string");
-        var ConversionString = Expressions.Expression.Lambda<Func<string, string>>(Expressions.Expression.Call(null, GetMethod(() => string_string_string("", "")), ParameterString, ParameterString), ParameterString);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Coalesce(ConstantString, ConstantString, ConversionString));
-    }
-    [Fact]
-    public void WriteLeftRightMethod()
-    {
-        var Constant1 = Expressions.Expression.Constant(1m);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Add(Constant1, Constant1));
-    }
-    [Fact]
-    public void WriteLeftRightMethodLambda()
-    {
-        var ParameterDecimmal = Expressions.Expression.Parameter(typeof(decimal));
-        var Constant1 = Expressions.Expression.Constant(1m);
-        var ConversionDecimal = Expressions.Expression.Lambda<Func<decimal, decimal>>(Expressions.Expression.Add(ParameterDecimmal, ParameterDecimmal), ParameterDecimmal);
-        var input1 = Expressions.Expression.AddAssign(ParameterDecimmal, Constant1, typeof(decimal).GetMethod("op_Addition"), ConversionDecimal);
-        this.MemoryMessageJson_TExpressionObject(
-            Expressions.Expression.Lambda<Func<object>>(
-                Expressions.Expression.Block(
-                    new[] { ParameterDecimmal },
-                    Expressions.Expression.Assign(
-                        ParameterDecimmal,
-                        Expressions.Expression.Constant(0m)
-                    ),
-                    Expressions.Expression.Convert(
-                        input1,
-                        typeof(object)
-                    )
-                )
-            )
-        );
-
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
-            Expressions.Expression.Lambda<Func<object>>(
-                Expressions.Expression.Block(
-                    new[] { ParameterDecimmal },
-                    Expressions.Expression.Assign(
-                        ParameterDecimmal,
-                        Expressions.Expression.Constant(0m)
-                    ),
-                    Expressions.Expression.Convert(
-                        input1,
-                        typeof(object)
-                    )
-                )
-            )
-        );
+    public void WriteNullable3() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        E.IEnumerable<Q.IGrouping<int,int>>a=GroupBy!;
+        var input=new{a=GroupBy,b=(E.IEnumerable<Q.IGrouping<int,int>>)GroupBy,c=(S.IEnumerable<S.IGrouping<int,int>>)GroupBy};
+        this.MessagePack_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
     }
 }

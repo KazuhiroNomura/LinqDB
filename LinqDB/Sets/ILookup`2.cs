@@ -5,7 +5,6 @@
 using Collections=System.Collections;
 namespace LinqDB.Sets;
 using Linq=System.Linq;
-using Generic=Collections.Generic;
 public interface ILookup<TKey,TElement>:Linq.ILookup<TKey,TElement>,IEnumerable<IGrouping<TKey,TElement>>{
     //int Count{get;}
     //IEnumerable<TElement> this[TKey key]{get;}

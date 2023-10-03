@@ -29,7 +29,7 @@ public class DisplayClass<T> : IJsonFormatter<T>
     private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader, IJsonFormatterResolver formatterResolver);
     private readonly delegate_Deserialize DelegateDeserialize;
-    public DisplayClass()
+    private DisplayClass()
     {
         try
         {

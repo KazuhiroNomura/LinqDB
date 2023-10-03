@@ -41,10 +41,12 @@
   <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
+    <Compile Remove="Serializers\Utf8Json\Formatters\Sets\IGroupingCollection`2.cs" />
     <Compile Remove="Sets\IGroupingSet`2.cs" />
     <Compile Remove="Sets\ImmutableGroupingSet`2.cs" />
     <Compile Remove="Sets\IOutputSet.cs" />
     <Compile Remove="Sets\IOutputSet`1.cs" />
+    <Compile Remove="Sets\IWriteRead`1.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />
@@ -98,8 +100,8 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-    <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     <AnalysisLevel>none</AnalysisLevel>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>

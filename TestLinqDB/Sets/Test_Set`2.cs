@@ -90,7 +90,7 @@ public partial struct Key:IEquatable<Key> {
     public override string ToString() => this.メンバー.ToString();
 }
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
-public partial class Value:Entity<Key,Container>,IWriteRead<Value>{
+public partial class Value:Entity<Key,Container>{
     [MemoryPack.MemoryPackIgnore]
     public メンバー Member => this.PrimaryKey.メンバー;
     [MemoryPack.MemoryPackConstructor]
@@ -103,12 +103,6 @@ public partial class Value:Entity<Key,Container>,IWriteRead<Value>{
     public bool Equals(Value other) => this.Member.Equals(other.Member);
     public override bool Equals(object? obj) => obj is Value other&&this.Equals(other);
     protected override void ToStringBuilder(StringBuilder sb) => sb.Append(this.Member.ToString());
-    public void BinaryWrite(BinaryWriter Writer){
-        throw new NotImplementedException();
-    }
-    public void BinaryRead(BinaryReader Reader,Func<Value> Create){
-        throw new NotImplementedException();
-    }
 }
 [Serializable,MessagePack.MessagePackObject(true),MemoryPack.MemoryPackable]
 public partial class シリアライズ対象:IEquatable<シリアライズ対象> {
@@ -235,7 +229,7 @@ public class Test_Set2:共通 {
         });
     }
     [Fact]public void Serialize01(){
-        var expected=new Set<Value,Key>{new(new(0)),new(new(1))};
+        var expected=new Set<Key,Value>{new(new(0)),new(new(1))};
         {
             var s=this.MemoryPack;
             var bytes=s.Serialize((object)expected);
@@ -243,7 +237,7 @@ public class Test_Set2:共通 {
         }
     }
     [Fact]public void Serialize02(){
-        var expected=new Set<Value,Key,Container>(null!){new(new(0)),new(new(1))};
+        var expected=new Set<Key,Value,Container>(null!){new(new(0)),new(new(1))};
         {
             var s=this.MemoryPack;
             var bytes=s.Serialize((object)expected);

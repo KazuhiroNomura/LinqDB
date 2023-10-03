@@ -1,17 +1,12 @@
 ﻿using System;
 using Collections=System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using Linq=System.Linq;
 using System.Runtime.CompilerServices;
 using LinqDB.Sets.Exceptions;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.IO;
-using LinqDB.Helpers;
-using System.Runtime.Serialization;
-using System.Text;
-using LinqDB.CRC;
+using System.Text.Json.Serialization;
 //using System.Linq;
 
 namespace LinqDB.Sets;
@@ -40,26 +35,33 @@ internal sealed class SystemLinq_GroupingDebugView<TKey, TElement>
 /// <typeparam name="TKey">キー</typeparam>
 [DebuggerDisplay("Key = {Key}")]
 [DebuggerTypeProxy(typeof(SystemLinq_GroupingDebugView<, >))]
-[Serializable,MessagePack.MessagePackObject]
-public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>,IGroupingCollection<TKey,TElement>,ICollection<TElement>,IEquatable<IGrouping<TKey,TElement>>,IEquatable<Linq.IGrouping<TKey,TElement>>{
+[Serializable]//,MessagePack.MessagePackObject]
+public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>,IGrouping<TKey,TElement>/*,ICollection<TElement>*/,IEquatable<IGrouping<TKey,TElement>>,IEquatable<Linq.IGrouping<TKey,TElement>>{
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    private static readonly Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+    private static readonly Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     static GroupingSet()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance);
-    public TKey Key{get;}
-    /// <summary>
-    /// MessagePackが必要とする
-    /// </summary>
-    public GroupingSet()=>this.Key=default!;
+    public TKey _Key;
+    [JsonInclude]
+    public TKey Key=>this._Key;
+    //public TKey Key{get;}
+    ///// <summary>
+    ///// MessagePackが必要とする
+    ///// </summary>
+    //public GroupingSet()=>this._Key=default!;
     /// <summary>
     /// コンストラクタ。キーは必須
     /// </summary>
     /// <param name="Key">このキーに関連するタプルの集合</param>
-    public GroupingSet(TKey Key)=>this.Key=Key;
+    public GroupingSet(TKey Key)=>this._Key=Key;
     /// <summary>
     /// コンストラクタ。キーは必須
     /// </summary>
     /// <param name="Key">このキーに関連するタプルの集合</param>
     /// <param name="Value">1つのタプル</param>
     public GroupingSet(TKey Key,TElement Value){
-        this.Key=Key;
+        this._Key=Key;
         this.InternalAdd(Value);
         this._LongCount=1;
     }
@@ -77,8 +79,8 @@ public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>,IGroupingC
     public bool Remove(TElement item) => this.InternalRemove(item);
     public int Count => (int)this._LongCount;
     public bool IsReadOnly => false;
-    public override int GetHashCode()=>this.Key!.GetHashCode();
-    private bool PrivateEquals(IGrouping<TKey,TElement> other)=>Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key)&&this.SetEquals(other);
+    public override int GetHashCode()=>this.Key is null?0:this.Key!.GetHashCode();
+    private bool PrivateEquals(IGrouping<TKey,TElement> other)=>this.Key is null||other.Key is null?false:Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key)&&this.SetEquals(other);
     public bool Equals(IGrouping<TKey,TElement>? other) {
         if(ReferenceEquals(null,other)) return false;
         if(ReferenceEquals(this,other)) return true;

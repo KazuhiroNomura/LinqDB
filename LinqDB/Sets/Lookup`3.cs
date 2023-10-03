@@ -9,7 +9,6 @@ using Generic=Collections.Generic;
 /// <typeparam name="TValue">ディクショナリ内の値の型。</typeparam>
 /// <typeparam name="TKey">ディクショナリ内のキーの型。</typeparam>
 /// <typeparam name="TCollection">TValueのIAddを継承した型</typeparam>
-[Serializable]
 public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCollection<TValue,TKey,TCollection>>where TCollection:class,Generic.ICollection<TValue>,new() {
     /// <summary>
     /// キー比較用EqualityComparer

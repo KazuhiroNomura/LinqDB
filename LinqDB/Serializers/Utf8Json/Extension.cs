@@ -85,31 +85,64 @@ internal static class Extension{
         var Serializer_Parameters=Serializer.Parameters;
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         var Parameters=new List<Expressions.ParameterExpression>();
-        if(!reader.ReadIsEndArray()){
-            while(true){
-                if(reader.ReadIsBeginObject()){//{
-                    var name=reader.ReadString();
-                    reader.ReadIsNameSeparatorWithVerify();
-                    var type=reader.ReadType();
-                    Parameters.Add(Expressions.Expression.Parameter(type,name));
-                    reader.ReadIsEndObjectWithVerify();
-                } else{
-                    var index0=reader.ReadInt32();
-                    if(index0<0){
-                        reader.ReadIsValueSeparatorWithVerify();
-                        var index1=reader.ReadInt32();
-                        Parameters.Add(Serializer_ラムダ跨ぎParameters[index1]);
-                    } else{
-                        Parameters.Add(Serializer_Parameters[index0]);
-                    }
-                }
-                if(!reader.ReadIsValueSeparator()){
-                    reader.ReadIsEndArrayWithVerify();
-                    break;
+        while(!reader.ReadIsEndArray()) {
+            if(reader.ReadIsBeginObject()) {//{
+                var name = reader.ReadString();
+                reader.ReadIsNameSeparatorWithVerify();
+                var type = reader.ReadType();
+                Parameters.Add(Expressions.Expression.Parameter(type,name));
+                reader.ReadIsEndObjectWithVerify();
+            } else {
+                var index0 = reader.ReadInt32();
+                if(index0<0) {
+                    reader.ReadIsValueSeparatorWithVerify();
+                    var index1 = reader.ReadInt32();
+                    Parameters.Add(Serializer_ラムダ跨ぎParameters[index1]);
+                } else {
+                    Parameters.Add(Serializer_Parameters[index0]);
                 }
             }
+            if(!reader.ReadIsValueSeparator()) {
+                reader.ReadIsEndArrayWithVerify();
+                break;
+            }
         }
+        //if(!reader.ReadIsEndArray()){
+        //    while(true){
+        //        if(reader.ReadIsBeginObject()){//{
+        //            var name=reader.ReadString();
+        //            reader.ReadIsNameSeparatorWithVerify();
+        //            var type=reader.ReadType();
+        //            Parameters.Add(Expressions.Expression.Parameter(type,name));
+        //            reader.ReadIsEndObjectWithVerify();
+        //        } else{
+        //            var index0=reader.ReadInt32();
+        //            if(index0<0){
+        //                reader.ReadIsValueSeparatorWithVerify();
+        //                var index1=reader.ReadInt32();
+        //                Parameters.Add(Serializer_ラムダ跨ぎParameters[index1]);
+        //            } else{
+        //                Parameters.Add(Serializer_Parameters[index0]);
+        //            }
+        //        }
+        //        if(!reader.ReadIsValueSeparator()){
+        //            reader.ReadIsEndArrayWithVerify();
+        //            break;
+        //        }
+        //    }
+        //}
         return Parameters;
+    }
+    public static void WriteValue(this ref Writer writer,Type type,object value,O Resolver){
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        var Serialize=Formatter.GetType().GetMethod("Serialize");
+        Debug.Assert(Serialize is not null);
+        var Objects3=new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
+        Objects3[0]=writer;
+        Objects3[1]=value;
+        Objects3[2]=Resolver;
+        Serialize.Invoke(Formatter,Objects3);
+        writer=(Writer)Objects3[0];
     }
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);

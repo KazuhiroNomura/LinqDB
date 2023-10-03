@@ -79,10 +79,10 @@ namespace テスト {
         [Serializable]
         public class dbo:Schema {
             //public Set<Int32> Int32 { get; private set; }
-            private Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container> _Entity1;
-            public Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container> Entity1 =>this._Entity1;
-            private Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container> _Entity2;
-            public Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container> Entity2 =>this._Entity2;
+            private Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> _Entity1;
+            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity1 =>this._Entity1;
+            private Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> _Entity2;
+            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity2 =>this._Entity2;
             public Struct比較対象にEquals struct比較対象にEquals;
             public Struct比較対象にIEquatableEquals struct比較対象にIEquatableEquals;
             public object Objectstruct比較対象にEquals = new Struct比較対象にEquals();
@@ -90,13 +90,13 @@ namespace テスト {
             private readonly Container Container;
             internal dbo(Container Container) {
                 this.Container=Container;
-                this._Entity1=new Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>(this.Container);
-                this._Entity2=new Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>(this.Container);
+                this._Entity1=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
+                this._Entity2=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
             }
             internal void Read(Stream Reader){
                 var Serializer=this.Container.Serializer;
-                this._Entity1=Serializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
-                this._Entity2=Serializer.Deserialize<Set<Tables.dbo.Entity1,PrimaryKeys.dbo.Entity1,Container>>(Reader);
+                this._Entity1=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
+                this._Entity2=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
                 this.struct比較対象にEquals=Serializer.Deserialize<Struct比較対象にEquals>(Reader);
                 this.struct比較対象にIEquatableEquals=Serializer.Deserialize<Struct比較対象にIEquatableEquals>(Reader);
                 this.Objectstruct比較対象にEquals=Serializer.Deserialize<object>(Reader);
@@ -175,7 +175,7 @@ namespace テスト {
     namespace Tables {
         namespace dbo {
             [Serializable]
-            public sealed class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>, IWriteRead<Entity1> {
+            public sealed class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>{
                 [JsonIgnore]
                 public decimal ID1 => this.ProtectedPrimaryKey.ID1;
                 public int C_ID { get; private set; }
@@ -206,34 +206,6 @@ namespace テスト {
                     return false;
                 }
 
-                public void BinaryWrite(BinaryWriter Writer) {
-                    Writer.Write(this.C_ID);
-                    if(this.C_DATA!=null) {
-                        Writer.Write(true);
-                        Writer.Write(this.C_DATA);
-                    } else {
-                        Writer.Write(false);
-                    }
-                }
-                public void BinaryRead(BinaryReader Reader,Func<Entity1> Create) {
-                }
-                public void TextWrite(IndentedTextWriter Writer) {
-                    Writer.Write(this.C_ID);
-                    if(this.C_DATA!=null) {
-                        Writer.Write(true);
-                        Writer.Write(this.C_DATA);
-                    } else {
-                        Writer.Write(false);
-                    }
-                }
-                public void TextRead(StreamReader Reader,int Indent) {
-                    var Line=Reader.ReadLine();
-                    this.C_ID=int.Parse(Line);
-                    if(bool.Parse(Reader.ReadLine())) {
-                        this.C_DATA=Reader.ReadLine().Substring(Indent);
-                    }
-                }
-
                 public static bool operator ==(Entity1 a,Entity1 b)=>a.Equals(b);
                 public static bool operator !=(Entity1 a,Entity1 b)=>!a.Equals(b);
             }
@@ -247,13 +219,13 @@ public class Transaction {
         using var e = new テスト.Container();
         var e0 = e.Transaction();
         e0.dbo.Entity1.Assign(
-            new Set<テスト.Tables.dbo.Entity1,テスト.PrimaryKeys.dbo.Entity1,テスト.Container>(e0){
+            new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(e0){
                 new(1,"1")
             }
         );
     }
-    private static Set<テスト.Tables.dbo.Entity1,テスト.PrimaryKeys.dbo.Entity1,テスト.Container> 共通(テスト.Container e,int タプル濃度) {
-        var result = new Set<テスト.Tables.dbo.Entity1,テスト.PrimaryKeys.dbo.Entity1,テスト.Container>(e);
+    private static Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container> 共通(テスト.Container e,int タプル濃度) {
+        var result = new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(e);
         for(var a = 0;a<タプル濃度;a++) {
             var value = new テスト.Tables.dbo.Entity1(a,a.ToString());
             result.IsAdded(value);

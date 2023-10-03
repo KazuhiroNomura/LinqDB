@@ -68,7 +68,7 @@ public class Test_Set1{
     }
     private class Container2:global::LinqDB.Databases.Container<Container2>{
     }
-    private class Entity:Entity<EntityKey,Container2>,IEquatable<Entity>,IWriteRead<Entity>{
+    private class Entity:Entity<EntityKey,Container2>,IEquatable<Entity>{
         public Entity(long ID):base(new EntityKey(ID)){
         }
         public bool Equals(Entity? other)=>other!=null&&this.PrimaryKey.Equals(other.PrimaryKey);
@@ -77,15 +77,13 @@ public class Test_Set1{
         }
 
         public override bool Equals(object? obj)=>obj is Entity other&&this.Equals(other);
-        public void BinaryWrite(BinaryWriter Writer)=>throw new NotImplementedException();
-        public void BinaryRead(BinaryReader Reader,Func<Entity> Create)=>throw new NotImplementedException();
     }
     [Fact]
     [SuppressMessage("ReSharper","ConvertToConstant.Local")]
     public void Assin0(){
         using var Container=new Container2();
-        var 本体=new Set<Entity,EntityKey,Container2>(Container);
-        var 履歴=new Set<Entity,EntityKey,Container2>(Container);
+        var 本体=new Set<EntityKey,Entity,Container2>(Container);
+        var 履歴=new Set<EntityKey,Entity,Container2>(Container);
         {
             long L=0,R=0x1FFFFFFFE;
             var M=(L+R)/2;
@@ -114,8 +112,8 @@ public class Test_Set1{
     public void Assin1(){
         const int 要素数=1000;
         var Container=new Container2();
-        var 本体=new Set<Entity,EntityKey,Container2>(Container);
-        var 履歴=new Set<Entity,EntityKey,Container2>(Container);
+        var 本体=new Set<EntityKey,Entity,Container2>(Container);
+        var 履歴=new Set<EntityKey,Entity,Container2>(Container);
         for(var a=0;a<要素数;a++){
             履歴.IsAdded(new Entity(a));
         }
@@ -133,8 +131,8 @@ public class Test_Set1{
         const int 要素数=100000;
         var r=new Random(1);
         var Container=new Container2();
-        var 本体=new Set<Entity,EntityKey,Container2>(Container);
-        var 履歴=new Set<Entity,EntityKey,Container2>(Container);
+        var 本体=new Set<EntityKey,Entity,Container2>(Container);
+        var 履歴=new Set<EntityKey,Entity,Container2>(Container);
         for(var a=0;a<要素数;a++){
             var 履歴Value=r.Next(要素数);
             履歴.IsAdded(new Entity(履歴Value));

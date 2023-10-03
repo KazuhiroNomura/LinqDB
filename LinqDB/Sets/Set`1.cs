@@ -3,8 +3,6 @@
 using System;
 //using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -15,9 +13,13 @@ namespace LinqDB.Sets;
 /// 関係集合。
 /// </summary>
 /// <typeparam name="T"></typeparam>
-[Serializable,MessagePack.MessagePackObject]
 public class Set<T>:ImmutableSet<T>,ICollection<T>{
-    static Set()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance;
+    internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
+    internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
+    static Set()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
     //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
     //    public static readonly Formatter Instance = new();
     //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {
@@ -195,14 +197,14 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     //        新TreeNode0=新TreeNode0!.P;
     //    }
     //}
-    private static void WriteObject(string フォルダ名,object value) {
-        var フィールドに対応するファイル名 = フォルダ名+@"\"+DateTimeOffset.Now.ToString("yyyyMMddHHmmssff",CultureInfo.CurrentCulture)+".tlg";
-        using var FileStream = new FileStream(フィールドに対応するファイル名,FileMode.Create,FileAccess.Write,FileShare.Read);
-        Utf8Json.JsonSerializer.Serialize(FileStream,value);
-        //var Writer = XmlDictionaryWriter.CreateTextWriter(FileStream,Encoding.UTF8,false);
-        //ExpressionSurrogateSelector.serializer.WriteObject(Writer,value);
-        //Writer.Flush();
-    }
+    //private static void WriteObject(string フォルダ名,object value) {
+    //    var フィールドに対応するファイル名 = フォルダ名+@"\"+DateTimeOffset.Now.ToString("yyyyMMddHHmmssff",CultureInfo.CurrentCulture)+".tlg";
+    //    using var FileStream = new FileStream(フィールドに対応するファイル名,FileMode.Create,FileAccess.Write,FileShare.Read);
+    //    Utf8Json.JsonSerializer.Serialize(FileStream,value);
+    //    //var Writer = XmlDictionaryWriter.CreateTextWriter(FileStream,Encoding.UTF8,false);
+    //    //ExpressionSurrogateSelector.serializer.WriteObject(Writer,value);
+    //    //Writer.Flush();
+    //}
     ///// <summary>
     ///// Setの差分を書き込む。
     ///// </summary>
@@ -221,7 +223,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     public void Add(T item){
         if(this.InternalAdd(item)) this._LongCount++;
     }
-    public bool Contains(T Item)=>this.InternalContains(Item);
+    public bool Contains(T item)=>this.InternalContains(item);
     //    if(Item is null) return false;
     //    var HashCode = (long)(uint)Item.GetHashCode();
     //    if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
@@ -326,7 +328,6 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         return false;
     }
     public bool IsReadOnly=>true;
-
     public int Count => checked((int)this.LongCount);
 
 

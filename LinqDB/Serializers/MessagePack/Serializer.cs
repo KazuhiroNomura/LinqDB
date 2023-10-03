@@ -5,10 +5,11 @@ using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
+using Formatters=LinqDB.Serializers.MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack;
-using Formatters;
-using Formatters.Others;
-using LinqDB.Serializers.MessagePack.Formatters.Reflection;
+///using Formatters;
+//using Formatters.Others;
+//using LinqDB.Serializers.MessagePack.Formatters.Reflection;
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
     //IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
     
@@ -16,55 +17,56 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     
     private readonly MessagePackSerializerOptions Options;
     public Serializer(){
-        var Formatters=new IMessagePackFormatter[]{
+        var formatters=new IMessagePackFormatter[]{
             this,
-            Object.Instance,
+            Formatters.Others.Object.Instance,
 
-            Binary.Instance,
-            Block.Instance,
-            CatchBlock.Instance,
-            Conditional.Instance,
-            Constant.Instance,
-            Default.Instance,
-            DebugInfo.Instance,
-            Dynamic.Instance,
-            ElementInit.Instance,
-            Expression.Instance,
-            Goto.Instance,
-            Index.Instance,
-            Invocation.Instance,
-            Label.Instance,
-            LabelTarget.Instance,
-            Lambda.Instance,
-            ListInit.Instance,
-            Loop.Instance,
-            MemberAccess.Instance,
-            MemberBinding.Instance,
-            MemberInit.Instance,
-            MethodCall.Instance,
-            New.Instance,
-            NewArray.Instance,
-            Parameter.Instance,
-            Switch.Instance,
-            SwitchCase.Instance,
-            SymbolDocumentInfo.Instance,
-            Try.Instance,
-            TypeBinary.Instance,
-            Unary.Instance,
+            Formatters.Binary.Instance,
+            Formatters.Block.Instance,
+            Formatters.CatchBlock.Instance,
+            Formatters.Conditional.Instance,
+            Formatters.Constant.Instance,
+            Formatters.Default.Instance,
+            Formatters.DebugInfo.Instance,
+            Formatters.Dynamic.Instance,
+            Formatters.ElementInit.Instance,
+            Formatters.Expression.Instance,
+            Formatters.Goto.Instance,
+            Formatters.Index.Instance,
+            Formatters.Invocation.Instance,
+            Formatters.Label.Instance,
+            Formatters.LabelTarget.Instance,
+            Formatters.Lambda.Instance,
+            Formatters.ListInit.Instance,
+            Formatters.Loop.Instance,
+            Formatters.MemberAccess.Instance,
+            Formatters.MemberBinding.Instance,
+            Formatters.MemberInit.Instance,
+            Formatters.MethodCall.Instance,
+            Formatters.New.Instance,
+            Formatters.NewArray.Instance,
+            Formatters.Parameter.Instance,
+            Formatters.Switch.Instance,
+            Formatters.SwitchCase.Instance,
+            Formatters.SymbolDocumentInfo.Instance,
+            Formatters.Try.Instance,
+            Formatters.TypeBinary.Instance,
+            Formatters.Unary.Instance,
 
-            Type.Instance,
-            Member.Instance,
-            Constructor.Instance,
-            Method.Instance,
-            Property.Instance,
-            Event.Instance,
-            Field.Instance,
-            Delegate.Instance,
+            Formatters.Reflection.Type.Instance,
+            Formatters.Reflection.Member.Instance,
+            Formatters.Reflection.Constructor.Instance,
+            Formatters.Reflection.Method.Instance,
+            Formatters.Reflection.Property.Instance,
+            Formatters.Reflection.Event.Instance,
+            Formatters.Reflection.Field.Instance,
+            Formatters.Others.Delegate.Instance,
 
-            CSharpArgumentInfo.Instance
+            Formatters.CSharpArgumentInfo.Instance,
             
+            Formatters.Sets.IEnumerable.Instance
         };
-        var Resolvers=new IFormatterResolver[]{
+        var resolvers=new IFormatterResolver[]{
             //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
             global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
 
@@ -74,17 +76,17 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             //MessagePack.Resolvers.DynamicEnumResolver.Instance,
             //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
             global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
+            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
             FormatterResolver.Instance
             //this.Resolver,
             //MessagePack.Resolvers.StandardResolver.Instance,
-            //MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
             //MessagePack.Resolvers.StandardResolver.Instance,//
             //this.AnonymousExpressionMessagePackFormatterResolver,
         };
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
-                Formatters,
-                Resolvers
+                formatters,
+                resolvers
             )
         );
         //var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();

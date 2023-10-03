@@ -37,5 +37,5 @@ public abstract class List64_VoidAdd<T>:Generic.ICollection<T> {
     Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator() => this.委譲.GetEnumerator();
     Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.委譲.GetEnumerator();
     public long LongCount => this.委譲.Count;
-    public long Count => this.委譲.Count;
+    public int Count => this.委譲.Count;
 }

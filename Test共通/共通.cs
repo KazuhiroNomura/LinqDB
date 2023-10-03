@@ -151,8 +151,8 @@ public abstract class 共通 {
             情報.Add.例外++;
         }
     }
-    protected static void Del<TValue, TKey, TContainer>(ref AddDel情報 情報,Set<TValue,TKey,TContainer> Set)
-        where TValue : Entity<TKey,TContainer>, IWriteRead<TValue>
+    protected static void Del<TValue, TKey, TContainer>(ref AddDel情報 情報,Set<TKey,TValue,TContainer> Set)
+        where TValue : Entity<TKey,TContainer>
         //where TValue : Entity<TKey,TContainer>, IPrimaryKey<TKey>, IEquatable<TValue>//,IWriteRead<TValue>
         where TKey : struct, IEquatable<TKey>
         where TContainer : LinqDB.Databases.Container {
