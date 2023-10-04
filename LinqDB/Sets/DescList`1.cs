@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using LinqDB.Enumerables;
+
 namespace LinqDB.Sets;
 
 /// <summary>単方向リストの逆方向コンテナ</summary>

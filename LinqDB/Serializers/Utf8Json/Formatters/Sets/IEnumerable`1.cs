@@ -5,10 +5,12 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class IEnumerable<T>:IJsonFormatter<Sets.IEnumerable<T>>  {
-    //public static readonly Set<T> Instance=new();
-    public void Serialize(ref JsonWriter writer,Sets.IEnumerable<T> value,IJsonFormatterResolver Resolver){
+using Collections=LinqDB.Sets;
+public class IEnumerable<T>:IJsonFormatter<Collections.IEnumerable<T>>  {
+#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    private static readonly IEnumerable<T> Instance=new();
+#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
+    public void Serialize(ref JsonWriter writer,Collections.IEnumerable<T> value,IJsonFormatterResolver Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var type=value.GetType();
@@ -17,13 +19,13 @@ public class IEnumerable<T>:IJsonFormatter<Sets.IEnumerable<T>>  {
         writer.WriteValue(type,value,Resolver);
         writer.WriteEndArray();
     }
-    public Sets.IEnumerable<T> Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    public Collections.IEnumerable<T> Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
         var value=reader.ReadValue(type,Resolver);
         reader.ReadIsEndArrayWithVerify();
-        return (Sets.IEnumerable<T>)value;
+        return (Collections.IEnumerable<T>)value;
     }
 }

@@ -4,7 +4,7 @@
 //using System.Threading.Tasks;
 using Collections=System.Collections;
 namespace LinqDB.Sets;
-using Generic=Collections.Generic;
-public interface ICollection<T> : IEnumerable<T>,Generic.ICollection<T>
+using Generic=System.Collections.Generic;
+public interface ICollection<T> : IEnumerable<T>,System.Collections.Generic.ICollection<T>
 {
 }

@@ -39,13 +39,6 @@ public class Object : MemoryPackFormatter<T>{
             default:{
                 FormatterResolver.GetFormatter(type);
                 writer.WriteValue(type, value);
-
-
-
-
-
-
-
                 break;
             }
         }

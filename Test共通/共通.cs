@@ -159,7 +159,7 @@ public abstract class 共通 {
         if(Set.LongCount==0) return;
         try {
             var Sampling = Set.Sampling;
-            if(Set.RemoveKey(Sampling.PrimaryKey)) {
+            if(Set.RemoveKey(Sampling.Key)) {
                 情報.Del.成功++;
             } else {
                 情報.Del.重複++;

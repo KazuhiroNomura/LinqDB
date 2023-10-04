@@ -6,9 +6,9 @@ using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Helpers;
 using Math = LinqDB.Reflection.Math;
-using Collections=System.Collections;
+using System.Collections.Generic;
+using Generic=System.Collections.Generic;
 namespace LinqDB.Optimizers;
-using Collections.Generic;
 
 partial class Optimizer {
     private class 変換_インラインループ独立:変換_インラインループ {
@@ -302,7 +302,7 @@ partial class Optimizer {
                                                     first,
                                                     argument => Expression.Call(
                                                         作業,
-                                                        作業_Type.GetMethod(nameof(ICollection<int>.Add),Instance_NonPublic_Public),
+                                                        作業_Type.GetMethod(nameof(Generic.ICollection<int>.Add),Instance_NonPublic_Public),
                                                         argument
                                                     )
                                                 )
@@ -792,7 +792,7 @@ partial class Optimizer {
                                     Expression.IfThenElse(
                                         Call(
                                             FILO_Enumerator,
-                                            nameof(Collections.IEnumerator.MoveNext)
+                                            nameof(System.Collections.IEnumerator.MoveNext)
                                         ),
                                         Expression.Block(
                                             Expression.Assign(
@@ -800,7 +800,7 @@ partial class Optimizer {
                                                 Expression.Subtract(
                                                     Expression.Property(
                                                         FILO_Enumerator,
-                                                        nameof(Collections.IEnumerator.Current)
+                                                        nameof(System.Collections.IEnumerator.Current)
                                                     ),
                                                     Average
                                                 )
@@ -1828,7 +1828,7 @@ partial class Optimizer {
                                 Expression.IfThenElse(
                                     Call(
                                         FILO_Enumerator,
-                                        nameof(Collections.IEnumerator.MoveNext)
+                                        nameof(System.Collections.IEnumerator.MoveNext)
                                     ),
                                     Expression.Block(
                                         Expression.Assign(
@@ -1836,7 +1836,7 @@ partial class Optimizer {
                                             Expression.Subtract(
                                                 Expression.Property(
                                                     FILO_Enumerator,
-                                                    nameof(Collections.IEnumerator.Current)
+                                                    nameof(System.Collections.IEnumerator.Current)
                                                 ),
                                                 Average
                                             )
@@ -1977,7 +1977,7 @@ partial class Optimizer {
                                     Expression.IfThenElse(
                                         Call(
                                             FILO_Enumerator,
-                                            nameof(Collections.IEnumerator.MoveNext)
+                                            nameof(System.Collections.IEnumerator.MoveNext)
                                         ),
                                         Expression.Block(
                                             Expression.Assign(
@@ -1985,7 +1985,7 @@ partial class Optimizer {
                                                 Expression.Subtract(
                                                     Expression.Property(
                                                         FILO_Enumerator,
-                                                        nameof(Collections.IEnumerator.Current)
+                                                        nameof(System.Collections.IEnumerator.Current)
                                                     ),
                                                     Average
                                                 )
@@ -2392,7 +2392,7 @@ partial class Optimizer {
                             MethodCall0_Arguments[0],
                             argument => Expression.Call(
                                 List,
-                                ListType.GetMethod(nameof(Collections.IList.Add)),
+                                ListType.GetMethod(nameof(System.Collections.IList.Add)),
                                 argument
                             )
                         );

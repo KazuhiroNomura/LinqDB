@@ -9,7 +9,7 @@ using Reader = MemoryPackReader;
 using Sets = LinqDB.Sets;
 // ReSharper disable once InconsistentNaming
 public class Set<TKey,TElement>:MemoryPackFormatter<Sets.Set<TKey,TElement>>
-    where TElement:IPrimaryKey<TKey>
+    where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
     public static readonly Set<TKey,TElement> Instance=new();//リフレクションで使われる
     private Set(){}

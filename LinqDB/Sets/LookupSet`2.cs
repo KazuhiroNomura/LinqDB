@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Collections=System.Collections;
 namespace LinqDB.Sets;
 using Linq=System.Linq;
-using Generic=Collections.Generic;
+using Generic=System.Collections.Generic;
 public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILookup<TKey,TValue>{
     public LookupSet()  { }
     public LookupSet(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}

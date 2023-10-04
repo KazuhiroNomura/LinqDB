@@ -1,4 +1,5 @@
-﻿using LinqDB.Sets;
+﻿using LinqDB.Enumerables;
+using LinqDB.Sets;
 using LinqDB.Helpers;
 
 namespace TestLinqDB.Sets;

@@ -10,7 +10,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TElement"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 public class Set<TKey,TElement>:Set<TElement>
-    where TElement:IPrimaryKey<TKey>
+    where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement> InstanceMessagePack=new();
@@ -72,7 +72,7 @@ public class Set<TKey,TElement>:Set<TElement>
             return false;
         LinkedNodeT LinkedNode = TreeNode;
         for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-            if(a.Item.PrimaryKey.Equals(Key)) {
+            if(a.Item.Key.Equals(Key)) {
                 this.RemoveRelationship(a.Item);
                 LinkedNode._LinkedNodeItem=a._LinkedNodeItem;
                 while(TreeNode.P is not null&&TreeNode.L is null&&TreeNode.R is null&&TreeNode._LinkedNodeItem is null) {
@@ -102,7 +102,7 @@ public class Set<TKey,TElement>:Set<TElement>
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(a.Item.PrimaryKey.Equals(Key)) {
+                if(a.Item.Key.Equals(Key)) {
                     Value=a.Item;
                     return true;
                 }
@@ -119,7 +119,7 @@ public class Set<TKey,TElement>:Set<TElement>
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(a.Item.PrimaryKey.Equals(Key)) {
+                if(a.Item.Key.Equals(Key)) {
                     var Result = new Set<TElement> {
                         a.Item
                     };
@@ -138,7 +138,7 @@ public class Set<TKey,TElement>:Set<TElement>
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
         if(TreeNode is not null) {
             for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(a.Item.PrimaryKey.Equals(Key)) {
+                if(a.Item.Key.Equals(Key)) {
                     return true;
                 }
             }
@@ -157,7 +157,7 @@ public class Set<TKey,TElement>:Set<TElement>
                     LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
                     return true;
                 }
-                if(Comparer.Equals(LinkedNodeItem.Item.PrimaryKey,Item.PrimaryKey)) {
+                if(Comparer.Equals(LinkedNodeItem.Item.Key,Item.Key)) {
                     return false;
                     //throw new RelationshipException("キー"+Item.PrimaryKey.ToString()+"が重複していたので失敗した。");
                 }

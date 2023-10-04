@@ -71,7 +71,7 @@ public class Test_Set1{
     private class Entity:Entity<EntityKey,Container2>,IEquatable<Entity>{
         public Entity(long ID):base(new EntityKey(ID)){
         }
-        public bool Equals(Entity? other)=>other!=null&&this.PrimaryKey.Equals(other.PrimaryKey);
+        public bool Equals(Entity? other)=>other!=null&&this.Key.Equals(other.Key);
 
         protected override void ToStringBuilder(StringBuilder sb){
         }

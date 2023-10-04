@@ -6,6 +6,7 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\kazuh\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_be882858\CoverageData\_LinqDB-TestLinqDB.371183822\Snapshot\snapshot.utdcvr</s:String>
 	
+	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60ac39f7_002Ddeaa_002D4e05_002Da15c_002Da95f6c8cc709/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="AverageDecimal" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

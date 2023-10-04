@@ -1,4 +1,5 @@
-﻿using S = LinqDB.Sets;
+﻿using System.Reflection;
+using S = LinqDB.Sets;
 using E = System.Collections.Generic;
 using Q = System.Linq;
 using LinqDB.Sets;
@@ -107,7 +108,7 @@ public class Set1:共通{
 //}
 public class Set2:共通 {
     [Fact]
-    public void WriteNullable() {
+    public void WriteNullable(){
         //var input = new { a = new Set<Keys.Key,Tables.Table> { new(1) } };
         //this.Utf8Json_Assert(input,actual => Assert.Equal(input,actual,this.Comparer));
         this.MemoryMessageJson_Assert(new { a = new LinqDB.Sets.Set<Keys.Key,Tables.Table> { new(1) } });
@@ -152,19 +153,59 @@ public class SetGroupingSet:共通 {
         var input=s.GroupBy(p=>new{p});
         this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
     }
-    [Fact]public void WriteNullable2(){
-        var C=new LinqDB.Databases.Container();
+    [Fact]public void WriteNullable20(){
+        //var C=new LinqDB.Databases.Container();
+        var s=new S.Set<Tables.Table>{new(1),new(2)};
+        var GroupBy=s.GroupBy(p=>new{p});
+        var input=(S.IEnumerable)GroupBy;
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable21(){
         var s=new S.Set<Tables.Table>{new(1),new(2)};
         var GroupBy=s.GroupBy(p=>new{p});
         var input=new{a=GroupBy,b=(S.IEnumerable)GroupBy,c=(object)GroupBy};
-        this.MessagePack_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
     }
-    [Fact]
-    public void WriteNullable3() {
+    [Fact]public void WriteNullable30() {
         var s=new S.Set<int>{1,2,3,4,5,6};
         var GroupBy=s.GroupBy(p=>p/2);
-        E.IEnumerable<Q.IGrouping<int,int>>a=GroupBy!;
+        var input=(E.IEnumerable<Q.IGrouping<int,int>>)GroupBy;
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable31() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        var input=(S.IEnumerable<S.IGrouping<int,int>>)GroupBy;
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable32() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        var input=GroupBy;
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable33() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        var input=new{a=GroupBy};
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable34() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        var input=new{b=(E.IEnumerable<Q.IGrouping<int,int>>)GroupBy};
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable35() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
+        var input=new{c=(S.IEnumerable<S.IGrouping<int,int>>)GroupBy};
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+    }
+    [Fact]public void WriteNullable36() {
+        var s=new S.Set<int>{1,2,3,4,5,6};
+        var GroupBy=s.GroupBy(p=>p/2);
         var input=new{a=GroupBy,b=(E.IEnumerable<Q.IGrouping<int,int>>)GroupBy,c=(S.IEnumerable<S.IGrouping<int,int>>)GroupBy};
-        this.MessagePack_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
+        this.MemoryMessageJson_Assert(input, actual => Assert.Equal(input, actual, this.Comparer));
     }
 }

@@ -17,7 +17,7 @@ using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 using Collections=System.Collections;
 namespace LinqDB.Helpers;
-using Generic=Collections.Generic;
+using Generic=System.Collections.Generic;
 
 /// <summary>
 /// 設定と定数。
@@ -242,7 +242,7 @@ public static class CommonLibrary {
     //internal const String IOutputSet1_FullName = "LinqDB.Sets.IOutputSet`1";
     //internal const String IGroupingSet2_FullName = "LinqDB.Sets.IGroupingSet`2";
     internal static readonly string Generic_IEnumerable1_FullName = typeof(Generic.IEnumerable<>).FullName!;
-    internal static readonly string Collections_IEnumerable_FullName = typeof(Collections.IEnumerable).FullName!;
+    internal static readonly string Collections_IEnumerable_FullName = typeof(System.Collections.IEnumerable).FullName!;
     internal static readonly string Linq_IGrouping2_FullName = typeof(Linq.IGrouping<,>).FullName!;
     internal static readonly string Sets_IEnumerable1_FullName = typeof(IEnumerable<>).FullName!;
     internal static readonly string Sets_IGrouping2_FullName = typeof(IGrouping<,>).FullName!;

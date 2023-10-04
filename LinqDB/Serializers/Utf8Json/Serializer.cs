@@ -1,73 +1,65 @@
 ﻿using System.IO;
 
-
 using Utf8Json;
 
-
-
 namespace LinqDB.Serializers.Utf8Json;
-using Formatters;
-using Formatters.Others;
-using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
-using System.Collections.Generic;
-
 public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
-    internal readonly Dictionary<Type,IJsonFormatter> TypeFormatter=new();
+    internal readonly System.Collections.Generic.Dictionary<System.Type,IJsonFormatter> TypeFormatter=new();
     private readonly FormatterResolver Resolver=new();
     private readonly IJsonFormatterResolver IResolver;
-
-
-
     public Serializer(){
-        var Formatters=new IJsonFormatter[]{
+        var formatters=new IJsonFormatter[]{
 
-            Object.Instance,
+            Formatters.Others.Object.Instance,
 
-            Binary.Instance,
-            Block.Instance,
-            CatchBlock.Instance,
-            Conditional.Instance,
-            Constant.Instance,
-            DebugInfo.Instance,
-            Default.Instance,
-            Dynamic.Instance,
-            ElementInit.Instance,
-            Expression.Instance,
-            Goto.Instance,
-            Index.Instance,
-            Invocation.Instance,
-            Label.Instance,
-            LabelTarget.Instance,
-            Lambda.Instance,
-            ListInit.Instance,
-            Loop.Instance,
-            MemberAccess.Instance,
-            MemberBinding.Instance,
-            MemberInit.Instance,
-            MethodCall.Instance,
-            New.Instance,
-            NewArray.Instance,
-            Parameter.Instance,
-            Switch.Instance,
-            SwitchCase.Instance,
-            SymbolDocumentInfo.Instance,
-            Try.Instance,
-            TypeBinary.Instance,
-            Unary.Instance,
+            Formatters.Binary.Instance,
+            Formatters.Block.Instance,
+            Formatters.CatchBlock.Instance,
+            Formatters.Conditional.Instance,
+            Formatters.Constant.Instance,
+            Formatters.DebugInfo.Instance,
+            Formatters.Default.Instance,
+            Formatters.Dynamic.Instance,
+            Formatters.ElementInit.Instance,
+            Formatters.Expression.Instance,
+            Formatters.Goto.Instance,
+            Formatters.Index.Instance,
+            Formatters.Invocation.Instance,
+            Formatters.Label.Instance,
+            Formatters.LabelTarget.Instance,
+            Formatters.Lambda.Instance,
+            Formatters.ListInit.Instance,
+            Formatters.Loop.Instance,
+            Formatters.MemberAccess.Instance,
+            Formatters.MemberBinding.Instance,
+            Formatters.MemberInit.Instance,
+            Formatters.MethodCall.Instance,
+            Formatters.New.Instance,
+            Formatters.NewArray.Instance,
+            Formatters.Parameter.Instance,
+            Formatters.Switch.Instance,
+            Formatters.SwitchCase.Instance,
+            Formatters.SymbolDocumentInfo.Instance,
+            Formatters.Try.Instance,
+            Formatters.TypeBinary.Instance,
+            Formatters.Unary.Instance,
 
-            Type.Instance,
-            Member.Instance,
-            Constructor.Instance,
-            Method.Instance,
-            Property.Instance,
-            Event.Instance,
-            Field.Instance,
-            Delegate.Instance,
+            Formatters.Reflection.Type.Instance,
+            Formatters.Reflection.Member.Instance,
+            Formatters.Reflection.Constructor.Instance,
+            Formatters.Reflection.Method.Instance,
+            Formatters.Reflection.Property.Instance,
+            Formatters.Reflection.Event.Instance,
+            Formatters.Reflection.Field.Instance,
+            Formatters.Others.Delegate.Instance,
 
-            CSharpArgumentInfo.Instance,
+            Formatters.CSharpArgumentInfo.Instance,
+            
+            Formatters.Enumerables.IEnumerable.Instance,
+            Formatters.Sets.IEnumerable.Instance,
             this
         };
-        var Resolvers=new[]{
+        var resovers=new[]{
             this.Resolver,
             global::Utf8Json.Resolvers.BuiltinResolver.Instance,//int,byte,double[],List<>,よく使う型
             global::Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
@@ -76,42 +68,12 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
             global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//.Default,//Anonymous
         };
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
-            Formatters,
-            Resolvers
+            formatters,
+            resovers
         );
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
     private void Clear(){
         this.ProtectedClear();
         this.Resolver.Clear();

@@ -48,8 +48,8 @@ public static class PrimaryKeys{
 public class Tables{
     [Serializable]
     public class Entity:Entity<PrimaryKeys.Entity,Container>,IEquatable<Entity>{
-        public decimal ID1=>this.PrimaryKey.ID1;
-        public decimal ID2=>this.PrimaryKey.ID2;
+        public decimal ID1=>this.Key.ID1;
+        public decimal ID2=>this.Key.ID2;
         public readonly decimal ID3;
         public Entity(decimal ID1):base(new PrimaryKeys.Entity(ID1,0)){
         }
@@ -58,7 +58,7 @@ public class Tables{
         }
         public bool Equals(Entity? other){
             if(other is null) return false;
-            if(!this.PrimaryKey.Equals(other.PrimaryKey)) return false;
+            if(!this.Key.Equals(other.Key)) return false;
             return this.ID3.Equals(other.ID3);
         }
         public override bool Equals(object? obj){
@@ -370,11 +370,11 @@ public class Tables{
             },_=>false),o=>o,i=>i,(o,i)=>new{
                 o,i
             }).Any());
-            Assert.True(k1.GroupJoin(k1,o=>o.PrimaryKey,i=>i.PrimaryKey,(outer,inner)=>new{
+            Assert.True(k1.GroupJoin(k1,o=>o.Key,i=>i.Key,(outer,inner)=>new{
                 outer,inner
             }).Any());
             Assert.True(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(_,inner)=>inner).Any());
-            Assert.True(k3.GroupJoin(k3,o=>o.PrimaryKey,i=>i.PrimaryKey,(_,inner)=>inner).Any());
+            Assert.True(k3.GroupJoin(k3,o=>o.Key,i=>i.Key,(_,inner)=>inner).Any());
         }
         var expected=Set作成(
             new{
@@ -484,17 +484,17 @@ public class Tables{
             }
             var sn1=dn1.ToSet();
             var sn2=dn2.ToSet();
-            dn1.Join(dn2,o=>o.PrimaryKey,i=>i.PrimaryKey,(o,i)=>new{
+            dn1.Join(dn2,o=>o.Key,i=>i.Key,(o,i)=>new{
                 o,i
             });
-            dn1.Join(dn2,o=>o.PrimaryKey,i=>i.PrimaryKey,(o,i)=>new{
+            dn1.Join(dn2,o=>o.Key,i=>i.Key,(o,i)=>new{
                 o,i
             }).ToSet();
             {
-                var 正解=dn1.Join(dn2,o=>o.PrimaryKey,i=>i.PrimaryKey,(o,i)=>new{
+                var 正解=dn1.Join(dn2,o=>o.Key,i=>i.Key,(o,i)=>new{
                     o,i
                 }).ToSet();
-                var 回答=sn1.Join(sn2,o=>o.PrimaryKey,i=>i.PrimaryKey,(o,i)=>new{
+                var 回答=sn1.Join(sn2,o=>o.Key,i=>i.Key,(o,i)=>new{
                     o,i
                 });
                 Assert.Equal(正解,回答);

@@ -1,20 +1,12 @@
 ﻿using System.IO;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
-
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions = System.Linq.Expressions;
-using Formatters=LinqDB.Serializers.MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack;
-///using Formatters;
-//using Formatters.Others;
-//using LinqDB.Serializers.MessagePack.Formatters.Reflection;
-public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{
-    //IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
+public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{//IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
     
-    
-    
+
     private readonly MessagePackSerializerOptions Options;
     public Serializer(){
         var formatters=new IMessagePackFormatter[]{
@@ -64,24 +56,17 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
 
             Formatters.CSharpArgumentInfo.Instance,
             
-            Formatters.Sets.IEnumerable.Instance
+            Formatters.Enumerables.IEnumerable.Instance,
+            Formatters.Sets.IEnumerable.Instance,
+            
         };
         var resolvers=new IFormatterResolver[]{
-            //this.AnonymousExpressionMessagePackFormatterResolver,//先頭に無いと匿名型やシリアライズ可能型がDictionaryになってしまう
             global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-
             global::MessagePack.Resolvers.BuiltinResolver.Instance,
-            global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
-            //MessagePack.Resolvers.DynamicEnumAsStringResolver.Instance,
-            //MessagePack.Resolvers.DynamicEnumResolver.Instance,
-            //MessagePack.Resolvers.DynamicObjectResolver.Instance,//MessagePackObjectAttribute
-            global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
+            //global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
+            //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
             global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
             FormatterResolver.Instance
-            //this.Resolver,
-            //MessagePack.Resolvers.StandardResolver.Instance,
-            //MessagePack.Resolvers.StandardResolver.Instance,//
-            //this.AnonymousExpressionMessagePackFormatterResolver,
         };
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
@@ -89,29 +74,10 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
                 resolvers
             )
         );
-        //var e0=this.Options.Resolver.GetFormatter<Expressions.Expression>();
-        //var e1=this.Options.Resolver.GetFormatter<Expressions.UnaryExpression>();
-        //var e2=this.Options.Resolver.GetFormatter<Expressions.SwitchCase>();
-        var e3=this.Options.Resolver.GetFormatter<Expressions.SwitchExpression>();
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     private void Clear(){
         this.ProtectedClear();
+        
         
     }
     public override byte[] Serialize<T>(T value){

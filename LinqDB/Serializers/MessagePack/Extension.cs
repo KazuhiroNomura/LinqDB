@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.ObjectModel;
-
-
-
+using System.Diagnostics;
+using System.Reflection.Emit;
+using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
+
+using Microsoft.CodeAnalysis;
+
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 using O=MessagePackSerializerOptions;
@@ -125,13 +128,44 @@ internal static class Extension{
         
         return Parameters;
     }
+    private delegate void SerializeDelegate(object Formatter,ref MessagePackWriter writer,object value,
+        MessagePackSerializerOptions options);
+    private static readonly System.Type[] SerializeTypes={typeof(object),typeof(MessagePackWriter).MakeByRefType(),typeof(object),typeof(MessagePackSerializerOptions)};
     public static void WriteValue(this ref Writer writer,Type type,object? value,O Resolver) {
-        var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-        MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
+        var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+        var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
+        var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
+        var I=D.GetILGenerator();
+        I.Ldarg_0();//formatter
+        I.Ldarg_1();//writer
+        I.Ldarg_2();//value
+        I.Unbox_Any(Formatter_Serialize.GetParameters()[1].ParameterType);
+        I.Ldarg_3();//options
+        I.Callvirt(Formatter_Serialize);
+        I.Ret();
+        ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
+        //MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
     }
+    private delegate object DeserializeDelegate(object Formatter,ref MessagePackReader reader,
+        MessagePackSerializerOptions options);
+    private static readonly System.Type[] DeserializeTypes={
+        typeof(object),typeof(MessagePackReader).MakeByRefType(),typeof(MessagePackSerializerOptions)
+    };
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
-        var Formatter=Resolver.Resolver.GetFormatterDynamic(type);
-        return MessagePack.Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
+        var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+        var Method=Formatter.GetType().GetMethod("Deserialize")!;
+        var D=new DynamicMethod("",typeof(object),DeserializeTypes){InitLocals=false};
+        var I=D.GetILGenerator();
+        I.Ldarg_0();
+        I.Ldarg_1();
+        I.Ldarg_2();
+        I.Callvirt(Method);
+        I.Box(Method.ReturnType);
+        I.Ret();
+        var Del=(DeserializeDelegate)D.CreateDelegate(typeof(DeserializeDelegate));
+        var Result=Del(Formatter,ref reader,Resolver);
+        return Result;
+        //return MessagePack.Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
     }
     
     

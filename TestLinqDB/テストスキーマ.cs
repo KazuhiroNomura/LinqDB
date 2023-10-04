@@ -21,10 +21,10 @@ namespace TestLinqDB{
             //public Keys.Key PrimaryKey{get;}
             public Table():base(default){}
             [MemoryPack.MemoryPackConstructor]
-            public Table(Keys.Key PrimaryKey):base(PrimaryKey){}
+            public Table(Keys.Key Key):base(Key){}
             public Table(int a):base(new Keys.Key(a)){}
-            public bool Equals(Table? other)=>other!=null&&this.PrimaryKey.Equals(other.PrimaryKey);
-            public override bool Equals(object? obj)=>obj is Table other&&this.PrimaryKey.Equals(other.PrimaryKey);
+            public bool Equals(Table? other)=>other!=null&&this.Key.Equals(other.Key);
+            public override bool Equals(object? obj)=>obj is Table other&&this.Key.Equals(other.Key);
         }
     }
 }

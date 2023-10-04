@@ -19,7 +19,8 @@ public class FormatterResolver : 共通
         //    if(type.IsDisplay()){
         Serializer.Serialize(ClassDisplay取得());
         //    }
-        Assert.Throws<MessagePackSerializationException>(() => Serializer.Serialize(this));
+        var ex=Assert.Throws<MessagePackSerializationException>(() => Serializer.Serialize(this));
+        Assert.True(ex.InnerException is NullReferenceException);
         //}
     }
     [Fact]

@@ -8,18 +8,17 @@ namespace LinqDB.Sets;
 /// <typeparam name="TKey">結合式のType</typeparam>
 /// <typeparam name="TElement">値のType</typeparam>
 public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey,TElement>>,Generic.ICollection<GroupingSet<TKey,TElement>>,
-    //SetGrouping<TKey,TElement,GroupingSet<TKey,TElement>>,
     IEquatable<IEnumerable<IGrouping<TKey,TElement>>>,
     IEquatable<Generic.IEnumerable<Linq.IGrouping<TKey,TElement>>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
-    private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
+    //private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     private new static readonly Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     private new static readonly Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     static SetGroupingSet()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance);
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>
-    protected readonly Generic.IEqualityComparer<TKey> KeyComparer;
+    private readonly Generic.IEqualityComparer<TKey> KeyComparer;
 
     public int Count => (int)this.LongCount;
 
@@ -60,13 +59,7 @@ public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey
                 LinkedNode=LinkedNode_LinkedNodeItem;
             }
         }
-        InternalAdd後半(
-            下限,
-            上限,
-            TreeNode,
-            HashCode,
-            new LinkedNodeItemT(new GroupingSet<TKey,TElement>(Key,Value))
-        );
+        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(new GroupingSet<TKey,TElement>(Key,Value)));
         this._LongCount++;
     }
     //internal abstract IGroupingCollection<TKey,TValue> InternalKeyValue(TKey Key,TValue Value);
@@ -108,20 +101,15 @@ public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey
             default:return false;
         }
     }
-
     public void Add(GroupingSet<TKey,TElement> item) {
         if(this.InternalAdd(item))
             this._LongCount++;
     }
-
     public void Clear()=>this.InternalClear();
-
     public bool Contains(GroupingSet<TKey,TElement> item)=>this.InternalContains(item);
-
     public void CopyTo(GroupingSet<TKey,TElement>[] array,int arrayIndex) {
         throw new NotImplementedException();
     }
-
     public bool Remove(GroupingSet<TKey,TElement> item) {
         throw new NotImplementedException();
     }

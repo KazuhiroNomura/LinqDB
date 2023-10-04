@@ -10,7 +10,7 @@ namespace LinqDB.Sets;
 /// <typeparam name="TElement"></typeparam>
 /// <typeparam name="TKey"></typeparam>
 /// <typeparam name="TContainer"></typeparam>
-public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,ISet2<TContainer>
+public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,IContainer<TContainer>
     where TElement : Entity<TKey,TContainer>
     where TKey : struct, IEquatable<TKey>
     where TContainer : Container{
@@ -108,7 +108,7 @@ public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,ISet2<TCon
         var List追加Value = new List<TElement>();
         foreach(var v1 in this) {
             if(second.Contains(v1)) continue;
-            List削除Key.Add(v1.PrimaryKey);
+            List削除Key.Add(v1.Key);
         }
         foreach(var v2 in second) {
             if(this.Contains(v2)) continue;

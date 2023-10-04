@@ -25,7 +25,7 @@ public class Entity2{
         int key0=0,key1=1,value0=2,value1=3;
         var o=new Entity実装(key0,key1,value0,value1);
         var expected=new Key(key0,key1);
-        Assert.Equal(expected,o.PrimaryKey);
-        Assert.Equal(expected.GetHashCode(),o.PrimaryKey.GetHashCode());
+        Assert.Equal(expected,o.Key);
+        Assert.Equal(expected.GetHashCode(),o.Key.GetHashCode());
     }
 }

@@ -25,10 +25,9 @@ using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.CSharp.RuntimeBinder;
-using Collections=System.Collections;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
-using Generic=Collections.Generic;
+using Generic=System.Collections.Generic;
 /// <summary>
 /// Expressionを最適化する
 /// </summary>
@@ -1105,7 +1104,7 @@ public sealed partial class Optimizer:IDisposable{
         if(IEnumerable1 is not null) {
             return IEnumerable1;
         }
-        return typeof(Collections.IEnumerable)==Type
+        return typeof(System.Collections.IEnumerable)==Type
             ? Type
             : Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName)!;
     }
@@ -1120,7 +1119,7 @@ public sealed partial class Optimizer:IDisposable{
             return Type.GetGenericArguments()[0];
         }
         var IEnumerable = Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName);
-        if(IEnumerable is not null||typeof(Collections.IEnumerable)==Type) {
+        if(IEnumerable is not null||typeof(System.Collections.IEnumerable)==Type) {
             return typeof(object);
         }
         throw new NotSupportedException();

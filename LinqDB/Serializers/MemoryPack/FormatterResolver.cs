@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using LinqDB.Helpers;
-using LinqDB.Sets;
 
+
+using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
@@ -24,26 +25,30 @@ internal static class FormatterResolver {
                 
                 
             }else if(type.IsInterface){
-                if(RegisterInterface(type,typeof(IGrouping  <,>),typeof(Formatters.Sets.IGrouping  <,>)))return;
-                if(RegisterInterface(type,typeof(IEnumerable< >),typeof(Formatters.Sets.IEnumerable< >)))return;
-                
-                
-                
+
+                if(RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))goto 型パラメーターを登録;
+                if(RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))goto 型パラメーターを登録;
+                if(RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))goto 型パラメーターを登録;
+                if(RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))goto 型パラメーターを登録;
             }else{
                 
                 var type0=type;
                 do{
-                    if(RegisterType(type0,typeof(GroupingSet        <, >),typeof(Formatters.Sets.GroupingSet   <, >)))break;
-                    if(RegisterType(type0,typeof(SetGroupingSet     <, >),typeof(Formatters.Sets.SetGroupingSet<, >)))break;
-                    if(RegisterType(type0,typeof(Set                <,,>),typeof(Formatters.Sets.Set           <,,>)))break;
-                    if(RegisterType(type0,typeof(Set                <, >),typeof(Formatters.Sets.Set           <, >)))break;
-                    if(RegisterType(type0,typeof(Set                <  >),typeof(Formatters.Sets.Set           <  >)))break;
+                    if(RegisterType(type0,typeof(Enumerables.GroupingList<, >)))break;
+                    if(RegisterType(type0,typeof(Sets.GroupingSet        <, >)))break;
+                    if(RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))break;
+                    if(RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))break;
+                    if(RegisterType(type0,typeof(Sets.Set                <,,>)))break;
+                    if(RegisterType(type0,typeof(Sets.Set                <, >)))break;
+                    if(RegisterType(type0,typeof(Sets.Set                <  >)))break;
                     do{
-                        if(type0.BaseType is null) return;
+                        if(type0==typeof(object)) goto 型パラメーターを登録;
                         type0=type0.BaseType!;
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
             }
+            型パラメーターを登録:
+            foreach(var GenericArgument in type.GetGenericArguments()) GetFormatter(GenericArgument);
         }
         
         
@@ -53,32 +58,34 @@ internal static class FormatterResolver {
         
         static bool RegisterInterface(Type type,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
             Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface||FormatterGenericInterfaceDefinition.IsInterface);
-            if(type.IsGenericType&&type.GetGenericTypeDefinition()==FormatterGenericInterfaceDefinition){
+            if(type.IsGenericType&&type.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
                 RegisterGeneric(type,FormatterGenericInterfaceDefinition);
                 return true;
             }
             foreach(var Interface in type.GetInterfaces()){
                 if(!Interface.IsGenericType)continue;
-                if(Interface.GetGenericTypeDefinition()==FormatterGenericInterfaceDefinition){
+                if(Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
                     RegisterGeneric(Interface,FormatterGenericInterfaceDefinition);
                     return true;
                 }
             }
             return false;
         }
-        static bool RegisterType(Type type,Type 検索したいキーGenericTypeDefinition,Type FormatterGenericTypeDefinition){
-            Debug.Assert(type.IsGenericType);
+        static bool RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition){
+            Debug.Assert(type0.IsGenericType);
             Debug.Assert(!検索したいキーGenericTypeDefinition.IsInterface);
-            if(type.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition)return false;
-            RegisterGeneric(type,FormatterGenericTypeDefinition);
+            if(type0.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition)return false;
+            var cctor=type0.GetConstructor(System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic,Type.EmptyTypes)!;
+            cctor.Invoke(null,Array.Empty<object>());
+            //var Formatter0=type0.GetValue("InstanceMemoryPack");
+            //var Register = Serializer.Register.MakeGenericMethod(type0);
+            //Register.Invoke(null,new object?[]{Formatter0});
             return true;
-
-
         }
-        static void RegisterGeneric(Type type,Type FormatterGenericTypeDefinition){
-            var GenericArguments=type.GetGenericArguments();
+        static void RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
+            var GenericArguments=type0.GetGenericArguments();
             var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-            var Register = Serializer.Register.MakeGenericMethod(type);
+            var Register = Serializer.Register.MakeGenericMethod(type0);
             var Instance=FormatterGenericType.GetValue("Instance")!;
             Register.Invoke(null,new object?[]{Instance});
         }
@@ -96,4 +103,3 @@ internal static class FormatterResolver {
         }
     }
 }
-//            foreach(var GenericArgument in type.GetGenericArguments()) GetFormatter(GenericArgument);

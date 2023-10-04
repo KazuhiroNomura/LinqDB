@@ -5,8 +5,8 @@ using Writer = JsonWriter;
 using Reader = JsonReader;
 using Sets=LinqDB.Sets;
 public class IGrouping<TKey,TElement>:IJsonFormatter<Sets.IGrouping<TKey,TElement>>{
+    public static readonly IGrouping<TKey,TElement> Instance=new();//リフレクションで使われる
 #pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
-    //public static readonly IGrouping<TKey,TElement> Instance=new();//リフレクションで使われる
 #pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
     public void Serialize(ref Writer writer,Sets.IGrouping<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;

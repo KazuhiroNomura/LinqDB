@@ -38,15 +38,7 @@ public class Object : IJsonFormatter<T>{
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
             default:{
                 writer.WriteValue(type,value,Resolver);
-                //var Formatter = Resolver.GetFormatterDynamic(type);
-                //var Serialize = Formatter.GetType().GetMethod("Serialize");
-                //Debug.Assert(Serialize is not null);
-                //var Objects3 = new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
-                //Objects3[0]=writer;
-                //Objects3[1]=value;
-                //Objects3[2]=Resolver;
-                //Serialize.Invoke(Formatter, Objects3);
-                //writer=(Writer)Objects3[0];
+                
                 break;
             }
         }

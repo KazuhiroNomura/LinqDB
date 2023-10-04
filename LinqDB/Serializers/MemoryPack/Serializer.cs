@@ -3,132 +3,80 @@
 using MemoryPack;
 
 namespace LinqDB.Serializers.MemoryPack;
-using Formatters;
-using Formatters.Others;
-using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 public class Serializer:Serializers.Serializer,System.IServiceProvider{
-    public static readonly System.Reflection.MethodInfo Register=Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Object.Instance));
-    public object GetService(System.Type serviceType){
-        throw new System.NotImplementedException();
-    }
+    public static readonly System.Reflection.MethodInfo Register=Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance));
+    public object GetService(System.Type serviceType)=>throw new System.NotImplementedException();
     private readonly MemoryPackSerializerOptions Options;
     public Serializer(){
         this.Options=new(){ServiceProvider=this};
 
-        MemoryPackFormatterProvider.Register(Object.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance);
 
-        MemoryPackFormatterProvider.Register(Binary.Instance);
-        MemoryPackFormatterProvider.Register(Block.Instance);
-        MemoryPackFormatterProvider.Register(CatchBlock.Instance);
-        MemoryPackFormatterProvider.Register(Conditional.Instance);
-        MemoryPackFormatterProvider.Register(Constant.Instance);
-        MemoryPackFormatterProvider.Register(DebugInfo.Instance);
-        MemoryPackFormatterProvider.Register(Default.Instance);
-        MemoryPackFormatterProvider.Register(Dynamic.Instance);
-        MemoryPackFormatterProvider.Register(ElementInit.Instance);
-        MemoryPackFormatterProvider.Register(Expression.Instance);
-        MemoryPackFormatterProvider.Register(Goto.Instance);
-        MemoryPackFormatterProvider.Register(Index.Instance);
-        MemoryPackFormatterProvider.Register(Invocation.Instance);
-        MemoryPackFormatterProvider.Register(Label.Instance);
-        MemoryPackFormatterProvider.Register(LabelTarget.Instance);
-        MemoryPackFormatterProvider.Register(Lambda.Instance);
-        MemoryPackFormatterProvider.Register(ListInit.Instance);
-        MemoryPackFormatterProvider.Register(Loop.Instance);
-        MemoryPackFormatterProvider.Register(MemberAccess.Instance);
-        MemoryPackFormatterProvider.Register(MemberBinding.Instance);
-        MemoryPackFormatterProvider.Register(MemberInit.Instance);
-        MemoryPackFormatterProvider.Register(MethodCall.Instance);
-        MemoryPackFormatterProvider.Register(New.Instance);
-        MemoryPackFormatterProvider.Register(NewArray.Instance);
-        MemoryPackFormatterProvider.Register(Parameter.Instance);
-        MemoryPackFormatterProvider.Register(Switch.Instance);
-        MemoryPackFormatterProvider.Register(SwitchCase.Instance);
-        MemoryPackFormatterProvider.Register(SymbolDocumentInfo.Instance);
-        MemoryPackFormatterProvider.Register(Try.Instance);
-        MemoryPackFormatterProvider.Register(TypeBinary.Instance);
-        MemoryPackFormatterProvider.Register(Unary.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Binary.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Block.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.CatchBlock.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Conditional.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Constant.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.DebugInfo.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Default.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Dynamic.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.ElementInit.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Expression.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Goto.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Index.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Invocation.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Label.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.LabelTarget.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Lambda.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.ListInit.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Loop.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberAccess.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberBinding.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberInit.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MethodCall.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.New.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.NewArray.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Parameter.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Switch.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.SwitchCase.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.SymbolDocumentInfo.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Try.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.TypeBinary.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Unary.Instance);
         
-        MemoryPackFormatterProvider.Register(Type.Instance);
-        MemoryPackFormatterProvider.Register(Member.Instance);
-        MemoryPackFormatterProvider.Register(Constructor.Instance);
-        MemoryPackFormatterProvider.Register(Method.Instance);
-        MemoryPackFormatterProvider.Register(Event.Instance);
-        MemoryPackFormatterProvider.Register(Property.Instance);
-        MemoryPackFormatterProvider.Register(Field.Instance);
-        MemoryPackFormatterProvider.Register(Delegate.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Type.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Member.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Constructor.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Method.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Event.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Property.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Reflection.Field.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Others.Delegate.Instance);
 
-        MemoryPackFormatterProvider.Register(CSharpArgumentInfo.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.CSharpArgumentInfo.Instance);
+        
+        MemoryPackFormatterProvider.Register(Formatters.Enumerables.IEnumerable.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.Sets.IEnumerable.Instance);
 
     }
-    //private readonly object[] objects1 = new object[1];
-    //internal void RegisterAnonymousDisplay(System.Type type) {
-    //    if(type.IsDisplay()){
-    //        //if(DisplayClass.DictionarySerialize.ContainsKey(Type)) return;
-    //        var FormatterType = typeof(DisplayClass<>).MakeGenericType(type);
-    //        var Instance=FormatterType.GetField("Instance")!;
-    //        var objects1=this.objects1;
-    //        objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-    //        var Register = Serializer.Register.MakeGenericMethod(type);
-    //        Register.Invoke(null,objects1);
-    //    }else if(type.IsArray) {
-    //        this.RegisterAnonymousDisplay(type.GetElementType());
-    //    }else if(type.IsGenericType) {
-    //        if(type.IsAnonymous()) {
-    //            var FormatterType = typeof(Anonymous<>).MakeGenericType(type);
-    //            var Instance=FormatterType.GetField("Instance")!;
-    //            var objects1=this.objects1;
-    //            objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-    //            var Register = Serializer.Register.MakeGenericMethod(type);
-    //            Register.Invoke(null,objects1);
-    //        } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
-    //            //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter)) return(IMessagePackFormatter<T>)Formatter;
-    //            var FormatterType = typeof(ExpressionT<>).MakeGenericType(type);
-    //            var Instance = FormatterType.GetField("Instance")!;
-    //            var objects1=this.objects1;
-    //            objects1[0]=Instance.GetValue(null)!;// System.Activator.CreateInstance(FormatterType)!;
-    //            var Register = Serializer.Register.MakeGenericMethod(type);
-    //            Register.Invoke(null,objects1);
-    //        }else{
-    //            var 検索されるType=type;
-    //            while(typeof(object)!=検索されるType){
-    //                if(検索されるType.IsGenericType){
-    //                    //if(検索されるType.GetGenericTypeDefinition()==typeof(Set<,,>)) {
-    //                    //    var GenericArguments = type.GetGenericArguments();
-    //                    //    var GenericArguments2=new[]{GenericArguments[0],GenericArguments[1]};
-    //                    //    var FormatterType = typeof(Formatters.Sets.Set<,>).MakeGenericType(GenericArguments2);
-    //                    //    type = typeof(Set<,>).MakeGenericType(GenericArguments2);
-    //                    //    var Instance = FormatterType.GetField("Instance")!;
-    //                    //    var objects2 = this.objects1;
-    //                    //    objects2[0]=Instance.GetValue(null)!;
-    //                    //    var register = Serializer.Register.MakeGenericMethod(type);
-    //                    //    register.Invoke(null,objects2);
-    //                    //    break;
-    //                    //}
-    //                    if(GetValue(typeof(Set<,,>),typeof(Formatters.Sets.Set<,,>)))break;
-    //                    if(GetValue(typeof(Set<, >),typeof(Formatters.Sets.Set<, >)))break;
-    //                    if(GetValue(typeof(Set<  >),typeof(Formatters.Sets.Set<  >)))break;
-    //                }
-    //                検索されるType=検索されるType.BaseType!;
-    //                bool GetValue(System.Type 検索したいキーTypeDifinition,System.Type FormatterTypeDifinition){
-    //                    if(検索されるType.GetGenericTypeDefinition()==検索したいキーTypeDifinition){
-    //                        var FormatterType=FormatterTypeDifinition.MakeGenericType(type.GetGenericArguments());
-    //                        var Instance=FormatterType.GetField("Instance")!;
-    //                        var objects1=this.objects1;
-    //                        objects1[0]=Instance.GetValue(null)!;
-    //                        var Register=Serializer.Register.MakeGenericMethod(type);
-    //                        Register.Invoke(null,objects1);
-    //                        return true;
-    //                    }
-    //                    return false;
-    //                }
-    //            }
-    //        }
-    //        foreach(var GenericArgument in type.GetGenericArguments()) this.RegisterAnonymousDisplay(GenericArgument);
-    //    }
-    //}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private void Clear(){
          this.ProtectedClear();
+    
          
     }
     public override byte[] Serialize<T>(T value){

@@ -349,7 +349,7 @@ partial class Optimizer {
                             Debug.Assert(Reflection.Helpers.NoEarlyEvaluation==MethodCall0_Method.GetGenericMethodDefinition());
                             return;
                         }
-                        case nameof(Enumerable.Except): {
+                        case nameof(Sets.ExtensionSet.Except): {
                             Debug.Assert(
                                 MethodCall.Arguments.Count==3
                                 &&
@@ -368,7 +368,7 @@ partial class Optimizer {
                             return;
                         }
                         default:
-                            Debug.Assert(nameof(Enumerable.Join)!=MethodCall0_Method.Name);
+                            Debug.Assert(nameof(Sets.ExtensionSet.Join)!=MethodCall0_Method.Name);
                             break;
                     }
                 }
@@ -562,7 +562,7 @@ partial class Optimizer {
                             Debug.Assert(Reflection.Helpers.NoEarlyEvaluation==MethodCall0_Method.GetGenericMethodDefinition());
                             return MethodCall0;
                         }
-                        case nameof(Enumerable.Except): {
+                        case nameof(Sets.ExtensionSet.Except): {
                             Debug.Assert(
                                 MethodCall0.Arguments.Count==3
                                 &&
@@ -583,7 +583,7 @@ partial class Optimizer {
                                 : Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
                         }
                         default:
-                            Debug.Assert(nameof(Enumerable.Join)!=MethodCall0_Method.Name);
+                            Debug.Assert(nameof(Sets.ExtensionSet.Join)!=MethodCall0_Method.Name);
                             break;
                     }
                 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using LinqDB.Enumerables;
 
-using Collections =System.Collections;
 namespace LinqDB.Sets;
-using Linq= System.Linq;
-using Generic=Collections.Generic;
-public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,AscList<TValue>>,Linq.ILookup<TKey,TValue>{
+using Linq = System.Linq;
+using Generic = System.Collections.Generic;
+public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,List<TValue>>,Linq.ILookup<TKey,TValue>{
     public LookupList():this(Generic.EqualityComparer<TKey>.Default){}
     public LookupList(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
 
@@ -14,7 +14,7 @@ public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,AscList<TValue>>
     public int Count =>checked((int)this._LongCount);
 
 
-    internal override KeyValueCollection<TValue,TKey,AscList<TValue>> InternalKeyValue(TKey Key,TValue Value)=>new(Key,new(){Value});
+    internal override KeyValueCollection<TValue,TKey,List<TValue>> InternalKeyValue(TKey Key,TValue Value)=>new(Key,new(){Value});
 
     bool Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
 

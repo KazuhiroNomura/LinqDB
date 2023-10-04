@@ -12,7 +12,7 @@ public class GroupingSet<TKey,TElement>:MemoryPackFormatter<Sets.GroupingSet<TKe
     private GroupingSet(){}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.GroupingSet<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
-        
+        FormatterResolver.GetFormatter(typeof(TKey));
         writer.WriteValue(value!.Key);
         var Count=value.LongCount;
         var Formatter=writer.GetFormatter<TElement>();

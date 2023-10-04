@@ -1,7 +1,7 @@
 ﻿using System;
-using Collections=System.Collections;
 namespace LinqDB.Sets;
-using Generic=Collections.Generic;
+using Collections=System.Collections;
+using Generic=System.Collections.Generic;
 
 /// <summary>
 /// キーとコレクションを表す。

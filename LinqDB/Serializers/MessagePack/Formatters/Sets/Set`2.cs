@@ -7,7 +7,7 @@ using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 public class Set<TKey,TElement>:IMessagePackFormatter<Sets.Set<TKey,TElement>>
-    where TElement:Sets.IPrimaryKey<TKey>
+    where TElement:Sets.IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
     //public static readonly Set<TKey,TElement> Instance=new();//リフレクションで使われる
     private static void WriteNullable(ref Writer writer,Sets.Set<TKey,TElement>? value,O Resolver) {

@@ -92,7 +92,7 @@ public partial struct Key:IEquatable<Key> {
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 public partial class Value:Entity<Key,Container>{
     [MemoryPack.MemoryPackIgnore]
-    public メンバー Member => this.PrimaryKey.メンバー;
+    public メンバー Member => this.Key.メンバー;
     [MemoryPack.MemoryPackConstructor]
     public Value():base(new Key(new(0))){
     }

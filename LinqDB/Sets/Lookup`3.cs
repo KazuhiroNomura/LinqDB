@@ -1,9 +1,8 @@
 ﻿#pragma warning disable CS8618 // Null 非許容フィールドは初期化されていません。null 許容として宣言することを検討してください。
 using System;
 using System.Runtime.CompilerServices;
-using Collections=System.Collections;
 namespace LinqDB.Sets;
-using Generic=Collections.Generic;
+using Generic=System.Collections.Generic;
 
 /// <summary>キーと値のペアのジェネリック コレクションを表します。ハッシュジョインで使う</summary>
 /// <typeparam name="TValue">ディクショナリ内の値の型。</typeparam>
@@ -46,13 +45,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
                 LinkedNode=LinkedNode_LinkedNodeItem;
             }
         }
-        InternalAdd後半(
-            下限,
-            上限,
-            TreeNode,
-            HashCode,
-            new LinkedNodeItemT(this.InternalKeyValue(Key,Value))
-        );
+        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(this.InternalKeyValue(Key,Value)));
         this._LongCount++;
     }
     private TCollection?GetCollection(TKey Key){

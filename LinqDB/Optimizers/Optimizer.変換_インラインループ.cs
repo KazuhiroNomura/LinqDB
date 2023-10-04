@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Linq=System.Linq;
+using Linq = System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
 using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
-using Collections=System.Collections;
+using Collections = System.Collections;
+using LinqDB.Enumerables;
+
 namespace LinqDB.Optimizers;
-using Generic=Collections.Generic;
+using Generic = System.Collections.Generic;
 
 partial class Optimizer {
     private class 変換_インラインループ:ReturnExpressionTraverser {
@@ -73,7 +75,7 @@ partial class Optimizer {
                     if(typeof(IGrouping<,>)==Type.GetGenericTypeDefinition()) {
                         Type=typeof(SetGroupingSet<,>).MakeGenericType(Type.GetGenericArguments());
                     } else if(typeof(Linq.IGrouping<,>)==Type.GetGenericTypeDefinition()) {
-                        Type=typeof(SetGroupingAscList<,>).MakeGenericType(Type.GetGenericArguments());
+                        Type=typeof(SetGroupingList<,>).MakeGenericType(Type.GetGenericArguments());
                     } else {
                         var IGroupingSet = Type.GetInterface(CommonLibrary.Sets_IGrouping2_FullName);
                         if(IGroupingSet is not null) {
@@ -81,7 +83,7 @@ partial class Optimizer {
                         } else{
                             var IGrouping = Type.GetInterface(CommonLibrary.Linq_IGrouping2_FullName);
                             Type=IGrouping is not null
-                                ?typeof(SetGroupingAscList<,>).MakeGenericType(IGrouping.GetGenericArguments())
+                                ?typeof(SetGroupingList<,>).MakeGenericType(IGrouping.GetGenericArguments())
                                 :typeof(Set<>).MakeGenericType(IEnumerable1.GetGenericArguments());
                         }
                     }
@@ -128,7 +130,7 @@ partial class Optimizer {
                 var HashSetProperty_Name = this.HashSetProperty_Name;
                 HashSetProperty_Name.Clear();
                 var EntityParameter_Type = EntityParameter.Type;
-                var PrimaryKey = EntityParameter_Type.GetProperty(nameof(IPrimaryKey<int>.PrimaryKey));
+                var PrimaryKey = EntityParameter_Type.GetProperty(nameof(IKey<int>.Key));
                 bool Anonymousか;
                 // ReSharper disable once PossibleNullReferenceException
                 if(PrimaryKey is not null) {
@@ -338,7 +340,7 @@ partial class Optimizer {
             var Expression本体 = ループの内部処理(
                 Expression.Property(
                     Enumerator変数,
-                    nameof(Collections.IEnumerator.Current)
+                    nameof(System.Collections.IEnumerator.Current)
                 )
             );
             return Expression.Block(
@@ -354,7 +356,7 @@ partial class Optimizer {
                                 Expression.Call(
                                     Enumerator変数,
                                     GetEnumerator_ReturnType.GetMethod(
-                                        nameof(Collections.IEnumerator.MoveNext),
+                                        nameof(System.Collections.IEnumerator.MoveNext),
                                         Type.EmptyTypes
                                     )??Reflection.IEnumerator.MoveNext
                                 ),
@@ -587,7 +589,7 @@ partial class Optimizer {
                 case nameof(Linq.Enumerable.GroupBy): {
                     var SetGroupingSet_GenericTypeDefinition = GenericMethodDefinition.DeclaringType==typeof(ExtensionSet)
                         ? typeof(SetGroupingSet<,>)
-                        : typeof(SetGroupingAscList<,>);
+                        : typeof(SetGroupingList<,>);
                     Expression? elementSelector;
                     Expression? resultSelector;
                     Expression? comparer;
@@ -1085,7 +1087,7 @@ partial class Optimizer {
                         Arguments_0,
                         argument => Expression.Call(
                             DescList,
-                            DescList_Type.GetMethod(nameof(ICollection<int>.Add)),
+                            DescList_Type.GetMethod(nameof(System.Collections.Generic.ICollection<int>.Add)),
                             argument
                         )
                     );

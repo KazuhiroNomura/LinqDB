@@ -208,30 +208,6 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal virtual bool InternalAdd(T Item) {
-        //if(Item is null) {
-        //    Debug.Assert(this._Count==0);
-        //    this.変数Enumerator.TreeNode._LinkedNodeItem=new LinkedNodeItemT(default!);
-        //} else {
-        //    var HashCode = (long)(uint)Item.GetHashCode();
-        //    if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
-        //        var Comparer = this.Comparer;
-        //        LinkedNodeT LinkedNode = TreeNode;
-        //        while(true) {
-        //            var LinkedNodeItem = LinkedNode._LinkedNodeItem;
-        //            if(LinkedNodeItem is null) {
-        //                this.AddRelationship(Item);
-        //                LinkedNode._LinkedNodeItem=new LinkedNodeItemT(Item);
-        //                return true;
-        //            }
-        //            if(Comparer.Equals(LinkedNodeItem.Item,Item)) {
-        //                return false;
-        //            }
-        //            LinkedNode=LinkedNodeItem;
-        //        }
-        //    }
-        //    this.AddRelationship(Item);
-        //    InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
-        //}
         var HashCode = typeof(T).IsNullable()?(long)(uint)Item!.GetHashCode():Item is not null?(long)(uint)Item.GetHashCode():0;
         if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = this.Comparer;
@@ -403,7 +379,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// 列挙子。値型なのでメソッド呼び出しがCallなので早い。
     /// </summary>
-    public struct Enumerator:Generic.IEnumerator<T> {
+    public struct Enumerator:System.Collections.Generic.IEnumerator<T> {
         //走査順はthis,L,R
         private LinkedNodeItemT? LinkedNodeItem;
         internal TreeNodeT TreeNode;
@@ -451,7 +427,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
         }
-        object Collections.IEnumerator.Current {
+        object System.Collections.IEnumerator.Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
             get => this.InternalCurrent;
@@ -470,12 +446,12 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         this.変数Enumerator.Reset();
         return this.変数Enumerator;
     }
-    Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator()=>this.GetEnumerator();
+    System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()=>this.GetEnumerator();
     /// <summary>
     /// EnumeratorをASetに返す。
     /// </summary>
     /// <returns></returns>
-    private protected override Collections.IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
+    private protected override System.Collections.IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
     ///// <summary>
     ///// ┌０┐
     ///// 　┌─０─┐
@@ -529,26 +505,26 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// タプル同士の比較方法。
     /// </summary>
-    private protected Generic.IEqualityComparer<T> Comparer{
-        get=>Generic.EqualityComparer<T>.Default;
+    private protected System.Collections.Generic.IEqualityComparer<T> Comparer{
+        get=>System.Collections.Generic.EqualityComparer<T>.Default;
         //set{}
     }
     //[NonSerialized]
-    //private protected readonly Generic.IEqualityComparer<T> Comparer;
+    //private protected readonly System.Collections.Generic.IEqualityComparer<T> Comparer;
     //[field:NonSerialized]
-    //internal Generic.IEqualityComparer<T> Comparer {
+    //internal System.Collections.Generic.IEqualityComparer<T> Comparer {
     //    get;
     //    set;
     //}
 
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    protected ImmutableSet():this(Generic.EqualityComparer<T>.Default){
+    protected ImmutableSet():this(System.Collections.Generic.EqualityComparer<T>.Default){
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(Generic.IEqualityComparer<T> Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(System.Collections.Generic.IEqualityComparer<T> Comparer) {
         this.変数Enumerator.TreeNode=new TreeNodeT(null);
         //this.Comparer=Comparer;
     }
@@ -556,19 +532,19 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。
     /// </summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source):this(source,Generic.EqualityComparer<T>.Default) {}
+    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source):this(source,System.Collections.Generic.EqualityComparer<T>.Default) {}
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer):this(Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source,System.Collections.Generic.IEqualityComparer<T> Comparer):this(Comparer) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(T[] source,Generic.IEqualityComparer<T> Comparer):this(Comparer){
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(T[] source,System.Collections.Generic.IEqualityComparer<T> Comparer):this(Comparer){
         this.PrivateProtectedImport(source);
     }
     ///// <summary>
@@ -1041,7 +1017,7 @@ LinkedNodeItem走査:
     /// <summary>
     /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
     /// </summary>
-    internal struct FILO:Generic.IEnumerator<T> {
+    internal struct FILO:System.Collections.Generic.IEnumerator<T> {
         private LinkedNodeItemT? LinkedListNode;
         /// <summary>
         /// 要素数
@@ -1049,7 +1025,7 @@ LinkedNodeItem走査:
         internal long Count;
         public T Current{get;private set;}
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object Collections.IEnumerator.Current => this.Current;
+        object System.Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1083,14 +1059,14 @@ LinkedNodeItem走査:
         }
         public void Dispose() {
         }
-        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
+        bool System.Collections.IEnumerator.MoveNext() => this.MoveNext();
         public void Reset() {
         }
     }
     /// <summary>
     /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
     /// </summary>
-    internal struct FIFO:Generic.IEnumerator<T>{
+    internal struct FIFO:System.Collections.Generic.IEnumerator<T>{
         private LinkedNodeT FirstNode;
         private LinkedNodeT LastNode;
         private LinkedNodeT CurrentNode;
@@ -1098,7 +1074,7 @@ LinkedNodeItem走査:
             get; private set;
         }
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object Collections.IEnumerator.Current => this.Current;
+        object System.Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1135,9 +1111,9 @@ LinkedNodeItem走査:
         }
         public void Dispose() {
         }
-        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
+        bool System.Collections.IEnumerator.MoveNext() => this.MoveNext();
         public bool SequenceEqual(FIFO other) {
-            var EqualityComparer=Generic.EqualityComparer<T>.Default;
+            var EqualityComparer=System.Collections.Generic.EqualityComparer<T>.Default;
             var a =this.FirstNode._LinkedNodeItem;
             var b = other.FirstNode._LinkedNodeItem;
             while(a is not null&&b is not null) {

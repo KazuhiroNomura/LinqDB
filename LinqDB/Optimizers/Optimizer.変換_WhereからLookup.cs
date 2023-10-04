@@ -96,8 +96,8 @@ partial class Optimizer {
                                         Debug.Assert(GetSet is not null);
                                         if(
                                             ビルド is MemberExpression Member&&
-                                            Member.Member==Member.Expression!.Type.GetProperty(nameof(IPrimaryKey<int>.PrimaryKey))&&
-                                            Set1.GetGenericArguments()[0].GetProperty(nameof(IPrimaryKey<int>.PrimaryKey))==Member.Member
+                                            Member.Member==Member.Expression!.Type.GetProperty(nameof(IKey<int>.Key))&&
+                                            Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
                                         ) {
                                             MethodCall1_Arguments_0=Expression.Call(
                                                 MethodCall1_Arguments_0,

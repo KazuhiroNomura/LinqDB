@@ -83,8 +83,8 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         var List = new List<object>();
         var x_Enumerator = x.GetEnumerator();
         if(x_Enumerator.MoveNext()) {
-            var x_Type = x_Enumerator.Current!.GetType();
-            if(x_Type.IsAnonymous()) {
+            Type x_Type;
+            if(x_Enumerator.Current is not null&&(x_Type=x_Enumerator.Current.GetType()).IsAnonymous()) {
                 if(!this.Dictionary_Anonymous_ValueTuple.TryGetValue(x_Type,out var M)) {
                     this.Types1[0]=typeof(object);
                     var D = new DynamicMethod("",typeof(object),this.Types1,typeof(EnumerableSetEqualityComparer),true) {
@@ -102,14 +102,10 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     M=(Func<object,object>)D.CreateDelegate(typeof(Func<object,object>));
                     this.Dictionary_Anonymous_ValueTuple.Add(x_Type,M);
                 }
-                do {
-                    List.Add(M(x_Enumerator.Current));
-                } while(x_Enumerator.MoveNext());
-            } else {
-                do {
-                    List.Add(x_Enumerator.Current);
-                } while(x_Enumerator.MoveNext());
             }
+            do {
+                List.Add(x_Enumerator.Current);
+            } while(x_Enumerator.MoveNext());
         }
         return List;
     }

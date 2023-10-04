@@ -6,7 +6,7 @@ using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using Sets=LinqDB.Sets;
-public class Set<TKey,TElement>:IJsonFormatter<Sets.Set<TKey,TElement>> where TElement:IPrimaryKey<TKey>
+public class Set<TKey,TElement>:IJsonFormatter<Sets.Set<TKey,TElement>> where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
     public new static readonly Set<TKey,TElement> Instance=new();
     public void Serialize(ref Writer writer,Sets.Set<TKey,TElement>? value,O Resolver){

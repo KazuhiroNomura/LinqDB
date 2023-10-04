@@ -177,7 +177,7 @@ namespace テスト {
             [Serializable]
             public sealed class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>{
                 [JsonIgnore]
-                public decimal ID1 => this.ProtectedPrimaryKey.ID1;
+                public decimal ID1 => this.ProtectedKey.ID1;
                 public int C_ID { get; private set; }
                 public string? C_DATA { get; private set; }
                 public Entity1(int C_ID,string? C_DATA = default) : base(new PrimaryKeys.dbo.Entity1(C_ID,C_ID)) {
@@ -185,7 +185,7 @@ namespace テスト {
                     this.C_DATA=C_DATA;
                 }
                 protected override void ToStringBuilder(StringBuilder sb) {
-                    this.PrimaryKey.ToStringBuilder(sb);
+                    this.Key.ToStringBuilder(sb);
                     sb.Append(",C_ID=");
                     sb.Append(this.C_ID);
                     sb.Append(",C_DATA=");

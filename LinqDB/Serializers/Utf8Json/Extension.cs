@@ -143,6 +143,16 @@ internal static class Extension{
         Objects3[2]=Resolver;
         Serialize.Invoke(Formatter,Objects3);
         writer=(Writer)Objects3[0];
+
+
+        //{
+        //    var g = new LinqDB.Enumerables.GroupingList<int,int>();
+        //    System.Linq.IGrouping<int,int> xx = g;
+        //}
+        //{
+        //    var g = new LinqDB.Serializers.Utf8Json.Formatters.Enumerables.GroupingList<int,int>();
+        //    global::Utf8Json.IJsonFormatter<System.Linq.IGrouping<int,int>> xx = g;
+        //}
     }
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
