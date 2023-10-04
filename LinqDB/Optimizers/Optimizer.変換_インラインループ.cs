@@ -11,7 +11,7 @@ using Collections = System.Collections;
 using LinqDB.Enumerables;
 
 namespace LinqDB.Optimizers;
-using Generic = System.Collections.Generic;
+using Generic = Collections.Generic;
 
 partial class Optimizer {
     private class 変換_インラインループ:ReturnExpressionTraverser {
@@ -89,10 +89,10 @@ partial class Optimizer {
                     }
                 } else {
                     Debug.Assert(
-                        typeof(System.Collections.Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||
+                        typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||
                         Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName) is not null
                     );
-                    var IEnumerable = typeof(System.Collections.Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
+                    var IEnumerable = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
                         ? Type
                         :Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!;
                     if(重複除去希望||Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {

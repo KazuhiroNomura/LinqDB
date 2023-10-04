@@ -116,7 +116,7 @@ public static class Extension{
         var value0=value;
         Formatter.Serialize(ref writer,ref value0);
     }
-    public static T Read<T>(this IMemoryPackFormatter<T>Formatter,ref MemoryPackReader reader){
+    public static T Read<T>(this IMemoryPackFormatter<T>Formatter,ref Reader reader){
         T? value=default;
         Formatter.Deserialize(ref reader,ref value);
         return value!;

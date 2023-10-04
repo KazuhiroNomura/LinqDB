@@ -17,7 +17,7 @@ public sealed class SetGroupingList<TKey,TElement>:ImmutableSet<GroupingList<TKe
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     private new static readonly Serializers.MessagePack.Formatters.Enumerables.SetGroupingList<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance;
     private new static readonly Serializers.Utf8Json.Formatters.Enumerables.SetGroupingList<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance;
-    static SetGroupingList()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance);
+    static SetGroupingList()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance);
     //IEquatable<IEnumerable<IGrouping<TKey,TElement>>>,
     //IEquatable<Generic.IEnumerable<Linq.IGrouping<TKey,TElement>>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません

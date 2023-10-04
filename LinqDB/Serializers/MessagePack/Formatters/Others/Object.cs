@@ -6,11 +6,11 @@ using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack.Formatters.Others;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
-using T = System.Object;
+using G = System.Object;
 using Reflection;
-public class Object : IMessagePackFormatter<T>{
+public class Object : IMessagePackFormatter<G>{
     public static readonly Object Instance = new();
-    private static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
+    private static void Write(ref Writer writer, G? value, MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
         var type = value!.GetType();
         writer.WriteType(type);
@@ -44,13 +44,13 @@ public class Object : IMessagePackFormatter<T>{
         }
 
     }
-    internal static void WriteNullable(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
+    internal static void WriteNullable(ref Writer writer, G? value, MessagePackSerializerOptions Resolver){
         if (writer.TryWriteNil(value)) return;
         Write(ref writer, value, Resolver);
     }
-    public void Serialize(ref Writer writer, T? value, MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer, value, Resolver);
-    private static T Read(ref Reader reader, MessagePackSerializerOptions Resolver){
-        T value;
+    public void Serialize(ref Writer writer, G? value, MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer, value, Resolver);
+    private static G Read(ref Reader reader, MessagePackSerializerOptions Resolver){
+        G value;
         var count = reader.ReadArrayHeader();
         Debug.Assert(count==2);
         var type = reader.ReadType();
@@ -79,6 +79,6 @@ public class Object : IMessagePackFormatter<T>{
 
         return value;
     }
-    internal static T? ReadNullable(ref Reader reader, MessagePackSerializerOptions Resolver) => reader.TryReadNil() ? null : Read(ref reader, Resolver);
-    public T Deserialize(ref Reader reader, MessagePackSerializerOptions Resolver) => ReadNullable(ref reader, Resolver)!;
+    internal static G? ReadNullable(ref Reader reader, MessagePackSerializerOptions Resolver) => reader.TryReadNil() ? null : Read(ref reader, Resolver);
+    public G Deserialize(ref Reader reader, MessagePackSerializerOptions Resolver) => ReadNullable(ref reader, Resolver)!;
 }

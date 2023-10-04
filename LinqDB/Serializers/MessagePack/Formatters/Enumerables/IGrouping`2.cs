@@ -2,10 +2,10 @@
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Enumerables;
-using G=System.Linq;
 using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
+using G=System.Linq;
 
 public class IGrouping<TKey,TElement>:IMessagePackFormatter<G.IGrouping<TKey,TElement>>{
     public static readonly IGrouping<TKey,TElement> Instance=new();

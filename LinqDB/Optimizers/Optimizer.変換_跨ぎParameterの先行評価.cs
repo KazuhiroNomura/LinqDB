@@ -15,13 +15,13 @@ partial class Optimizer{
         /// </summary>
         [Flags]private enum 場所{None=0b000,ループ跨ぎ=0b001,ラムダ跨ぎ=0b011}
         private sealed class 取得_先行評価式:VoidExpressionTraverser_Quoteを処理しない {
-            private readonly Generic.List<(System.Collections.Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報;
+            private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報;
             private sealed class 判定_移動できるか:VoidExpressionTraverser_Quoteを処理しない {
-                private readonly Generic.List<(System.Collections.Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>>ListVariables)>List束縛Parameter情報;
-                private readonly Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>> List内部Parameters=new();
-                private readonly System.Collections.Generic.IEnumerable<Expression>ループ跨ぎParameters;
-                private readonly Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>> List移動できないVariables;
-                public 判定_移動できるか(Generic.List<(System.Collections.Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>>ListVariables)>List束縛Parameter情報,System.Collections.Generic.IEnumerable<Expression>ループ跨ぎParameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>> List移動できないVariables) {
+                private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)>List束縛Parameter情報;
+                private readonly Generic.List<Generic.IEnumerable<ParameterExpression>> List内部Parameters=new();
+                private readonly Generic.IEnumerable<Expression>ループ跨ぎParameters;
+                private readonly Generic.List<Generic.IEnumerable<ParameterExpression>> List移動できないVariables;
+                public 判定_移動できるか(Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)>List束縛Parameter情報,Generic.IEnumerable<Expression>ループ跨ぎParameters,Generic.List<Generic.IEnumerable<ParameterExpression>> List移動できないVariables) {
                     this.List束縛Parameter情報=List束縛Parameter情報;
                     this.ループ跨ぎParameters=ループ跨ぎParameters;
                     this.List移動できないVariables=List移動できないVariables;
@@ -29,7 +29,7 @@ partial class Optimizer{
                 //internal Information Information=default!;
                 internal Generic.Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
 
-                private System.Collections.Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters=>
+                private Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters=>
                     this.Dictionaryラムダ跨ぎParameter.Keys;
 
                 private readonly ParameterExpression ContainerParameter=default!;
@@ -101,11 +101,11 @@ partial class Optimizer{
                 }
             }
             private readonly 判定_移動できるか _判定_移動できるか;
-            private readonly System.Collections.Generic.IEnumerable<Expression>ループ跨ぎParameters;
-            private readonly Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>> List移動できないVariables=new();
+            private readonly Generic.IEnumerable<Expression>ループ跨ぎParameters;
+            private readonly Generic.List<Generic.IEnumerable<ParameterExpression>> List移動できないVariables=new();
 
             [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
-            public 取得_先行評価式(Generic.List<(System.Collections.Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報,System.Collections.Generic.IEnumerable<Expression>ループ跨ぎParameters) {
+            public 取得_先行評価式(Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報,Generic.IEnumerable<Expression>ループ跨ぎParameters) {
                 this.List束縛Parameter情報=List束縛Parameter情報;
                 this._判定_移動できるか=new 判定_移動できるか(List束縛Parameter情報,ループ跨ぎParameters,this.List移動できないVariables);
                 this.ループ跨ぎParameters=ループ跨ぎParameters;
@@ -124,7 +124,7 @@ partial class Optimizer{
             //        this._判定_移動できるか.Dictionaryラムダ跨ぎParameter=value.Dictionaryラムダ跨ぎParameter;
             //    }
             //}
-            private System.Collections.Generic.IEnumerable<Expression> ラムダ跨ぎParameters{
+            private Generic.IEnumerable<Expression> ラムダ跨ぎParameters{
                 get=>this.Dictionaryラムダ跨ぎParameter.Keys;
             }
 
@@ -410,7 +410,7 @@ partial class Optimizer{
             }
         }
         private readonly 変換_先行評価式 _変換_先行評価式;
-        private readonly Generic.List<(System.Collections.Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<System.Collections.Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報 = new();
+        private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報 = new();
         private readonly Generic.ICollection<ParameterExpression> ループ跨ぎParameters;
         //private readonly Dictionary<Expression,ParameterExpression> Dictionary_Expression_ループラムダ跨ぎParameter;
         /// <summary>

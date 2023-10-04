@@ -1,16 +1,13 @@
-﻿using System;
-
-using System.Reflection;
-using MemoryPack;
+﻿using MemoryPack;
 using System.Buffers;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 using Reader = MemoryPackReader;
-using T = FieldInfo;
-public class Field:MemoryPackFormatter<T>{
+using G = System.Reflection.FieldInfo;
+public class Field:MemoryPackFormatter<G>{
     public static readonly Field Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G value)
         where TBufferWriter:IBufferWriter<byte>{
         var type=value.ReflectedType!;
         writer.WriteType(type);
@@ -19,15 +16,15 @@ public class Field:MemoryPackFormatter<T>{
 
 
         var array=writer.Serializer().TypeFields.Get(type);
-        var index=Array.IndexOf(array,value);
+        var index=System.Array.IndexOf(array,value);
         writer.WriteVarInt(index);
 
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G? value){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    internal static T Read(ref Reader reader){
+    internal static G Read(ref Reader reader){
 
         var type=reader.ReadType();
 
@@ -38,6 +35,6 @@ public class Field:MemoryPackFormatter<T>{
 
         return array[index];
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value)=>
+    public override void Deserialize(ref Reader reader,scoped ref G? value)=>
         value=reader.TryReadNil()?null:Read(ref reader);
 }

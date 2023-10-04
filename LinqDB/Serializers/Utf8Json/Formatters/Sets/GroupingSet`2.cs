@@ -3,10 +3,10 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class GroupingSet<TKey,TElement>:IJsonFormatter<Sets.GroupingSet<TKey,TElement>>{
+using G=LinqDB.Sets;
+public class GroupingSet<TKey,TElement>:IJsonFormatter<G.GroupingSet<TKey,TElement>>{
     public static readonly GroupingSet<TKey,TElement> Instance=new();//リフレクションで使われる
-    public void Serialize(ref Writer writer,Sets.GroupingSet<TKey,TElement> value,O Resolver){
+    public void Serialize(ref Writer writer,G.GroupingSet<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         Resolver.GetFormatter<TKey>().Serialize(ref writer,value!.Key,Resolver);
@@ -17,14 +17,14 @@ public class GroupingSet<TKey,TElement>:IJsonFormatter<Sets.GroupingSet<TKey,TEl
         }
         writer.WriteEndArray();
     }
-    public Sets.GroupingSet<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+    public G.GroupingSet<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key= Resolver.GetFormatter<TKey>().Deserialize(ref reader,Resolver);
-        var value=new Sets.GroupingSet<TKey,TElement>(Key);
+        var value=new G.GroupingSet<TKey,TElement>(Key);
         var Formatter = Resolver.GetFormatter<TElement>();
         while(!reader.ReadIsEndArray()) {
-        reader.ReadIsValueSeparatorWithVerify();
+            reader.ReadIsValueSeparatorWithVerify();
             var item = Formatter.Deserialize(ref reader,Resolver);
             value.Add(item);
         }

@@ -1,17 +1,9 @@
-﻿using System.Xml.Linq;
-
-
-
-
-using MemoryPack;
-using System.Buffers;
-
+﻿using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
-using G = System.Collections;
 
 
 using Reader = MemoryPackReader;
-// ReSharper disable once InconsistentNaming
+using G = System.Collections;
 public class IEnumerable : MemoryPackFormatter<G.IEnumerable>
 {
     public static readonly IEnumerable Instance = new();

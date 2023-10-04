@@ -480,14 +480,14 @@ partial class Optimizer {
                             } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(Sets.IGrouping<,>));
+                                return GroupBy_keySelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(IGrouping<,>));
                             }
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer,Reflection.ExtensionEnumerable.Select_selector,typeof(Linq.IGrouping<,>));
                             } else if(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(Sets.IGrouping<,>));
+                                return GroupBy_keySelector_elementSelector_resultSelector(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector,Reflection.ExtensionSet.Select_selector,typeof(IGrouping<,>));
                             }
                             if(Reflection.ExtensionEnumerable.GroupBy_keySelector==MethodCall0_GenericMethodDefinition) {
                                 return GroupBy_keySelector(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector);
@@ -902,7 +902,7 @@ partial class Optimizer {
                             LambdaExpression selector;
                             Expression Equals_this;
                             Expression Equals_Argument;
-                            System.Collections.Generic.IEnumerable<ParameterExpression> predicate_Parameters;
+                            Generic.IEnumerable<ParameterExpression> predicate_Parameters;
                             ParameterExpression o;
                             if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
                                 o=outerKeySelector.Parameters[0];
@@ -1463,7 +1463,7 @@ partial class Optimizer {
                                 }
                                 SelectMany=作業配列.MakeGenericMethod(SelectMany,TSource,TResult);
                                 Select=作業配列.MakeGenericMethod(Select,TCollection,TResult);
-                                System.Collections.Generic.IEnumerable<ParameterExpression> SelectMany_Parameters;
+                                Generic.IEnumerable<ParameterExpression> SelectMany_Parameters;
                                 Expression Select_source, Select_selector;
                                 if(MethodCall1_Arguments_1 is LambdaExpression collectionSelector) {
                                     var collectionSelector_Parameters = collectionSelector.Parameters;
@@ -2101,8 +2101,8 @@ partial class Optimizer {
             if(typeof(ExtensionSet)==SelectMany_GenericMethodDefinition.DeclaringType)
                 if(SelectMany_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
                     if(
-                        (selector1_Body.Type.IsGenericType&&selector1_Body.Type.GetGenericTypeDefinition()==typeof(Sets.IEnumerable<>))||
-                        selector1_Body.Type.IsInheritInterface(typeof(Sets.IEnumerable<>))){
+                        (selector1_Body.Type.IsGenericType&&selector1_Body.Type.GetGenericTypeDefinition()==typeof(IEnumerable<>))||
+                        selector1_Body.Type.IsInheritInterface(typeof(IEnumerable<>))){
                     }else{
                         SelectMany_GenericMethodDefinition=Reflection.ExtensionEnumerable.SelectMany_selector;
                     }
@@ -2130,7 +2130,7 @@ partial class Optimizer {
         /// <param name="Where_Parameters"></param>
         /// <param name="OuterPredicate又はInnerPredicate"></param>
         /// <returns></returns>
-        private Expression Outer又はInnerにWhereを付ける(Expression outer又はinner,MethodInfo Where,Type Where_T,System.Collections.Generic.IEnumerable<ParameterExpression> Where_Parameters,Expression OuterPredicate又はInnerPredicate) => Expression.Call(
+        private Expression Outer又はInnerにWhereを付ける(Expression outer又はinner,MethodInfo Where,Type Where_T,Generic.IEnumerable<ParameterExpression> Where_Parameters,Expression OuterPredicate又はInnerPredicate) => Expression.Call(
             this._作業配列.MakeGenericMethod(
                 Where,
                 Where_T

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using LinqDB.Enumerables;
-
 namespace LinqDB.Sets;
 using Linq = System.Linq;
 using Generic = System.Collections.Generic;
 public sealed class LookupList<TValue, TKey>:Lookup<TValue,TKey,List<TValue>>,Linq.ILookup<TKey,TValue>{
     public LookupList():this(Generic.EqualityComparer<TKey>.Default){}
-    public LookupList(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
+    public LookupList(IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
 
     Generic.IEnumerable<TValue> Linq.ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
 

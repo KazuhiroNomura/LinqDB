@@ -379,7 +379,7 @@ public sealed partial class Optimizer:IDisposable{
     /// <summary>
     /// 式木の等価を比較する
     /// </summary>
-    public class ExpressionEqualityComparer:Generic.IEqualityComparer<Expression>,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>{
+    public class ExpressionEqualityComparer:Generic.IEqualityComparer<Expression>,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>{
         private readonly EnumerableSetEqualityComparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
@@ -1972,17 +1972,17 @@ public sealed partial class Optimizer:IDisposable{
         return (Disp,DispParameter);
     }
     internal static class DynamicReflection {
-        public static readonly RuntimeBinder.CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
-        public static RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray(int Count){
-            var Array=new RuntimeBinder.CSharpArgumentInfo[Count];
+        public static readonly CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
+        public static CSharpArgumentInfo[] CSharpArgumentInfoArray(int Count){
+            var Array=new CSharpArgumentInfo[Count];
             for(var a=0;a<Count;a++)
                 Array[a]=CSharpArgumentInfo;
             return Array;
         }
-        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray1={CSharpArgumentInfo};
-        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray2={CSharpArgumentInfo,CSharpArgumentInfo};
-        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray3={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
-        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray4={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
+        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray1={CSharpArgumentInfo};
+        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray2={CSharpArgumentInfo,CSharpArgumentInfo};
+        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray3={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
+        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray4={CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo};
         public static class CallSites {
             public static readonly FieldInfo ObjectObjectObjectObjectTarget=typeof(CallSite<Func<CallSite,object,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object,object>>.Target))!;
             public static readonly FieldInfo ObjectObjectObjectTarget=typeof(CallSite<Func<CallSite,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object>>.Target))!;

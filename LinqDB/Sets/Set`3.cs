@@ -18,7 +18,7 @@ public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,IContainer
     private new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement,TContainer> InstanceMessagePack=new();
     private new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement,TContainer> InstanceUtf8Json=new();
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
-    static Set()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement,TContainer>.Instance);
+    static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement,TContainer>.Instance);
     /// <summary>
     /// このEntitySet&lt;<typeparamref name="TElement"/>,&lt;<typeparamref name="TKey"/>,&lt;<typeparamref name="TContainer"/>>の属する<typeparamref name="TContainer"/>。
     /// </summary>

@@ -3,12 +3,10 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class IGrouping<TKey,TElement>:IJsonFormatter<Sets.IGrouping<TKey,TElement>>{
+using G=LinqDB.Sets;
+public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>{
     public static readonly IGrouping<TKey,TElement> Instance=new();//リフレクションで使われる
-#pragma warning disable CA1823// 使用されていないプライベート フィールドを使用しません
-#pragma warning restore CA1823// 使用されていないプライベート フィールドを使用しません
-    public void Serialize(ref Writer writer,Sets.IGrouping<TKey,TElement> value,O Resolver){
+    public void Serialize(ref Writer writer,G.IGrouping<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         Resolver.GetFormatter<TKey>().Serialize(ref writer,value!.Key,Resolver);
@@ -22,12 +20,12 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<Sets.IGrouping<TKey,TElemen
         }
         writer.WriteEndArray();
     }
-    public Sets.IGrouping<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+    public G.IGrouping<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key= Resolver.GetFormatter<TKey>().Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var value=new Sets.GroupingSet<TKey,TElement>(Key);
+        var value=new G.GroupingSet<TKey,TElement>(Key);
         var Formatter = Resolver.GetFormatter<TElement>();
         var first=true;
         while(!reader.ReadIsEndArray()) {

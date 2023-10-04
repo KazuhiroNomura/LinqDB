@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Utf8Json;
+﻿using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
@@ -8,7 +6,7 @@ using Reader = JsonReader;
 using Sets=LinqDB.Sets;
 public class IEnumerable:IJsonFormatter<Sets.IEnumerable>  {
     public static readonly IEnumerable Instance=new();
-    public void Serialize(ref JsonWriter writer,Sets.IEnumerable value,IJsonFormatterResolver Resolver){
+    public void Serialize(ref Writer writer,Sets.IEnumerable value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var type=value.GetType();
@@ -17,7 +15,7 @@ public class IEnumerable:IJsonFormatter<Sets.IEnumerable>  {
         writer.WriteValue(type,value,Resolver);
         writer.WriteEndArray();
     }
-    public Sets.IEnumerable Deserialize(ref JsonReader reader,IJsonFormatterResolver Resolver){
+    public Sets.IEnumerable Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var type=reader.ReadType();

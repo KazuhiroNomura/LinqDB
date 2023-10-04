@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
-
-using Microsoft.CodeAnalysis;
-
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 using O=MessagePackSerializerOptions;
@@ -128,9 +123,9 @@ internal static class Extension{
         
         return Parameters;
     }
-    private delegate void SerializeDelegate(object Formatter,ref MessagePackWriter writer,object value,
-        MessagePackSerializerOptions options);
-    private static readonly System.Type[] SerializeTypes={typeof(object),typeof(MessagePackWriter).MakeByRefType(),typeof(object),typeof(MessagePackSerializerOptions)};
+    private delegate void SerializeDelegate(object Formatter,ref Writer writer,object value,
+        O options);
+    private static readonly Type[] SerializeTypes={typeof(object),typeof(Writer).MakeByRefType(),typeof(object),typeof(O) };
     public static void WriteValue(this ref Writer writer,Type type,object? value,O Resolver) {
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
@@ -146,10 +141,10 @@ internal static class Extension{
         ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
         //MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
     }
-    private delegate object DeserializeDelegate(object Formatter,ref MessagePackReader reader,
-        MessagePackSerializerOptions options);
-    private static readonly System.Type[] DeserializeTypes={
-        typeof(object),typeof(MessagePackReader).MakeByRefType(),typeof(MessagePackSerializerOptions)
+    private delegate object DeserializeDelegate(object Formatter,ref Reader reader,
+        O options);
+    private static readonly Type[] DeserializeTypes={
+        typeof(object),typeof(Reader).MakeByRefType(),typeof(O)
     };
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;

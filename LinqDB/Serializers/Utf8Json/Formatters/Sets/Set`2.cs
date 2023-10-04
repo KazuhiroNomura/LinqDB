@@ -5,11 +5,11 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class Set<TKey,TElement>:IJsonFormatter<Sets.Set<TKey,TElement>> where TElement:IKey<TKey>
+using G=LinqDB.Sets;
+public class Set<TKey,TElement>:IJsonFormatter<G.Set<TKey,TElement>> where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
     public new static readonly Set<TKey,TElement> Instance=new();
-    public void Serialize(ref Writer writer,Sets.Set<TKey,TElement>? value,O Resolver){
+    public void Serialize(ref Writer writer,G.Set<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter = Resolver.GetFormatter<TElement>();
@@ -21,10 +21,10 @@ public class Set<TKey,TElement>:IJsonFormatter<Sets.Set<TKey,TElement>> where TE
         }
         writer.WriteEndArray();
     }
-    public Sets.Set<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+    public G.Set<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var value=new Sets.Set<TKey,TElement>();
+        var value=new G.Set<TKey,TElement>();
         var Formatter = Resolver.GetFormatter<TElement>();
         var first=true;
         while(!reader.ReadIsEndArray()) {

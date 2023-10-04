@@ -1,10 +1,4 @@
-﻿using System.Xml.Linq;
-
-
-
-
-using MemoryPack;
-using System.Buffers;
+﻿using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 using Sets = LinqDB.Sets;
 

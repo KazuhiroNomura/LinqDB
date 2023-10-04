@@ -6,12 +6,12 @@ using Utf8Json;
 namespace LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using T = ConstructorInfo;
-public class Constructor : IJsonFormatter<T>
+using G = ConstructorInfo;
+public class Constructor : IJsonFormatter<G>
 {
     public static readonly Constructor Instance = new();
 
-    internal static void Write(ref Writer writer, T value, IJsonFormatterResolver Resolver)
+    internal static void Write(ref Writer writer, G value, IJsonFormatterResolver Resolver)
     {
         writer.WriteBeginArray();
         var type = value.ReflectedType!;
@@ -22,12 +22,12 @@ public class Constructor : IJsonFormatter<T>
         writer.WriteInt32(index);
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer, T? value, IJsonFormatterResolver Resolver)
+    public void Serialize(ref Writer writer, G? value, IJsonFormatterResolver Resolver)
     {
         if (writer.TryWriteNil(value)) return;
         Write(ref writer, value, Resolver);
     }
-    internal static T Read(ref Reader reader, IJsonFormatterResolver Resolver)
+    internal static G Read(ref Reader reader, IJsonFormatterResolver Resolver)
     {
         reader.ReadIsBeginArrayWithVerify();
         var type = reader.ReadType();
@@ -37,7 +37,7 @@ public class Constructor : IJsonFormatter<T>
         reader.ReadIsEndArrayWithVerify();
         return array[index];
     }
-    public T Deserialize(ref Reader reader, IJsonFormatterResolver Resolver)
+    public G Deserialize(ref Reader reader, IJsonFormatterResolver Resolver)
     {
         if (reader.TryReadNil()) return null!;
         return Read(ref reader, Resolver);

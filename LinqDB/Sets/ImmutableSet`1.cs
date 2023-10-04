@@ -379,7 +379,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// 列挙子。値型なのでメソッド呼び出しがCallなので早い。
     /// </summary>
-    public struct Enumerator:System.Collections.Generic.IEnumerator<T> {
+    public struct Enumerator:Generic.IEnumerator<T> {
         //走査順はthis,L,R
         private LinkedNodeItemT? LinkedNodeItem;
         internal TreeNodeT TreeNode;
@@ -427,7 +427,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => this.InternalCurrent;
         }
-        object System.Collections.IEnumerator.Current {
+        object Collections.IEnumerator.Current {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
             get => this.InternalCurrent;
@@ -446,12 +446,12 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         this.変数Enumerator.Reset();
         return this.変数Enumerator;
     }
-    System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()=>this.GetEnumerator();
+    Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator()=>this.GetEnumerator();
     /// <summary>
     /// EnumeratorをASetに返す。
     /// </summary>
     /// <returns></returns>
-    private protected override System.Collections.IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
+    private protected override Collections.IEnumerator ProtectedGetEnumerator() => this.GetEnumerator();
     ///// <summary>
     ///// ┌０┐
     ///// 　┌─０─┐
@@ -505,7 +505,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>
     /// タプル同士の比較方法。
     /// </summary>
-    private protected System.Collections.Generic.IEqualityComparer<T> Comparer{
+    private protected Generic.IEqualityComparer<T> Comparer{
         get=>System.Collections.Generic.EqualityComparer<T>.Default;
         //set{}
     }
@@ -523,8 +523,8 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(System.Collections.Generic.IEqualityComparer<T> Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(Generic.IEqualityComparer<T> Comparer) {
         this.変数Enumerator.TreeNode=new TreeNodeT(null);
         //this.Comparer=Comparer;
     }
@@ -532,19 +532,19 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。
     /// </summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source):this(source,System.Collections.Generic.EqualityComparer<T>.Default) {}
+    protected ImmutableSet(Generic.IEnumerable<T> source):this(source,System.Collections.Generic.EqualityComparer<T>.Default) {}
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(System.Collections.Generic.IEnumerable<T> source,System.Collections.Generic.IEqualityComparer<T> Comparer):this(Comparer) {
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(Generic.IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer):this(Comparer) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
-    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="System.Collections.Generic.IEqualityComparer{T}" /> の実装。</param>
-    protected ImmutableSet(T[] source,System.Collections.Generic.IEqualityComparer<T> Comparer):this(Comparer){
+    /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
+    protected ImmutableSet(T[] source,Generic.IEqualityComparer<T> Comparer):this(Comparer){
         this.PrivateProtectedImport(source);
     }
     ///// <summary>
@@ -651,7 +651,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         }
         this._LongCount=source.LongLength;
     }
-    private protected void PrivateProtectedImport(System.Collections.Generic.IEnumerable<T> source) {
+    private protected void PrivateProtectedImport(Generic.IEnumerable<T> source) {
         var Count = 0L;
         foreach(var Item in source) {
             this.PrivateImport(Item);
@@ -1015,9 +1015,9 @@ LinkedNodeItem走査:
 
 
     /// <summary>
-    /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
+    /// ILで<see cref="ImmutableSet{T}" />,<see cref="Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)L(ast)O(ut)。
     /// </summary>
-    internal struct FILO:System.Collections.Generic.IEnumerator<T> {
+    internal struct FILO:Generic.IEnumerator<T> {
         private LinkedNodeItemT? LinkedListNode;
         /// <summary>
         /// 要素数
@@ -1025,7 +1025,7 @@ LinkedNodeItem走査:
         internal long Count;
         public T Current{get;private set;}
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object System.Collections.IEnumerator.Current => this.Current;
+        object Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1059,14 +1059,14 @@ LinkedNodeItem走査:
         }
         public void Dispose() {
         }
-        bool System.Collections.IEnumerator.MoveNext() => this.MoveNext();
+        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
         public void Reset() {
         }
     }
     /// <summary>
-    /// ILで<see cref="ImmutableSet{T}" />,<see cref="System.Collections.Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
+    /// ILで<see cref="ImmutableSet{T}" />,<see cref="Generic.IEnumerable{T}" />を２回走査するときの２回目の走査に使う、F(irst)I(n)F(irst)O(ut)。
     /// </summary>
-    internal struct FIFO:System.Collections.Generic.IEnumerator<T>{
+    internal struct FIFO:Generic.IEnumerator<T>{
         private LinkedNodeT FirstNode;
         private LinkedNodeT LastNode;
         private LinkedNodeT CurrentNode;
@@ -1074,7 +1074,7 @@ LinkedNodeItem走査:
             get; private set;
         }
 #pragma warning disable CS8603 // Null 参照戻り値である可能性があります。
-        object System.Collections.IEnumerator.Current => this.Current;
+        object Collections.IEnumerator.Current => this.Current;
 #pragma warning restore CS8603 // Null 参照戻り値である可能性があります。
         /// <summary>
         /// structは引数なしコンストラクタの代わり
@@ -1111,7 +1111,7 @@ LinkedNodeItem走査:
         }
         public void Dispose() {
         }
-        bool System.Collections.IEnumerator.MoveNext() => this.MoveNext();
+        bool Collections.IEnumerator.MoveNext() => this.MoveNext();
         public bool SequenceEqual(FIFO other) {
             var EqualityComparer=System.Collections.Generic.EqualityComparer<T>.Default;
             var a =this.FirstNode._LinkedNodeItem;

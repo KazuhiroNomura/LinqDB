@@ -6,7 +6,6 @@ using System.Linq;
 using LinqDB.Helpers;
 using LinqDB.Sets;
 using LinqDB.CRC;
-using System.IO;
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
 // ReSharper disable PossibleMultipleEnumeration

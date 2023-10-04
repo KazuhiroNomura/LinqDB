@@ -3,11 +3,11 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class Set<T>:IJsonFormatter<Sets.Set<T>>{
+using G=LinqDB.Sets;
+public class Set<T>:IJsonFormatter<G.Set<T>>{
     public static readonly Set<T> Instance=new();
     private Set(){}
-    private static void WriteNullable(ref Writer writer,Sets.IEnumerable<T>? value,O Resolver){
+    private static void WriteNullable(ref Writer writer,G.IEnumerable<T>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter = Resolver.GetFormatter<T>();
@@ -19,9 +19,9 @@ public class Set<T>:IJsonFormatter<Sets.Set<T>>{
         }
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,Sets.Set<T>? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
-    internal static Sets.Set<T> Read(ref Reader reader,O Resolver){
-        var value=new Sets.Set<T>();
+    public void Serialize(ref Writer writer,G.Set<T>? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
+    internal static G.Set<T> Read(ref Reader reader,O Resolver){
+        var value=new G.Set<T>();
         var Formatter = Resolver.GetFormatter<T>();
         while(!reader.ReadIsEndArray()) {
             reader.ReadIsValueSeparatorWithVerify();
@@ -31,9 +31,9 @@ public class Set<T>:IJsonFormatter<Sets.Set<T>>{
         reader.ReadIsEndArrayWithVerify();
         return value;
     }
-    private static Sets.Set<T>? ReadNullable(ref Reader reader,O Resolver){
+    private static G.Set<T>? ReadNullable(ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
-        var value=new Sets.Set<T>();
+        var value=new G.Set<T>();
         var Formatter = Resolver.GetFormatter<T>();
         var first=true;
         while(!reader.ReadIsEndArray()) {
@@ -44,7 +44,7 @@ public class Set<T>:IJsonFormatter<Sets.Set<T>>{
         }
         return value;
     }
-    public Sets.Set<T> Deserialize(ref Reader reader,O Resolver){
+    public G.Set<T> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         return ReadNullable(ref reader,Resolver)!;
     }

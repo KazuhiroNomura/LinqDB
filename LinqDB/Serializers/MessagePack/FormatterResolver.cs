@@ -8,7 +8,7 @@ using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 internal sealed class FormatterResolver:IFormatterResolver {
     public static readonly FormatterResolver Instance = new();
-    private readonly System.Collections.Generic.Dictionary<System.Type,IMessagePackFormatter> DictionaryTypeFormatter = new();
+    private readonly Generic.Dictionary<Type,IMessagePackFormatter> DictionaryTypeFormatter = new();
     public IMessagePackFormatter<T> GetFormatter<T>() {
         var type=typeof(T);
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IMessagePackFormatter<T>)Formatter;
@@ -56,7 +56,7 @@ internal sealed class FormatterResolver:IFormatterResolver {
             this.DictionaryTypeFormatter.Add(typeof(T),result);
             return result;
         }
-        IMessagePackFormatter<T>?RegisterInterface(Type type0,System.Type 検索したいキーGenericInterfaceDefinition,System.Type FormatterGenericInterfaceDefinition){
+        IMessagePackFormatter<T>?RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
             Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface||FormatterGenericInterfaceDefinition.IsInterface);
             if(type0.IsGenericType&&type.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
                 return RegisterGeneric(type0,FormatterGenericInterfaceDefinition);

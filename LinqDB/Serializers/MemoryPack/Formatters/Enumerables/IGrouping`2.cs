@@ -1,15 +1,14 @@
 ﻿using System.Buffers;
-using System.Linq;
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
 
 using Reader = MemoryPackReader;
-using G = LinqDB.Enumerables;
-// ReSharper disable once InconsistentNaming
-public class IGrouping<TKey, TElement>:MemoryPackFormatter<System.Linq.IGrouping<TKey,TElement>> {
+using G =System.Linq;
+using System.Linq;
+public class IGrouping<TKey, TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElement>> {
     public static readonly IGrouping<TKey, TElement> Instance=new();
     private IGrouping(){}
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,System.Linq.IGrouping<TKey,TElement>? value) where TBufferWriter : IBufferWriter<byte> {
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.IGrouping<TKey,TElement>? value) where TBufferWriter : IBufferWriter<byte> {
         if(writer.TryWriteNil(value)) return;
         writer.WriteValue(value!.Key);
         var Formatter = writer.GetFormatter<TElement>();
@@ -19,11 +18,11 @@ public class IGrouping<TKey, TElement>:MemoryPackFormatter<System.Linq.IGrouping
             Formatter.Serialize(ref writer,ref item0);
         }
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref System.Linq.IGrouping<TKey,TElement>? value) => WriteNullable(ref writer,value);
-    private static System.Linq.IGrouping<TKey,TElement>? ReadNullable(ref Reader reader) {
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IGrouping<TKey,TElement>? value) => WriteNullable(ref writer,value);
+    private static G.IGrouping<TKey,TElement>? ReadNullable(ref Reader reader) {
         if(reader.TryReadNil()) return null;
         var Key=reader.ReadValue<TKey>();
-        var value = new G.GroupingList<TKey,TElement>(Key);
+        var value = new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
         var Formatter = reader.GetFormatter<TElement>();
         var Count = reader.ReadVarIntInt64();
         for(long a = 0;a<Count;a++) {
@@ -33,5 +32,5 @@ public class IGrouping<TKey, TElement>:MemoryPackFormatter<System.Linq.IGrouping
         }
         return value;
     }
-    public override void Deserialize(ref Reader reader,scoped ref System.Linq.IGrouping<TKey,TElement>? value) => value=ReadNullable(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref G.IGrouping<TKey,TElement>? value) => value=ReadNullable(ref reader);
 }

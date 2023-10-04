@@ -19,7 +19,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
     internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
-    static Set()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
+    static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
     //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
     //    public static readonly Formatter Instance = new();
     //    public override void Serialize<TBufferWriter>(ref MemoryPack.MemoryPackWriter<TBufferWriter> writer,scoped ref Set<T>? value) {

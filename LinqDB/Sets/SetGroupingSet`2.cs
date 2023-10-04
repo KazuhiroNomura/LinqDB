@@ -14,7 +14,7 @@ public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey
     //private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     private new static readonly Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     private new static readonly Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
-    static SetGroupingSet()=>global::MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance);
+    static SetGroupingSet()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance);
     /// <summary>
     /// キー比較用EqualityComparer
     /// </summary>

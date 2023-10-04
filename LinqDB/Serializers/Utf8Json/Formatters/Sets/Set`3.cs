@@ -6,13 +6,13 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Sets;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
-using Sets=LinqDB.Sets;
-public class Set<TKey,TElement, TContainer>:IJsonFormatter<Sets.Set<TKey,TElement,TContainer>>
+using G=LinqDB.Sets;
+public class Set<TKey,TElement, TContainer>:IJsonFormatter<G.Set<TKey,TElement,TContainer>>
     where TElement : Entity<TKey,TContainer>
     where TKey : struct, IEquatable<TKey>
     where TContainer : Container {
     public static readonly Set<TKey,TElement,TContainer> Instance = new();
-    private static void WriteNullable(ref Writer writer,Sets.Set<TKey,TElement,TContainer>? value,O Resolver) {
+    private static void WriteNullable(ref Writer writer,G.Set<TKey,TElement,TContainer>? value,O Resolver) {
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter = Resolver.GetFormatter<TElement>();
@@ -24,12 +24,12 @@ public class Set<TKey,TElement, TContainer>:IJsonFormatter<Sets.Set<TKey,TElemen
         }
         writer.WriteEndArray();
     }
-    public void Serialize(ref Writer writer,Sets.Set<TKey,TElement,TContainer>? value,O Resolver) => WriteNullable(ref writer,value,Resolver);
-    private static Sets.Set<TKey,TElement,TContainer>? ReadNullable(ref Reader reader,O Resolver) {
+    public void Serialize(ref Writer writer,G.Set<TKey,TElement,TContainer>? value,O Resolver) => WriteNullable(ref writer,value,Resolver);
+    private static G.Set<TKey,TElement,TContainer>? ReadNullable(ref Reader reader,O Resolver) {
         if(reader.TryReadNil()) return null;
         reader.ReadIsBeginArrayWithVerify();
         //サーバーのSet<,,>は送られない。Set<,>で復元する
-        var value = new Sets.Set<TKey,TElement,TContainer>(null!);
+        var value = new G.Set<TKey,TElement,TContainer>(null!);
         var Formatter = Resolver.GetFormatter<TElement>();
         var first=true;
         while(!reader.ReadIsEndArray()) {
@@ -40,5 +40,5 @@ public class Set<TKey,TElement, TContainer>:IJsonFormatter<Sets.Set<TKey,TElemen
         }
         return value;
     }
-    public Sets.Set<TKey,TElement,TContainer> Deserialize(ref Reader reader,O Resolver) => ReadNullable(ref reader,Resolver)!;
+    public G.Set<TKey,TElement,TContainer> Deserialize(ref Reader reader,O Resolver) => ReadNullable(ref reader,Resolver)!;
 }

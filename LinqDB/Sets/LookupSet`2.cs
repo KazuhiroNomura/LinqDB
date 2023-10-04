@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using Collections=System.Collections;
 namespace LinqDB.Sets;
 using Linq=System.Linq;
-using Generic=System.Collections.Generic;
+using Generic= Collections.Generic;
 public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILookup<TKey,TValue>{
     public LookupSet()  { }
-    public LookupSet(Generic.IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
+    public LookupSet(IEqualityComparer<TKey> KeyComparer):base(KeyComparer){}
 
     Generic.IEnumerable<TValue> Linq.ILookup<TKey,TValue>.this[TKey key] => throw new NotImplementedException();
 
@@ -29,7 +29,7 @@ public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILoo
     IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
         throw new NotImplementedException();
     }
-    bool System.Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
+    bool Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
     //Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
     //    foreach(var a in this) yield return a;
     //}

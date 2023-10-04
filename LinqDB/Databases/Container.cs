@@ -8,7 +8,7 @@ using System.Runtime.Serialization;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
-using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
+using Serializer= Serializers.Utf8Json.Serializer;
 /// <summary>
 /// エンティティの基底クラス
 /// </summary>
@@ -33,7 +33,7 @@ public partial class Container:IDisposable{
     /// <summary>
     /// 1要素集合
     /// </summary>
-    public static Sets.IEnumerable<AttributeEmpty> TABLE_DEE { get; } = new Set<AttributeEmpty> { new() };
+    public static IEnumerable<AttributeEmpty> TABLE_DEE { get; } = new Set<AttributeEmpty> { new() };
     ///// <summary>
     ///// ログ書き込みに使うXmlDictionaryWriter
     ///// </summary>

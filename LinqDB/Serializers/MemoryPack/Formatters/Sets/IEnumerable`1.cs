@@ -1,20 +1,13 @@
-﻿using System.Xml.Linq;
-
-
-
-
-using MemoryPack;
-using System.Buffers;
+﻿using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
-using Sets = LinqDB.Sets;
 
 
 using Reader = MemoryPackReader;
-// ReSharper disable once InconsistentNaming
-public class IEnumerable<T>:MemoryPackFormatter<Sets.IEnumerable<T>> {
+using G = LinqDB.Sets;
+public class IEnumerable<T>:MemoryPackFormatter<G.IEnumerable<T>> {
     public static readonly IEnumerable<T> Instance=new();
     private IEnumerable(){}
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref Sets.IEnumerable<T>? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IEnumerable<T>? value){
         if(writer.TryWriteNil(value)) return;
         var type=value!.GetType();
         writer.WriteType(type);
@@ -32,12 +25,12 @@ public class IEnumerable<T>:MemoryPackFormatter<Sets.IEnumerable<T>> {
         //    Formatter.Serialize(ref writer,ref item0);
         //}
     }
-    public override void Deserialize(ref Reader reader,scoped ref Sets.IEnumerable<T>? value){
+    public override void Deserialize(ref Reader reader,scoped ref G.IEnumerable<T>? value){
         if(reader.TryReadNil()) return;
         
         
         var type = reader.ReadType();
-        value=(Sets.IEnumerable<T>?)reader.ReadValue(type);
+        value=(G.IEnumerable<T>?)reader.ReadValue(type);
         //var Formatter = reader.GetFormatter<T>();
         //var value = new Sets.Set<T>();
         //var Count = reader.ReadVarIntInt64();
