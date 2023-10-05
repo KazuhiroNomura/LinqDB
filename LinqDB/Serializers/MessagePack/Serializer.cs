@@ -1,11 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack;
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{//IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
-    
+    public static readonly Dictionary<System.Type,object> TypeFormatter=new();
 
     private readonly MessagePackSerializerOptions Options;
     public Serializer(){

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Buffers;
+using System.Diagnostics;
 using System.Reflection;
+
 using MemoryPack;
-using MemoryPack.Formatters;
+using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
+using System.Runtime.Serialization;
+using LinqDB.Serializers.MessagePack;
 namespace LinqDB.Serializers.MemoryPack;
 
 
@@ -31,22 +35,27 @@ public static class Extension{
     }
     
     
+    
+    
+    
+    
+    
     private static class StaticReadOnlyCollectionFormatter<T>{
-        public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
+        public static readonly global::MemoryPack.Formatters.ReadOnlyCollectionFormatter<T> Formatter=new();
     }
     internal static void WriteCollection<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<T>? value)where TBufferWriter :IBufferWriter<byte> =>
     	StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,ref value!);
-    //private static class StaticArrayFormatter<T>{
-    //    public static readonly ArrayFormatter<T> Formatter=new();
-    //}
-    
-    
-    //internal static T[] ReadArray<T>(this ref Reader reader){
-    //    T[] value=default!;
-    //    StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,ref value!);
-    //    return value;
-    //}
-    public static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
+
+
+
+
+
+
+
+
+
+
+    internal static void Serialize宣言Parameters<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<Expressions.ParameterExpression>value)where TBufferWriter :IBufferWriter<byte> {
         writer.WriteVarInt(value.Count);
         var Serializer=writer.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
@@ -63,18 +72,22 @@ public static class Extension{
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
-    public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader){
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    internal static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader){
         var Count=reader.ReadVarIntInt32();
         var Serializer=reader.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
@@ -98,7 +111,6 @@ public static class Extension{
             }
             
         }
-        
         return Parameters;
     }
 
@@ -107,20 +119,116 @@ public static class Extension{
 
 
 
-
-
-
-
-
-    public static void Write<T,TBufferWriter>(this IMemoryPackFormatter<T>Formatter,ref MemoryPackWriter<TBufferWriter>writer,T value)where TBufferWriter:IBufferWriter<byte>{
-        var value0=value;
-        Formatter.Serialize(ref writer,ref value0);
+    public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,IMemoryPackFormatter<T>Formatter,T? value)where TBufferWriter:IBufferWriter<byte>{
+        Formatter.Serialize(ref writer,ref value);
+        //var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+        //if(Formatter_T is not null) Formatter_T.Serialize(ref writer,ref value);
+        //else Formatter.Serialize(ref writer,ref value);
     }
-    public static T Read<T>(this IMemoryPackFormatter<T>Formatter,ref Reader reader){
+    public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,IMemoryPackFormatter Formatter,object? value)where TBufferWriter:IBufferWriter<byte>{
+        Formatter.Serialize(ref writer,ref value);
+    }
+    public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,System.Collections.Generic.IEnumerable<T> value)where TBufferWriter:IBufferWriter<byte>{
+        var InstanceMemoryPack=(IMemoryPackFormatter)value.GetType().GetValue("InstanceMemoryPack")!;
+        Debug.Assert(InstanceMemoryPack!=null);
+        object? value0=value;
+        InstanceMemoryPack.Serialize(ref writer,ref value0);
+    }
+    public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,T? value_T)where TBufferWriter:IBufferWriter<byte>{
+        var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+        if(Formatter_T is not null){
+            Formatter_T.Serialize(ref writer,ref value_T);
+            return;
+        }
+        var Formatter=FormatterResolver.GetDisplayAnonymous以外Formatter(value_T!.GetType());
+        if(Formatter is not null){
+            object? value=value_T;
+            ((IMemoryPackFormatter)Formatter).Serialize(ref writer,ref value);
+            return;
+        }
+        writer.WriteValue(value_T);
+    }
+    public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,object value)where TBufferWriter:IBufferWriter<byte>{
+        var type=value.GetType();
+        var Formatter=FormatterResolver.GetAnonymousDisplaySetFormatter(type);
+        if(Formatter!=null){
+            Write(ref writer,(IMemoryPackFormatter)Formatter,value);
+        } else{
+            writer.WriteValue(type,value);
+        }
+    }
+    //public static void WriteValue<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter>writer,IMemoryPackFormatter<T> Formatter,object value)where TBufferWriter:IBufferWriter<byte>{
+    //    var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+    //    if(Formatter_T is not null) Formatter_T.Serialize(ref writer,ref value);
+    //    else Formatter.Serialize(ref writer,ref value);
+    //    var value0=value;
+    //    Formatter.Serialize(ref writer,ref value0);
+    //}
+    //public static void WriteValue<TBufferWriter>(ref MemoryPackWriter<TBufferWriter>writer,object value)where TBufferWriter:IBufferWriter<byte>{
+    //    var value0=value;
+    //    var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+    //    if(Formatter_T is not null) return WriteValue(ref writer,Formatter_T);
+    //    var Formatter=FormatterResolver.GetDisplayAnonymous以外Formatter(typeof(T));
+    //    if(Formatter!=null) return WriteValue(ref writer,(IMemoryPackFormatter)Formatter);
+    //    writer.WriteValue(writer.GetFormatter(type),value);
+    //}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static T? Read<T>(this ref Reader reader,IMemoryPackFormatter<T>Formatter_T){
         T? value=default;
-        Formatter.Deserialize(ref reader,ref value);
-        return value!;
+        Formatter_T.Deserialize(ref reader,ref value);
+        return value;
     }
+    public static object? ReadValue(ref Reader reader,IMemoryPackFormatter Formatter){
+        object? value=default;
+        Formatter.Deserialize(ref reader,ref value);
+        return value;
+    }
+    public static T? ReadValue<T>(ref Reader reader){
+        var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+        if(Formatter_T is not null){
+            T? value=default;
+            Formatter_T.Deserialize(ref reader,ref value);
+            return value;
+        }
+        var Formatter=FormatterResolver.GetDisplayAnonymous以外Formatter(typeof(T));
+        if(Formatter!=null){
+            object? value=default;
+            ((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
+            return (T?)value;
+        } else{
+            T? value=default;
+            reader.GetFormatter<T>().Deserialize(ref reader,ref value);
+            return value;
+        }
+    }
+    public static object? Read(this ref Reader reader,Type type){
+        object? value=default;
+        var Formatter=FormatterResolver.GetAnonymousDisplaySetFormatter(type);
+        if(Formatter!=null)((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
+        else reader.GetFormatter(type).Deserialize(ref reader,ref value);
+        return value;
+    }
+    //public static IMemoryPackFormatter RegisterFormatter<TBufferWriter>(this ref  MemoryPackWriter<TBufferWriter> writer,Type type)where TBufferWriter:IBufferWriter<byte>{
+    //    var Formatter=writer.GetFormatter(type);
+    //    ///errormessag
+    //    if(Formatter is not null) return Formatter;
+    //    return (IMemoryPackFormatter)FormatterResolver.Get全Formatter(type)!;
+    //}
+    //public static IMemoryPackFormatter RegisterFormatter(this ref Reader reader,Type type){
+    //    var Formatter=reader.GetFormatter(type);
+    //    if(Formatter is not null) return Formatter;
+    //    return (IMemoryPackFormatter)FormatterResolver.Get全Formatter(type)!;
+    //}
     public static Serializer Serializer<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter:IBufferWriter<byte> =>
         (Serializer)writer.Options.ServiceProvider!;
     public static Serializer Serializer(this ref Reader reader)=>

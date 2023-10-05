@@ -10,13 +10,12 @@ public class GroupingSet<TKey,TElement>:MemoryPackFormatter<G.GroupingSet<TKey,T
     private GroupingSet(){}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.GroupingSet<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
-        FormatterResolver.GetFormatter(typeof(TKey));
-        writer.WriteValue(value!.Key);
+        writer.Write(value!.Key);
         var Count=value.LongCount;
         var Formatter=writer.GetFormatter<TElement>();
         writer.WriteVarInt(Count);
         foreach(var item in value)
-            Formatter.Write(ref writer,item);
+            writer.Write(Formatter,item);
     }
     public override void Deserialize(ref Reader reader,scoped ref G.GroupingSet<TKey,TElement>? value){
         if(reader.TryReadNil())return;
@@ -24,11 +23,8 @@ public class GroupingSet<TKey,TElement>:MemoryPackFormatter<G.GroupingSet<TKey,T
         var value0=new G.GroupingSet<TKey,TElement>(Key);
         var Formatter=reader.GetFormatter<TElement>();
         var Count=reader.ReadVarIntInt64();
-        for(long a=0;a<Count;a++){
-            TElement? item=default;//ここでnull入れないと内部で作られない
-            Formatter.Deserialize(ref reader,ref item);
-            value0.Add(item);
-        }
+        for(long a=0;a<Count;a++)
+            value0.Add(reader.Read(Formatter));
         value=value0;
     }
 }

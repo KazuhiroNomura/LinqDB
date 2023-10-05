@@ -13,10 +13,8 @@ public class IGrouping<TKey, TElement>:MemoryPackFormatter<G.IGrouping<TKey,TEle
         var Count = value.LongCount;
         var Formatter = writer.GetFormatter<TElement>();
         writer.WriteVarInt(Count);
-        foreach(var item in value) {
-            var item0 = item;
-            Formatter.Serialize(ref writer,ref item0);
-        }
+        foreach(var item in value)
+            writer.Write(Formatter,item);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IGrouping<TKey,TElement>? value) => WriteNullable(ref writer,value);
     private static G.IGrouping<TKey,TElement>? ReadNullable(ref Reader reader) {
@@ -25,11 +23,8 @@ public class IGrouping<TKey, TElement>:MemoryPackFormatter<G.IGrouping<TKey,TEle
         var value = new G.GroupingSet<TKey,TElement>(Key);
         var Formatter = reader.GetFormatter<TElement>();
         var Count = reader.ReadVarIntInt64();
-        for(long a = 0;a<Count;a++) {
-            TElement? item = default;//ここでnull入れないと内部で作られない
-            Formatter.Deserialize(ref reader,ref item);
-            value.Add(item);
-        }
+        for(long a = 0;a<Count;a++)
+            value.Add(reader.Read(Formatter));
         return value;
     }
     public override void Deserialize(ref Reader reader,scoped ref G.IGrouping<TKey,TElement>? value) => value=ReadNullable(ref reader);

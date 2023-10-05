@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
+using LinqDB.Sets;
+
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -51,7 +54,7 @@ internal static class Extension{
         return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
 
     }
-    public static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression>value,O Resolver){
+    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression>value,O Resolver){
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
@@ -81,18 +84,9 @@ internal static class Extension{
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
     }
-    public static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,O Resolver){
+    
+    internal static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,O Resolver){
         var ArrayHeader=reader.ReadArrayHeader()-1;
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
@@ -120,12 +114,19 @@ internal static class Extension{
             ArrayHeader--;
             a++;
         }
-        
         return Parameters;
     }
-    private delegate void SerializeDelegate(object Formatter,ref Writer writer,object value,
-        O options);
+    
+    
+    private delegate void SerializeDelegate(object Formatter,ref Writer writer,object value,O options);
     private static readonly Type[] SerializeTypes={typeof(object),typeof(Writer).MakeByRefType(),typeof(object),typeof(O) };
+    public static void WriteValue<T>(this ref Writer writer,IMessagePackFormatter<T>Formatter,T value,O Resolver)=>
+        Formatter.Serialize(ref writer,value,Resolver);
+    
+    
+    
+    public static void WriteValue<T>(this ref Writer writer,T value,O Resolver)=>
+        Resolver.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,Resolver);
     public static void WriteValue(this ref Writer writer,Type type,object? value,O Resolver) {
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
@@ -141,6 +142,10 @@ internal static class Extension{
         ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
         //MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
     }
+    public static T ReadValue<T>(this ref Reader reader,IMessagePackFormatter<T>Formatter,O Resolver)=>
+        Formatter.Deserialize(ref reader,Resolver);
+    public static T ReadValue<T>(this ref Reader reader,O Resolver)=>
+        Resolver.Resolver.GetFormatter<T>()!.Deserialize(ref reader, Resolver);
     private delegate object DeserializeDelegate(object Formatter,ref Reader reader,
         O options);
     private static readonly Type[] DeserializeTypes={
@@ -162,13 +167,19 @@ internal static class Extension{
         return Result;
         //return MessagePack.Serializer.DynamicDeserialize(Formatter,ref reader,Resolver);
     }
-    
-    
-    
-    
-    
-    
-    
+    public static object GetFormatter(this Type type){
+        if(MessagePack.Serializer.TypeFormatter.TryGetValue(type,out var Formatter)) return Formatter;
+        Formatter=type.GetValue("InstanceMessagePack");
+        MessagePack.Serializer.TypeFormatter.Add(type,Formatter);
+        return Formatter;
+    }
+
+
+
+
+
+
+
     public static Serializer Serializer(this O Options)=>
         (Serializer)Options.Resolver.GetFormatter<Serializer>()!;
 }

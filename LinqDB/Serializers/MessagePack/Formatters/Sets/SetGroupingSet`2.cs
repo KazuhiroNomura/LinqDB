@@ -10,7 +10,6 @@ using G=LinqDB.Sets;
 
 public class SetGroupingSet<TKey,TElement>:IMessagePackFormatter<G.SetGroupingSet<TKey,TElement>>{
     public new static readonly SetGroupingSet<TKey,TElement>Instance=new();
-    private SetGroupingSet(){}
     public void Serialize(ref Writer writer,G.SetGroupingSet<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(value!.Count);

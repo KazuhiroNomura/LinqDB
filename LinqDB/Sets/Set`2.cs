@@ -13,10 +13,11 @@ public class Set<TKey,TElement>:Set<TElement>
     where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
-    internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement> InstanceMessagePack=new();
-    internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement> InstanceUtf8Json=new();
+    internal new static readonly Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement> InstanceMemoryPack=new();
+    internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement>InstanceMessagePack=new();
+    internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>   InstanceUtf8Json=new();
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
-    static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
+    //static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
     public Set() { }
     /// <summary>
     ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>

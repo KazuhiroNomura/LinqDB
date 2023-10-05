@@ -11,7 +11,7 @@ public class IEnumerable<T>:MemoryPackFormatter<G.IEnumerable<T>> {
         if(writer.TryWriteNil(value)) return;
         var type=value!.GetType();
         writer.WriteType(type);
-        writer.WriteValue(type, value);
+        writer.Write(value);
         //var GenericTypeDefinition=type.GetGenericTypeDefinition();
         //type.GetValue("Memor")
         //if(typeof(Sets.Set<>)==GenericTypeDefinition) {

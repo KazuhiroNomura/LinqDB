@@ -19,10 +19,11 @@ public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>
     ,IGrouping<TKey,TElement>/*,ICollection<TElement>*/,IEquatable<IGrouping<TKey,TElement>>
     ,IEquatable<Linq.IGrouping<TKey,TElement>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    private static readonly Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
     private static readonly Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
     private static readonly Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
-    static GroupingSet()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance);
+    //static GroupingSet()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance);
     public TKey _Key;
     [JsonInclude]
     public TKey Key=>this._Key;

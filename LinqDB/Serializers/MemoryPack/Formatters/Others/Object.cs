@@ -10,7 +10,7 @@ using T = System.Object;
 using Reflection;
 public class Object : MemoryPackFormatter<T>{
     public static readonly Object Instance = new();
-    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter : IBufferWriter<byte>    {
+    private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter : IBufferWriter<byte>{
 
         var type = value.GetType();
         writer.WriteType(type);
@@ -37,21 +37,20 @@ public class Object : MemoryPackFormatter<T>{
             case EventInfo v: Event.Write(ref writer, v); break;
             case FieldInfo v: Field.Write(ref writer, v); break;
             default:{
-                FormatterResolver.GetFormatter(type);
-                writer.WriteValue(type, value);
+                writer.Write(value);
+                //FormatterResolver.GetAnonymousDisplaySetFormatter(type);
+                //writer.WriteValue(type, value);
                 break;
             }
         }
 
     }
-    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T? value) where TBufferWriter : IBufferWriter<byte>
-    {
+    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T? value) where TBufferWriter : IBufferWriter<byte>{
         if (writer.TryWriteNil(value)) return;
         Write(ref writer, value);
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, scoped ref object? value) => WriteNullable(ref writer, value);
-    private static T Read(ref Reader reader)
-    {
+    private static T Read(ref Reader reader){
         T value;
 
         var type = reader.ReadType();
@@ -76,7 +75,7 @@ public class Object : MemoryPackFormatter<T>{
         else if (typeof(PropertyInfo).IsAssignableFrom(type)) value=Property.Read(ref reader);
         else if (typeof(EventInfo).IsAssignableFrom(type)) value=Event.Read(ref reader);
         else if (typeof(FieldInfo).IsAssignableFrom(type)) value=Field.Read(ref reader);
-        else value=reader.ReadValue(type)!;
+        else value=reader.Read(type)!;
 
         return value;
     }

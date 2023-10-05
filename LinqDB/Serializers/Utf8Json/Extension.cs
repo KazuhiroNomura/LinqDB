@@ -32,6 +32,11 @@ internal static class Extension{
 
 
 
+
+
+
+
+
     private static class StaticReadOnlyCollectionFormatter<T> {
         public static readonly ReadOnlyCollectionFormatter<T> Formatter = new();
     }
@@ -107,32 +112,17 @@ internal static class Extension{
                 break;
             }
         }
-        //if(!reader.ReadIsEndArray()){
-        //    while(true){
-        //        if(reader.ReadIsBeginObject()){//{
-        //            var name=reader.ReadString();
-        //            reader.ReadIsNameSeparatorWithVerify();
-        //            var type=reader.ReadType();
-        //            Parameters.Add(Expressions.Expression.Parameter(type,name));
-        //            reader.ReadIsEndObjectWithVerify();
-        //        } else{
-        //            var index0=reader.ReadInt32();
-        //            if(index0<0){
-        //                reader.ReadIsValueSeparatorWithVerify();
-        //                var index1=reader.ReadInt32();
-        //                Parameters.Add(Serializer_ラムダ跨ぎParameters[index1]);
-        //            } else{
-        //                Parameters.Add(Serializer_Parameters[index0]);
-        //            }
-        //        }
-        //        if(!reader.ReadIsValueSeparator()){
-        //            reader.ReadIsEndArrayWithVerify();
-        //            break;
-        //        }
-        //    }
-        //}
         return Parameters;
     }
+    
+    
+    
+    
+    public static void WriteValue<T>(this ref Writer writer,IJsonFormatter<T>Formatter,T value,O Resolver)=>
+        Formatter.Serialize(ref writer,value,Resolver);
+
+
+
     public static void WriteValue(this ref Writer writer,Type type,object value,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Serialize=Formatter.GetType().GetMethod("Serialize");
@@ -143,17 +133,17 @@ internal static class Extension{
         Objects3[2]=Resolver;
         Serialize.Invoke(Formatter,Objects3);
         writer=(Writer)Objects3[0];
-
-
-        //{
-        //    var g = new LinqDB.Enumerables.GroupingList<int,int>();
-        //    System.Linq.IGrouping<int,int> xx = g;
-        //}
-        //{
-        //    var g = new LinqDB.Serializers.Utf8Json.Formatters.Enumerables.GroupingList<int,int>();
-        //    global::Utf8Json.IJsonFormatter<System.Linq.IGrouping<int,int>> xx = g;
-        //}
     }
+    
+    
+    
+    
+    public static T ReadValue<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>Formatter.Deserialize(ref reader,Resolver);
+
+
+
+
+
     public static object ReadValue(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");

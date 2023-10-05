@@ -13,7 +13,9 @@ public class IEnumerable<T> : MemoryPackFormatter<G.IEnumerable<T>>
         if (writer.TryWriteNil(value)) return;
         var type = value!.GetType();
         writer.WriteType(type);
-        writer.WriteValue(type, value);
+        //writer.RegisterFormatter(type);
+        Extension.Write(ref writer,value);
+        //writer.Write(type, value);
     }
     public override void Deserialize(ref Reader reader, scoped ref G.IEnumerable<T>? value)
     {
@@ -21,6 +23,7 @@ public class IEnumerable<T> : MemoryPackFormatter<G.IEnumerable<T>>
 
 
         var type = reader.ReadType();
-        value=(G.IEnumerable<T>?)reader.ReadValue(type);
+        //reader.RegisterFormatter(type);
+        value=(G.IEnumerable<T>?)Extension.Read(ref reader,type);
     }
 }

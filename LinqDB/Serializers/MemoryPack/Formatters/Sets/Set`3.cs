@@ -11,7 +11,6 @@ public class Set<TKey,TElement,TContainer>:MemoryPackFormatter<G.Set<TKey,TEleme
     where TKey : struct, IEquatable<TKey>
     where TContainer : LinqDB.Databases.Container{
     public static readonly Set<TKey,TElement,TContainer>Instance=new();
-    private Set(){}
     private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.Set<TKey,TElement,TContainer> value)where TBufferWriter:IBufferWriter<byte>{
         //var type=value.GetType();
         //var GenericArguments=type.GetGenericArguments();
@@ -35,11 +34,8 @@ public class Set<TKey,TElement,TContainer>:MemoryPackFormatter<G.Set<TKey,TEleme
         var Formatter=reader.GetFormatter<TElement>();
         var value=new G.Set<TKey,TElement,TContainer>(null!);
         var Count=reader.ReadVarIntInt64();
-        for(long a=0;a<Count;a++){
-            TElement? item=default;
-            Formatter.Deserialize(ref reader,ref item);
-            value.Add(item);
-        }
+        for(long a=0;a<Count;a++)
+            value.Add(reader.Read(Formatter));
         return value;
     }
     public override void Deserialize(ref Reader reader,scoped ref G.Set<TKey,TElement,TContainer>? value)=>value=ReadNullable(ref reader);
