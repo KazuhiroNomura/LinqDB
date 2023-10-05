@@ -11,7 +11,7 @@ public class Set<TKey,TElement,TContainer>:IMessagePackFormatter<G.Set<TKey,TEle
     where TElement: G.Entity<TKey,TContainer>
     where TKey : struct, IEquatable<TKey>
     where TContainer : Container{
-    //public static readonly Set<TKey,TElement,TContainer> Instance=new();//リフレクションで使われる
+    public static readonly Set<TKey,TElement,TContainer> Instance=new();//リフレクションで使われる
     private static void WriteNullable(ref Writer writer,G.Set<TKey,TElement,TContainer>? value,O Resolver) {
         if(writer.TryWriteNil(value)) return;
         var Count=value!.Count;

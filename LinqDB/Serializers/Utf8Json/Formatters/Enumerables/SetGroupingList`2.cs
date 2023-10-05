@@ -13,11 +13,9 @@ public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKe
         var Formatter=GroupingList<TKey,TElement>.Instance;
         var first=true;
         foreach(var item in value!){
-            if(first)
-                first=false;
-            else
-                writer.WriteValueSeparator();
-            writer.WriteValue(Formatter,item,Resolver);
+            if(first)first=false;
+            else writer.WriteValueSeparator();
+            writer.Write(Formatter,item,Resolver);
         }
         writer.WriteEndArray();
     }
@@ -28,10 +26,8 @@ public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKe
         //var Formatter=Resolver.GetFormatter<Sets.GroupingSet<TKey,TElement>>()!;
         var first=true;
         while(!reader.ReadIsEndArray()){
-            if(first)
-                first=false;
-            else
-                reader.ReadIsValueSeparatorWithVerify();
+            if(first)first=false;
+            else reader.ReadIsValueSeparatorWithVerify();
             var item=Formatter.Deserialize(ref reader,Resolver);
             value.Add(item);
         }

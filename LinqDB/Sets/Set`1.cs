@@ -15,6 +15,9 @@ namespace LinqDB.Sets;
 /// <typeparam name="T"></typeparam>
 public class Set<T>:ImmutableSet<T>,ICollection<T>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
+    //internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack=new();//Serializers.MemoryPack.Formatters.Sets.Set<T>().ins);
+    //internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=new();//Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
+    //internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=new();//Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
     internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance;
     internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
     internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;

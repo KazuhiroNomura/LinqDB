@@ -11,9 +11,9 @@ public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey
     IEquatable<IEnumerable<IGrouping<TKey,TElement>>>,
     IEquatable<Generic.IEnumerable<Linq.IGrouping<TKey,TElement>>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
-    private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=new();
-    private new static readonly Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMessagePack=new();
-    private new static readonly Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceUtf8Json=new();
+    private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
+    private new static readonly Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
+    private new static readonly Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     //static SetGroupingSet()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance);
     /// <summary>
     /// キー比較用EqualityComparer

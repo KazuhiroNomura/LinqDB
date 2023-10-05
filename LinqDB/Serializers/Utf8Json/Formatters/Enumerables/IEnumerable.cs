@@ -14,7 +14,7 @@ public class IEnumerable:IJsonFormatter<G.IEnumerable>  {
         var type=value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
-        writer.WriteValue(type,value,Resolver);
+        writer.Write(type,value,Resolver);
         writer.WriteEndArray();
     }
     public G.IEnumerable Deserialize(ref Reader reader,O Resolver){
@@ -23,7 +23,7 @@ public class IEnumerable:IJsonFormatter<G.IEnumerable>  {
         
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var value=reader.ReadValue(type,Resolver);
+        var value=reader.Read(type,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return (G.IEnumerable)value;
     }

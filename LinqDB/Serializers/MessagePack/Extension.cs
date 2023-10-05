@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using LinqDB.Sets;
 
 using MessagePack;
 using MessagePack.Formatters;
+using Microsoft.FSharp.Core;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 using O=MessagePackSerializerOptions;
@@ -116,20 +118,38 @@ internal static class Extension{
         }
         return Parameters;
     }
-    
-    
     private delegate void SerializeDelegate(object Formatter,ref Writer writer,object value,O options);
     private static readonly Type[] SerializeTypes={typeof(object),typeof(Writer).MakeByRefType(),typeof(object),typeof(O) };
-    public static void WriteValue<T>(this ref Writer writer,IMessagePackFormatter<T>Formatter,T value,O Resolver)=>
+    public static void Write<T>(this ref Writer writer,IMessagePackFormatter<T>Formatter,T value,O Resolver)=>
         Formatter.Serialize(ref writer,value,Resolver);
     
     
     
-    public static void WriteValue<T>(this ref Writer writer,T value,O Resolver)=>
-        Resolver.Resolver.GetFormatter<T>()!.Serialize(ref writer,value,Resolver);
-    public static void WriteValue(this ref Writer writer,Type type,object? value,O Resolver) {
+    //public static void WriteValue<T>(this ref Writer writer,IMessagePackFormatter Formatter,T value,O Resolver)=>
+    //    Formatter..Serialize(ref writer,value,Resolver);
+
+    public static void Write<T>(this ref Writer writer,T value,O Resolver){
+        var Formatter=Resolver.Resolver.GetFormatter<T>()!;
+        Formatter.Serialize(ref writer,value,Resolver);
+    }
+
+
+
+
+
+    //private static void CreateDelegate<T>(MethodInfo Method){
+    //    var Delegate=Method.CreateDelegate<Func<int,int>>();
+    //    Delegate();
+    //}
+
+
+
+    public static void Write(this ref Writer writer,Type type,object? value,O Resolver) {
+        Debug.Assert(type==value!.GetType());
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
+        //Formatter_Serialize.CreateDelegate<Func<int>>();
+        //CreateDelegate(Formatte)
         var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
         I.Ldarg_0();//formatter
@@ -140,18 +160,32 @@ internal static class Extension{
         I.Callvirt(Formatter_Serialize);
         I.Ret();
         ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
-        //MessagePack.Serializer.DynamicSerialize(Formatter,ref writer,value,Resolver);
     }
-    public static T ReadValue<T>(this ref Reader reader,IMessagePackFormatter<T>Formatter,O Resolver)=>
+
+    public static T Read<T>(this ref Reader reader,IMessagePackFormatter<T>Formatter,O Resolver)=>
         Formatter.Deserialize(ref reader,Resolver);
-    public static T ReadValue<T>(this ref Reader reader,O Resolver)=>
+
+
+
+    public static T Read<T>(this ref Reader reader,O Resolver)=>
         Resolver.Resolver.GetFormatter<T>()!.Deserialize(ref reader, Resolver);
-    private delegate object DeserializeDelegate(object Formatter,ref Reader reader,
-        O options);
-    private static readonly Type[] DeserializeTypes={
-        typeof(object),typeof(Reader).MakeByRefType(),typeof(O)
-    };
-    public static object ReadValue(this ref Reader reader,Type type,O Resolver){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static object Read(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
         var Method=Formatter.GetType().GetMethod("Deserialize")!;
         var D=new DynamicMethod("",typeof(object),DeserializeTypes){InitLocals=false};
@@ -180,6 +214,8 @@ internal static class Extension{
 
 
 
+    private delegate object DeserializeDelegate(object Formatter,ref Reader reader,O options);
+    private static readonly Type[] DeserializeTypes={typeof(object),typeof(Reader).MakeByRefType(),typeof(O)};
     public static Serializer Serializer(this O Options)=>
         (Serializer)Options.Resolver.GetFormatter<Serializer>()!;
 }

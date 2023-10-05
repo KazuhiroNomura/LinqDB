@@ -15,7 +15,7 @@ public class IEnumerable:IMessagePackFormatter<G.IEnumerable>{
         writer.WriteArrayHeader(2);
         var type=value!.GetType();
         writer.WriteType(type);
-        writer.WriteValue(type,value,Resolver);
+        writer.Write(type,value,Resolver);
     }
 
 
@@ -24,7 +24,7 @@ public class IEnumerable:IMessagePackFormatter<G.IEnumerable>{
         var Count = reader.ReadArrayHeader();
         Debug.Assert(Count==2);
         var type = reader.ReadType();
-        var value=reader.ReadValue(type,Resolver);
+        var value=reader.Read(type,Resolver);
         return (G.IEnumerable)value;
     }
 }

@@ -1,4 +1,8 @@
-﻿using MemoryPack;
+﻿using LinqDB.Sets;
+using MemoryPack;
+
+using System.Xml.Linq;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 using Sets = LinqDB.Sets;
 
@@ -12,7 +16,7 @@ public class IEnumerable:MemoryPackFormatter<Sets.IEnumerable> {
         if(writer.TryWriteNil(value)) return;
         var type=value!.GetType();
         writer.WriteType(type);
-        writer.WriteValue(type, value);
+        writer.Write(value);
         //var GenericTypeDefinition=type.GetGenericTypeDefinition();
         //type.GetValue("Memor")
         //if(typeof(Sets.Set<>)==GenericTypeDefinition) {

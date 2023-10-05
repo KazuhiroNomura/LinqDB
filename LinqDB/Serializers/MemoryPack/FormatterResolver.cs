@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
 using LinqDB.Helpers;
-
+using MemoryPack;
 
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
-using MemoryPack;
-
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
-
-
     public static MemoryPackFormatter<T>? GetDisplayAnonymousFormatter<T>(){
         if(typeof(T).IsDisplay())return Formatters.Others.DisplayClass<T>.Instance;
         if(typeof(T).IsAnonymous()){
@@ -21,12 +17,14 @@ internal static class FormatterResolver {
     }
     public static object? GetDisplayAnonymous以外Formatter(Type type) {
         Debug.Assert(!(type.IsDisplay()||type.IsAnonymous()));
-
-
         if(type.IsArray)return GetAnonymousDisplaySetFormatter(type.GetElementType());
         if(type.IsGenericType) {
             foreach(var GenericArgument in type.GetGenericArguments())GetAnonymousDisplaySetFormatter(GenericArgument);
-            if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))return RegisterAnonymousDisplay(type,typeof(Formatters.ExpressionT<>));
+            if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
+                return RegisterAnonymousDisplay(type,typeof(Formatters.ExpressionT<>));
+                
+                
+                
             if(type.IsInterface){
                 object? Formatter;
                 if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Formatter;
@@ -51,9 +49,8 @@ internal static class FormatterResolver {
                 } while(typeof(object)!=type0);
             }
         }
-        return null;
-        
-        
+        return null!;
+
         
         
         
@@ -69,9 +66,8 @@ internal static class FormatterResolver {
             static object RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
                 var GenericArguments=type0.GetGenericArguments();
                 var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-                var Register = Serializer.Register.MakeGenericMethod(type0);
                 var Instance=FormatterGenericType.GetValue("Instance")!;
-                Register.Invoke(null,new object?[]{Instance});
+                Serializer.Register.MakeGenericMethod(type0).Invoke(null,new object?[]{Instance});
                 return Instance;
             }
         }

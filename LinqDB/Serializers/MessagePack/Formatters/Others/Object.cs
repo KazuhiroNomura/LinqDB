@@ -75,7 +75,7 @@ public class Object : IMessagePackFormatter<G>{
         else if (typeof(PropertyInfo).IsAssignableFrom(type)) value=Property.Read(ref reader, Resolver);
         else if (typeof(EventInfo).IsAssignableFrom(type)) value=Event.Read(ref reader, Resolver);
         else if (typeof(FieldInfo).IsAssignableFrom(type)) value=Field.Read(ref reader, Resolver);
-        else value=reader.ReadValue(type, Resolver);
+        else value=reader.Read(type, Resolver);
 
         return value;
     }

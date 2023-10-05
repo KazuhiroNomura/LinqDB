@@ -14,11 +14,12 @@ internal sealed class FormatterResolver:IFormatterResolver {
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IMessagePackFormatter<T>)Formatter;
         if(type.IsDisplay())return Return(Formatters.Others.DisplayClass<T>.Instance);
 
-        if(type.IsArray) {
-            
-        }else if(type.IsGenericType) {
-            if(type.IsAnonymous()) {
-                
+
+
+
+
+        if(type.IsGenericType) {
+            if(type.IsAnonymous()) {                
             } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
                 var FormatterType = typeof(Formatters.ExpressionT<>).MakeGenericType(type);
                 var Instance=FormatterType.GetField("Instance")!;
@@ -47,43 +48,35 @@ internal sealed class FormatterResolver:IFormatterResolver {
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
             }
-            
-            
         }
-        return default!;
+        return null!;
         IMessagePackFormatter<T> Return(object Formatter0){
             var result=(IMessagePackFormatter<T>)Formatter0;
             this.DictionaryTypeFormatter.Add(typeof(T),result);
             return result;
         }
-        IMessagePackFormatter<T>?RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
+        IMessagePackFormatter<T>? RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition) {
             Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface||FormatterGenericInterfaceDefinition.IsInterface);
-            if(type0.IsGenericType&&type.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
+            if(type0.IsGenericType&&type.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
                 return RegisterGeneric(type0,FormatterGenericInterfaceDefinition);
-                
-            }
-            foreach(var Interface in type0.GetInterfaces()){
-                if(!Interface.IsGenericType)continue;
-                if(Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
+            foreach(var Interface in type0.GetInterfaces())
+                if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
                     return RegisterGeneric(Interface,FormatterGenericInterfaceDefinition);
-                    
-                }
-            }
             return null;
+            IMessagePackFormatter<T> RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition) {
+                var GenericArguments = type0.GetGenericArguments();
+                var FormatterGenericType = FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
+                var Formatter_T = (IMessagePackFormatter<T>)FormatterGenericType.GetValue("Instance")!;
+                this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
+                return Formatter_T;
+            }
         }
-        IMessagePackFormatter<T>?RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition){
+        IMessagePackFormatter<T>? RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition) {
             Debug.Assert(type0.IsGenericType);
             Debug.Assert(!検索したいキーGenericTypeDefinition.IsInterface);
-            if(type0.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition)return null;
-            var Formatter0=type0.GetValue("InstanceMessagePack");
-            var Formatter_T=(IMessagePackFormatter<T>)Formatter0;
-            this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
-            return Formatter_T;
-        }
-        IMessagePackFormatter<T>RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
-            var GenericArguments=type0.GetGenericArguments();
-            var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-            var Formatter_T=(IMessagePackFormatter<T>)FormatterGenericType.GetValue("Instance")!;
+            if(type0.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition) return null;
+            var Formatter0 = type0.GetValue("InstanceMessagePack");
+            var Formatter_T = (IMessagePackFormatter<T>)Formatter0;
             this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
             return Formatter_T;
         }

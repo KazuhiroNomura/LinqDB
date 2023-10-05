@@ -6,7 +6,7 @@ using Reader = JsonReader;
 using G=LinqDB.Sets;
 public class Set<T>:IJsonFormatter<G.Set<T>>{
     public static readonly Set<T> Instance=new();
-    private Set(){}
+    //private Set(){}
     private static void WriteNullable(ref Writer writer,G.IEnumerable<T>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
@@ -20,17 +20,6 @@ public class Set<T>:IJsonFormatter<G.Set<T>>{
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,G.Set<T>? value,O Resolver)=>WriteNullable(ref writer,value,Resolver);
-    internal static G.Set<T> Read(ref Reader reader,O Resolver){
-        var value=new G.Set<T>();
-        var Formatter = Resolver.GetFormatter<T>();
-        while(!reader.ReadIsEndArray()) {
-            reader.ReadIsValueSeparatorWithVerify();
-            var item = Formatter.Deserialize(ref reader,Resolver);
-            value.Add(item);
-        }
-        reader.ReadIsEndArrayWithVerify();
-        return value;
-    }
     private static G.Set<T>? ReadNullable(ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var value=new G.Set<T>();

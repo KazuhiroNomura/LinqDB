@@ -118,12 +118,28 @@ internal static class Extension{
     
     
     
-    public static void WriteValue<T>(this ref Writer writer,IJsonFormatter<T>Formatter,T value,O Resolver)=>
+    public static void Write<T>(this ref Writer writer,IJsonFormatter<T>Formatter,T value,O Resolver)=>
         Formatter.Serialize(ref writer,value,Resolver);
 
 
 
-    public static void WriteValue(this ref Writer writer,Type type,object value,O Resolver){
+    //public static void Write<T>(this ref Writer writer,IJsonFormatter Formatter,T value,O Resolver)=>
+    //    Formatter.Serialize(ref writer,value,Resolver);
+    public static void Write<T>(this ref Writer writer,T value,O Resolver)=>
+        Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+        
+
+
+
+
+
+
+        
+        
+        
+        
+        
+    public static void Write(this ref Writer writer,Type type,object value,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Serialize=Formatter.GetType().GetMethod("Serialize");
         Debug.Assert(Serialize is not null);
@@ -138,13 +154,40 @@ internal static class Extension{
     
     
     
-    public static T ReadValue<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>Formatter.Deserialize(ref reader,Resolver);
+    public static T ReadValue<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
+        Formatter.Deserialize(ref reader,Resolver);
+
+
+
+    public static T ReadValue<T>(this ref Reader reader,O Resolver)=>
+        Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
 
 
 
 
 
-    public static object ReadValue(this ref Reader reader,Type type,O Resolver){
+
+
+
+
+
+
+
+
+
+
+
+    public static object Read(this ref Reader reader,IJsonFormatter Formatter,O Resolver){
+        var Deserialize=Formatter.GetType().GetMethod("Deserialize");
+        Debug.Assert(Deserialize is not null);
+        var Objects2=new object[2];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
+        Objects2[0]=reader;
+        Objects2[1]=Resolver;
+        var value=Deserialize.Invoke(Formatter,Objects2)!;
+        reader=(Reader)Objects2[0];
+        return value;
+    }
+    public static object Read(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);

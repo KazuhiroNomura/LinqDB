@@ -12,7 +12,7 @@ public class IEnumerable:IJsonFormatter<Sets.IEnumerable>  {
         var type=value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
-        writer.WriteValue(type,value,Resolver);
+        writer.Write(type,value,Resolver);
         writer.WriteEndArray();
     }
     public Sets.IEnumerable Deserialize(ref Reader reader,O Resolver){
@@ -20,7 +20,7 @@ public class IEnumerable:IJsonFormatter<Sets.IEnumerable>  {
         reader.ReadIsBeginArrayWithVerify();
         var type=reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var value=reader.ReadValue(type,Resolver);
+        var value=reader.Read(type,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return (Sets.IEnumerable)value;
     }

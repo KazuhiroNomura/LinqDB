@@ -9,7 +9,7 @@ using G=LinqDB.Sets;
 public class Set<TKey,TElement>:IMessagePackFormatter<G.Set<TKey,TElement>>
     where TElement:G.IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
-    //public static readonly Set<TKey,TElement> Instance=new();//リフレクションで使われる
+    public static readonly Set<TKey,TElement> Instance=new();//リフレクションで使われる
     private static void WriteNullable(ref Writer writer,G.Set<TKey,TElement>? value,O Resolver) {
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(1+value!.Count);

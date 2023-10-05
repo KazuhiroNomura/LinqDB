@@ -14,7 +14,7 @@ public class IEnumerable<T>:IMessagePackFormatter<IEnumerable<T>>{
         writer.WriteArrayHeader(2);
         var type=value!.GetType();
         writer.WriteType(type);
-        writer.WriteValue(type,value,Resolver);
+        writer.Write(type,value,Resolver);
     }
 
 
@@ -24,7 +24,7 @@ public class IEnumerable<T>:IMessagePackFormatter<IEnumerable<T>>{
         Debug.Assert(Count==2);
         var type=reader.ReadType();
         var o=type.GetValue("InstanceMemoryPack");
-        var value=reader.ReadValue(type,Resolver);
+        var value=reader.Read(type,Resolver);
         return(IEnumerable<T>)value;
     }
 }

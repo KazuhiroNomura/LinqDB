@@ -8,18 +8,10 @@ using Reader = MessagePackReader;
 using G=LinqDB.Sets;
 public class Set<T>:IMessagePackFormatter<G.Set<T>>{
     public static readonly Set<T> Instance=new();
-    private Set(){}
+    //private Set(){}
     public void Serialize(ref Writer writer,G.Set<T>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         var Count=value!.Count;
-        writer.WriteArrayHeader(Count);
-        var Formatter=Resolver.Resolver.GetFormatter<T>()!;
-        foreach(var item in value)
-            Formatter.Serialize(ref writer,item,Resolver);
-    }
-    public void Serialize(ref Writer writer,G.IEnumerable<T> value,O Resolver){
-        if(writer.TryWriteNil(value)) return;
-        var Count=value.Count();
         writer.WriteArrayHeader(Count);
         var Formatter=Resolver.Resolver.GetFormatter<T>()!;
         foreach(var item in value)

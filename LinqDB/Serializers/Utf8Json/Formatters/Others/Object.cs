@@ -36,7 +36,7 @@ public class Object : IJsonFormatter<G>{
             case EventInfo v: Event.Write(ref writer, v, Resolver); break;
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
             default:{
-                writer.WriteValue(type,value,Resolver);
+                writer.Write(type,value,Resolver);
                 
                 break;
             }
@@ -76,7 +76,7 @@ public class Object : IJsonFormatter<G>{
         else if (typeof(PropertyInfo).IsAssignableFrom(type)) value=Property.Read(ref reader, Resolver);
         else if (typeof(EventInfo).IsAssignableFrom(type)) value=Event.Read(ref reader, Resolver);
         else if (typeof(FieldInfo).IsAssignableFrom(type)) value=Field.Read(ref reader, Resolver);
-        else value=reader.ReadValue(type, Resolver);
+        else value=reader.Read(type, Resolver);
         reader.ReadIsEndArrayWithVerify();
         return value;
     }

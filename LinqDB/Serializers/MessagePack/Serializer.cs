@@ -62,12 +62,11 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             
         };
         var resolvers=new IFormatterResolver[]{
+            FormatterResolver.Instance,
             global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
             global::MessagePack.Resolvers.BuiltinResolver.Instance,
             //global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
             //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
-            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-            FormatterResolver.Instance
         };
         this.Options=MessagePackSerializerOptions.Standard.WithResolver(
             global::MessagePack.Resolvers.CompositeResolver.Create(
@@ -109,9 +108,8 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     /// <param name="Formatter"></param>
     /// <param name="writer"></param>
     /// <param name="value"></param>
-    /// <param name="options"></param>
-    public static void DynamicSerialize(object Formatter,ref MessagePackWriter writer,object value,
-        MessagePackSerializerOptions options){
+    /// <param name="Resolver"></param>
+    public static void DynamicSerialize(object Formatter,ref MessagePackWriter writer,object value,MessagePackSerializerOptions Resolver){
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
         var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
@@ -122,7 +120,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
         I.Ldarg_3();//options
         I.Callvirt(Formatter_Serialize);
         I.Ret();
-        ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,options);
+        ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
     }
     private delegate object DeserializeDelegate(object Formatter,ref MessagePackReader reader,
         MessagePackSerializerOptions options);

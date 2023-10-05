@@ -16,7 +16,7 @@ public class IGrouping<TKey, TElement> : IJsonFormatter<G.IGrouping<TKey, TEleme
         var type = value.GetType();
         writer.WriteType(type);
         writer.WriteValueSeparator();
-        writer.WriteValue(type, value, Resolver);
+        writer.Write(type, value, Resolver);
         writer.WriteEndArray();
     }
     public G.IGrouping<TKey, TElement> Deserialize(ref Reader reader, O Resolver)
@@ -25,7 +25,7 @@ public class IGrouping<TKey, TElement> : IJsonFormatter<G.IGrouping<TKey, TEleme
         reader.ReadIsBeginArrayWithVerify();
         var type = reader.ReadType();
         reader.ReadIsValueSeparatorWithVerify();
-        var value = reader.ReadValue(type, Resolver);
+        var value = reader.Read(type, Resolver);
         reader.ReadIsEndArrayWithVerify();
         return (G.IGrouping<TKey, TElement>)value;
     }

@@ -1,15 +1,21 @@
 ﻿using System.Buffers;
+using System.Reflection.PortableExecutable;
+
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 
 using Reader = MemoryPackReader;
 using G = LinqDB.Sets;
 public class Set<T>:MemoryPackFormatter<G.Set<T>>{
-    public static readonly Set<T>Instance=new();
-    private Set(){}
+    public static readonly Set<T> Instance=new();
     private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.Set<T>? value) where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
-        writer.WriteType(value!.GetType());
+        var type=value!.GetType();
+        writer.WriteType(type);
+        if(typeof(G.Set<T>)!=type){
+            writer.Write(value);
+            return;
+        }
         var Count=value.LongCount;
         var Formatter=writer.GetFormatter<T>();
         writer.WriteVarInt(Count);
@@ -20,17 +26,13 @@ public class Set<T>:MemoryPackFormatter<G.Set<T>>{
     private static G.Set<T>? ReadNullable(ref Reader reader){
         if(reader.TryReadNil())return null;
         var type=reader.ReadType();
-        if(typeof(G.Set<T>)==type){
-            var Formatter=reader.GetFormatter<T>();
-            var value=new G.Set<T>();
-            var Count=reader.ReadVarIntInt64();
-            for(long a=0;a<Count;a++)
-                value.Add(reader.Read(Formatter));
-            return value;
-        } else{
-            //GroupingSet<>,Set<,>など
-            return(G.Set<T>?)Extension.Read(ref reader,type);
-        }
+        if(typeof(G.Set<T>)!=type)return(G.Set<T>?)reader.Read(type);
+        var Formatter=reader.GetFormatter<T>();
+        var value=new G.Set<T>();
+        var Count=reader.ReadVarIntInt64();
+        for(long a=0;a<Count;a++) value.Add(reader.Read(Formatter));
+        return value;
+
     }
     public override void Deserialize(ref Reader reader,scoped ref G.Set<T>? value)=>value=ReadNullable(ref reader);
 }

@@ -16,7 +16,7 @@ public class IGrouping<TKey,TElement>:IMessagePackFormatter<G.IGrouping<TKey,TEl
         Resolver.Resolver.GetFormatter<TKey>()!.Serialize(ref writer,value!.Key,Resolver);
         var Formatter=Resolver.Resolver.GetFormatter<TElement>()!;
         foreach(var item in value) 
-            writer.WriteValue(Formatter,item,Resolver);
+            writer.Write(Formatter,item,Resolver);
     }
     
     
@@ -27,7 +27,7 @@ public class IGrouping<TKey,TElement>:IMessagePackFormatter<G.IGrouping<TKey,TEl
         var Formatter=Resolver.Resolver.GetFormatter<TElement>()!;
         var value=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
         for(var a=1;a<Count;a++)
-            value.Add(reader.ReadValue(Formatter,Resolver));
+            value.Add(reader.Read(Formatter,Resolver));
         return value;
     }
 }

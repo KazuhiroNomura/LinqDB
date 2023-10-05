@@ -12,7 +12,7 @@ public class SetGroupingList<TKey,TElement>:IMessagePackFormatter<G.SetGroupingL
         writer.WriteArrayHeader(value!.Count);
         var Formatter=Resolver.Resolver.GetFormatter<LinqDB.Enumerables.GroupingList<TKey,TElement>>()!;
         foreach(var item in value)
-            writer.WriteValue(Formatter,item,Resolver);
+            writer.Write(Formatter,item,Resolver);
     }
     public G.SetGroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil())return null!;
@@ -20,7 +20,7 @@ public class SetGroupingList<TKey,TElement>:IMessagePackFormatter<G.SetGroupingL
         var Formatter=Resolver.Resolver.GetFormatter<LinqDB.Enumerables.GroupingList<TKey,TElement>>()!;
         var value = new G.SetGroupingList<TKey,TElement>();
         for(long a = 0;a<Count;a++)
-            value.Add(reader.ReadValue(Formatter,Resolver));
+            value.Add(reader.Read(Formatter,Resolver));
         return value;
     }
 }

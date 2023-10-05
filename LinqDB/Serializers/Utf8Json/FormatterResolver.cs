@@ -14,11 +14,12 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IJsonFormatter<T>)Formatter;
         if(type.IsDisplay())return Return(Formatters.Others.DisplayClass<T>.Instance);
 
-        if(type.IsArray) {
-            
-        }else if(type.IsGenericType) {
-            if(type.IsAnonymous()) {
 
+
+
+
+        if(type.IsGenericType) {
+            if(type.IsAnonymous()) {
             } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
                 var FormatterType = typeof(Formatters.ExpressionT<>).MakeGenericType(type);
                 var Instance=FormatterType.GetField("Instance")!;
@@ -46,11 +47,9 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
                         type0=type0.BaseType!;
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
-            }            
-            
-            
+            }
         }
-        return default!;
+        return null!;
         IJsonFormatter<T> Return(object Formatter0){
             var result=(IJsonFormatter<T>)Formatter0;
             this.DictionaryTypeFormatter.Add(typeof(T),result);
@@ -58,18 +57,19 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
         }
         IJsonFormatter<T>?RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
             Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface||FormatterGenericInterfaceDefinition.IsInterface);
-            if(type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
+            if(type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
                 return RegisterGeneric(type0,FormatterGenericInterfaceDefinition);
-
-            }
-            foreach(var Interface in type.GetInterfaces()){
-                if(!Interface.IsGenericType)continue;
-                if(Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition){
+            foreach(var Interface in type.GetInterfaces())
+                if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
                     return RegisterGeneric(Interface,FormatterGenericInterfaceDefinition);
-                    
-                }
-            }
             return null;
+            IJsonFormatter<T>RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
+                var GenericArguments=type0.GetGenericArguments();
+                var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
+                var Formatter_T=(IJsonFormatter<T>)FormatterGenericType.GetValue("Instance")!;
+                this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
+                return Formatter_T;
+            }
         }
         IJsonFormatter<T>? RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition){
             Debug.Assert(type.IsGenericType);
@@ -77,13 +77,6 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
             if(type0.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition)return null;
             var Formatter0=type0.GetValue("InstanceUtf8Json");
             var Formatter_T=(IJsonFormatter<T>)Formatter0;
-            this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
-            return Formatter_T;
-        }
-        IJsonFormatter<T>RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
-            var GenericArguments=type0.GetGenericArguments();
-            var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-            var Formatter_T=(IJsonFormatter<T>)FormatterGenericType.GetValue("Instance")!;
             this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
             return Formatter_T;
         }
