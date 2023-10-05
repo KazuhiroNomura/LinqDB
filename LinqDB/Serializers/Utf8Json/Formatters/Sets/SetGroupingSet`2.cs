@@ -5,7 +5,7 @@ using Writer = JsonWriter;
 using Reader = JsonReader;
 using G=LinqDB.Sets;
 public class SetGroupingSet<TKey,TElement>:IJsonFormatter<G.SetGroupingSet<TKey,TElement>>{
-    internal new static readonly SetGroupingSet<TKey,TElement>Instance=new();
+    internal static readonly SetGroupingSet<TKey,TElement>Instance=new();
     public void Serialize(ref Writer writer,G.SetGroupingSet<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();

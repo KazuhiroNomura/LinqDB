@@ -22,7 +22,6 @@ public class IEnumerable:IMessagePackFormatter<G.IEnumerable>{
         var Count=reader.ReadArrayHeader();
         System.Diagnostics.Debug.Assert(Count==2);
         var type=reader.ReadType();
-        var o=type.GetValue("InstanceMemoryPack");
         var value=reader.Read(type,Resolver);
         return(G.IEnumerable)value;
     }

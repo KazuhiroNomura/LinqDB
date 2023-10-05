@@ -9,24 +9,13 @@ public class IEnumerable<T> : IJsonFormatter<G.IEnumerable<T>>
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     private static readonly IEnumerable<T> Instance = new();
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
+    private static readonly global::Utf8Json.Formatters.InterfaceEnumerableFormatter<T> Formatter=new();
     public void Serialize(ref Writer writer, G.IEnumerable<T> value, O Resolver)
     {
-        if (writer.TryWriteNil(value)) return;
-        writer.WriteBeginArray();
-        var type = value.GetType();
-        writer.WriteType(type);
-        writer.WriteValueSeparator();
-        writer.Write(type, value, Resolver);
-        writer.WriteEndArray();
+        writer.Write(Formatter,value,Resolver);
     }
     public G.IEnumerable<T> Deserialize(ref Reader reader, O Resolver)
     {
-        if (reader.TryReadNil()) return null!;
-        reader.ReadIsBeginArrayWithVerify();
-        var type = reader.ReadType();
-        reader.ReadIsValueSeparatorWithVerify();
-        var value = reader.Read(type, Resolver);
-        reader.ReadIsEndArrayWithVerify();
-        return (G.IEnumerable<T>)value;
+        return reader.Read(Formatter,Resolver)!;
     }
 }

@@ -63,10 +63,11 @@ internal sealed class FormatterResolver:IFormatterResolver {
                 if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
                     return RegisterGeneric(Interface,FormatterGenericInterfaceDefinition);
             return null;
-            IMessagePackFormatter<T> RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition) {
-                var GenericArguments = type0.GetGenericArguments();
+            IMessagePackFormatter<T> RegisterGeneric(Type type1,Type FormatterGenericTypeDefinition){
+                var GenericArguments = type1.GetGenericArguments();
                 var FormatterGenericType = FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-                var Formatter_T = (IMessagePackFormatter<T>)FormatterGenericType.GetValue("Instance")!;
+                var Formatter0=FormatterGenericType.GetValue("Instance");
+                var Formatter_T = (IMessagePackFormatter<T>)Formatter0;
                 this.DictionaryTypeFormatter.Add(typeof(T),Formatter_T);
                 return Formatter_T;
             }

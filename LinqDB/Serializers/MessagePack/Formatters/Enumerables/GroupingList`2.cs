@@ -25,10 +25,10 @@ public class GroupingList<TKey, TElement> : IMessagePackFormatter<G.GroupingList
         if (reader.TryReadNil()) return null!;
         var Count = reader.ReadArrayHeader();
         var Key=reader.Read<TKey>(Resolver);// Resolver.Resolver.GetFormatter<TKey>()!.Deserialize(ref reader, Resolver);
-        var ElementFormatter = Resolver.Resolver.GetFormatter<TElement>()!;
+        var Formatter = Resolver.Resolver.GetFormatter<TElement>()!;
         var value = new G.GroupingList<TKey, TElement>(Key);
-        for (var a = 2; a<Count; a++){
-            var item=ElementFormatter.Deserialize(ref reader, Resolver);
+        for (var a = 1; a<Count; a++){
+            var item=Formatter.Deserialize(ref reader, Resolver);
             value.Add(item);
         }
         return value;

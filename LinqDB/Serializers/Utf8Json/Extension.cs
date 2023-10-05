@@ -154,12 +154,12 @@ internal static class Extension{
     
     
     
-    public static T ReadValue<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
+    public static T Read<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
         Formatter.Deserialize(ref reader,Resolver);
 
 
 
-    public static T ReadValue<T>(this ref Reader reader,O Resolver)=>
+    public static T Read<T>(this ref Reader reader,O Resolver)=>
         Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
 
 

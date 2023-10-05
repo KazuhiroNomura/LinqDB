@@ -10,9 +10,7 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
     private GroupingList(){}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.GroupingList<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
-        
-        FormatterResolver.GetAnonymousDisplaySetFormatter(typeof(TKey));
-        writer.WriteValue(value!.Key);
+        writer.Write(value!.Key);
         var Formatter=writer.GetFormatter<TElement>();
         writer.WriteVarInt(value.LongCount);
         foreach(var item in value){

@@ -20,6 +20,7 @@ public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKe
         writer.WriteEndArray();
     }
     public G.SetGroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+        if (reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var value=new G.SetGroupingList<TKey,TElement>();
         var Formatter=GroupingList<TKey,TElement>.Instance;

@@ -13,20 +13,27 @@ public class IGrouping<TKey, TElement> : IJsonFormatter<G.IGrouping<TKey, TEleme
     {
         if (writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        var type = value.GetType();
-        writer.WriteType(type);
-        writer.WriteValueSeparator();
-        writer.Write(type, value, Resolver);
+        writer.Write(value.Key,Resolver);
+        
+        var Formatter=Resolver.GetFormatter<TElement>();
+        foreach(var item in value!){
+            writer.WriteValueSeparator();
+            Formatter.Serialize(ref writer,item,Resolver);
+        }
         writer.WriteEndArray();
     }
     public G.IGrouping<TKey, TElement> Deserialize(ref Reader reader, O Resolver)
     {
         if (reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var type = reader.ReadType();
-        reader.ReadIsValueSeparatorWithVerify();
-        var value = reader.Read(type, Resolver);
-        reader.ReadIsEndArrayWithVerify();
-        return (G.IGrouping<TKey, TElement>)value;
+        var Key=reader.Read<TKey>(Resolver);
+        var value=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        var Formatter=Resolver.GetFormatter<TElement>();
+        while(!reader.ReadIsEndArray()){
+            reader.ReadIsValueSeparatorWithVerify();
+            var item=Formatter.Deserialize(ref reader,Resolver);
+            value.Add(item);
+        }
+        return value;
     }
 }
