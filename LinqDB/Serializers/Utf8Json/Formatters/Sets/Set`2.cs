@@ -12,26 +12,36 @@ public class Set<TKey,TElement>:IJsonFormatter<G.Set<TKey,TElement>> where TElem
     public void Serialize(ref Writer writer,G.Set<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        var Formatter = Resolver.GetFormatter<TElement>();
-        var first=true;
-        foreach(var item in value!){
-            if(first) first=false;
-            else writer.WriteValueSeparator();
-            Formatter.Serialize(ref writer,item,Resolver);
+        var type=value!.GetType();
+        writer.WriteType(type);
+        if(typeof(G.Set<TKey,TElement>)!=type){
+            writer.WriteValueSeparator();
+            writer.Write(type,value,Resolver);
+        }else{
+            var Formatter = Resolver.GetFormatter<TElement>();
+            foreach(var item in value){
+                writer.WriteValueSeparator();
+                writer.Write(Formatter,item,Resolver);
+            }
         }
         writer.WriteEndArray();
     }
     public G.Set<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
+        G.Set<TKey,TElement>value;
         reader.ReadIsBeginArrayWithVerify();
-        var value=new G.Set<TKey,TElement>();
-        var Formatter = Resolver.GetFormatter<TElement>();
-        var first=true;
-        while(!reader.ReadIsEndArray()) {
-            if(first) first=false;
-            else reader.ReadIsValueSeparatorWithVerify();
-            var item = Formatter.Deserialize(ref reader,Resolver);
-            value.Add(item);
+        var type=reader.ReadType();
+        if(typeof(G.Set<TKey,TElement>)!=type){
+            reader.ReadIsValueSeparatorWithVerify();
+            value=(G.Set<TKey,TElement>)reader.Read(type,Resolver);
+            reader.ReadIsEndArrayWithVerify();
+        }else{
+            value=new G.Set<TKey,TElement>();
+            var Formatter = Resolver.GetFormatter<TElement>();
+            while(!reader.ReadIsEndArray()) {
+                reader.ReadIsValueSeparatorWithVerify();
+                value.Add(reader.Read(Formatter,Resolver));
+            }
         }
         return value;
     }

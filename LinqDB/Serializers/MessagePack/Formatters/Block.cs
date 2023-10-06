@@ -1,5 +1,4 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions=System.Linq.Expressions;

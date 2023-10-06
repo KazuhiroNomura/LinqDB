@@ -5,10 +5,10 @@ using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 using Reader = MemoryPackReader;
-using G = MemberInfo;
-public class Member:MemoryPackFormatter<G>{
+using T = MemberInfo;
+public class Member:MemoryPackFormatter<T>{
     public static readonly Member Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G value)
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)
         where TBufferWriter:IBufferWriter<byte>{
 
         var type=value.ReflectedType;
@@ -21,11 +21,11 @@ public class Member:MemoryPackFormatter<G>{
         writer.WriteVarInt(index);
 
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    internal static G Read(ref Reader reader){
+    internal static T Read(ref Reader reader){
 
         var type=reader.ReadType();
 
@@ -36,6 +36,6 @@ public class Member:MemoryPackFormatter<G>{
         var array=reader.Serializer().TypeMembers.Get(type);
         return array[index];
     }
-    public override void Deserialize(ref Reader reader,scoped ref G? value)=>
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>
         value=reader.TryReadNil()?null:Read(ref reader);
 }

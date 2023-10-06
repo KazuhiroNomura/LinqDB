@@ -10,30 +10,35 @@ public class Set<TKey,TElement>:MemoryPackFormatter<G.Set<TKey,TElement>>
     where TElement:G.IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
     public new static readonly Set<TKey,TElement> Instance=new();
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.Set<TKey,TElement>? value) where TBufferWriter:IBufferWriter<byte>{
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.Set<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
         var type=value!.GetType();
         writer.WriteType(type);
         if(typeof(G.Set<TKey,TElement>)!=type){
-            writer.Write(value);
-            return;
+            writer.Write(type,value);
+        } else{
+            var Count=value.LongCount;
+            var Formatter=writer.GetFormatter<TElement>();
+            writer.WriteVarInt(Count);
+            foreach(var item in value)
+                writer.Write(Formatter,item);
         }
-        var Count=value.LongCount;
-        var Formatter=writer.GetFormatter<TElement>();
-        writer.WriteVarInt(Count);
-        foreach(var item in value)
-            writer.Write(Formatter,item);
+        
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.Set<TKey,TElement>? value)=>WriteNullable(ref writer,value);
-    private static G.Set<TKey,TElement>? ReadNullable(ref Reader reader){
-        if(reader.TryReadNil())return null;
+    
+    public override void Deserialize(ref Reader reader,scoped ref G.Set<TKey,TElement>? value){
+        if(reader.TryReadNil())return;
         var type=reader.ReadType();
-        if(typeof(G.Set<TKey,TElement>)!=type)return(G.Set<TKey,TElement>?)reader.Read(type);
-        var Formatter=reader.GetFormatter<TElement>();
-        var value=new G.Set<TKey,TElement>();
-        var Count=reader.ReadVarIntInt64();
-        for(long a=0;a<Count;a++) value.Add(reader.Read(Formatter));
-        return value;
+        
+        if(typeof(G.Set<TKey,TElement>)!=type){
+            value=(G.Set<TKey,TElement>?)reader.Read(type);
+        }else{
+            var Formatter=reader.GetFormatter<TElement>();
+            var value0=new G.Set<TKey,TElement>();
+            var Count=reader.ReadVarIntInt64();
+            for(long a=0;a<Count;a++)
+                value0.Add(reader.Read(Formatter));
+            value=value0;
+        }
     }
-    public override void Deserialize(ref Reader reader,scoped ref G.Set<TKey,TElement>? value)=>value=ReadNullable(ref reader);
 }

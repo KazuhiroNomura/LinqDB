@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Xml.Linq;
-
-using LinqDB.Serializers.MessagePack.Formatters.Sets;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Enumerables;
 using O = MessagePackSerializerOptions;

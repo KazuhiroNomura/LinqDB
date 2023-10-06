@@ -5,10 +5,7 @@ using System.Diagnostics;
 using System.Reflection;
 
 using MemoryPack;
-using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
-using System.Runtime.Serialization;
-using LinqDB.Serializers.MessagePack;
 namespace LinqDB.Serializers.MemoryPack;
 
 
@@ -139,8 +136,7 @@ public static class Extension{
         }
         writer.WriteValue(value_T);
     }
-    public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,object value)where TBufferWriter:IBufferWriter<byte>{
-        var type=value.GetType();
+    public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type type,object value)where TBufferWriter:IBufferWriter<byte>{
         var Formatter=FormatterResolver.GetRegisteredFormatter(type);
         if(Formatter!=null){
             Write(ref writer,(IMemoryPackFormatter)Formatter,value);

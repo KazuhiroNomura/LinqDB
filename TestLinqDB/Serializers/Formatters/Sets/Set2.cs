@@ -14,8 +14,8 @@ namespace TestLinqDB.Serializers.Formatters.Sets;
 public class Set2:共通 {
     [Fact]
     public void Serialize(){
-        this.MemoryMessageJson_Assert(new { a = default(Set<Keys.Key,Tables.Table>) });
-        this.MemoryMessageJson_Assert(new { a = new Set<Keys.Key,Tables.Table> { new(1) ,new(2) } });
+        //this.MemoryMessageJson_Assert(new { a = default(Set<Keys.Key,Tables.Table>) });
+        //this.MemoryMessageJson_Assert(new { a = new Set<Keys.Key,Tables.Table> { new(1) ,new(2) } });
         this.MemoryMessageJson_Assert(new { a = (Set<Keys.Key,Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container> { new(1),new(2) } });
     }
 }

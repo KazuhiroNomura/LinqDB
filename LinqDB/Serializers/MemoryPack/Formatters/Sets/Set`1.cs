@@ -1,6 +1,4 @@
 ﻿using System.Buffers;
-using System.Reflection.PortableExecutable;
-
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 

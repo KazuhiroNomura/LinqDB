@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Databases.Tables;
-using System.Diagnostics;
 using System.Runtime.Serialization;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier

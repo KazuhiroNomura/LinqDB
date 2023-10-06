@@ -37,7 +37,7 @@ public class Object : MemoryPackFormatter<T>{
             case EventInfo v: Event.Write(ref writer, v); break;
             case FieldInfo v: Field.Write(ref writer, v); break;
             default:{
-                writer.Write(value);
+                writer.Write(type,value);
                 //FormatterResolver.GetAnonymousDisplaySetFormatter(type);
                 //writer.WriteValue(type, value);
                 break;

@@ -6,10 +6,10 @@ using System.Buffers;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 
 using Reader = MemoryPackReader;
-using G = System.Reflection.PropertyInfo;
-public class Property:MemoryPackFormatter<G>{
+using T = System.Reflection.PropertyInfo;
+public class Property:MemoryPackFormatter<T>{
     public static readonly Property Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G value)
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)
         where TBufferWriter:IBufferWriter<byte>{
 
         var type=value.ReflectedType!;
@@ -22,12 +22,12 @@ public class Property:MemoryPackFormatter<G>{
         writer.WriteVarInt(index);
 
     }
-    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G? value)where TBufferWriter:IBufferWriter<byte>{
+    internal static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value)where TBufferWriter:IBufferWriter<byte>{
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G? value)=>WriteNullable(ref writer,value);
-    internal static G Read(ref Reader reader){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)=>WriteNullable(ref writer,value);
+    internal static T Read(ref Reader reader){
 
         var type=reader.ReadType();
 
@@ -38,6 +38,6 @@ public class Property:MemoryPackFormatter<G>{
 
         return array[index];
     }
-    internal static G? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
-    public override void Deserialize(ref Reader reader,scoped ref G? value)=>value=Read(ref reader);
+    internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=Read(ref reader);
 }

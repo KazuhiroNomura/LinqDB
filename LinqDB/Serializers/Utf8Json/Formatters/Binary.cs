@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using LinqDB.Serializers.Utf8Json.Formatters.Reflection;
+﻿
+using System.Reflection;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -8,6 +8,7 @@ using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using T = Expressions.BinaryExpression;
+using Reflection;
 public class Binary:IJsonFormatter<T> {
     public static readonly Binary Instance=new();
     internal static void WriteLeftRight(ref Writer writer,T value,O Resolver){

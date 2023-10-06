@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Sets;
 using O=MessagePackSerializerOptions;

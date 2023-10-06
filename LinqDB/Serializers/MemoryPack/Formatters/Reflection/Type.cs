@@ -3,22 +3,22 @@ using System.Buffers;
 
 namespace LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using Reader = MemoryPackReader;
-using G = System.Type;
+using T = System.Type;
 
 
-public class Type:MemoryPackFormatter<G>{
+public class Type:MemoryPackFormatter<T>{
     public static readonly Type Instance=new();
-    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G? value) where TBufferWriter:IBufferWriter<byte>{
+    internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
         writer.WriteType(value);
     }
-    internal static G Read(ref Reader reader){
+    internal static T Read(ref Reader reader){
         return reader.ReadType();
     }
-    public override void Deserialize(ref Reader reader,scoped ref G? value){
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
         value=reader.ReadType();
     }
 }
