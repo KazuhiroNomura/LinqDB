@@ -1,5 +1,7 @@
 ﻿using System.IO;
 
+
+
 using MemoryPack;
 
 namespace LinqDB.Serializers.MemoryPack;
@@ -10,7 +12,9 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public Serializer(){
         this.Options=new(){ServiceProvider=this};
 
+        //MemoryPackFormatterProvider.Register(Formatters.Others.Action.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance);
+        //MemoryPackFormatterProvider.Register(Formatters.Others.Delegate.Instance);
 
         MemoryPackFormatterProvider.Register(Formatters.Binary.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Block.Instance);
@@ -43,6 +47,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Formatters.Try.Instance);
         MemoryPackFormatterProvider.Register(Formatters.TypeBinary.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Unary.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.CSharpArgumentInfo.Instance);
         
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Type.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Member.Instance);
@@ -51,13 +56,9 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Event.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Property.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Field.Instance);
-        MemoryPackFormatterProvider.Register(Formatters.Others.Delegate.Instance);
-
-        MemoryPackFormatterProvider.Register(Formatters.CSharpArgumentInfo.Instance);
-        
+       
         MemoryPackFormatterProvider.Register(Formatters.Enumerables.IEnumerable.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Sets.IEnumerable.Instance);
-
     }
     
     

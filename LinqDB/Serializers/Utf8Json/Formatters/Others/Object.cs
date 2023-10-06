@@ -27,7 +27,7 @@ public class Object : IJsonFormatter<G>{
             //double
             //bool
             case string v: writer.WriteString(v); break;
-            case System.Delegate v: Delegate.Write(ref writer, v, Resolver); break;
+            //case System.Delegate v: Delegate.Write(ref writer, v, Resolver); break;
             case Expressions.Expression v: Expression.Write(ref writer, v, Resolver); break;
             case System.Type v: Type.Write(ref writer, v, Resolver); break;
             case ConstructorInfo v: Constructor.Write(ref writer, v, Resolver); break;
@@ -68,7 +68,7 @@ public class Object : IJsonFormatter<G>{
         else if (typeof(double)==type) value=reader.ReadDouble();
         else if (typeof(bool)==type) value=reader.ReadBoolean();
         else if (typeof(string)==type) value=reader.ReadString();
-        else if (typeof(System.Delegate).IsAssignableFrom(type)) value=Delegate.Read(ref reader, Resolver);
+        //else if (typeof(System.Delegate).IsAssignableFrom(type)) value=Delegate.Read(ref reader, Resolver);
         else if (typeof(Expressions.Expression).IsAssignableFrom(type)) value=Expression.Read(ref reader, Resolver);
         else if (typeof(System.Type).IsAssignableFrom(type)) value=Type.Read(ref reader, Resolver);
         else if (typeof(ConstructorInfo).IsAssignableFrom(type)) value=Constructor.Read(ref reader, Resolver);

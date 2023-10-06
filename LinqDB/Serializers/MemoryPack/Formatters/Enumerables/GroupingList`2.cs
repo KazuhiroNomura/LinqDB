@@ -20,8 +20,7 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
     }
     public override void Deserialize(ref Reader reader,scoped ref G.GroupingList<TKey,TElement>? value){
         if(reader.TryReadNil())return;
-        FormatterResolver.GetAnonymousDisplaySetFormatter(typeof(TKey));
-        var Key=reader.ReadValue<TKey>();
+        var Key=reader.Read<TKey>();
         var value0=new G.GroupingList<TKey,TElement>(Key);
         var Formatter=reader.GetFormatter<TElement>();
         var Count=reader.ReadVarIntInt64();

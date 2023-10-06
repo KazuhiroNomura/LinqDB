@@ -126,12 +126,12 @@ public static class Extension{
     public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,IMemoryPackFormatter Formatter,object? value)where TBufferWriter:IBufferWriter<byte> =>
         Formatter.Serialize(ref writer,ref value);
     public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,T? value_T)where TBufferWriter:IBufferWriter<byte>{
-        var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+        var Formatter_T=FormatterResolver.GetRegisteredFormatter<T>();
         if(Formatter_T is not null){
             Formatter_T.Serialize(ref writer,ref value_T);
             return;
         }
-        var Formatter=FormatterResolver.GetDisplayAnonymous以外Formatter(value_T!.GetType());
+        var Formatter=FormatterResolver.GetRegisteredFormatter(value_T!.GetType());
         if(Formatter is not null){
             object? value=value_T;
             ((IMemoryPackFormatter)Formatter).Serialize(ref writer,ref value);
@@ -141,7 +141,7 @@ public static class Extension{
     }
     public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,object value)where TBufferWriter:IBufferWriter<byte>{
         var type=value.GetType();
-        var Formatter=FormatterResolver.GetAnonymousDisplaySetFormatter(type);
+        var Formatter=FormatterResolver.GetRegisteredFormatter(type);
         if(Formatter!=null){
             Write(ref writer,(IMemoryPackFormatter)Formatter,value);
         } else{
@@ -159,14 +159,14 @@ public static class Extension{
         Formatter_T.Deserialize(ref reader,ref value);
         return value;
     }
-    public static T? ReadValue<T>(ref Reader reader){
-        var Formatter_T=FormatterResolver.GetDisplayAnonymousFormatter<T>();
+    public static T? Read<T>(this ref Reader reader){
+        var Formatter_T=FormatterResolver.GetRegisteredFormatter<T>();
         if(Formatter_T is not null){
             T? value=default;
             Formatter_T.Deserialize(ref reader,ref value);
             return value;
         }
-        var Formatter=FormatterResolver.GetDisplayAnonymous以外Formatter(typeof(T));
+        var Formatter=FormatterResolver.GetRegisteredFormatter(typeof(T));
         if(Formatter!=null){
             object? value=default;
             ((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
@@ -190,7 +190,7 @@ public static class Extension{
     
     public static object? Read(this ref Reader reader,Type type){
         object? value=default;
-        var Formatter=FormatterResolver.GetAnonymousDisplaySetFormatter(type);
+        var Formatter=FormatterResolver.GetRegisteredFormatter(type);
         if(Formatter!=null)((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
         else reader.GetFormatter(type).Deserialize(ref reader,ref value);
         return value;

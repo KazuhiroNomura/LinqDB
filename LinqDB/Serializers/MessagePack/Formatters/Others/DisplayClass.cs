@@ -7,6 +7,7 @@ using Lokad.ILPack;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Others;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 internal static class DisplayClass

@@ -1,5 +1,7 @@
 ﻿using System.IO;
 
+
+
 using Utf8Json;
 
 namespace LinqDB.Serializers.Utf8Json;
@@ -9,8 +11,10 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
     private readonly IJsonFormatterResolver IResolver;
     public Serializer(){
         var formatters=new IJsonFormatter[]{
+            this,
 
             Formatters.Others.Object.Instance,
+            ////Formatters.Others.Delegate.Instance,
 
             Formatters.Binary.Instance,
             Formatters.Block.Instance,
@@ -43,6 +47,7 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
             Formatters.Try.Instance,
             Formatters.TypeBinary.Instance,
             Formatters.Unary.Instance,
+            Formatters.CSharpArgumentInfo.Instance,
 
             Formatters.Reflection.Type.Instance,
             Formatters.Reflection.Member.Instance,
@@ -51,13 +56,9 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
             Formatters.Reflection.Property.Instance,
             Formatters.Reflection.Event.Instance,
             Formatters.Reflection.Field.Instance,
-            Formatters.Others.Delegate.Instance,
 
-            Formatters.CSharpArgumentInfo.Instance,
-            
             Formatters.Enumerables.IEnumerable.Instance,
             Formatters.Sets.IEnumerable.Instance,
-            this
         };
         var resovers=new[]{
             this.Resolver,

@@ -3,6 +3,7 @@ using System.Reflection;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Reflection;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using G = ConstructorInfo;

@@ -12,7 +12,9 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     public Serializer(){
         var formatters=new IMessagePackFormatter[]{
             this,
+            //Formatters.Others.Action.Instance,
             Formatters.Others.Object.Instance,
+            //Formatters.Others.Delegate.Instance,
 
             Formatters.Binary.Instance,
             Formatters.Block.Instance,
@@ -45,6 +47,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             Formatters.Try.Instance,
             Formatters.TypeBinary.Instance,
             Formatters.Unary.Instance,
+            Formatters.CSharpArgumentInfo.Instance,
 
             Formatters.Reflection.Type.Instance,
             Formatters.Reflection.Member.Instance,
@@ -53,13 +56,9 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             Formatters.Reflection.Property.Instance,
             Formatters.Reflection.Event.Instance,
             Formatters.Reflection.Field.Instance,
-            Formatters.Others.Delegate.Instance,
 
-            Formatters.CSharpArgumentInfo.Instance,
-            
             Formatters.Enumerables.IEnumerable.Instance,
-            Formatters.Sets.IEnumerable.Instance,
-            
+            Formatters.Sets.IEnumerable.Instance,            
         };
         var resolvers=new IFormatterResolver[]{
             FormatterResolver.Instance,

@@ -1,14 +1,14 @@
-﻿using LinqDB.Serializers.MessagePack.Formatters.Reflection;
-using MessagePack;
+﻿using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack.Formatters.Others;
+using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
-using G = System.Delegate;
-public class Delegate:IMessagePackFormatter<G>{
-    public static readonly Delegate Instance=new();
+using Reflection;
+public class Delegate<T>:IMessagePackFormatter<T>where T:System.Delegate{
+    public static readonly Delegate<T>Instance=new();
     private const int ArrayHeader=3;
-    internal static void Write(ref Writer writer,G? value,MessagePackSerializerOptions Resolver){
+    internal static void Write(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(ArrayHeader);
         writer.WriteType(value!.GetType());
 
@@ -17,11 +17,11 @@ public class Delegate:IMessagePackFormatter<G>{
         Object.WriteNullable(ref writer,value.Target,Resolver);
 
     }
-    public void Serialize(ref Writer writer,G? value,MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions Resolver){
         if(writer.TryWriteNil(value)) return;
         Write(ref writer,value,Resolver);
     }
-    internal static G Read(ref Reader reader,MessagePackSerializerOptions Resolver){
+    internal static T Read(ref Reader reader,MessagePackSerializerOptions Resolver){
         var count=reader.ReadArrayHeader();
         var delegateType=reader.ReadType();
 
@@ -29,9 +29,9 @@ public class Delegate:IMessagePackFormatter<G>{
 
         var target=Object.ReadNullable(ref reader,Resolver);
 
-        return method.CreateDelegate(delegateType,target);
+        return (T)method.CreateDelegate(delegateType,target);
     }
-    public G Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
+    public T Deserialize(ref Reader reader,MessagePackSerializerOptions Resolver){
         if(reader.TryReadNil()) return null!;
         return Read(ref reader,Resolver);
     }

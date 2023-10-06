@@ -104,18 +104,22 @@ public partial class Container:IDisposable{
                 var SchemaIndex = TableView_FullName.LastIndexOf('.',TableIndex-1);
                 var CategoryIndex = TableView_FullName.LastIndexOf('.',SchemaIndex-1);
                 var Category = TableView_FullName[CategoryIndex..SchemaIndex];
-                if(Category==".Tables") {
-                    var Table = new Table(TableView_Property,system_Schema);
-                    Tables.IsAdded(Table);
-                    foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
+                switch(Category){
+                    case ".Tables":{
+                        var Table = new Table(TableView_Property,system_Schema);
+                        Tables.IsAdded(Table);
+                        foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
+                            TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
+                        }
+                        break;
                     }
-                } else {
-                    Debug.Assert(Category==".Views");
-                    var View=new View(TableView_Property,system_Schema);
-                    Views.IsAdded(View);
-                    foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                        ViewColumns.IsAdded(new ViewColumn(ViewColumn_Property,View));
+                    case ".Views":{
+                        var View=new View(TableView_Property,system_Schema);
+                        Views.IsAdded(View);
+                        foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
+                            ViewColumns.IsAdded(new ViewColumn(ViewColumn_Property,View));
+                        }
+                        break;
                     }
                 }
             }

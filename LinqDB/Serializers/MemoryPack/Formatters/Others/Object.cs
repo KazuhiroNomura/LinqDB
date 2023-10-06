@@ -28,7 +28,7 @@ public class Object : MemoryPackFormatter<T>{
             //double
             //bool
             case string v: writer.WriteString(v); break;
-            case System.Delegate v: Delegate.Write(ref writer, v); break;
+            //case System.Delegate v: Delegate.Write(ref writer, v); break;
             case Expressions.Expression v: Expression.Write(ref writer, v); break;
             case System.Type v: Type.Write(ref writer, v); break;
             case ConstructorInfo v: Constructor.Write(ref writer, v); break;
@@ -67,7 +67,7 @@ public class Object : MemoryPackFormatter<T>{
         //double
         //bool
         //string
-        else if (typeof(System.Delegate).IsAssignableFrom(type)) value=Delegate.Read(ref reader);
+        //else if (typeof(System.Delegate).IsAssignableFrom(type)) value=Delegate.Read(ref reader);
         else if (typeof(Expressions.Expression).IsAssignableFrom(type)) value=Expression.Read(ref reader);
         else if (typeof(System.Type).IsAssignableFrom(type)) value=Type.Read(ref reader);
         else if (typeof(ConstructorInfo).IsAssignableFrom(type)) value=Constructor.Read(ref reader);
