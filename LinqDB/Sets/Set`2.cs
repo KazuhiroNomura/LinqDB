@@ -21,7 +21,7 @@ public class Set<TKey,TElement>:Set<TElement>
     internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>   InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     //static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
-    public Set() { }
+    public Set(){}
     /// <summary>
     ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>

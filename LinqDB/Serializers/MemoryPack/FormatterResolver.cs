@@ -84,7 +84,7 @@ internal static class FormatterResolver {
             static object RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
                 var GenericArguments=type0.GetGenericArguments();
                 var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-                var Instance=FormatterGenericType.GetValue("Instance")!;
+                var Instance=FormatterGenericType.GetValue("Instance");
                 Serializer.Register.MakeGenericMethod(type0).Invoke(null,new object?[]{Instance});
                 return Instance;
             }

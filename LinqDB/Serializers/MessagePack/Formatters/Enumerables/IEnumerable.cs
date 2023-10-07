@@ -5,9 +5,10 @@ using O = MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T=System.Collections.IEnumerable;
-public class IEnumerable:IMessagePackFormatter<T> {
+public class IEnumerable:IMessagePackFormatter<T>{
     public static readonly IEnumerable Instance=new();
-    private IEnumerable() { }
+    private IEnumerable(){}
+
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
@@ -15,8 +16,10 @@ public class IEnumerable:IMessagePackFormatter<T> {
         writer.WriteType(type);
         
         writer.Write(type,value,Resolver);
-        
     }
+    
+    
+    
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var Count=reader.ReadArrayHeader();

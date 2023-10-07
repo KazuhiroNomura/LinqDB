@@ -7,7 +7,7 @@ namespace LinqDB.Enumerables;
 /// <summary>単方向リストのコンテナ</summary>
 /// <typeparam name="T">リスト内の要素の型。</typeparam>
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
-public class AscList<T> : List64_VoidAdd<T>
+public class AscList<T>: List64_VoidAdd<T>
 {
     ///// <summary>
     ///// 空のList

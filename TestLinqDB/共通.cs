@@ -55,7 +55,7 @@ public abstract class 共通{
         }
     }
     protected void MemoryMessageJson_TObject<T>(T input){
-        this.MemoryMessageJsonObject<object>(input);
+        this.MemoryMessageJsonObject<object>(input!);
         this.MemoryMessageJsonObject(input);
     }
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=false,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
@@ -269,7 +269,7 @@ public abstract class 共通{
         var body=GetLambda(()=>a).Body;
         var member=(Expressions.MemberExpression)body;
         var constant=(Expressions.ConstantExpression)member.Expression!;
-        return constant.Value;
+        return constant.Value!;
     }
     protected static Reflection.MethodInfo GetMethod<T>(Expressions.Expression<Func<T>> e)=>((Expressions.MethodCallExpression)e.Body).Method;
     protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(Serializers.Formatters.Serializer).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;

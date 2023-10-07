@@ -5,6 +5,6 @@
 using Collections=System.Collections;
 namespace LinqDB.Sets;
 using Generic= Collections.Generic;
-public interface ICollection<T> : IEnumerable<T>, Generic.ICollection<T>
+public interface ICollection<T>:IEnumerable<T>, Generic.ICollection<T>
 {
 }

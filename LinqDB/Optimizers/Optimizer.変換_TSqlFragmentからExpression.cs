@@ -240,7 +240,7 @@ public sealed partial class Optimizer{
             return Types2;
         }
         private class 判定_集約関数があるか:VoidTSqlFragmentTraverser{
-            public 判定_集約関数があるか():base(new Sql160ScriptGenerator()) { }
+            public 判定_集約関数があるか():base(new Sql160ScriptGenerator()){}
             private bool 集約関数があるか;
             public bool 実行(TSqlFragment x){
                 this.集約関数があるか=false;
@@ -1915,7 +1915,7 @@ public sealed partial class Optimizer{
                                     return ScalarExpressions[index];
                                 } else if(Method_Parameter.IsDefined(typeof(ParamArrayAttribute))) {
                                     //func(params int[]c)
-                                    var params_Length = x_Parameters!.Count - 1;
+                                    var params_Length = x_Parameters.Count - 1;
                                     var param = new e.Expression[params_Length];
                                     var ElementType = Method_Parameter.ParameterType.GetElementType();
                                     for(var a = 0;a < params_Length;a++)
@@ -1927,9 +1927,9 @@ public sealed partial class Optimizer{
                                 //func(int a,int b=3,params int[]c)
                                 var Method_Parameter = Method_Parameters[index];
                                 if(Method_Parameter.IsDefined(typeof(System.Runtime.InteropServices.OptionalAttribute)))
-                                    return e.Expression.Constant(Method_Parameter.DefaultValue,Method_Parameters![index].ParameterType);
+                                    return e.Expression.Constant(Method_Parameter.DefaultValue,Method_Parameters[index].ParameterType);
                                 if(Method_Parameter.IsDefined(typeof(ParamArrayAttribute))) {
-                                    var params_Length = x_Parameters!.Count - 1;
+                                    var params_Length = x_Parameters.Count - 1;
                                     var param = new e.Expression[params_Length];
                                     var ElementType = Method_Parameter.ParameterType.GetElementType();
                                     for(var a = 0;a < params_Length;a++)
@@ -1941,7 +1941,7 @@ public sealed partial class Optimizer{
                                 //func(int a,int b=3,params int[]c)
                                 var Method_Parameter = Method_Parameters[Method_Parameters.Length-1];
                                 if(Attribute.IsDefined(Method_Parameter,typeof(ParamArrayAttribute))) {
-                                    var params_Length = x_Parameters!.Count - 1;
+                                    var params_Length = x_Parameters.Count - 1;
                                     var param = new e.Expression[params_Length];
                                     var ElementType = Method_Parameter.ParameterType.GetElementType();
                                     for(var a = 0;a < params_Length;a++)
@@ -4622,7 +4622,7 @@ public sealed partial class Optimizer{
                 Debug.Assert(x.Columns.Count==0);
                 var Parameters=x.Parameters;
                 var Arguments_Length=Parameters.Count;
-                var Method_GetParameters=Method!.GetParameters();
+                var Method_GetParameters=Method.GetParameters();
                 Debug.Assert(Method_GetParameters.Length==Arguments_Length);
                 //var x_Alias_Value=x.Alias.Value;
                 var Arguments=new e.Expression[Arguments_Length];

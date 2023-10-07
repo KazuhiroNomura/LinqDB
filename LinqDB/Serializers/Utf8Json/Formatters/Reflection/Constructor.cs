@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = ConstructorInfo;
-public class Constructor : IJsonFormatter<G>
+public class Constructor :IJsonFormatter<G>
 {
     public static readonly Constructor Instance = new();
 

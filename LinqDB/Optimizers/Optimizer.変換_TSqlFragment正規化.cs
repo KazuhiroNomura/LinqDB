@@ -38,7 +38,7 @@ public sealed partial class Optimizer{
             x.QuoteType=QuoteType.NotQuoted;
             //EscapedName
             //var Value= x.Value.ToLowerInvariant().Replace(' ','_').Replace('-','_');
-            //if(x.Value!=Value) { }
+            //if(x.Value!=Value){}
             //x.Value=x.Value.ToLowerInvariant().Replace(' ','_').Replace('-','_');
             x.Value=x.Value.Replace(' ','_').Replace('-','_');
         }

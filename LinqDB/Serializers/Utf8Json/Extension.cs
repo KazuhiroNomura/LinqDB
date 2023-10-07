@@ -11,8 +11,8 @@ using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 internal static class Extension{
-    public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.AssemblyQualifiedName);
-    public static Type ReadType(this ref Reader reader)=>Type.GetType(reader.ReadString())!;
+    public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.TypeString());
+    public static Type ReadType(this ref Reader reader)=>reader.ReadString().StringType();
     
 
     public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteString(NodeType.ToString());

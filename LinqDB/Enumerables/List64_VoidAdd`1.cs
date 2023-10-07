@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 namespace LinqDB.Enumerables;
 using Generic = System.Collections.Generic;
 
-public abstract class List64_VoidAdd<T>:Generic.IEnumerable<T>
+public abstract class List64_VoidAdd<T>:IEnumerable<T>
     //, Generic.ICollection<T>
 {
     protected readonly List<T> 委譲 = new();
@@ -37,7 +37,7 @@ public abstract class List64_VoidAdd<T>:Generic.IEnumerable<T>
     /// </summary>
     /// <param name="Item"></param>
     public void VoidConcurrentAdd(T Item) => this.委譲.Add(Item);
-    IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator() => this.委譲.GetEnumerator();
+    IEnumerator<T> IEnumerable<T>.GetEnumerator() => this.委譲.GetEnumerator();
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => this.委譲.GetEnumerator();
     public long LongCount => this.委譲.Count;
     public int Count => this.委譲.Count;

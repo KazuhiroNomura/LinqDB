@@ -86,7 +86,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
-        var Task=MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
+        var Task=MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask();
         Task.Wait();
     }
     public override T Deserialize<T>(byte[] bytes){
@@ -96,8 +96,8 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public override T Deserialize<T>(Stream stream){
         this.Clear();
         //var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
-        var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
+        var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
         Task.Wait();
-        return Task.Result!;
+        return (T)Task.Result!;
     }
 }

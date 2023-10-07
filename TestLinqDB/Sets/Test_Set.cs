@@ -292,6 +292,7 @@ public class Tables{
             4,5,6
         }));
     }
+    [Fact]
     public void GroupBy(){
         for(var a=0;a<試行回数;a++){
             var EnumerateData=new Entity[4];
@@ -301,17 +302,17 @@ public class Tables{
                 var ID3=b;
                 EnumerateData[b]=new Entity(ID1,ID2,ID3);
             }
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).ToSet().Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
-            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
-            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).ToSet().Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Any());
+            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Any());
+            Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Any());
         }
         var r=new Random(1);
         for(var a=0;a<試行回数;a++){
-            var EnumerateData=new Entity[r.Next(100)];
+            var EnumerateData=new Entity[r.Next(1,100)];
             var low1=0;
             for(var b=0;b<EnumerateData.Length;b++){
                 var value=r.Next(low1,low1+5);
@@ -323,11 +324,11 @@ public class Tables{
             }
             Assert.True(EnumerateData.GroupBy(p=>p.ID1).ToSet().LongCount>0);
             var SetData=EnumerateData.ToSet();
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).Count()>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).Any());
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Any());
             Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).LongCount>0);
-            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Count()>0);
+            Assert.True(EnumerateData.GroupBy(p=>p.ID1).Select(p=>p).ToSet().Any());
             Assert.True(SetData.GroupBy(p=>p.ID1).Select(p=>p).LongCount>0);
         }
     }

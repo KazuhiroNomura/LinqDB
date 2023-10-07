@@ -4,10 +4,10 @@ namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 
 using Reader = MemoryPackReader;
 using G = LinqDB.Sets;
-public class IGrouping<TKey, TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElement>> {
-    public static readonly IGrouping<TKey, TElement> Instance=new();
+public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElement>> {
+    public static readonly IGrouping<TKey,TElement> Instance=new();
     private IGrouping(){}
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.IGrouping<TKey,TElement>? value) where TBufferWriter : IBufferWriter<byte> {
+    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.IGrouping<TKey,TElement>? value) where TBufferWriter :IBufferWriter<byte> {
         if(writer.TryWriteNil(value)) return;
         var type=value!.GetType();
         writer.WriteType(type);

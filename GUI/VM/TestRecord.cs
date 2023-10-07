@@ -12,7 +12,7 @@ public class TestRecord {
     //}
     public string Property { get; set; }
     //public String Field{ get; set; } = "Field";
-    public TestRecord(int a) { }
+    public TestRecord(int a)=>this.Property="";
 }
 public class TestRecords {
     public ObservableCollection<object> Records { get; } = new();

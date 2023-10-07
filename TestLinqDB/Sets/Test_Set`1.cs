@@ -55,7 +55,7 @@ public class Test_Set1{
     public void Add(){
         var s=new Set<int>();
         for(var a=0;a<要素数;a++) Assert.True(s.IsAdded(a));
-        Assert.Equal(s.LongCount,要素数);
+        Assert.Equal(要素数,s.LongCount);
     }
     private readonly struct EntityKey:IEquatable<EntityKey>{
         public readonly long ID;
@@ -155,7 +155,7 @@ public class Test_Set1{
         foreach(var a in s){
             Assert.Fail(a+"は不要");
         }
-        Assert.Equal(s.LongCount,0);
+        Assert.Equal(0,s.LongCount);
     }
 
 
@@ -505,7 +505,7 @@ public class Test_Set1{
         var s=new Set<int>();
         for(var a=0;a<要素数;a++) Assert.True(s.IsAdded(a));
         for(var a=0;a<要素数;a++) Assert.True(s.Remove(a));
-        Assert.Equal(s.LongCount,0);
+        Assert.Equal(0,s.LongCount);
     }
     [Fact]
     public void Remove1(){

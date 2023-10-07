@@ -38,7 +38,7 @@ public class View:DependencyObject, IView {
     public Visibility DataGridVisibility => Visibility.Visible;
     public Visibility LineVisibility => Visibility.Hidden;
     public string SQL { get; set; } = "";
-    public string Name { get; set; }
+    public string Name { get; set; }="";
     //public TypeBuilder? View_TypeBuilder { get; set; }
     //public Type? Type { get; private set; }
     //public MethodBuilder? Impl_MethodBuilder { get; set; }

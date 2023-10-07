@@ -6,8 +6,8 @@ using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MemoryPack;
 using System.Buffers;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters.Others;
+
 
 using Reader = MemoryPackReader;
 
@@ -22,14 +22,12 @@ using Reader = MemoryPackReader;
 
 
 
-public class DisplayClass<T> : MemoryPackFormatter<T>
-{
-#pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
-    public static readonly DisplayClass<T> Instance = new();//リフレクションで使われる
-#pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
-    private readonly Dictionary<Type, System.Delegate> DictionarySerialize = new();
-    private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ref T value) where TBufferWriter : IBufferWriter<byte>;
+public class DisplayClass<T>: MemoryPackFormatter<T>{
+    public static readonly DisplayClass<T> Instance = new();
+    private readonly Dictionary<Type, Delegate> DictionarySerialize = new();
+    private delegate void delegate_Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, ref T value) where TBufferWriter :IBufferWriter<byte>;
     private delegate void delegate_Deserialize(ref Reader reader, scoped ref T? value);
+    
     private readonly delegate_Deserialize DelegateDeserialize;
     public DisplayClass()
     {

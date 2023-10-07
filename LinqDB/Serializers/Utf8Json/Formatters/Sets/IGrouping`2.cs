@@ -9,11 +9,11 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>
     public void Serialize(ref Writer writer,G.IGrouping<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        Resolver.GetFormatter<TKey>().Serialize(ref writer,value!.Key,Resolver);
+        Resolver.GetFormatter<TKey>().Serialize(ref writer,value.Key,Resolver);
         writer.WriteValueSeparator();
         var Formatter = Resolver.GetFormatter<TElement>();
         var first=true;
-        foreach(var item in value!){
+        foreach(var item in value){
             if(first) first=false;
             else writer.WriteValueSeparator();
             Formatter.Serialize(ref writer,item,Resolver);

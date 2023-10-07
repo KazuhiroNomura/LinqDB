@@ -20,5 +20,6 @@ public abstract class Entity<TKey,TContainer>:Entity<TContainer>, IKey<TKey>
     /// </summary>
     /// <param name="Key"></param>
     protected Entity(TKey Key) => this.ProtectedKey=Key;
-    public sealed override int GetHashCode() => this.ProtectedKey.GetHashCode();
+    public override int GetHashCode() => this.ProtectedKey.GetHashCode();
+    public override bool Equals(object? obj)=>obj is Entity<TKey,TContainer> other&&this.Key.Equals(other.Key);
 }

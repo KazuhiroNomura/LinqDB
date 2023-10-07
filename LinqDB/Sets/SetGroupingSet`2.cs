@@ -7,7 +7,7 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="TKey">結合式のType</typeparam>
 /// <typeparam name="TElement">値のType</typeparam>
-public sealed class SetGroupingSet<TKey, TElement>:ImmutableSet<GroupingSet<TKey,TElement>>,Generic.ICollection<GroupingSet<TKey,TElement>>,
+public sealed class SetGroupingSet<TKey,TElement>:ImmutableSet<GroupingSet<TKey,TElement>>,Generic.ICollection<GroupingSet<TKey,TElement>>,
     IEquatable<IEnumerable<IGrouping<TKey,TElement>>>,
     IEquatable<Generic.IEnumerable<Linq.IGrouping<TKey,TElement>>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません

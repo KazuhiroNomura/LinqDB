@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
+
 using LinqDB.Helpers;
 
+using MemoryPack;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 internal static class Extension{
-    private static BindingFlags Flags=BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;
+    private const BindingFlags Flags=BindingFlags.Instance|BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic;
     public static MemberInfo[] Get(this ConcurrentDictionary<Type,MemberInfo[]>d,Type type){
         if(!d.TryGetValue(type,out var array)){
             array=d.GetOrAdd(type,key=>{
@@ -139,4 +144,20 @@ internal static class Extension{
         var value=field.GetValue(null)!;
         return value;
     }
+    public static string TypeString(this Type value)=>value.Name is
+        "SByte"  or"Byte"  or
+        "Int16"  or"UInt16"or
+        "Int32"  or"UInt32"or
+        "Int64"  or"UInt64"or
+        "Single" or"Double"or
+        "Boolean"or"Char"  or"Decimal"?value.Name:value.AssemblyQualifiedName!;
+    public static Type StringType(this string value)=>value switch{
+        "SByte"  =>typeof(sbyte),"Byte"  =>typeof(byte  ),
+        "Int16"  =>typeof(short),"UInt16"=>typeof(ushort),
+        "Int32"  =>typeof(int  ),"UInt32"=>typeof(uint  ),
+        "Int64"  =>typeof(long ),"UInt64"=>typeof(ulong ),
+        "Single" =>typeof(float),"Double"=>typeof(double),
+        "Boolean"=>typeof(bool ),"Char"  =>typeof(char  ),"Decimal"=>typeof(decimal),
+        _=>Type.GetType(value)??throw new TypeLoadException($"型{value}が見つからなかった")
+    };
 }

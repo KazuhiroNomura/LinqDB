@@ -2878,7 +2878,7 @@ public sealed partial class Optimizer {
             this.SchemaObjectName(x.OnName);
             this.FullTextCatalogAndFileGroup(x.CatalogAndFileGroup);
             this.FullTextIndexColumns(x.FullTextIndexColumns);
-            foreach(var ScriptTokenStream in x.ScriptTokenStream) { }
+            foreach(var ScriptTokenStream in x.ScriptTokenStream){}
         }
         /// <summary>
         ///TSqlStatement:TSqlFragment

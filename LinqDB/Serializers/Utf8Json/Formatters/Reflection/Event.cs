@@ -6,7 +6,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = EventInfo;
-public class Event : IJsonFormatter<G>
+public class Event :IJsonFormatter<G>
 {
     public static readonly Event Instance = new();
     internal static void Write(ref Writer writer, G value, IJsonFormatterResolver Resolver)

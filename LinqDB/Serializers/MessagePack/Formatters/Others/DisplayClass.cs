@@ -10,26 +10,24 @@ namespace LinqDB.Serializers.MessagePack.Formatters.Others;
 using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
-internal static class DisplayClass
-{
+internal static class DisplayClass{
     private static void Serialize<T>(ref Writer writer, T value, MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Serialize(ref writer, value, options);
     public static readonly MethodInfo MethodSerialize = typeof(DisplayClass).GetMethod(nameof(Serialize), BindingFlags.Static|BindingFlags.NonPublic)!;
     private static T Deserialize<T>(ref Reader reader, MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Deserialize(ref reader, options);
     public static readonly MethodInfo MethodDeserialize = typeof(DisplayClass).GetMethod(nameof(Deserialize), BindingFlags.Static|BindingFlags.NonPublic)!;
     public static readonly MethodInfo WriteArrayHeader = typeof(Writer).GetMethod(nameof(Writer.WriteArrayHeader), new[] { typeof(int) })!;
     public static readonly MethodInfo ReadArrayHeader = typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
-    public static readonly Dictionary<Type, System.Delegate> DictionarySerialize = new();
+    public static readonly Dictionary<Type, Delegate> DictionarySerialize = new();
 }
 
 
 
 public class DisplayClass<T>:IMessagePackFormatter<T>{
-
     public static readonly DisplayClass<T> Instance=new();
-
+    
     private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
-    private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);
+    private readonly delegate_Serialize DelegateSerialize;
     private readonly delegate_Deserialize DelegateDeserialize;
     private DisplayClass(){
         var Types1=new Type[1];

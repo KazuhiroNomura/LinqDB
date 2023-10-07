@@ -11,8 +11,8 @@ using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 internal static class Extension{
-    public static void WriteType(this ref Writer writer,Type value)=>writer.Write(value.AssemblyQualifiedName);
-    public static Type ReadType(this ref Reader reader)=> Type.GetType(reader.ReadString())!;
+    public static void WriteType(this ref Writer writer,Type value)=>writer.Write(value.TypeString());
+    public static Type ReadType(this ref Reader reader)=> reader.ReadString().StringType();
     public static void WriteBoolean(this ref Writer writer,bool value)=>writer.Write(value);
 
     public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteInt8((sbyte)NodeType);
@@ -125,7 +125,7 @@ internal static class Extension{
     //    Formatter..Serialize(ref writer,value,Resolver);
 
     public static void Write<T>(this ref Writer writer,T value,O Resolver){
-        var Formatter=Resolver.Resolver.GetFormatter<T>()!;
+        var Formatter=Resolver.GetFormatter<T>()!;
         Formatter.Serialize(ref writer,value,Resolver);
     }
 
@@ -142,7 +142,7 @@ internal static class Extension{
 
     public static void Write(this ref Writer writer,Type type,object? value,O Resolver) {
         Debug.Assert(type==value!.GetType());
-        var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+        var Formatter=Resolver.GetFormatterDynamic(type)!;
         var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
         //Formatter_Serialize.CreateDelegate<Func<int>>();
         //CreateDelegate(Formatte)
@@ -164,7 +164,7 @@ internal static class Extension{
 
 
     public static T Read<T>(this ref Reader reader,O Resolver)=>
-        Resolver.Resolver.GetFormatter<T>()!.Deserialize(ref reader, Resolver);
+        Resolver.GetFormatter<T>()!.Deserialize(ref reader, Resolver);
 
 
 
@@ -182,7 +182,7 @@ internal static class Extension{
 
 
     public static object Read(this ref Reader reader,Type type,O Resolver){
-        var Formatter=Resolver.Resolver.GetFormatterDynamic(type)!;
+        var Formatter=Resolver.GetFormatterDynamic(type)!;
         var Method=Formatter.GetType().GetMethod("Deserialize")!;
         var D=new DynamicMethod("",typeof(object),DeserializeTypes){InitLocals=false};
         var I=D.GetILGenerator();
@@ -212,6 +212,10 @@ internal static class Extension{
 
     private delegate object DeserializeDelegate(object Formatter,ref Reader reader,O options);
     private static readonly Type[] DeserializeTypes={typeof(object),typeof(Reader).MakeByRefType(),typeof(O)};
-    public static Serializer Serializer(this O Options)=>
-        (Serializer)Options.Resolver.GetFormatter<Serializer>()!;
+    public static Serializer Serializer(this O Resolver)=>
+        (Serializer)Resolver.GetFormatter<Serializer>()!;
+    public static IMessagePackFormatter<T>? GetFormatter<T>(this O Resolver)=>
+        Resolver.Resolver.GetFormatter<T>();
+    public static object? GetFormatterDynamic(this O Resolver,Type type)=>
+        Resolver.Resolver.GetFormatterDynamic(type);
 }

@@ -24,7 +24,6 @@ namespace TestLinqDB{
             public Table(Keys.Key Key):base(Key){}
             public Table(int a):base(new Keys.Key(a)){}
             public bool Equals(Table? other)=>other!=null&&this.Key.Equals(other.Key);
-            public override bool Equals(object? obj)=>obj is Table other&&this.Key.Equals(other.Key);
         }
     }
 }

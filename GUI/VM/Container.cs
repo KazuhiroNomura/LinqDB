@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace GUI.VM;
 [DebuggerDisplay("{Name}")]
 public class Container:DependencyObject, IContainer {
-    public string Name { get; set; }
+    public string Name { get; set; }="";
     public ObservableCollection<Schema> Schemas { get; } = new();
     IEnumerable<ISchema> IContainer.Schemas => this.Schemas;
     //public ObservableCollection<ParentChild> ParentsChildren { get; } = new();
@@ -94,8 +94,7 @@ public class Container:DependencyObject, IContainer {
         this.Tables.Remove(Value);
         this.DiagramObjects.Remove(Value);
     }
-    public void Clear()
-    {
+    public void Clear(){
         this.Schemas.Clear();
         this.Relations.Clear();
         this.Tables.Clear();
@@ -120,3 +119,4 @@ public class Container:DependencyObject, IContainer {
         set => this.SetValue(_SelectedIndex,value);
     }
 }
+

@@ -2,13 +2,15 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+
+
 using Utf8Json;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters.Others;
+
 using Writer = JsonWriter;
 using Reader = JsonReader;
-internal static class DisplayClass
-{
+internal static class DisplayClass{
     public static readonly MethodInfo WriteValueSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
     public static readonly MethodInfo WriteString = typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
     public static readonly MethodInfo WriteNameSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
@@ -23,10 +25,9 @@ internal static class DisplayClass
 public class DisplayClass<T>:IJsonFormatter<T>{
     public static readonly DisplayClass<T> Instance=new();
 
-
     private delegate void delegate_Serialize(ref Writer writer,T value,IJsonFormatterResolver formatterResolver);
-    private readonly delegate_Serialize DelegateSerialize;
     private delegate T delegate_Deserialize(ref Reader reader,IJsonFormatterResolver formatterResolver);
+    private readonly delegate_Serialize DelegateSerialize;
     private readonly delegate_Deserialize DelegateDeserialize;
     private DisplayClass(){
         var Types1=new Type[1];

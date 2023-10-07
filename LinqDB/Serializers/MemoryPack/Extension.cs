@@ -11,8 +11,8 @@ namespace LinqDB.Serializers.MemoryPack;
 
 using Reader = MemoryPackReader;
 public static class Extension{
-    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteString(value.AssemblyQualifiedName);
-    public static Type ReadType(this ref Reader reader)=>System.Type.GetType(reader.ReadString())!;
+    public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Type value) where TBufferWriter:IBufferWriter<byte> =>writer.WriteString(value.TypeString());
+    public static Type ReadType(this ref Reader reader)=>reader.ReadString().StringType();
     public static void WriteBoolean<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,bool value)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)(value?1:0));
     public static bool ReadBoolean(this ref Reader reader)=>reader.ReadVarIntByte()!=0;
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.ExpressionType NodeType)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)NodeType);
@@ -145,7 +145,7 @@ public static class Extension{
         }
     }
     public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,System.Collections.Generic.IEnumerable<T> value)where TBufferWriter:IBufferWriter<byte>{
-        var InstanceMemoryPack=(IMemoryPackFormatter)value.GetType().GetValue("InstanceMemoryPack")!;
+        var InstanceMemoryPack=(IMemoryPackFormatter)value.GetType().GetValue("InstanceMemoryPack");
         Debug.Assert(InstanceMemoryPack!=null);
         object? value0=value;
         InstanceMemoryPack.Serialize(ref writer,ref value0);
@@ -208,7 +208,7 @@ public static class Extension{
         (Serializer)reader.Options.ServiceProvider!;
     //public static Serializer Container<TContainer>(this ref Reader reader)where TContainer:Container=>
     //    (Serializer)reader.Options.ServiceProvider!;
-    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TValue? value) where TBufferWriter : IBufferWriter<byte> {
+    private static void Serialize2<TBufferWriter, TValue>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref TValue? value) where TBufferWriter :IBufferWriter<byte> {
         writer.WriteValue(value);
     }
     public static readonly MethodInfo MethodSerialize = typeof(Extension).GetMethod(nameof(Serialize2),BindingFlags.Static|BindingFlags.NonPublic)!;

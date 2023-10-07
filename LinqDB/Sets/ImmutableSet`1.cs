@@ -33,12 +33,12 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// タプルを追加した時に参照関係を作る。
     /// </summary>
     /// <param name="Item"></param>
-    internal virtual void AddRelationship(T Item) { }
+    internal virtual void AddRelationship(T Item){}
     /// <summary>
     /// タプルを削除した時に参照関係を作る。
     /// </summary>
     /// <param name="Item"></param>
-    internal virtual void RemoveRelationship(T Item) { }
+    internal virtual void RemoveRelationship(T Item){}
     /// <summary>
     /// HashCodeによるTreeNode探索
     /// </summary>
@@ -506,7 +506,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// タプル同士の比較方法。
     /// </summary>
     private protected Generic.IEqualityComparer<T> Comparer{
-        get=>System.Collections.Generic.EqualityComparer<T>.Default;
+        get=>Generic.EqualityComparer<T>.Default;
         //set{}
     }
     //[NonSerialized]
@@ -519,7 +519,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
 
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
-    protected ImmutableSet():this(System.Collections.Generic.EqualityComparer<T>.Default){
+    protected ImmutableSet():this(Generic.EqualityComparer<T>.Default){
     }
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。初期化後のインスタンスの内容は空です。このセット型には、指定された等値比較子が使用されます。</summary>
@@ -532,7 +532,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。
     /// </summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
-    protected ImmutableSet(Generic.IEnumerable<T> source):this(source,System.Collections.Generic.EqualityComparer<T>.Default) {}
+    protected ImmutableSet(Generic.IEnumerable<T> source):this(source,Generic.EqualityComparer<T>.Default) {}
     /// <summary>
     ///   <see cref="ImmutableSet{T}" /> クラスの新しいインスタンスを初期化します。このセット型には既定の等値比較子が使用されます。指定されたコレクションからコピーされた要素が格納され、コピー対象の要素数を格納できるだけの十分な容量が確保されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となるコレクション。</param>
@@ -1113,7 +1113,7 @@ LinkedNodeItem走査:
         }
         bool Collections.IEnumerator.MoveNext() => this.MoveNext();
         public bool SequenceEqual(FIFO other) {
-            var EqualityComparer=System.Collections.Generic.EqualityComparer<T>.Default;
+            var EqualityComparer=Generic.EqualityComparer<T>.Default;
             var a =this.FirstNode._LinkedNodeItem;
             var b = other.FirstNode._LinkedNodeItem;
             while(a is not null&&b is not null) {

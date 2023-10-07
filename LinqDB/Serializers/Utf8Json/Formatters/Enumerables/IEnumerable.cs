@@ -7,7 +7,7 @@ using Reader = JsonReader;
 using G=System.Collections;
 public class IEnumerable:IJsonFormatter<G.IEnumerable>  {
     public static readonly IEnumerable Instance=new();
-    private IEnumerable() { }
+    private IEnumerable(){}
     public void Serialize(ref Writer writer,G.IEnumerable value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
@@ -17,6 +17,7 @@ public class IEnumerable:IJsonFormatter<G.IEnumerable>  {
         writer.Write(type,value,Resolver);
         writer.WriteEndArray();
     }
+    
     public G.IEnumerable Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();

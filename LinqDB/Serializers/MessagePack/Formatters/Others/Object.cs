@@ -9,7 +9,7 @@ using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = System.Object;
 using Reflection;
-public class Object : IMessagePackFormatter<T>{
+public class Object :IMessagePackFormatter<T>{
     public static readonly Object Instance = new();
     private static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
         writer.WriteArrayHeader(2);
@@ -29,7 +29,6 @@ public class Object : IMessagePackFormatter<T>{
             case double v: writer.Write(v); break;
             case bool v: writer.Write(v); break;
             case string v: writer.Write(v); break;
-            //case System.Delegate v: Delegate.Write(ref writer, v, Resolver); break;
             case Expressions.Expression v: Expression.Write(ref writer, v, Resolver); break;
             case System.Type v: Type.Write(ref writer, v, Resolver); break;
             case ConstructorInfo v: Constructor.Write(ref writer, v, Resolver); break;
@@ -38,7 +37,7 @@ public class Object : IMessagePackFormatter<T>{
             case EventInfo v: Event.Write(ref writer, v, Resolver); break;
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
             default:{
-                var Formatter = Resolver.Resolver.GetFormatterDynamic(type)!;
+                var Formatter = Resolver.GetFormatterDynamic(type)!;
                 Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
                 break;
             }

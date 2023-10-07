@@ -10,7 +10,7 @@ using LinqDB.Sets;
 //using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace TestLinqDB.Serializers.Formatters.Others;
-public class Delegate:共通{
+public class Primitive:共通{
     [Fact]public void Action3(){
         this.MemoryMessageJson_Assert(new{a=default(Action<int,int,int>)});
         this.MemoryMessageJson_Assert(new{a=(Action<int,int,int>)((int a,int b,int c)=>{})});

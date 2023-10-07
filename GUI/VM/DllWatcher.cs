@@ -46,22 +46,22 @@ public class DllWatcher:DependencyObject {
     private void Created(object sender,FileSystemEventArgs e) {
         this.Dispatcher.Invoke(() =>{
             // 文字列が正規表現にマッチするかどうか調べる
-            if(this.Regex.IsMatch(e.Name)) {
-                this.Files.Add(e.Name);
+            if(this.Regex.IsMatch(e.Name!)) {
+                this.Files.Add(e.Name!);
             }
         });
     }
     private void Deleted(object sender,FileSystemEventArgs e) {
         this.Dispatcher.Invoke(() => {
-            if(this.Regex.IsMatch(e.Name)) {
-                this.Files.Remove(e.Name);
+            if(this.Regex.IsMatch(e.Name!)) {
+                this.Files.Remove(e.Name!);
             }
         });
     }
     private void Renamed(object sender, RenamedEventArgs e) {
-        var Index=this.Files.IndexOf(e.OldName);
+        var Index=this.Files.IndexOf(e.OldName!);
         if(Index>=0) {
-            this.Files[Index]=e.Name;
+            this.Files[Index]=e.Name!;
         }
     }
 }

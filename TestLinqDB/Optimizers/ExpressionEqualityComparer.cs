@@ -72,8 +72,7 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     //[global::Lite.Optimizers.NoOptimize]
     public int _最適化されないメンバー=4;
     public int Int32プロパティ{get;set;}
-    [MemoryPackInclude]
-    public string Stringプロパティ{get;set;}
+    [MemoryPackInclude]public string Stringプロパティ{get;set;}="";
     public int Int32フィールド=4;
     //public class_演算子オーバーロード(int 内部の値){
     //    this.内部の値=内部の値;
@@ -2205,36 +2204,31 @@ public class ExpressionEqualityComparer:共通{
         );
     }
 
-    [SuppressMessage("ReSharper","FieldCanBeMadeReadOnly.Local")]
     private class BindCollection{
         public int Int32フィールド1;
         public int Int32フィールド2;
-        public BindCollection BindCollectionフィールド1;
-        public BindCollection BindCollectionフィールド2;
+        public BindCollection BindCollectionフィールド1=new(1);
+        public BindCollection BindCollectionフィールド2=new(2);
         public readonly List<int> Listフィールド1=new();
         public readonly List<int> Listフィールド2=new();
-
+        // ReSharper disable once MemberCanBePrivate.Local
         public BindCollection(int v){
             this.Int32フィールド1=0;
             this.Int32フィールド2=0;
-            this.BindCollectionフィールド1=null;
-            this.BindCollectionフィールド2=null;
         }
     }
-
     [Fact]
-    [SuppressMessage("ReSharper","AssignNullToNotNullAttribute")]
     public void MemberBindingsEquals(){
         var Type=typeof(BindCollection);
-        var Int32フィールド1=Type.GetField(nameof(BindCollection.Int32フィールド1));
-        var Int32フィールド2=Type.GetField(nameof(BindCollection.Int32フィールド2));
-        var BindCollectionフィールド1=Type.GetField(nameof(BindCollection.BindCollectionフィールド1));
-        var BindCollectionフィールド2=Type.GetField(nameof(BindCollection.BindCollectionフィールド2));
-        var Listフィールド1=Type.GetField(nameof(BindCollection.Listフィールド1));
-        var Listフィールド2=Type.GetField(nameof(BindCollection.Listフィールド2));
+        var Int32フィールド1=Type.GetField(nameof(BindCollection.Int32フィールド1))!;
+        var Int32フィールド2=Type.GetField(nameof(BindCollection.Int32フィールド2))!;
+        var BindCollectionフィールド1=Type.GetField(nameof(BindCollection.BindCollectionフィールド1))!;
+        var BindCollectionフィールド2=Type.GetField(nameof(BindCollection.BindCollectionフィールド2))!;
+        var Listフィールド1=Type.GetField(nameof(BindCollection.Listフィールド1))!;
+        var Listフィールド2=Type.GetField(nameof(BindCollection.Listフィールド2))!;
         var Constant_1=Expression.Constant(1);
         var Constant_2=Expression.Constant(2);
-        var ctor=Type.GetConstructor(new[]{typeof(int)});
+        var ctor=Type.GetConstructor(new[]{typeof(int)})!;
         var New=Expression.New(
             ctor,
             Constant_1
@@ -2275,7 +2269,7 @@ public class ExpressionEqualityComparer:共通{
                 Expression.ListBind(
                     Listフィールド1,
                     Expression.ElementInit(
-                        typeof(List<int>).GetMethod("Add"),
+                        typeof(List<int>).GetMethod("Add")!,
                         Constant_1
                     )
                 )
@@ -2411,7 +2405,7 @@ public class ExpressionEqualityComparer:共通{
         );
         //        }
         //        default:{
-        var Add=typeof(List<int>).GetMethod("Add");
+        var Add=typeof(List<int>).GetMethod("Add")!;
         //            if(a1.Member!=b1.Member)return false;
         this.AssertNotEqual(
             Expression.MemberInit(

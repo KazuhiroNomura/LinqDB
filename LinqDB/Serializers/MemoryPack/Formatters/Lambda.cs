@@ -48,7 +48,7 @@ public class Lambda:MemoryPackFormatter<T> {
         var body=Expression.Read(ref reader);
         var tailCall=reader.ReadBoolean();
         Parameters.RemoveRange(Parameters_Count,parameters.Length);
-        return System.Linq.Expressions.Expression.Lambda(
+        return Expressions.Expression.Lambda(
             type,
             body,
             tailCall,

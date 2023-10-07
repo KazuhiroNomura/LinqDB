@@ -189,7 +189,7 @@ public class Table:DependencyObject, ITable,IDiagramObject {
         get => (ISchema)this.GetValue(SchemaProperty);
         set => this.SetValue(SchemaProperty,value);
     }
-    public string Name { get; set; }
+    public string Name { get; set; }="";
     public Column CreateColumn(string Name,Type Type,bool IsNullable,bool IsPrimaryKey) {
         var Column = new Column(Name,IsNullable&&Type.IsNullable()? Type.GetGenericArguments()[0]:Type,IsNullable,IsPrimaryKey);
         Debug.Assert(this.Columns.All(p=>p.Name!=Name));

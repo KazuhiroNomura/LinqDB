@@ -566,26 +566,26 @@ public static class ExtensionSet{
         return Math.Pow(10,Sum/Count);
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化し、指定された関数を使用して各グループの要素を射影します。</summary>
-    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TElement>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TElement))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、<paramref>
+    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey,TElement>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey,TElement))。ここでは、各 <see cref="System.Linq.IGrouping{TKey,TElement}" /> オブジェクトに、<paramref>
     ///<name>TElement</name>
     ///</paramref>型のオブジェクトのコレクション、およびキーが格納されています。</returns>
     /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
-    /// <param name="elementSelector">ソースの各要素を <see cref="GroupingSet{TKey, TElement}" /> の要素に割り当てる関数。</param>
+    /// <param name="elementSelector">ソースの各要素を <see cref="GroupingSet{TKey,TElement}" /> の要素に割り当てる関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TElement">
-    ///   <see cref="IGrouping{TKey, TElement}" /> の要素の型。</typeparam>
-    public static IEnumerable<IGrouping<TKey,TElement>> GroupBy<TSource, TKey, TElement>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
+    ///   <see cref="IGrouping{TKey,TElement}" /> の要素の型。</typeparam>
+    public static IEnumerable<IGrouping<TKey,TElement>> GroupBy<TSource, TKey,TElement>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector) {
         var r = new SetGroupingSet<TKey,TElement>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
         Debug.Assert(r.LongCount<=source.LongCount);
         return r;
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化します。</summary>
-    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
+    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey,TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
@@ -601,7 +601,7 @@ public static class ExtensionSet{
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従って集合の要素をグループ化します。</summary>
-    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
+    /// <returns>C# では IEnumerable&lt;ImmutableGroupingSet&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of GroupingSet(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey,TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
     /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
     /// <param name="elementSelector"></param>
@@ -611,10 +611,10 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">
     ///   <paramref name="keySelector" /> によって返されるキーの型。</typeparam>
     /// <typeparam name="TElement">
-    ///   <see cref="IGrouping{TKey, TElement}" /> の要素の型。</typeparam>
+    ///   <see cref="IGrouping{TKey,TElement}" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="resultSelector" /> によって返される結果値の型。</typeparam>
-    public static IEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector,Func<TKey,IEnumerable<TElement>,TResult> resultSelector) {
+    public static IEnumerable<TResult> GroupBy<TSource, TKey,TElement, TResult>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector,Func<TSource,TElement> elementSelector,Func<TKey,IEnumerable<TElement>,TResult> resultSelector) {
         var r = new SetGroupingSet<TKey,TElement>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
         Debug.Assert(r.LongCount<=source.LongCount);
@@ -623,7 +623,7 @@ public static class ExtensionSet{
         return r0;
     }
     /// <summary>指定されたキー セレクター関数に従ってシーケンスの要素をグループ化し、各グループとそのキーから結果値を作成します。</summary>
-    /// <returns>C# では IEnumerable&lt;IGrouping&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey, TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
+    /// <returns>C# では IEnumerable&lt;IGrouping&lt;TKey, TSource>>、Visual Basic では IEnumerable(Of IGrouping(Of TKey, TSource))。ここでは、各 <see cref="System.Linq.IGrouping{TKey,TElement}" /> オブジェクトに、オブジェクトの集合、およびキーが格納されています。</returns>
     /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
     /// <typeparam name="TSource">

@@ -10,7 +10,7 @@ public class SetGroupingSet<TKey,TElement>:IJsonFormatter<G.SetGroupingSet<TKey,
     public void Serialize(ref Writer writer,G.SetGroupingSet<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        var Formatter=Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+        var Formatter=GroupingSet<TKey,TElement>.Instance;
         var first=true;
         foreach(var item in value!){
             if(first) first=false;
@@ -22,7 +22,7 @@ public class SetGroupingSet<TKey,TElement>:IJsonFormatter<G.SetGroupingSet<TKey,
     public G.SetGroupingSet<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var Formatter=Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+        var Formatter=GroupingSet<TKey,TElement>.Instance;
         var value=new G.SetGroupingSet<TKey,TElement>();
         var first=true;
         while(!reader.ReadIsEndArray()) {

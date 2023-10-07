@@ -37,10 +37,6 @@ public partial class SerializeEntity:SerializeEntityBase{
     public override bool Equals(object? obj)=>obj is SerializeEntity other&&this.Name==other.Name;
     public override int GetHashCode()=>this.Name is not null?this.Name.GetHashCode():0;
 }
-public class Person {
-    public string Name { get; set; }
-    public int Age { get; set; }
-}
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
 public partial class SerializeContainer {
     [MessagePack.Key(0)]
@@ -121,22 +117,24 @@ public partial class シリアライズ対象:IEquatable<シリアライズ対�
 
 public class Test_Set2:共通 {
     private const int 要素数 = 100;
+#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+//#pragma warning disable IDE0044 // 読み取り専用修飾子を追加します
     [MessagePack.MessagePackObject]
     public class シリアライズMessagePack{
-        [MessagePack.Key(0)]private int privateKey;
+        [MessagePack.Key(0)]private int PrivateKey=0;
         [MessagePack.Key(1)]public int PublicKey { get; set; }
-        [MessagePack.Key(2)]private string privateKeyS { get; set; }
-        [MessagePack.Key(3)]public string PublicKeyS { get; set; }
+        [MessagePack.Key(2)]private string PrivateKeyS{get;set;}
+        [MessagePack.Key(3)]public string PublicKeyS{get;set;}="";
         [MessagePack.Key(4)]
-        private string? _A;
+        private string? _A="";
         [MessagePack.IgnoreMember]
         public string? A{
             get=>this._A;
             set=>this._A=value;
         }
-        //public override bool Equals(object? obj)=>obj is シリアライズMessagePack other&&this.A is not null&&this.A==other.A;
-        //public override int GetHashCode()=>this.A is not null?this.A.GetHashCode():0;
     }
+#pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
+//#pragma warning restore IDE0044 // 読み取り専用修飾子を追加します
     [Fact]public void シリアライズMessagePack0(){
         var expected=new シリアライズMessagePack(){ PublicKeyS= "AAA"};
         var bytes = global::MessagePack.MessagePackSerializer.Serialize(expected);

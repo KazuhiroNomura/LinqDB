@@ -6,15 +6,14 @@ using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = LinqDB.Enumerables;
 public class GroupingList<TKey,TElement>:IJsonFormatter<G.GroupingList<TKey,TElement>>{
-    public static readonly GroupingList<TKey,TElement> Instance=new();//リフレクションで使われる
+    public static readonly GroupingList<TKey,TElement> Instance=new();
     private GroupingList(){}
     public void Serialize(ref Writer writer,G.GroupingList<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         writer.Write(value.Key,Resolver);
-        
         var Formatter=Resolver.GetFormatter<TElement>();
-        foreach(var item in value!){
+        foreach(var item in value){
             writer.WriteValueSeparator();
             Formatter.Serialize(ref writer,item,Resolver);
         }

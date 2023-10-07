@@ -15,7 +15,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     [NonSerialized]
     protected readonly Generic.IEqualityComparer<TKey> KeyComparer;
     /// <summary>空で、既定の初期量を備え、キーの型の既定の等値比較子を使用する、<see cref="Lookup{TValue, TKey, TCollection}" /> クラスの新しいインスタンスを初期化します。</summary>
-    protected Lookup() : this(Generic.EqualityComparer<TKey>.Default) { }
+    protected Lookup() : this(Generic.EqualityComparer<TKey>.Default){}
     /// <summary>コンストラクタ</summary>
     /// <param name="KeyComparer">キーの比較時に使用する <see cref="Generic.IEqualityComparer{T}" /> 実装。キーの型の既定の <see cref="Generic.EqualityComparer{T}" /> を使用する場合は null。</param>
     protected Lookup(Generic.IEqualityComparer<TKey> KeyComparer) => this.KeyComparer=KeyComparer;

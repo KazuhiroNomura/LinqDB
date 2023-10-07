@@ -8,7 +8,7 @@ namespace LinqDB.Optimizers;
 /// </summary>
 [Serializable]
 public class Target<TValueTuple>:Target 
-    where TValueTuple: IComparable, IComparable<TValueTuple>, IEquatable<TValueTuple>, IStructuralComparable, IStructuralEquatable {
+    where TValueTuple:IComparable, IComparable<TValueTuple>, IEquatable<TValueTuple>, IStructuralComparable, IStructuralEquatable {
     public TValueTuple ValueTuple;
     public override object Object {
         get => this.ValueTuple;

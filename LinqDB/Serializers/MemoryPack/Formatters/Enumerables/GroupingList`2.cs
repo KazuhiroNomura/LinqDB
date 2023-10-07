@@ -10,9 +10,9 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
     private GroupingList(){}
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.GroupingList<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
-        writer.Write(value!.Key);
+        writer.WriteVarInt(value!.LongCount);
+        writer.Write(value.Key);
         var Formatter=writer.GetFormatter<TElement>();
-        writer.WriteVarInt(value.LongCount);
         foreach(var item in value){
         
             writer.Write(Formatter,item);
@@ -20,10 +20,10 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
     }
     public override void Deserialize(ref Reader reader,scoped ref G.GroupingList<TKey,TElement>? value){
         if(reader.TryReadNil())return;
-        var Key=reader.Read<TKey>();
-        var value0=new G.GroupingList<TKey,TElement>(Key);
-        var Formatter=reader.GetFormatter<TElement>();
         var Count=reader.ReadVarIntInt64();
+        var Key=reader.Read<TKey>();
+        var Formatter=reader.GetFormatter<TElement>();
+        var value0=new G.GroupingList<TKey,TElement>(Key);
         for(long a=0;a<Count;a++)
             value0.Add(reader.Read(Formatter));
         value=value0;

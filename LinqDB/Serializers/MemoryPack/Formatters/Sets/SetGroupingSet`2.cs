@@ -10,7 +10,7 @@ public class SetGroupingSet<TKey,TElement>:MemoryPackFormatter<G.SetGroupingSet<
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.SetGroupingSet<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
-        var Formatter=Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+        var Formatter=GroupingSet<TKey,TElement>.Instance;
         foreach(var item in value)
             writer.Write(Formatter,item);
             

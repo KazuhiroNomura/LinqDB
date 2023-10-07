@@ -222,7 +222,7 @@ partial class Optimizer{
                             }
                             break;
                         }
-                        case nameof(Sets.ExtensionSet.Except): {
+                        case nameof(ExtensionSet.Except): {
                             Debug.Assert(
                                 MethodCall.Arguments.Count==3
                                 &&
@@ -253,7 +253,7 @@ partial class Optimizer{
                         //    break;
                         //}
                         default: {
-                            Debug.Assert(nameof(Sets.ExtensionSet.Join)!=MethodCall0_GenericMethodDefinition.Name);
+                            Debug.Assert(nameof(ExtensionSet.Join)!=MethodCall0_GenericMethodDefinition.Name);
                             this.Traverse(MethodCall0_Arguments[0]);
                             if(this.結果Expression is not null) {
                                 return;

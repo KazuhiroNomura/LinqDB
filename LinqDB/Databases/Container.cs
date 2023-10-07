@@ -162,15 +162,33 @@ public partial class Container:IDisposable{
     }
     [MessagePack.IgnoreMember]
     protected Stream? LogStream;
+    protected record struct Pack<T>(T Data,DateTimeOffset DateTimeOffset);
+    protected virtual void Load(Stream LogStream){}
     /// <summary>
     /// 上位トランザクションがない基底となるコンストラクタ。
     /// </summary>
     /// <param name="LogStream"></param>
     protected Container(Stream LogStream):this(){
-        //this.Init();
+        this.Init();
         this.LogStream=LogStream;
         if(LogStream.CanRead){
-            this.Read(LogStream);
+            //this.Serializer.Deserialize()
+            //{
+            //    //{"DateTime","2011/3/11 07:08:05"}
+            //    var j=new Utf8Json.JsonReader();
+            //    Utf8Json.Resolvers.Internal.
+            //    j.WriteBeginObject();
+            //    j.WritePropertyName("DateTime");
+            //    j.WriteNameSeparator();
+            //    LogStream.Write(j.GetBuffer());
+            //    this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
+            //    j=new Utf8Json.JsonWriter();
+            //    j.WriteEndObject();
+            //    j.WriteValueSeparator();
+            //    LogStream.Write(j.GetBuffer());
+            //}
+            //var Now=this.Serializer.Deserialize<DateTimeOffset>(LogStream);
+            //this.Read(LogStream);
         }
     }
     /// <summary>
@@ -203,11 +221,11 @@ public partial class Container:IDisposable{
             }
         }
     }
-    ///// <summary>
-    ///// 全メンバーの初期化。
-    ///// </summary>
-    //protected virtual void Init() {
-    //}
+    /// <summary>
+    /// 全メンバーの初期化。
+    /// </summary>
+    protected virtual void Init() {
+    }
     /// <summary>
     /// 全メンバーの読み込み。
     /// </summary>
@@ -238,5 +256,5 @@ public partial class Container:IDisposable{
     /// <summary>
     /// 全Setの要素数0にする。リレーションがあっても全データ削除するため単純な実装でいい。
     /// </summary>
-    public virtual void Clear() { }
+    public virtual void Clear(){}
 }

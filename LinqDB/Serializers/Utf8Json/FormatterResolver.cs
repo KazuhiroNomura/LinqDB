@@ -87,7 +87,7 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
             IJsonFormatter<T>RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
                 var GenericArguments=type0.GetGenericArguments();
                 var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-                var Instance=(IJsonFormatter<T>)FormatterGenericType.GetValue("Instance")!;
+                var Instance=(IJsonFormatter<T>)FormatterGenericType.GetValue("Instance");
                 this.DictionaryTypeFormatter.Add(typeof(T),Instance);
                 return Instance;
             }

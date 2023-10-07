@@ -51,7 +51,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
             this.DelegateDeserialize=(delegate_Deserialize)Deserialize.CreateDelegate(typeof(delegate_Deserialize));
         }
     }
-    private static readonly Dictionary<Type,System.Delegate> DictionarySerialize=new();
+    private static readonly Dictionary<Type,Delegate> DictionarySerialize=new();
     private readonly Type[] MethodTypes=new Type[2];
     private readonly Type[] SerializeTypes=new Type[2];
     private readonly Type[] PropertyTypes=new Type[1];

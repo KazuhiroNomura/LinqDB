@@ -1,31 +1,33 @@
-﻿using System.Buffers;
+﻿using System.Linq;
 using MemoryPack;
+
 namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
+
 
 using Reader = MemoryPackReader;
 using G =System.Linq;
-using System.Linq;
-public class IGrouping<TKey, TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElement>> {
-    public static readonly IGrouping<TKey, TElement> Instance=new();
+public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElement>> {
+    internal static readonly IGrouping<TKey,TElement> Instance=new();
     private IGrouping(){}
-    private static void WriteNullable<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,G.IGrouping<TKey,TElement>? value) where TBufferWriter : IBufferWriter<byte> {
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IGrouping<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
+        writer.WriteVarInt(value.LongCount());
         writer.WriteValue(value!.Key);
         var Formatter = writer.GetFormatter<TElement>();
-        writer.WriteVarInt(value.LongCount());
         foreach(var item in value)
             writer.Write(Formatter,item);
     }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IGrouping<TKey,TElement>? value) => WriteNullable(ref writer,value);
-    private static G.IGrouping<TKey,TElement>? ReadNullable(ref Reader reader) {
-        if(reader.TryReadNil()) return null;
-        var Key=reader.ReadValue<TKey>();
-        var value = new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
-        var Formatter = reader.GetFormatter<TElement>();
+    
+    
+    
+    public override void Deserialize(ref Reader reader,scoped ref G.IGrouping<TKey,TElement>? value){
+        if(reader.TryReadNil()) return;
         var Count = reader.ReadVarIntInt64();
+        var Key=reader.ReadValue<TKey>();
+        var value0=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        var Formatter = reader.GetFormatter<TElement>();
         for(long a = 0;a<Count;a++)
-            value.Add(reader.Read(Formatter));
-        return value;
+            value0.Add(reader.Read(Formatter));
+        value=value0;
     }
-    public override void Deserialize(ref Reader reader,scoped ref G.IGrouping<TKey,TElement>? value) => value=ReadNullable(ref reader);
 }

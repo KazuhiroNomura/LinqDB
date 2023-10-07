@@ -18,9 +18,9 @@ public class Set<TKey,TElement>:IMessagePackFormatter<G.Set<TKey,TElement>>
             writer.WriteType(type);
             writer.Write(type,value,Resolver);
         }else{
-            writer.WriteArrayHeader(1+value!.Count);
+            writer.WriteArrayHeader(1+value.Count);
             writer.WriteType(type);
-            var Formatter = Resolver.Resolver.GetFormatter<TElement>();
+            var Formatter = Resolver.GetFormatter<TElement>();
             foreach(var item in value)
                 writer.Write(Formatter,item,Resolver);
         }
@@ -32,7 +32,7 @@ public class Set<TKey,TElement>:IMessagePackFormatter<G.Set<TKey,TElement>>
         if(typeof(G.Set<TKey,TElement>)!=type){
             return(G.Set<TKey,TElement>)reader.Read(type,Resolver);
         }else{
-            var Formatter=Resolver.Resolver.GetFormatter<TElement>()!;
+            var Formatter=Resolver.GetFormatter<TElement>()!;
             var value=new G.Set<TKey,TElement>();
             for(long a=1;a<Count;a++)
                 value.Add(reader.Read(Formatter,Resolver));

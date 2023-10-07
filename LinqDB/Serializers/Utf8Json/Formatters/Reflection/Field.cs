@@ -7,7 +7,7 @@ namespace LinqDB.Serializers.Utf8Json.Formatters.Reflection;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = FieldInfo;
-public class Field : IJsonFormatter<G>
+public class Field :IJsonFormatter<G>
 {
     public static readonly Field Instance = new();
     internal static void Write(ref Writer writer, G value, IJsonFormatterResolver Resolver)

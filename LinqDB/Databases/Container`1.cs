@@ -62,18 +62,30 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     /// </summary>
     /// <param name="To">コピー先</param>
     protected virtual void Copy(TContainer To) {}
-    public sealed override void Commit() {
+    public override void Commit() {
         this.UpdateRelationship();
         if(this.Parent is null) {
             if(this.LogStream is not null) {
                 var LogStream = this.LogStream;
-                this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
-                //var Serializer=new Serializers.Utf8Json.Serializer();
-                //var buffer = Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString("yyyy/MM/dd HH:mm:ss.ff",CultureInfo.CurrentCulture));
-                //LogStream.Write(buffer,0,buffer.Length);
-                //Writer.WriteStartElement("Container");
-                //Writer.WriteAttributeString("DateTimeOffset",DateTimeOffset.Now.ToString("yyyy/MM/dd HH:mm:ss.ff",CultureInfo.CurrentCulture));
+                {
+                    //{"DateTime","2011/3/11 07:08:05"}
+                    var j=new Utf8Json.JsonWriter();
+                    j.WriteBeginObject();
+                    j.WritePropertyName("DateTime");
+                    j.WriteNameSeparator();
+                    LogStream.Write(j.GetBuffer());
+                    this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
+                    j=new Utf8Json.JsonWriter();
+                    j.WriteEndObject();
+                    j.WriteValueSeparator();
+                    LogStream.Write(j.GetBuffer());
+                }
                 this.Commit(LogStream);
+                {
+                    var j=new Utf8Json.JsonWriter();
+                    j.WriteValueSeparator();
+                    LogStream.Write(j.GetBuffer());
+                }
                 //Writer.WriteEndElement();
             }
         } else {

@@ -4,7 +4,6 @@ using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Xml;
 using LinqDB.CRC;
 using LinqDB.Databases;
@@ -12,6 +11,8 @@ using LinqDB.Sets;
 using Serializers=LinqDB.Serializers;
 //using MessagePack=LinqDB.Serializers.MessagePack;
 using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
+using TestLinqDB.Sets;
+using System.Diagnostics;
 // ReSharper disable ConvertIfStatementToReturnStatement
 [Serializable]
 public struct Struct比較対象にEquals {
@@ -19,11 +20,7 @@ public struct Struct比較対象にEquals {
     public Struct比較対象にEquals(int a) => this.a=a;
     public static bool operator ==(Struct比較対象にEquals a,Struct比較対象にEquals b) => a.a==b.a;
     public static bool operator !=(Struct比較対象にEquals a,Struct比較対象にEquals b) => a.a!=b.a;
-    public override bool Equals(object obj) {
-        if(!(obj is Struct比較対象にEquals)) return false;
-        var o = (Struct比較対象にEquals)obj;
-        return this.a==o.a;
-    }
+    public override bool Equals(object? obj)=>obj is Struct比較対象にEquals other&&this.a==other.a;
     public override int GetHashCode() => this.a;
 }
 [Serializable]
@@ -32,10 +29,7 @@ public struct Struct比較対象にIEquatableEquals:IEquatable<Struct比較対�
     public Struct比較対象にIEquatableEquals(int a) => this.a=a;
     public static bool operator ==(Struct比較対象にIEquatableEquals a,Struct比較対象にIEquatableEquals b) => a.a==b.a;
     public static bool operator !=(Struct比較対象にIEquatableEquals a,Struct比較対象にIEquatableEquals b) => a.a!=b.a;
-    public override bool Equals(object obj) {
-        var o = (Struct比較対象にIEquatableEquals)obj;
-        return this==o;
-    }
+    public override bool Equals(object? obj)=>obj is Struct比較対象にIEquatableEquals other&&this.a==other.a;
     public bool Equals(Struct比較対象にIEquatableEquals other) => this==other;
     public override int GetHashCode() => this.a;
 }
@@ -51,18 +45,24 @@ namespace テスト {
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         public Container()=>this.Init();
         public Container(Container? Parent) : base(Parent)=>this.Init();
-        public Container(Stream logStream) : base(logStream)=>this.Init();
+        public Container(Stream logStream) : base(logStream){}
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         //public Container(Stream Reader) : base(Reader) { }
         //public Container(Stream Writer) : base(Writer) { }
-        private void Init() {
-            this.dbo=new Schemas.dbo(this);
+        protected override void Load(Stream LogStream){
+            //new Pack
         }
+        protected override void Init(){
+            this.dbo=new(this);
+        }
+        //protected override void Init() {
+        //    this.dbo=new Schemas.dbo(this);
+        //}
         protected override void Read(Stream Reader) {
             this.dbo.Read(Reader);
         }
         protected override void Write(Stream Writer) {
-            Contract.Requires(Writer!=null);
+            Debug.Assert(Writer!=null);
             this.dbo.Write(Writer);
         }
         protected override void Copy(Container To) {
@@ -129,7 +129,7 @@ namespace テスト {
     }
     namespace PrimaryKeys {
         namespace dbo {
-            [Serializable]
+            [Serializable,MessagePack.MessagePackObject(true)]
             public struct Entity1:IEquatable<Entity1> {
                 public decimal ID1 {
                     get;
@@ -150,10 +150,7 @@ namespace テスト {
                         return false;
                     return true;
                 }
-                public override bool Equals(object other) {
-                    Contract.Assert(other!=null,"other != null");
-                    return this.Equals((Entity1)other);
-                }
+                public override bool Equals(object? obj)=>obj is Entity1 other&&this.Equals((Entity1)other);
                 public override int GetHashCode() {
                     var CRC = new CRC32();
                     CRC.Input(this.ID1);
@@ -174,9 +171,8 @@ namespace テスト {
     }
     namespace Tables {
         namespace dbo {
-            [Serializable]
-            public sealed class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>{
-                [JsonIgnore]
+            [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+            public sealed partial class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>{
                 public decimal ID1 => this.ProtectedKey.ID1;
                 public int C_ID { get; private set; }
                 public string? C_DATA { get; private set; }
@@ -205,17 +201,16 @@ namespace テスト {
                         return this.PrivateEquals(other);
                     return false;
                 }
-
-                public static bool operator ==(Entity1 a,Entity1 b)=>a.Equals(b);
-                public static bool operator !=(Entity1 a,Entity1 b)=>!a.Equals(b);
+                public override int GetHashCode()=>HashCode.Combine(this.Key,this.C_ID);
+                public static bool operator ==(Entity1? a,Entity1? b)=>a is not null?a.Equals(b):ReferenceEquals(a,b);
+                public static bool operator !=(Entity1? a,Entity1? b)=>!(a==b);
             }
         }
     }
 }
 
 public class Transaction {
-    [Fact]
-    public void TestTransaction() {
+    [Fact]public void TestTransaction() {
         using var e = new テスト.Container();
         var e0 = e.Transaction();
         e0.dbo.Entity1.Assign(
@@ -232,9 +227,82 @@ public class Transaction {
         }
         return result;
     }
-    private static readonly OnXmlDictionaryReaderClose OnXmlDictionaryReaderClose = _ => { };
-    [Fact]
-    public void Transactionログ1(){
+    [Fact]public void 連続書き込み0(){
+        共通連続書き込み(new Serializers.MemoryPack.Serializer());
+        共通連続書き込み(new Serializers.MessagePack.Serializer());
+        共通連続書き込み(new Serializers.Utf8Json.Serializer());
+        static void 共通連続書き込み(Serializers.Serializer Serializer){
+            const int 回数 = 100;
+            var expected=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            for(var b = 0;b<回数;b++) {
+                expected.IsAdded(new テスト.Tables.dbo.Entity1(b));
+            }
+            {
+                var bytes=Serializer.Serialize(expected);
+                var actual=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(bytes);
+                Assert.Equal(expected,actual);
+            }
+            {
+                var stream = new MemoryStream();
+                Serializer.Serialize(stream,expected);
+                stream.Position=0;
+                var actual=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+                Assert.Equal(expected,actual);
+            }
+        }
+    }
+    [Fact]public void 連続書き込み01(){
+        共通連続書き込み(new Serializers.MemoryPack.Serializer());
+        static void 共通連続書き込み(Serializers.Serializer Serializer){
+            const int 回数 = 100;
+            var expected0=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            //var expected2=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            for(var b = 0;b<回数;b++) {
+                expected0.IsAdded(new テスト.Tables.dbo.Entity1(b));
+                //expected2.IsAdded(new テスト.Tables.dbo.Entity1(b+10));
+            }
+            {
+                var bytes=Serializer.Serialize(expected0);
+                var actual=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(bytes);
+                Assert.Equal(expected0,actual);
+            }
+            var stream = new MemoryStream();
+            const string expected1="abc";
+            Serializer.Serialize(stream,expected0);
+            //Serializer.Serialize(stream,expected1);
+            //Serializer.Serialize(stream,expected0);
+            stream.Position=0;
+            var actual0=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+            //var actual1=Serializer.Deserialize<string>(stream);
+            //var actual2=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+            Assert.Equal(expected0,actual0);
+        }
+    }
+    [Fact]public void 連続書き込み1(){
+        共通連続書き込み(new Serializers.MemoryPack.Serializer());
+        共通連続書き込み(new Serializers.MessagePack.Serializer());
+        共通連続書き込み(new Serializers.Utf8Json.Serializer());
+        static void 共通連続書き込み(Serializers.Serializer Serializer){
+            const int 回数 = 100;
+            var expected0=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            //var expected2=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            for(var b = 0;b<回数;b++) {
+                expected0.IsAdded(new テスト.Tables.dbo.Entity1(b));
+                //expected2.IsAdded(new テスト.Tables.dbo.Entity1(b+10));
+            }
+            var stream = new MemoryStream();
+            const string expected1="abc";
+            Serializer.Serialize(stream,expected0);
+            //Serializer.Serialize(stream,expected1);
+            //Serializer.Serialize(stream,expected0);
+            stream.Position=0;
+            var actual0=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+            //var actual1=Serializer.Deserialize<string>(stream);
+            //var actual2=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+            Assert.Equal(expected0,actual0);
+        }
+    }
+    [Fact]public void Transactionログ1(){
         const string ファイル名 = "Transaction.xml";
         const int 回数 = 100;
         var rnd = new Random(1);
@@ -283,40 +351,7 @@ public class Transaction {
     [Fact]
     public void Transactionログ2() {
         const string ファイル名 = "Transaction.xml";
-        Func<Stream,XmlDictionaryReader>[] Readers ={
-            s=>XmlDictionaryReader.CreateTextReader(
-                s,
-                Encoding.UTF8,
-                XmlDictionaryReaderQuotas.Max,
-                OnXmlDictionaryReaderClose
-            ),
-            s=>XmlDictionaryReader.CreateMtomReader(
-                s,
-                Encoding.UTF8,
-                XmlDictionaryReaderQuotas.Max
-            ),
-            s=>XmlDictionaryReader.CreateBinaryReader(
-                s,
-                XmlDictionaryReaderQuotas.Max
-            )
-        };
-        Func<Stream,XmlDictionaryWriter>[] Writers ={
-            s=>XmlDictionaryWriter.CreateTextWriter(
-                s,
-                Encoding.UTF8,
-                false
-            ),
-            s=>XmlDictionaryWriter.CreateMtomWriter(
-                s,
-                Encoding.UTF8,
-                1024,
-                ""
-            ),
-            XmlDictionaryWriter.CreateBinaryWriter
-        };
-        for(var a = 0;a<Writers.Length;a++) {
-            var Reader = Readers[a];
-            var Writer = Writers[a];
+        {
             var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.ReadWrite);
             //var w0 = new BinaryWriter(s0,Encoding.UTF8);
             var actual = new テスト.Container(s0);
@@ -390,9 +425,9 @@ public class Transaction {
                 MessagePack.MessagePackSerializer.Serialize(s,シリアライズデータ);
                 s.Position=0;
                 var 匿名型Type=MessagePack.MessagePackSerializer.Deserialize<string>(s);
-                var O匿名型=MessagePack.MessagePackSerializer.Deserialize(Type.GetType(匿名型Type),s);
+                var O匿名型=MessagePack.MessagePackSerializer.Deserialize(Type.GetType(匿名型Type)!,s);
                 var シリアライズデータType=MessagePack.MessagePackSerializer.Deserialize<string>(s);
-                var Oシリアライズデータ=MessagePack.MessagePackSerializer.Deserialize(Type.GetType(シリアライズデータType),s);
+                var Oシリアライズデータ=MessagePack.MessagePackSerializer.Deserialize(Type.GetType(シリアライズデータType)!,s);
             } catch{
             }
         }

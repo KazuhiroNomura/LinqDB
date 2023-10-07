@@ -97,7 +97,7 @@ public partial class テーブルスキーマ編集:Window {
 		Container.Name="D0";
 		this.dbo=Container.CreateSchema("dbo");
 		//監視するディレクトリを指定
-		var DllWatcher = new VM.DllWatcher(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+		var DllWatcher = new VM.DllWatcher(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!);
 		this.DLL.DataContext=DllWatcher;
 		{
 			var S = Container.CreateSchema("S0");
@@ -735,7 +735,7 @@ public partial class テーブルスキーマ編集:Window {
 	}
 	private static readonly char[] 分割文字 = { '.' };
 	private const string NullableContextAttribute="System.Runtime.CompilerServices.NullableContextAttribute";
-	private static readonly Type NullableContextAttribute_Type = Type.GetType(NullableContextAttribute);
+	//private static readonly Type NullableContextAttribute_Type = Type.GetType(NullableContextAttribute);
 	private WeakReference? WeakReference;
 	private void GCLoad(string ファイル名)
 	{

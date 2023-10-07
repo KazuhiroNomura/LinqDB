@@ -9,9 +9,9 @@ public class GroupingSet<TKey,TElement>:IJsonFormatter<G.GroupingSet<TKey,TEleme
     public void Serialize(ref Writer writer,G.GroupingSet<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        Resolver.GetFormatter<TKey>().Serialize(ref writer,value!.Key,Resolver);
+        Resolver.GetFormatter<TKey>().Serialize(ref writer,value.Key,Resolver);
         var Formatter = Resolver.GetFormatter<TElement>();
-        foreach(var item in value!){
+        foreach(var item in value){
             writer.WriteValueSeparator();
             Formatter.Serialize(ref writer,item,Resolver);
         }

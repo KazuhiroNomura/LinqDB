@@ -12,14 +12,14 @@ public class Set<T>:IMessagePackFormatter<G.Set<T>>{
         if(writer.TryWriteNil(value)) return;
         var Count=value!.Count;
         writer.WriteArrayHeader(Count);
-        var Formatter=Resolver.Resolver.GetFormatter<T>()!;
+        var Formatter=Resolver.GetFormatter<T>()!;
         foreach(var item in value)
             Formatter.Serialize(ref writer,item,Resolver);
     }
     public G.Set<T>Deserialize(ref Reader reader,O Resolver) {
         if(reader.TryReadNil())return null!;
         var Count = reader.ReadArrayHeader();
-        var Formatter=Resolver.Resolver.GetFormatter<T>()!;
+        var Formatter=Resolver.GetFormatter<T>()!;
         var value=new G.Set<T>();
         for(long a=0;a<Count;a++)
             value.Add(Formatter.Deserialize(ref reader,Resolver));

@@ -42,7 +42,7 @@ public class NewArray:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        System.Diagnostics.Debug.Assert(3==count);
+        Debug.Assert(3==count);
         var NodeType=reader.ReadNodeType();
         Debug.Assert(NodeType is Expressions.ExpressionType.NewArrayBounds or Expressions.ExpressionType.NewArrayInit);
         return NodeType switch{

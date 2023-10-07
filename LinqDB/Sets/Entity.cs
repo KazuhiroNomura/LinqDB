@@ -7,7 +7,7 @@ public abstract class Entity{
     //private string DebuggerDisplay=>this.ToString().Replace("\r\n",",");
     protected static void ProtectedToStringBuilder(StringBuilder sb,string Name,object Value)=>
         sb.Append(Name+':').Append(Value).Append(',');
-    protected virtual void ToStringBuilder(StringBuilder sb) { }
+    protected virtual void ToStringBuilder(StringBuilder sb){}
     public override string ToString() {
         var sb = new StringBuilder();
         this.ToStringBuilder(sb);

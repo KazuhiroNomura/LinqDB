@@ -7,7 +7,7 @@ using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = System.Object;
 using Reflection;
-public class Object : IJsonFormatter<G>{
+public class Object :IJsonFormatter<G>{
     public static readonly Object Instance = new();
     private static void Write(ref Writer writer, G value, IJsonFormatterResolver Resolver){
         writer.WriteBeginArray();
@@ -23,11 +23,10 @@ public class Object : IJsonFormatter<G>{
             case ushort v: writer.WriteUInt16(v); break;
             case uint v: writer.WriteUInt32(v); break;
             case ulong v: writer.WriteUInt64(v); break;
-            //float
-            //double
-            //bool
+            case float v:writer.WriteSingle(v); break;
+            case double v: writer.WriteDouble(v); break;
+            case bool v:writer.WriteBoolean(v); break;
             case string v: writer.WriteString(v); break;
-            //case System.Delegate v: Delegate.Write(ref writer, v, Resolver); break;
             case Expressions.Expression v: Expression.Write(ref writer, v, Resolver); break;
             case System.Type v: Type.Write(ref writer, v, Resolver); break;
             case ConstructorInfo v: Constructor.Write(ref writer, v, Resolver); break;
