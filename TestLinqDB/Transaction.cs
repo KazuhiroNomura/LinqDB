@@ -9,13 +9,11 @@ using LinqDB.CRC;
 using LinqDB.Databases;
 using LinqDB.Sets;
 using Serializers=LinqDB.Serializers;
-//using MessagePack=LinqDB.Serializers.MessagePack;
-using Serializer=LinqDB.Serializers.Utf8Json.Serializer;
-using TestLinqDB.Sets;
 using System.Diagnostics;
+using テスト.Schemas;
 // ReSharper disable ConvertIfStatementToReturnStatement
-[Serializable]
-public struct Struct比較対象にEquals {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial struct Struct比較対象にEquals {
     private readonly int a;
     public Struct比較対象にEquals(int a) => this.a=a;
     public static bool operator ==(Struct比較対象にEquals a,Struct比較対象にEquals b) => a.a==b.a;
@@ -23,8 +21,8 @@ public struct Struct比較対象にEquals {
     public override bool Equals(object? obj)=>obj is Struct比較対象にEquals other&&this.a==other.a;
     public override int GetHashCode() => this.a;
 }
-[Serializable]
-public struct Struct比較対象にIEquatableEquals:IEquatable<Struct比較対象にIEquatableEquals> {
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial struct Struct比較対象にIEquatableEquals:IEquatable<Struct比較対象にIEquatableEquals> {
     public readonly int a;
     public Struct比較対象にIEquatableEquals(int a) => this.a=a;
     public static bool operator ==(Struct比較対象にIEquatableEquals a,Struct比較対象にIEquatableEquals b) => a.a==b.a;
@@ -43,13 +41,20 @@ namespace テスト {
             return Container;
         }
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
-        public Container()=>this.Init();
-        public Container(Container? Parent) : base(Parent)=>this.Init();
-        public Container(Stream logStream) : base(logStream){}
+        public Container(){
+        }
+        public Container(Container? Parent):base(Parent){
+        }
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         //public Container(Stream Reader) : base(Reader) { }
         //public Container(Stream Writer) : base(Writer) { }
-        protected override void Load(Stream LogStream){
+        protected override void Deserialize(Stream LogStream){
+            try{
+                this.dbo=this.Serializer.Deserialize<dbo>(LogStream);
+                //this.dbo.Deserialize(LogStream);
+            } catch(AggregateException ex)when(ex.InnerExceptions[0] is NotSupportedException){
+
+            }catch(Utf8Json.JsonParsingException){}
             //new Pack
         }
         protected override void Init(){
@@ -58,12 +63,9 @@ namespace テスト {
         //protected override void Init() {
         //    this.dbo=new Schemas.dbo(this);
         //}
-        protected override void Read(Stream Reader) {
-            this.dbo.Read(Reader);
-        }
-        protected override void Write(Stream Writer) {
+        protected override void Serialize(Stream Writer) {
             Debug.Assert(Writer!=null);
-            this.dbo.Write(Writer);
+            //this.dbo.Serialize(Writer);
         }
         protected override void Copy(Container To) {
             To.dbo.Assign(this.dbo);
@@ -71,57 +73,101 @@ namespace テスト {
         protected override void UpdateRelationship() {
             this.dbo.UpdateRelationship();
         }
-        protected override void Commit(Stream LogStream) {
-            this.dbo.Write(LogStream);
+        protected override void Commit(Stream LogStream){
+            this.Serializer.Serialize(LogStream,this.dbo);
         }
     }
     namespace Schemas {
-        [Serializable]
-        public class dbo:Schema {
-            //public Set<Int32> Int32 { get; private set; }
-            private Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> _Entity1;
-            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity1 =>this._Entity1;
-            private Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> _Entity2;
-            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity2 =>this._Entity2;
+        [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+        public partial class dbo1:Schema{
+            private int _a;
+            public int a=>this._a;
+            //[MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
+            public readonly int b=0;
+            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
+            private readonly Container Container11;
+            [MemoryPack.MemoryPackConstructor]
+            public dbo1(int a,int b) {
+                this._a=a;
+                this.b=b;
+            }
+            public dbo1(int a) {
+                this._a=a;
+            }
+        }
+        [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+        public partial class dbo:Schema {
+            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity1;
+            public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity2;
+//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             public Struct比較対象にEquals struct比較対象にEquals;
+//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             public Struct比較対象にIEquatableEquals struct比較対象にIEquatableEquals;
-            public object Objectstruct比較対象にEquals = new Struct比較対象にEquals();
-            public object Objectstruct比較対象にIEquatableEquals = new Struct比較対象にIEquatableEquals();
+//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
+//            [MemoryPack.MemoryPackInclude]
+//            public object Objectstruct比較対象にEquals;// = new Struct比較対象にEquals();
+////            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
+//            [MemoryPack.MemoryPackInclude]
+//            public object Objectstruct比較対象にIEquatableEquals = new Struct比較対象にIEquatableEquals();
+            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             private readonly Container Container;
-            internal dbo(Container Container) {
+            [MemoryPack.MemoryPackConstructor]
+            internal dbo(Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity1
+                ,Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity2
+                ,Struct比較対象にEquals struct比較対象にEquals
+                ,Struct比較対象にIEquatableEquals struct比較対象にIEquatableEquals
+                 //,object Objectstruct比較対象にEquals
+                 //,object Objectstruct比較対象にIEquatableEquals
+                //,Container Container
+                ){
+                this.Entity1=Entity1;
+                this.Entity2=Entity2;
+                this.struct比較対象にEquals=struct比較対象にEquals;
+                this.struct比較対象にIEquatableEquals=struct比較対象にIEquatableEquals;
+                //this.Objectstruct比較対象にEquals=Objectstruct比較対象にEquals;
+                //this.Objectstruct比較対象にIEquatableEquals=Objectstruct比較対象にIEquatableEquals;
+                //this.Container=Container;
+            }
+            public dbo(Container Container) {
                 this.Container=Container;
-                this._Entity1=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
-                this._Entity2=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
+                this.Entity1=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
+                this.Entity2=new Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>(this.Container);
             }
-            internal void Read(Stream Reader){
-                var Serializer=this.Container.Serializer;
-                this._Entity1=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
-                this._Entity2=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
-                this.struct比較対象にEquals=Serializer.Deserialize<Struct比較対象にEquals>(Reader);
-                this.struct比較対象にIEquatableEquals=Serializer.Deserialize<Struct比較対象にIEquatableEquals>(Reader);
-                this.Objectstruct比較対象にEquals=Serializer.Deserialize<object>(Reader);
-                this.Objectstruct比較対象にIEquatableEquals=Serializer.Deserialize<object>(Reader);
-            }
-            internal void Write(Stream Writer){
+            internal void Serialize(Stream Writer){
                 var Serializer=this.Container.Serializer;
                 Serializer.Serialize(Writer,this.Entity1);
                 Serializer.Serialize(Writer,this.Entity2);
                 Serializer.Serialize(Writer,this.struct比較対象にEquals);
                 Serializer.Serialize(Writer,this.struct比較対象にIEquatableEquals);
-                Serializer.Serialize(Writer,this.Objectstruct比較対象にEquals);
-                Serializer.Serialize(Writer,this.Objectstruct比較対象にIEquatableEquals);
+                //Serializer.Serialize(Writer,this.Objectstruct比較対象にEquals);
+                //Serializer.Serialize(Writer,this.Objectstruct比較対象にIEquatableEquals);
+            }
+            internal void Deserialize(Stream Reader){
+                var Serializer=this.Container.Serializer;
+                var _Entity1=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
+                var _Entity2=Serializer.Deserialize<Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container>>(Reader);
+                var struct比較対象にEquals=Serializer.Deserialize<Struct比較対象にEquals>(Reader);
+                var struct比較対象にIEquatableEquals=Serializer.Deserialize<Struct比較対象にIEquatableEquals>(Reader);
+                var Objectstruct比較対象にEquals=Serializer.Deserialize<object>(Reader);
+                var Objectstruct比較対象にIEquatableEquals=Serializer.Deserialize<object>(Reader);
+                this.Entity1=_Entity1;
+                this.Entity2=_Entity2;
+                this.struct比較対象にEquals=struct比較対象にEquals;
+                this.struct比較対象にIEquatableEquals=struct比較対象にIEquatableEquals;
+                //this.Objectstruct比較対象にEquals=Objectstruct比較対象にEquals;
+                //this.Objectstruct比較対象にIEquatableEquals=Objectstruct比較対象にIEquatableEquals;
             }
 
             internal void RelationValidate() {
             }
 
             internal void Assign(dbo dbo) {
-                this._Entity1.Assign(dbo.Entity1);
-                this._Entity2.Assign(dbo.Entity2);
+                this.Entity1.Assign(dbo.Entity1);
+                this.Entity2.Assign(dbo.Entity2);
                 this.struct比較対象にEquals=dbo.struct比較対象にEquals;
                 this.struct比較対象にIEquatableEquals=dbo.struct比較対象にIEquatableEquals;
-                this.Objectstruct比較対象にEquals=dbo.Objectstruct比較対象にEquals;
-                this.Objectstruct比較対象にIEquatableEquals=dbo.Objectstruct比較対象にIEquatableEquals;
+                //this.Objectstruct比較対象にEquals=dbo.Objectstruct比較対象にEquals;
+//                this.Objectstruct比較対象にIEquatableEquals=dbo.Objectstruct比較対象にIEquatableEquals;
             }
             internal void UpdateRelationship() {
             }
@@ -251,100 +297,77 @@ public class Transaction {
             }
         }
     }
-    [Fact]public void 連続書き込み01(){
-        共通連続書き込み(new Serializers.MemoryPack.Serializer());
-        static void 共通連続書き込み(Serializers.Serializer Serializer){
-            const int 回数 = 100;
-            var expected0=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
-            //var expected2=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
-            for(var b = 0;b<回数;b++) {
-                expected0.IsAdded(new テスト.Tables.dbo.Entity1(b));
-                //expected2.IsAdded(new テスト.Tables.dbo.Entity1(b+10));
-            }
-            {
-                var bytes=Serializer.Serialize(expected0);
-                var actual=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(bytes);
-                Assert.Equal(expected0,actual);
-            }
-            var stream = new MemoryStream();
-            const string expected1="abc";
-            Serializer.Serialize(stream,expected0);
-            //Serializer.Serialize(stream,expected1);
-            //Serializer.Serialize(stream,expected0);
-            stream.Position=0;
-            var actual0=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
-            //var actual1=Serializer.Deserialize<string>(stream);
-            //var actual2=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
-            Assert.Equal(expected0,actual0);
-        }
-    }
     [Fact]public void 連続書き込み1(){
         共通連続書き込み(new Serializers.MemoryPack.Serializer());
         共通連続書き込み(new Serializers.MessagePack.Serializer());
-        共通連続書き込み(new Serializers.Utf8Json.Serializer());
         static void 共通連続書き込み(Serializers.Serializer Serializer){
             const int 回数 = 100;
             var expected0=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
-            //var expected2=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
+            var expected2=new Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>(null!);
             for(var b = 0;b<回数;b++) {
                 expected0.IsAdded(new テスト.Tables.dbo.Entity1(b));
-                //expected2.IsAdded(new テスト.Tables.dbo.Entity1(b+10));
+                expected2.IsAdded(new テスト.Tables.dbo.Entity1(b+10));
             }
             var stream = new MemoryStream();
             const string expected1="abc";
             Serializer.Serialize(stream,expected0);
-            //Serializer.Serialize(stream,expected1);
-            //Serializer.Serialize(stream,expected0);
+            var length0=stream.Length;
+            Serializer.Serialize(stream,expected1);
+            var length1=stream.Length;
+            Serializer.Serialize(stream,expected0);
+            var length2=stream.Length;
             stream.Position=0;
             var actual0=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
-            //var actual1=Serializer.Deserialize<string>(stream);
-            //var actual2=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
+            var actual1=Serializer.Deserialize<string>(stream);
+            var actual2=Serializer.Deserialize<Set<テスト.PrimaryKeys.dbo.Entity1,テスト.Tables.dbo.Entity1,テスト.Container>>(stream);
             Assert.Equal(expected0,actual0);
         }
     }
     [Fact]public void Transactionログ1(){
         const string ファイル名 = "Transaction.xml";
         const int 回数 = 100;
+        var x=()=>"";
         var rnd = new Random(1);
         {
-            var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.Write);
+            //var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.Write);
             //var w0 = new BinaryWriter(s0,Encoding.UTF8);
-            var 新規Container = new テスト.Container(s0);
-            var 新規Container0 = 新規Container.Transaction();
+            Container.ClearLog();
+            var 新規Container0 = new テスト.Container();
+            var 新規Container1 = 新規Container0.Transaction();
             for(var b = 0;b<回数;b++) {
-                新規Container0.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
+                新規Container1.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
             }
-            Assert.Equal(0,新規Container.dbo.Entity1.LongCount);
-            var expected=新規Container0.dbo.Entity1.LongCount;
+            Assert.Equal(0,新規Container0.dbo.Entity1.LongCount);
+            var expected=新規Container1.dbo.Entity1.LongCount;
             Assert.NotEqual(0,expected);
-            新規Container0.Commit();
+            新規Container1.Commit();
             //Writerがないので書き込めない。ログを読み込むことはできても書き込まない設定はどうすれば
-            Assert.Equal(expected,新規Container.dbo.Entity1.LongCount);
             Assert.Equal(expected,新規Container0.dbo.Entity1.LongCount);
-            新規Container.Commit();
+            Assert.Equal(expected,新規Container1.dbo.Entity1.LongCount);
+            新規Container0.Commit();
             //w0.Close();
-            s0.Close();
-            var s1= new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite);
+            //s0.Close();
+            //var s1= new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite);
             //var r1 = new BinaryReader(s1,Encoding.UTF8);
             //var w1 = new BinaryWriter(s1,Encoding.UTF8);
-            var 復元Container = new テスト.Container(s1);
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container.dbo.Entity1));
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container.dbo.Entity1.GetInformation());
+            var 復元Container = new テスト.Container();
+            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
             var 復元Container0 = 復元Container.Transaction();
-            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container.dbo.Entity1));
-            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container.dbo.Entity1.GetInformation());
+            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
+            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
+            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
             復元Container0.Commit();
-            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container.dbo.Entity1));
-            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container.dbo.Entity1.GetInformation());
+            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
+            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
+            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
             復元Container.Commit();
             //w1.Close();
             //r1.Close();
-            s1.Close();
-            新規Container.Dispose();
+            //s1.Close();
+            新規Container0.Dispose();
             復元Container.Dispose();
         }
     }
@@ -352,49 +375,39 @@ public class Transaction {
     public void Transactionログ2() {
         const string ファイル名 = "Transaction.xml";
         {
-            var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.ReadWrite);
-            //var w0 = new BinaryWriter(s0,Encoding.UTF8);
-            var actual = new テスト.Container(s0);
-            var actual0 = actual.Transaction();
-            actual0.dbo.Entity1.Assign(共通(actual0,1));
-            actual0.dbo.Entity2.Assign(共通(actual0,2));
-            Assert.Equal(0,actual.dbo.Entity1.LongCount());
-            Assert.Equal(0,actual.dbo.Entity2.LongCount());
+            Container.ClearLog();
+            var actual0 = new テスト.Container();
+            var actual1 = actual0.Transaction();
+            actual1.dbo.Entity1.Assign(共通(actual1,1));
+            actual1.dbo.Entity2.Assign(共通(actual1,2));
+            Assert.Equal(0,actual0.dbo.Entity1.LongCount());
+            Assert.Equal(0,actual0.dbo.Entity2.LongCount());
+            Assert.Equal(1,actual1.dbo.Entity1.LongCount());
+            Assert.Equal(2,actual1.dbo.Entity2.LongCount());
+            actual1.Commit();
             Assert.Equal(1,actual0.dbo.Entity1.LongCount());
             Assert.Equal(2,actual0.dbo.Entity2.LongCount());
+            Assert.Equal(1,actual1.dbo.Entity1.LongCount());
+            Assert.Equal(2,actual1.dbo.Entity2.LongCount());
             actual0.Commit();
-            Assert.Equal(1,actual.dbo.Entity1.LongCount());
-            Assert.Equal(2,actual.dbo.Entity2.LongCount());
-            Assert.Equal(1,actual0.dbo.Entity1.LongCount());
-            Assert.Equal(2,actual0.dbo.Entity2.LongCount());
-            actual.Commit();
-            //actual.dbo.Entity1.Assign(共通(actual,dbo.Entity1_Count1));
-            //actual.dbo.Entity2.Assign(共通(actual,dbo.Entity2_Count1));
-            //Assert.Equal(dbo.Entity1_Count1,actual.dbo.Entity1.LongCount());
-            //Assert.Equal(dbo.Entity2_Count1,actual.dbo.Entity2.LongCount());
-            //w0.Close();
-            s0.Close();
-            var s1 = new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite);
-            //var r1 = new BinaryReader(s1,Encoding.UTF8);
-            //var w1 = new BinaryWriter(s1,Encoding.UTF8);
-            var expected = new テスト.Container(s1);
-            Assert.True(expected.dbo.Entity1.SetEquals(actual.dbo.Entity1));
-            Assert.True(expected.dbo.Entity2.SetEquals(actual.dbo.Entity2));
+            var expected = new テスト.Container();
+            Assert.True(expected.dbo.Entity1.SetEquals(actual0.dbo.Entity1));
+            Assert.True(expected.dbo.Entity2.SetEquals(actual0.dbo.Entity2));
             var expected0 = expected.Transaction();
+            Assert.True(expected0.dbo.Entity1.SetEquals(actual1.dbo.Entity1));
+            Assert.True(expected0.dbo.Entity2.SetEquals(actual1.dbo.Entity2));
+            Assert.True(expected.dbo.Entity1.SetEquals(actual0.dbo.Entity1));
+            Assert.True(expected.dbo.Entity2.SetEquals(actual0.dbo.Entity2));
+            expected0.Commit();
+            Assert.True(expected.dbo.Entity1.SetEquals(actual0.dbo.Entity1));
+            Assert.True(expected.dbo.Entity2.SetEquals(actual0.dbo.Entity2));
             Assert.True(expected0.dbo.Entity1.SetEquals(actual0.dbo.Entity1));
             Assert.True(expected0.dbo.Entity2.SetEquals(actual0.dbo.Entity2));
-            Assert.True(expected.dbo.Entity1.SetEquals(actual.dbo.Entity1));
-            Assert.True(expected.dbo.Entity2.SetEquals(actual.dbo.Entity2));
-            expected0.Commit();
-            Assert.True(expected.dbo.Entity1.SetEquals(actual.dbo.Entity1));
-            Assert.True(expected.dbo.Entity2.SetEquals(actual.dbo.Entity2));
-            Assert.True(expected0.dbo.Entity1.SetEquals(actual.dbo.Entity1));
-            Assert.True(expected0.dbo.Entity2.SetEquals(actual.dbo.Entity2));
             expected.Commit();
             //w1.Close();
             //r1.Close();
-            s1.Close();
-            actual.Dispose();
+            //s1.Close();
+            actual0.Dispose();
             expected.Dispose();
         }
     }

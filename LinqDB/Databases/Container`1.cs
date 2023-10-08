@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 namespace LinqDB.Databases;
 
 /// <summary>
@@ -44,13 +45,6 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     //    this.Parent=null;
     //}
     /// <summary>
-    /// 上位トランザクションがない基底となるコンストラクタ。
-    /// </summary>
-    /// <param name="LogStream">TextWriterの場合BOFが入らない(例:UTF8)エンコード。Unicodeはだめ。</param>
-    protected Container(Stream LogStream) : base(LogStream) {
-        this.Parent=null;
-    }
-    /// <summary>
     /// コミット処理を実装。
     /// </summary>
     /// <param name="LogStream"></param>
@@ -65,29 +59,9 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     public override void Commit() {
         this.UpdateRelationship();
         if(this.Parent is null) {
-            if(this.LogStream is not null) {
-                var LogStream = this.LogStream;
-                {
-                    //{"DateTime","2011/3/11 07:08:05"}
-                    var j=new Utf8Json.JsonWriter();
-                    j.WriteBeginObject();
-                    j.WritePropertyName("DateTime");
-                    j.WriteNameSeparator();
-                    LogStream.Write(j.GetBuffer());
-                    this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
-                    j=new Utf8Json.JsonWriter();
-                    j.WriteEndObject();
-                    j.WriteValueSeparator();
-                    LogStream.Write(j.GetBuffer());
-                }
-                this.Commit(LogStream);
-                {
-                    var j=new Utf8Json.JsonWriter();
-                    j.WriteValueSeparator();
-                    LogStream.Write(j.GetBuffer());
-                }
-                //Writer.WriteEndElement();
-            }
+            var FileName=$"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{DateTime.Now:yyyyMMddhhmmssffff}.{拡張子}";
+            using var Stream=new FileStream(FileName,FileMode.Create,FileAccess.Write);
+            this.Commit(Stream);
         } else {
             this.Copy(this.Parent);
         }

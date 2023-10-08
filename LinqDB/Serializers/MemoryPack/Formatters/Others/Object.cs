@@ -19,22 +19,23 @@ public class Object : MemoryPackFormatter<T>{
         writer.WriteType(type);
 
         switch (value){
-            case sbyte    v:writer.WriteUnmanaged(v);break;
-            case short    v:writer.WriteUnmanaged(v);break;
-            case int      v:writer.WriteUnmanaged(v);break;
-            case long     v:writer.WriteUnmanaged(v);break;
-            case byte     v:writer.WriteUnmanaged(v);break;
-            case ushort   v:writer.WriteUnmanaged(v);break;
-            case uint     v:writer.WriteUnmanaged(v);break;
-            case ulong    v:writer.WriteUnmanaged(v);break;
-            case float    v:writer.WriteUnmanaged(v);break;
-            case double   v:writer.WriteUnmanaged(v);break;
-            case bool     v:writer.WriteUnmanaged(v);break;
-            case char     v:writer.WriteUnmanaged(v);break;
-            case decimal  v:writer.WriteUnmanaged(v);break;
-            case TimeSpan v:writer.WriteUnmanaged(v);break;
-            case DateTime v:writer.WriteUnmanaged(v);break;
-            case string   v:writer.WriteString   (v);break;
+            case sbyte          v:writer.WriteUnmanaged(v);break;
+            case short          v:writer.WriteUnmanaged(v);break;
+            case int            v:writer.WriteUnmanaged(v);break;
+            case long           v:writer.WriteUnmanaged(v);break;
+            case byte           v:writer.WriteUnmanaged(v);break;
+            case ushort         v:writer.WriteUnmanaged(v);break;
+            case uint           v:writer.WriteUnmanaged(v);break;
+            case ulong          v:writer.WriteUnmanaged(v);break;
+            case float          v:writer.WriteUnmanaged(v);break;
+            case double         v:writer.WriteUnmanaged(v);break;
+            case bool           v:writer.WriteUnmanaged(v);break;
+            case char           v:writer.WriteUnmanaged(v);break;
+            case decimal        v:writer.WriteUnmanaged(v);break;
+            case TimeSpan       v:writer.WriteUnmanaged(v);break;
+            case DateTime       v:writer.WriteUnmanaged(v);break;
+            case DateTimeOffset v:writer.WriteUnmanaged(v);break;
+            case string         v:writer.WriteString   (v);break;
             case Expressions.Expression v:Expression .Write(ref writer,v);break;
             case System.Type            v:Type       .Write(ref writer,v);break;
             case ConstructorInfo        v:Constructor.Write(ref writer,v);break;
@@ -56,21 +57,22 @@ public class Object : MemoryPackFormatter<T>{
 
         var TypeName= reader.ReadString();
         switch(TypeName){
-            case"SByte"   :{reader.ReadUnmanaged(out sbyte    value0);value=value0;break;}
-            case"Byte"    :{reader.ReadUnmanaged(out byte     value0);value=value0;break;}
-            case"Int16"   :{reader.ReadUnmanaged(out short    value0);value=value0;break;}
-            case"UInt16"  :{reader.ReadUnmanaged(out ushort   value0);value=value0;break;}
-            case"Int32"   :{reader.ReadUnmanaged(out int      value0);value=value0;break;}
-            case"UInt32"  :{reader.ReadUnmanaged(out uint     value0);value=value0;break;}
-            case"Int64"   :{reader.ReadUnmanaged(out long     value0);value=value0;break;}
-            case"UInt64"  :{reader.ReadUnmanaged(out ulong    value0);value=value0;break;}
-            case"Single"  :{reader.ReadUnmanaged(out float    value0);value=value0;break;}
-            case"Double"  :{reader.ReadUnmanaged(out double   value0);value=value0;break;}
-            case"Boolean" :{reader.ReadUnmanaged(out bool     value0);value=value0;break;}
-            case"Char"    :{reader.ReadUnmanaged(out char     value0);value=value0;break;}
-            case"Decimal" :{reader.ReadUnmanaged(out decimal  value0);value=value0;break;}
-            case"TimeSpan":{reader.ReadUnmanaged(out TimeSpan value0);value=value0;break;}
-            case"DateTime":{reader.ReadUnmanaged(out DateTime value0);value=value0;break;}
+            case"SByte"         :{reader.ReadUnmanaged(out sbyte          value0);value=value0;break;}
+            case"Byte"          :{reader.ReadUnmanaged(out byte           value0);value=value0;break;}
+            case"Int16"         :{reader.ReadUnmanaged(out short          value0);value=value0;break;}
+            case"UInt16"        :{reader.ReadUnmanaged(out ushort         value0);value=value0;break;}
+            case"Int32"         :{reader.ReadUnmanaged(out int            value0);value=value0;break;}
+            case"UInt32"        :{reader.ReadUnmanaged(out uint           value0);value=value0;break;}
+            case"Int64"         :{reader.ReadUnmanaged(out long           value0);value=value0;break;}
+            case"UInt64"        :{reader.ReadUnmanaged(out ulong          value0);value=value0;break;}
+            case"Single"        :{reader.ReadUnmanaged(out float          value0);value=value0;break;}
+            case"Double"        :{reader.ReadUnmanaged(out double         value0);value=value0;break;}
+            case"Boolean"       :{reader.ReadUnmanaged(out bool           value0);value=value0;break;}
+            case"Char"          :{reader.ReadUnmanaged(out char           value0);value=value0;break;}
+            case"Decimal"       :{reader.ReadUnmanaged(out decimal        value0);value=value0;break;}
+            case"TimeSpan"      :{reader.ReadUnmanaged(out TimeSpan       value0);value=value0;break;}
+            case"DateTime"      :{reader.ReadUnmanaged(out DateTime       value0);value=value0;break;}
+            case"DateTimeOffset":{reader.ReadUnmanaged(out DateTimeOffset value0);value=value0;break;}
             default:{
                 var type=TypeName.StringType();
                 if     (typeof(Expressions.Expression).IsAssignableFrom(type))value=Expression .Read(ref reader);

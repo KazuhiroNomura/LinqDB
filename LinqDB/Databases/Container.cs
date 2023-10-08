@@ -1,20 +1,26 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
-using Serializer= Serializers.Utf8Json.Serializer;
 /// <summary>
 /// エンティティの基底クラス
 /// </summary>
-[MemoryPack.MemoryPackable,MessagePack.MessagePackObject]
-public partial class Container:IDisposable{
+//[MemoryPack.MemoryPackable,MessagePack.MessagePackObject]
+[SuppressMessage("ReSharper","VirtualMemberCallInConstructor")]
+public class Container:IDisposable{
+    //protected const string 拡張子="MemoryPack";
+    protected const string 拡張子="json";
     [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember, NonSerialized]
-    public readonly Serializer Serializer=new();
+    //public readonly Serializers.MemoryPack.Serializer Serializer=new();
+    public readonly Serializers.Utf8Json.Serializer Serializer=new();
     /// <summary>
     /// リレーションシップ制約
     /// </summary>
@@ -50,83 +56,95 @@ public partial class Container:IDisposable{
     /// </summary>
     [MemoryPack.MemoryPackConstructor]
     public Container(){
-        var tables = new Set<tables>();
-        var columns = new Set<columns>();
-        var referential_constraints = new Set<referential_constraints>();
-        this.information_schema=new Schemas.information_schema(tables,columns,referential_constraints);
-        var Schemas      = new Set<PrimaryKeys.Reflection,Tables.Schema>();
-        var Tables       = new Set<PrimaryKeys.Reflection,Table>();
-        var Views        = new Set<PrimaryKeys.Reflection,View>();
-        var TableColumns = new Set<PrimaryKeys.Reflection,TableColumn>();
-        var ViewColumns  = new Set<PrimaryKeys.Reflection,ViewColumn>();
-        this._system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
-        var Container_Type = this.GetType();
-        //var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
-        //if(FieldInfoParent is null) {
-        //    return;
-        //}
-        var ContainerType=this.GetType();// FieldInfoParent!.FieldType;
-        static string Catalog取得(string Name) => Name[..Name.IndexOf('.')];
-        var catalog = Catalog取得(ContainerType.FullName!);
-        var ChildExtensions = ContainerType.Assembly.GetType(catalog+".ChildExtensions");
-        if(ChildExtensions is not null) {
-            foreach(var Method in ChildExtensions.GetMethods(BindingFlags.Static|BindingFlags.Public)) {
-                var OneTableType = Method.ReturnType;
-                var OneCatalog = Catalog取得(OneTableType.FullName!);
-                var ManyTableType = Method.GetParameters()[0].ParameterType;
-                var ManyCatalog = Catalog取得(ManyTableType.FullName!);
-                referential_constraints.IsAdded(
-                    new referential_constraints(
-                        ManyCatalog,
-                        "constraint_schema",
-                        Method.Name,
-                        OneCatalog,
-                        "unique_constraint_schema",
-                        "PrimaryKey",
-                        rule.ristrict,
-                        rule.ristrict
-                    )
-                );
+        this.Init();
+        {
+            var tables=new Set<tables>();
+            var columns=new Set<columns>();
+            var referential_constraints=new Set<referential_constraints>();
+            this.information_schema=new Schemas.information_schema(tables,columns,referential_constraints);
+            var Schemas=new Set<PrimaryKeys.Reflection,Tables.Schema>();
+            var Tables=new Set<PrimaryKeys.Reflection,Table>();
+            var Views=new Set<PrimaryKeys.Reflection,View>();
+            var TableColumns=new Set<PrimaryKeys.Reflection,TableColumn>();
+            var ViewColumns=new Set<PrimaryKeys.Reflection,ViewColumn>();
+            this._system=new Schemas.system(Schemas,Tables,Views,TableColumns,ViewColumns);
+            var Container_Type=this.GetType();
+            //var FieldInfoParent = Container_Type.GetField("Parent",BindingFlags.Instance|BindingFlags.NonPublic);
+            //if(FieldInfoParent is null) {
+            //    return;
+            //}
+            var ContainerType=this.GetType();// FieldInfoParent!.FieldType;
+            static string Catalog取得(string Name)=>Name[..Name.IndexOf('.')];
+            var catalog=Catalog取得(ContainerType.FullName!);
+            var ChildExtensions=ContainerType.Assembly.GetType(catalog+".ChildExtensions");
+            if(ChildExtensions is not null){
+                foreach(var Method in ChildExtensions.GetMethods(BindingFlags.Static|BindingFlags.Public)){
+                    var OneTableType=Method.ReturnType;
+                    var OneCatalog=Catalog取得(OneTableType.FullName!);
+                    var ManyTableType=Method.GetParameters()[0].ParameterType;
+                    var ManyCatalog=Catalog取得(ManyTableType.FullName!);
+                    referential_constraints.IsAdded(
+                        new referential_constraints(
+                            ManyCatalog,
+                            "constraint_schema",
+                            Method.Name,
+                            OneCatalog,
+                            "unique_constraint_schema",
+                            "PrimaryKey",
+                            rule.ristrict,
+                            rule.ristrict
+                        )
+                    );
+                }
             }
-        }
-        foreach(var Schema_Property in Container_Type.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-            var system_Schema = new Tables.Schema(Schema_Property);
-            if(!typeof(Sets.Schema).IsAssignableFrom(Schema_Property.PropertyType)) {
-                continue;
-            }
-            Schemas.IsAdded(system_Schema);
-            foreach(var TableView_Property in Schema_Property.PropertyType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                var TableView_Type=TableView_Property.PropertyType;
-                var ElementType = TableView_Type.GetGenericArguments()[0];
-                var TableView_FullName= ElementType.FullName!;
-                var TableIndex=TableView_FullName.LastIndexOf('.');
-                var SchemaIndex = TableView_FullName.LastIndexOf('.',TableIndex-1);
-                var CategoryIndex = TableView_FullName.LastIndexOf('.',SchemaIndex-1);
-                var Category = TableView_FullName[CategoryIndex..SchemaIndex];
-                switch(Category){
-                    case ".Tables":{
-                        var Table = new Table(TableView_Property,system_Schema);
-                        Tables.IsAdded(Table);
-                        foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                            TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
+            foreach(var Schema_Property in Container_Type.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                var system_Schema=new Tables.Schema(Schema_Property);
+                if(!typeof(Sets.Schema).IsAssignableFrom(Schema_Property.PropertyType)){
+                    continue;
+                }
+                Schemas.IsAdded(system_Schema);
+                foreach(var TableView_Property in Schema_Property.PropertyType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                    var TableView_Type=TableView_Property.PropertyType;
+                    var ElementType=TableView_Type.GetGenericArguments()[0];
+                    var TableView_FullName=ElementType.FullName!;
+                    var TableIndex=TableView_FullName.LastIndexOf('.');
+                    var SchemaIndex=TableView_FullName.LastIndexOf('.',TableIndex-1);
+                    var CategoryIndex=TableView_FullName.LastIndexOf('.',SchemaIndex-1);
+                    var Category=TableView_FullName[CategoryIndex..SchemaIndex];
+                    switch(Category){
+                        case".Tables":{
+                            var Table=new Table(TableView_Property,system_Schema);
+                            Tables.IsAdded(Table);
+                            foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                                TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
+                            }
+                            break;
                         }
-                        break;
-                    }
-                    case ".Views":{
-                        var View=new View(TableView_Property,system_Schema);
-                        Views.IsAdded(View);
-                        foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-                            ViewColumns.IsAdded(new ViewColumn(ViewColumn_Property,View));
+                        case".Views":{
+                            var View=new View(TableView_Property,system_Schema);
+                            Views.IsAdded(View);
+                            foreach(var ViewColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                                ViewColumns.IsAdded(new ViewColumn(ViewColumn_Property,View));
+                            }
+                            break;
                         }
-                        break;
                     }
                 }
             }
+            Schema処理(catalog,tables,columns,typeof(Schemas.system));
+            //Schema処理(catalog,tables,columns,typeof(Container).GetProperty(nameof(this.information_schema)).PropertyType);
+            foreach(var Schema in Container_Type.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                Schema処理(catalog,tables,columns,Schema.PropertyType);
+            }
         }
-        Schema処理(catalog,tables,columns,typeof(Schemas.system));
-        //Schema処理(catalog,tables,columns,typeof(Container).GetProperty(nameof(this.information_schema)).PropertyType);
-        foreach(var Schema in Container_Type.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
-            Schema処理(catalog,tables,columns,Schema.PropertyType);
+        {
+            var Regex= new Regex(@$"\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\.{拡張子}",RegexOptions.Compiled);
+            var Files=Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"*.??????????????????").Where(p=>Regex.IsMatch(p)).OrderBy(p=>p);
+            var File=Files.LastOrDefault();
+            if(File is not null){
+                using var Stream=new FileStream(File,FileMode.Open,FileAccess.Read);
+                this.Deserialize(Stream);
+            }
         }
         static void Schema処理(string catalog,Set<tables> tables,Set<columns> columns,Type Schema) {
             foreach(var Table in Schema.GetProperties(BindingFlags.Instance|BindingFlags.Public)) {
@@ -160,37 +178,12 @@ public partial class Container:IDisposable{
             }
         }
     }
-    [MessagePack.IgnoreMember]
-    protected Stream? LogStream;
-    protected record struct Pack<T>(T Data,DateTimeOffset DateTimeOffset);
-    protected virtual void Load(Stream LogStream){}
-    /// <summary>
-    /// 上位トランザクションがない基底となるコンストラクタ。
-    /// </summary>
-    /// <param name="LogStream"></param>
-    protected Container(Stream LogStream):this(){
-        this.Init();
-        this.LogStream=LogStream;
-        if(LogStream.CanRead){
-            //this.Serializer.Deserialize()
-            //{
-            //    //{"DateTime","2011/3/11 07:08:05"}
-            //    var j=new Utf8Json.JsonReader();
-            //    Utf8Json.Resolvers.Internal.
-            //    j.WriteBeginObject();
-            //    j.WritePropertyName("DateTime");
-            //    j.WriteNameSeparator();
-            //    LogStream.Write(j.GetBuffer());
-            //    this.Serializer.Serialize(LogStream,DateTimeOffset.Now);
-            //    j=new Utf8Json.JsonWriter();
-            //    j.WriteEndObject();
-            //    j.WriteValueSeparator();
-            //    LogStream.Write(j.GetBuffer());
-            //}
-            //var Now=this.Serializer.Deserialize<DateTimeOffset>(LogStream);
-            //this.Read(LogStream);
-        }
+    public static void ClearLog(){
+        var Regex= new Regex(@$"\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\d\.{拡張子}",RegexOptions.Compiled);
+        foreach(var File in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"*.??????????????????").Where(p=>Regex.IsMatch(p)))
+            System.IO.File.Delete(File);
     }
+    protected record struct Pack<T>(T Data,DateTimeOffset DateTimeOffset);
     /// <summary>
     /// ファイナライザ
     /// </summary>
@@ -214,10 +207,6 @@ public partial class Container:IDisposable{
         if(!this.IsDisposed) {
             this.IsDisposed=true;
             if(disposing) {
-                if(this.LogStream is not null) {
-                    this.LogStream.Close();
-                    this.LogStream.Dispose();
-                }
             }
         }
     }
@@ -230,13 +219,13 @@ public partial class Container:IDisposable{
     /// 全メンバーの読み込み。
     /// </summary>
     /// <param name="reader"></param>
-    protected virtual void Read(Stream reader) {
-    }
+    protected virtual void Deserialize(Stream reader){}
+
     /// <summary>
     /// 全メンバーの書き込み。
     /// </summary>
     /// <param name="writer"></param>
-    protected virtual void Write(Stream writer) {
+    protected virtual void Serialize(Stream writer) {
     }
     /// <summary>
     /// AssociateSet`3,EntitySet`3間のリレーションを作る。

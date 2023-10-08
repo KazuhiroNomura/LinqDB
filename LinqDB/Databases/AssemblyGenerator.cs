@@ -449,13 +449,13 @@ public partial class AssemblyGenerator {
         //foreach(var a in Dictionary_TableFunction.Values)a.CreateType();
         foreach(var a in Schemas)this.Disp作成(a,ContainerParameter);
         foreach(var a in Schemas)this.Impl作成(a,ContainerParameter);
-        var Regex=new Regex("^.*$");
-        var m=Regex.Match(@"場所 LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.Convertデータ型を合わせるNullableは想定しない(Expression 変更元, Type 変更先_Type) (D:\Team\kazuhiro.visualstudio.com\LinqDB\LinqDB\Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs):行 784");
-        using var f=new FileStream(@"無視すべきオブジェクト.txt",FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite);
-        using var w=new StreamWriter(f,Encoding.UTF8);
-        w.Close();
-        f.Close();
-        //DisplayClass_cctor_I.Ret();
+        //var Regex=new Regex("^.*$");
+        //var m=Regex.Match(@"場所 LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.Convertデータ型を合わせるNullableは想定しない(Expression 変更元, Type 変更先_Type) (D:\Team\kazuhiro.visualstudio.com\LinqDB\LinqDB\Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs):行 784");
+        //using var f=new FileStream(@"無視すべきオブジェクト.txt",FileMode.Create,FileAccess.ReadWrite,FileShare.ReadWrite);
+        //using var w=new StreamWriter(f,Encoding.UTF8);
+        //w.Close();
+        //f.Close();
+        ////DisplayClass_cctor_I.Ret();
         new Lokad.ILPack.AssemblyGenerator().GenerateAssembly(DynamicAssembly,$"{Folder}\\{Container_Name}.dll");
         //Process.Start(@"D:\Team\kazuhiro.visualstudio.com\LinqDB\GUI\bin\Debug\net60-windows",);
     }

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using LinqDB.Sets;
+// ReSharper disable InconsistentNaming
 
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Product.SQLServer;
