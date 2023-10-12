@@ -132,7 +132,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// 代入元からコピーする。代入元はDisposeする。
     /// </summary>
     /// <param name="source"></param>
-    public virtual void Assign(ImmutableSet<T> source) {
+    public virtual void Assign(IEnumerable<T> source) {
         this.変数Enumerator.TreeNode=new TreeNodeT(null);
         this.PrivateProtectedImport(source);
     }
@@ -309,14 +309,14 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="source">ImmutableSet値</param>
     /// <returns>追加に失敗すれば例外送出。</returns>
-    public void AddRangeOrThrow(ImmutableSet<T> source) {
+    public void AddRangeOrThrow(IEnumerable<T> source) {
         foreach(var Item in source) {
             if(this.InternalContains(Item)) throw new ArgumentException(Item!.ToString());
         }
         foreach(var Item in source) {
             this.InternalAdd(Item);
         }
-        this._LongCount+=source._LongCount;
+        this._LongCount+=source.LongCount;
     }
     /// <summary>
     /// 要素を削除する。

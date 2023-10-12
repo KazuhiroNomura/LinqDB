@@ -5,7 +5,7 @@ using System.Reflection;
 namespace LinqDB.Databases.Tables;
 [Serializable]
 public abstract class Reflection:Sets.Entity<PrimaryKeys.Reflection,Container>, IEquatable<Reflection> {
-    public string Name => this.ProtectedKey.Name;
+    public string Name => this.ProtectKey.Name;
     public Type Type => this.Property.PropertyType;
     public PropertyInfo Property { get; }
     protected Reflection(PropertyInfo Property) : base(new PrimaryKeys.Reflection(Property.Name)) {

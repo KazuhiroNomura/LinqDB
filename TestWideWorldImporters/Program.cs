@@ -13,8 +13,8 @@ using System.Data.SqlClient;
 namespace TestWideWorldImporters;
 
 abstract class Program:共通 {
-    private static void Transaction(Func<Int32>Switchパターン) {
-        const Int32 試行回数 = 10000;
+    private static void Transaction(Func<int>Switchパターン) {
+        const int 試行回数 = 10000;
         var Geography = new SqlGeography();
         using var Container = new Container();
         var Application = Container.Application;
@@ -86,10 +86,10 @@ abstract class Program:共通 {
                     switch(Switchパターン()%19) {
                         case 0:
                             if(People.Count==0) {
-                                Add(ref People情報,People,new People(PeopleID,"","","",false,"",false,Array.Empty<Byte>(),false,false,false,"","","","",Array.Empty<Byte>(),"","",PeopleID,DateTime.Now,DateTime.Now));
+                                Add(ref People情報,People,new People(PeopleID,"","","",false,"",false,Array.Empty<byte>(),false,false,false,"","","","",Array.Empty<byte>(),"","",PeopleID,DateTime.Now,DateTime.Now));
                                 PeopleID++;
                             } else {
-                                Add(ref People情報,People,new People(PeopleID++,"","","",false,"",false,Array.Empty<Byte>(),false,false,false,"","","","",Array.Empty<Byte>(),"","",People.Sampling.PersonID,DateTime.Now,DateTime.Now));
+                                Add(ref People情報,People,new People(PeopleID++,"","","",false,"",false,Array.Empty<byte>(),false,false,false,"","","","",Array.Empty<byte>(),"","",People.Sampling.PersonID,DateTime.Now,DateTime.Now));
                             }
                             break;
                         case 1:
@@ -183,7 +183,7 @@ abstract class Program:共通 {
                                     SupplierCategories.Sampling.SupplierCategoryID,
                                     Colors.Sampling.ColorID,
                                     0,0,
-                                    "","",0,0,false,"",0,0,0,0,"","",Array.Empty<Byte>(),"","","",
+                                    "","",0,0,false,"",0,0,0,0,"","",Array.Empty<byte>(),"","","",
                                     People.Sampling.PersonID,
                                     DateTime.Now,DateTime.Now
                                 )
@@ -354,7 +354,7 @@ abstract class Program:共通 {
         for(var PersonID=0;PersonID<2;PersonID++){
             People.AddOrThrow(
                 new People(
-                    PersonID,"","","",false,"",false,Array.Empty<Byte>(),false,false,false,"","","","",Array.Empty<Byte>(),"","",PersonID/2,DateTime.Now,DateTime.Now
+                    PersonID,"","","",false,"",false,Array.Empty<byte>(),false,false,false,"","","","",Array.Empty<byte>(),"","",PersonID/2,DateTime.Now,DateTime.Now
                 )
             );
         }
@@ -485,7 +485,7 @@ abstract class Program:共通 {
                                 a.SupplierID,
                                 b.ColorID,
                                 0,0,
-                                "","",0,0,false,"",0,0,0,0,"","",Array.Empty<Byte>(),"","","",
+                                "","",0,0,false,"",0,0,0,0,"","",Array.Empty<byte>(),"","","",
                                 c.PersonID,
                                 DateTime.Now,DateTime.Now
                             )
@@ -1220,19 +1220,19 @@ abstract class Program:共通 {
             using var Reader = Command.ExecuteReader();
             var People = Application.People;
             while(Reader.Read()) {
-                Byte[] HashedPassword7;
+                byte[] HashedPassword7;
                 if(Reader.IsDBNull(7)) {
-                    HashedPassword7=Array.Empty<Byte>();
+                    HashedPassword7=Array.Empty<byte>();
                 } else {
-                    HashedPassword7=new Byte[100];
+                    HashedPassword7=new byte[100];
                     Reader.GetBytes(7,0,HashedPassword7,0,HashedPassword7.Length);
                 }
 
-                Byte[] HashedPassword15;
+                byte[] HashedPassword15;
                 if(Reader.IsDBNull(15)) {
-                    HashedPassword15=Array.Empty<Byte>();
+                    HashedPassword15=Array.Empty<byte>();
                 } else {
-                    HashedPassword15=new Byte[100];
+                    HashedPassword15=new byte[100];
                     Reader.GetBytes(7,0,HashedPassword15,0,HashedPassword15.Length);
                 }
                 People.AddOrThrow(
@@ -1585,7 +1585,7 @@ abstract class Program:共通 {
             var StockItems = Warehouse.StockItems;
             if(!Reader.NextResult()) throw new Exception();
             while(Reader.Read()) {
-                Byte[]?Photo;
+                byte[]?Photo;
                 if(Reader.IsDBNull(18)) {
                     Photo=null;
                 } else {
@@ -1879,7 +1879,7 @@ abstract class Program:共通 {
             var VehicleTemperatures = Warehouse.VehicleTemperatures;
             if(!Reader.NextResult()) throw new Exception();
             while(Reader.Read()) {
-                Byte[]? CompressedSensorData;
+                byte[]? CompressedSensorData;
                 if(Reader.IsDBNull(7)) {
                     CompressedSensorData=null;
                 } else {
@@ -2107,16 +2107,16 @@ abstract class Program:共通 {
     }
     private static void GetCityUpdates(Container e,SqlCommand Command) {
         var CityChanges = new Set<(
-            Int32 WWI_City_ID,
-            String City,
-            String State_Province,
-            String Country,
-            String Continent,
-            String Sales_Territory,
-            String Region,
-            String Subregion,
+            int WWI_City_ID,
+            string City,
+            string State_Province,
+            string Country,
+            string Continent,
+            string Sales_Territory,
+            string Region,
+            string Subregion,
             SqlGeography Location,
-            Int64 Latest_Recorded_Population,
+            long Latest_Recorded_Population,
             DateTime Valid_From,
             DateTime? Valid_To
             )>();

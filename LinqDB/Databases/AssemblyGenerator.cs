@@ -14,12 +14,14 @@ using LinqDB.Sets;
 using LinqDB.CRC;
 using System.IO;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Text.RegularExpressions;
 using LinqDB.Databases.Dom;
 using LinqDB.Optimizers;
 using AssemblyName=System.Reflection.AssemblyName;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
+// ReSharper disable InconsistentNaming
 namespace LinqDB.Databases;
 public partial class AssemblyGenerator {
     //private const bool すべて実行=true;
@@ -44,7 +46,7 @@ public partial class AssemblyGenerator {
     private static readonly MethodInfo Container_UpdateRelationship = typeof(Container).GetMethod("UpdateRelationship",BindingFlags.Instance|BindingFlags.NonPublic);
     private static readonly MethodInfo Container_RelationValidate = typeof(Container).GetMethod(nameof(Container.RelationValidate));
     private static readonly MethodInfo Container_Clear = typeof(Container).GetMethod(nameof(Container.Clear));
-    private static readonly FieldInfo Entity2_ProtectedPrimaryKey = typeof(Entity<,>).GetField("ProtectedPrimaryKey",BindingFlags.Instance|BindingFlags.NonPublic);
+    private static readonly FieldInfo Entity2_ProtectedPrimaryKey = typeof(Entity<,>).GetField("ProtectKey",BindingFlags.Instance|BindingFlags.NonPublic);
     private static readonly MethodInfo Set2_ContainsKey = typeof(Set<,>).GetMethod("ContainsKey");
     private static readonly MethodInfo Set2_TryGetValue = typeof(Set<,>).GetMethod("TryGetValue");
     private static readonly MethodInfo Set1_Add = typeof(Set<>).GetMethod(nameof(Set<int>.Add));
@@ -347,7 +349,7 @@ public partial class AssemblyGenerator {
         ChildExtensions.SetCustomAttribute(Extension_CustomAttributeBuilder);
         var Container_TypeBuilder = ModuleBuilder.DefineType(Container_Name+".Container",TypeAttributes.Public|TypeAttributes.Serializable);
 
-
+        静的インターフェース付き型(ModuleBuilder);
 
 
 
@@ -456,8 +458,71 @@ public partial class AssemblyGenerator {
         //w.Close();
         //f.Close();
         ////DisplayClass_cctor_I.Ret();
+        var o=Activator.CreateInstance(Container_Type,null);
         new Lokad.ILPack.AssemblyGenerator().GenerateAssembly(DynamicAssembly,$"{Folder}\\{Container_Name}.dll");
         //Process.Start(@"D:\Team\kazuhiro.visualstudio.com\LinqDB\GUI\bin\Debug\net60-windows",);
+    }
+    #if false
+    public interface IAdditionOperators<in TSelf,in TOther,out TResult> where TSelf : IAdditionOperators<TSelf,TOther,TResult>? {
+        static abstract TResult operator +(TSelf left,TOther right);
+        static virtual TResult operator checked +(TSelf left,TOther right) {
+            return left+right;
+        }
+
+    }
+    #endif
+    private static void 静的インターフェース付き型(ModuleBuilder ModuleBuilder) {
+        //const string MethodName = "op_Addition";
+        var GenericInterfaceDefinition = typeof(IAdditionOperators<,,>);
+        var TypeBuilder = ModuleBuilder.DefineType("型",TypeAttributes.Public|TypeAttributes.Sealed);
+        var GenericInterface = GenericInterfaceDefinition.MakeGenericType(TypeBuilder,TypeBuilder,TypeBuilder);
+        TypeBuilder.AddInterfaceImplementation(GenericInterface);
+        Type[] types = { TypeBuilder,TypeBuilder };//Public_Final_NewSlot_HideBySig_Virtual
+        //var f = MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static;
+        //var f=MethodAttributes.Public|MethodAttributes.Final|MethodAttributes.NewSlot|MethodAttributes.HideBySig|MethodAttributes.Static;
+        //var メソッド本体 = TypeBuilder.DefineMethod(MethodName,MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static,TypeBuilder,types);
+        //var メソッド宣言 = GenericInterfaceDefinition.GetMethod(MethodName);
+        //TypeBuilder.DefineMethodOverride(メソッド本体,TypeBuilder.GetMethod(GenericInterface,メソッド宣言));
+        //メソッド本体.InitLocals=false;
+        //メソッド本体.DefineParameter(1,ParameterAttributes.None,"a");
+        //メソッド本体.DefineParameter(2,ParameterAttributes.None,"b");
+        //var I = メソッド本体.GetILGenerator();
+        //I.Ldarg_0();
+        //I.Ret();
+        共通("op_Addition");
+        共通("op_CheckedAddition");
+        var type=TypeBuilder.CreateType();
+        var i=Activator.CreateInstance(type);
+        void 共通(string MethodName){
+            var メソッド本体 = TypeBuilder.DefineMethod(MethodName,MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static,TypeBuilder,types);
+            var メソッド宣言 = GenericInterfaceDefinition.GetMethod(MethodName);
+            TypeBuilder.DefineMethodOverride(メソッド本体,TypeBuilder.GetMethod(GenericInterface,メソッド宣言));
+            メソッド本体.InitLocals=false;
+            メソッド本体.DefineParameter(1,ParameterAttributes.None,"a");
+            メソッド本体.DefineParameter(2,ParameterAttributes.None,"b");
+            var I = メソッド本体.GetILGenerator();
+            I.Ldarg_0();
+            I.Ret();
+        }
+    }
+    private static void 静的インターフェース付き型1(ModuleBuilder ModuleBuilder) {
+        const string MethodName = "Equals";
+        var GenericInterfaceDefinition = typeof(IEquatable<>);
+        var TypeBuilder = ModuleBuilder.DefineType("型",TypeAttributes.Public|TypeAttributes.Sealed|TypeAttributes.Abstract);
+        var GenericInterface = GenericInterfaceDefinition.MakeGenericType(TypeBuilder);
+        TypeBuilder.AddInterfaceImplementation(GenericInterface);
+        var returnType = typeof(bool);
+        Type[] types = new[] { TypeBuilder };
+        var f = Public_Final_NewSlot_HideBySig_Virtual;
+        var メソッド本体 = TypeBuilder.DefineMethod(MethodName,f,returnType,types);
+        var メソッド宣言 = GenericInterfaceDefinition.GetMethod(MethodName);
+        TypeBuilder.DefineMethodOverride(メソッド本体,TypeBuilder.GetMethod(GenericInterface,メソッド宣言));
+        メソッド本体.InitLocals=false;
+        メソッド本体.DefineParameter(1,ParameterAttributes.None,"a");
+        var I = メソッド本体.GetILGenerator();
+        I.Ldc_I4_0();
+        I.Ret();
+        TypeBuilder.CreateType();
     }
     private static int Impl数,Display数,Define数,宣言数;
     private static double Define率=>(double)Define数/宣言数;

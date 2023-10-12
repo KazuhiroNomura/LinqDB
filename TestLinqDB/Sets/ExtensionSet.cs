@@ -3,7 +3,6 @@ using LinqDB.Sets;
 using Expressions=System.Linq.Expressions;
 using Collections=System.Collections;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
@@ -395,22 +394,26 @@ public class ExtensionSet:共通{
     [Fact]public void Except(){
         const int 最大値=10;
         共通<sbyte  >(最大値);
-        //共通<short  >(最大値);
-        //共通<int    >(最大値);
-        //共通<long   >(最大値);
-        //共通<byte   >(最大値);
-        //共通<ushort >(最大値);
-        //共通<uint   >(最大値);
-        //共通<ulong  >(最大値);
-        //共通<float  >(最大値);
-        //共通<double >(最大値);
-        //共通<decimal>(最大値);
-        //共通<char   >(最大値);
+        共通<short>(最大値);
+        共通<int>(最大値);
+        共通<long>(最大値);
+        共通<byte>(最大値);
+        共通<ushort>(最大値);
+        共通<uint>(最大値);
+        共通<ulong>(最大値);
+        共通<float>(最大値);
+        共通<double>(最大値);
+        共通<decimal>(最大値);
+        共通<char>(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
             集約関数<T>(最大値,(s0,s1,e0,e1)=>this.共通コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
     }
     [Fact]public void GroupBy_keySelector_elementSelector(){
         const int 最大値=10;
+        {
+            var (s,e)=データ<sbyte>(5);
+            this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3));
+        }
         集約関数<sbyte  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
         集約関数<short  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
         集約関数<int    >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));

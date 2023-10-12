@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 [DebuggerDisplay("{"+nameof(v)+"}")]
-public readonly struct Int:IEquatable<Int>{
+public readonly struct Int:IEquatable<Int>,IAdditionOperators<Int,Int,Int>{
     private readonly long v;
     public Int(long v)=>this.v=v;
     public static implicit operator Int(long v)=>new(v);

@@ -12,14 +12,14 @@ public abstract class Entity<TKey,TContainer>:Entity<TContainer>, IKey<TKey>
     where TKey : struct, IEquatable<TKey>
     where TContainer:Container{
     //[IgnoreDataMember]
-    protected readonly TKey ProtectedKey;
+    protected readonly TKey ProtectKey;
     //[IgnoreDataMember]
-    public TKey Key=>this.ProtectedKey;
+    public TKey Key=>this.ProtectKey;
     /// <summary>
     /// 既定コンストラクタ
     /// </summary>
     /// <param name="Key"></param>
-    protected Entity(TKey Key) => this.ProtectedKey=Key;
-    public override int GetHashCode() => this.ProtectedKey.GetHashCode();
+    protected Entity(TKey Key) => this.ProtectKey=Key;
+    public override int GetHashCode() => this.ProtectKey.GetHashCode();
     public override bool Equals(object? obj)=>obj is Entity<TKey,TContainer> other&&this.Key.Equals(other.Key);
 }

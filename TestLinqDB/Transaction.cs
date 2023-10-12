@@ -1,4 +1,5 @@
-﻿#define テキスト
+﻿#pragma warning disable CS8981 // 型名には、小文字の ASCII 文字のみが含まれています。このような名前は、プログラミング言語用に予約されている可能性があります。
+#define テキスト
 using System.CodeDom.Compiler;
 using System.Diagnostics.Contracts;
 using System.Globalization;
@@ -12,6 +13,7 @@ using Serializers=LinqDB.Serializers;
 using System.Diagnostics;
 using テスト.Schemas;
 // ReSharper disable ConvertIfStatementToReturnStatement
+// ReSharper disable InconsistentNaming
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
 public partial struct Struct比較対象にEquals {
     private readonly int a;
@@ -48,7 +50,7 @@ namespace テスト {
 #pragma warning restore CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
         //public Container(Stream Reader) : base(Reader) { }
         //public Container(Stream Writer) : base(Writer) { }
-        protected override void Deserialize(Stream LogStream){
+        protected override void Read(Stream LogStream){
             try{
                 this.dbo=this.Serializer.Deserialize<dbo>(LogStream);
                 //this.dbo.Deserialize(LogStream);
@@ -63,7 +65,7 @@ namespace テスト {
         //protected override void Init() {
         //    this.dbo=new Schemas.dbo(this);
         //}
-        protected override void Serialize(Stream Writer) {
+        protected override void Write(Stream Writer) {
             Debug.Assert(Writer!=null);
             //this.dbo.Serialize(Writer);
         }
@@ -99,15 +101,9 @@ namespace テスト {
         public partial class dbo:Schema {
             public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity1;
             public Set<PrimaryKeys.dbo.Entity1,Tables.dbo.Entity1,Container> Entity2;
-//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             public Struct比較対象にEquals struct比較対象にEquals;
-//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             public Struct比較対象にIEquatableEquals struct比較対象にIEquatableEquals;
-//            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
-//            [MemoryPack.MemoryPackInclude]
 //            public object Objectstruct比較対象にEquals;// = new Struct比較対象にEquals();
-////            [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
-//            [MemoryPack.MemoryPackInclude]
 //            public object Objectstruct比較対象にIEquatableEquals = new Struct比較対象にIEquatableEquals();
             [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,System.Runtime.Serialization.IgnoreDataMember]
             private readonly Container Container;
@@ -219,7 +215,7 @@ namespace テスト {
         namespace dbo {
             [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
             public sealed partial class Entity1:Entity<PrimaryKeys.dbo.Entity1,Container>, IEquatable<Entity1>{
-                public decimal ID1 => this.ProtectedKey.ID1;
+                public decimal ID1 => this.ProtectKey.ID1;
                 public int C_ID { get; private set; }
                 public string? C_DATA { get; private set; }
                 public Entity1(int C_ID,string? C_DATA = default) : base(new PrimaryKeys.dbo.Entity1(C_ID,C_ID)) {
@@ -324,52 +320,41 @@ public class Transaction {
         }
     }
     [Fact]public void Transactionログ1(){
-        const string ファイル名 = "Transaction.xml";
         const int 回数 = 100;
-        var x=()=>"";
-        var rnd = new Random(1);
-        {
-            //var s0 = new FileStream(ファイル名,FileMode.Create,FileAccess.Write);
-            //var w0 = new BinaryWriter(s0,Encoding.UTF8);
-            Container.ClearLog();
-            var 新規Container0 = new テスト.Container();
-            var 新規Container1 = 新規Container0.Transaction();
-            for(var b = 0;b<回数;b++) {
-                新規Container1.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
-            }
-            Assert.Equal(0,新規Container0.dbo.Entity1.LongCount);
-            var expected=新規Container1.dbo.Entity1.LongCount;
-            Assert.NotEqual(0,expected);
-            新規Container1.Commit();
-            //Writerがないので書き込めない。ログを読み込むことはできても書き込まない設定はどうすれば
-            Assert.Equal(expected,新規Container0.dbo.Entity1.LongCount);
-            Assert.Equal(expected,新規Container1.dbo.Entity1.LongCount);
-            新規Container0.Commit();
-            //w0.Close();
-            //s0.Close();
-            //var s1= new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite);
-            //var r1 = new BinaryReader(s1,Encoding.UTF8);
-            //var w1 = new BinaryWriter(s1,Encoding.UTF8);
-            var 復元Container = new テスト.Container();
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
-            var 復元Container0 = 復元Container.Transaction();
-            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
-            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
-            復元Container0.Commit();
-            Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
-            Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
-            Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
-            Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
-            復元Container.Commit();
-            //w1.Close();
-            //r1.Close();
-            //s1.Close();
-            新規Container0.Dispose();
-            復元Container.Dispose();
-        }
+        Container.ClearLog();
+        var 新規Container0 = new テスト.Container();
+        var 新規Container1 = 新規Container0.Transaction();
+        for(var b = 0;b<回数;b++)
+            新規Container1.dbo.Entity1.IsAdded(new テスト.Tables.dbo.Entity1(b));
+        Assert.Equal(0,新規Container0.dbo.Entity1.LongCount);
+        var expected=新規Container1.dbo.Entity1.LongCount;
+        Assert.NotEqual(0,expected);
+        新規Container1.Commit();
+        //Writerがないので書き込めない。ログを読み込むことはできても書き込まない設定はどうすれば
+        Assert.Equal(expected,新規Container0.dbo.Entity1.LongCount);
+        Assert.Equal(expected,新規Container1.dbo.Entity1.LongCount);
+        新規Container0.Commit();
+        //w0.Close();
+        //s0.Close();
+        //var s1= new FileStream(ファイル名,FileMode.Open,FileAccess.ReadWrite);
+        //var r1 = new BinaryReader(s1,Encoding.UTF8);
+        //var w1 = new BinaryWriter(s1,Encoding.UTF8);
+        var 復元Container = new テスト.Container();
+        Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+        Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
+        var 復元Container0 = 復元Container.Transaction();
+        Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
+        Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+        Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
+        Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
+        復元Container0.Commit();
+        Assert.True(復元Container0.dbo.Entity1.SetEquals(新規Container1.dbo.Entity1));
+        Assert.True(復元Container.dbo.Entity1.SetEquals(新規Container0.dbo.Entity1));
+        Assert.Equal(復元Container0.dbo.Entity1.GetInformation(),新規Container1.dbo.Entity1.GetInformation());
+        Assert.Equal(復元Container.dbo.Entity1.GetInformation(),新規Container0.dbo.Entity1.GetInformation());
+        復元Container.Commit();
+        新規Container0.Dispose();
+        復元Container.Dispose();
     }
     [Fact]
     public void Transactionログ2() {
@@ -447,6 +432,7 @@ public class Transaction {
     }
     [Fact]
     public void TransactionCommit() {
+        Container.ClearLog();
         using var e = new テスト.Container();
         var e0 = e.Transaction();
         var expected1 = 共通(e0,1);

@@ -264,7 +264,7 @@ public static class Methods {
             var hi = BitConverter.ToInt32(expression,8);
             var isNegative = BitConverter.ToBoolean(expression,12);
             var scale = expression[13];
-            var d = new Decimal(lo,mid,hi,isNegative,scale);
+            var d = new decimal(lo,mid,hi,isNegative,scale);
             return d;
         }
         if(data_type == typeof(bool))return BitConverter.ToBoolean(expression);

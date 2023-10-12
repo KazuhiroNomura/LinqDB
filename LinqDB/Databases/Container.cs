@@ -143,7 +143,7 @@ public class Container:IDisposable{
             var File=Files.LastOrDefault();
             if(File is not null){
                 using var Stream=new FileStream(File,FileMode.Open,FileAccess.Read);
-                this.Deserialize(Stream);
+                this.Read(Stream);
             }
         }
         static void Schema処理(string catalog,Set<tables> tables,Set<columns> columns,Type Schema) {
@@ -183,7 +183,6 @@ public class Container:IDisposable{
         foreach(var File in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),"*.??????????????????").Where(p=>Regex.IsMatch(p)))
             System.IO.File.Delete(File);
     }
-    protected record struct Pack<T>(T Data,DateTimeOffset DateTimeOffset);
     /// <summary>
     /// ファイナライザ
     /// </summary>
@@ -219,13 +218,13 @@ public class Container:IDisposable{
     /// 全メンバーの読み込み。
     /// </summary>
     /// <param name="reader"></param>
-    protected virtual void Deserialize(Stream reader){}
+    protected virtual void Read(Stream reader){}
 
     /// <summary>
     /// 全メンバーの書き込み。
     /// </summary>
     /// <param name="writer"></param>
-    protected virtual void Serialize(Stream writer) {
+    protected virtual void Write(Stream writer) {
     }
     /// <summary>
     /// AssociateSet`3,EntitySet`3間のリレーションを作る。
@@ -236,11 +235,6 @@ public class Container:IDisposable{
     /// コミットして上位のContainerに反映させる。
     /// </summary>
     public virtual void Commit() {
-    }
-    /// <summary>
-    /// ロールバックして上位のContainerから戻す。
-    /// </summary>
-    public virtual void Rollback() {
     }
     /// <summary>
     /// 全Setの要素数0にする。リレーションがあっても全データ削除するため単純な実装でいい。

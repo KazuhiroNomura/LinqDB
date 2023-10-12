@@ -59,12 +59,12 @@ namespace TestAdventureWorks2019 {
             var SalesReason = Sales.SalesReason;
             var SpecialOffer = Sales.SpecialOffer;
             var s = Stopwatch.StartNew();
-            const Int32 スケール = 2;
+            const int スケール = 2;
             //LV0
             for(var ID = 0;ID<2;ID++) {
                 AWBuildVersion.AddOrThrow(
                     new AWBuildVersion(
-                        (Byte)ID,"",DateTime.Now,DateTime.Now
+                        (byte)ID,"",DateTime.Now,DateTime.Now
                     )
                 );
                 DatabaseLog.AddOrThrow(
@@ -79,20 +79,20 @@ namespace TestAdventureWorks2019 {
                 );
                 ProductPhoto.AddOrThrow(
                     new ProductPhoto(
-                        ID,Array.Empty<Byte>(),"",Array.Empty<Byte>(),"",DateTime.Now
+                        ID,Array.Empty<byte>(),"",Array.Empty<byte>(),"",DateTime.Now
                     )
                 );
                 Location.AddOrThrow(
-                    new Location((Int16)ID,"",0,0,DateTime.Now)
+                    new Location((short)ID,"",0,0,DateTime.Now)
                 );
                 ProductCategory.AddOrThrow(
                     new ProductCategory(ID,"",Guid.NewGuid(),DateTime.Now)
                 );
                 Department.AddOrThrow(
-                    new Department((Int16)ID,"","",DateTime.Now)
+                    new Department((short)ID,"","",DateTime.Now)
                 );
                 Shift.AddOrThrow(
-                    new Shift((Byte)ID,"",new TimeSpan(ID),new TimeSpan(ID+1),DateTime.Now)
+                    new Shift((byte)ID,"",new TimeSpan(ID),new TimeSpan(ID+1),DateTime.Now)
                 );
                 CountryRegion.AddOrThrow(
                     new CountryRegion(ID.ToString(),"",DateTime.Now)
@@ -125,7 +125,7 @@ namespace TestAdventureWorks2019 {
                     new ProductModel(ID,"",null,null,Guid.NewGuid(),DateTime.Now)
                 );
                 ScrapReason.AddOrThrow(
-                    new ScrapReason((Int16)ID,"",DateTime.Now)
+                    new ScrapReason((short)ID,"",DateTime.Now)
                 );
                 TransactionHistoryArchive.AddOrThrow(
                     new TransactionHistoryArchive(ID,0,0,0,DateTime.Now,"",0,0,DateTime.Now)
@@ -464,7 +464,7 @@ namespace TestAdventureWorks2019 {
             );
             var Document = Production.Document;
             var sb=new StringBuilder("/0/");
-            Int16 DocumentLevel=0;
+            short DocumentLevel=0;
             E(
                 Employee,
                 _=>{
@@ -740,7 +740,7 @@ namespace TestAdventureWorks2019 {
                                     new WorkOrderRouting(
                                         a.WorkOrderID,
                                         b.ProductID,
-                                        (Int16)OperationSequence++,
+                                        (short)OperationSequence++,
                                         c.LocationID,
                                         DateTime.Now,
                                         DateTime.Now,
@@ -818,7 +818,7 @@ namespace TestAdventureWorks2019 {
                     SalesPerson.AddOrThrow(
                         new SalesPerson(
                             a.BusinessEntityID,
-                            TerritoryID%2==0 ? (Int32)(SalesPerson_TerritoryID%SalesTerritory.Count) : (Int32?)null,
+                            TerritoryID%2==0 ? (int)(SalesPerson_TerritoryID%SalesTerritory.Count) : (int?)null,
                             null,
                             0,
                             0,
@@ -1154,8 +1154,8 @@ namespace TestAdventureWorks2019 {
         }
 
         [SuppressMessage("Globalization","CA1305:IFormatProvider を指定します",Justification = "<保留中>")]
-        private static void Transaction(Func<Int32> Switchパターン) {
-            const Int32 試行回数 = 10000;
+        private static void Transaction(Func<int> Switchパターン) {
+            const int 試行回数 = 10000;
             using var Container = new Container();
             var dbo = Container.dbo;
             var HumanResources = Container.HumanResources;
@@ -1311,11 +1311,11 @@ namespace TestAdventureWorks2019 {
             var ProductDocument_DocumentNode = new StringBuilder("/0/");
             for(var a=0;a<試行回数;a++){
                 switch(Switchパターン()%71) {
-                    case 0: Add(ref AWBuildVersion情報,AWBuildVersion,new AWBuildVersion((Byte)ID(AWBuildVersion),"",DateTime.Now,DateTime.Now)); break;
+                    case 0: Add(ref AWBuildVersion情報,AWBuildVersion,new AWBuildVersion((byte)ID(AWBuildVersion),"",DateTime.Now,DateTime.Now)); break;
                     case 1: Add(ref DatabaseLog情報,DatabaseLog,new DatabaseLog(ID(DatabaseLog),DateTime.Now,"","",null,null,"",XDocument.Parse("<ROOT />"))); break;
                     case 2: Add(ref ErrorLog情報,ErrorLog,new ErrorLog(ID(ErrorLog),DateTime.Now,"",0,null,null,null,null,"")); break;
-                    case 3: Add(ref Department情報,Department,new Department((Int16)ID(Department),"","",DateTime.Now)); break;
-                    case 4: Add(ref Shift情報,Shift,new Shift((Byte)ID(Shift),"",TimeSpan.Zero,TimeSpan.Zero,DateTime.Now)); break;
+                    case 3: Add(ref Department情報,Department,new Department((short)ID(Department),"","",DateTime.Now)); break;
+                    case 4: Add(ref Shift情報,Shift,new Shift((byte)ID(Shift),"",TimeSpan.Zero,TimeSpan.Zero,DateTime.Now)); break;
                     case 5: Add(ref AddressType情報,AddressType,new AddressType(ID(AddressType),"",Guid.NewGuid(),DateTime.Now)); break;
                     case 6: Add(ref BusinessEntity情報,BusinessEntity,new BusinessEntity(ID(BusinessEntity),Guid.NewGuid(),DateTime.Now)); break;
                     case 7: Add(ref ContactType情報,ContactType,new ContactType(ID(ContactType),"",DateTime.Now)); break;
@@ -1323,12 +1323,12 @@ namespace TestAdventureWorks2019 {
                     case 9: Add(ref PhoneNumberType情報,PhoneNumberType,new PhoneNumberType(ID(PhoneNumberType),"",DateTime.Now)); break;
                     case 10: Add(ref Culture情報,Culture,new Culture(ID(Culture).ToString(),"",DateTime.Now)); break;
                     case 11: Add(ref Illustration情報,Illustration,new Illustration(ID(Illustration),null,DateTime.Now)); break;
-                    case 12: Add(ref Location情報,Location,new Location((Int16)ID(Location),"",0,0,DateTime.Now)); break;
+                    case 12: Add(ref Location情報,Location,new Location((short)ID(Location),"",0,0,DateTime.Now)); break;
                     case 13: Add(ref ProductCategory情報,ProductCategory,new ProductCategory(ID(ProductCategory),"",Guid.NewGuid(),DateTime.Now)); break;
                     case 14: Add(ref ProductDescription情報,ProductDescription,new ProductDescription(ID(ProductDescription),"",Guid.NewGuid(),DateTime.Now)); break;
                     case 15: Add(ref ProductModel情報,ProductModel,new ProductModel(ID(ProductModel),"",null,null,Guid.NewGuid(),DateTime.Now)); break;
                     case 16: Add(ref ProductPhoto情報,ProductPhoto,new ProductPhoto(ID(ProductPhoto),null,null,null,null,DateTime.Now)); break;
-                    case 17: Add(ref ScrapReason情報,ScrapReason,new ScrapReason((Int16)ID(ScrapReason),"",DateTime.Now)); break;
+                    case 17: Add(ref ScrapReason情報,ScrapReason,new ScrapReason((short)ID(ScrapReason),"",DateTime.Now)); break;
                     case 18: Add(ref TransactionHistoryArchive情報,TransactionHistoryArchive,new TransactionHistoryArchive(ID(ProductCategory),0,0,0,DateTime.Now,"",0,0,DateTime.Now)); break;
                     case 19: Add(ref UnitMeasure情報,UnitMeasure,new UnitMeasure(ID(UnitMeasure).ToString(),"",DateTime.Now)); break;
                     case 20: Add(ref ShipMethod情報,ShipMethod,new ShipMethod(ID(ShipMethod),"",0,0,Guid.NewGuid(),DateTime.Now)); break;
@@ -3934,26 +3934,26 @@ namespace TestAdventureWorks2019 {
             ContactInfo.AddNamespace(nameof(ContactInfo),"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo");
         }
         //private static String? EvaluateString(XNode Resume_ref,String 式,XmlNamespaceManager XmlNamespaceManager) => Resume_ref.XPathEvaluate(式,XmlNamespaceManager)?.ToString();
-        private static String? InnerString(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static string? InnerString(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var x = XNode?.XPathEvaluate(式,XmlNamespaceManager);
             if(x==null) return null;
-            if(x is IEnumerable<Object> Enumerable1) {
+            if(x is System.Collections.Generic.IEnumerable<object> Enumerable1) {
                 foreach(var a in Enumerable1) {
                     var XText = (XText)a;
                     return XText.Value;
                 }
             }
-            if(x is String s) {
+            if(x is string s) {
                 return s;
             }
             return null;
         }
-        private static Int32? TagInt32(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static int? TagInt32(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
-            return Int32.Parse(XElement.Value,CultureInfo.InvariantCulture);
+            return int.Parse(XElement.Value,CultureInfo.InvariantCulture);
         }
-        private static Boolean? TagBoolean(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static bool? TagBoolean(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
             return XElement.Value=="1";
@@ -3963,45 +3963,45 @@ namespace TestAdventureWorks2019 {
         //    if(XElement==null) return null;
         //    return Int32.Parse(XElement.Attribute(Attribute).Value,CultureInfo.InvariantCulture);
         //}
-        private static String? AttributeString(XElement XNode,String Attribute) {
+        private static string? AttributeString(XElement XNode,string Attribute) {
             return XNode.Attribute(Attribute)?.Value;
         }
-        private static Int32? AttributeInt32(XElement XNode,String Attribute) {
+        private static int? AttributeInt32(XElement XNode,string Attribute) {
             var r = AttributeString(XNode,Attribute);
             if(r==null) return null;
-            return Int32.Parse(r,CultureInfo.InvariantCulture);
+            return int.Parse(r,CultureInfo.InvariantCulture);
         }
-        private static Decimal? AttributeDecimal(XElement XNode,String Attribute) {
+        private static decimal? AttributeDecimal(XElement XNode,string Attribute) {
             var r = AttributeString(XNode,Attribute);
             if(r==null) return null;
-            return Decimal.Round(Decimal.Parse(r,CultureInfo.InvariantCulture),4,MidpointRounding.AwayFromZero);
+            return decimal.Round(decimal.Parse(r,CultureInfo.InvariantCulture),4,MidpointRounding.AwayFromZero);
         }
-        private static Decimal? TagDecimal(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static decimal? TagDecimal(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
-            return Decimal.Round(Decimal.Parse(XElement.Value,CultureInfo.InvariantCulture),4,MidpointRounding.AwayFromZero);
+            return decimal.Round(decimal.Parse(XElement.Value,CultureInfo.InvariantCulture),4,MidpointRounding.AwayFromZero);
         }
-        private static String? AttributeString(XNode XNode,String 式,String Attribute,XmlNamespaceManager XmlNamespaceManager) {
+        private static string? AttributeString(XNode XNode,string 式,string Attribute,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             return XElement?.Attribute(Attribute)?.Value;
         }
-        private static String? TagString(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static string? TagString(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             return XElement?.Value;
         }
-        private static String? TagString(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager,Int32 Length) {
+        private static string? TagString(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager,int Length) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
             var s=XElement.Value;
             if(s.Length<Length) return s;
             return s.Substring(0,Length);
         }
-        private static DateTime? TagDateTime(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static DateTime? TagDateTime(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
             return DateTime.Parse(XElement.Value,CultureInfo.CurrentCulture,DateTimeStyles.RoundtripKind);
         }
-        private static DateTimeOffset? TagDateTimeOffset(XNode XNode,String 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static DateTimeOffset? TagDateTimeOffset(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
             if(XElement==null) return null;
             return DateTimeOffset.Parse(XElement.Value,CultureInfo.CurrentCulture,DateTimeStyles.RoundtripKind);
@@ -4035,7 +4035,7 @@ namespace TestAdventureWorks2019 {
                 "SELECT * FROM HumanResources.vJobCandidate",
                 Reader => new {
                     JobCandidateID = Reader.GetInt32(0),
-                    BusinessEntityID = Reader.IsDBNull(1) ? default(Int32?) : Reader.GetInt32(1),
+                    BusinessEntityID = Reader.IsDBNull(1) ? default(int?) : Reader.GetInt32(1),
                     Prefix        = GetString(Reader,2),
                     First         = GetString(Reader,3),
                     Middle        = GetString(Reader,4),
@@ -4669,22 +4669,22 @@ namespace TestAdventureWorks2019 {
         }
         private static void vSalesPerson(Container C,SqlCommand Command) {
             //{
-            //    Expression<Func<IOutImmutableSet<Int32>>> LINQ = () =>
+            //    Expression<Func<IOutLinqDB.Sets.IEnumerable<Int32>>> LINQ = () =>
             //        from s in C.Sales.SalesPerson
             //        select s.BusinessEntityID;
             //    var LINQ結果 = Optimizer.Execute(LINQ,"LINQ");
             //}
             {
-                var SalesPerson = new Set<Int32>();
-                Expression<Func<Object>> LINQ = () =>
+                var SalesPerson = new Set<int>();
+                Expression<Func<object>> LINQ = () =>
                      from a in SalesPerson
                      join b in SalesPerson on a equals b
                      select new { a,b };
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                var SalesPerson = new Set<Int32>();
-                Expression<Func<Object>> LINQ = () =>
+                var SalesPerson = new Set<int>();
+                Expression<Func<object>> LINQ = () =>
                      from a in SalesPerson
                      join b in SalesPerson on a equals b
                      join c in SalesPerson on b equals c
@@ -4692,8 +4692,8 @@ namespace TestAdventureWorks2019 {
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                var SalesPerson = new Set<Int32>();
-                Expression<Func<Object>> LINQ = () =>
+                var SalesPerson = new Set<int>();
+                Expression<Func<object>> LINQ = () =>
                      from a in SalesPerson
                      join b in SalesPerson on a equals b
                      join c in SalesPerson on b equals c
@@ -4702,8 +4702,8 @@ namespace TestAdventureWorks2019 {
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                var SalesPerson = new Set<Int32>();
-                Expression<Func<Object>> LINQ = () =>
+                var SalesPerson = new Set<int>();
+                Expression<Func<object>> LINQ = () =>
                      from a in SalesPerson
                      join b in SalesPerson on a equals b
                      join c in SalesPerson on b equals c
@@ -4712,23 +4712,23 @@ namespace TestAdventureWorks2019 {
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                var SalesPerson = new Set<Int32>();
-                var Employee = new Set<Int32>();
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                var SalesPerson = new Set<int>();
+                var Employee = new Set<int>();
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in SalesPerson
                      join e in Employee on s equals e
                      select s+e;
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                Expression<Func<ImmutableSet<Guid>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<Guid>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      select s.rowguid;
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                Expression<Func<ImmutableSet<Guid>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<Guid>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4737,7 +4737,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17検討中
-                Expression<Func<Object>> LINQ = () =>
+                Expression<Func<object>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      where s.BusinessEntityID==274
                      join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
@@ -4754,7 +4754,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17検討中
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      where s.BusinessEntityID==274||s.BusinessEntityID==275||s.BusinessEntityID==277
                      join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
@@ -4771,7 +4771,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17検討中
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
                      from st in st0.DefaultIfEmpty()
@@ -4786,7 +4786,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //17,17
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4810,7 +4810,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4838,7 +4838,7 @@ namespace TestAdventureWorks2019 {
             {
                 //17行入るべき
                 //BusinnessEntityID274,285,287入るべき
-                Expression<Func<ImmutableSet<Int32>>> LINQ = () =>
+                Expression<Func<LinqDB.Sets.IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -5044,7 +5044,7 @@ namespace TestAdventureWorks2019 {
             //    IN([2002],[2003],[2004])
             //)pvt
             {
-                Expression<Func<Object>> LINQ = () =>
+                Expression<Func<object>> LINQ = () =>
                     from sp  in C.Sales.SalesPerson
                     join soh in C.Sales.SalesOrderHeader  on sp.BusinessEntityID equals soh.SalesPersonID
                     join st  in C.Sales.SalesTerritory    on sp.TerritoryID      equals st.TerritoryID
@@ -5247,17 +5247,17 @@ namespace TestAdventureWorks2019 {
                 in(横にしたい列に含まれる値1,横にしたい列に含まれる値2)
         */
         //[SuppressMessage("Performance","CA1820:文字列の長さを使用して空の文字列をテストします",Justification="<保留中>")]
-        //private static IOutImmutableSet<TResult> Pivot<T, TKey,TResult>(
-        //    IOutImmutableSet<T> source,
+        //private static IOutLinqDB.Sets.IEnumerable<TResult> Pivot<T, TKey,TResult>(
+        //    IOutLinqDB.Sets.IEnumerable<T> source,
         //    Func<T,String> pivotedColumnSelector,
         //    Func<T,TResult> resultSelectorSelector
         //) {
         //    SetGroupingSet<TResult,T> g = source.GroupBy(keySelector);
         //    SetGrouping<TResult,T,GroupingSet<TResult,T>> g0 = g;
         //    Set<GroupingSet<TResult,T>> g1 = g;
-        //    ImmutableSet<GroupingSet<TResult,T>> g2 = g;
-        //    IOutImmutableSet<GroupingSet<TResult,T>> g3 = g;
-        //    IOutImmutableSet<IGrouping<TResult,T>> g4 = g2;
+        //    LinqDB.Sets.IEnumerable<GroupingSet<TResult,T>> g2 = g;
+        //    IOutLinqDB.Sets.IEnumerable<GroupingSet<TResult,T>> g3 = g;
+        //    IOutLinqDB.Sets.IEnumerable<IGrouping<TResult,T>> g4 = g2;
 
         //    //IGrouping<TKey,T> g = source.GroupBy(keySelector);
         //    return source.Where(
@@ -5274,8 +5274,8 @@ namespace TestAdventureWorks2019 {
         //}
 
         //[SuppressMessage("Performance","CA1820:文字列の長さを使用して空の文字列をテストします",Justification = "<保留中>")]
-        //private static IOutImmutableSet<IGrouping<TKey,T>> Pivot<T,  TKey>(
-        //    IOutImmutableSet<T> source,
+        //private static IOutLinqDB.Sets.IEnumerable<IGrouping<TKey,T>> Pivot<T,  TKey>(
+        //    IOutLinqDB.Sets.IEnumerable<T> source,
         //    Func<T,String> pivotedColumnSelector,
         //    //Func<T,TKey> keySelector,
         //    String[] pivotedColumns
@@ -5283,9 +5283,9 @@ namespace TestAdventureWorks2019 {
         //    SetGroupingSet<TKey,T> g = source.GroupBy(keySelector);
         //    SetGrouping<TKey,T,GroupingSet<TKey,T>> g0 = g;
         //    Set<GroupingSet<TKey,T>> g1 = g;
-        //    ImmutableSet<GroupingSet<TKey,T>> g2 = g;
-        //    IOutImmutableSet<GroupingSet<TKey,T>> g3 = g;
-        //    IOutImmutableSet<IGrouping<TKey,T>> g4 = g2;
+        //    LinqDB.Sets.IEnumerable<GroupingSet<TKey,T>> g2 = g;
+        //    IOutLinqDB.Sets.IEnumerable<GroupingSet<TKey,T>> g3 = g;
+        //    IOutLinqDB.Sets.IEnumerable<IGrouping<TKey,T>> g4 = g2;
 
         //    //IGrouping<TKey,T> g = source.GroupBy(keySelector);
         //    return source.Where(
@@ -5302,7 +5302,7 @@ namespace TestAdventureWorks2019 {
         //}
         private static void vStoreWithAddresses(Container e,SqlCommand Command) {
             {
-                Expression<Func<Object>> LINQ = () =>
+                Expression<Func<object>> LINQ = () =>
                     from s in e.Sales.Store
                     join bea in e.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
                     join a in e.Person.Address on bea.AddressID equals a.AddressID
@@ -5377,7 +5377,7 @@ namespace TestAdventureWorks2019 {
         }
         private static void vStoreWithContacts(Container e,SqlCommand Command) {
             {
-                Expression<Func<Object>> LINQ = () =>
+                Expression<Func<object>> LINQ = () =>
                     from s in e.Sales.Store
                     join bec in e.Person.BusinessEntityContact on s.BusinessEntityID equals bec.BusinessEntityID
                     join ct in e.Person.ContactType on bec.ContactTypeID equals ct.ContactTypeID
@@ -5478,7 +5478,7 @@ namespace TestAdventureWorks2019 {
             var ns = new XmlNamespaceManager(new NameTable());
             ns.AddNamespace("ns","http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/StoreSurvey");
             {
-                Expression<Func<Object>> LINQ = () =>
+                Expression<Func<object>> LINQ = () =>
                     from s in e.Sales.Store
                     select new {
                         s.BusinessEntityID,
@@ -5549,7 +5549,7 @@ namespace TestAdventureWorks2019 {
             );
         }
         //private static 
-        //    ImmutableSet<(Int32? ProductAssemblyID,Int32 ComponentID,String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost,Decimal ListPrice, Int16 BOMLevel)> uspGetBillOfMaterials(Container e,Int32 StartProductID,DateTime CheckDate) 
+        //    LinqDB.Sets.IEnumerable<(Int32? ProductAssemblyID,Int32 ComponentID,String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost,Decimal ListPrice, Int16 BOMLevel)> uspGetBillOfMaterials(Container e,Int32 StartProductID,DateTime CheckDate) 
         //{
         //    var result = from b in e.Production.BillOfMaterials
         //                 join p in e.Production.Product on b.ComponentID equals p.ProductID
@@ -5605,7 +5605,7 @@ namespace TestAdventureWorks2019 {
         //            group b by new { b.ComponentID,b.ComponentDesc,b.ProductAssemblyID,b.BOMLevel,b.RecursionLevel,b.StandardCost,b.ListPrice }into g
         //            select new { g.Key.ProductAssemblyID,g.Key.ComponentID,TotalQuantity = g.Sum(p => p.PerAssemblyQty),g.Key.StandardCost,g.Key.ListPrice,g.Key.BOMLevel,g.Key.RecursionLevel };
         //    return r;
-        //    ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> BOM_cte(ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel,Int32 RecursionLevel)> source,Int32 RecursionLevel) {
+        //    LinqDB.Sets.IEnumerable<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> BOM_cte(LinqDB.Sets.IEnumerable<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel,Int32 RecursionLevel)> source,Int32 RecursionLevel) {
         //        if(source.Count==0) return source;
         //        return source.Union(
         //            BOM_cte(
@@ -5628,7 +5628,7 @@ namespace TestAdventureWorks2019 {
         //        );
         //    }
         //}
-        private static void uspGetBillOfMaterials(Container e,Int32 StartProductID,DateTime CheckDate) {
+        private static void uspGetBillOfMaterials(Container e,int StartProductID,DateTime CheckDate) {
             {
                 var r = from b in BOM_cte(
                     from b in e.Production.BillOfMaterials
@@ -5651,8 +5651,8 @@ namespace TestAdventureWorks2019 {
                         group b by new { b.ComponentID,b.ComponentDesc,b.ProductAssemblyID,b.BOMLevel,b.RecursionLevel,b.StandardCost,b.ListPrice } into g
                         select new { g.Key.ProductAssemblyID,g.Key.ComponentID,g.Key.ComponentDesc, TotalQuantity = g.Sum(p => p.PerAssemblyQty),g.Key.StandardCost,g.Key.ListPrice,g.Key.BOMLevel,g.Key.RecursionLevel };
                 var array = r.ToArray();
-                ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> BOM_cte(ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> source,Int32 RecursionLevel) {
-                    if(source.Count==0) return source;
+                LinqDB.Sets.IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> BOM_cte(LinqDB.Sets.IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> source,int RecursionLevel) {
+                    if(source.LongCount==0) return source;
                     return source.Union(
                         BOM_cte(
                             from cte in source
@@ -5694,13 +5694,13 @@ namespace TestAdventureWorks2019 {
             //);
         }
         class G:IEquatable<G> {
-            private readonly Int32 v;
-            public G(Int32 v) => this.v=v;
-            public override Boolean Equals(Object? obj) => obj is G other&&this.v==other.v;
-            public Boolean Equals(G? other) => !(other is null)&&this.v==other.v;
-            public static Boolean operator ==(G a,G b) => a.v==b.v;
-            public static Boolean operator !=(G a,G b) => a.v!=b.v;
-            public override Int32 GetHashCode() => 0;
+            private readonly int v;
+            public G(int v) => this.v=v;
+            public override bool Equals(object? obj) => obj is G other&&this.v==other.v;
+            public bool Equals(G? other) => !(other is null)&&this.v==other.v;
+            public static bool operator ==(G a,G b) => a.v==b.v;
+            public static bool operator !=(G a,G b) => a.v!=b.v;
+            public override int GetHashCode() => 0;
         }
         private static void GroupJoin0() {
             var G1 = new G(1);
@@ -5715,24 +5715,24 @@ namespace TestAdventureWorks2019 {
                     S1,
                     (G s0) => s0,
                     (G s1) => s1,
-                    (G s0,ImmutableSet<G> g1) => (s0, g1)
+                    (G s0,LinqDB.Sets.IEnumerable<G> g1) => (s0, g1)
                 ).SelectMany(
-                    ((G s0, ImmutableSet<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, ImmutableSet<G> g1)h__TransparentIdentifier0,G s1) => (
+                    ((G s0, LinqDB.Sets.IEnumerable<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
+                    ((G s0, LinqDB.Sets.IEnumerable<G> g1)h__TransparentIdentifier0,G s1) => (
                         h__TransparentIdentifier0,
                         s1
                     )
                 ).GroupJoin(
                     S2,
-                    (((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1)h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
+                    (((G s0, LinqDB.Sets.IEnumerable<G> g1) h__TransparentIdentifier0, G s1)h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
                     (G s2) => s2,
-                    (((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,ImmutableSet<G> g2) => (
+                    (((G s0, LinqDB.Sets.IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,LinqDB.Sets.IEnumerable<G> g2) => (
                         h__TransparentIdentifier1,
                         g2
                     )
                 ).SelectMany(
-                    ((((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, ImmutableSet<G> g2)h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
-                    ((((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, ImmutableSet<G> g2)h__TransparentIdentifier2,G s2) => (
+                    ((((G s0, LinqDB.Sets.IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, LinqDB.Sets.IEnumerable<G> g2)h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
+                    ((((G s0, LinqDB.Sets.IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, LinqDB.Sets.IEnumerable<G> g2)h__TransparentIdentifier2,G s2) => (
                         h__TransparentIdentifier2.h__TransparentIdentifier1.h__TransparentIdentifier0.s0,
                         h__TransparentIdentifier2.h__TransparentIdentifier1.s1,
                         s2
@@ -5779,18 +5779,18 @@ namespace TestAdventureWorks2019 {
                     S1,
                     (G s0) => s0,
                     (G s1) => s1,
-                    (G s0,IEnumerable<G> g1) => (s0, g1)
+                    (G s0,System.Collections.Generic.IEnumerable<G> g1) => (s0, g1)
                 ).SelectMany(
-                    ((G s0, IEnumerable<G> g1) h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, IEnumerable<G> g1) h__TransparentIdentifier0,G? s1) => (
+                    ((G s0, System.Collections.Generic.IEnumerable<G> g1) h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
+                    ((G s0, System.Collections.Generic.IEnumerable<G> g1) h__TransparentIdentifier0,G? s1) => (
                         h__TransparentIdentifier0,
                         s1
                     )
                 ).GroupJoin(
                     S2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
+                    (((G s0, System.Collections.Generic.IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
                     (G s2) => s2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1,IEnumerable<G> g2) => (
+                    (((G s0, System.Collections.Generic.IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1,System.Collections.Generic.IEnumerable<G> g2) => (
                         h__TransparentIdentifier1,
                         g2
                     )

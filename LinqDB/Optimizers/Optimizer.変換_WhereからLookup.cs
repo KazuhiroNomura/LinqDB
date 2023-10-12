@@ -81,7 +81,7 @@ partial class Optimizer {
                             if(Listプローブビルド_Count==1) {
                                 var (プローブ, ビルド)=Listプローブビルド[0];
                                 var MethodCall1_Arguments_0_Type =MethodCall1_Arguments_0.Type;
-                                Type? Set1 = MethodCall1_Arguments_0_Type;
+                                var Set1 = MethodCall1_Arguments_0_Type;
                                 while(true) {
                                     if(Set1 is null) {
                                         MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
@@ -96,8 +96,11 @@ partial class Optimizer {
                                         Debug.Assert(GetSet is not null);
                                         if(
                                             ビルド is MemberExpression Member&&
-                                            Member.Member==Member.Expression!.Type.GetProperty(nameof(IKey<int>.Key))&&
-                                            Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
+                                            Member.Member.DeclaringType!.IsGenericType&&
+                                            Member.Member.DeclaringType.GetGenericTypeDefinition()==typeof(Entity<,>)&&
+                                            Member.Member.Name==nameof(IKey<int>.Key)
+                                            //Member.Member==Member.Expression!.Type.GetProperty(nameof(IKey<int>.Key))&&
+                                            //Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
                                         ) {
                                             MethodCall1_Arguments_0=Expression.Call(
                                                 MethodCall1_Arguments_0,
@@ -136,18 +139,23 @@ partial class Optimizer {
                                 );
                                 var GetValue = 作業配列.GetMethod(Instance.Type,nameof(LookupList<int,int>.GetTKeyValue),プローブ.Type);
                                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                                if(GetValue is null) {
-                                    GetValue=Instance.Type.GetMethod(nameof(LookupList<int,int>.GetObjectValue));
-                                    プローブ=Expression.Convert(
-                                        プローブ,
-                                        typeof(object)
-                                    );
-                                } else {
+                                Debug.Assert(GetValue is not null);
                                     プローブ=Convert必要なら(
                                         プローブ,
                                         GetValue.GetParameters()[0].ParameterType
                                     );
-                                }
+                                //if(GetValue is null) {
+                                //    GetValue=Instance.Type.GetMethod(nameof(LookupList<int,int>.GetObjectValue));
+                                //    プローブ=Expression.Convert(
+                                //        プローブ,
+                                //        typeof(object)
+                                //    );
+                                //} else {
+                                //    プローブ=Convert必要なら(
+                                //        プローブ,
+                                //        GetValue.GetParameters()[0].ParameterType
+                                //    );
+                                //}
                                 return Expression.Call(
                                     Instance,
                                     GetValue,

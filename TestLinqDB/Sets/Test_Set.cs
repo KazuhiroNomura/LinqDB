@@ -181,15 +181,15 @@ public class Tables{
                     EnumerateData.Contains(s),
                     SetData.Contains(s)
                 );
-                Assert.True(SetData.Contains(s));
+                Assert.Contains(s,SetData);
             }
         }
         {
             var s=new Set<int>{
                 1,2
             };
-            Assert.False(s.Contains(0));
-            Assert.True(s.Contains(1));
+            Assert.DoesNotContain(0,s);
+            Assert.Contains(1,s);
         }
     }
     [Fact]

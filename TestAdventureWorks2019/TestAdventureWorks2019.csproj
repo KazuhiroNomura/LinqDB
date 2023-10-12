@@ -27,7 +27,7 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AdventureWorks2019">
-      <HintPath>..\GUI\bin\Debug\net60-windows\AdventureWorks2019.dll</HintPath>
+      <HintPath>..\GUI\bin\Debug\net7.0-windows\AdventureWorks2019.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

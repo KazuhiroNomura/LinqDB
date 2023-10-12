@@ -219,6 +219,10 @@ partial class Optimizer{
                             if(MethodCall0_Arguments.Count==1) {
                                 Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall0_GenericMethodDefinition);
                                 巻き上げ処理(MethodCall0_Arguments[0]);
+                            }else{
+                                Debug.Assert(MethodCall0_Arguments.Count==2);
+                                Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall0_GenericMethodDefinition);
+                                巻き上げ処理(MethodCall0_Arguments[1]);
                             }
                             break;
                         }
@@ -428,7 +432,7 @@ partial class Optimizer{
 
         private int 番号;
         public bool IsInline {
-            get=>this._取得_先行評価式.IsInline;
+            //get=>this._取得_先行評価式.IsInline;
             set=>this._取得_先行評価式.IsInline=this._変換_先行評価式.ループ跨ぎを使うか=value;
         }
         public Expression 実行(Expression Lambda0){

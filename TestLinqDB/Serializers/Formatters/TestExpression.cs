@@ -23,8 +23,8 @@ class BindCollection
     {
         this.Int32フィールド1 = 0;
         this.Int32フィールド2 = 0;
-        this.BindCollectionフィールド1 = null;
-        this.BindCollectionフィールド2 = null;
+        this.BindCollectionフィールド1 = null!;
+        this.BindCollectionフィールド2 = null!;
     }
 }
 [Serializable,global::MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true)]

@@ -8,6 +8,7 @@ using LinqDB.Sets;
 using LinqDB.CRC;
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
+using MemoryPack;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Databases;
@@ -42,7 +43,23 @@ public partial class AssemblyGenerator {
         Types2[1]=Container_TypeBuilder;
         var Entity2 = typeof(Entity<,>).MakeGenericType(Types2);
         var Entity2_ProtectedPrimaryKey = TypeBuilder.GetField(Entity2,AssemblyGenerator.Entity2_ProtectedPrimaryKey);
-        var Object_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
+        var Table_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
+        Types1[0]=Table_TypeBuilder;
+        {
+            var IMemoryPackable=typeof(IMemoryPackable<>);
+            var IMemoryPackableT=IMemoryPackable.MakeGenericType(Types1);
+            Table_TypeBuilder.AddInterfaceImplementation(IMemoryPackableT);
+            {
+                ////Table_TypeBuilder.generic
+                //var Serialize本体=Table_TypeBuilder.DefineMethod(nameof(IMemoryPackable<int>.Serialize),MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static,TypeBuilder,new[]{TypeBuilder,TypeBuilder});
+                //var Serialize宣言=IMemoryPackable.GetMethod(nameof(IMemoryPackable<int>.Serialize));
+                //Table_TypeBuilder.DefineMethodOverride(Serialize本体,TypeBuilder.GetMethod(IMemoryPackable,Serialize宣言!));
+                //Serialize本体.InitLocals=false;
+                //var I=Serialize本体.GetILGenerator();
+                //I.Ldnull();
+                //I.Ret();
+            }
+        }
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
@@ -51,7 +68,7 @@ public partial class AssemblyGenerator {
         var Objects2 = this.Objects2;
         Objects2[0]=Object.Left;
         Objects2[1]=Object.Top;
-        Object_TypeBuilder.SetCustomAttribute(new CustomAttributeBuilder(Meta_ctor,Objects2));
+        Table_TypeBuilder.SetCustomAttribute(new CustomAttributeBuilder(Meta_ctor,Objects2));
         var Columns = Object.Columns.ToList();
         var PrimaryKeyColumns = Columns.Where(p => p.IsPrimaryKey).ToList();
         var PrimaryKeyColumns_Count = PrimaryKeyColumns.Count;
@@ -72,26 +89,26 @@ public partial class AssemblyGenerator {
             }
             Table_ctor_parameterTypes[a]=Column_Type;
         }
-        var Table_ctor = Object_TypeBuilder.DefineConstructor(Public_HideBySig,CallingConventions.HasThis,Table_ctor_parameterTypes);
+        var Table_ctor = Table_TypeBuilder.DefineConstructor(Public_HideBySig,CallingConventions.HasThis,Table_ctor_parameterTypes);
         Table_ctor.InitLocals=false;
         var Table_ctor_I = Table_ctor.GetILGenerator();
         var (_, Key_InputHashCode_I)=メソッド開始引数名(Key_TypeBuilder,"InputHashCode",Assembly_HideBySig,typeof(void),Types_InputHashCode,"CRC");
         var (Key_GetHashCode, Key_GetHashCode_I)=メソッド開始(Key_TypeBuilder,nameof(GetHashCode),Public_HideBySig_Virtual,typeof(int));
         Key_TypeBuilder.DefineMethodOverride(Key_GetHashCode,Object_GetHashCode);
         var (Key_ToStringBuilder, Key_ToStringBuilder_I)=メソッド開始引数名(Key_TypeBuilder,"ToStringBuilder",Assembly_HideBySig,typeof(void),Types_StringBuilder,"sb");
-        var (_, Table_ToStringBuilder_I)=メソッド開始引数名(Object_TypeBuilder,"ToStringBuilder",Family_Virtual,typeof(void),Types_StringBuilder,"sb");
+        var (_, Table_ToStringBuilder_I)=メソッド開始引数名(Table_TypeBuilder,"ToStringBuilder",Family_Virtual,typeof(void),Types_StringBuilder,"sb");
         Table_ToStringBuilder_I.Ldarg_0();
         Table_ToStringBuilder_I.Ldflda(Entity2_ProtectedPrimaryKey);
         Table_ToStringBuilder_I.Ldarg_1();
         Table_ToStringBuilder_I.Call(Key_ToStringBuilder);
-        var AddRelationship_I=AddRelationship開始(Object_TypeBuilder,"AddRelationship",Entity1_Container,Types_Container);
-        var RemoveRelationship_I=RemoveRelationship開始(Object_TypeBuilder,"RemoveRelationship",Entity1_Container);
-        Types1[0]=Object_TypeBuilder;
+        var AddRelationship_I=AddRelationship開始(Table_TypeBuilder,"AddRelationship",Entity1_Container,Types_Container);
+        var RemoveRelationship_I=RemoveRelationship開始(Table_TypeBuilder,"RemoveRelationship",Entity1_Container);
+        Types1[0]=Table_TypeBuilder;
         var Table_IEquatable = typeof(IEquatable<>).MakeGenericType(Types1);
-        Object_TypeBuilder.AddInterfaceImplementation(Table_IEquatable);
+        Table_TypeBuilder.AddInterfaceImplementation(Table_IEquatable);
         var ImmutableSet = typeof(ImmutableSet<>).MakeGenericType(Types1);
-        var (Table_IEquatable_Equals, Table_IEquatable_Equals_I)=メソッド開始引数名(Object_TypeBuilder,nameof(IEquatable<int>.Equals),Public_Final_NewSlot_HideBySig_Virtual,typeof(bool),Types1,"other");
-        Object_TypeBuilder.DefineMethodOverride(Table_IEquatable_Equals,TypeBuilder.GetMethod(Table_IEquatable,IEquatable_Equals));
+        var (Table_IEquatable_Equals, Table_IEquatable_Equals_I)=メソッド開始引数名(Table_TypeBuilder,nameof(IEquatable<int>.Equals),Public_Final_NewSlot_HideBySig_Virtual,typeof(bool),Types1,"other");
+        Table_TypeBuilder.DefineMethodOverride(Table_IEquatable_Equals,TypeBuilder.GetMethod(Table_IEquatable,IEquatable_Equals));
         //{
         //    var Table_IWriteRead = typeof(IWriteRead<>).MakeGenericType(Types1);
         //    Object_TypeBuilder.AddInterfaceImplementation(Table_IWriteRead);
@@ -153,8 +170,8 @@ public partial class AssemblyGenerator {
                 Key_IEquatable_Equals_I.Brfalse(KeyTable_Equalsでfalseの時);
             }
             {
-                var Property = Object_TypeBuilder.DefineProperty(PrimaryKeyColumn_EscapedName,PropertyAttributes.None,CallingConventions.HasThis,PrimaryKeyColumn_Type,Type.EmptyTypes);
-                var GetMethodBuilder = Object_TypeBuilder.DefineMethod(
+                var Property = Table_TypeBuilder.DefineProperty(PrimaryKeyColumn_EscapedName,PropertyAttributes.None,CallingConventions.HasThis,PrimaryKeyColumn_Type,Type.EmptyTypes);
+                var GetMethodBuilder = Table_TypeBuilder.DefineMethod(
                     PrimaryKeyColumn_EscapedName,
                     MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName,
                     PrimaryKeyColumn_Type,
@@ -254,7 +271,7 @@ public partial class AssemblyGenerator {
                 Column,
                 a,
                 Types1,
-                Object_TypeBuilder,
+                Table_TypeBuilder,
                 Table_ctor_I,
                 Table_ToStringBuilder_I,
                 Table_IEquatable_Equals_I,
@@ -288,13 +305,13 @@ public partial class AssemblyGenerator {
             Key_Equals_I.MarkLabel(終了);
             Key_Equals_I.Ret();
         }
-        共通override_Object_Equals終了(Object_TypeBuilder,Table_IEquatable_Equals,OpCodes.Isinst);
+        共通override_Object_Equals終了(Table_TypeBuilder,Table_IEquatable_Equals,OpCodes.Isinst);
         var Types3 = this.Types3;
         Types3[0]=Key_TypeBuilder;
-        Types3[1]=Object_TypeBuilder;
+        Types3[1]=Table_TypeBuilder;
         Types3[2]=Container_TypeBuilder;
         var Set3 = typeof(Set<,,>).MakeGenericType(Types3);
-        var (Tables_FieldBuilder,Tables_MethodBuilder) = PrivateField実装Property実装GetMethod実装(Schema_TypeBuilder,Set3,Object_TypeBuilder.Name,Set3);
+        var (Tables_FieldBuilder,Tables_MethodBuilder) = PrivateField実装Property実装GetMethod実装(Schema_TypeBuilder,Set3,Table_TypeBuilder.Name,Set3);
         Schema_ctor_I.Ldarg_0();
         Schema_ctor_I.Ldarg_1();
         Schema_ctor_I.Newobj(TypeBuilder.GetConstructor(Set3,Set3_ctor));
@@ -316,7 +333,7 @@ public partial class AssemblyGenerator {
             Schema_Assign_I.Ldfld(Tables_FieldBuilder);
             Schema_Assign_I.Ldarg_1();
             Schema_Assign_I.Ldfld(Tables_FieldBuilder);
-            Types1[0]=Object_TypeBuilder;
+            Types1[0]=Table_TypeBuilder;
             var Tables_InstanceType = typeof(Set<>).MakeGenericType(Types1);
             Schema_Assign_I.Call(TypeBuilder.GetMethod(Tables_InstanceType,Set1_Assign));
             Schema_Clear_I.Ldarg_0();
@@ -336,7 +353,7 @@ public partial class AssemblyGenerator {
             Key_TypeBuilder,
             Key_IEquatable_Equals,
             Key_ctor,
-            Object_TypeBuilder,
+            Table_TypeBuilder,
             Table_ctor_I,
             Tables_FieldBuilder,
             Tables_MethodBuilder,

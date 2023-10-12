@@ -27,14 +27,14 @@ namespace GUI;
 /// テーブルスキーマ編集.xaml の相互作用ロジック
 /// </summary>
 public partial class テーブルスキーマ編集:Window {
-	private const String ホスト名= @"COFFEELAKE\MSSQLSERVER2019";
-	private const String Windowsログイン = @"Integrated Security=SSPI;";
-	private const String SQLServerログイン = @"User ID=sa;Password=SQLSERVER711409;";
+	private const string ホスト名= @"COFFEELAKE\MSSQLSERVER2019";
+	private const string Windowsログイン = @"Integrated Security=SSPI;";
+	private const string SQLServerログイン = @"User ID=sa;Password=SQLSERVER711409;";
 	//private const String 接続文字列 = @"Data Source=localhost;Initial Catalog=master;Connect Timeout=60;Persist Security Info=True;User ID=sa;Password=password";
 	//private const String 接続文字列 = @"Data Source=localhost;Initial Catalog=master;Connect Timeout=60;Persist Security Info=True;";
-	private const String SQLServer接続文字列 = @$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";
+	private const string SQLServer接続文字列 = @$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";
 
-    private const String MySQL接続文字列=@$"Server=localhost;Database=sakila;Uid=root;Pwd=password;";
+    private const string MySQL接続文字列=@$"Server=localhost;Database=sakila;Uid=root;Pwd=password;";
 	//private const string 接続文字列 = @"Data Source=COFFEELAKE\MSSQLSERVER2019;Initial Catalog=master;Integrated Security=True;";
 	private readonly VM.Container Container = new();
 	private readonly VM.Schema dbo;
@@ -253,11 +253,12 @@ public partial class テーブルスキーマ編集:Window {
 			}
 		}
 	}
-	private readonly AssemblyGenerator Common = new();
+	private readonly AssemblyGenerator AssemblyGenerator = new();
 	private void 保存_Click(object sender,RoutedEventArgs e) {
 		var Container = (VM.Container)this.DataContext;
 		//var Common = this.Common;
-		this.Common.Save(Container,Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!);
+        //this.AssemblyGenerator.Save(Container,Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!);
+        this.AssemblyGenerator.Save(Container,Environment.CurrentDirectory);
 		//try { 
 		//Common.Save(Container,Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location)!);
 		//}catch(Exception ex) {

@@ -18,9 +18,9 @@ using WideWorldImportersDW.Tables.Integration;
 namespace WideWorldImportersDW {
     public abstract class Sequence<T> where T : struct {
         private readonly T Minimum, Maximum;
-        private readonly Boolean Cycle;
+        private readonly bool Cycle;
         private protected T ProtectedCurrent;
-        protected Sequence(T Minimum,T Maximum,Boolean Cycle) {
+        protected Sequence(T Minimum,T Maximum,bool Cycle) {
             this.Minimum=Minimum;
             this.Maximum=Maximum;
             this.Cycle=Cycle;
@@ -29,22 +29,22 @@ namespace WideWorldImportersDW {
         public abstract T Current { get; }
     }
     namespace Sequences {
-        public sealed class SequenceInt32:Sequence<Int32> {
-            public SequenceInt32(Int32 Minimum,Int32 Maximum,Boolean Cycle) : base(Minimum,Maximum,Cycle) {
+        public sealed class SequenceInt32:Sequence<int> {
+            public SequenceInt32(int Minimum,int Maximum,bool Cycle) : base(Minimum,Maximum,Cycle) {
             }
-            public override Int32 Current => this.ProtectedCurrent++;
+            public override int Current => this.ProtectedCurrent++;
         }
     }
     namespace Schemas {
         class Sequences2 {
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 CityKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 CustomerKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 EmployeeKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 LineageKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 PaymentMethodKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 StockItemKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 SupplierKey = new(Int32.MinValue,Int32.MaxValue,false);
-            public readonly WideWorldImportersDW.Sequences.SequenceInt32 TransactionTypeKey = new(Int32.MinValue,Int32.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 CityKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 CustomerKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 EmployeeKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 LineageKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 PaymentMethodKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 StockItemKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 SupplierKey = new(int.MinValue,int.MaxValue,false);
+            public readonly WideWorldImportersDW.Sequences.SequenceInt32 TransactionTypeKey = new(int.MinValue,int.MaxValue,false);
         }
     }
 }
@@ -58,9 +58,9 @@ namespace TestWideWorldImportersDW{
         [SuppressMessage("Globalization","CA1303:ローカライズされるパラメーターとしてリテラルを渡さない",Justification="<保留中>")]
         [SuppressMessage("ReSharper","VariableHidesOuterVariable")]
         private static void Create(){
-            const Int32 City数=4;
-            const Int32 Customer数=8;
-            const Int32 Date数=16;
+            const int City数=4;
+            const int Customer数=8;
+            const int Date数=16;
             using var e=new Container();
             var Fact=e.Fact;
             var Dimension=e.Dimension;
@@ -515,7 +515,7 @@ namespace TestWideWorldImportersDW{
                         0,
                         0,
                         0,
-                        Array.Empty<Byte>(),
+                        Array.Empty<byte>(),
                         DateTime起点,
                         DateTime起点,
                         0
@@ -531,7 +531,7 @@ namespace TestWideWorldImportersDW{
                         "",
                         "",
                         false,
-                        Array.Empty<Byte>(),
+                        Array.Empty<byte>(),
                         DateTime起点,
                         DateTime起点,
                         0
@@ -749,8 +749,8 @@ namespace TestWideWorldImportersDW{
         }
 
         [SuppressMessage("Globalization","CA1305:IFormatProvider を指定します",Justification="<保留中>")]
-        private static void Transaction(Func<Int32> Switchパターン){
-            const Int32 試行回数=10000;
+        private static void Transaction(Func<int> Switchパターン){
+            const int 試行回数=10000;
             using var e=new Container();
             var Fact=e.Fact;
             var Dimension=e.Dimension;
@@ -1486,7 +1486,7 @@ namespace TestWideWorldImportersDW{
                             Reader.GetDecimal(13),
                             Reader.GetDecimal(14),
                             Reader.GetDecimal(15),
-                            Reader.GetValue(16) as Byte[],
+                            Reader.GetValue(16) as byte[],
                             Reader.GetDateTime(17),
                             Reader.GetDateTime(18),
                             Reader.GetInt32(19)
@@ -1504,7 +1504,7 @@ namespace TestWideWorldImportersDW{
                             Reader.GetString(2),
                             Reader.GetString(3),
                             Reader.GetBoolean(4),
-                            Reader.GetValue(5) as Byte[],
+                            Reader.GetValue(5) as byte[],
                             Reader.GetDateTime(6),
                             Reader.GetDateTime(7),
                             Reader.GetInt32(8)
@@ -1667,7 +1667,7 @@ namespace TestWideWorldImportersDW{
         }
 
         private static class Application{
-            public static Int32 Configuration_ApplyPartitionedColumnstoreIndexing(Container2 e){
+            public static int Configuration_ApplyPartitionedColumnstoreIndexing(Container2 e){
                 Console.WriteLine(e.ToString());
                 return 1;
             }
@@ -1682,7 +1682,7 @@ namespace TestWideWorldImportersDW{
             public static void Configuration_EnableInMemory(Container2 e){
                 Console.WriteLine(e.ToString());
             }
-            public static void Configuration_PopulateLargeSaleTable(Container2 e,Int64 EstimatedRowsFor2012= 12000000) {
+            public static void Configuration_PopulateLargeSaleTable(Container2 e,long EstimatedRowsFor2012= 12000000) {
                 Integration.PopulateDateDimensionForYear(e,2012);
                 var ReturnValue= Configuration_ApplyPartitionedColumnstoreIndexing(e);
                 var LineageKey = e.Sequences2.LineageKey.Current;
@@ -1705,7 +1705,7 @@ namespace TestWideWorldImportersDW{
                     NumberOfSalesPerDay=50000;
                 }
                 var r = new Random(1);
-                String OutputCounter;
+                string OutputCounter;
                 while(DateCounter<new DateTime(2012,12,31)) {
                     OutputCounter=DateCounter.ToString("yyyymmdd");
                     var StartingSaleKey = MaximumSaleKey-NumberOfSalesPerDay-Math.Floor(r.NextDouble());
@@ -1780,21 +1780,21 @@ namespace TestWideWorldImportersDW{
             }
         }
         private static class Integration{
-            public static void GetLastETLCutoffTime(Container2 e,String TableName){
+            public static void GetLastETLCutoffTime(Container2 e,string TableName){
                 var x=from ETL_Cutoff in e.Integration.ETL_Cutoff
                     where ETL_Cutoff.Table_Name==TableName
                     select ETL_Cutoff;
-                if(x.Count==0){
+                if(x.LongCount==0){
                     Debug.Print("Invalid ETL table name");
                     throw new ApplicationException("Invalid ETL table name");
                 }
             }
-            public static void GetLineageKey(Container2 e,String TableName,DateTime NewCutoffTime){
+            public static void GetLineageKey(Container2 e,string TableName,DateTime NewCutoffTime){
                 var DataLoadStartedWhen=DateTime.Now;
                 var Transaction=e.Transaction();
                 Transaction.Integration.Lineage.IsAdded(
                     new Lineage(
-                        (Int32)e.Integration.Lineage.Count,
+                        (int)e.Integration.Lineage.Count,
                         DataLoadStartedWhen,
                         TableName,
                         null,
@@ -1811,16 +1811,16 @@ namespace TestWideWorldImportersDW{
                     ).Single()
                 );
             }
-            private static String ToMonthName(DateTime dateTime) {
+            private static string ToMonthName(DateTime dateTime) {
                 return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(dateTime.Month);
             }
 
-            private static String ToShortMonthName(DateTime dateTime) {
+            private static string ToShortMonthName(DateTime dateTime) {
                 return CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(dateTime.Month);
             }
             private static readonly DateTime EndOfTime = new(9999,12,31,23,59,59,999);
             public static void MigrateStagedCityData(Container2 e) {
-                const String Table_Name = "City";
+                const string Table_Name = "City";
                 var t = e.Transaction();
                 var LineageKey=(
                     from Lineage in t.Integration.Lineage
@@ -1840,9 +1840,9 @@ namespace TestWideWorldImportersDW{
                     select new City(c.City_Key,rtco.WWI_City_ID,
                     c.City,c.State_Province,c.Country,c.Continent,c.Sales_Territory,c.Region,c.Subregion,c.Location,c.Latest_Recorded_Population,c.Valid_From,c.Valid_To,c.Lineage_Key)
                 );
-                t.Dimension.City.Insert(
+                t.Dimension.City.AddRange(
                     from c in t.Integration.City_Staging
-                    select new City((Int32)t.Dimension.City.Count,c.WWI_City_ID,
+                    select new City((int)t.Dimension.City.Count,c.WWI_City_ID,
                     c.City,c.State_Province,c.Country,c.Continent,c.Sales_Territory,c.Region,c.Subregion,c.Location,c.Latest_Recorded_Population,c.Valid_From,c.Valid_To,LineageKey)
                 );
                 t.Integration.Lineage.UpdateWith(
@@ -1863,7 +1863,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedCustomerData(Container2 e) {
-                const String Table_Name = "Customer";
+                const string Table_Name = "Customer";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -1883,9 +1883,9 @@ namespace TestWideWorldImportersDW{
                     select new Customer(c.Customer_Key,rtco.WWI_Customer_ID,
                     c.Customer,c.Bill_To_Customer,c.Category,c.Buying_Group,c.Primary_Contact,c.Postal_Code,c.Valid_From,c.Valid_To,c.Lineage_Key)
                 );
-                t.Dimension.Customer.Insert(
+                t.Dimension.Customer.AddRange(
                     from c in t.Integration.Customer_Staging
-                    select new Customer((Int32)t.Dimension.Customer.Count,c.WWI_Customer_ID,
+                    select new Customer((int)t.Dimension.Customer.Count,c.WWI_Customer_ID,
                     c.Customer,c.Bill_To_Customer,c.Category,c.Buying_Group,c.Primary_Contact,c.Postal_Code,c.Valid_From,c.Valid_To,LineageKey)
                 );
                 t.Integration.Lineage.UpdateWith(
@@ -1906,7 +1906,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedEmployeeData(Container2 e) {
-                const String Table_Name = "Employee";
+                const string Table_Name = "Employee";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -1926,9 +1926,9 @@ namespace TestWideWorldImportersDW{
                     select new Employee(c.Employee_Key,rtco.WWI_Employee_ID,
                     c.Employee,c.Preferred_Name,c.Is_Salesperson,c.Photo,c.Valid_From,c.Valid_To,LineageKey)
                 );
-                t.Dimension.Employee.Insert(
+                t.Dimension.Employee.AddRange(
                     from c in t.Integration.Employee_Staging
-                    select new Employee((Int32)t.Dimension.Employee.Count,c.WWI_Employee_ID,
+                    select new Employee((int)t.Dimension.Employee.Count,c.WWI_Employee_ID,
                     c.Employee,c.Preferred_Name,c.Is_Salesperson,c.Photo,c.Valid_From,c.Valid_To,LineageKey)
                 );
                 t.Integration.Lineage.UpdateWith(
@@ -1949,7 +1949,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedMovementData(Container2 e) {
-                const String Table_Name = "Movement";
+                const string Table_Name = "Movement";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2043,7 +2043,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedOrderData(Container2 e) {
-                const String Table_Name = "Movement";
+                const string Table_Name = "Movement";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2152,7 +2152,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedPaymentMethodData(Container2 e) {
-                const String Table_Name = "Payment Method";
+                const string Table_Name = "Payment Method";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2181,7 +2181,7 @@ namespace TestWideWorldImportersDW{
                 t.Dimension.Payment_Method.AddRangeOrThrow(
                     from p in e.Integration.PaymentMethod_Staging
                     select new Payment_Method(
-                        (Int32)t.Dimension.Payment_Method.Count,
+                        (int)t.Dimension.Payment_Method.Count,
                         p.WWI_Payment_Method_ID,
                         p.Payment_Method,
                         p.Valid_From,
@@ -2214,7 +2214,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedPurchaseData(Container2 e) {
-                const String Table_Name = "Purchase";
+                const string Table_Name = "Purchase";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2296,7 +2296,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedSaleData(Container2 e) {
-                const String Table_Name = "Sale";
+                const string Table_Name = "Sale";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2416,7 +2416,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedStockHoldingData(Container2 e) {
-                const String Table_Name = "Stock Holding";
+                const string Table_Name = "Stock Holding";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2481,7 +2481,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedStockItemData(Container2 e) {
-                const String Table_Name = "Stock Item";
+                const string Table_Name = "Stock Item";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2524,7 +2524,7 @@ namespace TestWideWorldImportersDW{
                 t.Dimension.Stock_Item.AddRangeOrThrow(
                     from c in t.Integration.StockItem_Staging
                     select new Stock_Item(
-                        (Int32)t.Dimension.Stock_Item.Count,
+                        (int)t.Dimension.Stock_Item.Count,
                         c.WWI_Stock_Item_ID,
                         c.Stock_Item,
                         c.Color,
@@ -2571,7 +2571,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedSupplierData(Container2 e) {
-                const String Table_Name = "Supplier";
+                const string Table_Name = "Supplier";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2627,7 +2627,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedTransactionData(Container2 e) {
-                const String Table_Name = "Transaction";
+                const string Table_Name = "Transaction";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2707,7 +2707,7 @@ namespace TestWideWorldImportersDW{
                 t.Commit();
             }
             public static void MigrateStagedTransactionTypeData(Container2 e) {
-                const String Table_Name = "Transaction Type";
+                const string Table_Name = "Transaction Type";
                 var t = e.Transaction();
                 var LineageKey = (
                     from Lineage in t.Integration.Lineage
@@ -2736,7 +2736,7 @@ namespace TestWideWorldImportersDW{
                 t.Dimension.Transaction_Type.AddRange(
                     from c in t.Integration.TransactionType_Staging
                     select new Transaction_Type(
-                        (Int32)t.Dimension.Transaction_Type.Count,
+                        (int)t.Dimension.Transaction_Type.Count,
                         c.WWI_Transaction_Type_ID,
                         c.Transaction_Type,
                         c.Valid_From,
@@ -2784,16 +2784,16 @@ namespace TestWideWorldImportersDW{
                         "FY"+(Date.Month==11||Date.Month==12 ? Date.Month+1 : Date.Month)+'-'+ToShortMonthName(Date),
                         Date.Month==11||Date.Month==12 ? Date.Year-1 : Date.Year,
                         "FY"+(Date.Month==11||Date.Month==12 ? Date.Year-1 : Date.Year),
-                        (Int32)Date.DayOfWeek
+                        (int)Date.DayOfWeek
                     )
                 };
-            public static void PopulateDateDimensionForYear(Container2 e,Int32 YearNumber){
+            public static void PopulateDateDimensionForYear(Container2 e,int YearNumber){
                 var DateCounter=new DateTime(YearNumber,1,1);
                 try{
                     //Transactrion
                     while(DateCounter.Year==YearNumber){
                         if(!(from Date in e.Dimension.Date where Date.Date==DateCounter select 1).Any()){
-                            e.Dimension.Date.Insert(GenerateDateDimensionColumns(DateCounter));
+                            e.Dimension.Date.AddRange(GenerateDateDimensionColumns(DateCounter));
                         }
                         DateCounter=DateCounter.AddDays(1);
                     }
@@ -2818,11 +2818,11 @@ namespace TestWideWorldImportersDW{
             //    public readonly T @this;
             //    public 引数(T @this) => this.@this=@this;
             //}
-            static Object 共通(String ステートメント,Object 引数) {
+            static object 共通(string ステートメント,object 引数) {
                 var Script = CSharpScript.Create(
                     ステートメント,
                     ScriptOptions.Default.AddReferences(
-                        typeof(System.Object).Assembly,
+                        typeof(object).Assembly,
                         typeof(System.Linq.Enumerable).Assembly,
                         typeof(Program).Assembly,
                         引数.GetType().Assembly)
@@ -2836,9 +2836,9 @@ namespace TestWideWorldImportersDW{
                 Console.WriteLine(result.Result);
                 return result.Result;
             }
-            public static void ReseedSequenceBeyondTableValues(Container2 e,String SequenceName,String SchemaName,String TableName,String ColumnName) {
+            public static void ReseedSequenceBeyondTableValues(Container2 e,string SequenceName,string SchemaName,string TableName,string ColumnName) {
                 //var CurrentSequenceMaximumValue = 3;// (from g in e.information_schema.s)
-                var CurrentTableMaximumValue = (Int64)共通(
+                var CurrentTableMaximumValue = (long)共通(
                     $"AddRange(\r\n"+
                     $"    (from a in {SchemaName}.{TableName} select a).Max(a=>a.{ColumnName})\r\n"+
                     $")\r\n",

@@ -11,6 +11,7 @@ using LinqDB.Remote.Clients;
 using System.Net;
 using LinqDB;
 using LinqDB.Databases;
+using LinqDB.Sets;
 //using Utf8Json2 = LinqDB.Serializers.Utf8Json;
 //using MessagePack2 = LinqDB.Serializers.MessagePack;
 //using MemoryPack2 = LinqDB.Serializers.MemoryPack;
@@ -90,7 +91,7 @@ public abstract class 共通{
         var 標準1=input1.Compile();
         var expected0=標準0();
         var expected1=標準1();
-        Assert.Equal(expected0,expected1);
+        Assert.Equal(expected0,expected1,this.Comparer);
         Optimizer.IsInline=true;
         var Del0=Optimizer.CreateDelegate(input0);
         var Del1=Optimizer.CreateDelegate(input1);

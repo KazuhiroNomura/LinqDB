@@ -338,15 +338,15 @@ public class Server実行ExpressionEqualityComparer:共通{
     public static dynamic Dynamicメンバーアクセス(dynamic a){
         return a.メンバー;
     }
-    private readonly Optimizer.ExpressionEqualityComparer Comparer=new();
+    //private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
     private void AssertEqual(Expression a,Expression b){
-        this.MemoryMessageJson_Assert(a,aa=>Assert.Equal(aa,b,this.Comparer));
-        this.MemoryMessageJson_Assert(b,bb=>Assert.Equal(bb,a,this.Comparer));
+        this.MemoryMessageJson_Assert(a,aa=>Assert.Equal(aa,b,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_Assert(b,bb=>Assert.Equal(bb,a,this.ExpressionEqualityComparer));
     }
 
     private void AssertNotEqual(Expression a,Expression b){
-        this.MemoryMessageJson_Assert(a,aa=>Assert.NotEqual(aa,b,this.Comparer));
-        this.MemoryMessageJson_Assert(b,bb=>Assert.NotEqual(bb,a,this.Comparer));
+        this.MemoryMessageJson_Assert(a,aa=>Assert.NotEqual(aa,b,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_Assert(b,bb=>Assert.NotEqual(bb,a,this.ExpressionEqualityComparer));
     }
 
     [Fact]
@@ -2225,10 +2225,10 @@ public class Server実行ExpressionEqualityComparer:共通{
         var Type=typeof(BindCollection);
         var Int32フィールド1=Type.GetField(nameof(BindCollection.Int32フィールド1));
         var Int32フィールド2=Type.GetField(nameof(BindCollection.Int32フィールド2));
-        var BindCollectionフィールド1=Type.GetField(nameof(BindCollection.BindCollectionフィールド1));
-        var BindCollectionフィールド2=Type.GetField(nameof(BindCollection.BindCollectionフィールド2));
-        var Listフィールド1=Type.GetField(nameof(BindCollection.Listフィールド1));
-        var Listフィールド2=Type.GetField(nameof(BindCollection.Listフィールド2));
+        var BindCollectionフィールド1=Type.GetField(nameof(BindCollection.BindCollectionフィールド1))!;
+        var BindCollectionフィールド2=Type.GetField(nameof(BindCollection.BindCollectionフィールド2))!;
+        var Listフィールド1=Type.GetField(nameof(BindCollection.Listフィールド1))!;
+        var Listフィールド2=Type.GetField(nameof(BindCollection.Listフィールド2))!;
         var Constant_1=Expression.Constant(1);
         var Constant_2=Expression.Constant(2);
         var ctor=Type.GetConstructor(new[]{typeof(int)});
@@ -2272,7 +2272,7 @@ public class Server実行ExpressionEqualityComparer:共通{
                 Expression.ListBind(
                     Listフィールド1,
                     Expression.ElementInit(
-                        typeof(List<int>).GetMethod("Add"),
+                        typeof(List<int>).GetMethod("Add")!,
                         Constant_1
                     )
                 )
@@ -2509,7 +2509,7 @@ public class Server実行ExpressionEqualityComparer:共通{
                     foreach(var Left1 in 値配列){
                         foreach(var Right0 in 値配列){
                             foreach(var Right1 in 値配列){
-                                var _=this.Comparer.Equals(
+                                var _=this.ExpressionEqualityComparer.Equals(
                                     Expression.Add(
                                         Expression.Constant(Left0),
                                         Expression.Constant(Right0),

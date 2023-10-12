@@ -2485,7 +2485,7 @@ public class ExpressionEqualityComparer:共通{
         public static A Add1(A a,A b)=>new(a.v+b.v);
         public static A Add2(A a,A b)=>new(a.v+b.v);
         public bool Equals(A other)=>this.v==other.v;
-        public override bool Equals(object obj)=>this.Equals((A)obj);
+        public override bool Equals(object? obj)=>this.Equals((A)obj);
         public override int GetHashCode()=>this.v;
         private readonly int v;
         public A(int v){

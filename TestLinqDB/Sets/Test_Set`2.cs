@@ -111,7 +111,7 @@ public partial class シリアライズ対象:IEquatable<シリアライズ対�
     }
     public override bool Equals(object? obj) => obj is シリアライズ対象 other&& this.Equals(other);
     public override int GetHashCode() => this.a.GetHashCode();
-    public bool Equals(シリアライズ対象 other) =>this.a==other.a&&this.b==other.b;
+    public bool Equals(シリアライズ対象? other) =>other is not null&&(this.a==other.a&&this.b==other.b);
     public override string ToString() => this.a.ToString();
 }
 

@@ -27,7 +27,7 @@ public sealed class LookupSet<TValue, TKey>:Lookup<TValue,TKey,Set<TValue>>,ILoo
     }
 
     IEnumerator<Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<Linq.IGrouping<TKey,TValue>>.GetEnumerator() {
-        throw new NotImplementedException();
+        foreach(var a in this) yield return a;
     }
     bool Linq.ILookup<TKey,TValue>.Contains(TKey key)=>this.ContainsKey(key);
     //Generic.IEnumerator<System.Linq.IGrouping<TKey,TValue>> Generic.IEnumerable<System.Linq.IGrouping<TKey,TValue>>.GetEnumerator() {

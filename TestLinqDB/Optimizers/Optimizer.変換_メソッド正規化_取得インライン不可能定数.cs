@@ -560,8 +560,6 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
     }
     [Fact]public void Call_GroupBy1(){
-        LinqDB.Sets.IGrouping<double,int> i0=default;
-        LinqDB.Sets.IEnumerable<int> i1=i0;
         this.共通コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
         this.共通コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));

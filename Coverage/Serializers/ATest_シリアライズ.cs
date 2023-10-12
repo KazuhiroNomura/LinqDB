@@ -6,6 +6,7 @@ using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Serializers;
 using LinqDB.Serializers.MemoryPack.Formatters;
+using LinqDB.Serializers.MemoryPack.Formatters.Others;
 using MemoryPack;
 //using LinqDB.Serializers.Formatters;
 //using LinqDB.Serializers.MessagePack;
@@ -29,38 +30,8 @@ public class ATest_シリアライズ:ATest{
     private static readonly MessagePackSerializerOptions MessagePackSerializerOptions;
     //private static readonly AnonymousExpressionJsonFormatterResolver AnonymousExpressionJsonFormatterResolver=new();
     //private static readonly AnonymousExpressionFormatterResolver AnonymousExpressionMessagePackFormatterResolver=new();
-    private static readonly SerializerConfiguration SerializerConfiguration=new();
-    private static readonly global::LinqDB.Serializers.MemoryPack.Formatters.必要なFormatters Formatters=new();
-    static ATest_シリアライズ(){
-        //MemoryPackFormatterProvider.Register(Formatters.Expression);
-        JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
-            new IJsonFormatter[]{
-                classキーあり.JsonFormatter.Instance,
-                sealed_classキーあり.JsonFormatter.Instance,
-            },
-            new IJsonFormatterResolver[]{
-                SerializerConfiguration.JsonFormatterResolver
-            }
-
-            //new IJsonFormatterResolver[]{
-            //    Utf8Json.Resolvers.BuiltinResolver.Instance,//よく使う型
-            //    Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
-            //    Utf8Json.Resolvers.EnumResolver.Default,
-            //    AnonymousExpressionJsonFormatterResolver,
-            //}
-        );
-        MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
-            MessagePack.Resolvers.CompositeResolver.Create(
-                new IMessagePackFormatter[]{
-                    classキーあり.MessagePackFormatter.Instance,
-                    sealed_classキーあり.MessagePackFormatter.Instance,
-                },
-                new IFormatterResolver[]{
-                    SerializerConfiguration.MessagePackSerializerOptions.Resolver
-                }
-            )
-        );
-    }
+    //private static readonly SerializerConfiguration SerializerConfiguration=new();
+    //private static readonly global::LinqDB.Serializers.MemoryPack.Formatters.必要なFormatters Formatters=new();
     private static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
     protected static void 共通object(object input){
         共通object1(input,output=>Assert.IsTrue(Comparer.Equals(output,input)));
@@ -174,7 +145,7 @@ public class ATest_シリアライズ:ATest{
     const string 整形済みJsonファイル名="整形済みJson.txt";
     private static void Regist(System.Type Type){
         var AnonymousType=typeof(Anonymous<>).MakeGenericType(Type);
-        dynamic formatter=Activator.CreateInstance(AnonymousType);
+        dynamic formatter=Activator.CreateInstance(AnonymousType)!;
         // var b=writer.GetFormatter(value0);
         MemoryPackFormatterProvider.Register(formatter);
     }

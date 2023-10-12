@@ -21,6 +21,6 @@ public class Test_AscList
             Assert.Equal(a,Count);
             Count++;
         }
-        Assert.Equal(Count, 要素数);
+        Assert.Equal(要素数, Count);
     }
 }
