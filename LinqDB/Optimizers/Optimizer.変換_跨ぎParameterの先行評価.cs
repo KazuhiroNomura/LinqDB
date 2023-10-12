@@ -334,8 +334,9 @@ partial class Optimizer{
                     case ExpressionType.Block: {
                         var Block0 = (BlockExpression)Expression0;
                         var Block0_Expressions = Block0.Expressions;
-                        if(Block0.Variables.Count==0&&Block0_Expressions.Count==1)
-                            return this.Traverse(Block0_Expressions[0]);
+                        Debug.Assert(!(Block0.Variables.Count==0&&Block0_Expressions.Count==1),"最適化されてありえないはず。");
+                        //if(Block0.Variables.Count==0&&Block0_Expressions.Count==1)
+                        //    return this.Traverse(Block0_Expressions[0]);
                         var Block0_Expressions_Count = Block0_Expressions.Count;
                         var Block1_Expressions = new Expression[Block0_Expressions_Count];
                         for(var a = 0;a<Block0_Expressions_Count;a++)
@@ -456,7 +457,7 @@ partial class Optimizer{
             var LinkedList = new Generic.LinkedList<Expression>(Block0.Expressions);
             this.外だし(LinkedList);
             Debug.Assert(LinkedList.Last!=null,"LinkedList.Last != null");
-            if(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type) return LinkedList.Last.Value;
+            Debug.Assert(!(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type),"この式は最適化されて存在しないはず。");
             return Expression.Block(Block0.Type,Block0_Variables,LinkedList);
         }
         protected override Expression Lambda(LambdaExpression Lambda0) {

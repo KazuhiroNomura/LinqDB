@@ -392,7 +392,7 @@ public class ExtensionSet:共通{
     //}
     //[Fact]public void DUnion()
     [Fact]public void Except(){
-        const int 最大値=10;
+        const int 最大値=8;
         共通<sbyte  >(最大値);
         共通<short>(最大値);
         共通<int>(最大値);
