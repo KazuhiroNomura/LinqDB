@@ -2,9 +2,6 @@
 using E = System.Collections.Generic;
 using Q = System.Linq;
 using LinqDB.Sets;
-using Utf8Json;
-using LinqDB.Databases.Schemas;
-using テスト;
 //using Microsoft.SqlServer.Dac.Deployment;
 //using System.Diagnostics;
 //using System.Runtime.Serialization;

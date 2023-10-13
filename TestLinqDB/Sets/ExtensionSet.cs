@@ -2,11 +2,7 @@
 using LinqDB.Sets;
 using Expressions=System.Linq.Expressions;
 using Collections=System.Collections;
-using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
-using Microsoft.Build.Framework;
 namespace TestLinqDB.Sets;
 using Generic=Collections.Generic;
 using Sets=LinqDB.Sets;

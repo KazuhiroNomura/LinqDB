@@ -1,6 +1,5 @@
 ﻿
 using LinqDB.Enumerables;
-using TestLinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
 public class GroupingList2:共通 {
     [Fact]public void Serialize(){

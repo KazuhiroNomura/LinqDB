@@ -24,16 +24,16 @@ partial class Optimizer {
             this.Lambda((LambdaExpression)Lambda);
         }
         protected override void Constant(ConstantExpression Constant){
-            if(!ILで直接埋め込めるか(Constant.Type)&&!this.DictionaryConstant.ContainsKey(Constant))
-                this.DictionaryConstant.Add(Constant,default!);
+            if(ILで直接埋め込めるか(Constant.Type))return;
+            this.DictionaryConstant.TryAdd(Constant,default!);
         }
         protected override void Dynamic(DynamicExpression Dynamic){
             base.Dynamic(Dynamic);
-            if(!this.DictionaryDynamic.ContainsKey(Dynamic))this.DictionaryDynamic.Add(Dynamic,default!);
+            this.DictionaryDynamic.TryAdd(Dynamic,default!);
         }
-        protected override void Lambda(LambdaExpression Lambda) {
+        protected override void Lambda(LambdaExpression Lambda){
             this.Traverse(Lambda.Body);
-            if(!this.DictionaryLambda.ContainsKey(Lambda)) this.DictionaryLambda.Add(Lambda,default!);
+            this.DictionaryLambda.TryAdd(Lambda,default!);
             //var Parameters=this.Parameters;
             //var Parameters_Count=Parameters.Count;
             //var Lambda_Parameters=Lambda.Parameters;

@@ -10,8 +10,6 @@ using static LinqDB.Optimizers.Optimizer;
 using LinqDB.Remote.Clients;
 using System.Net;
 using LinqDB;
-using LinqDB.Databases;
-using LinqDB.Sets;
 //using Utf8Json2 = LinqDB.Serializers.Utf8Json;
 //using MessagePack2 = LinqDB.Serializers.MessagePack;
 //using MemoryPack2 = LinqDB.Serializers.MemoryPack;
@@ -19,7 +17,6 @@ using LinqDB.Sets;
 //using 共通=global.Serializers.MessagePack.Formatters.共通;
 namespace TestLinqDB;
 using Generic=System.Collections.Generic;
-using Sets=LinqDB.Sets;
 public abstract class 共通{
     private static int ポート番号;
     static 共通(){
