@@ -124,9 +124,7 @@ partial class Optimizer{
             //        this._判定_移動できるか.Dictionaryラムダ跨ぎParameter=value.Dictionaryラムダ跨ぎParameter;
             //    }
             //}
-            private Generic.IEnumerable<Expression> ラムダ跨ぎParameters{
-                get=>this.Dictionaryラムダ跨ぎParameter.Keys;
-            }
+            private Generic.IEnumerable<Expression> ラムダ跨ぎParameters=>this.Dictionaryラムダ跨ぎParameter.Keys;
 
             //private ParameterExpression ContainerParameter=>
             //    this.Information.ContainerParameter!;
@@ -210,18 +208,20 @@ partial class Optimizer{
                 base.Traverse(e);
             }
             protected override void Call(MethodCallExpression MethodCall) {
-                if(this.IsInline&&ループ展開可能メソッドか(MethodCall)) {
-                    var MethodCall0_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
+                var MethodCall_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
+                if(Reflection.Helpers.NoLoopUnrolling==MethodCall_GenericMethodDefinition)
+                    return;
+                if(this.IsInline&&ループ展開可能メソッドか(MethodCall_GenericMethodDefinition)) {
                     var MethodCall0_Arguments = MethodCall.Arguments;
-                    switch(MethodCall0_GenericMethodDefinition.Name) {
+                    switch(MethodCall_GenericMethodDefinition.Name) {
                         //ラムダ跨ぎ先行評価の不具合
                         case nameof(ExtensionSet.Inline): {
                             if(MethodCall0_Arguments.Count==1) {
-                                Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall0_GenericMethodDefinition);
+                                Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition);
                                 巻き上げ処理(MethodCall0_Arguments[0]);
                             }else{
                                 Debug.Assert(MethodCall0_Arguments.Count==2);
-                                Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall0_GenericMethodDefinition);
+                                Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition);
                                 巻き上げ処理(MethodCall0_Arguments[1]);
                             }
                             break;
@@ -230,21 +230,29 @@ partial class Optimizer{
                             Debug.Assert(
                                 MethodCall.Arguments.Count==3
                                 &&
-                                Reflection.ExtensionEnumerable.Except_comparer==MethodCall0_GenericMethodDefinition
+                                Reflection.ExtensionEnumerable.Except_comparer==MethodCall_GenericMethodDefinition
                                 ||
                                 MethodCall.Arguments.Count==2
                                 &&(
-                                    Reflection.ExtensionEnumerable.Except==MethodCall0_GenericMethodDefinition
+                                    Reflection.ExtensionEnumerable.Except==MethodCall_GenericMethodDefinition
                                     ||
-                                    Reflection.ExtensionSet.Except==MethodCall0_GenericMethodDefinition
+                                    Reflection.ExtensionSet.Except==MethodCall_GenericMethodDefinition
                                 )
                             );
                             this.Traverse(MethodCall0_Arguments[0]);
-                            if(this.結果Expression is not null) return;
-                            if(巻き上げ処理(MethodCall0_Arguments[1])) return;
-                            if(MethodCall.Arguments.Count==3) {
+                            if(this.結果Expression is not null)
+                                return;
+                            var 結果の場所 = this.結果の場所;
+                            Debug.Assert(this.結果Expression is null);
+                            this.結果の場所=結果の場所|場所.ループ跨ぎ;
+                            this.Traverse(MethodCall0_Arguments[1]);
+                            if(this.結果Expression is not null)
+                                return;
+                            this.結果の場所=結果の場所;
+                            //if(巻き上げ処理(MethodCall0_Arguments[1]))
+                            //    return;
+                            if(MethodCall.Arguments.Count==3)
                                 this.Traverse(MethodCall0_Arguments[2]);
-                            }
                             break;
                         }
                         //case nameof(Enumerable.Join): {
@@ -257,15 +265,15 @@ partial class Optimizer{
                         //    break;
                         //}
                         default: {
-                            Debug.Assert(nameof(ExtensionSet.Join)!=MethodCall0_GenericMethodDefinition.Name);
+                            Debug.Assert(nameof(ExtensionSet.Join)!=MethodCall_GenericMethodDefinition.Name);
+                            Debug.Assert(nameof(ExtensionSet.GroupJoin)!=MethodCall_GenericMethodDefinition.Name);
                             this.Traverse(MethodCall0_Arguments[0]);
-                            if(this.結果Expression is not null) {
+                            if(this.結果Expression is not null)
                                 return;
-                            }
                             var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
-                            for(var a = 1;a<MethodCall0_Arguments_Count;a++) {
-                                if(巻き上げ処理(MethodCall0_Arguments[a])) return;
-                            }
+                            for(var a = 1;a<MethodCall0_Arguments_Count;a++)
+                                if(巻き上げ処理(MethodCall0_Arguments[a])) 
+                                    return;
                             break;
                         }
                     }
@@ -273,15 +281,15 @@ partial class Optimizer{
                     base.Call(MethodCall);
                 }
                 bool 巻き上げ処理(Expression Expression0) {
-                    var 結果の場所 = this.結果の場所;
-                    Debug.Assert(this.結果Expression is null);
-                    this.結果の場所=結果の場所|場所.ループ跨ぎ;
                     if(Expression0 is LambdaExpression Lambda0) {
-                        Expression0=Lambda0.Body;
+                        var 結果の場所 = this.結果の場所;
+                        Debug.Assert(this.結果Expression is null);
+                        this.結果の場所=結果の場所|場所.ループ跨ぎ;
+                        this.Traverse(Lambda0.Body);
+                        if(this.結果Expression is not null)
+                            return true;
+                        this.結果の場所=結果の場所;
                     }
-                    this.Traverse(Expression0);
-                    if(this.結果Expression is not null) return true;
-                    this.結果の場所=結果の場所;
                     return false;
                 }
             }
@@ -339,6 +347,7 @@ partial class Optimizer{
                         //    return this.Traverse(Block0_Expressions[0]);
                         var Block0_Expressions_Count = Block0_Expressions.Count;
                         var Block1_Expressions = new Expression[Block0_Expressions_Count];
+                        Debug.Assert(Block0_Expressions_Count>1);
                         for(var a = 0;a<Block0_Expressions_Count;a++)
                             Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
                         return Expression.Block(Block0.Variables,Block1_Expressions);
@@ -360,34 +369,74 @@ partial class Optimizer{
                             var MethodCall0_Arguments = MethodCall0.Arguments;
                             var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
                             var MethodCall1_Arguments = new Expression[MethodCall0_Arguments_Count];
-                            if(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition) {
-                                var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
-                                Expression MethodCall1_Arguments_0;
-                                var 現在探索場所 = this.現在探索場所;
+                            if(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition){
+                                var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
+                                //Expression MethodCall1_Arguments_0;
+                                var 現在探索場所=this.現在探索場所;
                                 this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                if(MethodCall0_Arguments_0 is LambdaExpression Lambda0) {
-                                    var Lambda1_Body = this.Traverse(Lambda0.Body);
-                                    MethodCall1_Arguments_0=Expression.Lambda(
-                                        Lambda0.Type,
-                                        Lambda1_Body,
-                                        Lambda0.Name,
-                                        Lambda0.TailCall,
-                                        Lambda0.Parameters
-                                    );
-                                } else {
-                                    MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
-                                }
-                                MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                Debug.Assert(MethodCall0_Arguments_0.NodeType==ExpressionType.Lambda,"跨ぎParameterの先行評価から呼ばれないはず");
+                                var Lambda0=(LambdaExpression)MethodCall0_Arguments_0;
+                                var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                MethodCall1_Arguments[0]=Expression.Lambda(
+                                    Lambda0.Type,
+                                    Lambda1_Body,
+                                    Lambda0.Name,
+                                    Lambda0.TailCall,
+                                    Lambda0.Parameters
+                                );
+                                //if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
+                                //    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                //    MethodCall1_Arguments_0=Expression.Lambda(
+                                //        Lambda0.Type,
+                                //        Lambda1_Body,
+                                //        Lambda0.Name,
+                                //        Lambda0.TailCall,
+                                //        Lambda0.Parameters
+                                //    );
+                                //} else{
+                                //    MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
+                                //}
+                                //MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
                                 this.現在探索場所=現在探索場所;
-                            } else {
+                            }else if(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition) {
+                                var MethodCall0_Arguments_1=MethodCall0_Arguments[1];
+                                MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
+                                //Expression MethodCall1_Arguments_1;
+                                var 現在探索場所=this.現在探索場所;
+                                this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
+                                Debug.Assert(MethodCall0_Arguments_1.NodeType==ExpressionType.Lambda,"跨ぎParameterの先行評価から呼ばれないはず");
+                                var Lambda0=(LambdaExpression)MethodCall0_Arguments_1;
+                                var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                MethodCall1_Arguments[1]=Expression.Lambda(
+                                    Lambda0.Type,
+                                    Lambda1_Body,
+                                    Lambda0.Name,
+                                    Lambda0.TailCall,
+                                    Lambda0.Parameters
+                                );
+                                //if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
+                                //    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                //    MethodCall1_Arguments_1=Expression.Lambda(
+                                //        Lambda0.Type,
+                                //        Lambda1_Body,
+                                //        Lambda0.Name,
+                                //        Lambda0.TailCall,
+                                //        Lambda0.Parameters
+                                //    );
+                                //} else{
+                                //    MethodCall1_Arguments_1=this.Traverse(MethodCall0_Arguments_1);
+                                //}
+                                //MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
+                                this.現在探索場所=現在探索場所;
+                            }else {
                                 MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
                                 var 現在探索場所 = this.現在探索場所;
                                 this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
                                 for(var a = 1;a<MethodCall0_Arguments_Count;a++) {
                                     var MethodCall0_Arguments_a = MethodCall0_Arguments[a];
                                     Expression MethodCall1_Arguments_a;
-                                    if(MethodCall0_Arguments_a.NodeType==ExpressionType.Lambda) {
-                                        var Lambda0 = (LambdaExpression)MethodCall0_Arguments_a;
+                                    //ebug.Assert(MethodCall0_Arguments_0.NodeType==ExpressionType.Lambda,"跨ぎParameterの先行評価から呼ばれないはず");
+                                    if(MethodCall0_Arguments_a is LambdaExpression Lambda0){
                                         var Lambda1_Body = this.Traverse(Lambda0.Body);
                                         MethodCall1_Arguments_a=Expression.Lambda(
                                             Lambda0.Type,
@@ -474,21 +523,38 @@ partial class Optimizer{
             );
         }
         protected override Expression Call(MethodCallExpression MethodCall0) {
-            if(!ループ展開可能メソッドか(MethodCall0)) return base.Call(MethodCall0);
+            if(!ループ展開可能メソッドか(MethodCall0))
+                return base.Call(MethodCall0);
             var MethodCall0_Arguments = MethodCall0.Arguments;
-            if(Reflection.ExtensionSet.Inline1==GetGenericMethodDefinition(MethodCall0.Method)) {
-                var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
-                var MethodCall1_Arguments_0 = MethodCall0_Arguments_0 is LambdaExpression Lambda0
-                    ? this.Lambda(Lambda0) : this.Traverse(MethodCall0_Arguments_0);
+            if(Reflection.ExtensionSet.Inline1==GetGenericMethodDefinition(MethodCall0.Method)){
+                var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
+                Expression MethodCall1_Arguments_0;
+                if(MethodCall0_Arguments_0 is LambdaExpression Lambda0)
+                    MethodCall1_Arguments_0=this.Lambda(Lambda0);
+                else
+                    MethodCall1_Arguments_0=MethodCall0_Arguments_0;
                 return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0);
+            }else if(Reflection.ExtensionSet.Inline2==GetGenericMethodDefinition(MethodCall0.Method)) {
+                var MethodCall1_Arguments_0 =this.Traverse(MethodCall0_Arguments[0]);
+                var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
+                //var MethodCall1_Arguments_1 = MethodCall0_Arguments_1 is LambdaExpression Lambda0
+                    //? this.Lambda(Lambda0) : MethodCall0_Arguments_1;
+                Expression MethodCall1_Arguments_1;
+                if(MethodCall0_Arguments_1 is LambdaExpression Lambda0)
+                    MethodCall1_Arguments_1=this.Lambda(Lambda0);
+                else
+                    MethodCall1_Arguments_1=MethodCall0_Arguments_1;
+                return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
             }
             var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
             var MethodCall1_Arguments = new Expression[MethodCall0_Arguments_Count];
             MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
             for(var a = 1;a<MethodCall0_Arguments_Count;a++) {
                 var MethodCall0_Argument = MethodCall0_Arguments[a];
-                MethodCall1_Arguments[a]=MethodCall0_Argument is LambdaExpression Lambda0
-                    ? this.Lambda(Lambda0) : this.Traverse(MethodCall0_Argument);
+                if(MethodCall0_Argument is LambdaExpression Lambda0)
+                    MethodCall1_Arguments[a]=this.Lambda(Lambda0);
+                else
+                    MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Argument);
             }
             return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
         }
