@@ -23,6 +23,200 @@ public class 変換_跨ぎParameterの先行評価:共通{
     class SetT:Set<OI>{
 
     }
+    [Fact]public void 取得_先行評価式_Traverse(){
+        var s = new Set<int>();
+        //if(this.結果Expression is not null)return;
+        this.共通コンパイル実行(() => s.Join(s,o => new { key = o },i => new { key = i },(o,i) => o+i));
+        //switch(e.NodeType) {
+        //    case ExpressionType.Constant: {
+        //        if(ILで直接埋め込めるか((ConstantExpression)e))return;
+        this.共通コンパイル実行(()=>0);
+        this.共通コンパイル実行(()=>s);
+        //    }
+        //    case ExpressionType.Default:return;
+        this.共通コンパイル実行(Expression.Lambda<Action>(Expression.Default(typeof(int))));
+        //    case ExpressionType.Parameter: {
+        //        if(this.ラムダ跨ぎParameters.Contains(e)||this.ループ跨ぎParameters.Contains(e))return;
+        this.共通コンパイル実行(() => "".Let(a=>"".Let(b=>a)));
+        this.共通コンパイル実行(() => "".Let(a=>"".Inline(b=>a)));
+        this.共通コンパイル実行(() => "".Let(a=>a));
+        //    }
+        //}
+        //if(e.Type!=typeof(void)) {
+        //    if(this.結果の場所==場所.ループ跨ぎ) {
+        //        if((this.ラムダ式は取り出す||e.NodeType!=ExpressionType.Lambda)&&e.NodeType!=ExpressionType.Parameter) {
+        //            var Result = this._判定_移動できるか.実行(e);
+        //            if(Result==判定_移動できるか.EResult.移動できる) {
+        this.共通コンパイル実行(() => "".Let(a=>"".Inline(b=>a)));
+        //            }
+        this.共通コンパイル実行(() => "".Let(a=>"".Inline(b=>b)));
+        //            if(Result==判定_移動できるか.EResult.NoLoopUnrollingがあったので移動できない)return;
+        //this.共通コンパイル実行(() => "".Let(a=>"".Inline(b=>a).NoLoopUnrolling()));
+        //        }
+        //    } else if(this.結果の場所==場所.ラムダ跨ぎ) {
+        //        if(this.ラムダ式は取り出す||e.NodeType!=ExpressionType.Lambda) {
+        //            var Result = this._判定_移動できるか.実行(e);
+        //            if(Result==判定_移動できるか.EResult.移動できる) {
+        this.共通コンパイル実行(() => "".Let(a=>"".Let(b=>a)));
+        //            }
+        this.共通コンパイル実行(() => "".Let(a=>"".Let(b=>b)));
+        //            if(Result==判定_移動できるか.EResult.NoLoopUnrollingがあったので移動できない)return;
+        //this.共通コンパイル実行(() => "".Let(a=>"".Let(b=>a).NoLoopUnrolling()));
+        //        }
+        //    }
+        //}
+        this.共通コンパイル実行(() => s.ToString());
+    }
+    [Fact]public void 取得_先行評価式_Call(){
+        var s = new Set<int>();
+        //if(Reflection.Helpers.NoLoopUnrolling==MethodCall_GenericMethodDefinition)
+        this.共通コンパイル実行(()=>ExtensionSet.Inline(()=>"").NoLoopUnrolling());
+        //if(this.IsInline&&ループ展開可能メソッドか(MethodCall_GenericMethodDefinition)) {
+        //    switch(MethodCall_GenericMethodDefinition.Name) {
+        //        case nameof(ExtensionSet.Inline): {
+        //            if(MethodCall0_Arguments.Count==1) {
+        //                if(MethodCall0_Arguments_0 is LambdaExpression Lambda0) {
+        this.共通コンパイル実行(()=>ExtensionSet.Inline(()=>""));
+        //                }else{
+        this.共通コンパイル実行(()=>ExtensionSet.Inline((Func<decimal>)(()=>1m)));
+        //                }
+        //            }else{
+        //                if(MethodCall0_Arguments_1 is LambdaExpression Lambda0) {
+        this.共通コンパイル実行(()=>"".Inline(s=>s+"x"));
+        //                } else {
+        this.共通コンパイル実行(()=>"".Inline((Func<string,string>)(s=>s+"x")));
+        //                }
+        //            }
+        //        }
+        //        case nameof(ExtensionSet.Intersect):
+        //        case nameof(ExtensionSet.Union):
+        //        case nameof(ExtensionSet.DUnion):
+        //        case nameof(ExtensionSet.Except):
+        //            if(this.結果Expression is not null)
+        this.共通コンパイル実行(()=>"".Let(b=>s.Select(a=>a+a)).Except(s.Select(a=>a+a)));
+        //            if(this.結果Expression is not null)
+        this.共通コンパイル実行(()=>s.Select(a=>a+a).Except(s.Select(a=>a+a)));
+        //            if(MethodCall.Arguments.Count==3)
+        this.共通コンパイル実行(()=>s.Except(s,EqualityComparer<int>.Default));
+        //            break;
+        //        }
+        //        default: {
+        //            if(this.結果Expression is not null)
+        this.共通コンパイル実行(()=>"".Let(b=>s.Select(a=>a+a)).Select(a=>a+a));
+        //            for(var a = 1;a<MethodCall0_Arguments_Count;a++)
+        //                if(巻き上げ処理(MethodCall0_Arguments[a])) 
+        this.共通コンパイル実行(()=>s.Select(a=>1m));
+        this.共通コンパイル実行(()=>s.Select(a=>a+1));
+        //        }
+        //    }
+        //} else {
+        this.共通コンパイル実行(()=>"".Let(s=>""));
+        //}
+        //bool 巻き上げ処理(Expression Expression0) {
+        //    if(Expression0 is LambdaExpression Lambda0) {
+        this.共通コンパイル実行(()=>s.Select(a=>1m));
+        //    }
+        this.共通コンパイル実行(()=>s.Select((Func<int,decimal>)(a=>1m)));
+        //}
+    }
+    [Fact]public void 取得_先行評価式_Block(){
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Constant(0),
+                    Expression.Constant(0)
+                )
+            )
+        );
+    }
+    [Fact]
+    public void 取得_先行評価式_判定_移動できるか_MakeAssign(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Lambda<Func<int,int>>(
+                    Expression.Block(
+                        Expression.Lambda<Func<int>>(
+                            Expression.Assign(a,Expression.Constant(0))
+                        ),
+                        a
+                    ),
+                    a
+                )
+            )
+        );
+    }
+    [Fact]
+    public void 取得_先行評価式_判定_移動できるか_Lambda(){
+        var s = new Set<int>();
+        this.共通コンパイル実行(() => s.Join(s,o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==0));
+    }
+    [Fact]public void 取得_先行評価式_判定_移動できるか_Parameter(){
+        var s = new Set<int>();
+        var p=Expression.Parameter(typeof(int));
+        //if(this.ContainerParameter==Parameter||this.ラムダ跨ぎParameters.Contains(Parameter)||this.ループ跨ぎParameters.Contains(Parameter))
+        this.共通コンパイル実行(() => s.Join(s,o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==0));
+        //foreach(var 内部Parameters in this.List内部Parameters)
+        //    if(内部Parameters.Contains(Parameter)) return;
+        this.共通コンパイル実行(() => s.Join(s,o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==0));
+        //foreach(var a in this.List束縛Parameter情報){
+        //    if(a.Parameters.Contains(Parameter)) return;
+        this.共通コンパイル実行(() => s.Join(s,o => o,i => i,(o,i) => new { o,i }).Where(p => p.i==0));
+        //    foreach(var Variables in a.ListVariables)
+        //        if(Variables.Contains(Parameter)){
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Lambda<Func<Func<int>>>(
+                    Expression.Block(
+                        new[]{p},
+                        Expression.Lambda<Func<int>>(
+                            p
+                        )
+                    )
+                )
+            )
+        );
+        //        }
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Lambda<Func<Func<int>>>(
+                    Expression.Block(
+                        new[]{p},
+                        Expression.Lambda<Func<int>>(
+                            Expression.Constant(0)
+                        )
+                    )
+                )
+            )
+        );
+        //}
+    }
+    [Fact]public void 変換_先行評価式_Block(){
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Constant(0),
+                    Expression.Constant(0)
+                )
+            )
+        );
+    }
+    [Fact]public void 変換_先行評価式_Lambda(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Lambda<Func<int,int>>(
+                    Expression.Block(
+                        Expression.Lambda<Func<int>>(
+                            a
+                        ),
+                        a
+                    ),
+                    a
+                )
+            )
+        );
+    }
     [Fact]public void 変換_先行評価式_Traverse(){
         var a = Expression.Parameter(typeof(int), "a");
         var s = new Set<int>();
@@ -55,109 +249,25 @@ public class 変換_跨ぎParameterの先行評価:共通{
                 )
             )
         );
-        //    }
-        //    switch(Expression0.NodeType) {
-        //        case ExpressionType.Block: {
-        this.共通コンパイル実行(
-            Expression.Lambda<Action>(
-                Expression.Block(
-                    Expression.Constant(0),
-                    Expression.Constant(0)
-                )
-            )
-        );
-        //        }
-        //        case ExpressionType.Lambda: {
-        this.共通コンパイル実行(
-            Expression.Lambda<Action>(
-                Expression.Lambda<Func<int,int>>(
-                    Expression.Block(
-                        Expression.Lambda<Func<int>>(
-                            a
-                        ),
-                        a
-                    ),
-                    a
-                )
-            )
-        );
-        //        }
-        //        case ExpressionType.Call: {
-        //            if(Reflection.Helpers.NoLoopUnrolling==MethodCall_GenericMethodDefinition)
-        this.共通コンパイル実行(()=>new{
-            a=s.Select(p=>s).NoLoopUnrolling(),
-            b=s.Select(p=>s)
-        });
-        //            if(this.ループ跨ぎを使うか&&ループ展開可能メソッドか(MethodCall0)) {
-        //                if(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition) {
-        //                    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0) {
-        this.共通コンパイル実行(()=>"".Let(p=>ExtensionSet.Inline(()=>1m)));
-        //                    } else {
-        this.共通コンパイル実行(
-            ()=>
-                "".Let(p=>
-                    ExtensionSet.Inline((Func<decimal>)(()=>1m))+ExtensionSet.Inline((Func<decimal>)(()=>1m))
-                )
-        );
-        //this.共通コンパイル実行(()=>ExtensionSet.Inline((Func<string>)(()=>"")));
-        //                    }
-        //                } else if(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition) {
-        //                    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0) {
-        this.共通コンパイル実行(()=>"".Inline(s=>s+"x"));
-        //                    } else {
-        this.共通コンパイル実行(()=>"".Inline((Func<string,string>)(s=>s+"x")));
-        //                    }
-        //                } else {
-        //                    for(var a = 1;a<MethodCall0_Arguments_Count;a++) {
-        //                        if(MethodCall0_Arguments_a is LambdaExpression Lambda0) {
-        this.共通コンパイル実行(()=>s.Select(p=>p+p));
-        //                        } else {
-        this.共通コンパイル実行(()=>s.Select((Func<int,int>)(p=>p+p)));
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
     }
-    [Fact]public void 取得_先行評価式_Call(){
+    [Fact]public void 変換_先行評価式_Call(){
         var s = new Set<int>();
-        //if(Reflection.Helpers.NoLoopUnrolling==MethodCall_GenericMethodDefinition)
-        this.共通コンパイル実行(()=>ExtensionSet.Inline(()=>"").NoLoopUnrolling());
-        //if(this.IsInline&&ループ展開可能メソッドか(MethodCall_GenericMethodDefinition)) {
-        //    switch(MethodCall_GenericMethodDefinition.Name) {
-        //        case nameof(ExtensionSet.Inline): {
-        //            if(MethodCall0_Arguments.Count==1) {
-        this.共通コンパイル実行(()=>ExtensionSet.Inline(()=>""));
-        //            }else{
-        this.共通コンパイル実行(()=>"".Inline(a=>""));
-        //            }
-        //        }
-        //        case nameof(ExtensionSet.Except): {
-        //            if(this.結果Expression is not null)
-        this.共通コンパイル実行(()=>"".Let(b=>s.Select(a=>a+a)).Except(s.Select(a=>a+a)));
-        //            if(this.結果Expression is not null)
-        this.共通コンパイル実行(()=>s.Select(a=>a+a).Except(s.Select(a=>a+a)));
-        //            if(MethodCall.Arguments.Count==3)
-        this.共通コンパイル実行(()=>s.Except(s,EqualityComparer<int>.Default));
-        //            break;
-        //        }
-        //        default: {
-        //            if(this.結果Expression is not null)
-        this.共通コンパイル実行(()=>"".Let(b=>s.Select(a=>a+a)).Select(a=>a+a));
-        //            for(var a = 1;a<MethodCall0_Arguments_Count;a++)
-        //                if(巻き上げ処理(MethodCall0_Arguments[a])) 
-        this.共通コンパイル実行(()=>s.Select(a=>1m));
-        this.共通コンパイル実行(()=>s.Select(a=>a+1));
+        //if(!(this.ループ跨ぎを使うか&&ループ展開可能メソッドか(MethodCall0)))
+        this.共通コンパイル実行(()=>s.Select(a=>a+a));
+        //switch(MethodCall_GenericMethodDefinition.Name) {
+        //    case nameof(ExtensionSet.Inline): {
+        //        if(MethodCall0_Arguments.Count==1) {
+        this.共通コンパイル実行(()=>"".Let(a=>ExtensionSet.Inline(()=>1m)));
+        //        }else{
+        this.共通コンパイル実行(()=>"".Let(a=>"".Inline(a=>1m)));
+        //this.共通コンパイル実行(()=>ExtensionSet.Inline(()=>"".Inline(s=>s+"x")));
         //        }
         //    }
-        //} else {
-        //}
-        //bool 巻き上げ処理(Expression Expression0) {
-        //    if(Expression0 is LambdaExpression Lambda0) {
+        //    default: {
+        //        for(var a=1;a<MethodCall0_Arguments_Count;a++){
+        this.共通コンパイル実行(()=>s.Select(a=>s));
+        //        }
         //    }
-        //    return false;
         //}
     }
     [Fact]public void 変換_先行評価式_MakeAssign(){
