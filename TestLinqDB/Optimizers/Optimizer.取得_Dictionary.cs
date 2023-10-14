@@ -13,6 +13,13 @@ public class 取得_Dictionary:共通{
         this.共通コンパイル実行(() => 0);
         this.共通コンパイル実行(() => 0m);
     }
+    private delegate int FuncRef(ref int input);
+    private static int Lambda0(ref int input, FuncRef d)
+    {
+        return d(ref input);
+    }
+    private delegate int Int32_Delegate_ref_Int32(ref int input);
+    private static int Int32_Lambda_ref_Int32(ref int input, Int32_Delegate_ref_Int32 d) => d(ref input);
     [Fact]public void Dynamic(){
         var CSharpArgumentInfo1=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null);
         var CSharpArgumentInfoArray1=new[]{CSharpArgumentInfo1};

@@ -75,7 +75,7 @@ public sealed partial class Optimizer{
             return PrivateFindVariable(this.List_ScalarVariable,Name)??throw new NotSupportedException($"{Name}というスカラ変数はない");
         }
         private e.ParameterExpression FindTableVariable(string Name) {
-            e.ParameterExpression? result=PrivateFindVariable(this.List_定義型TableVariable,Name);
+            var result=PrivateFindVariable(this.List_定義型TableVariable,Name);
             if(result is not null) return result;
             foreach(var 匿名型TableVariable in this.List_匿名型TableVariable)
                 if(匿名型TableVariable.Variable.Name==Name)

@@ -109,8 +109,9 @@ partial class Optimizer {
             ExpressionType.Throw                => this.Throw                ((UnaryExpression)Expression0),
             ExpressionType.TypeAs               => this.TypeAs               ((UnaryExpression)Expression0),
             ExpressionType.UnaryPlus            => this.UnaryPlus            ((UnaryExpression)Expression0),
-            ExpressionType.Unbox                => this.Unbox                ((UnaryExpression)Expression0),
-            _ => throw new NotSupportedException($"{Expression0.NodeType}はサポートされてない"),
+            //ExpressionType.Unbox                => this.Unbox                ((UnaryExpression)Expression0),
+            _                                   => this.Unbox                ((UnaryExpression)Expression0)
+            //_ => throw new NotSupportedException($"{Expression0.NodeType}はサポートされてない"),
         };
         protected IList<Expression> TraverseExpressions(ReadOnlyCollection<Expression> Expressions0) {
             var Expressions0_Count = Expressions0.Count;
@@ -857,6 +858,7 @@ partial class Optimizer {
                 var Switch1_Case_TestValues=new Expression[Switch0_Case_TestValues_Count];
                 var 変化したか1=false;
                 for(var b=0; b < Switch0_Case_TestValues_Count; b++) {
+                    //c#上は定数(Constant)しかできないが式木で作った場合はそれにとらわれない
                     var Switch0_Case_TestValue=Switch0_Case_TestValues[b];
                     var Switch1_Case_TestValue=this.Traverse(Switch0_Case_TestValue);
                     Switch1_Case_TestValues[b]=Switch1_Case_TestValue;

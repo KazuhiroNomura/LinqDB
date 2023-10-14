@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Serializers\Formatters\TestExpression.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MemoryPack" Version="1.9.16" />
     <PackageReference Include="MessagePack" Version="2.5.129" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />

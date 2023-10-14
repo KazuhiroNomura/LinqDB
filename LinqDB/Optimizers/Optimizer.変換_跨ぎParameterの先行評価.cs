@@ -409,16 +409,20 @@ partial class Optimizer{
                         this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
                         for(var a=1;a<MethodCall0_Arguments_Count;a++){
                             var MethodCall_Arguments_a=MethodCall0_Arguments[a];
-                            Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda,"跨ぎParameterの先行評価から呼ばれないはず");
-                            var Lambda0=(LambdaExpression)MethodCall_Arguments_a;
-                            var Lambda1_Body=this.Traverse(Lambda0.Body);
-                            MethodCall1_Arguments[a]=Expression.Lambda(
-                                Lambda0.Type,
-                                Lambda1_Body,
-                                Lambda0.Name,
-                                Lambda0.TailCall,
-                                Lambda0.Parameters
-                            );
+                            //Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda
+                            //したいところだがAggregate(a,b,func)のbがLambdaではないので使えない。
+                            if(MethodCall_Arguments_a is LambdaExpression Lambda0){
+                                var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                MethodCall1_Arguments[a]=Expression.Lambda(
+                                    Lambda0.Type,
+                                    Lambda1_Body,
+                                    Lambda0.Name,
+                                    Lambda0.TailCall,
+                                    Lambda0.Parameters
+                                );
+                            } else{
+                                MethodCall1_Arguments[a]=MethodCall_Arguments_a;
+                            }
                         }
                         this.現在探索場所=現在探索場所;
                         break;

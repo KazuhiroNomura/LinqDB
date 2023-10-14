@@ -225,56 +225,9 @@ partial class Optimizer {
                 return false;
             }
             protected override void Conditional(ConditionalExpression Conditional){
-                //this.Traverse(Conditional.Test);
-                //if(this.二度出現した一度目のExpression is not null) return;
-                //var HashSet一度出現したExpression = this.HashSet一度出現したExpression;
-                //var IfTrueまたはIfFalse外部か = this.IfTrueまたはIfFalse外部か;
-                //this.IfTrueまたはIfFalse外部か=false;
-                //var HashSet一度出現したExpression0 = this.HashSet一度出現したExpression=new HashSet<Expression>(this.ExpressionEqualityComparer);
-                //this.Traverse(Conditional.IfTrue);
-                //var HashSet一度出現したExpression1 = this.HashSet一度出現したExpression=new HashSet<Expression>(this.ExpressionEqualityComparer);
-                //this.Traverse(Conditional.IfFalse);
-                //HashSet一度出現したExpression0.IntersectWith(HashSet一度出現したExpression1);
-                //var Dictionary一度出現したExpression_二度出現したExpressionの一度目 = this.Dictionary一度出現したExpression_二度出現したExpressionの一度目;
-                //this.IfTrueまたはIfFalse外部か=IfTrueまたはIfFalse外部か;
-                //if(IfTrueまたはIfFalse外部か){
-                //    foreach(var 一度出現したExpression in HashSet一度出現したExpression0){
-                //        if(Dictionary一度出現したExpression_二度出現したExpressionの一度目.TryGetValue(一度出現したExpression,
-                //               out var 二度出現した一度目のExpression)){
-                //            this.二度出現した一度目のExpression=二度出現した一度目のExpression;
-                //            break;
-                //        }
-                //        Dictionary一度出現したExpression_二度出現したExpressionの一度目.Add(一度出現したExpression,一度出現したExpression);
-                //    }
-                //} else{
-                //    HashSet一度出現したExpression.IntersectWith(HashSet一度出現したExpression0);
-                //}
-
                 var HashSet一度出現したExpression = this.HashSet一度出現したExpression;
                 this.Traverse(Conditional.Test);
                 if(this.二度出現した一度目のExpression is not null) return;
-                //var HashSet一度出現したExpression = this.HashSet一度出現したExpression;
-                //var IfTrueまたはIfFalse外部か= this.IfTrueまたはIfFalse外部か;
-                //this.IfTrueまたはIfFalse外部か=false;
-                //var HashSetIfTrue一度出現したExpression =this.HashSet一度出現したExpression=new HashSet<Expression>(this.ExpressionEqualityComparer);
-                ////Debug.Assert(!(Conditional.IfTrue.NodeType==ExpressionType.Default&&Conditional.IfTrue.Type==typeof(void)));
-                ////Debug.Assert(!(Conditional.IfFalse.NodeType==ExpressionType.Default&&Conditional.IfFalse.Type==typeof(void)));
-                //this.IfTrueまたはIfFalse外部か=false;
-                //this.Traverse(Conditional.IfTrue);
-                //var HashSetIfFalse一度出現したExpression = this.HashSet一度出現したExpression=new HashSet<Expression>(this.ExpressionEqualityComparer);
-                //this.Traverse(Conditional.IfFalse);
-                //HashSetIfTrue一度出現したExpression.IntersectWith(HashSetIfFalse一度出現したExpression);
-                //var Dictionary一度出現したExpression_二度出現したExpressionの一度目 = this.Dictionary一度出現したExpression_二度出現したExpressionの一度目;
-                //if(IfTrueまたはIfFalse外部か)
-                //    foreach(var 一度出現したExpression in HashSetIfTrue一度出現したExpression) {
-                //        if(Dictionary一度出現したExpression_二度出現したExpressionの一度目.TryGetValue(一度出現したExpression,out var 二度出現した一度目のExpression)) {
-                //            this.二度出現した一度目のExpression=二度出現した一度目のExpression;
-                //            break;
-                //        }
-                //        Dictionary一度出現したExpression_二度出現したExpressionの一度目.Add(一度出現したExpression,一度出現したExpression);
-                //    }
-                //else
-                //    HashSet一度出現したExpression.IntersectWith(HashSetIfTrue一度出現したExpression);
                 var IfTrueがLabelで終わるか = Labelで終わるか(Conditional.IfTrue);
                 if(IfTrueがLabelで終わるか==Labelで終わるか(Conditional.IfFalse)) {
                     var IfTrueまたはIfFalse外部か = this.IfTrueまたはIfFalse外部か;
@@ -340,6 +293,7 @@ partial class Optimizer {
             }
             protected override void Switch(SwitchExpression Switch){
                 this.Traverse(Switch.SwitchValue);
+                //bodyに全て同じ式が入った場合
             }
             protected override void Call(MethodCallExpression MethodCall) {
                 var MethodCall0_Method = MethodCall.Method;
