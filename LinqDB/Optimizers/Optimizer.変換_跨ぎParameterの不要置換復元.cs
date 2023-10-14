@@ -48,19 +48,23 @@ partial class Optimizer {
             return Lambda1;
         }
         protected override Expression Call(MethodCallExpression MethodCall0){
-            var MethodCall1_Object = this.TraverseNullable(MethodCall0.Object);
+            var MethodCall0_Object=MethodCall0.Object;
+            var MethodCall1_Object = this.TraverseNullable(MethodCall0_Object);
             var Method=MethodCall0.Method;
             var MethodCall0_Arguments = MethodCall0.Arguments;
             var MethodCall1_Arguments_Count = MethodCall0_Arguments.Count;
             var MethodCall1_Arguments= new Expression[MethodCall1_Arguments_Count];
             var Parameters=Method.GetParameters();
+            var 変化したか=MethodCall0_Object!=MethodCall1_Object;
             for(var a=0;a<MethodCall1_Arguments_Count;a++){
                 this.IsByRef=Parameters[a].ParameterType.IsByRef;
-                MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Arguments[a]);
+                var MethodCall0_Argument=MethodCall0_Arguments[a];
+                var MethodCall1_Argument=this.Traverse(MethodCall0_Argument);
+                if(MethodCall0_Argument!=MethodCall1_Argument) 変化したか=true;
+                MethodCall1_Arguments[a]=MethodCall1_Argument;
             }
             this.IsByRef=false;
-            if(MethodCall1_Object is null) return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
-            else return Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
+            return 変化したか?Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments):MethodCall0;
         }
         protected override Expression Traverse(Expression Expression0){
             //todo このExpressionが配置される場所がrefであったならば置換しないようにする

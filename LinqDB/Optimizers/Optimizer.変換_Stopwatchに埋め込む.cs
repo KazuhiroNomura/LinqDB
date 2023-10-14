@@ -480,18 +480,23 @@ partial class Optimizer {
                 if(Constructor is not null) {
                     TypeString(sb,New0.Type);
                     ParameterString(sb,Constructor);
+                    Debug.Assert(New0.Members is null);
                     return this.プロファイル後処理1(
                         this.プロファイル前処理(nameof(ExpressionType.New),sb.ToString()),
-                        New0.Members is not null
-                            ? Expression.New(
-                                Constructor,
-                                this.TraverseExpressions(New0.Arguments),
-                                New0.Members
-                            )
-                            : Expression.New(
-                                Constructor,
-                                this.TraverseExpressions(New0.Arguments)
-                            )
+                        Expression.New(
+                            Constructor,
+                            this.TraverseExpressions(New0.Arguments)
+                        )
+                        //New0.Members is not null
+                        //    ? Expression.New(
+                        //        Constructor,
+                        //        this.TraverseExpressions(New0.Arguments),
+                        //        New0.Members
+                        //    )
+                        //    : Expression.New(
+                        //        Constructor,
+                        //        this.TraverseExpressions(New0.Arguments)
+                        //    )
                     );
                 } else {
                     return this.プロファイル後処理1(

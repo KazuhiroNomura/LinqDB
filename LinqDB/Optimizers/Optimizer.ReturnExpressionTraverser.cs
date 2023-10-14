@@ -815,7 +815,6 @@ partial class Optimizer {
         //[SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalse")]
         //[SuppressMessage("ReSharper", "HeuristicUnreachableCode")]
         protected virtual Expression New(NewExpression New0) {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if(New0.Constructor is null)
                 return New0;
             var New0_Arguments=New0.Arguments;
@@ -823,8 +822,8 @@ partial class Optimizer {
             if(ReferenceEquals(New1_Arguments,New0_Arguments))
                 return New0;
             return New0.Members is null
-                ?Expression.New(New0.Constructor,New1_Arguments)
-                :Expression.New(New0.Constructor,New1_Arguments,New0.Members);
+                ? Expression.New(New0.Constructor,New1_Arguments)
+                : Expression.New(New0.Constructor,New1_Arguments,New0.Members);//Anonymousの場合
         }
         /// <summary>
         /// a

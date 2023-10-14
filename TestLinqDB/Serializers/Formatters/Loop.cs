@@ -3,8 +3,7 @@ namespace TestLinqDB.Serializers.Formatters;
 public class Loop : 共通
 {
     [Fact]
-    public void PrivateWrite()
-    {
+    public void PrivateWrite(){
         //this.MemoryMessageJson_Assert(new{a=default(Expressions.LoopExpression)});
         var Label_decimal = Expressions.Expression.Label(typeof(decimal), "Label_decimal");
         var Label_void = Expressions.Expression.Label("Label");

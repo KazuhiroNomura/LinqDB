@@ -1749,6 +1749,12 @@ partial class Optimizer {
                 Debug.Assert(MethodCall0.Object!=null,"MethodCall0.Object != null");
                 var MethodCall1_Object = this.Traverse(MethodCall0.Object);
                 var MethodCall1_Object_Type = MethodCall1_Object.Type;
+                if(MethodCall0_Method.Name==nameof(object.Equals))
+                    if(MethodCall1_Object_Type.IsAnonymous())
+                        return this.共通AnonymousValueTuple(MethodCall1_Object,MethodCall0_Method,MethodCall0.Arguments[0]);
+                    else if(MethodCall1_Object_Type.IsValueTuple())
+                        return this.共通AnonymousValueTuple(MethodCall1_Object,MethodCall0_Method,MethodCall0.Arguments[0]);
+                /*
                 var IsAnonymous = MethodCall1_Object_Type.IsAnonymous();
                 var IsValueTuple = MethodCall1_Object_Type.IsValueTuple();
                 if(IsAnonymous||IsValueTuple) {
@@ -1761,18 +1767,13 @@ partial class Optimizer {
                             return this.共通AnonymousValueTuple(MethodCall1_Object,MethodCall0_Method,MethodCall0.Arguments[0]);
                     }
                 }
+                */
                 //インスタンスメソッドで、仮想メソッドの場合よりインスタンスの変数の型一致していてsealedの場合それを選ぶ。
-                foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
-                    if((MethodCall1_Object_Type.IsSealed||ChildMethod.IsFinal)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
-                        MethodCall0_Method=ChildMethod;
-                        break;
-                    }
-                }
-                return Expression.Call(
-                    MethodCall1_Object,
-                    MethodCall0_Method,
-                    MethodCall1_Arguments
-                );
+                foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public))
+                    if((MethodCall1_Object_Type.IsSealed||ChildMethod.IsFinal)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method)
+                        return Expression.Call(MethodCall1_Object,ChildMethod,MethodCall1_Arguments);
+                if(MethodCall0.Object==MethodCall1_Object&&ReferenceEquals(MethodCall0.Arguments,MethodCall1_Arguments))return MethodCall0;
+                return Expression.Call(MethodCall1_Object,MethodCall0_Method,MethodCall1_Arguments);
             }
         }
         private Expression 共通AnonymousValueTuple(Expression MethodCall1_Object,MethodInfo MethodCall0_Method,Expression MethodCall0_Arguments_0) {

@@ -3,10 +3,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Reflection;
 //using System.Reflection;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Sets;
+using MessagePack.Formatters;
 using Microsoft.CSharp.RuntimeBinder;
 using static LinqDB.Optimizers.Optimizer;
 //using Binder=System.Reflection.Binder;
@@ -186,8 +188,32 @@ public class ReturnExpressionTraverser:共通{
     [Fact]public void Lambda(){
     }
     [Fact]public void ListInit(){
+        //for(var a=0; a < ListInit1_Initializers_Count; a++) {
+        //    if(ReferenceEquals(ListInit0_Initialize_Arguments,ListInit1_Initialize_Arguments)) {
+        this.共通コンパイル実行(()=>new List<int>{1,2,3});
+        //    } else {
+        var a=0;
+        this.共通コンパイル実行(()=>new List<int>{a,a});
+        //    }
+        //}
     }
     [Fact]public void Loop(){
+        //this.MemoryMessageJson_Assert(new{a=default(LoopExpression)});
+        var Label_decimal = Expression.Label(typeof(decimal), "Label_decimal");
+        var Label_void = Expression.Label("Label");
+        this.共通コンパイル実行(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Add(Expression.Constant(1m), Expression.Constant(1m)),
+                        Expression.Break(Label_decimal, Expression.Constant(1m)),
+                        Expression.Continue(Label_void)
+                    ),
+                    Label_decimal,
+                    Label_void
+                )
+            )
+        );
     }
     [Fact]public void MakeAssign(){
     }
@@ -196,14 +222,61 @@ public class ReturnExpressionTraverser:共通{
     [Fact]public void MakeUnary(){
     }
     [Fact]public void MamberAccess(){
+        //if(Member0_Expression==Member1_Expression)
+        this.共通コンパイル実行(()=>new Point(0,1).X);
+        var a=3;
+        this.共通コンパイル実行(()=>new Point(a,a).X);
     }
     [Fact]public void MemberInit(){
+        //if(MemberInit0_NewExpression==MemberInit1_NewExpression && ReferenceEquals(MemberInit0_Bindings,MemberInit1_Bindings))
+        //this.共通コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=3,Stringフィールド = 3});
+        var a=3;
+        this.共通コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=a,Stringフィールド = a.ToString()});
     }
     [Fact]public void New(){
+        //if(New0.Constructor is null)
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<int>>(
+                Expression.New(typeof(int))
+            )
+        );
+        //if(ReferenceEquals(New1_Arguments,New0_Arguments))
+        this.共通コンパイル実行(()=>new decimal(1));
+        //    ?Expression.New(New0.Constructor,New1_Arguments)
+        var a=1;
+        this.共通コンパイル実行(()=>new decimal(a,a,a,true,1));
+        //    :Expression.New(New0.Constructor,New1_Arguments,New0.Members);
+        //this.共通コンパイル実行(()=>new Point(1,2));
+        //this.共通コンパイル実行(
+        //    Expression.Lambda<Func<Point>>(
+        //        Expression.New(
+        //            typeof(Point).GetConstructors()[0],
+        //            new[]{Expression.Constant(1),Expression.Constant(2)},
+        //            new MemberInfo[]{typeof(Point).GetProperty(nameof(Point.Y))!,typeof(Point).GetProperty(nameof(Point.X))!}
+        //        )
+        //    )
+        //);
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<Point>>(
+                Expression.New(
+                    typeof(Point).GetConstructors()[0],
+                    new[]{Expression.Constant(1),Expression.Constant(2)},
+                    new MemberInfo[]{typeof(Point).GetProperty(nameof(Point.X))!,typeof(Point).GetProperty(nameof(Point.Y))!}
+                )
+            )
+        );
     }
     [Fact]public void NewArrayBound(){
+        //if(ReferenceEquals(NewArray1_Expressions,NewArray0_Expressions))
+        this.共通コンパイル実行(()=>new int[2,3]);
+        var a=3;
+        this.共通コンパイル実行(()=>new int[a,a]);
     }
     [Fact]public void NewArrayInit(){
+        //if(ReferenceEquals(NewArray1_Expressions,NewArray0_Expressions))
+        this.共通コンパイル実行(()=>new int[]{1});
+        var a=3;
+        this.共通コンパイル実行(()=>new int[]{a,a});
     }
     [Fact]public void Switch(){
         var p=Expression.Parameter(typeof(int));

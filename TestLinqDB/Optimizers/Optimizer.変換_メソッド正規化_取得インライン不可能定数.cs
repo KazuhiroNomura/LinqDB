@@ -837,6 +837,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         public sealed override string M()=>"A";
     }
     [Fact]
+    public void x(){
+        this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).ToString());
+    }
+    [Fact]
     public void Call(){
         //if(MethodCall0_Method.IsStatic){
         //}else{
@@ -852,14 +856,15 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).ToString());
         //        }
         //    }
-        ////    if(MethodCall1_Object_Type.IsAnonymousValueTuple()) {
-        ////        if(Reflection.Object.Equals_==MethodCall0_Method.GetBaseDefinition()){
-        ////            if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
-        ////                for(var a = 1;a<LNew_Arguments_Count;a++) {
-        //this.共通コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
-        //this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
-        ////            }
-        //this.共通コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
+        //    if(MethodCall1_Object_Type.IsAnonymousValueTuple()) {
+        //        if(Reflection.Object.Equals_==MethodCall0_Method.GetBaseDefinition()){
+        //            if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
+        //                for(var a = 1;a<LNew_Arguments_Count;a++) {
+        // ReSharper disable once EqualExpressionComparison
+        this.共通コンパイル実行(() => new { a = "a",b = "b" }.Equals(new { a = "a",b = "b" }));
+        this.共通コンパイル実行(() => new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        //            }
+        this.共通コンパイル実行(() => new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
         ////        }
         //    }
         //}

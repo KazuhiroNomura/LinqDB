@@ -111,6 +111,8 @@ public sealed partial class Optimizer:IDisposable{
     private static readonly ConstantExpression Constant_10D = Expression.Constant(10D);
     private static readonly ConstantExpression Constant_null = Expression.Constant(null);
     private static readonly DefaultExpression Default_void = Expression.Empty();
+    public static bool 変化したか(MethodCallExpression MethodCall,Expression Object,Generic.IEnumerable<Expression> Arguments)=>
+        MethodCall.Object==Object&&MethodCall.Arguments==Arguments;
     private static Expression Convert必要なら(Expression e,Type Type) => Type!=e.Type
         ? Expression.Convert(
             e,
