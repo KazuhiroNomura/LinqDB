@@ -45,6 +45,32 @@ public class 取得_Dictionary:共通{
         var s = new Set<int>();
         this.共通コンパイル実行(() => s.Select(p=>p+1));
     }
+    [Fact]public void Block(){
+        var p=Expression.Parameter(typeof(int));
+        var s = new Set<int>();
+        //var 判定_内部LambdaにParameterが存在するか=this._判定_内部LambdaにParameterが存在するか;
+        //var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
+        //foreach(var Variable in Block.Variables)
+        //    if(判定_内部LambdaにParameterが存在するか.実行(Block,Variable))
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Lambda<Func<int>>(p),
+                    p
+                )
+            )
+        );
+        this.共通コンパイル実行(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Lambda<Func<int>>(Expression.Constant(0)),
+                    p
+                )
+            )
+        );
+    }
     //var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
     //this.共通コンパイル実行(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
     //this.共通コンパイル実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));

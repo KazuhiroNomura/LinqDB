@@ -34,13 +34,6 @@ partial class Optimizer {
         protected override void Lambda(LambdaExpression Lambda){
             this.Traverse(Lambda.Body);
             this.DictionaryLambda.TryAdd(Lambda,default!);
-            //var Parameters=this.Parameters;
-            //var Parameters_Count=Parameters.Count;
-            //var Lambda_Parameters=Lambda.Parameters;
-            //Parameters.AddRange(Lambda_Parameters);
-            //this.Traverse(Lambda.Body);
-            //Parameters.RemoveRange(Parameters_Count,Lambda_Parameters.Count);
-            //if(!this.DictionaryLambda.ContainsKey(Lambda)) this.DictionaryLambda.Add(Lambda,default!);
         }
         private sealed class 判定_内部LambdaにParameterが存在するか:VoidExpressionTraverser_Quoteを処理しない {
             private bool 存在した;
@@ -69,16 +62,9 @@ partial class Optimizer {
             var 判定_内部LambdaにParameterが存在するか=this._判定_内部LambdaにParameterが存在するか;
             var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
             foreach(var Variable in Block.Variables)
-                if(判定_内部LambdaにParameterが存在するか.実行(Block,Variable)){
+                if(判定_内部LambdaにParameterが存在するか.実行(Block,Variable))
                     Dictionaryラムダ跨ぎParameter.Add(Variable,default!);
-                }
             base.Block(Block);
-            //var Parameters=this.Parameters;
-            //var Parameters_Count=Parameters.Count;
-            //var Block_Variables=Block.Variables;
-            //Parameters.AddRange(Block_Variables);
-            //base.Block(Block);
-            //Parameters.RemoveRange(Parameters_Count,Block_Variables.Count);
         }
         //protected override void Parameter(ParameterExpression Parameter){
         //    if(this.Parameters.Contains(Parameter))return;

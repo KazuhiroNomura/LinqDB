@@ -166,6 +166,30 @@ public class ReturnExpressionTraverser:共通{
         o.TraverseNullable(Expression.Add(@int,@int));
     }
     [Fact]public void Bindings(){
+        //for(var a=0; a < Bindings0_Count; a++) {
+        //    switch (Binding0.BindingType) {
+        //        case MemberBindingType.Assignment: {
+        //            if(Binding0_Expression==Binding1_Expression) {
+        //            } else {
+        //            }
+        //        }
+        //        case MemberBindingType.MemberBinding: {
+        //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
+        //            } else {
+        //            }
+        //        }
+        //        case MemberBindingType.ListBinding: {
+        //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
+        //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
+        //                } else {
+        //                }
+        //            }
+        //            if(変化したか1) {
+        //            } else
+        //        }
+        //        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
+        //    }
+        //}
     }
     [Fact]public void Block(){
     }
