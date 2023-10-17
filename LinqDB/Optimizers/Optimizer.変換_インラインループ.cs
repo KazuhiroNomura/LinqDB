@@ -410,7 +410,7 @@ partial class Optimizer {
             );
             var MethodCall0_Arguments = MethodCall0.Arguments;
             switch(Name) {
-                case nameof(Linq.Enumerable.Cast): {
+                case nameof(Linq.Enumerable.Cast          ): {
                     Debug.Assert(Reflection.ExtensionSet.Cast==GenericMethodDefinition||Reflection.ExtensionEnumerable.Cast==GenericMethodDefinition);
                     return this.ループ展開(
                         MethodCall0_Arguments[0],
@@ -470,7 +470,7 @@ partial class Optimizer {
                         Block_Expression
                     );
                 }
-                case nameof(Linq.Enumerable.Distinct): {
+                case nameof(Linq.Enumerable.Distinct      ): {
                     var Item_Type = 重複なし作業Type(MethodCall0);
                     var Item = Expression.Parameter(
                         Item_Type,
@@ -517,7 +517,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.Except): {
+                case nameof(Linq.Enumerable.Except        ): {
                     Debug.Assert(
                         Reflection.ExtensionSet.Except==GenericMethodDefinition||
                         Reflection.ExtensionEnumerable.Except==GenericMethodDefinition||
@@ -586,7 +586,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.GroupBy): {
+                case nameof(Linq.Enumerable.GroupBy       ): {
                     var SetGroupingSet_GenericTypeDefinition = GenericMethodDefinition.DeclaringType==typeof(ExtensionSet)
                         ? typeof(SetGroupingSet<,>)
                         : typeof(SetGroupingList<,>);
@@ -786,7 +786,7 @@ partial class Optimizer {
                         );
                     }
                 }
-                case nameof(Linq.Enumerable.Intersect): {
+                case nameof(Linq.Enumerable.Intersect     ): {
                     var first = MethodCall0_Arguments[0];
                     //Type 作業_Type;
                     //ParameterExpression 作業;
@@ -925,7 +925,7 @@ partial class Optimizer {
                         );
                     }
                 }
-                case nameof(Linq.Enumerable.OfType): {
+                case nameof(Linq.Enumerable.OfType        ): {
                     Debug.Assert(Reflection.ExtensionSet.OfType==GenericMethodDefinition||Reflection.ExtensionEnumerable.OfType==GenericMethodDefinition);
                     var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
                     return this.ループ展開(
@@ -982,7 +982,7 @@ partial class Optimizer {
                         }
                     );
                 }
-                case nameof(Linq.Enumerable.Range): {
+                case nameof(Linq.Enumerable.Range         ): {
                     Debug.Assert(Reflection.ExtensionSet.Range==GenericMethodDefinition||Reflection.ExtensionEnumerable.Range==GenericMethodDefinition);
                     var start = Expression.Parameter(
                         typeof(int),
@@ -1028,7 +1028,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.Repeat): {
+                case nameof(Linq.Enumerable.Repeat        ): {
                     Debug.Assert(Reflection.ExtensionEnumerable.Repeat==GenericMethodDefinition);
                     var Element = Expression.Parameter(
                         typeof(int),
@@ -1073,7 +1073,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.Reverse): {
+                case nameof(Linq.Enumerable.Reverse       ): {
                     Debug.Assert(Reflection.ExtensionEnumerable.Reverse==GenericMethodDefinition);
                     var Arguments_0 = MethodCall0_Arguments[0];
                     var DescList_Type = typeof(DescList<>).MakeGenericType(
@@ -1107,7 +1107,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.Select): {
+                case nameof(Linq.Enumerable.Select        ): {
                     if(Reflection.ExtensionEnumerable.Select_indexSelector==GenericMethodDefinition) {
                         var index = Expression.Parameter(
                             typeof(int),
@@ -1152,7 +1152,7 @@ partial class Optimizer {
                         );
                     }
                 }
-                case nameof(Linq.Enumerable.SelectMany): {
+                case nameof(Linq.Enumerable.SelectMany    ): {
                     if(Reflection.ExtensionEnumerable.SelectMany_indexSelector==GenericMethodDefinition) {
                         var index = Expression.Parameter(
                             typeof(int),
@@ -1254,7 +1254,7 @@ partial class Optimizer {
                         );
                     }
                 }
-                case nameof(Linq.Enumerable.Take): {
+                case nameof(Linq.Enumerable.Take          ): {
                     Debug.Assert(Reflection.ExtensionEnumerable.Take==GenericMethodDefinition);
                     var Count = Expression.Parameter(
                         typeof(int),
@@ -1285,7 +1285,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(Linq.Enumerable.TakeWhile): {
+                case nameof(Linq.Enumerable.TakeWhile     ): {
                     Debug.Assert(
                         MethodCall0_Arguments.Count==2
                         &&(
@@ -1346,7 +1346,7 @@ partial class Optimizer {
                         );
                     }
                 }
-                case nameof(Linq.Enumerable.Union): {
+                case nameof(Linq.Enumerable.Union         ): {
                     Debug.Assert(
                         MethodCall0_Arguments.Count==2
                         &&(
@@ -1420,7 +1420,7 @@ partial class Optimizer {
                         )
                     );
                 }
-                case nameof(ExtensionSet.DUnion): {
+                case nameof(ExtensionSet.DUnion           ): {
                     Debug.Assert(Reflection.ExtensionSet.DUnion==GenericMethodDefinition);
                     return Expression.Block(
                         this.ループ展開(
@@ -1436,9 +1436,8 @@ partial class Optimizer {
                             )
                         )
                     );
-                }
-                //case nameof(ExtensionSet.Having):
-                case nameof(Linq.Enumerable.Where): {
+                }            
+                case nameof(Linq.Enumerable.Where         ): {
                     if(Reflection.ExtensionEnumerable.Where_index==GenericMethodDefinition) {
                         var index = Expression.Parameter(
                             typeof(int),

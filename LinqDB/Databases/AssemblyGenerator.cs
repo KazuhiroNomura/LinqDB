@@ -562,7 +562,7 @@ public partial class AssemblyGenerator {
         var (Schema_Assign, Schema_Assign_I)=メソッド開始引数名(Schema_TypeBuilder,"Assign",MethodAttributes.Assembly,typeof(void),Types1,"source");
         var (Schema_Clear, Schema_Clear_I)=メソッド開始(Schema_TypeBuilder,"Clear",MethodAttributes.Assembly,typeof(void));
         var Schema_ToString = Schema_TypeBuilder.DefineMethod(
-            nameof(ToString),
+            nameof(object.ToString),
             MethodAttributes.Public|MethodAttributes.Virtual,
             typeof(string),
             Type.EmptyTypes

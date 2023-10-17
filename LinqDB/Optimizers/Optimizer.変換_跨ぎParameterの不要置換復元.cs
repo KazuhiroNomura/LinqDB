@@ -60,7 +60,7 @@ partial class Optimizer {
                 this.IsByRef=Parameters[a].ParameterType.IsByRef;
                 var MethodCall0_Argument=MethodCall0_Arguments[a];
                 var MethodCall1_Argument=this.Traverse(MethodCall0_Argument);
-                if(MethodCall0_Argument!=MethodCall1_Argument) 変化したか=true;
+                変化したか|=MethodCall0_Argument!=MethodCall1_Argument;
                 MethodCall1_Arguments[a]=MethodCall1_Argument;
             }
             this.IsByRef=false;
@@ -69,7 +69,7 @@ partial class Optimizer {
         protected override Expression Traverse(Expression Expression0){
             //todo このExpressionが配置される場所がrefであったならば置換しないようにする
             if(this.IsByRef){
-                if(this.DictionaryParameterExpression.ContainsKey(Expression0)) this.DictionaryParameterExpression.Remove(Expression0);
+                this.DictionaryParameterExpression.Remove(Expression0);
             }else if(this.DictionaryParameterExpression.TryGetValue(Expression0,out var Expression1)){
                 return Expression1;
             }

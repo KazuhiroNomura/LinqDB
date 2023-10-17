@@ -1851,12 +1851,11 @@ public sealed partial class Optimizer:IDisposable{
         var (Tuple,TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType);
         {
             var _=Impl_TypeBuilder.CreateType();
-            var Folder=Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
             //todo AssemblyGenerater.GenerateAssembly()の後GC.Collect()とGC.WaitForPendingFinalizers()することでファイルハンドルをファイナライザで解放させることを期待したがだダメだった
             //var t=Stopwatch.StartNew();
             //Console.Write("GenerateAssembly,");
             //new AssemblyGenerator()をフィールドに保存すると２度目以降前回のアセンブリ情報が残る
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
+            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\{Name}.dll");
             //this.AssemblyGenerator.GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
             //Console.WriteLine($"GenerateAssembly {t.ElapsedMilliseconds}ms");
         }
@@ -2401,7 +2400,6 @@ public sealed partial class Optimizer:IDisposable{
         //プロファイル=false;
         //if(プロファイル)HashSetConstant.Add(ConstantList計測);
         var Lambda04 = this._変換_WhereからLookup.実行(Lambda02);
-
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
         var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);

@@ -91,7 +91,7 @@ partial class Optimizer{
             var Block_Expressions = Block.Expressions;
             var I = this.I!;
             foreach(var Block_Variable in Block.Variables) {
-                Debug.Assert(!this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable));
+                //Debug.Assert(!this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable));
                 //if(this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
                     Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
             }

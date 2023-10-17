@@ -66,8 +66,7 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
             Deserialize.InitLocals=false;
             共通(Serialize.GetILGenerator(),Deserialize.GetILGenerator());
             Disp_TypeBuilder.CreateType();
-            var Folder=Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location);
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Folder}\MessagePackSerializer.dll");
+            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\MessagePackSerializer.dll");
         }
         void 共通(ILGenerator I0,ILGenerator I1){
             I0.Emit(OpCodes.Ldarg_0);//writer

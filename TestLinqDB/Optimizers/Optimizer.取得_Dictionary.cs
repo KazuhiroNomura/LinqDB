@@ -43,7 +43,14 @@ public class 取得_Dictionary:共通{
     }
     [Fact]public void Lambda(){
         var s = new Set<int>();
-        this.共通コンパイル実行(() => s.Select(p=>p+1));
+        //if(!this.Quote内か&&this.Lambdas.Contains(Lambda,this.ExpressionEqualityComparer))
+        //else
+        //this.共通コンパイル実行(() => s.Let(s=>s.Let(p=>new{s})));
+        //this.共通コンパイル実行(() => (1).Let(a=>a.Let((Func<int,int>)(p=>a))));
+        //this.共通コンパイル実行(() => s.Let(s=>s.Select(p=>ValueTuple.Create(s))));
+        this.共通コンパイル実行(() => s.Let(s=>s.Select((Func<int,ValueTuple<Set<int>>>)(p=>ValueTuple.Create(s)))));
+        this.共通コンパイル実行(() => s.Select((Func<int,int>)(p=>p+1)));
+        this.共通コンパイル実行(() => s.Let(s=>s.Select((Func<int,int>)(p=>p+1))));
     }
     [Fact]public void Block(){
         var p=Expression.Parameter(typeof(int));

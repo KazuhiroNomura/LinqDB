@@ -809,7 +809,8 @@ partial class Optimizer {
         /// </summary>
         /// <param name="Unary"></param>
         protected virtual void Throw(UnaryExpression Unary){
-            if(Unary.Operand is not null) this.MakeUnary(Unary);
+            //if(Unary.Operand is not null) 
+            this.MakeUnary(Unary);
         }
         /// <summary>
         /// a as Type0

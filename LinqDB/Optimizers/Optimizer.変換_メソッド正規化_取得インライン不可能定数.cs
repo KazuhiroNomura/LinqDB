@@ -107,7 +107,7 @@ partial class Optimizer {
                 this.DictionaryConstant.TryAdd(Constant0,default!);
             return Constant0;
         }
-        protected override Expression Quote(UnaryExpression Unary0){
+        protected override Expression Quote(UnaryExpression Unary0) {
             var Constant=Expression.Constant(Unary0.Operand);
             this.DictionaryConstant.TryAdd(Constant,default!);
             return Constant;

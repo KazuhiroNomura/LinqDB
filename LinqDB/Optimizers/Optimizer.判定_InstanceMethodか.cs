@@ -38,16 +38,16 @@ partial class Optimizer {
                 this.InstanceMethodか=true;
         }
 
-        protected override void Quote(UnaryExpression Unary) {
-            var Quote内か = this.Quote内か;
-            this.Quote内か=true;
-            //if(this.Dictionary_Quote_FieldBuilder.ContainsKey(Unary))
-            //    this.指定Constantが存在する=true;
-            //else
-            //    base.Quote(Unary);
-            base.Quote(Unary);
-            this.Quote内か=Quote内か;
-        }
+        //protected override void Quote(UnaryExpression Unary) {
+        //    var Quote内か = this.Quote内か;
+        //    this.Quote内か=true;
+        //    //if(this.Dictionary_Quote_FieldBuilder.ContainsKey(Unary))
+        //    //    this.指定Constantが存在する=true;
+        //    //else
+        //    //    base.Quote(Unary);
+        //    base.Quote(Unary);
+        //    this.Quote内か=Quote内か;
+        //}
         protected override void Lambda(LambdaExpression Lambda) {
             if(!this.Quote内か&&this.Lambdas.Contains(Lambda,this.ExpressionEqualityComparer))
                 this.InstanceMethodか=true;
