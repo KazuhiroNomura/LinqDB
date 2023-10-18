@@ -104,12 +104,14 @@ partial class Optimizer {
         internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
         protected override Expression Constant(ConstantExpression Constant0) {
             if(!ILで直接埋め込めるか(Constant0.Type))
-                this.DictionaryConstant.TryAdd(Constant0,default!);
+                this.DictionaryConstant[Constant0]=default!;
+                //this.DictionaryConstant.TryAdd(Constant0,default!);
             return Constant0;
         }
         protected override Expression Quote(UnaryExpression Unary0) {
             var Constant=Expression.Constant(Unary0.Operand);
-            this.DictionaryConstant.TryAdd(Constant,default!);
+            this.DictionaryConstant[Constant]=default!;
+            //this.DictionaryConstant.TryAdd(Constant,default!);
             return Constant;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,7 +8,6 @@ namespace LinqDB.Optimizers;
 partial class Optimizer {
     private sealed class 変換_跨ぎParameterの不要置換復元:ReturnExpressionTraverser_Quoteを処理しない {
         private Dictionary<Expression,Expression> DictionaryParameterExpression=new();
-
         internal 変換_跨ぎParameterの不要置換復元(作業配列 作業配列) : base(作業配列){
         }
         internal IReadOnlyDictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
@@ -23,21 +23,12 @@ partial class Optimizer {
                 base.Traverse(Assign0_Left),
                 this.Traverse(Assign0.Right)
             );
-            if(Assign0_Left is ParameterExpression Parameter&&this.Dictionaryラムダ跨ぎParameter.ContainsKey(Parameter)){
-                if(!this.DictionaryParameterExpression.TryAdd(Assign0_Left,Assign0.Right))
-                    this.DictionaryParameterExpression[Assign0_Left]=Assign0.Right;
-            }
+            if(Assign0_Left is ParameterExpression Parameter&&this.Dictionaryラムダ跨ぎParameter.ContainsKey(Parameter))
+                this.DictionaryParameterExpression[Assign0_Left]=Assign0.Right;
+            //if(Assign0_Left is ParameterExpression Parameter&&this.Dictionaryラムダ跨ぎParameter.ContainsKey(Parameter))
+            //    if(!this.DictionaryParameterExpression.TryAdd(Assign0_Left,Assign0.Right))
+            //        this.DictionaryParameterExpression[Assign0_Left]=Assign0.Right;
             return Assign;
-        }
-        protected override Expression Invoke(InvocationExpression Invocation0) {
-            //評価順序を既定と変える。
-            //a.Invoke(b)をb→aの順で評価したい。
-            var Invocation0_Arguments=Invocation0.Arguments;
-            var Invocation1_Arguments = this.TraverseExpressions(Invocation0_Arguments);
-            var Invocation0_Expression = Invocation0.Expression;
-            var Invocation1_Expression = this.Traverse(Invocation0_Expression);
-            if(ReferenceEquals(Invocation0_Arguments,Invocation1_Arguments)&&Invocation0_Expression==Invocation1_Expression) return Invocation0;
-            return Expression.Invoke(Invocation1_Expression,Invocation1_Arguments);
         }
         protected override Expression Lambda(LambdaExpression Lambda0){
             var DictionaryParameterExpression = this.DictionaryParameterExpression;
@@ -71,7 +62,7 @@ partial class Optimizer {
             if(this.IsByRef){
                 this.DictionaryParameterExpression.Remove(Expression0);
             }else if(this.DictionaryParameterExpression.TryGetValue(Expression0,out var Expression1)){
-                return Expression1;
+                Debug.Fail("ありえない");
             }
             return base.Traverse(Expression0);
         }

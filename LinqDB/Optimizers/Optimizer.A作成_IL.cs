@@ -1632,7 +1632,7 @@ partial class Optimizer{
             //foreach(var p in set)
             //    Invoke(t,Invoke(t=selector,p))
             //になる。
-            //todo Invokeは先行評価してた場合その評価順が問題になる
+            //a.Invoke(b)をb→aの順で評価したい。
             var Invocation_Expression =Invocation.Expression;
             this.Traverse(Invocation_Expression);
             Debug.Assert(Invocation_Expression.Type.GetMethod(nameof(Action.Invoke))!.IsVirtual);

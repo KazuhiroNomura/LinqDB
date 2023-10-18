@@ -548,12 +548,12 @@ partial class Optimizer {
             this.TraverseExpressions(Index.Arguments);
         }
         /// <summary>
-        /// a.Invoke(b)
+        /// Delegate.Invoke(),普通はExpression→Argumentsの評価だが先行評価の場合Arguments→Expressionにする
         /// </summary>
         /// <param name="Invocation"></param>
         protected virtual void Invoke(InvocationExpression Invocation) {
-            this.Traverse(Invocation.Expression);
             this.TraverseExpressions(Invocation.Arguments);
+            this.Traverse(Invocation.Expression);
         }
         /// <summary>
         /// Label0:

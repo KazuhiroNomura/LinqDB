@@ -25,15 +25,18 @@ partial class Optimizer {
         }
         protected override void Constant(ConstantExpression Constant){
             if(ILで直接埋め込めるか(Constant.Type))return;
-            this.DictionaryConstant.TryAdd(Constant,default!);
+            this.DictionaryConstant[Constant]=default!;
+            //this.DictionaryConstant.TryAdd(Constant,default!);
         }
         protected override void Dynamic(DynamicExpression Dynamic){
             base.Dynamic(Dynamic);
-            this.DictionaryDynamic.TryAdd(Dynamic,default!);
+            this.DictionaryDynamic[Dynamic]=default!;
+            //this.DictionaryDynamic.TryAdd(Dynamic,default!);
         }
         protected override void Lambda(LambdaExpression Lambda){
             this.Traverse(Lambda.Body);
-            this.DictionaryLambda.TryAdd(Lambda,default!);
+            this.DictionaryLambda[Lambda]=default!;
+            //this.DictionaryLambda.TryAdd(Lambda,default!);
         }
         private sealed class 判定_内部LambdaにParameterが存在するか:VoidExpressionTraverser_Quoteを処理しない {
             private bool 存在した;

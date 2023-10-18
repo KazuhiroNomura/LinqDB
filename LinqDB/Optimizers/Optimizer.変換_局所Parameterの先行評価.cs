@@ -630,16 +630,6 @@ partial class Optimizer {
             this.Traverse(Assign0.Left),
             this.Traverse(Assign0.Right)
         );
-        protected override Expression Invoke(InvocationExpression Invocation0) {
-            //評価順序を既定と変える。
-            //a.Invoke(b)をb→aの順で評価したい。
-            var Invocation0_Arguments=Invocation0.Arguments;
-            var Invocation1_Arguments = this.TraverseExpressions(Invocation0_Arguments);
-            var Invocation0_Expression = Invocation0.Expression;
-            var Invocation1_Expression = this.Traverse(Invocation0_Expression);
-            if(ReferenceEquals(Invocation0_Arguments,Invocation1_Arguments)&&Invocation0_Expression==Invocation1_Expression) return Invocation0;
-            return Expression.Invoke(Invocation1_Expression,Invocation1_Arguments);
-        }
         protected override Expression Lambda(LambdaExpression Lambda0){
             var ListスコープParameter = this.ListスコープParameter;
             var ListスコープParameter_Count = ListスコープParameter.Count;

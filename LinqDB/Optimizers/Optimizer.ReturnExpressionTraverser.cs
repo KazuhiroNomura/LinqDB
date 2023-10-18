@@ -512,10 +512,10 @@ partial class Optimizer {
         /// <param name="Invocation0"></param>
         /// <returns></returns>
         protected virtual Expression Invoke(InvocationExpression Invocation0) {
-            var Invocation0_Expression=Invocation0.Expression;
-            var Invocation1_Expression=this.Traverse(Invocation0_Expression);
             var Invocation0_Arguments=Invocation0.Arguments;
             var Invocation1_Arguments=this.TraverseExpressions(Invocation0_Arguments);
+            var Invocation0_Expression=Invocation0.Expression;
+            var Invocation1_Expression=this.Traverse(Invocation0_Expression);
             if(Invocation0_Expression==Invocation1_Expression&&ReferenceEquals(Invocation0_Arguments,Invocation1_Arguments)) return Invocation0;
             return Expression.Invoke(Invocation1_Expression,Invocation1_Arguments);
         }
