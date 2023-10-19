@@ -141,6 +141,7 @@ public static class Extension{
         if(Formatter!=null){
             Write(ref writer,(IMemoryPackFormatter)Formatter,value);
         } else{
+            //Debug.Fail($"{type.FullName} Formatterがない");
             writer.WriteValue(type,value);
         }
     }

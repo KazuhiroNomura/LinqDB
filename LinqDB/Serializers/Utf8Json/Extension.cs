@@ -140,7 +140,7 @@ internal static class Extension{
         
         
     public static void Write(this ref Writer writer,Type type,object value,O Resolver){
-        var Formatter=Resolver.GetFormatterDynamic(type);
+        var Formatter=Resolver.PrivateGetFormatterDynamic(type);
         var Serialize=Formatter.GetType().GetMethod("Serialize");
         Debug.Assert(Serialize is not null);
         var Objects3=new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
@@ -188,7 +188,7 @@ internal static class Extension{
         return value;
     }
     public static object Read(this ref Reader reader,Type type,O Resolver){
-        var Formatter=Resolver.GetFormatterDynamic(type);
+        var Formatter=Resolver.PrivateGetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
         var Objects2=new object[2];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
@@ -200,4 +200,20 @@ internal static class Extension{
     }
     public static Serializer Serializer(this O Resolver)=>
         (Serializer)Resolver.GetFormatter<Serializer>();
+    private static object PrivateGetFormatterDynamic(this O Resolver,Type type){
+        //var Interfaces=type.GetInterfaces();
+        //foreach(var Interface in Interfaces)
+        //    if(RegisterInterface(Interface,typeof(Sets.IGrouping<,>))){
+        //        return Resolver.GetFormatterDynamic(Interface);
+        //    }else if(RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>))){
+        //        return Resolver.GetFormatterDynamic(Interface);
+        //    }else if(RegisterInterface(Interface,typeof(Sets.IEnumerable<>))){
+        //        return Resolver.GetFormatterDynamic(Interface);
+        //    }else if(RegisterInterface(Interface,typeof(IEnumerable<>))){
+        //        return Resolver.GetFormatterDynamic(Interface);
+        //    }
+        return Resolver.GetFormatterDynamic(type);
+        //static bool RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition)=>
+        //    type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition;
+    }
 }

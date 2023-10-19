@@ -62,7 +62,8 @@ partial class Optimizer {
             if(this.IsByRef){
                 this.DictionaryParameterExpression.Remove(Expression0);
             }else if(this.DictionaryParameterExpression.TryGetValue(Expression0,out var Expression1)){
-                Debug.Fail("ありえない");
+                return Expression1;
+                //Debug.Fail("ありえない");
             }
             return base.Traverse(Expression0);
         }

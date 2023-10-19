@@ -386,12 +386,12 @@ public sealed partial class Optimizer:IDisposable{
         /// <summary>
         /// 比較するときに可視パラメーター
         /// </summary>
-        internal readonly Generic.IList<ParameterExpression> スコープParameters;
+        internal readonly Generic.List<ParameterExpression> スコープParameters;
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="スコープParameters"></param>
-        public ExpressionEqualityComparer(Generic.IList<ParameterExpression> スコープParameters){
+        public ExpressionEqualityComparer(Generic.List<ParameterExpression> スコープParameters){
             this.スコープParameters=スコープParameters;
             this.ObjectComparer=new(this);
         }

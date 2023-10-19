@@ -83,7 +83,7 @@ public class Container:IDisposable{
                     var OneCatalog=Catalog取得(OneTableType.FullName!);
                     var ManyTableType=Method.GetParameters()[0].ParameterType;
                     var ManyCatalog=Catalog取得(ManyTableType.FullName!);
-                    referential_constraints.IsAdded(
+                    referential_constraints.Add(
                         new referential_constraints(
                             ManyCatalog,
                             "constraint_schema",
@@ -102,7 +102,7 @@ public class Container:IDisposable{
                 if(!typeof(Sets.Schema).IsAssignableFrom(Schema_Property.PropertyType)){
                     continue;
                 }
-                Schemas.IsAdded(system_Schema);
+                Schemas.Add(system_Schema);
                 foreach(var TableView_Property in Schema_Property.PropertyType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
                     var TableView_Type=TableView_Property.PropertyType;
                     var ElementType=TableView_Type.GetGenericArguments()[0];
@@ -114,10 +114,9 @@ public class Container:IDisposable{
                     switch(Category){
                         case".Tables":{
                             var Table=new Table(TableView_Property,system_Schema);
-                            Tables.IsAdded(Table);
-                            foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
-                                TableColumns.IsAdded(new TableColumn(TableColumn_Property,Table));
-                            }
+                            Tables.Add(Table);
+                            foreach(var TableColumn_Property in ElementType.GetProperties(BindingFlags.Instance|BindingFlags.Public))
+                                TableColumns.Add(new TableColumn(TableColumn_Property,Table));
                             break;
                         }
                         case".Views":{

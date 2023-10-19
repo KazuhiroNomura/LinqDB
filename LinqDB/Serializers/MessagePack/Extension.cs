@@ -216,6 +216,22 @@ internal static class Extension{
         (Serializer)Resolver.GetFormatter<Serializer>()!;
     public static IMessagePackFormatter<T>? GetFormatter<T>(this O Resolver)=>
         Resolver.Resolver.GetFormatter<T>();
-    public static object? GetFormatterDynamic(this O Resolver,Type type)=>
-        Resolver.Resolver.GetFormatterDynamic(type);
+    public static object? GetFormatterDynamic(this O Resolver,Type type){
+        //var Interfaces=type.GetInterfaces();
+        //foreach(var Interface in Interfaces)
+        //    if(RegisterInterface(Interface,typeof(Sets.IGrouping<,>)))
+        //        return Resolver.Resolver.GetFormatterDynamic(Interface);
+        //foreach(var Interface in Interfaces)
+        //    if(RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>)))
+        //        return Resolver.Resolver.GetFormatterDynamic(Interface);
+        //foreach(var Interface in Interfaces)
+        //    if(RegisterInterface(Interface,typeof(Sets.IEnumerable<>)))
+        //        return Resolver.Resolver.GetFormatterDynamic(Interface);
+        //foreach(var Interface in Interfaces)
+        //    if(RegisterInterface(Interface,typeof(System.Collections.Generic.IEnumerable<>)))
+        //        return Resolver.Resolver.GetFormatterDynamic(Interface);
+        return Resolver.Resolver.GetFormatterDynamic(type);
+        //static bool RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition)=>
+        //    type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition;
+    }
 }

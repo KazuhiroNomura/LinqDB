@@ -499,7 +499,7 @@ partial class Optimizer {
                         argument => Expression.IfThenElse(
                             Expression.Call(
                                 Item,
-                                Item_Type.GetMethod(nameof(Set<int>.IsAdded),Instance_NonPublic_Public)!,
+                                Item_Type.GetMethod(nameof(Set<int>.IsAdded))!,
                                 argument
                             ),
                             ループの内部処理(argument),

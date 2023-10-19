@@ -3,8 +3,8 @@
 //using System.Text;
 //using System.Threading.Tasks;
 namespace LinqDB.Sets;
-public interface IEnumerable:System.Collections.IEnumerable
-{
+public interface IEnumerable:System.Collections.IEnumerable{
+    int Count=>(int)this.LongCount;
     long LongCount { get; }
     //Collections.IEnumerator GetEnumerator();
 }

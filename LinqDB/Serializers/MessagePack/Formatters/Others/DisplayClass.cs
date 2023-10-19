@@ -11,9 +11,9 @@ using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 internal static class DisplayClass{
-    private static void Serialize<T>(ref Writer writer, T value, MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Serialize(ref writer, value, options);
+    private static void Serialize<T>(ref Writer writer, T value,O options) => options.Resolver.GetFormatter<T>()!.Serialize(ref writer, value, options);
     public static readonly MethodInfo MethodSerialize = typeof(DisplayClass).GetMethod(nameof(Serialize), BindingFlags.Static|BindingFlags.NonPublic)!;
-    private static T Deserialize<T>(ref Reader reader, MessagePackSerializerOptions options) => options.Resolver.GetFormatter<T>()!.Deserialize(ref reader, options);
+    private static T Deserialize<T>(ref Reader reader,O options) => options.Resolver.GetFormatter<T>()!.Deserialize(ref reader, options);
     public static readonly MethodInfo MethodDeserialize = typeof(DisplayClass).GetMethod(nameof(Deserialize), BindingFlags.Static|BindingFlags.NonPublic)!;
     public static readonly MethodInfo WriteArrayHeader = typeof(Writer).GetMethod(nameof(Writer.WriteArrayHeader), new[] { typeof(int) })!;
     public static readonly MethodInfo ReadArrayHeader = typeof(Reader).GetMethod(nameof(Reader.ReadArrayHeader))!;
@@ -25,8 +25,8 @@ internal static class DisplayClass{
 public class DisplayClass<T>:IMessagePackFormatter<T>{
     public static readonly DisplayClass<T> Instance=new();
     
-    private delegate void delegate_Serialize(ref Writer writer,T value,MessagePackSerializerOptions options);
-    private delegate T delegate_Deserialize(ref Reader reader,MessagePackSerializerOptions options);
+    private delegate void delegate_Serialize(ref Writer writer,T value,O options);
+    private delegate T delegate_Deserialize(ref Reader reader,O options);
     private readonly delegate_Serialize DelegateSerialize;
     private readonly delegate_Deserialize DelegateDeserialize;
     private DisplayClass(){
@@ -36,7 +36,7 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
         Types3[0]=typeof(Writer).MakeByRefType();
         Types2[0]=typeof(Reader).MakeByRefType();
         Types3[1]=typeof(T);
-        Types2[1]=Types3[2]=typeof(MessagePackSerializerOptions);
+        Types2[1]=Types3[2]=typeof(O);
         var ctor=typeof(T).GetConstructors()[0];
         var Fields=typeof(T).GetFields(BindingFlags.Public|BindingFlags.Instance);
         var Fields_Length=Fields.Length;
@@ -96,9 +96,9 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
             I1.Emit(OpCodes.Ret);
         }
     }
-    public void Serialize(ref Writer writer,T? value,MessagePackSerializerOptions options){
+    public void Serialize(ref Writer writer,T? value,O options){
         if(writer.TryWriteNil(value)) return;
         this.DelegateSerialize(ref writer,value,options);
     }
-    public T Deserialize(ref Reader reader,MessagePackSerializerOptions options)=>reader.TryReadNil()?default!:this.DelegateDeserialize(ref reader,options);
+    public T Deserialize(ref Reader reader,O options)=>reader.TryReadNil()?default!:this.DelegateDeserialize(ref reader,options);
 }

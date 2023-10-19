@@ -24,8 +24,6 @@ internal static class FormatterResolver {
         return null;
     }
     public static object? GetRegisteredFormatter(Type type) {
-        
-        
         if(type.IsArray){
             GetRegisteredFormatter(type.GetElementType());
             return null;
@@ -41,6 +39,7 @@ internal static class FormatterResolver {
         }else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)){
             Formatter=Register(type,typeof(Formatters.ExpressionT<>));
         }else if(type.IsGenericType) {
+            
             if(type.IsAnonymous()){
                 Formatter=Register(type,typeof(Formatters.Others.Anonymous<>));
             }else if(type.IsInterface){
@@ -50,6 +49,23 @@ internal static class FormatterResolver {
                 }else if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null){
                 }
             }else{
+                //var Interfaces=type.GetInterfaces();
+                //foreach(var Interface in Interfaces)
+                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IGrouping<,>),typeof(Formatters.Sets.IGrouping<,>))) is not null){
+                //        type=Interface;goto 発見;
+                //    }
+                //foreach(var Interface in Interfaces)
+                //    if((Formatter=RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping<,>))) is not null){
+                //        type=Interface;goto 発見;
+                //    }
+                //foreach(var Interface in Interfaces)
+                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IEnumerable<>),typeof(Formatters.Sets.IEnumerable<>))) is not null){
+                //        type=Interface;goto 発見;
+                //    }
+                //foreach(var Interface in Interfaces)
+                //    if((Formatter=RegisterInterface(Interface,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null){
+                //        type=Interface;goto 発見;
+                //    }
                 var type0=type;
                 do{
                     if((Formatter=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)break;
@@ -60,11 +76,12 @@ internal static class FormatterResolver {
                     if((Formatter=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)break;
                     if((Formatter=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)break;
                     do{
-                        if(type0==typeof(object))break;
+                        if(type0.BaseType is null)break;
                         type0=type0.BaseType!;
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
             }
+            //発見:
             foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
         }
         return Formatter;
@@ -73,21 +90,14 @@ internal static class FormatterResolver {
         
         
         
-        static object? RegisterInterface(Type type,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
-            Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface||FormatterGenericInterfaceDefinition.IsInterface);
-            if(type.IsGenericType&&type.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
-                return RegisterGeneric(type,FormatterGenericInterfaceDefinition);
-            foreach(var Interface in type.GetInterfaces())
-                if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition)
-                    return RegisterGeneric(Interface,FormatterGenericInterfaceDefinition);
-            return null;
-            static object RegisterGeneric(Type type0,Type FormatterGenericTypeDefinition){
-                var GenericArguments=type0.GetGenericArguments();
-                var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
-                var Instance=FormatterGenericType.GetValue("Instance");
-                Serializer.Register.MakeGenericMethod(type0).Invoke(null,new object?[]{Instance});
-                return Instance;
-            }
+        static object? RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){
+            Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface);
+            if(!type0.IsGenericType||type0.GetGenericTypeDefinition()!=検索したいキーGenericInterfaceDefinition)return null;
+            var GenericArguments=type0.GetGenericArguments();
+            var FormatterGenericType=FormatterGenericInterfaceDefinition.MakeGenericType(GenericArguments);
+            var Instance=FormatterGenericType.GetValue("Instance");
+            Serializer.Register.MakeGenericMethod(type0).Invoke(null,new object?[]{Instance});
+            return Instance;
         }
         static object? RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition){
             Debug.Assert(type0.IsGenericType);

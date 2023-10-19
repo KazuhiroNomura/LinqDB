@@ -11,7 +11,7 @@ using T = System.Object;
 using Reflection;
 public class Object :IMessagePackFormatter<T>{
     public static readonly Object Instance = new();
-    private static void Write(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
+    private static void Write(ref Writer writer, T? value,O Resolver){
         writer.WriteArrayHeader(2);
         var type = value!.GetType();
         writer.WriteType(type);
@@ -38,18 +38,19 @@ public class Object :IMessagePackFormatter<T>{
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
             default:{
                 var Formatter = Resolver.GetFormatterDynamic(type)!;
+                //nullだとテストで引っかかるようにする。
                 Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
                 break;
             }
         }
 
     }
-    internal static void WriteNullable(ref Writer writer, T? value, MessagePackSerializerOptions Resolver){
+    internal static void WriteNullable(ref Writer writer, T? value,O Resolver){
         if (writer.TryWriteNil(value)) return;
         Write(ref writer, value, Resolver);
     }
-    public void Serialize(ref Writer writer, T? value, MessagePackSerializerOptions Resolver)=>WriteNullable(ref writer, value, Resolver);
-    private static T Read(ref Reader reader, MessagePackSerializerOptions Resolver){
+    public void Serialize(ref Writer writer, T? value,O Resolver)=>WriteNullable(ref writer, value, Resolver);
+    private static T Read(ref Reader reader,O Resolver){
         T value;
         var count = reader.ReadArrayHeader();
         Debug.Assert(count==2);
@@ -79,6 +80,6 @@ public class Object :IMessagePackFormatter<T>{
 
         return value;
     }
-    internal static T? ReadNullable(ref Reader reader, MessagePackSerializerOptions Resolver) => reader.TryReadNil() ? null : Read(ref reader, Resolver);
-    public T Deserialize(ref Reader reader, MessagePackSerializerOptions Resolver) => ReadNullable(ref reader, Resolver)!;
+    internal static T? ReadNullable(ref Reader reader,O Resolver) => reader.TryReadNil() ? null : Read(ref reader, Resolver);
+    public T Deserialize(ref Reader reader,O Resolver) => ReadNullable(ref reader, Resolver)!;
 }

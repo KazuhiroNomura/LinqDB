@@ -280,10 +280,17 @@ public class Test_Set2:共通 {
         this.MemoryMessageJson_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
     }
     [Fact]public void Serialize21(){
-        var expected=new TestSet<SerializeEntity>{new SerializeEntity{Name = "A"}};
+        var expected=new TestSet<SerializeEntity>{new(){Name = "A"}};
+        var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
+        var actual = global::Utf8Json.JsonSerializer.Deserialize<TestSet<SerializeEntity>>(bytes);
+        Assert.Equal(expected,actual);
+    }
+    [Fact]public void Serialize22(){
+        var expected=new Set<SerializeEntity>{new(){Name = "A"}};
         var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
         var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
         Assert.Equal(expected,actual);
+        this.MemoryMessageJson_Assert(new { a = expected });
     }
     [Fact]public void Serialize3(){
         var expected=new SerializeSchema{Name = "Na"};

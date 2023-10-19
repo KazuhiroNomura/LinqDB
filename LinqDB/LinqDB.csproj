@@ -41,6 +41,8 @@
   <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
+    <Compile Remove="Serializers\MessagePack\FormatterResolver - コピー.cs" />
+    <Compile Remove="Serializers\Utf8Json\FormatterResolver - コピー.cs" />
     <Compile Remove="Serializers\Utf8Json\Formatters\Sets\IGroupingCollection`2.cs" />
     <Compile Remove="Sets\IGroupingSet`2.cs" />
     <Compile Remove="Sets\ImmutableGroupingSet`2.cs" />
@@ -51,6 +53,7 @@
   <ItemGroup>
     <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />
     <None Remove="Optimizers\Optimizer.変換_跨ぎParameterの先行評価.txt" />
+    <None Remove="Serializers\MemoryPack\FormatterResolver.txt" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Lokad.ILPack" Version="0.2.0" />
