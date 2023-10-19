@@ -3,6 +3,7 @@ using System.Diagnostics;
 using LinqDB.Sets;
 using System;
 using System.Runtime.CompilerServices;
+
 namespace LinqDB.Enumerables;
 using Generic=Collections.Generic;
 
@@ -10,7 +11,7 @@ using Generic=Collections.Generic;
 /// <typeparam name="T">リスト内の要素の型。</typeparam>
 [DebuggerTypeProxy(typeof(SetDebugView<>))]
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
-public partial class AscList<T>:Generic.IEnumerable<T>{
+public partial class AscList<T>:Generic.ICollection<T>{
     [MemoryPack.MemoryPackInclude]
     protected readonly Generic.List<T>List;
     public AscList(){
@@ -36,7 +37,14 @@ public partial class AscList<T>:Generic.IEnumerable<T>{
     [MessagePack.IgnoreMember]
     public long LongCount=> this.List.Count;
 
+    bool Generic.ICollection<T>.IsReadOnly => throw new NotImplementedException();
+
     public virtual Generic.List<T>.Enumerator GetEnumerator()=>this.List.GetEnumerator();
     Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator()=>this.List.GetEnumerator();
     Collections.IEnumerator Collections.IEnumerable.GetEnumerator()=>this.List.GetEnumerator();
+
+    void Generic.ICollection<T>.Clear()=>this.List.Clear();
+    bool Generic.ICollection<T>.Contains(T item)=>this.List.Contains(item);
+    void Generic.ICollection<T>.CopyTo(T[] array,int arrayIndex)=>this.List.CopyTo(array,arrayIndex);
+    bool Generic.ICollection<T>.Remove(T item)=>this.List.Remove(item);
 }

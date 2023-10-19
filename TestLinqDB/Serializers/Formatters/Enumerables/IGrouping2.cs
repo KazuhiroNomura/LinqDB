@@ -1,18 +1,9 @@
-﻿using G = System.Linq;
-using LinqDB.Enumerables;
-//using Microsoft.SqlServer.Dac.Deployment;
-//using System.Diagnostics;
-//using System.Runtime.Serialization;
-
-//using static Microsoft.FSharp.Core.ByRefKinds;
+﻿using G = LinqDB.Enumerables;
 
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
-public class IGrouping2:共通 {
-    [Fact]public void Serialize(){
-        //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(G.IGrouping<int,double>)});
-        var input=new GroupingList<int,double>(1);
-        for(var a=0;a<10;a++)input.Add(a);
-        this.MemoryMessageJson_Assert(new{a=(G.IGrouping<int,double>)input});
+public class IGrouping2:CollectionTest<IGrouping<int,double>>{
+    public IGrouping2():base(new G.GroupingList<int,double>(1)){
+        var Data=(G.GroupingList<int,double>)this.Data;
+        for(var a=0;a<10;a++)Data.Add(a);
     }
 }

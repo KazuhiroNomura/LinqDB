@@ -1,12 +1,9 @@
 ﻿
 using LinqDB.Enumerables;
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
-public class GroupingList2:共通 {
-    [Fact]public void Serialize(){
-        //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(GroupingList<int,double>)});
-        var input=new GroupingList<int,double>(1);
-        for(var a=0;a<10;a++)input.Add(a);
-        this.MemoryMessageJson_Assert(new{a=input});
+public class GroupingList2:CollectionTest<GroupingList<int,double>>{
+    public GroupingList2():base(new(1)){
+        var Data=this.Data;
+        for(var a=0;a<10;a++)Data.Add(a);
     }
 }

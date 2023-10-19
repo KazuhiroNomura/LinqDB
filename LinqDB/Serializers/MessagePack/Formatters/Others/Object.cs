@@ -39,6 +39,9 @@ public class Object :IMessagePackFormatter<T>{
             default:{
                 var Formatter = Resolver.GetFormatterDynamic(type)!;
                 //nullだとテストで引っかかるようにする。
+                if(Formatter==null){
+
+                }
                 Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
                 break;
             }

@@ -2,10 +2,12 @@
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Reflection;
 using Utf8Json;
 using Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Helpers;
+using SerializableAttribute=System.SerializableAttribute;
 namespace LinqDB.Serializers.Utf8Json;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
@@ -114,17 +116,12 @@ internal static class Extension{
         }
         return Parameters;
     }
-    
-    
-    
+
     
     public static void Write<T>(this ref Writer writer,IJsonFormatter<T>Formatter,T value,O Resolver)=>
         Formatter.Serialize(ref writer,value,Resolver);
-
-
-
-    //public static void Write<T>(this ref Writer writer,IJsonFormatter Formatter,T value,O Resolver)=>
-    //    Formatter.Serialize(ref writer,value,Resolver);
+        
+        
     public static void Write<T>(this ref Writer writer,T value,O Resolver)=>
         Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
         
@@ -133,7 +130,7 @@ internal static class Extension{
 
 
 
-
+        
         
         
         
@@ -153,6 +150,8 @@ internal static class Extension{
     
     
     
+
+
     
     public static T Read<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
         Formatter.Deserialize(ref reader,Resolver);
@@ -161,32 +160,22 @@ internal static class Extension{
 
     public static T Read<T>(this ref Reader reader,O Resolver)=>
         Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public static object Read(this ref Reader reader,IJsonFormatter Formatter,O Resolver){
-        var Deserialize=Formatter.GetType().GetMethod("Deserialize");
-        Debug.Assert(Deserialize is not null);
-        var Objects2=new object[2];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
-        Objects2[0]=reader;
-        Objects2[1]=Resolver;
-        var value=Deserialize.Invoke(Formatter,Objects2)!;
-        reader=(Reader)Objects2[0];
-        return value;
-    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     public static object Read(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.PrivateGetFormatterDynamic(type);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
@@ -198,22 +187,51 @@ internal static class Extension{
         reader=(Reader)Objects2[0];
         return value;
     }
+    
+    
+    
+    
+    
+    
+    
     public static Serializer Serializer(this O Resolver)=>
         (Serializer)Resolver.GetFormatter<Serializer>();
     private static object PrivateGetFormatterDynamic(this O Resolver,Type type){
-        //var Interfaces=type.GetInterfaces();
-        //foreach(var Interface in Interfaces)
-        //    if(RegisterInterface(Interface,typeof(Sets.IGrouping<,>))){
-        //        return Resolver.GetFormatterDynamic(Interface);
-        //    }else if(RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>))){
-        //        return Resolver.GetFormatterDynamic(Interface);
-        //    }else if(RegisterInterface(Interface,typeof(Sets.IEnumerable<>))){
-        //        return Resolver.GetFormatterDynamic(Interface);
-        //    }else if(RegisterInterface(Interface,typeof(IEnumerable<>))){
-        //        return Resolver.GetFormatterDynamic(Interface);
-        //    }
+        if(!type.IsArray&&type.GetCustomAttribute(typeof(SerializableAttribute))==null){
+            if(type.IsGenericType){
+                var GenericTypeDefinition=type.GetGenericTypeDefinition();
+                if(GenericTypeDefinition==typeof(Enumerables.GroupingList<,>)
+                   ||GenericTypeDefinition==typeof(Sets.GroupingSet<,>)
+                   ||GenericTypeDefinition==typeof(Sets.SetGroupingList<,>)
+                   ||GenericTypeDefinition==typeof(Sets.SetGroupingSet<,>)
+                   ||GenericTypeDefinition==typeof(Sets.Set<,,>)
+                   ||GenericTypeDefinition==typeof(Sets.Set<,>)
+                   ||GenericTypeDefinition==typeof(Sets.Set<>))
+                    goto 発見;
+            }
+            Type? type0;
+            if((type0=type.GetInterface(CommonLibrary.Generic_ICollection1_FullName))!=null){
+                type=type0;
+            }else if((type0=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName))!=null){
+                type=type0;
+            }
+        }
+        発見: ;
+        /*
+        var Interfaces = type.GetInterfaces();
+        foreach(var Interface in Interfaces)
+            if(RegisterInterface(Interface,typeof(Sets.IGrouping<,>))) {
+                return Resolver.GetFormatterDynamic(Interface);
+            } else if(RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>))) {
+                return Resolver.GetFormatterDynamic(Interface);
+            } else if(RegisterInterface(Interface,typeof(Sets.IEnumerable<>))) {
+                return Resolver.GetFormatterDynamic(Interface);
+            } else if(RegisterInterface(Interface,typeof(IEnumerable<>))) {
+                return Resolver.GetFormatterDynamic(Interface);
+            }
+        static bool RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition) =>
+            type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition;
+            */
         return Resolver.GetFormatterDynamic(type);
-        //static bool RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition)=>
-        //    type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition;
     }
 }

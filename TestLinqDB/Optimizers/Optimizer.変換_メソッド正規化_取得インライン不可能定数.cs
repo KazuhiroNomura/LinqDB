@@ -22,9 +22,12 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
             )
         );
     }
-    [Fact]
-    public void Quote(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[3].AsQueryable().Select(p=>p));
+    private static int F(Expression<Func<int>> f){
+        var m=f.Compile();
+        return m();
+    }
+    [Fact]public void Quote(){
+        this.共通コンパイル実行(()=>F(()=>3));
     }
     private static int int_int_int(int a,int b){
         var r=1;
@@ -562,6 +565,8 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+    }
+    [Fact]public void Call_GroupBy2(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
@@ -687,9 +692,13 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].ToArray().ToArray());
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>((System.Collections.Generic.IEnumerable<int>)new int[1]).ToArray());
     }
-    [Fact]public void Call_Except(){
+    [Fact]public void Call_Except0(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+    }
+    [Fact]public void Call_Except1(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
+    }
+    [Fact]public void Call_Except2(){
         this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet()));
     }
     static Set<int> CreateSet0()=>CreateSet();
@@ -711,8 +720,14 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]public void Call_UnionBy(){
         var a=new[]{3,5,7};
         var b=new[]{4,6,8};
-        var c=a.UnionBy(b,k=>k/2).ToArray();
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o));
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1));
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default));
+    }
+    [Fact]public void Call_UnionBy_Anonymous(){
+        var a=new[]{3,5,7};
+        var b=new[]{4,6,8};
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1)});
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default) });
     }
     static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
     static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;

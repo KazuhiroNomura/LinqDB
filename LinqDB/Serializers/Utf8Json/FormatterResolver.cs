@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using LinqDB.Helpers;
 using Utf8Json;
+using Utf8Json.Formatters;
 
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
@@ -25,21 +27,20 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
 
     public IJsonFormatter<T> GetFormatter<T>(){
         var type=typeof(T);
+        if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null)return null!;
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var value))return(IJsonFormatter<T>)value;
-
 
         if(type.IsDisplay())
             return Return(Formatters.Others.DisplayClass<T>.Instance);
 
 
 
-
-        if(typeof(Delegate).IsAssignableFrom(type))
-            return(IJsonFormatter<T>)typeof(Formatters.Others.Delegate<>).MakeGenericType(type).GetValue("Instance");
-        if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
-            return(IJsonFormatter<T>)typeof(Formatters.ExpressionT<>).MakeGenericType(type).GetValue("Instance");
-        if(type.IsGenericType) {
-            IJsonFormatter<T>? Formatter=null;
+        IJsonFormatter<T>? Formatter=null;
+        if(typeof(Delegate).IsAssignableFrom(type)){
+            Formatter=(IJsonFormatter<T>)typeof(Formatters.Others.Delegate<>).MakeGenericType(type).GetValue("Instance");
+        }else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)){
+            Formatter=(IJsonFormatter<T>)typeof(Formatters.ExpressionT<>).MakeGenericType(type).GetValue("Instance");
+        }else if(type.IsGenericType) {
             if(type.IsAnonymous()){
                 
             }else if(type.IsInterface){
@@ -49,42 +50,51 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
                 }else if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null){
                 }
             }else{
-                //var Interfaces=type.GetInterfaces();
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IGrouping<,>),typeof(Formatters.Sets.IGrouping<,>))) is not null){
-                //        return Formatter!;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping<,>))) is not null){
-                //        return Formatter!;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IEnumerable<>),typeof(Formatters.Sets.IEnumerable<>))) is not null){
-                //        return Formatter!;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null){
-                //        return Formatter!;
-                //    }
                 var type0=type;
                 do{
-                    if((Formatter=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)break;
+                    if((Formatter=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)goto 発見;
                     do{
                         if(type0.BaseType is null)break;
                         type0=type0.BaseType!;
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
+
+                {
+                    var ICollection1=type.GetInterface(CommonLibrary.Generic_ICollection1_FullName);
+                    if(ICollection1!=null){
+                        var GenericArguments=ICollection1.GetGenericArguments();
+                        var GenericArguments_0=GenericArguments[0];
+                        var FormatterGenericType=typeof(GenericCollectionFormatter<,>).MakeGenericType(GenericArguments_0,type);
+                        Formatter=(IJsonFormatter<T>)Activator.CreateInstance(FormatterGenericType)!;
+
+
+                        return Formatter;
+                    }
+                }
+                {
+                    var IEnumerable1=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
+                    if(IEnumerable1!=null){
+                        var GenericArguments=IEnumerable1.GetGenericArguments();
+                        var GenericArguments_0=GenericArguments[0];
+                        var FormatterGenericType=typeof(InterfaceEnumerableFormatter<>).MakeGenericType(GenericArguments_0);
+                        Formatter=(IJsonFormatter<T>)Activator.CreateInstance(FormatterGenericType)!;
+
+                        
+                        return Formatter;
+                    }
+                }
+
+                発見: ;
             }
 
-            return Formatter!;
         }
-        return null!;
+        return Formatter!;
         IJsonFormatter<T> Return(object Formatter0){
             var result=(IJsonFormatter<T>)Formatter0;
             this.DictionaryTypeFormatter.Add(typeof(T),result);

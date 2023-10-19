@@ -1,7 +1,4 @@
 ﻿using System.Diagnostics;
-using S = LinqDB.Sets;
-using E = System.Collections.Generic;
-using Q = System.Linq;
 //using Microsoft.SqlServer.Dac.Deployment;
 //using System.Diagnostics;
 //using System.Runtime.Serialization;

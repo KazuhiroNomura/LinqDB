@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
+
 using LinqDB.Sets;
-using Microsoft.CSharp.RuntimeBinder;
 //using System.Reflection;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
@@ -13,11 +13,6 @@ public class 判定_InstanceMethodか:共通{
         return m();
     }
     [Fact]public void Quote(){
-        var Quote=Expression.Quote(
-            Expression.Lambda<Func<int>>(
-                Expression.Constant(0)
-            )
-        );
         this.共通コンパイル実行(()=>F(()=>3));
     }
     [Fact]public void Block(){

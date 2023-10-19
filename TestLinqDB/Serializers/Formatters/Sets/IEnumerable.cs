@@ -1,6 +1,4 @@
-﻿using S = LinqDB.Sets;
-using E = System.Collections.Generic;
-using Q = System.Linq;
+﻿using G = LinqDB.Sets;
 using LinqDB.Sets;
 //using Microsoft.SqlServer.Dac.Deployment;
 //using System.Diagnostics;
@@ -9,10 +7,6 @@ using LinqDB.Sets;
 //using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace TestLinqDB.Serializers.Formatters.Sets;
-public class IEnumerable:共通{
-    [Fact]
-    public void Serialize(){
-        this.MemoryMessageJson_Assert(new{a=(S.IEnumerable)new Set<Tables.Table> {new(1)}});
-        this.MemoryMessageJson_Assert(new{a=default(S.IEnumerable)});
-    }
+public class IEnumerable:CollectionTest<G.IEnumerable>{
+    public IEnumerable():base(new Set<Tables.Table>{new(1)}){}
 }

@@ -164,55 +164,36 @@ public class Test_Set2:共通 {
         public override void Deserialize(ref global::MemoryPack.MemoryPackReader reader,scoped ref Set<T>? value) {}
     }
     [Fact]public void Serialize00(){
-        var expected=new Set<int>{0,1,2,3};
-        //{
-        //    //var 下位0=Set3<int>.Instance;
-        //    //global::MemoryPack.MemoryPackFormatter<Set<int>> 上位0=下位0;
-        //    //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
-        //    var s = this.MemoryPack;
-        //    var bytes = s.Serialize((object)expected);
-        //    dynamic a = new NonPublicAccessor(s);
-        //    //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
-        //    //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<TestSet<int>,int>();
-        //    var output = s.Deserialize<object>(bytes);
+        var expected = new Set<int> { 0,1,2,3 };
+        {
+            //var 下位0=Set3<int>.Instance;
+            //global::MemoryPack.MemoryPackFormatter<Set<int>> 上位0=下位0;
+            //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
+            var s = this.MemoryPack;
+            var bytes = s.Serialize((object)expected);
+            dynamic a = new NonPublicAccessor(s);
+            //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
+            //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<TestSet<int>,int>();
+            var output = s.Deserialize<object>(bytes);
 
-        //}
-        //{
-        //    Set2<int> 下位0=default;
-        //    Formatter2<Set<int>> 上位0=下位0;
-        //    var 下位1=LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance;
-        //    global::MemoryPack.Formatters.MemoryFormatter<Set<int>> 上位1 = 下位1;
-        //    var Instance = LinqDB.Serializers.MemoryPack.Formatters.Set0<Set<int>,int>.Instance;
-        //    var type = Instance.GetType();
-        //    var BaseType = type.BaseType;
-        //    var bb = BaseType.IsAssignableFrom(type);
-        //    var bc = type.IsAssignableFrom(BaseType);
-        //    //x=LinqDB.Serializers.MemoryPack.Formatters.Set0<Set<int>,int>.Instance;
-        //    var s = this.MessagePack;
-        //    var bytes = s.Serialize(expected);
-        //    dynamic a = new NonPublicAccessor(s);
-        //    global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
-        //    //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<TestSet<int>,int>();
-        //    var json = global::MessagePack.MessagePackSerializer.ConvertToJson(bytes,a.Options);
-        //    var output = s.Deserialize<TestSet<int>>(bytes);
-        //}
-        //{
-        //    var b=this.Utf8Json.Serialize<object>(expected);
-        //    var json = Encoding.UTF8.GetString(b);
-        //    var o=this.Utf8Json.Deserialize<object>(b);
-        //}
-        //{
-        //    var b=this.MessagePack.Serialize<object>(expected);
-        //    dynamic a = new NonPublicAccessor(this.MessagePack);
-        //    var json = MessagePackSerializer.ConvertToJson(b,a.Options);
-        //    var o=this.MessagePack.Deserialize<object>(b);
-        //}
-        //{
-        //    //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.CollectionFormatter<int>());
-        //    //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.InterfaceCollectionFormatter<int>());
-        //    var b=this.MemoryPack.Serialize<object>(expected);
-        //    var o=this.MemoryPack.Deserialize<object>(b);
-        //}
+        }
+        {
+            var b = this.Utf8Json.Serialize<object>(expected);
+            var json = Encoding.UTF8.GetString(b);
+            var o = this.Utf8Json.Deserialize<object>(b);
+        }
+        {
+            var b = this.MessagePack.Serialize<object>(expected);
+            dynamic a = new NonPublicAccessor(this.MessagePack);
+            var json = global::MessagePack.MessagePackSerializer.ConvertToJson(b,a.Options);
+            var o = this.MessagePack.Deserialize<object>(b);
+        }
+        {
+            //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.CollectionFormatter<int>());
+            //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.InterfaceCollectionFormatter<int>());
+            var b = this.MemoryPack.Serialize<object>(expected);
+            var o = this.MemoryPack.Deserialize<object>(b);
+        }
         this.MemoryMessageJson_Assert(expected,output=>{
             var i=expected.LongCount;
             var o=output.LongCount;

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using LinqDB.Helpers;
 using MemoryPack;
+using MemoryPack.Formatters;
 
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
@@ -39,7 +40,6 @@ internal static class FormatterResolver {
         }else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)){
             Formatter=Register(type,typeof(Formatters.ExpressionT<>));
         }else if(type.IsGenericType) {
-            
             if(type.IsAnonymous()){
                 Formatter=Register(type,typeof(Formatters.Others.Anonymous<>));
             }else if(type.IsInterface){
@@ -49,39 +49,48 @@ internal static class FormatterResolver {
                 }else if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null){
                 }
             }else{
-                //var Interfaces=type.GetInterfaces();
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IGrouping<,>),typeof(Formatters.Sets.IGrouping<,>))) is not null){
-                //        type=Interface;goto 発見;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping<,>))) is not null){
-                //        type=Interface;goto 発見;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Sets.IEnumerable<>),typeof(Formatters.Sets.IEnumerable<>))) is not null){
-                //        type=Interface;goto 発見;
-                //    }
-                //foreach(var Interface in Interfaces)
-                //    if((Formatter=RegisterInterface(Interface,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null){
-                //        type=Interface;goto 発見;
-                //    }
                 var type0=type;
                 do{
-                    if((Formatter=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)break;
-                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)break;
+                    if((Formatter=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)goto 発見;
+                    if((Formatter=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)goto 発見;
                     do{
                         if(type0.BaseType is null)break;
                         type0=type0.BaseType!;
                     }while(!type0.IsGenericType);
                 } while(typeof(object)!=type0);
+                //Set<T>とは違った型引数付コレクションがあったときに使われる
+                {
+                    var ICollection1=type.GetInterface(CommonLibrary.Generic_ICollection1_FullName);
+                    if(ICollection1!=null){
+                        var GenericArguments=ICollection1.GetGenericArguments();
+                        var GenericArguments_0=GenericArguments[0];
+                        var FormatterGenericType=typeof(GenericCollectionFormatter<,>).MakeGenericType(type,GenericArguments_0);
+                        Formatter=Activator.CreateInstance(FormatterGenericType);
+                        Serializer.Register.MakeGenericMethod(type).Invoke(null,new object?[]{Formatter});
+                        GetRegisteredFormatter(GenericArguments_0);
+                        return Formatter;
+                    }
+                }
+                {
+                    var IEnumerable1=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
+                    if(IEnumerable1!=null){
+                        var GenericArguments=IEnumerable1.GetGenericArguments();
+                        var GenericArguments_0=GenericArguments[0];
+                        var FormatterGenericType=typeof(InterfaceEnumerableFormatter<>).MakeGenericType(GenericArguments_0);
+                        Formatter=Activator.CreateInstance(FormatterGenericType);
+                        Serializer.Register.MakeGenericMethod(IEnumerable1).Invoke(null,new object?[]{Formatter});
+                        GetRegisteredFormatter(GenericArguments_0);
+                        return Formatter;
+                    }
+                }
+                return Formatter;                
+                発見: ;
             }
-            //発見:
             foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
         }
         return Formatter;
