@@ -9,7 +9,7 @@ using Reader=MemoryPackReader;
 using T=Expressions.ParameterExpression;
 public class Parameter:MemoryPackFormatter<T> {
     public static readonly Parameter Instance=new();
-    internal static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
+    private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T? value) where TBufferWriter:IBufferWriter<byte>{
         var Serializer=writer.Serializer();
         var index0=Serializer.Parameters.LastIndexOf(value);
         writer.WriteVarInt(index0);

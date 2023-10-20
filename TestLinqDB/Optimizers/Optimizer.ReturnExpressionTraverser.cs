@@ -169,31 +169,31 @@ public class ReturnExpressionTraverser:共通{
         //    switch (Binding0.BindingType) {
         //        case MemberBindingType.Assignment: {
         //            if(Binding0_Expression==Binding1_Expression) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=3});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=3});
         //            } else {
         var a=3;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=a*a});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=a*a});
         //            }
         //        }
         //        case MemberBindingType.MemberBinding: {
         //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //            } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            }
         //        }
         //        default: {
         //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
         //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {1}}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {1}}});
         //                } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {a*a}}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {a*a}}});
         //                }
         //            }
         //            if(変化したか1) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            } else
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //        }
         //        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
         //    }
@@ -280,7 +280,7 @@ public class ReturnExpressionTraverser:共通{
             var Lambda1=Expression.Lambda<Func<object>>(Dynamic1);
             var actual1=Lambda1.Compile()();
             //Assert.Equal(expected,actual);
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda1);
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(Lambda1);
         }
         void 共通1<T>(Func<T,bool>  オブジェクト, object a){
             var binder=Binder.Invoke(
@@ -335,7 +335,7 @@ public class ReturnExpressionTraverser:共通{
             var M=Lambda.Compile();
             var actual=M();
             Assert.Equal(expected,actual);
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda);
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(Lambda);
         }
     }
     [Fact]public void ExpressionEqual(){

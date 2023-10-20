@@ -58,5 +58,5 @@ public class Method:MemoryPackFormatter<T>{
         return method;
     }
     internal static T? ReadNullable(ref Reader reader)=>reader.TryReadNil()?null:Read(ref reader);
-    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=ReadNullable(ref reader);
 }

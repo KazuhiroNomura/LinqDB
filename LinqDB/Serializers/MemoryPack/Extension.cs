@@ -18,15 +18,17 @@ public static class Extension{
     public static void WriteNodeType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Expressions.Expression Expression)where TBufferWriter :IBufferWriter<byte> =>writer.WriteVarInt((byte)Expression.NodeType);
     public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadVarIntByte();
     public static bool TryWriteNil<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,object? value)where TBufferWriter:IBufferWriter<byte>{
-        if(value is not null)return false;
-        writer.WriteNullObjectHeader();
-        return true;
-    }
-    public static bool TryReadNil(this ref Reader reader){
-        if(reader.PeekIsNull()){
-            reader.Advance(1);
+        if(value is null){
+            writer.WriteVarInt(0);
             return true;
         }
+        writer.WriteVarInt(1);
+        return false;
+    }
+    public static bool TryReadNil(this ref Reader reader){
+        var header=reader.ReadVarIntByte();
+        if(header==0) return true;
+        System.Diagnostics.Debug.Assert(header==1);
         return false;
     }
     

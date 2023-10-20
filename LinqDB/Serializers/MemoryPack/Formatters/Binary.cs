@@ -174,8 +174,8 @@ public class Binary:MemoryPackFormatter<T> {
                 value=Expressions.Expression.Assign(left,right);break;
             }
             case Expressions.ExpressionType.Coalesce: {
-                var (left, right)=ReadLeftRight(ref reader);
-                value=Expressions.Expression.Coalesce(left,right);break;
+                var (left, right,conversion)=ReadLeftRightLambda(ref reader);
+                value=Expressions.Expression.Coalesce(left,right,conversion);break;
             }
             case Expressions.ExpressionType.Add: {
                 var (left, right, method)=ReadLeftRightMethod(ref reader);

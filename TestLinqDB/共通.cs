@@ -10,6 +10,7 @@ using static LinqDB.Optimizers.Optimizer;
 using LinqDB.Remote.Clients;
 using System.Net;
 using LinqDB;
+using Microsoft.VisualStudio.TestPlatform.Utilities;
 //using Utf8Json2 = LinqDB.Serializers.Utf8Json;
 //using MessagePack2 = LinqDB.Serializers.MessagePack;
 //using MemoryPack2 = LinqDB.Serializers.MemoryPack;
@@ -57,16 +58,6 @@ public abstract class 共通{
         this.MemoryMessageJsonObject(input);
     }
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=false,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
-    //シリアライズ。色んな方法でやってデシリアライズ成功するか
-    //実行。結果が一致するから
-    protected void MemoryMessageJson_TExpressionObject<T>(T input) where T:Expressions.Expression{
-        this.MemoryMessageJson_Assert<T>(null!,Assert.Null);
-        this.MemoryMessageJson_Assert<Expressions.Expression>(null!,Assert.Null);
-        this.MemoryMessageJson_Assert<object>(null!,Assert.Null);
-        this.MemoryMessageJson_Assert(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.MemoryMessageJson_Assert<Expressions.Expression>(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        this.MemoryMessageJson_Assert<object>(input,output=>Assert.Equal(input,(Expressions.Expression)output,this.ExpressionEqualityComparer));
-    }
     protected void 共通コンパイル実行<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T t){
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
@@ -127,40 +118,7 @@ public abstract class 共通{
         Optimizer.IsInline=true;
         Optimizer.CreateDelegate(input)();
     }
-    private void 共通MemoryMessageJson_TExpressionObject_コンパイル実行<T>(Expressions.LambdaExpression input,Func<Delegate,T> x){
-        var Optimizer=this.Optimizer;
-        var 標準=input.Compile();
-        var expected0=x(標準);
-        Optimizer.IsInline=false;
-        var expected1=x(Optimizer.CreateDelegate(input));
-        Assert.Equal(expected0,expected1,this.Comparer);
-        Optimizer.IsInline=true;
-        var expected2=x(Optimizer.CreateDelegate(input));
-        Assert.Equal(expected0,expected2,this.Comparer);
-        this.MemoryMessageJson_Assert(input,共通);
-        this.MemoryMessageJson_Assert<Expressions.Expression>(input,共通);
-        this.MemoryMessageJson_Assert<object>(input,共通);
-        void 共通(object output){
-            Assert.Equal(expected0,x(input.Compile()),this.Comparer);
-            var outputLambda=(Expressions.LambdaExpression)output;
-            Assert.Equal(input,outputLambda,this.ExpressionEqualityComparer);
-            var actual0=x(outputLambda.Compile());
-            Assert.Equal(expected0,actual0,this.Comparer);
-            Assert.Equal(expected1,actual0,this.Comparer);
-            Assert.Equal(expected2,actual0,this.Comparer);
-            Optimizer.IsInline=false;
-            var actual1=x(Optimizer.CreateDelegate(outputLambda));
-            Assert.Equal(expected0,actual1,this.Comparer);
-            Assert.Equal(expected1,actual1,this.Comparer);
-            Assert.Equal(expected2,actual1,this.Comparer);
-            Optimizer.IsInline=true;
-            var actual2=x(Optimizer.CreateDelegate(outputLambda));
-            Assert.Equal(expected0,actual2,this.Comparer);
-            Assert.Equal(expected1,actual2,this.Comparer);
-            Assert.Equal(expected2,actual2,this.Comparer);
-        }
-    }
-    protected void MemoryMessageJson_TExpressionObject_コンパイル実行(Expressions.Expression<Action> inputLambda){
+    protected void MemoryMessageJson_Expression_コンパイル実行(Expressions.Expression<Action> inputLambda){
         var Optimizer=this.Optimizer;
         var 標準=inputLambda.Compile();
         標準();
@@ -181,7 +139,7 @@ public abstract class 共通{
             Optimizer.CreateDelegate(inputLambda)();
         }
     }
-    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input){
+    protected void MemoryMessageJson_Expression_コンパイルリモート実行<TResult>(Expressions.Expression<Func<TResult>> input){
         const int receiveTimeout=1000;
         var port=Interlocked.Increment(ref ポート番号);
         var Optimizer=this.Optimizer;
@@ -202,7 +160,7 @@ public abstract class 共通{
         //this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<TResult>)Delegate)());
     }
     //リモート実行できるか。
-    protected void MemoryMessageJson_TExpressionObject_コンパイル実行<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T t){
+    protected void MemoryMessageJson_Expression_コンパイルリモート実行<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T t){
         const int receiveTimeout=1000;
         var port=Interlocked.Increment(ref ポート番号);
         using var Server=new Server<T>(t,1,port);
@@ -215,7 +173,7 @@ public abstract class 共通{
         Server.Close();
         //this.共通MemoryMessageJson_TExpressionObject_コンパイル実行(input,Delegate=>((Func<T,TResult>)Delegate)(t));
     }
-    //protected void MemoryMessageJson_TExpressionObject<T>(T input) where T : Expressions.Expression?
+    //protected void MemoryMessageJson_Assert全パターン<T>(T input) where T : Expressions.Expression?
     //{
     //    //protected void 共通Expressions.Expression<T>(Expressions.Expressions.Expression<Func<T>> input){
     //    //this.共通object1(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
@@ -272,4 +230,44 @@ public abstract class 共通{
     protected static Reflection.MethodInfo GetMethod<T>(Expressions.Expression<Func<T>> e)=>((Expressions.MethodCallExpression)e.Body).Method;
     protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(Serializer).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
     protected static Reflection.MethodInfo M(Expressions.Expression<Action> f)=>((Expressions.MethodCallExpression)f.Body).Method;
+    protected void MemoryMessageJson_Assert全パターン<T>(T? input)where T:Expressions.Expression{
+        共通0(input);
+        共通1(input);
+        void 共通0(T? input0){
+            var a=input0;
+            var b=(Expressions.Expression?)input0;
+            var c=(object?)input0;
+            var d=default(T);
+            var e=(Expressions.Expression?)default(T);
+            var f=(object?)default(T);
+            this.MemoryMessageJson_Assert(a,output => Assert.Equal(a,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(b,output => Assert.Equal(b,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(c);
+            this.MemoryMessageJson_Assert(d,Assert.Null);
+            this.MemoryMessageJson_Assert(e,Assert.Null);
+            this.MemoryMessageJson_Assert(f,Assert.Null);
+            this.MemoryMessageJson_Assert(new{a});
+            this.MemoryMessageJson_Assert(new{b});
+            this.MemoryMessageJson_Assert(new{c});
+            this.MemoryMessageJson_Assert(new{d});
+            this.MemoryMessageJson_Assert(new{e});
+            this.MemoryMessageJson_Assert(new{f});
+            this.MemoryMessageJson_Assert(new{a,b,c,d,e,f});
+        }
+        void 共通1(T? input0){
+            var a=new[]{input0,input0};
+            var b=new Expressions.Expression?[]{input0,input0};
+            var c=new object?[]{input0,input0};
+            var d=new T?[]{default,default};
+            var e=new Expressions.Expression?[]{default,default};
+            var f=new object?[]{default,default};
+            this.MemoryMessageJson_Assert(a,output=>Assert.Equal(a,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(b,output=>Assert.Equal(b,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(c);
+            this.MemoryMessageJson_Assert(d,output=>Assert.Equal(d,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(e,output=>Assert.Equal(e,output,this.ExpressionEqualityComparer!));
+            this.MemoryMessageJson_Assert(f);
+            this.MemoryMessageJson_Assert(new{a,b,c,d,e,f});
+        }
+    }
 }

@@ -11,12 +11,12 @@ namespace TestLinqDB.Optimizers;
 public class 変換_メソッド正規化_取得インライン不可能定数:共通{
     [Fact]
     public void Constant(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int>>(
                 Expression.Constant(0)
             )
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<decimal>>(
                 Expression.Constant(0m)
             )
@@ -41,13 +41,13 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         var ConversionInt32=
             Expression.Lambda<Func<int,int>>(Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
         var Method_int=GetMethod(()=>int_int_int(1,1));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.MakeBinary(NodeType,ParameterInt32,ParameterInt32,false,Method_int,ConversionInt32),
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.MakeBinary(NodeType,ParameterInt32,ParameterInt32,false,Method_int),
                 ParameterInt32
@@ -85,7 +85,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]
     public void Try(){
         var ParameterInt32=Expression.Parameter(typeof(int),"int32");
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     Expression.AddAssign(ParameterInt32,ParameterInt32),
@@ -97,7 +97,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatchFinally(
                     ParameterInt32,
@@ -105,7 +105,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ),ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -117,7 +117,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
             )
         );
         var ex=Expression.Parameter(typeof(Exception),"ex");
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     ParameterInt32,
@@ -129,7 +129,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     ParameterInt32,
@@ -145,7 +145,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -156,7 +156,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     ParameterInt32,
@@ -168,7 +168,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     ParameterInt32,
@@ -184,7 +184,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
                     ParameterInt32,
@@ -196,7 +196,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryFault(
                     ParameterInt32,
@@ -205,7 +205,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.TryFault(
                     ParameterInt32,
@@ -217,7 +217,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     private void 共通Unary(ExpressionType NodeType){
         var ParameterInt32=Expression.Parameter(typeof(int),"int32");
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.MakeUnary(NodeType,ParameterInt32,typeof(int)),
                 ParameterInt32
@@ -233,20 +233,20 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]
     public void PreIncrementAssign()=>this.共通Unary(ExpressionType.PreIncrementAssign);
     [Fact]
-    public void Lambda()=>this.MemoryMessageJson_TExpressionObject_コンパイル実行(Expression.Lambda<Action>(Expression.Default(typeof(void))));
+    public void Lambda()=>this.MemoryMessageJson_Expression_コンパイル実行(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     [Fact]
     public void Not(){
         //this.共通Unary(ExpressionType.Not);
         //if(Unary1_Operand.NodeType==ExpressionType.Not)return ((UnaryExpression)Unary1_Operand).Operand;
         //if(Unary0_Operand==Unary1_Operand)return Unary0;
         var ParameterInt32=Expression.Parameter(typeof(int),"int32");
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.Not(Expression.Not(ParameterInt32)),
                 ParameterInt32
             ),1
         );
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.Not(Expression.Not(Expression.Not(ParameterInt32))),
                 ParameterInt32
@@ -510,7 +510,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         }
     }
     [Fact]public void Convert(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expression.Lambda<Func<sbyte>>(
                 Expression.Convert(
                     Expression.Constant(1000),
@@ -520,7 +520,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         );
     }
     [Fact]public void ConvertChecked(){
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(
                 Expression.Lambda<Func<sbyte>>(
                     Expression.ConvertChecked(
                         Expression.Constant(100),
@@ -532,114 +532,114 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]public void Call_Average(){
         var s=new int[10];
         //if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Select(p=>(decimal)p).Average());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Select(p=>(decimal)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Select(p=>(double)p).Average());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Select(p=>(double)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDecimal==MethodCall0_GenericMethodDefinition)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Select(p=>(decimal?)p).Average());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Select(p=>(decimal?)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Select(p=>(double?)p).Average());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>{1}.Select(p=>(decimal)p).Average());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Select(p=>(double?)p).Average());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>{1}.Select(p=>(decimal)p).Average());
     }
     private static System.Collections.Generic.IEnumerable<T> そのまま<T>(System.Collections.Generic.IEnumerable<T> i)=>i;
     [Fact]public void Call_Any(){
         var s=new int[10];
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Select(p=>p+p).Any());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.GroupJoin(s,o=>o,i=>i,(o,i)=>new{o,i}).Any());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>そのまま(s).Any());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Except(s).Any());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>s.Any(p=>p==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Select(p=>p+p).Any());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupJoin(s,o=>o,i=>i,(o,i)=>new{o,i}).Any());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>そのまま(s).Any());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Except(s).Any());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Any(p=>p==0));
     }
     [Fact]public void Call_Contains(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].Contains(0));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>((System.Collections.Generic.IEnumerable<int>)new List<int>()).Contains(0));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new decimal[10].Contains(0));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new decimal[10].Select(p=>(object)p).Contains(0m));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].Contains(0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>((System.Collections.Generic.IEnumerable<int>)new List<int>()).Contains(0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new decimal[10].Contains(0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new decimal[10].Select(p=>(object)p).Contains(0m));
     }
     [Fact]public void Call_GroupBy0(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
     }
     [Fact]public void Call_GroupBy1(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
     }
     [Fact]public void Call_GroupBy2(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p*p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p,EqualityComparer<decimal>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupBy(p=>new{p}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupBy(p=>new{p},p=>p*p));
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector_resultSelector(){
         //if(MethodCall1_Arguments.Count==3) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
         //}
         //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},(key,g)=>key.p+g.Count()));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
         //}
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector_elementSelector_resultSelector(){
         //if(MethodCall1_Arguments.Count==4) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p,p=>p+p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
         //}
         //if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p},p=>p+p,(key,g)=>key.p+g.Count()));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>p,p=>p+p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>p,p=>p+p,Anonymous((int key,System.Collections.Generic.IEnumerable<int>g)=>key+g.Count())));
         //}
     }
     [Fact]public void Call_GroupBy_GroupBy_keySelector(){
         //if(MethodCall1_Arguments.Count==2) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>new{p}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>new{p}));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupBy(p=>(decimal)p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupBy(p=>(decimal)p));
         //}
     }
     [Fact]public void Call_GroupJoin(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupJoin(new int[10],(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,System.Collections.Generic.IEnumerable<int>,int>)((o,i)=>o+i.Count())));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupJoin(new int[10],(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupJoin(new int[10],o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupJoin(new Set<int>(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,System.Collections.Generic.IEnumerable<int>,int>)((o,i)=>o+i.Count())));
     }
     private static Set<int>CreateSet()=>new();
     [Fact]public void Call_Intersect(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Intersect(CreateSet()).Where(p=>p==0));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Intersect(CreateSet()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Intersect(CreateSet()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Intersect(CreateSet().Where(p=>true)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Intersect(CreateSet(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Intersect(CreateSet()).Where(p=>p==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Intersect(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Intersect(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Intersect(CreateSet().Where(p=>true)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Intersect(CreateSet(),EqualityComparer<int>.Default));
     }
     private static List<int>CreateEnum()=>new();
     [Fact]public void Call_Join(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().Join(CreateEnum(),o=>o,i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(Func<int,int,int>)((o,i)=>o+i)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(Func<int,int,int>)((o,i)=>o+i)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().Join(CreateEnum(),o=>o,i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),o=>o,i=>i,(Func<int,int,int>)((o,i)=>o+i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),o=>o,(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),i=>i,(Func<int,int,int>)((o,i)=>o+i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Join(CreateSet(),(Func<int,int>)(o=>o),(Func<int,int>)(i=>i),(Func<int,int,int>)((o,i)=>o+i),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_OfType(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new string[]{"A","B","C"}.OfType<object>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new object[]{"ABC",1,3.0}.OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new string[]{"A","B","C"}.OfType<object>());
     }
     [Fact]public void Call_Select(){
         //this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
@@ -651,55 +651,55 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //        switch(MethodCall1_MethodCall_Method.Name) {
         //            case nameof(Enumerable.SelectMany): {
         //                if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Select(p=>p+p));
         //                }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany((o,index)=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany((o,index)=>CreateSet().SelectMany(i=>CreateSet())).Select(p=>p+p));
         //            }
         //            case nameof(Enumerable.Select): {
         //                if(MethodCall1_MethodCall_Arguments_1 is LambdaExpression selector1) {
         //                    if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>p+p).Select(p=>p+p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>p+p).Select(p=>p+p));
         //                                } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>p+p).Select(Anonymous((int p)=>p+p)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>p+p).Select(Anonymous((int p)=>p+p)));
         //                    }
         //                } else {
         //                    if(MethodCall1_Arguments_1 is LambdaExpression selector0) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(p=>p+p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(p=>p+p));
         //                                } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(Anonymous((int p)=>p+p)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(Anonymous((int p)=>p-p)).Select(Anonymous((int p)=>p+p)));
         //                    }
         //                }
         //            }
         //        }
         //    }
         //    if(MethodCall1_Arguments_1 is LambdaExpression MethodCall1_selector&&MethodCall1_selector.Parameters[0]==MethodCall1_selector.Body) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>p));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>p)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>p+p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>p));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(Anonymous((int p)=>p)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>p+p));
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select((p,index)=>p+index));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select((p,index)=>p+index));
     }
     [Fact]public void Call_Single(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].Single(p=>true));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].Single());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].Single(p=>true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].Single());
     }
     [Fact]public void Call_SingleDefault(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].SingleOrDefault(p=>true));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].SingleOrDefault(p=>true,1));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].SingleOrDefault());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].SingleOrDefault(p=>true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].SingleOrDefault(p=>true,1));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].SingleOrDefault());
     }
     [Fact]public void Call_ToArray(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new int[1].ToArray().ToArray());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>((System.Collections.Generic.IEnumerable<int>)new int[1]).ToArray());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[1].ToArray().ToArray());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>((System.Collections.Generic.IEnumerable<int>)new int[1]).ToArray());
     }
     [Fact]public void Call_Except0(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_Except1(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_Except2(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet()));
     }
     static Set<int> CreateSet0()=>CreateSet();
     static Set<int> CreateSet1()=>CreateSet();
@@ -709,61 +709,61 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         var x=typeof(Set<int>).IsInheritInterface(typeof(LinqDB.Sets.IEnumerable<>));
             //.GetInterfaces().GetInterface(typeof(LinqDB.Sets.IEnumerable<int>).FullName);
 
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet0()).Union(CreateSet1()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateEnum()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateEnum()).Union(CreateSet()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateSet()).Union(CreateEnum()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateEnum()).Union(CreateSet()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet0()).Union(CreateSet1()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateEnum()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany(o=>CreateEnum()).Union(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany(o=>CreateSet()).Union(CreateEnum()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateEnum()).Union(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Union(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
     }
     [Fact]public void Call_UnionBy(){
         var a=new[]{3,5,7};
         var b=new[]{4,6,8};
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default));
     }
     [Fact]public void Call_UnionBy_Anonymous(){
         var a=new[]{3,5,7};
         var b=new[]{4,6,8};
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1)});
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default) });
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1)});
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=CreateSet().UnionBy(CreateSet(),o=>o+1,EqualityComparer<int>.Default) });
     }
     static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
     static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
     [Fact]public void Call_SelectMany(){
         //if(MethodCall0_Arguments.Count==2) {
         //    if(SelectMany is not null)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).SelectMany(i=>CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).SelectMany(i=>CreateSet()));
         //this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).SelectMany(i=>CreateSet()));
         //    if(MethodCall1_Arguments_1 is LambdaExpression selector&&ループ展開可能メソッドか(selector.Body,out _)) {
         //        if(OuterPredicate is not null) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
         //        }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
         //    } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().ToArray()));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int o)=>CreateSet())));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().ToArray()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous((int o)=>CreateSet())));
         //} else {
         //    if(Reflection.ExtensionEnumerable.SelectMany_collectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany(o=>CreateEnum(),(o,i)=>o+i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany(o=>CreateEnum(),(o,i)=>o+i));
         //    } else if(Reflection.ExtensionEnumerable.SelectMany_indexCollectionSelector_resultSelector==MethodCall0_GenericMethodDefinition) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i));
         //    }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o+i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o+i));
         //    if(MethodCall1_Arguments_1 is LambdaExpression collectionSelector) {
         //        if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o*i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet(),(o,i)=>o*i));
         //        }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet(),Anonymous((int o,int i)=>o*i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet(),Anonymous((int o,int i)=>o*i)));
         //    }else{
         //        if(MethodCall1_Arguments_2 is LambdaExpression resultSelector) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),(o,i)=>o*i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),(o,i)=>o*i));
         //        }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),Anonymous((int o,int i)=>o*i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous<int,Set<int>>(o=>CreateSet()),Anonymous((int o,int i)=>o*i)));
         //        if(indexSelectorか) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((Func<int,int,System.Collections.Generic.IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany((Func<int,System.Collections.Generic.IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((Func<int,int,System.Collections.Generic.IEnumerable<int>>)((o,index)=>CreateEnum()),Anonymous((int o,int i)=>o*i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany((Func<int,System.Collections.Generic.IEnumerable<int>>)(o=>CreateSet()),(o,i)=>o+i));
     }
     [Fact]public void Call_SelectMany_共通(){
         //if(ループ展開可能メソッドか(InputBody,out var MethodCall)) {
@@ -771,67 +771,67 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //        case nameof(Enumerable.Where): {
         //            if(MethodCall.Arguments[1] is LambdaExpression predicate) {
         //                if(OuterPredicate is not null) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
         //                }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
         //                if(OtherPredicate is not null) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0&&o==3)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0&&o==3)));
         //                }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(Anonymous((int i)=>i==0))));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(Anonymous((int i)=>i==0))));
         //        }
         //        default: {
         //            for(var a = 1;a<MethodCall.Arguments.Count;a++) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(i=>o==0)));
         //            }
         //            if(ループ展開可能メソッドか(MethodCall.Arguments[0],out var MethodCall2)){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==9).Select(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==9).Select(i=>o==0)));
         //            }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().OfType<object>()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().OfType<object>()));
         //            }
         //        }
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(p=>p+1)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Select(p=>p+1)));
     }
     [Fact]public void Call_Where(){
         //if(Reflection.ExtensionEnumerable.Where_index=MethodCall0_GenericMethodDefinition)break;
         //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
         //    switch(MethodCall1_MethodCall_Method.Name) {
         //        case nameof(ExtensionSet.Except):
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Except(CreateSet()).Where(p => true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Except(CreateSet()).Where(p => true));
         //        case nameof(ExtensionSet.Intersect):
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Intersect(CreateSet()).Where(p => true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Intersect(CreateSet()).Where(p => true));
         //        case nameof(ExtensionSet.Union):
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Union(CreateSet()).Where(p => true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Union(CreateSet()).Where(p => true));
         //        case nameof(ExtensionSet.Select): {
         //            if(MethodCall1_Arguments_1 is LambdaExpression predicate) {
         //                if(MethodCall1_MethodCall.Arguments[1] is LambdaExpression selector) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>new{p}).Where(p=>true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>new{p}).Where(p=>true));
         //                }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(Anonymous((int p)=>new{p})).Where(p=>true));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(Anonymous((int p)=>new{p})).Where(p=>true));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>p*p).Where(Anonymous((int p)=>true)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>p*p).Where(Anonymous((int p)=>true)));
         //        case nameof(ExtensionSet.SelectMany): {
         //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Where(p=>p==4));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).Where(p=>p==4));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i).Where(p=>p==4));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((o,index)=>CreateEnum(),(o,i)=>o+i).Where(p=>p==4));
         //        case nameof(ExtensionSet.Where): {
         //            if(Reflection.ExtensionEnumerable.Where_index==MethodCall1_MethodCall_Method.GetGenericMethodDefinition())break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Where((int p,int index)=>p==1).Where(p=>p==1));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Where((int p,int index)=>p==1).Where(p=>p==1));
         //            if(MethodCall1_Arguments_1 is LambdaExpression predicate外) {
         //                if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Where(p=>p==1).Where(p=>p==2));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Where(p=>p==1).Where(p=>p==2));
         //                }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(p=>p==2));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(p=>p==2));
         //                }
         //            }else{
         //                if(MethodCall1_MethodCall0_Arguments[1]is LambdaExpression predicate内) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Where(p=>p==1).Where(Anonymous((int p)=>p==2)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Where(p=>p==1).Where(Anonymous((int p)=>p==2)));
         //                }else{
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(Anonymous((int p)=>p==2)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Where(Anonymous((int p)=>p==1)).Where(Anonymous((int p)=>p==2)));
         //                }
         //            }
         //        }
@@ -853,7 +853,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     }
     [Fact]
     public void x(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new ValueTuple<int,int>(1,2).ToString());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new ValueTuple<int,int>(1,2).ToString());
     }
     [Fact]
     public void Call(){
@@ -862,13 +862,13 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //    if(IsAnonymous||IsValueTuple) {
         //        if(IsAnonymous) {
         //            if(Reflection.Object.Equals_==MethodCall0_Method.GetBaseDefinition())
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a="a",b="b"}.ToString());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a="a",b="b"}.ToString());
         //        } else {
         //            Debug.Assert(IsValueTuple);
         //            if(MethodCall1_Object_Type.GetInterface(CommonLibrary.IEquatable_FullName) is not null)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new ValueTuple<int,int>(1,2).ToString());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new ValueTuple<int,int>(1,2).ToString());
         //        }
         //    }
         //    if(MethodCall1_Object_Type.IsAnonymousValueTuple()) {
@@ -876,19 +876,19 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //            if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
         //                for(var a = 1;a<LNew_Arguments_Count;a++) {
         // ReSharper disable once EqualExpressionComparison
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => new { a = "a",b = "b" }.Equals(new { a = "a",b = "b" }));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => new { a = "a",b = "b" }.Equals(new { a = "a",b = "b" }));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
         ////        }
         //    }
         //}
         //    foreach(var ChildMethod in MethodCall1_Object_Type.GetMethods(BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public)) {
         //        if((ChildMethod.IsFinal||MethodCall1_Object_Type.IsSealed)&&ChildMethod.GetBaseDefinition()==MethodCall0_Method) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new Derived0().M());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new IsSealed().M());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new IsFinal().M());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new IsSealedIsFinal().M());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Derived0().M());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new IsSealed().M());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new IsFinal().M());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new IsSealedIsFinal().M());
     }
     //[Fact]public void Call_Anonymous最適化(){
     //    //if(Member0_Expression is null)return Member0;
@@ -914,67 +914,67 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
     [Fact]public void 共通AnonymousValueTuple(){
         //if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
         //    for(var a = 1;a<LNew_Arguments_Count;a++) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a="a",b="b"}.Equals(new{a="a",b="b"}));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new ValueTuple<int,int>(1,2).Equals(new ValueTuple<int,int>(1,2)));
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new ValueTuple<int,int>(1,2).Equals(F(new ValueTuple<int,int>(1,2))));
     }
     [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
         //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
         //    switch(MethodCall1_MethodCall.Method.Name) {
         //        case nameof(ExtensionSet.SelectMany): {
         //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
         //        }
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().OfType<object>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().OfType<object>());
     }
     [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる1(){
         //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
         //    switch(MethodCall1_MethodCall.Method.Name) {
         //        case nameof(ExtensionSet.SelectMany): {
         //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum()));
         //        }
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().Except(CreateEnum()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().Except(CreateEnum()));
     }
     [Fact]public void 条件が合えば内部SelectManyのselector_Bodyに外部メソッドを入れる2(){
         //if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {
         //    switch(MethodCall1_MethodCall.Method.Name) {
         //        case nameof(ExtensionSet.SelectMany): {
         //            if(Reflection.ExtensionEnumerable.SelectMany_indexSelector!=MethodCall1_MethodCall.Method.GetGenericMethodDefinition()) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany(p=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany(p=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
         //            }
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).Except(CreateEnum(),EqualityComparer<int>.Default));
         //        }
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().Except(CreateEnum(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().Except(CreateEnum(),EqualityComparer<int>.Default));
     }
     [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる0(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum()).OfType<object>());
     }
     [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる1(){
         //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet()));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet()));
         //}
     }
     [Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる2(){
         //if(MethodCall1_MethodCall_Arguments[1] is LambdaExpression selector0) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(p=>CreateSet()).Except(CreateSet(),EqualityComparer<int>.Default));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet(),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).Except(CreateSet(),EqualityComparer<int>.Default));
         //}
     }
     //[Fact]public void 内部SelectManyのselector_Bodyに外部メソッドを入れる(){
@@ -1009,21 +1009,21 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
 
     [Fact]public void 共通後処理内部SelectManyのselectorBodyに外部メソッドを入れる(){
         var Tables = new Set<LinqDB.Databases.PrimaryKeys.Reflection,Table>();
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>Tables.SelectMany(o=>Tables).Except(Tables));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum().Select(q=>new{p,q,index})).Select(p=>p.p+p.q+p.index));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>Tables.SelectMany(o=>Tables).Except(Tables));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany((p,index)=>CreateEnum().Select(q=>new{p,q,index})).Select(p=>p.p+p.q+p.index));
         //if(typeof(ExtensionSet)==MethodCall1_MethodCall_GenericMethodDefinition.DeclaringType) {
         //    while(true) {
         //        if(GenericTypeDefinition.IsGenericType)GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateEnum().SelectMany(Anonymous((int p)=>CreateEnum())).OfType<string>());
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateEnum().SelectMany(Anonymous((int p)=>CreateEnum())).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
         //        if(GenericTypeDefinition==typeof(ImmutableSet<>)) break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>((ImmutableSet<int>)CreateSet()).SelectMany(Anonymous((int p)=>CreateSet())).OfType<string>());
         //        if(Set1.BaseType is null) {
         //            if(MethodCall1_MethodCall_GenericMethodDefinition==Reflection.ExtensionSet.SelectMany_selector)
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateEnum()));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateEnum()));
 
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet()).Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Except(CreateSet().Select(p=>p*p),EqualityComparer<int>.Default)));
         //        }
         //    }
         //}
@@ -1034,27 +1034,27 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //    if(IsAnonymous||IsValueTuple) {
         //        if(IsAnonymous) {
         //            for(var a = 0;a<NewExpression_Arguments_Count;a++) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new { p }).Where(p => p.p==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new { p }).Where(p => p.p==0));
         //            }
         //        } else {
         //            foreach(var NewExpression_Argument in NewExpression.Arguments) {
         //                switch(Index) {
         //                    case 0: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item1)),対象); Index=1;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int>(p)).Where(p => p.Item1==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int>(p)).Where(p => p.Item1==0));
         //                    case 1: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item2)),対象); Index=2;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int>(p,p)).Where(p => p.Item2==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int>(p,p)).Where(p => p.Item2==0));
         //                    case 2: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item3)),対象); Index=3;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int>(p,p,p)).Where(p => p.Item3==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int,int>(p,p,p)).Where(p => p.Item3==0));
         //                    case 3: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item4)),対象); Index=4;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int>(p,p,p,p)).Where(p => p.Item4==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int>(p,p,p,p)).Where(p => p.Item4==0));
         //                    case 4: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item5)),対象); Index=5;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int>(p,p,p,p,p)).Where(p => p.Item5==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int>(p,p,p,p,p)).Where(p => p.Item5==0));
         //                    case 5: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item6)),対象); Index=6;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int>(p,p,p,p,p,p)).Where(p => p.Item6==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int>(p,p,p,p,p,p)).Where(p => p.Item6==0));
         //                    case 6: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item7)),対象); Index=7;break;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(p => p.Item7==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(p => p.Item7==0));
         //                    default: Instance=Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Rest)); goto case 0;
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>>(p,p,p,p,p,p,p,new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>(p,p,p,p,p,p,p,new ValueTuple<int>(p)))).Where(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>>(p,p,p,p,p,p,p,new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>(p,p,p,p,p,p,p,new ValueTuple<int>(p)))).Where(
             p=>
                 p.Item1==0&&
                 p.Item2==0&&
@@ -1078,8 +1078,8 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //        }
         //    }
         //}
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(() => CreateSet().Select(p =>new{a=new ValueTuple<int,int>(p+1,p+2)}).Where(p => p.a.Item1==0));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => CreateSet().Select(p =>new{a=new ValueTuple<int,int>(p+1,p+2)}).Where(p => p.a.Item1==0));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             () => CreateSet().Select(
                 p =>new{
                     a=new ValueTuple<ValueTuple<int,int>,ValueTuple<int,int>>(
@@ -1093,19 +1093,19 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //if(e.NodeType==ExpressionType.AndAlso) {
         //    if(Left葉Outerに移動する) {
         //        if(Right葉Outerに移動する) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&4==o)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&4==o)));
         //        } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&i==3)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==3&&i==3)));
         //        }
         //    } else if(Right葉Outerに移動する) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==3&&o==3)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==3&&o==3)));
         //    } else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==o&&o==i)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==o&&o==i)));
         //    }
         //} else if(this._判定_Parameter_葉に移動したいPredicate.実行(e,this.Outer!)) {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>o==0)));
         //} else {
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>CreateSet().SelectMany(o=>CreateSet().Where(i=>i==0)));
         //}
     }
     private static int StaticProperty=>1;

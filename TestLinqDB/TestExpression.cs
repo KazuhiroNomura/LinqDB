@@ -383,7 +383,7 @@ public class Serializer:共通 {
             this.MemoryMessageJson_Assert<Expressions.BinaryExpression>(null!,Assert.Null);
             this.MemoryMessageJson_Assert<Expressions.Expression>(null!,Assert.Null);
             this.MemoryMessageJson_Assert<object>(null!,Assert.Null);
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         new[]{ParameterInt32},
@@ -400,7 +400,7 @@ public class Serializer:共通 {
             );
         }
         void 共通1(Expressions.BinaryExpression Binary){
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         Expressions.Expression.Assign(MemberInt32,Constant0),
@@ -411,7 +411,7 @@ public class Serializer:共通 {
         }
     }
     [Fact]public void Block0(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 ParameterDecimal
@@ -420,7 +420,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Block1(){
         var q= Expressions.Expression.Parameter(typeof(decimal),"q");
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal,q },
                 ParameterDecimal
@@ -428,7 +428,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block2(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[]{Expressions.Expression.Parameter(typeof(decimal),"a"),Expressions.Expression.Parameter(typeof(decimal),"b"),ParameterDecimal},
                 ParameterDecimal
@@ -436,7 +436,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block4(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -446,7 +446,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -456,7 +456,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -466,7 +466,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.TryCatchFinally(
@@ -476,7 +476,7 @@ public class Serializer:共通 {
                 ParameterDecimal
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.TryCatchFinally(
@@ -487,7 +487,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block10(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 Expressions.Expression.Switch(
                     Expressions.Expression.Constant(123),
@@ -499,7 +499,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 Expressions.Expression.Switch(
                     Expressions.Expression.Constant(123),
@@ -513,21 +513,21 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Condition(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Condition(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m),
                 Expressions.Expression.Constant(2m)
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.IfThenElse(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m),
                 Expressions.Expression.Constant(2m)
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.IfThen(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m)
@@ -535,17 +535,17 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Constant0(){
-        this.MemoryMessageJson_TExpressionObject((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
+        this.MemoryMessageJson_Assert全パターン((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
     }
     [Fact]public void Constant1(){
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Constant(1111m));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Constant(1111m,typeof(object)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Constant(1111m));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
         this.MemoryMessageJson_Assert(
             typeof(string).GetConstructor(new[]{typeof(char),typeof(int)}),Assert.NotNull
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.New(
                 typeof(string).GetConstructor(new[]{typeof(char),typeof(int)})!,
                 Expressions.Expression.Constant('a'),
@@ -555,13 +555,13 @@ public class Serializer:共通 {
     }
     [Fact]public void DebugInfo(){
         var SymbolDocument0=Expressions.Expression.SymbolDocument("SymbolDocument0.cs");
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.DebugInfo(SymbolDocument0,1,1,3,10)
         );
     }
     [Fact]public void Default(){
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Default(typeof(int)));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Default(typeof(decimal)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Default(typeof(int)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Default(typeof(decimal)));
     }
     //[Fact]public void Dynamic(){
     //    var CallSiteBinder=new CallSiteBinder();
@@ -670,9 +670,9 @@ public class Serializer:共通 {
         );
         var CallSite=CallSite<Func<CallSite,object,TResult>>.Create(binder);
         var expected=CallSite.Target(CallSite,input!);
-        this.MemoryMessageJson_TExpressionObject(Dynamic0);
+        this.MemoryMessageJson_Assert全パターン(Dynamic0);
         var Lambda=Expressions.Expression.Lambda<Func<TResult>>(Dynamic0);
-        this.MemoryMessageJson_TExpressionObject(Lambda);
+        this.MemoryMessageJson_Assert全パターン(Lambda);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
@@ -700,7 +700,7 @@ public class Serializer:共通 {
         }
     }
     [Fact]public void ClassDisplay(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Constant(ClassDisplay取得())
             )
@@ -789,9 +789,9 @@ public class Serializer:共通 {
         void Action1後処理<T0,T1>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 @this,T1 arg1){
             var CallSite=CallSite<Action<CallSite,T0,T1>>.Create(binder);
             CallSite.Target(CallSite,@this,arg1);
-            this.MemoryMessageJson_TExpressionObject(Dynamic);
+            this.MemoryMessageJson_Assert全パターン(Dynamic);
             var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
-            this.MemoryMessageJson_TExpressionObject(Lambda);
+            this.MemoryMessageJson_Assert全パターン(Lambda);
             var M = Lambda.Compile();
             M();
         }
@@ -818,9 +818,9 @@ public class Serializer:共通 {
         void Action3後処理<T0,T1,T2,T3>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
             var CallSite=CallSite<Action<CallSite,T0,T1,T2,T3>>.Create(binder);
             CallSite.Target(CallSite,arg0,arg1,arg2,arg3);
-            this.MemoryMessageJson_TExpressionObject(Dynamic);
+            this.MemoryMessageJson_Assert全パターン(Dynamic);
             var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
-            this.MemoryMessageJson_TExpressionObject(Lambda);
+            this.MemoryMessageJson_Assert全パターン(Lambda);
             var M = Lambda.Compile();
             M();
         }
@@ -901,7 +901,7 @@ public class Serializer:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1)
             );
-            this.MemoryMessageJson_TExpressionObject(Dynamic0);
+            this.MemoryMessageJson_Assert全パターン(Dynamic0);
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
             this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
@@ -1045,12 +1045,12 @@ public class Serializer:共通 {
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     private void 共通Dynamic(object expected,Expressions.DynamicExpression Dynamic0){
-        this.MemoryMessageJson_TExpressionObject(Dynamic0);
+        this.MemoryMessageJson_Assert全パターン(Dynamic0);
         var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda);
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(Lambda);
     }
     [Fact]public void ElementInit(){
         var Type=typeof(BindCollection);
@@ -1074,7 +1074,7 @@ public class Serializer:共通 {
         );
         {
             var l=new List<int>();
-            this.MemoryMessageJson_TExpressionObject(
+            this.MemoryMessageJson_Assert全パターン(
                 Expressions.Expression.MemberInit(
                     New,
                     Expressions.Expression.ListBind(
@@ -1090,8 +1090,8 @@ public class Serializer:共通 {
     }
     [Fact]public void Label(){
         var labelTarget=Expressions.Expression.Label();
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Label(labelTarget));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Label(labelTarget));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
     }
     [Fact]public void LabelTarget(){
         共通LabelTarget(Expressions.Expression.Label());
@@ -1106,10 +1106,10 @@ public class Serializer:共通 {
     static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]
     public void Lambda0(){
-        this.MemoryMessageJson_TExpressionObject(Lambda(()=>1));
+        this.MemoryMessageJson_Assert全パターン(Lambda(()=>1));
     }
     [Fact]public void Lambda1(){
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
     }
     [Fact]public void Lambda3(){
         //const decimal Catch値 = 40, Finally値 = 30;
@@ -1122,7 +1122,7 @@ public class Serializer:共通 {
         //        Expressions.Expressions.Expression.Constant(Catch値)
         //    )
         //);
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1140,7 +1140,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda31(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.Block(
                     Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -1154,7 +1154,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda32(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1169,7 +1169,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda33(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[]{ParameterDecimal},
@@ -1187,7 +1187,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda34(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1205,7 +1205,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda35(){
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1224,7 +1224,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda4(){
         var Exception=Expressions.Expression.Parameter(typeof(Exception));
-        this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.TryCatchFinally(
                     ParameterDecimal,
@@ -1237,7 +1237,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda5(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array2,
@@ -1248,7 +1248,7 @@ public class Serializer:共通 {
             )
         );
         var Array1=Expressions.Expression.Parameter(typeof(int[]));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array1,
@@ -1260,7 +1260,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void NewArrayInit(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.NewArrayInit(
                 typeof(int),
                 Expressions.Expression.Constant(0),
@@ -1270,7 +1270,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void NewArrayBounds(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.NewArrayBounds(
                 typeof(int),
                 Expressions.Expression.Constant(0),
@@ -1295,7 +1295,7 @@ public class Serializer:共通 {
             ctor,
             Constant_1
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.MemberInit(
                 New,
                 Expressions.Expression.Bind(
@@ -1304,7 +1304,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.MemberInit(
                 New,
                 Expressions.Expression.ListBind(
@@ -1321,7 +1321,7 @@ public class Serializer:共通 {
     private static readonly Expressions.LabelTarget Label_void=Expressions.Expression.Label("Label");
     [Fact]
     public void Loop0(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
                     Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m)),
@@ -1333,7 +1333,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Loop1(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
                     Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m))
@@ -1344,11 +1344,11 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Negate(){
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
     }
     [Fact]public void Index0(){
         var List=Expressions.Expression.Parameter(typeof(List<int>));
-        this.MemoryMessageJson_TExpressionObject((Expressions.Expression)
+        this.MemoryMessageJson_Assert全パターン((Expressions.Expression)
             Expressions.Expression.Block(
                 new[] { List },
                 Expressions.Expression.MakeIndex(
@@ -1361,7 +1361,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Index1(){
         var Array1=Expressions.Expression.Parameter(typeof(int[]));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array1,
@@ -1374,7 +1374,7 @@ public class Serializer:共通 {
     [Fact]
     public void Index2(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array2,
@@ -1388,7 +1388,7 @@ public class Serializer:共通 {
     [Fact]
     public void Index3(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,,]));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array2,
@@ -1403,7 +1403,7 @@ public class Serializer:共通 {
     [Fact]
     public void Goto(){
         var target=Expressions.Expression.Label(typeof(int),"target");
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 Expressions.Expression.Label(
                     target,
@@ -1417,7 +1417,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Block(
                 Expressions.Expression.Label(
                     target,
@@ -1452,7 +1452,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void ListInit(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.ListInit(
                 Expressions.Expression.New(typeof(List<int>)),
                 Expressions.Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expressions.Expression.Constant(1))
@@ -1461,7 +1461,7 @@ public class Serializer:共通 {
     }
     [Fact]public void MemberExpression(){
         var Point=Expressions.Expression.Parameter(typeof(Point));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
     [Fact]public void MemberBinding(){
         var Type = typeof(BindCollection);
@@ -1481,7 +1481,7 @@ public class Serializer:共通 {
             Constant_1
         );
         //if(a_Bindings.Count!=b_Bindings.Count) return false;
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.MemberInit(
                 New,
                 Expressions.Expression.Bind(
@@ -1505,13 +1505,13 @@ public class Serializer:共通 {
         var o=new テスト();
         var arg=Expressions.Expression.Constant(1);
         var @this=Expressions.Expression.Constant(o);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Call(
                 M(()=>string.Concat("","")),
                 Expressions.Expression.Constant("A"),
@@ -1536,7 +1536,7 @@ public class Serializer:共通 {
     [Fact]
     public void Invoke(){
         var @string=Expressions.Expression.Parameter(typeof(string));
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Invoke(
                 Expressions.Expression.Lambda(@string,@string),
                 Expressions.Expression.Constant("B")
@@ -1544,13 +1544,13 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void New(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.New(
                 typeof(ValueTuple<int>).GetConstructors()[0],
                 Expressions.Expression.Constant(1)
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
                 Expressions.Expression.Constant(1),
@@ -1565,15 +1565,15 @@ public class Serializer:共通 {
     [Fact]
     public void Parameter(){
         var p0=Expressions.Expression.Parameter(typeof(int));
-        this.MemoryMessageJson_TExpressionObject(p0);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Lambda<Func<int,int>>(p0,p0));
+        this.MemoryMessageJson_Assert全パターン(p0);
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Lambda<Func<int,int>>(p0,p0));
         var p1=Expressions.Expression.Parameter(typeof(int),"a");
-        this.MemoryMessageJson_TExpressionObject(p1);
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.Lambda<Func<int,int>>(p1,p1));
+        this.MemoryMessageJson_Assert全パターン(p1);
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.Lambda<Func<int,int>>(p1,p1));
     }
     [Fact]
     public void Switch(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.Switch(
                 Expressions.Expression.Constant(123),
                 Expressions.Expression.Constant(0m),
@@ -1586,7 +1586,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Try(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TryCatch(
                 Expressions.Expression.Constant(0),
                 Expressions.Expression.Catch(
@@ -1595,19 +1595,19 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TryCatchFinally(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TryFault(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
             )
         );
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TryFinally(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
@@ -1616,7 +1616,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void TypeEqual(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TypeEqual(
                 Expressions.Expression.Constant(1m),
                 typeof(decimal)
@@ -1624,7 +1624,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void TypeIs(){
-        this.MemoryMessageJson_TExpressionObject(
+        this.MemoryMessageJson_Assert全パターン(
             Expressions.Expression.TypeIs(
                 Expressions.Expression.Constant(1m),
                 typeof(decimal)
@@ -1645,7 +1645,7 @@ public class Serializer:共通 {
         var Constant演算子1=Expressions.Expression.Constant(new 演算子1(true));
         var Parameter演算子=Expressions.Expression.Parameter(typeof(演算子));
         var ParameterInt32=Expressions.Expression.Parameter(typeof(int));
-        this.MemoryMessageJson_TExpressionObject(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
+        this.MemoryMessageJson_Assert全パターン(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
         共通1(Expressions.Expression.ArrayLength(ConstantArray));
         共通1(Expressions.Expression.Quote(Expressions.Expression.Lambda(ConstantArray)));
         共通1(Expressions.Expression.Convert(Constant1_1d,typeof(int)));
@@ -1699,7 +1699,7 @@ public class Serializer:共通 {
         共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
         void 共通0(Expressions.ParameterExpression 代入先,Expressions.ConstantExpression 代入元,Expressions.UnaryExpression a){
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         new[]{代入先},
@@ -1716,8 +1716,8 @@ public class Serializer:共通 {
             );
         }
         void 共通1(Expressions.UnaryExpression Unary){
-            this.MemoryMessageJson_TExpressionObject(Unary);
-            this.MemoryMessageJson_TExpressionObject_コンパイル実行(
+            this.MemoryMessageJson_Assert全パターン(Unary);
+            this.MemoryMessageJson_Expression_コンパイルリモート実行(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Convert(
                         Unary,

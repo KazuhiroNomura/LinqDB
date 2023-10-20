@@ -39,10 +39,10 @@ public class TypeBinary:MemoryPackFormatter<T> {
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
         var NodeType=reader.ReadNodeType();
+        System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
         value=NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader),
-            Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader),
-            _=>throw new NotSupportedException(NodeType.ToString())
+            _                                   =>ReadTypeIs   (ref reader)
         };
     }
 }

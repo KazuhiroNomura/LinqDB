@@ -1,6 +1,7 @@
 ﻿using System;
 using MemoryPack;
 using System.Buffers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
@@ -46,10 +47,10 @@ public class NewArray:MemoryPackFormatter<T> {
         
         
         var NodeType=reader.ReadNodeType();
+        System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.NewArrayBounds or Expressions.ExpressionType.NewArrayInit);
         value=NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader),
-            Expressions.ExpressionType.NewArrayInit=>ReadNewArrayInit(ref reader),
-            _=>throw new NotImplementedException(NodeType.ToString())
+            _                                        =>ReadNewArrayInit  (ref reader)
         };
         
         

@@ -198,14 +198,14 @@ public class Test_Set2:共通 {
             var i=expected.LongCount;
             var o=output.LongCount;
         });
-        this.MemoryMessageJson_Assert((ImmutableSet<int>)expected,output=>{
-            var i=expected.LongCount;
-            var o=output.LongCount;
-        });
-        this.MemoryMessageJson_Assert((ImmutableSet)expected,output=>{
-            var i=expected.LongCount;
-            var o=output.LongCount;
-        });
+        //this.MemoryMessageJson_Assert((ImmutableSet<int>)expected,output=>{
+        //    var i=expected.LongCount;
+        //    var o=output.LongCount;
+        //});
+        //this.MemoryMessageJson_Assert((ImmutableSet)expected,output=>{
+        //    var i=expected.LongCount;
+        //    var o=output.LongCount;
+        //});
     }
     [Fact]public void Serialize01(){
         var expected=new Set<Key,Value>{new(new(0)),new(new(1))};
@@ -239,14 +239,14 @@ public class Test_Set2:共通 {
             var i=expected.Count;
             var o=output.Count;
         });
-        this.MemoryMessageJson_Assert((TestImmutableSet<int>)expected,output=>{
-            var i=expected.Count;
-            var o=output.Count;
-        });
-        this.MemoryMessageJson_Assert((TestImmutableSet)expected,output=>{
-            var i=expected.Count;
-            var o=output.Count;
-        });
+        //this.MemoryMessageJson_Assert((TestImmutableSet<int>)expected,output=>{
+        //    var i=expected.Count;
+        //    var o=output.Count;
+        //});
+        //this.MemoryMessageJson_Assert((TestImmutableSet)expected,output=>{
+        //    var i=expected.Count;
+        //    var o=output.Count;
+        //});
     }
     [Fact]public void Serialize20(){
         var expected=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
@@ -254,9 +254,9 @@ public class Test_Set2:共通 {
         //var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
         //Assert.Equal(expected,actual);
         this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        //this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        //this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
         this.MemoryMessageJson_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
     }

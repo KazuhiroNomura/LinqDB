@@ -1,9 +1,7 @@
 ﻿using Expressions = System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Formatters;
-public class Loop : 共通
-{
-    [Fact]
-    public void PrivateWrite(){
+public class Loop : 共通{
+    [Fact]public void PrivateWrite_Read(){
         //this.MemoryMessageJson_Assert(new{a=default(Expressions.LoopExpression)});
         var Label_decimal = Expressions.Expression.Label(typeof(decimal), "Label_decimal");
         var Label_void = Expressions.Expression.Label("Label");
@@ -45,5 +43,18 @@ public class Loop : 共通
         }
         //    }
         //}
+    }
+    [Fact]
+    public void Serialize_Deserialize(){
+        //if(writer.TryWriteNil(value)) return;
+        var Default=default(Expressions.LoopExpression);
+        this.MemoryMessageJson_Assert(new{a=Default,b=(Expressions.Expression?)Default});
+        {
+            var input=Expressions.Expression.Loop(
+                Expressions.Expression.Default(typeof(void))
+            );
+            var expected=new{a=input,b=(Expressions.Expression)input};
+            this.MemoryMessageJson_Assert(expected);
+        }
     }
 }
