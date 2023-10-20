@@ -15,12 +15,13 @@ partial class Optimizer {
         internal Dictionary<DynamicExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryDynamic=default!;
         internal Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
         internal Dictionary<LambdaExpression,(FieldInfo Disp,MemberExpression Member,MethodBuilder Impl)>DictionaryLambda=default!;
-        private readonly List<ParameterExpression> Parameters=new();
+        //private readonly List<ParameterExpression> Parameters=new();
         public void 実行(Expression Lambda) {
+            this.DictionaryConstant.Clear();
             this.DictionaryDynamic.Clear();
             this.Dictionaryラムダ跨ぎParameter.Clear();
             this.DictionaryLambda.Clear();
-            this.Parameters.Clear();
+            //this.Parameters.Clear();
             this.Lambda((LambdaExpression)Lambda);
         }
         protected override void Constant(ConstantExpression Constant){

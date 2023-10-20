@@ -649,7 +649,8 @@ partial class Optimizer {
                         }
                         break;
                     }
-                    case MemberBindingType.ListBinding: {
+                    default: {
+                        Debug.Assert(Binding0.BindingType==MemberBindingType.ListBinding);
                         var MemberListBinding0=(MemberListBinding)Binding0;
                         var MemberListBinding0_Initializers=MemberListBinding0.Initializers;
                         var MemberListBinding0_Initializers_Count=MemberListBinding0_Initializers.Count;
@@ -669,17 +670,17 @@ partial class Optimizer {
                                 変化したか1=true;
                             }
                         }
-                        if(変化したか1) {
+                        if(変化したか1){
                             Bindings1[a]=Expression.ListBind(
                                 Binding0.Member,
                                 MemberListBinding1_Initializers
                             );
                             変化したか=true;
-                        } else
+                        } else{
                             Bindings1[a]=MemberListBinding0;
+                        }
                         break;
                     }
-                    default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
                 }
             }
             return 変化したか?Bindings1 : Bindings0;

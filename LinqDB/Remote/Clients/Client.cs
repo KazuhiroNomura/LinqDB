@@ -501,12 +501,13 @@ public class Client:IDisposable {
     /// <returns></returns>
     internal T ReadObject<T>(MemoryStream ReadStream) {
         var SerializeType = (SerializeType)ReadStream.ReadByte();
-        return SerializeType switch{
-            SerializeType.MemoryPack=>(T)this.MemoryPack.Deserialize<object>(ReadStream),
-            SerializeType.MessagePack=>(T)this.MessagePack.Deserialize<object>(ReadStream),
-            SerializeType.Utf8Json=>(T)this.Utf8Json.Deserialize<object>(ReadStream),
+        var value=SerializeType switch{
+            SerializeType.MemoryPack=>this.MemoryPack.Deserialize<object>(ReadStream),
+            SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(ReadStream),
+            SerializeType.Utf8Json=>this.Utf8Json.Deserialize<object>(ReadStream),
             _=>throw new NotSupportedException(SerializeType.ToString())
         };
+        return(T)value;
         //object o;
         //T Result;
         //switch(SerializeType) {

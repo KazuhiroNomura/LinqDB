@@ -14,7 +14,6 @@ using Generic=System.Collections.Generic;
 /// <typeparam name="TKey">キー</typeparam>
 [DebuggerDisplay("Key = {Key}")]
 [DebuggerTypeProxy(typeof(SystemLinq_GroupingDebugView<, >))]
-[Serializable]//,MessagePack.MessagePackObject]
 public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>
     ,IGrouping<TKey,TElement>/*,ICollection<TElement>*/,IEquatable<IGrouping<TKey,TElement>>
     ,IEquatable<Linq.IGrouping<TKey,TElement>>{

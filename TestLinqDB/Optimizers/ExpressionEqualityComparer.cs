@@ -65,6 +65,7 @@ public partial struct StructCollection:ICollection<int>{
 }
 [Serializable,MessagePackObject(true),MemoryPackable]
 public partial class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
+    public class_演算子オーバーロード 自己参照;
     //public class_演算子オーバーロード(){
     //}
     [MemoryPackInclude]

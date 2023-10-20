@@ -1,15 +1,18 @@
 ﻿using System.Drawing;
-using System.Reflection;
+//using System.Reflection;
+using System.Runtime.CompilerServices;
 //using System.Reflection;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
-
-using Microsoft.CSharp.RuntimeBinder;
+//using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
+//using Microsoft.CSharp.RuntimeBinder;
 
 using static LinqDB.Optimizers.Optimizer;
 //using Binder=System.Reflection.Binder;
-using Binder = Microsoft.CSharp.RuntimeBinder.Binder;
-using Expression = System.Linq.Expressions.Expression;
+using Microsoft.CSharp.RuntimeBinder;
+//using Binder = Microsoft.CSharp.Binder;
+using System.Linq.Expressions;
+///using System.Reflection;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
@@ -166,22 +169,31 @@ public class ReturnExpressionTraverser:共通{
         //    switch (Binding0.BindingType) {
         //        case MemberBindingType.Assignment: {
         //            if(Binding0_Expression==Binding1_Expression) {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=3});
         //            } else {
+        var a=3;
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=a*a});
         //            }
         //        }
         //        case MemberBindingType.MemberBinding: {
         //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //            } else {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            }
         //        }
-        //        case MemberBindingType.ListBinding: {
+        //        default: {
         //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
         //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {1}}});
         //                } else {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {a*a}}});
         //                }
         //            }
         //            if(変化したか1) {
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            } else
+        this.MemoryMessageJson_TExpressionObject_コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //        }
         //        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
         //    }
@@ -193,7 +205,138 @@ public class ReturnExpressionTraverser:共通{
     }
     [Fact]public void Conditional(){
     }
+    private static readonly CSharpArgumentInfo CSharpArgumentInfo1 = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
+    private static readonly CSharpArgumentInfo[]CSharpArgumentInfoArray1 = {
+        CSharpArgumentInfo1
+    };
+    private static readonly CSharpArgumentInfo[]CSharpArgumentInfoArray2 = {
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1
+    };
+    private static readonly CSharpArgumentInfo[]CSharpArgumentInfoArray3 = {
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1
+    };
+    private static readonly CSharpArgumentInfo[]CSharpArgumentInfoArray4 = {
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1,
+        CSharpArgumentInfo1
+    };
     [Fact]public void Dynamic(){
+        //if(Dynamic0_Arguments_Count >= 5){
+        //    var Dynamic1_Arguments=this.TraverseExpressions(Dynamic0_Arguments);
+        //    return ReferenceEquals(Dynamic0_Arguments,Dynamic1_Arguments)?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments);
+        //}
+        //if(Dynamic0_Arguments_Count<=1)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0);
+        //共通0((a,b)=>a*b,3d,4d);
+        共通0((a,b)=>a*b,3m,4m);
+        //if(Dynamic0_Arguments_Count<=2)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1);
+        //共通1((int a)=>true,1);
+        共通1((decimal a)=>true,1m);
+        //if(Dynamic0_Arguments_Count<=3)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1,Dynamic1_Arguments_2);
+        //共通2((int a,int b)=>true,1,2);
+        //共通2((decimal a,decimal b)=>true,1m,1m);
+        //return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1,Dynamic1_Arguments_2,Dynamic1_Arguments_3);
+        //共通((int a,int b,int c)=>true,1,2,3);
+        //共通3((decimal a,decimal b,decimal c)=>true,1m,1m,1m);
+
+        void 共通0<T>(Func<T,T,T> 引数2のFunc,T a,T b){
+            var binder2=Binder.Invoke(
+                CSharpBinderFlags.None,
+                typeof(Serializer),
+                CSharpArgumentInfoArray3
+            );
+            var binder1=Binder.Invoke(
+                CSharpBinderFlags.None,
+                typeof(Serializer),
+                CSharpArgumentInfoArray2
+            );
+            var CallSite2=CallSite<Func<CallSite,object,object,object,object>>.Create(binder2);
+            var CallSite1=CallSite<Func<CallSite,object,object,object>>.Create(binder1);
+            //((a,b)=>..)(a,b)
+            var Dynamic2 = Expression.Dynamic(
+                binder2,
+                typeof(object),
+                Expression.Constant(引数2のFunc),
+                Expression.Constant(a),Expression.Constant(b)
+            );
+            //var Dynamic1 = Expression.Invoke(Dynamic2);
+            //()=>(()=>1m+1m)()
+            var expected2=CallSite2.Target(CallSite2,引数2のFunc,a!,b!);
+            var expected1=CallSite1.Target(CallSite1,(T x)=>x,a!);
+            //var expected=CallSite1.Target(CallSite1,引数2のFunc);
+            //((a,b)=>..)(a,b)
+            var Lambda2=Expression.Lambda<Func<object>>(Dynamic2);
+            var actual2=Lambda2.Compile()();
+            //(((a,b)=>..)(a,b))
+            var Dynamic1 = Expression.Dynamic(
+                binder1,
+                typeof(object),
+                Lambda2
+            );
+            //(()=>((a,b)=>..)(a,b))()
+            var Lambda1=Expression.Lambda<Func<object>>(Dynamic1);
+            var actual1=Lambda1.Compile()();
+            //Assert.Equal(expected,actual);
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda1);
+        }
+        void 共通1<T>(Func<T,bool>  オブジェクト, object a){
+            var binder=Binder.Invoke(
+                CSharpBinderFlags.None,
+                typeof(Serializer),
+                CSharpArgumentInfoArray2
+            );
+            var CallSite=CallSite<Func<CallSite,object,object,object>>.Create(binder);
+            var Dynamic0 = Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(オブジェクト),
+                Expression.Add(Expression.Constant(a),Expression.Constant(a))
+            );
+            共通Dynamic(CallSite.Target(CallSite,オブジェクト,a),Dynamic0);
+        }
+        void 共通2<T>(Func<T,T,bool>  オブジェクト, object a,object b){
+            var binder=Binder.Invoke(
+                CSharpBinderFlags.None,
+                typeof(Serializer),
+                CSharpArgumentInfoArray3
+            );
+            var CallSite=CallSite<Func<CallSite,object,object,object,object>>.Create(binder);
+            var Dynamic0 = Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(オブジェクト),
+                Expression.Constant(a),
+                Expression.Constant(b)
+            );
+            共通Dynamic(CallSite.Target(CallSite,オブジェクト,a,b),Dynamic0);
+        }
+        void 共通3<T>(Func<T,T,T,bool> オブジェクト, object a,object b,object c){
+            var binder=Binder.Invoke(
+                CSharpBinderFlags.None,
+                typeof(Serializer),
+                CSharpArgumentInfoArray4
+            );
+            var CallSite=CallSite<Func<CallSite,object,object,object,object,object>>.Create(binder);
+            var Dynamic0 = Expression.Dynamic(
+                binder,
+                typeof(object),
+                Expression.Constant(オブジェクト),
+                Expression.Constant(a),
+                Expression.Constant(b),
+                Expression.Constant(c)
+            );
+            共通Dynamic(CallSite.Target(CallSite,オブジェクト,a,b,c),Dynamic0);
+        }
+        void 共通Dynamic(object expected,Expression Expression0){
+            var Lambda=Expression.Lambda<Func<object>>(Expression0);
+            var M=Lambda.Compile();
+            var actual=M();
+            Assert.Equal(expected,actual);
+            this.MemoryMessageJson_TExpressionObject_コンパイル実行(Lambda);
+        }
     }
     [Fact]public void ExpressionEqual(){
     }
@@ -281,7 +424,7 @@ public class ReturnExpressionTraverser:共通{
                 Expression.New(
                     typeof(Point).GetConstructors()[0],
                     new[]{Expression.Constant(1),Expression.Constant(2)},
-                    new MemberInfo[]{typeof(Point).GetProperty(nameof(Point.X))!,typeof(Point).GetProperty(nameof(Point.Y))!}
+                    new System.Reflection.MemberInfo[]{typeof(Point).GetProperty(nameof(Point.X))!,typeof(Point).GetProperty(nameof(Point.Y))!}
                 )
             )
         );
