@@ -13,6 +13,8 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
         var type=typeof(T);
         if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null)return global::Utf8Json.Resolvers.StandardResolver.AllowPrivate.GetFormatter<T>();;
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var value))return(IJsonFormatter<T>)value;
+        if(type.IsArray)
+            return default!;
 
 
         if(type.IsAnonymous())

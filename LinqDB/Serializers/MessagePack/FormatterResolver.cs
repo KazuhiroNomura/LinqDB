@@ -13,8 +13,10 @@ internal sealed class FormatterResolver:IFormatterResolver {
         var type=typeof(T);
         if(type.GetCustomAttribute(typeof(MessagePackObjectAttribute))!=null)return null!;
         if(this.DictionaryTypeFormatter.TryGetValue(type,out var value))return(IMessagePackFormatter<T>)value;
-
-
+        if(type.IsArray)
+            return default!;
+            
+            
         if(type.IsAnonymous())
             return default!;
         if(type.IsDisplay())

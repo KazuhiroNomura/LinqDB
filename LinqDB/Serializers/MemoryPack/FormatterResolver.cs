@@ -11,6 +11,8 @@ namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
     public static MemoryPackFormatter<T>? GetRegisteredFormatter<T>(){
         var type=typeof(T);
+        
+        
         if(type.IsArray){
             GetRegisteredFormatter(type.GetElementType());
             return null;
