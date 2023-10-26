@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions=System.Linq.Expressions;
@@ -19,6 +18,10 @@ public class NewArray:IMessagePackFormatter<T> {
         writer.WriteNodeType(value);
         PrivateWrite(ref writer,value,Resolver);
     }
+    
+    
+    
+    
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(3);
@@ -42,12 +45,12 @@ public class NewArray:IMessagePackFormatter<T> {
     public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(3==count);
+        System.Diagnostics.Debug.Assert(3==count);
         var NodeType=reader.ReadNodeType();
-        Debug.Assert(NodeType is Expressions.ExpressionType.NewArrayBounds or Expressions.ExpressionType.NewArrayInit);
+        System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.NewArrayBounds or Expressions.ExpressionType.NewArrayInit);
         return NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader,Resolver),
-            _=>ReadNewArrayInit(ref reader,Resolver)
+            _                                        =>ReadNewArrayInit(ref reader,Resolver)
         };
         
         

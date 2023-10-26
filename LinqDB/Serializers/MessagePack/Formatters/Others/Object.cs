@@ -42,7 +42,7 @@ public class Object :IMessagePackFormatter<T>{
                 if(Formatter==null){
 
                 }
-                Serializer.DynamicSerialize(Formatter, ref writer, value, Resolver);
+                writer.Write(Formatter,value,Resolver);
                 break;
             }
         }

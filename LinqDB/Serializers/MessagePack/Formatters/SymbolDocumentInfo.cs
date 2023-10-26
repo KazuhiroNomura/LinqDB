@@ -13,11 +13,11 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         writer.WriteArrayHeader(4);
         writer.Write(value.FileName);
 
-        Formatter.Serialize(ref writer,value.Language,Resolver);
+        writer.Write(Formatter,value.Language,Resolver);
 
-        Formatter.Serialize(ref writer,value.LanguageVendor,Resolver);
+        writer.Write(Formatter,value.LanguageVendor,Resolver);
 
-        Formatter.Serialize(ref writer,value.DocumentType,Resolver);
+        writer.Write(Formatter,value.DocumentType,Resolver);
 
     }
     public void Serialize(ref Writer writer,T? value,O Resolver){
@@ -29,11 +29,11 @@ public class SymbolDocumentInfo:IMessagePackFormatter<T> {
         var count=reader.ReadArrayHeader();
         var fileName=reader.ReadString();
         
-        var language=Formatter.Deserialize(ref reader,Resolver);
+        var language=reader.Read(Formatter,Resolver);
         
-        var languageVendor=Formatter.Deserialize(ref reader,Resolver);
+        var languageVendor=reader.Read(Formatter,Resolver);
         
-        var documentType=Formatter.Deserialize(ref reader,Resolver);
+        var documentType=reader.Read(Formatter,Resolver);
         
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
         

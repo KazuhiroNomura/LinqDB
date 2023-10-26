@@ -7,12 +7,6 @@ public class ExpressionT : 共通
     {
         //if(writer.TryWriteNil(value)) return;
         var input = Expressions.Expression.Lambda<Action>(Expressions.Expression.Default(typeof(void)));
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.Expression<Action>) });
-        this.MemoryMessageJson_Assert(
-            new
-            {
-                input
-            }
-        );
+        this.MemoryMessageJson_T_Assert全パターン(input);
     }
 }

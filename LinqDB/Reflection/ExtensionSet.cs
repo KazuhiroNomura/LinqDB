@@ -12,7 +12,7 @@ using static Common;
 public static class ExtensionSet {
 #if DEBUG
     static ExtensionSet() {
-        var HashSet = new HashSet<int>();
+        var HashSet = new System.Collections.Generic.HashSet<int>();
         foreach(var Field in typeof(ExtensionEnumerable).GetFields(BindingFlags.Public|BindingFlags.Static))
             System.Diagnostics.Debug.Assert(HashSet.Add(Field.MetadataToken));
     }

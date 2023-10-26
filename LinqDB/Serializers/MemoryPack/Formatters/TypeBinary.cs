@@ -5,6 +5,7 @@ using System.Buffers;
 using Expressions=System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
+
 using Reader=MemoryPackReader;
 using T=Expressions.TypeBinaryExpression;
 public class TypeBinary:MemoryPackFormatter<T> {
@@ -16,15 +17,15 @@ public class TypeBinary:MemoryPackFormatter<T> {
         Expression.Write(ref writer,value.Expression);
         
         writer.WriteType(value.TypeOperand);
+        
     }
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
-        
         Write(ref writer,value);
-        
     }
     private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader){
         var expression=Expression.Read(ref reader);
+        
         var type=reader.ReadType();
         return (expression,type);
     }
@@ -38,11 +39,16 @@ public class TypeBinary:MemoryPackFormatter<T> {
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
         if(reader.TryReadNil()) return;
+        
+        
         var NodeType=reader.ReadNodeType();
         System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
+        
         value=NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader),
             _                                   =>ReadTypeIs   (ref reader)
         };
+        
+        
     }
 }

@@ -11,7 +11,7 @@ using static Common;
 public static class ExtensionSet2 {
 #if DEBUG
     static ExtensionSet2() {
-        var HashSet = new HashSet<int>();
+        var HashSet = new System.Collections.Generic.HashSet<int>();
         foreach(var Field in typeof(ExtensionSet2).GetFields(BindingFlags.Public|BindingFlags.Static))
             System.Diagnostics.Debug.Assert(HashSet.Add(Field.MetadataToken));
     }

@@ -9,8 +9,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters.Others;
 using Reader = MemoryPackReader;
 using T = System.Object;
 using Reflection;
-using System.Runtime.InteropServices;
-
 public class Object : MemoryPackFormatter<T>{
     public static readonly Object Instance = new();
     private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter :IBufferWriter<byte>{
@@ -19,23 +17,23 @@ public class Object : MemoryPackFormatter<T>{
         writer.WriteType(type);
 
         switch (value){
-            case sbyte          v:writer.WriteUnmanaged(v);break;
-            case short          v:writer.WriteUnmanaged(v);break;
-            case int            v:writer.WriteUnmanaged(v);break;
-            case long           v:writer.WriteUnmanaged(v);break;
-            case byte           v:writer.WriteUnmanaged(v);break;
-            case ushort         v:writer.WriteUnmanaged(v);break;
-            case uint           v:writer.WriteUnmanaged(v);break;
-            case ulong          v:writer.WriteUnmanaged(v);break;
-            case float          v:writer.WriteUnmanaged(v);break;
-            case double         v:writer.WriteUnmanaged(v);break;
-            case bool           v:writer.WriteUnmanaged(v);break;
-            case char           v:writer.WriteUnmanaged(v);break;
-            case decimal        v:writer.WriteUnmanaged(v);break;
-            case TimeSpan       v:writer.WriteUnmanaged(v);break;
-            case DateTime       v:writer.WriteUnmanaged(v);break;
-            case DateTimeOffset v:writer.WriteUnmanaged(v);break;
-            case string         v:writer.WriteString   (v);break;
+            case sbyte                  v:writer.WriteUnmanaged(v);       break;
+            case short                  v:writer.WriteUnmanaged(v);       break;
+            case int                    v:writer.WriteUnmanaged(v);       break;
+            case long                   v:writer.WriteUnmanaged(v);       break;
+            case byte                   v:writer.WriteUnmanaged(v);       break;
+            case ushort                 v:writer.WriteUnmanaged(v);       break;
+            case uint                   v:writer.WriteUnmanaged(v);       break;
+            case ulong                  v:writer.WriteUnmanaged(v);       break;
+            case float                  v:writer.WriteUnmanaged(v);       break;
+            case double                 v:writer.WriteUnmanaged(v);       break;
+            case bool                   v:writer.WriteUnmanaged(v);       break;
+            case char                   v:writer.WriteUnmanaged(v);       break;
+            case decimal                v:writer.WriteUnmanaged(v);       break;
+            case TimeSpan               v:writer.WriteUnmanaged(v);       break;
+            case DateTime               v:writer.WriteUnmanaged(v);       break;
+            case DateTimeOffset         v:writer.WriteUnmanaged(v);       break;
+            case string                 v:writer.WriteString   (v);       break;
             case Expressions.Expression v:Expression .Write(ref writer,v);break;
             case System.Type            v:Type       .Write(ref writer,v);break;
             case ConstructorInfo        v:Constructor.Write(ref writer,v);break;
@@ -43,7 +41,7 @@ public class Object : MemoryPackFormatter<T>{
             case PropertyInfo           v:Property   .Write(ref writer,v);break;
             case EventInfo              v:Event      .Write(ref writer,v);break;
             case FieldInfo              v:Field      .Write(ref writer,v);break;
-            default:{ writer.Write(type,value);break;}
+            default                      :writer.Write(type,value);       break;
         }
 
     }

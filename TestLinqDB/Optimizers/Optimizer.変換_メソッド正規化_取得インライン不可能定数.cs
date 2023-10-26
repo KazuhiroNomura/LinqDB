@@ -27,7 +27,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         return m();
     }
     [Fact]public void Quote(){
-        this.共通コンパイル実行(()=>F(()=>3));
+        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>F(()=>3));
     }
     private static int int_int_int(int a,int b){
         var r=1;

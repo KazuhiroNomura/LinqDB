@@ -53,27 +53,16 @@ public class Dynamic : 共通
                     RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null)
                 }
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder, typeof(object),
                 Expressions.Expression.Constant(arg1), Expressions.Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //case BinderType.ConvertBinder:{
         {
             var input = PrivateDynamicConvert<int, long>(1, RuntimeBinder.CSharpBinderFlags.None);
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = input,
-                    b = (Expressions.Expression)input
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //case BinderType.GetIndexBinder:{
         {
@@ -87,17 +76,12 @@ public class Dynamic : 共通
                 this.GetType(),
                 CSharpArgumentInfoArray2
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
                 Expressions.Expression.Constant(arg1), Expressions.Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //case BinderType.GetMemberBinder:{
         {
@@ -108,17 +92,12 @@ public class Dynamic : 共通
                 this.GetType(),
                 CSharpArgumentInfoArray1
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
                 Expressions.Expression.Constant(arg1)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //case BinderType.InvokeBinder:{
         {
@@ -132,7 +111,7 @@ public class Dynamic : 共通
                     CSharpArgumentInfoArray4
                 );
                 var CallSite = CallSite<Func<CallSite, object, object, object, object, object>>.Create(binder);
-                var Dynamic0 = Expressions.Expression.Dynamic(
+                var input = Expressions.Expression.Dynamic(
                     binder,
                     typeof(object),
                     Expressions.Expression.Constant(オブジェクト),
@@ -140,12 +119,7 @@ public class Dynamic : 共通
                     Expressions.Expression.Constant(b),
                     Expressions.Expression.Constant(c)
                 );
-                this.MemoryMessageJson_Assert(
-                    new
-                    {
-                        a = Dynamic0
-                    }
-                );
+                this.MemoryMessageJson_Expression_Assert全パターン(input);
             }
         }
         //case BinderType.InvokeMemberBinder:{
@@ -158,16 +132,11 @@ public class Dynamic : 共通
                 var binder = RuntimeBinder.Binder.InvokeMember(
                     RuntimeBinder.CSharpBinderFlags.ResultDiscarded, Name, null, typeof(テスト), CSharpArgumentInfos
                 );
-                var Dynamic0 = Expressions.Expression.Dynamic(
+                var input = Expressions.Expression.Dynamic(
                     binder, typeof(object),
                     Expressions.Expression.Constant(arg0), Expressions.Expression.Constant(arg1)
                 );
-                this.MemoryMessageJson_Assert(
-                    new
-                    {
-                        a = Dynamic0
-                    }
-                );
+                this.MemoryMessageJson_Expression_Assert全パターン(input);
             }
         }
         //case BinderType.SetIndexBinder:{
@@ -185,17 +154,12 @@ public class Dynamic : 共通
                 this.GetType(),
                 CSharpArgumentInfoArray4
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
                 Expressions.Expression.Constant(arg1), Expressions.Expression.Constant(arg2), Expressions.Expression.Constant(arg3), Expressions.Expression.Constant(arg4)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //}
         {
@@ -207,18 +171,13 @@ public class Dynamic : 共通
                 this.GetType(),
                 CSharpArgumentInfoArray2
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
                 Expressions.Expression.Constant(arg1),
                 Expressions.Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //case BinderType.UnaryOperationBinder:{
         {
@@ -232,24 +191,18 @@ public class Dynamic : 共通
                     //RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.NamedArgument,"a"),
                 }
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder,
                 typeof(object),
                 Expressions.Expression.Constant(arg1, typeof(object))
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
     }
     [Fact]
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.DynamicExpression) });
         {
             var arg1 = 1;
             var arg2 = 1;
@@ -262,16 +215,11 @@ public class Dynamic : 共通
                     RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null)
                 }
             );
-            var Dynamic0 = Expressions.Expression.Dynamic(
+            var input = Expressions.Expression.Dynamic(
                 binder, typeof(object),
                 Expressions.Expression.Constant(arg1), Expressions.Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Assert(
-                new
-                {
-                    a = Dynamic0
-                }
-            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
     }
 }

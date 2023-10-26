@@ -13,7 +13,7 @@ public class GroupingSet<TKey,TElement>:IJsonFormatter<G.GroupingSet<TKey,TEleme
         var Formatter = Resolver.GetFormatter<TElement>();
         foreach(var item in value){
             writer.WriteValueSeparator();
-            Formatter.Serialize(ref writer,item,Resolver);
+            writer.Write(Formatter,item,Resolver);;
         }
         writer.WriteEndArray();
     }
@@ -21,12 +21,11 @@ public class GroupingSet<TKey,TElement>:IJsonFormatter<G.GroupingSet<TKey,TEleme
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key= Resolver.GetFormatter<TKey>().Deserialize(ref reader,Resolver);
-        var value=new G.GroupingSet<TKey,TElement>(Key);
         var Formatter = Resolver.GetFormatter<TElement>();
+        var value=new G.GroupingSet<TKey,TElement>(Key);
         while(!reader.ReadIsEndArray()) {
             reader.ReadIsValueSeparatorWithVerify();
-            var item = Formatter.Deserialize(ref reader,Resolver);
-            value.Add(item);
+            value.Add(reader.Read(Formatter,Resolver));
         }
         return value;
     }

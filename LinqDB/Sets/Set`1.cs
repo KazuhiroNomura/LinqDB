@@ -14,13 +14,16 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class Set<T>:ImmutableSet<T>,ICollection<T>{
+    //static Set(){
+    //    MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
+    //}
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     //internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack=new();//Serializers.MemoryPack.Formatters.Sets.Set<T>().ins);
     //internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=new();//Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
     //internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=new();//Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
-    internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance;
-    internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
-    internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
+    internal static readonly Serializers.MemoryPack.Formatters.Sets.Set<T> InstanceMemoryPack = Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance;
+    internal static readonly Serializers.MessagePack.Formatters.Sets.Set<T> InstanceMessagePack = Serializers.MessagePack.Formatters.Sets.Set<T>.Instance;
+    internal static readonly Serializers.Utf8Json.Formatters.Sets.Set<T> InstanceUtf8Json = Serializers.Utf8Json.Formatters.Sets.Set<T>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     //static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<T>.Instance);
     //public class Formatter:MemoryPack.MemoryPackFormatter<Set<T>> {
@@ -242,7 +245,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     //    return false;
     //}
     public void CopyTo(T[] array,int arrayIndex){
-        throw new NotImplementedException();
+        foreach(var a in this) array[arrayIndex++]=a;
     }
     /// <summary>
     /// 全要素削除します。

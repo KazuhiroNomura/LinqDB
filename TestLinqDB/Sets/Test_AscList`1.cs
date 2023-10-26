@@ -10,7 +10,7 @@ public class Test_AscList
     [Fact]
     public void Add()
     {
-        var s = new AscList<int>();
+        var s = new LinqDB.Enumerables.List<int>();
         dynamic n = new NonPublicAccessor(s);
         for (var a = 0; a < 要素数; a++)
             n.Add(a);

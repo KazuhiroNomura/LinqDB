@@ -11,11 +11,13 @@ public class SetGroupingSet<TKey,TElement>:IJsonFormatter<G.SetGroupingSet<TKey,
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter=GroupingSet<TKey,TElement>.Instance;
-        var first=true;
-        foreach(var item in value!){
-            if(first) first=false;
-            else writer.WriteValueSeparator();
-            Formatter.Serialize(ref writer,item,Resolver);
+        using var Enumerator=value!.GetEnumerator();
+        if(Enumerator.MoveNext()){
+            writer.Write(Formatter,Enumerator.Current,Resolver);
+            while(Enumerator.MoveNext()){
+	            writer.WriteValueSeparator();
+                writer.Write(Formatter,Enumerator.Current,Resolver);
+            }
         }
         writer.WriteEndArray();
     }
@@ -24,11 +26,13 @@ public class SetGroupingSet<TKey,TElement>:IJsonFormatter<G.SetGroupingSet<TKey,
         reader.ReadIsBeginArrayWithVerify();
         var Formatter=GroupingSet<TKey,TElement>.Instance;
         var value=new G.SetGroupingSet<TKey,TElement>();
-        var first=true;
-        while(!reader.ReadIsEndArray()) {
-            if(first) first=false;
-            else reader.ReadIsValueSeparatorWithVerify();
+        // ReSharper disable once InvertIf
+        if(!reader.ReadIsEndArray()) {
             value.Add(reader.Read(Formatter,Resolver));
+	        while(!reader.ReadIsEndArray()) {
+	            reader.ReadIsValueSeparatorWithVerify();
+	            value.Add(reader.Read(Formatter,Resolver));
+	        }
         }
         return value;
     }

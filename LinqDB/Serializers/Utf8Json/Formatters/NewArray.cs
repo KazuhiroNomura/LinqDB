@@ -9,6 +9,10 @@ using Reader = JsonReader;
 using T = Expressions.NewArrayExpression;
 public class NewArray:IJsonFormatter<T> {
     public static readonly NewArray Instance=new();
+
+
+
+
     internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteBeginArray();
         writer.WriteNodeType(value);
@@ -46,8 +50,7 @@ public class NewArray:IJsonFormatter<T> {
         reader.ReadIsValueSeparatorWithVerify();
         var value=NodeType switch{
             Expressions.ExpressionType.NewArrayBounds=>ReadNewArrayBounds(ref reader,Resolver),
-            Expressions.ExpressionType.NewArrayInit=>ReadNewArrayInit(ref reader,Resolver),
-            _=>throw new NotImplementedException(NodeType.ToString())
+            _                                        =>ReadNewArrayInit(ref reader,Resolver)
         };
         reader.ReadIsEndArrayWithVerify();
         return value;

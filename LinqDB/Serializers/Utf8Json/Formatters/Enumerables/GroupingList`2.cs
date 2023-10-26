@@ -15,7 +15,7 @@ public class GroupingList<TKey,TElement>:IJsonFormatter<G.GroupingList<TKey,TEle
         var Formatter=Resolver.GetFormatter<TElement>();
         foreach(var item in value){
             writer.WriteValueSeparator();
-            Formatter.Serialize(ref writer,item,Resolver);
+            writer.Write(Formatter,item,Resolver);
         }
         writer.WriteEndArray();
     }
@@ -23,12 +23,11 @@ public class GroupingList<TKey,TElement>:IJsonFormatter<G.GroupingList<TKey,TEle
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key=reader.Read<TKey>(Resolver);
-        var value=new G.GroupingList<TKey,TElement>(Key);
         var Formatter=Resolver.GetFormatter<TElement>();
+        var value=new G.GroupingList<TKey,TElement>(Key);
         while(!reader.ReadIsEndArray()){
             reader.ReadIsValueSeparatorWithVerify();
-            var item=Formatter.Deserialize(ref reader,Resolver);
-            value.Add(item);
+            value.Add(reader.Read(Formatter,Resolver));
         }
         return value;
     }

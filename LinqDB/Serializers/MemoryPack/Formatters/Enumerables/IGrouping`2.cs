@@ -12,7 +12,7 @@ public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElem
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.IGrouping<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value.LongCount());
-        writer.WriteValue(value!.Key);
+        writer.WriteValue(value.Key);
         var Formatter = writer.GetFormatter<TElement>();
         foreach(var item in value)
             writer.Write(Formatter,item);
@@ -24,9 +24,9 @@ public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElem
         if(reader.TryReadNil()) return;
         var Count = reader.ReadVarIntInt64();
         var Key=reader.ReadValue<TKey>();
-        var value0=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
         var Formatter = reader.GetFormatter<TElement>();
-        for(long a = 0;a<Count;a++)
+        var value0=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        while(Count-->0)
             value0.Add(reader.Read(Formatter));
         value=value0;
     }

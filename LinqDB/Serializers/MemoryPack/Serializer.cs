@@ -1,16 +1,17 @@
 ﻿using System.IO;
 
 
-
 using MemoryPack;
 
 namespace LinqDB.Serializers.MemoryPack;
+using O=MemoryPackSerializerOptions;
+
+
 public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public static readonly System.Reflection.MethodInfo Register=Reflection.Common.M(()=>MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance));
     public object GetService(System.Type serviceType)=>throw new System.NotImplementedException();
-    private readonly MemoryPackSerializerOptions Options;
-    public Serializer(){
-        this.Options=new(){ServiceProvider=this};
+    private readonly O Options;
+    static Serializer(){
 
         //MemoryPackFormatterProvider.Register(Formatters.Others.Action.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance);
@@ -48,7 +49,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Formatters.TypeBinary.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Unary.Instance);
         MemoryPackFormatterProvider.Register(Formatters.CSharpArgumentInfo.Instance);
-        
+
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Type.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Member.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Constructor.Instance);
@@ -56,9 +57,13 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Event.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Property.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Reflection.Field.Instance);
-       
+
         MemoryPackFormatterProvider.Register(Formatters.Enumerables.IEnumerable.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Sets.IEnumerable.Instance);
+        MemoryPackFormatterProvider.Register(CharArrayFormatter.Instance);
+    }
+    public Serializer(){
+        this.Options=new(){ServiceProvider=this,StringEncoding = StringEncoding.Utf16};
     }
     
     
@@ -71,14 +76,10 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     
     
     
-    
-    
-    
-    
+
     private void Clear(){
          this.ProtectedClear();
-    
-         
+
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
@@ -87,18 +88,20 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
-        var Task=MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask();
+        FormatterResolver.GetRegisteredFormatter<T>();
+        var Task=MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
         Task.Wait();
     }
     public override T Deserialize<T>(byte[] bytes){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter(typeof(T));
+        FormatterResolver.GetRegisteredFormatter<T>();
         return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
     }
     public override T Deserialize<T>(Stream stream){
         this.Clear();
+        FormatterResolver.GetRegisteredFormatter<T>();
         //var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
-        var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
+        var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
         Task.Wait();
         return (T)Task.Result!;
     }

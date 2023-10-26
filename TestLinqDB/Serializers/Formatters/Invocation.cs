@@ -1,22 +1,13 @@
 ﻿using Expressions = System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Formatters;
-public class Invocation : 共通
-{
+public class Invocation:共通{
     [Fact]
-    public void Serialize()
-    {
-        var @string = Expressions.Expression.Parameter(typeof(string));
-        var input = Expressions.Expression.Invoke(
-            Expressions.Expression.Lambda(@string, @string),
+    public void Serialize(){
+        var @string=Expressions.Expression.Parameter(typeof(string));
+        var input=Expressions.Expression.Invoke(
+            Expressions.Expression.Lambda(@string,@string),
             Expressions.Expression.Constant("B")
         );
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.InvocationExpression) });
-        this.MemoryMessageJson_Assert(
-            new
-            {
-                a = input,
-                b = (Expressions.Expression)input
-            }
-        );
+        this.MemoryMessageJson_T_Assert全パターン(input);
     }
 }

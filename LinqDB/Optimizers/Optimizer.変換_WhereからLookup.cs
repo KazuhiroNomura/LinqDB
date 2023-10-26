@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using LinqDB.Sets;
@@ -137,7 +136,7 @@ partial class Optimizer {
                                         predicate_Parameters
                                     )
                                 );
-                                var GetValue = 作業配列.GetMethod(Instance.Type,nameof(LookupList<int,int>.GetTKeyValue),プローブ.Type);
+                                var GetValue = 作業配列.GetMethod(Instance.Type,nameof(SetGroupingList<int,int>.GetTKeyValue),プローブ.Type);
                                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                                 Debug.Assert(GetValue is not null);
                                     プローブ=Convert必要なら(

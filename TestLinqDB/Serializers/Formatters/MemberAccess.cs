@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using Expressions = System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Formatters;
-[MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true)]
+[MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true),Serializable]
 public partial class MemberAccess対象:IEquatable<MemberAccess対象>{
     public int property=>1;
     public int field=4;
@@ -40,12 +40,12 @@ public class MemberAccess:共通 {
     [Fact]public void Serialize(){
 
         var Point=Expressions.Expression.Parameter(typeof(Point));
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.MemberExpression)});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=default(Expressions.MemberExpression)});
         var input=Expressions.Expression.MakeMemberAccess(
             Expressions.Expression.Constant(new MemberAccess対象()),
             typeof(MemberAccess対象).GetProperty(nameof(MemberAccess対象.property))!
         );
-        this.MemoryMessageJson_Assert(
+        this.MemoryMessageJson_T_Assert全パターン(
             new{
                 a=input,b=(Expressions.Expression)input
             }

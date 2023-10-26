@@ -358,20 +358,19 @@ public class ExpressionEqualityComparer:共通{
         return a.メンバー;
     }
     private void AssertEqual(Expression? a,Expression? b){
-        this.MemoryMessageJson_Assert(a,c=>{
-            Assert.Equal(a,b,this.Comparer);
-            Assert.Equal(a,c,this.Comparer);
-            Assert.Equal(b,c,this.Comparer);
+        Assert.Equal(a,b,this.汎用Comparer);
+        this.MemoryMessageJson_T_Assert(a,c=>{
+            Assert.Equal(a,c,this.汎用Comparer);
+            Assert.Equal(b,c,this.汎用Comparer);
         });
-        this.MemoryMessageJson_Assert(b,c=>{
-            Assert.Equal(a,b,this.Comparer);
-            Assert.Equal(a,c,this.Comparer);
-            Assert.Equal(b,c,this.Comparer);
+        this.MemoryMessageJson_T_Assert(b,c=>{
+            Assert.Equal(a,c,this.汎用Comparer);
+            Assert.Equal(b,c,this.汎用Comparer);
         });
     }
     private void AssertNotEqual(Expression? a,Expression? b){
-        this.MemoryMessageJson_Assert(a,c=>Assert.NotEqual(c,b,this.Comparer));
-        this.MemoryMessageJson_Assert(b,c=>Assert.NotEqual(c,a,this.Comparer));
+        this.MemoryMessageJson_T_Assert(a,c=>Assert.NotEqual(c,b,this.汎用Comparer));
+        this.MemoryMessageJson_T_Assert(b,c=>Assert.NotEqual(c,a,this.汎用Comparer));
     }
 
     [Fact]
@@ -2507,7 +2506,7 @@ public class ExpressionEqualityComparer:共通{
                     foreach(var Left1 in 値配列){
                         foreach(var Right0 in 値配列){
                             foreach(var Right1 in 値配列){
-                                var _=this.Comparer.Equals(
+                                var _=this.汎用Comparer.Equals(
                                     Expression.Add(
                                         Expression.Constant(Left0),
                                         Expression.Constant(Right0),

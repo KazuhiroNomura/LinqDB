@@ -386,9 +386,10 @@ public class Server:IDisposable{
                     throw;
                 }
             }
-        } catch(OperationCanceledException) {
-            //
-        } catch(ArgumentNullException) {
+        } catch(OperationCanceledException ex) {
+            Trace_WriteLine(4,$"{ex}");
+        } catch(ArgumentNullException ex) {
+            Trace_WriteLine(4,$"{ex}");
             //RequestResponseSingleReceiveSends.Take(Token)で待っているときに別スレッドで
             //RequestResponseSingleReceiveSends.Dispose()すると発生。
         } catch(Exception ex) {

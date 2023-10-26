@@ -714,7 +714,7 @@ partial class Optimizer {
                         throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
                 }
             }
-            return 変化したか ? (IList<MemberBinding>)Bindings1 : Bindings0;
+            return 変化したか ? Bindings1 : Bindings0;
         }
 
         protected override Expression MemberInit(MemberInitExpression MemberInit0){

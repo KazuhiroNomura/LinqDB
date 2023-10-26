@@ -11,26 +11,28 @@ public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKe
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter=GroupingList<TKey,TElement>.Instance;
-        var first=true;
-        foreach(var item in value!){
-            if(first)first=false;
-            else writer.WriteValueSeparator();
-            writer.Write(Formatter,item,Resolver);
+        using var Enumerator=value!.GetEnumerator();
+        if(Enumerator.MoveNext()){
+            writer.Write(Formatter,Enumerator.Current,Resolver);
+            while(Enumerator.MoveNext()){
+	            writer.WriteValueSeparator();
+	            writer.Write(Formatter,Enumerator.Current,Resolver);
+            }
         }
         writer.WriteEndArray();
     }
     public G.SetGroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if (reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
-        var value=new G.SetGroupingList<TKey,TElement>();
         var Formatter=GroupingList<TKey,TElement>.Instance;
-        //var Formatter=Resolver.GetFormatter<Sets.GroupingSet<TKey,TElement>>()!;
-        var first=true;
-        while(!reader.ReadIsEndArray()){
-            if(first)first=false;
-            else reader.ReadIsValueSeparatorWithVerify();
-            var item=Formatter.Deserialize(ref reader,Resolver);
-            value.Add(item);
+        var value=new G.SetGroupingList<TKey,TElement>();
+        // ReSharper disable once InvertIf
+        if(!reader.ReadIsEndArray()) {
+            value.Add(reader.Read(Formatter,Resolver));
+	        while(!reader.ReadIsEndArray()) {
+	            reader.ReadIsValueSeparatorWithVerify();
+	            value.Add(reader.Read(Formatter,Resolver));
+	        }
         }
         return value;
     }

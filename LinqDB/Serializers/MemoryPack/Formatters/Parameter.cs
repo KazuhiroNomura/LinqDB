@@ -19,9 +19,11 @@ public class Parameter:MemoryPackFormatter<T> {
             writer.WriteVarInt(index1);
             if(index1<0){
 
+                writer.WriteString(value.Name);
+                
                 writer.WriteType(value.Type);
                 
-                writer.WriteString(value.Name);
+                writer.WriteBoolean(value.IsByRef);
                 Serializer.ラムダ跨ぎParameters.Add(value);
             }
         }
@@ -52,10 +54,10 @@ public class Parameter:MemoryPackFormatter<T> {
             var index1=reader.ReadVarIntInt32();
             if(index1<0){
 
-                var type=reader.ReadType();
-                
                 var name=reader.ReadString();
-                var Parameter=Expressions.Expression.Parameter(type,name);
+                var type=reader.ReadType();
+                var IsByRef=reader.ReadBoolean();
+                var Parameter=Expressions.Expression.Parameter(IsByRef?type.MakeByRefType():type,name);
                 Serializer.ラムダ跨ぎParameters.Add(Parameter);
                 return Parameter;
             } else{

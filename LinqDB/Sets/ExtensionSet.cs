@@ -226,7 +226,7 @@ public static class ExtensionSet{
             Sum+=value.Value;
             Count++;
         }
-        return Count==0 ? null:Sum/(decimal)Count;
+        return Count==0 ? null:Sum/Count;
     }
     /// <summary>入力集合の各要素に対して変換関数を呼び出して取得する <see cref="decimal" /> 値の集合の平均値を計算します。</summary>
     /// <returns>値の集合の平均値。</returns>
@@ -486,8 +486,11 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">キー型</typeparam>
     /// <returns></returns>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Global
-    public static LookupSet<TSource,TKey> Lookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
-        var r = new LookupSet<TSource,TKey>();
+    public static SetGroupingSet<TKey,TSource> Lookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
+        //var r = new LookupSet<TSource,TKey>();
+        //foreach(var a in source)r.AddKeyValue(keySelector(a),a);
+        //return r;
+        var r = new SetGroupingSet<TKey,TSource>();
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
         return r;
     }
@@ -797,7 +800,7 @@ public static class ExtensionSet{
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     public static TSource Max<TSource>(this IEnumerable<TSource> source) {
-        var Enumerator = source.GetEnumerator();
+        using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
         var Default =Generic.Comparer<TSource>.Default;

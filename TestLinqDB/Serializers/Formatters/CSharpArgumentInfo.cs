@@ -2,18 +2,9 @@
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 
 namespace TestLinqDB.Serializers.Formatters;
-public class CSharpArgumentInfo : 共通
-{
+public class CSharpArgumentInfo:共通{
     [Fact]
-    public void Serialize()
-    {
-        //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new { a = default(RuntimeBinder.CSharpArgumentInfo) });
-        this.MemoryMessageJson_Assert(
-            new
-            {
-                a = Expressions.Expression.Constant(RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null))
-            }
-        );
+    public void Serialize(){
+        this.MemoryMessageJson_T_Assert全パターン(RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null));
     }
 }

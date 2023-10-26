@@ -1,14 +1,12 @@
-﻿using System;
-using System.Reflection;
-
+﻿using System.Reflection;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json.Formatters;
 using O=IJsonFormatterResolver;
-using T = Expressions.UnaryExpression;
 using Writer = JsonWriter;
 using Reader = JsonReader;
+using T = Expressions.UnaryExpression;
 using Reflection;
 public class Unary:IJsonFormatter<T> {
     public static readonly Unary Instance=new();
@@ -51,28 +49,14 @@ public class Unary:IJsonFormatter<T> {
     public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         switch(value!.NodeType){
-            case Expressions.ExpressionType.ArrayLength        :
-            case Expressions.ExpressionType.Quote              :WriteOperand(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Throw              :
-            case Expressions.ExpressionType.TypeAs             :
-            case Expressions.ExpressionType.Unbox              :WriteOperandType(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Convert            :
-            case Expressions.ExpressionType.ConvertChecked     :WriteOperandTypeMethod(ref writer,value,Resolver);break;
-            case Expressions.ExpressionType.Decrement          :
-            case Expressions.ExpressionType.Increment          :
-            case Expressions.ExpressionType.IsFalse            :
-            case Expressions.ExpressionType.IsTrue             :
-            case Expressions.ExpressionType.Negate             :
-            case Expressions.ExpressionType.NegateChecked      :
-            case Expressions.ExpressionType.Not                :
-            case Expressions.ExpressionType.OnesComplement     :
-            case Expressions.ExpressionType.PostDecrementAssign:
-            case Expressions.ExpressionType.PostIncrementAssign:
-            case Expressions.ExpressionType.PreDecrementAssign :
-            case Expressions.ExpressionType.PreIncrementAssign :
-            case Expressions.ExpressionType.UnaryPlus          :WriteOperandMethod(ref writer,value,Resolver);break;
-            default:
-                throw new NotSupportedException(value.NodeType.ToString());
+            case Expressions.ExpressionType.ArrayLength   :
+            case Expressions.ExpressionType.Quote         :WriteOperand(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Throw         :
+            case Expressions.ExpressionType.TypeAs        :
+            case Expressions.ExpressionType.Unbox         :WriteOperandType(ref writer,value,Resolver);break;
+            case Expressions.ExpressionType.Convert       :
+            case Expressions.ExpressionType.ConvertChecked:WriteOperandTypeMethod(ref writer,value,Resolver);break;
+            default                                       :WriteOperandMethod(ref writer,value,Resolver);break;
         }
     }
     internal static Expressions.Expression ReadOperand(ref Reader reader,O Resolver){
@@ -182,11 +166,11 @@ public class Unary:IJsonFormatter<T> {
                 var (operand,method)=ReadOperandMethod(ref reader,Resolver);
                 value=Expressions.Expression.UnaryPlus(operand,method);break;
             }
-            case Expressions.ExpressionType.Unbox: {
+            default: {
+                System.Diagnostics.Debug.Assert(NodeType==Expressions.ExpressionType.Unbox);
                 var (operand,type)=ReadOperandType(ref reader,Resolver);
                 value=Expressions.Expression.Unbox(operand,type);break;
             }
-            default:throw new NotSupportedException(NodeType.ToString());
         }
         reader.ReadIsEndArrayWithVerify();
         return value;

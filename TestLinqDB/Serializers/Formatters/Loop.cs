@@ -11,8 +11,7 @@ public class Loop : 共通{
                 Expressions.Expression.Default(typeof(void))
             );
             //var expected=new{a=input};
-            var expected = new { a = input, b = (Expressions.Expression)input };
-            this.MemoryMessageJson_Assert(expected);
+            this.MemoryMessageJson_T_Assert全パターン(input);
         }
         //} else {
         //    if(value.ContinueLabel is null) {//break,body
@@ -23,9 +22,7 @@ public class Loop : 共通{
                 ),
                 Label_decimal
             );
-            this.MemoryMessageJson_Assert(
-                new { a = input, b = (Expressions.Expression)input }
-            );
+            this.MemoryMessageJson_T_Assert全パターン(input);
         }
         //    } else {//break,continue,body
         {
@@ -37,9 +34,7 @@ public class Loop : 共通{
                 Label_decimal,
                 Label_void
             );
-            this.MemoryMessageJson_Assert(
-                new { a = input, b = (Expressions.Expression)input }
-            );
+            this.MemoryMessageJson_T_Assert全パターン(input);
         }
         //    }
         //}
@@ -48,13 +43,13 @@ public class Loop : 共通{
     public void Serialize_Deserialize(){
         //if(writer.TryWriteNil(value)) return;
         var Default=default(Expressions.LoopExpression);
-        this.MemoryMessageJson_Assert(new{a=Default,b=(Expressions.Expression?)Default});
+        this.MemoryMessageJson_T_Assert全パターン(Default);
         {
             var input=Expressions.Expression.Loop(
                 Expressions.Expression.Default(typeof(void))
             );
             var expected=new{a=input,b=(Expressions.Expression)input};
-            this.MemoryMessageJson_Assert(expected);
+            this.MemoryMessageJson_T_Assert全パターン(expected);
         }
     }
 }

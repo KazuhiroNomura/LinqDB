@@ -11,12 +11,12 @@ public class MethodCall : 共通
         var StaticMethod = Expressions.Expression.Call(M(() => テスト.StaticMethod()));
         var InstanceMethod = Expressions.Expression.Call(Expressions.Expression.Constant(new テスト()), M(() => new テスト().InstanceMethod()));
 
-        this.MemoryMessageJson_Assert(Expressions.Expression.Call(M(() => テスト.StaticMethod(1)),arg));
-        this.MemoryMessageJson_Assert(Expressions.Expression.Call(M(() => テスト.StaticMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_Assert(Expressions.Expression.Call(@this,M(() => o.InstanceMethod())));
-        this.MemoryMessageJson_Assert(Expressions.Expression.Call(@this,M(() => o.InstanceMethod(1)),arg));
-        this.MemoryMessageJson_Assert(Expressions.Expression.Call(@this,M(() => o.InstanceMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_Assert(
+        this.MemoryMessageJson_T_Assert全パターン(Expressions.Expression.Call(M(() => テスト.StaticMethod(1)),arg));
+        this.MemoryMessageJson_T_Assert全パターン(Expressions.Expression.Call(M(() => テスト.StaticMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_T_Assert全パターン(Expressions.Expression.Call(@this,M(() => o.InstanceMethod())));
+        this.MemoryMessageJson_T_Assert全パターン(Expressions.Expression.Call(@this,M(() => o.InstanceMethod(1)),arg));
+        this.MemoryMessageJson_T_Assert全パターン(Expressions.Expression.Call(@this,M(() => o.InstanceMethod(1,2)),arg,arg));
+        this.MemoryMessageJson_T_Assert全パターン(
             Expressions.Expression.Call(
                 M(() => string.Concat("","")),
                 Expressions.Expression.Constant("A"),
@@ -24,8 +24,7 @@ public class MethodCall : 共通
             )
         );
 
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.MethodCallExpression) });
-        this.MemoryMessageJson_Assert(
+        this.MemoryMessageJson_T_Assert全パターン(
             new
             {
                 StaticMethod,

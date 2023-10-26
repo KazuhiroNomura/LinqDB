@@ -1,10 +1,9 @@
-﻿using System;
-using System.Reflection;
-
+﻿using System.Reflection;
 using MemoryPack;
 using System.Buffers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.UnaryExpression;
@@ -12,25 +11,32 @@ using Reflection;
 public class Unary:MemoryPackFormatter<T> {
     public static readonly Unary Instance=new();
     internal static void WriteOperand<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+
         writer.WriteNodeType(value);
 
         Expression.Write(ref writer,value.Operand);
+        
     }
     internal static void WriteOperandType<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
 
         writer.WriteNodeType(value);
 
         Expression.Write(ref writer,value.Operand);
+
         writer.WriteType(value.Type);
+        
     }
     internal static void WriteOperandMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+
         writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Operand);
         
         Method.WriteNullable(ref writer,value.Method);
+
     }
     internal static void WriteOperandTypeMethod<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value) where TBufferWriter :IBufferWriter<byte> {
+        
         writer.WriteNodeType(value);
         
         Expression.Write(ref writer,value.Operand);
@@ -38,38 +44,20 @@ public class Unary:MemoryPackFormatter<T> {
         writer.WriteType(value.Type);
         
         Method.WriteNullable(ref writer,value.Method);
-    }
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value)/*where TBufferWriter : class, IBufferWriter<byte>*/{
-        if(writer.TryWriteNil(value)) return;
-
-        switch(value!.NodeType){
-            case Expressions.ExpressionType.ArrayLength        : 
-            case Expressions.ExpressionType.Quote              : WriteOperand(ref writer,value);break;
-            case Expressions.ExpressionType.Throw              : 
-            case Expressions.ExpressionType.TypeAs             : 
-            case Expressions.ExpressionType.Unbox              : WriteOperandType(ref writer,value);break;
-            case Expressions.ExpressionType.Convert            : 
-            case Expressions.ExpressionType.ConvertChecked     : WriteOperandTypeMethod(ref writer,value);break;
-            //case Expressions.ExpressionType.Decrement          : 
-            //case Expressions.ExpressionType.Increment          : 
-            //case Expressions.ExpressionType.IsFalse            : 
-            //case Expressions.ExpressionType.IsTrue             : 
-            //case Expressions.ExpressionType.Negate             : 
-            //case Expressions.ExpressionType.NegateChecked      : 
-            //case Expressions.ExpressionType.Not                : 
-            //case Expressions.ExpressionType.OnesComplement     : 
-            //case Expressions.ExpressionType.PostDecrementAssign: 
-            //case Expressions.ExpressionType.PostIncrementAssign: 
-            //case Expressions.ExpressionType.PreDecrementAssign : 
-            //case Expressions.ExpressionType.PreIncrementAssign : 
-            //case Expressions.ExpressionType.UnaryPlus          : WriteOperandMethod(ref writer,value);break;
-            default:
-                //System.Diagnostics.Debug.Assert(value.NodeType==Expressions.ExpressionType.UnaryPlus);
-                WriteOperandMethod(ref writer,value);
-                break;
-                //throw new NotSupportedException(value.NodeType.ToString());
-        }
         
+    }
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        if(writer.TryWriteNil(value)) return;
+        switch(value!.NodeType){
+            case Expressions.ExpressionType.ArrayLength   : 
+            case Expressions.ExpressionType.Quote         :WriteOperand(ref writer,value);break;
+            case Expressions.ExpressionType.Throw         : 
+            case Expressions.ExpressionType.TypeAs        : 
+            case Expressions.ExpressionType.Unbox         :WriteOperandType(ref writer,value);break;
+            case Expressions.ExpressionType.Convert       : 
+            case Expressions.ExpressionType.ConvertChecked:WriteOperandTypeMethod(ref writer,value);break;
+            default                                       :WriteOperandMethod(ref writer,value);break;
+        }
     }
     internal static Expressions.Expression ReadOperand(ref Reader reader){
         var operand=Expression.Read(ref reader);
@@ -97,9 +85,10 @@ public class Unary:MemoryPackFormatter<T> {
     }
     private static T Read(ref Reader reader){
         
+
+        var NodeType=reader.ReadNodeType();
         
         T value;
-        var NodeType=reader.ReadNodeType();
         switch(NodeType){
             case Expressions.ExpressionType.ArrayLength: {
                 var operand=ReadOperand(ref reader);
@@ -177,16 +166,13 @@ public class Unary:MemoryPackFormatter<T> {
                 var (operand,type)=ReadOperandType(ref reader);
                 value=Expressions.Expression.TypeAs(operand,type);break;
             }
-            //case Expressions.ExpressionType.Unbox: {
-            //    var (operand,type)=ReadOperandType(ref reader);
-            //    value=Expressions.Expression.Unbox(operand,type);break;
-            //}
             default:{
                 System.Diagnostics.Debug.Assert(NodeType==Expressions.ExpressionType.Unbox);
                 var (operand,type)=ReadOperandType(ref reader);
                 value=Expressions.Expression.Unbox(operand,type);break;
             }
        }
+       
        return value;
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=reader.TryReadNil()?null:Read(ref reader);

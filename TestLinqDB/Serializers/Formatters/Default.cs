@@ -6,14 +6,6 @@ public class Default : 共通
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.DefaultExpression) });
-        var input = Expressions.Expression.Default(typeof(void));
-        this.MemoryMessageJson_Assert(
-            new
-            {
-                a = input,
-                b = (Expressions.Expression)input
-            }
-        );
+        this.MemoryMessageJson_Expression_Assert全パターン(Expressions.Expression.Default(typeof(void)));
     }
 }

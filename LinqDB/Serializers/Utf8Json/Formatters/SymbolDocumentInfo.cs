@@ -15,11 +15,11 @@ public class SymbolDocumentInfo:IJsonFormatter<T> {
         writer.WriteBeginArray();
         writer.WriteString(value.FileName);
         writer.WriteValueSeparator();
-        Formatter.Serialize(ref writer,value.Language,Resolver);
+        writer.Write(Formatter,value.Language,Resolver);
         writer.WriteValueSeparator();
-        Formatter.Serialize(ref writer,value.LanguageVendor,Resolver);
+        writer.Write(Formatter,value.LanguageVendor,Resolver);
         writer.WriteValueSeparator();
-        Formatter.Serialize(ref writer,value.DocumentType,Resolver);
+        writer.Write(Formatter,value.DocumentType,Resolver);
         writer.WriteEndArray();
     }
     public void Serialize(ref Writer writer,T? value,O Resolver) {
@@ -31,11 +31,11 @@ public class SymbolDocumentInfo:IJsonFormatter<T> {
         reader.ReadIsBeginArrayWithVerify();
         var fileName = reader.ReadString();
         reader.ReadIsValueSeparatorWithVerify();
-        var language = Formatter.Deserialize(ref reader,Resolver);
+        var language = reader.Read(Formatter,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var languageVendor = Formatter.Deserialize(ref reader,Resolver);
+        var languageVendor = reader.Read(Formatter,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var documentType = Formatter.Deserialize(ref reader,Resolver);
+        var documentType=reader.Read(Formatter,Resolver);
         reader.ReadIsEndArrayWithVerify();
         return Expressions.Expression.SymbolDocument(fileName,language,languageVendor,documentType);
 

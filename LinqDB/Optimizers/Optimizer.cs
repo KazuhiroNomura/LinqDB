@@ -20,7 +20,6 @@ using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 using AssemblyGenerator = Lokad.ILPack.AssemblyGenerator;
 using Container = LinqDB.Databases.Container;
 using Delegate = System.Delegate;
-using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
@@ -382,7 +381,8 @@ public sealed partial class Optimizer:IDisposable{
     /// 式木の等価を比較する
     /// </summary>
     public class ExpressionEqualityComparer:Generic.IEqualityComparer<Expression>,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>{
-        private readonly EnumerableSetEqualityComparer ObjectComparer;
+        private static bool @false=>false;
+        private readonly 汎用Comparer ObjectComparer;
         /// <summary>
         /// 比較するときに可視パラメーター
         /// </summary>
@@ -442,7 +442,7 @@ public sealed partial class Optimizer:IDisposable{
         /// <returns></returns>
         public bool Equals(Expression? a,Expression? b) {
             if(a==b) return true;
-            if(a==null&&b!=null||a!=null&&b==null) return false;
+            if(a==null&&b!=null||a!=null&&b==null) return @false;
             this.a_ラムダ跨ぎParameters.Clear();
             this.b_ラムダ跨ぎParameters.Clear();
             this.a_Parameters.Clear();
@@ -463,14 +463,14 @@ public sealed partial class Optimizer:IDisposable{
             if(a0 is null)
                 return b0 is null;
             if(b0 is null)
-                return false;
+                return @false;
             return this.PrivateEquals(a0,b0);
         }
         private bool PrivateEquals(Expression? a0,Expression? b0){
             var a1=this.Assignの比較対象(a0);
             var b1=this.Assignの比較対象(b0);
             if(a1.NodeType!=b1?.NodeType||a1.Type!=b1.Type)
-                return false;
+                return @false;
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch(a1.NodeType) {
                 case ExpressionType.Add:
@@ -517,22 +517,22 @@ public sealed partial class Optimizer:IDisposable{
                     var b_Assign = (BinaryExpression)b1;
                     var a_Left = a_Assign.Left;
                     var b_Left = b_Assign.Left;
-                    if(a_Left.NodeType!=b_Left.NodeType) return false;
+                    if(a_Left.NodeType!=b_Left.NodeType) return @false;
                     if(a_Left.NodeType!=ExpressionType.Parameter) return this.T(a_Assign,b_Assign);
                     if(!this.PrivateEquals(a_Assign.Right,b_Assign.Right))
-                        return false;
+                        return @false;
                     if(!this.InternalEquals(a_Assign.Conversion,b_Assign.Conversion))
-                        return false;
+                        return @false;
                     var a_Parameter= (ParameterExpression)a_Left;
                     var b_Parameter= (ParameterExpression)b_Left;
                     var a_Index0 = this.a_Parameters.IndexOf(a_Parameter);
                     var b_Index0 = this.b_Parameters.IndexOf(b_Parameter);
-                    if(a_Index0!=b_Index0) return false;
+                    if(a_Index0!=b_Index0) return @false;
                     if(a_Index0>=0) return true;
                     var スコープParameters = this.スコープParameters;
                     var a_Index1 = スコープParameters.IndexOf(a_Parameter);
                     var b_Index1 = スコープParameters.IndexOf(b_Parameter);
-                    if(a_Index1!=b_Index1) return false;
+                    if(a_Index1!=b_Index1) return @false;
                     if(a_Index1>=0) return true;
                     //Let(a=>.v),Let(b=>.w)は一致しない。
                     //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
@@ -540,9 +540,9 @@ public sealed partial class Optimizer:IDisposable{
                     var b_ラムダ跨ぎParameters = this.b_ラムダ跨ぎParameters;
                     Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||
                                  a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
-                    if(a_ラムダ跨ぎParameters is null)return false;
+                    if(a_ラムダ跨ぎParameters is null)return @false;
                     if(a_ラムダ跨ぎParameters.Contains(a_Parameter)) return b_ラムダ跨ぎParameters!.Contains(b_Parameter);
-                    if(b_ラムダ跨ぎParameters!.Contains(b_Parameter)) return false;
+                    if(b_ラムダ跨ぎParameters!.Contains(b_Parameter)) return @false;
                     a_ラムダ跨ぎParameters.Add(a_Parameter);
                     b_ラムダ跨ぎParameters.Add(b_Parameter);
                     return this.PrivateEquals(a_Assign.Right,b_Assign.Right);
@@ -622,20 +622,20 @@ public sealed partial class Optimizer:IDisposable{
         }
         private bool T(BinaryExpression a,BinaryExpression b) => a.Method==b.Method&&this.PrivateEquals(a.Left,b.Left)&&this.PrivateEquals(a.Right,b.Right)&&this.InternalEquals(a.Conversion,b.Conversion);
         private bool T(BlockExpression a,BlockExpression b){
-            //if(!this.T(a.Variables,b.Variables)) return false;
+            //if(!this.T(a.Variables,b.Variables)) return @false;
             //return this.SequenceEqual(a.Expressions,b.Expressions);
-            if(a.Type!=b.Type) return false;
+            if(a.Type!=b.Type) return @false;
             var a_Variables = a.Variables;
             var b_Variables = b.Variables;
             var a_Variables_Count = a_Variables.Count;
             var b_Variables_Count = b_Variables.Count;
-            if(a_Variables_Count!=b_Variables_Count)return false;
+            if(a_Variables_Count!=b_Variables_Count)return @false;
             var a_Parameters = this.a_Parameters;
             var b_Parameters = this.b_Parameters;
             for(var i = 0;i<a_Variables_Count;i++) {
                 var a_Variable = a_Variables[i];
                 var b_Variable = b_Variables[i];
-                if(a_Variable.Type!=b_Variable.Type)return false;
+                if(a_Variable.Type!=b_Variable.Type)return @false;
             }
             var a_Parameters_Count = a_Parameters.Count;
             Debug.Assert(a_Parameters_Count==b_Parameters.Count);
@@ -667,66 +667,66 @@ public sealed partial class Optimizer:IDisposable{
         private bool T(DefaultExpression a,DefaultExpression b) => a.Type==b.Type;
         private bool T(DynamicExpression a,DynamicExpression b) {
             if(!this.SequenceEqual(a.Arguments,b.Arguments))
-                return false;
+                return @false;
             var a_Binder = a.Binder;
             var b_Binder = b.Binder;
             Debug.Assert(a_Binder.GetType()==b_Binder.GetType(),"SequenceEqualの抜け穴パターンがあるか？");
             switch(a_Binder,b_Binder){
                 case(DynamicMetaObjectBinder a0,DynamicMetaObjectBinder b0):{
-                    if(a0.ReturnType!=b0.ReturnType)return false;
+                    if(a0.ReturnType!=b0.ReturnType)return @false;
                     switch(a0, b0) {
                         case (BinaryOperationBinder a1, BinaryOperationBinder b1): {
-                            if(a1.Operation!=b1.Operation) return false;
+                            if(a1.Operation!=b1.Operation) return @false;
                             return true;
                         }
                         case (ConvertBinder a1, ConvertBinder b1): {
-                            if(a1.Explicit!=b1.Explicit) return false;
+                            if(a1.Explicit!=b1.Explicit) return @false;
                             Debug.Assert(a1.ReturnType==a1.Type);
                             Debug.Assert(b1.ReturnType==b1.Type);
                             return true;
                         }
                         case (CreateInstanceBinder a1, CreateInstanceBinder b1): {
-                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (DeleteIndexBinder a1, DeleteIndexBinder b1): {
-                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (DeleteMemberBinder a1, DeleteMemberBinder b1): {
-                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
-                            if(a1.Name!=b1.Name) return false;
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
+                            if(a1.Name!=b1.Name) return @false;
                             return true;
                         }
                         case (GetIndexBinder a1, GetIndexBinder b1): {
-                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (GetMemberBinder a1, GetMemberBinder b1): {
                             Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"GetMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
-                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
-                            if(a1.Name!=b1.Name)return false;
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
+                            if(a1.Name!=b1.Name)return @false;
                             return true;
                         }
                         case (InvokeBinder a1, InvokeBinder b1): {
-                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (InvokeMemberBinder a1, InvokeMemberBinder b1): {
                             Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"InvokeMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
-                            if(a1.Name!=b1.Name) return false;
-                            if(a1.IgnoreCase!=b1.IgnoreCase) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.Name!=b1.Name) return @false;
+                            if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (SetIndexBinder a1, SetIndexBinder b1): {
                             Debug.Assert(a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames),"CallInfo.Argumentsが違うパターンもあるんじゃないか");
-                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return false;
-                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return false;
+                            if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
+                            if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
                             return true;
                         }
                         case (SetMemberBinder a1, SetMemberBinder b1): {
@@ -734,7 +734,7 @@ public sealed partial class Optimizer:IDisposable{
                             return a1.Name.Equals(b1.Name,StringComparison.Ordinal);
                         }
                         case (UnaryOperationBinder a1, UnaryOperationBinder b1): {
-                            if(a1.Operation!=b1.Operation) return false;
+                            if(a1.Operation!=b1.Operation) return @false;
                             return true;
                         }
                         default:
@@ -748,55 +748,55 @@ public sealed partial class Optimizer:IDisposable{
         private bool InitializersEquals(ReadOnlyCollection<ElementInit> a_Initializers,
             ReadOnlyCollection<ElementInit> b_Initializers) {
             if(a_Initializers.Count!=b_Initializers.Count)
-                return false;
+                return @false;
             var a_Initializers_Count = a_Initializers.Count;
             for(var c = 0;c<a_Initializers_Count;c++) {
                 var a = a_Initializers[c];
                 var b = b_Initializers[c];
                 if(a.AddMethod!=b.AddMethod)
-                    return false;
+                    return @false;
                 if(!this.SequenceEqual(a.Arguments,b.Arguments))
-                    return false;
+                    return @false;
             }
             return true;
         }
         private bool MemberBindingsEquals(ReadOnlyCollection<MemberBinding> a_Bindings,
             ReadOnlyCollection<MemberBinding> b_Bindings) {
             if(a_Bindings.Count!=b_Bindings.Count)
-                return false;
+                return @false;
             var a_Bindings_Count = a_Bindings.Count;
             for(var c = 0;c<a_Bindings_Count;c++) {
                 var a = a_Bindings[c];
                 var b = b_Bindings[c];
                 //Debug.Assert(a is not null&&b is not null);
                 if(a.BindingType!=b.BindingType)
-                    return false;
+                    return @false;
                 switch(a.BindingType) {
                     case MemberBindingType.Assignment: {
                         var a1 = (MemberAssignment)a;
                         var b1 = (MemberAssignment)b;
                         if(a1.Member!=b1.Member)
-                            return false;
+                            return @false;
                         if(!this.PrivateEquals(a1.Expression,b1.Expression))
-                            return false;
+                            return @false;
                         break;
                     }
                     case MemberBindingType.MemberBinding: {
                         var a1 = (MemberMemberBinding)a;
                         var b1 = (MemberMemberBinding)b;
                         if(a1.Member!=b1.Member)
-                            return false;
+                            return @false;
                         if(!this.MemberBindingsEquals(a1.Bindings,b1.Bindings))
-                            return false;
+                            return @false;
                         break;
                     }
                     case MemberBindingType.ListBinding: {
                         var a1 = (MemberListBinding)a;
                         var b1 = (MemberListBinding)b;
                         if(a1.Member!=b1.Member)
-                            return false;
+                            return @false;
                         if(!this.InitializersEquals(a1.Initializers,b1.Initializers))
-                            return false;
+                            return @false;
                         break;
                     }
                     default:
@@ -816,12 +816,12 @@ public sealed partial class Optimizer:IDisposable{
             a.Constructor==b.Constructor;
         public bool Equals(LabelTarget? a,LabelTarget? b){
             if(a==b) return true;
-            if(a==null&&b!=null||a!=null&&b==null) return false;
+            if(a==null&&b!=null||a!=null&&b==null) return @false;
             return a!.Type==b!.Type&&a.Name==b.Name&&
                 this.a_LabelTargets.IndexOf(a)==this.b_LabelTargets.IndexOf(b);
         }
         private bool T(LabelExpression a,LabelExpression b){
-            if(!this.Equals(a.Target,b.Target)) return false;
+            if(!this.Equals(a.Target,b.Target)) return @false;
             var a_LabelTargets = this.a_LabelTargets;
             var b_LabelTargets = this.b_LabelTargets;
             var a_LabelTargets_Count = a_LabelTargets.Count;
@@ -835,7 +835,7 @@ public sealed partial class Optimizer:IDisposable{
             return r;
         }
         private bool T(LambdaExpression a,LambdaExpression b){
-            if(a.Type!=b.Type||a.TailCall!=b.TailCall) return false;
+            if(a.Type!=b.Type||a.TailCall!=b.TailCall) return @false;
             var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
             var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
             this.a_ラムダ跨ぎParameters=new();
@@ -843,7 +843,7 @@ public sealed partial class Optimizer:IDisposable{
             var Lambda_a_Parameters = a.Parameters;
             var Lambda_b_Parameters = b.Parameters;
             var Lambda_a_Parameters_Count = Lambda_a_Parameters.Count;
-            if(Lambda_a_Parameters_Count!=Lambda_b_Parameters.Count) return false;
+            if(Lambda_a_Parameters_Count!=Lambda_b_Parameters.Count) return @false;
             var a_Parameters = this.a_Parameters;
             var b_Parameters = this.b_Parameters;
             var a_Parameters_Count = a_Parameters.Count;
@@ -875,16 +875,16 @@ public sealed partial class Optimizer:IDisposable{
             Debug.Assert(a_LabelTargets_Count==b_LabelTargets_Count);
             if(a_BreakLabel is not null) {
                 if(b_BreakLabel is null)
-                    return false;
+                    return @false;
                 a_LabelTargets.Add(a_BreakLabel);
                 b_LabelTargets.Add(b_BreakLabel);
-            } else if(b_BreakLabel is not null)return false;
+            } else if(b_BreakLabel is not null)return @false;
             if(a_ContinueLabel is not null) {
                 if(b_ContinueLabel is null)
-                    return false;
+                    return @false;
                 a_LabelTargets.Add(a_ContinueLabel);
                 b_LabelTargets.Add(b_ContinueLabel);
-            } else if(b_ContinueLabel is not null)return false;
+            } else if(b_ContinueLabel is not null)return @false;
             var r = this.PrivateEquals(a.Body,b.Body);
             Debug.Assert(a_LabelTargets.Count==b_LabelTargets.Count);
             a_LabelTargets.RemoveRange(a_LabelTargets_Count,a_LabelTargets.Count-a_LabelTargets_Count);
@@ -918,11 +918,11 @@ public sealed partial class Optimizer:IDisposable{
         private bool SequenceEqual(Generic.IList<Expression> a,Generic.IList<Expression> b) {
             var a_Count = a.Count;
             if(a_Count!=b.Count)
-                return false;
+                return @false;
             for(var i=0;i<a_Count;i++){
                 if(!this.PrivateEquals(a[i],b[i])){
                     Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
-                    return false;
+                    return @false;
                 }
                 Debug.Assert(this.a_LabelTargets.Count==this.b_LabelTargets.Count);
             }
@@ -931,13 +931,13 @@ public sealed partial class Optimizer:IDisposable{
         private bool T(ParameterExpression a,ParameterExpression b) {
             var a_Index0 = this.a_Parameters.IndexOf(a);
             var b_Index0 = this.b_Parameters.IndexOf(b);
-            if(a_Index0!=b_Index0)return false;
+            if(a_Index0!=b_Index0)return @false;
             if(a_Index0>=0) return true;
             //探索開始時点の
             var スコープParameters = this.スコープParameters;
             var a_Index1 = スコープParameters.IndexOf(a);
             var b_Index1 = スコープParameters.IndexOf(b);
-            if(a_Index1!=b_Index1) return false;
+            if(a_Index1!=b_Index1) return @false;
             if(a_Index1>=0) return true;
             //Let(a=>.v),Let(b=>.w)は一致しない。
             //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
@@ -946,10 +946,10 @@ public sealed partial class Optimizer:IDisposable{
             var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
             //Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
             //if(a_ラムダ跨ぎParameters is null){
-            //    return false;
+            //    return @false;
             //}
             if(a_ラムダ跨ぎParameters.Contains(a))return b_ラムダ跨ぎParameters.Contains(b);
-            if(b_ラムダ跨ぎParameters.Contains(b))return false;
+            if(b_ラムダ跨ぎParameters.Contains(b))return @false;
             a_ラムダ跨ぎParameters.Add(a);
             b_ラムダ跨ぎParameters.Add(b);
             return true;
@@ -959,42 +959,42 @@ public sealed partial class Optimizer:IDisposable{
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {
             if(a.Comparison!=b.Comparison)
-                return false;
+                return @false;
             if(!this.PrivateEquals(a.DefaultBody,b.DefaultBody))
-                return false;
+                return @false;
             if(!this.PrivateEquals(a.SwitchValue,b.SwitchValue))
-                return false;
+                return @false;
             var a_Cases = a.Cases;
             var b_Cases = b.Cases;
             var a_Cases_Count = a_Cases.Count;
             if(a_Cases.Count!=b_Cases.Count)
-                return false;
+                return @false;
             for(var c = 0;c<a_Cases_Count;c++) {
                 var a_Case = a_Cases[c];
                 var b_Case = b_Cases[c];
                 if(!this.PrivateEquals(a_Case.Body,b_Case.Body))
-                    return false;
+                    return @false;
                 if(!this.SequenceEqual(a_Case.TestValues,b_Case.TestValues))
-                    return false;
+                    return @false;
             }
             return true;
         }
         private bool T(TryExpression a,TryExpression b) {
-            if(!this.PrivateEquals(a.Body,b.Body))return false;
-            if(!this.InternalEquals(a.Fault,b.Fault))return false;
-            if(!this.InternalEquals(a.Finally,b.Finally))return false;
+            if(!this.PrivateEquals(a.Body,b.Body))return @false;
+            if(!this.InternalEquals(a.Fault,b.Fault))return @false;
+            if(!this.InternalEquals(a.Finally,b.Finally))return @false;
             var a_Handlers = a.Handlers;
             var b_Handlers = b.Handlers;
             var a_Handlers_Count = a_Handlers.Count;
             if(a_Handlers_Count!=b_Handlers.Count)
-                return false;
+                return @false;
             for(var c = 0;c<a_Handlers_Count;c++) {
                 var a_Handler = a_Handlers[c];
                 var b_Handler = b_Handlers[c];
-                if(a_Handler.Test!=b_Handler.Test)return false;
+                if(a_Handler.Test!=b_Handler.Test)return @false;
                 var a_Handler_Variable=a_Handler.Variable;
                 var b_Handler_Variable=b_Handler.Variable;
-                if(a_Handler_Variable is null^b_Handler_Variable is null) return false;
+                if(a_Handler_Variable is null^b_Handler_Variable is null) return @false;
                 var a_Parameters = this.a_Parameters;
                 var b_Parameters = this.b_Parameters;
                 var a_Parameters_Count = a_Parameters.Count;
@@ -1003,8 +1003,8 @@ public sealed partial class Optimizer:IDisposable{
                     a_Parameters.Add(a_Handler_Variable);
                     b_Parameters.Add(b_Handler_Variable);
                 }
-                if(!this.PrivateEquals(a_Handler.Body,b_Handler.Body))return false;
-                if(!this.InternalEquals(a_Handler.Filter,b_Handler.Filter))return false;
+                if(!this.PrivateEquals(a_Handler.Body,b_Handler.Body))return @false;
+                if(!this.InternalEquals(a_Handler.Filter,b_Handler.Filter))return @false;
                 if(a_Handler_Variable is not null) {
                     a_Parameters.RemoveAt(a_Parameters_Count);
                     b_Parameters.RemoveAt(a_Parameters_Count);
@@ -1028,11 +1028,11 @@ public sealed partial class Optimizer:IDisposable{
 
         public bool Equals(CatchBlock? a,CatchBlock? b) {
             if(a==b) return true;
-            if(a==null&&b!=null||a!=null&&b==null) return false;
-            if(a!.Test!=b!.Test)return false;
+            if(a==null&&b!=null||a!=null&&b==null) return @false;
+            if(a!.Test!=b!.Test)return @false;
             var a_Variable=a.Variable;
             var b_Variable=b.Variable;
-            if(a_Variable is null^b_Variable is null) return false;
+            if(a_Variable is null^b_Variable is null) return @false;
             var a_Parameters = this.a_Parameters;
             var b_Parameters = this.b_Parameters;
             var a_Parameters_Count = a_Parameters.Count;
@@ -1041,8 +1041,8 @@ public sealed partial class Optimizer:IDisposable{
                 a_Parameters.Add(a_Variable);
                 b_Parameters.Add(b_Variable);
             }
-            if(!this.PrivateEquals(a.Body,b.Body))return false;
-            if(!this.InternalEquals(a.Filter,b.Filter))return false;
+            if(!this.PrivateEquals(a.Body,b.Body))return @false;
+            if(!this.InternalEquals(a.Filter,b.Filter))return @false;
             if(a_Variable is not null) {
                 a_Parameters.RemoveAt(a_Parameters_Count);
                 b_Parameters.RemoveAt(a_Parameters_Count);
@@ -1056,15 +1056,15 @@ public sealed partial class Optimizer:IDisposable{
 
         public bool Equals(CSharpArgumentInfo? x,CSharpArgumentInfo? y) {
             if(x==y) return true;
-            if(x==null&&y!=null||x!=null&&y==null) return false;
+            if(x==null&&y!=null||x!=null&&y==null) return @false;
             dynamic x0=new NonPublicAccessor(x),y0=new NonPublicAccessor(y);
-            if(x0.Flags             !=y0.Flags             ) return false;
-            if(x0.IsByRefOrOut      !=y0.IsByRefOrOut      ) return false;
-            if(x0.IsStaticType      !=y0.IsStaticType      ) return false;
-            if(x0.LiteralConstant   !=y0.LiteralConstant   ) return false;
-            if(x0.Name              !=y0.Name              ) return false;
-            if(x0.NamedArgument     !=y0.NamedArgument     ) return false;
-            if(x0.UseCompileTimeType!=y0.UseCompileTimeType) return false;
+            if(x0.Flags             !=y0.Flags             ) return @false;
+            if(x0.IsByRefOrOut      !=y0.IsByRefOrOut      ) return @false;
+            if(x0.IsStaticType      !=y0.IsStaticType      ) return @false;
+            if(x0.LiteralConstant   !=y0.LiteralConstant   ) return @false;
+            if(x0.Name              !=y0.Name              ) return @false;
+            if(x0.NamedArgument     !=y0.NamedArgument     ) return @false;
+            if(x0.UseCompileTimeType!=y0.UseCompileTimeType) return @false;
             return true;
         }
 
@@ -1073,7 +1073,7 @@ public sealed partial class Optimizer:IDisposable{
         }
         public bool Equals(SwitchCase? x,SwitchCase? y){
             if(x==y) return true;
-            if(x==null&&y!=null||x!=null&&y==null) return false;
+            if(x==null&&y!=null||x!=null&&y==null) return @false;
             return this.PrivateEquals(x!.Body,y!.Body)&&x.TestValues.SequenceEqual(y.TestValues,this);
         }
         public int GetHashCode(SwitchCase obj){
@@ -1190,20 +1190,20 @@ public sealed partial class Optimizer:IDisposable{
             //プローブ.Type==typeof(Object)
             //    ? nameof(DictionaryAscList<Int32,Int32>.GetObjectValue)
             //    : nameof(DictionaryAscList<Int32,Int32>.GetTKeyValue),
-            if(
-                (
-                    nameof(Sets.LookupList<int,int>.GetObjectValue)==GenericMethodDefinition.Name||
-                    nameof(Sets.LookupList<int,int>.GetTKeyValue)==GenericMethodDefinition.Name
-                )&&
-                ExtensionEnumerable.Lookup==MethodCall_GenericMethodDefinition||
-                (
-                    nameof(Sets.LookupSet<int,int>.GetObjectValue)==GenericMethodDefinition.Name||
-                    nameof(Sets.LookupSet<int,int>.GetTKeyValue)==GenericMethodDefinition.Name
-                )&&
-                ExtensionSet.Lookup==MethodCall_GenericMethodDefinition
-            ){
-                throw new InvalidOperationException("Dictionary.Equalが連続してはいけない。Dictionaryは上位のラムダに移動してthisメンバにより参照されるはず。");
-            }
+            //if(
+            //    (
+            //        nameof(Sets.LookupList<int,int>.GetObjectValue)==GenericMethodDefinition.Name||
+            //        nameof(Sets.LookupList<int,int>.GetTKeyValue)==GenericMethodDefinition.Name
+            //    )&&
+            //    ExtensionEnumerable.Lookup==MethodCall_GenericMethodDefinition||
+            //    (
+            //        nameof(Sets.SetGroupingSet<int,int>.GetObjectValue)==GenericMethodDefinition.Name||
+            //        nameof(Sets.LookupSet<int,int>.GetTKeyValue)==GenericMethodDefinition.Name
+            //    )&&
+            //    ExtensionSet.Lookup==MethodCall_GenericMethodDefinition
+            //){
+            //    throw new InvalidOperationException("Dictionary.Equalが連続してはいけない。Dictionaryは上位のラムダに移動してthisメンバにより参照されるはず。");
+            //}
         }
     }
     private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);

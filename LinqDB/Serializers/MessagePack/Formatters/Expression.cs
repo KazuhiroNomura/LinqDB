@@ -353,7 +353,7 @@ public class Expression:IMessagePackFormatter<T> {
             case Expressions.ExpressionType.Lambda          :value=Lambda        .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Call            :value=MethodCall    .Read              (ref reader,Resolver);break;
             case Expressions.ExpressionType.Invoke          :value=Invocation    .Read              (ref reader,Resolver);break;
-            case Expressions.ExpressionType.New             :value=New           .Read              (ref reader,Resolver);break;
+            case Expressions.ExpressionType.New             :value=New           .Read              (ref reader,Resolver,ArrayHeader);break;
             case Expressions.ExpressionType.NewArrayBounds  :value=NewArray      .ReadNewArrayBounds(ref reader,Resolver);break;
             case Expressions.ExpressionType.NewArrayInit    :value=NewArray      .ReadNewArrayInit  (ref reader,Resolver);break;
             case Expressions.ExpressionType.ListInit        :value=ListInit      .Read              (ref reader,Resolver);break;

@@ -13,6 +13,6 @@ public class 自然なシリアライズ:共通{
         //var FormatterType=typeof(Anonymous<>).MakeGenericType(value.GetType());
         //dynamic formatter=Activator.CreateInstance(FormatterType)!;
         //MemoryPackFormatterProvider.Register(formatter);
-        this.MemoryMessageJson_TObject(value);
+        this.MemoryMessageJson_T_Assert全パターン(value);
     }
 }

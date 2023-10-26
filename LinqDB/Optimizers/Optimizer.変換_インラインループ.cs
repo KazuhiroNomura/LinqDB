@@ -96,9 +96,9 @@ partial class Optimizer {
                         ? Type
                         :Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!;
                     if(重複除去希望||Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
-                        Type=typeof(HashSet_VoidAdd<>);
+                        Type=typeof(HashSet<>);
                     } else {
-                        Type=typeof(AscList<>);
+                        Type=typeof(List<>);
                     }
                     Type=Type.MakeGenericType(IEnumerable.GetGenericArguments());
                 }

@@ -6,9 +6,9 @@ public class SymbolDocumentInfo : 共通
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.SymbolDocumentInfo) }, output => { });
+        this.MemoryMessageJson_T_Assert(new { a = default(Expressions.SymbolDocumentInfo) }, output => { });
         var SymbolDocument = Expressions.Expression.SymbolDocument("ソースファイル名0.cs");
-        this.MemoryMessageJson_Assert(
+        this.MemoryMessageJson_T_Assert(
             new
             {
                 SymbolDocument,

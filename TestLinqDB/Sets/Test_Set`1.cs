@@ -4,6 +4,7 @@ using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 
 using System.Text;
+using Types;
 using IEnumerable=System.Collections.IEnumerable;
 // ReSharper disable LocalizableElement
 

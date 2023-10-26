@@ -8,5 +8,5 @@ using LinqDB.Sets;
 
 namespace TestLinqDB.Serializers.Formatters.Sets;
 public class IEnumerable:CollectionTest<G.IEnumerable>{
-    public IEnumerable():base(new Set<Tables.Table>{new(1)}){}
+    public IEnumerable():base(new Set<Tables.Table>{ new(1),new(2) }){}
 }

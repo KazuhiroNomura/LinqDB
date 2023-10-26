@@ -15,7 +15,7 @@ public class Set<TKey,TElement,TContainer>:IMessagePackFormatter<G.Set<TKey,TEle
     public void Serialize(ref Writer writer,G.Set<TKey,TElement,TContainer>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(value!.Count);
-        var Formatter=Resolver.GetFormatter<TElement>()!;
+        var Formatter=Resolver.GetFormatter<TElement>();
         foreach(var item in value)
             writer.Write(Formatter,item,Resolver);
     }
@@ -27,7 +27,7 @@ public class Set<TKey,TElement,TContainer>:IMessagePackFormatter<G.Set<TKey,TEle
     public G.Set<TKey,TElement,TContainer> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil())return null!;
         var Count = reader.ReadArrayHeader();
-        var Formatter=Resolver.GetFormatter<TElement>()!;
+        var Formatter=Resolver.GetFormatter<TElement>();
         var value=new G.Set<TKey,TElement,TContainer>(null!);
         for(var a=0;a<Count;a++)
             value.Add(reader.Read(Formatter,Resolver));

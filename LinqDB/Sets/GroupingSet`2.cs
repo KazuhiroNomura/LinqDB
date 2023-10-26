@@ -14,13 +14,13 @@ using Generic=System.Collections.Generic;
 /// <typeparam name="TKey">キー</typeparam>
 [DebuggerDisplay("Key = {Key}")]
 [DebuggerTypeProxy(typeof(SystemLinq_GroupingDebugView<, >))]
-public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>
+public sealed class GroupingSet<TKey,TElement>:Set<TElement>
     ,IGrouping<TKey,TElement>/*,ICollection<TElement>*/,IEquatable<IGrouping<TKey,TElement>>
     ,IEquatable<Linq.IGrouping<TKey,TElement>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
-    private static readonly Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
-    private static readonly Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
-    private static readonly Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+    private new static readonly Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+    private new static readonly Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
+    private new static readonly Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement> InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.GroupingSet<TKey,TElement>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     //static GroupingSet()=>MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.GroupingSet<TKey,TElement>.Instance);
     public TKey _Key;
@@ -46,20 +46,6 @@ public sealed class GroupingSet<TKey,TElement>:ImmutableSet<TElement>
         this.InternalAdd(Value);
         this._LongCount=1;
     }
-    public void Add(TElement item) {
-        if(this.InternalAdd(item)) this._LongCount++;
-    }
-    public void Clear() => this.InternalClear();
-    public bool Contains(TElement item) => this.InternalContains(item);
-    public void CopyTo(TElement[] array,int arrayIndex) {
-        foreach(var a in this) {
-            array[arrayIndex++]=a;
-        }
-    }
-
-    public bool Remove(TElement item) => this.InternalRemove(item);
-    public int Count => (int)this._LongCount;
-    public bool IsReadOnly => false;
     public override int GetHashCode()=>this.Key is null?0:this.Key!.GetHashCode();
     private bool PrivateEquals(IGrouping<TKey,TElement> other)=> Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key)&&this.SetEquals(other);
     public bool Equals(IGrouping<TKey,TElement>? other) {

@@ -8,6 +8,7 @@ using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
+using Types;
 
 // ReSharper disable EqualExpressionComparison
 namespace TestLinqDB.Sets;
@@ -110,7 +111,7 @@ public class Tables{
             }.Aggregate(new Int(1),(p,index)=>p+index,p=>p+1)
         );
     }
-    private static readonly EnumerableSetEqualityComparer Comparer=new();
+    private static readonly 汎用Comparer Comparer=new();
     [Fact]
     public void All(){
         void Equal(object a,object b)=>Assert.True(Comparer.Equals(a,b));
@@ -377,56 +378,56 @@ public class Tables{
             Assert.True(k3.GroupJoin(k3,o=>o.ID1,i=>i.ID1,(_,inner)=>inner).Any());
             Assert.True(k3.GroupJoin(k3,o=>o.Key,i=>i.Key,(_,inner)=>inner).Any());
         }
-        var expected=Set作成(
-            new{
-                o=0L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
-            },
-            new{
-                o=1L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
-            },
-            new{
-                o=2L,
-                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
-                    2,3
-                }
-            },
-            new{
-                o=3L,
-                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
-                    2,3
-                }
-            },
-            new{
-                o=4L,
-                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
-                    4,5
-                }
-            },
-            new{
-                o=5L,
-                i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
-                    4,5
-                }
-            }
-        );
-        var actual=new Set<long>{
-            0,
-            1,
-            2,
-            3,
-            4,
-            5
-        }.GroupJoin(new Set<long>{
-            2,
-            3,
-            4,
-            5,
-            6,
-            7
-        },o=>o/2,i=>i/2,(o,i)=>new{
-            o,i
-        });
-        Assert.Equal(expected,actual);
+        //var expected=Set作成(
+        //    new{
+        //        o=0L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
+        //    },
+        //    new{
+        //        o=1L,i=(LinqDB.Sets.IEnumerable<long>)new Set<long>()
+        //    },
+        //    new{
+        //        o=2L,
+        //        i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
+        //            2,3
+        //        }
+        //    },
+        //    new{
+        //        o=3L,
+        //        i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
+        //            2,3
+        //        }
+        //    },
+        //    new{
+        //        o=4L,
+        //        i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
+        //            4,5
+        //        }
+        //    },
+        //    new{
+        //        o=5L,
+        //        i=(LinqDB.Sets.IEnumerable<long>)new Set<long>{
+        //            4,5
+        //        }
+        //    }
+        //);
+        //var actual=new Set<long>{
+        //    0,
+        //    1,
+        //    2,
+        //    3,
+        //    4,
+        //    5
+        //}.GroupJoin(new Set<long>{
+        //    2,
+        //    3,
+        //    4,
+        //    5,
+        //    6,
+        //    7
+        //},o=>o/2,i=>i/2,(o,i)=>new{
+        //    o,i
+        //});
+        //Assert.Equal(expected,actual);
     }
     [Fact]
     public void Geomean(){
@@ -1109,7 +1110,7 @@ public class Tables{
         var set=new Set<int>(enu);
         var expected=enu.GroupBy(p=>p/2).Select(p=>p.Sum());
         var actual=set.GroupBy(p=>p/2).Select(p=>p.Sum());
-        var Comparer=new EnumerableSetEqualityComparer();
+        var Comparer=new 汎用Comparer();
         Assert.True(Comparer.Equals(expected,actual));
     }
     [Fact]

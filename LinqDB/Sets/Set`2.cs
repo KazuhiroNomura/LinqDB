@@ -12,13 +12,16 @@ namespace LinqDB.Sets;
 public class Set<TKey,TElement>:Set<TElement>
     where TElement:IKey<TKey>
     where TKey : struct, IEquatable<TKey>{
+    //static Set(){
+    //    MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
+    //}
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     //internal new static readonly Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement> InstanceMemoryPack=new();
     //internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement>InstanceMessagePack=new();
     //internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>   InstanceUtf8Json=new();
-    internal new static readonly Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance;
-    internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement>InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement>.Instance;
-    internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>   InstanceUtf8Json=Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>.Instance;
+    internal new static readonly Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement> InstanceMemoryPack = Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance;
+    internal new static readonly Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement> InstanceMessagePack = Serializers.MessagePack.Formatters.Sets.Set<TKey,TElement>.Instance;
+    internal new static readonly Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement> InstanceUtf8Json = Serializers.Utf8Json.Formatters.Sets.Set<TKey,TElement>.Instance;
 #pragma warning restore CA1823 // 使用されていないプライベート フィールドを使用しません
     //static Set()=> MemoryPack.MemoryPackFormatterProvider.Register(Serializers.MemoryPack.Formatters.Sets.Set<TKey,TElement>.Instance);
     public Set(){}

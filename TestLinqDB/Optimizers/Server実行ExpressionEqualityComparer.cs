@@ -339,17 +339,19 @@ public class Server実行ExpressionEqualityComparer:共通{
     }
     //private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
     private void AssertEqual(Expression a,Expression b){
-        this.MemoryMessageJson_Assert(a,aa=>Assert.Equal(aa,b,this.ExpressionEqualityComparer));
-        this.MemoryMessageJson_Assert(b,bb=>Assert.Equal(bb,a,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_T_Assert(a,aa=>Assert.Equal(aa,b,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_T_Assert(b,bb=>Assert.Equal(bb,a,this.ExpressionEqualityComparer));
     }
 
     private void AssertNotEqual(Expression a,Expression b){
-        this.MemoryMessageJson_Assert(a,aa=>Assert.NotEqual(aa,b,this.ExpressionEqualityComparer));
-        this.MemoryMessageJson_Assert(b,bb=>Assert.NotEqual(bb,a,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_T_Assert(a,aa=>Assert.NotEqual(aa,b,this.ExpressionEqualityComparer));
+        this.MemoryMessageJson_T_Assert(b,bb=>Assert.NotEqual(bb,a,this.ExpressionEqualityComparer));
     }
 
     [Fact]
     public void Dynamic(){
+        var s=Expression.Constant(default(TestDynamic<int>));
+        var s0=Expression.Constant(null,typeof(TestDynamic<int>?));
         var CSharpArgumentInfo1=Binder.CSharpArgumentInfo.Create(Binder.CSharpArgumentInfoFlags.None,null);
         var CSharpArgumentInfoArray1=new[]{CSharpArgumentInfo1};
         var CSharpArgumentInfoArray2=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1};

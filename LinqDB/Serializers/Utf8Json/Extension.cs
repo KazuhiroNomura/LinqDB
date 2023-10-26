@@ -1,18 +1,39 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+
+using LinqDB.Helpers;
 using Utf8Json;
 using Utf8Json.Formatters;
 using Expressions = System.Linq.Expressions;
-using LinqDB.Helpers;
-using SerializableAttribute=System.SerializableAttribute;
+
+
 namespace LinqDB.Serializers.Utf8Json;
 using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 internal static class Extension{
+    public static readonly MethodInfo SerializeMethod = typeof(Extension).GetMethod(nameof(Serialize), BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static void Serialize<T>(ref Writer writer,T value,O Resolver){
+        var Formatter=Resolver.GetFormatter<T>();
+        Formatter?.Serialize(ref writer,value,Resolver);
+    }
+
+
+
+
+    public static readonly MethodInfo DeserializeMethod = typeof(Extension).GetMethod(nameof(Deserialize), BindingFlags.Static|BindingFlags.NonPublic)!;
+    private static T Deserialize<T>(ref Reader reader,O Resolver){
+        var Formatter=Resolver.GetFormatter<T>();
+        return Formatter is not null?reader.Read(Formatter,Resolver):default!;
+    }
+
+
+
+
     public static void WriteType(this ref Writer writer,Type value)=>writer.WriteString(value.TypeString());
     public static Type ReadType(this ref Reader reader)=>reader.ReadString().StringType();
     
@@ -43,15 +64,15 @@ internal static class Extension{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter = new();
     }
     internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,O Resolver) =>
-        StaticReadOnlyCollectionFormatter<T>.Formatter.Serialize(ref writer,value!,Resolver);
+        writer.Write(StaticReadOnlyCollectionFormatter<T>.Formatter,value!,Resolver);
     private static class StaticArrayFormatter<T> {
         public static readonly ArrayFormatter<T> Formatter = new();
     }
     internal static void WriteArray<T>(this ref Writer writer,T[] value,O Resolver)=>
-        StaticArrayFormatter<T>.Formatter.Serialize(ref writer,value,Resolver);
+        writer.Write(StaticArrayFormatter<T>.Formatter,value,Resolver);
     internal static T[] ReadArray<T>(this ref Reader reader,O Resolver) {
 
-        return StaticArrayFormatter<T>.Formatter.Deserialize(ref reader,Resolver)!;
+        return reader.Read(StaticArrayFormatter<T>.Formatter,Resolver)!;
 
     }
     internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,O Resolver){
@@ -70,7 +91,8 @@ internal static class Extension{
                         writer.WriteBeginObject();
                         writer.WriteString(Parameter.Name);
                         writer.WriteNameSeparator();
-                        writer.WriteType(Parameter.Type);
+                        var Type=Parameter.Type;
+                        writer.WriteType(Parameter.IsByRef?Type.MakeByRefType():Type);
                         writer.WriteEndObject();
                     } else{
                         writer.WriteInt32(-1);
@@ -93,7 +115,7 @@ internal static class Extension{
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         var Parameters=new List<Expressions.ParameterExpression>();
         while(!reader.ReadIsEndArray()) {
-            if(reader.ReadIsBeginObject()) {//{
+            if(reader.ReadIsBeginObject()) {
                 var name = reader.ReadString();
                 reader.ReadIsNameSeparatorWithVerify();
                 var type = reader.ReadType();
@@ -121,7 +143,19 @@ internal static class Extension{
     public static void Write<T>(this ref Writer writer,IJsonFormatter<T>Formatter,T value,O Resolver)=>
         Formatter.Serialize(ref writer,value,Resolver);
         
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
     public static void Write<T>(this ref Writer writer,T value,O Resolver)=>
         Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
         
@@ -130,14 +164,11 @@ internal static class Extension{
 
 
 
-        
-        
-        
-        
-        
-        
     public static void Write(this ref Writer writer,Type type,object value,O Resolver){
-        var Formatter=Resolver.PrivateGetFormatterDynamic(type);
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        if(Formatter is null){
+            return;
+        }
         var Serialize=Formatter.GetType().GetMethod("Serialize");
         Debug.Assert(Serialize is not null);
         var Objects3=new object[3];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
@@ -148,9 +179,6 @@ internal static class Extension{
         writer=(Writer)Objects3[0];
     }
     
-    
-    
-
 
     
     public static T Read<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
@@ -168,16 +196,9 @@ internal static class Extension{
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
     public static object Read(this ref Reader reader,Type type,O Resolver){
-        var Formatter=Resolver.PrivateGetFormatterDynamic(type);
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        Debug.Assert(Formatter is not null);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
         var Objects2=new object[2];//ここでインスタンス化しないとstaticなFormatterで重複してしまう。
@@ -187,16 +208,30 @@ internal static class Extension{
         reader=(Reader)Objects2[0];
         return value;
     }
+
     
     
     
+    public static readonly MethodInfo WriteValueSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteValueSeparator))!;
+    public static readonly MethodInfo WriteString = typeof(Writer).GetMethod(nameof(Writer.WriteString))!;
+    public static readonly MethodInfo WriteNameSeparator = typeof(Writer).GetMethod(nameof(Writer.WriteNameSeparator))!;
+    public static readonly MethodInfo ReadIsValueSeparatorWithVerify = typeof(Reader).GetMethod(nameof(Reader.ReadIsValueSeparatorWithVerify))!;
+    public static readonly MethodInfo ReadString = typeof(Reader).GetMethod(nameof(Reader.ReadString))!;
+    public static readonly MethodInfo ReadIsNameSeparatorWithVerify = typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
     
     
-    
-    
+
+
+
+
+
+
     public static Serializer Serializer(this O Resolver)=>
         (Serializer)Resolver.GetFormatter<Serializer>();
-    private static object PrivateGetFormatterDynamic(this O Resolver,Type type){
+        /*
+    private static object? PrivateGetFormatterDynamic(this O Resolver,Type type){
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        if(Formatter is not null) return Formatter;
         if(!type.IsArray&&type.GetCustomAttribute(typeof(SerializableAttribute))==null){
             if(type.IsGenericType){
                 var GenericTypeDefinition=type.GetGenericTypeDefinition();
@@ -216,22 +251,7 @@ internal static class Extension{
                 type=type0;
             }
         }
-        発見: ;
-        /*
-        var Interfaces = type.GetInterfaces();
-        foreach(var Interface in Interfaces)
-            if(RegisterInterface(Interface,typeof(Sets.IGrouping<,>))) {
-                return Resolver.GetFormatterDynamic(Interface);
-            } else if(RegisterInterface(Interface,typeof(System.Linq.IGrouping<,>))) {
-                return Resolver.GetFormatterDynamic(Interface);
-            } else if(RegisterInterface(Interface,typeof(Sets.IEnumerable<>))) {
-                return Resolver.GetFormatterDynamic(Interface);
-            } else if(RegisterInterface(Interface,typeof(IEnumerable<>))) {
-                return Resolver.GetFormatterDynamic(Interface);
-            }
-        static bool RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition) =>
-            type0.IsGenericType&&type0.GetGenericTypeDefinition()==検索したいキーGenericInterfaceDefinition;
-            */
+        発見:
         return Resolver.GetFormatterDynamic(type);
-    }
+    }*/
 }

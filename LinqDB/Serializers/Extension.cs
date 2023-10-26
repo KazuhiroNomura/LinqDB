@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Buffers;
 using System.Collections.Concurrent;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.PortableExecutable;
-
 using LinqDB.Helpers;
-
-using MemoryPack;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 internal static class Extension{
@@ -144,20 +138,38 @@ internal static class Extension{
         var value=field.GetValue(null)!;
         return value;
     }
-    public static string TypeString(this Type value)=>value.Name is
-        "SByte"  or"Byte"  or
-        "Int16"  or"UInt16"or
-        "Int32"  or"UInt32"or
-        "Int64"  or"UInt64"or
-        "Single" or"Double"or
-        "Boolean"or"Char"  or"Decimal"?value.Name:value.AssemblyQualifiedName!;
-    public static Type StringType(this string value)=>value switch{
-        "SByte"  =>typeof(sbyte),"Byte"  =>typeof(byte  ),
-        "Int16"  =>typeof(short),"UInt16"=>typeof(ushort),
-        "Int32"  =>typeof(int  ),"UInt32"=>typeof(uint  ),
-        "Int64"  =>typeof(long ),"UInt64"=>typeof(ulong ),
-        "Single" =>typeof(float),"Double"=>typeof(double),
-        "Boolean"=>typeof(bool ),"Char"  =>typeof(char  ),"Decimal"=>typeof(decimal),
-        _=>Type.GetType(value)??throw new TypeLoadException($"型{value}が見つからなかった")
-    };
+    private static string[]Type短縮Names;
+    private static Type[]短縮NameTypes;
+    static Extension(){
+        var ListType短縮Name=new System.Collections.Generic.List<string>();
+        var List短縮NameType=new System.Collections.Generic.List<Type>();
+        Type短縮Names=ListType短縮Name.ToArray();
+        短縮NameTypes=List短縮NameType.ToArray();
+        共通(typeof(sbyte   ));
+        共通(typeof(short   ));
+        共通(typeof(int     ));
+        共通(typeof(long    ));
+        共通(typeof(byte    ));
+        共通(typeof(ushort  ));
+        共通(typeof(uint    ));
+        共通(typeof(ulong   ));
+        共通(typeof(float   ));
+        共通(typeof(double  ));
+        共通(typeof(bool    ));
+        共通(typeof(char    ));
+        共通(typeof(decimal ));
+        共通(typeof(string  ));
+        void 共通(Type type){
+            ListType短縮Name.Add(type.Name);
+            List短縮NameType.Add(type);
+        }
+    }
+    public static string TypeString(this Type value){
+        return 短縮NameTypes.Contains(value)?value.Name:value.AssemblyQualifiedName!;
+    }
+    public static Type StringType(this string value){
+        var index=Array.IndexOf(Type短縮Names,value);
+        if(index<0) return Type.GetType(value)!;
+        return 短縮NameTypes[index];
+    }
 }

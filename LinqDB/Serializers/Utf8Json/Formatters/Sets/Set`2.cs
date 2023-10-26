@@ -6,22 +6,20 @@ using O=IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G=LinqDB.Sets;
-public class Set<TKey,TElement>:IJsonFormatter<G.Set<TKey,TElement>> where TElement:IKey<TKey>
+public class Set<TKey,TElement>:IJsonFormatter<G.Set<TKey,TElement>>
+    where TElement:IKey<TKey>   
     where TKey : struct, IEquatable<TKey>{
     public new static readonly Set<TKey,TElement> Instance=new();
     public void Serialize(ref Writer writer,G.Set<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
-        var type=value!.GetType();
-        writer.WriteType(type);
-        if(typeof(G.Set<TKey,TElement>)!=type){
-            writer.WriteValueSeparator();
-            writer.Write(type,value,Resolver);
-        }else{
-            var Formatter = Resolver.GetFormatter<TElement>();
-            foreach(var item in value){
-                writer.WriteValueSeparator();
-                writer.Write(Formatter,item,Resolver);
+        var Formatter = Resolver.GetFormatter<TElement>();
+        using var Enumerator=value!.GetEnumerator();
+        if(Enumerator.MoveNext()){
+            writer.Write(Formatter,Enumerator.Current,Resolver);
+            while(Enumerator.MoveNext()){
+	            writer.WriteValueSeparator();
+	            writer.Write(Formatter,Enumerator.Current,Resolver);
             }
         }
         writer.WriteEndArray();
@@ -30,18 +28,14 @@ public class Set<TKey,TElement>:IJsonFormatter<G.Set<TKey,TElement>> where TElem
         if(reader.TryReadNil()) return null!;
         G.Set<TKey,TElement>value;
         reader.ReadIsBeginArrayWithVerify();
-        var type=reader.ReadType();
-        if(typeof(G.Set<TKey,TElement>)!=type){
-            reader.ReadIsValueSeparatorWithVerify();
-            value=(G.Set<TKey,TElement>)reader.Read(type,Resolver);
-            reader.ReadIsEndArrayWithVerify();
-        }else{
-            value=new G.Set<TKey,TElement>();
-            var Formatter = Resolver.GetFormatter<TElement>();
-            while(!reader.ReadIsEndArray()) {
-                reader.ReadIsValueSeparatorWithVerify();
-                value.Add(reader.Read(Formatter,Resolver));
-            }
+        var Formatter = Resolver.GetFormatter<TElement>();
+        value=new G.Set<TKey,TElement>();
+        if(!reader.ReadIsEndArray()) {
+            value.Add(reader.Read(Formatter,Resolver));
+	        while(!reader.ReadIsEndArray()) {
+	            reader.ReadIsValueSeparatorWithVerify();
+	            value.Add(reader.Read(Formatter,Resolver));
+	        }
         }
         return value;
     }

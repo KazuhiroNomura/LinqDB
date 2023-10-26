@@ -329,6 +329,33 @@ public static class CommonLibrary {
     /// <param name="Type"></param>
     /// <returns></returns>
     public static bool IsNullable(this Type Type) => Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
+    public static bool GetIEnumerable1(this Type type,out Type[]GenericArguments){
+        var GetEnumerator=type.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+        var GenericTypeDefinition=typeof(Generic.IEnumerable<>);
+        foreach(var Interface in type.GetInterfaces())
+            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==GenericTypeDefinition){
+                if (Array.Exists(type.GetInterfaceMap(Interface).TargetMethods, m => m == GetEnumerator)){
+                    GenericArguments=Interface.GetGenericArguments();
+                    return true;
+                }
+                //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+                //if(Interface_GetEnumerator==GetEnumerator){
+                //    GenericArguments=Interface.GetGenericArguments();
+                //    return true;
+                //}
+            }
+        GenericArguments=Array.Empty<Type>();
+        return false;
+    }
+    public static bool GetGenericArguments(this Type type,Type GenericTypeDefinition,out Type[]GenericArguments){
+        foreach(var Interface in type.GetInterfaces())
+            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==GenericTypeDefinition){
+                GenericArguments=Interface.GetGenericArguments();
+                return true;
+            }
+        GenericArguments=Array.Empty<Type>();
+        return false;
+    }
     ///// <summary>
     ///// 小文字か
     ///// </summary>

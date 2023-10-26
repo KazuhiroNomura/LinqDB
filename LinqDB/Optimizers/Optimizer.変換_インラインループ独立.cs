@@ -311,7 +311,7 @@ partial class Optimizer {
                                     } else {
                                         var T = IEnumerable1のT(MethodCall0_MethodCall.Type);
                                         作業_Type=作業配列.MakeGenericType(
-                                            typeof(HashSet<>),
+                                            typeof(Generic.HashSet<>),
                                             T
                                         );
                                         作業=Expression.Parameter(
@@ -337,7 +337,7 @@ partial class Optimizer {
                                                 MethodCall0_MethodCall_Arguments[0],
                                                 argument => Expression.Call(
                                                     作業,
-                                                    作業_Type.GetMethod(nameof(HashSet<int>.Add),Instance_NonPublic_Public),
+                                                    作業_Type.GetMethod(nameof(Generic.HashSet<int>.Add),Instance_NonPublic_Public),
                                                     argument
                                                 )
                                             )
@@ -852,7 +852,7 @@ partial class Optimizer {
                                 if(argument.NodeType==ExpressionType.Parameter) {
                                     return Expression.Call(
                                         Dictionary,
-                                        Dictionary_Type.GetMethod(nameof(LookupSet<int,int>.AddKeyValue)),
+                                        Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
                                         this.LambdaExpressionを展開1(
                                             this.Traverse(MethodCall0_Arguments[1]),//keySelector
                                             argument
@@ -866,7 +866,7 @@ partial class Optimizer {
                                     );
                                     var Expressions_1=Expression.Call(
                                         Dictionary,
-                                        Dictionary_Type.GetMethod(nameof(LookupSet<int,int>.AddKeyValue)),
+                                        Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
                                         this.LambdaExpressionを展開1(
                                             this.Traverse(MethodCall0_Arguments[1]),//keySelector
                                             p

@@ -17,7 +17,7 @@ public class Try:共通{
                     )
                 )
             );
-            this.MemoryMessageJson_Assert(new{a=input,b=(Expressions.Expression)input,c=(object)input});
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //    } else {
         {
@@ -27,7 +27,7 @@ public class Try:共通{
                     Expressions.Expression.Default(typeof(int))
                 )
             );
-            this.MemoryMessageJson_Assert(new{a=input,b=(Expressions.Expression)input,c=(object)input});
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //    }
         //}else{
@@ -37,7 +37,7 @@ public class Try:共通{
                 Expressions.Expression.Constant(0),
                 Expressions.Expression.Constant(1)
             );
-            this.MemoryMessageJson_Assert(new{a=input,b=(Expressions.Expression)input,c=(object)input});
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //    } else{
         {
@@ -48,30 +48,13 @@ public class Try:共通{
                     Expressions.Expression.Constant(0)
                 )
             );
-            this.MemoryMessageJson_Assert(new{a=input,b=(Expressions.Expression)input,c=(object)input});
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
         }
         //    }
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.TryExpression)});
         //}
     }
     [Fact]public void Serialize_Deserialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.TryExpression)});
-        {
-            var input=Expressions.Expression.TryCatch(
-                Expressions.Expression.Constant(0),
-                Expressions.Expression.Catch(
-                    typeof(Exception),
-                    Expressions.Expression.Constant(0)
-                )
-            );
-            this.MemoryMessageJson_Assert(new{a=input,b=(Expressions.Expression)input,c=(object)input});
-        }
-    }
-    [Fact]public void PrivateWrite(){
-        //if(value.Finally is not null){
-        //}else{
-        this.MemoryMessageJson_Assert(new{a=default(Expressions.TryExpression)});
         var input=Expressions.Expression.TryCatch(
             Expressions.Expression.Constant(0),
             Expressions.Expression.Catch(
@@ -79,9 +62,19 @@ public class Try:共通{
                 Expressions.Expression.Constant(0)
             )
         );
-        this.MemoryMessageJson_Assert(
-            new{a=input,b=(Expressions.Expression)input,c=(object)input}
+        this.MemoryMessageJson_Expression_Assert全パターン(input);
+    }
+    [Fact]public void PrivateWrite(){
+        //if(value.Finally is not null){
+        //}else{
+        var input=Expressions.Expression.TryCatch(
+            Expressions.Expression.Constant(0),
+            Expressions.Expression.Catch(
+                typeof(Exception),
+                Expressions.Expression.Constant(0)
+            )
         );
+        this.MemoryMessageJson_Expression_Assert全パターン(input);
     }
 }
 

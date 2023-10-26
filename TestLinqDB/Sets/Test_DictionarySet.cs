@@ -9,7 +9,7 @@ public class Test_DictionarySet
     [Fact]
     public void ContainsKey()
     {
-        var d = new LookupSet<int, int>();
+        var d = new SetGroupingSet<int,int>();
         for (var a = 最小値; a <= 最大値; a++)
         for (var b = 0; b < a; b++)
             d.AddKeyValue(a, b);
@@ -21,7 +21,7 @@ public class Test_DictionarySet
     [Fact]
     public void Count()
     {
-        var d = new LookupSet<int, int>();
+        var d = new SetGroupingSet<int, int>();
         for (var a = 最小値; a <= 最大値; a++)
         {
             for (var b = 0; b < a; b++)
@@ -36,12 +36,12 @@ public class Test_DictionarySet
     public void ctor0()
     {
         // ReSharper disable once ObjectCreationAsStatement
-        new LookupSet<int, int>();
+        new SetGroupingSet<int, int>();
     }
     [Fact]
     public void AddKeyValue()
     {
-        var d = new LookupSet<int, int>();
+        var d = new SetGroupingSet<int, int>();
         for (var a = 最小値; a <= 最大値; a++)
         for (var b = 0; b < a; b++)
             d.AddKeyValue(a, b);
@@ -51,7 +51,7 @@ public class Test_DictionarySet
     public void TryGetValue()
     {
         {
-            var d = new LookupSet<int, int>();
+            var d = new SetGroupingSet<int, int>();
             for (var a = 最小値; a <= 最大値; a++)
             for (var b = 0; b < a; b++)
                 d.AddKeyValue(a, b);
@@ -63,7 +63,7 @@ public class Test_DictionarySet
                 Assert.True(d.ContainsKey(a));
         }
         {
-            var d = new LookupSet<int, int>();
+            var d = new SetGroupingSet<int, int>();
             d.AddKeyValue(1, 2);
             d.AddKeyValue(2, 4);
             d.AddKeyValue(unchecked(1 + int.MaxValue), 3);

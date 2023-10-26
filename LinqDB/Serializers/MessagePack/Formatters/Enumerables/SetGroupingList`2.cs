@@ -14,13 +14,26 @@ public class SetGroupingList<TKey,TElement>:IMessagePackFormatter<G.SetGroupingL
         foreach(var item in value)
             writer.Write(Formatter,item,Resolver);
     }
+    
+    
+    
+    
+    
+    
+    
     public G.SetGroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil())return null!;
         var Count = reader.ReadArrayHeader();
         var Formatter=GroupingList<TKey,TElement>.Instance;
         var value = new G.SetGroupingList<TKey,TElement>();
-        for(long a = 0;a<Count;a++)
+        while(Count-->0)
             value.Add(reader.Read(Formatter,Resolver));
+            
+            
+            
+            
+            
+            
         return value;
     }
 }

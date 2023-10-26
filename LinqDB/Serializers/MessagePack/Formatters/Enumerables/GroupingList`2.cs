@@ -12,10 +12,10 @@ public class GroupingList<TKey,TElement>:IMessagePackFormatter<G.GroupingList<TK
         if (writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(1+value!.Count);
         writer.Write(value.Key!,Resolver);
-        var Formatter = Resolver.GetFormatter<TElement>()!;
+        var Formatter = Resolver.GetFormatter<TElement>();
         foreach (var item in value){
             
-            Formatter.Serialize(ref writer, item, Resolver);
+            writer.Write(Formatter,item,Resolver);
         }
         
     }
@@ -23,12 +23,12 @@ public class GroupingList<TKey,TElement>:IMessagePackFormatter<G.GroupingList<TK
         if (reader.TryReadNil()) return null!;
         var Count = reader.ReadArrayHeader();
         var Key=reader.Read<TKey>(Resolver);// Resolver.GetFormatter<TKey>()!.Deserialize(ref reader, Resolver);
+        var Formatter = Resolver.GetFormatter<TElement>();
         var value = new G.GroupingList<TKey,TElement>(Key);
-        var Formatter = Resolver.GetFormatter<TElement>()!;
-        for (var a = 1; a<Count; a++){
-            var item=Formatter.Deserialize(ref reader, Resolver);
-            value.Add(item);
-        }
+        while(Count-->1)
+            value.Add(reader.Read(Formatter,Resolver));
+
+
         return value;
     }
 }

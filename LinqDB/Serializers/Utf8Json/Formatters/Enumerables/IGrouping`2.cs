@@ -1,6 +1,5 @@
 ﻿
 using Utf8Json;
-using Utf8Json.Formatters;
 namespace LinqDB.Serializers.Utf8Json.Formatters.Enumerables;
 using O = IJsonFormatterResolver;
 using Writer = JsonWriter;
@@ -16,7 +15,7 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>
         var Formatter=Resolver.GetFormatter<TElement>();
         foreach(var item in value){
             writer.WriteValueSeparator();
-            Formatter.Serialize(ref writer,item,Resolver);
+            writer.Write(Formatter,item,Resolver);;
         }
         writer.WriteEndArray();
     }
@@ -24,8 +23,8 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>
         if (reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key=reader.Read<TKey>(Resolver);
-        var value=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
         var Formatter=Resolver.GetFormatter<TElement>();
+        var value=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
         while(!reader.ReadIsEndArray()){
             reader.ReadIsValueSeparatorWithVerify();
             value.Add(reader.Read(Formatter,Resolver));

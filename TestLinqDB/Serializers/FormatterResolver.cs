@@ -20,7 +20,7 @@ public class FormatterResolver : 共通
         Serializer.Serialize(ClassDisplay取得());
         //    }
         var ex=Assert.Throws<MessagePackSerializationException>(() => Serializer.Serialize(this));
-        Assert.True(ex.InnerException is NullReferenceException);
+        Assert.True(ex.InnerException is FormatterNotRegisteredException);
         //}
     }
     [Fact]

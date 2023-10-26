@@ -24,7 +24,7 @@ public class SetGroupingSet<TKey,TElement>:MemoryPackFormatter<G.SetGroupingSet<
         var Count = reader.ReadVarIntInt64();
         var Formatter=GroupingSet<TKey,TElement>.Instance;
         var value0=new G.SetGroupingSet<TKey,TElement>();
-        for(long a=0;a<Count;a++)
+        while(Count-->0)
             value0.Add(reader.Read(Formatter));
         value=value0;
     }

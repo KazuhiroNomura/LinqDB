@@ -5,6 +5,7 @@ using System.Globalization;
 //using MemoryPack;
 using テスト;
 using LinqDB.Helpers;
+using MessagePack.Formatters;
 namespace TestLinqDB.Sets;
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 public partial class Serialize継承しない{
@@ -60,12 +61,21 @@ public partial class SerializeSchema {
     //[MessagePack.IgnoreMember]
     [MemoryPack.MemoryPackIgnore, MessagePack.IgnoreMember]
     public Set<SerializeEntity> SerializeEntitySet1=>this._SerializeEntitySet1;
-    [MessagePack.Key(1),MemoryPack.MemoryPackInclude,NonSerialized]
-    private Set<SerializeEntity> _SerializeEntitySet1= new();
+    [MessagePack.Key(1),MemoryPack.MemoryPackInclude]
+    private Set<SerializeEntity> _SerializeEntitySet1;
+    public SerializeSchema(){
+        this._SerializeEntitySet1=new();
+    }
     public override bool Equals(object? obj)=>obj is SerializeSchema other&&this.SerializeEntitySet1.SetEquals(other.SerializeEntitySet1)&&this.Name==other.Name;
     public override int GetHashCode()=>this.SerializeEntitySet1.GetHashCode();
 }
-[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
+public partial class SerializeSchema1 {
+    public Set<SerializeEntity> SerializeEntitySet1=new();
+    public override bool Equals(object? obj)=>obj is SerializeSchema1 other&&this.SerializeEntitySet1.SetEquals(other.SerializeEntitySet1);
+    public override int GetHashCode()=>this.SerializeEntitySet1.GetHashCode();
+}
+[Serializable,MessagePack.MessagePackObject(true),MemoryPack.MemoryPackable]
 public partial struct メンバー:IEquatable<メンバー> {
     public int value;
 
@@ -75,29 +85,32 @@ public partial struct メンバー:IEquatable<メンバー> {
     public bool Equals(メンバー other) => this.value.Equals(other.value);
     public override string ToString() => this.value.ToString(CultureInfo.CurrentCulture);
 }
-[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
+[Serializable,MessagePack.MessagePackObject(true),MemoryPack.MemoryPackable]
 public partial struct Key:IEquatable<Key> {
-    public メンバー メンバー;
+    public メンバー メンバー11;
 
-    public Key(メンバー メンバー) => this.メンバー=メンバー;
-    public override bool Equals(object? obj) => obj is Key other&&this.メンバー.value==other.メンバー.value;
-    public override int GetHashCode() => this.メンバー.GetHashCode();
-    public bool Equals(Key other) => this.メンバー.Equals(other.メンバー);
-    public override string ToString() => this.メンバー.ToString();
+    public Key(メンバー メンバー11) => this.メンバー11=メンバー11;
+    public override bool Equals(object? obj) => obj is Key other&&this.メンバー11.value==other.メンバー11.value;
+    public override int GetHashCode() => this.メンバー11.GetHashCode();
+    public bool Equals(Key other) => this.メンバー11.Equals(other.メンバー11);
+    public override string ToString() => this.メンバー11.ToString();
 }
-[Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
+[Serializable,MessagePack.MessagePackObject(true),MemoryPack.MemoryPackable]
 public partial class Value:Entity<Key,Container>{
-    [MemoryPack.MemoryPackIgnore]
-    public メンバー Member => this.Key.メンバー;
-    [MemoryPack.MemoryPackConstructor]
+  //  [MemoryPack.MemoryPackIgnore]
+    public メンバー Member => this.Key.メンバー11;
+
     public Value():base(new Key(new(0))){
     }
-    //[MemoryPack.MemoryPackConstructor]
-    public Value(メンバー x) : base(new Key(x)) {
+    [MemoryPack.MemoryPackConstructor]
+    public Value(メンバー Member ) : base(new Key(Member )) {
     }
 
     public bool Equals(Value other) => this.Member.Equals(other.Member);
     public override bool Equals(object? obj) => obj is Value other&&this.Equals(other);
+    public override int GetHashCode()=>this.Key.GetHashCode();
+    public static bool operator==(Value? left,Value? right)=>Equals(left,right);
+    public static bool operator!=(Value? left,Value? right)=>!Equals(left,right);
     protected override void ToStringBuilder(StringBuilder sb) => sb.Append(this.Member.ToString());
 }
 [Serializable,MessagePack.MessagePackObject(true),MemoryPack.MemoryPackable]
@@ -144,11 +157,11 @@ public class Test_Set2:共通 {
     }
     [Fact]public void Serialize継承しない1(){
         var expected=new Serialize継承しない(){A = "AAA"};
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
     [Fact]public void SerializeEntity0(){
         var expected=new SerializeEntity{Name = "ABCDE",A = "AAA"};
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
     public class Formatter2<T>{
 
@@ -194,7 +207,7 @@ public class Test_Set2:共通 {
             var b = this.MemoryPack.Serialize<object>(expected);
             var o = this.MemoryPack.Deserialize<object>(b);
         }
-        this.MemoryMessageJson_Assert(expected,output=>{
+        this.MemoryMessageJson_T_Assert(expected,output=>{
             var i=expected.LongCount;
             var o=output.LongCount;
         });
@@ -235,7 +248,7 @@ public class Test_Set2:共通 {
             var json = global::MessagePack.MessagePackSerializer.ConvertToJson(bytes,a.Options);
             var output = s.Deserialize<TestSet<int>>(bytes);
         }
-        this.MemoryMessageJson_Assert(expected,output=>{
+        this.MemoryMessageJson_T_Assert(expected,output=>{
             var i=expected.Count;
             var o=output.Count;
         });
@@ -249,16 +262,18 @@ public class Test_Set2:共通 {
         //});
     }
     [Fact]public void Serialize20(){
+        //var input=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
+        //this.MemoryMessageJson_T_Assert全パターン(input);
         var expected=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
+        this.MemoryMessageJson_T_Assert<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
         //var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
         //var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
         //Assert.Equal(expected,actual);
-        this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert(expected,actual=>Assert.Equal(expected,actual));
         //this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
         //this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
-        this.MemoryMessageJson_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert<object>(expected,actual=>Assert.Equal(expected,actual));
     }
     [Fact]public void Serialize21(){
         var expected=new TestSet<SerializeEntity>{new(){Name = "A"}};
@@ -271,37 +286,75 @@ public class Test_Set2:共通 {
         var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
         var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
         Assert.Equal(expected,actual);
-        this.MemoryMessageJson_Assert(new { a = expected });
+        this.MemoryMessageJson_T_Assert全パターン(expected);
     }
     [Fact]public void Serialize3(){
         var expected=new SerializeSchema{Name = "Na"};
         var set=expected.SerializeEntitySet1;
         set.Add(new(){Name = "C"});
-        this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert(expected,actual=>Assert.Equal(expected,actual));
+    }
+    [Fact]public void Serialize31(){
+        var expected=new SerializeEntity{Name = "Na"};
+        this.MemoryMessageJson_T_Assert全パターン(expected);
+    }
+    [Fact]
+    public void Serialize32(){
+        var expected=new Set<SerializeEntity>{new(){Name="Na"}};
+        this.MemoryMessageJson_T_Assert全パターン(expected);
+    }
+    [Fact]public void Serialize33() {
+        var expected = new SerializeSchema{SerializeEntitySet1 = {new(){Name = "A"},new(){Name = "B"}}};
+        var set=expected.SerializeEntitySet1;
+        set.Add(new(){Name = "C"});
+        this.Utf8_Assert(expected,actual=>{
+            var r=expected.Equals(actual);
+            Assert.Equal(expected,actual);
+        });
+        this.MemoryMessageJson_T_Assert(expected,actual=>{
+            var r=expected.Equals(actual);
+            Assert.Equal(expected,actual);
+        });
+    }
+    [Fact]public void Serialize330(){
+        var expected = new {SerializeEntitySet1 =new Set<SerializeEntity> {new SerializeEntity{Name = "A"},new SerializeEntity{Name = "B"}}};
+        var set=expected.SerializeEntitySet1;
+        set.Add(new SerializeEntity{Name = "C"});
+        this.Memory_Assert(expected);
+    }
+    [Fact]public void Serialize331(){
+        var expected = new SerializeSchema1{SerializeEntitySet1 = {new(){Name = "A"},new(){Name = "B"}}};
+        var set=expected.SerializeEntitySet1;
+        set.Add(new SerializeEntity{Name = "C"});
+        this.Memory_Assert(expected);
+    }
+    [Fact]public void Serialize34() {
+        var expected = new Set<SerializeSchema>{new(){SerializeEntitySet1 = {new(){Name = "A"},new(){Name = "B"}}}};
+        this.MemoryMessageJson_T_Assert(expected,actual=>Assert.Equal(expected,actual));
     }
     [Fact]public void Serialize4() {
         var expected = new SerializeContainer{SerializeSchema = { SerializeEntitySet1 = {new(){Name = "A"},new(){Name = "B"}}}};
         var set=expected.SerializeSchema.SerializeEntitySet1;
         set.Add(new(){Name = "C"});
-        this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert(expected,actual=>Assert.Equal(expected,actual));
     }
     [Fact]public void Serialize5() {
         var expected = new シリアライズ対象(1,2);
-        this.MemoryMessageJson_Assert(expected,actual=>Assert.Equal(expected,actual));
+        this.MemoryMessageJson_T_Assert(expected,actual=>Assert.Equal(expected,actual));
     }
     [Fact]public void Serialize6() {
         var expected = new Set<シリアライズ対象>();
         for(var a=0;a<10;a++){
             expected.Add(new(a,a));
         }
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
     [Fact]public void Serialize7() {
         var expected = new Set<SerializeEntity>();
         for(var a=0;a<10;a++){
             expected.Add(new SerializeEntity{Name=a.ToString()});
         }
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
 
     [Fact]public void Serialize8(){
@@ -311,14 +364,14 @@ public class Test_Set2:共通 {
         //for(var a=0;a<10;a++){
         //    expected.Add(new Table(default(PropertyInfo)!,new LinqDB.Databases.Tables.Schema(default(PropertyInfo)!)));
         //}
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
     [Fact]public void Serialize9() {
         var expected = new Set<SerializeEntity>();
         for(var a=0;a<10;a++){
             expected.Add(new SerializeEntity{Name=a.ToString()});
         }
-        this.MemoryMessageJson_Assert(expected,output=>Assert.Equal(expected,output));
+        this.MemoryMessageJson_T_Assert(expected,output=>Assert.Equal(expected,output));
     }
     [Serializable]
     public struct JsonSet<T> {
@@ -332,4 +385,8 @@ public class Test_Set2:共通 {
         }
     }
     private static JsonSet<T> Create<T>(DateTimeOffset DateTimeOffset,string Name,T Set) => new(DateTimeOffset,Name,Set);
+}
+[MemoryPack.MemoryPackableAttribute]
+partial class Set1<T>{
+    public int a;
 }

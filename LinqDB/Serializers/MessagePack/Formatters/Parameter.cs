@@ -18,8 +18,12 @@ public class Parameter:IMessagePackFormatter<T> {
                 writer.WriteArrayHeader(4);
                 writer.WriteNodeType(Expressions.ExpressionType.Parameter);
                 writer.WriteInt32(-2);
-                writer.WriteType(value.Type);
+                
                 writer.Write(value.Name);
+                
+                writer.WriteType(value.Type);
+                
+                writer.WriteBoolean(value.IsByRef);
                 Serializer.ラムダ跨ぎParameters.Add(value);
             }else{
                 writer.WriteArrayHeader(3);
@@ -42,8 +46,9 @@ public class Parameter:IMessagePackFormatter<T> {
             if(index1<0){
                 writer.WriteArrayHeader(3);
                 writer.WriteInt32(-2);
-                writer.WriteType(value.Type);
                 writer.Write(value.Name);
+                writer.WriteType(value.Type);
+                writer.WriteBoolean(value.IsByRef);
                 Serializer.ラムダ跨ぎParameters.Add(value);
             }else{
                 writer.WriteArrayHeader(2);
@@ -64,10 +69,10 @@ public class Parameter:IMessagePackFormatter<T> {
             
             if(ArrayHeader!=3){
                 Debug.Assert(index0==-2);
-                var type=reader.ReadType();
-            
                 var name=reader.ReadString();
-                var Parameter=Expressions.Expression.Parameter(type,name);
+                var type=reader.ReadType();
+                var IsByRef=reader.ReadBoolean();
+                var Parameter=Expressions.Expression.Parameter(IsByRef?type.MakeByRefType():type,name);
                 Serializer.ラムダ跨ぎParameters.Add(Parameter);
                 return Parameter;
             }else{
@@ -90,10 +95,11 @@ public class Parameter:IMessagePackFormatter<T> {
             
             if(ArrayHeader!=2){
                 Debug.Assert(index0==-2);
-                var type=reader.ReadType();
-            
                 var name=reader.ReadString();
-                var Parameter=Expressions.Expression.Parameter(type,name);
+
+                var type=reader.ReadType();
+                var IsByRef=reader.ReadBoolean();
+                var Parameter=Expressions.Expression.Parameter(IsByRef?type.MakeByRefType():type,name);
                 Serializer.ラムダ跨ぎParameters.Add(Parameter);
                 return Parameter;
             }else{

@@ -29,31 +29,31 @@ public class 色んなデータ型:共通{
         //var FormatterType=typeof(Anonymous<>).MakeGenericType(value.GetType());
         //dynamic formatter=Activator.CreateInstance(FormatterType)!;
         //MemoryPackFormatterProvider.Register(formatter);
-        this.MemoryMessageJson_TObject(value);
+        this.MemoryMessageJson_T_Assert全パターン(value);
     }
     [Fact]
     public void ClassDisplay(){
-        this.MemoryMessageJson_TObject(ClassDisplay取得());
+        this.MemoryMessageJson_T_Assert全パターン(ClassDisplay取得());
     }
     [Fact]
     public void Anonymous002(){
-        this.MemoryMessageJson_TObject(new{a=(object)1});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=(object)1});
     }
     [Fact]
     public void Anonymous003(){
-        this.MemoryMessageJson_TObject(new{a=(object)new{aa=11}});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=(object)new{aa=11}});
     }
     [Fact]
     public void Anonymous004(){
-        this.MemoryMessageJson_TObject(new{a=(object)new{aa=1}});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=(object)new{aa=1}});
     }
     [Fact]
     public void Anonymous022(){
-        this.MemoryMessageJson_TObject(new{x=new{a=111}});
+        this.MemoryMessageJson_T_Assert全パターン(new{x=new{a=111}});
     }
     [Fact]
     public void Anonymous023(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new{
                 x=new{
                     a=111,
@@ -67,13 +67,13 @@ public class 色んなデータ型:共通{
     }
     [Fact]
     public void Anonymous030(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             Tuple.Create(1)
         );
     }
     [Fact]
     public void Anonymous031(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             Tuple.Create(
                 new{a=111,}
             )
@@ -81,7 +81,7 @@ public class 色んなデータ型:共通{
     }
     [Fact]
     public void Anonymous032(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             Tuple.Create<object>(
                 new{a=111,}
             )
@@ -89,7 +89,7 @@ public class 色んなデータ型:共通{
     }
     [Fact]
     public void Anonymous033(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             Tuple.Create(
                 new{
                     a=111,
@@ -103,15 +103,15 @@ public class 色んなデータ型:共通{
     }
     [Fact]
     public void Anonymous040(){
-        this.MemoryMessageJson_TObject(new{a=new{aa=1},b=new{aa=1}});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=new{aa=1},b=new{aa=1}});
     }
     [Fact]
     public void Anonymous041(){
-        this.MemoryMessageJson_TObject(new{a=new{aa=1},b=(object)new{aa=1}});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=new{aa=1},b=(object)new{aa=1}});
     }
     [Fact]
     public void Anonymous05(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             Tuple.Create(
                 new{a=1111}
             )
@@ -119,68 +119,68 @@ public class 色んなデータ型:共通{
     }
     [Fact]
     public void Anonymous06(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new{a=(object)new{a=1111}}
         );
     }
     [Fact]
     public void Anonymous07(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new[]{new{a=1111},(object)new{a=2222}}
         );
     }
     [Fact]
     public void Anonymous080(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new[]{new{a=1111}}
         );
     }
     [Fact]
     public void Anonymous081(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new[]{new{a=1111},new{a=2222}}
         );
     }
     [Fact]
     public void Anonymous09(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             new[]{new{a=1111},new{a=2222}}.ToList()
         );
     }
     [Fact]
     public void Anonymous10(){
-        this.MemoryMessageJson_TObject(
+        this.MemoryMessageJson_T_Assert全パターン(
             (object)new{a=1111}
         );
     }
     [Fact]
     public void Anonymous11(){
-        this.MemoryMessageJson_TObject(new{a=(object)new{aa=1}});
+        this.MemoryMessageJson_T_Assert全パターン(new{a=(object)new{aa=1}});
     }
     private static int フィールド;
     [Fact]
     public void Field(){
         var f=typeof(色んなデータ型).GetField(nameof(フィールド),BindingFlags.Static|BindingFlags.NonPublic);
-        this.MemoryMessageJson_TObject(f);
+        this.MemoryMessageJson_T_Assert全パターン(f);
     }
     [Fact]
     public void Member(){
         MemberInfo f=typeof(色んなデータ型).GetField(nameof(フィールド),BindingFlags.Static|BindingFlags.NonPublic);
-        this.MemoryMessageJson_TObject(f);
+        this.MemoryMessageJson_T_Assert全パターン(f);
     }
     [Fact]
     public void Method(){
         var f=typeof(色んなデータ型).GetMethod("Method");
-        this.MemoryMessageJson_TObject(f);
+        this.MemoryMessageJson_T_Assert全パターン(f);
     }
     private static int プロパティ{get;set;}
     [Fact]
     public void Property(){
         var f=typeof(色んなデータ型).GetProperty(nameof(プロパティ),BindingFlags.Static|BindingFlags.NonPublic);
-        this.MemoryMessageJson_TObject(f);
+        this.MemoryMessageJson_T_Assert全パターン(f);
     }
     [Fact]
     public void Array(){
-        this.MemoryMessageJson_TObject(new[]{1,2,3});
+        this.MemoryMessageJson_T_Assert全パターン(new[]{1,2,3});
     }
 }

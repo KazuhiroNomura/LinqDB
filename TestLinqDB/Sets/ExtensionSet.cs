@@ -3,6 +3,9 @@ using LinqDB.Sets;
 using Expressions=System.Linq.Expressions;
 using Collections=System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using LinqDB.Enumerables;
+using LinqDB.Helpers;
 namespace TestLinqDB.Sets;
 using Generic=Collections.Generic;
 using Sets=LinqDB.Sets;
@@ -19,14 +22,6 @@ public class ExtensionSet:共通{
         var 上限0=数値<T>(上限);
         var value=new Set<T>();
         for(var a=下限0;a<上限0;a++){
-            value.Add(a);
-        }
-        return (value,value);
-    }
-    private static (Sets.IEnumerable<T>s,Generic.IEnumerable<T>e)データ<T>(int 上限数,int 上限値)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
-        var value=new Set<T>();
-        var 上限0=数値<T>(上限数);
-        for(var a=default(T);a<上限0;a++){
             value.Add(a);
         }
         return (value,value);
@@ -68,7 +63,7 @@ public class ExtensionSet:共通{
         }
     }
     private static void 集約関数Nullable<T>(int 上限,Action<Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action) where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool> =>
-        集約関数Nullable<T>(0,上限,action);
+        集約関数Nullable(0,上限,action);
     private static void 集約関数Nullable<T>(int 下限,int 上限,Action<Sets.IEnumerable<T?>,Generic.IEnumerable<T?>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         for(var a=下限;a<上限;a++){
             var (s,e)=データNullable<T>(a);
@@ -83,43 +78,40 @@ public class ExtensionSet:共通{
     //    var actual=数列.Lookup(p=>p/10).ToArray().OrderBy(p=>p.Key).ToArray();
     //}
     [Fact]public void Aggregate_func(){
-        //集約関数<sbyte  >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        //集約関数<short  >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<int    >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<long   >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        //集約関数<byte   >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        //集約関数<ushort >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<uint   >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<ulong  >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<float  >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<double >(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<decimal>(1,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        const int 最大値=5;
+        集約関数<int    >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<long   >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<uint   >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<ulong  >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<float  >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<double >(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<decimal>(1,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
     }
     [Fact]public void Aggregate_seed_func(){
-        集約関数<sbyte  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<short  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<int    >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<long   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1L ,(a,b)=>a+b),()=>e.Aggregate(1L ,(a,b)=>a+b)));
-        集約関数<byte   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<ushort >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<uint   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1U ,(a,b)=>a+b),()=>e.Aggregate(1U ,(a,b)=>a+b)));
-        集約関数<ulong  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1UL,(a,b)=>a+b),()=>e.Aggregate(1UL,(a,b)=>a+b)));
-        集約関数<float  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1f ,(a,b)=>a+b),()=>e.Aggregate(1f ,(a,b)=>a+b)));
-        集約関数<double >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1d ,(a,b)=>a+b),()=>e.Aggregate(1d ,(a,b)=>a+b)));
-        集約関数<decimal>(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1m ,(a,b)=>a+b),()=>e.Aggregate(1m ,(a,b)=>a+b)));
+        集約関数<sbyte  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<short  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<int    >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<long   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1L ,(a,b)=>a+b),()=>e.Aggregate(1L ,(a,b)=>a+b)));
+        集約関数<byte   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<ushort >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<uint   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1U ,(a,b)=>a+b),()=>e.Aggregate(1U ,(a,b)=>a+b)));
+        集約関数<ulong  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1UL,(a,b)=>a+b),()=>e.Aggregate(1UL,(a,b)=>a+b)));
+        集約関数<float  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1f ,(a,b)=>a+b),()=>e.Aggregate(1f ,(a,b)=>a+b)));
+        集約関数<double >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1d ,(a,b)=>a+b),()=>e.Aggregate(1d ,(a,b)=>a+b)));
+        集約関数<decimal>(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1m ,(a,b)=>a+b),()=>e.Aggregate(1m ,(a,b)=>a+b)));
     }
     [Fact]public void Aggregate_seed_func_resultSelector(){
-        集約関数<sbyte  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<short  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<int    >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<long   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<byte   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<ushort >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<uint   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<ulong  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<float  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<double >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<decimal>(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<sbyte  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<short  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<int    >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<long   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<byte   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<ushort >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<uint   >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<ulong  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<float  >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<double >(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<decimal>(0,10,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2)));
     }
     //private void 集約関数<T>(T 下限,T 上限,Action<LinqDB.Sets.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
     //    for(var a=下限;a<上限;a++){
@@ -128,44 +120,50 @@ public class ExtensionSet:共通{
     //    }
     //}
     [Fact]public void All(){
-        集約関数<sbyte  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<short  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<int    >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<long   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<byte   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<ushort >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<uint   >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<ulong  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<float  >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<double >(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<decimal>(0,10,(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        const int 最大値=5;
+        {
+            var (s,e)=データ<decimal>(1);
+            base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0));
+
+        }
+        集約関数<sbyte  >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<short  >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<int    >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<long   >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<byte   >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<ushort >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<uint   >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<ulong  >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<float  >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<double >(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<decimal>(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<char   >('a','z',(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
         //void 共通<T>() where T :struct, IIncrementOperators<T>, IComparisonOperators<T,T,bool>, IAdditionOperators<T,T,T>, IMultiplyOperators<T,T,T>{
         //    T max=default;
         //    T seed=;
         //    seed++;
         //    for(var a=0;a<10;a++) max++;
         //    集約関数<T>(default,max,(s,e) => {
-        //        this.共通コンパイル実行(() => s.Aggregate(seed,(a,b) => a+b,ab => ab*2),
+        //        this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Aggregate(seed,(a,b) => a+b,ab => ab*2),
         //            ()=>e.Aggregate(seed,(a,b) => a+b,ab => ab*2));
         //    });
         //}
     }
     [Fact]public void Any(){
-        集約関数<sbyte  >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<short  >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<int    >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<long   >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<byte   >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ushort >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<uint   >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ulong  >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<float  >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<double >(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<decimal>(0  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<sbyte  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<short  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<int    >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<long   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<byte   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ushort >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<uint   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ulong  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<float  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<double >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<decimal>(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<char   >('a','z',(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
     }
-    private void 共通コンパイル実行InvalidOperationException<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
+    private void 共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
         IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IAdditionOperators<T,T,T>
     {
         var Optimizer = this.Optimizer;
@@ -184,62 +182,62 @@ public class ExtensionSet:共通{
     }
     [Fact]public void AverageNullable(){
         const int Count=10;
-        //集約関数Nullable<sbyte  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<short  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<int    >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<long   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<byte   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<ushort >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<uint   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<float  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<double >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<decimal>(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<sbyte  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<short  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<int    >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<long   >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<byte   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<ushort >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<uint   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<float  >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<double >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<decimal>(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<char   >('a','z',(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(),()=>e.Average()));
     }
     [Fact]public void Average0行(){
-        //集約関数0<sbyte  >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<short  >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<int    >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<long   >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<byte   >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<ushort >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<uint   >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<ulong  >((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<float>((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
-        集約関数0<double>((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
-        集約関数0<decimal>((s,e) => this.共通コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
+        //集約関数0<sbyte  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<short  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<int    >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<long   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<byte   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<ushort >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<uint   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<ulong  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<float>((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),() => e.Average()));
+        集約関数0<double>((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),() => e.Average()));
+        集約関数0<decimal>((s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException(() => s.Average(),() => e.Average()));
     }
     [Fact]public void Average(){
-        //集約関数<sbyte  >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<short  >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<int    >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<long   >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<byte   >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<ushort >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<uint   >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<ulong  >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<float  >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<double >(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<decimal>(1,10,(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<char   >('a','z',(s,e) => this.共通コンパイル実行(() => s.Average(),()=>e.Average()));
+        //集約関数<sbyte  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<short  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        集約関数<int    >(1,10,(s,e) => base.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        集約関数<long   >(1,10,(s,e) => base.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<byte   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<ushort >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<uint   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<ulong  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        集約関数<float  >(1,10,(s,e) => base.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        集約関数<double >(1,10,(s,e) => base.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        集約関数<decimal>(1,10,(s,e) => base.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
+        //集約関数<char   >('a','z',(s,e) => this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Average(),()=>e.Average()));
     }
     [Fact]public void AverageNullable_selector(){
         const int Count=10;
-        集約関数Nullable<sbyte  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<short  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<int    >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<long   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<byte   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<ushort >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<uint   >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<float  >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<double >(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<decimal>(Count ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<sbyte  >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<short  >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<int    >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<long   >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<byte   >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<ushort >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<uint   >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<float  >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<double >(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<decimal>(Count ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<char   >('a','z',(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
-    private void コンパイル実行<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
+    private void MemoryMessageJson_Expression_コンパイルリモート実行<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
         IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IAdditionOperators<T,T,T>
     {
         var Optimizer = this.Optimizer;
@@ -257,37 +255,37 @@ public class ExtensionSet:共通{
         Assert.Equal(expected1,actual1);
     }
     [Fact]public void Average0_selector(){
-        集約関数0<sbyte  >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<short  >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<int    >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<long   >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<byte   >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<ushort >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<uint   >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数0<ulong  >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<float  >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<double >((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<decimal>((s,e)=>this.共通コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<sbyte  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<short  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<int    >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<long   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<byte   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<ushort >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<uint   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数0<ulong  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<float  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<double >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<decimal>((s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
     [Fact]public void Average_selector(){
-        集約関数<sbyte  >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<short  >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<int    >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<long   >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<byte   >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<ushort >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<uint   >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数<ulong  >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<float  >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<double >(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<decimal>(1  ,10 ,(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<char   >('a','z',(s,e)=>this.共通コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<sbyte  >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<short  >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<int    >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<long   >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<byte   >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<ushort >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<uint   >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数<ulong  >(1  ,10 ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<float  >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<double >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<decimal>(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<char   >('a','z',(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
     Sets.IEnumerable<T> m<T>(Sets.IEnumerable<T> i)=>i;
     Generic.IEnumerable<T> m<T>(Generic.IEnumerable<T> i)=>i;
     [Fact]public void Cast(){
-        集約関数<sbyte  >(1  ,10 ,(s,e)=>this.共通コンパイル実行(()=>s.Cast<object>().Cast<sbyte>(),()=>e.Cast<object>().Cast<sbyte>()));
-        集約関数<sbyte  >(1  ,10 ,(s,e)=>this.共通コンパイル実行(()=>s.Cast<sbyte  >(),()=>e.Cast<sbyte  >()));
+        集約関数<sbyte  >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Cast<object>().Cast<sbyte>(),()=>e.Cast<object>().Cast<sbyte>()));
+        集約関数<sbyte  >(1  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Cast<sbyte  >(),()=>e.Cast<sbyte  >()));
     }
     [Fact]public void Contains(){
         const int 最大値=10;
@@ -305,10 +303,10 @@ public class ExtensionSet:共通{
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var 中央値=数値<T>(Count/2);
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.Contains(中央値),()=>e.Contains(中央値)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Contains(中央値),()=>e.Contains(中央値)));
             var はみ出し=数値<T>(Count);
             はみ出し++;
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
         }
     }
     [Fact]public void DefaultIfEmptyNullable(){
@@ -327,31 +325,46 @@ public class ExtensionSet:共通{
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var a=数値<T>(9999);
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
         }
     }
     [Fact]public void DefaultIfEmpty(){
-        const int 最大値=10;
-        共通<sbyte  >(最大値);
-        共通<short  >(最大値);
-        共通<int    >(最大値);
-        共通<long   >(最大値);
-        共通<byte   >(最大値);
-        共通<ushort >(最大値);
-        共通<uint   >(最大値);
-        共通<ulong  >(最大値);
-        共通<float  >(最大値);
-        共通<double >(最大値);
-        共通<decimal>(最大値);
-        共通<char   >(最大値);
-        void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
+        const int 最大値=2;
+        共通<sbyte  >();
+        共通<short  >();
+        共通<int    >();
+        共通<long   >();
+        共通<byte   >();
+        共通<ushort >();
+        共通<uint   >();
+        共通<ulong  >();
+        共通<float  >();
+        共通<double >();
+        共通<decimal>();
+        共通<char   >();
+        void 共通<T>()where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var a=数値<T>(9999);
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
+            集約関数<T>(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
+            集約関数<T>(0,最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
         }
     }
+    interface I0{}
+    interface I1:I0{}
+    public sealed class L:I1,I0{
+    }
+    [Fact]public void HashSet(){
+        var h=new LinqDB.Sets.HashSet<int>();
+        h.IsAdded(1);
+        h.IsAdded(2);
+        var l=new LinqDB.Enumerables.List<int>{1,2,3};
+        //this.MemoryMessageJson_T_Assert全パターン(l);
+        //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<>();
+        global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection(typeof(LinqDB.Sets.HashSet<int>));
+        this.MemoryMessageJson_T_Assert全パターン(h);
+    }
     [Fact]public void Lookup(){
+        var x=typeof(L);
         const int 最大値=10;
         共通<sbyte  >(最大値);
         共通<short  >(最大値);
@@ -366,7 +379,7 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(0,Count,(s,e)=>this.共通コンパイル実行(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
     }
     //private Sets.IEnumerable<T> データ<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
     //    T 下限0=default,上限0=default;
@@ -402,26 +415,22 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char>(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(最大値,(s0,s1,e0,e1)=>this.共通コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
+            集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s0.Except(s1),()=>e0.Except(e1)));
     }
     [Fact]public void GroupBy_keySelector_elementSelector(){
-        const int 最大値=10;
-        {
-            var (s,e)=データ<sbyte>(5);
-            this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3));
-        }
-        集約関数<sbyte  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<short  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<int    >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<long   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<byte   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<ushort >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<uint   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<ulong  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<float  >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<double >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<decimal>(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<char   >(最大値,(s,e)=>this.共通コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        const int 最大値=6;
+        集約関数<sbyte  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<short  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<int    >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<long   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<byte   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ushort >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<uint   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ulong  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<float  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<double >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<decimal>(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<char   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
     }
     [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
     private static void 集約関数<T>(int 数,Action<Sets.IEnumerable<T>,Sets.IEnumerable<T>,Generic.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
@@ -502,4 +511,10 @@ public class ExtensionSet:共通{
         }
         return (value,value);
     }
+    //private readonly int a=3;
+    //[Fact]
+    //public void aaa(){
+    //    //var f=()=>this.a;
+    //    this.Memory_Assert(()=>this.a);
+    //}
 }

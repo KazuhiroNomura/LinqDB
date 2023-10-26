@@ -1,9 +1,9 @@
 ﻿using System;
 using MemoryPack;
 using System.Buffers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters;
+
 
 using Reader = MemoryPackReader;
 using T = Expressions.NewArrayExpression;
@@ -11,22 +11,22 @@ public class NewArray:MemoryPackFormatter<T> {
     public static readonly NewArray Instance=new();
     private static void PrivateWrite<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
         writer.WriteType(value.Type.GetElementType());
-        
         writer.WriteCollection(value.Expressions);
     }
     internal static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,T value)where TBufferWriter:IBufferWriter<byte>{
 
         writer.WriteNodeType(value);
-
         PrivateWrite(ref writer,value);
     }
+    
+    
+    
+    
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
         if(writer.TryWriteNil(value)) return;
 
         writer.WriteNodeType(value);
-        
         PrivateWrite(ref writer,value);
-        
     }
     private static (Type type,Expressions.Expression?[]?expressions)PrivateRead(ref Reader reader){
         var type=reader.ReadType();

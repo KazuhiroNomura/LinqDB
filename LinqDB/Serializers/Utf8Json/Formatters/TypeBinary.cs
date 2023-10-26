@@ -42,11 +42,11 @@ public class TypeBinary:IJsonFormatter<T> {
         reader.ReadIsBeginArrayWithVerify();
         
         var NodeType=reader.ReadNodeType();
+        System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
         reader.ReadIsValueSeparatorWithVerify();
         var value=NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
-            Expressions.ExpressionType.TypeIs=>ReadTypeIs(ref reader,Resolver),
-            _=>throw new NotSupportedException(NodeType.ToString())
+            _                                   =>ReadTypeIs(ref reader,Resolver)
         };
         reader.ReadIsEndArrayWithVerify();
         return(reader.TryReadNil()?null:value)!;

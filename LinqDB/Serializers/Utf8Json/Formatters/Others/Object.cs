@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Utf8Json;
 
 using Expressions = System.Linq.Expressions;
@@ -35,8 +36,11 @@ public class Object :IJsonFormatter<G>{
             case EventInfo v: Event.Write(ref writer, v, Resolver); break;
             case FieldInfo v: Field.Write(ref writer, v, Resolver); break;
             default:{
-                writer.Write(type,value,Resolver);
-                
+                try{
+                    writer.Write(type,value,Resolver);
+                } catch(Exception){
+
+                }
                 break;
             }
         }

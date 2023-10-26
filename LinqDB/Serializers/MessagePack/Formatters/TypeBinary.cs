@@ -7,6 +7,7 @@ namespace LinqDB.Serializers.MessagePack.Formatters;
 using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
+using T = Expressions.TypeBinaryExpression;
 public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public static readonly TypeBinary Instance=new();
     internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,O Resolver){
@@ -16,12 +17,11 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         Expression.Write(ref writer,value.Expression,Resolver);
         
         writer.WriteType(value.TypeOperand);
+        
     }
     public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,O Resolver){
         if(writer.TryWriteNil(value))return;
-        
         Write(ref writer,value,Resolver);
-        
     }
     private static (Expressions.Expression expression,Type type)PrivateRead(ref Reader reader,O Resolver){
         var expression=Expression.Read(ref reader,Resolver);
@@ -40,9 +40,10 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
     public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
-        Debug.Assert(count==3);
+        System.Diagnostics.Debug.Assert(count==3);
         var NodeType=reader.ReadNodeType();
-        Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
+        System.Diagnostics.Debug.Assert(NodeType is Expressions.ExpressionType.TypeEqual or Expressions.ExpressionType.TypeIs);
+        
         return NodeType switch{
             Expressions.ExpressionType.TypeEqual=>ReadTypeEqual(ref reader,Resolver),
             _=>ReadTypeIs(ref reader,Resolver)

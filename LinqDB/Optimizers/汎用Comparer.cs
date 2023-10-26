@@ -18,12 +18,13 @@ namespace LinqDB.Optimizers;
 /// SetとIEnumerableを比較するため
 /// </summary>
 /// </summary>
-public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
+public sealed class 汎用Comparer : EqualityComparer<object>{
+    private static bool @false=>false;
     private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer;
-    public EnumerableSetEqualityComparer(){
+    public 汎用Comparer(){
         this.ExpressionEqualityComparer=new();
     }
-    public EnumerableSetEqualityComparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
+    public 汎用Comparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
         this.ExpressionEqualityComparer=ExpressionEqualityComparer;
     }
     private readonly Type[] Types1 = new Type[1];
@@ -87,7 +88,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
             if(x_Enumerator.Current is not null&&(x_Type=x_Enumerator.Current.GetType()).IsAnonymous()) {
                 if(!this.Dictionary_Anonymous_ValueTuple.TryGetValue(x_Type,out var M)) {
                     this.Types1[0]=typeof(object);
-                    var D = new DynamicMethod("",typeof(object),this.Types1,typeof(EnumerableSetEqualityComparer),true) {
+                    var D = new DynamicMethod("",typeof(object),this.Types1,typeof(汎用Comparer),true) {
                         InitLocals=false
                     };
                     var I = D.GetILGenerator();
@@ -113,7 +114,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         Type.IsInheritInterface(typeof(System.Linq.IGrouping<,>));
     private bool 比較(List<object> List_x, List<object> List_y){
         var List_x_Count=List_x.Count;
-        if(List_x_Count!=List_y.Count) return false;
+        if(List_x_Count!=List_y.Count) return @false;
         for(var a=0; a<List_x_Count; a++){
             var x=List_x[a];
             if(x is not null) {
@@ -123,7 +124,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     var x_KeyValue = x_Key.GetMethod!.Invoke(x,Array.Empty<object>())!;
                     var b = a;
                     while(true) {
-                        if(b==List_x_Count) return false;
+                        if(b==List_x_Count) return @false;
                         var y = List_y[b];
                         var y_Type = y.GetType();
                         if(Groupingか(y_Type)) {
@@ -155,7 +156,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                     }
                     //var b = a;
                     //while(true) {
-                    //    if(b==List_x_Count) return false;
+                    //    if(b==List_x_Count) return @false;
                     //    var y = List_y[b];
                     //    if(this.Equals(x,y)) {
                     //        List_y[b]=List_y[a];
@@ -167,7 +168,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 }
             } else {
                 var y = List_y[a];
-                if(y is not null) return false;
+                if(y is not null) return @false;
             }
         }
         return true;
@@ -178,7 +179,7 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
     //private readonly Object[] Objects1= new Object[1];
     public override bool Equals(object? x,object? y){
         if(x==y) return true;
-        if(x is null||y is null) return false;
+        if(x is null||y is null) return @false;
         {
             if(x is ImmutableSet x0&&y is ImmutableSet y0) {
                 var xl = this.ToList(x0);
@@ -201,15 +202,15 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 var x_Properties_Length = x_Properties.Length;
                 var y_Properties = y_GetType.GetProperties();
                 var y_Properties_Length = y_Properties.Length;
-                if(x_Properties_Length!=y_Properties_Length) return false;
+                if(x_Properties_Length!=y_Properties_Length) return @false;
                 for(var Index = 0;Index<x_Properties_Length;Index++) {
                     var x0 = x_Properties[Index].GetMethod!.Invoke(x,Array.Empty<object>())!;
                     var y0 = y_Properties[Index].GetMethod!.Invoke(y,Array.Empty<object>())!;
-                    if(!this.Equals(x0,y0)) return false;
+                    if(!this.Equals(x0,y0)) return @false;
                 }
                 return true;
             } else{
-                return false;
+                return @false;
             }
         } else if(x_GetType.IsDisplay()){
             if(x_GetType==y_GetType){
@@ -219,21 +220,21 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
                 var x_Fields_Length = x_Fields.Length;
                 var y_Fields = y_GetType.GetFields(Flag);
                 var y_Fields_Length = y_Fields.Length;
-                if(x_Fields_Length!=y_Fields_Length) return false;
+                if(x_Fields_Length!=y_Fields_Length) return @false;
                 for(var Index = 0;Index<x_Fields_Length;Index++) {
                     var x0 = x_Fields[Index].GetValue(x)!;
                     var y0 = y_Fields[Index].GetValue(y)!;
-                    if(!this.Equals(x0,y0)) return false;
+                    if(!this.Equals(x0,y0)) return @false;
                 }
                 return true;
             } else{
-                return false;
+                return @false;
             }
         }else{
             switch(x,y){
                 case(Delegate x0,Delegate y0):{
-                    if(x0.Method!=y0.Method) return false;
-                    if(!this.Equals(x0.Target,y0.Target))return false;
+                    if(x0.Method!=y0.Method) return @false;
+                    if(!this.Equals(x0.Target,y0.Target))return @false;
                     return true;
                 }
                 case(LabelTarget x0,LabelTarget y0):
@@ -256,11 +257,11 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         //        var x_Properties_Length = x_Properties.Length;
         //        var y_Properties = y_GetType.GetProperties();
         //        var y_Properties_Length = y_Properties.Length;
-        //        if(x_Properties_Length!=y_Properties_Length) return false;
+        //        if(x_Properties_Length!=y_Properties_Length) return @false;
         //        for(var Index = 0;Index<x_Properties_Length;Index++) {
         //            var x0 = x_Properties[Index].GetMethod!.Invoke(x,Array.Empty<object>())!;
         //            var y0 = y_Properties[Index].GetMethod!.Invoke(y,Array.Empty<object>())!;
-        //            if(!this.Equals(x0,y0)) return false;
+        //            if(!this.Equals(x0,y0)) return @false;
         //        }
         //        return true;
         //    } else {
@@ -275,11 +276,11 @@ public sealed class EnumerableSetEqualityComparer : EqualityComparer<object>{
         //                if(y_Property is not null) {
         //                    y0=y_Property.GetValue(y)!;
         //                } else {
-        //                    return false;
+        //                    return @false;
         //                }
         //            }
         //            var x0 = x_Property.GetValue(x);
-        //            if(!this.Equals(x0,y0)) return false;
+        //            if(!this.Equals(x0,y0)) return @false;
         //        }
         //        return true;
         //    }

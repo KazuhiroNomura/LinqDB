@@ -9,10 +9,7 @@ namespace TestLinqDB.Serializers.Formatters;
 public class Primitive : 共通{
 #pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
     private void 共通<T>(T t){
-        this.MemoryMessageJson_Assert(t);
-        this.MemoryMessageJson_Assert((object)t);
-        this.MemoryMessageJson_Assert(new{a=t});
-        this.MemoryMessageJson_Assert(new{a=(object)t});
+        this.MemoryMessageJson_T_Assert全パターン(t);
         Trace.WriteLine(typeof(T).Name);
     }
 #pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。

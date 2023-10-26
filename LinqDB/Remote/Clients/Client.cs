@@ -800,7 +800,7 @@ public class Client:IDisposable {
         var Response = (Response)MemoryStream.ReadByte();
         return Response switch{
             Response.Object=>this.ReadObject<object>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
+            Response.ThrowException=>throw this.ReadObject<Exception>(MemoryStream),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }

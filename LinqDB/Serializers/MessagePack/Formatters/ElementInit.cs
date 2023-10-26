@@ -10,7 +10,6 @@ using T = Expressions.ElementInit;
 public class ElementInit:IMessagePackFormatter<T> {
     public static readonly ElementInit Instance=new();
     public void Serialize(ref Writer writer,T value,O Resolver){
-        if(writer.TryWriteNil(value)) return;
         writer.WriteArrayHeader(2);
         Method.Write(ref writer,value.AddMethod,Resolver);
         
@@ -18,7 +17,6 @@ public class ElementInit:IMessagePackFormatter<T> {
         
     }
     public T Deserialize(ref Reader reader,O Resolver){
-        if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         var addMethod= Method.Read(ref reader,Resolver);
         

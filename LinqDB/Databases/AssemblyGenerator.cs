@@ -15,7 +15,6 @@ using LinqDB.CRC;
 using System.IO;
 using System.Linq.Expressions;
 using System.Numerics;
-using System.Text.RegularExpressions;
 using LinqDB.Databases.Dom;
 using LinqDB.Optimizers;
 using AssemblyName=System.Reflection.AssemblyName;

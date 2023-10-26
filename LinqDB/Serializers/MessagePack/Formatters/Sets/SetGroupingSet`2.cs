@@ -13,7 +13,7 @@ public class SetGroupingSet<TKey,TElement>:IMessagePackFormatter<G.SetGroupingSe
         var Formatter=GroupingSet<TKey,TElement>.Instance;
         
         foreach(var item in value)
-            Formatter.Serialize(ref writer,item,Resolver);
+            writer.Write(Formatter,item,Resolver);;
             
             
             
@@ -24,7 +24,7 @@ public class SetGroupingSet<TKey,TElement>:IMessagePackFormatter<G.SetGroupingSe
         var Count = reader.ReadArrayHeader();
         var Formatter=GroupingSet<TKey,TElement>.Instance;
         var value = new G.SetGroupingSet<TKey,TElement>();
-        for(long a = 0;a<Count;a++)
+        while(Count-->0)
             value.Add(reader.Read(Formatter,Resolver));
         return value;
         

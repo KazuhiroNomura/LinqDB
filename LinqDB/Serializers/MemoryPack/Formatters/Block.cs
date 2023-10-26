@@ -40,11 +40,17 @@ public class Block:MemoryPackFormatter<T>{
         var variables=reader.Deserialize宣言Parameters();
         var ListParameter=reader.Serializer().Parameters;
         var ListParameter_Count=ListParameter.Count;
-
         ListParameter.AddRange(variables);
+        
         var expressions=reader.ReadArray<Expressions.Expression>();
         ListParameter.RemoveRange(ListParameter_Count,variables.Length);
         return Expressions.Expression.Block(type,variables,expressions!);
     }
-    public override void Deserialize(ref Reader reader,scoped ref T? value)=>value=reader.TryReadNil()?null:Read(ref reader);
+    public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil())return;
+        
+        
+        value=Read(ref reader);
+        
+    }
 }

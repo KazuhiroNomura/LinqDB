@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Numerics;
+namespace Types;
 [DebuggerDisplay("{"+nameof(v)+"}")]
 public readonly struct Int:IEquatable<Int>,IAdditionOperators<Int,Int,Int>{
     private readonly long v;

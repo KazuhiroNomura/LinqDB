@@ -1,14 +1,16 @@
 ﻿using System.IO;
 
 
-
 using Utf8Json;
 
 namespace LinqDB.Serializers.Utf8Json;
+using O=IJsonFormatterResolver;
+using Writer=JsonWriter;
+using Reader=JsonReader;
 public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
-    internal readonly System.Collections.Generic.Dictionary<System.Type,IJsonFormatter> TypeFormatter=new();
     private readonly FormatterResolver Resolver=new();
-    private readonly IJsonFormatterResolver IResolver;
+    
+    private readonly O IResolver;
     public Serializer(){
         var formatters=new IJsonFormatter[]{
             this,
@@ -63,44 +65,44 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
         var resovers=new[]{
             this.Resolver,
             global::Utf8Json.Resolvers.BuiltinResolver.Instance,//int,byte,double[],List<>,よく使う型
-            global::Utf8Json.Resolvers.DynamicGenericResolver.Instance,//主にジェネリックコレクション
+            global::Utf8Json.Resolvers.DynamicGenericResolver.Instance,//配列、主にジェネリックコレクション
             global::Utf8Json.Resolvers.EnumResolver.Default,
             global::Utf8Json.Resolvers.AttributeFormatterResolver.Instance,
-            global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//.Default,//Anonymous
+            //global::Utf8Json.Resolvers.StandardResolver..,
+            //global::Utf8Json.Resolvers.StandardResolver.AllowPrivate,//privateメンバーをシリアライズ。これを使うとDisplayClassのthisのようなシリアライズしたくないオブジェクトも対象になる
+            //global::Utf8Json.Resolvers.DynamicObjectResolver.AllowPrivate,//.Default,//Anonymous
         };
         this.IResolver=global::Utf8Json.Resolvers.CompositeResolver.Create(
             formatters,
             resovers
         );
     }
-
-
     private void Clear(){
         this.ProtectedClear();
         this.Resolver.Clear();
-        this.TypeFormatter.Clear();
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
-        return JsonSerializer.Serialize<object>(value,this.IResolver);
+        
+        return JsonSerializer.Serialize(value,this.IResolver);
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
-        JsonSerializer.Serialize<object>(stream,value,this.IResolver);
+        JsonSerializer.Serialize(stream,value,this.IResolver);
     }
     public override T Deserialize<T>(byte[] bytes){
         this.Clear();
-        return (T)JsonSerializer.Deserialize<object>(bytes,this.IResolver);
+        return JsonSerializer.Deserialize<T>(bytes,this.IResolver);
     }
     public override T Deserialize<T>(Stream stream){
         this.Clear();
-        return (T)JsonSerializer.Deserialize<object>(stream,this.IResolver);
+        return JsonSerializer.Deserialize<T>(stream,this.IResolver);
     }
 
-    public void Serialize(ref JsonWriter writer,Serializer value,IJsonFormatterResolver formatterResolver){
+    public void Serialize(ref Writer writer,Serializer value,O formatterResolver){
         throw new System.NotImplementedException();
     }
-    public Serializer Deserialize(ref JsonReader reader,IJsonFormatterResolver formatterResolver){
+    public Serializer Deserialize(ref Reader reader,O formatterResolver){
         throw new System.NotImplementedException();
     }
 }

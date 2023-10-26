@@ -630,6 +630,14 @@ partial class Optimizer {
             this.Traverse(Assign0.Left),
             this.Traverse(Assign0.Right)
         );
+        protected override Expression Block(BlockExpression Block0){
+            var ListスコープParameter = this.ListスコープParameter;
+            var ListスコープParameter_Count = ListスコープParameter.Count;
+            ListスコープParameter.AddRange(Block0.Variables);
+            var Block1=base.Block(Block0);
+            ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
+            return Block1;
+        }
         protected override Expression Lambda(LambdaExpression Lambda0){
             var ListスコープParameter = this.ListスコープParameter;
             var ListスコープParameter_Count = ListスコープParameter.Count;

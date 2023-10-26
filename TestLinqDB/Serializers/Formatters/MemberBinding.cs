@@ -42,8 +42,8 @@ public class MemberBinding : 共通
                 )
             )
         );
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.MemberBinding) });
-        this.MemoryMessageJson_Assert(
+        this.MemoryMessageJson_T_Assert全パターン(new { a = default(Expressions.MemberBinding) });
+        this.MemoryMessageJson_T_Assert全パターン(
             new
             {
                 a = input,

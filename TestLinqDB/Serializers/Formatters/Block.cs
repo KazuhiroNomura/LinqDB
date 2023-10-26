@@ -5,35 +5,24 @@
 //using MessagePack;
 namespace TestLinqDB.Serializers.Formatters;
 using Expressions = System.Linq.Expressions;
-public class Block : 共通
-{
+public class Block:共通{
     [Fact]
-    public void Serialize()
-    {
-        var Constant1 = Expressions.Expression.Constant(1m);
-        var input1 = Expressions.Expression.Block(Constant1);
-        this.MemoryMessageJson_Assert(new { a = input1 });
-        this.MemoryMessageJson_Assert(new { a = default(Expressions.BlockExpression) });
+    public void Serialize(){
+        var input1=Expressions.Expression.Block(Expressions.Expression.Constant(1m));
+        this.MemoryMessageJson_Expression_Assert全パターン(input1);
 
     }
     [Fact]
-    public void Block0()
-    {
-        var ParameterDecimmal = Expressions.Expression.Parameter(typeof(decimal));
-        共通0(
+    public void Block0(){
+        var ParameterDecimmal=Expressions.Expression.Parameter(typeof(decimal));
+        this.MemoryMessageJson_Expression_Assert全パターン(
             Expressions.Expression.Block(
-                new[] { ParameterDecimmal },
+                new[]{ParameterDecimmal},
                 Expressions.Expression.Block(
-                    new[] { ParameterDecimmal },
+                    new[]{ParameterDecimmal},
                     ParameterDecimmal
                 )
             )
         );
-        void 共通0(Expressions.Expression input)
-        {
-            this.MemoryMessageJson_Assert(
-                input,
-                output => Assert.Equal(input, output, this.ExpressionEqualityComparer));
-        }
     }
 }

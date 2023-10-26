@@ -19,9 +19,11 @@ public class Parameter:IJsonFormatter<T> {
             writer.WriteInt32(index1);
             if(index1<0){
                 writer.WriteValueSeparator();
+                writer.WriteString(value.Name);
+                writer.WriteValueSeparator();
                 writer.WriteType(value.Type);
                 writer.WriteValueSeparator();
-                writer.WriteString(value.Name);
+                writer.WriteBoolean(value.IsByRef);
                 Serializer.ラムダ跨ぎParameters.Add(value);
             }
         }
@@ -52,10 +54,12 @@ public class Parameter:IJsonFormatter<T> {
             var index1=reader.ReadInt32();
             if(index1<0){
                 reader.ReadIsValueSeparatorWithVerify();
+                var name=reader.ReadString();
+                reader.ReadIsValueSeparatorWithVerify();
                 var type=reader.ReadType();
                 reader.ReadIsValueSeparatorWithVerify();
-                var name=reader.ReadString();
-                var Parameter=Expressions.Expression.Parameter(type,name);
+                var IsByRef=reader.ReadBoolean();
+                var Parameter=Expressions.Expression.Parameter(IsByRef?type.MakeByRefType():type,name);
                 Serializer.ラムダ跨ぎParameters.Add(Parameter);
                 return Parameter;
             } else{

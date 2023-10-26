@@ -18,14 +18,17 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
             writer.Write(Formatter,item);
         }
     }
+    
     public override void Deserialize(ref Reader reader,scoped ref G.GroupingList<TKey,TElement>? value){
         if(reader.TryReadNil())return;
         var Count=reader.ReadVarIntInt64();
         var Key=reader.Read<TKey>();
         var Formatter=reader.GetFormatter<TElement>();
         var value0=new G.GroupingList<TKey,TElement>(Key);
-        for(long a=0;a<Count;a++)
+        while(Count-->0)
             value0.Add(reader.Read(Formatter));
+
+
         value=value0;
     }
 }
