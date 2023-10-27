@@ -16,7 +16,7 @@ public class Set<TKey,TElement,TContainer>:MemoryPackFormatter<G.Set<TKey,TEleme
         var Count=value!.LongCount;
         
         writer.WriteVarInt(Count);
-        var Formatter=writer.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??writer.GetFormatter<TElement>();
         foreach(var item in value)
             writer.Write(Formatter,item);
     }
@@ -25,7 +25,7 @@ public class Set<TKey,TElement,TContainer>:MemoryPackFormatter<G.Set<TKey,TEleme
     
     public override void Deserialize(ref Reader reader,scoped ref G.Set<TKey,TElement,TContainer>? value){
         if(reader.TryReadNil())return;
-        var Formatter=reader.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??reader.GetFormatter<TElement>();
         var value0=new G.Set<TKey,TElement,TContainer>(null!);
         var Count=reader.ReadVarIntInt64();
         for(long a=0;a<Count;a++)

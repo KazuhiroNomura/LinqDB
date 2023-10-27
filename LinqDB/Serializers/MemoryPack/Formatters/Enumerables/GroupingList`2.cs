@@ -12,7 +12,7 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
         writer.Write(value.Key);
-        var Formatter=writer.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??writer.GetFormatter<TElement>();
         foreach(var item in value){
         
             writer.Write(Formatter,item);
@@ -23,7 +23,7 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
         if(reader.TryReadNil())return;
         var Count=reader.ReadVarIntInt64();
         var Key=reader.Read<TKey>();
-        var Formatter=reader.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??reader.GetFormatter<TElement>();
         var value0=new G.GroupingList<TKey,TElement>(Key);
         while(Count-->0)
             value0.Add(reader.Read(Formatter));

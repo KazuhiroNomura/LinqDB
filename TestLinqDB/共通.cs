@@ -1,4 +1,7 @@
-﻿using Reflection = System.Reflection;
+﻿#define MEMORY
+#define MESSAGE
+#define JSON
+using Reflection = System.Reflection;
 using LinqDB.Optimizers;
 using LinqDB.Remote.Servers;
 using static LinqDB.Helpers.Configulation;
@@ -49,6 +52,10 @@ public abstract class 共通{
             Optimizer.CreateDelegate(inputLambda)();
         }
     }
+    protected void MemoryMessageJson_Expression_コンパイル実行<T0,T1>(Expressions.Expression<Func<T0>> input0,Expressions.Expression<Func<T1>> input1){
+        this.MemoryMessageJson_Expression_コンパイル実行(input0);
+        this.MemoryMessageJson_Expression_コンパイル実行(input1);
+    }
     protected void MemoryMessageJson_Expression_コンパイル実行<TResult>(Expressions.Expression<Func<TResult>> input){
         var Optimizer=this.Optimizer;
         this.MemoryMessageJson_T_Assert(input,共通);
@@ -70,21 +77,25 @@ public abstract class 共通{
         var Optimizer=this.Optimizer;
         var 標準=input.Compile();
         var expected0=標準();
-        Optimizer.IsInline=false;
-        var expected1=Optimizer.CreateDelegate(input)();
-        Optimizer.IsInline=true;
-        var expected2=Optimizer.CreateDelegate(input)();
         using var Server=new Server(1,port);
         Server.ReadTimeout=receiveTimeout;
         Server.Open();
         using var R=new Client(Dns.GetHostName(),port);
+#if MEMORY
         var actual0=R.Expression(input,SerializeType.MemoryPack);
+#elif MESSAGE
         var actual1=R.Expression(input,SerializeType.MessagePack);
+#elif JSON
         var actual2=R.Expression(input,SerializeType.Utf8Json);
+#endif
         Server.Close();
+#if MEMORY
         Assert.Equal(expected0,actual0,this.汎用Comparer);
+#elif MESSAGE
         Assert.Equal(expected0,actual1,this.汎用Comparer);
+#elif JSON
         Assert.Equal(expected0,actual2,this.汎用Comparer);
+#endif
         return expected0;
     }
     protected void MemoryMessageJson_Expression_コンパイルリモート実行<T0,T1>(Expressions.Expression<Func<T0>> input0,Expressions.Expression<Func<T1>> input1){
@@ -138,18 +149,26 @@ public abstract class 共通{
         this.MemoryMessageJson_T_Assert(input);
     }
     protected void MemoryMessageJson_T_Assert<T>(T input){
+#if MEMORY
         this.Memory_Assert(input);
+#elif MESSAGE
         this.Message_Assert(input);
+#elif JSON
         this.Utf8_Assert(input);
+#endif
     }
     protected void MemoryMessageJson_TObject_Assert<T>(T input,Action<T?> AssertAction){
         this.MemoryMessageJson_T_Assert<object?>(input,output=>AssertAction((T?)output));
         this.MemoryMessageJson_T_Assert(input,AssertAction);
     }
     protected void MemoryMessageJson_T_Assert<T>(T input,Action<T> AssertAction){
+#if MEMORY
         this.Memory_Assert(input,AssertAction);
+#elif MESSAGE
         this.Message_Assert(input,AssertAction);
+#elif JSON
         this.Utf8_Assert(input,AssertAction);
+#endif
     }
     protected void MemoryMessageJson_Expression_Assert全パターン<T>(T input)where T: Expressions.Expression{
         共通0(input);

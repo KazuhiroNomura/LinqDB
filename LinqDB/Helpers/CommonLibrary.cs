@@ -329,12 +329,12 @@ public static class CommonLibrary {
     /// <param name="Type"></param>
     /// <returns></returns>
     public static bool IsNullable(this Type Type) => Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
-    public static bool GetIEnumerable1(this Type type,out Type[]GenericArguments){
-        var GetEnumerator=type.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
-        var GenericTypeDefinition=typeof(Generic.IEnumerable<>);
+    public static bool GetIEnumerableTGenericArguments(this Type type,out Type[] GenericArguments) {
+        var GetEnumerator = type.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+        var GenericTypeDefinition = typeof(Generic.IEnumerable<>);
         foreach(var Interface in type.GetInterfaces())
-            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==GenericTypeDefinition){
-                if (Array.Exists(type.GetInterfaceMap(Interface).TargetMethods, m => m == GetEnumerator)){
+            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==GenericTypeDefinition) {
+                if(Array.Exists(type.GetInterfaceMap(Interface).TargetMethods,m => m==GetEnumerator)) {
                     GenericArguments=Interface.GetGenericArguments();
                     return true;
                 }
@@ -345,6 +345,31 @@ public static class CommonLibrary {
                 //}
             }
         GenericArguments=Array.Empty<Type>();
+        return false;
+    }
+    public static bool GetIEnumerableT(this Type type,out Type GenericInterface){
+        var GetEnumerator=type.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+        var GenericTypeDefinition=typeof(Generic.IEnumerable<>);
+        var Interfaces=new Generic.List<Type>();
+        foreach(var Interface in type.GetInterfaces())
+            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==GenericTypeDefinition){
+                if(Array.Exists(type.GetInterfaceMap(Interface).TargetMethods,m=>m==GetEnumerator)){
+                    GenericInterface=Interface;
+                    return true;
+                }
+                Interfaces.Add(Interface);
+                //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+                //if(Interface_GetEnumerator==GetEnumerator){
+                //    GenericArguments=Interface.GetGenericArguments();
+                //    return true;
+                //}
+            }
+        Debug.Assert(Interfaces.Count<=1);
+        foreach(var Interface in Interfaces){
+            GenericInterface=Interface;
+            return true;
+        }
+        GenericInterface=default!;
         return false;
     }
     public static bool GetGenericArguments(this Type type,Type GenericTypeDefinition,out Type[]GenericArguments){

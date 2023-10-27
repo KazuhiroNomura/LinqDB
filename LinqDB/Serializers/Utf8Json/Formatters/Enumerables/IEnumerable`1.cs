@@ -13,7 +13,12 @@ public class IEnumerable<T>:IJsonFormatter<G.IEnumerable<T>>{
     
     public void Serialize(ref Writer writer, G.IEnumerable<T> value, O Resolver){
         if(writer.TryWriteNil(value)) return;
+        var type=value!.GetType();
         writer.WriteBeginArray();
+        writer.WriteType(type);
+        writer.WriteValueSeparator();
+        writer.Write(type,value,Resolver);
+        /*
         var Formatter=Resolver.GetFormatter<T>();
         using var Enumerator=value.GetEnumerator();
         if(Enumerator.MoveNext()){
@@ -23,11 +28,17 @@ public class IEnumerable<T>:IJsonFormatter<G.IEnumerable<T>>{
                 writer.Write(Formatter,Enumerator.Current,Resolver);
             }
         }
+        */
         writer.WriteEndArray();
     }
     public G.IEnumerable<T> Deserialize(ref Reader reader, O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
+        var type=reader.ReadType();
+        reader.ReadIsValueSeparatorWithVerify();
+        var value=(G.IEnumerable<T>?)reader.Read(type,Resolver);
+        reader.ReadIsEndArrayWithVerify();
+        /*
         var Formatter = Resolver.GetFormatter<T>();
         var value=new G.List<T>();
         // ReSharper disable once InvertIf
@@ -38,6 +49,7 @@ public class IEnumerable<T>:IJsonFormatter<G.IEnumerable<T>>{
                 value.Add(reader.Read(Formatter,Resolver));
 	        }
         }
-        return value;
+        */
+        return value!;
     }
 }

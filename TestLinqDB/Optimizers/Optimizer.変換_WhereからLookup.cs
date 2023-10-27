@@ -25,7 +25,6 @@ public class 変換_WhereからLookup:共通{
     [Fact]public void Call(){
         var s = new Set<int>{1,2,3};
         var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
-        //this.Memory_Assert(st);
         this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.Equals(o.Key))));
         //if(ループ展開可能メソッドか(MethodCall0)) {
         //    if(nameof(Sets.ExtensionSet.Where)==MethodCall0_Method.Name) {

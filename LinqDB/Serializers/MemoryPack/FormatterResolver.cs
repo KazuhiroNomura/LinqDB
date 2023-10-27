@@ -6,7 +6,7 @@ using MemoryPack.Formatters;
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
 using System.Runtime.Serialization;
-
+using LinqDB.Enumerables;
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
     public static MemoryPackFormatter<T>? GetRegisteredFormatter<T>(){
@@ -47,7 +47,7 @@ internal static class FormatterResolver {
         return default;
         MemoryPackFormatter<T> Return(object Formatter0){
             
-            foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
+            //foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
             return (MemoryPackFormatter<T>)Formatter0;
         }
 
@@ -75,6 +75,9 @@ internal static class FormatterResolver {
         Serializer.Register.MakeGenericMethod(type0).Invoke(null,new object?[] { Formatter });
         return Formatter;
     }
+    
+    
+    
     public static object? GetRegisteredFormatter(Type type) {
         if(type.IsArray) {
             GetRegisteredFormatter(type.GetElementType());
@@ -113,36 +116,16 @@ internal static class FormatterResolver {
             }
         }
         {
-            if(type.GetGenericArguments(typeof(Generic.ICollection<>),out var GenericArguments0)){
-                var i=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-                MemoryPackFormatterProvider.RegisterCollection(typeof(Generic.ICollection<>).MakeGenericType(GenericArguments0));
-                return null;
-                //var t = type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName);
-                //var GenericArguments_0 = GenericArguments0[0];
-                //var FormatterGenericType = typeof(GenericCollectionFormatter<,>).MakeGenericType(type,GenericArguments_0);
-                //return Return(Activator.CreateInstance(FormatterGenericType)!);
-            }
-        }
-        {
-            if(type.GetIEnumerable1(out var GenericArguments)){
-                var GenericArguments_0 = GenericArguments[0];
-                var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerable<>).MakeGenericType(GenericArguments_0);
-                return Return(FormatterGenericType.GetValue(nameof(Formatters.Enumerables.IEnumerable<int>.Instance)));
-            }
-            if(type.GetGenericArguments(typeof(Generic.IEnumerable<>),out var GenericArguments0)){
-                var i=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-                MemoryPackFormatterProvider.RegisterCollection(typeof(Generic.ICollection<>).MakeGenericType(GenericArguments0));
-                return null;
-                //var t = type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName);
-                //var GenericArguments_0 = GenericArguments0[0];
-                //var FormatterGenericType = typeof(GenericCollectionFormatter<,>).MakeGenericType(type,GenericArguments_0);
-                //return Return(Activator.CreateInstance(FormatterGenericType)!);
+            if(type.GetIEnumerableT(out var Interface)){
+                var GenericArguments_0 = Interface.GetGenericArguments()[0];
+                var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<>).MakeGenericType(GenericArguments_0);
+                return Return(FormatterGenericType.GetValue("Instance"));
             }
         }
         return default;
         object Return(object Formatter0) {
 
-            foreach(var GenericArgument in type.GetGenericArguments()) GetRegisteredFormatter(GenericArgument);
+            //foreach(var GenericArgument in type.GetGenericArguments()) GetRegisteredFormatter(GenericArgument);
             return Formatter0;
         }
     }

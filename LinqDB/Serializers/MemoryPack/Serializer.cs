@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 
 using MemoryPack;
@@ -83,8 +84,8 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter(typeof(T));
-        return MemoryPackSerializer.Serialize(value,this.Options);
+        var Formatter=FormatterResolver.GetRegisteredFormatter(typeof(T));
+        return MemoryPackSerializer.Serialize<T>(value,this.Options);
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();

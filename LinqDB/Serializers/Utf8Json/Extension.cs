@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,8 @@ using System.Reflection;
 using LinqDB.Helpers;
 using Utf8Json;
 using Utf8Json.Formatters;
-using Expressions = System.Linq.Expressions;
+
+
 
 
 namespace LinqDB.Serializers.Utf8Json;
@@ -38,9 +39,9 @@ internal static class Extension{
     public static Type ReadType(this ref Reader reader)=>reader.ReadString().StringType();
     
 
-    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteString(NodeType.ToString());
-    public static void WriteNodeType(this ref Writer writer,Expressions.Expression Expression)=>writer.WriteNodeType(Expression.NodeType);
-    public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>Enum.Parse<Expressions.ExpressionType>(reader.ReadString());
+    public static void WriteNodeType(this ref Writer writer,ExpressionType NodeType)=>writer.WriteString(NodeType.ToString());
+    public static void WriteNodeType(this ref Writer writer,Expression Expression)=>writer.WriteNodeType(Expression.NodeType);
+    public static ExpressionType ReadNodeType(this ref Reader reader)=>Enum.Parse<ExpressionType>(reader.ReadString());
     public static bool TryWriteNil(this ref Writer writer,object? value){
         if(value is not null)return false;
         writer.WriteNull();
@@ -71,11 +72,9 @@ internal static class Extension{
     internal static void WriteArray<T>(this ref Writer writer,T[] value,O Resolver)=>
         writer.Write(StaticArrayFormatter<T>.Formatter,value,Resolver);
     internal static T[] ReadArray<T>(this ref Reader reader,O Resolver) {
-
         return reader.Read(StaticArrayFormatter<T>.Formatter,Resolver)!;
-
     }
-    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression> value,O Resolver){
+    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<ParameterExpression> value,O Resolver){
         writer.WriteBeginArray();
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
@@ -108,18 +107,18 @@ internal static class Extension{
         }
         writer.WriteEndArray();
     }
-    internal static List<Expressions.ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,O Resolver){
+    internal static List<ParameterExpression> Deserialize宣言Parameters(this ref Reader reader,O Resolver){
         reader.ReadIsBeginArrayWithVerify();
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
-        var Parameters=new List<Expressions.ParameterExpression>();
+        var Parameters=new List<ParameterExpression>();
         while(!reader.ReadIsEndArray()) {
             if(reader.ReadIsBeginObject()) {
                 var name = reader.ReadString();
                 reader.ReadIsNameSeparatorWithVerify();
                 var type = reader.ReadType();
-                Parameters.Add(Expressions.Expression.Parameter(type,name));
+                Parameters.Add(Expression.Parameter(type,name));
                 reader.ReadIsEndObjectWithVerify();
             } else {
                 var index0 = reader.ReadInt32();
@@ -156,14 +155,26 @@ internal static class Extension{
 
 
 
-    public static void Write<T>(this ref Writer writer,T value,O Resolver)=>
-        Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
-        
+    public static void Write<T>(this ref Writer writer,T value,O Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
 
 
-
-
-
+    //private static readonly CharFormatter CharFormatter=new();
+    private static readonly DecimalFormatter DecimalFormatter=new();
+    private static readonly TimeSpanFormatter TimeSpanFormatter=new();
+    private static readonly DateTimeFormatter DateTimeFormatter=new();
+    private static readonly DateTimeOffsetFormatter DateTimeOffsetFormatter=new();
+    public static void WriteChar          (this ref Writer writer,char            value)=>writer.WriteUInt16(value);
+    public static void WriteDecimal       (this ref Writer writer,decimal         value,O Resolver)=>DecimalFormatter       .Serialize(ref writer,value,Resolver);
+    public static void WriteTimeSpan      (this ref Writer writer,TimeSpan        value,O Resolver)=>TimeSpanFormatter      .Serialize(ref writer,value,Resolver);
+    public static void WriteDateTime      (this ref Writer writer,DateTime        value,O Resolver)=>DateTimeFormatter      .Serialize(ref writer,value,Resolver);
+    public static void WriteDateTimeOffset(this ref Writer writer,DateTimeOffset  value,O Resolver)=>DateTimeOffsetFormatter.Serialize(ref writer,value,Resolver);
+    public static void WriteExpression    (this ref Writer writer,Expression      value,O Resolver)=>Formatters.Expression.Write           (ref writer,value,Resolver);
+    //public static void WriteType          (this ref Writer writer,Type            value,O Resolver)=>Formatters.Reflection.Type.Write       (ref writer,value,Resolver);
+    public static void WriteConstructor   (this ref Writer writer,ConstructorInfo value,O Resolver)=>Formatters.Reflection.Constructor.Write(ref writer,value,Resolver);
+    public static void WriteMethod        (this ref Writer writer,MethodInfo      value,O Resolver)=>Formatters.Reflection.Method.Write     (ref writer,value,Resolver);
+    public static void WriteProperty      (this ref Writer writer,PropertyInfo    value,O Resolver)=>Formatters.Reflection.Property.Write   (ref writer,value,Resolver);
+    public static void WriteEvent         (this ref Writer writer,EventInfo       value,O Resolver)=>Formatters.Reflection.Event.Write      (ref writer,value,Resolver);
+    public static void WriteField         (this ref Writer writer,FieldInfo       value,O Resolver)=>Formatters.Reflection.Field.Write      (ref writer,value,Resolver);
     public static void Write(this ref Writer writer,Type type,object value,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
         if(Formatter is null){
@@ -178,26 +189,56 @@ internal static class Extension{
         Serialize.Invoke(Formatter,Objects3);
         writer=(Writer)Objects3[0];
     }
+
+
     
-
-    
-    public static T Read<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>
-        Formatter.Deserialize(ref reader,Resolver);
+    public static T Read<T>(this ref Reader reader,IJsonFormatter<T> Formatter,O Resolver)=>Formatter.Deserialize(ref reader,Resolver);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static char            ReadChar          (this ref Reader reader)=>(char)reader.ReadUInt16();
+    public static decimal         ReadDecimal       (this ref Reader reader,O Resolver)=>DecimalFormatter.Deserialize          (ref reader,Resolver);
+    public static TimeSpan        ReadTimeSpan      (this ref Reader reader,O Resolver)=>TimeSpanFormatter.Deserialize         (ref reader,Resolver);
+    public static DateTime        ReadDateTime      (this ref Reader reader,O Resolver)=>DateTimeFormatter.Deserialize         (ref reader,Resolver);
+    public static DateTimeOffset  ReadDateTimeOffset(this ref Reader reader,O Resolver)=>DateTimeOffsetFormatter.Deserialize   (ref reader,Resolver);
+    public static Expression      ReadExpression    (this ref Reader reader,O Resolver)=>Formatters.Expression.Read            (ref reader,Resolver);
+    public static Type            ReadType          (this ref Reader reader,O Resolver)=>Formatters.Reflection.Type.Read       (ref reader,Resolver);
+    public static ConstructorInfo ReadConstructor   (this ref Reader reader,O Resolver)=>Formatters.Reflection.Constructor.Read(ref reader,Resolver);
+    public static MethodInfo      ReadMethod        (this ref Reader reader,O Resolver)=>Formatters.Reflection.Method.Read     (ref reader,Resolver);
+    public static PropertyInfo    ReadProperty      (this ref Reader reader,O Resolver)=>Formatters.Reflection.Property.Read   (ref reader,Resolver);
+    public static EventInfo       ReadEvent         (this ref Reader reader,O Resolver)=>Formatters.Reflection.Event.Read      (ref reader,Resolver);
+    public static FieldInfo       ReadField         (this ref Reader reader,O Resolver)=>Formatters.Reflection.Field.Read      (ref reader,Resolver);
     public static T Read<T>(this ref Reader reader,O Resolver)=>
         Resolver.GetFormatter<T>().Deserialize(ref reader,Resolver);
-        
-        
-        
-        
-        
-        
-        
-        
     public static object Read(this ref Reader reader,Type type,O Resolver){
         var Formatter=Resolver.GetFormatterDynamic(type);
+        if(Formatter is null){
+            if(type.GetIEnumerableT(out var Interface)) {
+                Formatter=Resolver.GetFormatterDynamic(Interface);
+                //var GenericArguments_0 = Interface.GetGenericArguments()[0];
+                //var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
+                //return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
+            }
+
+        }
         Debug.Assert(Formatter is not null);
         var Deserialize=Formatter.GetType().GetMethod("Deserialize");
         Debug.Assert(Deserialize is not null);
@@ -220,6 +261,50 @@ internal static class Extension{
     public static readonly MethodInfo ReadIsNameSeparatorWithVerify = typeof(Reader).GetMethod(nameof(Reader.ReadIsNameSeparatorWithVerify))!;
     
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

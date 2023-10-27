@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-
+using System.Reflection;
 using LinqDB.Sets;
 //using System.Reflection;
 //using MemoryPack;
@@ -13,6 +13,19 @@ public class 判定_InstanceMethodか:共通{
         return m();
     }
     [Fact]public void Quote(){
+        //this.MemoryMessageJson_Expression_コンパイル実行(
+        //    Expression.Lambda<Func<int>>(
+        //        Expression.Call(
+        //            typeof(判定_InstanceMethodか).GetMethod(nameof(F),BindingFlags.NonPublic|BindingFlags.Static)!,
+        //            Expression.Quote(
+        //                Expression.Lambda<Func<int>>(
+        //                    Expression.Constant(3)
+        //                )
+        //            )
+        //        )
+        //    )
+        //);
+        //this.MemoryMessageJson_Expression_コンパイル実行(()=>F(()=>3));
         this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>F(()=>3));
     }
     [Fact]public void Block(){

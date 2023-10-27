@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MessagePack;
@@ -8,7 +9,7 @@ using O=MessagePackSerializerOptions;
 using Writer=MessagePackWriter;
 using Reader=MessagePackReader;
 public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>{//IMessagePackFormatter<Serializer>を継承する理由はFormatterでResolverを経由でSerializer情報を取得するため
-    private readonly FormatterResolver Resolver=new();
+    internal readonly FormatterResolver Resolver=new();
     
     private readonly O Options;
     public Serializer(){
@@ -62,6 +63,7 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             Formatters.Enumerables.IEnumerable.Instance,
             Formatters.Sets.IEnumerable.Instance,            
         };
+        //順序が大事
         var resolvers=new IFormatterResolver[]{
             this.Resolver,
             global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
@@ -83,7 +85,6 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
-        
         return MessagePackSerializer.Serialize(value,this.Options);
     }
     public override void Serialize<T>(Stream stream,T value){

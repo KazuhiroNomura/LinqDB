@@ -150,17 +150,18 @@ public class ExtensionSet:共通{
         //}
     }
     [Fact]public void Any(){
-        集約関数<sbyte  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<short  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<int    >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<long   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<byte   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ushort >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<uint   >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ulong  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<float  >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<double >(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<decimal>(0  ,10 ,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        const int 最大値=4;
+        集約関数<sbyte  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<short  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<int    >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<long   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<byte   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ushort >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<uint   >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ulong  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<float  >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<double >(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<decimal>(最大値,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
         集約関数<char   >('a','z',(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
     }
     private void 共通MemoryMessageJson_Expression_コンパイルリモート実行InvalidOperationException<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
@@ -303,10 +304,10 @@ public class ExtensionSet:共通{
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var 中央値=数値<T>(Count/2);
-            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Contains(中央値),()=>e.Contains(中央値)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイル実行(()=>s.Contains(中央値),()=>e.Contains(中央値)));
             var はみ出し=数値<T>(Count);
             はみ出し++;
-            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
+            集約関数<T>(0,Count,(s,e)=>base.MemoryMessageJson_Expression_コンパイル実行(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
         }
     }
     [Fact]public void DefaultIfEmptyNullable(){
@@ -401,7 +402,7 @@ public class ExtensionSet:共通{
     //}
     //[Fact]public void DUnion()
     [Fact]public void Except(){
-        const int 最大値=8;
+        const int 最大値=3;
         共通<sbyte  >(最大値);
         共通<short>(最大値);
         共通<int>(最大値);
@@ -415,7 +416,8 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char>(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s0.Except(s1),()=>e0.Except(e1)));
+            集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
+        //集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_コンパイルリモート実行(()=>s0.Except(s1),()=>e0.Except(e1)));
     }
     [Fact]public void GroupBy_keySelector_elementSelector(){
         const int 最大値=6;

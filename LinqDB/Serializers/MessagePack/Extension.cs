@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,8 @@ using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
-using Expressions = System.Linq.Expressions;
+//using Expressions = System.Linq.Expressions;
+
 
 
 namespace LinqDB.Serializers.MessagePack;
@@ -38,9 +39,9 @@ internal static class Extension{
     public static Type ReadType(this ref Reader reader)=> reader.ReadString().StringType();
     public static void WriteBoolean(this ref Writer writer,bool value)=>writer.Write(value);
 
-    public static void WriteNodeType(this ref Writer writer,Expressions.ExpressionType NodeType)=>writer.WriteInt8((sbyte)NodeType);
-    public static void WriteNodeType(this ref Writer writer,Expressions.Expression Expression)=>writer.WriteInt8((sbyte)Expression.NodeType);
-    public static Expressions.ExpressionType ReadNodeType(this ref Reader reader)=>(Expressions.ExpressionType)reader.ReadByte();
+    public static void WriteNodeType(this ref Writer writer,ExpressionType NodeType)=>writer.WriteInt8((sbyte)NodeType);
+    public static void WriteNodeType(this ref Writer writer,Expression Expression)=>writer.WriteInt8((sbyte)Expression.NodeType);
+    public static ExpressionType ReadNodeType(this ref Reader reader)=>(ExpressionType)reader.ReadByte();
     public static bool TryWriteNil(this ref Writer writer,object? value){
         if(value is not null)return false;
         writer.WriteNil();
@@ -55,11 +56,11 @@ internal static class Extension{
 
 
 
-
-
+/*
     public static void Write<T>(this IMessagePackFormatter<T>Formatter,ref Writer writer,T value,O Resolver){
         Formatter.Serialize(ref writer,value,Resolver);
     }
+    */
     private static class StaticReadOnlyCollectionFormatter<T>{
         public static readonly ReadOnlyCollectionFormatter<T> Formatter=new();
     }
@@ -71,11 +72,9 @@ internal static class Extension{
     internal static void WriteArray<T>(this ref Writer writer,T[] value,O Resolver)=>
         writer.Write(StaticArrayFormatter<T>.Formatter,value,Resolver);
     internal static T[] ReadArray<T>(this ref Reader reader,O Resolver){
-
         return reader.Read(StaticArrayFormatter<T>.Formatter,Resolver)!;
-
     }
-    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<Expressions.ParameterExpression>value,O Resolver){
+    internal static void Serialize宣言Parameters(this ref Writer writer,ReadOnlyCollection<ParameterExpression>value,O Resolver){
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
@@ -108,13 +107,13 @@ internal static class Extension{
         }
     }
     
-    internal static Expressions.ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,O Resolver){
+    internal static ParameterExpression[]Deserialize宣言Parameters(this ref Reader reader,O Resolver){
         var ArrayHeader=reader.ReadArrayHeader()-1;
         var Serializer=Resolver.Serializer();
         var Serializer_Parameters=Serializer.Parameters;
         var Serializer_ラムダ跨ぎParameters=Serializer.ラムダ跨ぎParameters;
         var Parameters_Length=reader.ReadInt32();
-        var Parameters=new Expressions.ParameterExpression[Parameters_Length];
+        var Parameters=new ParameterExpression[Parameters_Length];
         var a=0;
         while(ArrayHeader>0){
             var index0=reader.ReadInt32();
@@ -125,7 +124,7 @@ internal static class Extension{
                     ArrayHeader-=2;
                     var name=reader.ReadString();
                     var type=reader.ReadType();
-                    Parameters[a]=Expressions.Expression.Parameter(type,name);
+                    Parameters[a]=Expression.Parameter(type,name);
                     
                 } else{
                     Parameters[a]=Serializer_ラムダ跨ぎParameters[index1];
@@ -142,28 +141,40 @@ internal static class Extension{
     private static readonly Type[] SerializeTypes={typeof(object),typeof(Writer).MakeByRefType(),typeof(object),typeof(O) };
     public static void Write<T>(this ref Writer writer,IMessagePackFormatter<T>Formatter,T value,O Resolver)=>
         Formatter.Serialize(ref writer,value,Resolver);
-    public static void Write(this ref Writer writer,object Formatter,object value,O Resolver){
-        // Invokeではref引数を呼べないため。
-        var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
-        var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
-        var I=D.GetILGenerator();
-        I.Ldarg_0();//formatter
-        I.Ldarg_1();//writer
-        I.Ldarg_2();//value
-        I.Unbox_Any(Formatter_Serialize.GetParameters()[1].ParameterType);
-        I.Ldarg_3();//options
-        I.Callvirt(Formatter_Serialize);
-        I.Ret();
-        ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
-    }
-    public static void Write<T>(this ref Writer writer,T value,O Resolver)=>
-        Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+    public static void Write<T>(this ref Writer writer,T value,O Resolver)=>Resolver.GetFormatter<T>().Serialize(ref writer,value,Resolver);
+
+
+
+
+
+
+
+    public static void WriteChar(this ref Writer writer,char value,O Resolver)=>CharFormatter.Instance.Serialize(ref writer,value,Resolver);
+    public static void WriteDecimal(this ref Writer writer,decimal value,O Resolver)=>DecimalFormatter.Instance.Serialize(ref writer,value,Resolver);
+    public static void WriteTimeSpan(this ref Writer writer,TimeSpan value,O Resolver)=>TimeSpanFormatter.Instance.Serialize(ref writer,value,Resolver);
+    public static void WriteDateTime(this ref Writer writer,DateTime value,O Resolver)=>DateTimeFormatter.Instance.Serialize(ref writer,value,Resolver);
+    public static void WriteDateTimeOffset(this ref Writer writer,DateTimeOffset value,O Resolver)=>DateTimeOffsetFormatter.Instance.Serialize(ref writer,value,Resolver);
+    public static void WriteExpression (this ref Writer writer,Expression      value,O Resolver)=>Formatters.Expression.Write            (ref writer,value,Resolver);
+    public static void WriteType       (this ref Writer writer,Type            value,O Resolver)=>Formatters.Reflection.Type.Write       (ref writer,value,Resolver);
+    public static void WriteConstructor(this ref Writer writer,ConstructorInfo value,O Resolver)=>Formatters.Reflection.Constructor.Write(ref writer,value,Resolver);
+    public static void WriteMethod     (this ref Writer writer,MethodInfo      value,O Resolver)=>Formatters.Reflection.Method.Write     (ref writer,value,Resolver);
+    public static void WriteProperty   (this ref Writer writer,PropertyInfo    value,O Resolver)=>Formatters.Reflection.Property.Write   (ref writer,value,Resolver);
+    public static void WriteEvent      (this ref Writer writer,EventInfo       value,O Resolver)=>Formatters.Reflection.Event.Write      (ref writer,value,Resolver);
+    public static void WriteField      (this ref Writer writer,FieldInfo       value,O Resolver)=>Formatters.Reflection.Field.Write      (ref writer,value,Resolver);
     public static void Write(this ref Writer writer,Type type,object? value,O Resolver) {
         Debug.Assert(type==value!.GetType());
         var Formatter=Resolver.GetFormatterDynamic(type)!;
@@ -186,14 +197,35 @@ internal static class Extension{
 
 
 
-    public static T Read<T>(this ref Reader reader,O Resolver)=>
-        Resolver.GetFormatter<T>().Deserialize(ref reader, Resolver);
+    public static T Read<T>(this ref Reader reader,O Resolver)=>Resolver.GetFormatter<T>().Deserialize(ref reader, Resolver);
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    public static decimal         ReadDecimal       (this ref Reader reader,O Resolver)=>DecimalFormatter.Instance.Deserialize       (ref reader,Resolver);
+    public static TimeSpan        ReadTimeSpan      (this ref Reader reader,O Resolver)=>TimeSpanFormatter.Instance.Deserialize      (ref reader,Resolver);
+    //public static DateTime        ReadDateTime      (this ref Reader reader,O Resolver)=>DateTimeFormatter.Instance.Deserialize      (ref reader,Resolver);
+    public static DateTimeOffset  ReadDateTimeOffset(this ref Reader reader,O Resolver)=>DateTimeOffsetFormatter.Instance.Deserialize(ref reader,Resolver);
+    public static Expression      ReadExpression    (this ref Reader reader,O Resolver)=>Formatters.Expression.Read                  (ref reader,Resolver);
+    //public static Type            ReadType          (this ref Reader reader,O Resolver)=>Formatters.Reflection.Type.Read             (ref reader,Resolver);
+    public static ConstructorInfo ReadConstructor   (this ref Reader reader,O Resolver)=>Formatters.Reflection.Constructor.Read      (ref reader,Resolver);
+    public static MethodInfo      ReadMethod        (this ref Reader reader,O Resolver)=>Formatters.Reflection.Method.Read           (ref reader,Resolver);
+    public static PropertyInfo    ReadProperty      (this ref Reader reader,O Resolver)=>Formatters.Reflection.Property.Read         (ref reader,Resolver);
+    public static EventInfo       ReadEvent         (this ref Reader reader,O Resolver)=>Formatters.Reflection.Event.Read            (ref reader,Resolver);
+    public static FieldInfo       ReadField         (this ref Reader reader,O Resolver)=>Formatters.Reflection.Field.Read            (ref reader,Resolver);
 
 
     public static object Read(this ref Reader reader,Type type,O Resolver){
@@ -216,29 +248,89 @@ internal static class Extension{
     public static IMessagePackFormatter<T> GetFormatter<T>(this O Resolver)=>
         Resolver.Resolver.GetFormatter<T>()!;
     public static object? GetFormatterDynamic(this O Resolver,Type type){
-        if(!type.IsArray&&type.GetCustomAttribute(typeof(MessagePackObjectAttribute))==null){
-            if(type.IsGenericType){
-                var GenericTypeDefinition=type.GetGenericTypeDefinition();
-                if(GenericTypeDefinition==typeof(Enumerables.GroupingList<,>)
-                   ||GenericTypeDefinition==typeof(Sets.GroupingSet<,>)
-                   ||GenericTypeDefinition==typeof(Sets.SetGroupingList<,>)
-                   ||GenericTypeDefinition==typeof(Sets.SetGroupingSet<,>)
-                   ||GenericTypeDefinition==typeof(Sets.Set<,,>)
-                   ||GenericTypeDefinition==typeof(Sets.Set<,>)
-                   ||GenericTypeDefinition==typeof(Sets.Set<>))
-                    goto 発見;
+        if(type.GetCustomAttribute(typeof(MessagePackObjectAttribute)) is not null) 
+            return Resolver.Resolver.GetFormatterDynamic(type);
+        //return Resolver.Resolver.GetFormatterDynamic(type);
+        //if(this.DictionaryTypeFormatter.TryGetValue(type,out var value))return(IMessagePackFormatter)value;
+        if(type.IsArray)
+            return Resolver.Resolver.GetFormatterDynamic(type);
+            
+            
+        if(type.IsAnonymous())
+            return Resolver.Resolver.GetFormatterDynamic(type);
+        if(type.IsDisplay())
+            return Return((IMessagePackFormatter)typeof(Formatters.Others.DisplayClass<>).MakeGenericType(type).GetValue("Instance"));
+        if(typeof(Delegate).IsAssignableFrom(type))
+            return Return((IMessagePackFormatter)typeof(Formatters.Others.Delegate<>).MakeGenericType(type).GetValue("Instance"));
+        if(type.IsGenericType) {
+            if(typeof(LambdaExpression).IsAssignableFrom(type))
+                return Return((IMessagePackFormatter)typeof(Formatters.ExpressionT<>    ).MakeGenericType(type).GetValue("Instance"));
+            IMessagePackFormatter? Formatter=null;
+            if(type.IsInterface){
+                if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Return(Formatter);
+                if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Return(Formatter);
+                if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Return(Formatter);
+                if((Formatter=RegisterInterface(type,typeof(IEnumerable          < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Return(Formatter);
+            }else{
+                if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
             }
-            //<UnionByIterator>はシリアライズできないクラスなのでインターフェースに変換する
-            //Type? type0;
-            //if((type0=type.GetInterface(CommonLibrary.Generic_ICollection1_FullName))!=null){
-            //    type=type0;
-            //} else if((type0=type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName))!=null){
-            //    type=type0;
-            //}
         }
-        発見: ;
+        //{
+        //    if(type.GetIEnumerableTGenericArguments(out var GenericArguments)){
+        //        var GenericArguments_0 = GenericArguments[0];
+        //        var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerable<>).MakeGenericType(GenericArguments_0);
+        //        return Return(FormatterGenericType.GetValue(nameof(Formatters.Enumerables.IEnumerable<int>.Instance)));
+        //    }
+        //}
+        {
+            if(type.GetIEnumerableT(out var Interface)) {
+                var GenericArguments_0 = Interface.GetGenericArguments()[0];
+                var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
+                return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
+            }
+        }
         return Resolver.Resolver.GetFormatterDynamic(type);
+        IMessagePackFormatter Return(IMessagePackFormatter Formatter0){
+            Resolver.Serializer().Resolver.TypeFormatter.TryAdd(type,Formatter0);
+            //this.DictionaryTypeFormatter.Add(type,Formatter0);
+            return Formatter0;
+        }
+        IMessagePackFormatter? RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition) {
+            Debug.Assert(検索したいキーGenericInterfaceDefinition.IsInterface);
+            if(!type0.IsGenericType||type0.GetGenericTypeDefinition()!=検索したいキーGenericInterfaceDefinition)return null;
+            var GenericArguments = type0.GetGenericArguments();
+            var FormatterGenericType = FormatterGenericInterfaceDefinition.MakeGenericType(GenericArguments);
+            return (IMessagePackFormatter)FormatterGenericType.GetValue("Instance");
+        }
+        IMessagePackFormatter? RegisterType(Type type0,Type 検索したいキーGenericTypeDefinition) {
+            Debug.Assert(type0.IsGenericType);
+            Debug.Assert(!検索したいキーGenericTypeDefinition.IsInterface);
+            if(type0.GetGenericTypeDefinition()!=検索したいキーGenericTypeDefinition) return null;
+            return (IMessagePackFormatter)type0.GetValue("InstanceMessagePack");
+        }
     }
     public static Serializer Serializer(this O Resolver)=>
         (Serializer)Resolver.GetFormatter<Serializer>();
+    public static void Write(this ref Writer writer,object Formatter,object value,O Resolver){
+        // Invokeではref引数を呼べないため。
+        var Formatter_Serialize=Formatter.GetType().GetMethod("Serialize")!;
+        var D=new DynamicMethod("",typeof(void),SerializeTypes){InitLocals=false};
+        var I=D.GetILGenerator();
+        I.Ldarg_0();//formatter
+        I.Ldarg_1();//writer
+        I.Ldarg_2();//value
+        I.Unbox_Any(Formatter_Serialize.GetParameters()[1].ParameterType);
+        I.Ldarg_3();//options
+        I.Callvirt(Formatter_Serialize);
+        I.Ret();
+        ((SerializeDelegate)D.CreateDelegate(typeof(SerializeDelegate)))(Formatter,ref writer,value,Resolver);
+    }
 }

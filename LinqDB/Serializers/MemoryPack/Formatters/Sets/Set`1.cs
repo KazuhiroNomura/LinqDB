@@ -1,4 +1,6 @@
 ﻿using System.Buffers;
+using System.Xml.Linq;
+
 using MemoryPack;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Sets;
 
@@ -10,7 +12,10 @@ public class Set<T>:MemoryPackFormatter<G.Set<T>>{
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.Set<T>? value){
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
-        var Formatter=writer.GetFormatter<T>();
+        //if(FormatterResolver.GetRegisteredFormatter<T>() is IMemoryPackFormatter Formatter) {
+        //var Formatter=writer.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
+        //writer.GetFormatter<T>();
         foreach(var item in value)
             writer.Write(Formatter,item);
     }
@@ -25,7 +30,7 @@ public class Set<T>:MemoryPackFormatter<G.Set<T>>{
     public override void Deserialize(ref Reader reader,scoped ref G.Set<T>? value){
         if(reader.TryReadNil())return;
         var Count=reader.ReadVarIntInt64();
-        var Formatter=reader.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??reader.GetFormatter<T>();
         var value0=new G.Set<T>();
         while(Count-->0)
             value0.Add(reader.Read(Formatter));
