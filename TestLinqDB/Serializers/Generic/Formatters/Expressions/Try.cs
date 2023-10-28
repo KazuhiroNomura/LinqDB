@@ -1,0 +1,79 @@
+﻿using System.Linq.Expressions;
+namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
+public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
+    protected Try():base(new AssertDefinition(new TSerializer())){}
+    [Fact]public void PrivateWrite_Read(){
+        //if(@finally is not null){
+        //    if(handlers.Length>0) {
+        {
+            var input=Expression.Lambda<Func<int>>(
+                Expression.TryCatchFinally(
+                    Expression.Constant(0),
+                    Expression.Default(typeof(int)),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(1)
+                    )
+                )
+            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
+        }
+        //    } else {
+        {
+            var input=Expression.Lambda<Func<int>>(
+                Expression.TryFinally(
+                    Expression.Constant(0),
+                    Expression.Default(typeof(int))
+                )
+            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
+        }
+        //    }
+        //}else{
+        //    if(fault is not null){
+        {
+            var input=Expression.TryFault(
+                Expression.Constant(0),
+                Expression.Constant(1)
+            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
+        }
+        //    } else{
+        {
+            var input=Expression.TryCatch(
+                Expression.Constant(0),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(0)
+                )
+            );
+            this.MemoryMessageJson_Expression_Assert全パターン(input);
+        }
+        //    }
+        //}
+    }
+    [Fact]public void Serialize_Deserialize(){
+        //if(writer.TryWriteNil(value)) return;
+        var input=Expression.TryCatch(
+            Expression.Constant(0),
+            Expression.Catch(
+                typeof(Exception),
+                Expression.Constant(0)
+            )
+        );
+        this.MemoryMessageJson_Expression_Assert全パターン(input);
+    }
+    [Fact]public void PrivateWrite(){
+        //if(value.Finally is not null){
+        //}else{
+        var input=Expression.TryCatch(
+            Expression.Constant(0),
+            Expression.Catch(
+                typeof(Exception),
+                Expression.Constant(0)
+            )
+        );
+        this.MemoryMessageJson_Expression_Assert全パターン(input);
+    }
+}
+

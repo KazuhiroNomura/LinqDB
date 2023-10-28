@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using LinqDB.Helpers;
 using MemoryPack;
 using MemoryPack.Formatters;
@@ -7,8 +8,14 @@ using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
 using System.Runtime.Serialization;
 using LinqDB.Enumerables;
+using System.Buffers;
+
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
+    //private static void Serialize<TBufferWriter, T>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value) where TBufferWriter :IBufferWriter<byte>{
+    //    var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
+    //public static MemoryPackFormatter<T>? GetRegisteredFormatter<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter :IBufferWriter<byte>{
+    //}
     public static MemoryPackFormatter<T>? GetRegisteredFormatter<T>(){
         var type=typeof(T);
         
@@ -24,6 +31,7 @@ internal static class FormatterResolver {
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
         if(type.IsGenericType) {
+            foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
             if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter;
@@ -45,11 +53,7 @@ internal static class FormatterResolver {
             }
         }
         return default;
-        MemoryPackFormatter<T> Return(object Formatter0){
-            
-            //foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
-            return (MemoryPackFormatter<T>)Formatter0;
-        }
+        MemoryPackFormatter<T>Return(object Formatter0)=>RegisterFormatter<MemoryPackFormatter<T>>(type,Formatter0);
 
 
 
@@ -90,6 +94,7 @@ internal static class FormatterResolver {
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
         if(type.IsGenericType) {
+            foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
             if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter = null;
@@ -123,11 +128,7 @@ internal static class FormatterResolver {
             }
         }
         return default;
-        object Return(object Formatter0) {
-
-            //foreach(var GenericArgument in type.GetGenericArguments()) GetRegisteredFormatter(GenericArgument);
-            return Formatter0;
-        }
+        object Return(object Formatter0)=>RegisterFormatter<object>(type,Formatter0);
     }
     private static object Register(Type type,Type FormatterGenericTypeDefinition){
         var GenericArguments=new []{type};
@@ -136,5 +137,10 @@ internal static class FormatterResolver {
         var Instance=FormatterGenericType.GetValue("Instance");
         Register.Invoke(null,new object?[]{Instance});
         return Instance;
+    }
+    private static T RegisterFormatter<T>(Type type,object Formatter0){
+            
+        //foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
+        return (T)Formatter0;
     }
 }

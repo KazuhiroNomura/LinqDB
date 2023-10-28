@@ -5,7 +5,6 @@ using System.Globalization;
 //using MemoryPack;
 using テスト;
 using LinqDB.Helpers;
-using MessagePack.Formatters;
 namespace TestLinqDB.Sets;
 [Serializable,MessagePack.MessagePackObject,MemoryPack.MemoryPackable]
 public partial class Serialize継承しない{
@@ -127,8 +126,12 @@ public partial class シリアライズ対象:IEquatable<シリアライズ対�
     public bool Equals(シリアライズ対象? other) =>other is not null&&(this.a==other.a&&this.b==other.b);
     public override string ToString() => this.a.ToString();
 }
+public class Test_Set2:ATest_Set2{
+    public Test_Set2():base(new AssertDefinition(new LinqDB.Serializers.Utf8Json.Serializer())){}
 
-public class Test_Set2:共通 {
+}
+public abstract class ATest_Set2:共通 {
+    public ATest_Set2(AssertDefinition AssertDefinition):base(AssertDefinition){}
     private const int 要素数 = 100;
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 //#pragma warning disable IDE0044 // 読み取り専用修飾子を追加します

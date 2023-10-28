@@ -290,13 +290,13 @@ internal static class Extension{
         //        return Return(FormatterGenericType.GetValue(nameof(Formatters.Enumerables.IEnumerable<int>.Instance)));
         //    }
         //}
-        {
-            if(type.GetIEnumerableT(out var Interface)) {
-                var GenericArguments_0 = Interface.GetGenericArguments()[0];
-                var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
-                return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
-            }
-        }
+        //{
+        //    if(type.GetIEnumerableT(out var Interface)) {
+        //        var GenericArguments_0 = Interface.GetGenericArguments()[0];
+        //        var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
+        //        return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
+        //    }
+        //}
         return Resolver.Resolver.GetFormatterDynamic(type);
         IMessagePackFormatter Return(IMessagePackFormatter Formatter0){
             Resolver.Serializer().Resolver.TypeFormatter.TryAdd(type,Formatter0);

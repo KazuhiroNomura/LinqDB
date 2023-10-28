@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Serializers\Formatters\TestExpression.cs" />
+    <Compile Remove="Serializers\Generic\Formatters\TestExpression.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Serializers\Formatters\Primitives\" />
+    <Folder Include="Serializers\Generic\Formatters\Primitives\" />
   </ItemGroup>
 
 </Project>

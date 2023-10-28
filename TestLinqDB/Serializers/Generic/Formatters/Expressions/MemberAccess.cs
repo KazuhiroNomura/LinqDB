@@ -1,0 +1,55 @@
+﻿using System.Drawing;
+using System.Linq.Expressions;
+namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
+[global::MemoryPack.MemoryPackable,global::MessagePack.MessagePackObject(true),Serializable]
+public partial class MemberAccess対象:IEquatable<MemberAccess対象>{
+    public int property=>1;
+    public int field=4;
+    public override bool Equals(object? obj){
+        if(ReferenceEquals(null,obj)){
+            return false;
+        }
+        if(ReferenceEquals(this,obj)){
+            return true;
+        }
+        if(obj.GetType()!=this.GetType()){
+            return false;
+        }
+        return this.Equals((MemberAccess対象)obj);
+    }
+    public bool Equals(MemberAccess対象? other){
+        if(ReferenceEquals(null,other)){
+            return false;
+        }
+        if(ReferenceEquals(this,other)){
+            return true;
+        }
+        return this.field==other.field;
+    }
+    public override int GetHashCode(){
+        return this.field;
+    }
+    public static bool operator==(MemberAccess対象? left,MemberAccess対象? right){
+        return Equals(left,right);
+    }
+    public static bool operator!=(MemberAccess対象? left,MemberAccess対象? right){
+        return!Equals(left,right);
+    }
+}
+public abstract class MemberAccess<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
+    protected MemberAccess():base(new AssertDefinition(new TSerializer())){}
+    [Fact]public void Serialize(){
+
+        var Point=Expression.Parameter(typeof(Point));
+        this.MemoryMessageJson_T_Assert全パターン(new{a=default(MemberExpression)});
+        var input=Expression.MakeMemberAccess(
+            Expression.Constant(new MemberAccess対象()),
+            typeof(MemberAccess対象).GetProperty(nameof(MemberAccess対象.property))!
+        );
+        this.MemoryMessageJson_T_Assert全パターン(
+            new{
+                a=input,b=(Expression)input
+            }
+        );
+    }
+}

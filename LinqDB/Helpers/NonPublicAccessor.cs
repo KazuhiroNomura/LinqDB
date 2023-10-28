@@ -7,7 +7,7 @@ namespace LinqDB.Helpers;
 /// privateインスタンスメンバにアクセスできるdynamicクラス
 /// </summary>
 public class NonPublicAccessor:DynamicObject{
-    private const BindingFlags Instance_NonPublic_Public=BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public;
+    private const BindingFlags Flags=BindingFlags.Instance|BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public;
     private readonly object? Object;
     private readonly Type Type;
     private NonPublicAccessor(Type Type) {
@@ -39,19 +39,19 @@ public class NonPublicAccessor:DynamicObject{
     public override bool TrySetMember(SetMemberBinder binder,object? value) {
         var Type=this.Type;
         var Name=binder.Name;
-        var Field=Type.GetField(Name,Instance_NonPublic_Public);
+        var Field=Type.GetField(Name,Flags);
         if(Field is not null) {
             Field.SetValue(this.Object,value);
             return true;
         }
-        var Property=Type.GetProperty(Name,Instance_NonPublic_Public);
+        var Property=Type.GetProperty(Name,Flags);
         if(Property is not null){
             var SetObject=this.SetObject;
             SetObject[0]=value;
             Property.SetMethod!.Invoke(this.Object,SetObject);
             return true;
         }
-        var Method = Type.GetMethod(Name,Instance_NonPublic_Public);
+        var Method = Type.GetMethod(Name,Flags);
         if(Method is not null){
             var SetObject = this.SetObject;
             SetObject[0]=value;
@@ -67,17 +67,17 @@ public class NonPublicAccessor:DynamicObject{
     public override bool TryGetMember(GetMemberBinder binder,out object? result) {
         var Type=this.Type;
         var Name=binder.Name;
-        var Field=Type.GetField(Name,Instance_NonPublic_Public);
+        var Field=Type.GetField(Name,Flags);
         if(Field is not null) {
             result=Field.GetValue(this.Object);
             return true;
         }
-        var Property=Type.GetProperty(Name,Instance_NonPublic_Public);
+        var Property=Type.GetProperty(Name,Flags);
         if(Property is not null) {
             result=Property.GetMethod!.Invoke(this.Object,Array.Empty<object>());
             return true;
         }
-        var NestedType=Type.GetNestedType(Name,Instance_NonPublic_Public);
+        var NestedType=Type.GetNestedType(Name,Flags);
         if(NestedType is not null) {
             result=new NonPublicAccessor(NestedType);
             return true;
@@ -96,7 +96,7 @@ public class NonPublicAccessor:DynamicObject{
     public override bool TryInvokeMember(InvokeMemberBinder binder,object?[]? args,out object? result){
         //public override Boolean TryInvokeMember2(InvokeMemberBinder binder,Object[] args,out Object? result) {
         var args_Length=args!.Length;
-        var Methods=this.Type.GetMethods(Instance_NonPublic_Public|BindingFlags.Static);
+        var Methods=this.Type.GetMethods(Flags|BindingFlags.Static);
         MethodInfo? 結果Method=null;
         foreach(var Method in Methods) {
             if(!string.Equals(Method.Name,binder.Name,StringComparison.Ordinal)) continue;

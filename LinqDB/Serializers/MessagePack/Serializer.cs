@@ -66,8 +66,9 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
         //順序が大事
         var resolvers=new IFormatterResolver[]{
             this.Resolver,
-            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,
-            global::MessagePack.Resolvers.BuiltinResolver.Instance,
+            global::MessagePack.Resolvers.StandardResolverAllowPrivate.Instance,//Tuple
+            global::MessagePack.Resolvers.BuiltinResolver.Instance,//List<>
+            //this.Resolver,
             //global::MessagePack.Resolvers.DynamicGenericResolver.Instance,//GenericEnumerableFormatter
             //global::MessagePack.Resolvers.DynamicObjectResolverAllowPrivate.Instance,//MessagePackObjectAttribute
         };

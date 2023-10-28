@@ -51,6 +51,7 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
     //GenericクラスのT別のインスタンスが欲しいのでこれでいい
     private static readonly ConcurrentDictionary<Type,Delegate> Writes=new();
     public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value){
+        //var f=writer.GetFormatter<ValueTuple<int>>();
         if(writer.TryWriteNil(value)) return;
         if(!Writes.TryGetValue(typeof(TBufferWriter),out var Write)){
             var Types2=new Type[2];
@@ -62,22 +63,21 @@ public class Anonymous<T>:MemoryPackFormatter<T>{
             Properties=Parameters.Select(Parameter=>Properties.Single(Property=>Property.Name==Parameter.Name)).ToArray();
             var WriteMethod=new DynamicMethod("Write",typeof(void),new[]{typeof(MemoryPackWriter<TBufferWriter>).MakeByRefType(),typeof(T).MakeByRefType()},typeof(Anonymous<T>),true){InitLocals=false};
             //var (D0,D1,ctor,Properties)=((DynamicMethod D0,DynamicMethod D1,ConstructorInfo ctor,PropertyInfo[] Properties))(D0:D2,D1:D3,ctor:Ctor,Properties:Properties1);
-            var I0=WriteMethod.GetILGenerator();
+            var WI=WriteMethod.GetILGenerator();
             Types2[0]=typeof(TBufferWriter);
             foreach(var Property in Properties){
                 var PropertyType=Property.PropertyType;
                 Types2[1]=PropertyType;
-                I0.Ldarg_0();//writer
-                I0.Ldarg_1();//value
-                I0.Ldobj(typeof(T));//*value
+                WI.Ldarg_0();//writer
+                WI.Ldarg_1();//value
+                WI.Ldobj(typeof(T));//*value
                 Debug.Assert(Property.GetMethod!=null&&!Property.GetMethod.IsVirtual);
-                I0.Call(Property.GetMethod);//value.property
-                var L=I0.DeclareLocal(Property.PropertyType);
-                I0.Stloc(L);//value=
-                I0.Ldloca(L);//ref value
-                I0.Call(Extension.SerializeMethod.MakeGenericMethod(Types2));
+                WI.Call(Property.GetMethod);//value.property
+                var L=WI.M_DeclareLocal_Stloc(Property.PropertyType);
+                WI.Ldloca(L);//ref value
+                WI.Call(Extension.SerializeMethod.MakeGenericMethod(Types2));
             }
-            I0.Ret();
+            WI.Ret();
             Write=WriteMethod.CreateDelegate(typeof(delegate_Write<TBufferWriter>));
             Writes.TryAdd(typeof(TBufferWriter),Write);
         }

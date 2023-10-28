@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Numerics;
-namespace Types;
+﻿namespace Types;
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
 internal partial class Point:IEquatable<Point>{
     [MessagePack.IgnoreMember]
