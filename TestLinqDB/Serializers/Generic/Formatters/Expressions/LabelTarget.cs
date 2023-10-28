@@ -5,6 +5,6 @@ public abstract class LabelTarget<TSerializer>:共通 where TSerializer:LinqDB.S
     [Fact]
     public void Serialize(){
         var input=Expression.Label();
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

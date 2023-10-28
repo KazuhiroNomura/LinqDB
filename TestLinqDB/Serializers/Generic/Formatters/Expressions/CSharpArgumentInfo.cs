@@ -5,6 +5,6 @@ public abstract class CSharpArgumentInfo<TSerializer>:共通 where TSerializer:L
     protected CSharpArgumentInfo():base(new AssertDefinition(new TSerializer())){}
     [Fact]
     public void Serialize(){
-        this.MemoryMessageJson_T_Assert全パターン(RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null));
+        this.AssertEqual(RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null));
     }
 }

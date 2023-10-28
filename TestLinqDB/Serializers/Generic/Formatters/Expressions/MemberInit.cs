@@ -24,7 +24,7 @@ public abstract class MemberInit<TSerializer>:共通 where TSerializer:LinqDB.Se
                 Constant_1
             )
         );
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             new{a=input,b=(Expression)input}
         );
     }

@@ -1,10 +1,6 @@
-﻿//using System.Linq.Expressions;
-using MessagePack;
-//using System.Linq.Expressions;
-//using Expressions = System.Linq.Expressions;
-//using Binder = Microsoft.CSharp.RuntimeBinder;
-//using MessagePack;
+﻿using MessagePack;
 namespace TestLinqDB.Serializers.MessagePack;
+using Reader=MessagePackReader;
 public class Serializer:共通{
     [Fact]
     public void ctor(){
@@ -28,7 +24,7 @@ public class Serializer:共通{
         Assert.Throws<NotImplementedException>(()=>{
             var Serializer=new LinqDB.Serializers.MessagePack.Serializer();
             ReadOnlyMemory<byte> buffer=new byte[100];
-            var reader=new MessagePackReader(buffer);
+            var reader=new Reader(buffer);
             Serializer.Deserialize(ref reader,MessagePackSerializerOptions.Standard);
         });
     }

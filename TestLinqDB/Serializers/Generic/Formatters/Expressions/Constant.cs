@@ -5,6 +5,6 @@ public abstract class Constant<TSerializer>:共通 where TSerializer:LinqDB.Seri
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Expression_Assert全パターン(Expression.Constant(true));
+        this.ExpressionAssertEqual(Expression.Constant(true));
     }
 }

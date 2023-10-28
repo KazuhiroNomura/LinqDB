@@ -58,7 +58,7 @@ public class Extension:共通{
             var MemoryPackFormatterProvider=new NonPublicStaticAccessor(typeof(MemoryPackFormatterProvider));
             //MemoryPackFormatterProvider.NestedType("Check`1",typeof(T)).Field("registered").Value
             dynamic formatter=MemoryPackFormatterProvider.Field("formatters").Value!;
-            formatter.Clear();
+            //formatter.Clear();
             //var formatter=Cache_1.formatter;
             //dynamic formatter=new NonPublicAccessor(Value);
             //formatter.Clear();

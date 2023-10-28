@@ -9,7 +9,7 @@ public abstract class New<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                 typeof(int)
             );
             //this.Memory_Assert(new{input});
-            this.MemoryMessageJson_T_Assert全パターン(input);
+            this.AssertEqual(input);
         }
         //} else{
         {
@@ -17,7 +17,7 @@ public abstract class New<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                 typeof(ValueTuple<int>).GetConstructors()[0],
                 Expression.Constant(1)
             );
-            this.MemoryMessageJson_T_Assert全パターン(input);
+            this.AssertEqual(input);
         }
         //}
     }
@@ -26,6 +26,6 @@ public abstract class New<TSerializer>:共通 where TSerializer:LinqDB.Serialize
             typeof(ValueTuple<int>).GetConstructors()[0],
             Expression.Constant(1)
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

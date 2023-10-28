@@ -14,7 +14,7 @@ public abstract class NewArray<TSerializer>:共通 where TSerializer:LinqDB.Seri
             Expression.Constant(2),
             Expression.Constant(1)
         );
-        this.MemoryMessageJson_T_Assert全パターン(NewArrayBounds);
-        this.MemoryMessageJson_T_Assert全パターン(NewArrayInit);
+        this.AssertEqual(NewArrayBounds);
+        this.AssertEqual(NewArrayInit);
     }
 }

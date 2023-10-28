@@ -6,7 +6,7 @@ public abstract class DebugInfo<TSerializer>:共通 where TSerializer:LinqDB.Ser
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
         var SymbolDocument0=Expression.SymbolDocument("ソースファイル名0.cs");
-        this.MemoryMessageJson_Expression_Assert全パターン(Expression.DebugInfo(SymbolDocument0,1,2,3,4));
+        this.ExpressionAssertEqual(Expression.DebugInfo(SymbolDocument0,1,2,3,4));
     }
 }
 

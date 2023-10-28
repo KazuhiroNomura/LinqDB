@@ -42,8 +42,8 @@ public abstract class MemberBinding<TSerializer>:共通 where TSerializer:LinqDB
                 )
             )
         );
-        this.MemoryMessageJson_T_Assert全パターン(new { a = default(MemberBinding) });
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(new { a = default(MemberBinding) });
+        this.AssertEqual(
             new
             {
                 a = input,

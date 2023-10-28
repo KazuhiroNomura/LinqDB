@@ -12,6 +12,6 @@ public abstract class Switch<TSerializer>:共通 where TSerializer:LinqDB.Serial
                 Expression.Constant(124)
             )
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

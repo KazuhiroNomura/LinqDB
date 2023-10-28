@@ -181,6 +181,26 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
         if(x==y) return true;
         if(x is null||y is null) return @false;
         {
+            if(x is CSharpArgumentInfo x0&&y is CSharpArgumentInfo y0)
+                return this.ExpressionEqualityComparer.Equals(x0,y0);
+        }
+        {
+            if(x is SwitchCase x0&&y is SwitchCase y0)
+                return this.ExpressionEqualityComparer.Equals(x0,y0);
+        }
+        {
+            if(x is LabelTarget x0&&y is LabelTarget y0)
+                return this.ExpressionEqualityComparer.Equals(x0,y0);
+        }
+        {
+            if(x is CatchBlock x0&&y is CatchBlock y0)
+                return this.ExpressionEqualityComparer.Equals(x0,y0);
+        }
+        {
+            if(x is Expression x0&&y is Expression y0)
+                return this.ExpressionEqualityComparer.Equals(x0,y0);
+        }
+        {
             if(x is ImmutableSet x0&&y is ImmutableSet y0) {
                 var xl = this.ToList(x0);
                 var yl = this.ToList(y0);
@@ -251,42 +271,6 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
             }
             return x.Equals(y);
         }
-        //if(x_GetType.IsAnonymous()) {
-        //    if(y_GetType.IsAnonymous()) {
-        //        var x_Properties = x_GetType.GetProperties();
-        //        var x_Properties_Length = x_Properties.Length;
-        //        var y_Properties = y_GetType.GetProperties();
-        //        var y_Properties_Length = y_Properties.Length;
-        //        if(x_Properties_Length!=y_Properties_Length) return @false;
-        //        for(var Index = 0;Index<x_Properties_Length;Index++) {
-        //            var x0 = x_Properties[Index].GetMethod!.Invoke(x,Array.Empty<object>())!;
-        //            var y0 = y_Properties[Index].GetMethod!.Invoke(y,Array.Empty<object>())!;
-        //            if(!this.Equals(x0,y0)) return @false;
-        //        }
-        //        return true;
-        //    } else {
-        //        var x_Properties = x_GetType.GetProperties();
-        //        foreach(var x_Property in x_Properties) {
-        //            object y0;
-        //            var y_Field = x_GetType.GetField(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
-        //            if(y_Field is not null) {
-        //                y0=y_Field.GetValue(y)!;
-        //            } else {
-        //                var y_Property = x_GetType.GetProperty(x_Property.Name,BindingFlags.Instance|BindingFlags.Public);
-        //                if(y_Property is not null) {
-        //                    y0=y_Property.GetValue(y)!;
-        //                } else {
-        //                    return @false;
-        //                }
-        //            }
-        //            var x0 = x_Property.GetValue(x);
-        //            if(!this.Equals(x0,y0)) return @false;
-        //        }
-        //        return true;
-        //    }
-        //} else {
-        //    return x.Equals(y);
-        //}
     }
     /// <summary>
     /// キーのハッシュコードを返す

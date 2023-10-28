@@ -8,6 +8,6 @@ public abstract class Label<TSerializer>:共通 where TSerializer:LinqDB.Seriali
         //this.MemoryMessageJson_Expression(Expression.Label(labelTarget));
         //this.MemoryMessageJson_Expression(Expression.Label(labelTarget,Expression.Constant(1)));
         var input=Expression.Label(labelTarget);
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

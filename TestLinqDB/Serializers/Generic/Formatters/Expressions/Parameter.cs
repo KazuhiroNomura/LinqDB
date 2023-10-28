@@ -8,12 +8,12 @@ public abstract class Parameter<TSerializer>:共通 where TSerializer:LinqDB.Ser
         var p = Expression.Parameter(typeof(int), "p");
         //if(index0<0){
         //    if(index1<0){
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Block(p));
+        this.AssertEqual(Expression.Block(p));
         //    }else{
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Block(p,p));
+        this.AssertEqual(Expression.Block(p,p));
         //    }
         //}else{
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.Lambda<Func<int, object>>(
                 Expression.Constant(
                     new { a = p }
@@ -31,9 +31,9 @@ public abstract class Parameter<TSerializer>:共通 where TSerializer:LinqDB.Ser
         //    if(index1<0){
         //    }else{
         //    }
-        this.MemoryMessageJson_Expression_Assert全パターン(input);
+        this.ExpressionAssertEqual(input);
         //}else{
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expression.Lambda<Func<int, object>>(
                 Expression.Constant(
                     new { a = input }

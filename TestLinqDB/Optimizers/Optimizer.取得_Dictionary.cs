@@ -10,8 +10,8 @@ namespace TestLinqDB.Optimizers;
 public class 取得_Dictionary:共通{
     [Fact]public void Constant(){
         //if(ILで直接埋め込めるか(Constant.Type))return;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => 0);
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => 0m);
+        this.コンパイル実行(() => 0);
+        this.コンパイル実行(() => 0m);
     }
     private delegate int FuncRef(ref int input);
     private static int Lambda0(ref int input, FuncRef d)
@@ -26,7 +26,7 @@ public class 取得_Dictionary:共通{
         var CSharpArgumentInfoArray2=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1};
         var CSharpArgumentInfoArray3=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
         //if(!this.SequenceEqual(a.Arguments,b.Arguments)) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<object>>(
                 Expression.Dynamic(
                     Binder.UnaryOperation(
@@ -45,12 +45,12 @@ public class 取得_Dictionary:共通{
         var s = new Set<int>();
         //if(!this.Quote内か&&this.Lambdas.Contains(Lambda,this.ExpressionEqualityComparer))
         //else
-        //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Let(s=>s.Let(p=>new{s})));
-        //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => (1).Let(a=>a.Let((Func<int,int>)(p=>a))));
-        //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Let(s=>s.Select(p=>ValueTuple.Create(s))));
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Let(s=>s.Select((Func<int,ValueTuple<Set<int>>>)(p=>ValueTuple.Create(s)))));
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Select((Func<int,int>)(p=>p+1)));
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(() => s.Let(s=>s.Select((Func<int,int>)(p=>p+1))));
+        //this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Let(s=>s.Let(p=>new{s})));
+        //this.共通MemoryMessageJson_Expression_コンパイル実行(() => (1).Let(a=>a.Let((Func<int,int>)(p=>a))));
+        //this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Let(s=>s.Select(p=>ValueTuple.Create(s))));
+        this.コンパイル実行(() => s.Let(s=>s.Select((Func<int,ValueTuple<Set<int>>>)(p=>ValueTuple.Create(s)))));
+        this.コンパイル実行(() => s.Select((Func<int,int>)(p=>p+1)));
+        this.コンパイル実行(() => s.Let(s=>s.Select((Func<int,int>)(p=>p+1))));
     }
     [Fact]public void Block(){
         var p=Expression.Parameter(typeof(int));
@@ -59,7 +59,7 @@ public class 取得_Dictionary:共通{
         //var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
         //foreach(var Variable in Block.Variables)
         //    if(判定_内部LambdaにParameterが存在するか.実行(Block,Variable))
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[]{p},
@@ -68,7 +68,7 @@ public class 取得_Dictionary:共通{
                 )
             )
         );
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[]{p},
@@ -79,7 +79,7 @@ public class 取得_Dictionary:共通{
         );
     }
     //var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
-    //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
-    //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
-    //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
+    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
+    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
+    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
 }

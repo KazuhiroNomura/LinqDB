@@ -18,24 +18,7 @@ using System.Linq.Expressions;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers;
 public class ReturnExpressionTraverser:共通{
-    private class ggg{
-        public ggg(Optimizer.作業配列 xxx){
-
-        }
-    }
-    //private static readonly Type ReturnExpressionTraverser=typeof(LinqDB.Optimizers.Optimizer).GetNestedType("ReturnExpressionTraverser",System.Reflection.BindingFlags.NonPublic)!;
-    //private static readonly ConstructorInfo ReturnExpressionTraverser_ctor=ReturnExpressionTraverser!.GetConstructor(BindingFlags.NonPublic|BindingFlags.Instance,new[]{typeof(Optimizer.作業配列)})!;
-
-    private static readonly dynamic o=new NonPublicAccessor(typeof(LinqDB.Optimizers.Optimizer).GetNestedType("ReturnExpressionTraverser",System.Reflection.BindingFlags.NonPublic)!.GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance,new[]{typeof(作業配列)})!.Invoke(new object[]{new 作業配列()}));
-    //private static dynamic o{
-    //    get{
-    //        var ReturnExpressionTraverser=typeof(LinqDB.Optimizers.Optimizer).GetNestedType("ReturnExpressionTraverser",System.Reflection.BindingFlags.NonPublic);
-    //        var 作業配列=new Optimizer.作業配列();
-    //        var ctor=ReturnExpressionTraverser!.GetConstructor(BindingFlags.NonPublic|BindingFlags.Instance,new[]{typeof(Optimizer.作業配列)});
-    //        var x=ctor!.Invoke(new object[]{作業配列});
-    //        return new NonPublicAccessor(x);
-    //    }
-    //}
+    private static readonly dynamic o=new NonPublicAccessor(typeof(Optimizer).GetNestedType("ReturnExpressionTraverser",System.Reflection.BindingFlags.NonPublic)!.GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance,new[]{typeof(作業配列)})!.Invoke(new object[]{new 作業配列()}));
     [Fact]public void TraverseNullable(){
         o.TraverseNullable(null);
         o.TraverseNullable(Expression.Default(typeof(void)));
@@ -122,7 +105,7 @@ public class ReturnExpressionTraverser:共通{
         o.TraverseNullable(Expression.Loop                 (Expression.Default(typeof(void))));
         o.TraverseNullable(Expression.MakeMemberAccess     (Expression.Constant(new Point(0,0)),typeof(Point).GetProperty(nameof(Point.X))!));
         o.TraverseNullable(Expression.MemberInit           (New,Expression.Bind(Int32フィールド1,@int)));
-        var ToString=typeof(string).GetMethod("ToString",Array.Empty<System.Type>())!;
+        var ToString=typeof(string).GetMethod("ToString",Array.Empty<Type>())!;
         o.TraverseNullable(Expression.Call(@string,ToString));
         o.TraverseNullable(Expression.NewArrayBounds       (typeof(int),@int));
         o.TraverseNullable(Expression.NewArrayInit         (typeof(int),@int));
@@ -169,31 +152,31 @@ public class ReturnExpressionTraverser:共通{
         //    switch (Binding0.BindingType) {
         //        case MemberBindingType.Assignment: {
         //            if(Binding0_Expression==Binding1_Expression) {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=3});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=3});
         //            } else {
         var a=3;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=a*a});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=a*a});
         //            }
         //        }
         //        case MemberBindingType.MemberBinding: {
         //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //            } else {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            }
         //        }
         //        default: {
         //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
         //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {1}}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {1}}});
         //                } else {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {a*a}}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{自己参照 = new(){StructCollectionフィールド= {a*a}}});
         //                }
         //            }
         //            if(変化したか1) {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {a*a}});
         //            } else
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{StructCollectionフィールド= {1}});
         //        }
         //        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
         //    }
@@ -280,7 +263,7 @@ public class ReturnExpressionTraverser:共通{
             var Lambda1=Expression.Lambda<Func<object>>(Dynamic1);
             var actual1=Lambda1.Compile()();
             //Assert.Equal(expected,actual);
-            this.MemoryMessageJson_Expression_コンパイルリモート実行(Lambda1);
+            this.コンパイル実行(Lambda1);
         }
         void 共通1<T>(Func<T,bool>  オブジェクト, object a){
             var binder=Binder.Invoke(
@@ -335,7 +318,7 @@ public class ReturnExpressionTraverser:共通{
             var M=Lambda.Compile();
             var actual=M();
             Assert.Equal(expected,actual);
-            this.MemoryMessageJson_Expression_コンパイルリモート実行(Lambda);
+            this.コンパイル実行(Lambda);
         }
     }
     [Fact]public void ExpressionEqual(){
@@ -353,10 +336,10 @@ public class ReturnExpressionTraverser:共通{
     [Fact]public void ListInit(){
         //for(var a=0; a < ListInit1_Initializers_Count; a++) {
         //    if(ReferenceEquals(ListInit0_Initialize_Arguments,ListInit1_Initialize_Arguments)) {
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new List<int>{1,2,3});
+        this.コンパイル実行(()=>new List<int>{1,2,3});
         //    } else {
         var a=0;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new List<int>{a,a});
+        this.コンパイル実行(()=>new List<int>{a,a});
         //    }
         //}
     }
@@ -364,7 +347,7 @@ public class ReturnExpressionTraverser:共通{
         //this.MemoryMessageJson_Assert(new{a=default(LoopExpression)});
         var Label_decimal = Expression.Label(typeof(decimal), "Label_decimal");
         var Label_void = Expression.Label("Label");
-        this.MemoryMessageJson_Expression_コンパイル実行(
+        this.コンパイル実行(
             Expression.Lambda<Action>(
                 Expression.Loop(
                     Expression.Block(
@@ -386,30 +369,30 @@ public class ReturnExpressionTraverser:共通{
     }
     [Fact]public void MamberAccess(){
         //if(Member0_Expression==Member1_Expression)
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Point(0,1).X);
+        this.コンパイル実行(()=>new Point(0,1).X);
         var a=3;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new Point(a,a).X);
+        this.コンパイル実行(()=>new Point(a,a).X);
     }
     [Fact]public void MemberInit(){
         //if(MemberInit0_NewExpression==MemberInit1_NewExpression && ReferenceEquals(MemberInit0_Bindings,MemberInit1_Bindings))
-        //this.共通MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=3,Stringフィールド = 3});
+        //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=3,Stringフィールド = 3});
         var a=3;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new class_演算子オーバーロード{Int32フィールド=a,Stringフィールド = a.ToString()});
+        this.コンパイル実行(()=>new class_演算子オーバーロード{Int32フィールド=a,Stringフィールド = a.ToString()});
     }
     [Fact]public void New(){
         //if(New0.Constructor is null)
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.New(typeof(int))
             )
         );
         //if(ReferenceEquals(New1_Arguments,New0_Arguments))
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new decimal(1));
+        this.コンパイル実行(()=>new decimal(1));
         //    ?Expression.New(New0.Constructor,New1_Arguments)
         var a=1;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new decimal(a,a,a,true,1));
+        this.コンパイル実行(()=>new decimal(a,a,a,true,1));
         //    :Expression.New(New0.Constructor,New1_Arguments,New0.Members);
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<Types.Point>>(
                 Expression.New(
                     typeof(Types.Point).GetConstructors()[0],
@@ -420,22 +403,22 @@ public class ReturnExpressionTraverser:共通{
     }
     [Fact]public void NewArrayBound(){
         //if(ReferenceEquals(NewArray1_Expressions,NewArray0_Expressions))
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[2,3]);
+        this.コンパイル実行(()=>new int[2,3]);
         var a=3;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[a,a]);
+        this.コンパイル実行(()=>new int[a,a]);
     }
     [Fact]public void NewArrayInit(){
         //if(ReferenceEquals(NewArray1_Expressions,NewArray0_Expressions))
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[]{1});
+        this.コンパイル実行(()=>new int[]{1});
         var a=3;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new int[]{a,a});
+        this.コンパイル実行(()=>new int[]{a,a});
     }
     [Fact]public void Switch(){
         var p=Expression.Parameter(typeof(int));
         //for(var a=0; a < Switch0_Cases_Count; a++) {
         //    for(var b=0; b < Switch0_Case_TestValues_Count; b++) {
         //        if(Switch0_Case_TestValue !=Switch1_Case_TestValue)
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.Switch(
                     Expression.Add(Expression.Add(p,p),Expression.Add(p,p)),
@@ -455,7 +438,7 @@ public class ReturnExpressionTraverser:共通{
         //    } else
         //}
         //return 変化したか?
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int,int>>(
                 Expression.Switch(
                     p,

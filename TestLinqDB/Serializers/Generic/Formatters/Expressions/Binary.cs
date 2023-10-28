@@ -8,27 +8,25 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
     [Fact]
     public void Serialize(){
         var Constant1=Expressions.Expression.Constant(1m);
-        this.MemoryMessageJson_Expression_Assert全パターン(Expressions.Expression.Add(Constant1,Constant1));
+        this.ExpressionAssertEqual(Expressions.Expression.Add(Constant1,Constant1));
 
     }
     private void PrivateWrite<T>(Expressions.ExpressionType NodeType){
-        this.MemoryMessageJson_Expression_Assert全パターン(
-            Expressions.Expression.MakeBinary(
-                NodeType,
-                Expressions.Expression.Parameter(typeof(T),typeof(T).Name),
-                Expressions.Expression.Constant(default(T))
+        var p=Expressions.Expression.Parameter(typeof(T),typeof(T).Name);
+        this.ExpressionAssertEqual(
+            Expressions.Expression.Block(
+                new[]{p},
+                Expressions.Expression.MakeBinary(
+                    NodeType,
+                    p,
+                    Expressions.Expression.Constant(default(T))
+                )
             )
         );
 
     }
     [Fact]
     public void Write(){
-        this.MemoryMessageJson_Expression_Assert全パターン(
-            Expressions.Expression.ArrayIndex(
-                Expressions.Expression.Parameter(typeof(int[])),
-                Expressions.Expression.Constant(default(int))
-            )
-        );
         this.PrivateWrite<int>(Expressions.ExpressionType.Assign);
         this.PrivateWrite<string>(Expressions.ExpressionType.Coalesce);
         this.PrivateWrite<int>(Expressions.ExpressionType.Add);
@@ -70,7 +68,7 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
     }
     [Fact]
     public void WriteLeftRight(){
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expressions.Expression.Assign(
                 Expressions.Expression.Parameter(typeof(int),"int32"),
                 Expressions.Expression.Constant(1)
@@ -80,21 +78,23 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
     private static string string_string_string(string? a,string b)=>a??b;
     [Fact]
     public void WriteLeftRightLambda(){
-        var ParameterString = Expressions.Expression.Parameter(typeof(string), "string");
-        var ConstantString = Expressions.Expression.Constant("string");
-        var ConversionString = Expressions.Expression.Lambda<Func<string, string>>(Expressions.Expression.Call(null, GetMethod(() => string_string_string("", "")), ParameterString, ParameterString), ParameterString);
-        this.MemoryMessageJson_Expression_Assert全パターン(
-            Expressions.Expression.Coalesce(
-                Expressions.Expression.Parameter(typeof(string),"string"),
-                Expressions.Expression.Constant("string"),
-                Expressions.Expression.Lambda<Func<string,string>>(
-                    Expressions.Expression.Call(
-                        null,
-                        GetMethod(()=>string_string_string("","")),
-                        ParameterString,
-                        ParameterString
-                    ),
-                    ParameterString
+        var p = Expressions.Expression.Parameter(typeof(string), "p");
+        var q = Expressions.Expression.Parameter(typeof(string), "q");
+        this.ExpressionAssertEqual(
+            Expressions.Expression.Block(
+                new[]{p},
+                Expressions.Expression.Coalesce(
+                    p,
+                    Expressions.Expression.Constant("string"),
+                    Expressions.Expression.Lambda<Func<string,string>>(
+                        Expressions.Expression.Call(
+                            null,
+                            GetMethod(()=>string_string_string("","")),
+                            q,
+                            q
+                        ),
+                        q
+                    )
                 )
             )
         );
@@ -102,7 +102,7 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
     [Fact]
     public void WriteLeftRightMethod(){
         var Constant1=Expressions.Expression.Constant(1m);
-        this.MemoryMessageJson_Expression_Assert全パターン(Expressions.Expression.Add(Constant1,Constant1));
+        this.ExpressionAssertEqual(Expressions.Expression.Add(Constant1,Constant1));
     }
     [Fact]
     public void WriteLeftRightMethodLambda(){
@@ -110,7 +110,7 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
         var Constant1=Expressions.Expression.Constant(1m);
         var ConversionDecimal=Expressions.Expression.Lambda<Func<decimal,decimal>>(Expressions.Expression.Add(ParameterDecimmal,ParameterDecimmal),ParameterDecimmal);
         var input1=Expressions.Expression.AddAssign(ParameterDecimmal,Constant1,typeof(decimal).GetMethod("op_Addition"),ConversionDecimal);
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Block(
                     new[]{ParameterDecimmal},
@@ -126,7 +126,7 @@ public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serial
             )
         );
 
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイルリモート実行(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Block(
                     new[]{ParameterDecimmal},

@@ -48,9 +48,10 @@ partial class Optimizer{
                 );
             }
             //Dictionaryラムダ跨ぎParameter.Add(ContainerParameter,(ContainerField,Expression.Field(DispParameter,ContainerField)));
+            var 跨番号=0;
             foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable()){
-                Debug.Assert(a.Key.Name==a.Value.Disp.Name);
-                Dictionaryラムダ跨ぎParameter[a.Key]=(DispType.GetField(a.Key.Name,Instance_NonPublic_Public),a.Value.Member)!;
+                Debug.Assert(a.Key.Name is null||a.Key.Name==a.Value.Disp.Name);
+                Dictionaryラムダ跨ぎParameter[a.Key]=(DispType.GetField(a.Key.Name??$"[跨]{跨番号++}",Instance_NonPublic_Public),a.Value.Member)!;
             }
             this.Clear();
             this.インスタンスメソッドか=true;

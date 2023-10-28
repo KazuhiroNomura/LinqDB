@@ -67,7 +67,7 @@ public class Test_Set1{
         public override int GetHashCode()=>this.ID.GetHashCode();
         public bool Equals(EntityKey other)=>this.ID==other.ID;
     }
-    private class Container2:global::LinqDB.Databases.Container<Container2>{
+    private class Container2:LinqDB.Databases.Container<Container2>{
     }
     private class Entity:Entity<EntityKey,Container2>,IEquatable<Entity>{
         public Entity(long ID):base(new EntityKey(ID)){

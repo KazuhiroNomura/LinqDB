@@ -13,11 +13,11 @@ public abstract class Set1<TSerializer>:CollectionTest<Set<int>,TSerializer> whe
             Data.Add(a);
     }
     [Fact]public void Set3をSet1にキャスト(){
-        this.MemoryMessageJson_T_Assert全パターン((Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container> { new(1),new(2) });
+        this.AssertEqual((Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container> { new(1),new(2) });
     }
     [Fact]public void Anonymous_Set3をSet2にキャスト(){
         var C=new LinqDB.Databases.Container();
-        this.MemoryMessageJson_T_Assert全パターン(new { a = (Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container> { new(1),new(2) } });
-        this.MemoryMessageJson_T_Assert全パターン(new { a = (Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container>(C){ new(1),new(2) } });
+        this.AssertEqual(new { a = (Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container> { new(1),new(2) } });
+        this.AssertEqual(new { a = (Set<Tables.Table>)new Set<Keys.Key,Tables.Table,LinqDB.Databases.Container>(C){ new(1),new(2) } });
     }
 }

@@ -12,7 +12,7 @@ public abstract class Loop<TSerializer>:共通 where TSerializer:LinqDB.Serializ
                 Expression.Default(typeof(void))
             );
             //var expected=new{a=input};
-            this.MemoryMessageJson_T_Assert全パターン(input);
+            this.AssertEqual(input);
         }
         //} else {
         //    if(value.ContinueLabel is null) {//break,body
@@ -23,7 +23,7 @@ public abstract class Loop<TSerializer>:共通 where TSerializer:LinqDB.Serializ
                 ),
                 Label_decimal
             );
-            this.MemoryMessageJson_T_Assert全パターン(input);
+            this.AssertEqual(input);
         }
         //    } else {//break,continue,body
         {
@@ -35,7 +35,7 @@ public abstract class Loop<TSerializer>:共通 where TSerializer:LinqDB.Serializ
                 Label_decimal,
                 Label_void
             );
-            this.MemoryMessageJson_T_Assert全パターン(input);
+            this.AssertEqual(input);
         }
         //    }
         //}
@@ -44,13 +44,13 @@ public abstract class Loop<TSerializer>:共通 where TSerializer:LinqDB.Serializ
     public void Serialize_Deserialize(){
         //if(writer.TryWriteNil(value)) return;
         var Default=default(LoopExpression);
-        this.MemoryMessageJson_T_Assert全パターン(Default);
+        this.AssertEqual(Default);
         {
             var input=Expression.Loop(
                 Expression.Default(typeof(void))
             );
             var expected=new{a=input,b=(Expression)input};
-            this.MemoryMessageJson_T_Assert全パターン(expected);
+            this.AssertEqual(expected);
         }
     }
 }

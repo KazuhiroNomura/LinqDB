@@ -10,13 +10,13 @@ public abstract class Block<TSerializer>:共通 where TSerializer:LinqDB.Seriali
     [Fact]
     public void Serialize(){
         var input1=Expression.Block(Expression.Constant(1m));
-        this.MemoryMessageJson_Expression_Assert全パターン(input1);
+        this.ExpressionAssertEqual(input1);
 
     }
     [Fact]
     public void Block0(){
         var ParameterDecimmal=Expression.Parameter(typeof(decimal));
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expression.Block(
                 new[]{ParameterDecimmal},
                 Expression.Block(

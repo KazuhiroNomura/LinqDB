@@ -16,7 +16,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                     )
                 )
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //    } else {
         {
@@ -26,7 +26,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                     Expression.Default(typeof(int))
                 )
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //    }
         //}else{
@@ -36,7 +36,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                 Expression.Constant(0),
                 Expression.Constant(1)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //    } else{
         {
@@ -47,7 +47,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                     Expression.Constant(0)
                 )
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //    }
         //}
@@ -61,7 +61,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                 Expression.Constant(0)
             )
         );
-        this.MemoryMessageJson_Expression_Assert全パターン(input);
+        this.ExpressionAssertEqual(input);
     }
     [Fact]public void PrivateWrite(){
         //if(value.Finally is not null){
@@ -73,7 +73,7 @@ public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serialize
                 Expression.Constant(0)
             )
         );
-        this.MemoryMessageJson_Expression_Assert全パターン(input);
+        this.ExpressionAssertEqual(input);
     }
 }
 

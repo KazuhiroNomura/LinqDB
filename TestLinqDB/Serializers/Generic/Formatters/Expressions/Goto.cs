@@ -4,7 +4,7 @@ public abstract class Goto<TSerializer>:共通 where TSerializer:LinqDB.Serializ
     protected Goto():base(new AssertDefinition(new TSerializer())){}
     [Fact]
     public void Serialize(){
-        this.MemoryMessageJson_T_Assert全パターン(new{a=default(GotoExpression)});
+        this.AssertEqual(new{a=default(GotoExpression)});
         var target=Expression.Label(typeof(int),"target");
         var input=Expression.MakeGoto(
             GotoExpressionKind.Return,
@@ -12,6 +12,6 @@ public abstract class Goto<TSerializer>:共通 where TSerializer:LinqDB.Serializ
             Expression.Constant(5),
             typeof(byte)
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

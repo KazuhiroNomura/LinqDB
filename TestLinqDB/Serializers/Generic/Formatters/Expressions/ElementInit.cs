@@ -13,7 +13,7 @@ public abstract class ElementInit<TSerializer>:共通 where TSerializer:LinqDB.S
             Constant_1
         );
         var Add = typeof(List<int>).GetMethod("Add")!;
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(

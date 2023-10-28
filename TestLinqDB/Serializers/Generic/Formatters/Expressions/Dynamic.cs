@@ -38,12 +38,12 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 binder,typeof(object),
                 Expression.Constant(arg1),Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //case BinderType.ConvertBinder:{
         {
             var input=PrivateDynamicConvert<int,long>(1,RuntimeBinder.CSharpBinderFlags.None);
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //case BinderType.GetIndexBinder:{
         {
@@ -60,7 +60,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 typeof(object),
                 Expression.Constant(arg1),Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //case BinderType.GetMemberBinder:{
         {
@@ -76,7 +76,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 typeof(object),
                 Expression.Constant(arg1)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //case BinderType.InvokeBinder:{
         {
@@ -97,7 +97,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                     Expression.Constant(b),
                     Expression.Constant(c)
                 );
-                this.MemoryMessageJson_Expression_Assert全パターン(input);
+                this.ExpressionAssertEqual(input);
             }
         }
         //case BinderType.InvokeMemberBinder:{
@@ -113,7 +113,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                     binder,typeof(object),
                     Expression.Constant(arg0),Expression.Constant(arg1)
                 );
-                this.MemoryMessageJson_Expression_Assert全パターン(input);
+                this.ExpressionAssertEqual(input);
             }
         }
         //case BinderType.SetIndexBinder:{
@@ -132,7 +132,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 typeof(object),
                 Expression.Constant(arg1),Expression.Constant(arg2),Expression.Constant(arg3),Expression.Constant(arg4)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //}
         {
@@ -150,7 +150,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 Expression.Constant(arg1),
                 Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
         //case BinderType.UnaryOperationBinder:{
         {
@@ -169,7 +169,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 typeof(object),
                 Expression.Constant(arg1,typeof(object))
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
     }
     [Fact]
@@ -188,7 +188,7 @@ public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Seria
                 binder,typeof(object),
                 Expression.Constant(arg1),Expression.Constant(arg2)
             );
-            this.MemoryMessageJson_Expression_Assert全パターン(input);
+            this.ExpressionAssertEqual(input);
         }
     }
 }

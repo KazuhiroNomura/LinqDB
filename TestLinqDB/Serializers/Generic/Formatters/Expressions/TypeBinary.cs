@@ -13,7 +13,7 @@ public abstract class TypeBinary<TSerializer>:共通 where TSerializer:LinqDB.Se
             Expression.Constant(1m),
             typeof(decimal)
         );
-        this.MemoryMessageJson_Expression_Assert全パターン(TypeIs);
-        this.MemoryMessageJson_Expression_Assert全パターン(TypeEqual);
+        this.ExpressionAssertEqual(TypeIs);
+        this.ExpressionAssertEqual(TypeEqual);
     }
 }

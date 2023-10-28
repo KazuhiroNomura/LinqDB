@@ -7,6 +7,6 @@ public abstract class ExpressionT<TSerializer>:共通 where TSerializer:LinqDB.S
     {
         //if(writer.TryWriteNil(value)) return;
         var input = Expression.Lambda<Action>(Expression.Default(typeof(void)));
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

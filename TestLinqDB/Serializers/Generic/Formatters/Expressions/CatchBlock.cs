@@ -8,14 +8,14 @@ public abstract class CatchBlock<TSerializer>:共通 where TSerializer:LinqDB.Se
         //if(writer.TryWriteNil(value)) return;
         //if(value.Variable is null){
         //    if(value.Filter is null){
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.Catch(
                 typeof(Exception),
                 Expression.Default(typeof(void))
             )
         );
         //    } else{
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.Catch(
                 typeof(Exception),
                 Expression.Constant(0),
@@ -25,14 +25,14 @@ public abstract class CatchBlock<TSerializer>:共通 where TSerializer:LinqDB.Se
         //    }
         //} else{
         //    if(value.Filter is null){
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.Catch(
                 Variable,
                 Expression.Default(typeof(void))
             )
         );
         //    } else{
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             Expression.Catch(
                 Variable,
                 Expression.Constant(0),
@@ -46,7 +46,7 @@ public abstract class CatchBlock<TSerializer>:共通 where TSerializer:LinqDB.Se
     [Fact]
     public void Block0(){
         var ParameterDecimmal=Expression.Parameter(typeof(decimal));
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expression.Block(
                 new[]{ParameterDecimmal},
                 Expression.Block(

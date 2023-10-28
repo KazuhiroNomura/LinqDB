@@ -9,6 +9,6 @@ public abstract class Invocation<TSerializer>:共通 where TSerializer:LinqDB.Se
             Expression.Lambda(@string,@string),
             Expression.Constant("B")
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

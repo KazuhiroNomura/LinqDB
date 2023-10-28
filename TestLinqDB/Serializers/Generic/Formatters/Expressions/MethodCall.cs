@@ -11,12 +11,12 @@ public abstract class MethodCall<TSerializer>:共通 where TSerializer:LinqDB.Se
         var StaticMethod = Expression.Call(M(() => テスト.StaticMethod()));
         var InstanceMethod = Expression.Call(Expression.Constant(new テスト()), M(() => new テスト().InstanceMethod()));
 
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Call(M(() => テスト.StaticMethod(1)),arg));
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Call(M(() => テスト.StaticMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Call(@this,M(() => o.InstanceMethod())));
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Call(@this,M(() => o.InstanceMethod(1)),arg));
-        this.MemoryMessageJson_T_Assert全パターン(Expression.Call(@this,M(() => o.InstanceMethod(1,2)),arg,arg));
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(Expression.Call(M(() => テスト.StaticMethod(1)),arg));
+        this.AssertEqual(Expression.Call(M(() => テスト.StaticMethod(1,2)),arg,arg));
+        this.AssertEqual(Expression.Call(@this,M(() => o.InstanceMethod())));
+        this.AssertEqual(Expression.Call(@this,M(() => o.InstanceMethod(1)),arg));
+        this.AssertEqual(Expression.Call(@this,M(() => o.InstanceMethod(1,2)),arg,arg));
+        this.AssertEqual(
             Expression.Call(
                 M(() => string.Concat("","")),
                 Expression.Constant("A"),
@@ -24,7 +24,7 @@ public abstract class MethodCall<TSerializer>:共通 where TSerializer:LinqDB.Se
             )
         );
 
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             new
             {
                 StaticMethod,

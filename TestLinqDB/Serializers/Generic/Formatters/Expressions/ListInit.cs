@@ -9,6 +9,6 @@ public abstract class ListInit<TSerializer>:共通 where TSerializer:LinqDB.Seri
             Expression.New(typeof(List<int>)),
             Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expression.Constant(1))
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

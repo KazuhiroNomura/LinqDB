@@ -6,7 +6,7 @@ public abstract class Conditional<TSerializer>:共通 where TSerializer:LinqDB.S
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Expression_Assert全パターン(
+        this.ExpressionAssertEqual(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),

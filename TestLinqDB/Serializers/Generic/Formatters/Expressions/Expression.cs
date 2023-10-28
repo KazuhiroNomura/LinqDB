@@ -2,14 +2,7 @@
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
 public abstract class Expression<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
     protected Expression():base(new AssertDefinition(new TSerializer())){}
-    private void Binary(){
-        {
-            var Parameter=Expression.Parameter(typeof(int[]));
-            var Constant=Expression.Constant(default(int));
-            var input=Expression.ArrayIndex(Parameter,Constant);
-            this.MemoryMessageJson_T_Assert全パターン(input);
-
-        }
+    [Fact]public void Binary(){
         共通<int>(ExpressionType.Assign);
         共通<string>(ExpressionType.Coalesce);
         共通<int>(ExpressionType.Add);
@@ -49,23 +42,21 @@ public abstract class Expression<TSerializer>:共通 where TSerializer:LinqDB.Se
         共通<int>(ExpressionType.LessThanOrEqual);
         共通<int>(ExpressionType.NotEqual);
         void 共通<T>(ExpressionType NodeType){
-            var Constant=Expression.Constant(default(T));
             var Parameter=Expression.Parameter(typeof(T),typeof(T).Name);
-            Expression input=Expression.MakeBinary(NodeType,Parameter,Constant);
-            this.MemoryMessageJson_T_Assert全パターン(new{a=input});
+            var Constant=Expression.Constant(default(T));
+            Expression input=Expression.Block(
+                new[]{Parameter},
+                Expression.MakeBinary(NodeType,Parameter,Constant)
+            );
+            this.AssertEqual(new{a=input});
         }
-    }
-    [Fact]
-    public void Serialize(){
-        this.Binary();
-        this.Unary();
     }
     private static 演算子 Unary演算子(演算子 a)=>~a;
     private static bool IsTrue演算子(演算子 a)=>a.HasValue;
     static int UnaryDouble(double a){
         return(int)a;
     }
-    private void Unary(){
+    [Fact]public void Unary(){
         var ConstantArray=Expression.Constant(new int[10]);
         var Constant1=Expression.Constant(1);
         var Constant1_1d=Expression.Constant(1.1);
@@ -75,7 +66,7 @@ public abstract class Expression<TSerializer>:共通 where TSerializer:LinqDB.Se
         var Parameter演算子=Expression.Parameter(typeof(演算子));
         var ParameterInt32=Expression.Parameter(typeof(int));
         var x=Expression.ArrayLength(Expression.Constant(new int[1]));
-        this.MemoryMessageJson_Expression_Assert全パターン(Expression.ArrayLength(Expression.Constant(new int[1])));
+        this.ExpressionAssertEqual(Expression.ArrayLength(Expression.Constant(new int[1])));
         共通(Expression.ArrayLength(ConstantArray));
         共通(Expression.Quote(Expression.Lambda(ConstantArray)));
         共通(Expression.Throw(Expression.New(typeof(InvalidOperationException).GetConstructor(Type.EmptyTypes)!)));
@@ -131,6 +122,11 @@ public abstract class Expression<TSerializer>:共通 where TSerializer:LinqDB.Se
         共通(Expression.Decrement(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通(Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通(Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
-        void 共通(UnaryExpression Unary)=>this.MemoryMessageJson_Expression_Assert全パターン(Unary);
+        void 共通(UnaryExpression Unary)=>this.ExpressionAssertEqual(
+            Expression.Block(
+                new[]{Parameter演算子,ParameterInt32},
+                Unary
+            )
+        );
     }
 }

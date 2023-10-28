@@ -33,7 +33,7 @@ public partial struct Struct比較対象にIEquatableEquals:IEquatable<Struct比
 namespace テスト {
     [Serializable]
     public class Container:Container<Container> {
-        public Schemas.dbo dbo { get; private set; }
+        public dbo dbo { get; private set; }
         public override Container Transaction() {
             var Container = new Container(this);
             this.Copy(Container);

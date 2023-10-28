@@ -941,20 +941,17 @@ public sealed partial class Optimizer:IDisposable{
             if(a_Index1>=0) return true;
             //Let(a=>.v),Let(b=>.w)は一致しない。
             //Let(a=>.v=a),Let(b=>.w=b)は一致する。大域変数.v,.wが代入左辺地なら一致する。
-
+#if false//変換_先行評価式_Callでエラーになる
             var a_ラムダ跨ぎParameters=this.a_ラムダ跨ぎParameters;
             var b_ラムダ跨ぎParameters=this.b_ラムダ跨ぎParameters;
-            //Debug.Assert(a_ラムダ跨ぎParameters is null&&b_ラムダ跨ぎParameters is null||a_ラムダ跨ぎParameters is not null&&b_ラムダ跨ぎParameters is not null);
-            //if(a_ラムダ跨ぎParameters is null){
-            //    return @false;
-            //}
             if(a_ラムダ跨ぎParameters.Contains(a))return b_ラムダ跨ぎParameters.Contains(b);
             if(b_ラムダ跨ぎParameters.Contains(b))return @false;
             a_ラムダ跨ぎParameters.Add(a);
             b_ラムダ跨ぎParameters.Add(b);
             return true;
-            //if(a_Index0>=0||a_Index1>=0) return true;
-            //return a==b;
+#else
+#endif
+            return this.a_ラムダ跨ぎParameters.Contains(a)&&this.b_ラムダ跨ぎParameters.Contains(b);
         }
         private bool T(RuntimeVariablesExpression a,RuntimeVariablesExpression b) => a.Variables.SequenceEqual(b.Variables);
         private bool T(SwitchExpression a,SwitchExpression b) {
@@ -1806,8 +1803,9 @@ public sealed partial class Optimizer:IDisposable{
             Field番号++;
         }
         Disp_ctor_I.Ret();
+        var 跨番号=0;
         foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable())
-            Dictionaryラムダ跨ぎParameter[a.Key]=(Disp_TypeBuilder.DefineField(a.Key.Name,a.Key.Type,FieldAttributes.Public),default!);
+            Dictionaryラムダ跨ぎParameter[a.Key]=(Disp_TypeBuilder.DefineField(a.Key.Name??$"[跨]{跨番号++}",a.Key.Type,FieldAttributes.Public),default!);
         //Disp作成
         var Disp_Type=Disp_TypeBuilder.CreateType();
         var DispParameter=Expression.Parameter(Disp_Type,"Disp");
@@ -1838,7 +1836,7 @@ public sealed partial class Optimizer:IDisposable{
                 );
             }
             foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable()){
-                Debug.Assert(a.Key.Name==a.Value.Disp.Name);
+                Debug.Assert(a.Key.Name is null||a.Key.Name==a.Value.Disp.Name);
                 番号++;
                 var Field=Disp_Type.GetField(a.Value.Disp.Name,Instance_NonPublic_Public)!;
                 Dictionaryラムダ跨ぎParameter[a.Key]=(Field,Expression.Field(DispParameter,Field));

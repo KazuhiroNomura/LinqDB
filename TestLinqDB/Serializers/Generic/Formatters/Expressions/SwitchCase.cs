@@ -8,6 +8,6 @@ public abstract class SwitchCase<TSerializer>:共通 where TSerializer:LinqDB.Se
             Expression.Constant(64m),
             Expression.Constant(124)
         );
-        this.MemoryMessageJson_T_Assert全パターン(input);
+        this.AssertEqual(input);
     }
 }

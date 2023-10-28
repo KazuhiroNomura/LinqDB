@@ -41,12 +41,12 @@ public abstract class MemberAccess<TSerializer>:共通 where TSerializer:LinqDB.
     [Fact]public void Serialize(){
 
         var Point=Expression.Parameter(typeof(Point));
-        this.MemoryMessageJson_T_Assert全パターン(new{a=default(MemberExpression)});
+        this.AssertEqual(new{a=default(MemberExpression)});
         var input=Expression.MakeMemberAccess(
             Expression.Constant(new MemberAccess対象()),
             typeof(MemberAccess対象).GetProperty(nameof(MemberAccess対象.property))!
         );
-        this.MemoryMessageJson_T_Assert全パターン(
+        this.AssertEqual(
             new{
                 a=input,b=(Expression)input
             }

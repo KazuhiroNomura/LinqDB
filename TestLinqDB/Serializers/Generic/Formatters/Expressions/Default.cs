@@ -6,6 +6,6 @@ public abstract class Default<TSerializer>:共通 where TSerializer:LinqDB.Seria
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Expression_Assert全パターン(Expression.Default(typeof(void)));
+        this.ExpressionAssertEqual(Expression.Default(typeof(void)));
     }
 }

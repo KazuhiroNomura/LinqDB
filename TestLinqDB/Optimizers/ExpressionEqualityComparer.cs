@@ -203,78 +203,78 @@ public class ExpressionEqualityComparer:共通{
     private static readonly Func<int,int> _Delegate=p=>p;
     private static int Function()=>1;
     [Fact]
-    public void Add()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32+_Int32);
+    public void Add()=>this.コンパイル実行(()=>_Int32+_Int32);
     [Fact]
-    public void AddChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>checked(_Int32+_Int32));
+    public void AddChecked()=>this.コンパイル実行(()=>checked(_Int32+_Int32));
     [Fact]
-    public void Subtract()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32-_Int32);
+    public void Subtract()=>this.コンパイル実行(()=>_Int32-_Int32);
     [Fact]
-    public void SubtractChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>checked(_Int32-_Int32));
+    public void SubtractChecked()=>this.コンパイル実行(()=>checked(_Int32-_Int32));
     [Fact]
-    public void Multiply()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32*_Int32);
+    public void Multiply()=>this.コンパイル実行(()=>_Int32*_Int32);
     [Fact]
-    public void MultiplyChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>checked(_Int32*_Int32));
+    public void MultiplyChecked()=>this.コンパイル実行(()=>checked(_Int32*_Int32));
     [Fact]
-    public void Divide()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32/_Int32);
+    public void Divide()=>this.コンパイル実行(()=>_Int32/_Int32);
     [Fact]
-    public void Modulo()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32%_Int32);
+    public void Modulo()=>this.コンパイル実行(()=>_Int32%_Int32);
     [Fact]
-    public void And()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean&_Boolean);
+    public void And()=>this.コンパイル実行(()=>_Boolean&_Boolean);
     [Fact]
-    public void Or()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean|_Boolean);
+    public void Or()=>this.コンパイル実行(()=>_Boolean|_Boolean);
     [Fact]
-    public void AndChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean&_Boolean);
+    public void AndChecked()=>this.コンパイル実行(()=>_Boolean&_Boolean);
     [Fact]
-    public void ExclusiveOr()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean^_Boolean);
+    public void ExclusiveOr()=>this.コンパイル実行(()=>_Boolean^_Boolean);
     [Fact]
-    public void AndAlso()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean&&_Boolean);
+    public void AndAlso()=>this.コンパイル実行(()=>_Boolean&&_Boolean);
     [Fact]
-    public void OrElse()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Boolean||_Boolean);
+    public void OrElse()=>this.コンパイル実行(()=>_Boolean||_Boolean);
     [Fact]
-    public void Equal()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32==3);
+    public void Equal()=>this.コンパイル実行(()=>_Int32==3);
     [Fact]
-    public void NotEqual()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32!=3);
+    public void NotEqual()=>this.コンパイル実行(()=>_Int32!=3);
     [Fact]
-    public void GreaterThan()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32>3);
+    public void GreaterThan()=>this.コンパイル実行(()=>_Int32>3);
     [Fact]
-    public void GreaterThanOrEqual()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32>=3);
+    public void GreaterThanOrEqual()=>this.コンパイル実行(()=>_Int32>=3);
     [Fact]
-    public void LessThan()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32<3);
+    public void LessThan()=>this.コンパイル実行(()=>_Int32<3);
     [Fact]
-    public void LessThanOrEqual()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32<=3);
+    public void LessThanOrEqual()=>this.コンパイル実行(()=>_Int32<=3);
     [Fact]
-    public void LeftShift()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32<<3);
+    public void LeftShift()=>this.コンパイル実行(()=>_Int32<<3);
     [Fact]
-    public void RightShift()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Int32>> 3);
+    public void RightShift()=>this.コンパイル実行(()=>_Int32>> 3);
     [Fact]
-    public void ArrayIndex()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>Array[0]);
+    public void ArrayIndex()=>this.コンパイル実行(()=>Array[0]);
     [Fact]
-    public void ArrayLength()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>Array.Length);
+    public void ArrayLength()=>this.コンパイル実行(()=>Array.Length);
     [Fact]
-    public void Convert()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(double)_Int32+(double)_Int32);
+    public void Convert()=>this.コンパイル実行(()=>(double)_Int32+(double)_Int32);
     [Fact]
-    public void ConvertChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(double)_Int32+(double)_Int32);
+    public void ConvertChecked()=>this.コンパイル実行(()=>(double)_Int32+(double)_Int32);
     //[Fact] public void Increment         ()=>this._変数Cache.AssertExecute(()=>_Int32+1);
     //[Fact] public void Decrement         ()=>this._変数Cache.AssertExecute(()=>_Int32-1);
     //[Fact] public void IsFalse           ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2--);
     //[Fact] public void IsTrue            ()=>this._変数Cache.AssertExecute(()=>class_演算子オーバーロード2++);
     [Fact]
-    public void Negate()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>-_Int32+-_Int32);
+    public void Negate()=>this.コンパイル実行(()=>-_Int32+-_Int32);
     [Fact]
-    public void NegateChecked()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>checked(-_Int32)+checked(-_Int32));
+    public void NegateChecked()=>this.コンパイル実行(()=>checked(-_Int32)+checked(-_Int32));
     [Fact]
-    public void Not()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>!_Boolean&&!_Boolean);
+    public void Not()=>this.コンパイル実行(()=>!_Boolean&&!_Boolean);
     [Fact]
-    public void OnesComplement()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>~_Int32+~_Int32);
+    public void OnesComplement()=>this.コンパイル実行(()=>~_Int32+~_Int32);
 
     [Fact]
-    public void TypeAs()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(Object_String as string)+(Object_String as string));
+    public void TypeAs()=>this.コンパイル実行(()=>(Object_String as string)+(Object_String as string));
 
     [Fact]
-    public void UnaryPlus()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>+_Static_class_演算子オーバーロード1-+_Static_class_演算子オーバーロード1);
+    public void UnaryPlus()=>this.コンパイル実行(()=>+_Static_class_演算子オーバーロード1-+_Static_class_演算子オーバーロード1);
 
     [Fact]
-    public void Unbox()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(int)Object_Int32+(int)Object_Int32);
+    public void Unbox()=>this.コンパイル実行(()=>(int)Object_Int32+(int)Object_Int32);
 
     [Fact]
     public void Block(){
@@ -317,10 +317,10 @@ public class ExpressionEqualityComparer:共通{
     }
 
     [Fact]
-    public void Conditional()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(_Boolean?_Int32:10)+(_Boolean?_Int32:10));
+    public void Conditional()=>this.コンパイル実行(()=>(_Boolean?_Int32:10)+(_Boolean?_Int32:10));
 
     [Fact]
-    public void Constant()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_List[1]+_List[1]);
+    public void Constant()=>this.コンパイル実行(()=>_List[1]+_List[1]);
 
     [Fact]
     public void DebugInfo(){
@@ -359,18 +359,18 @@ public class ExpressionEqualityComparer:共通{
     }
     private void AssertEqual(Expression? a,Expression? b){
         Assert.Equal(a,b,this.汎用Comparer);
-        this.MemoryMessageJson_T_Assert(a,c=>{
+        this.AssertEqual(a,c=>{
             Assert.Equal(a,c,this.汎用Comparer);
             Assert.Equal(b,c,this.汎用Comparer);
         });
-        this.MemoryMessageJson_T_Assert(b,c=>{
+        this.AssertEqual(b,c=>{
             Assert.Equal(a,c,this.汎用Comparer);
             Assert.Equal(b,c,this.汎用Comparer);
         });
     }
     private void AssertNotEqual(Expression? a,Expression? b){
-        this.MemoryMessageJson_T_Assert(a,c=>Assert.NotEqual(c,b,this.汎用Comparer));
-        this.MemoryMessageJson_T_Assert(b,c=>Assert.NotEqual(c,a,this.汎用Comparer));
+        this.AssertEqual(a,c=>Assert.NotEqual(c,b,this.汎用Comparer));
+        this.AssertEqual(b,c=>Assert.NotEqual(c,a,this.汎用Comparer));
     }
 
     [Fact]
@@ -702,7 +702,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void Goto00(){
         var Label1=Expression.Label(typeof(int),"Label1");
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     Expression.Goto(Label1,Expression.Constant(1)),
@@ -716,7 +716,7 @@ public class ExpressionEqualityComparer:共通{
         //a.Target==b.Target&&this.Equals(a.Value,b.Value);
         var Label1=Expression.Label(typeof(int),"Label1");
         var Label2=Expression.Label(typeof(int),"Label2");
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -735,7 +735,7 @@ public class ExpressionEqualityComparer:共通{
     public void Goto1(){
         var Label1=Expression.Label(typeof(int),"Label1");
         var Label2=Expression.Label(typeof(int),"Label2");
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Block(
@@ -753,7 +753,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void Goto2(){
         var Label1=Expression.Label(typeof(int),"Label1");
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     Expression.Goto(Label1,Expression.Constant(1)),
@@ -902,7 +902,7 @@ public class ExpressionEqualityComparer:共通{
     //}
 
     [Fact]
-    public void Invoke()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>_Delegate(4)+_Delegate(4));
+    public void Invoke()=>this.コンパイル実行(()=>_Delegate(4)+_Delegate(4));
     [Fact]
     public void Lambda0(){
         var p=Expression.Parameter(typeof(int));
@@ -1005,7 +1005,7 @@ public class ExpressionEqualityComparer:共通{
         );
     }
     [Fact]
-    public void ListInit()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=new List<int>{1,2},b=new List<int>{1,2}});
+    public void ListInit()=>this.コンパイル実行(()=>new{a=new List<int>{1,2},b=new List<int>{1,2}});
 
     [Fact]
     public void Loop(){
@@ -1333,27 +1333,27 @@ public class ExpressionEqualityComparer:共通{
 
     [Fact]
     public void MemberAccess()=>
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             ()=>_Static_class_演算子オーバーロード1.Int32フィールド+_Static_class_演算子オーバーロード1.Int32フィールド);
 
     [Fact]
     public void MemberInit()=>
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=new class_演算子オーバーロード{Int32フィールド=3},b=new class_演算子オーバーロード{Int32フィールド=3}});
+        this.コンパイル実行(()=>new{a=new class_演算子オーバーロード{Int32フィールド=3},b=new class_演算子オーバーロード{Int32フィールド=3}});
 
     [Fact]
-    public void Call()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>Function()+Function());
+    public void Call()=>this.コンパイル実行(()=>Function()+Function());
 
     [Fact]
-    public void NewArrayBounds()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=new int[10],b=new int[10]});
+    public void NewArrayBounds()=>this.コンパイル実行(()=>new{a=new int[10],b=new int[10]});
 
     [Fact]
-    public void NewArrayInit()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=new[]{1,2,3},b=new[]{1,2,3}});
+    public void NewArrayInit()=>this.コンパイル実行(()=>new{a=new[]{1,2,3},b=new[]{1,2,3}});
 
     [Fact]
-    public void New()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>new{a=new class_演算子オーバーロード(),b=new class_演算子オーバーロード()});
+    public void New()=>this.コンパイル実行(()=>new{a=new class_演算子オーバーロード(),b=new class_演算子オーバーロード()});
 
     [Fact]
-    public void Calesce()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>(_NullableInt32??4)+(_NullableInt32??4));
+    public void Calesce()=>this.コンパイル実行(()=>(_NullableInt32??4)+(_NullableInt32??4));
     //共通部分式でParameterは最速なので先行評価しないため、カバレッジが出来方法が思いつかない。
     [Fact]
     public void Parameter(){
@@ -1368,7 +1368,10 @@ public class ExpressionEqualityComparer:共通{
             Expression.Lambda<Func<int,int,int>>(p,p,q),
             Expression.Lambda<Func<int,int,int>>(p,p,q)
         );
-        this.AssertEqual(p,p);
+        this.AssertEqual(
+            Expression.Assign(p,Expression.Constant(1)),
+            Expression.Assign(p,Expression.Constant(1))
+        );
     }
 
     //Switch
@@ -1376,7 +1379,7 @@ public class ExpressionEqualityComparer:共通{
     //実際どんな式か分からない。
     [Fact]
     public void TypeEqual(){
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>
+        this.コンパイル実行(()=>
             // ReSharper disable once OperatorIsCanBeUsed
             Object_Int32.GetType()==typeof(int)&&
             // ReSharper disable once OperatorIsCanBeUsed
@@ -1385,14 +1388,14 @@ public class ExpressionEqualityComparer:共通{
     }
 
     [Fact]
-    public void TypeIs()=>this.MemoryMessageJson_Expression_コンパイルリモート実行(()=>Object_Int32 is int||Object_Int32 is int);
+    public void TypeIs()=>this.コンパイル実行(()=>Object_Int32 is int||Object_Int32 is int);
 
     private static double L(Func<double> f)=>f();
 
     [Fact]
     public void Default(){
         var Method=typeof(ExpressionEqualityComparer).GetMethod(nameof(L),BindingFlags.Static|BindingFlags.NonPublic)!;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<double>>(
                 Expression.Add(
                     Expression.Call(
@@ -1614,7 +1617,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryFinally(){
         //if(!this.PrivateEquals(a.Finally,b.Finally)) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryFinally(
                     Expression.Constant(0),
@@ -1689,7 +1692,7 @@ public class ExpressionEqualityComparer:共通{
     public void TryCatch_Handler_Body(){
         //for(var c=0;c<a_Handlers_Count;c++) {
         //    if(!this.PrivateEquals(a_Handler.Body  ,b_Handler.Body  )) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1712,7 +1715,7 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void TryCatch_Filter0(){
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
                     Expression.Constant(0),
@@ -1731,7 +1734,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Filter1(){
         //    if(!this.PrivateEquals(a_Handler.Filter,b_Handler.Filter)) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1760,7 +1763,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Filter2(){
         var Variable=Expression.Parameter(typeof(Exception));
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1796,7 +1799,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch_Test(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1822,7 +1825,7 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void TryCatch(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1842,7 +1845,7 @@ public class ExpressionEqualityComparer:共通{
                 )
             )
         );
-        this.MemoryMessageJson_Expression_コンパイル実行(
+        this.コンパイル実行(
             Expression.Lambda<Action>(
                 Expression.Add(
                     Expression.TryCatch(
@@ -1865,7 +1868,7 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void TryCatchFinally(){
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatchFinally(
                     Expression.Constant(0),
@@ -1915,7 +1918,7 @@ public class ExpressionEqualityComparer:共通{
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant=Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsTrue(Constant),
@@ -1935,7 +1938,7 @@ public class ExpressionEqualityComparer:共通{
         //_Field ? _Field : (_Field | b);
         //Test_ExpressionEqualityComparer.class_演算子オーバーロード2.op_False(_Field) ? _Field : (_Field & b);
         var Constant=Expression.Constant(_Static_class_演算子オーバーロード1);
-        this.MemoryMessageJson_Expression_コンパイルリモート実行(
+        this.コンパイル実行(
             Expression.Lambda<Func<class_演算子オーバーロード>>(
                 Expression.Condition(
                     Expression.IsFalse(Constant),
@@ -2008,16 +2011,22 @@ public class ExpressionEqualityComparer:共通{
             var p=Expression.Parameter(typeof(int));
             var q=Expression.Parameter(typeof(int[]));
             this.AssertNotEqual(
-                Expression.Assign(
-                    p,
-                    Expression.Constant(0)
-                ),
-                Expression.Assign(
-                    Expression.ArrayAccess(
-                        q,
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(
+                        p,
                         Expression.Constant(0)
-                    ),
-                    Expression.Constant(0)
+                    )
+                ),
+                Expression.Block(
+                    new[]{q},
+                    Expression.Assign(
+                        Expression.ArrayAccess(
+                            q,
+                            Expression.Constant(0)
+                        ),
+                        Expression.Constant(0)
+                    )
                 )
             );
         }
@@ -2025,19 +2034,25 @@ public class ExpressionEqualityComparer:共通{
         {
             var p=Expression.Parameter(typeof(int[]));
             this.AssertEqual(
-                Expression.Assign(
-                    Expression.ArrayAccess(
-                        p,
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(
+                        Expression.ArrayAccess(
+                            p,
+                            Expression.Constant(0)
+                        ),
                         Expression.Constant(0)
-                    ),
-                    Expression.Constant(0)
+                    )
                 ),
-                Expression.Assign(
-                    Expression.ArrayAccess(
-                        p,
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(
+                        Expression.ArrayAccess(
+                            p,
+                            Expression.Constant(0)
+                        ),
                         Expression.Constant(0)
-                    ),
-                    Expression.Constant(0)
+                    )
                 )
             );
         }
@@ -2046,13 +2061,19 @@ public class ExpressionEqualityComparer:共通{
             var p=Expression.Parameter(typeof(int));
             var q=Expression.Parameter(typeof(int));
             this.AssertNotEqual(
-                Expression.Assign(
-                    p,
-                    Expression.Constant(0)
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(
+                        p,
+                        Expression.Constant(0)
+                    )
                 ),
-                Expression.Assign(
-                    q,
-                    Expression.Constant(1)
+                Expression.Block(
+                    new[]{q},
+                    Expression.Assign(
+                        q,
+                        Expression.Constant(1)
+                    )
                 )
             );
         }

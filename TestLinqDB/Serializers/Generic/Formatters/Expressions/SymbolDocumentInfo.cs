@@ -6,9 +6,9 @@ public abstract class SymbolDocumentInfo<TSerializer>:共通 where TSerializer:L
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_T_Assert(new { a = default(SymbolDocumentInfo) }, output => { });
+        this.AssertEqual(new { a = default(SymbolDocumentInfo) }, output => { });
         var SymbolDocument = Expression.SymbolDocument("ソースファイル名0.cs");
-        this.MemoryMessageJson_T_Assert(
+        this.AssertEqual(
             new
             {
                 SymbolDocument,

@@ -5,7 +5,7 @@ public abstract class Lambda<TSerializer>:共通 where TSerializer:LinqDB.Serial
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;
-        this.MemoryMessageJson_Expression_Assert全パターン<LambdaExpression>(Expression.Lambda<Action>(Expression.Default(typeof(void))));
+        this.ExpressionAssertEqual<LambdaExpression>(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     }
 }
 

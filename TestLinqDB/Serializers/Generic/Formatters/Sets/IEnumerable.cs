@@ -7,6 +7,6 @@ using LinqDB.Sets;
 //using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Sets;
-public abstract class IEnumerable<TSerializer>:CollectionTest<G.IEnumerable,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
+public abstract class IEnumerable<TSerializer>:CollectionTest<IEnumerable,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
     protected IEnumerable():base(new Set<Tables.Table>{ new(1),new(2) }){}
 }
