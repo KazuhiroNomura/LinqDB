@@ -8,9 +8,9 @@ using LinqDB.Sets;
 
 //using static Microsoft.FSharp.Core.ByRefKinds;
 
-namespace TestLinqDB.Serializers.Generic.Formatters.Sets;
-public abstract class FormatterResolver<TSerializer> : 共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected FormatterResolver():base(new AssertDefinition(new TSerializer())){}
+namespace TestLinqDB.Serializers.Generic.Formatters;
+public abstract class FormatterResolver:共通{
+    protected FormatterResolver(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void GetFormatter0(){
         //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IJsonFormatter<T>)Formatter;
         this.AssertEqual(new Set<Tables.Table>());

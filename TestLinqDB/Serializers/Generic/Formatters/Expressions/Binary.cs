@@ -3,8 +3,8 @@
 //using MessagePack;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
 using Expressions = System.Linq.Expressions;
-public abstract class Binary<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Binary():base(new AssertDefinition(new TSerializer())){}
+public abstract class Binary:共通{
+    protected Binary(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var Constant1=Expressions.Expression.Constant(1m);

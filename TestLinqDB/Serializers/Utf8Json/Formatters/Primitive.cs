@@ -1,5 +1,3 @@
 ﻿namespace TestLinqDB.Serializers.Utf8Json.Formatters;
-using LinqDB.Serializers.Utf8Json;
-using Generic.Formatters;
-
-public class Primitive:Primitive<Serializer>{}
+using E = Generic.Formatters;
+public class Primitive:E.Primitive{public Primitive           ():base(C.O){}}

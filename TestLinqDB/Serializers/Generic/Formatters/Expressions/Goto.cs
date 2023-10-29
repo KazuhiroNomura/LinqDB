@@ -1,10 +1,9 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class Goto<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Goto():base(new AssertDefinition(new TSerializer())){}
+public abstract class Goto:共通{
+    protected Goto(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
-        this.AssertEqual(new{a=default(GotoExpression)});
         var target=Expression.Label(typeof(int),"target");
         var input=Expression.MakeGoto(
             GotoExpressionKind.Return,

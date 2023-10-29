@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class SymbolDocumentInfo<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected SymbolDocumentInfo():base(new AssertDefinition(new TSerializer())){}
+public abstract class SymbolDocumentInfo:共通{
+    protected SymbolDocumentInfo(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize()
     {

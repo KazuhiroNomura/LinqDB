@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class MemberBinding<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected MemberBinding():base(new AssertDefinition(new TSerializer())){}
+public abstract class MemberBinding:共通{
+    protected MemberBinding(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize()
     {
@@ -42,7 +42,7 @@ public abstract class MemberBinding<TSerializer>:共通 where TSerializer:LinqDB
                 )
             )
         );
-        this.AssertEqual(new { a = default(MemberBinding) });
+        this.AssertEqual(new { a = default(System.Linq.Expressions.MemberBinding) });
         this.AssertEqual(
             new
             {

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class NewArray<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected NewArray():base(new AssertDefinition(new TSerializer())){}
+public abstract class NewArray:共通{
+    protected NewArray(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var NewArrayBounds=Expression.NewArrayBounds(

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class Loop<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Loop():base(new AssertDefinition(new TSerializer())){}
+public abstract class Loop:共通{
+    protected Loop(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void PrivateWrite_Read(){
         //this.MemoryMessageJson_Assert(new{a=default(LoopExpression)});
         var Label_decimal = Expression.Label(typeof(decimal), "Label_decimal");

@@ -1,5 +1,4 @@
 ﻿namespace TestLinqDB.Serializers.MemoryPack.Formatters.Others;
-using LinqDB.Serializers.MemoryPack;
-using Generic.Formatters.Others;
-public class Delegate:Delegate<Serializer>{}
-public class DisplayClass:DisplayClass<Serializer>{}
+using E=Generic.Formatters;
+public class Delegate    :E.Others.Delegate    {public Delegate    ():base(C.O){}}
+public class DisplayClass:E.Others.DisplayClass{public DisplayClass():base(C.O){}}

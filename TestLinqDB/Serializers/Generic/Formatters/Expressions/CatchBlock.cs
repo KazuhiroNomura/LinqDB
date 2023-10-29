@@ -1,7 +1,7 @@
 ﻿namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
 using System.Linq.Expressions;
-public abstract class CatchBlock<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected CatchBlock():base(new AssertDefinition(new TSerializer())){}
+public abstract class CatchBlock:共通{
+    protected CatchBlock(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var Variable=Expression.Parameter(typeof(Exception));

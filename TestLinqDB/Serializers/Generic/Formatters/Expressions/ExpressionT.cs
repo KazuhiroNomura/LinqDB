@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class ExpressionT<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected ExpressionT():base(new AssertDefinition(new TSerializer())){}
+public abstract class ExpressionT:共通{
+    protected ExpressionT(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize()
     {

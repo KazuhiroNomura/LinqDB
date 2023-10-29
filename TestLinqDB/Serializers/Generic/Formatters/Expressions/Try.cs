@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class Try<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Try():base(new AssertDefinition(new TSerializer())){}
+public abstract class Try:共通{
+    protected Try(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void PrivateWrite_Read(){
         //if(@finally is not null){
         //    if(handlers.Length>0) {

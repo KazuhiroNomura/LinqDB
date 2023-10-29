@@ -1,5 +1,3 @@
 ﻿namespace TestLinqDB.Serializers.MemoryPack.Formatters;
-using LinqDB.Serializers.MemoryPack;
-using Generic.Formatters.Sets;
-
-public class FormatterResolver:FormatterResolver<Serializer>{}
+using E = Generic.Formatters;
+public class FormatterResolver:E.FormatterResolver{public FormatterResolver():base(C.O){}}

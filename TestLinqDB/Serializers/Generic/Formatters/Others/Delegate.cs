@@ -1,8 +1,8 @@
 ﻿
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Others;
-public abstract class Delegate<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Delegate():base(new AssertDefinition(new TSerializer())){}
+public abstract class Delegate:共通{
+    protected Delegate(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void Action3(){
         this.AssertEqual((Action<int,int,int>)((int a,int b,int c) => { }));
     }

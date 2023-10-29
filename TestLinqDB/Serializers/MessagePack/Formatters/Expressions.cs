@@ -1,25 +1,24 @@
 ﻿namespace TestLinqDB.Serializers.MessagePack.Formatters;
-using LinqDB.Serializers.MessagePack;
-using Generic.Formatters.Expressions;
-public class Binary:Binary<Serializer>{}
-public class Block:Block<Serializer>{}
-public class CatchBlock:CatchBlock<Serializer>{}
-public class Conditional:Conditional<Serializer>{}
-public class Constant:Constant<Serializer>{}
-public class CSharpArgumentInfo:CSharpArgumentInfo<Serializer>{}
-public class DebugInfo:DebugInfo<Serializer>{}
-public class Default:Default<Serializer>{}
-public class Dynamic:Dynamic<Serializer>{}
-public class ElementInit:ElementInit<Serializer>{}
-public class Expression:Expression<Serializer>{}
-public class ExpressionT:ExpressionT<Serializer>{}
-public class Goto:Goto<Serializer>{}
-public class Index:Index<Serializer>{}
-public class Invocation:Invocation<Serializer>{}
-public class Label:Label<Serializer>{}
-public class LabelTarget:LabelTarget<Serializer>{}
-public class Lambda:Lambda<Serializer>{}
-public class ListInit:ListInit<Serializer>{}
-public class Loop:Loop<Serializer>{}
-public class MemberAccess:MemberAccess<Serializer>{}
-public class MemberBinding:MemberBinding<Serializer>{}
+using E=Generic.Formatters.Expressions;
+public class Binary            :E.Binary            {public Binary            ():base(C.O){}}
+public class Block             :E.Block             {public Block             ():base(C.O){}}
+public class CatchBlock        :E.CatchBlock        {public CatchBlock        ():base(C.O){}}
+public class Conditional       :E.Conditional       {public Conditional       ():base(C.O){}}
+public class Constant          :E.Constant          {public Constant          ():base(C.O){}}
+public class CSharpArgumentInfo:E.CSharpArgumentInfo{public CSharpArgumentInfo():base(C.O){}}
+public class DebugInfo         :E.DebugInfo         {public DebugInfo         ():base(C.O){}}
+public class Default           :E.Default           {public Default           ():base(C.O){}}
+public class Dynamic           :E.Dynamic           {public Dynamic           ():base(C.O){}}
+public class ElementInit       :E.ElementInit       {public ElementInit       ():base(C.O){}}
+public class Expression1       :E.Expression1       {public Expression1       ():base(C.O){}}
+public class ExpressionT       :E.ExpressionT       {public ExpressionT       ():base(C.O){}}
+public class Goto              :E.Goto              {public Goto              ():base(C.O){}}
+public class Index             :E.Index             {public Index             ():base(C.O){}}
+public class Invocation        :E.Invocation        {public Invocation        ():base(C.O){}}
+public class Label             :E.Label             {public Label             ():base(C.O){}}
+public class LabelTarget       :E.LabelTarget       {public LabelTarget       ():base(C.O){}}
+public class Lambda            :E.Lambda            {public Lambda            ():base(C.O){}}
+public class ListInit          :E.ListInit          {public ListInit          ():base(C.O){}}
+public class Loop              :E.Loop              {public Loop              ():base(C.O){}}
+public class MemberAccess      :E.MemberAccess      {public MemberAccess      ():base(C.O){}}
+public class MemberBinding     :E.MemberBinding     {public MemberBinding     ():base(C.O){}}

@@ -36,8 +36,8 @@ public partial class MemberAccess対象:IEquatable<MemberAccess対象>{
         return!Equals(left,right);
     }
 }
-public abstract class MemberAccess<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected MemberAccess():base(new AssertDefinition(new TSerializer())){}
+public abstract class MemberAccess:共通{
+    protected MemberAccess(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void Serialize(){
 
         var Point=Expression.Parameter(typeof(Point));

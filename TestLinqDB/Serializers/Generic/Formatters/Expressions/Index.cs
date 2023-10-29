@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class Index<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Index():base(new AssertDefinition(new TSerializer())){}
+public abstract class Index:共通{
+    protected Index(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var List=Expression.Parameter(typeof(List<int>));

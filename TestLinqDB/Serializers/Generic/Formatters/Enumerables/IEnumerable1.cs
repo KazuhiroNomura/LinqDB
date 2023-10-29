@@ -1,6 +1,4 @@
-﻿using Xunit.Sdk;
-
-namespace TestLinqDB.Serializers.Generic.Formatters.Enumerables;
-public abstract class IEnumerable1<TSerializer>:CollectionTest<System.Collections.Generic.IEnumerable<Tables.Table>,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected IEnumerable1():base(new List<Tables.Table>{new(1),new(2)}){}
+﻿namespace TestLinqDB.Serializers.Generic.Formatters.Enumerables;
+public abstract class IEnumerable1:CollectionTest<IEnumerable<Tables.Table>>{
+    protected IEnumerable1(テストオプション テストオプション) : base(テストオプション,new List<Tables.Table> { new(1),new(2) }) {}
 }

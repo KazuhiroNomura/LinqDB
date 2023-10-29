@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class ListInit<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected ListInit():base(new AssertDefinition(new TSerializer())){}
+public abstract class ListInit:共通{
+    protected ListInit(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;

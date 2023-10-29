@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class ElementInit<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected ElementInit():base(new AssertDefinition(new TSerializer())){}
+public abstract class ElementInit:共通{
+    protected ElementInit(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var Type = typeof(BindCollection);

@@ -2,14 +2,14 @@
 using System.Linq.Expressions;
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class Dynamic<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Dynamic():base(new AssertDefinition(new TSerializer())){}
+public abstract class Dynamic:共通{
+    protected Dynamic(テストオプション テストオプション):base(テストオプション){}
     private static DynamicExpression PrivateDynamicConvert<TInput,TResult>(TInput input,RuntimeBinder.CSharpBinderFlags Flag){
         var Constant=Expression.Constant(input);
         var binder=RuntimeBinder.Binder.Convert(
             Flag,
             typeof(TResult),
-            typeof(Dynamic<TSerializer>)
+            typeof(Dynamic)
         );
         return Expression.Dynamic(
             binder,

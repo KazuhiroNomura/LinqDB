@@ -35,8 +35,4 @@
     <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Serializers\Generic\Formatters\Primitives\" />
-  </ItemGroup>
-
 </Project>

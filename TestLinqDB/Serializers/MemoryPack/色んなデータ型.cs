@@ -1,4 +1,3 @@
-﻿using TestLinqDB.Serializers.Generic;
-namespace TestLinqDB.Serializers.MemoryPack;
-using G=LinqDB.Serializers.MessagePack;
-public class 色んなデータ型:色んなデータ型<G.Serializer>{}
+﻿namespace TestLinqDB.Serializers.MemoryPack;
+using E=Generic;
+public class 色んなデータ型:E.色んなデータ型{public 色んなデータ型():base(C.O){}}

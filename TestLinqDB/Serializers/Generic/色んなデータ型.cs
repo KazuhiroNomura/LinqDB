@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 namespace TestLinqDB.Serializers.Generic;
 
-public abstract class 色んなデータ型<TSerializer> : 共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected 色んなデータ型():base(new AssertDefinition(new TSerializer())){}
+public abstract class 色んなデータ型: 共通{
+    protected 色んなデータ型(テストオプション テストオプション):base(テストオプション){}
     //[Fact]public void Anonymous0(){
     //    MemoryPackFormatterProvider.Register(new Formatter2());
     //    object data=new Data2{
@@ -250,7 +250,7 @@ public abstract class 色んなデータ型<TSerializer> : 共通 where TSeriali
         this.AssertEqual(1);
     }
     private static int フィールド;
-    private static Type ThisType=>typeof(色んなデータ型<TSerializer>);
+    private static Type ThisType=>typeof(色んなデータ型);
     [Fact]
     public void Field(){
         var f=ThisType.GetField(nameof(フィールド),BindingFlags.Static|BindingFlags.NonPublic);

@@ -1,9 +1,7 @@
 ﻿namespace TestLinqDB.Serializers.Generic.Formatters;
-public abstract class CollectionTest<T,TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected readonly T? Default=default;
+public abstract class CollectionTest<T>:共通{
     protected readonly T Data;
-    //protected CollectionTest(){}
-    protected CollectionTest(T Data):base(new AssertDefinition(new TSerializer()))=>this.Data=Data;
+    protected CollectionTest(テストオプション テストオプション,T Data):base(テストオプション)=>this.Data=Data;
     [Fact]public void Test()=>this.AssertEqual(this.Data);
     [Fact]public void Array(){
         共通<string>();

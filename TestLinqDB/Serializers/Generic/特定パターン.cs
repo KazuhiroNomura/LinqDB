@@ -14,8 +14,8 @@ file class コンパイラが生成したIEnumerable1継承クラス:System.Coll
         return this.GetEnumerator();
     }
 }
-public abstract class 特定パターン<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected 特定パターン():base(new AssertDefinition(new TSerializer())){}
+public abstract class 特定パターン:共通{
+    protected 特定パターン(テストオプション テストオプション):base(テストオプション){}
     private class コンパイラが生成したIEnumerable1明示的実装継承クラス:System.Collections.Generic.IEnumerable<int> {
         IEnumerator<int> System.Collections.Generic.IEnumerable<int>.GetEnumerator() {
             for(var a=0;a<10;a++) yield return a;

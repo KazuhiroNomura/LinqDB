@@ -6,8 +6,8 @@
 //using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Sets;
-public abstract class Set2<TSerializer>:CollectionTest<Set<Keys.Key,Tables.Table>,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Set2():base(new()){
+public abstract class Set2:CollectionTest<Set<Keys.Key,Tables.Table>>{
+    protected Set2(テストオプション テストオプション):base(テストオプション,new()){
         var Data=this.Data;
         for(var a=0;a<10;a++)
             Data.Add(new(a));

@@ -1,6 +1,6 @@
 ﻿namespace TestLinqDB.Serializers.Generic.Formatters.Enumerables;
-public abstract class List1<TSerializer>:CollectionTest<LinqDB.Enumerables.List<int>,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected List1():base(new()){
+public abstract class List1:CollectionTest<LinqDB.Enumerables.List<int>>{
+    protected List1(テストオプション テストオプション):base(テストオプション,new()){
         //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<LinqDB.Enumerables.List<int>,int>();
         var Data=this.Data;
         for(var a=0;a<10;a++){

@@ -4,8 +4,8 @@
 //using MessagePack;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
 using System.Linq.Expressions;
-public abstract class Unary<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Unary():base(new AssertDefinition(new TSerializer())){}
+public abstract class Unary:共通{
+    protected Unary(テストオプション テストオプション):base(テストオプション){}
     private static 演算子 Unary演算子(演算子 a) => ~a;
     private static bool IsTrue演算子(演算子 a) => a.HasValue;
     static int UnaryDouble(double a)

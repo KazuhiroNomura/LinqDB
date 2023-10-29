@@ -1,13 +1,6 @@
-﻿using System.Diagnostics;
-//using Microsoft.SqlServer.Dac.Deployment;
-//using System.Diagnostics;
-//using System.Runtime.Serialization;
-
-//using static Microsoft.FSharp.Core.ByRefKinds;
-
-namespace TestLinqDB.Serializers.Generic.Formatters;
-public abstract class Primitive<TSerializer> : 共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Primitive():base(new AssertDefinition(new TSerializer())){}
+﻿namespace TestLinqDB.Serializers.Generic.Formatters;
+public abstract class Primitive:共通{
+    protected Primitive(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void @sbyte()=>this.AssertEqual((sbyte)1);
     [Fact]public void @byte()=>this.AssertEqual((byte)1);
     [Fact]public void @short()=>this.AssertEqual((short)1);

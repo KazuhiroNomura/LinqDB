@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
-public abstract class SwitchCase<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected SwitchCase():base(new AssertDefinition(new TSerializer())){}
+public abstract class SwitchCase:共通{
+    protected SwitchCase(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var input=Expression.SwitchCase(

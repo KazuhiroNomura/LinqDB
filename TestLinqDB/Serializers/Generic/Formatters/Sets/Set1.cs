@@ -1,13 +1,8 @@
 ﻿using LinqDB.Sets;
-//using Microsoft.SqlServer.Dac.Deployment;
-//using System.Diagnostics;
-//using System.Runtime.Serialization;
-
-//using static Microsoft.FSharp.Core.ByRefKinds;
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Sets;
-public abstract class Set1<TSerializer>:CollectionTest<Set<int>,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Set1():base(new()){
+public abstract class Set1:CollectionTest<Set<int>>{
+    protected Set1(テストオプション テストオプション):base(テストオプション,new()){
         var Data=this.Data;
         for(var a=0;a<10;a++)
             Data.Add(a);

@@ -2,8 +2,8 @@
 using LinqDB.Sets;
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Enumerables;
-public abstract class SetGroupingList2<TSerializer>:CollectionTest<SetGroupingList<int,int>,TSerializer> where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected SetGroupingList2():base(new SetGroupingList<int,int>()){
+public abstract class SetGroupingList2:CollectionTest<SetGroupingList<int,int>>{
+    protected SetGroupingList2(テストオプション テストオプション):base(テストオプション,new()){
         var Data=this.Data;
         for(var a=0;a<10;a++){
             var Grouping=new GroupingList<int,int>(a);

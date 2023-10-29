@@ -1,8 +1,8 @@
 ﻿
 
 namespace TestLinqDB.Serializers.Generic.Formatters.Others;
-public abstract class DisplayClass<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected DisplayClass():base(new AssertDefinition(new TSerializer())){}
+public abstract class DisplayClass:共通{
+    protected DisplayClass(テストオプション テストオプション):base(テストオプション){}
     [Fact]public void Test(){
         this.AssertEqual(ClassDisplay取得());
     }

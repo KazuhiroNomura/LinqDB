@@ -1,5 +1,4 @@
 ﻿namespace TestLinqDB.Serializers.Utf8Json.Formatters.Others;
-using LinqDB.Serializers.Utf8Json;
-using Generic.Formatters.Others;
-public class Delegate:Delegate<Serializer>{}
-public class DisplayClass:DisplayClass<Serializer>{}
+using E=Generic.Formatters;
+public class Delegate    :E.Others.Delegate    {public Delegate    ():base(C.O){}}
+public class DisplayClass:E.Others.DisplayClass{public DisplayClass():base(C.O){}}

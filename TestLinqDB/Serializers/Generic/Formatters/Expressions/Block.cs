@@ -5,8 +5,8 @@
 //using MessagePack;
 namespace TestLinqDB.Serializers.Generic.Formatters.Expressions;
 using System.Linq.Expressions;
-public abstract class Block<TSerializer>:共通 where TSerializer:LinqDB.Serializers.Serializer,new(){
-    protected Block():base(new AssertDefinition(new TSerializer())){}
+public abstract class Block:共通{
+    protected Block(テストオプション テストオプション):base(テストオプション){}
     [Fact]
     public void Serialize(){
         var input1=Expression.Block(Expression.Constant(1m));
