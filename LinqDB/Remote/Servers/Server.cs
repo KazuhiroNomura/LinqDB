@@ -18,7 +18,7 @@ namespace LinqDB.Remote.Servers;
 /// 複数のListerSocketでAcceptする。
 /// </summary>
 public class Server:IDisposable{
-    internal readonly object Proxy;
+    //internal readonly object Proxy;
     private readonly ParameterizedThreadStart Delegate実行;
     /// <summary>
     /// 非同期処理が終了したらWaitを通過する。
@@ -240,19 +240,17 @@ public class Server:IDisposable{
     /// </summary>
     /// <param name="ReceiveSendスレッド数"></param>
     /// <param name="ListenPorts"></param>
-    public Server(int ReceiveSendスレッド数,params int[] ListenPorts):this(null,staticプロキシ,ReceiveSendスレッド数,ListenPorts) {
+    public Server(int ReceiveSendスレッド数,params int[] ListenPorts):this(null,ReceiveSendスレッド数,ListenPorts) {
     }
     /// <summary>
     /// コンストラクタ
     /// </summary>
     /// <param name="ServerObject"></param>
-    /// <param name="プロキシ"></param>
     /// <param name="ReceiveSendスレッド数"></param>
     /// <param name="ListenPorts"></param>
-    private protected Server(object? ServerObject,object プロキシ,int ReceiveSendスレッド数,params int[] ListenPorts) {
+    public Server(object? ServerObject,int ReceiveSendスレッド数,params int[] ListenPorts) {
         Debug.WriteLine("4");
         this.ServerObject=ServerObject;
-        this.Proxy=プロキシ;
         this.RequestResponseSingleReceiveSends=new BlockingCollection<SingleReceiveSend>(RequestResponseCount);
         var SingleAcceptReceiveSends = this.SingleAcceptReceiveSends=new SingleAcceptReceiveSend[ListenPorts.Length];
         Debug.WriteLine("5");

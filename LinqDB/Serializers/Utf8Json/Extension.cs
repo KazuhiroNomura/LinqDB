@@ -66,6 +66,8 @@ internal static class Extension{
     }
     internal static void WriteCollection<T>(this ref Writer writer,ReadOnlyCollection<T>? value,O Resolver) =>
         writer.Write(StaticReadOnlyCollectionFormatter<T>.Formatter,value!,Resolver);
+    internal static ReadOnlyCollection<T>ReadCollection<T>(this ref Reader reader,O Resolver) =>
+        reader.Read(StaticReadOnlyCollectionFormatter<T>.Formatter,Resolver);
     private static class StaticArrayFormatter<T> {
         public static readonly ArrayFormatter<T> Formatter = new();
     }

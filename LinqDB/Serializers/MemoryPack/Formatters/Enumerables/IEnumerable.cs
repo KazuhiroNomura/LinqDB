@@ -1,6 +1,5 @@
 ﻿
 using MemoryPack;
-using MemoryPack.Formatters;
 using System.Linq;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
 

@@ -98,7 +98,7 @@ public partial class AssemblyGenerator {
     //private const MethodAttributes Public_Virtual=MethodAttributes.Public|MethodAttributes.Virtual;
     private const MethodAttributes Public_Virtual_HideBySig=MethodAttributes.Public|MethodAttributes.Virtual|MethodAttributes.HideBySig;
 
-    private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new(new List<ParameterExpression>());
+    private readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     private static (FieldBuilder FieldBuilder, MethodBuilder GetMethodBuilder) PrivateField実装Property実装GetMethod実装(TypeBuilder TypeBuilder,Type InstanceType,string Name,Type PropertyType) {
         var FieldBuilder = TypeBuilder.DefineField($"[{Name}]",InstanceType,FieldAttributes.Assembly|FieldAttributes.InitOnly);
         var Property = TypeBuilder.DefineProperty(Name,PropertyAttributes.None,CallingConventions.HasThis,PropertyType,Type.EmptyTypes);

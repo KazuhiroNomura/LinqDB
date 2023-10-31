@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using MessagePack;
 using MessagePack.Formatters;
 using Expressions = System.Linq.Expressions;
@@ -8,9 +7,9 @@ using O=MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 using T = Expressions.TypeBinaryExpression;
-public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
+public class TypeBinary:IMessagePackFormatter<T> {
     public static readonly TypeBinary Instance=new();
-    internal static void Write(ref Writer writer,Expressions.TypeBinaryExpression value,O Resolver){
+    internal static void Write(ref Writer writer,T value,O Resolver){
         writer.WriteArrayHeader(3);
         writer.WriteNodeType(value);
         
@@ -19,7 +18,7 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         writer.WriteType(value.TypeOperand);
         
     }
-    public void Serialize(ref Writer writer,Expressions.TypeBinaryExpression? value,O Resolver){
+    public void Serialize(ref Writer writer,T? value,O Resolver){
         if(writer.TryWriteNil(value))return;
         Write(ref writer,value,Resolver);
     }
@@ -29,15 +28,15 @@ public class TypeBinary:IMessagePackFormatter<Expressions.TypeBinaryExpression>{
         var type=reader.ReadType();
         return (expression,type);
     }
-    internal static Expressions.TypeBinaryExpression ReadTypeEqual(ref Reader reader,O Resolver){
+    internal static T ReadTypeEqual(ref Reader reader,O Resolver){
         var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeEqual(expression,type);
     }
-    internal static Expressions.TypeBinaryExpression ReadTypeIs(ref Reader reader,O Resolver){
+    internal static T ReadTypeIs(ref Reader reader,O Resolver){
         var (expression,type)=PrivateRead(ref reader,Resolver);
         return Expressions.Expression.TypeIs(expression,type);
     }
-    public Expressions.TypeBinaryExpression Deserialize(ref Reader reader,O Resolver){
+    public T Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         var count=reader.ReadArrayHeader();
         System.Diagnostics.Debug.Assert(count==3);

@@ -29,7 +29,7 @@ internal sealed class Information {
         TypeBuilder Disp_TypeBuilder,
         ILGenerator Disp_ctor_I,
         TypeBuilder Impl_TypeBuilder,
-        Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer,
+        ExpressionEqualityComparer ExpressionEqualityComparer,
         MethodBuilder SchemaのMethod
     ){
         this.Disp_TypeBuilder=Disp_TypeBuilder;

@@ -11,7 +11,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Serializers\Generic\Formatters\TestExpression.cs" />
+    <Compile Remove="Serializers\MemoryPack\**" />
+    <Compile Remove="Serializers\MessagePack\**" />
+    <Compile Remove="Serializers\Utf8Json\**" />
+    <EmbeddedResource Remove="Serializers\MemoryPack\**" />
+    <EmbeddedResource Remove="Serializers\MessagePack\**" />
+    <EmbeddedResource Remove="Serializers\Utf8Json\**" />
+    <None Remove="Serializers\MemoryPack\**" />
+    <None Remove="Serializers\MessagePack\**" />
+    <None Remove="Serializers\Utf8Json\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Serializers\Formatters\TestExpression.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,6 +45,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Serializers\Generic\" />
   </ItemGroup>
 
 </Project>

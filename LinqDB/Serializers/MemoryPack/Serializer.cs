@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 
 using MemoryPack;
@@ -13,6 +12,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public object GetService(System.Type serviceType)=>throw new System.NotImplementedException();
     private readonly O Options;
     static Serializer(){
+
 
         //MemoryPackFormatterProvider.Register(Formatters.Others.Action.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Others.Object.Instance);
@@ -38,6 +38,9 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         MemoryPackFormatterProvider.Register(Formatters.Loop.Instance);
         MemoryPackFormatterProvider.Register(Formatters.MemberAccess.Instance);
         MemoryPackFormatterProvider.Register(Formatters.MemberBinding.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberAssignment.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberListBinding.Instance);
+        MemoryPackFormatterProvider.Register(Formatters.MemberMemberBinding.Instance);
         MemoryPackFormatterProvider.Register(Formatters.MemberInit.Instance);
         MemoryPackFormatterProvider.Register(Formatters.MethodCall.Instance);
         MemoryPackFormatterProvider.Register(Formatters.New.Instance);

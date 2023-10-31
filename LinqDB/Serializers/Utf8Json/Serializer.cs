@@ -1,6 +1,7 @@
 ﻿using System.IO;
 
 
+
 using Utf8Json;
 
 namespace LinqDB.Serializers.Utf8Json;
@@ -37,6 +38,10 @@ public class Serializer:Serializers.Serializer,IJsonFormatter<Serializer>{
             Formatters.ListInit.Instance,
             Formatters.Loop.Instance,
             Formatters.MemberAccess.Instance,
+            Formatters.MemberBinding.Instance,
+            Formatters.MemberAssignment.Instance,
+            Formatters.MemberListBinding.Instance,
+            Formatters.MemberMemberBinding.Instance,
             Formatters.MemberBinding.Instance,
             Formatters.MemberInit.Instance,
             Formatters.MethodCall.Instance,

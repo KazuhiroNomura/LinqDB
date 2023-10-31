@@ -9,7 +9,6 @@ namespace LinqDB.Serializers.MemoryPack.Formatters.Others;
 
 using Reader = MemoryPackReader;
 using T = System.Object;
-using Reflection;
 public class Object : MemoryPackFormatter<T>{
     public static readonly Object Instance = new();
     private static void Write<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer, T value) where TBufferWriter :IBufferWriter<byte>{

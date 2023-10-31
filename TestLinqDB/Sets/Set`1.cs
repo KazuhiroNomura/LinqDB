@@ -16,8 +16,6 @@ public abstract class TestImmutableSet{
 //[Serializable,MessagePack.MessagePackObject]
 public abstract class TestImmutableSet<T>:TestImmutableSet,ICollection<T>{
     //[MemoryPack.MemoryPackInclude]
-    protected TestImmutableSet(){
-    }
     public IEnumerator<T> GetEnumerator(){
         throw new NotImplementedException();
     }

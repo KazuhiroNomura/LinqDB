@@ -13,6 +13,7 @@ using LinqDB.Remote.Clients;
 using System.Net;
 using System.Reflection;
 using LinqDB;
+using TestLinqDB.Serializers;
 namespace TestLinqDB;
 //リモートで呼び出す、ローカルだけでやる、最適化なしでやるなど
 //public class AssertDefinition{
@@ -171,16 +172,17 @@ namespace TestLinqDB;
 //}
 [Flags]
 public enum テストオプション{
-    MemoryPack                                        =0b10000000,
-    MessagePack                                       =0b01000000,
-    Utf8Json                                          =0b00100000,
+    MemoryPack                                        =0b100000000,
+    MessagePack                                       =0b010000000,
+    Utf8Json                                          =0b001000000,
+    ローカル実行                                      =0b000100000,
+    リモート実行                                      =0b000010000,
+    ファイルが無ければシリアライズ有ればデシリアライズ=0b000001000,
+    ラムダ式最適化                                    =0b000000100,
+    ループ式最適化                                    =0b000000010,
+    アセンブリ保存                                    =0b000000001,
+    全て                                              =0b111111111,
     MemoryPack_MessagePack_Utf8Json=MemoryPack|MessagePack|Utf8Json,
-    ローカル実行                                      =0b00010000,
-    リモート実行                                      =0b00001000,
-    ファイルが無ければシリアライズ有ればデシリアライズ=0b00000100,
-    ラムダ式最適化                                    =0b00000010,
-    ループ式最適化                                    =0b00000001,
-    全て                                              =0b11111111
 }
 public abstract class 共通{
     private static int ポート番号;
@@ -206,20 +208,15 @@ public abstract class 共通{
         //}
     }
     private readonly SerializeType SerializeType;
-    private readonly テストオプション テストオプション;
-    protected 共通(テストオプション テストオプション){
-        this.テストオプション=テストオプション;
-        if((テストオプション&テストオプション.MemoryPack)!=0){
+    private readonly テストオプション テストオプション=C.O;
+    protected 共通(){
+        if((this.テストオプション&テストオプション.MemoryPack)!=0){
             this.SerializeType=SerializeType.MemoryPack;
-        }else if((テストオプション&テストオプション.MessagePack)!=0){
+        }else if((this.テストオプション&テストオプション.MessagePack)!=0){
             this.SerializeType=SerializeType.MessagePack;
         }else{
             this.SerializeType=SerializeType.Utf8Json;
         }
-        this.汎用Comparer=new(this.ExpressionEqualityComparer);
-    }
-    protected 共通(){
-        this.テストオプション=テストオプション.全て;
         this.汎用Comparer=new(this.ExpressionEqualityComparer);
     }
     protected readonly 汎用Comparer 汎用Comparer;
@@ -227,7 +224,7 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
     protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
-    protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=false,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
+    protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
     protected void コンパイル実行(Expressions.Expression<Action> inputLambda){
         var Optimizer=this.Optimizer;
         var 標準=inputLambda.Compile();
@@ -370,7 +367,127 @@ public abstract class 共通{
     protected void AssertEqual<T>(T input)=>this.AssertAction(input,actual=>Assert.Equal(input,actual,this.汎用Comparer));
     protected void AssertEqual<T>(T input,Action<T> AssertAction)=>
         this.AssertAction(input,AssertAction);
-    protected void ExpressionAssertEqual<T>(T input)where T: Expressions.Expression{
+    protected void ExpressionAssertEqual(Expressions.Expression input){
+    }
+    protected void ExpressionAssertEqual<T>(Expressions.Expression<Func<T>> input)where T: Expressions.LambdaExpression=>this.ExpressionAssertEqual(input,actual=>Assert.Equal(input,actual,this.汎用Comparer));
+    protected void ExpressionAssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T ServerObject)where T: Expressions.LambdaExpression=>this.ExpressionAssertEqual(input,ServerObject,actual=>Assert.Equal(input,actual,this.汎用Comparer));
+    protected void ExpressionAssertEqual<T>(Expressions.Expression<Func<T>> input,Action<T> Action)where T: Expressions.LambdaExpression{
+        if((テストオプション.MemoryPack&this.テストオプション)!=0)
+            Serialize(this.MemoryPack,nameof(this.MemoryPack));
+        if((テストオプション.MessagePack&this.テストオプション)!=0)
+            Serialize(this.MessagePack,nameof(this.MessagePack));
+        if((テストオプション.Utf8Json&this.テストオプション)!=0)
+            Serialize(this.Utf8Json,nameof(this.Utf8Json));
+        if((テストオプション.リモート実行&this.テストオプション)!=0){
+            const int receiveTimeout = 1000;
+            var port = Interlocked.Increment(ref ポート番号);
+            var 標準 = input.Compile();
+            var expected = 標準();
+            using var Server = new Server(1,port);
+            Server.ReadTimeout=receiveTimeout;
+            Server.Open();
+            using var R = new Client(Dns.GetHostName(),port);
+            if((テストオプション.MemoryPack&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.MemoryPack);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            if((テストオプション.MessagePack&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.MessagePack);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            if((テストオプション.Utf8Json&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.Utf8Json);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            Server.Close();
+        }
+        void Serialize(LinqDB.Serializers.Serializer Serializer,string プリフィックス){
+            var ファイル名=this.ファイル名(プリフィックス);
+            if((テストオプション.ファイルが無ければシリアライズ有ればデシリアライズ&this.テストオプション)!=0){
+                if(File.Exists(ファイル名)){
+                    try{
+                        using var f=new FileStream(ファイル名,FileMode.Open);
+                        var output=Serializer.Deserialize<T>(f);
+                        Action(output!);
+                    } finally{
+                        File.Delete(ファイル名);
+                    }
+                } else{
+                    using var f=new FileStream(ファイル名,FileMode.CreateNew);
+                    Serializer.Serialize(f,input);
+                }
+            } else{
+                var bytes=Serializer.Serialize(input);
+                var output=Serializer.Deserialize<T>(bytes);
+                Action(output!);
+            }
+        }
+        LinqDB.Serializers.Serializer Serializer;
+        if((テストオプション.MemoryPack_MessagePack_Utf8Json&this.テストオプション)!=0){
+            if((テストオプション.MemoryPack&this.テストオプション)!=0){
+                Serializer=this.MemoryPack;
+            } else if((テストオプション.MessagePack&this.テストオプション)!=0){
+                Serializer=this.MessagePack;
+            } else{
+                Assert.True((テストオプション.Utf8Json&this.テストオプション)!=0);
+                Serializer=this.Utf8Json;
+            }
+            var bytes = Serializer.Serialize(input);
+            var output = Serializer.Deserialize<T>(bytes);
+            this.AssertAction(input,actual=>Assert.Equal(input,actual,this.汎用Comparer));
+        }
+    }
+    protected void ExpressionAssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T ServerObject,Action<T> Action)where T: Expressions.LambdaExpression{
+        if((テストオプション.MemoryPack&this.テストオプション)!=0)
+            Serialize(this.MemoryPack,nameof(this.MemoryPack));
+        if((テストオプション.MessagePack&this.テストオプション)!=0)
+            Serialize(this.MessagePack,nameof(this.MessagePack));
+        if((テストオプション.Utf8Json&this.テストオプション)!=0)
+            Serialize(this.Utf8Json,nameof(this.Utf8Json));
+        if((テストオプション.リモート実行&this.テストオプション)!=0){
+            const int receiveTimeout = 1000;
+            var port = Interlocked.Increment(ref ポート番号);
+            var 標準 = input.Compile();
+            var expected = 標準(ServerObject);
+            using var Server = new Server(ServerObject,1,port);
+            Server.ReadTimeout=receiveTimeout;
+            Server.Open();
+            using var R = new Client(Dns.GetHostName(),port);
+            if((テストオプション.MemoryPack&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.MemoryPack);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            if((テストオプション.MessagePack&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.MessagePack);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            if((テストオプション.Utf8Json&this.テストオプション)!=0){
+                var actual=R.Expression(input,SerializeType.Utf8Json);
+                Assert.Equal(expected,actual,this.汎用Comparer);
+            }
+            Server.Close();
+        }
+        void Serialize(LinqDB.Serializers.Serializer Serializer,string プリフィックス){
+            var ファイル名=this.ファイル名(プリフィックス);
+            if((テストオプション.ファイルが無ければシリアライズ有ればデシリアライズ&this.テストオプション)!=0){
+                if(File.Exists(ファイル名)){
+                    try{
+                        using var f=new FileStream(ファイル名,FileMode.Open);
+                        var output=Serializer.Deserialize<T>(f);
+                        Action(output!);
+                    } finally{
+                        File.Delete(ファイル名);
+                    }
+                } else{
+                    using var f=new FileStream(ファイル名,FileMode.CreateNew);
+                    Serializer.Serialize(f,input);
+                }
+            } else{
+                var bytes=Serializer.Serialize(input);
+                var output=Serializer.Deserialize<T>(bytes);
+                Action(output!);
+            }
+        }
         LinqDB.Serializers.Serializer Serializer;
         if((テストオプション.MemoryPack_MessagePack_Utf8Json&this.テストオプション)!=0){
             if((テストオプション.MemoryPack&this.テストオプション)!=0){

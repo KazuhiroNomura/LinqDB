@@ -244,8 +244,13 @@ public class 変換_跨ぎParameterの先行評価:共通{
             )
         );
     }
+    [Fact]
+    public void エラー(){
+        this.コンパイル実行(()=>"".Let(a=>"".Inline(b=>1m)));
+    }
     [Fact]public void 変換_先行評価式_Call(){
         var s = new Set<int>();
+        this.コンパイル実行(()=>"".Let(a=>"".Inline(b=>1m)));
         //if(!(this.ループ跨ぎを使うか&&ループ展開可能メソッドか(MethodCall0)))
         this.コンパイル実行(() => s.Select(a => a+a));
         //switch(MethodCall_GenericMethodDefinition.Name) {

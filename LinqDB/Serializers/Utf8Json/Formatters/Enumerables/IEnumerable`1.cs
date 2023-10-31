@@ -1,7 +1,5 @@
 ﻿
 using Utf8Json;
-using Utf8Json.Formatters;
-using System.Linq;
 namespace LinqDB.Serializers.Utf8Json.Formatters.Enumerables;
 using O = IJsonFormatterResolver;
 using Writer = JsonWriter;

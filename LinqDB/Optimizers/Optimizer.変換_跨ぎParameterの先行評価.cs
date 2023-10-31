@@ -309,27 +309,27 @@ partial class Optimizer{
             protected override Expression Block(BlockExpression Block0){
                 var Block0_Expressions = Block0.Expressions;
                 var Block0_Variables=Block0.Variables;
-                var スコープParameters=this.ExpressionEqualityComparer.スコープParameters;
-                var スコープParameters_Count=スコープParameters.Count;
-                スコープParameters.AddRange(Block0_Variables);
+                //var スコープParameters=this.ExpressionEqualityComparer.スコープParameters;
+                //var スコープParameters_Count=スコープParameters.Count;
+                //スコープParameters.AddRange(Block0_Variables);
                 Debug.Assert(!(Block0_Variables.Count==0&&Block0_Expressions.Count==1),"最適化されてありえないはず。");
                 var Block0_Expressions_Count = Block0_Expressions.Count;
                 var Block1_Expressions = new Expression[Block0_Expressions_Count];
                 Debug.Assert(Block0_Expressions_Count>1);
                 for(var a = 0;a<Block0_Expressions_Count;a++)
                     Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
-                スコープParameters.RemoveRange(スコープParameters_Count,Block0_Variables.Count);
+                //スコープParameters.RemoveRange(スコープParameters_Count,Block0_Variables.Count);
                 return Expression.Block(Block0_Variables,Block1_Expressions);
             }
             protected override Expression Lambda(LambdaExpression Lambda0){
                 var 現在探索場所 = this.現在探索場所;
                 this.現在探索場所=現在探索場所|場所.ラムダ跨ぎ;
                 var Lambda0_Parameters=Lambda0.Parameters;
-                var スコープParameters=this.ExpressionEqualityComparer.スコープParameters;
-                var スコープParameters_Count=スコープParameters.Count;
-                スコープParameters.AddRange(Lambda0_Parameters);
+                //var スコープParameters=this.ExpressionEqualityComparer.スコープParameters;
+                //var スコープParameters_Count=スコープParameters.Count;
+                //スコープParameters.AddRange(Lambda0_Parameters);
                 var Lambda1_Body=this.Traverse(Lambda0.Body);
-                スコープParameters.RemoveRange(スコープParameters_Count,Lambda0_Parameters.Count);
+                //スコープParameters.RemoveRange(スコープParameters_Count,Lambda0_Parameters.Count);
                 this.現在探索場所=現在探索場所;
                 return Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters);
             }

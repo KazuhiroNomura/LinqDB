@@ -2,8 +2,6 @@
 using MemoryPack;
 
 using System.Linq;
-using System.Xml.Linq;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
 
 

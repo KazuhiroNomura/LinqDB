@@ -1,7 +1,5 @@
 ﻿using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 using MemoryPack;
-using System.Buffers;
-
 namespace LinqDB.Serializers.MemoryPack.Formatters;
 
 

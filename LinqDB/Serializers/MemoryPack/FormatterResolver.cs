@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Reflection;
 using LinqDB.Helpers;
 using MemoryPack;
-using MemoryPack.Formatters;
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
-using System.Runtime.Serialization;
-using LinqDB.Enumerables;
-using System.Buffers;
-
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
     //private static void Serialize<TBufferWriter, T>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value) where TBufferWriter :IBufferWriter<byte>{
@@ -135,7 +129,7 @@ internal static class FormatterResolver {
         var FormatterGenericType=FormatterGenericTypeDefinition.MakeGenericType(GenericArguments);
         var Register = Serializer.Register.MakeGenericMethod(GenericArguments);
         var Instance=FormatterGenericType.GetValue("Instance");
-        Register.Invoke(null,new object?[]{Instance});
+        Register.Invoke(null,new[]{Instance});
         return Instance;
     }
     private static T RegisterFormatter<T>(Type type,object Formatter0){

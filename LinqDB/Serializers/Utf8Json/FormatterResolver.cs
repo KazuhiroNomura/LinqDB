@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Reflection;
 using LinqDB.Helpers;
 using Utf8Json;
-using Utf8Json.Formatters;
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json;

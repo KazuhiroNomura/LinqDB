@@ -29,7 +29,8 @@ public class MemberInit:IJsonFormatter<T> {
     internal static T Read(ref Reader reader,O Resolver){
         var @new=New.ReadNew(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
-        var bindings=reader.ReadArray<Expressions.MemberBinding>(Resolver);
+        var bindings=reader.ReadCollection<Expressions.MemberBinding>(Resolver);
+        //var bindings=reader.ReadArray<Expressions.MemberBinding>(Resolver);
         return Expressions.Expression.MemberInit(@new,bindings);
     }
     public T Deserialize(ref Reader reader,O Resolver) {

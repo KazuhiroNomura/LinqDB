@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using MessagePack.Formatters;
 namespace LinqDB.Serializers;
 using Expressions = System.Linq.Expressions;
 public abstract class Serializer{

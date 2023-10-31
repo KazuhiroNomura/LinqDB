@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection.Emit;
-using LinqDB.Helpers;
+﻿using System.IO;
 using MessagePack;
 using MessagePack.Formatters;
 namespace LinqDB.Serializers.MessagePack;
@@ -38,6 +35,10 @@ public class Serializer:Serializers.Serializer,IMessagePackFormatter<Serializer>
             Formatters.ListInit.Instance,
             Formatters.Loop.Instance,
             Formatters.MemberAccess.Instance,
+            Formatters.MemberBinding.Instance,
+            Formatters.MemberAssignment.Instance,
+            Formatters.MemberListBinding.Instance,
+            Formatters.MemberMemberBinding.Instance,
             Formatters.MemberBinding.Instance,
             Formatters.MemberInit.Instance,
             Formatters.MethodCall.Instance,

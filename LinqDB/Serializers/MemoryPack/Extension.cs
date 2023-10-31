@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Buffers;
-using System.Diagnostics;
 using System.Reflection;
 
 
 using MemoryPack;
 using System.Linq.Expressions;
-using System.Reflection.PortableExecutable;
-using System.Runtime.Serialization;
-
 namespace LinqDB.Serializers.MemoryPack;
 
 using Reader = MemoryPackReader;

@@ -127,7 +127,7 @@ public partial class シリアライズ対象:IEquatable<シリアライズ対�
     public override string ToString() => this.a.ToString();
 }
 public abstract class ATest_Set2:共通 {
-    public ATest_Set2(テストオプション テストオプション):base(テストオプション){}
+    public ATest_Set2(テストオプション テストオプション){}
     private const int 要素数 = 100;
 #pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 //#pragma warning disable IDE0044 // 読み取り専用修飾子を追加します

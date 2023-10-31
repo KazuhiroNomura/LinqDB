@@ -96,7 +96,6 @@ partial class Optimizer {
         private int 番号;
         //internal Information? Information;
         public Expression 実行(Expression e) {
-            Debug.Assert(this.DictionaryConstant.Comparer is ExpressionEqualityComparer ExpressionEqualityComparer&&ExpressionEqualityComparer.スコープParameters.Count==0);
             this.番号=0;
             this.DictionaryConstant.Clear();
             return this.Traverse(e);

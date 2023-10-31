@@ -20,11 +20,11 @@ namespace LinqDB.Optimizers;
 /// </summary>
 public sealed class 汎用Comparer : EqualityComparer<object>{
     private static bool @false=>false;
-    private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer;
+    private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
     public 汎用Comparer(){
         this.ExpressionEqualityComparer=new();
     }
-    public 汎用Comparer(Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer){
+    public 汎用Comparer(ExpressionEqualityComparer ExpressionEqualityComparer){
         this.ExpressionEqualityComparer=ExpressionEqualityComparer;
     }
     private readonly Type[] Types1 = new Type[1];
@@ -181,26 +181,6 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
         if(x==y) return true;
         if(x is null||y is null) return @false;
         {
-            if(x is CSharpArgumentInfo x0&&y is CSharpArgumentInfo y0)
-                return this.ExpressionEqualityComparer.Equals(x0,y0);
-        }
-        {
-            if(x is SwitchCase x0&&y is SwitchCase y0)
-                return this.ExpressionEqualityComparer.Equals(x0,y0);
-        }
-        {
-            if(x is LabelTarget x0&&y is LabelTarget y0)
-                return this.ExpressionEqualityComparer.Equals(x0,y0);
-        }
-        {
-            if(x is CatchBlock x0&&y is CatchBlock y0)
-                return this.ExpressionEqualityComparer.Equals(x0,y0);
-        }
-        {
-            if(x is Expression x0&&y is Expression y0)
-                return this.ExpressionEqualityComparer.Equals(x0,y0);
-        }
-        {
             if(x is ImmutableSet x0&&y is ImmutableSet y0) {
                 var xl = this.ToList(x0);
                 var yl = this.ToList(y0);
@@ -251,25 +231,18 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
                 return @false;
             }
         }else{
-            switch(x,y){
-                case(Delegate x0,Delegate y0):{
-                    if(x0.Method!=y0.Method) return @false;
-                    if(!this.Equals(x0.Target,y0.Target))return @false;
-                    return true;
-                }
-                case(LabelTarget x0,LabelTarget y0):
-                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
-                case(CSharpArgumentInfo x0,CSharpArgumentInfo y0):
-                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
-                case(SwitchCase x0,SwitchCase y0):
-                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
-                case(CatchBlock x0,CatchBlock y0):
-                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
-                    //return((IEqualityComparer<CatchBlock>)this).Equals(x0,y0);
-                case(Expression x0,Expression y0):
-                    return new Optimizer.ExpressionEqualityComparer().Equals(x0,y0);
-            }
-            return x.Equals(y);
+            return(x,y) switch{
+                (Delegate           x0,Delegate           y0)=>x0.Method==y0.Method&&this.Equals(x0.Target,y0.Target),
+                (Expression         x0,Expression         y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (LabelTarget        x0,LabelTarget        y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (CatchBlock         x0,CatchBlock         y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (CSharpArgumentInfo x0,CSharpArgumentInfo y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (SwitchCase         x0,SwitchCase         y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (ElementInit        x0,ElementInit        y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (MemberBinding      x0,MemberBinding      y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                (SymbolDocumentInfo x0,SymbolDocumentInfo y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
+                _                                            =>x.Equals(y)
+            };
         }
     }
     /// <summary>

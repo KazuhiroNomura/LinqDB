@@ -350,8 +350,6 @@ public class Server実行ExpressionEqualityComparer:共通{
 
     [Fact]
     public void Dynamic(){
-        var s=Expression.Constant(default(TestDynamic<int>));
-        var s0=Expression.Constant(null,typeof(TestDynamic<int>?));
         var CSharpArgumentInfo1=Binder.CSharpArgumentInfo.Create(Binder.CSharpArgumentInfoFlags.None,null);
         var CSharpArgumentInfoArray1=new[]{CSharpArgumentInfo1};
         var CSharpArgumentInfoArray2=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1};

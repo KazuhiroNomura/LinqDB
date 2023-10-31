@@ -30,7 +30,6 @@ public partial class class_演算子オーバーロード2{
     public readonly StructCollection StructCollectionフィールド=new();
 
     //[MemoryPackConstructor]
-    public class_演算子オーバーロード2(){}
 }
 [Serializable,MessagePackObject(true),MemoryPackable]
 public partial struct struct_演算子オーバーロード2{
@@ -1358,7 +1357,11 @@ public class ExpressionEqualityComparer:共通{
     [Fact]
     public void Parameter(){
         //if(a_Index!=b_Index) return false;
-        var p=Expression.Parameter(typeof(int));
+        var p=Expression.Parameter(typeof(int),"p");
+        this.AssertEqual(
+            Expression.Assign(p,Expression.Constant(1)),
+            Expression.Assign(p,Expression.Constant(1))
+        );
         var q=Expression.Parameter(typeof(int));
         this.AssertNotEqual(
             Expression.Lambda<Func<int,int,int>>(p,p,q),
