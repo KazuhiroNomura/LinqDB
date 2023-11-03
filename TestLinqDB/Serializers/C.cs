@@ -1,6 +1,6 @@
 ﻿namespace TestLinqDB.Serializers;
 //internal static class C { public const テストオプション O =テストオプション.MessagePack|テストオプション.アセンブリ保存; }
 internal static class C { public const テストオプション O = テストオプション.全て^テストオプション.ファイルが無ければシリアライズ有ればデシリアライズ^テストオプション.アセンブリ保存; }
-//internal static class C { public const テストオプション O = テストオプション.MemoryPack; }
+//internal static class C { public const テストオプション O = テストオプション.MemoryPack|テストオプション.MessagePack|テストオプション.Utf8Json; }
 //internal static class C { public const テストオプション O = テストオプション.MessagePack; }
 //internal static class C { public const テストオプション O = テストオプション.Utf8Json; }

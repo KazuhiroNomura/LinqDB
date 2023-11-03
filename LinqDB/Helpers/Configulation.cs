@@ -12,10 +12,10 @@ public static class Configulation{
     /// Remote.ConnectSocketのReceiveバイト数
     /// </summary>
     public const int ClientSendBufferSize = 102;
-    /// <summary>
-    /// Remote.MemoryStreamのバイト数。足りないと「メモリ ストリームは展開不可能です。」
-    /// </summary>
-    public const int ClientMemoryStreamBufferSize = 1<<16;
+    ///// <summary>
+    ///// Remote.MemoryStreamのバイト数。足りないと「メモリ ストリームは展開不可能です。」
+    ///// </summary>
+    //public const int ClientMemoryStreamBufferSize = 1<<16;
     /// <summary>
     /// Server.AcceptSocketのReceiveバイト数
     /// </summary>
@@ -27,7 +27,7 @@ public static class Configulation{
     /// <summary>
     /// サーバーのMemoryStreamのバイト数。足りないと「リモート先で例外が発生した。」
     /// </summary>
-    public const int ServerMemoryStreamBufferSize = 1<<16;
+    public const int MemoryStreamBufferSize = 1<<20;
     /// <summary>
     /// WCFBackendのSocketポート番号
     /// </summary>

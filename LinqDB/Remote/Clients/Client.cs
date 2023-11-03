@@ -35,7 +35,7 @@ public class Client:IDisposable {
     private readonly Serializers.MessagePack.Serializer MessagePack=new();
     private readonly Serializers.MemoryPack.Serializer MemoryPack=new();
     [NonSerialized]
-    private readonly byte[]Buffer=new byte[ClientMemoryStreamBufferSize];
+    private readonly byte[]Buffer=new byte[MemoryStreamBufferSize];
     /// <summary>
     /// バッファストリーム。
     /// </summary>
@@ -651,11 +651,11 @@ public class Client:IDisposable {
     private void サーバーに送信(Request Request,SerializeType SerializeType,object Object) {
         this.BufferにUserとPasswordHashを設定(Request);
         this.MemoryStream.WriteByte((byte)SerializeType);
+        Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
         switch(SerializeType) {
             case SerializeType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
             case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
-            case SerializeType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
-            default:throw new NotSupportedException(SerializeType.ToString());
+            default                       :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
         }
         //switch(SerializeType) {
         //    case SerializeType.Utf8Json:

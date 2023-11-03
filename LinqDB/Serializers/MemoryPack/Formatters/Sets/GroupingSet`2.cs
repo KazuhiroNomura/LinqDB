@@ -12,7 +12,7 @@ public class GroupingSet<TKey,TElement>:MemoryPackFormatter<G.GroupingSet<TKey,T
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
         writer.Write(value.Key);
-        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??writer.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??writer.GetFormatter<TElement>();
         foreach(var item in value)
             writer.Write(Formatter,item);
     }
@@ -21,7 +21,7 @@ public class GroupingSet<TKey,TElement>:MemoryPackFormatter<G.GroupingSet<TKey,T
         var Count=reader.ReadVarIntInt64();
         var Key=reader.ReadValue<TKey>();
         var value0=new G.GroupingSet<TKey,TElement>(Key);
-        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??reader.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??reader.GetFormatter<TElement>();
         while(Count-->0)
             value0.Add(reader.Read(Formatter));
         value=value0;

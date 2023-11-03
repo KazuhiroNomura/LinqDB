@@ -146,25 +146,25 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
                         b++;
                     }
                 } else {
-                    for(var b=a;b<List_x_Count;b++){
-                        var y = List_y[b];
-                        if(this.Equals(x,y)) {
-                            List_y[b]=List_y[a];
-                            List_y[a]=y;
-                            break;
-                        }
-                    }
-                    //var b = a;
-                    //while(true) {
-                    //    if(b==List_x_Count) return @false;
+                    //for(var b=a;b<List_x_Count;b++){
                     //    var y = List_y[b];
                     //    if(this.Equals(x,y)) {
                     //        List_y[b]=List_y[a];
                     //        List_y[a]=y;
                     //        break;
                     //    }
-                    //    b++;
                     //}
+                    var b = a;
+                    while(true) {
+                        if(b==List_x_Count) return @false;
+                        var y = List_y[b];
+                        if(this.Equals(x,y)) {
+                            List_y[b]=List_y[a];
+                            List_y[a]=y;
+                            break;
+                        }
+                        b++;
+                    }
                 }
             } else {
                 var y = List_y[a];
@@ -206,7 +206,7 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
                 for(var Index = 0;Index<x_Properties_Length;Index++) {
                     var x0 = x_Properties[Index].GetMethod!.Invoke(x,Array.Empty<object>())!;
                     var y0 = y_Properties[Index].GetMethod!.Invoke(y,Array.Empty<object>())!;
-                    if(!this.Equals(x0,y0)) return @false;
+                    if(!共通ReturnFalse(x0,y0))return false;
                 }
                 return true;
             } else{
@@ -222,9 +222,10 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
                 var y_Fields_Length = y_Fields.Length;
                 if(x_Fields_Length!=y_Fields_Length) return @false;
                 for(var Index = 0;Index<x_Fields_Length;Index++) {
-                    var x0 = x_Fields[Index].GetValue(x)!;
-                    var y0 = y_Fields[Index].GetValue(y)!;
-                    if(!this.Equals(x0,y0)) return @false;
+                    var x0 = x_Fields[Index].GetValue(x);
+                    var y0 = y_Fields[Index].GetValue(y);
+                    if(!共通ReturnFalse(x0,y0))return false;
+                    //if(!this.Equals(x0,y0)) return @false;
                 }
                 return true;
             } else{
@@ -243,6 +244,21 @@ public sealed class 汎用Comparer : EqualityComparer<object>{
                 (SymbolDocumentInfo x0,SymbolDocumentInfo y0)=>this.ExpressionEqualityComparer.Equals(x0,y0),
                 _                                            =>x.Equals(y)
             };
+        }
+        bool 共通ReturnFalse(object? x0,object? y0){
+            if(x0 is null){
+                if(y0 is not null&&y0.GetType().GetCustomAttribute<SerializableAttribute>() is not null)
+                    return @false;
+            } else{
+                if(y0 is not null){
+                    if(!this.Equals(x0,y0)){
+                        return @false;
+                    }
+                } else if(x0.GetType().GetCustomAttribute<SerializableAttribute>() is not null){
+                    return @false;
+                }
+            }
+            return true;
         }
     }
     /// <summary>

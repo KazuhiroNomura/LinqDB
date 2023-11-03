@@ -11,7 +11,7 @@ public class Set<T>:MemoryPackFormatter<G.Set<T>>{
         writer.WriteVarInt(value!.LongCount);
         //if(FormatterResolver.GetRegisteredFormatter<T>() is IMemoryPackFormatter Formatter) {
         //var Formatter=writer.GetFormatter<T>();
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??writer.GetFormatter<T>();
         //writer.GetFormatter<T>();
         foreach(var item in value)
             writer.Write(Formatter,item);
@@ -27,7 +27,7 @@ public class Set<T>:MemoryPackFormatter<G.Set<T>>{
     public override void Deserialize(ref Reader reader,scoped ref G.Set<T>? value){
         if(reader.TryReadNil())return;
         var Count=reader.ReadVarIntInt64();
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??reader.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??reader.GetFormatter<T>();
         var value0=new G.Set<T>();
         while(Count-->0)
             value0.Add(reader.Read(Formatter));

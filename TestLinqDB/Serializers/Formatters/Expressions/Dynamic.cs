@@ -41,12 +41,12 @@ public class Dynamic : 共通
                 binder, typeof(object),
                 Expression.Constant(arg1), Expression.Constant(arg2)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //case BinderType.ConvertBinder:{
         {
             var input = PrivateDynamicConvert<int, long>(1, RuntimeBinder.CSharpBinderFlags.None);
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //case BinderType.GetIndexBinder:{
         {
@@ -63,7 +63,7 @@ public class Dynamic : 共通
                 typeof(object),
                 Expression.Constant(arg1), Expression.Constant(arg2)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //case BinderType.GetMemberBinder:{
         {
@@ -79,7 +79,7 @@ public class Dynamic : 共通
                 typeof(object),
                 Expression.Constant(arg1)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //case BinderType.InvokeBinder:{
         {
@@ -101,7 +101,7 @@ public class Dynamic : 共通
                     Expression.Constant(b),
                     Expression.Constant(c)
                 );
-                this.ExpressionAssertEqual(input);
+                this.ExpressionシリアライズAssertEqual(input);
             }
         }
         //case BinderType.InvokeMemberBinder:{
@@ -118,7 +118,7 @@ public class Dynamic : 共通
                     binder, typeof(object),
                     Expression.Constant(arg0), Expression.Constant(arg1)
                 );
-                this.ExpressionAssertEqual(input);
+                this.ExpressionシリアライズAssertEqual(input);
             }
         }
         //case BinderType.SetIndexBinder:{
@@ -137,7 +137,7 @@ public class Dynamic : 共通
                 typeof(object),
                 Expression.Constant(arg1), Expression.Constant(arg2), Expression.Constant(arg3), Expression.Constant(arg4)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //}
         {
@@ -155,7 +155,7 @@ public class Dynamic : 共通
                 Expression.Constant(arg1),
                 Expression.Constant(arg2)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //case BinderType.UnaryOperationBinder:{
         {
@@ -174,7 +174,7 @@ public class Dynamic : 共通
                 typeof(object),
                 Expression.Constant(arg1, typeof(object))
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
     }
     [Fact]
@@ -194,7 +194,7 @@ public class Dynamic : 共通
                 binder, typeof(object),
                 Expression.Constant(arg1), Expression.Constant(arg2)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
     }
 }

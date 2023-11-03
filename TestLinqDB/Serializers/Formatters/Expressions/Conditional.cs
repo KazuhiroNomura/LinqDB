@@ -8,7 +8,7 @@ public class Conditional : 共通
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),

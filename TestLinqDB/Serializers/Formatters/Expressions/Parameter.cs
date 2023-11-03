@@ -8,7 +8,7 @@ public class Parameter:共通{
     public void エラー特定(){
         var p=Expression.Parameter(typeof(int),"p");
         this.AssertEqual(Expression.Assign(p,Expression.Constant(0)));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズCoverage(
             Expression.Lambda<Func<int,object>>(
                 Expression.Constant(
                     p
@@ -16,7 +16,7 @@ public class Parameter:共通{
                 p
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズCoverage(
             Expression.Lambda<Func<int,object>>(
                 Expression.Constant(
                     new{p}
@@ -54,20 +54,20 @@ public class Parameter:共通{
         var p=Expression.Parameter(typeof(int));
         //if(index0<0){
         //    if(index1<0){
-        this.AssertEqual(new []{p},_=>{});
+        this.Coverage(new []{p});
         //    }else{
-        this.AssertEqual(new []{p,p},_=>{});
+        this.Coverage(new []{p,p});
         //this.AssertEqual(Expression.Block(new[]{p},p,p));
         //this.AssertEqual(new{p,q=p});
         //    }
         //}else{
-        this.AssertEqual(
+        this.ExpressionシリアライズCoverage(
             Expression.Lambda<Func<int,object>>(
                 Expression.Constant(
                     new{p}
                 ),
                 p
-            ),_=>{}
+            )
         );
         //}
     }

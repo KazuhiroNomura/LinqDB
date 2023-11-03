@@ -77,82 +77,82 @@ public class ExtensionSet:共通{
     }
     const int 最大値=4;
     [Fact]public void Aggregate_func(){
-        集約関数<int    >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<long   >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<uint   >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<ulong  >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<float  >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<double >(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
-        集約関数<decimal>(1,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<int    >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<long   >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<uint   >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<ulong  >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<float  >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<double >(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
+        集約関数<decimal>(1,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate((a,b)=>a+b),()=>e.Aggregate((a,b)=>a+b)));
     }
     [Fact]public void Aggregate_seed_func(){
-        集約関数<sbyte  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<short  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<int    >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<long   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1L ,(a,b)=>a+b),()=>e.Aggregate(1L ,(a,b)=>a+b)));
-        集約関数<byte   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<ushort >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
-        集約関数<uint   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1U ,(a,b)=>a+b),()=>e.Aggregate(1U ,(a,b)=>a+b)));
-        集約関数<ulong  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1UL,(a,b)=>a+b),()=>e.Aggregate(1UL,(a,b)=>a+b)));
-        集約関数<float  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1f ,(a,b)=>a+b),()=>e.Aggregate(1f ,(a,b)=>a+b)));
-        集約関数<double >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1d ,(a,b)=>a+b),()=>e.Aggregate(1d ,(a,b)=>a+b)));
-        集約関数<decimal>(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1m ,(a,b)=>a+b),()=>e.Aggregate(1m ,(a,b)=>a+b)));
+        集約関数<sbyte  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<short  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<int    >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<long   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1L ,(a,b)=>a+b),()=>e.Aggregate(1L ,(a,b)=>a+b)));
+        集約関数<byte   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<ushort >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b),()=>e.Aggregate(1  ,(a,b)=>a+b)));
+        集約関数<uint   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1U ,(a,b)=>a+b),()=>e.Aggregate(1U ,(a,b)=>a+b)));
+        集約関数<ulong  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1UL,(a,b)=>a+b),()=>e.Aggregate(1UL,(a,b)=>a+b)));
+        集約関数<float  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1f ,(a,b)=>a+b),()=>e.Aggregate(1f ,(a,b)=>a+b)));
+        集約関数<double >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1d ,(a,b)=>a+b),()=>e.Aggregate(1d ,(a,b)=>a+b)));
+        集約関数<decimal>(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1m ,(a,b)=>a+b),()=>e.Aggregate(1m ,(a,b)=>a+b)));
     }
     [Fact]public void Aggregate_seed_func_resultSelector(){
-        集約関数<sbyte  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<short  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<int    >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<long   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<byte   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<ushort >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<uint   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<ulong  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<float  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<double >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2)));
-        集約関数<decimal>(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<sbyte  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<short  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<int    >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<long   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1L ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<byte   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<ushort >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1  ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<uint   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1U ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<ulong  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1UL,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<float  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1f ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<double >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1d ,(a,b)=>a+b,ab=>ab*2)));
+        集約関数<decimal>(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2),()=>e.Aggregate(1m ,(a,b)=>a+b,ab=>ab*2)));
     }
     [Fact]public void エラー(){
         const int 最大値=5;
         var (s,e)=データ<decimal>(1);
-        this.コンパイル実行(()=>s.All(p=>p%2==0));
+        this.Expression実行AssertEqual(()=>s.All(p=>p%2==0));
 
     }
     [Fact]public void All(){
         const int 最大値=5;
         {
             var (s,e)=データ<decimal>(1);
-            this.コンパイル実行 (()=>s.All(p=>p%2==0));
+            this.Expression実行AssertEqual (()=>s.All(p=>p%2==0));
 
         }
-        集約関数<sbyte  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<short  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<int    >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<long   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<byte   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<ushort >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<uint   >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<ulong  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<float  >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<double >(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<decimal>(0,最大値,(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
-        集約関数<char   >('a','z',(s,e)=>this.コンパイル実行 (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<sbyte  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<short  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<int    >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<long   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<byte   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<ushort >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<uint   >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<ulong  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<float  >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<double >(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<decimal>(0,最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
+        集約関数<char   >('a','z',(s,e)=>this.Expression比較実行AssertEqual (()=>s.All(p=>p%2==0),()=>e.All(p=>p%2==0)));
     }
     [Fact]public void Any(){
         const int 最大値=4;
-        集約関数<sbyte  >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<short  >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<int    >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<long   >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<byte   >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ushort >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<uint   >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<ulong  >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<float  >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<double >(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<decimal>(最大値,(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
-        集約関数<char   >('a','z',(s,e)=>this.コンパイル実行 (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<sbyte  >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<short  >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<int    >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<long   >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<byte   >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ushort >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<uint   >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<ulong  >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<float  >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<double >(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<decimal>(最大値,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
+        集約関数<char   >('a','z',(s,e)=>this.Expression比較実行AssertEqual (()=>s.Any(p=>p%2==0),()=>e.Any(p=>p%2==0)));
     }
-    private void 共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
+    private void 共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
         IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IAdditionOperators<T,T,T>
     {
         var Optimizer = this.Optimizer;
@@ -171,62 +171,62 @@ public class ExtensionSet:共通{
     }
     [Fact]public void AverageNullable(){
         const int Count=10;
-        //集約関数Nullable<sbyte  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<short  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<int    >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<long   >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<byte   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<ushort >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<uint   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<float  >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<double >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        集約関数Nullable<decimal>(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(),()=>e.Average()));
-        //集約関数Nullable<char   >('a','z',(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<sbyte  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<short  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<int    >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<long   >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<byte   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<ushort >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<uint   >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<float  >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<double >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(),()=>e.Average()));
+        集約関数Nullable<decimal>(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(),()=>e.Average()));
+        //集約関数Nullable<char   >('a','z',(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(),()=>e.Average()));
     }
     [Fact]public void Average0行(){
-        //集約関数0<sbyte  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<short  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<int    >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<long   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<byte   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<ushort >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<uint   >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        //集約関数0<ulong  >((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),()=>e.Average()));
-        集約関数0<float>((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
-        集約関数0<double>((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
-        集約関数0<decimal>((s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException(() => s.Average(),() => e.Average()));
+        //集約関数0<sbyte  >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<short  >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<int    >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<long   >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<byte   >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<ushort >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<uint   >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        //集約関数0<ulong  >((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),()=>e.Average()));
+        集約関数0<float>((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),() => e.Average()));
+        集約関数0<double>((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),() => e.Average()));
+        集約関数0<decimal>((s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException(() => s.Average(),() => e.Average()));
     }
     [Fact]public void Average(){
-        //集約関数<sbyte  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<short  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<int    >(1,10,(s,e) => this.コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<long   >(1,10,(s,e) => this.コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<byte   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<ushort >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<uint   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<ulong  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<float  >(1,10,(s,e) => this.コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<double >(1,10,(s,e) => this.コンパイル実行(() => s.Average(),()=>e.Average()));
-        集約関数<decimal>(1,10,(s,e) => this.コンパイル実行(() => s.Average(),()=>e.Average()));
-        //集約関数<char   >('a','z',(s,e) => this.共通MemoryMessageJson_Expression_コンパイル実行(() => s.Average(),()=>e.Average()));
+        //集約関数<sbyte  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<short  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        集約関数<int    >(1,10,(s,e) => this.Expression比較実行AssertEqual(() => s.Average(),()=>e.Average()));
+        集約関数<long   >(1,10,(s,e) => this.Expression比較実行AssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<byte   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<ushort >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<uint   >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<ulong  >(1,10,(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
+        集約関数<float  >(1,10,(s,e) => this.Expression比較実行AssertEqual(() => s.Average(),()=>e.Average()));
+        集約関数<double >(1,10,(s,e) => this.Expression比較実行AssertEqual(() => s.Average(),()=>e.Average()));
+        集約関数<decimal>(1,10,(s,e) => this.Expression比較実行AssertEqual(() => s.Average(),()=>e.Average()));
+        //集約関数<char   >('a','z',(s,e) => this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Average(),()=>e.Average()));
     }
     [Fact]public void AverageNullable_selector(){
         const int Count=10;
-        集約関数Nullable<sbyte  >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<short  >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<int    >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<long   >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<byte   >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<ushort >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<uint   >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<float  >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<double >(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<decimal>(Count ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数Nullable<char   >('a','z',(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<sbyte  >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<short  >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<int    >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<long   >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<byte   >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<ushort >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<uint   >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数Nullable<ulong  >(Count ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<float  >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<double >(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<decimal>(Count ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数Nullable<char   >('a','z',(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
-    private void MemoryMessageJson_Expression_コンパイル実行<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
+    private void MemoryMessageJson_Expression_ExpressionAssertEqual<T>(Expressions.Expression<Func<T>> input0,Expressions.Expression<Func<T>> input1)where T:struct,
         IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IAdditionOperators<T,T,T>
     {
         var Optimizer = this.Optimizer;
@@ -244,38 +244,38 @@ public class ExtensionSet:共通{
         Assert.Equal(expected1,actual1);
     }
     [Fact]public void Average0_selector(){
-        集約関数0<sbyte  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<short  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<int    >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<long   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<byte   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<ushort >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<uint   >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数0<ulong  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<float  >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<double >((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数0<decimal>((s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行InvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<sbyte  >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<short  >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<int    >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<long   >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<byte   >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<ushort >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<uint   >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数0<ulong  >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<float  >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<double >((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数0<decimal>((s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqualInvalidOperationException (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
     [Fact]public void Average_selector(){
-        集約関数<sbyte  >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<short  >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<int    >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<long   >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<byte   >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<ushort >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<uint   >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        //集約関数<ulong  >(1  ,10 ,(s,e)=>this.共通MemoryMessageJson_Expression_コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<float  >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<double >(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<decimal>(1  ,10 ,(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
-        集約関数<char   >('a','z',(s,e)=>this.コンパイル実行 (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<sbyte  >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<short  >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<int    >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<long   >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<byte   >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<ushort >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<uint   >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        //集約関数<ulong  >(1  ,10 ,(s,e)=>this.共通MemoryMessageJson_Expression_ExpressionAssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<float  >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<double >(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<decimal>(1  ,10 ,(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
+        集約関数<char   >('a','z',(s,e)=>this.Expression比較実行AssertEqual (()=>s.Average(p=>p+p),()=>e.Average(p=>p+p)));
     }
     Sets.IEnumerable<T> m<T>(Sets.IEnumerable<T> i)=>i;
     Generic.IEnumerable<T> m<T>(Generic.IEnumerable<T> i)=>i;
     [Fact]public void Cast(){
         const int 最大値=3;
-        集約関数<sbyte  >(1  ,最大値,(s,e)=>this.コンパイル実行(()=>s.Cast<object>().Cast<sbyte>(),()=>e.Cast<object>().Cast<sbyte>()));
-        集約関数<sbyte  >(1  ,最大値,(s,e)=>this.コンパイル実行(()=>s.Cast<sbyte  >(),()=>e.Cast<sbyte  >()));
+        集約関数<sbyte  >(1  ,最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.Cast<object>().Cast<sbyte>(),()=>e.Cast<object>().Cast<sbyte>()));
+        集約関数<sbyte  >(1  ,最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.Cast<sbyte  >(),()=>e.Cast<sbyte  >()));
     }
     [Fact]public void Contains(){
         const int 最大値=3;
@@ -293,10 +293,10 @@ public class ExtensionSet:共通{
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var 中央値=数値<T>(Count/2);
-            集約関数<T>(0,Count,(s,e)=>this.コンパイル実行(()=>s.Contains(中央値),()=>e.Contains(中央値)));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>s.Contains(中央値),()=>e.Contains(中央値)));
             var はみ出し=数値<T>(Count);
             はみ出し++;
-            集約関数<T>(0,Count,(s,e)=>this.コンパイル実行(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>s.Contains(はみ出し),()=>e.Contains(はみ出し)));
         }
     }
     [Fact]public void DefaultIfEmptyNullable(){
@@ -315,8 +315,8 @@ public class ExtensionSet:共通{
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var a=数値<T>(9999);
-            集約関数<T>(0,Count,(s,e)=>this.コンパイル実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
-            集約関数<T>(0,Count,(s,e)=>this.コンパイル実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
         }
     }
     [Fact]public void DefaultIfEmpty(){
@@ -335,8 +335,8 @@ public class ExtensionSet:共通{
         共通<char   >();
         void 共通<T>()where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
             var a=数値<T>(9999);
-            集約関数<T>(0,最大値,(s,e)=>this.コンパイル実行(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
-            集約関数<T>(0,最大値,(s,e)=>this.コンパイル実行(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
+            集約関数<T>(0,最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.DefaultIfEmpty(a),()=>e.DefaultIfEmpty(a)));
+            集約関数<T>(0,最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.DefaultIfEmpty(),()=>e.DefaultIfEmpty()));
         }
     }
     interface I0{}
@@ -369,7 +369,7 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(0,Count,(s,e)=>this.コンパイル実行(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
     }
     //private Sets.IEnumerable<T> データ<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
     //    T 下限0=default,上限0=default;
@@ -405,23 +405,23 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char>(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(最大値,(s0,s1,e0,e1)=>this.コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
-        //集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_コンパイル実行(()=>s0.Except(s1),()=>e0.Except(e1)));
+            集約関数<T>(最大値,(s0,s1,e0,e1)=>this.Expression比較実行AssertEqual(()=>s0.Except(s1),()=>e0.Except(e1)));
+        //集約関数<T>(最大値,(s0,s1,e0,e1)=>base.MemoryMessageJson_Expression_ExpressionAssertEqual(()=>s0.Except(s1),()=>e0.Except(e1)));
     }
     [Fact]public void GroupBy_keySelector_elementSelector(){
         const int 最大値=6;
-        集約関数<sbyte  >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<short  >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<int    >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<long   >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<byte   >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<ushort >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<uint   >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<ulong  >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<float  >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<double >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<decimal>(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
-        集約関数<char   >(最大値,(s,e)=>this.コンパイル実行(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<sbyte  >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<short  >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<int    >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<long   >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<byte   >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ushort >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<uint   >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<ulong  >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<float  >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<double >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<decimal>(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
+        集約関数<char   >(最大値,(s,e)=>this.Expression比較実行AssertEqual(()=>s.GroupBy(p=>p/3),()=>e.GroupBy(p=>p/3)));
     }
     [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
     private static void 集約関数<T>(int 数,Action<Sets.IEnumerable<T>,Sets.IEnumerable<T>,Generic.IEnumerable<T>,Generic.IEnumerable<T>> action)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{

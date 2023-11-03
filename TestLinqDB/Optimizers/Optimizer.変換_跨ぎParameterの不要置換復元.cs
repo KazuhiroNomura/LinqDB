@@ -19,7 +19,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var int_refint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
         var input = Expression.Parameter(typeof(int), "p");
         //()=>{var p;int_Lambda0_refint_intFuncRef(
-        this.コンパイル実行(
+        this.ExpressionAssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[]{input},
@@ -47,7 +47,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var ref_p=Expression.Parameter(typeof(int).MakeByRefType(),"ref_p");
         var int_Lambda0_refint_intFuncRef=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
         var int_Lambda_refint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
-        this.コンパイル実行(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[]{in_p},
@@ -76,7 +76,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var Lambda0=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
         var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
         var p = Expression.Parameter(typeof(int), "p");
-        this.コンパイル実行(
+        this.ExpressionAssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[]{p},
@@ -103,11 +103,11 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         );
     }
     [Fact]public void Invoke(){
-        this.コンパイル実行(() =>((Func<int,int>)((int a)=>a+a))(2));
+        this.Expression実行AssertEqual(() =>((Func<int,int>)((int a)=>a+a))(2));
     }
     [Fact]public void Lambda(){
         var s = new Set<int>();
-        this.コンパイル実行(() => s.Select(p=>p+1));
+        this.Expression実行AssertEqual(() => s.Select(p=>p+1));
     }
     [Fact]public void Traverse(){
         var f= BindingFlags.Static|BindingFlags.NonPublic;
@@ -115,7 +115,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var Lambda0=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
         var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
         var p = Expression.Parameter(typeof(int), "p");
-        this.コンパイル実行(
+        this.ExpressionAssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[]{p},
@@ -142,7 +142,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         );
     }
     //var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
-    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
-    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
-    //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
+    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
+    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
+    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
 }

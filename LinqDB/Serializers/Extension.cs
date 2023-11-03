@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Dynamic;
 using System.Linq;
+using Expressions=System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 internal static class Extension{
@@ -175,17 +177,19 @@ internal static class Extension{
         if(typeof(EventInfo      ).IsAssignableFrom(value))return nameof(EventInfo      );
         if(typeof(FieldInfo      ).IsAssignableFrom(value))return nameof(FieldInfo      );
         //if(typeof(Expression     ).IsAssignableFrom(value)&&!typeof(LambdaExpression).IsAssignableFrom(value))return nameof(Expression     );
+        if(typeof(Expressions.SymbolDocumentInfo).IsAssignableFrom(value))return nameof(Expressions.SymbolDocumentInfo);
         return 短縮NameTypes.Contains(value)?value.Name:value.AssemblyQualifiedName!;
     }
     public static Type StringType(this string value){
         switch(value){
             //case nameof(Expression     ):return typeof(Expression     );
-            case nameof(Type           ):return typeof(Type           );
-            case nameof(ConstructorInfo):return typeof(ConstructorInfo);
-            case nameof(MethodInfo     ):return typeof(MethodInfo     );
-            case nameof(PropertyInfo   ):return typeof(PropertyInfo   );
-            case nameof(EventInfo      ):return typeof(EventInfo      );
-            case nameof(FieldInfo      ):return typeof(FieldInfo      );
+            case nameof(Type                          ):return typeof(Type                          );
+            case nameof(ConstructorInfo               ):return typeof(ConstructorInfo               );
+            case nameof(MethodInfo                    ):return typeof(MethodInfo                    );
+            case nameof(PropertyInfo                  ):return typeof(PropertyInfo                  );
+            case nameof(EventInfo                     ):return typeof(EventInfo                     );
+            case nameof(FieldInfo                     ):return typeof(FieldInfo                     );
+            case nameof(Expressions.SymbolDocumentInfo):return typeof(Expressions.SymbolDocumentInfo);
         }
         var index=Array.IndexOf(Type短縮Names,value);
         return index<0?Type.GetType(value)!:短縮NameTypes[index];

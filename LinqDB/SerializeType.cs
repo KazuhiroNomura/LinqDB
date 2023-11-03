@@ -4,13 +4,9 @@
 /// </summary>
 public enum SerializeType:byte {
     /// <summary>
-    /// 無効
-    /// </summary>
-    Head,
-    /// <summary>
     /// Utf8Json.JsonSerializer
     /// </summary>
-    Utf8Json=Head,
+    Utf8Json,
     /// <summary>
     /// MessagePack.MessagePackSerializer
     /// </summary>
@@ -18,6 +14,5 @@ public enum SerializeType:byte {
     /// <summary>
     /// MemoryPack.MemoryPackSerializer
     /// </summary>
-    MemoryPack,
-    Tail= MemoryPack
+    MemoryPack
 }

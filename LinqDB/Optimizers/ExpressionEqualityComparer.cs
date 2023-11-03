@@ -56,7 +56,7 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
         //Let(x=>.v),Let(y=>.v)は一致する。
         //Let(x=>.v=x),Let(y=>.v=y)は一致する。
         //代入先が始めて出現した宣言してないParameterだった場合始めて出現したという意味で一致する
-        return true;
+        return x_Left.GetType()==y_Left.GetType(); //true;
     }
     public override bool Equals(ParameterExpression? x,ParameterExpression? y){
         var x_Index0 = this.x_Parameters.IndexOf(x);

@@ -2,6 +2,7 @@
 using MessagePack;
 using MessagePack.Formatters;
 using System.Linq;
+
 namespace LinqDB.Serializers.MessagePack.Formatters.Enumerables;
 using O = MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
@@ -13,36 +14,40 @@ public class IEnumerable<T>:IMessagePackFormatter<G.IEnumerable<T>>{
     [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
     public void Serialize(ref Writer writer,G.IEnumerable<T>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
-        writer.WriteArrayHeader(2);
+        
         var type=value!.GetType();
-        writer.WriteType(type);
-        writer.Write(type,value,Resolver);
-        /*
-        var Count=value.Count();
-        writer.WriteArrayHeader(Count);
-        var Formatter=Resolver.GetFormatter<T>();
-        foreach(var item in value)
-            writer.Write(Formatter,item,Resolver);
-            */
+        var Formatter=Resolver.GetFormatterDynamic(type);
+        if(Formatter is not null){
+            writer.WriteArrayHeader(2);
+            writer.WriteType(type);
+            writer.Write(Formatter,value,Resolver);
+        } else{
+            var Count=value.Count();
+            writer.WriteArrayHeader(Count+1);
+            writer.WriteType(typeof(G.IEnumerable<T>));
+            var FormatterT=Resolver.GetFormatter<T>();
+            foreach(var item in value)
+                writer.Write(FormatterT,item,Resolver);
+        }
     }
-    
-    
-
 
 
 
     public G.IEnumerable<T> Deserialize(ref Reader reader,O Resolver) {
         if(reader.TryReadNil())return null!;
-        var Count = reader.ReadArrayHeader();
-        return(G.IEnumerable<T>)reader.Read(reader.ReadType(),Resolver);
-        /*
-        var Count = reader.ReadArrayHeader();
-        var Formatter=Resolver.GetFormatter<T>();
-        var value=new G.List<T>();
-        while(Count-->0)
-            value.Add(reader.Read(Formatter,Resolver));
-        return value;
-        */
+        var Count= reader.ReadArrayHeader();
+        var type=reader.ReadType();
+        if(type!=typeof(G.IEnumerable<T>)){
+            var value=reader.Read(type,Resolver);
+            return (G.IEnumerable<T>)value;
+        } else{
+            var FormatterT=Resolver.GetFormatter<T>();
+            Count--;
+            var value=new T[Count];
+            for(var a=0;a<Count;a++)
+                value[a]=reader.Read(FormatterT,Resolver);
+            return value;
+        }
     }
 }
 

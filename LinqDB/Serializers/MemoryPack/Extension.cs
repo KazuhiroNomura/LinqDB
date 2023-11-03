@@ -6,49 +6,26 @@ using System.Reflection;
 
 using MemoryPack;
 using System.Linq.Expressions;
+
+
+
+
+
+
 namespace LinqDB.Serializers.MemoryPack;
+
 
 using Reader = MemoryPackReader;
 internal static class Extension{
     public static readonly MethodInfo SerializeMethod = typeof(Extension).GetMethod(nameof(Serialize),BindingFlags.Static|BindingFlags.NonPublic)!;
     private static void Serialize<TBufferWriter, T>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value) where TBufferWriter :IBufferWriter<byte>{
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??writer.GetFormatter<T>();
         writer.Write(Formatter,value);
-        //{
-        //    var Formatter = FormatterResolver.GetRegisteredFormatter<T>();
-        //    if(Formatter is not null) writer.Write(Formatter,value);
-        //    else {
-        //        var Formatter0=writer.GetFormatter<T>();
-        //        var s=Formatter0.ToString();
-        //        writer.Write(Formatter0,value);
-        //        //.Serialize(ref writer,ref value);
-        //        Debug.Fail($"Formatterがなかった{typeof(T).Name}");
-        //    }
-        //}
-        //if(MemoryPackFormatterProvider.IsRegistered<T>())
-        //    writer.WriteValue(value);
-        //else {
-        //    var Formatter = FormatterResolver.GetRegisteredFormatter<T>();
-        //    if(Formatter is not null) writer.Write(Formatter,value);
-        //    else{
-        //        writer.GetRegisteredFormatterGetFormatter<T,TBufferWriter>().Serialize(ref writer,ref value);
-        //        Debug.Fail($"Formatterがなかった{typeof(T).Name}");
-        //    }
-        //}
     }    
     public static readonly MethodInfo DeserializeMethod = typeof(Extension).GetMethod(nameof(Deserialize),BindingFlags.Static|BindingFlags.NonPublic)!;
     private static void Deserialize<T>(ref Reader reader,scoped ref T? value){
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??reader.GetFormatter<T>();
-        //var Formatter=reader.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??reader.GetFormatter<T>();
         value=reader.Read(Formatter);
-        //reader.GetRegisteredFormatterGetFormatter<T>().Deserialize(ref reader,ref value);
-        //if(MemoryPackFormatterProvider.IsRegistered<T>())
-        //    value=reader.ReadValue<T>();
-        //else{
-        //    var Formatter=FormatterResolver.GetRegisteredFormatter<T>();
-        //    if(Formatter is not null) value=reader.Read(Formatter);
-        //    else Debug.Fail($"Formatterがなかった{typeof(T).Name}");
-        //}
     }
     public static void WriteType<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,Type value) where TBufferWriter:IBufferWriter<byte> =>writer.WriteString(value.TypeString());
     public static Type ReadType(this ref Reader reader)=>reader.ReadString().StringType();
@@ -81,6 +58,7 @@ internal static class Extension{
     }
     internal static void WriteCollection<T,TBufferWriter>(this ref MemoryPackWriter<TBufferWriter> writer,ReadOnlyCollection<T>? value)where TBufferWriter :IBufferWriter<byte> =>
     	writer.Write(StaticReadOnlyCollectionFormatter<T>.Formatter!,value!);
+
 
 
 
@@ -155,8 +133,6 @@ internal static class Extension{
 
 
 
-
-
     public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter> writer,IMemoryPackFormatter<T> Formatter,T? value) where TBufferWriter:IBufferWriter<byte>{
         try{
             Formatter.Serialize(ref writer,ref value);
@@ -176,25 +152,41 @@ internal static class Extension{
         
         
     public static void Write<TBufferWriter,T>(this ref MemoryPackWriter<TBufferWriter>writer,T? value)where TBufferWriter:IBufferWriter<byte>{
-        //writer.GetRegisteredFormatterGetFormatter<T,TBufferWriter>().Serialize(ref writer,ref value);
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??writer.GetFormatter<T>();
         writer.Write(Formatter,value);
     }
     
     
     
     
-    
-    public static void WriteExpression <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Expression             value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Expression.Write           (ref writer,value);
+
+
+    public static void WriteExpression        <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Expression             value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Expression.Write           (ref writer,value);
+    public static void WriteSymbolDocumentInfo<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,SymbolDocumentInfo     value)where TBufferWriter:IBufferWriter<byte> =>Formatters.SymbolDocumentInfo.Write   (ref writer,value);
     //public static void WriteType       <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type                   value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Type.Write       (ref writer,value);
-    public static void WriteConstructor<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,ConstructorInfo        value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Constructor.Write(ref writer,value);
-    public static void WriteMethod     <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,MethodInfo             value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Method.Write     (ref writer,value);
-    public static void WriteProperty   <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,PropertyInfo           value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Property.Write   (ref writer,value);
-    public static void WriteEvent      <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,EventInfo              value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Event.Write      (ref writer,value);
-    public static void WriteField      <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,FieldInfo              value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Field.Write      (ref writer,value);
+    public static void WriteConstructor       <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,ConstructorInfo        value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Constructor.Write(ref writer,value);
+    public static void WriteMethod            <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,MethodInfo             value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Method.Write     (ref writer,value);
+    public static void WriteProperty          <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,PropertyInfo           value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Property.Write   (ref writer,value);
+    public static void WriteEvent             <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,EventInfo              value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Event.Write      (ref writer,value);
+    public static void WriteField             <TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,FieldInfo              value)where TBufferWriter:IBufferWriter<byte> =>Formatters.Reflection.Field.Write      (ref writer,value);
+    public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,object Formatter,object? value)where TBufferWriter:IBufferWriter<byte>{
+        ((IMemoryPackFormatter)Formatter).Serialize(ref writer,ref value);
+    }
+
+
+
+
+
+
+
+
+
+
+
     public static void Write<TBufferWriter>(this ref MemoryPackWriter<TBufferWriter>writer,Type type,object? value)where TBufferWriter:IBufferWriter<byte>{
-        if(FormatterResolver.GetRegisteredFormatter(type) is IMemoryPackFormatter Formatter) {
-            writer.Write(Formatter,value);
+        var Formatter=FormatterResolver.GetFormatterDynamic(type);
+        if(Formatter is not null){
+            ((IMemoryPackFormatter)Formatter).Serialize(ref writer,ref value);
         } else{
             //Formatter=writer.GetFormatter(type);
             //Formatter.Serialize(ref writer, ref value);
@@ -203,12 +195,17 @@ internal static class Extension{
         }
     }
 
-
-
-
-
-
-
+    //public static decimal         ReadDecimal       (this ref Reader reader)=>global::MemoryPack.Formatters.d DecimalFormatter.Deserialize         (ref reader,Resolver);
+    //public static TimeSpan        ReadTimeSpan      (this ref Reader reader)=>TimeSpanFormatter.Deserialize         (ref reader,Resolver);
+    //public static DateTime        ReadDateTime      (this ref Reader reader)=>DateTimeFormatter.Deserialize         (ref reader,Resolver);
+    //public static DateTimeOffset  ReadDateTimeOffset(this ref Reader reader)=>DateTimeOffsetFormatter.Deserialize   (ref reader,Resolver);
+    public static Expression         ReadExpression        (this ref Reader reader)=>Formatters.Expression.Read            (ref reader);
+    public static SymbolDocumentInfo ReadSymbolDocumentInfo(this ref Reader reader)=>Formatters.SymbolDocumentInfo.Read    (ref reader);
+    public static ConstructorInfo    ReadConstructor       (this ref Reader reader)=>Formatters.Reflection.Constructor.Read(ref reader);
+    public static MethodInfo         ReadMethod            (this ref Reader reader)=>Formatters.Reflection.Method.Read     (ref reader);
+    public static PropertyInfo       ReadProperty          (this ref Reader reader)=>Formatters.Reflection.Property.Read   (ref reader);
+    public static EventInfo          ReadEvent             (this ref Reader reader)=>Formatters.Reflection.Event.Read      (ref reader);
+    public static FieldInfo          ReadField             (this ref Reader reader)=>Formatters.Reflection.Field.Read      (ref reader);
     public static T? Read<T>(this ref Reader reader,IMemoryPackFormatter<T>Formatter){
         try{
             T? value=default;
@@ -220,64 +217,33 @@ internal static class Extension{
     }
     public static T? Read<T>(this ref Reader reader){
         T? value=default;
-        var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??reader.GetFormatter<T>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<T>()??reader.GetFormatter<T>();
         Formatter.Deserialize(ref reader,ref value);
-        //writer.Write(Formatter,value);
-        ////reader.GetRegisteredFormatterGetFormatter<T>().Deserialize(ref reader,ref value);
-        //var Formatter = FormatterResolver.GetRegisteredFormatter<T>();
-        //if(Formatter is not null) {
-        //    Formatter.Deserialize(ref reader,ref value);
-        //} else {
-        //    reader.GetFormatter<T>().Deserialize(ref reader,ref value);
-        //}
         return value;
     }
+    public static object? Read(this ref Reader reader,object Formatter){
+        object? value=default;
+        ((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
+        return value;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
     public static object? Read(this ref Reader reader,Type type){
         object? value=default;
-        if(FormatterResolver.GetRegisteredFormatter(type)is IMemoryPackFormatter Formatter)
-            Formatter.Deserialize(ref reader,ref value);
+        var Formatter=FormatterResolver.GetFormatterDynamic(type);
+        if(Formatter is not null)
+            ((IMemoryPackFormatter)Formatter).Deserialize(ref reader,ref value);
         else 
             reader.GetFormatter(type).Deserialize(ref reader,ref value);
         return value;
     }
-    //public static decimal         ReadDecimal       (this ref Reader reader)=>global::MemoryPack.Formatters.d DecimalFormatter.Deserialize         (ref reader,Resolver);
-    //public static TimeSpan        ReadTimeSpan      (this ref Reader reader)=>TimeSpanFormatter.Deserialize         (ref reader,Resolver);
-    //public static DateTime        ReadDateTime      (this ref Reader reader)=>DateTimeFormatter.Deserialize         (ref reader,Resolver);
-    //public static DateTimeOffset  ReadDateTimeOffset(this ref Reader reader)=>DateTimeOffsetFormatter.Deserialize   (ref reader,Resolver);
-    public static Expression      ReadExpression (this ref Reader reader)=>Formatters.Expression.Read            (ref reader);
-    //public static Type            ReadType       (this ref Reader reader)=>Formatters.Reflection.Type.Read       (ref reader);
-    public static ConstructorInfo ReadConstructor(this ref Reader reader)=>Formatters.Reflection.Constructor.Read(ref reader);
-    public static MethodInfo      ReadMethod     (this ref Reader reader)=>Formatters.Reflection.Method.Read     (ref reader);
-    public static PropertyInfo    ReadProperty   (this ref Reader reader)=>Formatters.Reflection.Property.Read   (ref reader);
-    public static EventInfo       ReadEvent      (this ref Reader reader)=>Formatters.Reflection.Event.Read      (ref reader);
-    public static FieldInfo       ReadField      (this ref Reader reader)=>Formatters.Reflection.Field.Read      (ref reader);
-    
-    
-    
-    
-    
-    
-    
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

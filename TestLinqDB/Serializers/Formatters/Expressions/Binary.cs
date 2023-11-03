@@ -10,13 +10,13 @@ public class Binary : 共通
     public void Serialize()
     {
         var Constant1 = Expressions.Expression.Constant(1m);
-        this.ExpressionAssertEqual(Expressions.Expression.Add(Constant1, Constant1));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Add(Constant1, Constant1));
 
     }
     private void PrivateWrite<T>(Expressions.ExpressionType NodeType)
     {
         var p = Expressions.Expression.Parameter(typeof(T), typeof(T).Name);
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { p },
                 Expressions.Expression.MakeBinary(
@@ -73,7 +73,7 @@ public class Binary : 共通
     [Fact]
     public void WriteLeftRight()
     {
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Assign(
                 Expressions.Expression.Parameter(typeof(int), "int32"),
                 Expressions.Expression.Constant(1)
@@ -86,7 +86,7 @@ public class Binary : 共通
     {
         var p = Expressions.Expression.Parameter(typeof(string), "p");
         var q = Expressions.Expression.Parameter(typeof(string), "q");
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { p },
                 Expressions.Expression.Coalesce(
@@ -109,7 +109,7 @@ public class Binary : 共通
     public void WriteLeftRightMethod()
     {
         var Constant1 = Expressions.Expression.Constant(1m);
-        this.ExpressionAssertEqual(Expressions.Expression.Add(Constant1, Constant1));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Add(Constant1, Constant1));
     }
     [Fact]
     public void WriteLeftRightMethodLambda()
@@ -118,7 +118,7 @@ public class Binary : 共通
         var Constant1 = Expressions.Expression.Constant(1m);
         var ConversionDecimal = Expressions.Expression.Lambda<Func<decimal, decimal>>(Expressions.Expression.Add(ParameterDecimmal, ParameterDecimmal), ParameterDecimmal);
         var input1 = Expressions.Expression.AddAssign(ParameterDecimmal, Constant1, typeof(decimal).GetMethod("op_Addition"), ConversionDecimal);
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimmal },
@@ -134,7 +134,7 @@ public class Binary : 共通
             )
         );
 
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimmal },

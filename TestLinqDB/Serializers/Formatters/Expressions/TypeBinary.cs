@@ -15,7 +15,7 @@ public class TypeBinary : 共通
             Expression.Constant(1m),
             typeof(decimal)
         );
-        this.ExpressionAssertEqual(TypeIs);
-        this.ExpressionAssertEqual(TypeEqual);
+        this.ExpressionシリアライズAssertEqual(TypeIs);
+        this.ExpressionシリアライズAssertEqual(TypeEqual);
     }
 }

@@ -320,7 +320,7 @@ public class Server:IDisposable{
                                     }
                                     case Request.Delegate_Invoke:
                                     case Request.Expression_Invoke: {
-                                        Debug.Assert(デシリアライズした.SerializeType<=SerializeType.Tail);
+                                        Debug.Assert(デシリアライズした.SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
                                         var Delegate=Optimizer.CreateServerDelegate(Lambda);
                                         var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(

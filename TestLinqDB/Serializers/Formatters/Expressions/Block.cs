@@ -12,14 +12,14 @@ public class Block : 共通
     public void Serialize()
     {
         var input1 = Expression.Block(Expression.Constant(1m));
-        this.ExpressionAssertEqual(input1);
+        this.ExpressionシリアライズAssertEqual(input1);
 
     }
     [Fact]
     public void Block0()
     {
         var ParameterDecimmal = Expression.Parameter(typeof(decimal));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.Block(
                 new[] { ParameterDecimmal },
                 Expression.Block(

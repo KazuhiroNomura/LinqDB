@@ -10,12 +10,12 @@ internal static class FormatterResolver {
     //    var Formatter=FormatterResolver.GetRegisteredFormatter<T>()??writer.GetFormatter<T>();
     //public static MemoryPackFormatter<T>? GetRegisteredFormatter<TBufferWriter,T>(ref MemoryPackWriter<TBufferWriter> writer)where TBufferWriter :IBufferWriter<byte>{
     //}
-    public static MemoryPackFormatter<T>? GetRegisteredFormatter<T>(){
+    public static MemoryPackFormatter<T>? GetFormatterDynamic<T>(){
         var type=typeof(T);
         
         
         if(type.IsArray){
-            GetRegisteredFormatter(type.GetElementType());
+            GetFormatterDynamic(type.GetElementType());
             return null;
         }
         if(type.IsAnonymous())
@@ -25,7 +25,7 @@ internal static class FormatterResolver {
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
         if(type.IsGenericType) {
-            foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
+            foreach(var GenericArgument in type.GetGenericArguments())GetFormatterDynamic(GenericArgument);
             if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter;
@@ -76,9 +76,9 @@ internal static class FormatterResolver {
     
     
     
-    public static object? GetRegisteredFormatter(Type type) {
+    public static object? GetFormatterDynamic(Type type) {
         if(type.IsArray) {
-            GetRegisteredFormatter(type.GetElementType());
+            GetFormatterDynamic(type.GetElementType());
             return null;
         }
         if(type.IsAnonymous())
@@ -88,7 +88,7 @@ internal static class FormatterResolver {
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
         if(type.IsGenericType) {
-            foreach(var GenericArgument in type.GetGenericArguments())GetRegisteredFormatter(GenericArgument);
+            foreach(var GenericArgument in type.GetGenericArguments())GetFormatterDynamic(GenericArgument);
             if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter = null;

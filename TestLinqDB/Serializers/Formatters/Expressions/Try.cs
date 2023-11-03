@@ -19,7 +19,7 @@ public class Try : 共通
                     )
                 )
             );
-            this.ExpressionAssertEqual(input);
+            this.Expression実行AssertEqual(input);
         }
         //    } else {
         {
@@ -29,7 +29,7 @@ public class Try : 共通
                     Expression.Default(typeof(int))
                 )
             );
-            this.ExpressionAssertEqual(input);
+            this.Expression実行AssertEqual(input);
         }
         //    }
         //}else{
@@ -39,7 +39,7 @@ public class Try : 共通
                 Expression.Constant(0),
                 Expression.Constant(1)
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //    } else{
         {
@@ -50,7 +50,7 @@ public class Try : 共通
                     Expression.Constant(0)
                 )
             );
-            this.ExpressionAssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //    }
         //}
@@ -66,7 +66,7 @@ public class Try : 共通
                 Expression.Constant(0)
             )
         );
-        this.ExpressionAssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
     [Fact]
     public void PrivateWrite()
@@ -80,7 +80,7 @@ public class Try : 共通
                 Expression.Constant(0)
             )
         );
-        this.ExpressionAssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }
 

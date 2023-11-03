@@ -48,7 +48,7 @@ public class CatchBlock : 共通
     public void Block0()
     {
         var ParameterDecimmal = Expression.Parameter(typeof(decimal));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.Block(
                 new[] { ParameterDecimmal },
                 Expression.Block(

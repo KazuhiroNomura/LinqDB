@@ -73,7 +73,7 @@ public class Expression1 : 共通
         var Parameter演算子 = Expression.Parameter(typeof(演算子));
         var ParameterInt32 = Expression.Parameter(typeof(int));
         var x = Expression.ArrayLength(Expression.Constant(new int[1]));
-        this.ExpressionAssertEqual(Expression.ArrayLength(Expression.Constant(new int[1])));
+        this.ExpressionシリアライズAssertEqual(Expression.ArrayLength(Expression.Constant(new int[1])));
         共通(Expression.ArrayLength(ConstantArray));
         共通(Expression.Quote(Expression.Lambda(ConstantArray)));
         共通(Expression.Throw(Expression.New(typeof(InvalidOperationException).GetConstructor(Type.EmptyTypes)!)));
@@ -129,7 +129,7 @@ public class Expression1 : 共通
         共通(Expression.Decrement(Constant演算子, GetMethod(nameof(Unary演算子))));
         共通(Expression.Increment(Constant演算子, GetMethod(nameof(Unary演算子))));
         共通(Expression.UnaryPlus(Constant演算子, GetMethod(nameof(Unary演算子))));
-        void 共通(UnaryExpression Unary) => this.ExpressionAssertEqual(
+        void 共通(UnaryExpression Unary) => this.ExpressionシリアライズAssertEqual(
             Expression.Block(
                 new[] { Parameter演算子, ParameterInt32 },
                 Unary

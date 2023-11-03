@@ -1,8 +1,10 @@
-﻿using System.IO;
-
-
+﻿using System;
+using System.IO;
+using Sets=LinqDB.Sets;
+using Generic=System.Collections.Generic;
 using MemoryPack;
-
+using MemoryPack.Formatters;
+using Microsoft.Build.Utilities;
 namespace LinqDB.Serializers.MemoryPack;
 using O=MemoryPackSerializerOptions;
 
@@ -12,6 +14,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public object GetService(System.Type serviceType)=>throw new System.NotImplementedException();
     private readonly O Options;
     static Serializer(){
+        MemoryPackFormatterProvider.Register(CharArrayFormatter.Instance);
 
 
         //MemoryPackFormatterProvider.Register(Formatters.Others.Action.Instance);
@@ -64,7 +67,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
 
         MemoryPackFormatterProvider.Register(Formatters.Enumerables.IEnumerable.Instance);
         MemoryPackFormatterProvider.Register(Formatters.Sets.IEnumerable.Instance);
-        MemoryPackFormatterProvider.Register(CharArrayFormatter.Instance);
+        //MemoryPackFormatterProvider.Register(new ArrayFormatter<char>());
     }
     public Serializer(){
         this.Options=new(){ServiceProvider=this,StringEncoding = StringEncoding.Utf16};
@@ -87,26 +90,45 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter<T>();
-        return MemoryPackSerializer.Serialize<T>(value,this.Options);
+        //FormatterResolver.GetFormatterDynamic<T>();
+        return MemoryPackSerializer.Serialize<object>(value,this.Options);
+        //if(typeof(T)==typeof(char[]))
+        //    return MemoryPackSerializer.Serialize<object>(value,this.Options);
+        //else
+        //    return MemoryPackSerializer.Serialize(value,this.Options);
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter<T>();
-        var Task=MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
+        var Task=MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask();
         Task.Wait();
+        //FormatterResolver.GetFormatterDynamic<T>();
+        //var Task=typeof(T)==typeof(char[])?MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask():MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
+        //Task.Wait();
     }
     public override T Deserialize<T>(byte[] bytes){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter<T>();
-        return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
+        return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
+        //FormatterResolver.GetFormatterDynamic<T>();
+        //if(typeof(T)==typeof(char[]))
+        //    return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
+        //else
+        //    return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
     }
     public override T Deserialize<T>(Stream stream){
         this.Clear();
-        FormatterResolver.GetRegisteredFormatter<T>();
-        //var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
-        var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
+        var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
         Task.Wait();
         return (T)Task.Result!;
+        //FormatterResolver.GetFormatterDynamic<T>();
+        ////var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
+        //if(typeof(T)==typeof(char[])){
+        //    var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
+        //    Task.Wait();
+        //    return (T)Task.Result!;
+        //} else{
+        //    var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
+        //    Task.Wait();
+        //    return Task.Result!;
+        //}
     }
 }

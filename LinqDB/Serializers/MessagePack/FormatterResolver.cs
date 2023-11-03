@@ -120,13 +120,13 @@ internal sealed class FormatterResolver:IFormatterResolver {
         //        return Return(FormatterGenericType.GetValue(nameof(Formatters.Enumerables.IEnumerable<int>.Instance)));
         //    }
         //}
-        {
-            if(type.GetIEnumerableT(out var Interface)) {
-                var GenericArguments_0 = Interface.GetGenericArguments()[0];
-                var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
-                return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
-            }
-        }
+        //{
+        //    if(type.GetIEnumerableT(out var Interface)) {
+        //        var GenericArguments_0 = Interface.GetGenericArguments()[0];
+        //        var FormatterGenericType = typeof(Formatters.Enumerables.IEnumerableOther<,>).MakeGenericType(Interface,GenericArguments_0);
+        //        return Return((IMessagePackFormatter)FormatterGenericType.GetValue("Instance"));
+        //    }
+        //}
         return default!;
         IMessagePackFormatter Return(IMessagePackFormatter Formatter0){
             this.TypeFormatter.TryAdd(type,Formatter0);

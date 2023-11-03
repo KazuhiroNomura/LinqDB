@@ -52,7 +52,7 @@ public class Loop : 共通
             var input = Expression.Loop(
                 Expression.Default(typeof(void))
             );
-            var expected = new { a = input, b = (Expression)input };
+            var expected = new { a = input, b = input };
             this.AssertEqual(expected);
         }
     }

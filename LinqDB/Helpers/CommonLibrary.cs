@@ -106,10 +106,7 @@ public static class CommonLibrary {
         public override void SetLength(long value) {
             if(value>this.Buffer.Length) {
                 var Buffer_Length = this.Buffer.Length;
-                throw new IndexOutOfRangeException(
-                    $"value≦Buffer.Lengthが満たされる必要がある。"+
-                    $"実際は{value}≦{Buffer_Length}だった。"
-                );
+                throw new IndexOutOfRangeException($"value≦Buffer.Lengthが満たされる必要がある。実際は{value}≦{Buffer_Length}だった。");
             }
             this._Length=value;
             this.必要なLength=0;
@@ -119,16 +116,12 @@ public static class CommonLibrary {
             //Debug.Assert(this.Position+count<=this.Buffer.Length);
             this.必要なLength+=count;
             var Position = this.Position;
-            if(Position+count<=this.Buffer.Length) {
-                Array.Copy(buffer,offset,this.Buffer,Position,count);
-                Position+=count;
-                if(this._Length<Position) {
-                    this._Length=Position;
-                }
-                this.Position=Position;
-            } else {
-                this.必要なLength+=count;
+            Array.Copy(buffer,offset,this.Buffer,Position,count);
+            Position+=count;
+            if(this._Length<Position){
+                this._Length=Position;
             }
+            this.Position=Position;
         }
         public override void WriteByte(byte value) {
             this.必要なLength++;

@@ -8,7 +8,7 @@ public class DebugInfo : 共通
     {
         //if(writer.TryWriteNil(value)) return;
         var SymbolDocument0 = Expression.SymbolDocument("ソースファイル名0.cs");
-        this.ExpressionAssertEqual(Expression.DebugInfo(SymbolDocument0, 1, 2, 3, 4));
+        this.ExpressionシリアライズAssertEqual(Expression.DebugInfo(SymbolDocument0, 1, 2, 3, 4));
     }
 }
 

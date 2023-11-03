@@ -380,10 +380,8 @@ public class Serializer:共通 {
         共通0(Expressions.Expression.LessThanOrEqual      (Constant1,Constant1,false,Method_int));
         共通0(Expressions.Expression.NotEqual             (Constant1,Constant1,false,Method_int));
         void 共通0(Expressions.BinaryExpression Binary){
-            this.AssertEqual<Expressions.BinaryExpression>(null!,Assert.Null);
-            this.AssertEqual<Expressions.Expression>(null!,Assert.Null);
-            this.AssertEqual<object>(null!,Assert.Null);
-            this.コンパイルリモート実行(
+            this.ExpressionシリアライズAssertEqual(Binary);
+            this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         new[]{ParameterInt32},
@@ -400,7 +398,8 @@ public class Serializer:共通 {
             );
         }
         void 共通1(Expressions.BinaryExpression Binary){
-            this.コンパイルリモート実行(
+            this.ExpressionシリアライズAssertEqual(Binary);
+            this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         Expressions.Expression.Assign(MemberInt32,Constant0),
@@ -411,7 +410,7 @@ public class Serializer:共通 {
         }
     }
     [Fact]public void Block0(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 ParameterDecimal
@@ -420,7 +419,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Block1(){
         var q= Expressions.Expression.Parameter(typeof(decimal),"q");
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal,q },
                 ParameterDecimal
@@ -428,7 +427,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block2(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[]{Expressions.Expression.Parameter(typeof(decimal),"a"),Expressions.Expression.Parameter(typeof(decimal),"b"),ParameterDecimal},
                 ParameterDecimal
@@ -436,7 +435,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block4(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -446,7 +445,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -456,7 +455,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -466,7 +465,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.TryCatchFinally(
@@ -476,7 +475,7 @@ public class Serializer:共通 {
                 ParameterDecimal
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 new[] { ParameterDecimal },
                 Expressions.Expression.TryCatchFinally(
@@ -487,7 +486,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Block10(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 Expressions.Expression.Switch(
                     Expressions.Expression.Constant(123),
@@ -499,7 +498,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 Expressions.Expression.Switch(
                     Expressions.Expression.Constant(123),
@@ -513,21 +512,21 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Condition(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Condition(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m),
                 Expressions.Expression.Constant(2m)
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.IfThenElse(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m),
                 Expressions.Expression.Constant(2m)
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.IfThen(
                 Expressions.Expression.Constant(true),
                 Expressions.Expression.Constant(1m)
@@ -535,17 +534,17 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Constant0(){
-        this.ExpressionAssertEqual((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
+        this.ExpressionシリアライズAssertEqual((Expressions.Expression)Expressions.Expression.Constant(null,typeof(string)));
     }
     [Fact]public void Constant1(){
-        this.ExpressionAssertEqual(Expressions.Expression.Constant(1111m));
-        this.ExpressionAssertEqual(Expressions.Expression.Constant(1111m,typeof(object)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Constant(1111m));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
         this.AssertEqual(
             typeof(string).GetConstructor(new[]{typeof(char),typeof(int)}),Assert.NotNull
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.New(
                 typeof(string).GetConstructor(new[]{typeof(char),typeof(int)})!,
                 Expressions.Expression.Constant('a'),
@@ -555,13 +554,13 @@ public class Serializer:共通 {
     }
     [Fact]public void DebugInfo(){
         var SymbolDocument0=Expressions.Expression.SymbolDocument("SymbolDocument0.cs");
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.DebugInfo(SymbolDocument0,1,1,3,10)
         );
     }
     [Fact]public void Default(){
-        this.ExpressionAssertEqual(Expressions.Expression.Default(typeof(int)));
-        this.ExpressionAssertEqual(Expressions.Expression.Default(typeof(decimal)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Default(typeof(int)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Default(typeof(decimal)));
     }
     //[Fact]public void Dynamic(){
     //    var CallSiteBinder=new CallSiteBinder();
@@ -670,9 +669,9 @@ public class Serializer:共通 {
         );
         var CallSite=CallSite<Func<CallSite,object,TResult>>.Create(binder);
         var expected=CallSite.Target(CallSite,input!);
-        this.ExpressionAssertEqual(Dynamic0);
+        this.ExpressionシリアライズAssertEqual(Dynamic0);
         var Lambda=Expressions.Expression.Lambda<Func<TResult>>(Dynamic0);
-        this.ExpressionAssertEqual(Lambda);
+        this.Expression実行AssertEqual(Lambda);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
@@ -700,7 +699,7 @@ public class Serializer:共通 {
         }
     }
     [Fact]public void ClassDisplay(){
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<object>>(
                 Expressions.Expression.Constant(ClassDisplay取得())
             )
@@ -789,9 +788,9 @@ public class Serializer:共通 {
         void Action1後処理<T0,T1>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 @this,T1 arg1){
             var CallSite=CallSite<Action<CallSite,T0,T1>>.Create(binder);
             CallSite.Target(CallSite,@this,arg1);
-            this.ExpressionAssertEqual(Dynamic);
+            this.ExpressionシリアライズAssertEqual(Dynamic);
             var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
-            this.ExpressionAssertEqual(Lambda);
+            this.ExpressionシリアライズAssertEqual((Expressions.Expression)Lambda);
             var M = Lambda.Compile();
             M();
         }
@@ -818,9 +817,9 @@ public class Serializer:共通 {
         void Action3後処理<T0,T1,T2,T3>(Expressions.DynamicExpression Dynamic,CallSiteBinder binder,T0 arg0,T1 arg1,T2 arg2,T3 arg3){
             var CallSite=CallSite<Action<CallSite,T0,T1,T2,T3>>.Create(binder);
             CallSite.Target(CallSite,arg0,arg1,arg2,arg3);
-            this.ExpressionAssertEqual(Dynamic);
+            this.ExpressionシリアライズAssertEqual(Dynamic);
             var Lambda = Expressions.Expression.Lambda<Action>(Dynamic);
-            this.ExpressionAssertEqual(Lambda);
+            this.ExpressionシリアライズAssertEqual((Expressions.Expression)Lambda);
             var M = Lambda.Compile();
             M();
         }
@@ -901,7 +900,7 @@ public class Serializer:共通 {
                 typeof(object),
                 Expressions.Expression.Constant(arg1)
             );
-            this.ExpressionAssertEqual(Dynamic0);
+            this.ExpressionシリアライズAssertEqual(Dynamic0);
             var CallSite=CallSite<Func<CallSite,object,object>>.Create(binder);
             this.共通Dynamic(CallSite.Target(CallSite,arg1),Dynamic0);
         }
@@ -1045,12 +1044,12 @@ public class Serializer:共通 {
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2),Dynamic0);
     }
     private void 共通Dynamic(object expected,Expressions.DynamicExpression Dynamic0){
-        this.ExpressionAssertEqual(Dynamic0);
+        this.ExpressionシリアライズAssertEqual(Dynamic0);
         var Lambda=Expressions.Expression.Lambda<Func<object>>(Dynamic0);
         var M=Lambda.Compile();
         var actual=M();
         Assert.Equal(expected,actual);
-        this.コンパイルリモート実行(Lambda);
+        this.Expression実行AssertEqual(Lambda);
     }
     [Fact]public void ElementInit(){
         var Type=typeof(BindCollection);
@@ -1074,7 +1073,7 @@ public class Serializer:共通 {
         );
         {
             var l=new List<int>();
-            this.ExpressionAssertEqual(
+            this.ExpressionシリアライズAssertEqual(
                 Expressions.Expression.MemberInit(
                     New,
                     Expressions.Expression.ListBind(
@@ -1090,26 +1089,21 @@ public class Serializer:共通 {
     }
     [Fact]public void Label(){
         var labelTarget=Expressions.Expression.Label();
-        this.ExpressionAssertEqual(Expressions.Expression.Label(labelTarget));
-        this.ExpressionAssertEqual(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Label(labelTarget));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
     }
     [Fact]public void LabelTarget(){
-        共通LabelTarget(Expressions.Expression.Label());
-        共通LabelTarget(Expressions.Expression.Label(typeof(int)));
-        共通LabelTarget(Expressions.Expression.Label(typeof(double),"abc"));
-        void 共通LabelTarget(Expressions.LabelTarget input){
-            Debug.Assert(input!=null,nameof(input)+" != null");
-            this.AssertEqual<object>(input,output=>Assert.Equal(input,(Expressions.LabelTarget)output,this.ExpressionEqualityComparer));
-            this.AssertEqual(input,output=>Assert.Equal(input,output,this.ExpressionEqualityComparer));
-        }
+        this.AssertEqual(Expressions.Expression.Label());
+        this.AssertEqual(Expressions.Expression.Label(typeof(int)));
+        this.AssertEqual(Expressions.Expression.Label(typeof(double),"abc"));
     }
     static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]
     public void Lambda0(){
-        this.ExpressionAssertEqual(Lambda(()=>1));
+        this.ExpressionシリアライズAssertEqual(Lambda(()=>1));
     }
     [Fact]public void Lambda1(){
-        this.ExpressionAssertEqual(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
+        this.Expression実行AssertEqual(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
     }
     [Fact]public void Lambda3(){
         //const decimal Catch値 = 40, Finally値 = 30;
@@ -1122,7 +1116,7 @@ public class Serializer:共通 {
         //        Expressions.Expressions.Expression.Constant(Catch値)
         //    )
         //);
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1140,7 +1134,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda31(){
-        this.コンパイルリモート実行(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.Block(
                     Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -1150,11 +1144,11 @@ public class Serializer:共通 {
                     )
                 ),
                 ParameterDecimal
-            ),1
+            )
         );
     }
     [Fact]public void Lambda32(){
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1169,7 +1163,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda33(){
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[]{ParameterDecimal},
@@ -1187,7 +1181,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda34(){
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1205,7 +1199,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Lambda35(){
-        this.コンパイルリモート実行(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
                     new[] { ParameterDecimal },
@@ -1224,7 +1218,7 @@ public class Serializer:共通 {
     }
     [Fact]public void Lambda4(){
         var Exception=Expressions.Expression.Parameter(typeof(Exception));
-        this.コンパイルリモート実行(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.TryCatchFinally(
                     ParameterDecimal,
@@ -1232,12 +1226,12 @@ public class Serializer:共通 {
                     Expressions.Expression.Catch(Exception,ParameterDecimal,Expressions.Expression.Constant(true))
                 ),
                 ParameterDecimal
-            ),1
+            )
         );
     }
     [Fact]public void Lambda5(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,]));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array2,
@@ -1248,7 +1242,7 @@ public class Serializer:共通 {
             )
         );
         var Array1=Expressions.Expression.Parameter(typeof(int[]));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array1,
@@ -1260,7 +1254,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void NewArrayInit(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.NewArrayInit(
                 typeof(int),
                 Expressions.Expression.Constant(0),
@@ -1270,7 +1264,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void NewArrayBounds(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.NewArrayBounds(
                 typeof(int),
                 Expressions.Expression.Constant(0),
@@ -1295,7 +1289,7 @@ public class Serializer:共通 {
             ctor,
             Constant_1
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.MemberInit(
                 New,
                 Expressions.Expression.Bind(
@@ -1304,7 +1298,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.MemberInit(
                 New,
                 Expressions.Expression.ListBind(
@@ -1321,7 +1315,7 @@ public class Serializer:共通 {
     private static readonly Expressions.LabelTarget Label_void=Expressions.Expression.Label("Label");
     [Fact]
     public void Loop0(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
                     Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m)),
@@ -1333,7 +1327,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void Loop1(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Loop(
                 Expressions.Expression.Block(
                     Expressions.Expression.Break(Label_decimal,Expressions.Expression.Constant(1m))
@@ -1344,51 +1338,39 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Negate(){
-        this.ExpressionAssertEqual(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Negate(Expressions.Expression.Constant(1m)));
     }
     [Fact]public void Index0(){
-        var List=Expressions.Expression.Parameter(typeof(List<int>));
-        this.ExpressionAssertEqual((Expressions.Expression)
-            Expressions.Expression.Block(
-                new[] { List },
-                Expressions.Expression.MakeIndex(
-                    List,
-                    typeof(List<int>).GetProperty("Item"),
-                    new []{Expressions.Expression.Constant(0)}
-                )
+        this.ExpressionシリアライズAssertEqual(
+            Expressions.Expression.MakeIndex(
+                Expressions.Expression.New(typeof(List<int>).GetConstructor(Type.EmptyTypes)!),
+                typeof(List<int>).GetProperty("Item"),
+                new []{Expressions.Expression.Constant(0)}
             )
         );
     }
     [Fact]public void Index1(){
-        var Array1=Expressions.Expression.Parameter(typeof(int[]));
-        this.ExpressionAssertEqual(
-            Expressions.Expression.Lambda(
-                Expressions.Expression.ArrayIndex(
-                    Array1,
-                    Expressions.Expression.Constant(0)
-                ),
-                Array1
+        this.ExpressionシリアライズAssertEqual(
+            Expressions.Expression.ArrayIndex(
+                Expressions.Expression.NewArrayBounds(typeof(int),Expressions.Expression.Constant(2)),
+                Expressions.Expression.Constant(0)
             )
         );
     }
     [Fact]
     public void Index2(){
-        var Array2=Expressions.Expression.Parameter(typeof(int[,]));
-        this.ExpressionAssertEqual(
-            Expressions.Expression.Lambda(
-                Expressions.Expression.ArrayIndex(
-                    Array2,
-                    Expressions.Expression.Constant(0),
-                    Expressions.Expression.Constant(0)
-                ),
-                Array2
+        this.ExpressionシリアライズAssertEqual(
+            Expressions.Expression.ArrayIndex(
+                Expressions.Expression.NewArrayBounds(typeof(int),Expressions.Expression.Constant(2),Expressions.Expression.Constant(3)),
+                Expressions.Expression.Constant(0),
+                Expressions.Expression.Constant(0)
             )
         );
     }
     [Fact]
     public void Index3(){
         var Array2=Expressions.Expression.Parameter(typeof(int[,,]));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Lambda(
                 Expressions.Expression.ArrayIndex(
                     Array2,
@@ -1403,7 +1385,7 @@ public class Serializer:共通 {
     [Fact]
     public void Goto(){
         var target=Expressions.Expression.Label(typeof(int),"target");
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 Expressions.Expression.Label(
                     target,
@@ -1417,7 +1399,7 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Block(
                 Expressions.Expression.Label(
                     target,
@@ -1452,7 +1434,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void ListInit(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.ListInit(
                 Expressions.Expression.New(typeof(List<int>)),
                 Expressions.Expression.ElementInit(typeof(List<int>).GetMethod("Add")!,Expressions.Expression.Constant(1))
@@ -1461,7 +1443,7 @@ public class Serializer:共通 {
     }
     [Fact]public void MemberExpression(){
         var Point=Expressions.Expression.Parameter(typeof(Point));
-        this.ExpressionAssertEqual(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Block(new[]{Point},Expressions.Expression.MakeMemberAccess(Point,typeof(Point).GetProperty("X")!)));
     }
     [Fact]public void MemberBinding(){
         var Type = typeof(BindCollection);
@@ -1481,17 +1463,10 @@ public class Serializer:共通 {
             Constant_1
         );
         //if(a_Bindings.Count!=b_Bindings.Count) return false;
-        this.ExpressionAssertEqual(
-            Expressions.Expression.MemberInit(
-                New,
-                Expressions.Expression.Bind(
-                    Int32フィールド1,
-                    Constant_1
-                ),
-                Expressions.Expression.Bind(
-                    Int32フィールド2,
-                    Constant_1
-                )
+        this.AssertEqual<Expressions.MemberBinding>(
+            Expressions.Expression.Bind(
+                Int32フィールド1,
+                Constant_1
             )
         );
     }
@@ -1505,13 +1480,13 @@ public class Serializer:共通 {
         var o=new テスト();
         var arg=Expressions.Expression.Constant(1);
         var @this=Expressions.Expression.Constant(o);
-        this.ExpressionAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
-        this.ExpressionAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
-        this.ExpressionAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
-        this.ExpressionAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
-        this.ExpressionAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
-        this.ExpressionAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Call(
                 M(()=>string.Concat("","")),
                 Expressions.Expression.Constant("A"),
@@ -1536,7 +1511,7 @@ public class Serializer:共通 {
     [Fact]
     public void Invoke(){
         var @string=Expressions.Expression.Parameter(typeof(string));
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Invoke(
                 Expressions.Expression.Lambda(@string,@string),
                 Expressions.Expression.Constant("B")
@@ -1544,13 +1519,13 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void New(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.New(
                 typeof(ValueTuple<int>).GetConstructors()[0],
                 Expressions.Expression.Constant(1)
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.New(
                 typeof(ValueTuple<int,int>).GetConstructors()[0],
                 Expressions.Expression.Constant(1),
@@ -1565,13 +1540,11 @@ public class Serializer:共通 {
     [Fact]
     public void Parameter(){
         var p0=Expressions.Expression.Parameter(typeof(int));
-        this.ExpressionAssertEqual(Expressions.Expression.Lambda<Func<int,int>>(p0,p0));
-        var p1=Expressions.Expression.Parameter(typeof(int),"a");
-        this.ExpressionAssertEqual(Expressions.Expression.Lambda<Func<int,int>>(p1,p1));
+        this.ExpressionシリアライズCoverage(p0);
     }
     [Fact]
     public void Switch(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.Switch(
                 Expressions.Expression.Constant(123),
                 Expressions.Expression.Constant(0m),
@@ -1584,7 +1557,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void Try(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TryCatch(
                 Expressions.Expression.Constant(0),
                 Expressions.Expression.Catch(
@@ -1593,19 +1566,19 @@ public class Serializer:共通 {
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TryCatchFinally(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TryFault(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
             )
         );
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TryFinally(
                 Expressions.Expression.Default(typeof(void)),
                 Expressions.Expression.Default(typeof(void))
@@ -1614,7 +1587,7 @@ public class Serializer:共通 {
     }
     [Fact]
     public void TypeEqual(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TypeEqual(
                 Expressions.Expression.Constant(1m),
                 typeof(decimal)
@@ -1622,7 +1595,7 @@ public class Serializer:共通 {
         );
     }
     [Fact]public void TypeIs(){
-        this.ExpressionAssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expressions.Expression.TypeIs(
                 Expressions.Expression.Constant(1m),
                 typeof(decimal)
@@ -1643,7 +1616,7 @@ public class Serializer:共通 {
         var Constant演算子1=Expressions.Expression.Constant(new 演算子1(true));
         var Parameter演算子=Expressions.Expression.Parameter(typeof(演算子));
         var ParameterInt32=Expressions.Expression.Parameter(typeof(int));
-        this.ExpressionAssertEqual(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.ArrayLength(Expressions.Expression.Constant(new int[1])));
         共通1(Expressions.Expression.ArrayLength(ConstantArray));
         共通1(Expressions.Expression.Quote(Expressions.Expression.Lambda(ConstantArray)));
         共通1(Expressions.Expression.Convert(Constant1_1d,typeof(int)));
@@ -1697,7 +1670,7 @@ public class Serializer:共通 {
         共通1(Expressions.Expression.Increment(Constant演算子,GetMethod(nameof(Unary演算子))));
         共通1(Expressions.Expression.UnaryPlus(Constant演算子,GetMethod(nameof(Unary演算子))));
         void 共通0(Expressions.ParameterExpression 代入先,Expressions.ConstantExpression 代入元,Expressions.UnaryExpression a){
-            this.コンパイルリモート実行(
+            this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
                         new[]{代入先},
@@ -1714,8 +1687,8 @@ public class Serializer:共通 {
             );
         }
         void 共通1(Expressions.UnaryExpression Unary){
-            this.ExpressionAssertEqual(Unary);
-            this.コンパイルリモート実行(
+            this.ExpressionシリアライズAssertEqual(Unary);
+            this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Convert(
                         Unary,

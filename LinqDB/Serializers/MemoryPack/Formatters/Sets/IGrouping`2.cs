@@ -11,7 +11,7 @@ public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElem
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
         writer.WriteValue(value.Key);
-        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??writer.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??writer.GetFormatter<TElement>();
         foreach(var item in value)
             writer.Write(Formatter,item);
     }
@@ -26,7 +26,7 @@ public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElem
         if(reader.TryReadNil()) return;
         var Count = reader.ReadVarIntInt64();
         var Key=reader.ReadValue<TKey>();
-        var Formatter=FormatterResolver.GetRegisteredFormatter<TElement>()??reader.GetFormatter<TElement>();
+        var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??reader.GetFormatter<TElement>();
         var value0 = new G.GroupingSet<TKey,TElement>(Key);
         while(Count-->0)
             value0.Add(reader.Read(Formatter));

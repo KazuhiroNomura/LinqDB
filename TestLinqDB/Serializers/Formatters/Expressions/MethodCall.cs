@@ -29,9 +29,9 @@ public class MethodCall : 共通
             new
             {
                 StaticMethod,
-                StaticMethodExpression = (Expression)StaticMethod,
+                StaticMethodExpression = StaticMethod,
                 InstanceMethod,
-                InstanceMethodExpression = (Expression)InstanceMethod
+                InstanceMethodExpression = InstanceMethod
             }
         );
     }

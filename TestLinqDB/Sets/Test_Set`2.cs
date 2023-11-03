@@ -156,11 +156,11 @@ public abstract class ATest_Set2:共通 {
     }
     [Fact]public void Serialize継承しない1(){
         var expected=new Serialize継承しない(){A = "AAA"};
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
     [Fact]public void SerializeEntity0(){
         var expected=new SerializeEntity{Name = "ABCDE",A = "AAA"};
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
     public class Formatter2<T>{
 
@@ -264,15 +264,15 @@ public abstract class ATest_Set2:共通 {
         //var input=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
         //this.AssertEqual全パターン(input);
         var expected=new Set<SerializeEntity>{new(){Name = "Name0",A = "A0"}};
-        this.AssertEqual<IEnumerable>(expected,actual=>Assert.Equal(expected,actual));
+        this.AssertEqual<IEnumerable>(expected);
         //var bytes=global::Utf8Json.JsonSerializer.Serialize(expected);
         //var actual = global::Utf8Json.JsonSerializer.Deserialize<Set<SerializeEntity>>(bytes);
         //Assert.Equal(expected,actual);
-        this.AssertEqual(expected,actual=>Assert.Equal(expected,actual));
-        //this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.AssertEqual<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        //this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected,actual=>Assert.Equal(expected,actual));
-        this.AssertEqual<object>(expected,actual=>Assert.Equal(expected,actual));
+        this.AssertEqual(expected);
+        //this.MemoryMessageJson_Assert<ImmutableSet<SerializeEntity>>(expected);
+        this.AssertEqual<LinqDB.Sets.IEnumerable<SerializeEntity>>(expected);
+        //this.MemoryMessageJson_Assert<LinqDB.Sets.ICollection<SerializeEntity>>(expected);
+        this.AssertEqual<object>(expected);
     }
     [Fact]public void Serialize21(){
         var expected=new TestSet<SerializeEntity>{new(){Name = "A"}};
@@ -291,7 +291,7 @@ public abstract class ATest_Set2:共通 {
         var expected=new SerializeSchema{Name = "Na"};
         var set=expected.SerializeEntitySet1;
         set.Add(new(){Name = "C"});
-        this.AssertEqual(expected,actual=>Assert.Equal(expected,actual));
+        this.AssertEqual(expected);
     }
     [Fact]public void Serialize31(){
         var expected=new SerializeEntity{Name = "Na"};
@@ -307,10 +307,6 @@ public abstract class ATest_Set2:共通 {
         var set=expected.SerializeEntitySet1;
         set.Add(new(){Name = "C"});
         this.AssertEqual(expected);
-        this.AssertEqual(expected,actual=>{
-            var r=expected.Equals(actual);
-            Assert.Equal(expected,actual);
-        });
     }
     [Fact]public void Serialize330(){
         var expected = new {SerializeEntitySet1 =new Set<SerializeEntity> {new SerializeEntity{Name = "A"},new SerializeEntity{Name = "B"}}};
@@ -332,25 +328,25 @@ public abstract class ATest_Set2:共通 {
         var expected = new SerializeContainer{SerializeSchema = { SerializeEntitySet1 = {new(){Name = "A"},new(){Name = "B"}}}};
         var set=expected.SerializeSchema.SerializeEntitySet1;
         set.Add(new(){Name = "C"});
-        this.AssertEqual(expected,actual=>Assert.Equal(expected,actual));
+        this.AssertEqual(expected);
     }
     [Fact]public void Serialize5() {
         var expected = new シリアライズ対象(1,2);
-        this.AssertEqual(expected,actual=>Assert.Equal(expected,actual));
+        this.AssertEqual(expected);
     }
     [Fact]public void Serialize6() {
         var expected = new Set<シリアライズ対象>();
         for(var a=0;a<10;a++){
             expected.Add(new(a,a));
         }
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
     [Fact]public void Serialize7() {
         var expected = new Set<SerializeEntity>();
         for(var a=0;a<10;a++){
             expected.Add(new SerializeEntity{Name=a.ToString()});
         }
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
 
     [Fact]public void Serialize8(){
@@ -360,14 +356,14 @@ public abstract class ATest_Set2:共通 {
         //for(var a=0;a<10;a++){
         //    expected.Add(new Table(default(PropertyInfo)!,new LinqDB.Databases.Tables.Schema(default(PropertyInfo)!)));
         //}
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
     [Fact]public void Serialize9() {
         var expected = new Set<SerializeEntity>();
         for(var a=0;a<10;a++){
             expected.Add(new SerializeEntity{Name=a.ToString()});
         }
-        this.AssertEqual(expected,output=>Assert.Equal(expected,output));
+        this.AssertEqual(expected);
     }
     [Serializable]
     public struct JsonSet<T> {

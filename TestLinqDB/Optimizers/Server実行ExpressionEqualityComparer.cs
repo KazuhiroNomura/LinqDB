@@ -172,14 +172,97 @@ public class Server実行ExpressionEqualityComparer:共通{
     protected static readonly long Int64_1=1;
     protected static readonly decimal Decimal_1=1,Decimal_2=2;
     protected static readonly bool Boolean1=true,Boolean2=false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static readonly string _String="S";
     protected static readonly object Object_String="A";
     protected static readonly object Object_Int32=1;
     protected static readonly string[] Array={"A","B"};
-
-
     protected static readonly int _Int32=2;
     protected static readonly bool _Boolean=true;
-    public static readonly string _String="S";
     protected static readonly int? _NullableInt32=0;
     protected static readonly List<int> _List=new(){1,2};
     protected static readonly Func<int,int> _Delegate=p=>p;
@@ -337,11 +420,16 @@ public class Server実行ExpressionEqualityComparer:共通{
     public static dynamic Dynamicメンバーアクセス(dynamic a){
         return a.メンバー;
     }
-    //private readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
     private void AssertEqual(Expression a,Expression b){
         this.AssertEqual(a,aa=>Assert.Equal(aa,b,this.ExpressionEqualityComparer));
         this.AssertEqual(b,bb=>Assert.Equal(bb,a,this.ExpressionEqualityComparer));
     }
+
+
+
+
+
+
 
     private void AssertNotEqual(Expression a,Expression b){
         this.AssertEqual(a,aa=>Assert.NotEqual(aa,b,this.ExpressionEqualityComparer));
