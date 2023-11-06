@@ -24,10 +24,10 @@ public static class Configulation{
     /// Server.AcceptSocketのReceiveバイト数
     /// </summary>
     public const int ServerSendBytes = 102;
-    /// <summary>
-    /// サーバーのMemoryStreamのバイト数。足りないと「リモート先で例外が発生した。」
-    /// </summary>
-    public const int MemoryStreamBufferSize = 1<<20;
+    ///// <summary>
+    ///// サーバーのMemoryStreamのバイト数。足りないと「リモート先で例外が発生した。」
+    ///// </summary>
+    //public const int MemoryStreamBufferSize = 1<<20;
     /// <summary>
     /// WCFBackendのSocketポート番号
     /// </summary>

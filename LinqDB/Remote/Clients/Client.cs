@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Security;
@@ -14,15 +15,8 @@ using System.Xml;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Properties;
-//using MemoryPack=LinqDB.Serializers.MemoryPack;
-//using MessagePack=LinqDB.Serializers.MessagePack;
-//using Utf8Json=LinqDB.Serializers.Utf8Json;
-//using LinqDB.Serializers.Utf8Json.Formatters;
 using static LinqDB.Helpers.CommonLibrary;
 using static LinqDB.Helpers.Configulation;
-//using System.Linq.Expressions;
-//using Expression = System.Linq.Expressions.Expression;
-//using MemoryStream = System.IO.MemoryStream;
 using MemoryStream = LinqDB.Helpers.CommonLibrary.MemoryStream;
 
 namespace LinqDB.Remote.Clients;
@@ -34,13 +28,18 @@ public class Client:IDisposable {
     private readonly Serializers.Utf8Json.Serializer Utf8Json=new();
     private readonly Serializers.MessagePack.Serializer MessagePack=new();
     private readonly Serializers.MemoryPack.Serializer MemoryPack=new();
-    [NonSerialized]
-    private readonly byte[]Buffer=new byte[MemoryStreamBufferSize];
-    /// <summary>
-    /// バッファストリーム。
-    /// </summary>
-    [NonSerialized]
-    private protected readonly MemoryStream MemoryStream;
+    //[NonSerialized]
+    //private readonly byte[]Buffer=new byte[MemoryStreamBufferSize];
+    ///// <summary>
+    ///// バッファストリーム。
+    ///// </summary>
+    //[NonSerialized]
+    //private protected readonly MemoryStream MemoryStream;
+    [NonSerialized]private readonly byte[] Hash=new byte[HashLength];
+    [NonSerialized]private readonly byte[] Hash_Request_SerializeType=new byte[HashLength+2];
+    [NonSerialized]private byte[] PasswordHash=default!;
+    [NonSerialized]private byte[] WriteBuffer;
+    [NonSerialized]private byte[] ReadBuffer=default!;
     private struct メルセンヌツィスター乱数 {
         /// <summary>
         /// 内部状態ベクトル総数
@@ -196,40 +195,19 @@ public class Client:IDisposable {
     /// 既定コンストラクタ。
     /// </summary>
     public Client():this(既定のタイムアウト,既定のタイムアウト,null!) {}
-    //private readonly Utf8JsonCustomSerializer Utf8JsonCustomSerializer;
-    //private readonly MessagePackCustomSerializer MessagePackCustomSerializer;
-    //private readonly CustomSerializerMemoryPack CustomSerializerMemoryPack;
-    //private readonly Serializers.Utf8Json.Resolver Utf8Json_Resolver=new Serializers.Utf8Json.Resolver();
-    //private readonly IJsonFormatterResolver JsonFormatterResolver;
-    //private readonly Serializers.MessagePack.Resolver MessagePack_Resolver=new Serializers.MessagePack.Resolver();
-    //private readonly MessagePackSerializerOptions MessagePackSerializerOptions;
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     /// <param name="WriteTimeout">書き込みタイムアウト</param>
     /// <param name="ReadTimeout">読み込みタイムアウト</param>
     /// <param name="DnsEndPoint">接続先</param>
-    private Client(int WriteTimeout,int ReadTimeout,DnsEndPoint DnsEndPoint) {
-        this.MemoryStream=new MemoryStream(this.Buffer);
+    private Client(int WriteTimeout,int ReadTimeout,DnsEndPoint DnsEndPoint){
+        this.WriteBuffer=new byte[65536];
+        //this.MemoryStream=new MemoryStream(this.Buffer);
         //this.MemoryStream=new MemoryStream();
         this.WriteTimeout=WriteTimeout;
         this.ReadTimeout=ReadTimeout;
         this.DnsEndPoint=DnsEndPoint;
-        //this.Utf8JsonCustomSerializer=new();
-        //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
-        //    //順序が大事
-        //    this.Utf8Json_Resolver,
-        //    Utf8Json.Resolvers.StandardResolver.AllowPrivate,
-        //    Utf8Json.Resolvers.StandardResolver.Default
-        //);
-        //this.MessagePackSerializerOptions=MessagePackSerializerOptions.Standard.WithResolver(
-        //    MessagePack.Resolvers.CompositeResolver.Create(
-        //        //順序が大事
-        //        this.MessagePack_Resolver,
-        //        MessagePack.Resolvers.StandardResolver.Instance,
-        //        MessagePack.Resolvers.DynamicContractlessObjectResolverAllowPrivate.Instance
-        //    )
-        //);
     }
     /// <summary>
     /// ファイナライザ
@@ -254,7 +232,7 @@ public class Client:IDisposable {
             this.IsDisposed=true;
             if(disposing) {
                 this.Provider.Dispose();
-                this.MemoryStream.Dispose();
+                //this.MemoryStream.Dispose();
                 this.取得_CSharp.Dispose();
             }
         }
@@ -360,17 +338,28 @@ public class Client:IDisposable {
     /// NetworkStreamはusing用、SslStreamはNetworkStreamかSslStreamを取得する。
     /// </summary>
     /// <returns></returns>
-    private void BufferにUserとPasswordHashを設定(Request Request) {
-        var MemoryStream = this.MemoryStream;
-        MemoryStream.SetLength(4);
-        MemoryStream.Position=4;
-        using var BinaryWriter = new BinaryWriter(MemoryStream,Encoding.Unicode,true);
-        BinaryWriter.Write(this.User);
-        BinaryWriter.Write(GetPasswordHash(this.Password));
-        BinaryWriter.Flush();
-        MemoryStream.WriteByte((byte)Request);
+    private void PasswordHashを設定(Request Request,byte[]Header) {
+        //var MemoryStream = this.MemoryStream;
+        //MemoryStream.SetLength(4);
+        //MemoryStream.Position=4;
+        //using var BinaryWriter = new BinaryWriter(MemoryStream,Encoding.Unicode,true);
+        //BinaryWriter.Write(this.User);
+        //BinaryWriter.Write(GetPasswordHash(this.Password));
+        //BinaryWriter.Flush();
+        //MemoryStream.WriteByte((byte)Request);
+        this.PasswordHash=Header;
+        var Provider=this.Provider;
+        //Provider.Initialize();
+        //Provider.ComputeHash(Encoding.Unicode.GetBytes(this.User));
+        //Array.Copy(Provider.Hash,0,Header,0,32);
+        Provider.Initialize();
+        Provider.ComputeHash(Encoding.Unicode.GetBytes(this.Password));
+        Array.Copy(Provider.Hash,0,Header,0,32);
+        //Array.Copy(Provider.Hash,0,Header,32,32);
+        Header[32]=(byte)Request;
+
     }
-    private void Bufferをサーバーに送信してBufferに受信() {
+    private Response WriteBufferをサーバーに送信してReadBufferに受信() {
         //Trace.WriteLine("Client");
         //Trace.WriteLine("Server.Function受信");
         //Trace.WriteLine("Server.Function受信終了");
@@ -378,23 +367,19 @@ public class Client:IDisposable {
         //Trace.WriteLine("Server.Function送信");
         //Trace.WriteLine("Server.Function送信終了");
         //Trace.WriteLine("Client");
-        var MemoryStream = this.MemoryStream;
-        var Buffer = this.Buffer;
+        //var MemoryStream = this.MemoryStream;
+        //var Buffer = this.Buffer;
+        var WriteBuffer = this.WriteBuffer;
         var Provider = this.Provider;
-        Provider.Initialize();
-        var Length = (int)MemoryStream.Length;
-        var Length除外全体バイト数 = Length-4;
-        var 送信データとハッシュのバイト数 = Length除外全体バイト数+ハッシュバイト数;
+        //var Length = WriteBuffer.Length;
+        //var Length除外全体バイト数 = Length-4;
         //Debug.Assert(送信データとハッシュのバイト数<=ServerMemoryStreamBufferSize);
         //送信データのバイト数
-        Provider.ComputeHash(Buffer,4,Length除外全体バイト数);
-        Buffer[0]=(byte)(送信データとハッシュのバイト数>>0);
-        Buffer[1]=(byte)(送信データとハッシュのバイト数>>8);
-        Buffer[2]=(byte)(送信データとハッシュのバイト数>>16);
-        Buffer[3]=(byte)(送信データとハッシュのバイト数>>24);
-        var Provider_Hash = Provider.Hash!;
-        for(var a = 0;a<ハッシュバイト数;a++)
-            Buffer[a+Length]=Provider_Hash[a];
+        Provider.Initialize();
+        Provider.ComputeHash(WriteBuffer);
+        //var Provider_Hash0 = Provider.Hash!;
+        //for(var a = 0;a<ハッシュバイト数;a++)
+        //    WriteBuffer[a+Length]=Provider_Hash0[a];
         // 4:バイト数(未確定)
         //64:SHA256(未確定)
         // 1:公開鍵暗号化アルゴリズム
@@ -405,7 +390,7 @@ public class Client:IDisposable {
         using var ConnectSocket = new Socket(CommonLibrary.AddressFamily,SocketType.Stream,ProtocolType.Tcp) {
             //LingerState=Common.LingerState,
             ReceiveBufferSize=ClientReceiveBufferSize,
-            SendBufferSize=ClientSendBufferSize,
+            SendBufferSize = ClientSendBufferSize,
             ReceiveTimeout=this.ReadTimeout,
             SendTimeout=this.WriteTimeout
         };
@@ -441,45 +426,62 @@ public class Client:IDisposable {
         } else {
             Stream=NetworkStream;
         }
-        Stream.Write(Buffer,0,Length+ハッシュバイト数);
+
+        using var BinaryWriter = new BinaryWriter(Stream,Encoding.Unicode,true);
+        BinaryWriter.Write(this.User);
+        BinaryWriter.Flush();
+        //Stream.Write(Buffer,0,Length+ハッシュバイト数);
+        Stream.Write(this.PasswordHash);
+        var WriteBuffer_Length = WriteBuffer.Length;
+        Stream.WriteByte((byte)(WriteBuffer_Length>>0));
+        Stream.WriteByte((byte)(WriteBuffer_Length>>8));
+        Stream.WriteByte((byte)(WriteBuffer_Length>>16));
+        Stream.WriteByte((byte)(WriteBuffer_Length>>24));
+        Stream.Write(WriteBuffer);
+        Stream.Write(Provider.Hash);
         Trace_WriteLine(1,"Client.送信 Stream.Write");
         Stream.Flush();
         Trace_WriteLine(2,"Client.送信 Stream.Flush");
-        var 受信データとハッシュのバイト数 = 0;
-        ReadByte(ref 受信データとハッシュのバイト数,Stream,0);
-        ReadByte(ref 受信データとハッシュのバイト数,Stream,8);
-        ReadByte(ref 受信データとハッシュのバイト数,Stream,16);
-        ReadByte(ref 受信データとハッシュのバイト数,Stream,24);
-        var 受信データバイト数 = 受信データとハッシュのバイト数-ハッシュバイト数;
-        MemoryStream.SetLength(受信データバイト数);
-        MemoryStream.Position=0;
-        var ReadOffset = 0;
-        var 残りバイト数 = 受信データとハッシュのバイト数;
-        do {
-            var ReadしたBytes = Stream.Read(Buffer,ReadOffset,残りバイト数);
-            ReadOffset+=ReadしたBytes;
-            残りバイト数-=ReadしたBytes;
-        } while(残りバイト数>0);
+        var ReadBuffer_Length = 0;
+        ReadByte(ref ReadBuffer_Length,Stream,0);
+        ReadByte(ref ReadBuffer_Length,Stream,8);
+        ReadByte(ref ReadBuffer_Length,Stream,16);
+        ReadByte(ref ReadBuffer_Length,Stream,24);
+        var Response=(Response)Stream.ReadByte();
+        var ReadBuffer=this.ReadBuffer=new byte[ReadBuffer_Length+HashLength];
+        //var ReadOffset = 0;
+        //var 残りバイト数 = ReadBuffer_Length;
+        //do {
+        //    var ReadしたBytes = Stream.Read(Buffer,ReadOffset,残りバイト数);
+        //    ReadOffset+=ReadしたBytes;
+        //    残りバイト数-=ReadしたBytes;
+        //} while(残りバイト数>0);
+        Read(Stream,ReadBuffer,ReadBuffer.Length);
+        //do {
+        //    var ReadしたBytes = Stream.Read(ReadBuffer,ReadOffset,残りバイト数);
+        //    ReadOffset+=ReadしたBytes;
+        //    残りバイト数-=ReadしたBytes;
+        //} while(残りバイト数>0);
         ConnectSocket.Shutdown(SocketShutdown.Both);
         ConnectSocket.Close();
         Provider.Initialize();
-        Provider.ComputeHash(Buffer,0,受信データバイト数);
-        var 受信Hash = Provider.Hash!;
-        for(var a = 0;a<ハッシュバイト数;a++)
-            if(受信Hash[a]!=Buffer[a+受信データバイト数])
+        Provider.ComputeHash(ReadBuffer,0,ReadBuffer_Length);
+        var Provider_Hash = Provider.Hash!;
+        for(var a = 0;a<HashLength;a++)
+            if(Provider_Hash[a]!=ReadBuffer[a+ReadBuffer_Length])
                 throw new InvalidDataException(Resources.ハッシュ値が一致しなかった);
+        return Response;
     }
     private static void ReadByte(ref int バイト数,Stream Stream,int シフト数) {
         var Byte = Stream.ReadByte();
         if(Byte<0)throw new InvalidDataException(Resources.データ長が読み込めなかった);
         バイト数+=Byte<<シフト数;
     }
-    private void Bufferをサーバーに送信してBufferに受信_例外処理(Response response) {
-        this.Bufferをサーバーに送信してBufferに受信();
-        var actual = (Response)this.MemoryStream.ReadByte();
+    private void WriteBufferをサーバーに送信してReadBufferに受信_例外処理(Response response) {
+        var actual = this.WriteBufferをサーバーに送信してReadBufferに受信();
         if(response==actual)return;
         if(actual==Response.ThrowException){
-            var Message=this.ReadObject<string>(this.MemoryStream);
+            var Message=this.ReadObject<string>(SerializeType.Utf8Json);
             throw new InvalidDataException(Resources.リモート先で例外が発生した,new Exception(Message));
         }
         throw リモート先から_を受信することを期待したが_だった(response,actual);
@@ -491,79 +493,37 @@ public class Client:IDisposable {
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
     public void EmptySendReceive() {
-        this.BufferにUserとPasswordHashを設定(Request.Bytes0_Bytes0);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.Bytes0);
+        this.PasswordHashを設定(Request.Bytes0_Bytes0,this.Hash);
+        this.WriteBufferをサーバーに送信してReadBufferに受信_例外処理(Response.Bytes0);
     }
     /// <summary>
     /// this.NetworkStreamからObjectをデシリアライズする
     /// </summary>
-    /// <param name="ReadStream"></param>
     /// <returns></returns>
-    internal T ReadObject<T>(MemoryStream ReadStream) {
-        var SerializeType = (SerializeType)ReadStream.ReadByte();
+    internal T ReadObject<T>(SerializeType SerializeType){
+        var ReadBuffer=this.ReadBuffer;
+        Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
         var value=SerializeType switch{
-            SerializeType.MemoryPack=>this.MemoryPack.Deserialize<object>(ReadStream),
-            SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(ReadStream),
-            SerializeType.Utf8Json=>this.Utf8Json.Deserialize<object>(ReadStream),
-            _=>throw new NotSupportedException(SerializeType.ToString())
+            SerializeType.MemoryPack =>this.MemoryPack.Deserialize<object>(ReadBuffer),
+            SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(ReadBuffer),
+            _                        =>this.Utf8Json.Deserialize<object>(ReadBuffer)
         };
         return(T)value;
-        //object o;
-        //T Result;
-        //switch(SerializeType) {
-        //    case SerializeType.Utf8Json: 
-        //        o=JsonResolver.Serializer().Deserialize<object>(ReadStream,this.SerializerConfiguration.JsonFormatterResolver); 
-        //        Result=(T)o;
-        //        break;
-        //    case SerializeType.MessagePack: 
-        //        o=MessagePackResolver.Serializer().Deserialize<object>(ReadStream); 
-        //        Result=(T)o;
-        //        break;
-        //    default: {
-        //        throw new NotSupportedException(SerializeType.ToString());
-        //    }
-        //}
-        //return Result;
     }
-    /// <summary>
-    /// 空を送信し例外をthrowする。
-    /// </summary>
-    public void BackendOutOfMemoryException() {
-        this.BufferにUserとPasswordHashを設定(Request.リモート先でOutOfMemoryException);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.ThrowException);
-        throw new OutOfMemoryException(this.ReadObject<string>(this.MemoryStream));
-    }
-    /// <summary>
-    /// Byteを送信し同じByteを受信する。
-    /// </summary>
-    /// <param name="value"></param>
-    /// <exception cref="InvalidDataException"></exception>
-    /// <exception cref="Exception"></exception>
-    public void ByteEofSendReceive(byte value) {
-        this.BufferにUserとPasswordHashを設定(Request.Byte_Byte);
-        var MemoryStream = this.MemoryStream;
-        MemoryStream.WriteByte(value);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.Byte);
-        var ReadByte0= MemoryStream.ReadByte();
-        if(ReadByte0!=value)throw リモート先から_を受信することを期待したが_だった(value,ReadByte0);
-        var ReadByte1= MemoryStream.ReadByte();
-        Debug.Assert(ReadByte1<0);
-    }
-
-    /// <summary>
-    /// サーバーでTimeoutExceptionを発生させる
-    /// </summary>
-    /// <param name="WriteXmlの表現形式"></param>
-    /// <exception cref="InvalidDataException"></exception>
-    /// <exception cref="Exception"></exception>
-    /// <returns>TimeoutException</returns>
-    public TimeoutException SendTimeoutException(SerializeType WriteXmlの表現形式){
-        this.BufferにUserとPasswordHashを設定(Request.TimeoutException_ThrowException);
-        var MemoryStream=this.MemoryStream;
-        MemoryStream.WriteByte((byte)WriteXmlの表現形式);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.ThrowException);
-        throw new InvalidDataException(Resources.リモート先で例外が発生した,new TimeoutException(this.ReadObject<string>(MemoryStream)));
-    }
+    ///// <summary>
+    ///// サーバーでTimeoutExceptionを発生させる
+    ///// </summary>
+    ///// <param name="WriteXmlの表現形式"></param>
+    ///// <exception cref="InvalidDataException"></exception>
+    ///// <exception cref="Exception"></exception>
+    ///// <returns>TimeoutException</returns>
+    //public TimeoutException SendTimeoutException(SerializeType WriteXmlの表現形式){
+    //    this.BufferにUserとPasswordHashを設定(Request.TimeoutException_ThrowException,this.Header65);
+    //    var MemoryStream=this.MemoryStream;
+    //    MemoryStream.WriteByte((byte)WriteXmlの表現形式);
+    //    this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.ThrowException);
+    //    throw new InvalidDataException(Resources.リモート先で例外が発生した,new TimeoutException(this.ReadObject<string>(MemoryStream)));
+    //}
     /// <summary>
     /// 指定されたバイト数送信中にタイムアウトする。
     /// </summary>
@@ -596,93 +556,89 @@ public class Client:IDisposable {
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
     public void BytesSendReceive(int 要素数) {
-        this.BufferにUserとPasswordHashを設定(Request.BytesN_BytesN);
-        var MemoryStream=this.MemoryStream;
-        for(var a=0;a<要素数;a++)MemoryStream.WriteByte((byte)a);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.BytesN);
+        this.PasswordHashを設定(Request.BytesN_BytesN,this.Hash);
+        var WriteBuffer=this.WriteBuffer;
+        for(var a=0;a<要素数;a++)WriteBuffer[a]=(byte)a;
+        this.WriteBufferをサーバーに送信してReadBufferに受信_例外処理(Response.BytesN);
+        var ReadBuffer=this.ReadBuffer;
         for(var a=0;a<要素数;a++){
-            var Byte= MemoryStream.ReadByte();
+            var Byte=ReadBuffer[a];
             if(Byte==(byte)a)continue;
             throw リモート先から_を受信することを期待したが_だった(a,Byte);
         }
-        var ReadObject1= MemoryStream.ReadByte();
-        Debug.Assert(ReadObject1<0);
+        var ReadObject1=ReadBuffer[要素数];
     }
-    /// <summary>
-    /// 指定されたバイト数1バイトずつ送受信する。
-    /// </summary>
-    /// <param name="要素数"></param>
-    /// <exception cref="InvalidDataException"></exception>
-    /// <exception cref="Exception"></exception>
-    public void Bytes1SendReceive(int 要素数) {
-        this.BufferにUserとPasswordHashを設定(Request.BytesN_BytesN);
-        var MemoryStream = this.MemoryStream;
-        for(var a = 0;a<要素数;a++)MemoryStream.WriteByte((byte)a);
-        this.Bufferをサーバーに送信してBufferに受信();
-        var actual = (Response)this.MemoryStream.ReadByte();
-        if(Response.BytesN==actual)return;
-        throw リモート先から_を受信することを期待したが_だった(Response.BytesN,actual);
-    }
-    /// <summary>
-    /// 指定された配列を送受信する。
-    /// </summary>
-    /// <param name="配列"></param>
-    /// <exception cref="InvalidDataException">送信したデータと同じデータが受信できなかった場合</exception>
-    public void BytesSendReceive(byte[] 配列) {
-        this.BufferにUserとPasswordHashを設定(Request.BytesN_BytesN);
-        var MemoryStream = this.MemoryStream;
-        foreach(var a in 配列)MemoryStream.WriteByte(a);
-        this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.BytesN);
-        foreach(var a in 配列){
-            var Byte= MemoryStream.ReadByte();
-            if(Byte==a)continue;
-            throw リモート先から_を受信することを期待したが_だった(a,Byte);
-        }
-        var ReadObject= MemoryStream.ReadByte();
-        Debug.Assert(ReadObject<0);
-    }
-    /// <summary>
-    /// オブジェクトをXmlBinaryで送信し、受信する。
-    /// </summary>
-    /// <param name="送信">送信したオブジェクト。</param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns>受信したオブジェクト。</returns>
-    public T XmlSendReceive<T>(T 送信)=>this.XmlSendReceive(送信,SerializeType.MessagePack);
-    private void サーバーに送信(Request Request,SerializeType SerializeType,object Object) {
-        this.BufferにUserとPasswordHashを設定(Request);
-        this.MemoryStream.WriteByte((byte)SerializeType);
+    ///// <summary>
+    ///// 指定されたバイト数1バイトずつ送受信する。
+    ///// </summary>
+    ///// <param name="要素数"></param>
+    ///// <exception cref="InvalidDataException"></exception>
+    ///// <exception cref="Exception"></exception>
+    //public void Bytes1SendReceive(int 要素数) {
+    //    this.BufferにUserとPasswordHashを設定(Request.BytesN_BytesN);
+    //    var MemoryStream = this.MemoryStream;
+    //    for(var a = 0;a<要素数;a++)MemoryStream.WriteByte((byte)a);
+    //    this.Bufferをサーバーに送信してBufferに受信();
+    //    var actual = (Response)this.MemoryStream.ReadByte();
+    //    if(Response.BytesN==actual)return;
+    //    throw リモート先から_を受信することを期待したが_だった(Response.BytesN,actual);
+    //}
+    ///// <summary>
+    ///// 指定された配列を送受信する。
+    ///// </summary>
+    ///// <param name="配列"></param>
+    ///// <exception cref="InvalidDataException">送信したデータと同じデータが受信できなかった場合</exception>
+    //public void BytesSendReceive(byte[] 配列) {
+    //    this.BufferにUserとPasswordHashを設定(Request.BytesN_BytesN);
+    //    var MemoryStream = this.MemoryStream;
+    //    foreach(var a in 配列)MemoryStream.WriteByte(a);
+    //    this.Bufferをサーバーに送信してBufferに受信_例外処理(Response.BytesN);
+    //    foreach(var a in 配列){
+    //        var Byte= MemoryStream.ReadByte();
+    //        if(Byte==a)continue;
+    //        throw リモート先から_を受信することを期待したが_だった(a,Byte);
+    //    }
+    //    var ReadObject= MemoryStream.ReadByte();
+    //    Debug.Assert(ReadObject<0);
+    //}
+    internal Response サーバーに送信(Request Request,SerializeType SerializeType,object Object){
+        var Hash_Request_SerializeType=this.Hash_Request_SerializeType;
+        this.PasswordHashを設定(Request,Hash_Request_SerializeType);
+        Hash_Request_SerializeType[^1]=(byte)SerializeType;
         Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
-        switch(SerializeType) {
-            case SerializeType.Utf8Json   :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
-            case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
-            default                       :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
-        }
         //switch(SerializeType) {
-        //    case SerializeType.Utf8Json:
-        //        //this.SerializerConfiguration.Clear();
-        //        JsonSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.JsonFormatterResolver);
-        //        break;
-        //    case SerializeType.MessagePack:
-        //        this.SerializerConfiguration.Clear();
-        //        MessagePackSerializer.Serialize(this.MemoryStream,Object,this.SerializerConfiguration.MessagePackSerializerOptions);
-        //        break;
-        //    default:throw new NotSupportedException(SerializeType.ToString());
+        //    case SerializeType.MemoryPack :this.MemoryPack.Serialize(this.MemoryStream,Object);break;
+        //    case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Object);break;
+        //    default                       :this.Utf8Json.Serialize(this.MemoryStream,Object);break;
         //}
-        this.Bufferをサーバーに送信してBufferに受信();
+        this.WriteBuffer=SerializeType switch{
+            SerializeType.MemoryPack=>this.MemoryPack.Serialize(Object),
+            SerializeType.MessagePack=>this.MessagePack.Serialize(Object),
+            _=>this.Utf8Json.Serialize(Object)
+        };
+        return this.WriteBufferをサーバーに送信してReadBufferに受信();
     }
     private readonly Optimizer.取得_CSharp 取得_CSharp = new();
-    internal void サーバーに送信(Request Request,SerializeType SerializeType,Expression Expression) {
-        this.BufferにUserとPasswordHashを設定(Request);
-        //var Lambda = (LambdaExpression)Expression;
-        this.MemoryStream.WriteByte((byte)SerializeType);
-        switch(SerializeType) {
-            case SerializeType.MemoryPack:this.MemoryPack.Serialize(this.MemoryStream,Expression);break;
-            case SerializeType.MessagePack:this.MessagePack.Serialize(this.MemoryStream,Expression);break;
-            case SerializeType.Utf8Json:this.Utf8Json.Serialize(this.MemoryStream,Expression);break;
-            default:throw new NotSupportedException(SerializeType.ToString());
-        }
-        this.Bufferをサーバーに送信してBufferに受信();
-    }
+    //internal Response サーバーに送信(Request Request,SerializeType SerializeType,Expression Expression)=>
+
+    //    var Header66=this.Header66;
+    //    this.BufferにUserとPasswordHashを設定(Request,Header66);
+    //    Header66[65]=(byte)SerializeType;
+    //    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+    //    this.WriteBuffer=SerializeType switch{
+    //        SerializeType.MemoryPack=>this.MemoryPack.Serialize(Object),
+    //        SerializeType.MessagePack=>this.MessagePack.Serialize(Object),
+    //        _=>this.Utf8Json.Serialize(Object)
+    //    };
+    //    return this.Bufferをサーバーに送信してBufferに受信();
+    //    this.WriteBuffer=SerializeType switch{
+    //        SerializeType.MemoryPack: this.MemoryPack.Serialize(Expression); break;
+    //        SerializeType.MessagePack: this.MessagePack.Serialize(Expression); break;
+    //        _                     : this.Utf8Json.Serialize(Expression); break;
+    //        default: throw new NotSupportedException(SerializeType.ToString());
+    //    }
+    //    return this.Bufferをサーバーに送信してBufferに受信();
+    //}
     private protected static InvalidDataException 受信ヘッダー_は不正だった(Response Response) =>new(
         string.Format(
             CultureInfo.CurrentCulture,
@@ -698,43 +654,27 @@ public class Client:IDisposable {
             arg1
         )
     );
-    /// <summary>
-    /// オブジェクトをNetContractSerializerで送信し、受信する。
-    /// </summary>
-    /// <param name="送信">送信したオブジェクト。</param>
-    /// <param name="SerializeType"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns>受信したオブジェクト。</returns>
-    /// <exception cref="InvalidDataException"></exception>
-    /// <exception cref="Exception"></exception>
-    /// <exception cref="XmlException"></exception>
-    public T XmlSendReceive<T>(T 送信,SerializeType SerializeType) {
-        this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
-        var MemoryStream = this.MemoryStream;
-        var Response =(Response)MemoryStream.ReadByte();
-        // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
-        return Response switch{
-            Response.ThrowException => throw new Exception(this.ReadObject<string>(MemoryStream)),
-            Response.Object => this.ReadObject<T>(MemoryStream),
-            _ => throw 受信ヘッダー_は不正だった(Response)
-        };
-    }
-    /// <summary>
-    /// Remoteの接続先を文字列で表現。
-    /// </summary>
-    /// <returns></returns>
-    public override string ToString()=>this.DnsEndPoint is null?"": this.DnsEndPoint.ToString();
-    /// <summary>
-    /// Streamにテキストシリアライズする
-    /// </summary>
-    /// <param name="Stream"></param>
-    /// <param name="リモート先で実行させるデリゲート"></param>
-    /// <returns>戻り値</returns>
-    public static void SaveRequest(Stream Stream,object リモート先で実行させるデリゲート) {
-        using var Writer = XmlDictionaryWriter.CreateTextWriter(Stream,Encoding.Unicode,false);
-        //ExpressionSurrogateSelector.serializer.WriteObject(Writer,リモート先で実行させるデリゲート);
-        Writer.Flush();
-    }
+    ///// <summary>
+    ///// オブジェクトをNetContractSerializerで送信し、受信する。
+    ///// </summary>
+    ///// <param name="送信">送信したオブジェクト。</param>
+    ///// <param name="SerializeType"></param>
+    ///// <typeparam name="T"></typeparam>
+    ///// <returns>受信したオブジェクト。</returns>
+    ///// <exception cref="InvalidDataException"></exception>
+    ///// <exception cref="Exception"></exception>
+    ///// <exception cref="XmlException"></exception>
+    //public T XmlSendReceive<T>(T 送信,SerializeType SerializeType) {
+    //    this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
+    //    var MemoryStream = this.MemoryStream;
+    //    var Response =(Response)MemoryStream.ReadByte();
+    //    // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
+    //    return Response switch{
+    //        Response.ThrowException => throw new Exception(this.ReadObject<string>(MemoryStream)),
+    //        Response.Object => this.ReadObject<T>(MemoryStream),
+    //        _ => throw 受信ヘッダー_は不正だった(Response)
+    //    };
+    //}
     /// <summary>
     /// シリアライズを送信して同じデータを受信する。
     /// </summary>
@@ -745,27 +685,15 @@ public class Client:IDisposable {
     /// <exception cref="InvalidDataException"></exception>
     /// <exception cref="Exception"></exception>
     public T SerializeSendReceive<T>(T 送信,SerializeType SerializeType) {
-        this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
-        var MemoryStream = this.MemoryStream;
-        var Response = (Response)MemoryStream.ReadByte();
+        var Response = this.サーバーに送信(Request.Object_Object,SerializeType,送信!);
         if(Response!=Response.Object)throw 受信ヘッダー_は不正だった(Response);
-        return this.ReadObject<T>(MemoryStream);
+        return this.ReadObject<T>(SerializeType);
     }
-    ///// <summary>
-    ///// 式木のデリゲート
-    ///// </summary>
-    ///// <typeparam name="T"></typeparam>
-    ///// <returns></returns>
-    //public delegate T サーバーで実行する式木<out T>();
     /// <summary>
     /// Optimizerオブジェクト
     /// </summary>
     [field:NonSerialized]
     protected Optimizer Optimizer { get; } = new();
-    ///// <summary>
-    ///// 最適化レベル
-    ///// </summary>
-    //public OptimizeLevels OptimizeLevel { get; set; } = OptimizeLevels.デバッグ;
     /// <summary>
     /// 戻り値のあるリモート処理を行う。
     /// </summary>
@@ -773,34 +701,16 @@ public class Client:IDisposable {
     /// <param name="SerializeType"></param>
     public T Expression<T>(Expression<Func<T>> Lambda,SerializeType SerializeType){
         return (T)this.Expression((LambdaExpression)Lambda,SerializeType);
-        //var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
-        //var Optimizer = this.Optimizer;
-        //Optimizer.Context=DeclaringType;
-        //var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
-        ////var s=JsonSerializer.Serialize(最適化Lambda,this.SerializerConfiguration.JsonFormatterResolver);
-        ////var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(s,this.SerializerConfiguration.JsonFormatterResolver);
-
-
-        //this.サーバーに送信(Request.Expression_Invoke,SerializeType,最適化Lambda);
-        //var MemoryStream = this.MemoryStream;
-        //var Response = (Response)MemoryStream.ReadByte();
-        //return Response switch{
-        //    Response.Object=>this.ReadObject<T>(MemoryStream),
-        //    Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
-        //    _=>throw 受信ヘッダー_は不正だった(Response)
-        //};
     }
     public object Expression(LambdaExpression Lambda,SerializeType SerializeType) {
         var DeclaringType = new StackFrame(1).GetMethod()!.DeclaringType!;
         var Optimizer = this.Optimizer;
         Optimizer.Context=DeclaringType;
         var 最適化Lambda=Optimizer.Lambda最適化(Lambda);
-        this.サーバーに送信(Request.Expression_Invoke,SerializeType,最適化Lambda);
-        var MemoryStream = this.MemoryStream;
-        var Response = (Response)MemoryStream.ReadByte();
+        var Response = this.サーバーに送信(Request.Expression_Invoke,SerializeType,最適化Lambda);
         return Response switch{
-            Response.Object=>this.ReadObject<object>(MemoryStream),
-            Response.ThrowException=>throw this.ReadObject<Exception>(MemoryStream),
+            Response.Object=>this.ReadObject<object>(SerializeType),
+            Response.ThrowException=>throw this.ReadObject<Exception>(SerializeType),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }

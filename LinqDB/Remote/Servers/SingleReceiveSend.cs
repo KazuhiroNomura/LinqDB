@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqDB.Helpers;
 //using Serializers=LinqDB.Serializers;
 //using MemoryStream = System.IO.MemoryStream;
 using MemoryStream = LinqDB.Helpers.CommonLibrary.MemoryStream;
@@ -33,7 +34,11 @@ internal class SingleReceiveSend:IDisposable{
     private readonly Serializers.MessagePack.Serializer MessagePack=new();
     private readonly Serializers.MemoryPack.Serializer MemoryPack=new();
     private readonly SHA256 Provider=SHA256.Create();
-    private readonly byte[] Buffer = new byte[MemoryStreamBufferSize];
+    private Response WriteResponse=Response.Byte;
+    private readonly byte[] PasswordHash=new byte[32];
+    //private byte[] ReadBuffer=default!;
+    private byte[] WriteBuffer=default!;
+    private readonly byte[] Hash=new byte[32];
     /// <summary>
     /// 実際の送受信するストリーム。
     /// </summary>
@@ -65,8 +70,8 @@ internal class SingleReceiveSend:IDisposable{
         Debug.WriteLine("11");
         this.MultiReceiveSend=MultiReceiveSend;
         this.Index=Index;
-        //this.MemoryStream=new System.IO.MemoryStream(this.Buffer);
-        this.MemoryStream=new MemoryStream(this.Buffer);
+        //this.MemoryStream=new System.IO.MemoryStream(this.WriteBuffer);
+        //this.MemoryStream=new MemoryStream(this.WriteBuffer);
         Debug.WriteLine("12");
 
         //this.JsonFormatterResolver=Utf8Json.Resolvers.CompositeResolver.Create(
@@ -97,287 +102,287 @@ internal class SingleReceiveSend:IDisposable{
     //        new Serializers.MessagePack.Resolver()
     //    )
     //);
-    private int count;
+    //private int count;
 
-    private async Task Function受信Async(Socket Socket,CancellationToken CancellationToken) {
-        Trace_WriteLine(0,"Server.Function受信");
-        // 4:バイト数
-        //64:SHA256
-        // 1:公開鍵暗号化アルゴリズム
-        //  :ユーザ名
-        //  :パスワード
-        // 1:リクエストヘッダ
-        //  :本体
-        try {
-            var NetworkStream = this.NetworkStream=new NetworkStream(Socket) {
-                ReadTimeout=this.ReadTimeout,
-                WriteTimeout=this.WriteTimeout
-            };
-            var buffer = new byte[4];
-            Stream Stream;
-            await NetworkStream.ReadAsync(buffer,CancellationToken).ConfigureAwait(false);
-            var SslProtocol0 = buffer[0];
-            var SslProtocol1 = buffer[1];
-            var SslProtocol2 = buffer[2];
-            var SslProtocol3 = buffer[3];
-            //var SslProtocol = (SslProtocols)NetworkStream.ReadByte();
-#pragma warning disable CA5397 // SslProtocols の非推奨の値を使用しない
-            var SslProtocol = (SslProtocols)((SslProtocol0<<0)|(SslProtocol1<<8)|(SslProtocol2<<16)|(SslProtocol3<<24));
-#pragma warning restore CA5397 // SslProtocols の非推奨の値を使用しない
-            if(SslProtocol!=SslProtocols.None) {
-                var X509Certificate = this.X509Certificate;
-                if(X509Certificate is null) {
-                    this.Privateデシリアライズした(
-                        LinqDB.Request.Exception_ThrowException,
-                        ExceptionのString(new InvalidOperationException("SSL接続を要求したが証明書が無かった。")),
-                        SerializeType.Utf8Json
-                    );
-                    return;
-                }
-                var SslStream = new SslStream(
-                    NetworkStream,
-                    true,
-                    DelegateRemoteCertificateValidationCallback
-                );
-                await SslStream.AuthenticateAsServerAsync(X509Certificate,true,SslProtocol,true).ConfigureAwait(false);
-                Trace_WriteLine(1,"Server.Function受信 AuthenticateAsServer");
-                Stream=SslStream;
-            } else {
-                Stream=NetworkStream;
-            }
-            this.Stream=Stream;
-            var Length0 = Stream.ReadByte();
-            var Length1 = Stream.ReadByte();
-            var Length2 = Stream.ReadByte();
-            var Length3 = Stream.ReadByte();
-            if(Length0<0||Length1<0||Length2<0||Length3<0) {
-                this.Privateデシリアライズした(
-                    LinqDB.Request.Exception_ThrowException,
-                    ExceptionのString(new InvalidOperationException("Length0が負だった。")),
-                    SerializeType.Utf8Json
-                );
-                return;
-            }
-            var 受信データとハッシュのバイト数 = (Length0<<0)|(Length1<<8)|(Length2<<16)|(Length3<<24);
-            if(受信データとハッシュのバイト数>MemoryStreamBufferSize) {
-                this.Privateデシリアライズした(
-                    LinqDB.Request.Exception_ThrowException,
-                    ExceptionのString(
-                        new InvalidOperationException(
-                            $"Lengthが{受信データとハッシュのバイト数}バイトで{MemoryStreamBufferSize}({nameof(MemoryStreamBufferSize)})を超えてはいけない。"
-                        )
-                    ),
-                    SerializeType.Utf8Json
-                );
-                return;
-            }
-            var 受信データのバイト数 = 受信データとハッシュのバイト数-ハッシュバイト数;
-            var Buffer = this.Buffer;
-            var ReadOffset = 0;
-            var 残りバイト数 = 受信データとハッシュのバイト数;
-            do {
-                var Memory = Buffer.AsMemory(ReadOffset,残りバイト数);
-                var ReadしたBytes = await Stream.ReadAsync(Memory,CancellationToken).ConfigureAwait(false);
-                ReadOffset+=ReadしたBytes;
-                残りバイト数-=ReadしたBytes;
-                this.count++;
-            } while(残りバイト数>0);
-            var Provider = this.Provider;
-            Provider.Initialize();
-            Provider.ComputeHash(Buffer,0,受信データのバイト数);
-            var 受信Hash = Provider.Hash!;
-            for(var a = 0;a<ハッシュバイト数;a++) {
-                if(受信Hash[a]!=Buffer[a+受信データのバイト数]) {
-                    throw new InvalidDataException("ハッシュ値が一致しなかった");
-                }
-            }
-            var MemoryStream = this.MemoryStream;
-            MemoryStream.SetLength(受信データのバイト数);
-            MemoryStream.Position=0;
-            //leaveOpenとはtrueだとReader.CloseされてもStream.Closeしないということ。
-            using(var Reader = new BinaryReader(MemoryStream,Encoding.Unicode,true)) {
-                var User = Reader.ReadString();
-                var PasswordHash = Reader.ReadString();
-                if(PasswordHash.Length!=64) {
-                    throw new InvalidDataException("パスワードハッシュは64文字必要だったが"+PasswordHash.Length+"文字だった。");
-                }
-                var UserPasswordDictionary = this.MultiReceiveSend.Server.UserPasswordDictionary;
-                if(!UserPasswordDictionary.Authentication(User,PasswordHash)) {
-                    this.Privateデシリアライズした(
-                        LinqDB.Request.Exception_ThrowException,
-                        ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
-                        SerializeType.Utf8Json
-                    );
-                    return;
-                }
-            }
-            var Request = (Request)MemoryStream.ReadByte();
-            if(Request==Request.CommunicateClient_ReceiveでOutOfMemoryException) {
-                throw new OutOfMemoryException(Request.ToString());
-            }
-            Trace_WriteLine(2,$"Server.Function受信 {Request}");
-            switch(Request) {
-                case Request.Bytes0_Bytes0: {
-                    var result = MemoryStream.ReadByte();
-                    if(result>=0) {
-                        throw new InvalidOperationException();
-                    }
-                    this.Privateデシリアライズした(
-                        Request.Bytes0_Bytes0,
-                        default(object),
-                        SerializeType.MemoryPack
-                    );
-                    break;
-                }
-                case Request.Byte_Byte: {
-                    var result = MemoryStream.ReadByte();
-                    if(result<0)
-                        throw new InvalidOperationException();
-                    this.Privateデシリアライズした(
-                        Request.Byte_Byte,
-                        (byte)result,
-                        SerializeType.MemoryPack
-                    );
-                    break;
-                }
-                case Request.BytesN_BytesN: {
-                    var List = new List<byte>();
-                    while(true) {
-                        var Int32 = MemoryStream.ReadByte();
-                        if(Int32<0) {
-                            break;
-                        }
-                        List.Add((byte)Int32);
-                    }
-                    this.Privateデシリアライズした(
-                        Request.BytesN_BytesN,
-                        List,
-                        SerializeType.MemoryPack
-                    );
-                    break;
-                }
-                case Request.TimeoutException_ThrowException: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
-                    throw new TimeoutException("テスト");
-                }
-                case Request.Object_Object: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
-                    try {
-                        var Object =SerializeType switch{
-                            SerializeType.MemoryPack=>this.MemoryPack.Deserialize<string>(MemoryStream),
-                            SerializeType.MessagePack=>this.MessagePack.Deserialize<string>(MemoryStream),
-                            SerializeType.Utf8Json=>this.Utf8Json.Deserialize<string>(MemoryStream),
-                            _=>throw new NotSupportedException(SerializeType.ToString())
-                        };
-                        this.Privateデシリアライズした(
-                            Request,
-                            Object,
-                            SerializeType
-                        );
-                    } catch(SerializationException ex) {
-                        Trace_WriteLine(3,"Server.Function受信 catch(SerializationException)");
-                        this.Privateデシリアライズした(
-                            Request.Exception_ThrowException,
-                            ExceptionのString(ex),
-                            SerializeType
-                        );
-                    }
-                    break;
-                }
-                case Request.Delegate_Invoke:
-                case Request.Expression_Invoke: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
-                    try {
-                        ////パラメーター_ステートメント パラメーター_ステートメント;
-                        ////String パラメーター,ステートメント;
-                        ////if(SerializeType==SerializeType.Utf8Json) {
-                        ////    パラメーター_ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<パラメーター_ステートメント>(MemoryStream);
-                        ////    //ParameterName =Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
-                        ////    //ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
-                        ////    パラメーター=パラメーター_ステートメント.パラメーター;
-                        ////    ステートメント=パラメーター_ステートメント.ステートメント;
-                        ////} else{
-                        ////    パラメーター=MessagePack.MessagePackResolver.Serializer().Deserialize<String>(MemoryStream);
-                        ////    ステートメント=MessagePack.MessagePackResolver.Serializer().Deserialize<String>(MemoryStream);
-                        ////}
-                        ////var ParameterName= Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
-                        ////var ステートメント = Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
-                        //using var r = new BinaryReader(MemoryStream);
-                        //var ParameterName = r.ReadString();
-                        //var Statement = r.ReadString();
-                        //Debug.Assert(Request==Request.Expression_Invoke);
-                        //var Proxy = this.MultiReceiveSend.Server.Proxy!;
-                        //if(ParameterName!="") {
-                        //    Statement=$"var {ParameterName}=Entities;\r\n{Statement}";
-                        //}
-                        //var Script = CSharpScript.Create(
-                        //    Statement,
-                        //    options,
-                        //    Proxy.GetType()
-                        //);
-                        ////var Compile=Script.Compile();
-                        //Object=Script.CreateDelegate(CancellationToken);
-                        ////var e = Script.CreateDelegate()("");
-                        ////e.Wait();
-                        ////var input = e.Result;
-                        //break;
-                        var Object= SerializeType switch{
-                            SerializeType.Utf8Json   => this.Utf8Json.Deserialize<LambdaExpression>(MemoryStream),
-                            SerializeType.MessagePack=> this.MessagePack.Deserialize<LambdaExpression>(MemoryStream),
-                            SerializeType.MemoryPack => this.MemoryPack.Deserialize<LambdaExpression>(MemoryStream),
-                            _=>throw new NotSupportedException(SerializeType.ToString())
-                        };
-                        this.Privateデシリアライズした(
-                            Request,
-                            Object,
-                            SerializeType
-                        );
-                    } catch(SerializationException ex) {
-                        Trace_WriteLine(4,"Server.Function受信 catch(SerializationException)");
-                        this.Privateデシリアライズした(
-                            Request.Exception_ThrowException,
-                            ex,
-                            SerializeType
-                        );
-                    }
-                    break;
-                }
-                case Request.リモート先でOutOfMemoryException: {
-                    throw new OutOfMemoryException("サーバー側で発生");
-                    //this.Privateデシリアライズした(
-                    //    Request.Exception_ThrowException,
-                    //    new OutOfMemoryException("サーバー側で発生"),
-                    //    SerializeType.Utf8Json
-                    //);
-                    //break;
-                }
-                default: throw new InvalidDataException("不正な通信方式"+Request);
-            }
-        } catch(ObjectDisposedException) {
-            Trace_WriteLine(5,"Server.Function受信 catch(ObjectDisposedException)");
-        } catch(IOException) {
-            var Socket0 = this.Socket;
-            //Debug.Assert(Socket0 is not null);
-            Socket0!.Shutdown(SocketShutdown.Both);
-            Socket0.Dispose();
-            Trace_WriteLine(6,"Server.Function受信 catch(IOException)");
-        } catch(OperationCanceledException) {
-            Trace_WriteLine(7,"Server.Function受信 catch(OperationCanceledException)");
-#pragma warning disable CA1031 // 一般的な例外の種類はキャッチしません
-        } catch(Exception ex) {
-#pragma warning restore CA1031 // 一般的な例外の種類はキャッチしません
-            this.Privateデシリアライズした(
-                Request.Exception_ThrowException,
-                ex,
-                SerializeType.Utf8Json
-            );
-            Trace_WriteLine(8,$"Server.Function受信 catch({ex.GetType().FullName})");
-            //throw;
-        }
-    }
+//    private async Task Function受信Async(Socket Socket,CancellationToken CancellationToken) {
+//        Trace_WriteLine(0,"Server.Function受信");
+//        // 4:バイト数
+//        //64:SHA256
+//        // 1:公開鍵暗号化アルゴリズム
+//        //  :ユーザ名
+//        //  :パスワード
+//        // 1:リクエストヘッダ
+//        //  :本体
+//        try {
+//            var NetworkStream = this.NetworkStream=new NetworkStream(Socket) {
+//                ReadTimeout=this.ReadTimeout,
+//                WriteTimeout=this.WriteTimeout
+//            };
+//            var buffer = new byte[4];
+//            Stream Stream;
+//            await NetworkStream.ReadAsync(buffer,CancellationToken).ConfigureAwait(false);
+//            var SslProtocol0 = buffer[0];
+//            var SslProtocol1 = buffer[1];
+//            var SslProtocol2 = buffer[2];
+//            var SslProtocol3 = buffer[3];
+//            //var SslProtocol = (SslProtocols)NetworkStream.ReadByte();
+//#pragma warning disable CA5397 // SslProtocols の非推奨の値を使用しない
+//            var SslProtocol = (SslProtocols)((SslProtocol0<<0)|(SslProtocol1<<8)|(SslProtocol2<<16)|(SslProtocol3<<24));
+//#pragma warning restore CA5397 // SslProtocols の非推奨の値を使用しない
+//            if(SslProtocol!=SslProtocols.None) {
+//                var X509Certificate = this.X509Certificate;
+//                if(X509Certificate is null) {
+//                    this.Privateデシリアライズした(
+//                        LinqDB.Request.Exception_ThrowException,
+//                        ExceptionのString(new InvalidOperationException("SSL接続を要求したが証明書が無かった。")),
+//                        SerializeType.Utf8Json
+//                    );
+//                    return;
+//                }
+//                var SslStream = new SslStream(
+//                    NetworkStream,
+//                    true,
+//                    DelegateRemoteCertificateValidationCallback
+//                );
+//                await SslStream.AuthenticateAsServerAsync(X509Certificate,true,SslProtocol,true).ConfigureAwait(false);
+//                Trace_WriteLine(1,"Server.Function受信 AuthenticateAsServer");
+//                Stream=SslStream;
+//            } else {
+//                Stream=NetworkStream;
+//            }
+//            this.Stream=Stream;
+//            var Length0 = Stream.ReadByte();
+//            var Length1 = Stream.ReadByte();
+//            var Length2 = Stream.ReadByte();
+//            var Length3 = Stream.ReadByte();
+//            if(Length0<0||Length1<0||Length2<0||Length3<0) {
+//                this.Privateデシリアライズした(
+//                    LinqDB.Request.Exception_ThrowException,
+//                    ExceptionのString(new InvalidOperationException("Length0が負だった。")),
+//                    SerializeType.Utf8Json
+//                );
+//                return;
+//            }
+//            var 受信データとハッシュのバイト数 = (Length0<<0)|(Length1<<8)|(Length2<<16)|(Length3<<24);
+//            if(受信データとハッシュのバイト数>MemoryStreamBufferSize) {
+//                this.Privateデシリアライズした(
+//                    LinqDB.Request.Exception_ThrowException,
+//                    ExceptionのString(
+//                        new InvalidOperationException(
+//                            $"Lengthが{受信データとハッシュのバイト数}バイトで{MemoryStreamBufferSize}({nameof(MemoryStreamBufferSize)})を超えてはいけない。"
+//                        )
+//                    ),
+//                    SerializeType.Utf8Json
+//                );
+//                return;
+//            }
+//            var 受信データのバイト数 = 受信データとハッシュのバイト数-ハッシュバイト数;
+//            var WriteBuffer = this.WriteBuffer;
+//            var ReadOffset = 0;
+//            var 残りバイト数 = 受信データとハッシュのバイト数;
+//            do {
+//                var Memory = WriteBuffer.AsMemory(ReadOffset,残りバイト数);
+//                var ReadしたBytes = await Stream.ReadAsync(Memory,CancellationToken).ConfigureAwait(false);
+//                ReadOffset+=ReadしたBytes;
+//                残りバイト数-=ReadしたBytes;
+//                this.count++;
+//            } while(残りバイト数>0);
+//            var Provider = this.Provider;
+//            Provider.Initialize();
+//            Provider.ComputeHash(WriteBuffer,0,受信データのバイト数);
+//            var 受信Hash = Provider.Hash!;
+//            for(var a = 0;a<ハッシュバイト数;a++) {
+//                if(受信Hash[a]!=WriteBuffer[a+受信データのバイト数]) {
+//                    throw new InvalidDataException("ハッシュ値が一致しなかった");
+//                }
+//            }
+//            var MemoryStream = this.MemoryStream;
+//            MemoryStream.SetLength(受信データのバイト数);
+//            MemoryStream.Position=0;
+//            //leaveOpenとはtrueだとReader.CloseされてもStream.Closeしないということ。
+//            using(var Reader = new BinaryReader(MemoryStream,Encoding.Unicode,true)) {
+//                var User = Reader.ReadString();
+//                var PasswordHash = Reader.ReadString();
+//                if(PasswordHash.Length!=64) {
+//                    throw new InvalidDataException("パスワードハッシュは64文字必要だったが"+PasswordHash.Length+"文字だった。");
+//                }
+//                var UserPasswordDictionary = this.MultiReceiveSend.Server.UserPasswordDictionary;
+//                if(!UserPasswordDictionary.Authentication(User,PasswordHash)) {
+//                    this.Privateデシリアライズした(
+//                        LinqDB.Request.Exception_ThrowException,
+//                        ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
+//                        SerializeType.Utf8Json
+//                    );
+//                    return;
+//                }
+//            }
+//            var Request = (Request)MemoryStream.ReadByte();
+//            if(Request==Request.CommunicateClient_ReceiveでOutOfMemoryException) {
+//                throw new OutOfMemoryException(Request.ToString());
+//            }
+//            Trace_WriteLine(2,$"Server.Function受信 {Request}");
+//            switch(Request) {
+//                case Request.Bytes0_Bytes0: {
+//                    var result = MemoryStream.ReadByte();
+//                    if(result>=0) {
+//                        throw new InvalidOperationException();
+//                    }
+//                    this.Privateデシリアライズした(
+//                        Request.Bytes0_Bytes0,
+//                        default(object),
+//                        SerializeType.MemoryPack
+//                    );
+//                    break;
+//                }
+//                case Request.Byte_Byte: {
+//                    var result = MemoryStream.ReadByte();
+//                    if(result<0)
+//                        throw new InvalidOperationException();
+//                    this.Privateデシリアライズした(
+//                        Request.Byte_Byte,
+//                        (byte)result,
+//                        SerializeType.MemoryPack
+//                    );
+//                    break;
+//                }
+//                case Request.BytesN_BytesN: {
+//                    var List = new List<byte>();
+//                    while(true) {
+//                        var Int32 = MemoryStream.ReadByte();
+//                        if(Int32<0) {
+//                            break;
+//                        }
+//                        List.Add((byte)Int32);
+//                    }
+//                    this.Privateデシリアライズした(
+//                        Request.BytesN_BytesN,
+//                        List,
+//                        SerializeType.MemoryPack
+//                    );
+//                    break;
+//                }
+//                case Request.TimeoutException_ThrowException: {
+//                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+//                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+//                    throw new TimeoutException("テスト");
+//                }
+//                case Request.Object_Object: {
+//                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+//                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+//                    try {
+//                        var Object =SerializeType switch{
+//                            SerializeType.MemoryPack=>this.MemoryPack.Deserialize<string>(MemoryStream),
+//                            SerializeType.MessagePack=>this.MessagePack.Deserialize<string>(MemoryStream),
+//                            SerializeType.Utf8Json=>this.Utf8Json.Deserialize<string>(MemoryStream),
+//                            _=>throw new NotSupportedException(SerializeType.ToString())
+//                        };
+//                        this.Privateデシリアライズした(
+//                            Request,
+//                            Object,
+//                            SerializeType
+//                        );
+//                    } catch(SerializationException ex) {
+//                        Trace_WriteLine(3,"Server.Function受信 catch(SerializationException)");
+//                        this.Privateデシリアライズした(
+//                            Request.Exception_ThrowException,
+//                            ExceptionのString(ex),
+//                            SerializeType
+//                        );
+//                    }
+//                    break;
+//                }
+//                case Request.Delegate_Invoke:
+//                case Request.Expression_Invoke: {
+//                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+//                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+//                    try {
+//                        ////パラメーター_ステートメント パラメーター_ステートメント;
+//                        ////String パラメーター,ステートメント;
+//                        ////if(SerializeType==SerializeType.Utf8Json) {
+//                        ////    パラメーター_ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<パラメーター_ステートメント>(MemoryStream);
+//                        ////    //ParameterName =Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        ////    //ステートメント=Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        ////    パラメーター=パラメーター_ステートメント.パラメーター;
+//                        ////    ステートメント=パラメーター_ステートメント.ステートメント;
+//                        ////} else{
+//                        ////    パラメーター=MessagePack.MessagePackResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        ////    ステートメント=MessagePack.MessagePackResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        ////}
+//                        ////var ParameterName= Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        ////var ステートメント = Utf8Json.JsonResolver.Serializer().Deserialize<String>(MemoryStream);
+//                        //using var r = new BinaryReader(MemoryStream);
+//                        //var ParameterName = r.ReadString();
+//                        //var Statement = r.ReadString();
+//                        //Debug.Assert(Request==Request.Expression_Invoke);
+//                        //var Proxy = this.MultiReceiveSend.Server.Proxy!;
+//                        //if(ParameterName!="") {
+//                        //    Statement=$"var {ParameterName}=Entities;\r\n{Statement}";
+//                        //}
+//                        //var Script = CSharpScript.Create(
+//                        //    Statement,
+//                        //    options,
+//                        //    Proxy.GetType()
+//                        //);
+//                        ////var Compile=Script.Compile();
+//                        //Object=Script.CreateDelegate(CancellationToken);
+//                        ////var e = Script.CreateDelegate()("");
+//                        ////e.Wait();
+//                        ////var input = e.Result;
+//                        //break;
+//                        var Object= SerializeType switch{
+//                            SerializeType.Utf8Json   => this.Utf8Json.Deserialize<LambdaExpression>(MemoryStream),
+//                            SerializeType.MessagePack=> this.MessagePack.Deserialize<LambdaExpression>(MemoryStream),
+//                            SerializeType.MemoryPack => this.MemoryPack.Deserialize<LambdaExpression>(MemoryStream),
+//                            _=>throw new NotSupportedException(SerializeType.ToString())
+//                        };
+//                        this.Privateデシリアライズした(
+//                            Request,
+//                            Object,
+//                            SerializeType
+//                        );
+//                    } catch(SerializationException ex) {
+//                        Trace_WriteLine(4,"Server.Function受信 catch(SerializationException)");
+//                        this.Privateデシリアライズした(
+//                            Request.Exception_ThrowException,
+//                            ex,
+//                            SerializeType
+//                        );
+//                    }
+//                    break;
+//                }
+//                case Request.リモート先でOutOfMemoryException: {
+//                    throw new OutOfMemoryException("サーバー側で発生");
+//                    //this.Privateデシリアライズした(
+//                    //    Request.Exception_ThrowException,
+//                    //    new OutOfMemoryException("サーバー側で発生"),
+//                    //    SerializeType.Utf8Json
+//                    //);
+//                    //break;
+//                }
+//                default: throw new InvalidDataException("不正な通信方式"+Request);
+//            }
+//        } catch(ObjectDisposedException) {
+//            Trace_WriteLine(5,"Server.Function受信 catch(ObjectDisposedException)");
+//        } catch(IOException) {
+//            var Socket0 = this.Socket;
+//            //Debug.Assert(Socket0 is not null);
+//            Socket0!.Shutdown(SocketShutdown.Both);
+//            Socket0.Dispose();
+//            Trace_WriteLine(6,"Server.Function受信 catch(IOException)");
+//        } catch(OperationCanceledException) {
+//            Trace_WriteLine(7,"Server.Function受信 catch(OperationCanceledException)");
+//#pragma warning disable CA1031 // 一般的な例外の種類はキャッチしません
+//        } catch(Exception ex) {
+//#pragma warning restore CA1031 // 一般的な例外の種類はキャッチしません
+//            this.Privateデシリアライズした(
+//                Request.Exception_ThrowException,
+//                ex,
+//                SerializeType.Utf8Json
+//            );
+//            Trace_WriteLine(8,$"Server.Function受信 catch({ex.GetType().FullName})");
+//            //throw;
+//        }
+//    }
     //private readonly byte[] Header= new byte[MemoryStreamBufferSize];
     private void Function受信(Socket Socket,CancellationToken CancellationToken) {
         Trace_WriteLine(0,"Server.Function受信");
@@ -393,10 +398,11 @@ internal class SingleReceiveSend:IDisposable{
                 ReadTimeout=this.ReadTimeout,
                 WriteTimeout=this.WriteTimeout
             };
-            var Buffer=this.Buffer;
+            //var WriteBuffer=this.WriteBuffer;
+            //this.Buffer0
             Stream Stream;
             //NetworkStream.ReadByte()
-            //var バイト数=NetworkStream.Read(Buffer,0,4);
+            //var バイト数=NetworkStream.Read(WriteBuffer,0,4);
             //Debug.Assert(バイト数==4);
             var SslProtocol0=NetworkStream.ReadByte();
             var SslProtocol1=NetworkStream.ReadByte();
@@ -428,82 +434,26 @@ internal class SingleReceiveSend:IDisposable{
                 Stream=NetworkStream;
             }
             this.Stream=Stream;
-            var Length0 = Stream.ReadByte();
-            var Length1 = Stream.ReadByte();
-            var Length2 = Stream.ReadByte();
-            var Length3 = Stream.ReadByte();
-            if(Length0<0||Length1<0||Length2<0||Length3<0) {
+            using var Reader = new BinaryReader(Stream,Encoding.Unicode,true);
+            var User = Reader.ReadString();
+            var PasswordHash = this.PasswordHash;
+            Read(Stream,PasswordHash,PasswordHash.Length);
+            var UserPasswordDictionary = this.MultiReceiveSend.Server.UserPasswordDictionary;
+            if(!UserPasswordDictionary.Authentication(User,PasswordHash)) {
                 this.Privateデシリアライズした(
                     LinqDB.Request.Exception_ThrowException,
-                    ExceptionのString(new InvalidOperationException("Length0が負だった。")),
+                    ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
                     SerializeType.Utf8Json
                 );
                 return;
             }
-            var 受信データとハッシュのバイト数 = (Length0<<0)|(Length1<<8)|(Length2<<16)|(Length3<<24);
-            if(受信データとハッシュのバイト数>MemoryStreamBufferSize) {
-                this.Privateデシリアライズした(
-                    LinqDB.Request.Exception_ThrowException,
-                    ExceptionのString(
-                        new InvalidOperationException(
-                            $"Lengthが{受信データとハッシュのバイト数}バイトで{MemoryStreamBufferSize}({nameof(MemoryStreamBufferSize)})を超えてはいけない。"
-                        )
-                    ),
-                    SerializeType.Utf8Json
-                );
-                return;
-            }
-            var 受信データのバイト数 = 受信データとハッシュのバイト数-ハッシュバイト数;
-            //var Buffer = this.Buffer;
-            var ReadOffset = 0;
-            var 残りバイト数 = 受信データとハッシュのバイト数;
-            do{
-                //var Memory=Buffer.AsMemory(ReadOffset,残りバイト数);
-                var ReadしたBytes=Stream.Read(Buffer,ReadOffset,残りバイト数);
-                ReadOffset+=ReadしたBytes;
-                残りバイト数-=ReadしたBytes;
-                this.count++;
-            } while(残りバイト数>0);
-            var Provider = this.Provider;
-            Provider.Initialize();
-            Provider.ComputeHash(Buffer,0,受信データのバイト数);
-            var 受信Hash = Provider.Hash!;
-            for(var a = 0;a<ハッシュバイト数;a++) {
-                if(受信Hash[a]!=Buffer[a+受信データのバイト数]) {
-                    throw new InvalidDataException("ハッシュ値が一致しなかった");
-                }
-            }
-            var MemoryStream = this.MemoryStream;
-            MemoryStream.SetLength(受信データのバイト数);
-            MemoryStream.Position=0;
-            //leaveOpenとはtrueだとReader.CloseされてもStream.Closeしないということ。
-            using(var Reader = new BinaryReader(MemoryStream,Encoding.Unicode,true)) {
-                var User = Reader.ReadString();
-                var PasswordHash = Reader.ReadString();
-                if(PasswordHash.Length!=64) {
-                    throw new InvalidDataException("パスワードハッシュは64文字必要だったが"+PasswordHash.Length+"文字だった。");
-                }
-                var UserPasswordDictionary = this.MultiReceiveSend.Server.UserPasswordDictionary;
-                if(!UserPasswordDictionary.Authentication(User,PasswordHash)) {
-                    this.Privateデシリアライズした(
-                        LinqDB.Request.Exception_ThrowException,
-                        ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
-                        SerializeType.Utf8Json
-                    );
-                    return;
-                }
-            }
-            var Request = (Request)MemoryStream.ReadByte();
-            if(Request==Request.CommunicateClient_ReceiveでOutOfMemoryException) {
-                throw new OutOfMemoryException(Request.ToString());
-            }
+            var Request = (Request)Stream.ReadByte();
+            if(Request==Request.CommunicateClient_ReceiveでOutOfMemoryException)throw new OutOfMemoryException(Request.ToString());
             Trace_WriteLine(2,$"Server.Function受信 {Request}");
             switch(Request) {
                 case Request.Bytes0_Bytes0: {
-                    var result = MemoryStream.ReadByte();
-                    if(result>=0) {
-                        throw new InvalidOperationException();
-                    }
+                    var result= Stream.ReadByte();
+                    if(result>=0)throw new InvalidOperationException();
                     this.Privateデシリアライズした(
                         Request.Bytes0_Bytes0,
                         default(object),
@@ -512,9 +462,8 @@ internal class SingleReceiveSend:IDisposable{
                     break;
                 }
                 case Request.Byte_Byte: {
-                    var result = MemoryStream.ReadByte();
-                    if(result<0)
-                        throw new InvalidOperationException();
+                    var result= Stream.ReadByte();
+                    if(result<0)throw new InvalidOperationException();
                     this.Privateデシリアライズした(
                         Request.Byte_Byte,
                         (byte)result,
@@ -523,69 +472,121 @@ internal class SingleReceiveSend:IDisposable{
                     break;
                 }
                 case Request.BytesN_BytesN: {
-                    var List = new List<byte>();
-                    while(true) {
-                        var Int32 = MemoryStream.ReadByte();
-                        if(Int32<0) {
-                            break;
-                        }
-                        List.Add((byte)Int32);
+                    var Length0 = Stream.ReadByte();
+                    var Length1 = Stream.ReadByte();
+                    var Length2 = Stream.ReadByte();
+                    var Length3 = Stream.ReadByte();
+                    if(Length0<0||Length1<0||Length2<0||Length3<0) {
+                        this.Privateデシリアライズした(
+                            Request.Exception_ThrowException,
+                            ExceptionのString(new InvalidOperationException("Length0が負だった。")),
+                            SerializeType.Utf8Json
+                        );
+                        return;
                     }
+                    var ReadBuffer_Length = (Length0<<0)|(Length1<<8)|(Length2<<16)|(Length3<<24);
+                    //if(ReadBuffer_Length>MemoryStreamBufferSize) {
+                    //    this.Privateデシリアライズした(
+                    //        Request.Exception_ThrowException,
+                    //        ExceptionのString(
+                    //            new InvalidOperationException(
+                    //                $"Lengthが{ReadBuffer_Length}バイトで{MemoryStreamBufferSize}({nameof(MemoryStreamBufferSize)})を超えてはいけない。"
+                    //            )
+                    //        ),
+                    //        SerializeType.Utf8Json
+                    //    );
+                    //    return;
+                    //}
+                    //var ReadBuffer_Length = 受信データとハッシュのバイト数-ハッシュバイト数;
+                    var ReadBuffer = new byte[ReadBuffer_Length];
+                    Read(Stream,ReadBuffer,ReadBuffer_Length);
+                    var Hash = this.Hash;
+                    Read(Stream,Hash,Hash.Length);
+                    {
+                        var Provider = this.Provider;
+                        Provider.Initialize();
+                        Provider.ComputeHash(ReadBuffer,0,ReadBuffer_Length);
+                        var Provider_Hash = Provider.Hash!;
+                        for(var a = 0;a<HashLength;a++) {
+                            if(Provider_Hash[a]!=Hash[a]) {
+                                throw new InvalidDataException("ハッシュ値が一致しなかった");
+                            }
+                        }
+                    }
+                    {
+                        if(!this.MultiReceiveSend.Server.UserPasswordDictionary.Authentication(User,Hash)) {
+                            this.Privateデシリアライズした(
+                                Request.Exception_ThrowException,
+                                ExceptionのString(new InvalidOperationException("ユーザー名かパスワードが間違っている。")),
+                                SerializeType.Utf8Json
+                            );
+                            return;
+                        }
+                    }                    
                     this.Privateデシリアライズした(
                         Request.BytesN_BytesN,
-                        List,
+                        ReadBuffer,
                         SerializeType.MemoryPack
                     );
                     break;
                 }
                 case Request.TimeoutException_ThrowException: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                    var SerializeType = (SerializeType)Stream.ReadByte();
                     Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
                     throw new TimeoutException("テスト");
                 }
-                case Request.Object_Object: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
+                case Request.Object_Object:
+                case Request.Delegate_Invoke:
+                case Request.Expression_Invoke: 
+                {
+                    var SerializeType = (SerializeType)Stream.ReadByte();
                     Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
-                    try{
-                        var Object= SerializeType switch{
-                            SerializeType.MemoryPack =>this.MemoryPack.Deserialize<object>(MemoryStream),
-                            SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(MemoryStream),
-                            _                        =>this.Utf8Json.Deserialize<object>(MemoryStream)
-                        };
-                        //var Object=SerializeType==SerializeType.Utf8Json
-                        //    ?JsonResolver.Serializer().Deserialize<object>(MemoryStream,this.CustomSerializerUtf8Json.Resolver)
-                        //    :MessagePackResolver.Serializer().Deserialize<object>(MemoryStream,this.CustomSerializerMessagePack.Options,CancellationToken);
-                        this.Privateデシリアライズした(
-                            Request,
-                            Object,
-                            SerializeType
-                        );
-                    } catch(SerializationException ex) {
-                        Trace_WriteLine(3,"Server.Function受信 catch(SerializationException)");
+                    var Length0 = Stream.ReadByte();
+                    var Length1 = Stream.ReadByte();
+                    var Length2 = Stream.ReadByte();
+                    var Length3 = Stream.ReadByte();
+                    if(Length0<0||Length1<0||Length2<0||Length3<0) {
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
-                            ExceptionのString(ex),
-                            SerializeType
+                            ExceptionのString(new InvalidOperationException("Length0が負だった。")),
+                            SerializeType.Utf8Json
                         );
+                        return;
                     }
-                    break;
-                }
-                case Request.Delegate_Invoke:
-                case Request.Expression_Invoke: {
-                    var SerializeType = (SerializeType)MemoryStream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+                    var ReadBuffer_Length = (Length0<<0)|(Length1<<8)|(Length2<<16)|(Length3<<24);
+                    //if(ReadBuffer_Length>MemoryStreamBufferSize) {
+                    //    this.Privateデシリアライズした(
+                    //        Request.Exception_ThrowException,
+                    //        ExceptionのString(
+                    //            new InvalidOperationException(
+                    //                $"Lengthが{ReadBuffer_Length}バイトで{MemoryStreamBufferSize}({nameof(MemoryStreamBufferSize)})を超えてはいけない。"
+                    //            )
+                    //        ),
+                    //        SerializeType.Utf8Json
+                    //    );
+                    //    return;
+                    //}
+                    //var ReadBuffer_Length = 受信データとハッシュのバイト数-ハッシュバイト数;
+                    var ReadBuffer = new byte[ReadBuffer_Length];
+                    Read(Stream,ReadBuffer,ReadBuffer_Length);
+                    var Hash = this.Hash;
+                    Read(Stream,Hash,Hash.Length);
+                    {
+                        var Provider = this.Provider;
+                        Provider.Initialize();
+                        Provider.ComputeHash(ReadBuffer,0,ReadBuffer_Length);
+                        var Provider_Hash = Provider.Hash!;
+                        for(var a = 0;a<HashLength;a++) {
+                            if(Provider_Hash[a]!=Hash[a]) {
+                                throw new InvalidDataException("ハッシュ値が一致しなかった");
+                            }
+                        }
+                    }
                     try {
-                        //string s = Encoding.UTF8.GetString(this.Buffer,(int)this.MemoryStream.Position,
-                        //    (int)(this.MemoryStream.Length-this.MemoryStream.Position));
-                        //var s1 = format_json(s);
-                        //File.WriteAllText("受診Json.json",s1);
-                        //var o=JsonResolver.Serializer().Deserialize<LambdaExpression>(MemoryStream,
-                        //    this.SerializerConfiguration.JsonFormatterResolver);
-                        //var Lambda=JsonResolver.Serializer().Deserialize<LambdaExpression>(MemoryStream,this.SerializerConfiguration.JsonFormatterResolver);
                         var Object= SerializeType switch{
-                            SerializeType.MemoryPack =>this.MemoryPack.Deserialize<Expression>(MemoryStream),
-                            SerializeType.MessagePack=>this.MessagePack.Deserialize<Expression>(MemoryStream),
-                            _                        =>this.Utf8Json.Deserialize<Expression>(MemoryStream)
+                            SerializeType.MemoryPack =>this.MemoryPack.Deserialize<object>(ReadBuffer),
+                            SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(ReadBuffer),
+                            _                        =>this.Utf8Json.Deserialize<object>(ReadBuffer)
                         };
                         this.Privateデシリアライズした(
                             Request,
@@ -640,74 +641,63 @@ internal class SingleReceiveSend:IDisposable{
     private void Function送信(object Object) {
         Trace_WriteLine(0,"Server.Function送信");
         var シリアライズしたい = (シリアライズしたい)Object;
-        var MemoryStream = this.MemoryStream;
-        MemoryStream.SetLength(4);
-        MemoryStream.Position=4;
+        //var MemoryStream = this.MemoryStream;
+        //MemoryStream.SetLength(4);
+        //MemoryStream.Position=4;
         var Response = シリアライズしたい.Response;
         Trace_WriteLine(1,$"Server.Function送信 {Response}");
-        try {
-            MemoryStream.WriteByte((byte)Response);
+        try{
+            this.WriteResponse=Response;
             switch(Response) {
                 case Response.Bytes0: {
                     break;
                 }
-                case Response.Byte: {
-                    MemoryStream.WriteByte((byte)シリアライズしたい.Object!);
+                case Response.Byte:{
+                    this.WriteBuffer=new[]{(byte)シリアライズしたい.Object!};
                     break;
                 }
                 case Response.BytesN: {
-                    var List = (List<byte>)シリアライズしたい.Object!;
-                    foreach(var a in List) {
-                        MemoryStream.WriteByte(a);
-                    }
-                    //Trace_Write("Delegate送信3");
+                    this.WriteBuffer=(byte[])シリアライズしたい.Object!;
                     break;
                 }
                 case Response.Object:
                 case Response.ThrowException: {
                     var SerializeType = シリアライズしたい.SerializeType;
-                    MemoryStream.WriteByte((byte)SerializeType);
-                    switch(SerializeType) {
-                        case SerializeType.MemoryPack: this.MemoryPack.Serialize(MemoryStream, シリアライズしたい.Object);break;
-                        case SerializeType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        case SerializeType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, シリアライズしたい.Object);break;
-                        default:throw new NotSupportedException(SerializeType.ToString());
-                    }
+                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+                    //MemoryStream.WriteByte((byte)SerializeType);
+                    this.WriteBuffer=SerializeType switch{
+                        SerializeType.MemoryPack =>this.MemoryPack.Serialize( シリアライズしたい.Object),
+                        SerializeType.MessagePack=>this.MessagePack.Serialize<object>(シリアライズしたい.Object),
+                        _                        =>this.Utf8Json.Serialize<object>(シリアライズしたい.Object)
+                    };
                     break;
                 }
             }
-            if(this.Buffer.Length>MemoryStreamBufferSize) {
-                Trace_WriteLine(2,$"Server.Function送信 {this.Buffer.Length}Bytes,Buffer {MemoryStreamBufferSize}Bytes");
-            } else {
-                BufferにLengthとSHA256を設定してStreamにWrite();
-                Trace_WriteLine(3,"Server.Function送信 サーバーが正常に送信できた");
-            }
+            //if(this.WriteBuffer.Length>MemoryStreamBufferSize) {
+            //    Trace_WriteLine(2,$"Server.Function送信 {this.WriteBuffer.Length}Bytes,WriteBuffer {MemoryStreamBufferSize}Bytes");
+            //} else {
+            //    WriteBufferにLengthとSHA256を設定してStreamにWrite();
+            //    Trace_WriteLine(3,"Server.Function送信 サーバーが正常に送信できた");
+            //}
+            WriteBufferにLengthとSHA256を設定してStreamにWrite();
+            Trace_WriteLine(3,"Server.Function送信 サーバーが正常に送信できた");
         } catch(NotSupportedException ex) {
             //メモリがいっぱい
             Trace_WriteLine(4,$"Server.Function送信 catch(NotSupportedException){ex}");
-            MemoryStream.SetLength(4);
-            MemoryStream.Position=4;
-            MemoryStream.WriteByte((byte)Response.ThrowException);
-            //using(var XmlWriter=CreateXmlWriter(MemoryStream,シリアライズしたい.Xmlの表現形式)){
-            //    ExpressionSurrogateSelector.serializer.WriteObject(
-            //        XmlWriter,
-            //        ex
-            //    );
-            //}
+            this.WriteResponse=Response.ThrowException;
             var SerializeType = シリアライズしたい.SerializeType;
-            switch(SerializeType) {
-                case SerializeType.Utf8Json: this.Utf8Json.Serialize<object>(MemoryStream, ex);break;
-                case SerializeType.MessagePack: this.MessagePack.Serialize<object>(MemoryStream, ex);break;
-                case SerializeType.MemoryPack: this.MemoryPack.Serialize<object>(MemoryStream, ex);break;
-                default:throw new NotSupportedException(SerializeType.ToString());
-            }
-            BufferにLengthとSHA256を設定してStreamにWrite();
+            this.WriteBuffer=SerializeType switch{
+                SerializeType.MemoryPack =>this.MemoryPack.Serialize(ex),
+                SerializeType.MessagePack=>this.MessagePack.Serialize<object>(ex),
+                _                        =>this.Utf8Json.Serialize<object>(ex)
+            };
+            WriteBufferにLengthとSHA256を設定してStreamにWrite();
         } catch(ObjectDisposedException) {
             Trace_WriteLine(5,"Server.Function送信 catch(ObjectDisposedException)");
         } catch(IOException ex) {
             Trace_WriteLine(6,$"Server.Function送信 catch(IOException)サーバーがクライアントにWriteしたらクライアントが切断してきた。{ex.Message} {ex.StackTrace}");
         } catch(IndexOutOfRangeException ex) {
-            Trace_WriteLine(7,$"Server.Function送信 catch(IndexOutOfRangeException)MemoryStream.Bufferのサイズが足りなかった。{ex.Message} {ex.StackTrace}");
+            Trace_WriteLine(7,$"Server.Function送信 catch(IndexOutOfRangeException)MemoryStream.WriteBufferのサイズが足りなかった。{ex.Message} {ex.StackTrace}");
         } catch(Exception ex) {
             Trace_WriteLine(8,$"Server.Function送信 catch(Exception){ex.Message} {ex.StackTrace}");
             throw;
@@ -728,29 +718,25 @@ internal class SingleReceiveSend:IDisposable{
             this.MultiReceiveSend.未使用のSingleReceiveSends.Add(this.Index);
             Trace_WriteLine(3,"Server.Function送信終了 finally");
         }
-        void BufferにLengthとSHA256を設定してStreamにWrite() {
-            var MemoryStream0 = this.MemoryStream;
-            var Length = (int)MemoryStream0.Length;
-            var Length除外全体バイト数 = Length-4;
-            var 送信データとハッシュのバイト数 = Length除外全体バイト数+ハッシュバイト数;
-            var Provider = this.Provider;
-            Trace_WriteLine(0,"Server.Function送信.BufferにLengthとSHA256を設定してStreamにWrite");
-            Provider.Initialize();
-            var Buffer = this.Buffer;
-            Provider.ComputeHash(Buffer,4,Length除外全体バイト数);
-            Trace_WriteLine(1,"Server.Function送信.BufferにLengthとSHA256を設定してStreamにWrite");
-            Buffer[0]=(byte)(送信データとハッシュのバイト数>>0);
-            Buffer[1]=(byte)(送信データとハッシュのバイト数>>8);
-            Buffer[2]=(byte)(送信データとハッシュのバイト数>>16);
-            Buffer[3]=(byte)(送信データとハッシュのバイト数>>24);
-            var Provider_Hash = Provider.Hash!;
-            for(var a = 0;a<ハッシュバイト数;a++) {
-                Buffer[a+Length]=Provider_Hash[a];
-            }
+        void WriteBufferにLengthとSHA256を設定してStreamにWrite(){
+            //var MemoryStream0 = this.MemoryStream;
+            //var Length = (int)MemoryStream0.Length;
+            //var Length除外全体バイト数 = Length-4;
+            var WriteBuffer = this.WriteBuffer;
+            var Length = WriteBuffer.Length;
             var Stream = this.Stream;
-            Stream.Write(Buffer,0,Length+ハッシュバイト数);
+            Stream.WriteByte((byte)(Length>>0));
+            Stream.WriteByte((byte)(Length>>8));
+            Stream.WriteByte((byte)(Length>>16));
+            Stream.WriteByte((byte)(Length>>24));
+            Stream.WriteByte((byte)this.WriteResponse);
+            Stream.Write(WriteBuffer);
+            var Provider = this.Provider;
+            Provider.Initialize();
+            Provider.ComputeHash(WriteBuffer);
+            Stream.Write(Provider.Hash!);
             Stream.Flush();
-            Trace_WriteLine(2,"Server.Function送信.BufferにLengthとSHA256を設定してStreamにWrite");
+            Trace_WriteLine(2,"Server.Function送信.WriteBufferにLengthとSHA256を設定してStreamにWrite");
         }
     }
     private void Function送信終了(IAsyncResult IAsyncResult) {
@@ -772,11 +758,11 @@ internal class SingleReceiveSend:IDisposable{
             Trace_WriteLine(3,"Server.Function送信終了 finally");
         }
     }
-    /// <summary>
-    /// バッファストリーム。
-    /// </summary>
-    [NonSerialized]
-    private readonly MemoryStream MemoryStream;
+    ///// <summary>
+    ///// バッファストリーム。
+    ///// </summary>
+    //[NonSerialized]
+    //private readonly MemoryStream MemoryStream;
     //private readonly System.IO.MemoryStream MemoryStream;
     /// <summary>
     /// 受信バッファサイズ
@@ -1002,7 +988,7 @@ internal class SingleReceiveSend:IDisposable{
             if(disposing) {
                 this.Provider.Dispose();
                 //this.Socket.Dispose()するのは別スレッドで動いているので難しい。
-                this.MemoryStream.Dispose();
+                //this.MemoryStream.Dispose();
             }
         }
     }

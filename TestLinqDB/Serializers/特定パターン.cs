@@ -65,12 +65,12 @@ public class 特定パターン:共通{
             var output=Serializer.Deserialize<object>(bytes0);
             Assert.Equal(input,output!,this.汎用Comparer);
         }
-        //{
-        //    var input='A';
-        //    var bytes=Serializer.Serialize(input);
-        //    var output=Serializer.Deserialize<char>(bytes);
-        //    Assert.Equal(input,output!,this.汎用Comparer);
-        //}
+        {
+            var input = 'A';
+            var bytes = Serializer.Serialize(input);
+            var output = Serializer.Deserialize<char>(bytes);
+            Assert.Equal(input,output!,this.汎用Comparer);
+        }
         {
             var input=new[]{'a','b','c'};
             var m=new MemoryStream();

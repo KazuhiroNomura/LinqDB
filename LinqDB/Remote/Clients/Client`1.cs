@@ -37,12 +37,10 @@ public sealed class Client<TContainer>:Client, IClient {
     /// <param name="リモート先で実行させるExpression"></param>
     /// <param name="SerializeType"></param>
     public void Expression(Expression<サーバーで実行する式木> リモート先で実行させるExpression, SerializeType SerializeType=SerializeType.Utf8Json) {
-        this.サーバーに送信(Request.Expression_Invoke,SerializeType,this.Optimizer.Lambda最適化(リモート先で実行させるExpression));
-        var MemoryStream = this.MemoryStream;
-        var Response =(Response)MemoryStream.ReadByte();
+        var Response =this.サーバーに送信(Request.Expression_Invoke,SerializeType,this.Optimizer.Lambda最適化(リモート先で実行させるExpression));
         switch (Response) {
             case Response.Object:throw 受信ヘッダー_は不正だった(Response);
-            case Response.ThrowException:throw new InvalidOperationException(this.ReadObject<string>(MemoryStream));
+            case Response.ThrowException:throw new InvalidOperationException(this.ReadObject<string>(SerializeType));
         }
     }
     /// <summary>
@@ -61,12 +59,10 @@ public sealed class Client<TContainer>:Client, IClient {
     /// <returns>戻り値</returns>
     public TResult Expression<TResult>(Expression<サーバーで実行するEntities式木<TResult>> リモート先で実行させるLambda,SerializeType SerializeType=SerializeType.Utf8Json){
         var Lambda=this.Optimizer.Lambda最適化(リモート先で実行させるLambda);
-        this.サーバーに送信(Request.Expression_Invoke,SerializeType,Lambda);
-        var MemoryStream = this.MemoryStream;
-        var Response = (Response)MemoryStream.ReadByte();
+        var Response = this.サーバーに送信(Request.Expression_Invoke,SerializeType,Lambda);
         return Response switch{
-            Response.Object=>this.ReadObject<TResult>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
+            Response.Object=>this.ReadObject<TResult>(SerializeType),
+            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(SerializeType)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }
@@ -81,12 +77,10 @@ public sealed class Client<TContainer>:Client, IClient {
         var Container_Parameter=System.Linq.Expressions.Expression.Parameter(typeof(TContainer),"this");
         var リモート先で実行させるLambda_Body= Optimizer.SQLToExpression(Container_Parameter,SQL);
         var リモート先で実行させるLambda = System.Linq.Expressions.Expression.Lambda<サーバーで実行するEntities式木<object>>(リモート先で実行させるLambda_Body,Container_Parameter);
-        this.サーバーに送信(Request.Expression_Invoke,SerializeType,Optimizer.Lambda最適化(リモート先で実行させるLambda));
-        var MemoryStream = this.MemoryStream;
-        var Response = (Response)MemoryStream.ReadByte();
+        var Response = this.サーバーに送信(Request.Expression_Invoke,SerializeType,Optimizer.Lambda最適化(リモート先で実行させるLambda));
         return Response switch{
-            Response.Object=>this.ReadObject<object>(MemoryStream),
-            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(MemoryStream)),
+            Response.Object=>this.ReadObject<object>(SerializeType),
+            Response.ThrowException=>throw new InvalidOperationException(this.ReadObject<string>(SerializeType)),
             _=>throw 受信ヘッダー_は不正だった(Response)
         };
     }

@@ -141,7 +141,7 @@ public static class CommonLibrary {
     /// <summary>
     /// データの完全性をチェックするハッシュ関数によって出力されたハッシュバイト長
     /// </summary>
-    internal const int ハッシュバイト数 = 256/8;
+    internal const int HashLength = 256/8;
     internal const string シーケンスに要素が含まれていません_NoElements = "Sequence contains no elements";//"シーケンスに要素が含まれていません";
     internal static InvalidOperationException シーケンスに要素が含まれていません(MethodBase Method) => new($"{Method}:{シーケンスに要素が含まれていません_NoElements}");
     internal const string シーケンスに複数の要素が含まれています_MoreThanOneElement = "シーケンスに複数の要素が含まれています";
@@ -672,5 +672,13 @@ public static class CommonLibrary {
         "yyyy-M-d",
         "yyyy/M/d",
     };
+    public static void Read(Stream Stream,byte[]ReadBuffer,int Count){
+        var ReadOffset=0;
+        do{
+            var ReadしたBytes=Stream.Read(ReadBuffer,ReadOffset,Count);
+            ReadOffset+=ReadしたBytes;
+            Count-=ReadしたBytes;
+        } while(Count>0);
+    }
 }
 //560
