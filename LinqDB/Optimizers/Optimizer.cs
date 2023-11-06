@@ -709,7 +709,7 @@ public sealed partial class Optimizer:IDisposable{
         var TupleField=TupleType.GetField($"Item{Item番号++}");
         return Expression.Field(TupleExpression,TupleField);
     }
-    internal void Disp作成(ParameterExpression ContainerParameter,Information Information,string SQL) {
+    internal void Disp作成(ParameterExpression ContainerParameter,Information Information,string SQL){
         var Disp_TypeBuilder = Information.Disp_TypeBuilder;
         var Impl_TypeBuilder = Information.Impl_TypeBuilder;
         Debug.Assert(Disp_TypeBuilder is not null);

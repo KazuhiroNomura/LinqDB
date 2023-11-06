@@ -961,15 +961,15 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <summary>コレクションの集合としてのHashCode</summary>
     /// <returns>コレクションの集合としてのHashCode</returns>
     public override int GetHashCode(){
-        var CRC = new CRC32();
+        var CRC = new HashCode();
         var TreeNode = this.TreeRoot;
 LinkedNodeItem走査:
         var HashCode = 0;
         for(var LinkedNodeItem = TreeNode._LinkedNodeItem;LinkedNodeItem is not null;LinkedNodeItem=LinkedNodeItem._LinkedNodeItem) {
             Debug.Assert(LinkedNodeItem.Item is not null);
-            CRC.Input(LinkedNodeItem.Item);
+            CRC.Add(LinkedNodeItem.Item);
         }
-        CRC.Input(HashCode);
+        CRC.Add(HashCode);
         if(TreeNode.L is not null) {
             TreeNode=TreeNode.L;
             goto LinkedNodeItem走査;
@@ -988,7 +988,7 @@ LinkedNodeItem走査:
             }
             TreeNode=旧TreeNode_P;
         }
-        return CRC.GetHashCode();
+        return CRC.ToHashCode();
     }
     /// <summary>
     /// 配列に変換する。

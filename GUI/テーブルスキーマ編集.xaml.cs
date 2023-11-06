@@ -170,6 +170,7 @@ public partial class テーブルスキーマ編集:Window {
             }
             this.MySQL.ItemsSource=ItemsSource;
         }
+        //this.SQLServer保存("AdventureWorksDW2008R2");
         //this.MySQL保存("sakila");
         //this.SQLServer保存("AdventureWorks2008R2");
         //this.SQLServer保存("Pubs");

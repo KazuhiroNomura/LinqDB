@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -45,21 +46,34 @@ public partial class AssemblyGenerator {
         var Entity2_ProtectedPrimaryKey = TypeBuilder.GetField(Entity2,AssemblyGenerator.Entity2_ProtectedPrimaryKey);
         var Table_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
         Types1[0]=Table_TypeBuilder;
-        {
-            var IMemoryPackable=typeof(IMemoryPackable<>);
-            var IMemoryPackableT=IMemoryPackable.MakeGenericType(Types1);
-            Table_TypeBuilder.AddInterfaceImplementation(IMemoryPackableT);
-            {
-                ////Table_TypeBuilder.generic
-                //var Serialize本体=Table_TypeBuilder.DefineMethod(nameof(IMemoryPackable<int>.Serialize),MethodAttributes.Public|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static,TypeBuilder,new[]{TypeBuilder,TypeBuilder});
-                //var Serialize宣言=IMemoryPackable.GetMethod(nameof(IMemoryPackable<int>.Serialize));
-                //Table_TypeBuilder.DefineMethodOverride(Serialize本体,TypeBuilder.GetMethod(IMemoryPackable,Serialize宣言!));
-                //Serialize本体.InitLocals=false;
-                //var I=Serialize本体.GetILGenerator();
-                //I.Ldnull();
-                //I.Ret();
-            }
-        }
+        //{
+        //    var IMemoryPackable=typeof(IMemoryPackable<>);
+        //    var IMemoryPackableT=IMemoryPackable.MakeGenericType(Types1);
+        //    Table_TypeBuilder.AddInterfaceImplementation(IMemoryPackableT);
+        //    {
+        //        //Table_TypeBuilder.generic
+        //        var Serialize本体 = Table_TypeBuilder.DefineMethod(
+        //            nameof(IMemoryPackable<int>.Serialize),
+        //            MethodAttributes.Private|MethodAttributes.HideBySig|MethodAttributes.SpecialName|MethodAttributes.Static,
+        //            typeof(void),new Type[] { Table_TypeBuilder,Table_TypeBuilder});
+        //        var GenericTypeParameterBuilders=Serialize本体.DefineGenericParameters("TBufferWriter");
+        //        GenericTypeParameterBuilders[0].SetInterfaceConstraints(typeof(IBufferWriter<byte>));
+        //        Type[] GenericTypes=GenericTypeParameterBuilders;
+        //        Serialize本体.SetParameters(typeof(MemoryPackWriter<>).MakeGenericType(GenericTypes).MakeByRefType());
+        //        Serialize本体.DefineParameter(1,ParameterAttributes.Out,"writer");
+        //        Serialize本体.SetParameters(Table_TypeBuilder.MakeByRefType());
+        //        Serialize本体.DefineParameter(2,ParameterAttributes.Out,"value");
+        //        var Serialize宣言 = IMemoryPackable.GetMethod(nameof(IMemoryPackable<int>.Serialize));
+        //        Table_TypeBuilder.DefineMethodOverride(
+        //            Serialize本体,
+        //            TypeBuilder.GetMethod(IMemoryPackable,Serialize宣言!)
+        //        );
+        //        Serialize本体.InitLocals=false;
+        //        var I = Serialize本体.GetILGenerator();
+        //        //I.Ldnull();
+        //        I.Ret();
+        //    }
+        //}
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);

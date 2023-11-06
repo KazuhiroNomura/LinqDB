@@ -312,10 +312,9 @@ partial class Optimizer{
                 //var スコープParameters=this.ExpressionEqualityComparer.スコープParameters;
                 //var スコープParameters_Count=スコープParameters.Count;
                 //スコープParameters.AddRange(Block0_Variables);
-                Debug.Assert(!(Block0_Variables.Count==0&&Block0_Expressions.Count==1),"最適化されてありえないはず。");
                 var Block0_Expressions_Count = Block0_Expressions.Count;
+                Debug.Assert(Block0_Expressions_Count>1||Block0_Variables.Count>0&&Block0_Expressions.Count==1,"最適化されてありえないはず。");
                 var Block1_Expressions = new Expression[Block0_Expressions_Count];
-                Debug.Assert(Block0_Expressions_Count>1);
                 for(var a = 0;a<Block0_Expressions_Count;a++)
                     Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
                 //スコープParameters.RemoveRange(スコープParameters_Count,Block0_Variables.Count);

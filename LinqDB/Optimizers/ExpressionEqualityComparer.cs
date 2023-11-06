@@ -19,8 +19,8 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
     ,Generic.IEqualityComparer<MemberMemberBinding>
     ,Generic.IEqualityComparer<ElementInit>
     ,Generic.IEqualityComparer<SymbolDocumentInfo>{
-    private Generic.List<ParameterExpression> x_ラムダ跨ぎParameters= new();
-    private Generic.List<ParameterExpression> y_ラムダ跨ぎParameters= new();
+    internal Generic.List<ParameterExpression> x_ラムダ跨ぎParameters= new();
+    internal Generic.List<ParameterExpression> y_ラムダ跨ぎParameters= new();
     protected override void Clear(){
         this.x_ラムダ跨ぎParameters.Clear();
         this.y_ラムダ跨ぎParameters.Clear();
