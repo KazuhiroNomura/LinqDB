@@ -12,7 +12,7 @@ using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic=System.Collections.Generic;
-public sealed class ExpressionReferenceEqualityComparer:Generic.IEqualityComparer<Expression>
+public sealed class ExpressionReferenceEqualityCompare:Generic.IEqualityComparer<Expression>
 //,Generic.IEqualityComparer<ParameterExpression>//,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>,
 //,Generic.IEqualityComparer<MemberBinding>//,Generic.IEqualityComparer<MemberAssignment>,Generic.IEqualityComparer<MemberListBinding>,Generic.IEqualityComparer<MemberMemberBinding>
 //,Generic.IEqualityComparer<ElementInit>

@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
+    <Compile Remove="Optimizers\ExpressionReferenceEqualityCompare.cs" />
     <Compile Remove="Serializers\MessagePack\FormatterResolver - コピー.cs" />
     <Compile Remove="Serializers\Utf8Json\FormatterResolver - コピー.cs" />
     <Compile Remove="Serializers\Utf8Json\Formatters\Sets\IGroupingCollection`2.cs" />
@@ -94,6 +95,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Optimizers\Comparison\" />
   </ItemGroup>
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

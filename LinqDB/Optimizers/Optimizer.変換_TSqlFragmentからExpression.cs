@@ -289,7 +289,7 @@ public sealed partial class Optimizer{
         public 変換_TSqlFragmentからExpression(作業配列 作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド,ExpressionEqualityComparer ExpressionEqualityComparer,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Expressionを新Expression1 変換_旧Expressionを新Expression1,判定_指定Parameters無 判定_指定Parametersが存在しない,SqlScriptGenerator ScriptGenerator){
             this.作業配列=作業配列;
             this.変換_旧Parameterを新Expression1=変換_旧Parameterを新Expression1;
-            this.変換_旧Expressionを新Expression1=new 変換_旧Expressionを新Expression1(作業配列,new ExpressionEqualityComparerGroupBy());
+            this.変換_旧Expressionを新Expression1=new 変換_旧Expressionを新Expression1(作業配列,new ExpressionReferenceEqualityComparer());
             this.取得_OuterPredicate_InnerPredicate_プローブビルド=取得_OuterPredicate_InnerPredicate_プローブビルド;
             this.ScriptGenerator=ScriptGenerator;
             this._StackSubquery単位の情報=new(ExpressionEqualityComparer);
