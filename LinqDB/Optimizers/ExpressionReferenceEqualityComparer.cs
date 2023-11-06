@@ -12,7 +12,7 @@ using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic=System.Collections.Generic;
-public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expression>
+public abstract class ExpressionReferenceEqualityComparer:Generic.IEqualityComparer<Expression>
 //,Generic.IEqualityComparer<ParameterExpression>//,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>,
 //,Generic.IEqualityComparer<MemberBinding>//,Generic.IEqualityComparer<MemberAssignment>,Generic.IEqualityComparer<MemberListBinding>,Generic.IEqualityComparer<MemberMemberBinding>
 //,Generic.IEqualityComparer<ElementInit>
@@ -27,16 +27,6 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     /// <param name="e"></param>
     /// <returns></returns>
     public virtual int GetHashCode(Expression e)=>e.GetHashCode();
-    protected readonly Generic.List<ParameterExpression> x_Parameters = new();
-    protected readonly Generic.List<ParameterExpression> y_Parameters = new();
-    protected readonly Generic.List<LabelTarget> x_LabelTargets = new();
-    protected readonly Generic.List<LabelTarget> y_LabelTargets = new();
-    internal virtual void Clear(){
-        this.x_Parameters.Clear();
-        this.y_Parameters.Clear();
-        this.x_LabelTargets.Clear();
-        this.y_LabelTargets.Clear();
-    }
     protected virtual bool ProtectedAssign(BinaryExpression x_Assign,BinaryExpression y_Assign){
         var x_Left = x_Assign.Left;
         var y_Left = y_Assign.Left;
@@ -46,24 +36,9 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             return @false;
         if(!this.InternalEquals(x_Assign.Conversion,y_Assign.Conversion))
             return @false;
-        var x= (ParameterExpression)x_Left;
-        var y= (ParameterExpression)y_Left;
-        var x_Index0 = this.x_Parameters.IndexOf(x);
-        var y_Index0 = this.y_Parameters.IndexOf(y);
-        if(x_Index0!=y_Index0) return @false;
-        if(x_Index0>=0) return true;
-        return this.ProtectedAssign後処理(x,y);
-        //return x==y;
+        return this.Equals((ParameterExpression)x_Left,(ParameterExpression)y_Left);
     }
-    protected abstract bool ProtectedAssign後処理(ParameterExpression x,ParameterExpression y);
-    public bool Equals(ParameterExpression? x,ParameterExpression? y){
-        var x_Index0 = this.x_Parameters.IndexOf(x);
-        var y_Index0 = this.y_Parameters.IndexOf(y);
-        if(x_Index0!=y_Index0)return @false;
-        if(x_Index0>=0)return true;
-        return this.Equals後処理(x,y);
-    }
-    protected abstract bool Equals後処理(ParameterExpression x,ParameterExpression y);
+    public bool Equals(ParameterExpression? x,ParameterExpression? y)=>x==y;
     /// <summary>
     /// 式木同士が一致するか。
     /// </summary>
@@ -73,30 +48,20 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     public bool Equals(Expression? x,Expression? y) {
         if(x==y) return true;
         if(x is null^y is null) return @false;
-        this.Clear();
         return this.InternalEquals(x,y);
     }
-
-    /// <summary>
-    /// Cラムダ局所に代入している場合はその左辺で比較したい。デフォルトではそのままAssign式を比較する。「
-    /// </summary>
-    /// <param name="Expression0"></param>
-    /// <returns></returns>
-    protected virtual Expression Assignの比較対象(Expression Expression0)=>Expression0;
-    internal bool InternalEquals(Expression? a0,Expression? b0) {
-        if(a0 is null)
-            return b0 is null;
-        if(b0 is null)
+    internal bool InternalEquals(Expression? x,Expression? y) {
+        if(x is null)
+            return y is null;
+        if(y is null)
             return @false;
-        return this.ProtectedEquals(a0,b0);
+        return this.ProtectedEquals(x,y);
     }
-    protected bool ProtectedEquals(Expression a0,Expression b0){
-        var a1=this.Assignの比較対象(a0);
-        var b1=this.Assignの比較対象(b0);
-        if(a1.NodeType!=b1?.NodeType||a1.Type!=b1.Type)
+    protected bool ProtectedEquals(Expression x,Expression y){
+        if(x.NodeType!=y?.NodeType||x.Type!=y.Type)
             return @false;
         // ReSharper disable once SwitchStatementMissingSomeCases
-        switch(a1.NodeType) {
+        switch(x.NodeType) {
             case ExpressionType.Add:
             case ExpressionType.AddAssign:
             case ExpressionType.AddAssignChecked:
@@ -135,9 +100,9 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             case ExpressionType.SubtractAssign:
             case ExpressionType.SubtractAssignChecked:
             case ExpressionType.SubtractChecked:
-                return this.T((BinaryExpression)a1,(BinaryExpression)b1);
+                return this.T((BinaryExpression)x,(BinaryExpression)y);
             case ExpressionType.Assign: {
-                return this.ProtectedAssign((BinaryExpression)a1,(BinaryExpression)b1);
+                return this.ProtectedAssign((BinaryExpression)x,(BinaryExpression)y);
             }
             case ExpressionType.ArrayLength:
             case ExpressionType.Convert:
@@ -159,57 +124,57 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             case ExpressionType.TypeAs:
             case ExpressionType.UnaryPlus:
             case ExpressionType.Unbox:
-                return this.T((UnaryExpression)a1,(UnaryExpression)b1);
+                return this.T((UnaryExpression)x,(UnaryExpression)y);
             case ExpressionType.Block:
-                return this.T((BlockExpression)a1,(BlockExpression)b1);
+                return this.T((BlockExpression)x,(BlockExpression)y);
             case ExpressionType.Conditional:
-                return this.T((ConditionalExpression)a1,(ConditionalExpression)b1);
+                return this.T((ConditionalExpression)x,(ConditionalExpression)y);
             case ExpressionType.Constant:
-                return this.T((ConstantExpression)a1,(ConstantExpression)b1);
+                return this.T((ConstantExpression)x,(ConstantExpression)y);
             case ExpressionType.DebugInfo:
-                return this.T((DebugInfoExpression)a1,(DebugInfoExpression)b1);
+                return this.T((DebugInfoExpression)x,(DebugInfoExpression)y);
             case ExpressionType.Default:
-                return this.T((DefaultExpression)a1,(DefaultExpression)b1);
+                return this.T((DefaultExpression)x,(DefaultExpression)y);
             case ExpressionType.Dynamic:
-                return this.T((DynamicExpression)a1,(DynamicExpression)b1);
+                return this.T((DynamicExpression)x,(DynamicExpression)y);
             case ExpressionType.Goto:
-                return this.T((GotoExpression)a1,(GotoExpression)b1);
+                return this.T((GotoExpression)x,(GotoExpression)y);
             case ExpressionType.Index:
-                return this.T((IndexExpression)a1,(IndexExpression)b1);
+                return this.T((IndexExpression)x,(IndexExpression)y);
             case ExpressionType.Invoke:
-                return this.T((InvocationExpression)a1,(InvocationExpression)b1);
+                return this.T((InvocationExpression)x,(InvocationExpression)y);
             case ExpressionType.Label:
-                return this.T((LabelExpression)a1,(LabelExpression)b1);
+                return this.T((LabelExpression)x,(LabelExpression)y);
             case ExpressionType.Lambda:
-                return this.T((LambdaExpression)a1,(LambdaExpression)b1);
+                return this.T((LambdaExpression)x,(LambdaExpression)y);
             case ExpressionType.ListInit:
-                return this.T((ListInitExpression)a1,(ListInitExpression)b1);
+                return this.T((ListInitExpression)x,(ListInitExpression)y);
             case ExpressionType.Loop:
-                return this.T((LoopExpression)a1,(LoopExpression)b1);
+                return this.T((LoopExpression)x,(LoopExpression)y);
             case ExpressionType.MemberAccess:
-                return this.T((MemberExpression)a1,(MemberExpression)b1);
+                return this.T((MemberExpression)x,(MemberExpression)y);
             case ExpressionType.MemberInit:
-                return this.T((MemberInitExpression)a1,(MemberInitExpression)b1);
+                return this.T((MemberInitExpression)x,(MemberInitExpression)y);
             case ExpressionType.Call:
-                return this.T((MethodCallExpression)a1,(MethodCallExpression)b1);
+                return this.T((MethodCallExpression)x,(MethodCallExpression)y);
             case ExpressionType.NewArrayBounds:
             case ExpressionType.NewArrayInit:
-                return this.T((NewArrayExpression)a1,(NewArrayExpression)b1);
+                return this.T((NewArrayExpression)x,(NewArrayExpression)y);
             case ExpressionType.New:
-                return this.T((NewExpression)a1,(NewExpression)b1);
+                return this.T((NewExpression)x,(NewExpression)y);
             case ExpressionType.Parameter:
-                return this.Equals((ParameterExpression)a1,(ParameterExpression)b1);
+                return this.Equals((ParameterExpression)x,(ParameterExpression)y);
             case ExpressionType.RuntimeVariables:
-                return this.T((RuntimeVariablesExpression)a1,(RuntimeVariablesExpression)b1);
+                return this.T((RuntimeVariablesExpression)x,(RuntimeVariablesExpression)y);
             case ExpressionType.Switch:
-                return this.T((SwitchExpression)a1,(SwitchExpression)b1);
+                return this.T((SwitchExpression)x,(SwitchExpression)y);
             case ExpressionType.Try:
-                return this.T((TryExpression)a1,(TryExpression)b1);
+                return this.T((TryExpression)x,(TryExpression)y);
             case ExpressionType.TypeEqual:
             case ExpressionType.TypeIs:
-                return this.T((TypeBinaryExpression)a1,(TypeBinaryExpression)b1);
+                return this.T((TypeBinaryExpression)x,(TypeBinaryExpression)y);
             default:
-                throw new NotSupportedException($"{a1.NodeType}はサポートされていない");
+                throw new NotSupportedException($"{x.NodeType}はサポートされていない");
         }
     }
     protected bool T(BinaryExpression x,BinaryExpression y) => x.Method==y.Method&&this.ProtectedEquals(x.Left,y.Left)&&this.ProtectedEquals(x.Right,y.Right)&&this.InternalEquals(x.Conversion,y.Conversion);
@@ -217,26 +182,8 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         //if(!this.T(x.Variables,y.Variables)) return @false;
         //return this,x.Expressions,y.Expressions);
         if(x.Type!=y.Type) return @false;
-        var x_Variables = x.Variables;
-        var y_Variables = y.Variables;
-        var x_Variables_Count = x_Variables.Count;
-        var y_Variables_Count = y_Variables.Count;
-        if(x_Variables_Count!=y_Variables_Count)return @false;
-        var x_Parameters = this.x_Parameters;
-        var y_Parameters = this.y_Parameters;
-        for(var i = 0;i<x_Variables_Count;i++) {
-            var x_Variable = x_Variables[i];
-            var y_Variable = y_Variables[i];
-            if(x_Variable.Type!=y_Variable.Type)return @false;
-        }
-        var x_Parameters_Count = x_Parameters.Count;
-        Debug.Assert(x_Parameters_Count==y_Parameters.Count);
-        x_Parameters.AddRange(x_Variables);
-        y_Parameters.AddRange(y_Variables);
-        var r = this.SequenceEqual(x.Expressions,y.Expressions);
-        x_Parameters.RemoveRange(x_Parameters_Count,x_Variables_Count);
-        y_Parameters.RemoveRange(x_Parameters_Count,x_Variables_Count);
-        return r;
+        if(!x.Variables.SequenceEqual(y.Variables)) return @false;
+        return this.SequenceEqual(x.Expressions,y.Expressions);
     }
     protected bool T(ConditionalExpression x,ConditionalExpression y) =>
         this.ProtectedEquals(x.Test,y.Test)&&
@@ -260,109 +207,86 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         x.EndLine==y.EndLine&&
         x.EndColumn==y.EndColumn;
     protected bool T(DefaultExpression x,DefaultExpression y) => x.Type==y.Type;
-    protected bool T(DynamicExpression x,DynamicExpression y) {
-        if(!this.SequenceEqual(x.Arguments,y.Arguments))
+    protected bool T(DynamicExpression x0,DynamicExpression y0) {
+        if(!this.SequenceEqual(x0.Arguments,y0.Arguments))
             return @false;
-        var x_Binder = x.Binder;
-        var y_Binder = y.Binder;
+        var x_Binder = x0.Binder;
+        var y_Binder = y0.Binder;
         Debug.Assert(x_Binder.GetType()==y_Binder.GetType(),"SequenceEqualの抜け穴パターンがあるか？");
         switch(x_Binder:x_Binder,y_Binder:y_Binder){
-            case(DynamicMetaObjectBinder a0,DynamicMetaObjectBinder b0):{
-                if(a0.ReturnType!=b0.ReturnType)return @false;
-                switch(a0, b0) {
-                    case (BinaryOperationBinder a1, BinaryOperationBinder b1): {
-                        if(a1.Operation!=b1.Operation) return @false;
+            case(DynamicMetaObjectBinder x,DynamicMetaObjectBinder y):{
+                if(x.ReturnType!=y.ReturnType)return @false;
+                switch(x, y) {
+                    case (BinaryOperationBinder x1, BinaryOperationBinder y1): {
+                        if(x1.Operation!=y1.Operation) return @false;
                         return true;
                     }
-                    case (ConvertBinder a1, ConvertBinder b1): {
-                        if(a1.Explicit!=b1.Explicit) return @false;
-                        Debug.Assert(a1.ReturnType==a1.Type);
-                        Debug.Assert(b1.ReturnType==b1.Type);
+                    case (ConvertBinder x1, ConvertBinder y1): {
+                        if(x1.Explicit!=y1.Explicit) return @false;
+                        Debug.Assert(x1.ReturnType==x1.Type);
+                        Debug.Assert(y1.ReturnType==y1.Type);
                         return true;
                     }
-                    case (CreateInstanceBinder a1, CreateInstanceBinder b1): {
-                        if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (CreateInstanceBinder x1, CreateInstanceBinder y1): {
+                        if(x1.CallInfo.ArgumentCount!=y1.CallInfo.ArgumentCount) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (DeleteIndexBinder a1, DeleteIndexBinder b1): {
-                        if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (DeleteIndexBinder x1, DeleteIndexBinder y1): {
+                        if(x1.CallInfo.ArgumentCount!=y1.CallInfo.ArgumentCount) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (DeleteMemberBinder a1, DeleteMemberBinder b1): {
-                        if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
-                        if(a1.Name!=b1.Name) return @false;
+                    case (DeleteMemberBinder x1, DeleteMemberBinder y1): {
+                        if(x1.IgnoreCase!=y1.IgnoreCase) return @false;
+                        if(x1.Name!=y1.Name) return @false;
                         return true;
                     }
-                    case (GetIndexBinder a1, GetIndexBinder b1): {
-                        if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (GetIndexBinder x1, GetIndexBinder y1): {
+                        if(x1.CallInfo.ArgumentCount!=y1.CallInfo.ArgumentCount) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (GetMemberBinder a1, GetMemberBinder b1): {
-                        Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"GetMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
-                        if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
-                        if(a1.Name!=b1.Name)return @false;
+                    case (GetMemberBinder x1, GetMemberBinder y1): {
+                        Debug.Assert(x1.IgnoreCase==y1.IgnoreCase,"GetMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
+                        if(x1.IgnoreCase!=y1.IgnoreCase) return @false;
+                        if(x1.Name!=y1.Name)return @false;
                         return true;
                     }
-                    case (InvokeBinder a1, InvokeBinder b1): {
-                        if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (InvokeBinder x1, InvokeBinder y1): {
+                        if(x1.CallInfo.ArgumentCount!=y1.CallInfo.ArgumentCount) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (InvokeMemberBinder a1, InvokeMemberBinder b1): {
-                        Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"InvokeMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
-                        if(a1.Name!=b1.Name) return @false;
-                        if(a1.IgnoreCase!=b1.IgnoreCase) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (InvokeMemberBinder x1, InvokeMemberBinder y1): {
+                        Debug.Assert(x1.IgnoreCase==y1.IgnoreCase,"InvokeMemberBinder 本当はVBとかで破るパターンあるんじゃないのか");
+                        if(x1.Name!=y1.Name) return @false;
+                        if(x1.IgnoreCase!=y1.IgnoreCase) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (SetIndexBinder a1, SetIndexBinder b1): {
-                        Debug.Assert(a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames),"CallInfo.Argumentsが違うパターンもあるんじゃないか");
-                        if(a1.CallInfo.ArgumentCount!=b1.CallInfo.ArgumentCount) return @false;
-                        if(!a1.CallInfo.ArgumentNames.SequenceEqual(b1.CallInfo.ArgumentNames))return @false;
+                    case (SetIndexBinder x1, SetIndexBinder y1): {
+                        Debug.Assert(x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames),"CallInfo.Argumentsが違うパターンもあるんじゃないか");
+                        if(x1.CallInfo.ArgumentCount!=y1.CallInfo.ArgumentCount) return @false;
+                        if(!x1.CallInfo.ArgumentNames.SequenceEqual(y1.CallInfo.ArgumentNames))return @false;
                         return true;
                     }
-                    case (SetMemberBinder a1, SetMemberBinder b1): {
-                        Debug.Assert(a1.IgnoreCase==b1.IgnoreCase,"本当はVBとかで破るパターンあるんじゃないのか");
-                        return a1.Name.Equals(b1.Name,StringComparison.Ordinal);
+                    case (SetMemberBinder x1, SetMemberBinder y1): {
+                        Debug.Assert(x1.IgnoreCase==y1.IgnoreCase,"本当はVBとかで破るパターンあるんじゃないのか");
+                        return x1.Name.Equals(y1.Name,StringComparison.Ordinal);
                     }
-                    case (UnaryOperationBinder a1, UnaryOperationBinder b1): {
-                        if(a1.Operation!=b1.Operation) return @false;
+                    case (UnaryOperationBinder x1, UnaryOperationBinder y1): {
+                        if(x1.Operation!=y1.Operation) return @false;
                         return true;
                     }
                     default:
-                        throw new NotSupportedException($"{a0.GetType()},{b0.GetType()}が一致しない");
+                        throw new NotSupportedException($"{x.GetType()},{y.GetType()}が一致しない");
                 }
             }
             default:
-                throw new NotSupportedException($"{x.GetType()},{y.GetType()}が一致しない");
+                throw new NotSupportedException($"{x0.GetType()},{y0.GetType()}が一致しない");
         }
     }
-    //private bool InitializersEquals(ReadOnlyCollection<ElementInit> x_Initializers,ReadOnlyCollection<ElementInit> y_Initializers) {
-    //    if(x_Initializers.Count!=y_Initializers.Count)
-    //        return @false;
-    //    var x_Initializers_Count = x_Initializers.Count;
-    //    for(var c = 0;c<x_Initializers_Count;c++) {
-    //        this.Equals(x_Initializers[c],)
-    //        var x = x_Initializers[c];
-    //        var y = y_Initializers[c];
-    //        if(x.AddMethod!=y.AddMethod)
-    //            return @false;
-    //        if(!this,x.Arguments,y.Arguments))
-    //            return @false;
-    //    }
-    //    return true;
-    //}
-    //private bool MemberBindingsEquals(ReadOnlyCollection<MemberBinding> x,ReadOnlyCollection<MemberBinding> y) {
-    //    if(x.Count!=y.Count)
-    //        return @false;
-    //    var x_Bindings_Count = x.Count;
-    //    for(var c=0;c<x_Bindings_Count;c++)
-    //        if(!this.InternalEquals(x[c],y[c])) return false;
-    //    return true;
-    //}
     protected bool T(MemberInitExpression x,MemberInitExpression y) =>
         this.ProtectedEquals(x.NewExpression,y.NewExpression)&&
         this.SequenceEqual(x.Bindings,y.Bindings);
@@ -376,21 +300,11 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     internal bool InternalEquals(LabelTarget? x,LabelTarget? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
-        return x!.Type==y!.Type&&x.Name==y.Name&&
-               this.x_LabelTargets.IndexOf(x)==this.y_LabelTargets.IndexOf(y);
+        return x!.Type==y!.Type&&x.Name==y.Name&&x==y;
     }
     protected bool T(LabelExpression x,LabelExpression y){
         if(!this.InternalEquals(x.Target,y.Target)) return @false;
-        var x_LabelTargets = this.x_LabelTargets;
-        var y_LabelTargets = this.y_LabelTargets;
-        var x_LabelTargets_Count = x_LabelTargets.Count;
-        var y_LabelTargets_Count = y_LabelTargets.Count;
-        Debug.Assert(x_LabelTargets_Count==y_LabelTargets_Count);
-        x_LabelTargets.Add(x.Target);
-        y_LabelTargets.Add(y.Target);
         var r = this.InternalEquals(x.DefaultValue,y.DefaultValue);
-        x_LabelTargets.RemoveRange(x_LabelTargets_Count,1);
-        y_LabelTargets.RemoveRange(x_LabelTargets_Count,1);
         return r;
     }
     protected abstract bool T(LambdaExpression x,LambdaExpression y);
@@ -402,27 +316,15 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var y_BreakLabel = y.BreakLabel;
         var x_ContinueLabel = x.ContinueLabel;
         var y_ContinueLabel = y.ContinueLabel;
-        var x_LabelTargets = this.x_LabelTargets;
-        var y_LabelTargets = this.y_LabelTargets;
-        var x_LabelTargets_Count = x_LabelTargets.Count;
-        var y_LabelTargets_Count = y_LabelTargets.Count;
-        Debug.Assert(x_LabelTargets_Count==y_LabelTargets_Count);
         if(x_BreakLabel is not null) {
             if(y_BreakLabel is null)
                 return @false;
-            x_LabelTargets.Add(x_BreakLabel);
-            y_LabelTargets.Add(y_BreakLabel);
         } else if(y_BreakLabel is not null)return @false;
         if(x_ContinueLabel is not null) {
             if(y_ContinueLabel is null)
                 return @false;
-            x_LabelTargets.Add(x_ContinueLabel);
-            y_LabelTargets.Add(y_ContinueLabel);
         } else if(y_ContinueLabel is not null)return @false;
         var r = this.ProtectedEquals(x.Body,y.Body);
-        Debug.Assert(x_LabelTargets.Count==y_LabelTargets.Count);
-        x_LabelTargets.RemoveRange(x_LabelTargets_Count,x_LabelTargets.Count-x_LabelTargets_Count);
-        y_LabelTargets.RemoveRange(y_LabelTargets_Count,y_LabelTargets.Count-y_LabelTargets_Count);
         return r;
     }
     protected bool T(MemberExpression x,MemberExpression y) => x.Member==y.Member&&this.InternalEquals(x.Expression,y.Expression);
@@ -447,7 +349,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         this.ProtectedEquals(x.Expression,y.Expression)&&
         this.SequenceEqual(x.Arguments,y.Arguments);
     protected bool T(GotoExpression x,GotoExpression y) =>
-        this.x_LabelTargets.IndexOf(x.Target)==this.y_LabelTargets.IndexOf(y.Target)&&
+        x.Target==y.Target&&
         this.InternalEquals(x.Value,y.Value);
     public int GetHashCode(ParameterExpression obj)=>0;
     //protected abstract bool Equals(ParameterExpression? x,ParameterExpression? y);
@@ -485,28 +387,6 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             return @false;
         for(var c = 0;c<x_Handlers_Count;c++)
             if(!this.InternalEquals(x_Handlers[c],y_Handlers[c])) return false;
-        //for(var c = 0;c<x_Handlers_Count;c++) {
-        //    var x_Handler = x_Handlers[c];
-        //    var y_Handler = y_Handlers[c];
-        //    if(x_Handler.Test!=y_Handler.Test)return @false;
-        //    var x_Handler_Variable=x_Handler.Variable;
-        //    var y_Handler_Variable=y_Handler.Variable;
-        //    if(x_Handler_Variable is null^y_Handler_Variable is null) return @false;
-        //    var x_Parameters = this.x_Parameters;
-        //    var y_Parameters = this.y_Parameters;
-        //    var x_Parameters_Count = x_Parameters.Count;
-        //    Debug.Assert(x_Parameters_Count==y_Parameters.Count);
-        //    if(x_Handler_Variable is not null){
-        //        x_Parameters.Add(x_Handler_Variable);
-        //        y_Parameters.Add(y_Handler_Variable);
-        //    }
-        //    if(!this.PrivateEquals(x_Handler.Body,y_Handler.Body))return @false;
-        //    if(!this.InternalEquals(x_Handler.Filter,y_Handler.Filter))return @false;
-        //    if(x_Handler_Variable is not null) {
-        //        x_Parameters.RemoveAt(x_Parameters_Count);
-        //        y_Parameters.RemoveAt(x_Parameters_Count);
-        //    }
-        //}
         return true;
     }
     protected bool T(TypeBinaryExpression x,TypeBinaryExpression y) =>
@@ -587,20 +467,8 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var x_Variable=x.Variable;
         var y_Variable=y.Variable;
         if(x_Variable is null^y_Variable is null) return @false;
-        var x_Parameters = this.x_Parameters;
-        var y_Parameters = this.y_Parameters;
-        var x_Parameters_Count = x_Parameters.Count;
-        Debug.Assert(x_Parameters_Count==y_Parameters.Count);
-        if(x_Variable is not null){
-            x_Parameters.Add(x_Variable);
-            y_Parameters.Add(y_Variable);
-        }
         if(!this.ProtectedEquals(x.Body,y.Body))return @false;
         if(!this.InternalEquals(x.Filter,y.Filter))return @false;
-        if(x_Variable is not null) {
-            x_Parameters.RemoveAt(x_Parameters_Count);
-            y_Parameters.RemoveAt(x_Parameters_Count);
-        }
         return true;
     }
 

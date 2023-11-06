@@ -1,9 +1,9 @@
 ﻿using System.Linq.Expressions;
-//using Microsoft.CSharp.RuntimeBinder;
-using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
-using Generic=System.Collections.Generic;
+/// <summary>
+/// 先行評価式の(t=x)の場合tを評価するようにする
+/// </summary>
 internal class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualityComparer {
     protected override Expression Assignの比較対象(Expression Expression0){
         if(Expression0.NodeType==ExpressionType.Assign){

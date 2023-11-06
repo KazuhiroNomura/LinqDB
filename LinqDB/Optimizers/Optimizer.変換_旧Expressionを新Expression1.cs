@@ -4,8 +4,8 @@ namespace LinqDB.Optimizers;
 
 partial class Optimizer {
     private class 変換_旧Expressionを新Expression1:ReturnExpressionTraverser {
-        private protected readonly ExpressionEqualityComparer ExpressionEqualityComparer;
-        public 変換_旧Expressionを新Expression1(作業配列 作業配列,ExpressionEqualityComparer ExpressionEqualityComparer) : base(作業配列) => this.ExpressionEqualityComparer=ExpressionEqualityComparer;
+        private protected readonly AExpressionEqualityComparer ExpressionEqualityComparer;
+        public 変換_旧Expressionを新Expression1(作業配列 作業配列,AExpressionEqualityComparer ExpressionEqualityComparer) : base(作業配列) => this.ExpressionEqualityComparer=ExpressionEqualityComparer;
         private Expression? 旧Expression, 新Expression;
         public Expression 実行(Expression e,Expression 旧Expression,Expression 新Expression) {
             this.旧Expression=旧Expression;

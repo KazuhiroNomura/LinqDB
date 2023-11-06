@@ -1,11 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
 //using Microsoft.CSharp.RuntimeBinder;
-using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic=System.Collections.Generic;
+/// <summary>
+/// 代入左辺値に未定義のParameterが出現したら同じデータ型ならtrue
+/// 評価値に未定義のParameterが出現したらfalse
+/// </summary>
 public class ExpressionEqualityComparer:AExpressionEqualityComparer
     ,Generic.IEqualityComparer<Expression>
     ,Generic.IEqualityComparer<ParameterExpression>
@@ -21,63 +24,22 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
     ,Generic.IEqualityComparer<SymbolDocumentInfo>{
     internal Generic.List<ParameterExpression> x_ラムダ跨ぎParameters= new();
     internal Generic.List<ParameterExpression> y_ラムダ跨ぎParameters= new();
-    protected override void Clear(){
+    internal override void Clear(){
         this.x_ラムダ跨ぎParameters.Clear();
         this.y_ラムダ跨ぎParameters.Clear();
         base.Clear();
     }
-    protected override bool ProtectedAssign(BinaryExpression x_Assign,BinaryExpression y_Assign){
-        var x_Left = x_Assign.Left;
-        var y_Left = y_Assign.Left;
-        if(x_Left.NodeType!=y_Left.NodeType) return @false;
-        if(x_Left.NodeType!=ExpressionType.Parameter) return this.T(x_Assign,y_Assign);
-        if(!this.ProtectedEquals(x_Assign.Right,y_Assign.Right))
-            return @false;
-        if(!this.InternalEquals(x_Assign.Conversion,y_Assign.Conversion))
-            return @false;
-        var x_Parameter= (ParameterExpression)x_Left;
-        var y_Parameter= (ParameterExpression)y_Left;
-        var x_Index0 = this.x_Parameters.IndexOf(x_Parameter);
-        var y_Index0 = this.y_Parameters.IndexOf(y_Parameter);
-        if(x_Index0!=y_Index0) return @false;
-        if(x_Index0>=0) return true;
-        //a=1,b=1はtrue
-        //var a;a=1,var b;b=1はtrue
-        var x_ラムダ跨ぎParameters = this.x_ラムダ跨ぎParameters;
-        var y_ラムダ跨ぎParameters = this.y_ラムダ跨ぎParameters;
-        var x_Index1 = x_ラムダ跨ぎParameters.IndexOf(x_Parameter);
-        var y_Index1 = y_ラムダ跨ぎParameters.IndexOf(y_Parameter);
-        if(x_Index1!=y_Index1) return @false;
-        if(x_Index1>=0) return true;
-        x_ラムダ跨ぎParameters.Add(x_Parameter);
-        y_ラムダ跨ぎParameters.Add(y_Parameter);
+    protected override bool ProtectedAssign後処理(ParameterExpression x,ParameterExpression y){
+        this.x_ラムダ跨ぎParameters.Add(x);
+        this.y_ラムダ跨ぎParameters.Add(y);
         //Let(x=>.v),Let(y=>.w)は一致しない。
         //Let(x=>.v=x),Let(y=>.w=y)は一致しない。
         //Let(x=>.v),Let(y=>.v)は一致する。
         //Let(x=>.v=x),Let(y=>.v=y)は一致する。
         //代入先が始めて出現した宣言してないParameterだった場合始めて出現したという意味で一致する
-        return x_Left.GetType()==y_Left.GetType(); //true;
+        return x.GetType()==y.GetType(); //true;
     }
-    public override bool Equals(ParameterExpression? x,ParameterExpression? y){
-        var x_Index0 = this.x_Parameters.IndexOf(x);
-        var y_Index0 = this.y_Parameters.IndexOf(y);
-        if(x_Index0!=y_Index0) return @false;
-        if(x_Index0>=0) return true;
-        //Let(x=>.v),Let(y=>.w)は一致しない。
-        //Let(x=>.v=x),Let(y=>.w=y)は一致しない。
-        //Let(x=>.v),Let(y=>.v)は一致する。
-        //Let(x=>.v=x),Let(y=>.v=y)は一致する。
-        var x_ラムダ跨ぎParameters = this.x_ラムダ跨ぎParameters;
-        var y_ラムダ跨ぎParameters = this.y_ラムダ跨ぎParameters;
-        var x_Index1 = x_ラムダ跨ぎParameters.IndexOf(x);
-        var y_Index1 = y_ラムダ跨ぎParameters.IndexOf(y);
-        if(x_Index1!=y_Index1) return @false;
-        if(x_Index1>=0){
-            return x==y;
-        }
-        x_ラムダ跨ぎParameters.Add(x);
-        y_ラムダ跨ぎParameters.Add(y);
-        //return true;
+    protected override bool Equals後処理(ParameterExpression x,ParameterExpression y){
         return @false;
     }
     protected override bool T(LambdaExpression x,LambdaExpression y){

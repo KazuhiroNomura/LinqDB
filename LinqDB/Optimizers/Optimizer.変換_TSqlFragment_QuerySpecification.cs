@@ -14,45 +14,38 @@ public sealed partial class Optimizer {
     /// TSQLからLINQに変換する。
     /// </summary>
     private partial class 変換_TSqlFragmentからExpression {
-        private sealed class ExpressionEqualityComparerGroupBy:ExpressionEqualityComparer {
-            protected override void Clear(){
-                this.x_Parameters.Clear();
-                this.y_Parameters.Clear();
-                this.x_LabelTargets.Clear();
-                this.y_LabelTargets.Clear();
-            }
-            public override bool Equals(ParameterExpression? x,ParameterExpression? y){
-                var x_Index0 = this.x_Parameters.IndexOf(x);
-                var y_Index0 = this.y_Parameters.IndexOf(y);
-                if(x_Index0!=y_Index0) return @false;
-                if(x_Index0>=0) return true;
-                //Let(x=>.v),Let(y=>.w)は一致しない。
-                //Let(x=>.v=x),Let(y=>.w=y)は一致しない。
-                //Let(x=>.v),Let(y=>.v)は一致する。
-                //Let(x=>.v=x),Let(y=>.v=y)は一致する。
-                var x_ラムダ跨ぎParameters = this.x_ラムダ跨ぎParameters;
-                var y_ラムダ跨ぎParameters = this.y_ラムダ跨ぎParameters;
-                var x_Index1 = x_ラムダ跨ぎParameters.IndexOf(x);
-                var y_Index1 = y_ラムダ跨ぎParameters.IndexOf(y);
-                if(x_Index1!=y_Index1) return @false;
-                if(x_Index1>=0){
-                    return x==y;
-                }
-                return @false;
+        private sealed class ExpressionEqualityComparerGroupBy:AExpressionEqualityComparer{
+            //internal ParameterExpression ラムダ跨ぎParameter;
+            protected override bool ProtectedAssign後処理(ParameterExpression x,ParameterExpression y)=>@false;
+            protected override bool Equals後処理(ParameterExpression x,ParameterExpression y)=>x==y;
+            protected override bool T(LambdaExpression x,LambdaExpression y){
+                if(x.Type!=y.Type||x.TailCall!=y.TailCall) return @false;
+                var Lambdx_x_Parameters = x.Parameters;
+                var Lambdx_y_Parameters = y.Parameters;
+                var Lambdx_x_Parameters_Count = Lambdx_x_Parameters.Count;
+                if(Lambdx_x_Parameters_Count!=Lambdx_y_Parameters.Count) return @false;
+                var x_Parameters = this.x_Parameters;
+                var y_Parameters = this.y_Parameters;
+                var x_Parameters_Count = x_Parameters.Count;
+                Debug.Assert(x_Parameters_Count==y_Parameters.Count);
+                x_Parameters.AddRange(Lambdx_x_Parameters);
+                y_Parameters.AddRange(Lambdx_y_Parameters);
+                Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
+                var r = this.ProtectedEquals(x.Body,y.Body);
+                Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
+                x_Parameters.RemoveRange(x_Parameters_Count,Lambdx_x_Parameters_Count);
+                y_Parameters.RemoveRange(x_Parameters_Count,Lambdx_x_Parameters_Count);
+                return r;
             }
         }
-        private sealed class 変換_旧Expressionを新Expression1GroupBy:変換_旧Expressionを新Expression1{
-            private readonly ExpressionEqualityComparerGroupBy ExpressionEqualityComparerGroupBy;
-            public 変換_旧Expressionを新Expression1GroupBy(作業配列 作業配列):base(作業配列,new ExpressionEqualityComparerGroupBy()){
-                this.ExpressionEqualityComparerGroupBy=(ExpressionEqualityComparerGroupBy)this.ExpressionEqualityComparer;
-            }
-            public Expression 実行(Expression e,Expression 旧Expression,Expression 新Expression,ParameterExpression ラムダ跨ぎParameter){
-                var ExpressionEqualityComparerGroupBy=this.ExpressionEqualityComparerGroupBy;
-                ExpressionEqualityComparerGroupBy.x_ラムダ跨ぎParameters.Add(ラムダ跨ぎParameter);
-                ExpressionEqualityComparerGroupBy.y_ラムダ跨ぎParameters.Add(ラムダ跨ぎParameter);
-                return base.実行(e,旧Expression,新Expression);
-            }
-        }
+        //private sealed class 変換_旧Expressionを新Expression1GroupBy:変換_旧Expressionを新Expression1 {
+        //    public 変換_旧Expressionを新Expression1GroupBy(作業配列 作業配列) : base(作業配列,new ExpressionEqualityComparerGroupBy()) {
+        //    }
+        //    public Expression 実行(Expression e,Expression 旧Expression,Expression 新Expression,ParameterExpression ラムダ跨ぎParameter){
+        //        //this.ラムダ跨ぎParameter=ラムダ跨ぎParameter;
+        //        return base.実行(e,旧Expression,新Expression);
+        //    }
+        //}
         private Expression QuerySpecification(QuerySpecification x) {
             var 作業配列 = this.作業配列;
             //var StackSubquery単位の情報 = this._StackSubquery単位の情報;
@@ -125,16 +118,11 @@ public sealed partial class Optimizer {
                 //Expression keySelector_Body1= keySelector_Body;
                 var Item番号 = 1;
                 for(var a = 0;a<RefPeek_List_GroupByExpression_Count;a++)
-                    resultSelector_Body=変換_旧Expressionを新Expression1.実行(resultSelector_Body,RefPeek_List_GroupByExpression[a],ValueTuple_Item(ref ValueTuple,ref Item番号),ss);
-                var x0=作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,Element_Type,keySelector_Body.Type,resultSelector_Body.Type);
-                var y=Expression.Lambda(
-                    keySelector_Body,
-                    作業配列.Parameters設定(ss)
-                );
-                var z=Expression.Lambda(
-                    resultSelector_Body,
-                    作業配列.Parameters設定(Key,Group)
-                );
+                    resultSelector_Body=変換_旧Expressionを新Expression1.実行(
+                        resultSelector_Body,
+                        RefPeek_List_GroupByExpression[a],
+                        ValueTuple_Item(ref ValueTuple,ref Item番号)
+                    );
                 var GroupBy = Expression.Call(
                     作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,Element_Type,keySelector_Body.Type,resultSelector_Body.Type),
                     Source,

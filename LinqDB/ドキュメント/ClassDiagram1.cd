@@ -10,7 +10,7 @@
   <Class Name="LinqDB.Sets.ImmutableSet&lt;T&gt;" Collapsed="true">
     <Position X="6.75" Y="2" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AggIABQABCBQABPsgAFAAQAgQIACBpAEAgAQABBQIQA=</HashCode>
+      <HashCode>AigIBBQABCBQABPsgAFAAQAgQAAABpAAAoAQABBQIQA=</HashCode>
       <FileName>Sets\ImmutableSet`1.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -18,24 +18,17 @@
   <Class Name="LinqDB.Sets.Lookup&lt;TValue, TKey, TCollection&gt;" Collapsed="true">
     <Position X="8" Y="4.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CACAAAAAIBAEAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>CACAAAAAIBAEEAAQCAAAAAAAAAAQAAAAAAAAAEAQIAA=</HashCode>
       <FileName>Sets\Lookup`3.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="LinqDB.Sets.Set&lt;T&gt;" Collapsed="true">
     <Position X="11.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAoAAiRAQEAAQAAQAEAABAAAAAKAACAgAAAQAEBUIAA=</HashCode>
+      <HashCode>CAoAAiRAQAAAQAAQAGAABAQAAAKAACAAAAAQAGBUIAA=</HashCode>
       <FileName>Sets\Set`1.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.SetGrouping&lt;TKey, TValue, TGrouping&gt;" Collapsed="true">
-    <Position X="3.5" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AACAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
-      <FileName>Sets\SetGrouping`3.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Class Name="LinqDB.Sets.SetGroupingAscList&lt;TKey, TValue&gt;" Collapsed="true">
     <Position X="4.5" Y="5" Width="1.5" />
@@ -44,17 +37,18 @@
       <FileName>Sets\SetGroupingAscList`2.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.SetGroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+  <Class Name="LinqDB.Sets.SetGroupingSet&lt;TKey, TElement&gt;" Collapsed="true">
     <Position X="2.25" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>CAAAAAAAIBAEEAAQiCAAAAAAAAAQAIAAAAAAAGAQIAA=</HashCode>
       <FileName>Sets\SetGroupingSet`2.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
-  <Class Name="LinqDB.Sets.Set&lt;TValue, TKey&gt;" Collapsed="true">
+  <Class Name="LinqDB.Sets.Set&lt;TKey, TElement&gt;" Collapsed="true">
     <Position X="11.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAEAACACAAEAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>CAAAAAAAAAAEAACACCAEAAAEAAAAAAAAAAAAAGAAAAA=</HashCode>
       <FileName>Sets\Set`2.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -66,10 +60,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="LinqDB.Sets.GroupingSet&lt;TKey, TValue&gt;" Collapsed="true">
+  <Class Name="LinqDB.Sets.GroupingSet&lt;TKey, TElement&gt;" Collapsed="true">
     <Position X="4.5" Y="8" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAAAAAAAAAQAAAABAAAAAIAAAAAAAAAAABQIAA=</HashCode>
+      <HashCode>AAAAAEACAAAAAAQAgCAAAAAAAAAAAIAAAAAAAGAAAAA=</HashCode>
       <FileName>Sets\GroupingSet`2.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -95,10 +89,10 @@
       <FileName>Sets\LookupSet`2.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.Set&lt;TValue, TKey, TContainer&gt;" Collapsed="true">
+  <Class Name="LinqDB.Sets.Set&lt;TKey, TElement, TContainer&gt;" Collapsed="true">
     <Position X="11.5" Y="6.75" Width="3.75" />
     <TypeIdentifier>
-      <HashCode>AAIAAAQAAAEAAAAgAEAAAAAAAigAQAAAAEAAAAAQAAA=</HashCode>
+      <HashCode>AAAAAAQAAAEAAAAgACAAAAAAAiAAQAAAAAAAAGAQAAA=</HashCode>
       <FileName>Sets\Set`3.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
