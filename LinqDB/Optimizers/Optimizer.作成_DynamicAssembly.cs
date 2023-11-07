@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
+using static Common;
 partial class Optimizer{
     internal class 作成_DynamicAssembly:A作成_IL{
         public 作成_DynamicAssembly(判定_InstanceMethodか 判定_InstanceMethodか) :base(判定_InstanceMethodか){

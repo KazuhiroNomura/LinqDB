@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using System.Linq.Expressions;
 // ReSharper disable LocalizableElement
 namespace LinqDB.Optimizers;
+using static Common;
 
 /// <summary>
 /// Expressionを最適化する

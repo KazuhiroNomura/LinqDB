@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
+using LinqDB.Optimizers.Comparison;
 //using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
-using Generic=System.Collections.Generic;
+using Generic = System.Collections.Generic;
 /// <summary>
 /// 代入左辺値に未定義のParameterが出現したら同じデータ型ならtrue
 /// 評価値に未定義のParameterが出現したらfalse

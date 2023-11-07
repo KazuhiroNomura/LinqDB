@@ -16,13 +16,13 @@ public sealed partial class Optimizer{
         /// <summary>
         ///リフレクションで使う作業領域確保によるGCを防ぐ。
         /// </summary>
-        protected readonly 作業配列 作業配列;
+        protected private readonly 作業配列 作業配列;
         protected readonly SqlScriptGenerator ScriptGenerator;
         /// <summary>
         /// コンストラクタ。
         /// </summary>
         /// <param name="作業配列"></param>
-        public ReturnTSqlFragmentTraverser(作業配列 作業配列,SqlScriptGenerator ScriptGenerator) {
+        internal ReturnTSqlFragmentTraverser(作業配列 作業配列,SqlScriptGenerator ScriptGenerator) {
             this.作業配列=作業配列;
             this.ScriptGenerator=ScriptGenerator;
         }

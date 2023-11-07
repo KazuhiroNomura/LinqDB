@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Text;
 //using ColumnReferenceExpression=Microsoft.SqlServer.TransactSql.ScriptDom.ColumnReferenceExpression;
 namespace LinqDB.Optimizers;
+using static Common;
 /// <summary>
 /// Expressionを最適化する
 /// </summary>

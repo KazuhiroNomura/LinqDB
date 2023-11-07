@@ -4,10 +4,10 @@ using System.Diagnostics;
 namespace LinqDB.Optimizers;
 
 partial class Optimizer {
-    private class 変換_旧Parameterを新Expression1:ReturnExpressionTraverser {
+    internal class 変換_旧Parameterを新Expression1:ReturnExpressionTraverser {
         private ParameterExpression? 旧Parameter;
         private Expression? 新Expression;
-        public 変換_旧Parameterを新Expression1(作業配列 作業配列) : base(作業配列){}
+        internal 変換_旧Parameterを新Expression1(作業配列 作業配列) : base(作業配列){}
         public Expression 実行(Expression Expression0,ParameterExpression 旧Parameter,Expression 新Expression) {
             Debug.Assert(旧Parameter.Type.IsAssignableFrom(新Expression.Type));
             this.旧Parameter=旧Parameter;

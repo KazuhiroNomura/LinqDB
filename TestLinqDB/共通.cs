@@ -13,6 +13,7 @@ using LinqDB.Remote.Clients;
 using System.Net;
 using System.Reflection;
 using LinqDB;
+using LinqDB.Optimizers.Comparison;
 using TestLinqDB.Serializers;
 using Types;
 

@@ -10,7 +10,7 @@ using LinqDB.Helpers;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable PossibleNullReferenceException
 namespace LinqDB.Optimizers;
-
+using static Common;
 partial class Optimizer {
     /// <summary>
     /// プロファイル出来るように式木に計測を埋め込む

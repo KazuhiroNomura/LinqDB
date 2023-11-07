@@ -14,6 +14,7 @@ using System.Text;
 using System.Xml;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
+using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Properties;
 using static LinqDB.Helpers.CommonLibrary;
 using static LinqDB.Helpers.Configulation;
@@ -618,7 +619,7 @@ public class Client:IDisposable {
         };
         return this.WriteBufferをサーバーに送信してReadBufferに受信();
     }
-    private readonly Optimizer.取得_CSharp 取得_CSharp = new();
+    private readonly 取得_CSharp 取得_CSharp = new();
     //internal Response サーバーに送信(Request Request,SerializeType SerializeType,Expression Expression)=>
 
     //    var Header66=this.Header66;

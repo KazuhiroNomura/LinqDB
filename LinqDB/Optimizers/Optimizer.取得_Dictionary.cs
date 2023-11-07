@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 namespace LinqDB.Optimizers;
+using static Common;
 partial class Optimizer {
     /// <summary>
     /// ラムダを跨ぐParameterExpressionを取得

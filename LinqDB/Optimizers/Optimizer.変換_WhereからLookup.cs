@@ -6,7 +6,7 @@ using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers;
-
+using static Common;
 partial class Optimizer {
     private sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quoteを処理しない {
         private readonly 取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド;

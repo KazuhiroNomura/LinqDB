@@ -6,6 +6,7 @@ using System.Text;
 // ReSharper disable AssignNullToNotNullAttribute
 
 namespace LinqDB.Optimizers;
+using static Common;
 
 partial class Optimizer {
     private sealed class 取得_命令ツリー:VoidExpressionTraverser,IDisposable {

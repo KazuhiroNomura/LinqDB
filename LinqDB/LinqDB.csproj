@@ -34,14 +34,72 @@
     <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Optimizers\Comparison\**" />
+    <Compile Remove="Optimizers\ReturnExpressionTraverser\**" />
+    <Compile Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
+    <Compile Remove="Optimizers\VoidExpressionTraverser\**" />
+    <Compile Remove="Optimizers\VoidTSqlFragmentTraverser\**" />
     <Compile Remove="Serializers\Formatters\**" />
+    <EmbeddedResource Remove="Optimizers\Comparison\**" />
+    <EmbeddedResource Remove="Optimizers\ReturnExpressionTraverser\**" />
+    <EmbeddedResource Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
+    <EmbeddedResource Remove="Optimizers\VoidExpressionTraverser\**" />
+    <EmbeddedResource Remove="Optimizers\VoidTSqlFragmentTraverser\**" />
     <EmbeddedResource Remove="Serializers\Formatters\**" />
+    <None Remove="Optimizers\Comparison\**" />
+    <None Remove="Optimizers\ReturnExpressionTraverser\**" />
+    <None Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
+    <None Remove="Optimizers\VoidExpressionTraverser\**" />
+    <None Remove="Optimizers\VoidTSqlFragmentTraverser\**" />
     <None Remove="Serializers\Formatters\**" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Databases\ImportDatabase - コピー.cs" />
     <Compile Remove="Databases\ImportDatabase.cs" />
+    <Compile Remove="Optimizers\ExpressionEqualityComparer.cs" />
+    <Compile Remove="Optimizers\ExpressionEqualityComparer_Assign_Leftで比較.cs" />
     <Compile Remove="Optimizers\ExpressionReferenceEqualityCompare.cs" />
+    <Compile Remove="Optimizers\ExpressionReferenceEqualityComparer.cs" />
+    <Compile Remove="Optimizers\LambdaEqualityComparer.cs" />
+    <Compile Remove="Optimizers\Optimizer.A作成_IL.cs" />
+    <Compile Remove="Optimizers\Optimizer.ReturnExpressionTraverser.cs" />
+    <Compile Remove="Optimizers\Optimizer.ReturnTSqlFragmentTraverser.cs" />
+    <Compile Remove="Optimizers\Optimizer.VoidExpressionTraverser.cs" />
+    <Compile Remove="Optimizers\Optimizer.VoidTSqlFragmentTraverser.cs" />
+    <Compile Remove="Optimizers\Optimizer.作成_DynamicAssembly.cs" />
+    <Compile Remove="Optimizers\Optimizer.作成_DynamicMethod.cs" />
+    <Compile Remove="Optimizers\Optimizer.作成_実行計画サンキーダイアグラム.cs" />
+    <Compile Remove="Optimizers\Optimizer.作業配列.cs" />
+    <Compile Remove="Optimizers\Optimizer.判定_InstanceMethodか.cs" />
+    <Compile Remove="Optimizers\Optimizer.判定_指定Parameters無.cs" />
+    <Compile Remove="Optimizers\Optimizer.判定_指定Parameter有_他Parameter無_Lambda内部走査.cs" />
+    <Compile Remove="Optimizers\Optimizer.判定_指定Parameter無_他Parameter有.cs" />
+    <Compile Remove="Optimizers\Optimizer.取得_CSharp.cs" />
+    <Compile Remove="Optimizers\Optimizer.取得_Dictionary.cs" />
+    <Compile Remove="Optimizers\Optimizer.取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
+    <Compile Remove="Optimizers\Optimizer.取得_出力Table.cs" />
+    <Compile Remove="Optimizers\Optimizer.取得_命令ツリー.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_KeySelectorの匿名型をValueTuple.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_Stopwatchに埋め込む.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_TSqlFragment_PivotTableReference.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_TSqlFragment_QuerySpecification.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_TSqlFragment正規化.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_WhereからLookup.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_インラインループ.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_インラインループ独立.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_メソッド正規化_取得インライン不可能定数.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_旧Expressionを新Expression1.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_旧Parameterを新Expression1.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_旧Parameterを新Expression2.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_最終正規化.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_跨ぎParameterの不要置換復元.cs" />
+    <Compile Remove="Optimizers\Optimizer.変換_跨ぎParameterの先行評価.cs" />
+    <Compile Remove="Optimizers\Optimizer.検証_Parameterの使用状態.cs" />
+    <Compile Remove="Optimizers\Optimizer.計測.cs" />
+    <Compile Remove="Optimizers\汎用Comparer.cs" />
+    <Compile Remove="Optimizers\計測.cs" />
     <Compile Remove="Serializers\MessagePack\FormatterResolver - コピー.cs" />
     <Compile Remove="Serializers\Utf8Json\FormatterResolver - コピー.cs" />
     <Compile Remove="Serializers\Utf8Json\Formatters\Sets\IGroupingCollection`2.cs" />
@@ -55,6 +113,53 @@
     <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />
     <None Remove="Optimizers\Optimizer.変換_跨ぎParameterの先行評価.txt" />
     <None Remove="Serializers\MemoryPack\FormatterResolver.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Optimizers\Comparison\AExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparison\ブローブビルドExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparison\汎用Comparer.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_KeySelectorの匿名型をValueTuple.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_WhereからLookup.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ独立.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_最終正規化.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの不要置換復元.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs" />
+    <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\ReturnTSqlFragmentTraverser.cs" />
+    <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_PivotTableReference.cs" />
+    <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_QuerySpecification.cs" />
+    <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\A作成_IL.cs" />
+    <Compile Include="Optimizers\Comparison\ExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparison\ExpressionEqualityComparer_Assign_Leftで比較.cs" />
+    <Compile Include="Optimizers\Comparison\ExpressionReferenceEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparison\LambdaEqualityComparer.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\VoidExpressionTraverser.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\VoidExpressionTraverser_Quoteを処理しない.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\作成_DynamicAssembly.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\作成_DynamicMethod.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\作成_実行計画サンキーダイアグラム.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\判定_InstanceMethodか.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameters無.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter有_他Parameter無_Lambda内部走査.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter無_他Parameter有.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_CSharp.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_Dictionary.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_出力Table.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_命令ツリー.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\検証_Parameterの使用状態.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\検証_変形状態.cs" />
+    <Compile Include="Optimizers\VoidTSqlFragmentTraverser\VoidTSqlFragmentTraverser.cs" />
+    <Compile Include="Optimizers\VoidTSqlFragmentTraverser\変換_TSqlFragment正規化.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Lokad.ILPack" Version="0.2.0" />
@@ -95,9 +200,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Optimizers\Comparison\" />
   </ItemGroup>
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

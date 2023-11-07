@@ -19,6 +19,7 @@ using Type = System.Type;
 using Linq=System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers;
+using static Common;
 partial class Optimizer {
     /// <summary>
     /// インライン不可能定数とは1mとか単純にIL命令で書けないもの。

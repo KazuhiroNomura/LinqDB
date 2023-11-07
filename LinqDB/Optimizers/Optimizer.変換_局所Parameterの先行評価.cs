@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 namespace LinqDB.Optimizers;
+using static Common;
 
 partial class Optimizer {
     /// <summary>

@@ -8,8 +8,10 @@ using LinqDB.Helpers;
 using Math = LinqDB.Reflection.Math;
 using System.Collections.Generic;
 using Generic=System.Collections.Generic;
-namespace LinqDB.Optimizers;
+using LinqDB.Databases.Dom;
 
+namespace LinqDB.Optimizers;
+using static Common;
 partial class Optimizer {
     private class 変換_インラインループ独立:変換_インラインループ {
         public 変換_インラインループ独立(作業配列 作業配列,ExpressionEqualityComparer ExpressionEqualityComparer,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2):base(作業配列,ExpressionEqualityComparer,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2) {

@@ -6,6 +6,9 @@
   &lt;Assembly Path="C:\Users\kazuh\.nuget\packages\utf8json\1.3.7\lib\netstandard2.0\Utf8Json.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\kazuh\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_be882858\CoverageData\_LinqDB-TestLinqDB.371183822\Snapshot\snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=527327e0_002D9a8b_002D4136_002D8d8b_002D226e83ef67ba/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;' #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	
@@ -17,6 +20,15 @@
 	
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=6d394bbc_002Df431_002D4a0d_002Dab5c_002D15d5f5446947/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;TestLinqDB&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ae6c9c81_002D2974_002D4819_002Db243_002Da9bb4dbc1858/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;'" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c1ac88e2_002D1210_002D4bc2_002Db589_002Dbecc72de3187/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;' #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fb288133_002D42e5_002D463a_002D9be7_002D52efbfc2c3eb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;' #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
 	

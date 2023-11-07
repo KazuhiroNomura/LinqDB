@@ -446,11 +446,11 @@ public static class CommonLibrary {
     //    }
     //    return New;
     //}
-    internal static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,Generic.IList<Expression> 旧Arguments)=>
+    internal static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> 旧Arguments)=>
         旧Arguments.Count==0
             ?Expression.New(Reflection.ValueTuple.ValueTuple0)
             :ValueTupleでNewする(作業配列,旧Arguments,0);
-    private static NewExpression ValueTupleでNewする(Optimizer.作業配列 作業配列,Generic.IList<Expression> 旧Arguments,int Offset) {
+    private static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> 旧Arguments,int Offset) {
         var 残りType数 = 旧Arguments.Count-Offset;
         switch(残りType数) {
             case 1:

@@ -6,6 +6,7 @@ using LinqDB.Sets;
 using System.Linq.Expressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace LinqDB.Optimizers;
+using static Common;
 /// <summary>
 /// Expressionを最適化する
 /// </summary>

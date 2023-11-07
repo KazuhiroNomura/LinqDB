@@ -18,7 +18,8 @@ using System.Linq.Expressions;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers;
 public class ReturnExpressionTraverser:共通{
-    private static readonly dynamic o=new NonPublicAccessor(typeof(Optimizer).GetNestedType("ReturnExpressionTraverser",System.Reflection.BindingFlags.NonPublic)!.GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance,new[]{typeof(作業配列)})!.Invoke(new object[]{new 作業配列()}));
+    private static readonly dynamic o=new NonPublicAccessor(typeof(LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser)!.GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance,new[]{typeof(作業配列)})!.Invoke(new object[]{new 作業配列()}));
+    //private static readonly dynamic o=new NonPublicAccessor(new LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser(new 作業配列()));
     [Fact]public void TraverseNullable(){
         o.TraverseNullable(null);
         o.TraverseNullable(Expression.Default(typeof(void)));

@@ -12,6 +12,7 @@ using LinqDB.Enumerables;
 
 namespace LinqDB.Optimizers;
 using Generic = Collections.Generic;
+using static Common;
 
 partial class Optimizer {
     private class 変換_インラインループ:ReturnExpressionTraverser {
@@ -264,7 +265,7 @@ partial class Optimizer {
             }
             return false;
         }
-        protected Expression LambdaExpressionを展開1(Expression Lambda,Expression argument1) => Optimizer.LambdaExpressionを展開1(
+        protected Expression LambdaExpressionを展開1(Expression Lambda,Expression argument1) => Common.LambdaExpressionを展開1(
             Lambda,
             argument1,
             this.変換_旧Parameterを新Expression1

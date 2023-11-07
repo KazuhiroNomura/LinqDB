@@ -8,6 +8,7 @@ using System.Reflection;
 using LinqDB.Sets;
 namespace LinqDB.Optimizers;
 using Generic=System.Collections.Generic;
+using static Common;
 partial class Optimizer{
     private sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTraverser_Quoteを処理しない{
         /// <summary>

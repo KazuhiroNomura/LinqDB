@@ -9,7 +9,7 @@ partial class Optimizer {
     /// a+=b→a=a+b
     /// a=bのaは評価される
     /// </summary>
-    private class ReturnExpressionTraverser {
+    internal class ReturnExpressionTraverser {
         protected readonly 作業配列 _作業配列;
         /// <summary>
         /// コンストラクタ

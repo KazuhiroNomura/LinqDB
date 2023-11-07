@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Optimizers;
+using LinqDB.Optimizers.Comparison;
 namespace LinqDB.Databases.Dom;
 /// <summary>
 /// ScalarFunction

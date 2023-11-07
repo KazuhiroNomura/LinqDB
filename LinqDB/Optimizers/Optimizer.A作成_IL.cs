@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using LinqDB.Helpers;
 // ReSharper disable PossibleNullReferenceException
 namespace LinqDB.Optimizers;
+using static Common;
 partial class Optimizer{
     /// <summary>
     /// Optimizerで最適化されたExpressionからDynamicMethodを作る専用

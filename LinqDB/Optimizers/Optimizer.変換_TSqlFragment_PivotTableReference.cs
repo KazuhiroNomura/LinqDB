@@ -7,6 +7,7 @@ using System.Reflection;
 using LinqDB.Sets;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Optimizers;
+using static Common;
 public sealed partial class Optimizer{
     private partial class 変換_TSqlFragmentからExpression{
         private partial (Expressions.Expression Set, Expressions.ParameterExpression Element) PivotedTableReference(PivotedTableReference x) {
