@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser" Collapsed="true">
+    <Position X="16.75" Y="1.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>IC4UQISIEZpqAKtB4IUHImogiKByICwhGVEECSR+AKg=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser_Quoteを処理しない" Collapsed="true">
+    <Position X="13.5" Y="3" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_KeySelectorの匿名型をValueTuple" Collapsed="true">
+    <Position X="6.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_KeySelectorの匿名型をValueTuple.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_Stopwatchに埋め込む" Collapsed="true">
+    <Position X="27" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>Ii4EQISIAZJKAqoB4IUnICAggIAzIA0hCEEFCSRGRCQ=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_WhereからLookup" Collapsed="true">
+    <Position X="13.5" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgAQIAAAAAAAABAAAAAAAAAAQAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_WhereからLookup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ" Collapsed="true">
+    <Position X="22.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CQgAQoCOAAIAAAAAIIgAAABggAAAABAhQACAAJCIoAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ独立" Collapsed="true">
+    <Position X="22.5" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_インラインループ独立.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数" Collapsed="true">
+    <Position X="11.25" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQgAQICAAAkBACMAFIUAAioAjKAgAqwQERCAAQA4AAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価" Collapsed="true">
+    <Position X="15.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACgEAMQAIAACAAAAAAAAAAAAAQCAAAAACASAAAAEAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Expressionを新Expression1" Collapsed="true">
+    <Position X="4.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression1" Collapsed="true">
+    <Position X="24.75" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression2" Collapsed="true">
+    <Position X="29.25" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_最終正規化" Collapsed="true">
+    <Position X="18" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAEAIAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_最終正規化.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの不要置換復元" Collapsed="true">
+    <Position X="20.25" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgAQIQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAggAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの不要置換復元.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価" Collapsed="true">
+    <Position X="9" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgEQIAAAAAAAAAAAACAAAAAEACAAAAAAACEAAgAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Yu Gothic UI" Size="9" />
+</ClassDiagram>

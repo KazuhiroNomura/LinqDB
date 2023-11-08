@@ -33,7 +33,7 @@ public enum テストオプション{
     MemoryPack_MessagePack_Utf8Json=MemoryPack|MessagePack|Utf8Json,
 }
 public abstract class 共通{
-    private static int ポート番号;
+    private protected static int ポート番号;
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);

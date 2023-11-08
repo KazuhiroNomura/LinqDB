@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Reflection;
 using LinqDB.Sets;
+using MemoryPack;
+
 using IEnumerable = System.Collections.IEnumerable;
 namespace TestLinqDB.Serializers;
 internal class ClassIEnumerableInt32Double:System.Collections.Generic.IEnumerable<int>,System.Collections.Generic.IEnumerable<double>{
@@ -86,5 +88,13 @@ public class 特定パターン:共通{
             var output=Serializer.Deserialize<object>(bytes);
             Assert.Equal(input,output!,this.汎用Comparer);
         }
+    }
+    [Fact]
+    public void MemoryPackでCharArray(){
+        MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.ArrayFormatter<char>());
+        var input=new[]{'a','b','c'};
+        var bytes=MemoryPackSerializer.Serialize(input);
+        var output=MemoryPackSerializer.Deserialize<char[]>(bytes);
+        Assert.True(input.SequenceEqual(output));
     }
 }

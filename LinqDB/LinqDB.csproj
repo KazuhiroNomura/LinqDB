@@ -153,13 +153,18 @@
     <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter無_他Parameter有.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_CSharp.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_Dictionary.cs" />
-    <Compile Include="Optimizers\VoidExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_出力Table.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_命令ツリー.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\検証_Parameterの使用状態.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\検証_変形状態.cs" />
     <Compile Include="Optimizers\VoidTSqlFragmentTraverser\VoidTSqlFragmentTraverser.cs" />
     <Compile Include="Optimizers\VoidTSqlFragmentTraverser\変換_TSqlFragment正規化.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Optimizers\Comparison\ClassDiagram1.cd" />
+    <None Include="Optimizers\ReturnExpressionTraverser\ClassDiagram1.cd" />
+    <None Include="Optimizers\ReturnTSqlFragmentTraverser\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Lokad.ILPack" Version="0.2.0" />

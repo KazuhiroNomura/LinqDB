@@ -1,294 +1,140 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="LinqDB.Optimizers.AExpressionEqualityComparer" Collapsed="true">
-    <Position X="3.5" Y="1.25" Width="2.75" />
-    <TypeIdentifier>
-      <HashCode>AAAAAACABSQAABAggABCAIAAAAAAAIAAAIAQAABEAAA=</HashCode>
-      <FileName>Optimizers\AExpressionEqualityComparer.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Optimizers.ExpressionEqualityComparer" Collapsed="true">
-    <Position X="3" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAgABAAAAAAAAAQAAAACAAAABEAAA=</HashCode>
-      <FileName>Optimizers\ExpressionEqualityComparer.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Optimizers.LambdaEqualityComparer" Collapsed="true">
-    <Position X="5.25" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAAABAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
-      <FileName>Optimizers\LambdaEqualityComparer.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.Optimizer">
-    <Position X="0.5" Y="0.5" Width="1.5" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
+  <Class Name="LinqDB.Optimizers.Optimizer" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
     <NestedTypes>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_KeySelectorの匿名型をValueTuple" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_KeySelectorの匿名型をValueTuple.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.ReturnTSqlFragmentTraverser" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.ReturnTSqlFragmentTraverser.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_旧Expressionを新Expression1" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_旧Expressionを新Expression1.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.VoidExpressionTraverser" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.VoidExpressionTraverser.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.作成_DynamicMethod" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.作成_DynamicMethod.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_旧Parameterを新Expression2" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_旧Parameterを新Expression2.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.判定_指定Parameters無" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.判定_指定Parameters無.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_局所Parameterの先行評価" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression">
-        <Compartments>
-          <Compartment Name="Nested Types" Collapsed="false" />
-        </Compartments>
-        <NestedTypes>
-          <Class Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.ExpressionEqualityComparerGroupBy" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragment_QuerySpecification.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Class>
-          <Enum Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.種類" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Enum>
-          <Class Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.判定_集約関数があるか" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Class>
-          <Struct Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.Subquery単位の情報" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Struct>
-          <Class Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.StackSubquery単位の情報" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Class>
-          <Struct Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.一致度" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-            <Lollipop Position="0.2" />
-          </Struct>
-          <Struct Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragmentからExpression.情報CreateFunctionStatement" Collapsed="true">
-            <TypeIdentifier>
-              <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragmentからExpression.cs</NewMemberFileName>
-            </TypeIdentifier>
-          </Struct>
-        </NestedTypes>
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragment_PivotTableReference.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.ブローブビルドExpressionEqualityComparer" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.判定_指定Parameter有_他Parameter無_Lambda内部走査" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.判定_指定Parameter有_他Parameter無_Lambda内部走査.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_メソッド正規化_取得インライン不可能定数" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_メソッド正規化_取得インライン不可能定数.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.A作成_IL" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.A作成_IL.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
       <Class Name="LinqDB.Optimizers.Optimizer.DynamicReflection" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>Optimizers\Optimizer.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_インラインループ" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_インラインループ.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_TSqlFragment正規化" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_TSqlFragment正規化.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_インラインループ独立" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_インラインループ独立.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.検証_Parameterの使用状態" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.検証_Parameterの使用状態.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.取得_CSharp" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.取得_CSharp.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_跨ぎParameterの先行評価" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.判定_InstanceMethodか" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.判定_InstanceMethodか.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.判定_指定Parameter無_他Parameter有" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.判定_指定Parameter無_他Parameter有.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.作成_実行計画サンキーダイアグラム" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.作成_実行計画サンキーダイアグラム.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.ReturnExpressionTraverser_Quoteを処理しない" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_WhereからLookup" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_WhereからLookup.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_Stopwatchに埋め込む" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_Stopwatchに埋め込む.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.VoidTSqlFragmentTraverser" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.VoidTSqlFragmentTraverser.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.作成_DynamicAssembly" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.作成_DynamicAssembly.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_最終正規化" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_最終正規化.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.ReturnExpressionTraverser" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.ReturnExpressionTraverser.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.計測しない" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.計測.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.A計測" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.計測.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.計測する" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.計測.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.取得_OuterPredicate_InnerPredicate_プローブビルド" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.取得_OuterPredicate_InnerPredicate_プローブビルド.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.取得_出力Table" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.取得_出力Table.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.VoidExpressionTraverser_Quoteを処理しない" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.取得_命令ツリー" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.取得_命令ツリー.cs</NewMemberFileName>
-        </TypeIdentifier>
-        <Lollipop Position="0.2" />
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_跨ぎParameterの不要置換復元" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_跨ぎParameterの不要置換復元.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.検証_変形状態" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.変換_旧Parameterを新Expression1" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.変換_旧Parameterを新Expression1.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.作業配列" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.作業配列.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.Optimizer.取得_Dictionary" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\Optimizer.取得_Dictionary.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>SZDxBkwbaiCDSNQBgJMwNFYxJ1KRIpQlzmFwEBgACGA=</HashCode>
-      <FileName>Optimizers\Optimizer.A作成_IL.cs</FileName>
+      <HashCode>QYDxBEwbIiCDCMQBAJEAFBYxJBKRIgQFSgFgABgACGA=</HashCode>
+      <FileName>Optimizers\Optimizer.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.A作成_IL" Collapsed="true">
+    <Position X="4.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>sWYgQAzIURLqSehB4o1HJGIoAHQwMSghWcGEDSxWAKg=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\A作成_IL.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.作成_DynamicMethod" Collapsed="true">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgMAAAAAAAAAAAAAAAAAAACABAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\作成_DynamicMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.作成_DynamicAssembly" Collapsed="true">
+    <Position X="6" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgEAAAAAAAAAAAAAAAAAAAAABAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\作成_DynamicAssembly.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.判定_指定Parameters無" Collapsed="true">
+    <Position X="5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQQIAAAAAAAAAAAAAAAAAACAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\判定_指定Parameters無.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.VoidExpressionTraverser" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IC4UQMSIERp6AOtB4IUHImogiKAyICwhGVEECSR+AKg=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\VoidExpressionTraverser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.作成_実行計画サンキーダイアグラム" Collapsed="true">
+    <Position X="8.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAQIQAAAAAAIACAAAAAQAAAAAQAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\作成_実行計画サンキーダイアグラム.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.判定_InstanceMethodか" Collapsed="true">
+    <Position X="19.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAIAUAAAAAAABAIAAAAAAAAAQAAgAAAAAAAgAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\判定_InstanceMethodか.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.判定_指定Parameter有_他Parameter無_Lambda内部走査" Collapsed="true">
+    <Position X="17.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAgAAIAAABAAAAAIAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\判定_指定Parameter有_他Parameter無_Lambda内部走査.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.判定_指定Parameter無_他Parameter有" Collapsed="true">
+    <Position X="20" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAgAAIAAAAAAAAAAAAAQAAAQAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\判定_指定Parameter無_他Parameter有.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.取得_CSharp" Collapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>KC4MUJSIETBmAKpC4IUDInJgjKIwICwhCYAEDSReIqg=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\取得_CSharp.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.取得_Dictionary" Collapsed="true">
+    <Position X="11" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQgEAIAAAAAAAAABAIAAAAAAAAAgAAgAAAAAAAgAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\取得_Dictionary.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.取得_OuterPredicate_InnerPredicate_プローブビルド" Collapsed="true">
+    <Position X="26.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.取得_出力Table" Collapsed="true">
+    <Position X="21.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAIAEAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\取得_出力Table.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.取得_命令ツリー" Collapsed="true">
+    <Position X="23.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAgEQICIECAkAqAKAAAAIBAAAAAQAAggAAAAAAEGCIA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\取得_命令ツリー.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.検証_Parameterの使用状態" Collapsed="true">
+    <Position X="13.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACgEAMQAIAAAIAAEAACAABAAAAAQAAAAEAAAAAAABoA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\検証_Parameterの使用状態.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.VoidExpressionTraverser_Quoteを処理しない" Collapsed="true">
+    <Position X="16.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\VoidExpressionTraverser_Quoteを処理しない.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LinqDB.Optimizers.VoidExpressionTraverser.検証_変形状態" Collapsed="true">
+    <Position X="15.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\VoidExpressionTraverser\検証_変形状態.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />
 </ClassDiagram>

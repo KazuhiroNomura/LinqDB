@@ -34,394 +34,7 @@ using Generic = System.Collections.Generic;
 /// Expressionを最適化する
 /// </summary>
 public sealed partial class Optimizer:IDisposable {
-    ////private const Int32 プリフィックス長 = 5;
-    ////private const String Cラムダ跨 = "ラムダ跨ﾟ";
-    ////private const String Cループ跨 = "ループ跨ﾟ";
-    ////private const String Cローカル = "ローカルﾟ";
-    ////private static Boolean プリフィックス一致(ParameterExpression Parameter,String プリフィックス) => Parameter.Name is not null&&Parameter.Name.StartsWith(プリフィックス,StringComparison.Ordinal);
-    ////private static Boolean プリフィックス一致(ParameterExpression Parameter,String プリフィックス0,String プリフィックス1)=>
-    ////    Parameter.Name is not null&&(Parameter.Name.StartsWith(プリフィックス0,StringComparison.Ordinal)||Parameter.Name.StartsWith(プリフィックス1,StringComparison.Ordinal));
-    ////private static Boolean プリフィックス一致(ParameterExpression Parameter,String プリフィックス0,String プリフィックス1,String プリフィックス2)=>
-    ////    Parameter.Name is not null&&(Parameter.Name.StartsWith(プリフィックス0,StringComparison.Ordinal)||Parameter.Name.StartsWith(プリフィックス1,StringComparison.Ordinal)||Parameter.Name.StartsWith(プリフィックス2,StringComparison.Ordinal));
-    ////private const String Cラムダ局所 = nameof(Cラムダ局所);//ラムダの内部のラムダを跨がない2回以上評価される共通部分式の局所変数による最適化
-    ////private const String Pラムダ引数 = nameof(Pラムダ引数);
-    ////private const String Pワーク変数 = nameof(Pワーク変数);
-    ////private const String Lループ = nameof(Lループ);//ループ展開されるラムダ名称
-    ////private const String Lラムダ = nameof(Lラムダ);//ループ展開されないラムダ名称
-    ////private const String D動的Get = nameof(D動的Get);
-    ////private const String D動的Set = nameof(D動的Set);
-    ////private const Int32 プレフィックス長 = 1;
-    ////private const String Lラムダ跨 = ".";//自由変数,束縛変数,評価変数
-    ////private const String Lループ跨 = "L";//ループに展開されるラムダを跨ぐ外だし出来る先行評価共通部分式の局所変数による最適化
-    ////private const String A自動変数 = "A";//ラムダの内部のラムダを跨がない2回以上評価される共通部分式の局所変数による最適化
-    ////private const String P関数引数 = "P";
-    ////private const String W作業変数 = "W";
-    ////private const String G動的変数 = "G";
-    ////private const String S動的変数 = "S";
-    ////private const String Lループ = nameof(Lループ);//ループ展開されるラムダ名称
-    ////private const String Lラムダ = nameof(Lラムダ);//ループ展開されないラムダ名称
-    ////private const String get_Item = nameof(get_Item);
-    ////private const String op_Decrement        =nameof(op_Decrement);
-    ////private const String op_Increment        =nameof(op_Increment );
-    ////private const String op_Negation         =nameof(op_Negation);
-    ////private const String op_UnaryNegation    =nameof(op_UnaryNegation);
-    ////private const String op_UnaryPlus        =nameof(op_UnaryPlus);
-    ////private const String op_Addition         =nameof(op_Addition);
-    ////private const String op_Assign           =nameof(op_Assign);
-    ////private const String op_BitwiseAnd=nameof(op_BitwiseAnd);
-    ////private const String op_BitwiseOr=nameof(op_BitwiseOr);
-    ////private const String op_Division         =nameof(op_Division);
-    ////private const String op_Equality         =nameof(op_Equality);
-    ////private const String op_ExclusiveOr      =nameof(op_ExclusiveOr);
-    //private const string op_GreaterThan = nameof(op_GreaterThan);
-    ////private const String op_GreaterThanOrEqual=nameof(op_GreaterThanOrEqual);
-    ////private const String op_Inequality       =nameof(op_Inequality);
-    ////private const String op_LeftShift        =nameof(op_LeftShift);
-    //private const string op_LessThan = nameof(op_LessThan);
-    ////private const String op_LessThanOrEqual  =nameof(op_LessThanOrEqual);
-    ////private const String op_LogicalAnd       =nameof(op_LogicalAnd);
-    ////private const String op_LogicalOr        =nameof(op_LogicalOr);
-    ////private const String op_Modulus          =nameof(op_Modulus);
-    ////private const String op_Multiply         =nameof(op_Multiply);
-    ////private const String op_RightShift       =nameof(op_RightShift);
-    ////private const String op_Subtraction      =nameof(op_Subtraction);
-    ////private const String op_Implicit=nameof(op_Implicit);
-    ////private const String op_Explicit=nameof(op_Explicit);
-    //private const string op_True = nameof(op_True);
-    //private const string op_False = nameof(op_False);
-    ////private const BindingFlags Instance_NonPublic_Public =BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public;
-    ////private const BindingFlags Static_NonPublic_Public =BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public;
-    ////private const BindingFlags Static_NonPublic = BindingFlags.Static|BindingFlags.NonPublic;
-    //private static readonly ConstantExpression Constant_false = Expression.Constant(false);
-    //private static readonly ConstantExpression Constant_true = Expression.Constant(true);
-    //private static readonly MemberExpression Constant_0M = Expression.Field(null,typeof(decimal).GetField(nameof(decimal.Zero)));
-    //private static readonly MemberExpression Constant_1M = Expression.Field(null,typeof(decimal).GetField(nameof(decimal.One)));
-    //private static readonly ConstantExpression Constant_0 = Expression.Constant(0);
-    ////private static readonly ConstantExpression Constant_4 = Expression.Constant(4);
-    ////private static readonly ConstantExpression Constant_8 = Expression.Constant(8);
-    ////private static readonly ConstantExpression Constant_12 = Expression.Constant(12);
-    ////private static readonly ConstantExpression Constant_13 = Expression.Constant(13);
-    //private static readonly ConstantExpression Constant_100 = Expression.Constant(100);
-    //private static readonly ConstantExpression Constant_100000 = Expression.Constant(100000);
-    //private static readonly ConstantExpression Constant_1=Expression.Constant(1);
-    //private static readonly ConstantExpression Constant_0L = Expression.Constant(0L);
-    //private static readonly ConstantExpression Constant_1L=Expression.Constant(1L);
-    //private static readonly ConstantExpression Constant_0F = Expression.Constant(0F);
-    //private static readonly ConstantExpression Constant_1F = Expression.Constant(0F);
-    //private static readonly ConstantExpression Constant_0D = Expression.Constant(0D);
-    //private static readonly ConstantExpression Constant_1D = Expression.Constant(1D);
-    //private static readonly ConstantExpression Constant_10D = Expression.Constant(10D);
-    //private static readonly ConstantExpression Constant_null = Expression.Constant(null);
-    //private static readonly DefaultExpression Default_void = Expression.Empty();
-    public static bool 変化したか(MethodCallExpression MethodCall,Expression Object,Generic.IEnumerable<Expression> Arguments) =>
-        MethodCall.Object==Object&&MethodCall.Arguments==Arguments;
-    //private static Expression Convert必要なら(Expression e,Type Type) => Type!=e.Type
-    //    ? Expression.Convert(
-    //        e,
-    //        Type
-    //    )
-    //    : e;
-    //private static (Expression プローブ,Expression ビルド)ValueTupleでNewする(作業配列 作業配列,Generic.IList<(Expression プローブ, Expression ビルド)> Listプローブビルド,int Offset) {
-    //    var 残りType数 = Listプローブビルド.Count-Offset;
-    //    switch(残りType数) {
-    //        case 1:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple1,
-    //                    Listプローブビルド[Offset+0].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple1,
-    //                    Listプローブビルド[Offset+0].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 2:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple2,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple2,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 3:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple3,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple3,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 4:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple4,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type,Listプローブビルド[Offset+3].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ     ,Listプローブビルド[Offset+3].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple4,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type  ,Listプローブビルド[Offset+3].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド       ,Listプローブビルド[Offset+3].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 5:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple5,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type,Listプローブビルド[Offset+3].プローブ.Type,Listプローブビルド[Offset+4].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ     ,Listプローブビルド[Offset+3].プローブ     ,Listプローブビルド[Offset+4].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple5,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type  ,Listプローブビルド[Offset+3].ビルド.Type  ,Listプローブビルド[Offset+4].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド       ,Listプローブビルド[Offset+3].ビルド       ,Listプローブビルド[Offset+4].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 6:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple6,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type,Listプローブビルド[Offset+3].プローブ.Type,Listプローブビルド[Offset+4].プローブ.Type,Listプローブビルド[Offset+5].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ     ,Listプローブビルド[Offset+3].プローブ     ,Listプローブビルド[Offset+4].プローブ     ,Listプローブビルド[Offset+5].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple6,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type  ,Listプローブビルド[Offset+3].ビルド.Type  ,Listプローブビルド[Offset+4].ビルド.Type  ,Listプローブビルド[Offset+5].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド       ,Listプローブビルド[Offset+3].ビルド       ,Listプローブビルド[Offset+4].ビルド       ,Listプローブビルド[Offset+5].ビルド
-    //                )
-    //            )
-    //        );
-    //        case 7:return (
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple7,
-    //                    Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type,Listプローブビルド[Offset+3].プローブ.Type,Listプローブビルド[Offset+4].プローブ.Type,Listプローブビルド[Offset+5].プローブ.Type,Listプローブビルド[Offset+6].プローブ.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ     ,Listプローブビルド[Offset+3].プローブ     ,Listプローブビルド[Offset+4].プローブ     ,Listプローブビルド[Offset+5].プローブ     ,Listプローブビルド[Offset+6].プローブ
-    //                )
-    //            ),
-    //            Expression.New(
-    //                作業配列.MakeValueTuple_ctor(
-    //                    Reflection.ValueTuple.ValueTuple7,
-    //                    Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type  ,Listプローブビルド[Offset+3].ビルド.Type  ,Listプローブビルド[Offset+4].ビルド.Type  ,Listプローブビルド[Offset+5].ビルド.Type  ,Listプローブビルド[Offset+6].ビルド.Type
-    //                ),
-    //                作業配列.Expressions設定(
-    //                    Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド       ,Listプローブビルド[Offset+3].ビルド       ,Listプローブビルド[Offset+4].ビルド       ,Listプローブビルド[Offset+5].ビルド       ,Listプローブビルド[Offset+6].ビルド
-    //                )
-    //            )
-    //        );
-    //        default: {
-    //            var (プローブ, ビルド)=ValueTupleでNewする(作業配列,Listプローブビルド,Offset+7);
-    //            return (
-    //                Expression.New(
-    //                    作業配列.MakeValueTuple_ctor(
-    //                        Reflection.ValueTuple.ValueTuple8,
-    //                        Listプローブビルド[Offset+0].プローブ.Type,Listプローブビルド[Offset+1].プローブ.Type,Listプローブビルド[Offset+2].プローブ.Type,Listプローブビルド[Offset+3].プローブ.Type,Listプローブビルド[Offset+4].プローブ.Type,Listプローブビルド[Offset+5].プローブ.Type,Listプローブビルド[Offset+6].プローブ.Type,
-    //                        プローブ.Type
-    //                    ),
-    //                    作業配列.Expressions設定(
-    //                        Listプローブビルド[Offset+0].プローブ     ,Listプローブビルド[Offset+1].プローブ     ,Listプローブビルド[Offset+2].プローブ     ,Listプローブビルド[Offset+3].プローブ     ,Listプローブビルド[Offset+4].プローブ     ,Listプローブビルド[Offset+5].プローブ     ,Listプローブビルド[Offset+6].プローブ     ,
-    //                        プローブ
-    //                    )
-    //                ),
-    //                Expression.New(
-    //                    作業配列.MakeValueTuple_ctor(
-    //                        Reflection.ValueTuple.ValueTuple8,
-    //                        Listプローブビルド[Offset+0].ビルド.Type  ,Listプローブビルド[Offset+1].ビルド.Type  ,Listプローブビルド[Offset+2].ビルド.Type  ,Listプローブビルド[Offset+3].ビルド.Type  ,Listプローブビルド[Offset+4].ビルド.Type  ,Listプローブビルド[Offset+5].ビルド.Type  ,Listプローブビルド[Offset+6].ビルド.Type  ,
-    //                        ビルド.Type
-    //                    ) ,
-    //                    作業配列.Expressions設定(
-    //                        Listプローブビルド[Offset+0].ビルド       ,Listプローブビルド[Offset+1].ビルド       ,Listプローブビルド[Offset+2].ビルド       ,Listプローブビルド[Offset+3].ビルド       ,Listプローブビルド[Offset+4].ビルド       ,Listプローブビルド[Offset+5].ビルド       ,Listプローブビルド[Offset+6].ビルド       ,
-    //                        ビルド
-    //                    )
-    //                )
-    //            );
-    //        }
-    //    }
-    //}
-    //private static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> Arguments) {
-    //    return CommonLibrary.ValueTupleでNewする(作業配列,Arguments);
-    //}
-    //private static bool ILで直接埋め込めるか(Type Type) =>
-    //    Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
-    ///// <summary>
-    ///// Constant定数がILに直接埋め込めるか判定する
-    ///// </summary>
-    ///// <param name="Constant"></param>
-    ///// <returns>ILに埋め込めるか</returns>
-    //private static bool ILで直接埋め込めるか(ConstantExpression Constant) =>
-    //    !Constant.Type.IsValueType&&Constant.Value is null||ILで直接埋め込めるか(Constant.Type);
-    //private static MethodCallExpression? ループ展開可能なSetのCall(Expression e) {
-    //    if(e.NodeType!=ExpressionType.Call)
-    //        return null;
-    //    var MethodCall = (MethodCallExpression)e;
-    //    return MethodCall.Method.DeclaringType==typeof(Sets.ExtensionSet)
-    //        ? MethodCall
-    //        : null;
-    //}
-    //private static bool ループ展開可能メソッドか(MethodInfo GenericMethodDefinition) {
-    //    Debug.Assert(!GenericMethodDefinition.IsGenericMethod||GenericMethodDefinition.IsGenericMethodDefinition);
-    //    var DeclaringType = GenericMethodDefinition.DeclaringType;
-    //    if(typeof(Enumerable)==DeclaringType) {
-    //        var Name = GenericMethodDefinition.Name;
-    //        if(
-    //            nameof(Enumerable.DistinctBy)==Name||
-    //            nameof(Enumerable.ExceptBy)==Name||
-    //            nameof(Enumerable.IntersectBy)==Name||
-    //            nameof(Enumerable.UnionBy)==Name||
-    //            nameof(Enumerable.MaxBy)==Name||
-    //            nameof(Enumerable.MinBy)==Name||
-    //            nameof(Enumerable.Empty)==Name||
-    //            nameof(Enumerable.OrderBy)==Name||nameof(Enumerable.OrderByDescending)==Name||
-    //            nameof(Enumerable.ThenBy)==Name||nameof(Enumerable.ThenByDescending)==Name
-    //        ) {
-    //            return false;
-    //        }
-    //        return true;
-    //    }
-    //    return typeof(Sets.ExtensionEnumerable)==DeclaringType||typeof(Sets.ExtensionSet)==DeclaringType;
-    //}
-    //private static bool ループ展開可能メソッドか(Expression Expression,out MethodCallExpression MethodCall) {
-    //    if(Expression is MethodCallExpression MethodCall0) {
-    //        MethodCall=MethodCall0;
-    //        return ループ展開可能メソッドか(GetGenericMethodDefinition(MethodCall.Method));
-    //    }
-    //    MethodCall=null!;
-    //    return false;
-    //}
-    //private static bool ループ展開可能メソッドか(MethodCallExpression MethodCall) =>
-    //    ループ展開可能メソッドか(GetGenericMethodDefinition(MethodCall.Method));
-    //private static Expression LambdaExpressionを展開1(Expression Lambda,Expression argument,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression) {
-    //    Debug.Assert(typeof(Delegate).IsAssignableFrom(Lambda.Type));
-    //    return Lambda is LambdaExpression Lambda1
-    //        ? 変換_旧Parameterを新Expression.実行(
-    //            Lambda1.Body,
-    //            Lambda1.Parameters[0],
-    //            argument
-    //        )
-    //        : Expression.Invoke(
-    //            Lambda,
-    //            argument
-    //        );
-    //}
-    ///// <summary>
-    ///// テストプロジェクト用に公開するExpressionを比較するメソッド。
-    ///// </summary>
-    ///// <param name="a"></param>
-    ///// <param name="b"></param>
-    ///// <returns></returns>
-    //public static bool Test_ExpressionEqualityComparer(Expression a,Expression b) =>
-    //    new ExpressionEqualityComparer(new List<ParameterExpression>()).Equals(a,b);
-    /// <summary>
-    /// ビルド,プローブ式木の等価を比較する
-    /// </summary>
-    //public class ブローブビルドExpressionEqualityComparer:Generic.IEqualityComparer<(Expression ビルド, Expression プローブ)> {
-    //    private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
-    //    public ブローブビルドExpressionEqualityComparer(ExpressionEqualityComparer ExpressionEqualityComparer) => this.ExpressionEqualityComparer=ExpressionEqualityComparer;
-    //    public bool Equals((Expression ビルド, Expression プローブ) x,(Expression ビルド, Expression プローブ) y) {
-    //        var ExpressionEqualityComparer = this.ExpressionEqualityComparer;
-    //        if(!ExpressionEqualityComparer.Equals(x.プローブ,y.プローブ)) return false;
-    //        if(!ExpressionEqualityComparer.Equals(x.ビルド,y.ビルド)) return false;
-    //        return true;
-    //    }
-    //    public int GetHashCode((Expression ビルド, Expression プローブ) obj) => 0;
-    //}
     private readonly 作業配列 _作業配列 = new();
-
-    private static Type IEnumerable1(Type Type) {
-        var IEnumerable1 = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
-            ? Type
-            : Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-        if(IEnumerable1 is not null) {
-            return IEnumerable1;
-        }
-        return typeof(System.Collections.IEnumerable)==Type
-            ? Type
-            : Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName)!;
-    }
-    private static Type IEnumerable1のT(Type Type) {
-        //if(Type==typeof(XDocument)) return typeof(XDocument);
-        var IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-        if(IEnumerable1 is not null) {
-            return IEnumerable1.GetGenericArguments()[0];
-        }
-        if(Type.IsGenericType&&typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()) {
-            return Type.GetGenericArguments()[0];
-        }
-        var IEnumerable = Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName);
-        if(IEnumerable is not null||typeof(System.Collections.IEnumerable)==Type) {
-            return typeof(object);
-        }
-        throw new NotSupportedException();
-    }
-    private static Type[] IEnumerable1のGenericArguments(Type Type) {
-        var IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-        if(IEnumerable1 is not null) {
-            return IEnumerable1.GetGenericArguments();
-        }
-        if(Type.IsGenericType&&typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()) {
-            return Type.GetGenericArguments();
-        }
-        throw new NotSupportedException();
-    }
-    private static MethodInfo GetGenericMethodDefinition(MethodInfo Method) =>
-        Method.IsGenericMethod
-            ? Method.GetGenericMethodDefinition()
-            : Method;
     /// <summary>
     /// Where((ValueTule&lt;,>p=>p.Item1==p.Item2)は移動できない
     /// Where((ValueTule&lt;,>p=>p.Item1.Item1==p.Item.Item2)は移動できる
@@ -437,9 +50,6 @@ public sealed partial class Optimizer:IDisposable {
     private readonly 変換_KeySelectorの匿名型をValueTuple _変換_KeySelectorの匿名型をValueTuple;
     private readonly 変換_メソッド正規化_取得インライン不可能定数 _変換_メソッド正規化_取得インライン不可能定数;
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
-    /// <summary>
-    /// Listラムダ跨ぎParameter,Listループ跨ぎParameter設定
-    /// </summary>
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
     private readonly 変換_跨ぎParameterの不要置換復元 _変換_跨ぎParameterの不要置換復元;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
@@ -454,9 +64,6 @@ public sealed partial class Optimizer:IDisposable {
     private readonly 作成_DynamicMethod _作成_DynamicMethod;
     private readonly 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
-    /// <summary>
-    /// IL生成時に使う。変換_跨ぎParameterをBlock_Variablesに、
-    /// </summary>
     private Generic.Dictionary<ConstantExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryConstant {
         get => this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
         set {
@@ -622,36 +229,6 @@ public sealed partial class Optimizer:IDisposable {
         var Value = Field.GetValue(Tuple);
         Debug.Assert(Value!=null);
         return Value;
-    }
-    private static MemberExpression ValueTuple_Item(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression,object Value) {
-        if(Item番号==8) {
-            var Rest = TupleType.GetField("Rest");
-            Debug.Assert(Rest!=null);
-            TupleType=Rest.FieldType;
-            var Value0 = Rest.GetValue(TupleValue);
-            Debug.Assert(Value0!=null);
-            TupleValue=Value0;
-            TupleExpression=Expression.Field(TupleExpression,Rest);
-            Item番号=1;
-        }
-        var TupleField = TupleType.GetField($"Item{Item番号++}");
-        Debug.Assert(TupleField!=null);
-        TupleField.SetValue(TupleValue,Value);
-        return Expression.Field(TupleExpression,TupleField);
-    }
-    private static MemberExpression ValueTuple_Item(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression) {
-        if(Item番号==8) {
-            var Rest = TupleType.GetField("Rest");
-            Debug.Assert(Rest!=null);
-            TupleType=Rest.FieldType;
-            var Value0 = Rest.GetValue(TupleValue);
-            Debug.Assert(Value0!=null);
-            TupleValue=Value0;
-            TupleExpression=Expression.Field(TupleExpression,Rest);
-            Item番号=1;
-        }
-        var TupleField = TupleType.GetField($"Item{Item番号++}");
-        return Expression.Field(TupleExpression,TupleField);
     }
     internal void Disp作成(ParameterExpression ContainerParameter,Information Information,string SQL) {
         var Disp_TypeBuilder = Information.Disp_TypeBuilder;
@@ -1182,18 +759,48 @@ public sealed partial class Optimizer:IDisposable {
             var Disp0 = Disp;
             var Item番号 = 2;//1はContainerが入る
             foreach(var a in DictionaryConstant.AsEnumerable())
-                DictionaryConstant[a.Key]=(default!, ValueTuple_Item(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,a.Key.Value));
+                DictionaryConstant[a.Key]=(default!, ValueTuple_Item0(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,a.Key.Value));
             foreach(var a in DictionaryDynamic.AsEnumerable()) {
                 var Dynamic = a.Key;
                 var CallSite0 = CallSite.Create(this.Dynamicに対応するFunc(Dynamic),Dynamic.Binder);
-                DictionaryDynamic[Dynamic]=(default!, ValueTuple_Item(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,CallSite0));
+                DictionaryDynamic[Dynamic]=(default!, ValueTuple_Item0(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,CallSite0));
             }
             foreach(var a in DictionaryLambda.AsEnumerable())
-                DictionaryLambda[a.Key]=(default!, ValueTuple_Item(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression), default!);
+                DictionaryLambda[a.Key]=(default!, ValueTuple_Item1(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression), default!);
             foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable())
-                Dictionaryラムダ跨ぎParameter[a.Key]=(default!, ValueTuple_Item(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression));
+                Dictionaryラムダ跨ぎParameter[a.Key]=(default!, ValueTuple_Item1(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression));
         }
         return (Disp, DispParameter);
+        static MemberExpression ValueTuple_Item0(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression,object Value) {
+            if(Item番号==8) {
+                var Rest = TupleType.GetField("Rest");
+                Debug.Assert(Rest!=null);
+                TupleType=Rest.FieldType;
+                var Value0 = Rest.GetValue(TupleValue);
+                Debug.Assert(Value0!=null);
+                TupleValue=Value0;
+                TupleExpression=Expression.Field(TupleExpression,Rest);
+                Item番号=1;
+            }
+            var TupleField = TupleType.GetField($"Item{Item番号++}");
+            Debug.Assert(TupleField!=null);
+            TupleField.SetValue(TupleValue,Value);
+            return Expression.Field(TupleExpression,TupleField);
+        }
+        static MemberExpression ValueTuple_Item1(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression) {
+            if(Item番号==8) {
+                var Rest = TupleType.GetField("Rest");
+                Debug.Assert(Rest!=null);
+                TupleType=Rest.FieldType;
+                var Value0 = Rest.GetValue(TupleValue);
+                Debug.Assert(Value0!=null);
+                TupleValue=Value0;
+                TupleExpression=Expression.Field(TupleExpression,Rest);
+                Item番号=1;
+            }
+            var TupleField = TupleType.GetField($"Item{Item番号++}");
+            return Expression.Field(TupleExpression,TupleField);
+        }
     }
     internal static class DynamicReflection {
         public static readonly CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
@@ -1554,29 +1161,29 @@ public sealed partial class Optimizer:IDisposable {
         }
     }
     public string 命令ツリー(Expression Expression) => this._取得_命令ツリー.実行(Expression);
-    private static object Set_ValueTuple(object ValueTuple,int Index,object Value) {
-        switch(Index) {
-            case 0: ValueTuple.GetType().GetField("Item1")!.SetValue(ValueTuple,Value); break;
-            case 1: ValueTuple.GetType().GetField("Item2")!.SetValue(ValueTuple,Value); break;
-            case 2: ValueTuple.GetType().GetField("Item3")!.SetValue(ValueTuple,Value); break;
-            case 3: ValueTuple.GetType().GetField("Item4")!.SetValue(ValueTuple,Value); break;
-            case 4: ValueTuple.GetType().GetField("Item5")!.SetValue(ValueTuple,Value); break;
-            case 5: ValueTuple.GetType().GetField("Item6")!.SetValue(ValueTuple,Value); break;
-            case 6: ValueTuple.GetType().GetField("Item7")!.SetValue(ValueTuple,Value); break;
-            default:
-                var Rest = ValueTuple.GetType().GetField("Rest")!;
-                Rest.SetValue(
-                    ValueTuple,
-                    Set_ValueTuple(
-                        Rest.GetValue(ValueTuple)!,
-                        Index-7,
-                        Value
-                    )
-                );
-                break;
-        }
-        return ValueTuple;
-    }
+    //private static object Set_ValueTuple(object ValueTuple,int Index,object Value) {
+    //    switch(Index) {
+    //        case 0: ValueTuple.GetType().GetField("Item1")!.SetValue(ValueTuple,Value); break;
+    //        case 1: ValueTuple.GetType().GetField("Item2")!.SetValue(ValueTuple,Value); break;
+    //        case 2: ValueTuple.GetType().GetField("Item3")!.SetValue(ValueTuple,Value); break;
+    //        case 3: ValueTuple.GetType().GetField("Item4")!.SetValue(ValueTuple,Value); break;
+    //        case 4: ValueTuple.GetType().GetField("Item5")!.SetValue(ValueTuple,Value); break;
+    //        case 5: ValueTuple.GetType().GetField("Item6")!.SetValue(ValueTuple,Value); break;
+    //        case 6: ValueTuple.GetType().GetField("Item7")!.SetValue(ValueTuple,Value); break;
+    //        default:
+    //            var Rest = ValueTuple.GetType().GetField("Rest")!;
+    //            Rest.SetValue(
+    //                ValueTuple,
+    //                Set_ValueTuple(
+    //                    Rest.GetValue(ValueTuple)!,
+    //                    Index-7,
+    //                    Value
+    //                )
+    //            );
+    //            break;
+    //    }
+    //    return ValueTuple;
+    //}
     ///// <summary>
     ///// 最適化レベル
     ///// </summary>
@@ -1637,7 +1244,6 @@ public sealed partial class Optimizer:IDisposable {
         //DictionaryLambda,DictionaryDynamic add
         return (LambdaExpression)Lambda08;
     }
-    private static bool equals(object obj) => obj is string&&obj.Equals("ABC");
 }
 //2122 20220516
 //2708 20220514

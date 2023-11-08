@@ -129,7 +129,7 @@
   <data name="クライアントでChainStatusが空でない配列を返した" xml:space="preserve">
     <value>クライアントでChainStatusが空でない配列を返した。</value>
   </data>
-  <data name="クライアントでサーバー証明書の検証に成功しなかった" xml:space="preserve">
+  <data name="クライアントでサーバー証明書の検証に成功した" xml:space="preserve">
     <value>クライアントでサーバー証明書の検証に成功した。</value>
   </data>
   <data name="クライアントで証明書が利用できなかった" xml:space="preserve">

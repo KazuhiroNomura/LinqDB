@@ -148,14 +148,6 @@ public class Server:IDisposable{
                     ? 1
                     : 0;
                 this.Result=Method.GetParameters().Length==Length?Delegate.DynamicInvoke(Array.Empty<object>())!:Delegate.DynamicInvoke(this.args1)!;
-                //this.Result=Delegate.DynamicInvoke(
-                //    Method.GetParameters().Length==(Method.IsStatic&&Delegate.Target is not null
-                //        ? 1
-                //        : 0
-                //    )
-                //        ?null
-                //        :this.args
-                //);
             } catch(Exception ex) {
                 this.Result=ex;
                 this.Sendヘッダー=Response.ThrowException;
@@ -177,7 +169,7 @@ public class Server:IDisposable{
 
     //[System.Diagnostics.CodeAnalysis.SuppressMessage("コードの品質","IDE0069:破棄可能なフィールドは破棄しなければなりません",Justification = "<保留中>")]
 #pragma warning disable IDE0069 // 破棄可能なフィールドは破棄しなければなりません
-    internal BlockingCollection<SingleReceiveSend> RequestResponseSingleReceiveSends { get;}
+    private BlockingCollection<SingleReceiveSend> RequestResponseSingleReceiveSends { get;}
 #pragma warning restore IDE0069 // 破棄可能なフィールドは破棄しなければなりません
     public bool リクエストを保存するか{
         get;
@@ -234,7 +226,6 @@ public class Server:IDisposable{
     public static Server Create(int ReceiveSendスレッド数,params int[] ListenPorts){
         return new Server<object>(null!,ReceiveSendスレッド数,ListenPorts);
     }
-    private static readonly object staticプロキシ = new();
     /// <summary>
     /// コンストラクタ
     /// </summary>
@@ -331,26 +322,6 @@ public class Server:IDisposable{
                                             Result,
                                             デシリアライズした.SerializeType
                                         );
-                                        //if(デシリアライズした.SerializeType==SerializeType.Utf8Json) {
-                                        //    var ScriptRunner = (ScriptRunner<object>)デシリアライズした.Object!;
-                                        //    var e = ScriptRunner(this.Proxy);
-                                        //    e.Wait();
-                                        //    SingleReceiveSend.送信(
-                                        //        Response.Object,
-                                        //        e.Result,
-                                        //        デシリアライズした.SerializeType
-                                        //    );
-                                        //} else {
-                                        //    Debug.Assert(デシリアライズした.SerializeType==SerializeType.MessagePack);
-                                        //    var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
-                                        //        デシリアライズした.Object!
-                                        //    );
-                                        //    SingleReceiveSend.送信(
-                                        //        ResponseType,
-                                        //        Result,
-                                        //        デシリアライズした.SerializeType
-                                        //    );
-                                        //}
                                         break;
                                     }
                                 }
@@ -416,30 +387,31 @@ public class Server:IDisposable{
         Debug.Assert(this.RequestResponseSingleReceiveSends.Count==0);
         foreach(var SingleAccept in this.SingleAcceptReceiveSends)SingleAccept.Open(CancellationToken);
     }
-    /// <summary>
-    /// 非同期でAcceptを終了させる
-    /// </summary>
-    public void BeginClose() {
-        foreach(var SingleAccept in this.SingleAcceptReceiveSends)SingleAccept.BeginClose();
-        //this.CountdownEvent.Signal();
-        this.CancellationTokenSourceループRequestResponse.Cancel();
-    }
-    /// <summary>
-    /// BeginCloseが完了するまで待つ。
-    /// </summary>
-    public void EndClose(){
-        foreach(var SingleAccept in this.SingleAcceptReceiveSends) {
-            SingleAccept.EndClose();
-        }
-        this.CountdownEvent.Wait();
-    }
+    ///// <summary>
+    ///// 非同期でAcceptを終了させる
+    ///// </summary>
+    //public void BeginClose() {
+    //    foreach(var SingleAccept in this.SingleAcceptReceiveSends) SingleAccept.BeginClose();
+    //    //this.CountdownEvent.Signal();
+    //    this.CancellationTokenSourceループRequestResponse.Cancel();
+    //}
+    ///// <summary>
+    ///// BeginCloseが完了するまで待つ。
+    ///// </summary>
+    //public void EndClose(){
+    //    foreach(var SingleAccept in this.SingleAcceptReceiveSends)SingleAccept.EndClose();
+    //    this.CountdownEvent.Wait();
+    //}
     /// <summary>
     /// 同期でAcceptを終了させる
     /// </summary>
     public void Close(){
         if(this.CountdownEvent.IsSet)return;
-        this.BeginClose();
-        this.EndClose();
+        foreach(var SingleAccept in this.SingleAcceptReceiveSends) SingleAccept.BeginClose();
+        //this.CountdownEvent.Signal();
+        this.CancellationTokenSourceループRequestResponse.Cancel();
+        foreach(var SingleAccept in this.SingleAcceptReceiveSends)SingleAccept.EndClose();
+        this.CountdownEvent.Wait();
     }
     /// <summary>
     /// ファイナライザ
