@@ -1,7 +1,5 @@
 ﻿using S = LinqDB.Sets;
 using LinqDB.Sets;
-using TestLinqDB.Serializers.Formatters;
-
 namespace TestLinqDB.Serializers.Formatters.Sets;
 public class IEnumerable1 : CollectionTest<S.IEnumerable<Tables.Table>>
 {

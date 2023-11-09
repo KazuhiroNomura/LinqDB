@@ -14,7 +14,7 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     public object GetService(System.Type serviceType)=>throw new System.NotImplementedException();
     private readonly O Options;
     static Serializer(){
-        MemoryPackFormatterProvider.Register(CharArrayFormatter.Instance);
+        //MemoryPackFormatterProvider.Register(CharArrayFormatter.Instance);
 
 
         //MemoryPackFormatterProvider.Register(Formatters.Others.Action.Instance);
@@ -90,45 +90,25 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
     }
     public override byte[] Serialize<T>(T value){
         this.Clear();
-        //FormatterResolver.GetFormatterDynamic<T>();
-        return MemoryPackSerializer.Serialize<object>(value,this.Options);
-        //if(typeof(T)==typeof(char[]))
-        //    return MemoryPackSerializer.Serialize<object>(value,this.Options);
-        //else
-        //    return MemoryPackSerializer.Serialize(value,this.Options);
+        FormatterResolver.GetFormatterDynamic<T>();
+        return MemoryPackSerializer.Serialize(value,this.Options);
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
-        var Task=MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask();
+        FormatterResolver.GetFormatterDynamic<T>();
+        var Task=MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
         Task.Wait();
-        //FormatterResolver.GetFormatterDynamic<T>();
-        //var Task=typeof(T)==typeof(char[])?MemoryPackSerializer.SerializeAsync<object>(stream,value,this.Options).AsTask():MemoryPackSerializer.SerializeAsync(stream,value,this.Options).AsTask();
-        //Task.Wait();
     }
     public override T Deserialize<T>(byte[] bytes){
         this.Clear();
-        return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
-        //FormatterResolver.GetFormatterDynamic<T>();
-        //if(typeof(T)==typeof(char[]))
-        //    return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
-        //else
-        //    return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
+        FormatterResolver.GetFormatterDynamic<T>();
+        return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
     }
     public override T Deserialize<T>(Stream stream){
         this.Clear();
-        var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
+        FormatterResolver.GetFormatterDynamic<T>();
+        var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
         Task.Wait();
-        return (T)Task.Result!;
-        //FormatterResolver.GetFormatterDynamic<T>();
-        ////var e=MemoryPackSerializer.DeserializeAsync<T>(stream);
-        //if(typeof(T)==typeof(char[])){
-        //    var Task=MemoryPackSerializer.DeserializeAsync<object>(stream,this.Options).AsTask();
-        //    Task.Wait();
-        //    return (T)Task.Result!;
-        //} else{
-        //    var Task=MemoryPackSerializer.DeserializeAsync<T>(stream,this.Options).AsTask();
-        //    Task.Wait();
-        //    return Task.Result!;
-        //}
+        return Task.Result!;
     }
 }

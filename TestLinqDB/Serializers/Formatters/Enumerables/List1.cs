@@ -1,6 +1,4 @@
-﻿using TestLinqDB.Serializers.Formatters;
-
-namespace TestLinqDB.Serializers.Formatters.Enumerables;
+﻿namespace TestLinqDB.Serializers.Formatters.Enumerables;
 public class List1 : CollectionTest<LinqDB.Enumerables.List<int>>
 {
     public List1() : base(C.O, new())

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using LinqDB.Optimizers.Comparison;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
 using MemoryPack;
@@ -421,19 +422,19 @@ public class ExpressionEqualityComparer:共通{
         return a.メンバー;
     }
     private void AssertEqual(Expression? a,Expression? b){
-        Assert.Equal(a,b,this.汎用Comparer);
+        Assert.Equal(a,b,new 汎用Comparer());
         this.AssertEqual(a,c=>{
-            Assert.Equal(a,c,this.汎用Comparer);
-            Assert.Equal(b,c,this.汎用Comparer);
+            Assert.Equal(a,c,new 汎用Comparer());
+            Assert.Equal(b,c,new 汎用Comparer());
         });
         this.AssertEqual(b,c=>{
-            Assert.Equal(a,c,this.汎用Comparer);
-            Assert.Equal(b,c,this.汎用Comparer);
+            Assert.Equal(a,c,new 汎用Comparer());
+            Assert.Equal(b,c,new 汎用Comparer());
         });
     }
     private void AssertNotEqual(Expression? a,Expression? b){
-        this.AssertEqual(a,c=>Assert.NotEqual(c,b,this.汎用Comparer));
-        this.AssertEqual(b,c=>Assert.NotEqual(c,a,this.汎用Comparer));
+        this.AssertEqual(a,c=>Assert.NotEqual(c,b,new 汎用Comparer()));
+        this.AssertEqual(b,c=>Assert.NotEqual(c,a,new 汎用Comparer()));
     }
 
     [Fact]
@@ -2588,13 +2589,14 @@ public class ExpressionEqualityComparer:共通{
         //            var Methods = new[] { null, typeof(A).GetMethod(nameof(A.Add1)), typeof(A).GetMethod(nameof(A.Add2)) };
         var Methods=new[]{null,typeof(A).GetMethod("op_Addition")};
         var 値配列=new[]{new A(1),new A(2)};
+        var 汎用Comparer=new 汎用Comparer();
         foreach(var Method0 in Methods){
             foreach(var Method1 in Methods){
                 foreach(var Left0 in 値配列){
                     foreach(var Left1 in 値配列){
                         foreach(var Right0 in 値配列){
                             foreach(var Right1 in 値配列){
-                                var _=this.汎用Comparer.Equals(
+                                var _=汎用Comparer.Equals(
                                     Expression.Add(
                                         Expression.Constant(Left0),
                                         Expression.Constant(Right0),

@@ -1,7 +1,5 @@
 ﻿using LinqDB.Enumerables;
 using LinqDB.Sets;
-using TestLinqDB.Serializers.Formatters;
-
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
 public class SetGroupingList2 : CollectionTest<SetGroupingList<int, int>>
 {

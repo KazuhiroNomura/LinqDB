@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
+using LinqDB.Optimizers.Comparison;
 using LinqDB.Sets;
 using MemoryPack;
 
@@ -60,18 +61,19 @@ public class 特定パターン:共通{
     public void CharArray(){
         var Serializer=this.MemoryPack;
         {
-            var input=new[]{'a','b','c'};
-            var bytes=Serializer.Serialize<object>(input);
+            var expected=new[]{'a','b','c'};
+            var bytes=Serializer.Serialize<object>(expected);
             var bytes0=new byte[bytes.Length+1];
             Array.Copy(bytes,bytes0,bytes.Length);
             var output=Serializer.Deserialize<object>(bytes0);
-            Assert.Equal(input,output!,this.汎用Comparer);
+            Assert.Equal(expected,output!,new 汎用Comparer());
         }
         {
-            var input = 'A';
-            var bytes = Serializer.Serialize(input);
-            var output = Serializer.Deserialize<char>(bytes);
-            Assert.Equal(input,output!,this.汎用Comparer);
+            var expected = 'A';
+            //var bytes = Serializer.Serialize(expected);
+            //var output = Serializer.Deserialize<char>(bytes);
+            //Assert.Equal(expected,output!,new 汎用Comparer());
+            SerializeDeserialize<object>(this.MemoryPack,expected);
         }
         {
             var input=new[]{'a','b','c'};
@@ -79,14 +81,15 @@ public class 特定パターン:共通{
             Serializer.Serialize(m,input);
             m.Position=0;
             var output=Serializer.Deserialize<char[]>(m);
-            Assert.Equal(input,output!,this.汎用Comparer);
+            Assert.Equal(input,output!,new 汎用Comparer());
         }
         {
-            var input=new[]{'a','b','c'};
+            var expected=new[]{'a','b','c'};
             //LinqDB.Serializers.MemoryPack.CharArrayFormatter.Instance.Serialize();
-            var bytes=Serializer.Serialize<object>(input);
-            var output=Serializer.Deserialize<object>(bytes);
-            Assert.Equal(input,output!,this.汎用Comparer);
+            //var bytes=Serializer.Serialize<object>(expected);
+            //var output=Serializer.Deserialize<object>(bytes);
+            //Assert.Equal(expected,output!,new 汎用Comparer());
+            SerializeDeserialize<object>(this.MemoryPack,expected);
         }
     }
     [Fact]

@@ -917,13 +917,34 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 case nameof(Enumerable.Count): {
                     var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
                     //if(MethodCall0_Arguments_0 is MethodCallExpression MethodCall&&ループ展開可能メソッドか(MethodCall)) {
-                    if(ループ展開可能メソッドか(MethodCall0_Arguments_0,out _)) {
-                        if(this.Set結果かつ重複が残っているか(MethodCall0_Arguments_0)) {
-                            //Set(10).Select(p=>p/2).Count()==5
-                            var (作業,作業_Type,作業Assign)= 具象Type(MethodCall0_Arguments_0,変数名,true);
-                            var Expression1ループ = this.ループ展開(
+                    if(ループ展開可能メソッドか(MethodCall0_Arguments_0,out _)){
+                        if(this.重複除去されているか(MethodCall0_Arguments_0)){
+                            var MethodCall0_Method_ReturnType=Method.ReturnType;
+                            var Result=Expression.Parameter(
+                                MethodCall0_Method_ReturnType,
+                                変数名
+                            );
+                            var Expression1ループ=this.ループ展開(
                                 MethodCall0_Arguments_0,
-                                argument => Expression.Call(
+                                _=>IncrementAssign(Result)
+                            );
+                            return Expression.Block(
+                                作業配列.Parameters設定(Result),
+                                作業配列.Expressions設定(
+                                    Expression.Assign(
+                                        Result,
+                                        Expression.Default(MethodCall0_Method_ReturnType)
+                                    ),
+                                    Expression1ループ,
+                                    Result
+                                )
+                            );
+                        } else{
+                            //Set(10).Select(p=>p/2).Count()==5
+                            var (作業,作業_Type,作業Assign)=具象Type(MethodCall0_Arguments_0,変数名);
+                            var Expression1ループ=this.ループ展開(
+                                MethodCall0_Arguments_0,
+                                argument=>Expression.Call(
                                     作業,
                                     作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
                                     argument
@@ -938,27 +959,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                         Method,
                                         作業
                                     )
-                                )
-                            );
-                        } else {
-                            var MethodCall0_Method_ReturnType = Method.ReturnType;
-                            var Result = Expression.Parameter(
-                                MethodCall0_Method_ReturnType,
-                                変数名
-                            );
-                            var Expression1ループ = this.ループ展開(
-                                MethodCall0_Arguments_0,
-                                _ => IncrementAssign(Result)
-                            );
-                            return Expression.Block(
-                                作業配列.Parameters設定(Result),
-                                作業配列.Expressions設定(
-                                    Expression.Assign(
-                                        Result,
-                                        Expression.Default(MethodCall0_Method_ReturnType)
-                                    ),
-                                    Expression1ループ,
-                                    Result
                                 )
                             );
                         }
@@ -1055,7 +1055,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                 );
                             } else {
                                 //Setメソッドで結果が重複除去されていない
-                                var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true);
+                                var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業");
                                 ListParameter.Add(作業);
                                 ListExpression.Add(作業Assign);
                                 //逆数の合計
@@ -1159,7 +1159,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                 )
                             );
                         } else {
-                            var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true);
+                            var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業");
                             ListParameter.Add(作業);
                             ListExpression.Add(作業Assign);
                             ListExpression.Add(
@@ -1224,8 +1224,55 @@ internal class 変換_インラインループ独立:変換_インラインル�
                         var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
                         // ReSharper disable once RedundantAssignment
                         var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                        if(this.Set結果かつ重複が残っているか(MethodCall0_Arguments_0)) {
-                            var (作業, 作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true);
+                        if(this.重複除去されているか(MethodCall0_Arguments_0)){
+                            var Geomean_Int64Count=Expression.Parameter(
+                                typeof(long),
+                                $"{変数名}Int64Count"
+                            );
+                            ListParameter.Add(Geomean_Int64Count);
+                            ListExpression.Add(
+                                Expression.Assign(
+                                    Geomean_Int64Count,
+                                    Constant_0L
+                                )
+                            );
+                            ListExpression.Add(
+                                Expression.Assign(
+                                    Item,
+                                    Constant_0D
+                                )
+                            );
+                            ListExpression.Add(
+                                this.ループ展開(
+                                    MethodCall0_Arguments_0,
+                                    argument=>Block_PreIncrementAssign_AddAssign(
+                                        Geomean_Int64Count,
+                                        Item,
+                                        Expression.Call(
+                                            Math.Log10,
+                                            this.LambdaExpressionを展開1(
+                                                MethodCall1_Arguments_1,
+                                                argument
+                                            )
+                                        )
+                                    )
+                                )
+                            );
+                            ListExpression.Add(
+                                Expression.Call(
+                                    Math.Pow,
+                                    Constant_10D,
+                                    Expression.Divide(
+                                        Item,
+                                        Expression.Convert(
+                                            Geomean_Int64Count,
+                                            typeof(double)
+                                        )
+                                    )
+                                )
+                            );
+                        } else{
+                            var (作業,作業_Type,作業Assign)=具象Type(MethodCall0_Arguments_0,$"{変数名}作業");
                             ListParameter.Add(作業);
                             ListExpression.Add(作業Assign);
                             ListExpression.Add(
@@ -1237,7 +1284,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                             ListExpression.Add(
                                 this.ループ展開(
                                     MethodCall0_Arguments_0,
-                                    argument => Expression.IfThenElse(
+                                    argument=>Expression.IfThenElse(
                                         Expression.Call(
                                             作業,
                                             作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
@@ -1268,53 +1315,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                                 作業,
                                                 作業_Type.GetProperty(nameof(Set<int>.LongCount))
                                             ),
-                                            typeof(double)
-                                        )
-                                    )
-                                )
-                            );
-                        } else {
-                            var Geomean_Int64Count = Expression.Parameter(
-                                typeof(long),
-                                $"{変数名}Int64Count"
-                            );
-                            ListParameter.Add(Geomean_Int64Count);
-                            ListExpression.Add(
-                                Expression.Assign(
-                                    Geomean_Int64Count,
-                                    Constant_0L
-                                )
-                            );
-                            ListExpression.Add(
-                                Expression.Assign(
-                                    Item,
-                                    Constant_0D
-                                )
-                            );
-                            ListExpression.Add(
-                                this.ループ展開(
-                                    MethodCall0_Arguments_0,
-                                    argument => Block_PreIncrementAssign_AddAssign(
-                                        Geomean_Int64Count,
-                                        Item,
-                                        Expression.Call(
-                                            Math.Log10,
-                                            this.LambdaExpressionを展開1(
-                                                MethodCall1_Arguments_1,
-                                                argument
-                                            )
-                                        )
-                                    )
-                                )
-                            );
-                            ListExpression.Add(
-                                Expression.Call(
-                                    Math.Pow,
-                                    Constant_10D,
-                                    Expression.Divide(
-                                        Item,
-                                        Expression.Convert(
-                                            Geomean_Int64Count,
                                             typeof(double)
                                         )
                                     )
@@ -1427,7 +1427,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                     );
                                 } else {
                                     //Setメソッドで結果が重複除去されていない。重複除去すべき。
-                                    var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true);
+                                    var (作業,作業_Type, 作業Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業");
                                     ListParameter.Add(作業);
                                     ListExpression.Add(作業Assign);
                                     ListExpression.Add(
@@ -2091,7 +2091,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                 )
                             );
                             //var argument0 = argument;
-                            if(this.Set結果かつ重複が残っているか(MethodCall0_Arguments_0)) {
+                            if(!this.重複除去されているか(MethodCall0_Arguments_0)) {
                                 MethodCallExpression EqualExpression;
                                 var Item_Type=Item0.Type;
                                 var IEquatableType = 作業配列.MakeGenericType(typeof(IEquatable<>),Item_Type);
@@ -2299,13 +2299,25 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                 )
                             );
                             var MethodCall0_Arguments_0 = MethodCall0.Arguments[0];
-                            if(this.Set結果かつ重複が残っているか(MethodCall0_Arguments_0)) {
+                            if(this.重複除去されているか(MethodCall0_Arguments_0)){
+                                //Setの場合重複は除かれて合計すべきなのでそのまま合計
+                                //Enumerableの場合重複があっても合計すべきなのでそのまま合計
+                                ListExpression.Add(
+                                    this.ループ展開(
+                                        MethodCall0_Arguments_0,
+                                        argument=>AddAssign(
+                                            Sum,
+                                            argument
+                                        )
+                                    )
+                                );
+                            } else{
                                 //Setでかつ重複がある場合は重複を除いて合計すべき
-                                var 作業_Type = 作業配列.MakeGenericType(
+                                var 作業_Type=作業配列.MakeGenericType(
                                     typeof(Set<>),
                                     IEnumerable1のT(MethodCall0_Arguments_0.Type)
                                 );
-                                var 作業 = Expression.Parameter(
+                                var 作業=Expression.Parameter(
                                     作業_Type,
                                     $"{変数名}Sum"
                                 );
@@ -2319,7 +2331,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                 ListExpression.Add(
                                     this.ループ展開(
                                         MethodCall0.Arguments[0],
-                                        argument => Expression.IfThenElse(
+                                        argument=>Expression.IfThenElse(
                                             Expression.Call(
                                                 作業,
                                                 作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
@@ -2330,18 +2342,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                                 argument
                                             ),
                                             Default_void
-                                        )
-                                    )
-                                );
-                            } else {
-                                //Setの場合重複は除かれて合計すべきなのでそのまま合計
-                                //Enumerableの場合重複があっても合計すべきなのでそのまま合計
-                                ListExpression.Add(
-                                    this.ループ展開(
-                                        MethodCall0_Arguments_0,
-                                        argument => AddAssign(
-                                            Sum,
-                                            argument
                                         )
                                     )
                                 );
@@ -2420,7 +2420,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
             }
             Debug.Assert(MethodCall0.Type!=typeof(void));
             {
-                var (Result, Result_Type,ResultAssign)=具象Type(MethodCall0,変数名,typeof(ExtensionSet)==MethodCall0.Method.DeclaringType);
+                var (Result, Result_Type,ResultAssign)=具象Type(MethodCall0,変数名);
                 var Expression1ループ = this.ループ展開(
                     MethodCall0,
                     argument => Expression.Call(

@@ -65,43 +65,42 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         InvalidOperationException_ctor,
         Expression.Constant(nameof(ExtensionSet.Single))
     );
-    protected static(ParameterExpression Parameter,Type Parameter_Type,BinaryExpression Assign) 具象Type(Expression Expression0,string Name,bool 重複除去希望) {
+    protected static(ParameterExpression Parameter,Type Parameter_Type,BinaryExpression Assign) 具象Type(Expression Expression0,string Name) {
         var Type = Expression0.Type;
         Debug.Assert(Type.IsGenericType);
         if(!Type.IsSealed) {
             Type IEnumerable1;
+            Debug.Assert((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is null);
             if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
                 Type=typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
-            } else if((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is not null) {
-                if(typeof(IGrouping<,>)==Type.GetGenericTypeDefinition()) {
-                    Type=typeof(SetGroupingSet<,>).MakeGenericType(Type.GetGenericArguments());
-                } else if(typeof(Linq.IGrouping<,>)==Type.GetGenericTypeDefinition()) {
-                    Type=typeof(SetGroupingList<,>).MakeGenericType(Type.GetGenericArguments());
-                } else {
-                    var IGroupingSet = Type.GetInterface(CommonLibrary.Sets_IGrouping2_FullName);
-                    if(IGroupingSet is not null) {
-                        Type=typeof(SetGroupingSet<,>).MakeGenericType(IGroupingSet.GetGenericArguments());
-                    } else{
-                        var IGrouping = Type.GetInterface(CommonLibrary.Linq_IGrouping2_FullName);
-                        Type=IGrouping is not null
-                            ?typeof(SetGroupingList<,>).MakeGenericType(IGrouping.GetGenericArguments())
-                            :typeof(Set<>).MakeGenericType(IEnumerable1.GetGenericArguments());
-                    }
-                }
+            //} else if((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is not null) {
+            //    if(typeof(IGrouping<,>)==Type.GetGenericTypeDefinition()) {
+            //        Type=typeof(SetGroupingSet<,>).MakeGenericType(Type.GetGenericArguments());
+            //    } else if(typeof(Linq.IGrouping<,>)==Type.GetGenericTypeDefinition()) {
+            //        Type=typeof(SetGroupingList<,>).MakeGenericType(Type.GetGenericArguments());
+            //    } else {
+            //        var IGroupingSet = Type.GetInterface(CommonLibrary.Sets_IGrouping2_FullName);
+            //        if(IGroupingSet is not null) {
+            //            Type=typeof(SetGroupingSet<,>).MakeGenericType(IGroupingSet.GetGenericArguments());
+            //        } else{
+            //            var IGrouping = Type.GetInterface(CommonLibrary.Linq_IGrouping2_FullName);
+            //            Type=IGrouping is not null
+            //                ?typeof(SetGroupingList<,>).MakeGenericType(IGrouping.GetGenericArguments())
+            //                :typeof(Set<>).MakeGenericType(IEnumerable1.GetGenericArguments());
+            //        }
+            //    }
             } else {
-                Debug.Assert(
-                    typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||
-                    Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName) is not null
-                );
-                var IEnumerable = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
-                    ? Type
-                    :Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!;
-                if(重複除去希望||Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
-                    Type=typeof(HashSet<>);
+                Debug.Assert(Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName) is null);
+                //var IEnumerable = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
+                //    ? Type
+                //    :Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!;
+                Type TypeDefinition;
+                if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
+                    TypeDefinition=typeof(HashSet<>);
                 } else {
-                    Type=typeof(List<>);
+                    TypeDefinition=typeof(List<>);
                 }
-                Type=Type.MakeGenericType(IEnumerable.GetGenericArguments());
+                Type=TypeDefinition.MakeGenericType(Type.GetGenericArguments());
             }
         }
         var Parameter = Expression.Parameter(Type,Name);
@@ -251,8 +250,10 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             return this.重複除去されているか(MethodCall.Arguments[0]);
         return true;
     }
-    protected bool Set結果かつ重複が残っているか(Expression e) => 
-        e.Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName) is not null&&!this.重複除去されているか(e);
+    //protected bool Set結果かつ重複が残っているか(Expression e){
+    //    Debug.Assert(e.Type.IsInterface);
+    //    if(e.Type.get.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName) is not null&&!this.重複除去されているか(e);
+    //}
     private static bool Enumerableメソッドで結果にSetを要求するか(Expression Expression) {
         if(Expression is MethodCallExpression MethodCall&&typeof(Linq.Enumerable)==MethodCall.Method.DeclaringType) {
             var Name = MethodCall.Method.Name;

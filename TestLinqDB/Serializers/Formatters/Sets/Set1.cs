@@ -1,6 +1,4 @@
 ﻿using LinqDB.Sets;
-using TestLinqDB.Serializers.Formatters;
-
 namespace TestLinqDB.Serializers.Formatters.Sets;
 public class Set1 : CollectionTest<Set<int>>
 {

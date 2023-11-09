@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Text;
 using LinqDB.Databases;
 using LinqDB.Helpers;
-using LinqDB.Optimizers;
 using LinqDB.Optimizers.Comparison;
 using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;

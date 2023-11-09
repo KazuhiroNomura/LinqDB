@@ -182,11 +182,12 @@ public abstract class ATest_Set2:共通 {
             //global::MemoryPack.MemoryPackFormatter<Set<int>> 上位0=下位0;
             //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
             var s = this.MemoryPack;
-            var bytes = s.Serialize((object)expected);
             dynamic a = new NonPublicAccessor(s);
+            //var bytes = s.Serialize((object)expected);
             //global::MemoryPack.MemoryPackFormatterProvider.Register(LinqDB.Serializers.MemoryPack.Formatters.Set1<int>.Instance);
             //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<TestSet<int>,int>();
-            var output = s.Deserialize<object>(bytes);
+            //var output = s.Deserialize<object>(bytes);
+            SerializeDeserialize<object>(this.MemoryPack,expected);
 
         }
         {
@@ -203,8 +204,7 @@ public abstract class ATest_Set2:共通 {
         {
             //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.CollectionFormatter<int>());
             //global::MemoryPack.MemoryPackFormatterProvider.Register(new global::MemoryPack.Formatters.InterfaceCollectionFormatter<int>());
-            var b = this.MemoryPack.Serialize<object>(expected);
-            var o = this.MemoryPack.Deserialize<object>(b);
+            SerializeDeserialize<object>(this.MemoryPack,expected);
         }
         this.AssertEqual(expected,output=>{
             var i=expected.LongCount;
@@ -221,19 +221,11 @@ public abstract class ATest_Set2:共通 {
     }
     [Fact]public void Serialize01(){
         var expected=new Set<Key,Value>{new(new(0)),new(new(1))};
-        {
-            var s=this.MemoryPack;
-            var bytes=s.Serialize((object)expected);
-            var output=s.Deserialize<object>(bytes);
-        }
+        SerializeDeserialize<object>(this.MemoryPack,expected);
     }
     [Fact]public void Serialize02(){
         var expected=new Set<Key,Value,Container>(null!){new(new(0)),new(new(1))};
-        {
-            var s=this.MemoryPack;
-            var bytes=s.Serialize((object)expected);
-            var output=s.Deserialize<object>(bytes);
-        }
+        SerializeDeserialize<object>(this.MemoryPack,expected);
     }
     [Fact]public void Serialize1(){
         var expected=new TestSet<int>{0,1,2,3};

@@ -7,7 +7,6 @@ using LinqDB.Optimizers;
 //using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 //using Microsoft.CSharp.RuntimeBinder;
 
-using static LinqDB.Optimizers.Optimizer;
 //using Binder=System.Reflection.Binder;
 using Microsoft.CSharp.RuntimeBinder;
 //using Binder = Microsoft.CSharp.Binder;

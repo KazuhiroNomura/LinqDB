@@ -1,6 +1,4 @@
 ﻿using LinqDB.Sets;
-using TestLinqDB.Serializers.Formatters;
-
 namespace TestLinqDB.Serializers.Formatters.Sets;
 public class GroupingSet2 : CollectionTest<GroupingSet<int, double>>
 {

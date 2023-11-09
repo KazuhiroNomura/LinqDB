@@ -750,94 +750,93 @@ public class Client:IDisposable {
         this.BytesSendReceive(要素数);
     }
     public void HttpRequest(string Request){
-        using(var ConnectSocket=new Socket(SocketAddressFamily,SocketType.Stream,ProtocolType.Tcp) {
-                  //LingerState=Common.LingerState,
-                  ReceiveBufferSize=ClientReceiveBufferSize,
-                  SendBufferSize = ClientSendBufferSize,
-                  ReceiveTimeout=this.ReadTimeout,
-                  SendTimeout=this.WriteTimeout
-              }){
-            ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.KeepAlive,1);
-            //ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReadTimeout,this.ReadTimeout);
-            //ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.SendTimeout,this.ReadTimeout);
-            ConnectSocket.Connect(this.DnsEndPoint);
-            Trace_WriteLine(0,"Client.送信 ConnectSocket.Connect");
-            using Stream NetworkStream = new NetworkStream(ConnectSocket,false) {
-                ReadTimeout= this.ReadTimeout,
-                WriteTimeout= this.ReadTimeout
-            };
-            var sslProtocol = this.SslProtocol;
-            Stream Stream;
-            if(this.X509Certificate is not null) {
-                var x509CertificateCollection = this.X509CertificateCollection;
-                x509CertificateCollection.Clear();
-                x509CertificateCollection.Add(this.X509Certificate);
-                Debug.Assert(this.DnsEndPoint is not null);
-                //var SslStream = new SslStream(
-                //    NetworkStream,
-                //    true
-                //);
-                ////SslStream.AuthenticateAsClient(this.DnsEndPoint.Host,X509CertificateCollection,this.SslProtocol,false);
-                //SslStream.AuthenticateAsClient(this.DnsEndPoint.Host);
-                var SslStream = new SslStream(
-                    NetworkStream,
-                    true,
-                    (sender,Certificate,Chain,SslPolicyErrors)=>{
-                        if(SslPolicyErrors == SslPolicyErrors.None) {
-                            Console.WriteLine(Resources.クライアントでサーバー証明書の検証に成功した);
-                            return true;
-                        }
-                        //何かサーバー証明書検証エラーが発生している
+        using var ConnectSocket=new Socket(SocketAddressFamily,SocketType.Stream,ProtocolType.Tcp) {
+            //LingerState=Common.LingerState,
+            ReceiveBufferSize=ClientReceiveBufferSize,
+            SendBufferSize = ClientSendBufferSize,
+            ReceiveTimeout=this.ReadTimeout,
+            SendTimeout=this.WriteTimeout
+        };
+        ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.KeepAlive,1);
+        //ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReadTimeout,this.ReadTimeout);
+        //ConnectSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.SendTimeout,this.ReadTimeout);
+        ConnectSocket.Connect(this.DnsEndPoint);
+        Trace_WriteLine(0,"Client.送信 ConnectSocket.Connect");
+        using Stream NetworkStream = new NetworkStream(ConnectSocket,false) {
+            ReadTimeout= this.ReadTimeout,
+            WriteTimeout= this.ReadTimeout
+        };
+        var sslProtocol = this.SslProtocol;
+        Stream Stream;
+        if(this.X509Certificate is not null) {
+            var x509CertificateCollection = this.X509CertificateCollection;
+            x509CertificateCollection.Clear();
+            x509CertificateCollection.Add(this.X509Certificate);
+            Debug.Assert(this.DnsEndPoint is not null);
+            //var SslStream = new SslStream(
+            //    NetworkStream,
+            //    true
+            //);
+            ////SslStream.AuthenticateAsClient(this.DnsEndPoint.Host,X509CertificateCollection,this.SslProtocol,false);
+            //SslStream.AuthenticateAsClient(this.DnsEndPoint.Host);
+            var SslStream = new SslStream(
+                NetworkStream,
+                true,
+                (sender,Certificate,Chain,SslPolicyErrors)=>{
+                    if(SslPolicyErrors == SslPolicyErrors.None) {
+                        Console.WriteLine(Resources.クライアントでサーバー証明書の検証に成功した);
+                        return true;
+                    }
+                    //何かサーバー証明書検証エラーが発生している
 
-                        //SslPolicyErrors列挙体には、Flags属性があるので、
-                        //エラーの原因が複数含まれているかもしれない。
-                        //そのため、&演算子で１つ１つエラーの原因を検出する。
-                        if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateChainErrors)!=0){
-                            foreach(var ChainElement in Chain!.ChainElements){
-                                foreach(var a1 in ChainElement.ChainElementStatus){
-                                    Trace.WriteLine(a1.StatusInformation);
-                                }
+                    //SslPolicyErrors列挙体には、Flags属性があるので、
+                    //エラーの原因が複数含まれているかもしれない。
+                    //そのため、&演算子で１つ１つエラーの原因を検出する。
+                    if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateChainErrors)!=0){
+                        foreach(var ChainElement in Chain!.ChainElements){
+                            foreach(var a1 in ChainElement.ChainElementStatus){
+                                Trace.WriteLine(a1.StatusInformation);
                             }
                         }
+                    }
 
-                        if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNameMismatch)!=0){
-                            Trace_WriteLine(3,Properties.Resources.サーバーで証明書名が不一致だった);
-                        }
+                    if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNameMismatch)!=0){
+                        Trace_WriteLine(3,Properties.Resources.サーバーで証明書名が不一致だった);
+                    }
 
-                        if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNotAvailable)!=0){
-                            Trace_WriteLine(4,Properties.Resources.サーバーで証明書が利用できなかった);
-                        }
-                        //検証失敗とする
-                        return false;
-                    },
-                    null
-                );
-                SslStream.AuthenticateAsClient(this.DnsEndPoint.Host,x509CertificateCollection,this.SslProtocol,true);
-                //                SslStream.AuthenticateAsClient(this.Endpoint.ToString(),null,SslProtocols.Tls12,true);
-                Stream=SslStream;
-            } else {
-                Stream=NetworkStream;
-            }
-            using var BinaryWriter = new BinaryWriter(Stream,Encoding.UTF8,true);
-            BinaryWriter.Write(Request);
-            BinaryWriter.Flush();
-            Stream.Flush();
-            var ReadBuffer_Length = 10000;
-            var ReadBuffer=new byte[ReadBuffer_Length];
-            var ReadOffset=0;
-            try{
-                do{
-                    var ReadしたBytes=Stream.Read(ReadBuffer,ReadOffset,ReadBuffer_Length-ReadOffset);
-                    if(ReadしたBytes==0) break;
-                    ReadOffset+=ReadしたBytes;
-                } while(true);
-            } catch(IOException){
-
-            }
-            var s=Encoding.UTF8.GetString(ReadBuffer,0,ReadOffset);
-            ConnectSocket.Shutdown(SocketShutdown.Both);
-            ConnectSocket.Close();
+                    if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNotAvailable)!=0){
+                        Trace_WriteLine(4,Properties.Resources.サーバーで証明書が利用できなかった);
+                    }
+                    //検証失敗とする
+                    return false;
+                },
+                null
+            );
+            SslStream.AuthenticateAsClient(this.DnsEndPoint.Host,x509CertificateCollection,this.SslProtocol,true);
+            //                SslStream.AuthenticateAsClient(this.Endpoint.ToString(),null,SslProtocols.Tls12,true);
+            Stream=SslStream;
+        } else {
+            Stream=NetworkStream;
         }
+        using var BinaryWriter = new BinaryWriter(Stream,Encoding.UTF8,true);
+        BinaryWriter.Write(Request);
+        BinaryWriter.Flush();
+        Stream.Flush();
+        var ReadBuffer_Length = 10000;
+        var ReadBuffer=new byte[ReadBuffer_Length];
+        var ReadOffset=0;
+        try{
+            do{
+                var ReadしたBytes=Stream.Read(ReadBuffer,ReadOffset,ReadBuffer_Length-ReadOffset);
+                if(ReadしたBytes==0) break;
+                ReadOffset+=ReadしたBytes;
+            } while(true);
+        } catch(IOException){
+
+        }
+        var s=Encoding.UTF8.GetString(ReadBuffer,0,ReadOffset);
+        ConnectSocket.Shutdown(SocketShutdown.Both);
+        ConnectSocket.Close();
     }
     /// <summary>
     /// 指定されたバイト数送受信する。
