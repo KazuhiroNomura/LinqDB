@@ -2,20 +2,14 @@
 using System.Runtime.CompilerServices;
 using LinqDB.Enumerables;
 using Generic = System.Collections.Generic;
-
-
+using Linq=System.Linq;
 namespace LinqDB.Sets;
-
 /// <summary>
 /// Enumerable.GroupByの結果。要素はGroupingAscList。
 /// </summary>
 /// <typeparam name="TKey">結合式のType</typeparam>
 /// <typeparam name="TElement">値のType</typeparam>
-public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElement>>
-    //IEquatable<IEnumerable<System.Linq.IGrouping<TKey,TElement>>>,
-    //IEquatable<Generic.IEnumerable<System.Linq.IGrouping<TKey,TElement>>>
-
-{
+public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElement>>,Linq.ILookup<TKey,TElement>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     private new static readonly Serializers.MemoryPack.Formatters.Enumerables.SetGroupingList<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance;
     private new static readonly Serializers.MessagePack.Formatters.Enumerables.SetGroupingList<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Enumerables.SetGroupingList<TKey,TElement>.Instance;
@@ -24,8 +18,6 @@ public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElemen
     /// キー比較用EqualityComparer
     /// </summary>
     private readonly Generic.IEqualityComparer<TKey> KeyComparer;
-
-
     /// <summary>
     /// 既定コンストラクタ
     /// </summary>
@@ -35,11 +27,6 @@ public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElemen
     /// </summary>
     /// <param name="KeyComparer">比較方法</param>
     public SetGroupingList(Generic.IEqualityComparer<TKey> KeyComparer)=>this.KeyComparer=KeyComparer;
-
-    public bool Equals(IEnumerable<IGrouping<TKey,TElement>>? other) {
-        throw new NotImplementedException();
-    }
-
     /// <summary>
     /// 指定したキーと値をディクショナリに追加する。
     /// KeyがなければTGrouping(Key,Value)
@@ -49,7 +36,7 @@ public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElemen
     /// <param name="Value">追加する要素の値。参照型の場合、null の値を使用できます。</param>
     public void AddKeyValue(TKey Key,TElement Value) {
         var HashCode = (long)(uint)Key!.GetHashCode();
-        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+        if(this.InternalIsAdded前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var KeyComparer = this.KeyComparer;
             LinkedNodeT LinkedNode = TreeNode;
             while(true) {
@@ -66,96 +53,21 @@ public sealed class SetGroupingList<TKey,TElement>:Set<GroupingList<TKey,TElemen
                 LinkedNode=LinkedNode_LinkedNodeItem;
             }
         }
-        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(new GroupingList<TKey,TElement>(Key,Value)));
+        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(new GroupingList<TKey,TElement>(Key,Value)));
         this._LongCount++;
     }
-    private static readonly InternalList<TElement> EmptyCollection =new();
-
-
-    private InternalList<TElement>?GetCollection(TKey Key){
+    public bool Contains(TKey Key)=>this.GetCollection(Key) is not null;
+    public Generic.IEnumerable<TElement> this[TKey Key]=>this.GetCollection(Key)??EmptyCollection;
+    private static readonly Generic.IEnumerable<TElement> EmptyCollection =new InternalList<TElement>();
+    private Generic.IEnumerable<TElement>? GetCollection(TKey Key) {
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key!.GetHashCode());
         if(TreeNode is not null) {
             var KeyComparer = this.KeyComparer;
-            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem){
+            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
                 if(KeyComparer.Equals(a.Item.Key,Key)) return a.Item;
             }
         }
         return null;
     }
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool ContainsKey(TKey Key)=>this.GetCollection(Key) is not null;
-    //bool System.Linq.ILookup<TKey,TElement>.Contains(TKey key)=>this.ContainsKey(key);
-    //Generic.IEnumerator<System.Linq.IGrouping<TKey,TElement>> Generic.Set<System.Linq.IGrouping<TKey,TElement>>.GetEnumerator() {
-    //    foreach(var a in this) yield return a;
-    //}
-
-    //Generic.IEnumerator<IGrouping<TKey,TElement>> Generic.Set<IGrouping<TKey,TElement>>.GetEnumerator() {
-    //    foreach(var a in this) yield return a;
-    //}
-    //int System.Linq.ILookup<TKey,TElement>.Count=>checked((int)this._LongCount);
-
-    //Generic.Set<TElement> System.Linq.ILookup<TKey,TElement>.this[TKey key]=>this.GetIndex(key);
-    /// <summary>
-    /// 指定したキーに関連付けられている値を取得します。
-    /// </summary>
-    /// <param name="Key"></param>
-    /// <param name="Default"></param>
-    /// <returns></returns>
-    private InternalList<TElement> GetValue(TKey Key,InternalList<TElement> Default){
-        var Collection=this.GetCollection(Key);
-        return Collection??Default;
-    }
-    /// <summary>
-    /// 指定したキーに関連付けられている値を取得します。
-    /// </summary>
-    /// <param name="Key"></param>
-    /// <param name="Default"></param>
-    /// <returns></returns>
-    private InternalList<TElement> GetValue(object Key,InternalList<TElement> Default) {
-        var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Key.GetHashCode());
-        if(TreeNode is not null) {
-            var KeyComparer = this.KeyComparer;
-            for(var a = TreeNode._LinkedNodeItem;a is not null;a=a._LinkedNodeItem) {
-                if(a.Item.Key!.Equals(Key)) {
-                    return a.Item;
-                }
-            }
-        }
-        return Default;
-    }
-
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>検索できた場合は true。それ以外の場合は false。</returns>
-    /// <param name="Key">取得する値のキー。</param>
-    /// <param name="Collection">キーが見つかった場合は、指定したキーに関連付けられている値が格納されます。</param>
-    /// <exception cref="ArgumentNullException">
-    ///   <paramref name="Key" /> が null です。</exception>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public bool TryGetValue(TKey Key,ref InternalList<TElement> Collection){
-        if(Key is null) return false;
-        var Item=this.GetCollection(Key);
-        if(Item is not null){
-            Collection=Item;
-            return true;
-        }
-        return false;
-    }
-
-    //int ILookup<TKey,TElement>.Count => throw new NotImplementedException();
-
-    private InternalList<TElement> GetIndex(TKey key){
-        InternalList<TElement> value=default!;
-        if(this.TryGetValue(key,ref value)) return value;
-        throw new NotImplementedException();
-    }
-    public InternalList<TElement> this[TKey key]=>this.GetIndex(key);
-
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public InternalList<TElement> GetTKeyValue(TKey Key) => this.GetValue(Key,EmptyCollection);
-    /// <summary>指定したキーに関連付けられている値を取得します。</summary>
-    /// <returns>指定したキーに対応するCollection。それ以外の場合はEmptyなCollection。</returns>
-    /// <param name="Key"></param>
-    public InternalList<TElement> GetObjectValue(object Key) => this.GetValue(Key,EmptyCollection);
+    Generic.IEnumerator<Linq.IGrouping<TKey,TElement>> Generic.IEnumerable<Linq.IGrouping<TKey,TElement>>.GetEnumerator()=>this.変数Enumerator;
 }

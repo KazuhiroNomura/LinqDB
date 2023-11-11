@@ -13,10 +13,10 @@ public class Test_DictionarySet
         for (var a = 最小値; a <= 最大値; a++)
         for (var b = 0; b < a; b++)
             d.AddKeyValue(a, b);
-        Assert.False(d.ContainsKey(最小値 - 1));
-        Assert.False(d.ContainsKey(11));
+        Assert.False(d.Contains(最小値 - 1));
+        Assert.False(d.Contains(11));
         for (var a = 最小値; a <= 最大値; a++)
-            Assert.True(d.ContainsKey(a));
+            Assert.True(d.Contains(a));
     }
     [Fact]
     public void Count()
@@ -26,7 +26,7 @@ public class Test_DictionarySet
         {
             for (var b = 0; b < a; b++)
                 d.AddKeyValue(a, b);
-            Assert.Equal(a, d.GetTKeyValue(a).Count);
+            Assert.Equal(a, d[a].Count);
         }
     }
     //GetHashCode(U)
@@ -55,12 +55,12 @@ public class Test_DictionarySet
             for (var a = 最小値; a <= 最大値; a++)
             for (var b = 0; b < a; b++)
                 d.AddKeyValue(a, b);
-            Set<int> value = default!;
-            Assert.False(d.TryGetValue(0, ref value));
-            Assert.False(d.ContainsKey(最小値 - 1));
-            Assert.False(d.ContainsKey(11));
+            LinqDB.Sets.IEnumerable<int> value = default!;
+            Assert.Equal(0,d[0].Count);
+            Assert.False(d.Contains(最小値 - 1));
+            Assert.False(d.Contains(11));
             for (var a = 最小値; a <= 最大値; a++)
-                Assert.True(d.ContainsKey(a));
+                Assert.True(d.Contains(a));
         }
         {
             var d = new SetGroupingSet<int, int>();
@@ -68,14 +68,14 @@ public class Test_DictionarySet
             d.AddKeyValue(2, 4);
             d.AddKeyValue(unchecked(1 + int.MaxValue), 3);
             //KeyValuePair<Int32,Int32>value;
-            Set<int> value = default!;
-            Assert.False(d.TryGetValue(0, ref value));
-            Assert.True(d.TryGetValue(1, ref value));
-            Assert.Equal(new Set<int> { 2 }, value);
-            Assert.True(d.TryGetValue(2, ref value));
-            Assert.Equal(new Set<int> { 4 }, value);
-            Assert.True(d.TryGetValue(unchecked(1 + int.MaxValue), ref value));
-            Assert.Equal(new Set<int> { 3 }, value);
+            LinqDB.Sets.IEnumerable<int> value = default!;
+            Assert.Equal(0,d[0].Count);
+            Assert.Equal(1,d[1].Count);
+            Assert.Equal(new Set<int> { 2 }, d[1]);
+            Assert.Equal(1,d[2].Count);
+            Assert.Equal(new Set<int> { 4 }, d[2]);
+            Assert.Equal(1,d[unchecked(1 + int.MaxValue)].Count);
+            Assert.Equal(new Set<int> { 3 }, d[unchecked(1 + int.MaxValue)]);
         }
     }
 }

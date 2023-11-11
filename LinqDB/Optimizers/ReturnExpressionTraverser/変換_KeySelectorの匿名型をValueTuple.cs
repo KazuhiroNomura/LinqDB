@@ -63,7 +63,7 @@ internal sealed class 変換_KeySelectorの匿名型をValueTuple:ReturnExpressi
                     var innerKeySelector1_Body=innerKeySelector1.Body;
                     if(outerKeySelector1_Body.NodeType==ExpressionType.New&&
                        innerKeySelector1_Body.NodeType==ExpressionType.New){
-                        var 作業配列=this._作業配列;
+                        var 作業配列=this.作業配列;
                         var keyType_GetGenericArguments=keyType.GetGenericArguments();
                         Expression outerKeySelector2_Body,innerKeySelector2_Body;
                         Type 新keyType;

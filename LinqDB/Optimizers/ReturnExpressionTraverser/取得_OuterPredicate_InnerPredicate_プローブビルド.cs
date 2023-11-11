@@ -114,7 +114,7 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
                 var Binary_Left=Binary0.Left;
                 if(Binary_Left.Type.IsPrimitive) return this.等号が出現した時にDictionaryHashとEqualに分離(Binary0,Binary_Left,Binary0.Right);
                 var Binary_Left_Type=Binary_Left.Type;
-                var IEquatableType=this._作業配列.MakeGenericType(typeof(IEquatable<>),Binary_Left_Type);
+                var IEquatableType=this.作業配列.MakeGenericType(typeof(IEquatable<>),Binary_Left_Type);
                 return IEquatableType.IsAssignableFrom(Binary_Left_Type)?this.等号が出現した時にDictionaryHashとEqualに分離(Binary0,Binary_Left,Binary0.Right):Expression0;
             }
             case ExpressionType.Call:{

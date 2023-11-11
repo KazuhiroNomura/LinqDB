@@ -4,7 +4,17 @@
 //using System.Threading.Tasks;
 namespace LinqDB.Sets;
 using Linq=System.Linq;
-public interface ILookup<TKey,TElement>:Linq.ILookup<TKey,TElement>,IEnumerable<IGrouping<TKey,TElement>>{
+//public interface ILookup2<TKey,TElement>:System.Collections.Generic.IEnumerable<System.Linq.IGrouping<TKey,TElement>>,System.Collections.IEnumerable{
+//    int Count { get; }
+//    System.Collections.Generic.IEnumerable<TElement> this[TKey key] { get; }
+//    bool Contains(TKey key);
+//}
+
+public interface ILookup<TKey,out TElement>:IEnumerable<IGrouping<TKey,TElement>>,IEnumerable{
+    //int Count { get; }
+    IEnumerable<TElement> this[TKey key] { get; }
+    bool Contains(TKey key);
+    //bool TryGetValue(TKey Key,ref IEnumerable<TElement> Collection);
     //int Count{get;}
     //IEnumerable<TElement> this[TKey key]{get;}
     //bool Contains(TKey key);

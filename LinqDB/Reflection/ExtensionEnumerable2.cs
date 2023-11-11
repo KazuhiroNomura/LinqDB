@@ -58,6 +58,6 @@ public static class ExtensionEnumerable2 {
     public static readonly MethodInfo Skip = M(() => _Int32.Skip(0));
     public static readonly MethodInfo SkipWhile = M(() => _Int32.SkipWhile(p => true));
     public static readonly MethodInfo SkipWhile_index = M(() => _Int32.SkipWhile((p,i) => true));
-    public static readonly MethodInfo Lookup_comparer = M(() => _Int32.Lookup(p => p,null!));
-    public static readonly MethodInfo Lookup_index_comparer = M(() => _Int32.Lookup((p,index) => p+index,null!));
+    public static readonly MethodInfo Lookup_comparer = M(() => _Int32.ToLookup(p => p,null!));
+    //public static readonly MethodInfo Lookup_index_comparer = M(() => _Int32.ToLookup((p,index) => p+index,null!));
 }

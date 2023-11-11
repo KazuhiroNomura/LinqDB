@@ -33,8 +33,8 @@ using Generic = System.Collections.Generic;
 /// <summary>
 /// Expressionを最適化する
 /// </summary>
-public sealed partial class Optimizer:IDisposable {
-    private readonly 作業配列 _作業配列 = new();
+public sealed class Optimizer:IDisposable {
+    private readonly 作業配列 作業配列 = new();
     /// <summary>
     /// Where((ValueTule&lt;,>p=>p.Item1==p.Item2)は移動できない
     /// Where((ValueTule&lt;,>p=>p.Item1.Item1==p.Item.Item2)は移動できる
@@ -121,7 +121,7 @@ public sealed partial class Optimizer:IDisposable {
     /// </summary>
     /// <param name="BaseType"></param>
     private Optimizer(Type BaseType) {
-        var 作業配列 = this._作業配列;
+        var 作業配列 = this.作業配列;
         var ScriptGenerator = new SQLServer.Sql160ScriptGenerator(
             new SQLServer.SqlScriptGeneratorOptions {
                 KeywordCasing=SQLServer.KeywordCasing.Lowercase,
@@ -250,7 +250,7 @@ public sealed partial class Optimizer:IDisposable {
             foreach(var a in DictionaryDynamic.AsEnumerable())
                 DictionaryDynamic[a.Key]=(Disp_TypeBuilder.DefineField($"CallSite{Field番号++}",a.Key.Type,FieldAttributes.Public)!, default!);
             var 判定InstanceMethodか = this.判定InstanceMethodか;
-            var 作業配列 = this._作業配列;
+            var 作業配列 = this.作業配列;
             var Types2 = 作業配列.Types2;
             Types2[0]=typeof(object);
             Types2[1]=typeof(IntPtr);
@@ -518,7 +518,7 @@ public sealed partial class Optimizer:IDisposable {
         Types[Dynamic_Arguments_Count+1]=Dynamic.Type;
         return Reflection.Func.Get(Dynamic_Arguments_Count+1).MakeGenericType(Types);
     }
-    private Type Dynamicに対応するCallSite(DynamicExpression Dynamic) => this._作業配列.MakeGenericType(typeof(CallSite<>),this.Dynamicに対応するFunc(Dynamic));
+    private Type Dynamicに対応するCallSite(DynamicExpression Dynamic) => this.作業配列.MakeGenericType(typeof(CallSite<>),this.Dynamicに対応するFunc(Dynamic));
     private Delegate DynamicAssemblyとDynamicMethod(Type ContainerType,LambdaExpression Lambda1) {
         //Lambda1=this.Lambda最適化(Lambda1);
         var DictionaryConstant = this.DictionaryConstant;
@@ -532,7 +532,7 @@ public sealed partial class Optimizer:IDisposable {
         var Disp_TypeBuilder = ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
         var Impl_TypeBuilder = Disp_TypeBuilder.DefineNestedType("Impl",TypeAttributes.NestedPublic|TypeAttributes.Sealed|TypeAttributes.Abstract);
         var Container_FieldBuilder = Disp_TypeBuilder.DefineField("Container",ContainerType,FieldAttributes.Public);
-        var Disp_ctor = Disp_TypeBuilder.DefineConstructor(MethodAttributes.Public,CallingConventions.HasThis,this._作業配列.Types設定(ContainerType));
+        var Disp_ctor = Disp_TypeBuilder.DefineConstructor(MethodAttributes.Public,CallingConventions.HasThis,this.作業配列.Types設定(ContainerType));
         Disp_ctor.InitLocals=false;
         Disp_ctor.DefineParameter(1,ParameterAttributes.None,"Container");
         var Disp_ctor_I = Disp_ctor.GetILGenerator();
@@ -540,7 +540,7 @@ public sealed partial class Optimizer:IDisposable {
         Disp_ctor_I.Ldarg_1();
         Disp_ctor_I.Stfld(Container_FieldBuilder);
         Debug.Assert(Disp_TypeBuilder is not null);
-        var 作業配列 = this._作業配列;
+        var 作業配列 = this.作業配列;
         var Field番号 = 0;
         foreach(var a in DictionaryConstant.AsEnumerable())
             DictionaryConstant[a.Key]=(Disp_TypeBuilder.DefineField($"Constant{Field番号++}",a.Key.Type,FieldAttributes.Public)!, default!);
@@ -705,7 +705,7 @@ public sealed partial class Optimizer:IDisposable {
                 FieldTypes[index++]=a.Type;
         }
         //末尾再帰をループで処理
-        var 作業配列 = this._作業配列;
+        var 作業配列 = this.作業配列;
         var Switch = TargetFieldType数%7;
         var Offset = TargetFieldType数-Switch;
         Type DispType;

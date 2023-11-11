@@ -123,7 +123,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="HashCode"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal bool InternalAdd前半(out long 下限,out long 上限,out TreeNodeT out_TreeNode,long HashCode) {
+    internal bool InternalIsAdded前半(out long 下限,out long 上限,out TreeNodeT out_TreeNode,long HashCode) {
         Debug.Assert(this.TreeRoot is not null);
         var TreeNode = this.TreeRoot;
         long 下限1 = 初期下限, 上限1 = 初期上限;
@@ -165,7 +165,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="LinkedNodeItemT"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static void InternalAdd後半(long 下限,long 上限,TreeNodeT TreeNode,long HashCode,LinkedNodeItemT LinkedNodeItemT) {
+    internal static void InternalIsAdded後半(long 下限,long 上限,TreeNodeT TreeNode,long HashCode,LinkedNodeItemT LinkedNodeItemT) {
         while(true) {
             var CurrentHashCode = (下限+上限)>>1;
             /*
@@ -207,9 +207,9 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="Item"></param>
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal virtual bool InternalAdd(T Item) {
+    internal virtual bool InternalIsAdded(T Item) {
         var HashCode = typeof(T).IsNullable()?(uint)Item!.GetHashCode():Item is not null?(long)(uint)Item.GetHashCode():0;
-        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+        if(this.InternalIsAdded前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = this.Comparer;
             LinkedNodeT LinkedNode = TreeNode;
             while(true) {
@@ -226,9 +226,10 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
             }
         }
         this.AddRelationship(Item);
-        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
+        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         return true;
     }
+    internal void InternalAdd(T Item)=>this.InternalIsAdded(Item);
     /// <summary>既定の等値比較子を使用して、指定した要素が集合に含まれているかどうかを判断します。</summary>
     /// <returns>指定した値を持つ要素がソース 集合に含まれている場合は true。それ以外は false。</returns>
     /// <param name="item">集合内で検索する値。</param>
@@ -706,7 +707,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
         //var Array数 = 0;
         try {
             while(true) {
-                this.InternalAdd(
+                this.InternalIsAdded(
                     Utf8Json.JsonSerializer.Deserialize<T>(Reader)
                 );
                 Count++;

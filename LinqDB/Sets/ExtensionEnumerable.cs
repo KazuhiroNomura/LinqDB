@@ -33,25 +33,6 @@ public static class ExtensionEnumerable{
             );
         return r;
     }
-    /// <summary>
-    /// ハッシュアルゴリズムに使う。
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="keySelector"></param>
-    /// <typeparam name="TSource"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <returns></returns>
-    public static SetGroupingList<TKey,TSource> Lookup<TSource, TKey>(this Generic.IEnumerable<TSource> source,Func<TSource,TKey> keySelector) => PrivateDictionaryList(source,keySelector,Generic.EqualityComparer<TKey>.Default);
-    /// <summary>
-    /// ハッシュアルゴリズムに使う。comparerで比較する。
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="keySelector"></param>
-    /// <param name="comparer"></param>
-    /// <typeparam name="TElement"></typeparam>
-    /// <typeparam name="TKey"></typeparam>
-    /// <returns></returns>
-    public static SetGroupingList<TKey,TElement> Lookup<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
     private static SetGroupingList<TKey,TElement> PrivateDictionaryList<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,int,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) {
         var r = new SetGroupingList<TKey,TElement>(comparer);
         var Index=0;
@@ -62,23 +43,42 @@ public static class ExtensionEnumerable{
             );
         return r;
     }
+    ///// <summary>
+    ///// ハッシュアルゴリズムに使う。
+    ///// </summary>
+    ///// <param name="source"></param>
+    ///// <param name="keySelector"></param>
+    ///// <typeparam name="TSource"></typeparam>
+    ///// <typeparam name="TKey"></typeparam>
+    ///// <returns></returns>
+    //public static SetGroupingList<TKey,TSource> ToLookup<TSource, TKey>(this Generic.IEnumerable<TSource> source,Func<TSource,TKey> keySelector) => PrivateDictionaryList(source,keySelector,Generic.EqualityComparer<TKey>.Default);
+    ///// <summary>
+    ///// ハッシュアルゴリズムに使う。comparerで比較する。
+    ///// </summary>
+    ///// <param name="source"></param>
+    ///// <param name="keySelector"></param>
+    ///// <param name="comparer"></param>
+    ///// <typeparam name="TElement"></typeparam>
+    ///// <typeparam name="TKey"></typeparam>
+    ///// <returns></returns>
+    //public static SetGroupingList<TKey,TElement> ToLookup<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
     /// <summary>
     /// ハッシュアルゴリズムに使う。
     /// </summary>
     /// <param name="source"></param>
     /// <param name="keySelector"></param>
-    /// <typeparam name="TElement"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static SetGroupingList<TKey,TElement> Lookup<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,int,TKey> keySelector) => PrivateDictionaryList(source,keySelector,Generic.EqualityComparer<TKey>.Default);
+    public static System.Linq.ILookup<TKey, TSource>ToLookup<TSource, TKey>(this Generic.IEnumerable<TSource> source,Func<TSource,int,TKey> keySelector) => PrivateDictionaryList(source,keySelector,Generic.EqualityComparer<TKey>.Default);
     /// <summary>
     /// ハッシュアルゴリズムに使う。comparerで比較する。
     /// </summary>
     /// <param name="source"></param>
     /// <param name="keySelector"></param>
     /// <param name="comparer"></param>
-    /// <typeparam name="TElement"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TKey"></typeparam>
     /// <returns></returns>
-    public static SetGroupingList<TKey,TElement> Lookup<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,int,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
+    public static System.Linq.ILookup<TKey, TSource>ToLookup<TSource, TKey>(this Generic.IEnumerable<TSource> source,Func<TSource,int,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) => PrivateDictionaryList(source,keySelector,comparer);
 }

@@ -32,7 +32,7 @@ public static class ExtensionSet {
     public static readonly MethodInfo AverageNullableInt64 = M(() => _Int32.Cast<long?>().Average());
     public static readonly MethodInfo AverageInt64 = M(() => _Int32.Cast<long>().Average());
     public static readonly MethodInfo AverageNullableInt32 = M(() => _Int32.Cast<int?>().Average());
-    //public static readonly MethodInfo AverageInt32 = M(() => _Int32.Cast<int>().Average());
+    public static readonly MethodInfo AverageInt32 = M(() => _Int32.Cast<int>().Average());
     public static readonly MethodInfo AverageNullableDecimal_selector = M(() => _Int32.Average(p => (decimal?)0m));
     public static readonly MethodInfo AverageDecimal_selector = M(() => _Int32.Average(p => 0m));
     public static readonly MethodInfo AverageNullableDouble_selector = M(() => _Int32.Average(p => (double?)0d));
@@ -153,6 +153,6 @@ public static class ExtensionSet {
     public static readonly MethodInfo VarpDouble_selector = M(() => _Int32.Varp(p => 0d));
     public static readonly MethodInfo Inline1 = M(() => Extension.Inline(() => 0));
     public static readonly MethodInfo Inline2 = M(() => new object().Inline(p => 0));
-    public static readonly MethodInfo Lookup = M(() => _Int32.Lookup(p => p));
+    public static readonly MethodInfo ToLookup = M(() => _Int32.ToLookup(p => p));
     //public static readonly MethodInfo Update = M(() => _Int32.Update(p => true,p => 0));
 }

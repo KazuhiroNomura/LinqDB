@@ -238,8 +238,10 @@ public static class CommonLibrary {
     internal static readonly string Generic_IEnumerable1_FullName = typeof(Generic.IEnumerable<>).FullName!;
     internal static readonly string Collections_IEnumerable_FullName = typeof(Collections.IEnumerable).FullName!;
     internal static readonly string Linq_IGrouping2_FullName = typeof(Linq.IGrouping<,>).FullName!;
+    internal static readonly string Linq_ILookup2_FullName = typeof(Linq.ILookup<,>).FullName!;
     internal static readonly string Sets_IEnumerable1_FullName = typeof(IEnumerable<>).FullName!;
     internal static readonly string Sets_IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
+    internal static readonly string Sets_ILookup2_FullName = typeof(ILookup<,>).FullName!;
     private static Type? PrivateGetInterface(this Type 検索されるInterface,Type 検索したいInterfaceDifinition){
         if(検索されるInterface.IsGenericType&&検索されるInterface.GetGenericTypeDefinition()==検索したいInterfaceDifinition)return 検索されるInterface;
         foreach(var Interface in 検索されるInterface.GetInterfaces()){
@@ -357,7 +359,6 @@ public static class CommonLibrary {
                 //    return true;
                 //}
             }
-        Debug.Assert(Interfaces.Count<=1);
         foreach(var Interface in Interfaces){
             GenericInterface=Interface;
             return true;

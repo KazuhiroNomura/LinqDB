@@ -21,14 +21,14 @@ public static class ExtensionSet2{
         var Count = 0L;
         foreach(var a in first) {
             if(!second.Contains(a)) {
-                var r = Result.InternalAdd(a);
+                var r = Result.InternalIsAdded(a);
                 Debug.Assert(r);
                 Count++;
             }
         }
         foreach(var a in second) {
             if(!first.Contains(a)) {
-                var r = Result.InternalAdd(a);
+                var r = Result.InternalIsAdded(a);
                 Debug.Assert(r);
                 Count++;
             }

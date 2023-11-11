@@ -28,7 +28,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
     /// <param name="Value">追加する要素の値。</param>
     public void AddKeyValue(TKey Key,TValue Value) {
         var HashCode = (long)(uint)Key!.GetHashCode();
-        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+        if(this.InternalIsAdded前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var KeyComparer = this.KeyComparer;
             LinkedNodeT LinkedNode = TreeNode;
             while(true) {
@@ -45,7 +45,7 @@ public abstract class Lookup<TValue, TKey, TCollection>:ImmutableSet<KeyValueCol
                 LinkedNode=LinkedNode_LinkedNodeItem;
             }
         }
-        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(this.InternalKeyValue(Key,Value)));
+        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(this.InternalKeyValue(Key,Value)));
         this._LongCount++;
     }
     private TCollection?GetCollection(TKey Key){

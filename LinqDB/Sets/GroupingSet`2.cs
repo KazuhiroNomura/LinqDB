@@ -43,7 +43,7 @@ public sealed class GroupingSet<TKey,TElement>:Set<TElement>
     /// <param name="Value">1つのタプル</param>
     public GroupingSet(TKey Key,TElement Value){
         this._Key=Key;
-        this.InternalAdd(Value);
+        this.InternalIsAdded(Value);
         this._LongCount=1;
     }
     public override int GetHashCode()=>this.Key is null?0:this.Key!.GetHashCode();

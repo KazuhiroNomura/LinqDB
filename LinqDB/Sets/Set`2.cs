@@ -152,9 +152,9 @@ public class Set<TKey,TElement>:Set<TElement>
         }
         return false;
     }
-    internal override bool InternalAdd(TElement Item) {
+    internal override bool InternalIsAdded(TElement Item) {
         var HashCode = (long)(uint)Item.GetHashCode();
-        if(this.InternalAdd前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
+        if(this.InternalIsAdded前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = EqualityComparer<TKey>.Default;
             LinkedNodeT LinkedNode = TreeNode;
             while(true) {
@@ -172,7 +172,7 @@ public class Set<TKey,TElement>:Set<TElement>
             }
         }
         this.AddRelationship(Item);
-        InternalAdd後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
+        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(Item));
         return true;
     }
 }

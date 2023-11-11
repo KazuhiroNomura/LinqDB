@@ -530,16 +530,17 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         );
     }
     [Fact]public void Call_Average(){
-        var s=new int[10];
+        var s0=new Set<int>{1};
+        var s1=new int[10];
         //if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
-        this.Expression実行AssertEqual(()=>s.Select(p=>(decimal)p).Average());
+        this.Expression実行AssertEqual(()=>s1.Select(p=>(decimal)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
-        this.Expression実行AssertEqual(()=>s.Select(p=>(double)p).Average());
+        this.Expression実行AssertEqual(()=>s1.Select(p=>(double)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDecimal==MethodCall0_GenericMethodDefinition)
-        this.Expression実行AssertEqual(()=>s.Select(p=>(decimal?)p).Average());
+        this.Expression実行AssertEqual(()=>s1.Select(p=>(decimal?)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
-        this.Expression実行AssertEqual(()=>s.Select(p=>(double?)p).Average());
-        this.Expression実行AssertEqual(()=>new Set<int>{1}.Select(p=>(decimal)p).Average());
+        this.Expression実行AssertEqual(()=>s1.Select(p=>(double?)p).Average());
+        this.Expression実行AssertEqual(()=>s0.Select(p=>(decimal)p).Average());
     }
     private static System.Collections.Generic.IEnumerable<T> そのまま<T>(System.Collections.Generic.IEnumerable<T> i)=>i;
     [Fact]public void Call_Any(){
@@ -604,6 +605,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //}
     }
     [Fact]public void Call_GroupJoin(){
+        var s0=new int[]{0,1,2,3,4,5,6,7,8,9}.GroupJoin(new int[]{0,1,2,3,4,5,6,7,8,9},o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default).ToArray();
+        var s1=new Set<int>{0,1,2,3,4,5,6,7,8,9}.GroupJoin(new Set<int>{0,1,2,3,4,5,6,7,8,9},o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default).ToArray();
+        var s2=new int[]{0,0}.GroupJoin(new int[]{0,0},o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default).ToArray();
+        var s3=new Set<int>{0,0}.GroupJoin(new Set<int>{0,0},o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default).ToArray();
         this.Expression実行AssertEqual(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i},EqualityComparer<int>.Default));
         this.Expression実行AssertEqual(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(o,i)=>new{o,i}));
         this.Expression実行AssertEqual(()=>new int[10].GroupJoin(new int[10],(Func<int,int>)(o=>o),i=>i,(o,i)=>new{o,i}));

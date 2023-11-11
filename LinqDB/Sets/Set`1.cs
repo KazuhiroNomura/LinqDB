@@ -227,7 +227,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     //    ExpressionSurrogateSelector.serializer.WriteObject(Writer,追加Item);
     //}
     public void Add(T item){
-        if(this.InternalAdd(item)) this._LongCount++;
+        if(this.InternalIsAdded(item)) this._LongCount++;
     }
     public bool Contains(T item)=>this.InternalContains(item);
     //    if(Item is null) return false;
@@ -263,7 +263,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <returns>追加に失敗すれば例外送出。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void AddOrThrow(T Item) {
-        if(this.InternalAdd(Item)) {
+        if(this.InternalIsAdded(Item)) {
             this._LongCount++;
         } else {
             throw new ArgumentException(Item!.ToString());
@@ -276,7 +276,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public bool IsAdded(T Item) {
-        if(this.InternalAdd(Item)) {
+        if(this.InternalIsAdded(Item)) {
             this._LongCount++;
             return true;
         } else {
@@ -291,7 +291,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     public void AddRange(Generic.IEnumerable<T>source) {
         var Count = this._LongCount;
         foreach(var Item in source) {
-            if(this.InternalAdd(Item)) {
+            if(this.InternalIsAdded(Item)) {
                 Count++;
             }
         }
@@ -317,7 +317,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
             if(this.InternalContains(Item)) throw new ArgumentException(Item!.ToString());
         }
         foreach(var Item in source) {
-            this.InternalAdd(Item);
+            this.InternalIsAdded(Item);
         }
         this._LongCount+=source.LongCount;
     }
@@ -400,7 +400,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         }
         var Add数 = 0L;
         for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
-            if(this.InternalAdd(setSelector(Node.Item)))
+            if(this.InternalIsAdded(setSelector(Node.Item)))
                 Add数++;
         this._LongCount-=Remove数-Add数;
         return (Remove数, Add数);
@@ -451,7 +451,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         }
         var Add数 = 0L;
         for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
-            if(this.InternalAdd(setSelector(Node.Item)))
+            if(this.InternalIsAdded(setSelector(Node.Item)))
                 Add数++;
         this._LongCount-=Remove数-Add数;
         return (Remove数, Add数);
@@ -551,7 +551,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         var r = new Set<T>();
         long Count = 0;
         foreach(var a in other)
-            if(ExtensionSet.Contains(this,a)&&r.InternalAdd(a))
+            if(ExtensionSet.Contains(this,a)&&r.InternalIsAdded(a))
                 Count++;
         this.変数Enumerator=r.変数Enumerator;
         return this._LongCount=Count;
@@ -562,7 +562,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     public long UnionWith(IEnumerable<T> other) {
         long Count = 0;
         foreach(var a in other)
-            if(this.InternalAdd(a))
+            if(this.InternalIsAdded(a))
                 Count++;
         this._LongCount+=Count;
         return Count;
@@ -576,7 +576,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     public long DUnionWith(IEnumerable<T> other) {
         long Count = 0;
         foreach(var a in other) {
-            if(!this.InternalAdd(a))
+            if(!this.InternalIsAdded(a))
                 throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
             Count++;
         }
@@ -604,13 +604,13 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
         var Count = 0L;
         foreach(var a in this){
             if(second.InternalContains(a))continue;
-            var r = Result.InternalAdd(a);
+            var r = Result.InternalIsAdded(a);
             Debug.Assert(r);
             Count++;
         }
         foreach(var a in second){
             if(this.InternalContains(a))continue;
-            var r = Result.InternalAdd(a);
+            var r = Result.InternalIsAdded(a);
             Debug.Assert(r);
             Count++;
         }

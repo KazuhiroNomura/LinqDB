@@ -437,7 +437,7 @@ public static class ExtensionSet{
         var r = new Set<TResult>();
         long Count = 0;
         foreach(var a in source)
-            if(r.InternalAdd((TResult)a!))
+            if(r.InternalIsAdded((TResult)a!))
                 Count++;
         r._LongCount=Count;
         return r;
@@ -486,7 +486,8 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">キー型</typeparam>
     /// <returns></returns>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Global
-    public static SetGroupingSet<TKey,TSource> Lookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
+    public static ILookup<TKey, TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
+    //public static SetGroupingSet<TKey,TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
         //var r = new LookupSet<TSource,TKey>();
         //foreach(var a in source)r.AddKeyValue(keySelector(a),a);
         //return r;
@@ -506,7 +507,7 @@ public static class ExtensionSet{
         var r = new Set<TSource>(source);
         long Count = 0;
         foreach(var a in second) {
-            if(!r.InternalAdd(a)) throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
+            if(!r.InternalIsAdded(a)) throw new OneTupleException(MethodBase.GetCurrentMethod()!.Name);
             Count++;
         }
         r._LongCount+=Count;
@@ -652,18 +653,21 @@ public static class ExtensionSet{
     /// <typeparam name="TResult">結果の要素の型。</typeparam>
     public static IEnumerable<TResult> GroupJoin<TOuter, TInner, TKey, TResult>(this IEnumerable<TOuter> outer,IEnumerable<TInner> inner,Func<TOuter,TKey> outerKeySelector,Func<TInner,TKey> innerKeySelector,Func<TOuter,IEnumerable<TInner>,TResult> resultSelector) {
         var EmptySet = ImmutableSet<TInner>.EmptySet;
-        var Dictionary = inner.Lookup(innerKeySelector);
-        Set<TInner> innerValue = null!;
+        var Dictionary = inner.ToLookup(innerKeySelector);
+        //IEnumerable<TInner> innerValue = null!;
         var r = new Set<TResult>();
         long count = 0;
         foreach(var a in outer)
-            if(
-                r.InternalAdd(
-                    Dictionary.TryGetValue(outerKeySelector(a),ref innerValue)
-                        ? resultSelector(a,innerValue)
-                        : resultSelector(a,EmptySet)
-                )
-            )count++;
+            if(r.InternalIsAdded(resultSelector(a,Dictionary[outerKeySelector(a)])))
+                count++;
+        //if(
+        //    r.InternalAdd(
+        //        Dictionary.TryGetValue(outerKeySelector(a),ref innerValue)
+        //            ? resultSelector(a,innerValue)
+        //            : resultSelector(a,EmptySet)
+        //    )
+        //)count++;
+        Debug.Assert(outer.Count==count);
         r._LongCount=count;
         Debug.Assert(r.LongCount<=outer.LongCount);
         return r;
@@ -765,22 +769,37 @@ public static class ExtensionSet{
         var r = new Set<TResult>();
         long count = 0;
         if(inner.LongCount<outer.LongCount) {
-            var outerDictionary = outer.Lookup(outerKeySelector);
-            Set<TOuter> outer2 = null!;
+            var outerDictionary = outer.ToLookup(outerKeySelector);
             foreach(var innerValue in inner)
-                if(outerDictionary.TryGetValue(innerKeySelector(innerValue),ref outer2))
-                    foreach(var outerValue in outer2)
-                        if(r.InternalAdd(resultSelector(outerValue,innerValue)))count++;
+                foreach(var outerValue in outerDictionary[innerKeySelector(innerValue)])
+                    if(r.InternalIsAdded(resultSelector(outerValue,innerValue)))count++;
         } else {
-            var innerDictionary = inner.Lookup(innerKeySelector);
-            Set<TInner> inner2 = null!;
+            var innerDictionary = inner.ToLookup(innerKeySelector);
             foreach(var outerValue in outer)
-                if(innerDictionary.TryGetValue(outerKeySelector(outerValue),ref inner2))
-                    foreach(var innerValue in inner2)
-                        if(r.InternalAdd(resultSelector(outerValue,innerValue)))count++;
+                    foreach(var innerValue in innerDictionary[outerKeySelector(outerValue)])
+                        if(r.InternalIsAdded(resultSelector(outerValue,innerValue)))count++;
         }
         r._LongCount=count;
         return r;
+        //var r = new Set<TResult>();
+        //long count = 0;
+        //if(inner.LongCount<outer.LongCount) {
+        //    var outerDictionary = outer.ToLookup(outerKeySelector);
+        //    IEnumerable<TOuter> outer2 = null!;
+        //    foreach(var innerValue in inner)
+        //        if(outerDictionary.TryGetValue(innerKeySelector(innerValue),ref outer2))
+        //            foreach(var outerValue in outer2)
+        //                if(r.InternalAdd(resultSelector(outerValue,innerValue)))count++;
+        //} else {
+        //    var innerDictionary = inner.ToLookup(innerKeySelector);
+        //    IEnumerable<TInner> inner2 = null!;
+        //    foreach(var outerValue in outer)
+        //        if(innerDictionary.TryGetValue(outerKeySelector(outerValue),ref inner2))
+        //            foreach(var innerValue in inner2)
+        //                if(r.InternalAdd(resultSelector(outerValue,innerValue)))count++;
+        //}
+        //r._LongCount=count;
+        //return r;
     }
     /// <summary>集合内の要素の合計数を表す <see cref="int" /> を返します。</summary>
     /// <returns>ソース 集合の要素数。</returns>
@@ -1476,7 +1495,7 @@ public static class ExtensionSet{
         long Count = 0;
         foreach(var a in source) {
             if(a is TResult Current) {
-                var r = Result.InternalAdd(Current);
+                var r = Result.InternalIsAdded(Current);
                 Debug.Assert(r);
                 Count++;
             }
@@ -1494,7 +1513,7 @@ public static class ExtensionSet{
         Debug.Assert(count>=0);
         var r = new Set<int>();
         var index = count;
-        while(index-->0)r.InternalAdd(start++);
+        while(index-->0)r.InternalIsAdded(start++);
         r._LongCount=count;
         return r;
     }
@@ -1511,7 +1530,7 @@ public static class ExtensionSet{
         var r = new Set<TResult>();
         var Count = 0L;
         foreach(var a in source)
-            if(r.InternalAdd(selector(a)))Count++;
+            if(r.InternalIsAdded(selector(a)))Count++;
         r._LongCount=Count;
         return r;
     }
@@ -1533,7 +1552,7 @@ public static class ExtensionSet{
         var Count = 0L;
         foreach(var a in source)
             foreach(var b in collectionSelector(a))
-                if(r.InternalAdd(resultSelector(a,b)))Count++;
+                if(r.InternalIsAdded(resultSelector(a,b)))Count++;
         r._LongCount=Count;
         return r;
     }
@@ -1550,7 +1569,7 @@ public static class ExtensionSet{
         var Count = 0L;
         foreach(var a in source)
             foreach(var b in selector(a))
-                if(r.InternalAdd(b))Count++;
+                if(r.InternalIsAdded(b))Count++;
         r._LongCount=Count;
         return r;
     }
@@ -1872,7 +1891,7 @@ public static class ExtensionSet{
         long Count = 0;
         foreach(var a in source){
             if(!predicate(a)) continue;
-            var b = r.InternalAdd(a);
+            var b = r.InternalIsAdded(a);
             Debug.Assert(b);
             Count++;
         }

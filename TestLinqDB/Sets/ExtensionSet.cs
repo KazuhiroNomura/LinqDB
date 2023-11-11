@@ -369,7 +369,7 @@ public class ExtensionSet:共通{
         共通<decimal>(最大値);
         共通<char   >(最大値);
         void 共通<T>(int Count)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>,IMultiplyOperators<T,T,T> =>
-            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.Lookup(p=>p),()=>e.Lookup(p=>p)));
+            集約関数<T>(0,Count,(s,e)=>this.Expression比較実行AssertEqual(()=>(Sets.IEnumerable<Sets.IGrouping<T,T>>)s.ToLookup(p=>p),()=>e.ToLookup(p=>p)));
     }
     //private Sets.IEnumerable<T> データ<T>(int 下限,int 上限)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
     //    T 下限0=default,上限0=default;

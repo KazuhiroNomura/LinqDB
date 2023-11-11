@@ -150,7 +150,7 @@ public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,IContainer
         }
         Count-=List削除Key.Count;
         foreach(var 追加Value in List追加Value) {
-            if(!this.InternalAdd(追加Value)) {
+            if(!this.InternalIsAdded(追加Value)) {
                 throw new InvalidDataException("トランザクションログに追加に重複という不整合が発生した。");
             }
         }

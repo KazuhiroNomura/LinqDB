@@ -1,8 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
 using LinqDB.Helpers;
 using LinqDB.Optimizers.VoidExpressionTraverser;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using LinqDB.Sets;
 using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
@@ -116,16 +119,16 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                 Set1=Set1.BaseType;
                             }
                         } else {
-                            var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this._作業配列,Listプローブビルド,0);
+                            var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
                             MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
                         }
                         Expression LookupExpression(Expression プローブ,Expression ビルド) {
                             var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
-                                ? ExtensionSet.Lookup
+                                ? ExtensionSet.ToLookup
                                 : ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()
-                                    ? ExtensionEnumerable.Lookup
-                                    : ExtensionEnumerable.Lookup_index;
-                            var 作業配列=this._作業配列;
+                                    ? ExtensionEnumerable.ToLookup
+                                    : ExtensionEnumerable.ToLookup_index;
+                            var 作業配列=this.作業配列;
                             var Instance = Expression.Call(
                                 作業配列.MakeGenericMethod(
                                     Lookup,
@@ -138,28 +141,51 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                     predicate_Parameters
                                 )
                             );
-                            var GetValue = 作業配列.GetMethod(Instance.Type,nameof(SetGroupingList<int,int>.GetTKeyValue),プローブ.Type);
-                            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                            Debug.Assert(GetValue is not null);
-                                プローブ=Convert必要なら(
-                                    プローブ,
-                                    GetValue.GetParameters()[0].ParameterType
-                                );
-                            //if(GetValue is null) {
-                            //    GetValue=Instance.Type.GetMethod(nameof(LookupList<int,int>.GetObjectValue));
-                            //    プローブ=Expression.Convert(
-                            //        プローブ,
-                            //        typeof(object)
-                            //    );
-                            //} else {
-                            //    プローブ=Convert必要なら(
-                            //        プローブ,
-                            //        GetValue.GetParameters()[0].ParameterType
-                            //    );
+                            //MethodInfo get_Item;
+                            var Instance_Type=Instance.Type;
+                            var get_Item=Instance_Type.GetMethod("get_Item");
+                            if(get_Item is null){
+                                foreach(var Interface in Instance_Type.GetInterfaces()){
+                                    if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)){
+                                        get_Item=Interface.GetMethod("get_Item")!;
+                                        goto 発見;
+                                        //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+                                        //if(Interface_GetEnumerator==GetEnumerator){
+                                        //    GenericArguments=Interface.GetGenericArguments();
+                                        //    return true;
+                                        //}
+                                    }
+                                }
+                                throw new NotImplementedException();
+                                発見: ;
+                            }
+                            //if(typeof(System.Linq.ILookup<,>)==Instance_Type.GetGenericTypeDefinition()){
+                            //    get_Item=Instance_Type.GetMethod("get_Item")!;
+                            //} else{
+                            //    foreach(var Interface in Instance_Type.GetInterfaces()){
+                            //        if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)){
+                            //            get_Item=Interface.GetMethod("get_Item")!;
+                            //            goto 発見;
+                            //            //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+                            //            //if(Interface_GetEnumerator==GetEnumerator){
+                            //            //    GenericArguments=Interface.GetGenericArguments();
+                            //            //    return true;
+                            //            //}
+                            //        }
+                            //    }
+                            //    throw new NotImplementedException();
+                            //    発見: ;
                             //}
+                            //var ILookup2=Instance.Type.GetInterface(CommonLibrary.Sets_ILookup2_FullName)??Instance.Type.GetInterface(CommonLibrary.Linq_ILookup2_FullName)!;
+                            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                            Debug.Assert(get_Item is not null);
+                            プローブ=Convert必要なら(
+                                プローブ,
+                                get_Item.GetParameters()[0].ParameterType
+                            );
                             return Expression.Call(
                                 Instance,
-                                GetValue,
+                                get_Item,
                                 プローブ
                             );
                         }

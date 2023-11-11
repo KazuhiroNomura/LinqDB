@@ -208,7 +208,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     private Expression 共通Post(UnaryExpression Unary0, ExpressionType NodeType) {
         var Unary1_Operand=this.Traverse(Unary0.Operand);
         var 変数=Expression.Parameter(Unary0.Operand.Type);
-        var 作業配列=this._作業配列;
+        var 作業配列=this.作業配列;
         return Expression.Block(
             作業配列.Parameters設定(変数),
             作業配列.Expressions設定(
@@ -318,21 +318,36 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                 //    o=>Where
                 //        I
                 //        i=>o==i&&i==1
-                var 作業配列 = this._作業配列;
+                var 作業配列 = this.作業配列;
                 switch(MethodCall0_Method.Name) {
                     case nameof(Linq.Enumerable.Average): {
+                        //set.Average()は重複を除いて平均
+                        //set.Average(p=>p)は重複ありで平均
                         //s.Average()→s.Average(p=>p)
                         if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
-                            return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageDecimal_selector);
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageDecimal_selector);
                         if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
-                            return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageDouble_selector);
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageDouble_selector);
+                        if(Reflection.ExtensionEnumerable.AverageSingle==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageSingle_selector);
+                        if(Reflection.ExtensionEnumerable.AverageInt64==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageInt64_selector);
+                        if(Reflection.ExtensionEnumerable.AverageInt32==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageInt32_selector);
                         if(Reflection.ExtensionEnumerable.AverageNullableDecimal==MethodCall0_GenericMethodDefinition)
-                            return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageNullableDecimal_selector);
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageNullableDecimal_selector);
                         if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
-                            return 集約を集約_selectorに変換TSource(MethodCall0,MethodCall0.Type,Reflection.ExtensionEnumerable.AverageNullableDouble_selector);
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageNullableDouble_selector);
+                        if(Reflection.ExtensionEnumerable.AverageNullableSingle==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageNullableSingle_selector);
+                        if(Reflection.ExtensionEnumerable.AverageNullableInt64==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageNullableInt64_selector);
+                        if(Reflection.ExtensionEnumerable.AverageNullableInt32==MethodCall0_GenericMethodDefinition)
+                            return 集約を集約_selectorに変換TSource(MethodCall0,Reflection.ExtensionEnumerable.AverageNullableInt32_selector);
                         break;
-                        MethodCallExpression 集約を集約_selectorに変換TSource(MethodCallExpression MethodCall00,Type SourceType,MethodInfo 集約_selector) {
-                            var 作業配列0 = this._作業配列;
+                        MethodCallExpression 集約を集約_selectorに変換TSource(MethodCallExpression MethodCall00,MethodInfo 集約_selector) {
+                            var 作業配列0 = this.作業配列;
+                            var SourceType=MethodCall0_Method.GetParameters()[0].ParameterType.GetGenericArguments()[0];
                             var p = Expression.Parameter(SourceType,$"Averageﾟ{this.番号++}");
                             var MethodCall01_Arguments_0 = this.Traverse(MethodCall00.Arguments[0]);
                             return Expression.Call(
@@ -361,7 +376,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                             } else
                                 break;
                         }
-                        var GenericArguments = this._作業配列.GetGenericArguments(MethodCall1_Arguments_0.Type);
+                        var GenericArguments = this.作業配列.GetGenericArguments(MethodCall1_Arguments_0.Type);
                         MethodCallExpression MethodCall1;
                         if(Reflection.ExtensionEnumerable.Any_predicate==MethodCall0_GenericMethodDefinition) {
                             //s.Any(p)→s.Where(p).Any()
@@ -1489,7 +1504,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                             resultSelector_o,
                                             collectionSelector_o
                                         ),
-                                        this._作業配列.Parameters設定(resultSelector_i)
+                                        this.作業配列.Parameters設定(resultSelector_i)
                                     );
                                 } else {
                                     var resultSelector_i = Expression.Parameter(TCollection,"i");
@@ -1607,7 +1622,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                             var selector_Parameters = selector.Parameters;
                                             var predicate_Parameters = predicate.Parameters;
                                             var Where0 = Expression.Call(
-                                                this._作業配列.MakeGenericMethod(MethodCall0_GenericMethodDefinition,MethodCall1_MethodCall_Method.GetGenericArguments()[0]),
+                                                this.作業配列.MakeGenericMethod(MethodCall0_GenericMethodDefinition,MethodCall1_MethodCall_Method.GetGenericArguments()[0]),
                                                 MethodCall1_MethodCall.Arguments[0],
                                                 Expression.Lambda(
                                                     this.Select_Where再帰で匿名型を走査(
@@ -1781,7 +1796,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     private Expression 共通AnonymousValueTuple(Expression MethodCall1_Object,MethodInfo MethodCall0_Method,Expression MethodCall0_Arguments_0) {
         var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
         if(MethodCall1_Object is NewExpression LNew&&MethodCall1_Arguments_0 is NewExpression RNew) {
-            var 作業配列 = this._作業配列;
+            var 作業配列 = this.作業配列;
             var LNew_Arguments = LNew.Arguments;
             var RNew_Arguments = RNew.Arguments;
             var LNew_Arguments_0 = LNew_Arguments[0];
@@ -1803,7 +1818,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             }
             return Result;
         }
-        return Expression.Call(MethodCall1_Object,MethodCall0_Method,this._作業配列.Expressions設定(MethodCall1_Arguments_0));
+        return Expression.Call(MethodCall1_Object,MethodCall0_Method,this.作業配列.Expressions設定(MethodCall1_Arguments_0));
     }
     /// <summary>
     /// OfType()
@@ -1927,7 +1942,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             //        MethodCall0_Method                                OfType<T>
             //            MethodCall1_MethodCall_Arguments[1].Invoke(o) selector0
             //O.SelectMany(selector).OfType<T>()→O.SelectMany(o=>selector(O).OfType<T>())
-            var 作業配列 = this._作業配列;
+            var 作業配列 = this.作業配列;
             var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
             var Invoke=Expression.Invoke(
                 MethodCall1_MethodCall_Arguments[1],
@@ -1999,7 +2014,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             //        MethodCall0_Method
             //            MethodCall1_MethodCall_Arguments[1].Invoke(o)
             //            MethodCall1_Arguments[1]
-            var 作業配列 = this._作業配列;
+            var 作業配列 = this.作業配列;
             var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
             var Invoke=Expression.Invoke(
                 MethodCall1_MethodCall_Arguments[1],
@@ -2075,7 +2090,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             //            MethodCall1_MethodCall_Arguments[1].Invoke(o)
             //            MethodCall1_Arguments[1]                      second
             //            MethodCall1_Arguments[2]                      comparer
-            var 作業配列 = this._作業配列;
+            var 作業配列 = this.作業配列;
             var o = Expression.Parameter(MethodCall1_MethodCall.Method.GetGenericArguments()[0],"o");
             var Invoke=Expression.Invoke(
                 MethodCall1_MethodCall_Arguments[1],
@@ -2134,7 +2149,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     /// <param name="OuterPredicate又はInnerPredicate"></param>
     /// <returns></returns>
     private Expression Outer又はInnerにWhereを付ける(Expression outer又はinner,MethodInfo Where,Type Where_T,Generic.IEnumerable<ParameterExpression> Where_Parameters,Expression OuterPredicate又はInnerPredicate) => Expression.Call(
-        this._作業配列.MakeGenericMethod(
+        this.作業配列.MakeGenericMethod(
             Where,
             Where_T
         ),

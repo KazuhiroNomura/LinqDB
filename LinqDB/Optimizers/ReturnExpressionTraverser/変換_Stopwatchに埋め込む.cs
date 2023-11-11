@@ -358,7 +358,7 @@ internal sealed class 変換_Stopwatchに埋め込む:ReturnExpressionTraverser{
                     Lambda0.Parameters
                 );
             } else {
-                var 作業配列 = this._作業配列;
+                var 作業配列 = this.作業配列;
                 var 戻り値 = Expression.Parameter(
                     Lambda1_Body.Type,
                     $"戻り値{List計測.Count}"
@@ -473,7 +473,7 @@ internal sealed class 変換_Stopwatchに埋め込む:ReturnExpressionTraverser{
                 計測Expression,
                 A計測.Reflection.Start
             ),
-            this._作業配列.MakeGenericMethod(A計測.Reflection.StopReturn,Body.Type),
+            this.作業配列.MakeGenericMethod(A計測.Reflection.StopReturn,Body.Type),
             Body
         );
     }

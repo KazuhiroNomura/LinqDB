@@ -9,12 +9,12 @@ namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 /// a=bのaは評価される
 /// </summary>
 public class ReturnExpressionTraverser {
-    protected readonly 作業配列 _作業配列;
+    protected readonly 作業配列 作業配列;
     /// <summary>
     /// コンストラクタ
     /// </summary>
     /// <param name="作業配列"></param>
-    protected ReturnExpressionTraverser(作業配列 作業配列)=>this._作業配列=作業配列;
+    protected ReturnExpressionTraverser(作業配列 作業配列)=>this.作業配列=作業配列;
     protected virtual Expression? TraverseNullable(Expression? Expression0) => Expression0 is null
        ?null
         : this.Traverse(Expression0);
@@ -761,7 +761,7 @@ public class ReturnExpressionTraverser {
             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
             b&=MethodCall0_Arguments_0==MethodCall1_Arguments_0;
-            if(MethodCall0_Arguments_Count<=1)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,this._作業配列.Expressions設定(MethodCall1_Arguments_0));
+            if(MethodCall0_Arguments_Count<=1)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,this.作業配列.Expressions設定(MethodCall1_Arguments_0));
             var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments_1);
             b&=MethodCall0_Arguments_1==MethodCall1_Arguments_1;

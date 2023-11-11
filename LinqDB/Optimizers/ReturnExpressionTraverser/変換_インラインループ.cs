@@ -65,56 +65,118 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         InvalidOperationException_ctor,
         Expression.Constant(nameof(ExtensionSet.Single))
     );
-    protected static(ParameterExpression Parameter,Type Parameter_Type,BinaryExpression Assign) 具象Type(Expression Expression0,string Name) {
+    //[Flags]
+    //protected enum 具象TypeOption{
+    //    Addに成功したかの判定=0b10,
+    //    Countアップするか    =0b01
+    //}
+    //private static Type 重複なし作業Type(Expression Expression) {
+    //    Debug.Assert(Expression.Type.IsGenericType);
+    //    var Type = Expression.Type;
+    //    var Generic_IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
+    //    if(Generic_IEnumerable1 is not null){
+    //        Type=Generic_IEnumerable1;
+    //    }else if(Type.IsGenericType&&(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||typeof(IEnumerable<>)==Type.GetGenericTypeDefinition())) {
+    //    }else{
+    //        var Sets_IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName);
+    //        if(Sets_IEnumerable1 is not null){
+    //            Type=Sets_IEnumerable1;
+    //        } else{
+    //            throw new NotSupportedException(Type.FullName);
+    //        }
+    //    }
+    //    return typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
+    //}
+    protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象Type(Expression Expression0,string Name,bool 戻り値あり,bool Countあり){
         var Type = Expression0.Type;
-        Debug.Assert(Type.IsGenericType);
-        if(!Type.IsSealed) {
-            Type IEnumerable1;
-            Debug.Assert((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is null);
-            if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
-                Type=typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
-            //} else if((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is not null) {
-            //    if(typeof(IGrouping<,>)==Type.GetGenericTypeDefinition()) {
-            //        Type=typeof(SetGroupingSet<,>).MakeGenericType(Type.GetGenericArguments());
-            //    } else if(typeof(Linq.IGrouping<,>)==Type.GetGenericTypeDefinition()) {
-            //        Type=typeof(SetGroupingList<,>).MakeGenericType(Type.GetGenericArguments());
-            //    } else {
-            //        var IGroupingSet = Type.GetInterface(CommonLibrary.Sets_IGrouping2_FullName);
-            //        if(IGroupingSet is not null) {
-            //            Type=typeof(SetGroupingSet<,>).MakeGenericType(IGroupingSet.GetGenericArguments());
-            //        } else{
-            //            var IGrouping = Type.GetInterface(CommonLibrary.Linq_IGrouping2_FullName);
-            //            Type=IGrouping is not null
-            //                ?typeof(SetGroupingList<,>).MakeGenericType(IGrouping.GetGenericArguments())
-            //                :typeof(Set<>).MakeGenericType(IEnumerable1.GetGenericArguments());
-            //        }
-            //    }
+        Type? Interface;
+        if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()){
+            Interface=Type;
+            Type=typeof(Set<>);
+        }else if((Interface=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)) is not null){
+            Type=typeof(Set<>);
+        }else if(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()){
+            Interface=Type;
+            Type=typeof(List<>);
+        }else if((Interface=Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)) is not null){
+            Type=typeof(List<>);
+        } else{
+            throw new NotSupportedException(Type.FullName);
+        }
+        var ReturnType=Type.MakeGenericType(Interface.GetGenericArguments());
+        string MethodName;
+        if(戻り値あり) {
+            if(Countあり) {
+                MethodName=nameof(Set<int>.IsAdded);
             } else {
-                Debug.Assert(Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName) is null);
-                //var IEnumerable = typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()
-                //    ? Type
-                //    :Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!;
-                Type TypeDefinition;
-                if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
-                    TypeDefinition=typeof(HashSet<>);
-                } else {
-                    TypeDefinition=typeof(List<>);
-                }
-                Type=TypeDefinition.MakeGenericType(Type.GetGenericArguments());
+                MethodName=nameof(Set<int>.InternalIsAdded);
+            }
+        } else {
+            if(Countあり) {
+                MethodName=nameof(Set<int>.Add);
+            } else {
+                MethodName=nameof(Set<int>.InternalAdd);
             }
         }
-        var Parameter = Expression.Parameter(Type,Name);
+        //Type ReturnType;
+        //Debug.Assert(Expression0.Type.IsGenericType);
+        //if(typeof(IEnumerable<>)==Interface.GetGenericTypeDefinition()) {
+        //    重複なし作業Type(Expression0)
+        //    ReturnType=typeof(Set<>).MakeGenericType(Expression0.Type.GetGenericArguments());
+        //} else {
+        //    Type TypeDefinition;
+        //    if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
+        //        TypeDefinition=typeof(HashSet<>);
+        //        ReturnType=TypeDefinition.MakeGenericType(ReturnType.GetGenericArguments());
+        //    } else {
+        //        TypeDefinition=typeof(List<>);
+        //        if(戻り値あり)
+        //            throw new NotSupportedException("Listで戻り値ありのAddは存在しない。");
+        //    }
+        //}
+        //ReturnType=TypeDefinition.MakeGenericType(ReturnType.GetGenericArguments());
+        var Parameter = Expression.Parameter(ReturnType,Name);
         return (
             Parameter,
-            Type,
+            ReturnType.GetMethod(MethodName,Instance_NonPublic_Public)!,
             Expression.Assign(
                 Parameter,
                 Expression.New(
-                    Type.GetConstructor(Type.EmptyTypes)!
+                    ReturnType.GetConstructor(Type.EmptyTypes)!
                 )
             )
         );
     }
+    //protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 重複許容IEnumerable具象Typeカウントなし(Expression Expression0,string Name) {
+    //    var Type = Expression0.Type;
+    //    MethodInfo Method;
+    //    Debug.Assert(Type.IsGenericType);
+    //    if(!Type.IsSealed) {
+    //        if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
+    //            Type=typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
+    //            Method=Type.GetMethod(nameof(Set<int>.InternalAdd),Instance_NonPublic_Public)!;
+    //        } else {
+    //            Type TypeDefinition;
+    //            if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
+    //                TypeDefinition=typeof(HashSet<>);
+    //            } else {
+    //                TypeDefinition=typeof(List<>);
+    //            }
+    //            Type=TypeDefinition.MakeGenericType(Type.GetGenericArguments());
+    //        }
+    //    }
+    //    var Parameter = Expression.Parameter(Type,Name);
+    //    return (
+    //        Parameter,
+    //        Type,
+    //        Expression.Assign(
+    //            Parameter,
+    //            Expression.New(
+    //                Type.GetConstructor(Type.EmptyTypes)!
+    //            )
+    //        )
+    //    );
+    //}
     private sealed class 判定_指定PrimaryKeyが存在する:VoidExpressionTraverser_Quoteを処理しない {
         private readonly Generic.HashSet<string> HashSetProperty_Name = new();
         private ParameterExpression? EntityParameter;
@@ -321,7 +383,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         public bool MoveNext() => this.Index<this.EndIndex&&++this.Index<this.EndIndex;
     }
     protected Expression ループ起点(Expression Expression0,ループの内部処理 ループの内部処理) {
-        var 作業配列 = this._作業配列;
+        var 作業配列 = this.作業配列;
         var Expression1 = base.Traverse(Expression0);
         if(Expression0.NodeType==ExpressionType.Assign&&Expression1.NodeType==ExpressionType.Block) {
             return Expression.Assign(
@@ -418,7 +480,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         var GenericMethodDefinition = GetGenericMethodDefinition(Method);
         var Name = Method.Name;
         var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
-        var 作業配列 = this._作業配列;
+        var 作業配列 = this.作業配列;
         Debug.Assert(
             nameof(Linq.Enumerable.Join)!=Name&&
             nameof(Linq.Enumerable.GroupJoin)!=Name
@@ -575,7 +637,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             second,
                             argument1 => Expression.Call(
                                 作業,
-                                作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalAdd),Instance_NonPublic_Public),
+                                作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalIsAdded),Instance_NonPublic_Public),
                                 argument1
                             )
                         )
@@ -857,7 +919,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             first,
                             argument => Expression.Call(
                                 作業,
-                                作業_Type.GetMethod(nameof(Set<int>.InternalAdd),Instance_NonPublic_Public)!,
+                                作業_Type.GetMethod(nameof(Set<int>.InternalIsAdded),Instance_NonPublic_Public)!,
                                 argument
                             )
                         );
