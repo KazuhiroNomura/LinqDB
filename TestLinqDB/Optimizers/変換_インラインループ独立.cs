@@ -208,30 +208,56 @@ public class 変換_インラインループ独立:共通{
         var n0=new Set<decimal?>{1,2,3};
         var n1=n0;
         //if(Reflection.ExtensionSet.HarmeanNullableDecimal_selector==GenericMethodDefinition||Reflection.ExtensionSet.HarmeanDecimal_selector==GenericMethodDefinition) {
-        this.Expression実行AssertEqual(() => new Set<decimal?>{1,2,3}.Harmean(p=>p));
-        this.Expression実行AssertEqual(() => new Set<decimal>{1,2,3}.Harmean(p=>p));
+        this.Expression実行AssertEqual(() => new Set<decimal?> { 1,2,3 }.Harmean(p => p));
+        this.Expression実行AssertEqual(() => new Set<decimal> { 1,2,3 }.Harmean(p => p));
         //} else {
         this.Expression実行AssertEqual(() => new Set<double?> { 1,2,3 }.Harmean(p => p));
         this.Expression実行AssertEqual(() => new Set<double> { 1,2,3 }.Harmean(p => p));
         //}
-        ////if(MethodCall0.Type.IsNullable()) {
-        ////    if(MethodCall is not null) {
-        ////        if(this.重複除去されているか(MethodCall)) {
-        //this.Expression実行AssertEqual(() => n0.Intersect(n1).Harmean(p=>p));
-        ////        } else {
-        //this.Expression実行AssertEqual(() => n0.Select(p=>p+1).Harmean(p=>p));
-        ////        }
-        ////    } else {
-        //this.Expression実行AssertEqual(() => n0.Harmean(p=>p));
-        ////    }
-        ////} else {
-        ////    if(MethodCall is not null&&this.重複除去されているか(MethodCall)) {
-        //this.Expression実行AssertEqual(() => s0.Intersect(s1).Harmean(p=>p));
-        ////    } else {
-        //this.Expression実行AssertEqual(() => s0.Harmean(p=>p));
-        //this.Expression実行AssertEqual(() => s0.Select(p=>p+1).Harmean(p=>p));
-        ////    }
-        ////}
+        //if(MethodCall0.Type.IsNullable()) {
+        //    if(MethodCall is not null) {
+        //        if(this.重複除去されているか(MethodCall)) {
+        this.Expression実行AssertEqual(() => n0.GroupBy(p=>p).Harmean(p => p.Key));
+        //        } else {
+        this.Expression実行AssertEqual(() => n0.Select(p => p+1).Harmean(p => p));
+        //        }
+        //    } else {
+        this.Expression実行AssertEqual(() => n0.Harmean(p => p));
+        //    }
+        //} else {
+        //    if(MethodCall is not null&&this.重複除去されているか(MethodCall)) {
+        this.Expression実行AssertEqual(() => s0.GroupBy(p=>p).Harmean(p => p.Key));
+        //    } else {
+        this.Expression実行AssertEqual(() => s0.Select(p => p+1).Harmean(p => p));
+        //    }
+        //}
+    }
+    [Fact]public void Geomean(){
+        var s0=new Set<double>{1,2,3};
+        var s1=s0;
+        var n0=new Set<double?>{1,2,3};
+        var n1 = n0;
+        //if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
+        //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
+        this.Expression実行AssertEqual(() => s0.GroupBy(p => p).Geomean(p => p.Key));
+        //    } else{
+        this.Expression実行AssertEqual(() => s0.Geomean(p => p));
+        //    }
+        //} else {
+        //    if(MethodCall0_Arguments_0.NodeType==ExpressionType.Parameter) {
+        this.Expression実行AssertEqual(() => n0.Let(n => n.Geomean(p => p)));
+        //    } else {
+        //        if(MethodCall is not null) {
+        //            if(this.重複除去されているか(MethodCall)) {
+        //this.Expression実行AssertEqual(() => n0.GroupBy(p => p).Geomean(p => p.Key));
+        //            } else {
+        this.Expression実行AssertEqual(() => n0.Select(p=>p+1).Geomean(p => p));
+        //            }
+        //        } else {
+        this.Expression実行AssertEqual(() => n0.Geomean(p => p));
+        //        }
+        //    }
+        //}
     }
     [Fact]public void Call() {
         var s = new int[]{1,2,3,4,5,6,7};

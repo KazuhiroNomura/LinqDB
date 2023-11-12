@@ -1164,48 +1164,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     )
                 );
             } else {
-
-                
-                
-                
-                
-                //string name=$"{変数名}作業";
-                //var Type = MethodCall0_Arguments_0.Type;
-                //Debug.Assert(Type.IsGenericType);
-                //if(!Type.IsSealed) {
-                //    //Type IEnumerable1;
-                //    //Debug.Assert((IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)!) is null);
-                //    if(typeof(Sets.IEnumerable<>)==Type.GetGenericTypeDefinition()) {
-                //        Type=typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
-                //    } else {
-                //        Type TypeDefinition;
-                //        if(MethodCall0_Arguments_0 is MethodCallExpression methodCall&&Enumerableメソッドで結果にSetを要求するか(methodCall)) {
-                //            TypeDefinition=typeof(Sets.HashSet<>);
-                //        } else {
-                //            TypeDefinition=typeof(Enumerables.List<>);
-                //        }
-                //        Type=TypeDefinition.MakeGenericType(Type.GetGenericArguments());
-                //    }
-                //}
-                //var parameter = Expression.Parameter(Type,name);
-                //var (作業,作業_Type, 作業Assign)=((ParameterExpression Parameter,Type Parameter_Type,BinaryExpression Assign))(
-                //    Parameter:parameter,
-                //    Type,
-                //    Expression.Assign(
-                //        parameter,
-                //        Expression.New(
-                //            Type.GetConstructor(Type.EmptyTypes)!
-                //        )
-                //    )
-                //);
-                
-                
-                
-                
-                
-                
-                
-                
                 var (Parameter,IsAdded, Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
                 ListParameter.Add(Parameter);
                 ListExpression.Add(Assign);
@@ -1254,10 +1212,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 );
             }
         }
-        return Expression.Block(
-            ListParameter,
-            ListExpression
-        );
+        return Expression.Block(ListParameter,ListExpression);
     }
     private Expression Geomean(MethodCallExpression MethodCall0){
         var MethodCall0_Arguments = MethodCall0.Arguments;
@@ -1477,7 +1432,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                             )
                         );
                     } else {
-                        //Setメソッドで結果が重複除去されていない。重複除去すべき。
+                        //MethodCall0_Arguments_0が重複除去されていない。重複除去すべき。
                         var (Parameter,IsAdded, Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,false);
                         ListParameter.Add(Parameter);
                         ListExpression.Add(Assign);
