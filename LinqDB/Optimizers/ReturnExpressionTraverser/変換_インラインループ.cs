@@ -291,7 +291,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         )
     );
     [SuppressMessage("ReSharper","TailRecursiveCall")]
-    protected bool 重複除去されているか(Expression Expression)=>Expression is MethodCallExpression MethodCall&&this.重複除去されているか(MethodCall);
+    protected bool 重複除去されているか(Expression Expression)=>Expression is MethodCallExpression MethodCall?this.重複除去されているか(MethodCall):true;
     protected bool 重複除去されているか(MethodCallExpression MethodCall) {
         var GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
         if(Reflection.ExtensionSet.GroupBy_keySelector==GenericMethodDefinition)

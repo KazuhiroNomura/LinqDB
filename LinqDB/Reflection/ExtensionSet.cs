@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using LinqDB.Sets;
 
 using Extension = LinqDB.Sets.ExtensionSet;
@@ -153,6 +154,9 @@ public static class ExtensionSet {
     public static readonly MethodInfo VarpDouble_selector = M(() => _Int32.Varp(p => 0d));
     public static readonly MethodInfo Inline1 = M(() => Extension.Inline(() => 0));
     public static readonly MethodInfo Inline2 = M(() => new object().Inline(p => 0));
-    public static readonly MethodInfo ToLookup = M(() => _Int32.ToLookup(p => p));
+    public static readonly MethodInfo ToLookup_keySelector = M(() => _Int32.ToLookup(p => p));
+    public static readonly MethodInfo ToLookup_keySelector_comparer = M(() => _Int32.ToLookup(p => p,EqualityComparer<int>.Default));
+    public static readonly MethodInfo ToLookup_keySelector_elementSelector = M(() => _Int32.ToLookup(p => p,p=>p));
+    public static readonly MethodInfo ToLookup_keySelector_elementSelector_comparer = M(() => _Int32.ToLookup(p => p,p=>p,EqualityComparer<int>.Default));
     //public static readonly MethodInfo Update = M(() => _Int32.Update(p => true,p => 0));
 }

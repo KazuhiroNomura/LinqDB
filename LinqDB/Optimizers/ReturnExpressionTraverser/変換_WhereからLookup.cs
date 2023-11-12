@@ -124,9 +124,9 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                         }
                         Expression LookupExpression(Expression プローブ,Expression ビルド) {
                             var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
-                                ? ExtensionSet.ToLookup
+                                ? ExtensionSet.ToLookup_keySelector
                                 : ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()
-                                    ? ExtensionEnumerable.ToLookup
+                                    ? ExtensionEnumerable.ToLookup_keySelector
                                     : ExtensionEnumerable.ToLookup_index;
                             var 作業配列=this.作業配列;
                             var Instance = Expression.Call(

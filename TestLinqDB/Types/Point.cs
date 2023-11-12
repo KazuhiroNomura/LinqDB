@@ -63,4 +63,30 @@ internal partial class Single{
     public Single(int X){
         this.X=X;
     }
+    public static bool operator==(Single? left,Single? right){
+        return Equals(left,right);
+    }
+    public static bool operator!=(Single? left,Single? right){
+        return!Equals(left,right);
+    }
+}
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+internal partial struct  ValueSingle{
+    [MessagePack.IgnoreMember]
+    private int x;
+    //public int X;
+    public int X{
+        get=>this.x;
+        set=>this.x=value;
+    }
+    //[MessagePack.SerializationConstructor]
+    public ValueSingle(int X){
+        this.X=X;
+    }
+    public override bool Equals(object? obj){
+        return obj is ValueSingle other && this.x==other.x;
+    }
+    public override int GetHashCode(){
+        return this.x;
+    }
 }

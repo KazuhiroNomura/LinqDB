@@ -1,11 +1,10 @@
-﻿using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Reflection;
-
+﻿
 using LinqDB.Helpers;
+using LinqDB.Optimizers;
 using LinqDB.Sets;
-
+using Types;
 using Xunit;
+using Single=Types.Single;
 //using System.Reflection;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
@@ -173,21 +172,40 @@ public class 変換_インラインループ独立:共通{
     [Fact]public void ToLookup(){
         var e=new int[]{1,2,3,4,5,6,7};
         var s=e.ToSet();
+        //if(Reflection.ExtensionEnumerable.ToLookup_keySelector_comparer==GenericMethodDefinition||Reflection.ExtensionSet.ToLookup_keySelector_comparer==GenericMethodDefinition) {
+        this.Expression実行AssertEqual(() => s.ToLookup(p => p/2,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => e.ToLookup(p => p/2,EqualityComparer<int>.Default));
+        //} else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition) {
+        this.Expression実行AssertEqual(() => s.ToLookup(p => p/2,q => q+1,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => e.ToLookup(p => p/2,q => q+1,EqualityComparer<int>.Default));
+        //} else{
+        this.Expression実行AssertEqual(() => s.ToLookup(p => p/2));
+        this.Expression実行AssertEqual(() => e.ToLookup(p => p/2));
+        //}
+        //if(comparer is null)New=Expression.New(Dictionary_Type);
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2));
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2,q=>q+1));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2,q=>q+1));
+        //else New=Expression.New(
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2,q=>q+1,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2,q=>q+1,EqualityComparer<int>.Default));
         //var Expression1ループ = this.ループ展開(
         //    argument => {
-        //        if(argument.NodeType==ExpressionType.Parameter) {
-        //        } else {
+        //        if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||Reflection.ExtensionSet.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||
+        //           Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2,q=>q+1));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2,q=>q+1));
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2,q=>q+1,EqualityComparer<int>.Default));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2,q=>q+1,EqualityComparer<int>.Default));
+        //        }else{
+        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2));
+        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2));
         //        }
         //    }
         //);
-        //if(MethodCall0_Arguments.Count==3) {
-        //} else {
-        //    New=Expression.New(Dictionary_Type);
-        //}
-        //ExtensionEnumerable.ToLookup(e,p=>p/2);
-        //e.ToLookup(p=>p/2);
-        this.Expression実行AssertEqual(() => e.ToLookup(p=>p/2));
-        this.Expression実行AssertEqual(() => s.ToLookup(p=>p/2));
     }
     [Fact]public void Count(){
         var e=new int[]{1,2,3,4,5,6,7};
@@ -197,7 +215,7 @@ public class 変換_インラインループ独立:共通{
         //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
         this.Expression実行AssertEqual(() => s0.Intersect(s1).Count());
         //    } else{
-        this.Expression実行AssertEqual(() => e.Select(p=>p+1).Count());
+        this.Expression実行AssertEqual(() => s0.Select(p=>p+1).Count());
         //    }
         //}
         this.Expression実行AssertEqual(() => e.ToSet().Count());
@@ -238,10 +256,10 @@ public class 変換_インラインループ独立:共通{
         var n0=new Set<double?>{1,2,3};
         var n1 = n0;
         //if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
-        //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        this.Expression実行AssertEqual(() => s0.GroupBy(p => p).Geomean(p => p.Key));
+        ////    if(this.重複除去されているか(MethodCall0_Arguments_0)){
+        //this.Expression実行AssertEqual(() => s0.GroupBy(p => p).Geomean(p => p.Key));
         //    } else{
-        this.Expression実行AssertEqual(() => s0.Geomean(p => p));
+        this.Expression実行AssertEqual(() => s0.Select(p=>p+1).Geomean(p => p));
         //    }
         //} else {
         //    if(MethodCall0_Arguments_0.NodeType==ExpressionType.Parameter) {
@@ -270,13 +288,6 @@ public class 変換_インラインループ独立:共通{
         this.Expression実行AssertEqual(() => double0.Max());
         this.Expression実行AssertEqual(() => double0.Min());
         //}
-        //if(Compare_Defaultを使うべきか(NodeType,ElementType)) {
-        this.Expression実行AssertEqual(() => decimal0.Max());
-        this.Expression実行AssertEqual(() => decimal0.Min());
-        //} else {
-        this.Expression実行AssertEqual(() => double0.Max());
-        this.Expression実行AssertEqual(() => double0.Min());
-        //}
         //ListExpression.Add(
         //    this.ループ展開(
         //        MethodCall0_Arguments[0],
@@ -296,33 +307,92 @@ public class 変換_インラインループ独立:共通{
         this.Expression実行AssertEqual(() => NullableDouble.Min());
         //            } else {
         //            }
-        //            if(Parameter_Comparer_Default is not null) {
-        //            } else {
-        //            }
         //        }
         //    )
         //);
-        //if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
-        //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        this.Expression実行AssertEqual(() => double0.GroupBy(p => p).Geomean(p => p.Key));
-        //    } else{
-        this.Expression実行AssertEqual(() => double0.Geomean(p => p));
-        //    }
+    }
+    [Fact]public void Stdev(){
+        var double0=new Set<double>{1,2,3};
+        //if(MethodCall0_Arguments.Count==1) {
+        this.Expression実行AssertEqual(()=>double0.Stdev());
         //} else {
-        //    if(MethodCall0_Arguments_0.NodeType==ExpressionType.Parameter) {
-        this.Expression実行AssertEqual(() => NullableDouble.Let(n => n.Geomean(p => p)));
-        //    } else {
-        //        if(MethodCall is not null) {
-        //            if(this.重複除去されているか(MethodCall)) {
-        //this.Expression実行AssertEqual(() => n0.GroupBy(p => p).Geomean(p => p.Key));
+        this.Expression実行AssertEqual(()=>double0.Stdev(p=>p+1));
+        //}
+    }
+    [Fact]public void VarVarp(){
+        var decimal0=new Set<decimal>{1,2,3};
+        var double0=new Set<double>{1,2,3};
+        this.Expression実行AssertEqual(()=>decimal0.Var(p=>p));
+        this.Expression実行AssertEqual(()=>double0.Var(p=>p));
+        this.Expression実行AssertEqual(()=>decimal0.Varp(p=>p));
+        this.Expression実行AssertEqual(()=>double0.Varp(p=>p));
+    }
+    [Fact]public void SequenceEqual(){
+        var double0=new Set<double>{1,2,3};
+        var double1=new Set<double>{1,2,3};
+        this.Expression実行AssertEqual(()=>double0.SequenceEqual(double1));
+    }
+    private struct StructSingle{
+        public readonly int a;
+        public StructSingle(int a)=>this.a=a;
+    }
+    [Fact]public void Single(){
+        var ints=new Set<int>{1};
+        var singles=new Set<ValueSingle>{new(1)};
+        var strings=new Set<string>{"1"};
+        //var Expressions1 = this.ループ展開(
+        //    argument => {
+        //        if(!this.重複除去されているか(MethodCall0_Arguments_0)) {
+        //            if(IEquatableType.IsAssignableFrom(Item_Type)) {
+        this.Expression実行AssertEqual(() => strings.Select(p => p+1).Single());
         //            } else {
-        this.Expression実行AssertEqual(() => NullableDouble.Select(p=>p+1).Geomean(p => p));
+        //                if(Item_Type.IsValueType) {
+        //                    if(Item_Type.IsNullable()&&!argument.Type.IsNullable())
+        this.Expression実行AssertEqual(() => singles.Select(p => (ValueSingle?)new ValueSingle(p.X+1)).Single());
+        this.Expression実行AssertEqual(() => singles.Select(p => new ValueSingle(p.X+1)).Single());
+        //                }
+        this.Expression実行AssertEqual(() => ints.Select(p => new { p = p+1 }).Single());
         //            }
-        //        } else {
-        this.Expression実行AssertEqual(() => NullableDouble.Geomean(p => p));
         //        }
         //    }
+        //);
+        //var 要素なしifTrue = nameof(ExtensionSet.SingleOrDefault)==Name
+        //    ?MethodCall0_Arguments.Count==1
+        //        ?Expression.Default(ElementType)
+        this.Expression実行AssertEqual(()=>ints.SingleOrDefault());
+        //        :this.Traverse(MethodCall0_Arguments[1])
+        this.Expression実行AssertEqual(()=>ints.SingleOrDefault(3));
+        //    :Expression.Throw(
+        //        New_ZeroTupleException,
+        //        ElementType
+        //    );
+        this.Expression実行AssertEqual(()=>ints.Single(p=>p==1));
+    }
+    [Fact]public void Sum(){
+        var ints=new Set<int>{1};
+        var n=new Set<int?>{1,2};
+        //if(Nullableか){
+        //    if(MethodCall0_Arguments.Count==1) {
+        this.Expression実行AssertEqual(() => n.Sum());
+        //    } else {
+        this.Expression実行AssertEqual(() => n.Sum(p=>p));
+        //    }
+        //} else {
+        //    if(MethodCall0_Arguments.Count==1) {
+        //        if(this.重複除去されているか(MethodCall0_Arguments_0)){
+        this.Expression実行AssertEqual(() => ints.Sum());
+        //        } else {
+        this.Expression実行AssertEqual(() => ints.Select(p=>p+1).Sum());
+        //        }
+        //    } else {
+        this.Expression実行AssertEqual(() => ints.Sum(p=>p));
+        //    }
         //}
+    }
+    [Fact]
+    public void ToArray(){
+        var ints=new Set<int>{1};
+        this.Expression実行AssertEqual(() => ints.ToArray());
     }
     [Fact]public void Call() {
         var s = new int[]{1,2,3,4,5,6,7};
@@ -351,84 +421,19 @@ public class 変換_インラインループ独立:共通{
         //        case nameof(ExtensionSet.Geomean): 
         this.Geomean();
         //        case nameof(Enumerable.Max)or nameof(Enumerable.Min): {
-        //            var NodeType = nameof(ExtensionSet.Max)==Name
-        //                ? ExpressionType.LessThan
-        //                : ExpressionType.GreaterThan;
-        //            if(MethodCall0_Type.IsNullable()) {
-        //            } else {
-        //            }
-        //            if(Compare_Defaultを使うべきか(NodeType,ElementType)) {
-        //            } else {
-        //            }
-        //            ListExpression.Add(
-        //                this.ループ展開(
-        //                    argument => {
-        //                        var Element = MethodCall0_Arguments.Count==1
-        //                            ? argument
-        //                            : this.LambdaExpressionを展開1(
-        //                                this.Traverse(MethodCall0_Arguments[1]),
-        //                                argument
-        //                            );
-        //                        if(GetValueOrDefault is not null) {
-        //                            if(Element.NodeType!=ExpressionType.Parameter) {
-        //                            } else {
-        //                            }
-        //                        } else {
-        //                        }
-        //                        if(Parameter_Comparer_Default is not null) {
-        //                        } else {
-        //                        }
-        //                    }
-        //                )
-        //            );
-        //        }
+        this.MaxMin();
         //        case nameof(ExtensionSet.Stdev): {
-        //            if(MethodCall0_Arguments.Count==1) {
-        //            } else {
-        //            }
-        //        }
+        this.Stdev();
         //        case nameof(ExtensionSet.Var)or nameof(ExtensionSet.Varp): {
-        //        }
+        this.VarVarp();
         //        case nameof(Enumerable.SequenceEqual): {
-        //        }
+        this.SequenceEqual();
         //        case nameof(Enumerable.Single)or nameof(Enumerable.SingleOrDefault): {
-        //            var Expressions1 = this.ループ展開(
-        //                argument => {
-        //                    if(!this.重複除去されているか(MethodCall0_Arguments_0)) {
-        //                        if(IEquatableType.IsAssignableFrom(Item_Type)) {
-        //                        } else {
-        //                        }
-        //                    }
-        //                }
-        //            );
-        //            //Expression 要素なしifTrue;
-        //            var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
-        //                ?MethodCall0_Arguments.Count==1
-        //                    ?Expression.Default(ElementType)
-        //                    :this.Traverse(MethodCall0_Arguments[1])
-        //                :Expression.Throw(
-        //                    New_ZeroTupleException,
-        //                    ElementType
-        //                );
-        //        }
+        this.Single();
         //        case nameof(Enumerable.Sum): {
-        //            if(Nullableか) {
-        //                if(MethodCall0_Arguments.Count==1) {
-        //                } else {
-        //                }
-        //            } else {
-        //                if(MethodCall0_Arguments.Count==1) {
-        //                    if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        //                    } else{
-        //                    }
-        //                } else {
-        //                }
-        //            }
-        //        }
-        //        case nameof(Enumerable.ToArray): {
+        this.Sum();
         //            if(Method.DeclaringType!=typeof(Enumerable)) {
-        //            }
-        //        }
+        this.ToArray();
         //    }
         //    Debug.Assert(MethodCall0.Type!=typeof(void));
         //    {

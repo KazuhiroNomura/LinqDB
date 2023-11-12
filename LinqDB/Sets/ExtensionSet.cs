@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using LinqDB.Sets.Exceptions;
 using static LinqDB.Helpers.CommonLibrary;
+using System.Collections.Generic;
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable RedundantAssignment
 // ReSharper disable HeuristicUnreachableCode
@@ -486,13 +487,20 @@ public static class ExtensionSet{
     /// <typeparam name="TKey">キー型</typeparam>
     /// <returns></returns>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Global
-    public static ILookup<TKey, TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
-    //public static SetGroupingSet<TKey,TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector) {
-        //var r = new LookupSet<TSource,TKey>();
-        //foreach(var a in source)r.AddKeyValue(keySelector(a),a);
-        //return r;
-        var r = new SetGroupingSet<TKey,TSource>();
+    public static ILookup<TKey, TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector)=>
+        ToLookup(source,keySelector,Generic.EqualityComparer<TKey>.Default);
+    public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer){
+        var r = new SetGroupingSet<TKey,TSource>(comparer);
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
+        return r;
+    }
+
+    public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) =>
+        ToLookup(source, keySelector, elementSelector, Generic.EqualityComparer<TKey>.Default);
+
+    public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer){
+        var r = new SetGroupingSet<TKey,TElement>(comparer);
+        foreach(var a in source)r.AddKeyValue(keySelector(a),elementSelector(a));
         return r;
     }
     /// <summary>

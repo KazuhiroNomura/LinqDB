@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using LinqDB.Optimizers.Comparison;
 using Generic = System.Collections.Generic;
 using LinqDB.Optimizers.VoidExpressionTraverser;
+using System.Collections;
 
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
@@ -853,60 +854,61 @@ internal class 変換_インラインループ独立:変換_インラインル�
     }
     private Expression ToLookup(MethodCallExpression MethodCall0){
         var MethodCall0_Arguments = MethodCall0.Arguments;
-        var 変数名 = $"{MethodCall0.Method.Name}ﾟ{this.番号++}ﾟ";
-        var Dictionary_Type=typeof(ExtensionSet)==MethodCall0.Method.DeclaringType?typeof(SetGroupingSet<,>):typeof(SetGroupingList<,>);
+        var Method=MethodCall0.Method;
+        var 変数名 = $"{Method.Name}ﾟ{this.番号++}ﾟ";
+        var GenericMethodDefinition=Method.GetGenericMethodDefinition();
+        var Dictionary_Type=typeof(ExtensionSet)==Method.DeclaringType?typeof(SetGroupingSet<,>):typeof(SetGroupingList<,>);
         Dictionary_Type=Dictionary_Type.MakeGenericType(MethodCall0.Type.GetGenericArguments());
+        Expression? comparer;
+        if(Reflection.ExtensionSet.ToLookup_keySelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_comparer==GenericMethodDefinition) {
+            comparer=this.Traverse(MethodCall0_Arguments[2]);
+        } else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition) {
+            comparer=this.Traverse(MethodCall0_Arguments[3]);
+        } else{
+            comparer=null;
+        }
+        var 作業配列 = this.作業配列;
+        NewExpression New;
+        if(comparer is null)New=Expression.New(Dictionary_Type);
+        else New=Expression.New(
+            作業配列.GetConstructor(Dictionary_Type,comparer.Type),
+            comparer
+        );
         var Dictionary = Expression.Parameter(Dictionary_Type,変数名);
         var Expression1ループ = this.ループ展開(
             MethodCall0_Arguments[0],
             argument => {
-                if(argument.NodeType==ExpressionType.Parameter) {
-                    return Expression.Call(
-                        Dictionary,
-                        Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                        this.LambdaExpressionを展開1(
-                            this.Traverse(MethodCall0_Arguments[1]),//keySelector
-                            argument
-                        ),
-                        argument
-                    );
-                } else {
-                    var p = Expression.Parameter(
-                        argument.Type,
-                        $"{変数名}argument"
-                    );
-                    var Expressions_1=Expression.Call(
-                        Dictionary,
-                        Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                        this.LambdaExpressionを展開1(
-                            this.Traverse(MethodCall0_Arguments[1]),//keySelector
-                            p
-                        ),
+                var keySelector=this.Traverse(MethodCall0_Arguments[1]);
+                //if(argument.NodeType==ExpressionType.Parameter)return 共通(argument);
+                var p = Expression.Parameter(argument.Type,$"{変数名}argument");
+                var 作業配列1 = this.作業配列;
+                Expression elementSelector;
+                if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||
+                   Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+                    elementSelector=this.LambdaExpressionを展開1(
+                        this.Traverse(MethodCall0_Arguments[2]),
                         p
                     );
-                    var 作業配列1 = this.作業配列;
-                    return Expression.Block(
-                        作業配列1.Parameters設定(p),
-                        作業配列1.Expressions設定(
-                            Expression.Assign(p,argument),
-                            Expressions_1
-                        )
-                    );
+                }else{
+                    elementSelector=p;
                 }
+                return Expression.Block(
+                    作業配列1.Parameters設定(p),
+                    作業配列1.Expressions設定(
+                        Expression.Assign(p,argument),
+                        Expression.Call(
+                            Dictionary,
+                            Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
+                            this.LambdaExpressionを展開1(
+                                keySelector,
+                                p
+                            ),
+                            elementSelector
+                        )
+                    )
+                );
             }
         );
-        var 作業配列 = this.作業配列;
-        NewExpression New;
-        if(MethodCall0_Arguments.Count==3) {
-            var MethodCall0_Arguments_2 = MethodCall0_Arguments[2];
-            var Constructor = 作業配列.GetConstructor(Dictionary_Type,MethodCall0_Arguments_2.Type);
-            New=Expression.New(
-                Constructor,
-                this.Traverse(MethodCall0_Arguments_2)
-            );
-        } else {
-            New=Expression.New(Dictionary_Type);
-        }
         return Expression.Block(
             作業配列.Parameters設定(Dictionary),
             作業配列.Expressions設定(
@@ -1615,7 +1617,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                             argument
                         );
                     Debug.Assert(MethodCall0_Type==Element.Type);
-                    Expression Left;
                     Expression Right;
                     if(GetValueOrDefault is not null) {
                         Debug.Assert(Element.NodeType!=ExpressionType.Parameter);
@@ -1670,7 +1671,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     //} else {
                     //    Left=Parameter_MaxMinValue;
                     //}
-                    Left=Parameter_MaxMinValue;
+                    var Left=Parameter_MaxMinValue;
                     ListExpression0.Add(
                         Expression.IfThenElse(
                             要素あり,
@@ -1705,12 +1706,749 @@ internal class 変換_インラインループ独立:変換_インラインル�
             ListExpression
         );
     }
-    //private Expression Stdev(MethodCallExpression MethodCall0){
-    //}
-    //private Expression Var(MethodCallExpression MethodCall0){
-    //}
-    //private Expression SequenceEqual(MethodCallExpression MethodCall0){
-    //}
+    private Expression Stdev(MethodCallExpression MethodCall0){
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        var Method=MethodCall0.Method;
+        var GenericMethodDefinition = GetGenericMethodDefinition(Method);
+        var 変数名 = $"{Method.Name}ﾟ{this.番号++}ﾟ";
+        var ListParameter = new List<ParameterExpression>();
+        var ListExpression = new List<Expression>();
+        var Stdev_Int64Count = Expression.Parameter(
+            typeof(long),
+            $"{変数名}Int64Count"
+        );
+        ListParameter.Add(Stdev_Int64Count);
+        var DoubleCount = Expression.Parameter(
+            typeof(double),
+            $"{変数名}DoubleCount"
+        );
+        ListParameter.Add(DoubleCount);
+        var DoubleSum = Expression.Parameter(
+            typeof(double),
+            $"{変数名}DoubleSum"
+        );
+        ListParameter.Add(DoubleSum);
+        var Average = Expression.Parameter(
+            typeof(double),
+            $"{変数名}Average"
+        );
+        ListParameter.Add(Average);
+        var Subtract = Expression.Parameter(
+            typeof(double),
+            $"{変数名}Subtract"
+        );
+        ListParameter.Add(Subtract);
+        var DoubleSumを初期化 = Expression.Assign(
+            DoubleSum,
+            Constant_0D
+        );
+        ListExpression.Add(DoubleSumを初期化);
+        var FILO_Enumerator_Type = this.作業配列.MakeGenericType(typeof(ImmutableSet<>.FILO),typeof(double));
+        var FILO_Enumerator = Expression.Parameter(
+            FILO_Enumerator_Type,
+            $"{変数名}FILO_Enumerator"
+        );
+        ListParameter.Add(FILO_Enumerator);
+        ListExpression.Add(
+            Call(
+                FILO_Enumerator,
+                nameof(ImmutableSet<int>.FILO.Constructor)
+            )
+        );
+        if(MethodCall0_Arguments.Count==1) {
+            Debug.Assert(Reflection.ExtensionSet.StdevDouble==GenericMethodDefinition);
+            ListExpression.Add(
+                this.ループ展開(
+                    MethodCall0_Arguments[0],
+                    argument => Expression.Block(
+                        Expression.Call(
+                            FILO_Enumerator,
+                            FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add)),
+                            argument
+                        ),
+                        AddAssign(
+                            DoubleSum,
+                            argument
+                        )
+                    )
+                )
+            );
+        } else {
+            Debug.Assert(Reflection.ExtensionSet.StdevDouble_selector==GenericMethodDefinition);
+            var 値 = Expression.Parameter(typeof(double),$"{変数名}値");
+            ListParameter.Add(値);
+            ListExpression.Add(
+                this.ループ展開(
+                    MethodCall0_Arguments[0],
+                    argument => Expression.Block(
+                        Expression.Assign(
+                            値,
+                            this.LambdaExpressionを展開1(
+                                this.Traverse(MethodCall0_Arguments[1]),
+                                argument
+                            )
+                        ),
+                        Expression.Call(
+                            FILO_Enumerator,
+                            FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add))!,
+                            値
+                        ),
+                        AddAssign(DoubleSum,値)
+                    )
+                )
+            );
+        }
+        ListExpression.Add(
+            Expression.Assign(
+                Stdev_Int64Count,
+                Field(
+                    FILO_Enumerator,
+                    nameof(ImmutableSet<int>.FILO.Count)
+                )
+            )
+        );
+        ListExpression.Add(
+            Expression.IfThenElse(
+                Expression.Equal(
+                    Stdev_Int64Count,
+                    Constant_0L
+                ),
+                Throw_ZeroTuple_Stdev,
+                Default_void
+            )
+        );
+        ListExpression.Add(
+            Expression.Assign(
+                DoubleCount,
+                Expression.Convert(
+                    Stdev_Int64Count,
+                    typeof(double)
+                )
+            )
+        );
+        ListExpression.Add(
+            Expression.Assign(
+                Average,
+                Expression.Divide(DoubleSum,DoubleCount)
+            )
+        );
+        ListExpression.Add(DoubleSumを初期化);
+        var Loop終了 = Expression.Label($"{変数名}Loop終了");
+        ListExpression.Add(
+            Expression.Loop(
+                Expression.IfThenElse(
+                    Call(
+                        FILO_Enumerator,
+                        nameof(System.Collections.IEnumerator.MoveNext)
+                    ),
+                    Expression.Block(
+                        Expression.Assign(
+                            Subtract,
+                            Expression.Subtract(
+                                Expression.Property(
+                                    FILO_Enumerator,
+                                    nameof(System.Collections.IEnumerator.Current)
+                                ),
+                                Average
+                            )
+                        ),
+                        AddAssign(
+                            DoubleSum,
+                            Expression.Multiply(Subtract,Subtract)
+                        )
+                    ),
+                    Expression.Break(Loop終了)
+                ),
+                Loop終了
+            )
+        );
+        ListExpression.Add(
+            Expression.Call(
+                Math.Sqrt,
+                Expression.Divide(
+                    DoubleSum,
+                    Expression.Decrement(DoubleCount)
+                )
+            )
+        );
+        return Expression.Block(
+            ListParameter,
+            ListExpression
+        );
+    }
+    private Expression VarVarp(MethodCallExpression MethodCall0){
+        var Method=MethodCall0.Method;
+        var Name=Method.Name;
+        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        //var GenericMethodDefinition = GetGenericMethodDefinition(Method);
+        var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
+        var ReturnType = MethodCall0.Type;
+        var Int64Count = Expression.Parameter(
+            typeof(long),
+            $"{変数名}Int64Count"
+        );
+        var 作業配列=this.作業配列;
+        var FILO_Enumerator_Type = 作業配列.MakeGenericType(typeof(ImmutableSet<>.FILO),ReturnType);
+        var FILO_Enumerator = Expression.Parameter(
+            FILO_Enumerator_Type,
+            $"{変数名}FILO_Enumerator"
+        );
+        var TCount = Expression.Parameter(
+            ReturnType,
+            $"{変数名}TCount"
+        );
+        var Sum = Expression.Parameter(
+            ReturnType,
+            $"{変数名}Sum"
+        );
+        var selector値 = Expression.Parameter(
+            ReturnType,
+            $"{変数名}selector値"
+        );
+        var Expressionループ = this.ループ展開(
+            MethodCall0_Arguments[0],
+            argument => Expression.Block(
+                Expression.Assign(
+                    selector値,
+                    this.LambdaExpressionを展開1(
+                        MethodCall1_Arguments_1,
+                        argument
+                    )
+                ),
+                Expression.Call(
+                    FILO_Enumerator,
+                    FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add)),
+                    selector値
+                ),
+                AddAssign(
+                    Sum,
+                    selector値
+                )
+            )
+        );
+        var Subtract = Expression.Parameter(
+            ReturnType,
+            $"{変数名}Subtract"
+        );
+        var Average = Expression.Parameter(
+            ReturnType,
+            $"{変数名}Average"
+        );
+        var Loop終了 = Expression.Label($"{変数名}Loop終了");
+        var ExpressionSumを初期化 = Expression.Assign(
+            Sum,
+            Expression.Default(ReturnType)
+        );
+        var (Throw_ZeroTuple, 割る数)=nameof(ExtensionSet.Varp)==Name
+            ? (Throw_ZeroTuple_Varp, (Expression)TCount)
+            : (Throw_ZeroTuple_Var, Expression.Decrement(TCount));
+        return Expression.Block(
+            作業配列.Parameters設定(
+                Int64Count,
+                FILO_Enumerator,
+                Sum,
+                selector値,
+                TCount,
+                Average,
+                Subtract
+            ),
+            作業配列.Expressions設定(
+                Call(
+                    FILO_Enumerator,
+                    nameof(ImmutableSet<int>.FILO.Constructor)
+                ),
+                ExpressionSumを初期化,
+                Expressionループ,
+                Expression.Assign(
+                    Int64Count,
+                    Field(
+                        FILO_Enumerator,
+                        nameof(ImmutableSet<int>.FILO.Count)
+                    )
+                ),
+                Expression.IfThenElse(
+                    Expression.Equal(
+                        Int64Count,
+                        Constant_0L
+                    ),
+                    Throw_ZeroTuple,
+                    Default_void
+                ),
+                Expression.Assign(
+                    TCount,
+                    Expression.Convert(
+                        Int64Count,
+                        ReturnType
+                    )
+                ),
+                Expression.Assign(
+                    Average,
+                    Expression.Divide(
+                        Sum,
+                        TCount
+                    )
+                ),
+                ExpressionSumを初期化,
+                Expression.Loop(
+                    Expression.IfThenElse(
+                        Call(
+                            FILO_Enumerator,
+                            nameof(System.Collections.IEnumerator.MoveNext)
+                        ),
+                        Expression.Block(
+                            Expression.Assign(
+                                Subtract,
+                                Expression.Subtract(
+                                    Expression.Property(
+                                        FILO_Enumerator,
+                                        nameof(System.Collections.IEnumerator.Current)
+                                    ),
+                                    Average
+                                )
+                            ),
+                            AddAssign(
+                                Sum,
+                                Expression.Multiply(
+                                    Subtract,
+                                    Subtract
+                                )
+                            )
+                        ),
+                        Expression.Break(Loop終了)
+                    ),
+                    Loop終了
+                ),
+                Expression.Divide(
+                    Sum,
+                    割る数
+                )
+            )
+        );
+    }
+    private Expression SequenceEqual(MethodCallExpression MethodCall0){
+        var Method=MethodCall0.Method;
+        var Name=Method.Name;
+        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        //var GenericMethodDefinition = GetGenericMethodDefinition(Method);
+        var first = MethodCall0_Arguments[0];
+        var T = IEnumerable1のT(first.Type);
+        var 作業配列=this.作業配列;
+        var FIFO_Enumerator_Type = 作業配列.MakeGenericType(
+            typeof(ImmutableSet<>.FIFO),
+            T
+        );
+        var Constructor=FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.Constructor),Instance_NonPublic_Public);
+        Debug.Assert(Constructor is not null);
+        var Add=FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.Add));
+        Debug.Assert(Add is not null);
+        var FIFO_Enumerator1 = Expression.Parameter(
+            FIFO_Enumerator_Type,
+            $"{変数名}first"
+        );
+        var FIFO_Enumerator2 = Expression.Parameter(
+            FIFO_Enumerator_Type,
+            $"{変数名}second"
+        );
+        var Expression2=this.ループ展開(
+            first,
+            argument => Expression.Call(
+                FIFO_Enumerator1,
+                Add,
+                argument
+            )
+        );
+        var Expression3 = this.ループ展開(
+            MethodCall0_Arguments[1],
+            argument => Expression.Call(
+                FIFO_Enumerator2,
+                Add,
+                argument
+            )
+        );
+        return Expression.Block(
+            作業配列.Parameters設定(
+                FIFO_Enumerator1,
+                FIFO_Enumerator2
+            ),
+            作業配列.Expressions設定(
+                Expression.Call(
+                    FIFO_Enumerator1,
+                    Constructor
+                ),
+                Expression.Call(
+                    FIFO_Enumerator2,
+                    Constructor
+                ),
+                Expression2,
+                Expression3,
+                Expression.Call(
+                    FIFO_Enumerator1,
+                    FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.SequenceEqual))!,
+                    FIFO_Enumerator2
+                )
+            )
+        );
+    }
+    private Expression Single(MethodCallExpression MethodCall0){
+        var Method=MethodCall0.Method;
+        var Name=Method.Name;
+        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        var MethodCall0_Method = MethodCall0.Method;
+        var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
+        var ElementType = MethodCall0_Method.ReturnType;
+        var Item0 = Expression.Parameter(ElementType,$"{変数名}Item0");
+        var Item1 = Expression.Parameter(ElementType,$"{変数名}Item1");
+        var 要素なし = Expression.Parameter(typeof(bool),$"{変数名}要素なし");
+        var Expressions0 = Expression.Assign(要素なし,Constant_true);
+        var Expressions1 = this.ループ展開(
+            MethodCall0_Arguments_0,
+            argument => {
+                var 作業配列0=this.作業配列;
+                Expression 要素があった時のExpression = Expression.Throw(
+                    Expression.New(
+                        InvalidOperationException_ctor,
+                        作業配列0.Expressions設定(
+                            Expression.Constant($"{MethodCall0_Method}:{CommonLibrary.シーケンスに複数の要素が含まれています_MoreThanOneElement}")
+                        )
+                    )
+                );
+                //var argument0 = argument;
+                if(!this.重複除去されているか(MethodCall0_Arguments_0)) {
+                    MethodCallExpression EqualExpression;
+                    var IEquatableType = 作業配列0.MakeGenericType(typeof(IEquatable<>),ElementType);
+                    if(IEquatableType.IsAssignableFrom(ElementType)) {
+                        var InterfaceMap = ElementType.GetInterfaceMap(IEquatableType);
+                        Debug.Assert(InterfaceMap.InterfaceMethods[0]==IEquatableType.GetMethod(nameof(IEquatable<int>.Equals)));
+                        EqualExpression=Expression.Call(
+                            Item0,
+                            InterfaceMap.TargetMethods[0],
+                            作業配列0.Expressions設定(Item1)
+                        );
+                    } else {
+                        Expression argument1 = Item1;
+                        if(ElementType.IsValueType) {
+                            //if(/*nameof(ExtendSet.SingleOrNull)==Name&&*/Item_Type.IsNullable()&&!argument.Type.IsNullable()) {
+                            if(ElementType.IsNullable())
+                                argument=Expression.Convert(argument,ElementType);
+                            argument1=Expression.Convert(argument1,typeof(object));
+                        }
+                        EqualExpression=Expression.Call(
+                            Item0,
+                            Reflection.Object.Equals_,
+                            作業配列0.Expressions設定(argument1)
+                        );
+                    }
+                    要素があった時のExpression=Expression.IfThenElse(
+                        EqualExpression,
+                        Default_void,
+                        要素があった時のExpression
+                    );
+                }
+                return Expression.IfThenElse(
+                    要素なし,
+                    Expression.Block(
+                        typeof(void),
+                        作業配列0.Expressions設定(
+                            Expression.Assign(Item1,argument),
+                            Expression.Assign(要素なし,Constant_false),
+                            Expression.Assign(Item0,Item1)
+                        )
+                    ),
+                    要素があった時のExpression
+                );
+            }
+        );
+        //Expression 要素なしifTrue;
+        var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
+            ?MethodCall0_Arguments.Count==1
+                ?Expression.Default(ElementType)
+                :this.Traverse(MethodCall0_Arguments[1])
+            :Expression.Throw(
+                New_ZeroTupleException,
+                ElementType
+            );
+        var 作業配列=this.作業配列;
+        return Expression.Block(
+            作業配列.Parameters設定(要素なし,Item0,Item1),
+            作業配列.Expressions設定(
+                Expressions0,
+                Expressions1,
+                Expression.Condition(
+                    要素なし,
+                    要素なしifTrue,
+                    Item0
+                )
+            )
+        );
+    }
+    private Expression Sum(MethodCallExpression MethodCall0){
+        var Method=MethodCall0.Method;
+        var Name=Method.Name;
+        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+        var GenericMethodDefinition=GetGenericMethodDefinition(Method);
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        var ListParameter = new List<ParameterExpression>();
+        var ListExpression = new List<Expression>();
+        var MethodCall0_Type = MethodCall0.Type;
+        var Nullableか = MethodCall0_Type.IsNullable();
+        var Sum_Type=Nullableか?MethodCall0_Type.GetGenericArguments()[0]:MethodCall0.Type;
+        var Sum = Expression.Parameter(
+            Sum_Type,
+            $"{変数名}Item"
+        );
+        ListParameter.Add(Sum);
+        ListExpression.Add(
+            Expression.Assign(
+                Sum,
+                Expression.Default(Sum_Type)
+            )
+        );
+        var 作業配列=this.作業配列;
+        if(Nullableか){
+            var Nullable = Expression.Parameter(
+                MethodCall0_Type,
+                $"{変数名}Nullable"
+            );
+            if(MethodCall0_Arguments.Count==1) {
+                Debug.Assert(
+                    MethodCall0_Arguments.Count==1&&(
+                        Reflection.ExtensionSet.SumNullableInt32==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableInt64==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableDecimal==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableDouble==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableSingle==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableInt32==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableInt64==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableDecimal==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableDouble==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableSingle==GenericMethodDefinition
+                    )
+                );
+                ListExpression.Add(
+                    this.ループ展開(
+                        MethodCall0_Arguments[0],
+                        argument => Expression.Block(
+                            作業配列.Parameters設定(Nullable),
+                            作業配列.Expressions設定(
+                                Expression.Assign(
+                                    Nullable,
+                                    argument
+                                ),
+                                Expression.IfThenElse(
+                                    Expression.Property(
+                                        Nullable,
+                                        nameof(Nullable<int>.HasValue)
+                                    ),
+                                    AddAssign(
+                                        Sum,
+                                        Expression.Property(
+                                            Nullable,
+                                            nameof(Nullable<int>.Value)
+                                        )
+                                    ),
+                                    Default_void
+                                )
+                            )
+                        )
+                    )
+                );
+            } else {
+                Debug.Assert(
+                    MethodCall0_Arguments.Count==2&&(
+                        Reflection.ExtensionSet.SumNullableInt32_selector==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableInt64_selector==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableDecimal_selector==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableDouble_selector==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumNullableSingle_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableInt32_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableInt64_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableDecimal_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableDouble_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumNullableSingle_selector==GenericMethodDefinition
+                    )
+                );
+                ListExpression.Add(
+                    this.ループ展開(
+                        MethodCall0_Arguments[0],
+                        argument =>{
+                            var Assign=Expression.Assign(
+                                Nullable,
+                                this.LambdaExpressionを展開1(
+                                    this.Traverse(MethodCall0_Arguments[1]),
+                                    argument
+                                )
+                            );
+                            return Expression.Block(
+                                作業配列.Parameters設定(Nullable),
+                                作業配列.Expressions設定(
+                                    Assign,
+                                    Expression.IfThenElse(
+                                        Expression.Property(
+                                            Nullable,
+                                            nameof(Nullable<int>.HasValue)
+                                        ),
+                                        AddAssign(
+                                            Sum,
+                                            Expression.Property(
+                                                Nullable,
+                                                nameof(Nullable<int>.Value)
+                                            )
+                                        ),
+                                        Default_void
+                                    )
+                                )
+                            );
+                        })
+                );
+            }
+            ListExpression.Add(
+                Expression.New(
+                    作業配列.GetConstructor(
+                        MethodCall0_Type,
+                        Sum_Type
+                    ),
+                    作業配列.Expressions設定(Sum)
+                )
+            );
+        } else {
+            if(MethodCall0_Arguments.Count==1) {
+                Debug.Assert(
+                    MethodCall0_Arguments.Count==1&&(
+                        Reflection.ExtensionSet.SumInt32==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumInt64==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumDecimal==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumDouble==GenericMethodDefinition||
+                        Reflection.ExtensionSet.SumSingle==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumInt32==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumInt64==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumDecimal==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumDouble==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SumSingle==GenericMethodDefinition
+                    )
+                );
+                var MethodCall0_Arguments_0 = MethodCall0.Arguments[0];
+                if(this.重複除去されているか(MethodCall0_Arguments_0)){
+                    //Setの場合重複は除かれて合計すべきなのでそのまま合計
+                    //Enumerableの場合重複があっても合計すべきなのでそのまま合計
+                    ListExpression.Add(
+                        this.ループ展開(
+                            MethodCall0_Arguments_0,
+                            argument=>AddAssign(
+                                Sum,
+                                argument
+                            )
+                        )
+                    );
+                } else{
+                    //Setでかつ重複がある場合は重複を除いて合計すべき
+                    var 作業_Type=作業配列.MakeGenericType(
+                        typeof(Set<>),
+                        IEnumerable1のT(MethodCall0_Arguments_0.Type)
+                    );
+                    var 作業=Expression.Parameter(
+                        作業_Type,
+                        $"{変数名}Sum"
+                    );
+                    ListParameter.Add(作業);
+                    ListExpression.Add(
+                        Expression.Assign(
+                            作業,
+                            Expression.New(作業_Type)
+                        )
+                    );
+                    ListExpression.Add(
+                        this.ループ展開(
+                            MethodCall0.Arguments[0],
+                            argument=>Expression.IfThenElse(
+                                Expression.Call(
+                                    作業,
+                                    作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
+                                    argument
+                                ),
+                                AddAssign(
+                                    Sum,
+                                    argument
+                                ),
+                                Default_void
+                            )
+                        )
+                    );
+                }
+            } else {
+                Debug.Assert(
+                    Reflection.ExtensionSet.SumInt32_selector==GenericMethodDefinition||
+                    Reflection.ExtensionSet.SumInt64_selector==GenericMethodDefinition||
+                    Reflection.ExtensionSet.SumDecimal_selector==GenericMethodDefinition||
+                    Reflection.ExtensionSet.SumDouble_selector==GenericMethodDefinition||
+                    Reflection.ExtensionSet.SumSingle_selector==GenericMethodDefinition||
+                    Reflection.ExtensionEnumerable.SumInt32_selector==GenericMethodDefinition||
+                    Reflection.ExtensionEnumerable.SumInt64_selector==GenericMethodDefinition||
+                    Reflection.ExtensionEnumerable.SumDecimal_selector==GenericMethodDefinition||
+                    Reflection.ExtensionEnumerable.SumDouble_selector==GenericMethodDefinition||
+                    Reflection.ExtensionEnumerable.SumSingle_selector==GenericMethodDefinition
+                );
+                ListExpression.Add(
+                    this.ループ展開(
+                        MethodCall0_Arguments[0],
+                        argument => AddAssign(
+                            Sum,
+                            this.LambdaExpressionを展開1(
+                                this.Traverse(MethodCall0_Arguments[1]),
+                                argument
+                            )
+                        )
+                    )
+                );
+            }
+            ListExpression.Add(Sum);
+        }
+        return Expression.Block(
+            ListParameter,
+            ListExpression
+        );
+    }
+    private Expression ToArray(MethodCallExpression MethodCall0){
+        var Method=MethodCall0.Method;
+        var Name=Method.Name;
+        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+        //var GenericMethodDefinition=GetGenericMethodDefinition(Method);
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        if(Method.DeclaringType!=typeof(Enumerable)) return base.Call(MethodCall0);
+        var 作業配列=this.作業配列;
+        var ListType = 作業配列.MakeGenericType(
+            typeof(List<>),
+            MethodCall0.Type.GetElementType()!
+        );
+        var List = Expression.Parameter(
+            ListType,
+            $"{変数名}List"
+        );
+        var Expression1ループ = this.ループ展開(
+            MethodCall0_Arguments[0],
+            argument => Expression.Call(
+                List,
+                ListType.GetMethod(nameof(System.Collections.IList.Add)),
+                argument
+            )
+        );
+        return Expression.Block(
+            作業配列.Parameters設定(List),
+            作業配列.Expressions設定(
+                Expression.Assign(
+                    List,
+                    Expression.New(ListType)
+                ),
+                Expression1ループ,
+                Call(
+                    List,
+                    nameof(List<int>.ToArray)
+                )
+            )
+        );
+    }
     protected override Expression Call(MethodCallExpression MethodCall0) {
         var Method = MethodCall0.Method;
         var GenericMethodDefinition = GetGenericMethodDefinition(Method);
@@ -1722,755 +2460,45 @@ internal class 変換_インラインループ独立:変換_インラインル�
         var MethodCall0_Arguments = MethodCall0.Arguments;
         if(ループ展開可能メソッドか(GenericMethodDefinition)) {
             switch(Method.Name) {
-                case nameof(ExtensionSet.Inline):return this.Inline(MethodCall0);
-                case nameof(Enumerable.Aggregate):return this.Aggregate(MethodCall0);
-                case nameof(Enumerable.All):return this.All(MethodCall0);
-                case nameof(Enumerable.Any):return this.Any(MethodCall0);
-                case nameof(Enumerable.Average):return this.Average(MethodCall0);
-                case nameof(ExtensionSet.Avedev): return this.Avedev(MethodCall0);
-                case nameof(Enumerable.AsEnumerable):return this.AsEnumerable(MethodCall0);
-                case nameof(ExtensionSet.ToLookup):return this.ToLookup(MethodCall0);
-                case nameof(Enumerable.Count)or nameof(Enumerable.LongCount):return this.Count(MethodCall0);
-                case nameof(ExtensionSet.Harmean):return this.Harmean(MethodCall0);
-                case nameof(ExtensionSet.Geomean):return this.Geomean(MethodCall0);
-                case nameof(Enumerable.Max):return this.MaxMin(MethodCall0,ExpressionType.LessThan);
-                case nameof(Enumerable.Min):return this.MaxMin(MethodCall0,ExpressionType.GreaterThan);
-                case nameof(ExtensionSet.Stdev): {
-                    var ListParameter = new List<ParameterExpression>();
-                    var ListExpression = new List<Expression>();
-                    var Stdev_Int64Count = Expression.Parameter(
-                        typeof(long),
-                        $"{変数名}Int64Count"
-                    );
-                    ListParameter.Add(Stdev_Int64Count);
-                    var DoubleCount = Expression.Parameter(
-                        typeof(double),
-                        $"{変数名}DoubleCount"
-                    );
-                    ListParameter.Add(DoubleCount);
-                    var DoubleSum = Expression.Parameter(
-                        typeof(double),
-                        $"{変数名}DoubleSum"
-                    );
-                    ListParameter.Add(DoubleSum);
-                    var Average = Expression.Parameter(
-                        typeof(double),
-                        $"{変数名}Average"
-                    );
-                    ListParameter.Add(Average);
-                    var Subtract = Expression.Parameter(
-                        typeof(double),
-                        $"{変数名}Subtract"
-                    );
-                    ListParameter.Add(Subtract);
-                    var DoubleSumを初期化 = Expression.Assign(
-                        DoubleSum,
-                        Constant_0D
-                    );
-                    ListExpression.Add(DoubleSumを初期化);
-                    var FILO_Enumerator_Type = 作業配列.MakeGenericType(typeof(ImmutableSet<>.FILO),typeof(double));
-                    var FILO_Enumerator = Expression.Parameter(
-                        FILO_Enumerator_Type,
-                        $"{変数名}FILO_Enumerator"
-                    );
-                    ListParameter.Add(FILO_Enumerator);
-                    ListExpression.Add(
-                        Call(
-                            FILO_Enumerator,
-                            nameof(ImmutableSet<int>.FILO.Constructor)
-                        )
-                    );
-                    if(MethodCall0_Arguments.Count==1) {
-                        Debug.Assert(Reflection.ExtensionSet.StdevDouble==GenericMethodDefinition);
-                        ListExpression.Add(
-                            this.ループ展開(
-                                MethodCall0_Arguments[0],
-                                argument => Expression.Block(
-                                    Expression.Call(
-                                        FILO_Enumerator,
-                                        FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add)),
-                                        argument
-                                    ),
-                                    AddAssign(
-                                        DoubleSum,
-                                        argument
-                                    )
-                                )
-                            )
-                        );
-                    } else {
-                        Debug.Assert(Reflection.ExtensionSet.StdevDouble_selector==GenericMethodDefinition);
-                        var 値 = Expression.Parameter(typeof(double),$"{変数名}値");
-                        ListParameter.Add(値);
-                        ListExpression.Add(
-                            this.ループ展開(
-                                MethodCall0_Arguments[0],
-                                argument => Expression.Block(
-                                    Expression.Assign(
-                                        値,
-                                        this.LambdaExpressionを展開1(
-                                            this.Traverse(MethodCall0_Arguments[1]),
-                                            argument
-                                        )
-                                    ),
-                                    Expression.Call(
-                                        FILO_Enumerator,
-                                        FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add))!,
-                                        値
-                                    ),
-                                    AddAssign(DoubleSum,値)
-                                )
-                            )
-                        );
-                    }
-                    ListExpression.Add(
-                        Expression.Assign(
-                            Stdev_Int64Count,
-                            Field(
-                                FILO_Enumerator,
-                                nameof(ImmutableSet<int>.FILO.Count)
-                            )
-                        )
-                    );
-                    ListExpression.Add(
-                        Expression.IfThenElse(
-                            Expression.Equal(
-                                Stdev_Int64Count,
-                                Constant_0L
-                            ),
-                            Throw_ZeroTuple_Stdev,
-                            Default_void
-                        )
-                    );
-                    ListExpression.Add(
-                        Expression.Assign(
-                            DoubleCount,
-                            Expression.Convert(
-                                Stdev_Int64Count,
-                                typeof(double)
-                            )
-                        )
-                    );
-                    ListExpression.Add(
-                        Expression.Assign(
-                            Average,
-                            Expression.Divide(DoubleSum,DoubleCount)
-                        )
-                    );
-                    ListExpression.Add(DoubleSumを初期化);
-                    var Loop終了 = Expression.Label($"{変数名}Loop終了");
-                    ListExpression.Add(
-                        Expression.Loop(
-                            Expression.IfThenElse(
-                                Call(
-                                    FILO_Enumerator,
-                                    nameof(System.Collections.IEnumerator.MoveNext)
-                                ),
-                                Expression.Block(
-                                    Expression.Assign(
-                                        Subtract,
-                                        Expression.Subtract(
-                                            Expression.Property(
-                                                FILO_Enumerator,
-                                                nameof(System.Collections.IEnumerator.Current)
-                                            ),
-                                            Average
-                                        )
-                                    ),
-                                    AddAssign(
-                                        DoubleSum,
-                                        Expression.Multiply(Subtract,Subtract)
-                                    )
-                                ),
-                                Expression.Break(Loop終了)
-                            ),
-                            Loop終了
-                        )
-                    );
-                    ListExpression.Add(
-                        Expression.Call(
-                            Math.Sqrt,
-                            Expression.Divide(
-                                DoubleSum,
-                                Expression.Decrement(DoubleCount)
-                            )
-                        )
-                    );
-                    return Expression.Block(
-                        ListParameter,
-                        ListExpression
-                    );
-                }
-                case nameof(ExtensionSet.Var)or nameof(ExtensionSet.Varp): {
-                    var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                    var ReturnType = MethodCall0.Type;
-                    var Int64Count = Expression.Parameter(
-                        typeof(long),
-                        $"{変数名}Int64Count"
-                    );
-                    var FILO_Enumerator_Type = 作業配列.MakeGenericType(typeof(ImmutableSet<>.FILO),ReturnType);
-                    var FILO_Enumerator = Expression.Parameter(
-                        FILO_Enumerator_Type,
-                        $"{変数名}FILO_Enumerator"
-                    );
-                    var TCount = Expression.Parameter(
-                        ReturnType,
-                        $"{変数名}TCount"
-                    );
-                    var Sum = Expression.Parameter(
-                        ReturnType,
-                        $"{変数名}Sum"
-                    );
-                    var selector値 = Expression.Parameter(
-                        ReturnType,
-                        $"{変数名}selector値"
-                    );
-                    var Expressionループ = this.ループ展開(
-                        MethodCall0_Arguments[0],
-                        argument => Expression.Block(
-                            Expression.Assign(
-                                selector値,
-                                this.LambdaExpressionを展開1(
-                                    MethodCall1_Arguments_1,
-                                    argument
-                                )
-                            ),
-                            Expression.Call(
-                                FILO_Enumerator,
-                                FILO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FILO.Add)),
-                                selector値
-                            ),
-                            AddAssign(
-                                Sum,
-                                selector値
-                            )
-                        )
-                    );
-                    var Subtract = Expression.Parameter(
-                        ReturnType,
-                        $"{変数名}Subtract"
-                    );
-                    var Average = Expression.Parameter(
-                        ReturnType,
-                        $"{変数名}Average"
-                    );
-                    var Loop終了 = Expression.Label($"{変数名}Loop終了");
-                    var ExpressionSumを初期化 = Expression.Assign(
-                        Sum,
-                        Expression.Default(ReturnType)
-                    );
-                    var (Throw_ZeroTuple, 割る数)=nameof(ExtensionSet.Varp)==Name
-                        ? (Throw_ZeroTuple_Varp, (Expression)TCount)
-                        : (Throw_ZeroTuple_Var, Expression.Decrement(TCount));
-                    return Expression.Block(
-                        作業配列.Parameters設定(
-                            Int64Count,
-                            FILO_Enumerator,
-                            Sum,
-                            selector値,
-                            TCount,
-                            Average,
-                            Subtract
-                        ),
-                        作業配列.Expressions設定(
-                            Call(
-                                FILO_Enumerator,
-                                nameof(ImmutableSet<int>.FILO.Constructor)
-                            ),
-                            ExpressionSumを初期化,
-                            Expressionループ,
-                            Expression.Assign(
-                                Int64Count,
-                                Field(
-                                    FILO_Enumerator,
-                                    nameof(ImmutableSet<int>.FILO.Count)
-                                )
-                            ),
-                            Expression.IfThenElse(
-                                Expression.Equal(
-                                    Int64Count,
-                                    Constant_0L
-                                ),
-                                Throw_ZeroTuple,
-                                Default_void
-                            ),
-                            Expression.Assign(
-                                TCount,
-                                Expression.Convert(
-                                    Int64Count,
-                                    ReturnType
-                                )
-                            ),
-                            Expression.Assign(
-                                Average,
-                                Expression.Divide(
-                                    Sum,
-                                    TCount
-                                )
-                            ),
-                            ExpressionSumを初期化,
-                            Expression.Loop(
-                                Expression.IfThenElse(
-                                    Call(
-                                        FILO_Enumerator,
-                                        nameof(System.Collections.IEnumerator.MoveNext)
-                                    ),
-                                    Expression.Block(
-                                        Expression.Assign(
-                                            Subtract,
-                                            Expression.Subtract(
-                                                Expression.Property(
-                                                    FILO_Enumerator,
-                                                    nameof(System.Collections.IEnumerator.Current)
-                                                ),
-                                                Average
-                                            )
-                                        ),
-                                        AddAssign(
-                                            Sum,
-                                            Expression.Multiply(
-                                                Subtract,
-                                                Subtract
-                                            )
-                                        )
-                                    ),
-                                    Expression.Break(Loop終了)
-                                ),
-                                Loop終了
-                            ),
-                            Expression.Divide(
-                                Sum,
-                                割る数
-                            )
-                        )
-                    );
-                }
-                case nameof(Enumerable.SequenceEqual): {
-                    var first = MethodCall0_Arguments[0];
-                    var T = IEnumerable1のT(first.Type);
-                    var FIFO_Enumerator_Type = 作業配列.MakeGenericType(
-                        typeof(ImmutableSet<>.FIFO),
-                        T
-                    );
-                    var Constructor=FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.Constructor),Instance_NonPublic_Public);
-                    Debug.Assert(Constructor is not null);
-                    var Add=FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.Add));
-                    Debug.Assert(Add is not null);
-                    var FIFO_Enumerator1 = Expression.Parameter(
-                        FIFO_Enumerator_Type,
-                        $"{変数名}first"
-                    );
-                    var FIFO_Enumerator2 = Expression.Parameter(
-                        FIFO_Enumerator_Type,
-                        $"{変数名}second"
-                    );
-                    var Expression2=this.ループ展開(
-                        first,
-                        argument => Expression.Call(
-                            FIFO_Enumerator1,
-                            Add,
-                            argument
-                        )
-                    );
-                    var Expression3 = this.ループ展開(
-                        MethodCall0_Arguments[1],
-                        argument => Expression.Call(
-                            FIFO_Enumerator2,
-                            Add,
-                            argument
-                        )
-                    );
-                    return Expression.Block(
-                        作業配列.Parameters設定(
-                            FIFO_Enumerator1,
-                            FIFO_Enumerator2
-                        ),
-                        作業配列.Expressions設定(
-                            Expression.Call(
-                                FIFO_Enumerator1,
-                                Constructor
-                            ),
-                            Expression.Call(
-                                FIFO_Enumerator2,
-                                Constructor
-                            ),
-                            Expression2,
-                            Expression3,
-                            Expression.Call(
-                                FIFO_Enumerator1,
-                                FIFO_Enumerator_Type.GetMethod(nameof(ImmutableSet<int>.FIFO.SequenceEqual))!,
-                                FIFO_Enumerator2
-                            )
-                        )
-                    );
-                }
-                case nameof(Enumerable.Single)or nameof(Enumerable.SingleOrDefault): {
-                    var MethodCall0_Method = MethodCall0.Method;
-                    var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
-                    var ElementType = MethodCall0_Method.ReturnType;
-                    var Item0 = Expression.Parameter(ElementType,$"{変数名}Item0");
-                    var Item1 = Expression.Parameter(ElementType,$"{変数名}Item1");
-                    var 要素なし = Expression.Parameter(typeof(bool),$"{変数名}要素なし");
-                    var Expressions0 = Expression.Assign(要素なし,Constant_true);
-                    var Expressions1 = this.ループ展開(
-                        MethodCall0_Arguments_0,
-                        argument => {
-                            Expression 要素があった時のExpression = Expression.Throw(
-                                Expression.New(
-                                    InvalidOperationException_ctor,
-                                    作業配列.Expressions設定(
-                                        Expression.Constant($"{MethodCall0_Method}:{CommonLibrary.シーケンスに複数の要素が含まれています_MoreThanOneElement}")
-                                    )
-                                )
-                            );
-                            //var argument0 = argument;
-                            if(!this.重複除去されているか(MethodCall0_Arguments_0)) {
-                                MethodCallExpression EqualExpression;
-                                var Item_Type=Item0.Type;
-                                var IEquatableType = 作業配列.MakeGenericType(typeof(IEquatable<>),Item_Type);
-                                if(IEquatableType.IsAssignableFrom(Item_Type)) {
-                                    var InterfaceMap = Item_Type.GetInterfaceMap(IEquatableType);
-                                    Debug.Assert(InterfaceMap.InterfaceMethods[0]==IEquatableType.GetMethod(nameof(IEquatable<int>.Equals)));
-                                    EqualExpression=Expression.Call(
-                                        Item0,
-                                        InterfaceMap.TargetMethods[0],
-                                        作業配列.Expressions設定(Item1)
-                                    );
-                                } else {
-                                    Expression argument1 = Item1;
-                                    if(Item_Type.IsValueType) {
-                                        if(/*nameof(ExtendSet.SingleOrNull)==Name&&*/Item_Type.IsNullable()&&!argument.Type.IsNullable()) {
-                                            argument=Expression.Convert(argument,ElementType);
-                                        }
-                                        argument1=Expression.Convert(argument1,typeof(object));
-                                    }
-                                    EqualExpression=Expression.Call(
-                                        Item0,
-                                        Reflection.Object.Equals_,
-                                        作業配列.Expressions設定(argument1)
-                                    );
-                                }
-                                要素があった時のExpression=Expression.IfThenElse(
-                                    EqualExpression,
-                                    Default_void,
-                                    要素があった時のExpression
-                                );
-                            }
-                            return Expression.IfThenElse(
-                                要素なし,
-                                Expression.Block(
-                                    typeof(void),
-                                    作業配列.Expressions設定(
-                                        Expression.Assign(Item1,argument),
-                                        Expression.Assign(要素なし,Constant_false),
-                                        Expression.Assign(Item0,Item1)
-                                    )
-                                ),
-                                要素があった時のExpression
-                            );
-                        }
-                    );
-                    //Expression 要素なしifTrue;
-                    var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
-                        ?MethodCall0_Arguments.Count==1
-                            ?Expression.Default(ElementType)
-                            :this.Traverse(MethodCall0_Arguments[1])
-                        :Expression.Throw(
-                            New_ZeroTupleException,
-                            ElementType
-                        );
-                    return Expression.Block(
-                        作業配列.Parameters設定(要素なし,Item0,Item1),
-                        作業配列.Expressions設定(
-                            Expressions0,
-                            Expressions1,
-                            Expression.Condition(
-                                要素なし,
-                                要素なしifTrue,
-                                Item0
-                            )
-                        )
-                    );
-                }
-                case nameof(Enumerable.Sum): {
-                    var ListParameter = new List<ParameterExpression>();
-                    var ListExpression = new List<Expression>();
-                    var MethodCall0_Type = MethodCall0.Type;
-                    var Nullableか = MethodCall0_Type.IsNullable();
-                    var Sum_Type=Nullableか?MethodCall0_Type.GetGenericArguments()[0]:MethodCall0.Type;
-                    var Sum = Expression.Parameter(
-                        Sum_Type,
-                        $"{変数名}Item"
-                    );
-                    ListParameter.Add(Sum);
-                    ListExpression.Add(
-                        Expression.Assign(
-                            Sum,
-                            Expression.Default(Sum_Type)
-                        )
-                    );
-                    if(Nullableか) {
-                        var Nullable = Expression.Parameter(
-                            MethodCall0_Type,
-                            $"{変数名}Nullable"
-                        );
-                        if(MethodCall0_Arguments.Count==1) {
-                            Debug.Assert(
-                                MethodCall0_Arguments.Count==1&&(
-                                    Reflection.ExtensionSet.SumNullableInt32==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableInt64==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableDecimal==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableDouble==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableSingle==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableInt32==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableInt64==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableDecimal==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableDouble==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableSingle==GenericMethodDefinition
-                                )
-                            );
-                            ListExpression.Add(
-                                this.ループ展開(
-                                    MethodCall0_Arguments[0],
-                                    argument => Expression.Block(
-                                        作業配列.Parameters設定(Nullable),
-                                        作業配列.Expressions設定(
-                                            Expression.Assign(
-                                                Nullable,
-                                                argument
-                                            ),
-                                            Expression.IfThenElse(
-                                                Expression.Property(
-                                                    Nullable,
-                                                    nameof(Nullable<int>.HasValue)
-                                                ),
-                                                AddAssign(
-                                                    Sum,
-                                                    Expression.Property(
-                                                        Nullable,
-                                                        nameof(Nullable<int>.Value)
-                                                    )
-                                                ),
-                                                Default_void
-                                            )
-                                        )
-                                    )
-                                )
-                            );
-                        } else {
-                            Debug.Assert(
-                                MethodCall0_Arguments.Count==2&&(
-                                    Reflection.ExtensionSet.SumNullableInt32_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableInt64_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableDecimal_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableDouble_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumNullableSingle_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableInt32_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableInt64_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableDecimal_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableDouble_selector==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumNullableSingle_selector==GenericMethodDefinition
-                                )
-                            );
-                            ListExpression.Add(
-                                this.ループ展開(
-                                    MethodCall0_Arguments[0],
-                                    argument =>{
-                                        var Assign=Expression.Assign(
-                                            Nullable,
-                                            this.LambdaExpressionを展開1(
-                                                this.Traverse(MethodCall0_Arguments[1]),
-                                                argument
-                                            )
-                                        );
-                                        return Expression.Block(
-                                            作業配列.Parameters設定(Nullable),
-                                            作業配列.Expressions設定(
-                                                Assign,
-                                                Expression.IfThenElse(
-                                                    Expression.Property(
-                                                        Nullable,
-                                                        nameof(Nullable<int>.HasValue)
-                                                    ),
-                                                    AddAssign(
-                                                        Sum,
-                                                        Expression.Property(
-                                                            Nullable,
-                                                            nameof(Nullable<int>.Value)
-                                                        )
-                                                    ),
-                                                    Default_void
-                                                )
-                                            )
-                                        );
-                                    })
-                            );
-                        }
-                        ListExpression.Add(
-                            Expression.New(
-                                作業配列.GetConstructor(
-                                    MethodCall0_Type,
-                                    Sum_Type
-                                ),
-                                作業配列.Expressions設定(Sum)
-                            )
-                        );
-                    } else {
-                        if(MethodCall0_Arguments.Count==1) {
-                            Debug.Assert(
-                                MethodCall0_Arguments.Count==1&&(
-                                    Reflection.ExtensionSet.SumInt32==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumInt64==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumDecimal==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumDouble==GenericMethodDefinition||
-                                    Reflection.ExtensionSet.SumSingle==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumInt32==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumInt64==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumDecimal==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumDouble==GenericMethodDefinition||
-                                    Reflection.ExtensionEnumerable.SumSingle==GenericMethodDefinition
-                                )
-                            );
-                            var MethodCall0_Arguments_0 = MethodCall0.Arguments[0];
-                            if(this.重複除去されているか(MethodCall0_Arguments_0)){
-                                //Setの場合重複は除かれて合計すべきなのでそのまま合計
-                                //Enumerableの場合重複があっても合計すべきなのでそのまま合計
-                                ListExpression.Add(
-                                    this.ループ展開(
-                                        MethodCall0_Arguments_0,
-                                        argument=>AddAssign(
-                                            Sum,
-                                            argument
-                                        )
-                                    )
-                                );
-                            } else{
-                                //Setでかつ重複がある場合は重複を除いて合計すべき
-                                var 作業_Type=作業配列.MakeGenericType(
-                                    typeof(Set<>),
-                                    IEnumerable1のT(MethodCall0_Arguments_0.Type)
-                                );
-                                var 作業=Expression.Parameter(
-                                    作業_Type,
-                                    $"{変数名}Sum"
-                                );
-                                ListParameter.Add(作業);
-                                ListExpression.Add(
-                                    Expression.Assign(
-                                        作業,
-                                        Expression.New(作業_Type)
-                                    )
-                                );
-                                ListExpression.Add(
-                                    this.ループ展開(
-                                        MethodCall0.Arguments[0],
-                                        argument=>Expression.IfThenElse(
-                                            Expression.Call(
-                                                作業,
-                                                作業_Type.GetMethod(nameof(Set<int>.IsAdded)),
-                                                argument
-                                            ),
-                                            AddAssign(
-                                                Sum,
-                                                argument
-                                            ),
-                                            Default_void
-                                        )
-                                    )
-                                );
-                            }
-                        } else {
-                            Debug.Assert(
-                                Reflection.ExtensionSet.SumInt32_selector==GenericMethodDefinition||
-                                Reflection.ExtensionSet.SumInt64_selector==GenericMethodDefinition||
-                                Reflection.ExtensionSet.SumDecimal_selector==GenericMethodDefinition||
-                                Reflection.ExtensionSet.SumDouble_selector==GenericMethodDefinition||
-                                Reflection.ExtensionSet.SumSingle_selector==GenericMethodDefinition||
-                                Reflection.ExtensionEnumerable.SumInt32_selector==GenericMethodDefinition||
-                                Reflection.ExtensionEnumerable.SumInt64_selector==GenericMethodDefinition||
-                                Reflection.ExtensionEnumerable.SumDecimal_selector==GenericMethodDefinition||
-                                Reflection.ExtensionEnumerable.SumDouble_selector==GenericMethodDefinition||
-                                Reflection.ExtensionEnumerable.SumSingle_selector==GenericMethodDefinition
-                            );
-                            ListExpression.Add(
-                                this.ループ展開(
-                                    MethodCall0_Arguments[0],
-                                    argument => AddAssign(
-                                        Sum,
-                                        this.LambdaExpressionを展開1(
-                                            this.Traverse(MethodCall0_Arguments[1]),
-                                            argument
-                                        )
-                                    )
-                                )
-                            );
-                        }
-                        ListExpression.Add(Sum);
-                    }
-                    return Expression.Block(
-                        ListParameter,
-                        ListExpression
-                    );
-                }
-                case nameof(Enumerable.ToArray): {
-                    if(Method.DeclaringType!=typeof(Enumerable)) {
-                        return base.Call(MethodCall0);
-                    }
-                    var ListType = 作業配列.MakeGenericType(
-                        typeof(List<>),
-                        MethodCall0.Type.GetElementType()!
-                    );
-                    var List = Expression.Parameter(
-                        ListType,
-                        $"{変数名}List"
-                    );
-                    var Expression1ループ = this.ループ展開(
-                        MethodCall0_Arguments[0],
-                        argument => Expression.Call(
-                            List,
-                            ListType.GetMethod(nameof(System.Collections.IList.Add)),
-                            argument
-                        )
-                    );
-                    return Expression.Block(
-                        作業配列.Parameters設定(List),
-                        作業配列.Expressions設定(
-                            Expression.Assign(
-                                List,
-                                Expression.New(ListType)
-                            ),
-                            Expression1ループ,
-                            Call(
-                                List,
-                                nameof(List<int>.ToArray)
-                            )
-                        )
-                    );
-                }
-                case nameof(Enumerable.Empty): {
-                    return MethodCall0;
-                }
+                case nameof(ExtensionSet.Inline       ):return this.Inline(MethodCall0);
+                case nameof(Enumerable  .Aggregate    ):return this.Aggregate(MethodCall0);
+                case nameof(Enumerable  .All          ):return this.All(MethodCall0);
+                case nameof(Enumerable  .Any          ):return this.Any(MethodCall0);
+                case nameof(Enumerable  .Average      ):return this.Average(MethodCall0);
+                case nameof(ExtensionSet.Avedev       ):return this.Avedev(MethodCall0);
+                case nameof(Enumerable  .AsEnumerable ):return this.AsEnumerable(MethodCall0);
+                case nameof(ExtensionSet.ToLookup     ):return this.ToLookup(MethodCall0);
+                case nameof(Enumerable  .Count        )or nameof(Enumerable.LongCount):return this.Count(MethodCall0);
+                case nameof(ExtensionSet.Harmean      ):return this.Harmean(MethodCall0);
+                case nameof(ExtensionSet.Geomean      ):return this.Geomean(MethodCall0);
+                case nameof(Enumerable  .Max          ):return this.MaxMin(MethodCall0,ExpressionType.LessThan);
+                case nameof(Enumerable  .Min          ):return this.MaxMin(MethodCall0,ExpressionType.GreaterThan);
+                case nameof(ExtensionSet.Stdev        ):return this.Stdev(MethodCall0);
+                case nameof(ExtensionSet.Var          )or nameof(ExtensionSet.Varp):return this.VarVarp(MethodCall0); 
+                case nameof(Enumerable  .SequenceEqual):return this.SequenceEqual(MethodCall0);
+                case nameof(Enumerable  .Single       )or nameof(Enumerable.SingleOrDefault): return this.Single(MethodCall0);
+                case nameof(Enumerable  .Sum          ):return this.Sum(MethodCall0); 
+                case nameof(Enumerable  .ToArray      ):return this.ToArray(MethodCall0); 
+                case nameof(Enumerable  .Empty        ):return MethodCall0;
             }
             Debug.Assert(MethodCall0.Type!=typeof(void));
-            {
-                var (Result, Add,ResultAssign)=具象Type(MethodCall0,変数名,false,true);
-                var Expression1ループ = this.ループ展開(
-                    MethodCall0,
-                    argument => Expression.Call(
-                        Result,
-                        Add,
-                        argument
-                    )
-                );
-                return Expression.Block(
-                    作業配列.Parameters設定(Result),
-                    作業配列.Expressions設定(
-                        ResultAssign,
-                        Expression1ループ,
-                        Result
-                    )
-                );
-            }
+            var (Result, Add,ResultAssign)=具象Type(MethodCall0,変数名,false,true);
+            var Expression1ループ = this.ループ展開(
+                MethodCall0,
+                argument => Expression.Call(
+                    Result,
+                    Add,
+                    argument
+                )
+            );
+            return Expression.Block(
+                作業配列.Parameters設定(Result),
+                作業配列.Expressions設定(
+                    ResultAssign,
+                    Expression1ループ,
+                    Result
+                )
+            );
         }
         return base.Call(MethodCall0);
     }
