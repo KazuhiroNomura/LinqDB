@@ -249,12 +249,77 @@ public class 変換_インラインループ独立:共通{
         //    } else {
         //        if(MethodCall is not null) {
         //            if(this.重複除去されているか(MethodCall)) {
-        //this.Expression実行AssertEqual(() => n0.GroupBy(p => p).Geomean(p => p.Key));
+        this.Expression実行AssertEqual(() => n0.GroupBy(p => p).Geomean(p => p.Key));
         //            } else {
         this.Expression実行AssertEqual(() => n0.Select(p=>p+1).Geomean(p => p));
         //            }
         //        } else {
         this.Expression実行AssertEqual(() => n0.Geomean(p => p));
+        //        }
+        //    }
+        //}
+    }
+    [Fact]public void MaxMin(){
+        var decimal0=new Set<decimal>{1,2,3};
+        var double0=new Set<double>{1,2,3};
+        var NullableDouble=new Set<double?>{1,2,3};
+        //if(MethodCall0_Type.IsNullable()) {
+        this.Expression実行AssertEqual(() => NullableDouble.Max());
+        this.Expression実行AssertEqual(() => NullableDouble.Min());
+        //} else {
+        this.Expression実行AssertEqual(() => double0.Max());
+        this.Expression実行AssertEqual(() => double0.Min());
+        //}
+        //if(Compare_Defaultを使うべきか(NodeType,ElementType)) {
+        this.Expression実行AssertEqual(() => decimal0.Max());
+        this.Expression実行AssertEqual(() => decimal0.Min());
+        //} else {
+        this.Expression実行AssertEqual(() => double0.Max());
+        this.Expression実行AssertEqual(() => double0.Min());
+        //}
+        //ListExpression.Add(
+        //    this.ループ展開(
+        //        MethodCall0_Arguments[0],
+        //        argument => {
+        //            var Element = MethodCall0_Arguments.Count==1
+        //                ? argument
+        this.Expression実行AssertEqual(() => double0.Max());
+        this.Expression実行AssertEqual(() => double0.Min());
+        //                : this.LambdaExpressionを展開1(
+        //                    this.Traverse(MethodCall0_Arguments[1]),
+        //                    argument
+        //                );
+        this.Expression実行AssertEqual(() => double0.Max(p=>p+1));
+        this.Expression実行AssertEqual(() => double0.Min(p=>p+1));
+        //            if(GetValueOrDefault is not null) {
+        this.Expression実行AssertEqual(() => NullableDouble.Max());
+        this.Expression実行AssertEqual(() => NullableDouble.Min());
+        //            } else {
+        //            }
+        //            if(Parameter_Comparer_Default is not null) {
+        //            } else {
+        //            }
+        //        }
+        //    )
+        //);
+        //if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
+        //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
+        this.Expression実行AssertEqual(() => double0.GroupBy(p => p).Geomean(p => p.Key));
+        //    } else{
+        this.Expression実行AssertEqual(() => double0.Geomean(p => p));
+        //    }
+        //} else {
+        //    if(MethodCall0_Arguments_0.NodeType==ExpressionType.Parameter) {
+        this.Expression実行AssertEqual(() => NullableDouble.Let(n => n.Geomean(p => p)));
+        //    } else {
+        //        if(MethodCall is not null) {
+        //            if(this.重複除去されているか(MethodCall)) {
+        //this.Expression実行AssertEqual(() => n0.GroupBy(p => p).Geomean(p => p.Key));
+        //            } else {
+        this.Expression実行AssertEqual(() => NullableDouble.Select(p=>p+1).Geomean(p => p));
+        //            }
+        //        } else {
+        this.Expression実行AssertEqual(() => NullableDouble.Geomean(p => p));
         //        }
         //    }
         //}
@@ -279,61 +344,12 @@ public class 変換_インラインループ独立:共通{
         this.AsEnumerable();
         //        case nameof(ExtensionSet.Lookup): {
         this.ToLookup();
-        //            var Expression1ループ = this.ループ展開(
-        //                argument => {
-        //                    if(argument.NodeType==ExpressionType.Parameter) {
-        //                    } else {
-        //                    }
-        //                }
-        //            );
-        //            if(MethodCall0_Arguments.Count==3) {
-        //            } else {
-        //            }
-        //        }
-        //        case nameof(Enumerable.LongCount):
-        //        case nameof(Enumerable.Count): {
-        //            if(ループ展開可能メソッドか(MethodCall0_Arguments_0,out _)){
-        //                if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        //                } else{
-        //                }
-        //            } else {
-        //            }
-        //        }
-        //        case nameof(ExtensionSet.Harmean): {
-        //            Expression Constant_0, Constant_1;
-        //            if(Reflection.ExtensionSet.HarmeanNullableDecimal_selector==GenericMethodDefinition||Reflection.ExtensionSet.HarmeanDecimal_selector==GenericMethodDefinition) {
-        //            } else {
-        //            }
-        //            if(MethodCall0.Type.IsNullable()) {
-        //                if(MethodCall is not null) {
-        //                    if(this.重複除去されているか(MethodCall)) {
-        //                    } else {
-        //                    }
-        //                } else {
-        //                }
-        //            } else {
-        //                if(MethodCall is not null&&this.重複除去されているか(MethodCall)) {
-        //                } else {
-        //                }
-        //            }
-        //        }
-        //        case nameof(ExtensionSet.Geomean): {
-        //            if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
-        //                if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        //                } else{
-        //                }
-        //            } else {
-        //                if(MethodCall0_Arguments_0.NodeType==ExpressionType.Parameter) {
-        //                } else {
-        //                    if(MethodCall is not null) {
-        //                        if(this.重複除去されているか(MethodCall)) {
-        //                        } else {
-        //                        }
-        //                    } else {
-        //                    }
-        //                }
-        //            }
-        //        }
+        //        case nameof(Enumerable.Count)or nameof(Enumerable.LongCount):return this.Count();
+        this.Count();
+        //        case nameof(ExtensionSet.Harmean):{
+        this.Harmean();
+        //        case nameof(ExtensionSet.Geomean): 
+        this.Geomean();
         //        case nameof(Enumerable.Max)or nameof(Enumerable.Min): {
         //            var NodeType = nameof(ExtensionSet.Max)==Name
         //                ? ExpressionType.LessThan

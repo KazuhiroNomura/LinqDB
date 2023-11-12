@@ -1549,8 +1549,162 @@ internal class 変換_インラインループ独立:変換_インラインル�
             ListExpression
         );
     }
-    //private Expression MaxMin(MethodCallExpression MethodCall0){
-    //}
+    /// <summary>
+    /// Max,Min
+    /// </summary>
+    /// <param name="MethodCall0"></param>
+    /// <param name="NodeType">MaxならLessThan、MinならGreaterThan</param>
+    /// <returns></returns>
+    private Expression MaxMin(MethodCallExpression MethodCall0,ExpressionType NodeType){
+        var MethodCall0_Arguments = MethodCall0.Arguments;
+        var Method=MethodCall0.Method;
+        //var GenericMethodDefinition = Method.GetGenericMethodDefinition();
+        var 変数名 = $"{Method.Name}ﾟ{this.番号++}ﾟ";
+        var MethodCall0_Type = MethodCall0.Type;
+        var 要素あり = Expression.Parameter(typeof(bool),$"{変数名}シーケンスに要素が含まれているか");
+        var ListParameter = new List<ParameterExpression> { 要素あり };
+        var ListExpression = new List<Expression>{Expression.Assign(要素あり,Constant_false)};
+        Type ElementType;
+        MethodInfo? GetValueOrDefault;
+        if(MethodCall0_Type.IsNullable()) {
+            GetValueOrDefault=MethodCall0_Type.GetMethod(nameof(Nullable<int>.GetValueOrDefault),Type.EmptyTypes)!;
+            ElementType=GetValueOrDefault.ReturnType;
+        } else {
+            GetValueOrDefault=null;
+            ElementType=MethodCall0_Type;
+        }
+        //ParameterExpression? Parameter_Comparer_Default;
+        //if(Compare_Defaultを使うべきか(NodeType,ElementType)) {
+        //    var Parameter_Comparer_Default_Type = this.作業配列.MakeGenericType(
+        //        typeof(Comparer<>),
+        //        ElementType
+        //    );
+        //    Parameter_Comparer_Default=Expression.Parameter(
+        //        Parameter_Comparer_Default_Type,
+        //        $"{変数名}Comparer<{ElementType.Name}>"
+        //    );
+        //    ListParameter.Add(Parameter_Comparer_Default);
+        //    ListExpression.Add(
+        //        Expression.Assign(
+        //            Parameter_Comparer_Default,
+        //            Expression.Property(
+        //                null,
+        //                Parameter_Comparer_Default_Type.GetProperty(nameof(Comparer<int>.Default))
+        //            )
+        //        )
+        //    );
+        //} else {
+        //    Parameter_Comparer_Default=null;
+        //}
+        var Parameter_Value = Expression.Parameter(ElementType,$"{変数名}Value");
+        ListParameter.Add(Parameter_Value);
+        var Parameter_MaxMinValue = Expression.Parameter(ElementType,$"{変数名}Result");
+        ListParameter.Add(Parameter_MaxMinValue);
+        Expression? 終了処理ifTrue = null;
+        Expression? 終了処理ifFalse = null;
+        ListExpression.Add(
+            this.ループ展開(
+                MethodCall0_Arguments[0],
+                argument => {
+                    var ListParameter0 = new List<ParameterExpression>();
+                    var ListExpression0 = new List<Expression>();
+                    var Element = MethodCall0_Arguments.Count==1
+                        ? argument
+                        : this.LambdaExpressionを展開1(
+                            this.Traverse(MethodCall0_Arguments[1]),
+                            argument
+                        );
+                    Debug.Assert(MethodCall0_Type==Element.Type);
+                    Expression Left;
+                    Expression Right;
+                    if(GetValueOrDefault is not null) {
+                        Debug.Assert(Element.NodeType!=ExpressionType.Parameter);
+                        var Parameter_Nullable = Expression.Parameter(
+                            Element.Type,
+                            $"{変数名}Nullable"
+                        );
+                        ListParameter0.Add(Parameter_Nullable);
+                        ListExpression0.Add(
+                            Expression.Assign(Parameter_Nullable,Element)
+                        );
+                        ListExpression0.Add(
+                            Expression.Assign(
+                                Parameter_Value,
+                                Expression.Call(
+                                    Parameter_Nullable,
+                                    GetValueOrDefault
+                                )
+                            )
+                        );
+                        Right=Parameter_Value;
+                        終了処理ifTrue=Expression.New(
+                            this.作業配列.GetConstructor(
+                                MethodCall0.Type,
+                                ElementType
+                            ),
+                            Parameter_MaxMinValue
+                        );
+                        終了処理ifFalse=Expression.Default(MethodCall0_Type);
+                    } else {
+                        Right=Element;
+                        終了処理ifTrue=Parameter_MaxMinValue;
+                        終了処理ifFalse=Expression.Throw(
+                            Expression.New(
+                                InvalidOperationException_ctor,
+                                this.作業配列.Expressions設定(
+                                    Expression.Constant(Method.ToString())
+                                )
+                            ),
+                            ElementType
+                        );
+                    }
+                    var Current = Right;
+                    //if(Parameter_Comparer_Default is not null) {
+                    //    Left=Expression.Call(
+                    //        Parameter_Comparer_Default,
+                    //        Parameter_Comparer_Default.Type.GetMethod(nameof(Comparer<int>.Compare))!,
+                    //        Parameter_MaxMinValue,
+                    //        Expression.Assign(Parameter_Value,Right)
+                    //    );
+                    //    Right=Constant_0;
+                    //} else {
+                    //    Left=Parameter_MaxMinValue;
+                    //}
+                    Left=Parameter_MaxMinValue;
+                    ListExpression0.Add(
+                        Expression.IfThenElse(
+                            要素あり,
+                            Expression.IfThenElse(
+                                Expression.MakeBinary(
+                                    NodeType,
+                                    Left,
+                                    Right
+                                ),
+                                Expression.Assign(Parameter_MaxMinValue,Current),
+                                Default_void
+                            ),
+                            Expression.Block(
+                                Expression.Assign(要素あり,Constant_true),
+                                Expression.Assign(Parameter_MaxMinValue,Current)
+                            )
+                        )
+                    );
+                    return Expression.Block(
+                        ListParameter0,
+                        ListExpression0
+                    );
+                }
+            )
+        );
+        Debug.Assert(終了処理ifTrue is not null&&終了処理ifFalse is not null);
+        ListExpression.Add(
+            Expression.Condition(要素あり,終了処理ifTrue,終了処理ifFalse)
+        );
+        return Expression.Block(
+            ListParameter,
+            ListExpression
+        );
+    }
     //private Expression Stdev(MethodCallExpression MethodCall0){
     //}
     //private Expression Var(MethodCallExpression MethodCall0){
@@ -1579,160 +1733,8 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 case nameof(Enumerable.Count)or nameof(Enumerable.LongCount):return this.Count(MethodCall0);
                 case nameof(ExtensionSet.Harmean):return this.Harmean(MethodCall0);
                 case nameof(ExtensionSet.Geomean):return this.Geomean(MethodCall0);
-                case nameof(Enumerable.Max)or nameof(Enumerable.Min): {
-                    var NodeType = nameof(ExtensionSet.Max)==Name
-                        ? ExpressionType.LessThan
-                        : ExpressionType.GreaterThan;
-                    var MethodCall0_Type = MethodCall0.Type;
-                    var 要素あり = Expression.Parameter(typeof(bool),$"{変数名}シーケンスに要素が含まれているか");
-                    var ListParameter = new List<ParameterExpression> { 要素あり };
-                    var ListExpression = new List<Expression>{Expression.Assign(要素あり,Constant_false)};
-                    MethodInfo? GetValueOrDefault;
-                    Type ElementType;
-                    if(MethodCall0_Type.IsNullable()) {
-                        GetValueOrDefault=MethodCall0_Type.GetMethod(nameof(Nullable<int>.GetValueOrDefault),Type.EmptyTypes)!;
-                        ElementType=GetValueOrDefault.ReturnType;
-                    } else {
-                        GetValueOrDefault=null;
-                        ElementType=MethodCall0_Type;
-                    }
-                    ParameterExpression? Parameter_Comparer_Default;
-                    if(Compare_Defaultを使うべきか(NodeType,ElementType)) {
-                        var Parameter_Comparer_Default_Type = this.作業配列.MakeGenericType(
-                            typeof(Comparer<>),
-                            ElementType
-                        );
-                        Parameter_Comparer_Default=Expression.Parameter(
-                            Parameter_Comparer_Default_Type,
-                            $"{変数名}Comparer<{ElementType.Name}>"
-                        );
-                        ListParameter.Add(Parameter_Comparer_Default);
-                        ListExpression.Add(
-                            Expression.Assign(
-                                Parameter_Comparer_Default,
-                                Expression.Property(
-                                    null,
-                                    Parameter_Comparer_Default_Type.GetProperty(nameof(Comparer<int>.Default))
-                                )
-                            )
-                        );
-                    } else {
-                        Parameter_Comparer_Default=null;
-                    }
-                    var Parameter_Value = Expression.Parameter(ElementType,$"{変数名}Value");
-                    ListParameter.Add(Parameter_Value);
-                    var Parameter_MaxMinValue = Expression.Parameter(ElementType,$"{変数名}Result");
-                    ListParameter.Add(Parameter_MaxMinValue);
-                    Expression? 終了処理ifTrue = null;
-                    Expression? 終了処理ifFalse = null;
-                    ListExpression.Add(
-                        this.ループ展開(
-                            MethodCall0_Arguments[0],
-                            argument => {
-                                var ListParameter0 = new List<ParameterExpression>();
-                                var ListExpression0 = new List<Expression>();
-                                var Element = MethodCall0_Arguments.Count==1
-                                    ? argument
-                                    : this.LambdaExpressionを展開1(
-                                        this.Traverse(MethodCall0_Arguments[1]),
-                                        argument
-                                    );
-                                Debug.Assert(MethodCall0_Type==Element.Type);
-                                Expression Left;
-                                Expression Right;
-                                if(GetValueOrDefault is not null) {
-                                    if(Element.NodeType!=ExpressionType.Parameter) {
-                                        var Parameter_Nullable = Expression.Parameter(
-                                            Element.Type,
-                                            $"{変数名}Nullable"
-                                        );
-                                        ListParameter0.Add(Parameter_Nullable);
-                                        ListExpression0.Add(
-                                            Expression.Assign(Parameter_Nullable,Element)
-                                        );
-                                        ListExpression0.Add(
-                                            Expression.Assign(
-                                                Parameter_Value,
-                                                Expression.Call(
-                                                    Parameter_Nullable,
-                                                    GetValueOrDefault
-                                                )
-                                            )
-                                        );
-                                        Right=Parameter_Value;
-                                    } else {
-                                        Right=Expression.Call(
-                                            Element,
-                                            GetValueOrDefault
-                                        );
-                                    }
-                                    終了処理ifTrue=Expression.New(
-                                        作業配列.GetConstructor(
-                                            MethodCall0.Type,
-                                            ElementType
-                                        ),
-                                        Parameter_MaxMinValue
-                                    );
-                                    終了処理ifFalse=Expression.Default(MethodCall0_Type);
-                                } else {
-                                    Right=Element;
-                                    終了処理ifTrue=Parameter_MaxMinValue;
-                                    終了処理ifFalse=Expression.Throw(
-                                        Expression.New(
-                                            InvalidOperationException_ctor,
-                                            作業配列.Expressions設定(
-                                                Expression.Constant(Method.ToString())
-                                            )
-                                        ),
-                                        ElementType
-                                    );
-                                }
-                                var Current = Right;
-                                if(Parameter_Comparer_Default is not null) {
-                                    Left=Expression.Call(
-                                        Parameter_Comparer_Default,
-                                        Parameter_Comparer_Default.Type.GetMethod(nameof(Comparer<int>.Compare))!,
-                                        Parameter_MaxMinValue,
-                                        Expression.Assign(Parameter_Value,Right)
-                                    );
-                                    Right=Constant_0;
-                                } else {
-                                    Left=Parameter_MaxMinValue;
-                                }
-                                ListExpression0.Add(
-                                    Expression.IfThenElse(
-                                        要素あり,
-                                        Expression.IfThenElse(
-                                            Expression.MakeBinary(
-                                                NodeType,
-                                                Left,
-                                                Right
-                                            ),
-                                            Expression.Assign(Parameter_MaxMinValue,Current),
-                                            Default_void
-                                        ),
-                                        Expression.Block(
-                                            Expression.Assign(要素あり,Constant_true),
-                                            Expression.Assign(Parameter_MaxMinValue,Current)
-                                        )
-                                    )
-                                );
-                                return Expression.Block(
-                                    ListParameter0,
-                                    ListExpression0
-                                );
-                            }
-                        )
-                    );
-                    Debug.Assert(終了処理ifTrue is not null&&終了処理ifFalse is not null);
-                    ListExpression.Add(
-                        Expression.Condition(要素あり,終了処理ifTrue,終了処理ifFalse)
-                    );
-                    return Expression.Block(
-                        ListParameter,
-                        ListExpression
-                    );
-                }
+                case nameof(Enumerable.Max):return this.MaxMin(MethodCall0,ExpressionType.LessThan);
+                case nameof(Enumerable.Min):return this.MaxMin(MethodCall0,ExpressionType.GreaterThan);
                 case nameof(ExtensionSet.Stdev): {
                     var ListParameter = new List<ParameterExpression>();
                     var ListExpression = new List<Expression>();

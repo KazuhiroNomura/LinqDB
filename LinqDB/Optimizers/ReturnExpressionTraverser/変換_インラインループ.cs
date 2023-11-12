@@ -17,7 +17,7 @@ using Generic = Collections.Generic;
 using static Common;
 internal class 変換_インラインループ:ReturnExpressionTraverser {
     protected static bool Compare_Defaultを使うべきか(ExpressionType NodeType,Type Type) =>
-        NodeType==ExpressionType.LessThan&&Type.GetMethod(op_LessThan) is null||NodeType==ExpressionType.GreaterThan&&Type.GetMethod(op_GreaterThan) is null;
+        NodeType==ExpressionType.LessThan&&Type.GetMethod(op_LessThan) is not null||NodeType==ExpressionType.GreaterThan&&Type.GetMethod(op_GreaterThan) is not null;
     protected static MethodCallExpression Call(Expression instance,string MethodName) => Expression.Call(
         instance,
         instance.Type.GetMethod(MethodName,Instance_NonPublic_Public)
