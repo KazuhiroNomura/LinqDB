@@ -51,7 +51,6 @@ public sealed class Optimizer:IDisposable {
     private readonly 変換_メソッド正規化_取得インライン不可能定数 _変換_メソッド正規化_取得インライン不可能定数;
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
-    private readonly 変換_跨ぎParameterの不要置換復元 _変換_跨ぎParameterの不要置換復元;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
     private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
@@ -97,7 +96,6 @@ public sealed class Optimizer:IDisposable {
         set {
             this._取得_Dictionary.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
-            this._変換_跨ぎParameterの不要置換復元.Dictionaryラムダ跨ぎParameter=value;
             this._変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
             this._検証_Parameterの使用状態.ラムダ跨ぎParameters=value.Keys;
             this._作成_DynamicMethod.Dictionaryラムダ跨ぎParameter=value;
@@ -153,7 +151,6 @@ public sealed class Optimizer:IDisposable {
         this._変換_WhereからLookup=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
         var Listループ跨ぎParameter = this.Listループ跨ぎParameter;
         this._変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer,Listループ跨ぎParameter);
-        this._変換_跨ぎParameterの不要置換復元=new(作業配列);
         var ExpressionEqualityComparer_Assign_Leftで比較 = new ExpressionEqualityComparer_Assign_Leftで比較();
         this._変換_局所Parameterの先行評価=new(作業配列,ListスコープParameter,ExpressionEqualityComparer_Assign_Leftで比較);
         this._取得_Dictionary=new();

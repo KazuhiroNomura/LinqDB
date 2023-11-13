@@ -152,6 +152,7 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo ToLookup_keySelector_elementSelector = M(() => _Int32.ToLookup(p => p,p=>p));
     public static readonly MethodInfo ToLookup_keySelector_elementSelector_comparer = M(() => _Int32.ToLookup(p => p,p=>p,EqualityComparer<int>.Default));
     public static readonly MethodInfo ToLookup_index = M(() => _Int32.ToLookup((p,index) => p+index));
+    public static readonly MethodInfo ToLookup_index_comparer = M(() => _Int32.ToLookup((p,index) => p+index,null!));
     public static readonly MethodInfo Repeat = M(() => Extension.Repeat(0,0));
     public static readonly MethodInfo Reverse = M(() => _Int32.Reverse());
     public static readonly MethodInfo Select_indexSelector = M(() => _Int32.Select((p,i) => p));

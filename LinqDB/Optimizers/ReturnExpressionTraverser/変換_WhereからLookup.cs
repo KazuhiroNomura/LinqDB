@@ -64,7 +64,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                     //    B.Select(b=>
                     //        Dictionary.Equal(b).Where(c=>c+1==a)
                     //Debug.Assert(this.外側Parameters is not null);
-                    var (OuterPredicate, InnerPredicate, Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+                    var (OuterPredicate, InnerPredicate,Comparer,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
                         predicate.Body,
                         this.外側Parameters!,
                         predicate_Parameters[0]
@@ -88,7 +88,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             var Set1 = MethodCall1_Arguments_0_Type;
                             while(true) {
                                 if(Set1 is null) {
-                                    MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                                    MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
                                     break;
                                 }
                                 var GenericTypeDefinition = Set1;
@@ -112,7 +112,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                             プローブ
                                         );
                                     } else {
-                                        MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                                        MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
                                     }
                                     break;
                                 }
@@ -120,27 +120,58 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             }
                         } else {
                             var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
-                            MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                            MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
                         }
-                        Expression LookupExpression(Expression プローブ,Expression ビルド) {
-                            var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
-                                ? ExtensionSet.ToLookup_keySelector
-                                : ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()
-                                    ? ExtensionEnumerable.ToLookup_keySelector
-                                    : ExtensionEnumerable.ToLookup_index;
-                            var 作業配列=this.作業配列;
-                            var Instance = Expression.Call(
-                                作業配列.MakeGenericMethod(
-                                    Lookup,
-                                    MethodCall0_Method.GetGenericArguments()[0],
-                                    ビルド.Type
-                                ),
-                                MethodCall1_Arguments_0,
-                                Expression.Lambda(
-                                    ビルド,
-                                    predicate_Parameters
-                                )
+                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer){
+                            var keySelector=Expression.Lambda(
+                                ビルド,
+                                predicate_Parameters
                             );
+                            Expression Instance;
+                            var 作業配列=this.作業配列;
+                            if(Comparer is null){
+                                MethodInfo Lookup;
+                                if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
+                                    Lookup=ExtensionSet.ToLookup_keySelector;
+                                } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
+                                    Lookup=ExtensionEnumerable.ToLookup_keySelector;
+                                } else{
+                                    Lookup=ExtensionEnumerable.ToLookup_index;
+                                }
+                                Instance = Expression.Call(
+                                    作業配列.MakeGenericMethod(
+                                        Lookup,
+                                        MethodCall0_Method.GetGenericArguments()[0],
+                                        ビルド.Type
+                                    ),
+                                    MethodCall1_Arguments_0,
+                                    keySelector
+                                );
+                            } else{
+                                MethodInfo Lookup;
+                                if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
+                                    Lookup=ExtensionSet.ToLookup_keySelector_comparer;
+                                } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
+                                    Lookup=ExtensionEnumerable.ToLookup_keySelector_comparer;
+                                } else{
+                                    Lookup=ExtensionEnumerable.ToLookup_index_comparer;
+                                }
+                                Instance = Expression.Call(
+                                    作業配列.MakeGenericMethod(
+                                        Lookup,
+                                        MethodCall0_Method.GetGenericArguments()[0],
+                                        ビルド.Type
+                                    ),
+                                    MethodCall1_Arguments_0,
+                                    keySelector,
+                                    Comparer
+                                );
+                            }
+                            //var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
+                            //    ? ExtensionSet.ToLookup_keySelector
+                            //    : ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()
+                            //        ? ExtensionEnumerable.ToLookup_keySelector
+                            //        : ExtensionEnumerable.ToLookup_index;
                             //MethodInfo get_Item;
                             var Instance_Type = Instance.Type;
                             var get_Item = Instance_Type.GetMethod("get_Item");

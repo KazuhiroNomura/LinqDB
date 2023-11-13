@@ -132,7 +132,6 @@
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_最終正規化.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの不要置換復元.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\ReturnTSqlFragmentTraverser.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_PivotTableReference.cs" />

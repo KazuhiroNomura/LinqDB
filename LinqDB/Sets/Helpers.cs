@@ -70,5 +70,5 @@ public static class Helpers {
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public static T NoEarlyEvaluation<T>(this T input) => input;
-    public static bool Equals<T>(T a,T b) => EqualityComparer<T>.Default.Equals(a,b);
+    //public static bool Equals<T>(T a,T b) => EqualityComparer<T>.Default.Equals(a,b);
 }
