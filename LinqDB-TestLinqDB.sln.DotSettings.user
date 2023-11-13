@@ -6,6 +6,11 @@
   &lt;Assembly Path="C:\Users\kazuh\.nuget\packages\utf8json\1.3.7\lib\netstandard2.0\Utf8Json.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/Highlighting/HighlightingSourceSnapshotLocation/@EntryValue">C:\Users\kazuh\AppData\Local\Temp\JetBrains\ReSharperPlatformVs17\vAny_be882858\CoverageData\_LinqDB-TestLinqDB.371183822\Snapshot\snapshot.utdcvr</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=31484562_002D567f_002D43d8_002Db698_002D428450a5d5df/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Any" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net7.0::TestLinqDB.Optimizers.変換_インラインループ独立.Any&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=527327e0_002D9a8b_002D4136_002D8d8b_002D226e83ef67ba/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;' #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
 &lt;/SessionState&gt;</s:String>

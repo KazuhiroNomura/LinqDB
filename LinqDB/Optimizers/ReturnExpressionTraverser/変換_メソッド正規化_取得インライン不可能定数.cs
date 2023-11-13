@@ -1305,15 +1305,15 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                         }
                         break;
                     }
-                    case nameof(Linq.Enumerable.ToArray): {
-                        Debug.Assert(Reflection.ExtensionEnumerable.ToArray==MethodCall0_GenericMethodDefinition);
-                        var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
-                        if(MethodCall1_Arguments_0.Type.IsArray)return MethodCall1_Arguments_0;
-                        return Expression.Call(
-                            MethodCall0_Method,
-                            MethodCall1_Arguments_0
-                        );
-                    }
+                    //case nameof(Linq.Enumerable.ToArray): {
+                    //    Debug.Assert(Reflection.ExtensionEnumerable.ToArray==MethodCall0_GenericMethodDefinition);
+                    //    var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
+                    //    if(MethodCall1_Arguments_0.Type.IsArray)return MethodCall1_Arguments_0;
+                    //    return Expression.Call(
+                    //        MethodCall0_Method,
+                    //        MethodCall1_Arguments_0
+                    //    );
+                    //}
                     case nameof(Linq.Enumerable.Except):
                     case nameof(Linq.Enumerable.Union): {
                         if(MethodCall1_Arguments.Count==3) {

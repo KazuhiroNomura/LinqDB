@@ -108,6 +108,7 @@
     <Compile Remove="Sets\IOutputSet.cs" />
     <Compile Remove="Sets\IOutputSet`1.cs" />
     <Compile Remove="Sets\IWriteRead`1.cs" />
+    <Compile Remove="Sets\Lookup`3.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Optimizers\Optimizer.変換_局所Parameterの先行評価.txt" />

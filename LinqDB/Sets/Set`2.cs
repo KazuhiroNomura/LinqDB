@@ -51,7 +51,7 @@ public class Set<TKey,TElement>:Set<TElement>
     ///   <see cref="Set{TKey,TElement}" /> クラスの新しいインスタンスを初期化します。指定されたコレクションからコピーされた要素が格納されます。</summary>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TElement}" /> の実装。</param>
-    public Set(ImmutableSet<TElement> source,IEqualityComparer<TElement> Comparer) : base(source,Comparer) {
+    public Set(IEnumerable<TElement> source,IEqualityComparer<TElement> Comparer) : base(source,Comparer) {
     }
     /// <summary>
     /// キーから値を取得する。

@@ -142,23 +142,24 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                 )
                             );
                             //MethodInfo get_Item;
-                            var Instance_Type=Instance.Type;
-                            var get_Item=Instance_Type.GetMethod("get_Item");
-                            if(get_Item is null){
-                                foreach(var Interface in Instance_Type.GetInterfaces()){
-                                    if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)){
-                                        get_Item=Interface.GetMethod("get_Item")!;
-                                        goto 発見;
-                                        //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
-                                        //if(Interface_GetEnumerator==GetEnumerator){
-                                        //    GenericArguments=Interface.GetGenericArguments();
-                                        //    return true;
-                                        //}
-                                    }
-                                }
-                                throw new NotImplementedException();
-                                発見: ;
-                            }
+                            var Instance_Type = Instance.Type;
+                            var get_Item = Instance_Type.GetMethod("get_Item");
+                            Debug.Assert(get_Item is not null);
+//                            if(get_Item is null) {
+//                                foreach(var Interface in Instance_Type.GetInterfaces()) {
+//                                    if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)) {
+//                                        get_Item=Interface.GetMethod("get_Item")!;
+//                                        goto 発見;
+//                                        //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
+//                                        //if(Interface_GetEnumerator==GetEnumerator){
+//                                        //    GenericArguments=Interface.GetGenericArguments();
+//                                        //    return true;
+//                                        //}
+//                                    }
+//                                }
+//                                throw new NotImplementedException();
+//発見:;
+//                            }
                             //if(typeof(System.Linq.ILookup<,>)==Instance_Type.GetGenericTypeDefinition()){
                             //    get_Item=Instance_Type.GetMethod("get_Item")!;
                             //} else{

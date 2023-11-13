@@ -83,7 +83,7 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="Generic.IEqualityComparer{T}" /> の実装。</param>
     [MethodImpl(MethodImplOptions.NoInlining|MethodImplOptions.NoOptimization)]
-    public Set(ImmutableSet<T> source,Generic.IEqualityComparer<T> Comparer) :base(source,Comparer) {
+    public Set(IEnumerable<T> source,Generic.IEqualityComparer<T> Comparer) : base(source,Comparer) {
     }
     //public sealed class JsonFormatter:Utf8Json.IJsonFormatter<Set<T>>{
     //    public static readonly JsonFormatter Instance=new();

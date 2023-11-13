@@ -346,6 +346,7 @@ internal static class Common {
         if(typeof(Enumerable)==DeclaringType) {
             var Name = GenericMethodDefinition.Name;
             if(
+                nameof(Enumerable.ToArray)==Name||
                 nameof(Enumerable.DistinctBy)==Name||
                 nameof(Enumerable.ExceptBy)==Name||
                 nameof(Enumerable.IntersectBy)==Name||

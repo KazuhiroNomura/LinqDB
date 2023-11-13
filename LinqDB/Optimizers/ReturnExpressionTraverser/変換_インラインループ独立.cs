@@ -2410,45 +2410,45 @@ internal class 変換_インラインループ独立:変換_インラインル�
             ListExpression
         );
     }
-    private Expression ToArray(MethodCallExpression MethodCall0){
-        var Method=MethodCall0.Method;
-        var Name=Method.Name;
-        var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
-        //var GenericMethodDefinition=GetGenericMethodDefinition(Method);
-        var MethodCall0_Arguments = MethodCall0.Arguments;
-        if(Method.DeclaringType!=typeof(Enumerable)) return base.Call(MethodCall0);
-        var 作業配列=this.作業配列;
-        var ListType = 作業配列.MakeGenericType(
-            typeof(List<>),
-            MethodCall0.Type.GetElementType()!
-        );
-        var List = Expression.Parameter(
-            ListType,
-            $"{変数名}List"
-        );
-        var Expression1ループ = this.ループ展開(
-            MethodCall0_Arguments[0],
-            argument => Expression.Call(
-                List,
-                ListType.GetMethod(nameof(System.Collections.IList.Add)),
-                argument
-            )
-        );
-        return Expression.Block(
-            作業配列.Parameters設定(List),
-            作業配列.Expressions設定(
-                Expression.Assign(
-                    List,
-                    Expression.New(ListType)
-                ),
-                Expression1ループ,
-                Call(
-                    List,
-                    nameof(List<int>.ToArray)
-                )
-            )
-        );
-    }
+    //private Expression ToArray(MethodCallExpression MethodCall0){
+    //    var Method=MethodCall0.Method;
+    //    var Name=Method.Name;
+    //    var 変数名 = $"{Name}ﾟ{this.番号++}ﾟ";
+    //    //var GenericMethodDefinition=GetGenericMethodDefinition(Method);
+    //    var MethodCall0_Arguments = MethodCall0.Arguments;
+    //    if(Method.DeclaringType!=typeof(Enumerable)) return base.Call(MethodCall0);
+    //    var 作業配列=this.作業配列;
+    //    var ListType = 作業配列.MakeGenericType(
+    //        typeof(List<>),
+    //        MethodCall0.Type.GetElementType()!
+    //    );
+    //    var List = Expression.Parameter(
+    //        ListType,
+    //        $"{変数名}List"
+    //    );
+    //    var Expression1ループ = this.ループ展開(
+    //        MethodCall0_Arguments[0],
+    //        argument => Expression.Call(
+    //            List,
+    //            ListType.GetMethod(nameof(System.Collections.IList.Add)),
+    //            argument
+    //        )
+    //    );
+    //    return Expression.Block(
+    //        作業配列.Parameters設定(List),
+    //        作業配列.Expressions設定(
+    //            Expression.Assign(
+    //                List,
+    //                Expression.New(ListType)
+    //            ),
+    //            Expression1ループ,
+    //            Call(
+    //                List,
+    //                nameof(List<int>.ToArray)
+    //            )
+    //        )
+    //    );
+    //}
     protected override Expression Call(MethodCallExpression MethodCall0) {
         var Method = MethodCall0.Method;
         var GenericMethodDefinition = GetGenericMethodDefinition(Method);
@@ -2457,7 +2457,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
         var 作業配列 = this.作業配列;
         //Debug.Assert(Reflection.ExtensionSet.Contains_value!=GenericMethodDefinition);
         Debug.Assert(Method.ReturnType==MethodCall0.Type);
-        var MethodCall0_Arguments = MethodCall0.Arguments;
         if(ループ展開可能メソッドか(GenericMethodDefinition)) {
             switch(Method.Name) {
                 case nameof(ExtensionSet.Inline       ):return this.Inline(MethodCall0);
@@ -2478,8 +2477,8 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 case nameof(Enumerable  .SequenceEqual):return this.SequenceEqual(MethodCall0);
                 case nameof(Enumerable  .Single       )or nameof(Enumerable.SingleOrDefault): return this.Single(MethodCall0);
                 case nameof(Enumerable  .Sum          ):return this.Sum(MethodCall0); 
-                case nameof(Enumerable  .ToArray      ):return this.ToArray(MethodCall0); 
-                case nameof(Enumerable  .Empty        ):return MethodCall0;
+                //case nameof(Enumerable  .ToArray      ):return this.ToArray(MethodCall0); 
+                //case nameof(Enumerable  .Empty        ):return MethodCall0;
             }
             Debug.Assert(MethodCall0.Type!=typeof(void));
             var (Result, Add,ResultAssign)=具象Type(MethodCall0,変数名,false,true);

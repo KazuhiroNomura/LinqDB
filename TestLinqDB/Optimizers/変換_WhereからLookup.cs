@@ -13,13 +13,6 @@ public class 変換_WhereからLookup:共通{
             this.i=i;
         }
     }
-    [Fact]public void xxx(){
-        var s = new Set<int>{1,2,3};
-        var st=new Set<Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
-        var a=st.GetSet(new (new(0)));
-        //this.Memory_Assert(st);
-        this.ExpressionAssertEqual((Expression<Action>)(()=>st.SelectMany(o=>st.Where(i=>i.Key.Equals(o.Key)))));
-    }
     class SetT:Set<OI>{
 
     }
@@ -65,6 +58,17 @@ public class 変換_WhereからLookup:共通{
         //                            ? ExtensionEnumerable.Lookup
         this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>new int[3].Where(i=>o==i&&i+1==o+1))));
         //                            : ExtensionEnumerable.Lookup_index;
+
+
+        //                    if(get_Item is null){
+        //                        foreach(var Interface in Instance_Type.GetInterfaces()){
+        //                            if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)){
+        //                            }
+        //                        }
+        //                        throw new NotImplementedException();
+        //                        発見: ;
+        //                    }
+
         this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>new int[3].Where((i,index)=>o==i&&i+1==o+1&&index==3))));
         //                    var GetValue = 作業配列.GetMethod(Instance.Type,nameof(LookupList<int,int>.GetTKeyValue),プローブ.Type);
         ////                    if(GetValue is null) {

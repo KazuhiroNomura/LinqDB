@@ -448,13 +448,15 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         //get=>this._取得_先行評価式.IsInline;
         set=>this._取得_先行評価式.IsInline=this._変換_先行評価式.ループ跨ぎを使うか=value;
     }
+    [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
     public Expression 実行(Expression Lambda0){
         this.番号=0;
         this.List束縛Parameter情報.Clear();
         //this.Dictionary_Expression_ループラムダ跨ぎParameter.Clear();
         var Lambda1=(LambdaExpression)this.Traverse(Lambda0);
         var Block1_Variables=this.Dictionaryラムダ跨ぎParameter.Keys.Concat(this.ループ跨ぎParameters);
-        var Lambda1_Body=Expression.Block(Block1_Variables,this.作業配列.Expressions設定(Lambda1.Body));
+        var Lambda1_Body=Lambda1.Body;
+        if(Block1_Variables.Any())Lambda1_Body=Expression.Block(Block1_Variables,this.作業配列.Expressions設定(Lambda1_Body));
         return Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda1.Name,Lambda1.TailCall,Lambda1.Parameters);
     }
     internal Generic.Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{

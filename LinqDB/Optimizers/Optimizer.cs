@@ -1232,7 +1232,8 @@ public sealed class Optimizer:IDisposable {
         var Lambda04 = this._変換_WhereからLookup.実行(Lambda02);
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
-        var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
+        //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
+        var Lambda06=Lambda05;
         var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
         this._検証_変形状態.実行(Lambda07);
         var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;

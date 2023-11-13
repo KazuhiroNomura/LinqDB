@@ -74,13 +74,13 @@ public sealed class Set<TKey,TElement, TContainer>:Set<TKey,TElement>,IContainer
     /// <param name="Container"></param>
     /// <param name="source">新しいセットの要素のコピー元となる配列。</param>
     /// <param name="Comparer">セット内の値を比較する際に使用する <see cref="IEqualityComparer{TValue}" /> の実装。</param>
-    public Set(TContainer Container,ImmutableSet<TElement> source,IEqualityComparer<TElement> Comparer) : this(Container,Comparer) {
+    public Set(TContainer Container,IEnumerable<TElement> source,IEqualityComparer<TElement> Comparer) : this(Container,Comparer) {
         this.PrivateProtectedImport(source);
     }
     /// <summary>
     /// <see cref="ImmutableSet{TValue}" />からのコンストラクタ。Containerに属させる。
     /// </summary>
-    public Set(TContainer Container,ImmutableSet<TElement> source) : this(Container) => this.PrivateProtectedImport(source);
+    public Set(TContainer Container,IEnumerable<TElement> source) : this(Container) => this.PrivateProtectedImport(source);
     /// <summary>
     /// 配列からのコンストラクタ。Containerに属させる。
     /// </summary>

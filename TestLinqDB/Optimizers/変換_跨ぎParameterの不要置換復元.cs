@@ -17,15 +17,15 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
         var int_refint_intFuncRef=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
         var int_refint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
-        var input = Expression.Parameter(typeof(int), "p");
+        var p = Expression.Parameter(typeof(int), "p");
         //()=>{var p;int_Lambda0_refint_intFuncRef(
         this.ExpressionAssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
-                    new[]{input},
+                    new[]{p},
                     Expression.Call(
                         int_refint,
-                        input,
+                        p,
                         Expression.Lambda<delegate_int_refint>(
                             Expression.Assign(
                                 ref_p,
@@ -38,30 +38,107 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
             )
         );
     }
-    private delegate int delegate_int_refint(ref int input);
-    private static int int_refint(ref int input, delegate_int_refint d) => d(ref input);
-    [Fact]
-    public void Ref1(){
-        var f= BindingFlags.Static|BindingFlags.NonPublic;
-        var in_p=Expression.Parameter(typeof(int),"p");
-        var ref_p=Expression.Parameter(typeof(int).MakeByRefType(),"ref_p");
-        var int_Lambda0_refint_intFuncRef=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
-        var int_Lambda_refint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
+    [Fact]public void Val0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        var val_p=Expression.Parameter(typeof(int),"val_p");
+        var int_valint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_valint),f)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Call(
+                    int_valint,
+                    p,
+                    Expression.Lambda<delegate_int_valint>(
+                        Expression.Add(
+                            p,
+                            p
+                        ),
+                        val_p
+                    )
+                ),p
+            )
+        );
+    }
+    private delegate int delegate_int_valint(int input);
+    private static int int_valint(ref int input, delegate_int_valint d) => d(input);
+    /// <summary>
+    /// ()=>
+    ///     int p=0
+    ///     return int_int(p,(int input)=>p+p)
+    /// </summary>
+    [Fact]public void Val1(){
+        var p=Expression.Parameter(typeof(int),"p");
+        var val_p=Expression.Parameter(typeof(int),"val_p");
+        var int_valint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_valint),f)!;
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
-                    new[]{in_p},
+                    new[]{p},
                     Expression.Assign(
-                        in_p,
+                        p,
                         Expression.Constant(0)
                     ),
                     Expression.Call(
-                        int_Lambda_refint,
-                        in_p,
+                        int_valint,
+                        p,
+                        Expression.Lambda<delegate_int_valint>(
+                            Expression.Add(
+                                p,
+                                p
+                            ),
+                            val_p
+                        )
+                    )
+                )
+            )
+        );
+    }
+    private delegate int delegate_int_refint(ref int input);
+    private static int int_refint(ref int input, delegate_int_refint d) => d(ref input);
+    private const BindingFlags f= BindingFlags.Static|BindingFlags.NonPublic;
+    [Fact]public void Ref1(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(p,Expression.Constant(0)),
+                    Expression.Invoke(
+                        Expression.Lambda<Func<int>>(
+                            Expression.Add(
+                                p,
+                                p
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    /// <summary>
+    /// ()=>
+    ///     int p=0
+    ///     return int_refint(p,(ref int input)=>p+p)
+    /// </summary>
+    [Fact]public void Ref2(){
+        var f= BindingFlags.Static|BindingFlags.NonPublic;
+        var p=Expression.Parameter(typeof(int),"p");
+        var ref_p=Expression.Parameter(typeof(int).MakeByRefType(),"ref_p");
+        var int_refint=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(
+                        p,
+                        Expression.Constant(0)
+                    ),
+                    Expression.Call(
+                        int_refint,
+                        p,
                         Expression.Lambda<delegate_int_refint>(
                             Expression.Add(
-                                in_p,
-                                in_p
+                                p,
+                                p
                             ),
                             ref_p
                         )
@@ -70,11 +147,11 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
             )
         );
     }
-    [Fact]public void Ref2(){
+    [Fact]public void Ref4(){
         var f= BindingFlags.Static|BindingFlags.NonPublic;
         var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
         var Lambda0=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
-        var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
+        var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
         var p = Expression.Parameter(typeof(int), "p");
         this.ExpressionAssertEqual(
             Expression.Lambda<Action>(
@@ -113,7 +190,7 @@ public class 変換_跨ぎParameterの不要置換復元:共通{
         var f= BindingFlags.Static|BindingFlags.NonPublic;
         var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
         var Lambda0=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
-        var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(変換_跨ぎParameterの不要置換復元.int_refint),f)!;
+        var Int32_Lambda_ref_Int32=typeof(変換_跨ぎParameterの不要置換復元).GetMethod(nameof(int_refint),f)!;
         var p = Expression.Parameter(typeof(int), "p");
         this.ExpressionAssertEqual(
             Expression.Lambda<Action>(

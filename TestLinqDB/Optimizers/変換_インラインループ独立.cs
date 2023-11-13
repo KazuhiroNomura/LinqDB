@@ -256,8 +256,8 @@ public class 変換_インラインループ独立:共通{
         var n0=new Set<double?>{1,2,3};
         var n1 = n0;
         //if(Reflection.ExtensionSet.GeomeanDouble_selector==GenericMethodDefinition) {
-        ////    if(this.重複除去されているか(MethodCall0_Arguments_0)){
-        //this.Expression実行AssertEqual(() => s0.GroupBy(p => p).Geomean(p => p.Key));
+        //    if(this.重複除去されているか(MethodCall0_Arguments_0)){
+        this.Expression実行AssertEqual(() => s0.GroupBy(p => p).Geomean(p => p.Key));
         //    } else{
         this.Expression実行AssertEqual(() => s0.Select(p=>p+1).Geomean(p => p));
         //    }
@@ -391,11 +391,16 @@ public class 変換_インラインループ独立:共通{
     }
     [Fact]
     public void ToArray(){
-        var ints=new Set<int>{1};
+        System.Collections.Generic.IEnumerable<int> ints=new List<int>{1};
+        System.Collections.Generic.IEnumerable<int> sets0=new Set<int>{1};
+        LinqDB.Sets.IEnumerable<int> sets1=new Set<int>{1};
+        //if(Method.DeclaringType!=typeof(Enumerable)) return base.Call(MethodCall0);
+        //this.Expression実行AssertEqual(() => ints.ToSet().ToArray());
         this.Expression実行AssertEqual(() => ints.ToArray());
+        this.Expression実行AssertEqual(() => sets0.ToArray());
+        this.Expression実行AssertEqual(() => sets1.ToArray());
     }
     [Fact]public void Call() {
-        var s = new int[]{1,2,3,4,5,6,7};
         //if(ループ展開可能メソッドか(GenericMethodDefinition)) {
         //    switch(Method.Name) {
         //        case nameof(ExtensionSet.Inline):return this.Inline(MethodCall0);
@@ -432,11 +437,7 @@ public class 変換_インラインループ独立:共通{
         this.Single();
         //        case nameof(Enumerable.Sum): {
         this.Sum();
-        //            if(Method.DeclaringType!=typeof(Enumerable)) {
+        //    }
         this.ToArray();
-        //    }
-        //    Debug.Assert(MethodCall0.Type!=typeof(void));
-        //    {
-        //    }
     }
 }
