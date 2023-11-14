@@ -1,4 +1,7 @@
 ﻿using System.Linq.Expressions;
+using LinqDB.Optimizers;
+using System.Reflection;
+
 using LinqDB.Sets;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
@@ -51,6 +54,21 @@ public class 変換_WhereからLookup:共通{
         this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>s.Where(i=>o==i&&i+1==o+1))));
         //                }
         //                Expression LookupExpression(Expression プローブ,Expression ビルド) {
+        //                    if(Comparer is null){
+        //                        if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
+        this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>s.Where(i=>o==i&&i+1==o+1))));
+        //                        } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
+        this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>new int[3].Where(i=>o==i&&i+1==o+1))));
+        //                        } else{
+        this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>new int[3].Where((i,index)=>o==i&&i+1==o+1&&index==0))));
+        //                        }
+        //                    } else{
+        //                        if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
+        this.ExpressionAssertEqual(() => s.Join(s,o=>o,i=>i,(o,i)=>o+i));
+        //                        } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
+        this.ExpressionAssertEqual(() => new int[2].Join(new int[1],o=>o,i=>i,(o,i)=>o+i,EqualityComparer<int>.Default));
+        //                        }
+        //                    }
         //                    var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
         //                        ? ExtensionSet.Lookup
         this.ExpressionAssertEqual((Expression<Action>)(() => s.SelectMany(o=>s.Where(i=>o==i&&i+1==o+1))));

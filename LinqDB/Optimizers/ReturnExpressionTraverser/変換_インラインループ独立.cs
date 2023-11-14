@@ -16,7 +16,7 @@ namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 
 internal class 変換_インラインループ独立:変換_インラインループ {
-    public 変換_インラインループ独立(作業配列 作業配列,ExpressionEqualityComparer ExpressionEqualityComparer,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2):base(作業配列,ExpressionEqualityComparer,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2) {
+    public 変換_インラインループ独立(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2):base(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2) {
     }
     private Expression Inline(MethodCallExpression MethodCall0){
         if(Reflection.ExtensionSet.Inline2==MethodCall0.Method.GetGenericMethodDefinition()) {

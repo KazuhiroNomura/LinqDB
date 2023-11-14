@@ -58,17 +58,17 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
         var InnerPredicate = this.PrivateTraverseNullable(predicate_Body);
         return (this.OuterPredicate, InnerPredicate,this.Comparer,Listプローブビルド);
     }
-    public (Expression? OuterPredicate, Expression? InnerPredicate, List<(Expression プローブ, Expression ビルド)> Listプローブビルド) TSQLから実行(Expression predicate_Body,IList<ParameterExpression> 外側Parameters,ParameterExpression 内側Parameter) {
-        this.外側Parameters=外側Parameters;
-        this.内側Parameter=内側Parameter;
-        this.OuterPredicate=null;
-        this.Comparer=null;
-        var Listプローブビルド = this.Listプローブビルド;
-        Listプローブビルド.Clear();
-        var InnerPredicate = this.PrivateTraverseNullable(predicate_Body);
-        Debug.Assert(this.Comparer is null);
-        return (this.OuterPredicate, InnerPredicate,Listプローブビルド);
-    }
+    //public (Expression? OuterPredicate, Expression? InnerPredicate, List<(Expression プローブ, Expression ビルド)> Listプローブビルド) TSQLから実行(Expression predicate_Body,IList<ParameterExpression> 外側Parameters,ParameterExpression 内側Parameter) {
+    //    this.外側Parameters=外側Parameters;
+    //    this.内側Parameter=内側Parameter;
+    //    this.OuterPredicate=null;
+    //    this.Comparer=null;
+    //    var Listプローブビルド = this.Listプローブビルド;
+    //    Listプローブビルド.Clear();
+    //    var InnerPredicate = this.PrivateTraverseNullable(predicate_Body);
+    //    Debug.Assert(this.Comparer is null);
+    //    return (this.OuterPredicate, InnerPredicate,Listプローブビルド);
+    //}
     private Expression? 等号が出現した時にDictionaryHashとEqualに分離(Expression e,Expression Left,Expression Right) {
         Debug.Assert(this.外側Parameters is not null);
         if(HashEqualを設定(Right,Left)||HashEqualを設定(Left,Right)) return null;

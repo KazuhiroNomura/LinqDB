@@ -64,7 +64,6 @@ public abstract class 共通{
         }
     }
     //protected readonly 汎用Comparer 汎用Comparer;
-    protected ExpressionEqualityComparer ExpressionEqualityComparer=>new();
     protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
     protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();

@@ -151,10 +151,12 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                 MethodInfo Lookup;
                                 if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
                                     Lookup=ExtensionSet.ToLookup_keySelector_comparer;
-                                } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
-                                    Lookup=ExtensionEnumerable.ToLookup_keySelector_comparer;
                                 } else{
-                                    Lookup=ExtensionEnumerable.ToLookup_index_comparer;
+                                    //Where((i,index))はあるけどComparerありの比較はないのでToLookup_index_comparerが登場することはない
+                                    Debug.Assert(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition());
+                                    Lookup=ExtensionEnumerable.ToLookup_keySelector_comparer;
+                                //} else{
+                                //    Lookup=ExtensionEnumerable.ToLookup_index_comparer;
                                 }
                                 Instance = Expression.Call(
                                     作業配列.MakeGenericMethod(

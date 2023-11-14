@@ -64,7 +64,7 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         private readonly IReadOnlyDictionary<LabelTarget,List<Expression>>Dictionary_LabelTarget_Expressions;
         private readonly Dictionary<Expression,Expression?> Dictionary一度出現したExpression_二度出現したExpressionの一度目;
         private HashSet<Expression> HashSet一度出現したExpression;
-        private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
+        public readonly ExpressionEqualityComparer ExpressionEqualityComparer;
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly Stack<(HashSet<Expression>HashSet一度出現したExpression,HashSet<Expression>HashSet一度出現したExpression1,bool IfTrueまたはIfFalse外部か)> Stack_HashSet一度出現したExpression=new();
         private readonly HashSet<LabelTarget> HashSet_走査したLabelTarget=new();
@@ -356,6 +356,7 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
     }
     private sealed class 変換_二度出現したExpression:ReturnExpressionTraverser{
         private readonly IReadOnlyDictionary<LabelTarget,List<Expression>> Dictionary_LabelTarget_Expressions;
+        //不要では？
         private readonly HashSet<LabelTarget> HashSet処理した=new();
         //private List<Expression>? ListExpression;
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
@@ -591,14 +592,16 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
     }
     private readonly 変換_フロー _変換_フロー;
     private readonly List<ParameterExpression> ListスコープParameter;
-    internal 変換_局所Parameterの先行評価(作業配列 作業配列,List<ParameterExpression> ListスコープParameter,ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer_Assign_Leftで比較) : base(作業配列){
+    private readonly ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer_Assign_Leftで比較;
+    internal 変換_局所Parameterの先行評価(作業配列 作業配列) : base(作業配列){
+        var ListスコープParameter=this.ListスコープParameter=new();
+        var ExpressionEqualityComparer_Assign_Leftで比較=this.ExpressionEqualityComparer_Assign_Leftで比較=new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
         var 判定_左辺Parametersが含まれる=new 判定_左辺Expressionsが含まれる(ExpressionEqualityComparer_Assign_Leftで比較);
         var Dictionary_LabelTarget_Expressions=new Dictionary<LabelTarget,List<Expression>>();
         this._取得_Labelに対応するExpressions=new(Dictionary_LabelTarget_Expressions);
         this._取得_二度出現したExpression=new(Dictionary_LabelTarget_Expressions,ExpressionEqualityComparer_Assign_Leftで比較,判定_左辺Parametersが含まれる);
         this._変換_二度出現したExpression=new(作業配列,Dictionary_LabelTarget_Expressions,ExpressionEqualityComparer_Assign_Leftで比較,判定_左辺Parametersが含まれる);
         this._変換_フロー=new(作業配列,Dictionary_LabelTarget_Expressions);
-        this.ListスコープParameter=ListスコープParameter;
     }
     internal IEnumerable<ParameterExpression> ラムダ跨ぎParameters{
         set{
@@ -619,6 +622,7 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         }
     }
     public Expression 実行(Expression Expression0) {
+        this.ListスコープParameter.Clear();
         Debug.Assert(Expression0.NodeType==ExpressionType.Lambda&&this.ListスコープParameter.Count==0);
         this._取得_Labelに対応するExpressions.実行(Expression0);
         this.番号=0;
@@ -674,7 +678,10 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         var Conditional1_Test=this.Traverse(Conditional0_Test);
         var Conditional1_IfTrue=共通(Conditional0_IfTrue);
         var Conditional1_IfFalse=共通(Conditional0_IfFalse);
-        if(Conditional0_Test==Conditional1_Test && Conditional0_IfTrue==Conditional1_IfTrue && Conditional0_IfFalse==Conditional1_IfFalse)return Conditional0;
+        if(Conditional0_Test==Conditional1_Test)
+            if(Conditional0_IfTrue==Conditional1_IfTrue)
+                if(Conditional0_IfFalse==Conditional1_IfFalse)
+                    return Conditional0;
         return Expression.Condition(Conditional1_Test,Conditional1_IfTrue,Conditional1_IfFalse,Conditional0.Type);
         Expression 共通(Expression Expression0){
             var Block_Variables=this.Block_Variables;

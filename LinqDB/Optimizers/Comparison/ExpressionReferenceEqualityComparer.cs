@@ -11,6 +11,9 @@ using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers.Comparison;
 using Generic = System.Collections.Generic;
+/// <summary>
+/// 式の各要素を参照により等価性を見る
+/// </summary>
 public sealed class ExpressionReferenceEqualityComparer : Generic.IEqualityComparer<Expression>
 //,Generic.IEqualityComparer<ParameterExpression>//,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>,
 //,Generic.IEqualityComparer<MemberBinding>//,Generic.IEqualityComparer<MemberAssignment>,Generic.IEqualityComparer<MemberListBinding>,Generic.IEqualityComparer<MemberMemberBinding>
