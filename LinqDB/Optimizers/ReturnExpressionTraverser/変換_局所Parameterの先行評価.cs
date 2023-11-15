@@ -28,33 +28,29 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
             var ListExpression=this.ListExpression=new List<Expression>();
             this.Dictionary_LabelTarget_Expressions.Add(Label.Target,ListExpression);
         }
-        //protected override void Conditional(ConditionalExpression Conditional){
-        //    this.Traverse(Conditional.Test);
-        //    this.Traverse(Conditional.IfTrue);
-        //    this.Traverse(Conditional.IfFalse);
-        //    base.Conditional(Conditional);
-        //}
         protected override void Loop(LoopExpression Loop){
-            if(Loop.ContinueLabel is not null){
+            if(Loop.ContinueLabel is not null)
                 this.Dictionary_LabelTarget_Expressions.Add(Loop.ContinueLabel,this.ListExpression=new List<Expression>());
-            } else{
+            else
                 this.ListExpression=null;
-            }
             this.Traverse(Loop.Body);
-            if(Loop.BreakLabel is not null){
+            if(Loop.BreakLabel is not null)
                 this.Dictionary_LabelTarget_Expressions.Add(Loop.BreakLabel,this.ListExpression=new List<Expression>());
-            } else{
+            else
                 this.ListExpression=null;
-            }
         }
         protected override void Block(BlockExpression Block){
             var Block_Expressions=Block.Expressions;
             var Block_Expressions_Count=Block_Expressions.Count;
             for(var a=0;a<Block_Expressions_Count;a++){
                 var Block_Expression=Block_Expressions[a];
-                if(Block_Expression.NodeType is ExpressionType.Block or ExpressionType.Loop or ExpressionType.Label){
-                }else if(Block_Expression.NodeType==ExpressionType.Goto)this.ListExpression=null;
-                else this.ListExpression?.Add(Block_Expression);
+                switch(Block_Expression.NodeType){
+                    case ExpressionType.Block:continue;
+                    case ExpressionType.Loop:continue;
+                    case ExpressionType.Label:continue;
+                    case ExpressionType.Goto:this.ListExpression=null; break;
+                    default:this.ListExpression?.Add(Block_Expression); break;
+                }
                 this.Traverse(Block_Expression);
             }
         }
@@ -64,7 +60,7 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         private readonly IReadOnlyDictionary<LabelTarget,List<Expression>>Dictionary_LabelTarget_Expressions;
         private readonly Dictionary<Expression,Expression?> Dictionary一度出現したExpression_二度出現したExpressionの一度目;
         private HashSet<Expression> HashSet一度出現したExpression;
-        public readonly ExpressionEqualityComparer ExpressionEqualityComparer;
+        private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly Stack<(HashSet<Expression>HashSet一度出現したExpression,HashSet<Expression>HashSet一度出現したExpression1,bool IfTrueまたはIfFalse外部か)> Stack_HashSet一度出現したExpression=new();
         private readonly HashSet<LabelTarget> HashSet_走査したLabelTarget=new();
@@ -549,59 +545,59 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         protected override Expression Lambda(LambdaExpression Lambda0) => Lambda0;
     }
     private readonly 変換_二度出現したExpression _変換_二度出現したExpression;
-    private sealed class 変換_フロー:ReturnExpressionTraverser{
-        private readonly IReadOnlyDictionary<LabelTarget,List<Expression>> Dictionary_LabelTarget_Expressions;
-        private static readonly List<Expression>ListEmpty=new();
-        public 変換_フロー(作業配列 作業配列,IReadOnlyDictionary<LabelTarget,List<Expression>>Dictionary_LabelTarget_Expressions):base(作業配列){
-            this.Dictionary_LabelTarget_Expressions=Dictionary_LabelTarget_Expressions;
-        }
-        private List<Expression>ListExpression=ListEmpty;
-        private int index;
-        private List<Expression>.Enumerator Enumerator;
-        public Expression 実行(Expression Expression0){
-            this.index=0;
-            this.Enumerator=ListEmpty.GetEnumerator();
-            var Expression1=this.Traverse(Expression0);
-            Debug.Assert(!this.Enumerator.MoveNext());
-            return Expression1;
-        }
-        protected override Expression Block(BlockExpression Block0){
-            var Block0_Expressions = Block0.Expressions;
-            var Block0_Expressions_Count = Block0_Expressions.Count;
-            var Block1_Expressions=new Expression[Block0_Expressions_Count];
-            for(var a=0;a<Block0_Expressions_Count;a++){
-                var Block0_Expression=Block0_Expressions[a];
-                if(Block0_Expression.NodeType!=ExpressionType.Block&&this.Enumerator.MoveNext()){
-                    this.index++;
-                    Debug.Assert(Block0_Expression.NodeType!=ExpressionType.Label);
-                    Block1_Expressions[a]=this.Traverse(this.Enumerator.Current);
-                } else{
-                    Block1_Expressions[a]=this.Traverse(Block0_Expression);
-                }
-            }
-            return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
-        }
-        protected override Expression Traverse(Expression Expression0) {
-            if(Expression0.NodeType==ExpressionType.Label){
-                this.ListExpression=this.Dictionary_LabelTarget_Expressions[((LabelExpression)Expression0).Target];
-                this.Enumerator=this.Dictionary_LabelTarget_Expressions[((LabelExpression)Expression0).Target].GetEnumerator();
-                return Expression0;
-            }
-            return base.Traverse(Expression0);
-        }
-    }
-    private readonly 変換_フロー _変換_フロー;
+    //private sealed class 変換_フロー:ReturnExpressionTraverser{
+    //    private readonly IReadOnlyDictionary<LabelTarget,List<Expression>> Dictionary_LabelTarget_Expressions;
+    //    private static readonly List<Expression>ListEmpty=new();
+    //    public 変換_フロー(作業配列 作業配列,IReadOnlyDictionary<LabelTarget,List<Expression>>Dictionary_LabelTarget_Expressions):base(作業配列){
+    //        this.Dictionary_LabelTarget_Expressions=Dictionary_LabelTarget_Expressions;
+    //    }
+    //    private List<Expression>ListExpression=ListEmpty;
+    //    private int index;
+    //    private List<Expression>.Enumerator Enumerator;
+    //    public Expression 実行(Expression Expression0){
+    //        this.index=0;
+    //        this.Enumerator=ListEmpty.GetEnumerator();
+    //        var Expression1=this.Traverse(Expression0);
+    //        Debug.Assert(!this.Enumerator.MoveNext());
+    //        return Expression1;
+    //    }
+    //    protected override Expression Block(BlockExpression Block0){
+    //        var Block0_Expressions = Block0.Expressions;
+    //        var Block0_Expressions_Count = Block0_Expressions.Count;
+    //        var Block1_Expressions=new Expression[Block0_Expressions_Count];
+    //        for(var a=0;a<Block0_Expressions_Count;a++){
+    //            var Block0_Expression=Block0_Expressions[a];
+    //            if(Block0_Expression.NodeType!=ExpressionType.Block&&this.Enumerator.MoveNext()){
+    //                this.index++;
+    //                Debug.Assert(Block0_Expression.NodeType!=ExpressionType.Label);
+    //                Block1_Expressions[a]=this.Traverse(this.Enumerator.Current);
+    //            } else{
+    //                Block1_Expressions[a]=this.Traverse(Block0_Expression);
+    //            }
+    //        }
+    //        return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
+    //    }
+    //    protected override Expression Traverse(Expression Expression0) {
+    //        if(Expression0.NodeType==ExpressionType.Label){
+    //            this.ListExpression=this.Dictionary_LabelTarget_Expressions[((LabelExpression)Expression0).Target];
+    //            this.Enumerator=this.Dictionary_LabelTarget_Expressions[((LabelExpression)Expression0).Target].GetEnumerator();
+    //            return Expression0;
+    //        }
+    //        return base.Traverse(Expression0);
+    //    }
+    //}
+    //private readonly 変換_フロー _変換_フロー;
     private readonly List<ParameterExpression> ListスコープParameter;
-    private readonly ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer_Assign_Leftで比較;
+    //private readonly ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer_Assign_Leftで比較;
     internal 変換_局所Parameterの先行評価(作業配列 作業配列) : base(作業配列){
         var ListスコープParameter=this.ListスコープParameter=new();
-        var ExpressionEqualityComparer_Assign_Leftで比較=this.ExpressionEqualityComparer_Assign_Leftで比較=new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
+        var ExpressionEqualityComparer_Assign_Leftで比較=new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
         var 判定_左辺Parametersが含まれる=new 判定_左辺Expressionsが含まれる(ExpressionEqualityComparer_Assign_Leftで比較);
         var Dictionary_LabelTarget_Expressions=new Dictionary<LabelTarget,List<Expression>>();
         this._取得_Labelに対応するExpressions=new(Dictionary_LabelTarget_Expressions);
         this._取得_二度出現したExpression=new(Dictionary_LabelTarget_Expressions,ExpressionEqualityComparer_Assign_Leftで比較,判定_左辺Parametersが含まれる);
         this._変換_二度出現したExpression=new(作業配列,Dictionary_LabelTarget_Expressions,ExpressionEqualityComparer_Assign_Leftで比較,判定_左辺Parametersが含まれる);
-        this._変換_フロー=new(作業配列,Dictionary_LabelTarget_Expressions);
+        //this._変換_フロー=new(作業配列,Dictionary_LabelTarget_Expressions);
     }
     internal IEnumerable<ParameterExpression> ラムダ跨ぎParameters{
         set{
@@ -628,7 +624,8 @@ internal sealed class 変換_局所Parameterの先行評価:ReturnExpressionTrav
         this.番号=0;
         var Lambda1 = (LambdaExpression)this.Traverse(Expression0);
         //var Lambda2=Lambda1;
-        var Lambda2=(LambdaExpression)this._変換_フロー.実行(Lambda1);
+        //var Lambda2=(LambdaExpression)this._変換_フロー.実行(Lambda1);
+        var Lambda2=Lambda1;
         return Expression.Lambda(Lambda2.Type,Lambda2.Body,Lambda2.Name,Lambda2.TailCall,Lambda2.Parameters);
     }
 

@@ -45,4 +45,134 @@ public class 変換_局所Parameterの先行評価:共通{
         //    }
         //}
     }
+    [Fact]public void 取得_Labelに対応するExpressions_Label(){
+        var Label=Expression.Label(typeof(int),"Label1");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Label(Label,Expression.Constant(1))
+            )
+        );
+    }
+    [Fact]public void 取得_Labelに対応するExpressions_Loop(){
+        var Continue=Expression.Label(typeof(void),"Continue");
+        var Break=Expression.Label(typeof(int),"Break");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    Expression.Loop(
+                        Expression.Goto(Break,Expression.Constant(1)),
+                        Break,
+                        Continue
+                    )
+                )
+            )
+        );
+        //if(Loop.ContinueLabel is not null)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break,
+                    Continue
+                )
+            )
+        );
+        //else
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break
+                )
+            )
+        );
+        //if(Loop.BreakLabel is not null)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break
+                )
+            )
+        );
+        //else
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    Expression.Loop(
+                        Expression.Goto(Break,Expression.Constant(1))
+                    ),
+                    Expression.Label(Break,Expression.Constant(2))
+                )
+            )
+        );
+    }
+    [Fact]public void 取得_Labelに対応するExpressions_Block(){
+        //for(var a=0;a<Block_Expressions_Count;a++){
+        //    switch(Block_Expression.NodeType){
+        //        case ExpressionType.Block:
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    Expression.Constant(1)
+                )
+            )
+        );
+        //        case ExpressionType.Loop:
+        var Break=Expression.Label(typeof(int),"Break");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break
+                )
+            )
+        );
+        //        case ExpressionType.Label:continue;
+        //        case ExpressionType.Goto:this.ListExpression=null; break;
+        //        default:this.ListExpression?.Add(Block_Expression); break;
+        //    }
+        //}
+        var Continue=Expression.Label(typeof(void),"Continue");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    Expression.Loop(
+                        Expression.Goto(Break,Expression.Constant(1)),
+                        Break,
+                        Continue
+                    )
+                )
+            )
+        );
+        //if(Loop.ContinueLabel is not null)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break,
+                    Continue
+                )
+            )
+        );
+        //else
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break
+                )
+            )
+        );
+        //if(Loop.BreakLabel is not null)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Loop(
+                    Expression.Goto(Break,Expression.Constant(1)),
+                    Break
+                )
+            )
+        );
+        //else
+    }
 }
