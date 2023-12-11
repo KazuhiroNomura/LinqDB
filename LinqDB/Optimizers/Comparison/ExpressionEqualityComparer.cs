@@ -24,7 +24,7 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
     ,Generic.IEqualityComparer<SymbolDocumentInfo>{
     internal Generic.List<ParameterExpression> x_ラムダ跨ぎParameters=new();
     internal Generic.List<ParameterExpression> y_ラムダ跨ぎParameters=new();
-    internal ExpressionEqualityComparer(){
+    public ExpressionEqualityComparer(){
 
     }
     internal override void Clear(){

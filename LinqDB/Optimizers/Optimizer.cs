@@ -1227,6 +1227,8 @@ public sealed class Optimizer:IDisposable {
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
         //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
+        var 変換_ジャンプ命令のみ=new 変換_ジャンプ命令のみ(this.作業配列);
+        //var Lambda06=変換_ジャンプ命令のみ.実行(Lambda05);
         var Lambda06=Lambda05;
         var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
         this._検証_変形状態.実行(Lambda07);

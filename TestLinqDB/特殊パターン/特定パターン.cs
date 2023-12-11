@@ -3,7 +3,7 @@ using System.Reflection;
 using LinqDB.Optimizers.Comparison;
 using LinqDB.Sets;
 using MemoryPack;
-
+using 辺に関する情報=LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺に関する情報;
 using IEnumerable = System.Collections.IEnumerable;
 namespace TestLinqDB.特殊パターン;
 internal class ClassIEnumerableInt32Double : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IEnumerable<double>
@@ -115,5 +115,23 @@ public class 特定パターン : 共通
         var bytes = MemoryPackSerializer.Serialize(input);
         var output = MemoryPackSerializer.Deserialize<char[]>(bytes);
         Assert.True(input.SequenceEqual(output));
+    }
+    [Fact]
+    public void Select_Where再帰で匿名型を走査(){
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0&&
+                    p.Item5==0
+            )
+        );
+    }
+    [Fact]public void 具象Type(){
+        var s=new int[]{
+            1,2,3,4,5,6,7
+        };
+        this.Expression実行AssertEqual(()=>s.AsEnumerable().Union(s));
     }
 }

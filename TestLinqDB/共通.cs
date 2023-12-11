@@ -12,6 +12,7 @@ using System.Net;
 using System.Reflection;
 using LinqDB;
 using LinqDB.Optimizers.Comparison;
+using LinqDB.Sets;
 using TestLinqDB.Serializers;
 namespace TestLinqDB;
 [Flags]
@@ -68,6 +69,7 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
+    protected static Set<int>CreateSet()=>new();
     private string ファイル名(string プリフィックス){
         var Type=this.GetType();
         var Frames=new StackTrace().GetFrames();
@@ -359,8 +361,8 @@ public abstract class 共通{
         }
         return expected;
     }
-    protected void Expression実行AssertEqual<T>(Expressions.Expression<Func<int,T>> input){
-        const int 引数=0;
+    protected void Expression実行AssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input){
+        var 引数=default(T)!;
         this.ExpressionシリアライズAssertEqual(input);
         var 標準 = input.Compile();
         var expected = 標準(引数);

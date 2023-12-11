@@ -104,6 +104,82 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
         return this.Traverse(e);
     }
     internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
+    #if true
+    private Expression AndAlso_OrElse(ParameterExpression p,Expression test,Expression ifTrue,Expression ifFalse) {
+        if(test.Type==typeof(bool)) {
+            return Expression.Block(
+                this.作業配列.Parameters設定(p),
+                Expression.Condition(
+                    test,
+                    ifTrue,
+                    ifFalse
+                )                
+            );
+        } else {
+            return Expression.Block(
+                this.作業配列.Parameters設定(p),
+                Expression.Condition(
+                    Expression.Call(
+                        test.Type.GetMethod(op_True)!,
+                        test
+                    ),
+                    ifTrue,
+                    ifFalse
+                )
+            );
+        }
+    }
+    //protected override Expression AndAlso(BinaryExpression Binary0) {
+    //    var Binary1_Left = this.Traverse(Binary0.Left);
+    //    var And = Expression.And(
+    //        Binary1_Left,
+    //        this.Traverse(Binary0.Right)
+    //    );
+    //    return this.AndAlso_OrElse(Binary1_Left,And,Binary1_Left);
+    //}
+    /// <summary>
+    /// a&amp;&amp;b→operator true(a)?a&amp;b:a
+    /// </summary>
+    /// <param name="Binary0"></param>
+    /// <returns></returns>
+    protected override Expression AndAlso(BinaryExpression Binary0) {
+        var Binary1_Left = this.Traverse(Binary0.Left);
+        var Binary1_Right=this.Traverse(Binary0.Right);
+        if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.And(Binary1_Left,Binary1_Right);
+        var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
+        return this.AndAlso_OrElse(
+            p,
+            Expression.Assign(p,Binary1_Left),
+            Expression.And(p,Binary1_Right),
+            p
+        );
+    }
+    //protected override Expression OrElse(BinaryExpression Binary0) {
+    //    var Binary1_Left = this.Traverse(Binary0.Left);
+    //    var Or = Expression.Or(
+    //        Binary1_Left,
+    //        this.Traverse(Binary0.Right)
+    //    );
+    //    return this.AndAlso_OrElse(Binary1_Left,Binary1_Left,Or);
+    //}
+    /// <summary>
+    /// a||b→operator false(a)?a|b:a
+    /// </summary>
+    /// <param name="Binary0"></param>
+    /// <returns></returns>
+    protected override Expression OrElse(BinaryExpression Binary0) {
+        var Binary1_Left =this.Traverse(Binary0.Left);
+        var Binary1_Right=this.Traverse(Binary0.Right);
+        if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.Or(Binary1_Left,Binary1_Right);
+        var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
+        return this.AndAlso_OrElse(
+            p,
+            Expression.Assign(p,Binary1_Left),
+            p,
+            Expression.Or(p,Binary1_Right)
+        );
+    }
+    #endif
     protected override Expression Constant(ConstantExpression Constant0) {
         if(!ILで直接埋め込めるか(Constant0.Type))
             this.DictionaryConstant[Constant0]=default!;

@@ -130,7 +130,10 @@ public class ReturnExpressionTraverser {
         var Binary1_Left=this.Traverse(Binary0_Left);
         var Binary1_Right=this.Traverse(Binary0_Right);
         var Binary1_Conversion= this.TraverseNullable(Binary0_Conversion);
-        if(Binary0_Left==Binary1_Left && Binary0_Right==Binary1_Right && Binary0_Conversion==Binary1_Conversion)return Binary0;
+        if(Binary0_Left==Binary1_Left)
+            if(Binary0_Right==Binary1_Right)
+                if(Binary0_Conversion==Binary1_Conversion)
+                    return Binary0;
         return Expression.MakeBinary(Binary0.NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
     }
     /// <summary>
@@ -146,7 +149,10 @@ public class ReturnExpressionTraverser {
         var Binary1_Left=this.Traverse(Binary0_Left);
         var Binary1_Right=this.Traverse(Binary0_Right);
         var Binary1_Conversion= this.TraverseNullable(Binary0_Conversion);
-        if(Binary0_Left==Binary1_Left && Binary0_Right==Binary1_Right && Binary0_Conversion==Binary1_Conversion)return Binary0;
+        if(Binary0_Left==Binary1_Left)
+            if(Binary0_Right==Binary1_Right)
+                if(Binary0_Conversion==Binary1_Conversion)
+                    return Binary0;
         return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
     }
     /// <summary>
@@ -400,23 +406,41 @@ public class ReturnExpressionTraverser {
         var Block0_Expression0=Block0_Expressions[0];
         var Block1_Expression0=this.Traverse(Block0_Expression0);
         var b=Block1_Expression0==Block0_Expression0;
-        if(Block0_Expressions_Count<=1)return b?Block0:Block1_Expression0;
+        if(Block0_Expressions_Count<=1){
+            if(b) return Block0;
+            return Block1_Expression0;
+            //return b?Block0:Block1_Expression0;
+        }
         var Block0_Expression1=Block0_Expressions[1];
         var Block1_Expression1=this.Traverse(Block0_Expression1);
         b&=Block1_Expression1==Block0_Expression1;
-        if(Block0_Expressions_Count<=2)return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1);
+        if(Block0_Expressions_Count<=2){
+            if(b) return Block0;
+            return Expression.Block(Block1_Expression0,Block1_Expression1);
+            //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1);
+        }
         var Block0_Expression2=Block0_Expressions[2];
         var Block1_Expression2=this.Traverse(Block0_Expression2);
         b&=Block1_Expression2==Block0_Expression2;
-        if(Block0_Expressions_Count<=3)return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
+        if(Block0_Expressions_Count<=3){
+            if(b) return Block0;
+            return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
+            //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
+        }
         var Block0_Expression3=Block0_Expressions[3];
         var Block1_Expression3=this.Traverse(Block0_Expression3);
         b&=Block1_Expression3==Block0_Expression3;
-        if(Block0_Expressions_Count<=4)return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
+        if(Block0_Expressions_Count<=4){
+            if(b) return Block0;
+            return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
+        }
+        //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
         var Block0_Expression4=Block0_Expressions[4];
         var Block1_Expression4=this.Traverse(Block0_Expression4);
         b&=Block1_Expression4==Block0_Expression4;
-        return                               b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
+        if(b)return Block0;
+        return                               Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
+        //return                               b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
     }
     /// <summary>
     /// a?b:c
@@ -430,7 +454,10 @@ public class ReturnExpressionTraverser {
         var Conditional1_Test=this.Traverse(Conditional0_Test);
         var Conditional1_IfTrue=this.Traverse(Conditional0_IfTrue);
         var Conditional1_IfFalse=this.Traverse(Conditional0_IfFalse);
-        if(Conditional0_Test==Conditional1_Test && Conditional0_IfTrue==Conditional1_IfTrue && Conditional0_IfFalse==Conditional1_IfFalse)return Conditional0;
+        if(Conditional0_Test==Conditional1_Test)
+            if(Conditional0_IfTrue==Conditional1_IfTrue)
+                if(Conditional0_IfFalse==Conditional1_IfFalse)
+                    return Conditional0;
         return Expression.Condition(Conditional1_Test,Conditional1_IfTrue,Conditional1_IfFalse,Conditional0.Type);
     }
     /// <summary>
@@ -501,7 +528,9 @@ public class ReturnExpressionTraverser {
         var Index1_Object=this.Traverse(Index0_Object);
         var Index0_Arguments=Index0.Arguments;
         var Index1_Arguments=this.TraverseExpressions(Index0_Arguments);
-        if(Index1_Object==Index0_Object&&ReferenceEquals(Index0_Arguments,Index1_Arguments)) return Index0;
+        if(Index1_Object==Index0_Object)
+            if(ReferenceEquals(Index0_Arguments,Index1_Arguments)) 
+                return Index0;
         return Expression.MakeIndex(Index1_Object,Index0.Indexer,Index1_Arguments);
     }
     /// <summary>
@@ -514,7 +543,9 @@ public class ReturnExpressionTraverser {
         var Invocation1_Arguments=this.TraverseExpressions(Invocation0_Arguments);
         var Invocation0_Expression=Invocation0.Expression;
         var Invocation1_Expression=this.Traverse(Invocation0_Expression);
-        if(Invocation0_Expression==Invocation1_Expression&&ReferenceEquals(Invocation0_Arguments,Invocation1_Arguments)) return Invocation0;
+        if(Invocation0_Expression==Invocation1_Expression)
+            if(ReferenceEquals(Invocation0_Arguments,Invocation1_Arguments)) 
+                return Invocation0;
         return Expression.Invoke(Invocation1_Expression,Invocation1_Arguments);
     }
     /// <summary>
@@ -693,8 +724,9 @@ public class ReturnExpressionTraverser {
         var MemberInit0_Bindings=MemberInit0.Bindings;
         var MemberInit1_NewExpression= (NewExpression)this.New(MemberInit0_NewExpression);
         var MemberInit1_Bindings=this.Bindings(MemberInit0_Bindings);
-        if(MemberInit0_NewExpression==MemberInit1_NewExpression && ReferenceEquals(MemberInit0_Bindings,MemberInit1_Bindings))
-            return MemberInit0;
+        if(MemberInit0_NewExpression==MemberInit1_NewExpression)
+            if(ReferenceEquals(MemberInit0_Bindings,MemberInit1_Bindings))
+                return MemberInit0;
         return Expression.MemberInit(
             MemberInit1_NewExpression,
             MemberInit1_Bindings
@@ -748,14 +780,19 @@ public class ReturnExpressionTraverser {
             var MethodCall0_Arguments_4 = MethodCall0_Arguments[4];
             var MethodCall1_Arguments_4 = this.Traverse(MethodCall0_Arguments_4);
             b&=MethodCall0_Arguments_4==MethodCall1_Arguments_4;
-            return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
+            if(b) return MethodCall0;
+            return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
+            //return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
         } else {
             var MethodCall1_Object = this.Traverse(MethodCall0_Object);
             var b = MethodCall0_Object==MethodCall1_Object;
             if(MethodCall0_Arguments_Count>=4){
                 var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-                return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
-                //return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
+                if(b)
+                    if(ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments))
+                        return MethodCall0;
+                return Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
+                //return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
             }
             if(MethodCall0_Arguments_Count==0)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method);
             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];

@@ -618,7 +618,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         this.Expression実行AssertEqual(()=>new Set<int>().GroupJoin(new Set<int>(),o=>o,(Func<int,int>)(i=>i),(o,i)=>new{o,i}));
         this.Expression実行AssertEqual(()=>new int[10].GroupJoin(new int[10],o=>o,i=>i,(Func<int,System.Collections.Generic.IEnumerable<int>,int>)((o,i)=>o+i.Count())));
     }
-    private static Set<int>CreateSet()=>new();
+    //private static Set<int>CreateSet()=>new();
     [Fact]public void Call_Intersect(){
         this.Expression実行AssertEqual(()=>CreateSet().Intersect(CreateSet()).Where(p=>p==0));
         this.Expression実行AssertEqual(()=>CreateSet().SelectMany(o=>CreateSet().SelectMany(i=>CreateSet())).Intersect(CreateSet()));
@@ -1058,6 +1058,67 @@ public class 変換_メソッド正規化_取得インライン不可能定数:�
         //                    case 6: 対象=this.Select_Where再帰で匿名型を走査(NewExpression_Argument,Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Item7)),対象); Index=7;break;
         this.Expression実行AssertEqual(() => CreateSet().Select(p => new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(p => p.Item7==0));
         //                    default: Instance=Expression.Field(Instance,nameof(ValueTuple<int,int,int,int,int,int,int,int>.Rest)); goto case 0;
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int>(p)).Where(
+                p=>
+                    p.Item1==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0&&
+                    p.Item5==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0&&
+                    p.Item5==0&&
+                    p.Item6==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int>(p,p,p,p,p,p,p)).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0&&
+                    p.Item5==0&&
+                    p.Item6==0&&
+                    p.Item7==0
+            )
+        );
+        this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>(p,p,p,p,p,p,p,new ValueTuple<int>(p))).Where(
+                p=>
+                    p.Item1==0&&
+                    p.Item2==0&&
+                    p.Item3==0&&
+                    p.Item4==0&&
+                    p.Item5==0&&
+                    p.Item6==0&&
+                    p.Item7==0&&
+                    p.Rest.Item1==0
+            )
+        );
         this.Expression実行AssertEqual(()=>CreateSet().Select(p=>new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>>(p,p,p,p,p,p,p,new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int>>(p,p,p,p,p,p,p,new ValueTuple<int>(p)))).Where(
             p=>
                 p.Item1==0&&
