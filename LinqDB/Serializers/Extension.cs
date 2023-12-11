@@ -5,7 +5,6 @@ using System.Linq;
 using Expressions=System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CSharp.RuntimeBinder;
 namespace LinqDB.Serializers;
 internal static class Extension{

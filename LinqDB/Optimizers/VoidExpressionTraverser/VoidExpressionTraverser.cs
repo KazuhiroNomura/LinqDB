@@ -671,13 +671,12 @@ internal class VoidExpressionTraverser {
     /// </summary>
     /// <param name="Switch"></param>
     protected virtual void Switch(SwitchExpression Switch) {
+        this.Traverse(Switch.SwitchValue);
         foreach(var Switch_Case in Switch.Cases) {
-            foreach(var Switch_Case_TestValue in Switch_Case.TestValues) {
+            foreach(var Switch_Case_TestValue in Switch_Case.TestValues)
                 this.Traverse(Switch_Case_TestValue);
-            }
             this.Traverse(Switch_Case.Body);
         }
-        this.Traverse(Switch.SwitchValue);
         this.Traverse(Switch.DefaultBody);
     }
     /// <summary>

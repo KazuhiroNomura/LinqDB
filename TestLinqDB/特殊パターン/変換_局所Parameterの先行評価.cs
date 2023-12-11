@@ -1,8 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Reflection.Emit;
 
+using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Sets;
 
 using MemoryPack;
@@ -136,7 +139,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Condition0(){
+    [Fact]public void Condition2分岐と1分岐の先行評価(){
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
         this.Expression実行AssertEqual(
@@ -150,7 +153,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Condition1(){
+    [Fact]public void Condition1分岐と2分岐の先行評価(){
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
         this.Expression実行AssertEqual(
@@ -162,6 +165,32 @@ public class 変換_局所Parameterの先行評価 : 共通{
                         pp
                     ),
                     pp
+                ),
+                p
+            )
+        );
+    }
+    [Fact]public void Condition3(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        var pp=Expression.And(p,p);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Expression.Condition(
+                    Expression.Condition(
+                        p,
+                        p,
+                        p
+                    ),
+                    Expression.Condition(
+                        p,
+                        p,
+                        p
+                    ),
+                    Expression.Condition(
+                        p,
+                        p,
+                        p
+                    )
                 ),
                 p
             )
@@ -197,7 +226,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void _2分岐0(){
+    [Fact]public void 経路2_0(){
         //p&&p
         var ifFalse=Expression.Label("ifFalse");
         var endif=Expression.Label("endif");
@@ -220,7 +249,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }    
-    [Fact]public void _2分岐1(){
+    [Fact]public void 経路2_1(){
         //│　r=p&p
         //└┐goto endif
         //　│ifFalse:
@@ -250,24 +279,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }    
-    [Fact]public void 経路1つから経路2つに分岐0(){
-        //p&p 　　　　0
-        //├────┐1 br_false 2 ifFalse
-        //p&p 　　　│
-        //└───┐│  goto 3 endif
-        //┌───┼┘2 ifFalse:
-        //p&p 　　│
-        //├───┘　3 endif:
-        //if(p&p)
-        //    p&p
-        //else
-        //    p&p
-        //p&p
-        //↓
-        //if(t=p&p)
-        //    t
-        //else
-        //    t
+    [Fact]public void 経路12_0(){
+        //└┬┐0,IfTest (局所0 = (p And p))
+        //┌┘│2,IfTrue 局所0
+        //└┐│2,
+        //┌┼┘3,IfFalse 局所0
+        //└┼┐3,
+        //┌┴┘1,End If
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
         var Block=Expression.Block(
@@ -286,26 +304,21 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つに分岐1(){
-        //p&p 　　　　0
-        //p 　　　　　
-        //├────┐1 br_false 2 ifFalse
-        //p&p 　　　│
-        //└───┐│  goto 3 endif
-        //┌───┼┘2 ifFalse:
-        //p&p 　　│
-        //├───┘　3 endif:
-        //p&p
-        //if(p)
-        //    p&p
-        //else
-        //    p&p
-        //↓
-        //t=p&p
-        //if(p)
-        //    t
-        //else
-        //    t
+    [Fact]public void 経路12_1(){
+        //└┬┐0,IfTest p
+        //┌┘│2,IfTrue (p And p)
+        //└┐│2,
+        //┌┼┘3,IfFalse (p And p)
+        //└┼┐3,
+        //┌┴┘1,End If
+        //$局所0 = $p & $p;
+        //.If (
+        //    $p
+        //) {
+        //    $局所0
+        //} .Else {
+        //    $局所0
+        //}
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
         var Block=Expression.Block(
@@ -318,33 +331,39 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 )
             )
         );
-        this.Expression実行AssertEqual(
+        var Lambda=this.Optimizer.Lambda最適化(
             Expression.Lambda<Func<bool,bool>>(
                 Block,
                 p
             )
         );
     }
-    [Fact]public void 経路1つから経路2つに分岐2(){
-        //p&p 　　　　0
-        //├────┐1 br_false 2 ifFalse
-        //r=p&p 　　│
-        //└───┐│  goto 3 endif
-        //┌───┼┘2 ifFalse:
-        //r=p&p 　│
-        //├───┘　3 endif:
-
-        //if(p&p)goto ifFalse
-        //r=p&p
-        //ifFalse:
-        //r=p&p
-        //r
-        //↓
-        //if((t=p&p))goto ifFalse
-        //r=t
-        //ifFalse:
-        //r=t
-        //r
+    [Fact]public void 経路12_手動共通部分式(){
+        //└┬┐0,IfTest Not((p And p))
+        //┌┘│2,IfTrue goto ifFalse
+        //└┐│2,
+        //└┼┼┐4,デッドコード
+        //┌┼┘│5,IfFalse default(Void)
+        //└┼┐│5,
+        //┌┼┴┘1,End If
+        //└┼┐　1,
+        //┌┘│　3,()ifFalse:
+        //┌─┘　6,()endif:
+        //.If (
+        //    !($p & $p)
+        //) {
+        //    .Goto ifFalse { }
+        //} .Else {
+        //    .Default(System.Void)
+        //};
+        //$r = $p & $p;
+        //.Goto endif { };
+        //.Label
+        //.LabelTarget ifFalse:;
+        //$r = $p & $p;
+        //.Label
+        //.LabelTarget endif:;
+        //$r
         var r = Expression.Parameter(typeof(bool), "r");
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
@@ -363,14 +382,65 @@ public class 変換_局所Parameterの先行評価 : 共通{
             Expression.Label(endif),
             r
         );
-        this.Expression実行AssertEqual(
+        var Lambda=this.Optimizer.Lambda最適化(
             Expression.Lambda<Func<bool,bool>>(
                 Block,
                 p
             )
         );
     }
-    [Fact]public void 経路1つから経路2つに分岐3(){
+    [Fact]public void 経路12_自動共通部分式(){
+        //└┬┐0,IfTest Not((p And p))
+        //┌┘│2,IfTrue goto ifFalse
+        //└┐│2,
+        //└┼┼┐4,デッドコード
+        //┌┼┘│5,IfFalse default(Void)
+        //└┼┐│5,
+        //┌┼┴┘1,End If
+        //└┼┐　1,
+        //┌┘│　3,()ifFalse:
+        //┌─┘　6,()endif:
+        //.If (
+        //    !($p & $p)
+        //) {
+        //    .Goto ifFalse { }
+        //} .Else {
+        //    .Default(System.Void)
+        //};
+        //$r = $p & $p;
+        //.Goto endif { };
+        //.Label
+        //.LabelTarget ifFalse:;
+        //$r = $p & $p;
+        //.Label
+        //.LabelTarget endif:;
+        //$r
+        var r = Expression.Parameter(typeof(bool), "r");
+        var p = Expression.Parameter(typeof(bool), "p");
+        var pp=Expression.And(p,p);
+        var ifFalse=Expression.Label("ifFalse");
+        var endif=Expression.Label("endif");
+        var Block=Expression.Block(
+            new[]{r},
+            Expression.IfThen(
+                Expression.Not(pp),
+                Expression.Goto(ifFalse)
+            ),
+            pp,
+            Expression.Goto(endif),
+            Expression.Label(ifFalse),
+            pp,
+            Expression.Label(endif),
+            r
+        );
+        var Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<bool,bool>>(
+                Block,
+                p
+            )
+        );
+    }
+    [Fact]public void 経路12_3(){
         //p 　　　　　0
         //├────┐1 br_false 2 ifFalse
         //r=p&p 　　│
@@ -405,7 +475,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路2つから経路1つに合流(){
+    [Fact]public void 経路21(){
         //p   　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p 　　　│
@@ -442,7 +512,51 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つから経路1つ0(){
+    [Fact]public void 経路21_1(){
+        //└┬┐0,IfTest Not((p And p))
+        //┌┘│2,IfTrue goto ifFalse
+        //└┐│2,
+        //└┼┼┐4,デッドコード
+        //┌┼┘│5,IfFalse default(Void)
+        //└┼┐│5,
+        //┌┼┴┘1,End If
+        //└┼┐　1,
+        //┌┘│　3,()ifFalse:
+        //┌─┘　6,((p And p))endif:
+        //if(!p){
+        //    goto ifFalse
+        //}else{
+        //    void
+        //}
+        //p&p
+        //goto endif
+        //ifFalse:
+        //p&p
+        //endif:
+        //↓
+        //if(p)
+        //    t=p&p
+        //else
+        //    t=p&p
+        //t
+        var p = Expression.Parameter(typeof(bool), "p");
+        var pp=Expression.And(p,p);
+        var ifFalse=Expression.Label("ifFalse");
+        var endif=Expression.Label(typeof(bool),"endif");
+        var Block=Expression.Block(
+            Expression.IfThen(
+                Expression.Not(pp),
+                Expression.Goto(ifFalse)
+            ),
+            Expression.Goto(endif,pp),
+            Expression.Label(ifFalse),
+            Expression.Label(endif,pp)
+        );
+        var Lambda=Expression.Lambda<Func<bool,bool>>(Block,p);
+        var Lambda1=this.Optimizer.Lambda最適化(Lambda);
+        this.Expression実行AssertEqual(Lambda);
+    }
+    [Fact]public void 経路121_0(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p 　　　│
@@ -476,7 +590,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つから経路1つ1(){
+    [Fact]public void 経路121_1(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p 　　　│
@@ -513,7 +627,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つから経路1つ2(){
+    [Fact]public void 経路121_2(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p 　　　│
@@ -550,7 +664,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つから経路1つ3(){
+    [Fact]public void 経路121_3(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p 　　　│
@@ -587,7 +701,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 経路1つから経路2つから経路1つ4(){
+    [Fact]public void 経路121_4(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
         //p&p|p&p 　│
@@ -1002,51 +1116,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void goto経路2つから経路1つに合流(){
-        //│　　p&p
-        //├─┐br_false ifFalse
-        //│　│void
-        //│　│p&p
-        //└┐│goto endif
-        //┌┼┘ifFalse:
-        //││　p&p
-        //├┘　endif:
-        //if(!p){
-        //    goto ifFalse
-        //}else{
-        //    void
-        //}
-        //p&p
-        //goto endif
-        //ifFalse:
-        //p&p
-        //endif:
-        //↓
-        //if(p)
-        //    t=p&p
-        //else
-        //    t=p&p
-        //t
-        var p = Expression.Parameter(typeof(bool), "p");
-        var pp=Expression.And(p,p);
-        var ifFalse=Expression.Label("ifFalse");
-        var endif=Expression.Label(typeof(bool),"endif");
-        var Block=Expression.Block(
-            Expression.IfThen(
-                Expression.Not(pp),
-                Expression.Goto(ifFalse)
-            ),
-            Expression.Goto(endif,pp),
-            Expression.Label(ifFalse),
-            Expression.Label(endif,pp)
-        );
-        this.Expression実行AssertEqual(
-            Expression.Lambda<Func<bool,bool>>(
-                Block,
-                p
-            )
-        );
-    }
     [Fact]public void Loop0(){
         var p = Expression.Parameter(typeof(bool), "p");
         var Block=Expression.Block(
@@ -1141,7 +1210,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
         //    $局所0
         //}
         var p = Expression.Parameter(typeof(decimal), "p");
-        var q = Expression.Parameter(typeof(decimal), "q");
         var pp=Expression.Add(p,p);
         var Block=Expression.Block(
             Expression.Loop(
@@ -1151,6 +1219,44 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     ),
                     pp
                 )
+            ),
+            pp
+        );
+        var 最適化Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<decimal,decimal>>(
+                Block,
+                p
+            )
+        );
+    }
+    [Fact]public void LoopBreak(){
+        //└┐　　　　　　　　0,最上位,子 
+        //┌┴┐　　　　　　　1,Begin Loop,親 (辺番号1 , 辺番号1 )
+        //└┬┘　　　　　　　1,,子 
+        //┌┘　　　　　　　　2,End Loop,親 (辺番号1 , 辺番号2 )
+        //.Block() {
+        //    .Loop  {
+        //        .Block() {
+        //            $局所0 = $p & $p;
+        //            $局所0
+        //            break
+        //        }
+        //    };
+        //    $局所0
+        //}
+        var p = Expression.Parameter(typeof(decimal), "p");
+        var pp=Expression.Add(p,p);
+        var Break=Expression.Label("Break");
+        var Block=Expression.Block(
+            Expression.Loop(
+                Expression.Block(
+                    Expression.Assign(
+                        p,pp
+                    ),
+                    pp,
+                    Expression.Break(Break)
+                ),
+                Break
             ),
             pp
         );
@@ -1255,46 +1361,177 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
     }
     [Fact]
-    public void AndAlso50(){
-        this.Optimizer.Lambda最適化(()=>
-            new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int>>(1,2,3,4,5,6,7,new ValueTuple<int,int,int,int,int,int,int>(81,82,83,84,85,86,87)).Let(
+    public void OrElse2(){
+        this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(op,op).Let(
                 p=>
-                    p.Item1==0&&
-                    //p.Item2==0&&
-                    //p.Item3==0&&
-                    p.Item4==0&&
-                    p.Item5==0&&
-                    p.Item6==0&&
-                    p.Item7==0&&
-                    p.Rest.Item1==0&&
-                    p.Rest.Item2==0&&
-                    p.Rest.Item3==0&&
-                    p.Rest.Item4==0&&
-                    p.Rest.Item5==0&&
-                    p.Rest.Item6==0&&
-                    p.Rest.Item7==0
+                    p.Item1||p.Item2
             )
         );
     }
     [Fact]
-    public void AndAlso60(){
+    public void OrElse3(){
         this.Optimizer.Lambda最適化(()=>
-            new ValueTuple<int,int,int,int,int,int,int,ValueTuple<int,int,int,int,int,int,int>>(1,2,3,4,5,6,7,new ValueTuple<int,int,int,int,int,int,int>(81,82,83,84,85,86,87)).Let(
+            Tuple.Create(op,op,op).Let(
                 p=>
-                    p.Item1==0&&
-                    p.Item2==0&&
-                    p.Item3==0&&
-                    p.Item4==0&&
-                    p.Item5==0&&
-                    p.Item6==0&&
-                    p.Item7==0&&
-                    p.Rest.Item1==0&&
-                    p.Rest.Item2==0&&
-                    p.Rest.Item3==0&&
-                    p.Rest.Item4==0&&
-                    p.Rest.Item5==0&&
-                    p.Rest.Item6==0&&
-                    p.Rest.Item7==0
+                    p.Item1||p.Item2||p.Item3
+            )
+        );
+    }
+    [Fact]
+    public void OrElse4(){
+        this.Optimizer.Lambda最適化(()=>
+            Tuple.Create(op,op,op,op).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4
+            )
+        );
+    }
+    [Fact]
+    public void OrElse5(){
+        this.Optimizer.Lambda最適化(()=>
+            Tuple.Create(op,op,op,op,op).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5
+            )
+        );
+    }
+    [Fact]
+    public void OrElse6(){
+        this.Optimizer.Lambda最適化(()=>
+            Tuple.Create(op,op,op,op,op,op).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5||p.Item6
+            )
+        );
+    }
+    [Fact]
+    public void OrElse7(){
+        this.Optimizer.Lambda最適化(()=>
+            Tuple.Create(op,op,op,op,op,op,op).Let(
+                //new ValueTuple<bool,bool,bool,bool,bool,bool,bool,ValueTuple<bool>>(true,true,true,true,true,true,true,new ValueTuple<bool>(true)).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5||p.Item6||p.Item7
+            )
+        );
+    }
+    [Fact]
+    public void OrElseRest1(){
+        this.Optimizer.Lambda最適化(()=>
+            new Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,Tuple<operator_true>>(op,op,op,op,op,op,op,new Tuple<operator_true>(op)).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5||p.Item6||p.Item7||p.Rest.Item1
+            )
+        );
+    }
+    [Fact]
+    public void OrElseRest7(){
+        this.Optimizer.Lambda最適化(()=>
+            new Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true>>(op,op,op,op,op,op,op,new Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true>(op,op,op,op,op,op,op)).Let(
+                //new ValueTuple<bool,bool,bool,bool,bool,bool,bool,ValueTuple<bool>>(true,true,true,true,true,true,true,new ValueTuple<bool>(true)).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5||p.Item6||p.Item7||p.Rest.Item1
+                    ||p.Rest.Item2||p.Rest.Item3||p.Rest.Item4||p.Rest.Item5||p.Rest.Item6||p.Rest.Item7
+            )
+        );
+        this.Optimizer.Lambda最適化(()=>
+            new ValueTuple<bool,bool,bool,bool,bool,bool,bool,ValueTuple<bool,bool,bool,bool,bool,bool,bool>>(true,true,true,true,true,true,true,new ValueTuple<bool,bool,bool,bool,bool,bool,bool>(true,true,true,true,true,true,true)).Let(
+                p=>
+                    p.Item1||p.Item2||p.Item3||p.Item4||p.Item5||p.Item6||p.Item7||p.Rest.Item1
+                    ||p.Rest.Item2||p.Rest.Item3||p.Rest.Item4||p.Rest.Item5||p.Rest.Item6||p.Rest.Item7
+            )
+        );
+    }
+    [Fact]public void Switch_Default(){
+        var p = Expression.Parameter(typeof(int), "p");
+        var e=Expression.Switch(p,p);
+        var 最適化Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<int,int>>(
+                e,
+                p
+            )
+        );
+    }
+    [Fact]public void Switch_Case経路1N(){
+        var p = Expression.Parameter(typeof(int), "p");
+        var pp=Expression.And(p,p);
+        var SwitchCases=new List<SwitchCase>();
+        var TestValues=new List<Expression>();
+        var r=new Random(1);
+        var case定数=0;
+        for(var a=0;a<10;a++){
+            for(var b=r.Next(1,10);b>=0;b--) TestValues.Add(Expression.Constant(case定数++));
+            var SwitchCase=Expression.SwitchCase(pp,TestValues);
+            SwitchCases.Add(SwitchCase);
+            TestValues.Clear();
+        }
+        var e=Expression.Switch(pp,pp,SwitchCases.ToArray());
+        var 最適化Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<int,int>>(
+                e,
+                p
+            )
+        );
+    }
+    public static void Save(LambdaExpression Lambda){
+        var Name=Lambda.Name;
+        var AssemblyName = new AssemblyName { Name=Name};
+        var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        var ModuleBuilder = DynamicAssembly.DefineDynamicModule(Name);
+        var TypeBuilder = ModuleBuilder.DefineType(Name,TypeAttributes.Public);
+        var MethodBuilder = TypeBuilder.DefineMethod(Name,MethodAttributes.Public,Lambda.ReturnType,Lambda.Parameters.Select(p=>p.Type).ToArray());
+        MethodBuilder.InitLocals=false;
+        var I=MethodBuilder.GetILGenerator();
+        var _ = TypeBuilder.CreateType();
+        new Lokad.ILPack.AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\{Name}.dll");
+    }
+    [Fact]
+    public void Switch_Case経路N1(){
+        var p=Expression.Parameter(typeof(int),"p");
+        var pp=Expression.And(p,p);
+        var SwitchCases=new List<SwitchCase>();
+        var TestValues=new List<Expression>();
+        var r=new Random(1);
+        var case定数=0;
+        for(var a=0;a<10;a++){
+            for(var b=r.Next(1,10);b>=0;b--) TestValues.Add(Expression.Constant(case定数++));
+            TestValues.Add(pp);
+            var SwitchCase=Expression.SwitchCase(pp,TestValues);
+            SwitchCases.Add(SwitchCase);
+            TestValues.Clear();
+        }
+        var e=Expression.Block(
+            Expression.Switch(p,pp,SwitchCases.ToArray()),
+            pp
+        );
+        var 最適化Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<int,int>>(
+                e,
+                p
+            )
+        );
+    }
+    [Fact]public void Conditional内部にAndAlso(){
+        var p = Expression.Parameter(typeof(operator_true), "p");
+        var pp=Expression.And(p,p);
+        var AndAlso=Expression.AndAlso(
+            p,Expression.And(p,p));
+        var Block=Expression.Block(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Call(
+                        AndAlso.Type.GetMethod("op_True")!,
+                        AndAlso
+                    ),
+                    p,
+                    pp
+                )
+            )
+        );
+        var Lambda=this.Optimizer.Lambda最適化(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Block,
+                p
             )
         );
     }

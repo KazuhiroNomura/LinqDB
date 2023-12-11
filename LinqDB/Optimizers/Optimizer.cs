@@ -20,7 +20,6 @@ using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 using AssemblyGenerator = Lokad.ILPack.AssemblyGenerator;
 using Container = LinqDB.Databases.Container;
 using Delegate = System.Delegate;
-using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.CSharp.RuntimeBinder;
@@ -40,7 +39,7 @@ public sealed class Optimizer:IDisposable {
     /// Where((ValueTule&lt;,>p=>p.Item1.Item1==p.Item.Item2)は移動できる
     /// pは要素数2の匿名型かValueTule&lt;,>
     /// </summary>
-    private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
+    //private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
     private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
     private readonly Generic.List<ParameterExpression> Listループ跨ぎParameter = new();
     private readonly SQLServer.TSql160Parser Parser = new(true);

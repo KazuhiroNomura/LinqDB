@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Security;
@@ -10,17 +9,12 @@ using System.Net.Sockets;
 using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Security.Policy;
 using System.Text;
-using System.Xml;
-using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Properties;
 using static LinqDB.Helpers.CommonLibrary;
 using static LinqDB.Helpers.Configulation;
-using MemoryStream = LinqDB.Helpers.CommonLibrary.MemoryStream;
-
 namespace LinqDB.Remote.Clients;
 
 /// <summary>

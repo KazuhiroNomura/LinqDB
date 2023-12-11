@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Linq.Expressions;
 using LinqDB.Optimizers.Comparison;
-using LinqDB.Optimizers.VoidExpressionTraverser;
-
 namespace LinqDB.Optimizers.VoidExpressionTraverser;
 
 /// <summary>

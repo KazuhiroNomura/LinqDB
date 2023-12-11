@@ -9,7 +9,6 @@ using LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 using Collections = System.Collections;
 using LinqDB.Enumerables;
-using LinqDB.Optimizers.Comparison;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;

@@ -38,8 +38,8 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
         辺に関する情報.接続(L0,L1);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1};
         Trace.WriteLine(l.フロー);
@@ -52,9 +52,9 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L2);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1,L2};
@@ -70,10 +70,10 @@ public class フロー: 共通
         //┌──┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L2);
         辺に関する情報.接続(L2,L1);
         辺に関する情報.接続(L1,L3);
@@ -88,24 +88,38 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L3);
         辺に関する情報.接続(L1,L2);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1,L2,L3};
         Trace.WriteLine(l.フロー);
     }
-    [Fact]public void 辺に関する情報ループ0(){
+    [Fact]public void 辺に関する情報ループ00(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //├←┐
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
         辺に関する情報.接続(L0,L0);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0};
+        Trace.WriteLine(l.フロー);
+    }
+    [Fact]public void 辺に関する情報ループ01(){
+        Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
+        //└┐0,
+        //┌┴┐1,L1
+        //└─┘1,
+        var Comparer=new ExpressionEqualityComparer();
+        var 番号=0;
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        辺に関する情報.接続(L0,L1);
+        辺に関する情報.接続(L1,L1);
+        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ1(){
@@ -116,8 +130,8 @@ public class フロー: 共通
         //└┘　　　　　　　　　1,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L0);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1};
@@ -133,9 +147,9 @@ public class フロー: 共通
         //└┘　　　　　　　　　2,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L2);
         辺に関する情報.接続(L2,L0);
@@ -150,8 +164,8 @@ public class フロー: 共通
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
         //辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L1);
@@ -168,10 +182,10 @@ public class フロー: 共通
         //┌┴┘3,IfEnd,L3:親
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L2);
         辺に関する情報.接続(L1,L3);
@@ -208,14 +222,14 @@ public class フロー: 共通
         //┌┴┘L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
-        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4"! };
-        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5"! };
-        var L6=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L6"! };
-        var L7=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L7"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
+        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4" };
+        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5" };
+        var L6=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L6" };
+        var L7=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L7" };
 
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L2);
@@ -263,14 +277,14 @@ public class フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L2, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L00=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L00"! };
-        var L01=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L01"! };
-        var L02=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L02"! };
-        var L03=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L03"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L00=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L00" };
+        var L01=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L01" };
+        var L02=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L02" };
+        var L03=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L03" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L00);
 
         辺に関する情報.接続(L00,L01);
@@ -320,14 +334,14 @@ public class フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L23, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L20=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L20"! };
-        var L21=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L21"! };
-        var L22=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L22"! };
-        var L23=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L23"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L20=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L20" };
+        var L21=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L21" };
+        var L22=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L22" };
+        var L23=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L23" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L2);
         辺に関する情報.接続(L1,L3);
@@ -409,12 +423,12 @@ public class フロー: 共通
         //├─┘  L5
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
-        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4"! };
-        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
+        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4" };
+        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5" };
 
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L3);
@@ -443,12 +457,12 @@ public class フロー: 共通
         //├┘　　L5
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
-        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4"! };
-        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
+        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4" };
+        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L2);
         辺に関する情報.接続(L1,L4);
@@ -477,14 +491,14 @@ public class フロー: 共通
         //┌┘　　L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
-        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4"! };
-        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5"! };
-        var L6=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L6"! };
-        var L7=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L7"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
+        var L4=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L4" };
+        var L5=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L5" };
+        var L6=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L6" };
+        var L7=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L7" };
         辺に関する情報.接続(L0,L7);
         辺に関する情報.接続(L1,L2);
         辺に関する情報.接続(L1,L3);
@@ -511,9 +525,9 @@ public class フロー: 共通
         //┌┴┘  jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump0"! };
-        var jump1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump1"! };
-        var label=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label"! };
+        var jump0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump0" };
+        var jump1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump1" };
+        var label=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label" };
         辺に関する情報.接続(jump0,label);
         辺に関する情報.接続(jump1,label);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{jump0,jump1,label};
@@ -527,10 +541,10 @@ public class フロー: 共通
         //┌┴┴┘jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump0"! };
-        var jump1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump1"! };
-        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump2"! };
-        var label=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label"! };
+        var jump0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump0" };
+        var jump1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump1" };
+        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump2" };
+        var label=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label" };
         辺に関する情報.接続(jump0,label);
         辺に関する情報.接続(jump1,label);
         辺に関する情報.接続(jump,label);
@@ -544,9 +558,9 @@ public class フロー: 共通
         //┌┘　　　　　　　　1,Label,label0,親 (辺番号0 jump, 辺番号1 label0)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump"! };
-        var label0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label0"! };
-        var label1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label1"! };
+        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump" };
+        var label0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label0" };
+        var label1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label1" };
         辺に関する情報.接続(jump,label0);
         辺に関する情報.接続(jump,label1);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{jump,label0,label1};
@@ -560,10 +574,10 @@ public class フロー: 共通
         //┌┴┴┘jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump"! };
-        var label0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label0"! };
-        var label1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label1"! };
-        var label2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label2"! };
+        var jump=new 辺に関する情報(Comparer,ref 番号) { 親コメント="jump" };
+        var label0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label0" };
+        var label1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label1" };
+        var label2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="label2" };
         辺に関する情報.接続(jump,label0);
         辺に関する情報.接続(jump,label1);
         辺に関する情報.接続(jump,label2);
@@ -576,8 +590,8 @@ public class フロー: 共通
         //┌┴┘  1
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L1);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{L0,L1};
@@ -591,9 +605,9 @@ public class フロー: 共通
         //┌┴┘  3
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L2);
@@ -611,10 +625,10 @@ public class フロー: 共通
         //┌┴┘　　　　　　　　3,Label,goto L3:        //└┼┐  0
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L1,L2);
@@ -629,8 +643,8 @@ public class フロー: 共通
         //├┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
         辺に関する情報.接続(L0,L1);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{
             L0,
@@ -646,10 +660,10 @@ public class フロー: 共通
         //├─┘L3 end swtich
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
-        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
+        var L3=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L3" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L2);
         辺に関する情報.接続(L1,L3);
@@ -673,9 +687,9 @@ public class フロー: 共通
         
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0"! };
-        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1"! };
-        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2"! };
+        var L0=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L0" };
+        var L1=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L1" };
+        var L2=new 辺に関する情報(Comparer,ref 番号) { 親コメント="L2" };
         辺に関する情報.接続(L0,L1);
         辺に関する情報.接続(L0,L1);
         var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{

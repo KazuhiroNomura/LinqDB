@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-using LinqDB.Sets;
 
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;

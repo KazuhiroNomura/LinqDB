@@ -1,5 +1,5 @@
 ﻿#define 省略
-using System.ComponentModel.DataAnnotations;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using Generic=System.Collections.Generic;
@@ -12,8 +12,6 @@ using LinqDB.Optimizers.VoidExpressionTraverser;
 
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
-using static LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価;
-
 /// <summary>
 /// 複数出現した式が最初に出現した時点で変数に代入し、以降その変数を参照する。
 /// </summary>
@@ -114,7 +112,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         internal readonly List<辺に関する情報>List親辺=new();
         internal readonly List<辺に関する情報>List子辺=new();
         private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
-        public string 親コメント{get;init;}="";
+        public string 親コメント{get;set;}="";
         public string 子コメント{get;set;}="";
         //private readonly Generic.HashSet<Expression>作業Expressions;
         //private bool 二度出現した=false;
@@ -297,27 +295,21 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     if(Label.DefaultValue is not null)
                         this.Traverse(Label.DefaultValue);
                     if(this.Dictionary_LabelTarget_辺に関する情報.TryGetValue(Label.Target,out var 移動先)){
+                        //gotoで指定したラベルでまだ定義されてない奴
                         //└┐0 goto 下
                         //..................
                         //┌┘1 下:←ここ
-                        //.Goto 下 { };    0   [1,[0]]ここで作った"辺に関する情報"
-                        //..................
-                        //.Label
-                        //.LabelTarget 下:;1   {0}1←ここ
+                        移動先.親コメント=$"({Label.DefaultValue}){Label.Target.Name}:";
                         this.List辺に関する情報.Add(移動先);
                         this.辺に関する情報=移動先;
                     } else{
                         //始めて出現。後でgoto命令で飛んでループを形成する
                         var 移動元=this.辺に関する情報;
-                        if(移動元 is null){
-                            //┌←┐    1 L1:←ここ
-                            移動先=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){親コメント = Label.Target.Name!};
-                        } else{
-                            //├←┐    1 L1:←ここ
-                            移動先=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号, 移動元){親コメント = Label.Target.Name!};
-                        }
+                        移動元.子コメント="Label2";//$"goto({Label.DefaultValue}){Goto.Target.Name! }"};
+                        //├←┐    1 L1:←ここ
+                        this.辺に関する情報=移動先=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号, 移動元){親コメント=$"({Label.DefaultValue}){ Label.Target.Name}:"};
                         this.List辺に関する情報.Add(移動先);
-                        this.Dictionary_LabelTarget_辺に関する情報.Add(Label.Target,this.辺に関する情報=移動先);
+                        this.Dictionary_LabelTarget_辺に関する情報.Add(Label.Target,移動先);
                     }
                     return;
                 }
@@ -326,7 +318,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Goto=(GotoExpression)Expression;
                     if(Goto.Value is not null)
                         this.Traverse(Goto.Value);
-                    if(this.Dictionary_LabelTarget_辺に関する情報.TryGetValue(Goto.Target,out var 後辺)){
+                    if(this.Dictionary_LabelTarget_辺に関する情報.TryGetValue(Goto.Target,out var 上辺)){
                         //├┐  0 上辺:
                         //..................
                         //└┘    goto 上辺:←ここ
@@ -334,58 +326,31 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                         //.LabelTarget 上辺:;
                         //..................
                         //.Goto 上辺 { };    
-                        辺に関する情報.接続(this.辺に関する情報,後辺);
-                        //var 前辺=this.辺に関する情報!;
-                        //前辺.List子辺.Add(後辺);
-                        //後辺.List親辺.Add(前辺);
-                        //var 移動元=this.辺に関する情報!;
-
-                        //var s0=移動元.上辺String;
-                        //var s1=移動元.下辺String;
-                        ////移動先.Add移動先(移動元);
-                        ////移動元.Add移動元(移動先);
-                        //移動先.Add移動元(移動元);
-                        //移動元.Add移動先(移動先);
+                        辺に関する情報.接続(this.辺に関する情報,上辺);
                     } else {
                         //下にジャンプ。条件分岐で多い。
-                        //└┐  0 goto 下:←ここ
-                        //.Goto 下 { };   ←ここ
-                        //└─┐
-                        //└┐│goto XX:←ここ
-                        //.Goto ...
-                        //.Goto XX { };←ここ
-                        if(this.辺に関する情報 is not null) {
-                            //└┐  0 goto 下:←ここ
-                            //.Goto 下 { };   ←ここ
-                            var 辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報) { 親コメント=Goto.Target.Name! };
-                            //this.List辺に関する情報.Add(辺に関する情報);
-                            this.Dictionary_LabelTarget_辺に関する情報.Add(Goto.Target,辺に関する情報);
-                        } else {
-                            //└─┐
-                            //└┐│goto XX:←ここ
-                            //.Goto ...
-                            //.Goto XX { };←ここ
-                            var 辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号) { 親コメント=Goto.Target.Name! };
-                           // this.List辺に関する情報.Add(辺に関する情報);
-                            this.Dictionary_LabelTarget_辺に関する情報.Add(Goto.Target,辺に関する情報);
-                        }
-                        //this.Dictionary_LabelTarget_辺に関する情報.Add(Goto.Target,this.辺に関する情報);
+                        //└┐0 goto 下:←new 辺に関する情報
+                        //││          ←new 辺に関する情報 デッドコード
+                        this.Dictionary_LabelTarget_辺に関する情報.Add(Goto.Target,new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報) { 子コメント=$"goto({Goto.Value}){Goto.Target.Name}"});
+                        //this.Dictionary_LabelTarget_辺に関する情報.Add(Goto.Target,new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報) { 親コメント=$"({Label.DefaultValue}){ Label.Target.Name}:"};
                     }
-                    var デッドコード=this.辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){親コメント="デッドコード"};
-                    this.List辺に関する情報.Add(デッドコード);
+                    this.List辺に関する情報.Add(this.辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){子コメント="デッドコード"});
                     return;
                 }
                 case ExpressionType.Loop:{
                     var Loop=(LoopExpression)Expression;
-                    var BeginLoop=this.辺に関する情報;
-                    var LoopBody0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,BeginLoop){親コメント="Begin Loop"};
+                    //var BeginLoop=this.辺に関する情報;
+                    //var LoopBody0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報){親コメント="Begin Loop"};
                     var List辺に関する情報=this.List辺に関する情報;
-                    List辺に関する情報.Add(LoopBody0);
+                    var Begin_Loop=this.辺に関する情報;
+                    Begin_Loop.子コメント="Begin Loop";
+                    List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Begin_Loop){親コメント="Loop"});
                     this.Traverse(Loop.Body);
                     var LoopBody1=this.辺に関する情報;
-                    辺に関する情報.接続(LoopBody1,LoopBody0);
-                    var EndLoop=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,LoopBody1){親コメント="End Loop"};
-                    List辺に関する情報.Add(EndLoop);
+                    辺に関する情報.接続(LoopBody1,LoopBody1);
+                    //var EndLoop=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報){親コメント="End Loop"};
+                    //List辺に関する情報.Add(EndLoop);
+                    this.List辺に関する情報.Add(this.辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){子コメント="End Loop"});
                     return;
                 }
                 case ExpressionType.Assign: {
@@ -457,74 +422,70 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         //    辺に関する情報.接続(False1,End);
         //}
         protected override void AndAlso(BinaryExpression Binary){
-            //a&&b
-            //(t0=a)&&b
-            //if((t0=a).op_True)
-            //    t0&b
-            //else
-            //    t0
-            //a&&b&&c
-            //(t1=(t0=a)&&b)&&c
-            //if((t0=a).op_True)
-            //    if((t1=t0&b).op_True)
-            //        t1&c
-            //    else
-            //        t1
-            //else
-            //    t0
-            var Left=Binary.Left;
-            var Right=Binary.Right;
-            this.Traverse(Left);
-            var Test = this.辺に関する情報;
-            var Left_ToString=Left.ToString();
-            Test.子コメント=Left_ToString;
-            var True0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Binary.ToString() };
-            this.List辺に関する情報.Add(True0);
-            this.Traverse(Expression.And(Left,Right));
-            var True1=this.辺に関する情報;
-            var False0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Left_ToString };
-            this.List辺に関する情報.Add(False0);
-            this.Traverse(Left);
-            var False1=this.辺に関する情報;
-            var End=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号);
-            this.List辺に関する情報.Add(End);
-            辺に関する情報.接続(True1,End);
-            辺に関する情報.接続(False1,End);
+            throw new NotImplementedException();
+            ////a&&b
+            ////(t0=a)&&b
+            ////if((t0=a).op_True)
+            ////    t0&b
+            ////else
+            ////    t0
+            ////a&&b&&c
+            ////(t1=(t0=a)&&b)&&c
+            ////if((t0=a).op_True)
+            ////    if((t1=t0&b).op_True)
+            ////        t1&c
+            ////    else
+            ////        t1
+            ////else
+            ////    t0
+            //var Left=Binary.Left;
+            //var Right=Binary.Right;
+            //var Left_ToString=Left.ToString();
+            //this.Traverse(Left);
+            //var Test = this.辺に関する情報;
+            //Test.子コメント=$"AndAlso {Left_ToString}";
+            //var End_AndAlso=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号){ 親コメント="End AndAlso"};
+            //var List辺に関する情報=this.List辺に関する情報;
+            //List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Binary.ToString() });
+            //this.Traverse(Expression.And(Left,Right));
+            //辺に関する情報.接続(this.辺に関する情報,End_AndAlso);
+            //List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Left_ToString });
+            //this.Traverse(Left);
+            //辺に関する情報.接続(this.辺に関する情報,End_AndAlso);
+            //List辺に関する情報.Add(this.辺に関する情報=this.辺に関する情報=End_AndAlso);
         }
         protected override void OrElse(BinaryExpression Binary){
-            //a||b
-            //(t0=a)||b
-            //if((t0=a).op_True)
-            //    t0
-            //else
-            //    t0|b
-            //a||b||c
-            //(t1=(t0=a)||b)||c
-            //if((t0=a).op_True)
-            //    t0
-            //else
-            //    if((t1=t0|b).op_True)
-            //        t1
-            //    else
-            //        t1|c
-            var Left=Binary.Left;
-            var Right=Binary.Right;
-            this.Traverse(Left);
-            var Test = this.辺に関する情報;
-            var Left_ToString=Left.ToString();
-            Test.子コメント=Left_ToString;
-            var True0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Left_ToString};
-            this.List辺に関する情報.Add(True0);
-            this.Traverse(Left);
-            var True1=this.辺に関する情報;
-            var False0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Binary.ToString()};
-            this.List辺に関する情報.Add(False0);
-            this.Traverse(Expression.Or(Left,Right));
-            var False1=this.辺に関する情報;
-            var End=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号);
-            this.List辺に関する情報.Add(End);
-            辺に関する情報.接続(True1,End);
-            辺に関する情報.接続(False1,End);
+            throw new NotImplementedException();
+            ////a||b
+            ////(t0=a)||b
+            ////if((t0=a).op_True)
+            ////    t0
+            ////else
+            ////    t0|b
+            ////a||b||c
+            ////(t1=(t0=a)||b)||c
+            ////if((t0=a).op_True)
+            ////    t0
+            ////else
+            ////    if((t1=t0|b).op_True)
+            ////        t1
+            ////    else
+            ////        t1|c
+            //var Left=Binary.Left;
+            //var Right=Binary.Right;
+            //var Left_ToString=Left.ToString();
+            //this.Traverse(Left);
+            //var Test = this.辺に関する情報;
+            //Test.子コメント=$"OrElse {Left_ToString}";
+            //var End_OrElse=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号) { 親コメント="End OrElse"};
+            //var List辺に関する情報=this.List辺に関する情報;
+            //List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Left_ToString});
+            //this.Traverse(Left);
+            //辺に関する情報.接続(this.辺に関する情報,End_OrElse);
+            //List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,Test ) { 親コメント=Binary.ToString()});
+            //this.Traverse(Expression.Or(Left,Right));
+            //辺に関する情報.接続(this.辺に関する情報,End_OrElse);
+            //List辺に関する情報.Add(this.辺に関する情報=End_OrElse);
         }
         protected override void Conditional(ConditionalExpression Conditional){
             //test　　　　0 test
@@ -538,31 +499,29 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var IfTrue=Conditional.IfTrue;
             var IfFalse=Conditional.IfFalse;
             this.Traverse(Conditional.Test);
-            var Test1 = this.辺に関する情報;
-            Test1.子コメント=$"IfTest {IfTest}";
-            var True0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号, Test1){親コメント=$"IfTrue {IfTrue}"};
-            this.List辺に関する情報.Add(True0);
+            var begin_if = this.辺に関する情報;
+            begin_if.子コメント=$"begin if {IfTest}";
+            var end_if=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){親コメント="end if"};
+            var List辺に関する情報=this.List辺に関する情報;
+            List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号, begin_if){親コメント=$"true {IfTrue}"});
             this.Traverse(IfTrue);
-            var True1=this.辺に関する情報;
-            var False0=this.辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号,Test1) { 親コメント=$"IfFalse {IfFalse}" };
-            this.List辺に関する情報.Add(False0);
+            辺に関する情報.接続(this.辺に関する情報,end_if);
+            List辺に関する情報.Add(this.辺に関する情報=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号,begin_if) { 親コメント=$"false {IfFalse}" });
             this.Traverse(IfFalse);
-            var False1=this.辺に関する情報;
-            var End=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号){親コメント="EndIf"};
-            this.List辺に関する情報.Add(End);
-            辺に関する情報.接続(True1,End);
-            辺に関する情報.接続(False1,End);
+            辺に関する情報.接続(this.辺に関する情報,end_if);
+            List辺に関する情報.Add(this.辺に関する情報=this.辺に関する情報=end_if);
         }
         protected override void Switch(SwitchExpression Switch){
+            var List辺に関する情報=this.List辺に関する情報;
             this.Traverse(Switch.SwitchValue);
-            var Test1 = this.辺に関する情報;
+            var SwitchValue = this.辺に関する情報;
+            SwitchValue.子コメント=$"begin switch {SwitchValue}";
             var sb=new StringBuilder();
             var Cases=Switch.Cases;
             var Cases_Count=Cases.Count;
-            var Endに対応する辺Array=new 辺に関する情報[Cases_Count];
+            var End_Switch=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号){親コメント="end switch"};
             for(var a=0;a<Cases_Count;a++){
                 var Case=Cases[a];
-                //foreach(var Case in Cases){
                 foreach(var TestValue in Case.TestValues){
                     sb.Append(TestValue);
                     sb.Append(',');
@@ -570,16 +529,16 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 sb[^1]=':';
                 var Body=Case.Body;
                 sb.Append(Body);
-                var Case0=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号, Test1){親コメント=$"Case {sb}"};
-                this.List辺に関する情報.Add(Case0);
+                List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号, SwitchValue){親コメント=$"case {sb}:{Body}"});
                 this.Traverse(Body);
-                Endに対応する辺Array[a]=this.辺に関する情報;
+                辺に関する情報.接続(this.辺に関する情報,End_Switch);
+                sb.Clear();
             }
-            var End=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号){親コメント="EndIf"};
-            this.List辺に関する情報.Add(End);
-            foreach(var Endに対応する辺 in Endに対応する辺Array){
-                辺に関する情報.接続(Endに対応する辺,End);
-            }
+            var DefaultBody=Switch.DefaultBody;
+            List辺に関する情報.Add(this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号, SwitchValue){親コメント=$"default:{DefaultBody}"});
+            this.Traverse(DefaultBody);
+            辺に関する情報.接続(this.辺に関する情報,End_Switch);
+            List辺に関する情報.Add(this.辺に関する情報=End_Switch);
         }
         protected override void Call(MethodCallExpression MethodCall) {
             var MethodCall0_Method = MethodCall.Method;
@@ -618,11 +577,13 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
     private readonly 取得_二度出現したExpression0 _取得_辺;
     private sealed class 取得_二度出現したExpression1:VoidExpressionTraverser_Quoteを処理しない{
         private readonly 判定_分岐があるか 判定_分岐があるか=new();
+        private readonly Generic.HashSet<LabelTarget>Dictionary_LabelTarget_辺に関する情報;
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly List辺に関する情報 List辺に関する情報;
         public 取得_二度出現したExpression1(List辺に関する情報 List辺に関する情報,Generic.Dictionary<LabelTarget,辺に関する情報> Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer ExpressionEqualityComparer,判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる){
             this.List辺に関する情報=List辺に関する情報;
             this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
+            this.Dictionary_LabelTarget_辺に関する情報=new(ExpressionEqualityComparer);
         }
         internal Generic.IEnumerable<Expression> ラムダ跨ぎParameters=default!;
         /// <summary>
@@ -636,6 +597,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         public void 実行(Expression Expression0){
             this.計算量=0;
             this.辺番号=1;
+            this.Dictionary_LabelTarget_辺に関する情報.Clear();
             this.辺に関する情報=this.Top辺に関する情報;
             this.判定_左辺Expressionsが含まれる.Clear();
             this.Traverse(Expression0);
@@ -661,6 +623,23 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Label=(LabelExpression)Expression;
                     if(Label.DefaultValue is not null)
                         this.Traverse(Label.DefaultValue);
+                    //if(this.Dictionary_LabelTarget_辺に関する情報.Contains(Label.Target)){
+                    //    //gotoで指定したラベルでまだ定義されてない奴
+                    //    //└┐0 goto 下
+                    //    //..................
+                    //    //┌┘1 下:←ここ
+                    //    移動先.親コメント=$"({Label.DefaultValue}){Label.Target.Name}:";
+                    //    this.List辺に関する情報.Add(移動先);
+                    //    this.辺に関する情報=移動先;
+                    //} else{
+                    //    //始めて出現。後でgoto命令で飛んでループを形成する
+                    //    var 移動元=this.辺に関する情報;
+                    //    移動元.子コメント="Label2";//$"goto({Label.DefaultValue}){Goto.Target.Name! }"};
+                    //    //├←┐    1 L1:←ここ
+                    //    this.辺に関する情報=移動先=new 辺に関する情報(this.ExpressionEqualityComparer,ref this.辺番号, 移動元){親コメント=$"({Label.DefaultValue}){ Label.Target.Name}:"};
+                    //    this.List辺に関する情報.Add(移動先);
+                    //    this.Dictionary_LabelTarget_辺に関する情報.Add(Label.Target,移動先);
+                    //}
                     this.辺インクリメント();
                     return;
                 }
@@ -668,6 +647,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Goto=(GotoExpression)Expression;
                     if(Goto.Value is not null)
                         this.Traverse(Goto.Value);
+                    this.辺インクリメント();
                     return;
                 }
                 case ExpressionType.Loop:{
@@ -791,6 +771,8 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 this.Traverse(Case.Body);
             }
             this.辺インクリメント();
+            this.Traverse(Switch.DefaultBody);
+            this.辺インクリメント();
         }
         protected override void Call(MethodCallExpression MethodCall) {
             var MethodCall0_Method = MethodCall.Method;
@@ -879,6 +861,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Goto=(GotoExpression)Expression;
                     if(Goto.Value is not null)
                         this.Traverse(Goto.Value);
+                    this.辺インクリメント();
                     return;
                 }
                 case ExpressionType.Loop:{
@@ -989,6 +972,8 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 this.Traverse(Case.Body);
             }
             this.辺インクリメント();
+            this.Traverse(Switch.DefaultBody);
+            this.辺インクリメント();
         }
         protected override void Call(MethodCallExpression MethodCall) {
             var MethodCall0_Method = MethodCall.Method;
@@ -1048,7 +1033,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         }
     }
     private sealed class 変換_二度出現したExpression:ReturnExpressionTraverser{
-        private readonly Generic.Dictionary<LabelTarget,辺に関する情報>Dictionary_LabelTarget_辺に関する情報;
+        //private readonly Generic.Dictionary<LabelTarget,辺に関する情報>Dictionary_LabelTarget_辺に関する情報;
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
         //private readonly Generic.List<int> List辺番号;
@@ -1056,7 +1041,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         public 変換_二度出現したExpression(作業配列 作業配列,List辺に関する情報 List辺に関する情報,Generic.Dictionary<LabelTarget,辺に関する情報> Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer,
             判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる) : base(作業配列){
             this.List辺に関する情報=List辺に関する情報;
-            this.Dictionary_LabelTarget_辺に関する情報=Dictionary_LabelTarget_辺に関する情報;
+            //this.Dictionary_LabelTarget_辺に関する情報=Dictionary_LabelTarget_辺に関する情報;
             this.ExpressionEqualityComparer=ExpressionEqualityComparer;
             this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
         }
@@ -1107,12 +1092,14 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Label0 = (LabelExpression)Expression0;
                     var Label1=this.Label(Label0);
                     //this.辺番号=this.Dictionary_LabelTarget_辺に関する情報[Label0.Target].辺番号;
-                    this.辺に関する情報=this.Dictionary_LabelTarget_辺に関する情報[Label0.Target];
+                    //this.辺に関する情報=this.Dictionary_LabelTarget_辺に関する情報[Label0.Target];
+                    this.辺インクリメント();
                     return Label1;
                 }
                 case ExpressionType.Goto:{
                     var Goto0=(GotoExpression)Expression0;
                     var Goto1=this.Goto(Goto0);
+                    this.辺インクリメント();
                     return Goto1;
                 }
                 case ExpressionType.Loop: {
@@ -1182,16 +1169,12 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Conditional0_Test=Conditional0.Test;
             var Conditional0_IfTrue=Conditional0.IfTrue;
             var Conditional0_IfFalse=Conditional0.IfFalse;
-            //var List子辺=this.辺に関する情報.List親辺;
-
             var Conditional1_Test=this.Traverse(Conditional0_Test);
-            //this.辺に関する情報=List子辺[0];
             this.辺インクリメント();
             var Conditional1_IfTrue=this.Traverse(Conditional0_IfTrue);
             this.辺インクリメント();
             var Conditional1_IfFalse=this.Traverse(Conditional0_IfFalse);
             this.辺インクリメント();
-            //this.辺に関する情報=this.辺に関する情報.List子辺[0];
             var Test=Conditional0.Test;
             var IfTrue=Conditional0.IfTrue;
             var IfFalse=Conditional0.IfFalse;
@@ -1200,6 +1183,60 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     if(IfFalse==Conditional1_IfFalse)
                         return Conditional0;
             return Expression.Condition(Conditional1_Test,Conditional1_IfTrue,Conditional1_IfFalse,Conditional0.Type);
+        }
+        protected override Expression Switch(SwitchExpression Switch0){
+            var Switch0_SwitchValue=Switch0.SwitchValue;
+            var Switch0_Cases=Switch0.Cases;
+            var Switch1_SwitchValue=this.Traverse(Switch0_SwitchValue);
+            this.辺インクリメント();
+            var Switch0_Cases_Count=Switch0_Cases.Count;
+            var Switch1_Cases=new SwitchCase[Switch0_Cases_Count];
+            var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue;
+            for(var a=0; a < Switch0_Cases_Count; a++) {
+                var Switch0_Case=Switch0_Cases[a];
+                var Switch0_Case_Body=Switch0_Case.Body;
+                var Switch1_Case_Body=this.Traverse(Switch0_Case_Body);
+                this.辺インクリメント();
+                if(Switch0_Case_Body !=Switch1_Case_Body) {
+                    Switch1_Cases[a]=Expression.SwitchCase(Switch1_Case_Body,Switch0_Case.TestValues);
+                    変化したか=true;
+                } else
+                    Switch1_Cases[a]=Switch0_Case;
+                //var Switch0_Case_TestValues=Switch0_Case.TestValues;
+                //var Switch0_Case_TestValues_Count=Switch0_Case_TestValues.Count;
+                //var Switch1_Case_TestValues=new Expression[Switch0_Case_TestValues_Count];
+                //var 変化したか1=false;
+                //for(var b=0; b < Switch0_Case_TestValues_Count; b++) {
+                //    var Switch0_Case_TestValue=Switch0_Case_TestValues[b];
+                //    var Switch1_Case_TestValue=this.Traverse(Switch0_Case_TestValue);
+                //    //c#上は定数(Constant)しかできないが式木で作った場合はそれにとらわれない
+                //    //this.辺インクリメント();
+                //    Switch1_Case_TestValues[b]=Switch1_Case_TestValue;
+                //    if(Switch0_Case_TestValue !=Switch1_Case_TestValue)
+                //        変化したか1=true;
+                //}
+                //var Switch0_Case_Body=Switch0_Case.Body;
+                //var Switch1_Case_Body=this.Traverse(Switch0_Case_Body);
+                //this.辺インクリメント();
+                //if(Switch0_Case_Body !=Switch1_Case_Body || 変化したか1) {
+                //    Switch1_Cases[a]=Expression.SwitchCase(Switch1_Case_Body,Switch1_Case_TestValues);
+                //    変化したか=true;
+                //} else
+                //    Switch1_Cases[a]=Switch0_Case;
+            }
+            var Switch0_DefaultBody=Switch0.DefaultBody;
+            var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);
+            this.辺インクリメント();
+            変化したか|=Switch0_DefaultBody!=Switch1_DefaultBody;
+            return 変化したか
+               ?Expression.Switch(
+                    Switch0.Type,
+                    Switch1_SwitchValue,
+                    Switch1_DefaultBody,
+                    Switch0.Comparison,
+                    Switch1_Cases
+                )
+                : Switch0;
         }
         protected override Expression Call(MethodCallExpression MethodCall0) {
             var MethodCall0_Method = MethodCall0.Method;
@@ -1308,7 +1345,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 else
                     Line[b]='│';
         }
-        private static void 親(辺に関する情報[] 親辺Array,List<(辺に関する情報? 移動元,辺に関する情報? 移動先)>列Array0,ref string 前回のLine,辺に関する情報 辺,StringBuilder sb,StringBuilder Line,辺に関する情報? 上辺,ref char 直前文字){
+        private static void 親(辺に関する情報[] 親辺Array,List<(辺に関する情報? 移動元,辺に関する情報? 移動先)>列Array,ref string 前回のLine,辺に関する情報 辺,StringBuilder sb,StringBuilder Line,辺に関する情報? 上辺,ref char 直前文字){
             var 親辺Array_Length=親辺Array.Length;
             if(親辺Array_Length<=0)return;
 #if 省略
@@ -1329,22 +1366,19 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             //        直前文字='├';
             //else
             //直前文字='┌';
-            Line初期化(列Array0,Line);
+            Line初期化(列Array,Line);
             Line[0]='┌';
-            var サフィックス="";
-            var ループか=false;
-            var 書き換えLineIndexEnd=-1;
+            //var ループか=false;
+            var 書き込みした右端列=-1;
             for(var a=0;a<親辺Array_Length;a++){
                 var 親辺=親辺Array[a];
-                var Count=列Array0.Count;
+                var Count=列Array.Count;
                 for(var b=0;b<Count;b++){
-                    var 列=列Array0[b];
+                    var 列=列Array[b];
                     if(列.移動元==親辺) {
                         if(列.移動先==辺) {
                             if(Line[b]!='┘') {
-                                サフィックス=列.ToString();
-                                //親辺Array[a]=null!;
-                                if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
+                                if(書き込みした右端列<b) 書き込みした右端列=b;
                                 Line[b]='┘';
                                 goto 終了;
                             }
@@ -1354,47 +1388,49 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 for(var b=0;b<Count;b++){
                     if(Line[b]is'　'){
                         //if(列Array0[b].移動元 is null){
-                        列Array0[b]=(親辺,辺);
-                        サフィックス=列Array0[b].ToString();
-                        if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
+                        列Array[b]=(親辺,辺);
+                        if(書き込みした右端列<b) 書き込みした右端列=b;
                         Line[b]='┐';
-                        ループか=true;
+                        //ル//ープか=true;
                         goto 終了;
                     } else{
                         Debug.Assert(Line[b]!='　');
                     }
                 }
-                書き換えLineIndexEnd=Line.Length;
-                列Array0.Add((親辺,辺));
+                書き込みした右端列=Line.Length;
+                列Array.Add((親辺,辺));
                 Line.Append('┐');
                 終了: ;
             }
-            {
-                var a=0;
-                if(Line[a]=='┐'){
-                    if(前回のLine[0]is'┌'or'├')
-                        Line[a]='├';
-                    else
-                        Line[a]='┌';
-                } else if(Line[a]=='┘'){
-                    Debug.Fail("gg");
-                    //Line[a]='┴';
+            //{
+            //    var a=0;
+            //    if(Line[a]=='┐'){
+            //        if(前回のLine[0]is'┌'or'├')
+            //            Line[a]='├';
+            //        else
+            //            Line[a]='┌';
+            //    } else if(Line[a]=='┘'){
+            //        Debug.Fail("gg");
+            //        //Line[a]='┴';
+            //    }
+            //}
+            if(書き込みした右端列>0){
+                for(var a=1;a<書き込みした右端列;a++){
+                    if(Line[a]=='　'){
+                        Line[a]='─';
+                    } else if(Line[a]=='┐'){
+                        Line[a]='┬';
+                    } else if(Line[a]=='┘'){
+                        Line[a]='┴';
+                        列Array[a]=(null,null);
+                    } else if(Line[a]=='│'){
+                        Line[a]='┼';
+                    }
                 }
+                if(Line[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null,null);
             }
-            for(var a=1;a<書き換えLineIndexEnd;a++){
-                if(Line[a]=='　'){
-                    Line[a]='─';
-                } else if(Line[a]=='┐'){
-                    Line[a]='┬';
-                } else if(Line[a]=='┘'){
-                    Line[a]='┴';
-                    列Array0[a]=(null,null);
-                } else if(Line[a]=='│'){
-                    Line[a]='┼';
-                }
-            }
-            if(!ループか)
-                列Array0[書き換えLineIndexEnd]=(null,null);
+            //if(!ループか)
+            //    列Array[書き込みした右端列]=(null,null);
             直前文字=Line[0];
             var 行=Line.ToString();
             前回のLine=行;

@@ -4,7 +4,6 @@ using System.Reflection;
 
 using MemoryPack;
 using System.Buffers;
-using System.Diagnostics;
 using LinqDB.Helpers;
 using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MemoryPack.Formatters.Others;

@@ -21,8 +21,6 @@ using Linq=System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
-using static System.Net.Mime.MediaTypeNames;
-
 /// <summary>
 /// インライン不可能定数とは1mとか単純にIL命令で書けないもの。
 /// a+=bなどの合体演算子をa=a+bにする。
@@ -105,6 +103,24 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     }
     internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
     #if true
+    private Expression AndAlso_OrElse(Expression test,Expression ifTrue,Expression ifFalse) {
+        if(test.Type==typeof(bool)) {
+            return Expression.Condition(
+                test,
+                ifTrue,
+                ifFalse
+            );
+        } else {
+            return Expression.Condition(
+                Expression.Call(
+                    test.Type.GetMethod(op_True)!,
+                    test
+                ),
+                ifTrue,
+                ifFalse
+            );
+        }
+    }
     private Expression AndAlso_OrElse(ParameterExpression p,Expression test,Expression ifTrue,Expression ifFalse) {
         if(test.Type==typeof(bool)) {
             return Expression.Block(
@@ -129,14 +145,6 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             );
         }
     }
-    //protected override Expression AndAlso(BinaryExpression Binary0) {
-    //    var Binary1_Left = this.Traverse(Binary0.Left);
-    //    var And = Expression.And(
-    //        Binary1_Left,
-    //        this.Traverse(Binary0.Right)
-    //    );
-    //    return this.AndAlso_OrElse(Binary1_Left,And,Binary1_Left);
-    //}
     /// <summary>
     /// a&amp;&amp;b→operator true(a)?a&amp;b:a
     /// </summary>
@@ -146,22 +154,22 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
         var Binary1_Left = this.Traverse(Binary0.Left);
         var Binary1_Right=this.Traverse(Binary0.Right);
         if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.And(Binary1_Left,Binary1_Right);
-        var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
-        return this.AndAlso_OrElse(
-            p,
-            Expression.Assign(p,Binary1_Left),
-            Expression.And(p,Binary1_Right),
-            p
-        );
+        if(Binary1_Left.NodeType is ExpressionType.Constant or ExpressionType.Parameter){
+            return this.AndAlso_OrElse(
+                Binary1_Left,
+                Expression.And(Binary1_Left,Binary1_Right),
+                Binary1_Left
+            );
+        } else{
+            var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
+            return this.AndAlso_OrElse(
+                p,
+                Expression.Assign(p,Binary1_Left),
+                Expression.And(p,Binary1_Right),
+                p
+            );
+        }
     }
-    //protected override Expression OrElse(BinaryExpression Binary0) {
-    //    var Binary1_Left = this.Traverse(Binary0.Left);
-    //    var Or = Expression.Or(
-    //        Binary1_Left,
-    //        this.Traverse(Binary0.Right)
-    //    );
-    //    return this.AndAlso_OrElse(Binary1_Left,Binary1_Left,Or);
-    //}
     /// <summary>
     /// a||b→operator false(a)?a|b:a
     /// </summary>
@@ -171,15 +179,40 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
         var Binary1_Left =this.Traverse(Binary0.Left);
         var Binary1_Right=this.Traverse(Binary0.Right);
         if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.Or(Binary1_Left,Binary1_Right);
-        var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
-        return this.AndAlso_OrElse(
-            p,
-            Expression.Assign(p,Binary1_Left),
-            p,
-            Expression.Or(p,Binary1_Right)
-        );
+        if(Binary1_Left.NodeType is ExpressionType.Constant or ExpressionType.Parameter){
+            var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
+            return this.AndAlso_OrElse(
+                Binary1_Left,
+                Binary1_Left,
+                Expression.Or(Binary1_Left,Binary1_Right)
+            );
+        } else{
+            var p=Expression.Parameter(Binary1_Left.Type,"AndAlso");
+            return this.AndAlso_OrElse(
+                p,
+                Expression.Assign(p,Binary1_Left),
+                p,
+                Expression.Or(p,Binary1_Right)
+            );
+        }
     }
     #endif
+    //protected override Expression OrElse(BinaryExpression Binary0) {
+    //    var Binary1_Left = this.Traverse(Binary0.Left);
+    //    var Or = Expression.Or(
+    //        Binary1_Left,
+    //        this.Traverse(Binary0.Right)
+    //    );
+    //    return this.AndAlso_OrElse(Binary1_Left,Binary1_Left,Or);
+    //}
+    //protected override Expression AndAlso(BinaryExpression Binary0) {
+    //    var Binary1_Left = this.Traverse(Binary0.Left);
+    //    var And = Expression.And(
+    //        Binary1_Left,
+    //        this.Traverse(Binary0.Right)
+    //    );
+    //    return this.AndAlso_OrElse(Binary1_Left,And,Binary1_Left);
+    //}
     protected override Expression Constant(ConstantExpression Constant0) {
         if(!ILで直接埋め込めるか(Constant0.Type))
             this.DictionaryConstant[Constant0]=default!;
@@ -1762,7 +1795,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     predicate外.Type,
-                                                    Expression.AndAlso(
+                                                    Common.AndAlso(
                                                         predicate外.Body,
                                                         this.変換_旧Parameterを新Expression1.実行(
                                                             predicate内.Body,
@@ -1781,7 +1814,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     predicate外.Type,
-                                                    Expression.AndAlso(
+                                                    Common.AndAlso(
                                                         Expression.Invoke(
                                                             MethodCall1_MethodCall1_Arguments[1],
                                                             predicate外_Parameters[0]
@@ -1802,7 +1835,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     MethodCall1_Arguments_1.Type,
-                                                    Expression.AndAlso(
+                                                    Common.AndAlso(
                                                         predicate内.Body,
                                                         Expression.Invoke(
                                                             MethodCall1_Arguments_1,
@@ -1834,7 +1867,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     MethodCall1_Arguments_1_Type,
-                                                    Expression.AndAlso(
+                                                    Common.AndAlso(
                                                         Left,
                                                         Right
                                                     ),
@@ -1897,7 +1930,15 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
             for(var a = 1;a<LNew_Arguments_Count;a++) {
                 var LNew_Arguments_a = LNew_Arguments[a];
                 var LNew_Arguments_a_Type = LNew_Arguments_a.Type;
-                Result=Expression.AndAlso(
+                //var AndAlso1=Expression.AndAlso(
+                //    Result,
+                //    Expression.Call(
+                //        LNew_Arguments_a,
+                //        作業配列.GetMethod(LNew_Arguments_a_Type,nameof(Equals),LNew_Arguments_a_Type),
+                //        RNew_Arguments[a]
+                //    )
+                //);
+                Result=Common.AndAlso(
                     Result,
                     Expression.Call(
                         LNew_Arguments_a,

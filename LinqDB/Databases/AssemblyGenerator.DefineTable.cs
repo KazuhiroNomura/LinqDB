@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -9,7 +8,6 @@ using LinqDB.Sets;
 using LinqDB.CRC;
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
-using MemoryPack;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Databases;
