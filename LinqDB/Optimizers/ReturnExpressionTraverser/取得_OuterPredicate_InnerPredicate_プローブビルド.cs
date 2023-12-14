@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-using LinqDB.Sets;
 
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
@@ -122,10 +121,7 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
                 var Binary1_Right = this.PrivateTraverseNullable(Binary0_Right);
                 if(Binary1_Left is null) return Binary1_Right;
                 if(Binary1_Right is null) return Binary1_Left;
-                Debug.Assert(Binary1_Left==Binary0_Left&&Binary1_Right==Binary0_Right);
-                return Expression0;
-                //if(Binary1_Left==Binary0_Left&&Binary1_Right==Binary0_Right) return Expression0;
-                //return Expression.AndAlso(Binary1_Left,Binary1_Right);
+                return Expression.AndAlso(Binary1_Left,Binary1_Right);
             }
             case ExpressionType.Equal: {
                 var Binary0 = (BinaryExpression)Expression0;
@@ -157,15 +153,15 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
                     //}
                     //var T=typeof(IEqualityComparer<>).GetGenericArguments()[0];
                     //var xx=typeof(IEqualityComparer<>).GetMethod("Equals",new []{T,T});
-                    if(MethodCall.Object!.Type.GetGenericArguments(typeof(IEqualityComparer<>),out var _)){
-                        this.Comparer=MethodCall.Object;
-                        var MethodCall_Arguments = MethodCall.Arguments;
-                        return this.等号が出現した時にDictionaryHashとEqualに分離(
-                            Expression0,
-                            MethodCall_Arguments[0],
-                            MethodCall_Arguments[1]
-                        );
-                    }
+                    //if(MethodCall.Object!.Type.GetGenericArguments(typeof(IEqualityComparer<>),out var _)){
+                    //    this.Comparer=MethodCall.Object;
+                    //    var MethodCall_Arguments = MethodCall.Arguments;
+                    //    return this.等号が出現した時にDictionaryHashとEqualに分離(
+                    //        Expression0,
+                    //        MethodCall_Arguments[0],
+                    //        MethodCall_Arguments[1]
+                    //    );
+                    //}
                     var IEquatable = MethodCall.Arguments[0].Type.GetInterface(CommonLibrary.IEquatable_FullName);
                     if(IEquatable is not null) return this.等号が出現した時にDictionaryHashとEqualに分離(Expression0,MethodCall.Object,MethodCall.Arguments[0]);
                 }

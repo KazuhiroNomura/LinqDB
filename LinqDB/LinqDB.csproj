@@ -7,8 +7,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>NET7</TargetFramework>
-    <LangVersion>11.0</LangVersion>
+    <TargetFramework>net8</TargetFramework>
+    <LangVersion>12.0</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <ApplicationIcon>logo128.ico</ApplicationIcon>
@@ -121,18 +121,16 @@
     <Compile Include="Optimizers\Comparison\汎用Comparer.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_KeySelectorの匿名型をValueTuple.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_WhereからLookup.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ独立.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_AndAlsoとOrElseをConditionに.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_ジャンプ命令のみ.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_最終正規化.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\ReturnTSqlFragmentTraverser.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_PivotTableReference.cs" />
@@ -153,7 +151,7 @@
     <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter有_他Parameter無_Lambda内部走査.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter無_他Parameter有.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_CSharp.cs" />
-    <Compile Include="Optimizers\VoidExpressionTraverser\取得_Dictionary.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_ラムダを跨ぐParameter.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_出力Table.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_命令ツリー.cs" />

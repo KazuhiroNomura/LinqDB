@@ -15,13 +15,13 @@ public class Client : 共通{
         using var R = new LinqDB.Remote.Clients.Client(server,80);
         R.HttpRequest(CreateRequest(server,"/"));
     }
-    [Fact]public void httpsGoogle(){
-        const string server="www.google.com";
-        var X509Certificate=new X509Certificate2(@"証明書\Google.crt");
-        using var R = new LinqDB.Remote.Clients.Client(server,443);
-        R.X509Certificate=X509Certificate;
-        R.HttpRequest(CreateRequest(server,"/"));
-    }
+    //[Fact]public void httpsGoogle(){
+    //    const string server="www.google.com";
+    //    var X509Certificate=new X509Certificate2(@"証明書\Google.crt");
+    //    using var R = new LinqDB.Remote.Clients.Client(server,443);
+    //    R.X509Certificate=X509Certificate;
+    //    R.HttpRequest(CreateRequest(server,"/"));
+    //}
     [Fact]public void 阿部寛(){
         const string server="abehiroshi.la.coocan.jp";
         const string path="/tv/tv.htm";

@@ -1,31 +1,20 @@
-﻿using LinqDB.Databases.Dom;
-using LinqDB.Helpers;
+﻿using LinqDB.Helpers;
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
 //using LinqDB.Optimizers.ReturnExpressionTraverser;
 //using LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 //using LinqDB.Optimizers.VoidExpressionTraverser;
-using Array = System.Array;
 //using Microsoft.CSharp.RuntimeBinder;
-using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
-using AssemblyGenerator = Lokad.ILPack.AssemblyGenerator;
-using Container = LinqDB.Databases.Container;
 using Delegate = System.Delegate;
-using ExtensionSet = LinqDB.Reflection.ExtensionSet;
-using Regex = System.Text.RegularExpressions.Regex;
-using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
+using static System.Net.Mime.MediaTypeNames;
+
 using Generic = System.Collections.Generic;
 /// <summary>
 /// Expressionを最適化する
@@ -113,7 +102,41 @@ internal static class Common {
     internal const BindingFlags Instance_NonPublic_Public =BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public;
     internal const BindingFlags Static_NonPublic_Public =BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public;
     internal const BindingFlags Static_NonPublic = BindingFlags.Static|BindingFlags.NonPublic;
-    internal static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
+    internal static Expression AndAlsoで繋げる(Expression? predicate,Expression e)=>predicate is null?e:Expression.AndAlso(predicate,e);
+    /// <summary>
+    /// a&amp;&amp;b→operator true(a)?a&amp;b:a
+    /// </summary>
+    /// <param name="Left"></param>
+    /// <param name="Right"></param>
+    /// <returns></returns>
+    internal static Expression AndAlsoに相当するCondition(Expression Left,Expression Right) {
+        if(Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.And(Left,Right);
+        var Type=Left.Type;
+        var p=Expression.Parameter(Left.Type,"AndAlso");
+        var test=Expression.Assign(p,Left);
+        if(Type==typeof(bool)) {
+            return Expression.Block(
+                new[]{p},
+                Expression.Condition(
+                    test,
+                    Expression.And(p,Right),
+                    p
+                )                
+            );
+        } else {
+            return Expression.Block(
+                new[]{p},
+                Expression.Condition(
+                    Expression.Call(
+                        test.Type.GetMethod(op_True)!,
+                        test
+                    ),
+                    Expression.And(p,Right),
+                    p
+                )
+            );
+        }
+    }
     internal static Expression Convert必要なら(Expression e,Type Type) => Type!=e.Type
         ? Expression.Convert(
             e,
@@ -302,15 +325,22 @@ internal static class Common {
     //internal static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> Arguments) {
     //    return CommonLibrary.ValueTupleでNewする(作業配列,Arguments);
     //}
-    internal static bool ILで直接埋め込めるか(Type Type) =>
-        Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
+    //internal static bool ILで直接埋め込めるか(Type Type) =>
+    //    Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
     /// <summary>
     /// Constant定数がILに直接埋め込めるか判定する
     /// </summary>
     /// <param name="Constant"></param>
     /// <returns>ILに埋め込めるか</returns>
-    internal static bool ILで直接埋め込めるか(ConstantExpression Constant) =>
-        !Constant.Type.IsValueType&&Constant.Value is null||ILで直接埋め込めるか(Constant.Type);
+    internal static bool ILで直接埋め込めるか(ConstantExpression Constant){
+        if(Constant.Value is null)return true;
+        //if(!Constant.Type.IsValueType)return true;
+        //    if(Constant.Value is null)return true;
+        if(Constant.Type.IsPrimitive)return true;
+        if(Constant.Type.IsEnum)return true;
+        if(Constant.Type==typeof(string))return true;
+        return false;
+    }
     internal static MethodCallExpression? ループ展開可能なSetのCall(Expression e) {
         if(e.NodeType!=ExpressionType.Call)
             return null;

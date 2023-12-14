@@ -21,7 +21,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     protected Dictionary<ParameterExpression,LocalBuilder> Dictionary_Parameter_LocalBuilder=new();
     protected readonly 判定_InstanceMethodか 判定_InstanceMethodか;
     /// <summary>
-    /// LabetlTargetの同一参照に対応するILのLabel
+    /// LabelTargetの同一参照に対応するILのLabel
     /// </summary>
     protected Dictionary<LabelTarget,Label>? Dictionary_Name_Label;
 

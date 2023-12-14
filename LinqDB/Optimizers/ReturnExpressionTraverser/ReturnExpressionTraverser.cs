@@ -879,13 +879,11 @@ public class ReturnExpressionTraverser {
     /// <returns></returns>
     protected virtual Expression Switch(SwitchExpression Switch0) {
         var Switch0_SwitchValue=Switch0.SwitchValue;
-        var Switch0_DefaultBody=Switch0.DefaultBody;
         var Switch0_Cases=Switch0.Cases;
         var Switch1_SwitchValue=this.Traverse(Switch0_SwitchValue);
-        var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);
         var Switch0_Cases_Count=Switch0_Cases.Count;
         var Switch1_Cases=new SwitchCase[Switch0_Cases_Count];
-        var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue || Switch0_DefaultBody !=Switch1_DefaultBody;
+        var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue;
         for(var a=0; a < Switch0_Cases_Count; a++) {
             var Switch0_Case=Switch0_Cases[a];
             var Switch0_Case_TestValues=Switch0_Case.TestValues;
@@ -908,6 +906,9 @@ public class ReturnExpressionTraverser {
             } else
                 Switch1_Cases[a]=Switch0_Case;
         }
+        var Switch0_DefaultBody=Switch0.DefaultBody;
+        var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);
+        変化したか|=Switch0_DefaultBody!=Switch1_DefaultBody;
         return 変化したか
            ?Expression.Switch(
                 Switch0.Type,

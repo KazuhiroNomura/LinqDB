@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using Sets=LinqDB.Sets;
-using Generic=System.Collections.Generic;
+﻿using System.IO;
 using MemoryPack;
-using MemoryPack.Formatters;
-using Microsoft.Build.Utilities;
 namespace LinqDB.Serializers.MemoryPack;
 using O=MemoryPackSerializerOptions;
 

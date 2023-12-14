@@ -7,11 +7,7 @@ using LinqDB.Sets;
 using LinqDB.Helpers;
 using Math = LinqDB.Reflection.Math;
 using System.Collections.Generic;
-using LinqDB.Optimizers.Comparison;
 using Generic = System.Collections.Generic;
-using LinqDB.Optimizers.VoidExpressionTraverser;
-using System.Collections;
-
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 

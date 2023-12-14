@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Buffers;
 using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -9,7 +8,6 @@ using LinqDB.Sets;
 using LinqDB.CRC;
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
-using MemoryPack;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Databases;
@@ -26,7 +24,8 @@ public partial class AssemblyGenerator {
         var IContainer_EscapedName = ISchema.Container.EscapedName;
         var Key_TypeBuilder=ModuleBuilder.DefineType(
             $"{IContainer_EscapedName}.PrimaryKeys.{ISchema_EscapedName}.{EscapedName}",
-            TypeAttributes.Public|TypeAttributes.SequentialLayout|TypeAttributes.Serializable,
+            TypeAttributes.Public|TypeAttributes.SequentialLayout,
+            //TypeAttributes.Public|TypeAttributes.SequentialLayout|TypeAttributes.Serializable,
             typeof(ValueType)
         );
         //これがあるとCore系列では保存できない
@@ -44,7 +43,8 @@ public partial class AssemblyGenerator {
         Types2[1]=Container_TypeBuilder;
         var Entity2 = typeof(Entity<,>).MakeGenericType(Types2);
         var Entity2_ProtectedPrimaryKey = TypeBuilder.GetField(Entity2,AssemblyGenerator.Entity2_ProtectedPrimaryKey);
-        var Table_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
+        var Table_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public,Entity2);
+        //var Table_TypeBuilder = ModuleBuilder.DefineType($"{IContainer_EscapedName}.Tables.{ISchema_EscapedName}.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,Entity2);
         Types1[0]=Table_TypeBuilder;
         //{
         //    var IMemoryPackable=typeof(IMemoryPackable<>);
