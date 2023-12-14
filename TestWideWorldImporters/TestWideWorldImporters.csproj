@@ -7,8 +7,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <LangVersion>11.0</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,7 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="WideWorldImporters">
-      <HintPath>..\GUI\bin\Debug\net60-windows\WideWorldImporters.dll</HintPath>
+      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\WideWorldImporters.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

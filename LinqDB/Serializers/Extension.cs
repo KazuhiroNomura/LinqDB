@@ -63,9 +63,10 @@ internal static class Extension{
         if(!d.TryGetValue(type,out var array)){
             array=d.GetOrAdd(type,key=>{
                 //NonPublicは<>cのinternalメソッドが匿名デリゲートの本体になることがあるため
-                var value=type.GetMethods(Flags|BindingFlags.NonPublic).ToArray();
-                Array.Sort(value,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
-                return value;
+                //98,475,726calls,21.6%,16,813ms
+                var values=type.GetMethods(Flags|BindingFlags.NonPublic);
+                Array.Sort(values,(a,b)=>string.CompareOrdinal(a.ToString(),b.ToString()));
+                return values;
             });
         }
         return array;

@@ -64,28 +64,6 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         InvalidOperationException_ctor,
         Expression.Constant(nameof(ExtensionSet.Single))
     );
-    //[Flags]
-    //protected enum 具象TypeOption{
-    //    Addに成功したかの判定=0b10,
-    //    Countアップするか    =0b01
-    //}
-    //private static Type 重複なし作業Type(Expression Expression) {
-    //    Debug.Assert(Expression.Type.IsGenericType);
-    //    var Type = Expression.Type;
-    //    var Generic_IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-    //    if(Generic_IEnumerable1 is not null){
-    //        Type=Generic_IEnumerable1;
-    //    }else if(Type.IsGenericType&&(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||typeof(IEnumerable<>)==Type.GetGenericTypeDefinition())) {
-    //    }else{
-    //        var Sets_IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName);
-    //        if(Sets_IEnumerable1 is not null){
-    //            Type=Sets_IEnumerable1;
-    //        } else{
-    //            throw new NotSupportedException(Type.FullName);
-    //        }
-    //    }
-    //    return typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
-    //}
     protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象Type(Expression Expression0,string Name,bool 戻り値あり,bool Countあり){
         var Type = Expression0.Type;
         Type? Interface;
@@ -117,23 +95,6 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 MethodName=nameof(Set<int>.InternalAdd);
             }
         }
-        //Type ReturnType;
-        //Debug.Assert(Expression0.Type.IsGenericType);
-        //if(typeof(IEnumerable<>)==Interface.GetGenericTypeDefinition()) {
-        //    重複なし作業Type(Expression0)
-        //    ReturnType=typeof(Set<>).MakeGenericType(Expression0.Type.GetGenericArguments());
-        //} else {
-        //    Type TypeDefinition;
-        //    if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
-        //        TypeDefinition=typeof(HashSet<>);
-        //        ReturnType=TypeDefinition.MakeGenericType(ReturnType.GetGenericArguments());
-        //    } else {
-        //        TypeDefinition=typeof(List<>);
-        //        if(戻り値あり)
-        //            throw new NotSupportedException("Listで戻り値ありのAddは存在しない。");
-        //    }
-        //}
-        //ReturnType=TypeDefinition.MakeGenericType(ReturnType.GetGenericArguments());
         var Parameter = Expression.Parameter(ReturnType,Name);
         return (
             Parameter,
@@ -146,36 +107,6 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             )
         );
     }
-    //protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 重複許容IEnumerable具象Typeカウントなし(Expression Expression0,string Name) {
-    //    var Type = Expression0.Type;
-    //    MethodInfo Method;
-    //    Debug.Assert(Type.IsGenericType);
-    //    if(!Type.IsSealed) {
-    //        if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()) {
-    //            Type=typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
-    //            Method=Type.GetMethod(nameof(Set<int>.InternalAdd),Instance_NonPublic_Public)!;
-    //        } else {
-    //            Type TypeDefinition;
-    //            if(Expression0 is MethodCallExpression MethodCall&&Enumerableメソッドで結果にSetを要求するか(MethodCall)) {
-    //                TypeDefinition=typeof(HashSet<>);
-    //            } else {
-    //                TypeDefinition=typeof(List<>);
-    //            }
-    //            Type=TypeDefinition.MakeGenericType(Type.GetGenericArguments());
-    //        }
-    //    }
-    //    var Parameter = Expression.Parameter(Type,Name);
-    //    return (
-    //        Parameter,
-    //        Type,
-    //        Expression.Assign(
-    //            Parameter,
-    //            Expression.New(
-    //                Type.GetConstructor(Type.EmptyTypes)!
-    //            )
-    //        )
-    //    );
-    //}
     private sealed class 判定_指定PrimaryKeyが存在する:VoidExpressionTraverser_Quoteを処理しない {
         private readonly Generic.HashSet<string> HashSetProperty_Name = new();
         private ParameterExpression? EntityParameter;

@@ -2123,7 +2123,7 @@ abstract class Program :共通{
                 IncomeGroup = GetString(Reader,3)
             });
     }
-    private static ImmutableSet<vDMPrep> vDMPrep(Container e)=>
+    private static LinqDB.Sets.IEnumerable<vDMPrep> vDMPrep(Container e)=>
         from f in e.dbo.FactInternetSales
         join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
         join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
@@ -2152,7 +2152,7 @@ abstract class Program :共通{
             f.OrderQuantity,
             f.ExtendedAmount
         );
-    private static void 実行<T>(System.Linq.Expressions.Expression<Func<IEnumerable<T>>> LINQ){
+    private static void 実行<T>(System.Linq.Expressions.Expression<Func<System.Collections.Generic.IEnumerable<T>>> LINQ){
         var LINQ結果=o.Execute(LINQ);
     }
     private static void vDMPrep(Container e,SqlCommand Command) {

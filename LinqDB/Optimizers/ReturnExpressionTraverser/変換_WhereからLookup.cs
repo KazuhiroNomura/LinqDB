@@ -119,14 +119,14 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
                             MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
                         }
-                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer){
+                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer0){
                             var keySelector=Expression.Lambda(
                                 ビルド,
                                 predicate_Parameters
                             );
                             Expression Instance;
                             var 作業配列=this.作業配列;
-                            if(Comparer is null){
+                            if(Comparer0 is null){
                                 MethodInfo Lookup;
                                 if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
                                     Lookup=ExtensionSet.ToLookup_keySelector;

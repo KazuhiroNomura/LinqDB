@@ -71,11 +71,11 @@ public class Test_DictionarySet
             LinqDB.Sets.IEnumerable<int> value = default!;
             Assert.Equal(0,d[0].Count);
             Assert.Equal(1,d[1].Count);
-            Assert.Equal(new Set<int> { 2 }, d[1]);
+            Assert.Equal(new GroupingSet<int,int>(1) { 2 }, d[1]);
             Assert.Equal(1,d[2].Count);
-            Assert.Equal(new Set<int> { 4 }, d[2]);
+            Assert.Equal(new GroupingSet<int,int>(2) { 4 }, d[2]);
             Assert.Equal(1,d[unchecked(1 + int.MaxValue)].Count);
-            Assert.Equal(new Set<int> { 3 }, d[unchecked(1 + int.MaxValue)]);
+            Assert.Equal(new GroupingSet<int,int>(unchecked(1 + int.MaxValue)){ 3 }, d[unchecked(1 + int.MaxValue)]);
         }
     }
 }

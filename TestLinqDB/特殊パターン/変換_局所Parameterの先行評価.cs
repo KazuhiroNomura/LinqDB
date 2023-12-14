@@ -937,37 +937,18 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
     }
     [Fact]public void 無条件ジャンプ3(){
-        //└──┐0 br L0
-        //┌─┐│1 L1:
-        //1m  ││
-        //└┐││  br L2
-        //┌┼┼┘2 L0:
-        //1m││  
-        //└┼┘    br L1
-        //┌┼┐  3 L3:
-        //3m││
-        //└┼┼┐  br L4
-        //┌┘││4 L2:
-        //2m  ││
-        //└─┘│  br L3
-        //┌──┘5 L4:
-        //2m
-        //↓
-        //└────┐ 0 br L0
-        //┌───┐│1 L1:
-        //t0      ││
-        //└──┐││  br L2
-        //┌──┼┼┘2 L0:
-        //t0=1m ││  
-        //└──┼┘    br L1
-        //┌──┼┐  3 L3:
-        //3m    ││
-        //└──┼┼┐  br L4
-        //┌──┘││4 L2:
-        //t1=2m   ││
-        //└───┘│  br L3
-        //┌────┘5 L4:
-        //t1
+        //└┐0,最上位
+        //└┼┐2,Label2
+        //┌┼┴┐3,()L1:
+        //└┼┐│3,
+        //┌┘││1,()L0:
+        //└─┼┘1,goto()L0
+        //└┐│　6,Label2
+        //┌┴┼┐7,()L3:
+        //└┐││7,
+        //┌┼┘│4,()L2:
+        //└┼─┘4,goto()L2
+        //┌┘　　8,()L4:
         var L0=Expression.Label("L0");
         var L1=Expression.Label("L1");
         var L2=Expression.Label("L2");
@@ -1269,6 +1250,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     public class operator_true{
         private bool 内部のBoolean;
+        public operator_true()=>this.内部のBoolean=true;
         public operator_true(bool 内部のBoolean){
             this.内部のBoolean=内部のBoolean;
         }
@@ -1277,11 +1259,93 @@ public class 変換_局所Parameterの先行評価 : 共通{
         public static operator_true operator&(operator_true a,operator_true b)=>new(a.内部のBoolean&b.内部のBoolean);
         public static operator_true operator|(operator_true a,operator_true b)=>new(a.内部のBoolean|b.内部のBoolean);
     }
+    public class Tuple2<T>{
+        public T Item1=>default!;
+        public T Item2=>default!;
+        public static Tuple2<T> Create()=>new();
+    }
+    public struct ValueTuple2<T>{
+        public T Item1=>default!;
+        public T Item2=>default!;
+        public static Tuple2<T> Create()=>new();
+    }
+    [Fact]public void 値型と参照型による先行評価の使い分け0(){
+        var l0=this.Optimizer.Lambda最適化(() =>
+            Tuple2<string>.Create().Item1+Tuple2<string>.Create().Item1
+        );
+        var l1=this.Optimizer.Lambda最適化(() =>
+            ValueTuple2<string>.Create().Item1+ValueTuple2<string>.Create().Item1
+        );
+        var l2=this.Optimizer.Lambda最適化(() =>
+            Tuple2<int>.Create().Item1+Tuple2<int>.Create().Item1
+        );
+        var l3=this.Optimizer.Lambda最適化(() =>
+            ValueTuple2<int>.Create().Item1+ValueTuple2<string>.Create().Item1
+        );
+    }
+    [Fact]public void 値型と参照型による先行評価の使い分け1(){
+        var l0=this.Optimizer.Lambda最適化(() =>
+            Tuple2<string>.Create().Item1+Tuple2<string>.Create().Item2
+        );
+        var l1=this.Optimizer.Lambda最適化(() =>
+            ValueTuple2<string>.Create().Item1+ValueTuple2<string>.Create().Item2
+        );
+        var l2=this.Optimizer.Lambda最適化(() =>
+            Tuple2<int>.Create().Item1+Tuple2<int>.Create().Item2
+        );
+        var l3=this.Optimizer.Lambda最適化(() =>
+            ValueTuple2<int>.Create().Item1+ValueTuple2<string>.Create().Item2
+        );
+    }
+    [Fact]public void 値型と参照型による先行評価の使い分け2(){
+        var l0=this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(op).Let(
+                p=>
+                    p.Item1&p.Item1
+            )
+        );
+        var l1=this.Optimizer.Lambda最適化(() =>
+            ValueTuple.Create(op).Let(
+                p=>
+                    p.Item1&p.Item1
+            )
+        );
+        var l2=this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(true).Let(
+                p=>
+                    p.Item1&p.Item1
+            )
+        );
+        var l3=this.Optimizer.Lambda最適化(() =>
+            ValueTuple.Create(true).Let(
+                p=>
+                    p.Item1&p.Item1
+            )
+        );
+    }
     private static operator_true op=new(true);
     [Fact]
     public void AndAlso2(){
-        this.Optimizer.Lambda最適化(() =>
+        var l0=this.Optimizer.Lambda最適化(() =>
             Tuple.Create(op,op).Let(
+                p=>
+                    p.Item1&&p.Item2
+            )
+        );
+        var l1=this.Optimizer.Lambda最適化(() =>
+            ValueTuple.Create(op,op).Let(
+                p=>
+                    p.Item1&&p.Item2
+            )
+        );
+        var l2=this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(true,true).Let(
+                p=>
+                    p.Item1&&p.Item2
+            )
+        );
+        var l3=this.Optimizer.Lambda最適化(() =>
+            ValueTuple.Create(true,true).Let(
                 p=>
                     p.Item1&&p.Item2
             )
@@ -1344,7 +1408,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]
     public void AndAlsoRest7(){
-        this.Optimizer.Lambda最適化(()=>
+        var l0=this.Optimizer.Lambda最適化(()=>
             new Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true>>(op,op,op,op,op,op,op,new Tuple<operator_true,operator_true,operator_true,operator_true,operator_true,operator_true,operator_true>(op,op,op,op,op,op,op)).Let(
                 //new ValueTuple<bool,bool,bool,bool,bool,bool,bool,ValueTuple<bool>>(true,true,true,true,true,true,true,new ValueTuple<bool>(true)).Let(
                 p=>
@@ -1352,7 +1416,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     &&p.Rest.Item2&&p.Rest.Item3&&p.Rest.Item4&&p.Rest.Item5&&p.Rest.Item6&&p.Rest.Item7
             )
         );
-        this.Optimizer.Lambda最適化(()=>
+        var l1=this.Optimizer.Lambda最適化(()=>
             new ValueTuple<bool,bool,bool,bool,bool,bool,bool,ValueTuple<bool,bool,bool,bool,bool,bool,bool>>(true,true,true,true,true,true,true,new ValueTuple<bool,bool,bool,bool,bool,bool,bool>(true,true,true,true,true,true,true)).Let(
                 p=>
                     p.Item1&&p.Item2&&p.Item3&&p.Item4&&p.Item5&&p.Item6&&p.Item7&&p.Rest.Item1

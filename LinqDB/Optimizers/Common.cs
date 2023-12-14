@@ -102,14 +102,14 @@ internal static class Common {
     internal const BindingFlags Instance_NonPublic_Public =BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.Public;
     internal const BindingFlags Static_NonPublic_Public =BindingFlags.Static|BindingFlags.NonPublic|BindingFlags.Public;
     internal const BindingFlags Static_NonPublic = BindingFlags.Static|BindingFlags.NonPublic;
-    internal static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : AndAlso(predicate,e);
+    internal static Expression AndAlsoで繋げる(Expression? predicate,Expression e)=>predicate is null?e:Expression.AndAlso(predicate,e);
     /// <summary>
     /// a&amp;&amp;b→operator true(a)?a&amp;b:a
     /// </summary>
     /// <param name="Left"></param>
     /// <param name="Right"></param>
     /// <returns></returns>
-    internal static Expression AndAlso(Expression Left,Expression Right) {
+    internal static Expression AndAlsoに相当するCondition(Expression Left,Expression Right) {
         if(Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.And(Left,Right);
         var Type=Left.Type;
         var p=Expression.Parameter(Left.Type,"AndAlso");
@@ -325,15 +325,22 @@ internal static class Common {
     //internal static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> Arguments) {
     //    return CommonLibrary.ValueTupleでNewする(作業配列,Arguments);
     //}
-    internal static bool ILで直接埋め込めるか(Type Type) =>
-        Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
+    //internal static bool ILで直接埋め込めるか(Type Type) =>
+    //    Type.IsPrimitive||Type.IsEnum||Type==typeof(string);
     /// <summary>
     /// Constant定数がILに直接埋め込めるか判定する
     /// </summary>
     /// <param name="Constant"></param>
     /// <returns>ILに埋め込めるか</returns>
-    internal static bool ILで直接埋め込めるか(ConstantExpression Constant) =>
-        !Constant.Type.IsValueType&&Constant.Value is null||ILで直接埋め込めるか(Constant.Type);
+    internal static bool ILで直接埋め込めるか(ConstantExpression Constant){
+        if(Constant.Value is null)return true;
+        //if(!Constant.Type.IsValueType)return true;
+        //    if(Constant.Value is null)return true;
+        if(Constant.Type.IsPrimitive)return true;
+        if(Constant.Type.IsEnum)return true;
+        if(Constant.Type==typeof(string))return true;
+        return false;
+    }
     internal static MethodCallExpression? ループ展開可能なSetのCall(Expression e) {
         if(e.NodeType!=ExpressionType.Call)
             return null;

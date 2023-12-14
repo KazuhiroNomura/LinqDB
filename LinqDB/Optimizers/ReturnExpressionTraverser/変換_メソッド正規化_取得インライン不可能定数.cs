@@ -91,18 +91,16 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
         変換_旧Expressionを新Expression1 変換_旧Expressionを新Expression1) : base(作業配列) {
         this.変換_旧Parameterを新Expression1=変換_旧Parameterを新Expression1;
         this.変換_旧Parameterを新Expression2=変換_旧Parameterを新Expression2;
-        //this._取得_New_OuterPredicate_InnerPredicate_OtherPredicate=new 取得_New_OuterPredicate_InnerPredicate_OtherPredicate(判定_New_葉に移動したいPredicate);
         this.変換_旧Expressionを新Expression1=変換_旧Expressionを新Expression1;
     }
     private int 番号;
-    //internal Information? Information;
     public Expression 実行(Expression e) {
         this.番号=0;
         this.DictionaryConstant.Clear();
         return this.Traverse(e);
     }
     internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
-    #if true
+    #if false
     private Expression AndAlso_OrElse(Expression test,Expression ifTrue,Expression ifFalse) {
         if(test.Type==typeof(bool)) {
             return Expression.Condition(
@@ -213,8 +211,23 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     //    );
     //    return this.AndAlso_OrElse(Binary1_Left,And,Binary1_Left);
     //}
+    /// <summary>
+    /// 不要なBlockを削除する
+    /// </summary>
+    /// <param name="Block0"></param>
+    /// <returns></returns>
+    protected override Expression Block(BlockExpression Block0) {
+        var Block0_Expressions=Block0.Expressions;
+        var Block0_Expressions_Count = Block0_Expressions.Count;
+        if(Block0_Expressions_Count==0) return Default_void;
+        if(Block0.Variables.Count==0)
+            if(Block0_Expressions_Count==1) return this.Traverse(Block0_Expressions[0]);
+        var Block1_Expressions = new Expression[Block0_Expressions_Count];
+        for(var a = 0;a<Block0_Expressions_Count;a++)Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
+        return Expression.Block(Block0.Variables,Block1_Expressions);
+    }
     protected override Expression Constant(ConstantExpression Constant0) {
-        if(!ILで直接埋め込めるか(Constant0.Type))
+        if(!ILで直接埋め込めるか(Constant0))
             this.DictionaryConstant[Constant0]=default!;
             //this.DictionaryConstant.TryAdd(Constant0,default!);
         return Constant0;
@@ -404,6 +417,75 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
     //}
     protected override Expression ConvertChecked(UnaryExpression Unary0)=> this.共通ConvertConvertChecked(Unary0, ExpressionType.ConvertChecked);
 
+    private Generic.IList<Expression>KeySelectorの匿名型をValueTuple(Type[]GenericArguments,Generic.IList<Expression>MethodCall1_Arguments){
+        //var MethodCall0_Method=MethodCall0.Method;
+        //if(!MethodCall0_Method.IsStatic)return base.Call(MethodCall0);
+        //var MethodCall0_Arguments=MethodCall0.Arguments;
+        //var MethodCall1_Arguments_Length=MethodCall0_Arguments.Count;
+        ////var MethodCall1_Arguments=new Expression[MethodCall1_Arguments_Length];
+        //for(var a=0;a<MethodCall1_Arguments_Length;a++)
+        //    MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Arguments[a]);
+        //var MethodCall0_GenericMethodDefinition=GetGenericMethodDefinition(MethodCall0_Method);
+        //var typeArguments=MethodCall0_Method.GetGenericArguments();
+        {
+            //Join,GroupJoinのKeyが匿名型の場合ValueTupleにしてヒープ消費を減らす
+            var keyType=GenericArguments[2];
+            if(keyType.IsAnonymous()){
+                //匿名型をキャストすることはないと考えられるので。
+                if(MethodCall1_Arguments[2] is LambdaExpression outerKeySelector1&&
+                   MethodCall1_Arguments[3] is LambdaExpression innerKeySelector1){
+                    var outerKeySelector1_Body=outerKeySelector1.Body;
+                    var innerKeySelector1_Body=innerKeySelector1.Body;
+                    if(outerKeySelector1_Body.NodeType==ExpressionType.New&&
+                       innerKeySelector1_Body.NodeType==ExpressionType.New){
+                        var 作業配列=this.作業配列;
+                        var keyType_GetGenericArguments=keyType.GetGenericArguments();
+                        Expression outerKeySelector2_Body,innerKeySelector2_Body;
+                        Type 新keyType;
+                        if(keyType_GetGenericArguments.Length==1){
+                            outerKeySelector2_Body=((NewExpression)outerKeySelector1_Body).Arguments[0];
+                            innerKeySelector2_Body=((NewExpression)innerKeySelector1_Body).Arguments[0];
+                            新keyType=keyType_GetGenericArguments[0];
+                        } else{
+                            outerKeySelector2_Body=CommonLibrary.ValueTupleでNewする(作業配列,
+                                ((NewExpression)outerKeySelector1_Body).Arguments);
+                            innerKeySelector2_Body=CommonLibrary.ValueTupleでNewする(作業配列,
+                                ((NewExpression)innerKeySelector1_Body).Arguments);
+                            新keyType=innerKeySelector2_Body.Type;
+                        }
+                        if(MethodCall1_Arguments.IsReadOnly){
+                            var MethodCall1_Arguments_Length=MethodCall1_Arguments.Count;
+                            var MethodCall2_Arguments=new Expression[MethodCall1_Arguments_Length];
+                            MethodCall2_Arguments[0]=MethodCall1_Arguments[0];
+                            MethodCall2_Arguments[1]=MethodCall1_Arguments[1];
+                            for(var a=4;a<MethodCall1_Arguments_Length;a++) MethodCall2_Arguments[a]=MethodCall1_Arguments[a];
+                            MethodCall1_Arguments=MethodCall2_Arguments;
+                        }
+                        GenericArguments[2]=新keyType;
+                        MethodCall1_Arguments[2]=Expression.Lambda(
+                            作業配列.MakeGenericType(
+                                typeof(Func<,>),
+                                GenericArguments[0],
+                                新keyType
+                            ),
+                            outerKeySelector2_Body,
+                            outerKeySelector1.Parameters
+                        );
+                        MethodCall1_Arguments[3]=Expression.Lambda(
+                            作業配列.MakeGenericType(
+                                typeof(Func<,>),
+                                GenericArguments[1],
+                                新keyType
+                            ),
+                            innerKeySelector2_Body,
+                            innerKeySelector1.Parameters
+                        );
+                    }
+                }
+            }
+        }
+        return MethodCall1_Arguments;
+    }
     /// <summary>
     /// 末尾最適化できる部分多いが煩雑になるので素直にthis.Call再帰する。
     /// </summary>
@@ -826,6 +908,8 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                         }
                     }
                     case nameof(Linq.Enumerable.GroupJoin): {
+                        var GenericArguments = MethodCall0_Method.GetGenericArguments();
+                        MethodCall1_Arguments=this.KeySelectorの匿名型をValueTuple(GenericArguments,MethodCall1_Arguments);
                         var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                         var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                         var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
@@ -834,7 +918,6 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                         var MethodCall1_Arguments_5=MethodCall1_Arguments.Count==6//引数5にはComparerがあるのでそれで比較する。
                             ?MethodCall1_Arguments[5]
                             :null;
-                        var GenericArguments = MethodCall0_Method.GetGenericArguments();
                         var TOuter = GenericArguments[0];
                         var TInner = GenericArguments[1];
                         var TKey = GenericArguments[2];
@@ -1010,6 +1093,8 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                         }
                     }
                     case nameof(Linq.Enumerable.Join): {
+                        var GenericArguments = MethodCall0_Method.GetGenericArguments();
+                        MethodCall1_Arguments=this.KeySelectorの匿名型をValueTuple(GenericArguments,MethodCall1_Arguments);
                         var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                         var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                         var MethodCall1_Arguments_2 = MethodCall1_Arguments[2];
@@ -1030,11 +1115,10 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                             Select_selector=Reflection.ExtensionEnumerable.Select_selector;
                             Where_predicate=Reflection.ExtensionEnumerable.Where;
                         }
-                        var MethodCall0_Method_GetGenericArguments = MethodCall0_Method.GetGenericArguments();
-                        var TOuter = MethodCall0_Method_GetGenericArguments[0];
-                        var TInner = MethodCall0_Method_GetGenericArguments[1];
-                        var TKey = MethodCall0_Method_GetGenericArguments[2];
-                        var TResult = MethodCall0_Method_GetGenericArguments[3];
+                        var TOuter = GenericArguments[0];
+                        var TInner = GenericArguments[1];
+                        var TKey = GenericArguments[2];
+                        var TResult = GenericArguments[3];
                         LambdaExpression selector;
                         Expression Equals_this;
                         Expression Equals_Argument;
@@ -1795,7 +1879,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     predicate外.Type,
-                                                    Common.AndAlso(
+                                                    AndAlsoで繋げる(
                                                         predicate外.Body,
                                                         this.変換_旧Parameterを新Expression1.実行(
                                                             predicate内.Body,
@@ -1814,7 +1898,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     predicate外.Type,
-                                                    Common.AndAlso(
+                                                    AndAlsoで繋げる(
                                                         Expression.Invoke(
                                                             MethodCall1_MethodCall1_Arguments[1],
                                                             predicate外_Parameters[0]
@@ -1835,7 +1919,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     MethodCall1_Arguments_1.Type,
-                                                    Common.AndAlso(
+                                                    AndAlsoで繋げる(
                                                         predicate内.Body,
                                                         Expression.Invoke(
                                                             MethodCall1_Arguments_1,
@@ -1867,7 +1951,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                                                 MethodCall1_MethodCall1_Arguments[0],
                                                 Expression.Lambda(
                                                     MethodCall1_Arguments_1_Type,
-                                                    Common.AndAlso(
+                                                    AndAlsoで繋げる(
                                                         Left,
                                                         Right
                                                     ),
@@ -1938,7 +2022,7 @@ internal sealed class 変換_メソッド正規化_取得インライン不可�
                 //        RNew_Arguments[a]
                 //    )
                 //);
-                Result=Common.AndAlso(
+                Result=AndAlsoで繋げる(
                     Result,
                     Expression.Call(
                         LNew_Arguments_a,
