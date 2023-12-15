@@ -9,10 +9,11 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using LinqDB.Sets;
 using LinqDB.Optimizers;
+using LinqDB.Optimizers.Comparison;
 using IEnumerable=System.Collections.IEnumerable;
 public abstract class 共通 {
-    protected static readonly EnumerableSetEqualityComparer ProtectedComparer=new(ExpressionEqualityComparer);
-    protected static readonly Optimizer.ExpressionEqualityComparer ExpressionEqualityComparer=new();
+    protected static readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
+    protected static readonly 汎用Comparer ProtectedComparer=new(ExpressionEqualityComparer);
     protected static void WriteLine(string s) {
         Trace.WriteLine(s);
         Console.WriteLine(s);

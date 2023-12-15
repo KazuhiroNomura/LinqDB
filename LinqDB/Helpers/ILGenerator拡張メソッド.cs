@@ -39,17 +39,18 @@ public static class ILGenerator拡張メソッド {
     //    I.Ret();
     //    GetLabelPos=(Func<ILGenerator,Label,Int32>)D.CreateDelegate(typeof(Func<ILGenerator,Label,Int32>));
     //}
-    private static void B_S命令かB命令か(ILGenerator I,Label Label,OpCode 短縮形,OpCode 通常形){
-        var LabelPos=GetLabelPos(I,Label);
-        if(LabelPos==-1)
-            I.Emit(通常形,Label);
-        //上にジャンプ
-        else if(-128<=LabelPos-I.ILOffset-2)//-2はBr_S,オフセット(Byte)
-            I.Emit(通常形,Label);
-            //I.Emit(短縮形,Label);
-        else
-            I.Emit(通常形,Label);
-    }
+    //private static void B_S命令かB命令か(ILGenerator I,Label Label,OpCode 短縮形,OpCode 通常形){
+    //    I.Emit(通常形,Label);
+    //    var LabelPos=GetLabelPos(I,Label);
+    //    if(LabelPos==-1)
+    //        I.Emit(通常形,Label);
+    //    //上にジャンプ
+    //    else if(-128<=LabelPos-I.ILOffset-2)//-2はBr_S,オフセット(Byte)
+    //        I.Emit(通常形,Label);
+    //    //I.Emit(短縮形,Label);
+    //    else
+    //        I.Emit(通常形,Label);
+    //}
     /// <summary>
     /// 2 つの値を加算し、結果を評価スタックにプッシュします。
     /// </summary>
@@ -80,7 +81,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Beq           (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Beq_S,OpCodes.Beq);
+    public static void Beq           (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Beq,Label);
     /// <summary>
     /// 2 つの値が等しい場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -92,7 +93,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Bge           (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Bge_S,OpCodes.Bge);
+    public static void Bge           (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Bge,Label);
     /// <summary>
     /// 最初の値が 2 番目の値以上の場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -104,7 +105,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Bge_Un        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Bge_Un_S,OpCodes.Bge_Un);
+    public static void Bge_Un        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Bge_Un,Label);
     /// <summary>
     /// 符号なし整数値または順序なし float 値を比較したとき、最初の値が 2 番目の値を超える場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -116,7 +117,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Bgt           (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Bgt_S,OpCodes.Bgt);
+    public static void Bgt           (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Bgt,Label);
     /// <summary>
     /// 最初の値が 2 番目の値を超える場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -128,7 +129,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Bgt_Un        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Bgt_Un_S,OpCodes.Bgt_Un);
+    public static void Bgt_Un        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Bgt_Un,Label);
     /// <summary>
     /// 符号なし整数値または順序なし float 値を比較したとき、最初の値が 2 番目の値を超える場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -140,7 +141,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Ble           (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Ble_S,OpCodes.Ble);
+    public static void Ble           (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Ble,Label);
     /// <summary>
     /// 最初の値が 2 番目の値以下の場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -152,7 +153,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Ble_Un        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Ble_Un_S,OpCodes.Ble_Un);
+    public static void Ble_Un        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Ble_Un,Label);
     /// <summary>
     /// 符号なし整数値または順序なし float 値を比較したとき、最初の値が 2 番目の値以下の場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -164,7 +165,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Blt           (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Blt_S,OpCodes.Blt);
+    public static void Blt           (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Blt,Label);
     /// <summary>
     /// 最初の値が 2 番目の値より小さい場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -176,7 +177,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Blt_Un        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Blt_Un_S,OpCodes.Blt_Un);
+    public static void Blt_Un        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Blt_Un,Label);
     /// <summary>
     /// 符号なし整数値または順序なし float 値を比較したとき、最初の値が 2 番目の値より小さい場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -188,7 +189,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Bne_Un        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Bne_Un_S,OpCodes.Bne_Un);
+    public static void Bne_Un        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Bne_Un,Label);
     /// <summary>
     /// 2 つの符号なし整数値または順序なし float 値が等しくない場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -206,7 +207,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Br(this ILGenerator I,Label Label                  )=>B_S命令かB命令か(I,Label,OpCodes.Br_S,OpCodes.Br);
+    public static void Br(this ILGenerator I,Label Label                  )=>I.Emit(OpCodes.Br,Label);
     /// <summary>
     /// 無条件でターゲット命令に制御を転送します (短い形式)。
     /// </summary>
@@ -223,7 +224,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Brfalse       (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Brfalse_S,OpCodes.Brfalse);
+    public static void Brfalse       (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Brfalse,Label);
     /// <summary>
     /// 0 MarkLabel(Label)
     /// 0 Nop
@@ -246,7 +247,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Brtrue        (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Brtrue_S,OpCodes.Brtrue);
+    public static void Brtrue        (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Brtrue,Label);
     /// <summary>
     /// value が true、null 以外、または 0 以外の場合は、ターゲット命令 (短い形式) に制御を転送します。
     /// </summary>
@@ -1056,7 +1057,7 @@ public static class ILGenerator拡張メソッド {
     /// </summary>
     /// <param name="I"></param>
     /// <param name="Label"></param>
-    public static void Leave         (this ILGenerator I,Label Label      )=>B_S命令かB命令か(I,Label,OpCodes.Leave_S,OpCodes.Leave);
+    public static void Leave         (this ILGenerator I,Label Label      )=>I.Emit(OpCodes.Leave,Label);
     /// <summary>
     /// コードの保護領域を終了し、制御をターゲット命令に無条件で転送します (短い形式)。
     /// </summary>

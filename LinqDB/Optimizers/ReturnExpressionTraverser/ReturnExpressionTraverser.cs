@@ -409,7 +409,6 @@ public class ReturnExpressionTraverser {
         if(Block0_Expressions_Count<=1){
             if(b) return Block0;
             return Block1_Expression0;
-            //return b?Block0:Block1_Expression0;
         }
         var Block0_Expression1=Block0_Expressions[1];
         var Block1_Expression1=this.Traverse(Block0_Expression1);
@@ -417,7 +416,6 @@ public class ReturnExpressionTraverser {
         if(Block0_Expressions_Count<=2){
             if(b) return Block0;
             return Expression.Block(Block1_Expression0,Block1_Expression1);
-            //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1);
         }
         var Block0_Expression2=Block0_Expressions[2];
         var Block1_Expression2=this.Traverse(Block0_Expression2);
@@ -425,7 +423,6 @@ public class ReturnExpressionTraverser {
         if(Block0_Expressions_Count<=3){
             if(b) return Block0;
             return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
-            //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
         }
         var Block0_Expression3=Block0_Expressions[3];
         var Block1_Expression3=this.Traverse(Block0_Expression3);
@@ -434,13 +431,11 @@ public class ReturnExpressionTraverser {
             if(b) return Block0;
             return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
         }
-        //return b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
         var Block0_Expression4=Block0_Expressions[4];
         var Block1_Expression4=this.Traverse(Block0_Expression4);
         b&=Block1_Expression4==Block0_Expression4;
         if(b)return Block0;
         return                               Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
-        //return                               b?Block0:Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
     }
     /// <summary>
     /// a?b:c
@@ -733,20 +728,6 @@ public class ReturnExpressionTraverser {
         );
     }
     /// <summary>
-    /// Expressionコレクションが一致するか
-    /// </summary>
-    /// <param name="Arguments1"></param>
-    /// <param name="Arguments2"></param>
-    /// <returns></returns>
-    protected static bool ExpressionsEquals(IList<Expression> Arguments1, IList<Expression> Arguments2) {
-        var Arguments1_Count=Arguments1.Count;
-        Debug.Assert(Arguments2.Count==Arguments1_Count);
-        for(var a=0; a < Arguments1_Count; a++)
-            if(Arguments1[a] !=Arguments2[a])
-                return false;
-        return true;
-    }
-    /// <summary>
     /// a(b)
     /// </summary>
     /// <param name="MethodCall0"></param>
@@ -879,13 +860,11 @@ public class ReturnExpressionTraverser {
     /// <returns></returns>
     protected virtual Expression Switch(SwitchExpression Switch0) {
         var Switch0_SwitchValue=Switch0.SwitchValue;
-        var Switch0_DefaultBody=Switch0.DefaultBody;
         var Switch0_Cases=Switch0.Cases;
         var Switch1_SwitchValue=this.Traverse(Switch0_SwitchValue);
-        var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);
         var Switch0_Cases_Count=Switch0_Cases.Count;
         var Switch1_Cases=new SwitchCase[Switch0_Cases_Count];
-        var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue || Switch0_DefaultBody !=Switch1_DefaultBody;
+        var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue;
         for(var a=0; a < Switch0_Cases_Count; a++) {
             var Switch0_Case=Switch0_Cases[a];
             var Switch0_Case_TestValues=Switch0_Case.TestValues;
@@ -908,6 +887,9 @@ public class ReturnExpressionTraverser {
             } else
                 Switch1_Cases[a]=Switch0_Case;
         }
+        var Switch0_DefaultBody=Switch0.DefaultBody;
+        var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);
+        変化したか|=Switch0_DefaultBody!=Switch1_DefaultBody;
         return 変化したか
            ?Expression.Switch(
                 Switch0.Type,

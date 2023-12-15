@@ -1,101 +1,127 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="LinqDB.Sets.AscList&lt;T&gt;" Collapsed="true">
-    <Position X="2" Y="6" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser" Collapsed="true">
+    <Position X="11.5" Y="2" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Sets\AscList`1.cs</FileName>
+      <HashCode>IC4UQISIEZpqAKtB4IUHImogiKAyICwhGVEECSR+QKg=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.ImmutableSet&lt;T&gt;" Collapsed="true">
-    <Position X="6.75" Y="2" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser_Quoteを処理しない" Collapsed="true">
+    <Position X="3.75" Y="3.25" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AigIBBQABCBQABPsgAFAAQAgQAAABpAAAoAQABBQIQA=</HashCode>
-      <FileName>Sets\ImmutableSet`1.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.Lookup&lt;TValue, TKey, TCollection&gt;" Collapsed="true">
-    <Position X="8" Y="4.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>CACAAAAAIBAEEAAQCAAAAAAAAAAQAAAAAAAAAEAQIAA=</HashCode>
-      <FileName>Sets\Lookup`3.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.Set&lt;T&gt;" Collapsed="true">
-    <Position X="11.75" Y="3.5" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_Stopwatchに埋め込む" Collapsed="true">
+    <Position X="9" Y="3.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>CAoAAiRAQAAAQAAQAGAABAQAAAKAACAAAAAQAGBUIAA=</HashCode>
-      <FileName>Sets\Set`1.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.SetGroupingAscList&lt;TKey, TValue&gt;" Collapsed="true">
-    <Position X="4.5" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Sets\SetGroupingAscList`2.cs</FileName>
+      <HashCode>Ii4EQISIAZJKAqoB4IUnICAggIAzIA0hCEEFCSRGRCQ=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.SetGroupingSet&lt;TKey, TElement&gt;" Collapsed="true">
-    <Position X="2.25" Y="5" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ" Collapsed="true">
+    <Position X="11.75" Y="3.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>CAAAAAAAIBAEEAAQiCAAAAAAAAAQAIAAAAAAAGAQIAA=</HashCode>
-      <FileName>Sets\SetGroupingSet`2.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.Set&lt;TKey, TElement&gt;" Collapsed="true">
-    <Position X="11.75" Y="5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>CAAAAAAAAAAEAACACCAEAAAEAAAAAAAAAAAAAGAAAAA=</HashCode>
-      <FileName>Sets\Set`2.cs</FileName>
+      <HashCode>CQgAQICKAAIAAAAAIIgAAABggAAAABAhQACAAJCIoAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.GroupingAscList&lt;TKey, TValue&gt;" Collapsed="true">
-    <Position X="2" Y="7.5" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Expressionを新Expression1" Collapsed="true">
+    <Position X="14.25" Y="3.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAQEAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Sets\GroupingAscList`2.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.GroupingSet&lt;TKey, TElement&gt;" Collapsed="true">
-    <Position X="4.5" Y="8" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAEACAAAAAAQAgCAAAAAAAAAAAIAAAAAAAGAAAAA=</HashCode>
-      <FileName>Sets\GroupingSet`2.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="LinqDB.Sets.HashSet_VoidAdd&lt;T&gt;" Collapsed="true">
-    <Position X="6.25" Y="8" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAEAAAAA=</HashCode>
-      <FileName>Sets\HashSet_VoidAdd.cs</FileName>
+      <HashCode>AAAAAIAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.LookupList&lt;TValue, TKey&gt;" Collapsed="true">
-    <Position X="6.75" Y="6" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression1" Collapsed="true">
+    <Position X="17.5" Y="3.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAIAA=</HashCode>
-      <FileName>Sets\LookupList`2.cs</FileName>
+      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.LookupSet&lt;TValue, TKey&gt;" Collapsed="true">
-    <Position X="9" Y="6" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression2" Collapsed="true">
+    <Position X="20.75" Y="3.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACAAAAAAAAAEAAAAAAAAAAAAAAQAAAAAAAAAAAAIAA=</HashCode>
-      <FileName>Sets\LookupSet`2.cs</FileName>
+      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Sets.Set&lt;TKey, TElement, TContainer&gt;" Collapsed="true">
-    <Position X="11.5" Y="6.75" Width="3.75" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価">
+    <Position X="2" Y="4.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.変換_二度出現したExpression" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺を作る" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺に二度出現したExpressionを作る" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺から二度出現したExpressionを取得" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.判定_左辺Expressionsが含まれる" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAEAAAAgACAAAAAAAiAAQAAAAAAAAGAQAAA=</HashCode>
-      <FileName>Sets\Set`3.cs</FileName>
+      <HashCode>ACgEAMQAIBAIAAAAAAAAAACAAQCAAAAAAADAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価">
+    <Position X="5.5" Y="4.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.変換_先行評価式" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.場所" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.取得_先行評価式" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgEQIAAAAAAAAAAAACAAAAAEACAAAAAAACEAAgAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />
 </ClassDiagram>

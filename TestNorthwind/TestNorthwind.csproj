@@ -8,8 +8,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <LangVersion>11.0</LangVersion>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Northwind">
-      <HintPath>..\GUI\bin\Debug\net60-windows\Northwind.dll</HintPath>
+      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\Northwind.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

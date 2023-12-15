@@ -347,7 +347,7 @@ public partial class AssemblyGenerator {
         ParentExtensions.SetCustomAttribute(Extension_CustomAttributeBuilder);
         var ChildExtensions = ModuleBuilder.DefineType(Container_Name+".ChildExtensions",TypeAttributes.Public|TypeAttributes.Sealed|TypeAttributes.Abstract);
         ChildExtensions.SetCustomAttribute(Extension_CustomAttributeBuilder);
-        var Container_TypeBuilder = ModuleBuilder.DefineType(Container_Name+".Container",TypeAttributes.Public|TypeAttributes.Serializable);
+        var Container_TypeBuilder = ModuleBuilder.DefineType(Container_Name+".Container",TypeAttributes.Public);//|TypeAttributes.Serializable);
 
         静的インターフェース付き型(ModuleBuilder);
 
@@ -533,7 +533,8 @@ public partial class AssemblyGenerator {
     private void DefineSchema(ISchema Schema,ModuleBuilder ModuleBuilder,Type Entity1_Container,Type[] Types_Container,TypeBuilder Container_TypeBuilder,ILGenerator Container_Equals_I,Label Container_Equalsでfalseの時,ILGenerator Container_RelationValidate_I,ILGenerator Container_Init_I,ILGenerator Container_Read_I,ILGenerator Container_Write_I,ILGenerator Container_Copy_I,ILGenerator Container_Clear_I) {
         var Database_EscapedName = Schema.Container.EscapedName;
         var EscapedName = Schema.EscapedName;
-        var Schema_TypeBuilder = ModuleBuilder.DefineType($"{Database_EscapedName}.Schemas.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,typeof(Schema));
+        var Schema_TypeBuilder = ModuleBuilder.DefineType($"{Database_EscapedName}.Schemas.{EscapedName}",TypeAttributes.Public,typeof(Schema));
+        //var Schema_TypeBuilder = ModuleBuilder.DefineType($"{Database_EscapedName}.Schemas.{EscapedName}",TypeAttributes.Public|TypeAttributes.Serializable,typeof(Schema));
         var Schema_Container_FieldBuilder = Schema_TypeBuilder.DefineField("Container3",Container_TypeBuilder,FieldAttributes.Private|FieldAttributes.InitOnly);
         var Types1 = this.Types1;
         Types1[0]=Schema_TypeBuilder;

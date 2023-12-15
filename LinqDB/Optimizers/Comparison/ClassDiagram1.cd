@@ -1,14 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="LinqDB.Optimizers.Comparison.汎用Comparer" Collapsed="true">
-    <Position X="8.75" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AgACAgAEAAAAAAAAgAAAAIAAAAAAAIABAAoAAAAAAAA=</HashCode>
-      <FileName>Optimizers\Comparison\汎用Comparer.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="LinqDB.Optimizers.Comparison.AExpressionEqualityComparer" Collapsed="true">
-    <Position X="5.25" Y="1.5" Width="1.5" />
+    <Position X="1" Y="3" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAACABSQAABAggABCAIAAAAAAAIAAAIAQAABEAAA=</HashCode>
       <FileName>Optimizers\Comparison\AExpressionEqualityComparer.cs</FileName>
@@ -16,42 +9,67 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="LinqDB.Optimizers.Comparison.ExpressionEqualityComparer" Collapsed="true">
-    <Position X="4" Y="3" Width="1.5" />
+    <Position X="1" Y="5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAgABAAAAAAAAAQAAAACAAAABEAAA=</HashCode>
       <FileName>Optimizers\Comparison\ExpressionEqualityComparer.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="LinqDB.Optimizers.Comparison.ExpressionEqualityComparer_Assign_Leftで比較" Collapsed="true">
-    <Position X="4" Y="4.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Optimizers\Comparison\ExpressionEqualityComparer_Assign_Leftで比較.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.Comparison.ExpressionReferenceEqualityComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="1.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAACAAAQAAAAggAAAAIAAAAAAAIAAAIAQAAAEAAA=</HashCode>
-      <FileName>Optimizers\Comparison\ExpressionReferenceEqualityComparer.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="LinqDB.Optimizers.Comparison.LambdaEqualityComparer" Collapsed="true">
-    <Position X="6.25" Y="2.75" Width="1.5" />
+    <Position X="1" Y="1" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAABAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
       <FileName>Optimizers\Comparison\LambdaEqualityComparer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Optimizers.ブローブビルドExpressionEqualityComparer" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="10.5" Y="1.5" Width="1.5" />
+  <Class Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression" Collapsed="true">
+    <Position X="4.25" Y="1" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.ExpressionEqualityComparerGroupBy" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_QuerySpecification.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Enum Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.種類" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.判定_集約関数があるか" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Struct Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.Subquery単位の情報" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.StackSubquery単位の情報" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Struct Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.一致度" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Struct>
+      <Struct Name="LinqDB.Optimizers.ReturnTSqlFragmentTraverser.変換_TSqlFragmentからExpression.情報CreateFunctionStatement" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAEAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
-      <FileName>Optimizers\Comparison\ブローブビルドExpressionEqualityComparer.cs</FileName>
+      <HashCode>///////////////////////////////f/////9////8=</HashCode>
+      <FileName>Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_PivotTableReference.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />
 </ClassDiagram>

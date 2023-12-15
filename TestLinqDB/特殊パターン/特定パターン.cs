@@ -1,9 +1,9 @@
 ﻿using System.Collections;
+using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Optimizers.Comparison;
 using LinqDB.Sets;
 using MemoryPack;
-using 辺に関する情報=LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺に関する情報;
 using IEnumerable = System.Collections.IEnumerable;
 namespace TestLinqDB.特殊パターン;
 internal class ClassIEnumerableInt32Double : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IEnumerable<double>
@@ -134,4 +134,33 @@ public class 特定パターン : 共通
         };
         this.Expression実行AssertEqual(()=>s.AsEnumerable().Union(s));
     }
+    [Fact]
+    public void Exceptを実行するとsourceがnullになるエラーがあった(){
+        var st = (new[] { 3, 5, 7 }).ToSet();
+        //this.Optimizer.CreateDelegate(() => st.Except(st))();
+        this.Expression実行AssertEqual(() =>new{a=st.Except(st),b=st.Except(st)});
+    }
+    [Fact]
+    public void WriteLeftRightMethodLambda(){
+        var ParameterDecimmal=Expression.Parameter(typeof(decimal));
+        var Constant1=Expression.Constant(1m);
+        var ConversionDecimal=Expression.Lambda<Func<decimal,decimal>>(Expression.Add(ParameterDecimmal,ParameterDecimmal),ParameterDecimmal);
+        var input1=Expression.AddAssign(ParameterDecimmal,Constant1,typeof(decimal).GetMethod("op_Addition"),ConversionDecimal);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<object>>(
+                Expression.Block(
+                    new[]{ParameterDecimmal},
+                    Expression.Assign(
+                        ParameterDecimmal,
+                        Expression.Constant(0m)
+                    ),
+                    Expression.Convert(
+                        input1,
+                        typeof(object)
+                    )
+                )
+            )
+        );
+    }
+
 }

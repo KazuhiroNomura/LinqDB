@@ -1,5 +1,4 @@
-﻿using System.Data.OracleClient;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace LinqDB.Remote.Servers;
 

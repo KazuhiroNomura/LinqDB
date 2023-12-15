@@ -12,7 +12,7 @@ using AdventureWorks2017.Tables.Production;
 using AdventureWorks2017.Tables.Purchasing;
 using AdventureWorks2017.Tables.Sales;
 using AdventureWorks2017;
-using System.Collections.Generic;
+using Generic=System.Collections.Generic;
 using System.Linq;
 using System.Xml.XPath;
 using System.Xml;
@@ -3937,7 +3937,7 @@ namespace TestAdventureWorks2019 {
         private static string? InnerString(XNode? XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var x = XNode?.XPathEvaluate(式,XmlNamespaceManager);
             if(x==null) return null;
-            if(x is IEnumerable<object> Enumerable1) {
+            if(x is System.Collections.Generic.IEnumerable<object> Enumerable1) {
                 foreach(var a in Enumerable1) {
                     var XText = (XText)a;
                     return XText.Value;
@@ -4714,21 +4714,21 @@ namespace TestAdventureWorks2019 {
             {
                 var SalesPerson = new Set<int>();
                 var Employee = new Set<int>();
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in SalesPerson
                      join e in Employee on s equals e
                      select s+e;
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                Expression<Func<ImmutableSet<Guid>>> LINQ = () =>
+                Expression<Func<IEnumerable<Guid>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      select s.rowguid;
                 var LINQ結果 = o.Execute(LINQ);
             }
             {
-                Expression<Func<ImmutableSet<Guid>>> LINQ = () =>
+                Expression<Func<IEnumerable<Guid>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4754,7 +4754,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17検討中
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      where s.BusinessEntityID==274||s.BusinessEntityID==275||s.BusinessEntityID==277
                      join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
@@ -4771,7 +4771,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17検討中
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
                      from st in st0.DefaultIfEmpty()
@@ -4786,7 +4786,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //17,17
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4810,7 +4810,7 @@ namespace TestAdventureWorks2019 {
             }
             {
                 //14,17
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -4838,7 +4838,7 @@ namespace TestAdventureWorks2019 {
             {
                 //17行入るべき
                 //BusinnessEntityID274,285,287入るべき
-                Expression<Func<ImmutableSet<int>>> LINQ = () =>
+                Expression<Func<IEnumerable<int>>> LINQ = () =>
                      from s in C.Sales.SalesPerson
                      join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
                      join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
@@ -5255,7 +5255,7 @@ namespace TestAdventureWorks2019 {
         //    SetGroupingSet<TResult,T> g = source.GroupBy(keySelector);
         //    SetGrouping<TResult,T,GroupingSet<TResult,T>> g0 = g;
         //    Set<GroupingSet<TResult,T>> g1 = g;
-        //    ImmutableSet<GroupingSet<TResult,T>> g2 = g;
+        //    IEnumerable<GroupingSet<TResult,T>> g2 = g;
         //    IOutImmutableSet<GroupingSet<TResult,T>> g3 = g;
         //    IOutImmutableSet<IGrouping<TResult,T>> g4 = g2;
 
@@ -5283,7 +5283,7 @@ namespace TestAdventureWorks2019 {
         //    SetGroupingSet<TKey,T> g = source.GroupBy(keySelector);
         //    SetGrouping<TKey,T,GroupingSet<TKey,T>> g0 = g;
         //    Set<GroupingSet<TKey,T>> g1 = g;
-        //    ImmutableSet<GroupingSet<TKey,T>> g2 = g;
+        //    IEnumerable<GroupingSet<TKey,T>> g2 = g;
         //    IOutImmutableSet<GroupingSet<TKey,T>> g3 = g;
         //    IOutImmutableSet<IGrouping<TKey,T>> g4 = g2;
 
@@ -5549,7 +5549,7 @@ namespace TestAdventureWorks2019 {
             );
         }
         //private static 
-        //    ImmutableSet<(Int32? ProductAssemblyID,Int32 ComponentID,String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost,Decimal ListPrice, Int16 BOMLevel)> uspGetBillOfMaterials(Container e,Int32 StartProductID,DateTime CheckDate) 
+        //    IEnumerable<(Int32? ProductAssemblyID,Int32 ComponentID,String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost,Decimal ListPrice, Int16 BOMLevel)> uspGetBillOfMaterials(Container e,Int32 StartProductID,DateTime CheckDate) 
         //{
         //    var result = from b in e.Production.BillOfMaterials
         //                 join p in e.Production.Product on b.ComponentID equals p.ProductID
@@ -5605,7 +5605,7 @@ namespace TestAdventureWorks2019 {
         //            group b by new { b.ComponentID,b.ComponentDesc,b.ProductAssemblyID,b.BOMLevel,b.RecursionLevel,b.StandardCost,b.ListPrice }into g
         //            select new { g.Key.ProductAssemblyID,g.Key.ComponentID,TotalQuantity = g.Sum(p => p.PerAssemblyQty),g.Key.StandardCost,g.Key.ListPrice,g.Key.BOMLevel,g.Key.RecursionLevel };
         //    return r;
-        //    ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> BOM_cte(ImmutableSet<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel,Int32 RecursionLevel)> source,Int32 RecursionLevel) {
+        //    IEnumerable<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel, Int32 RecursionLevel)> BOM_cte(IEnumerable<(Int32? ProductAssemblyID, Int32 ComponentID, String ComponentDesc, Decimal PerAssemblyQty, Decimal StandardCost, Decimal ListPrice, Int16 BOMLevel,Int32 RecursionLevel)> source,Int32 RecursionLevel) {
         //        if(source.Count==0) return source;
         //        return source.Union(
         //            BOM_cte(
@@ -5651,7 +5651,7 @@ namespace TestAdventureWorks2019 {
                         group b by new { b.ComponentID,b.ComponentDesc,b.ProductAssemblyID,b.BOMLevel,b.RecursionLevel,b.StandardCost,b.ListPrice } into g
                         select new { g.Key.ProductAssemblyID,g.Key.ComponentID,g.Key.ComponentDesc, TotalQuantity = g.Sum(p => p.PerAssemblyQty),g.Key.StandardCost,g.Key.ListPrice,g.Key.BOMLevel,g.Key.RecursionLevel };
                 var array = r.ToArray();
-                ImmutableSet<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> BOM_cte(ImmutableSet<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> source,int RecursionLevel) {
+                IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> BOM_cte(IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> source,int RecursionLevel) {
                     if(source.Count==0) return source;
                     return source.Union(
                         BOM_cte(
@@ -5715,24 +5715,24 @@ namespace TestAdventureWorks2019 {
                     S1,
                     (G s0) => s0,
                     (G s1) => s1,
-                    (G s0,ImmutableSet<G> g1) => (s0, g1)
+                    (G s0,IEnumerable<G> g1) => (s0, g1)
                 ).SelectMany(
-                    ((G s0, ImmutableSet<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, ImmutableSet<G> g1)h__TransparentIdentifier0,G s1) => (
+                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
+                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0,G s1) => (
                         h__TransparentIdentifier0,
                         s1
                     )
                 ).GroupJoin(
                     S2,
-                    (((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1)h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
+                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1)h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
                     (G s2) => s2,
-                    (((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,ImmutableSet<G> g2) => (
+                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,IEnumerable<G> g2) => (
                         h__TransparentIdentifier1,
                         g2
                     )
                 ).SelectMany(
-                    ((((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, ImmutableSet<G> g2)h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
-                    ((((G s0, ImmutableSet<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, ImmutableSet<G> g2)h__TransparentIdentifier2,G s2) => (
+                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2)h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
+                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2)h__TransparentIdentifier2,G s2) => (
                         h__TransparentIdentifier2.h__TransparentIdentifier1.h__TransparentIdentifier0.s0,
                         h__TransparentIdentifier2.h__TransparentIdentifier1.s1,
                         s2
@@ -5774,27 +5774,6 @@ namespace TestAdventureWorks2019 {
                     )
                 ).ToArray();
             */
-            var x =
-                S0.GroupJoin(
-                    S1,
-                    (G s0) => s0,
-                    (G s1) => s1,
-                    (G s0,IEnumerable<G> g1) => (s0, g1)
-                ).SelectMany(
-                    ((G s0, IEnumerable<G> g1) h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, IEnumerable<G> g1) h__TransparentIdentifier0,G? s1) => (
-                        h__TransparentIdentifier0,
-                        s1
-                    )
-                ).GroupJoin(
-                    S2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
-                    (G s2) => s2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G? s1) h__TransparentIdentifier1,IEnumerable<G> g2) => (
-                        h__TransparentIdentifier1,
-                        g2
-                    )
-                );
         }
         private static void GroupJoin2() {
             var G1 = new G(1);

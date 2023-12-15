@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Helpers;
-using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Sets;
 using Microsoft.CSharp.RuntimeBinder;
 using IEnumerable = System.Collections.IEnumerable;

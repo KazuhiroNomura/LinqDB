@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
-using LinqDB.Helpers;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 using LinqDB.Sets;
 using ExtensionEnumerable = LinqDB.Reflection.ExtensionEnumerable;
 using ExtensionSet = LinqDB.Reflection.ExtensionSet;
@@ -122,14 +119,14 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
                             MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
                         }
-                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer){
+                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer0){
                             var keySelector=Expression.Lambda(
                                 ビルド,
                                 predicate_Parameters
                             );
                             Expression Instance;
                             var 作業配列=this.作業配列;
-                            if(Comparer is null){
+                            if(Comparer0 is null){
                                 MethodInfo Lookup;
                                 if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
                                     Lookup=ExtensionSet.ToLookup_keySelector;
@@ -166,7 +163,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                     ),
                                     MethodCall1_Arguments_0,
                                     keySelector,
-                                    Comparer
+                                    Comparer0
                                 );
                             }
                             //var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType

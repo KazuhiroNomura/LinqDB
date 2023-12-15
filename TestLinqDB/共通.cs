@@ -308,6 +308,16 @@ public abstract class 共通{
         this.ExpressionシリアライズAssertEqual(input);
         var 標準 = input.Compile();
         var expected = 標準();
+        {
+            var 汎用Comparer=new 汎用Comparer();
+            var Optimizer=this.Optimizer;
+            Optimizer.IsInline=false;
+            var actual0=Optimizer.CreateDelegate(input)();
+            Optimizer.IsInline=true;
+            var actual1=Optimizer.CreateDelegate(input)();
+            Assert.Equal(expected,actual0,汎用Comparer);
+            Assert.Equal(expected,actual1,汎用Comparer);
+        }
         ServerClient(Client=>{
             if((テストオプション.MemoryPack&C.O)!=0){
                 var actual=Client.Expression(input,SerializeType.MemoryPack);
@@ -322,43 +332,6 @@ public abstract class 共通{
                 Assert.Equal(expected,actual,new 汎用Comparer());
             }
         });
-        //const int receiveTimeout = 1000;
-        //var port = Interlocked.Increment(ref ポート番号);
-        //using var Server = new Server(1,port);
-        //Server.ReadTimeout=receiveTimeout;
-        //Server.Open();
-        //using var R = new Client(Dns.GetHostName(),port);
-        //if((テストオプション.MemoryPack&C.O)!=0){
-        //    var actual=R.Expression(input,SerializeType.MemoryPack);
-        //    Assert.Equal(expected,actual,new 汎用Comparer());
-        //}
-        //if((テストオプション.MessagePack&C.O)!=0){
-        //    var actual=R.Expression(input,SerializeType.MessagePack);
-        //    Assert.Equal(expected,actual,new 汎用Comparer());
-        //}
-        //if((テストオプション.Utf8Json&C.O)!=0){
-        //    var actual=R.Expression(input,SerializeType.Utf8Json);
-        //    Assert.Equal(expected,actual,new 汎用Comparer());
-        //}
-        //Server.Close();
-        if((テストオプション.ローカル実行&C.O)!=0){
-            if((テストオプション.MemoryPack&C.O)!=0)
-                共通(this.MemoryPack,nameof(this.MemoryPack));
-            if((テストオプション.MessagePack&C.O)!=0)
-                共通(this.MessagePack,nameof(this.MessagePack));
-            if((テストオプション.Utf8Json&C.O)!=0)
-                共通(this.Utf8Json,nameof(this.Utf8Json));
-            void 共通(LinqDB.Serializers.Serializer Serializer,string プリフィックス) {
-                var 汎用Comparer=new 汎用Comparer();
-                var Optimizer=this.Optimizer;
-                Optimizer.IsInline=false;
-                var actual0=Optimizer.CreateDelegate(input)();
-                Optimizer.IsInline=true;
-                var actual1=Optimizer.CreateDelegate(input)();
-                Assert.Equal(expected,actual0,汎用Comparer);
-                Assert.Equal(expected,actual1,汎用Comparer);
-            }
-        }
         return expected;
     }
     protected void Expression実行AssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input){

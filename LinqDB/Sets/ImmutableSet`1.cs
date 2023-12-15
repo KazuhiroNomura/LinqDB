@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using LinqDB.Helpers;
 using System.IO;
-using LinqDB.CRC;
 //using System.Collections;
 //using MemoryPack;
 //using MessagePack.Resolvers;

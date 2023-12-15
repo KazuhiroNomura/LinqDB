@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 namespace LinqDB.Optimizers;
 using static Common;
+using static LinqDB.Optimizers.作業配列;
+
 /// <summary>
 /// ガベージヒープを節約するための作業用メモリプール。
 /// </summary>
@@ -956,6 +958,10 @@ public class 作業配列 {
         return Expressions;
     }
     public readonly Expression[] Expressions8=new Expression[8];
+    [InlineArray(8)]
+    public struct Array8<T>{
+        public T t;
+    }
     /// <summary>
     /// Expression配列を作る。
     /// </summary>
@@ -969,7 +975,8 @@ public class 作業配列 {
     /// <param name="Expression7"></param>
     /// <returns></returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public Expression[] Expressions設定(Expression Expression0, Expression Expression1, Expression Expression2, Expression Expression3, Expression Expression4, Expression Expression5, Expression Expression6, Expression Expression7) {
+    public Expression[] Expressions設定(Expression Expression0, Expression Expression1, Expression Expression2, Expression Expression3, Expression Expression4, Expression Expression5, Expression Expression6, Expression Expression7){
+        //var Expressions=new Array8<Expression>();// this.Expressions8;
         var Expressions=this.Expressions8;
         Expressions[0]=Expression0;
         Expressions[1]=Expression1;

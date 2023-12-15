@@ -4,8 +4,6 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using Generic = System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Helpers;
 using LinqDB.Optimizers.Comparison;
 

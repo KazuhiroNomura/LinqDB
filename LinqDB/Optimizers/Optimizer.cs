@@ -20,13 +20,13 @@ using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
 using AssemblyGenerator = Lokad.ILPack.AssemblyGenerator;
 using Container = LinqDB.Databases.Container;
 using Delegate = System.Delegate;
-using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 using Regex = System.Text.RegularExpressions.Regex;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
-using Microsoft.CSharp.RuntimeBinder;
 using static LinqDB.Optimizers.Common;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.VoidTSqlFragmentTraverser;
+using LinqDB.Serializers.MemoryPack.Formatters;
+using Expression=System.Linq.Expressions.Expression;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic = System.Collections.Generic;
@@ -40,20 +40,20 @@ public sealed class Optimizer:IDisposable {
     /// Where((ValueTule&lt;,>p=>p.Item1.Item1==p.Item.Item2)は移動できる
     /// pは要素数2の匿名型かValueTule&lt;,>
     /// </summary>
-    private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
+    //private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
     private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
     private readonly Generic.List<ParameterExpression> Listループ跨ぎParameter = new();
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
     private readonly 変換_TSqlFragmentからExpression _変換_TSqlFragmentからExpression;
-    private readonly 変換_KeySelectorの匿名型をValueTuple _変換_KeySelectorの匿名型をValueTuple;
+    private readonly 変換_AndAlsoとOrElseをConditionに 変換_AndAlsoとOrElseをConditionに;
     private readonly 変換_メソッド正規化_取得インライン不可能定数 _変換_メソッド正規化_取得インライン不可能定数;
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
     private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
-    private readonly 取得_Dictionary _取得_Dictionary;
+    private readonly 取得_ラムダを跨ぐParameter 取得ラムダを跨ぐParameter;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
     private readonly 取得_CSharp _取得_CSharp = new();
     private readonly 判定_InstanceMethodか 判定InstanceMethodか;
@@ -65,7 +65,7 @@ public sealed class Optimizer:IDisposable {
     private Generic.Dictionary<ConstantExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryConstant {
         get => this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
         set {
-            this._取得_Dictionary.DictionaryConstant=value;
+            this.取得ラムダを跨ぐParameter.DictionaryConstant=value;
             this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant=value;
             this.判定InstanceMethodか.DictionaryConstant=value;
             Debug.Assert(this._作成_DynamicMethod.DictionaryConstant==value);
@@ -75,25 +75,25 @@ public sealed class Optimizer:IDisposable {
         }
     }
     private Generic.Dictionary<DynamicExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryDynamic {
-        get => this._取得_Dictionary.DictionaryDynamic;
+        get => this.取得ラムダを跨ぐParameter.DictionaryDynamic;
         set {
-            this._取得_Dictionary.DictionaryDynamic=value;
+            this.取得ラムダを跨ぐParameter.DictionaryDynamic=value;
             this._作成_DynamicMethod.DictionaryDynamic=value;
             this._作成_DynamicAssembly.DictionaryDynamic=value;
         }
     }
     private Generic.Dictionary<LambdaExpression,(FieldInfo Disp, MemberExpression Member, MethodBuilder Impl)> DictionaryLambda {
-        get => this._取得_Dictionary.DictionaryLambda;
+        get => this.取得ラムダを跨ぐParameter.DictionaryLambda;
         set {
-            this._取得_Dictionary.DictionaryLambda=value;
+            this.取得ラムダを跨ぐParameter.DictionaryLambda=value;
             this._作成_DynamicMethod.DictionaryLambda=value;
             this._作成_DynamicAssembly.DictionaryLambda=value;
         }
     }
     private Generic.Dictionary<ParameterExpression,(FieldInfo Disp, MemberExpression Member)> Dictionaryラムダ跨ぎParameter {
-        get => this._取得_Dictionary.Dictionaryラムダ跨ぎParameter;
+        get => this.取得ラムダを跨ぐParameter.Dictionaryラムダ跨ぎParameter;
         set {
-            this._取得_Dictionary.Dictionaryラムダ跨ぎParameter=value;
+            this.取得ラムダを跨ぐParameter.Dictionaryラムダ跨ぎParameter=value;
             this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
             this._変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
             this._検証_Parameterの使用状態.ラムダ跨ぎParameters=value.Keys;
@@ -143,15 +143,15 @@ public sealed class Optimizer:IDisposable {
         var 取得_OuterPredicate_InnerPredicate_プローブビルド = new 取得_OuterPredicate_InnerPredicate_プローブビルド(作業配列,判定_指定Parameter無_他Parameter有,判定_指定Parameter有_他Parameter無_Lambda内部走査,ブローブビルドExpressionEqualityComparer);
         var 変換_旧Expressionを新Expression1 = new 変換_旧Expressionを新Expression1(作業配列,ExpressionEqualityComparer);
         this._変換_TSqlFragmentからExpression=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,ExpressionEqualityComparer,変換_旧Parameterを新Expression1,変換_旧Expressionを新Expression1,判定_指定Parameters無,ScriptGenerator);
-        this._変換_KeySelectorの匿名型をValueTuple=new(作業配列);
         var 変換_旧Parameterを新Expression2 = new 変換_旧Parameterを新Expression2(作業配列);
+        this.変換_AndAlsoとOrElseをConditionに=new(作業配列);
         this._変換_メソッド正規化_取得インライン不可能定数=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
         this._変換_WhereからLookup=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
         var Listループ跨ぎParameter = this.Listループ跨ぎParameter;
         this._変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer,Listループ跨ぎParameter);
         //var ExpressionEqualityComparer_Assign_Leftで比較 = new ExpressionEqualityComparer_Assign_Leftで比較();
         this._変換_局所Parameterの先行評価=new(作業配列);
-        this._取得_Dictionary=new();
+        this.取得ラムダを跨ぐParameter=new();
         this._検証_変形状態=new();
         this._検証_Parameterの使用状態=new(Listループ跨ぎParameter);
         this._変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
@@ -236,7 +236,7 @@ public sealed class Optimizer:IDisposable {
         var DictionaryLambda = this.DictionaryLambda=Information.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=Information.Dictionaryラムダ跨ぎParameter;
         var Lambda1 = Information.Lambda=this.Lambda最適化(Lambda0);
-        this._取得_Dictionary.実行(Lambda1);
+        this.取得ラムダを跨ぐParameter.実行(Lambda1);
         var Disp_ctor_I = Information.Disp_ctor_I;
         {
             var Field番号 = 0;
@@ -432,14 +432,14 @@ public sealed class Optimizer:IDisposable {
         (Func<TResult>)this.PrivateDelegate(Lambda);
 
     public Delegate CreateServerDelegate(LambdaExpression Lambda) {
-        this._取得_Dictionary.実行(Lambda);
+        this.取得ラムダを跨ぐParameter.実行(Lambda);
         return this.IsGenerateAssembly
             ? this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda)
             : this.DynamicMethod(typeof(object),Lambda);
     }
     private Delegate PrivateDelegate(LambdaExpression Lambda) {
         var Lambda0 = this.Lambda最適化(Lambda);
-        this._取得_Dictionary.実行(Lambda0);
+        this.取得ラムダを跨ぐParameter.実行(Lambda0);
         return this.IsGenerateAssembly
             ? this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda0)
             : this.DynamicMethod(typeof(object),Lambda0);
@@ -798,17 +798,17 @@ public sealed class Optimizer:IDisposable {
         }
     }
     internal static class DynamicReflection {
-        public static readonly CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
-        public static CSharpArgumentInfo[] CSharpArgumentInfoArray(int Count) {
-            var Array = new CSharpArgumentInfo[Count];
+        public static readonly RuntimeBinder.CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
+        public static RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray(int Count) {
+            var Array = new RuntimeBinder.CSharpArgumentInfo[Count];
             for(var a = 0;a<Count;a++)
                 Array[a]=CSharpArgumentInfo;
             return Array;
         }
-        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray1 = { CSharpArgumentInfo };
-        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray2 = { CSharpArgumentInfo,CSharpArgumentInfo };
-        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray3 = { CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo };
-        public static readonly CSharpArgumentInfo[] CSharpArgumentInfoArray4 = { CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo };
+        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray1 = { CSharpArgumentInfo };
+        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray2 = { CSharpArgumentInfo,CSharpArgumentInfo };
+        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray3 = { CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo };
+        public static readonly RuntimeBinder.CSharpArgumentInfo[] CSharpArgumentInfoArray4 = { CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo,CSharpArgumentInfo };
         public static class CallSites {
             public static readonly FieldInfo ObjectObjectObjectObjectTarget = typeof(CallSite<Func<CallSite,object,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object,object>>.Target))!;
             public static readonly FieldInfo ObjectObjectObjectTarget = typeof(CallSite<Func<CallSite,object,object,object>>).GetField(nameof(CallSite<Func<CallSite,object,object,object>>.Target))!;
@@ -1214,10 +1214,10 @@ public sealed class Optimizer:IDisposable {
         //分離するアイデア。ここで以下を取得する
         //DictionaryConstant add
 
-        var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);
+        //var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);
         //以下で更新されるコレクション
         //DictionaryConstant read
-        var Lambda02 = this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda01);
+        var Lambda02 = this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
         //プロファイル=false;
         //var List計測 = new List<A計測>();
         //var ConstantList計測 = Expression.Constant(List計測);
@@ -1227,10 +1227,9 @@ public sealed class Optimizer:IDisposable {
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
         //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
-        var 変換_ジャンプ命令のみ=new 変換_ジャンプ命令のみ(this.作業配列);
-        //var Lambda06=変換_ジャンプ命令のみ.実行(Lambda05);
-        var Lambda06=Lambda05;
+        var Lambda06 = this.変換_AndAlsoとOrElseをConditionに.実行(Lambda05);
         var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
+        //Lambda07=Lambda06;
         this._検証_変形状態.実行(Lambda07);
         var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;
         //DictionaryDynamic add
