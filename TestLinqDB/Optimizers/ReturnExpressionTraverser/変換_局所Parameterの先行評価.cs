@@ -1307,4 +1307,131 @@ public class 変換_局所Parameterの先行評価 : 共通
         );
         //else
     }
+    private static readonly 特殊パターン.変換_局所Parameterの先行評価.operator_true Op = new(true);
+    // private static bool boolを返す関数()=>true;
+    [Fact]
+    public void AndAlso_OrElse()
+    {
+        //if(test.Type==typeof(bool)) {
+        this.Optimizer.Lambda最適化(() => true&&ReferenceEquals(null, ""));
+        //} else {
+        var Constant = Expression.Constant(Op);
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.AndAlso(
+                    Constant,
+                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                )
+            )
+        );
+        //}
+    }
+    [Fact]
+    public void AndAlso(){
+        //if(Binary1_Test.NodeType is ExpressionType.Assign){
+        var Constant = Expression.Constant(Op);//定数が先行評価で変数にAssignされるため
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.AndAlso(Constant, Constant)
+            )
+        );
+        //}
+        //if(Binary2_Left is ParameterExpression Parameter){
+        var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.AndAlso(p,Constant),
+                p
+            )
+        );
+        //} else{
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.AndAlso(Constant, p),
+                p
+            )
+        );
+        //}
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.AndAlso(
+                    p,
+                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                ),
+                p
+            )
+        );
+        this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(Op, Op).Let(
+                p =>
+                    p.Item1&&p.Item2
+            )
+        );
+    }
+    [Fact]
+    public void OrElse(){
+        //if(Binary1_Test.NodeType is ExpressionType.Assign){
+        var Constant = Expression.Constant(Op);//定数が先行評価で変数にAssignされるため
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.OrElse(Constant, Constant)
+            )
+        );
+        //}
+        //if(Binary2_Left is ParameterExpression Parameter){
+        var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.OrElse(p,Constant),
+                p
+            )
+        );
+        //} else{
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.OrElse(Constant, p),
+                p
+            )
+        );
+        //}
+        ////if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.Or(Binary1_Left,Binary1_Right);
+        //var Constant = Expression.Constant(Op);
+        //this.Optimizer.Lambda最適化(
+        //    Expression.Lambda(
+        //        Expression.OrElse(Constant, Constant)
+        //    )
+        //);
+        //var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        //this.Optimizer.Lambda最適化(
+        //    Expression.Lambda(
+        //        Expression.OrElse(Constant, p),
+        //        p
+        //    )
+        //);
+        ////if(Binary1_Left.NodeType is ExpressionType.Constant or ExpressionType.Parameter){
+        //this.Optimizer.Lambda最適化(
+        //    Expression.Lambda(
+        //        Expression.OrElse(
+        //            Constant,
+        //            Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+        //        ),
+        //        p
+        //    )
+        //);
+        this.Optimizer.Lambda最適化(
+            Expression.Lambda(
+                Expression.OrElse(
+                    p,
+                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                ),
+                p
+            )
+        );
+        this.Optimizer.Lambda最適化(() =>
+            Tuple.Create(Op, Op).Let(
+                p =>
+                    p.Item1||p.Item2
+            )
+        );
+    }
 }

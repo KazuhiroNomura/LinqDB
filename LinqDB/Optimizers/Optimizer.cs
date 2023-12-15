@@ -46,7 +46,6 @@ public sealed class Optimizer:IDisposable {
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
     private readonly 変換_TSqlFragmentからExpression _変換_TSqlFragmentからExpression;
-    private readonly 変換_AndAlsoとOrElseをConditionに 変換_AndAlsoとOrElseをConditionに;
     private readonly 変換_メソッド正規化_取得インライン不可能定数 _変換_メソッド正規化_取得インライン不可能定数;
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
@@ -144,7 +143,6 @@ public sealed class Optimizer:IDisposable {
         var 変換_旧Expressionを新Expression1 = new 変換_旧Expressionを新Expression1(作業配列,ExpressionEqualityComparer);
         this._変換_TSqlFragmentからExpression=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,ExpressionEqualityComparer,変換_旧Parameterを新Expression1,変換_旧Expressionを新Expression1,判定_指定Parameters無,ScriptGenerator);
         var 変換_旧Parameterを新Expression2 = new 変換_旧Parameterを新Expression2(作業配列);
-        this.変換_AndAlsoとOrElseをConditionに=new(作業配列);
         this._変換_メソッド正規化_取得インライン不可能定数=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
         this._変換_WhereからLookup=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
         var Listループ跨ぎParameter = this.Listループ跨ぎParameter;
@@ -1227,8 +1225,7 @@ public sealed class Optimizer:IDisposable {
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
         //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
-        var Lambda06 = this.変換_AndAlsoとOrElseをConditionに.実行(Lambda05);
-        var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda06);
+        var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda05);
         //Lambda07=Lambda06;
         this._検証_変形状態.実行(Lambda07);
         var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;

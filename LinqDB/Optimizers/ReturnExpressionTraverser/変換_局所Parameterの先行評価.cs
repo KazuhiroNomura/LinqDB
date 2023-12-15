@@ -14,7 +14,7 @@ using static Common;
 /// 複数出現した式が最初に出現した時点で変数に代入し、以降その変数を参照する。
 /// </summary>
 /// <example>(a*b)+(a*b)→(t=a*b)+t</example>
-public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraverser_Quoteを処理しない {
+public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraverser{
     public class 辺{
         //internal readonly E属性 属性;
         internal readonly int 辺番号;
@@ -161,7 +161,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         internal bool IsInline=true;
         protected override void Traverse(Expression Expression){
             this.計算量++;
-            Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
+            //Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
             switch(Expression.NodeType) {
                 case ExpressionType.DebugInfo:
                 case ExpressionType.Default:
@@ -457,7 +457,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             this.辺=this.List辺[this.辺番号++];
         }
         protected override void Traverse(Expression Expression) {
-            Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
+            //Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
             this.計算量++;
             switch(Expression.NodeType) {
                 case ExpressionType.DebugInfo:
@@ -658,7 +658,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             this.辺=this.List辺[this.辺番号++];
         }
         protected override void Traverse(Expression Expression) {
-            Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
+            //Debug.Assert(Expression.NodeType is not(ExpressionType.AndAlso or ExpressionType.OrElse));
             this.計算量++;
             switch(Expression.NodeType) {
                 case ExpressionType.DebugInfo:
@@ -1411,19 +1411,106 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
         return Lambda1;
     }
-    //protected override Expression Conditional(ConditionalExpression Conditional0){
-    //    var Conditional0_Test=Conditional0.Test;
-    //    var Conditional0_IfTrue=Conditional0.IfTrue;
-    //    var Conditional0_IfFalse=Conditional0.IfFalse;
-    //    var Conditional1_Test=this.Traverse(Conditional0_Test);
-    //    var Conditional1_IfTrue=this.Traverse(Conditional0_IfTrue);
-    //    var Conditional1_IfFalse=this.Traverse(Conditional0_IfFalse);
-    //    if(Conditional0_Test==Conditional1_Test)
-    //        if(Conditional0_IfTrue==Conditional1_IfTrue)
-    //            if(Conditional0_IfFalse==Conditional1_IfFalse)
-    //                return Conditional0;
-    //    return Expression.Condition(Conditional1_Test,Conditional1_IfTrue,Conditional1_IfFalse,Conditional0.Type);
-    //}
+    private Expression AndAlso_OrElse(Expression test,Expression ifTrue,Expression ifFalse) {
+        if(test.Type==typeof(bool)) {
+            return Expression.Condition(
+                test,
+                ifTrue,
+                ifFalse
+            );
+        } else {
+            return Expression.Condition(
+                Expression.Call(
+                    test.Type.GetMethod(op_True)!,
+                    test
+                ),
+                ifTrue,
+                ifFalse
+            );
+        }
+    }
+    private Expression AndAlso_OrElse(ParameterExpression p,Expression test,Expression ifTrue,Expression ifFalse) {
+        if(test.Type==typeof(bool)) {
+            return Expression.Block(
+                this.作業配列.Parameters設定(p),
+                Expression.Condition(
+                    test,
+                    ifTrue,
+                    ifFalse
+                )                
+            );
+        } else {
+            return Expression.Block(
+                this.作業配列.Parameters設定(p),
+                Expression.Condition(
+                    Expression.Call(
+                        test.Type.GetMethod(op_True)!,
+                        test
+                    ),
+                    ifTrue,
+                    ifFalse
+                )
+            );
+        }
+    }
+    /// <summary>
+    /// a&amp;&amp;b→operator true(a)?a&amp;b:a
+    /// </summary>
+    /// <param name="Binary0"></param>
+    /// <returns></returns>
+    protected override Expression AndAlso(BinaryExpression Binary0) {
+        var Binary1_Test = this.Traverse(Binary0.Left);
+        var Binary1_Right=this.Traverse(Binary0.Right);
+        var Binary2_Left=Binary1_Test;
+        if(Binary1_Test.NodeType is ExpressionType.Assign){
+            var Binary=(BinaryExpression)Binary1_Test;
+            Binary2_Left=Binary.Left;
+        }
+        if(Binary2_Left is ParameterExpression Parameter){
+            return this.AndAlso_OrElse(
+                Binary1_Test,
+                Expression.And(Parameter,Binary1_Right),
+                Parameter
+            );
+        } else{
+            var p=Expression.Parameter(Binary1_Test.Type,"AndAlso");
+            return this.AndAlso_OrElse(
+                p,
+                Expression.Assign(p,Binary1_Test),
+                Expression.And(p,Binary1_Right),
+                p
+            );
+        }
+    }
+    /// <summary>
+    /// a||b→operator true(a)?a:a|b
+    /// </summary>
+    /// <param name="Binary0"></param>
+    /// <returns></returns>
+    protected override Expression OrElse(BinaryExpression Binary0) {
+        var Binary1_Test = this.Traverse(Binary0.Left);
+        var Binary1_Right=this.Traverse(Binary0.Right);
+        var Binary2_Left=Binary1_Test;
+        if(Binary1_Test.NodeType is ExpressionType.Assign){
+            var Binary=(BinaryExpression)Binary1_Test;
+            Binary2_Left=Binary.Left;
+        }
+        if(Binary2_Left is ParameterExpression Parameter){
+            return this.AndAlso_OrElse(
+                Binary1_Test,
+                Parameter,
+                Expression.And(Parameter,Binary1_Right)
+            );
+        } else{
+            var p=Expression.Parameter(Binary1_Test.Type,"AndAlso");
+            return this.AndAlso_OrElse(
+                p,
+                Expression.Assign(p,Binary1_Test),
+                p,
+                Expression.Or(p,Binary1_Right)
+            );
+        }
+    }
 }
 //20231128  719
 //20231208 2516
