@@ -37,105 +37,101 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                 var MethodCall0_Arguments = MethodCall0.Arguments;
                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                if(this.判定_指定Parameters無.実行(MethodCall1_Arguments_0,this.外側Parameters!)&&MethodCall1_Arguments_1 is LambdaExpression predicate) {
-                    //A.SelectMany(a=>
-                    //    B.Where(b=>b==a)
-                    //    (a,b)=>a,b
-                    //↓
-                    //A.SelectMany(a=>
-                    //    B.Dictionary(b=>b).Equal(a)
-                    //    (a,b)=>a,b
-                    var predicate_Parameters = predicate.Parameters;
-                    //↓でDictionary().Equal()と連続しないようにする。
-                    //REVENUE_S.Let(revenue_s=>
-                    //    revenue_s.Where(revenue=>
-                    //        (revenue_s.Single().total_revenue==revenue.total_revenue)
-                    //    )
-                    //)
-                    //A.Where(a=>
-                    //    B.Select(b=>
-                    //        C.Where(c=>c+1==a&&c+2==b)
-                    //↓
-                    //A.Where(a=>
-                    //    Dictionary=C.Dictionary(c=>c+2)
-                    //    B.Select(b=>
-                    //        Dictionary.Equal(b).Where(c=>c+1==a)
-                    //Debug.Assert(this.外側Parameters is not null);
-                    var (OuterPredicate, InnerPredicate,Comparer,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
-                        predicate.Body,
-                        this.外側Parameters!,
-                        predicate_Parameters[0]
-                    );
-                    if(OuterPredicate is not null) {
-                        MethodCall1_Arguments_0=Expression.Call(
-                            MethodCall0_Method,
-                            MethodCall1_Arguments_0,
-                            Expression.Lambda(
-                                predicate.Type,
-                                OuterPredicate,
-                                predicate_Parameters
-                            )
+                if(this.判定_指定Parameters無.実行(MethodCall1_Arguments_0,this.外側Parameters!)){
+                    if(MethodCall1_Arguments_1 is LambdaExpression predicate){
+                        //A.SelectMany(a=>
+                        //    B.Where(b=>b==a)
+                        //    (a,b)=>a,b
+                        //↓
+                        //A.SelectMany(a=>
+                        //    B.Dictionary(b=>b).Equal(a)
+                        //    (a,b)=>a,b
+                        var predicate_Parameters=predicate.Parameters;
+                        //↓でDictionary().Equal()と連続しないようにする。
+                        //REVENUE_S.Let(revenue_s=>
+                        //    revenue_s.Where(revenue=>
+                        //        (revenue_s.Single().total_revenue==revenue.total_revenue)
+                        //    )
+                        //)
+                        //A.Where(a=>
+                        //    B.Select(b=>
+                        //        C.Where(c=>c+1==a&&c+2==b)
+                        //↓
+                        //A.Where(a=>
+                        //    Dictionary=C.Dictionary(c=>c+2)
+                        //    B.Select(b=>
+                        //        Dictionary.Equal(b).Where(c=>c+1==a)
+                        //Debug.Assert(this.外側Parameters is not null);
+                        var (OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+                            predicate.Body,
+                            this.外側Parameters!,
+                            predicate_Parameters[0]
                         );
-                    }
-                    var Listプローブビルド_Count = Listプローブビルド.Count;
-                    if(Listプローブビルド_Count>0) {
-                        if(Listプローブビルド_Count==1) {
-                            var (プローブ, ビルド)=Listプローブビルド[0];
-                            var MethodCall1_Arguments_0_Type =MethodCall1_Arguments_0.Type;
-                            var Set1 = MethodCall1_Arguments_0_Type;
-                            while(true) {
-                                if(Set1 is null) {
-                                    MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
-                                    break;
-                                }
-                                var GenericTypeDefinition = Set1;
-                                if(GenericTypeDefinition.IsGenericType) {
-                                    GenericTypeDefinition=Set1.GetGenericTypeDefinition();
-                                }
-                                if(GenericTypeDefinition==typeof(Set<,>)) {
-                                    var GetSet = Set1.GetMethod("GetSet");
-                                    Debug.Assert(GetSet is not null);
-                                    if(
-                                        ビルド is MemberExpression Member&&
-                                        Member.Member.DeclaringType!.IsGenericType&&
-                                        Member.Member.DeclaringType.GetGenericTypeDefinition()==typeof(Entity<,>)&&
-                                        Member.Member.Name==nameof(IKey<int>.Key)
-                                        //Member.Member==Member.Expression!.Type.GetProperty(nameof(IKey<int>.Key))&&
-                                        //Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
-                                    ) {
-                                        MethodCall1_Arguments_0=Expression.Call(
-                                            MethodCall1_Arguments_0,
-                                            GetSet,
-                                            プローブ
-                                        );
-                                    } else {
-                                        MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
-                                    }
-                                    break;
-                                }
-                                Set1=Set1.BaseType;
-                            }
-                        } else {
-                            var (プローブ, ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
-                            MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド,Comparer);
-                        }
-                        Expression LookupExpression(Expression プローブ,Expression ビルド,Expression?Comparer0){
-                            var keySelector=Expression.Lambda(
-                                ビルド,
-                                predicate_Parameters
+                        if(OuterPredicate is not null)
+                            MethodCall1_Arguments_0=Expression.Call(
+                                MethodCall0_Method,
+                                MethodCall1_Arguments_0,
+                                Expression.Lambda(
+                                    predicate.Type,
+                                    OuterPredicate,
+                                    predicate_Parameters
+                                )
                             );
-                            Expression Instance;
-                            var 作業配列=this.作業配列;
-                            if(Comparer0 is null){
-                                MethodInfo Lookup;
-                                if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
-                                    Lookup=ExtensionSet.ToLookup_keySelector;
-                                } else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()){
-                                    Lookup=ExtensionEnumerable.ToLookup_keySelector;
-                                } else{
-                                    Lookup=ExtensionEnumerable.ToLookup_index;
+                        var Listプローブビルド_Count=Listプローブビルド.Count;
+                        if(Listプローブビルド_Count>0){
+                            if(Listプローブビルド_Count==1){
+                                var (プローブ,ビルド)=Listプローブビルド[0];
+                                var MethodCall1_Arguments_0_Type=MethodCall1_Arguments_0.Type;
+                                var Set1=MethodCall1_Arguments_0_Type;
+                                while(true){
+                                    if(Set1 is null){
+                                        MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                                        break;
+                                    }
+                                    var GenericTypeDefinition=Set1;
+                                    if(GenericTypeDefinition.IsGenericType) GenericTypeDefinition=Set1.GetGenericTypeDefinition();
+                                    if(GenericTypeDefinition==typeof(Set<,>)){
+                                        var GetSet=Set1.GetMethod("GetSet");
+                                        Debug.Assert(GetSet is not null);
+                                        if(
+                                            ビルド is MemberExpression Member&&
+                                            Member.Member.DeclaringType!.IsGenericType&&
+                                            Member.Member.DeclaringType.GetGenericTypeDefinition()==typeof(Entity<,>)&&
+                                            Member.Member.Name==nameof(IKey<int>.Key)
+                                            //Member.Member==Member.Expression!.Type.GetProperty(nameof(IKey<int>.Key))&&
+                                            //Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
+                                        ){
+                                            MethodCall1_Arguments_0=Expression.Call(
+                                                MethodCall1_Arguments_0,
+                                                GetSet,
+                                                プローブ
+                                            );
+                                        } else{
+                                            MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                                        }
+                                        break;
+                                    }
+                                    Set1=Set1.BaseType;
                                 }
-                                Instance = Expression.Call(
+                            } else{
+                                var (プローブ,ビルド)=ValueTupleでNewしてプローブとビルドに分解(this.作業配列,Listプローブビルド,0);
+                                MethodCall1_Arguments_0=LookupExpression(プローブ,ビルド);
+                            }
+                            Expression LookupExpression(Expression プローブ,Expression ビルド){
+                                var keySelector=Expression.Lambda(
+                                    ビルド,
+                                    predicate_Parameters
+                                );
+                                Expression Instance;
+                                var 作業配列=this.作業配列;
+                                MethodInfo Lookup;
+                                if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType)
+                                    Lookup=ExtensionSet.ToLookup_keySelector;
+                                else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition())
+                                    Lookup=ExtensionEnumerable.ToLookup_keySelector;
+                                else
+                                    Lookup=ExtensionEnumerable.ToLookup_index;
+                                Instance=Expression.Call(
                                     作業配列.MakeGenericMethod(
                                         Lookup,
                                         MethodCall0_Method.GetGenericArguments()[0],
@@ -144,122 +140,61 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                     MethodCall1_Arguments_0,
                                     keySelector
                                 );
-                            } else{
-                                MethodInfo Lookup;
-                                if(typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType){
-                                    Lookup=ExtensionSet.ToLookup_keySelector_comparer;
+                                var Instance_Type=Instance.Type;
+                                var get_Item=Instance_Type.GetMethod("get_Item");
+                                Debug.Assert(get_Item is not null);
+                                プローブ=Convert必要なら(
+                                    プローブ,
+                                    get_Item.GetParameters()[0].ParameterType
+                                );
+                                return Expression.Call(
+                                    Instance,
+                                    get_Item,
+                                    プローブ
+                                );
+                            }
+                        }
+                        if(InnerPredicate is not null){
+                            if(this.判定_指定Parameters無.実行(InnerPredicate,predicate_Parameters)){
+                                var ReturnType=MethodCall0_Method.ReturnType;
+                                Expression ifFalse;
+                                if(typeof(Sets.ExtensionSet)==MethodCall0.Method.DeclaringType){
+                                    ifFalse=Expression.Field(
+                                        null,
+                                        typeof(ImmutableSet<>).MakeGenericType(ReturnType.GetGenericArguments()).GetField(nameof(ImmutableSet<int>.EmptySet))
+                                    );
                                 } else{
-                                    //Where((i,index))はあるけどComparerありの比較はないのでToLookup_index_comparerが登場することはない
-                                    Debug.Assert(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition());
-                                    Lookup=ExtensionEnumerable.ToLookup_keySelector_comparer;
-                                //} else{
-                                //    Lookup=ExtensionEnumerable.ToLookup_index_comparer;
+                                    ifFalse=Expression.Convert(
+                                        Expression.NewArrayBounds(
+                                            ReturnType.GetGenericArguments()[0],
+                                            Constant_0
+                                        ),
+                                        ReturnType
+                                    );
                                 }
-                                Instance = Expression.Call(
-                                    作業配列.MakeGenericMethod(
-                                        Lookup,
-                                        MethodCall0_Method.GetGenericArguments()[0],
-                                        ビルド.Type
+                                return Expression.Condition(
+                                    InnerPredicate,
+                                    Convert必要なら(
+                                        MethodCall1_Arguments_0,
+                                        ReturnType
                                     ),
-                                    MethodCall1_Arguments_0,
-                                    keySelector,
-                                    Comparer0
+                                    ifFalse
                                 );
                             }
-                            //var Lookup = typeof(Sets.ExtensionSet)==MethodCall0_Method.DeclaringType
-                            //    ? ExtensionSet.ToLookup_keySelector
-                            //    : ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition()
-                            //        ? ExtensionEnumerable.ToLookup_keySelector
-                            //        : ExtensionEnumerable.ToLookup_index;
-                            //MethodInfo get_Item;
-                            var Instance_Type = Instance.Type;
-                            var get_Item = Instance_Type.GetMethod("get_Item");
-                            Debug.Assert(get_Item is not null);
-//                            if(get_Item is null) {
-//                                foreach(var Interface in Instance_Type.GetInterfaces()) {
-//                                    if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)) {
-//                                        get_Item=Interface.GetMethod("get_Item")!;
-//                                        goto 発見;
-//                                        //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
-//                                        //if(Interface_GetEnumerator==GetEnumerator){
-//                                        //    GenericArguments=Interface.GetGenericArguments();
-//                                        //    return true;
-//                                        //}
-//                                    }
-//                                }
-//                                throw new NotImplementedException();
-//発見:;
-//                            }
-                            //if(typeof(System.Linq.ILookup<,>)==Instance_Type.GetGenericTypeDefinition()){
-                            //    get_Item=Instance_Type.GetMethod("get_Item")!;
-                            //} else{
-                            //    foreach(var Interface in Instance_Type.GetInterfaces()){
-                            //        if(Interface.IsGenericType&&Interface.GetGenericTypeDefinition()==typeof(System.Linq.ILookup<,>)){
-                            //            get_Item=Interface.GetMethod("get_Item")!;
-                            //            goto 発見;
-                            //            //var Interface_GetEnumerator=Interface.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
-                            //            //if(Interface_GetEnumerator==GetEnumerator){
-                            //            //    GenericArguments=Interface.GetGenericArguments();
-                            //            //    return true;
-                            //            //}
-                            //        }
-                            //    }
-                            //    throw new NotImplementedException();
-                            //    発見: ;
-                            //}
-                            //var ILookup2=Instance.Type.GetInterface(CommonLibrary.Sets_ILookup2_FullName)??Instance.Type.GetInterface(CommonLibrary.Linq_ILookup2_FullName)!;
-                            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                            Debug.Assert(get_Item is not null);
-                            プローブ=Convert必要なら(
-                                プローブ,
-                                get_Item.GetParameters()[0].ParameterType
-                            );
-                            return Expression.Call(
-                                Instance,
-                                get_Item,
-                                プローブ
+                            MethodCall1_Arguments_0=Expression.Call(
+                                MethodCall0_Method,
+                                MethodCall1_Arguments_0,
+                                Expression.Lambda(
+                                    predicate.Type,
+                                    InnerPredicate,
+                                    predicate_Parameters
+                                )
                             );
                         }
+                        return MethodCall1_Arguments_0;
                     }
-                    if(InnerPredicate is not null){
-                        if(this.判定_指定Parameters無.実行(InnerPredicate,predicate_Parameters)) {
-                            var ReturnType = MethodCall0_Method.ReturnType;
-                            Expression ifFalse;
-                            if(typeof(Sets.ExtensionSet)==MethodCall0.Method.DeclaringType) {
-                                ifFalse=Expression.Field(
-                                    null,
-                                    typeof(ImmutableSet<>).MakeGenericType(ReturnType.GetGenericArguments()).GetField(nameof(ImmutableSet<int>.EmptySet))
-                                );
-                            } else {
-                                ifFalse=Expression.Convert(
-                                    Expression.NewArrayBounds(
-                                        ReturnType.GetGenericArguments()[0],
-                                        Constant_0
-                                    ),
-                                    ReturnType
-                                );
-                            }
-                            return Expression.Condition(
-                                InnerPredicate,
-                                Convert必要なら(
-                                    MethodCall1_Arguments_0,
-                                    ReturnType
-                                ),
-                                ifFalse
-                            );
-                        }
-                        MethodCall1_Arguments_0=Expression.Call(
-                            MethodCall0_Method,
-                            MethodCall1_Arguments_0,
-                            Expression.Lambda(
-                                predicate.Type,
-                                InnerPredicate,
-                                predicate_Parameters
-                            )
-                        );
-                    }
-                    return MethodCall1_Arguments_0;
                 }
+
                 return Expression.Call(
                     MethodCall0_Method,
                     MethodCall1_Arguments_0,

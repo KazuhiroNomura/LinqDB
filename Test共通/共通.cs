@@ -3,13 +3,12 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Types;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using LinqDB.Sets;
 using LinqDB.Optimizers;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using IEnumerable=System.Collections.IEnumerable;
 public abstract class 共通 {
     protected static readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();

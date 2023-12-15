@@ -11,7 +11,7 @@ using LinqDB.Remote.Clients;
 using System.Net;
 using System.Reflection;
 using LinqDB;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using LinqDB.Sets;
 using TestLinqDB.Serializers;
 namespace TestLinqDB;
@@ -70,6 +70,8 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
     protected static Set<int>CreateSet()=>new();
+    protected static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
+    protected static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
     private string ファイル名(string プリフィックス){
         var Type=this.GetType();
         var Frames=new StackTrace().GetFrames();

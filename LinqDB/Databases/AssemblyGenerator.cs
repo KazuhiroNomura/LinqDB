@@ -17,7 +17,7 @@ using System.Linq.Expressions;
 using System.Numerics;
 using LinqDB.Databases.Dom;
 using LinqDB.Optimizers;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using AssemblyName=System.Reflection.AssemblyName;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute

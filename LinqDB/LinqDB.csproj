@@ -34,19 +34,19 @@
     <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Optimizers\Comparison\**" />
+    <Compile Remove="Optimizers\Comparer\**" />
     <Compile Remove="Optimizers\ReturnExpressionTraverser\**" />
     <Compile Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
     <Compile Remove="Optimizers\VoidExpressionTraverser\**" />
     <Compile Remove="Optimizers\VoidTSqlFragmentTraverser\**" />
     <Compile Remove="Serializers\Formatters\**" />
-    <EmbeddedResource Remove="Optimizers\Comparison\**" />
+    <EmbeddedResource Remove="Optimizers\Comparer\**" />
     <EmbeddedResource Remove="Optimizers\ReturnExpressionTraverser\**" />
     <EmbeddedResource Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
     <EmbeddedResource Remove="Optimizers\VoidExpressionTraverser\**" />
     <EmbeddedResource Remove="Optimizers\VoidTSqlFragmentTraverser\**" />
     <EmbeddedResource Remove="Serializers\Formatters\**" />
-    <None Remove="Optimizers\Comparison\**" />
+    <None Remove="Optimizers\Comparer\**" />
     <None Remove="Optimizers\ReturnExpressionTraverser\**" />
     <None Remove="Optimizers\ReturnTSqlFragmentTraverser\**" />
     <None Remove="Optimizers\VoidExpressionTraverser\**" />
@@ -116,15 +116,17 @@
     <None Remove="Serializers\MemoryPack\FormatterResolver.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Optimizers\Comparison\AExpressionEqualityComparer.cs" />
-    <Compile Include="Optimizers\Comparison\ブローブビルドExpressionEqualityComparer.cs" />
-    <Compile Include="Optimizers\Comparison\汎用Comparer.cs" />
+    <Compile Include="Optimizers\Comparer\AExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparer\ブローブビルドExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparer\汎用Comparer.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_WhereからLookup.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ独立.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.Join.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.GroupJoin.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_メソッド正規化_取得インライン不可能定数.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs" />
@@ -136,10 +138,10 @@
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragment_QuerySpecification.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\A作成_IL.cs" />
-    <Compile Include="Optimizers\Comparison\ExpressionEqualityComparer.cs" />
-    <Compile Include="Optimizers\Comparison\ExpressionEqualityComparer_Assign_Leftで比較.cs" />
-    <Compile Include="Optimizers\Comparison\ExpressionReferenceEqualityComparer.cs" />
-    <Compile Include="Optimizers\Comparison\LambdaEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparer\ExpressionEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparer\ExpressionEqualityComparer_Assign_Leftで比較.cs" />
+    <Compile Include="Optimizers\Comparer\ExpressionReferenceEqualityComparer.cs" />
+    <Compile Include="Optimizers\Comparer\LambdaEqualityComparer.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\VoidExpressionTraverser.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\VoidExpressionTraverser_Quoteを処理しない.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\作成_DynamicAssembly.cs" />
@@ -160,7 +162,7 @@
     <Compile Include="Optimizers\VoidTSqlFragmentTraverser\変換_TSqlFragment正規化.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Optimizers\Comparison\ClassDiagram1.cd" />
+    <None Include="Optimizers\Comparer\ClassDiagram1.cd" />
     <None Include="Optimizers\ReturnExpressionTraverser\ClassDiagram1.cd" />
     <None Include="Optimizers\ReturnTSqlFragmentTraverser\ClassDiagram1.cd" />
   </ItemGroup>

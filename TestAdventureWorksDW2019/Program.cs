@@ -7,8 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using AdventureWorksDW2019;
 using AdventureWorksDW2019.Tables.dbo;
-using System.Collections.Generic;
-
 namespace TestAdventureWorksDW2019;
 abstract class Program :共通{
     ///// <summary>アンマネージ リソースの解放またはリセットに関連付けられているアプリケーション定義のタスクを実行します。</summary>

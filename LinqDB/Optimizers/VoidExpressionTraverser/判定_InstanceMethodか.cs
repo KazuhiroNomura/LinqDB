@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers.VoidExpressionTraverser;
 internal sealed class 判定_InstanceMethodか:VoidExpressionTraverser {

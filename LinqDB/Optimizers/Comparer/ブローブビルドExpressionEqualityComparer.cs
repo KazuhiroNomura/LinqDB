@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 //using System.Linq;
 using System.Linq.Expressions;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
 namespace LinqDB.Optimizers;

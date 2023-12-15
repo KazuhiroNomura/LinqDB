@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace TestLinqDB.Optimizers;
 internal sealed class DebugViewWriter:ExpressionVisitor{
     [Flags]
@@ -35,7 +29,7 @@ internal sealed class DebugViewWriter:ExpressionVisitor{
 
     private int Depth=> this._depth;
 
-    private DebugViewWriter(TextWriter file){
+    public DebugViewWriter(TextWriter file){
         this._out=file;
     }
 

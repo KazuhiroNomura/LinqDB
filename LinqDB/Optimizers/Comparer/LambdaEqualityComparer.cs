@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
 // ReSharper disable All
-namespace LinqDB.Optimizers.Comparison;
+namespace LinqDB.Optimizers.Comparer;
 public class LambdaEqualityComparer : AExpressionEqualityComparer
 {
     protected override bool ProtectedAssign後処理(ParameterExpression x, ParameterExpression y) => @false;

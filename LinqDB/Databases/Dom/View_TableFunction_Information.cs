@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 namespace LinqDB.Databases.Dom;
 /// <summary>
 /// ScalarFunction

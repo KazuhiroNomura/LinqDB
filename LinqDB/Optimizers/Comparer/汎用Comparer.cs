@@ -11,7 +11,7 @@ using Microsoft.CSharp.RuntimeBinder;
 using IEnumerable = System.Collections.IEnumerable;
 // ReSharper disable LoopCanBeConvertedToQuery
 // ReSharper disable InheritdocConsiderUsage
-namespace LinqDB.Optimizers.Comparison;
+namespace LinqDB.Optimizers.Comparer;
 
 /// <summary>
 /// <summary>

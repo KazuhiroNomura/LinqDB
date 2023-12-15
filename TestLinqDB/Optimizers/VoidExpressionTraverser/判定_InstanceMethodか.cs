@@ -5,13 +5,17 @@ using LinqDB.Sets;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
-namespace TestLinqDB.Optimizers;
-public class 判定_InstanceMethodか:共通{
-    private static int F(Expression<Func<int>> f){
-        var m=f.Compile();
+namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
+public class 判定_InstanceMethodか : 共通
+{
+    private static int F(Expression<Func<int>> f)
+    {
+        var m = f.Compile();
         return m();
     }
-    [Fact]public void Quote(){
+    [Fact]
+    public void Quote()
+    {
         //this.MemoryMessageJson_Expression_ExpressionAssertEqual(
         //    Expression.Lambda<Func<int>>(
         //        Expression.Call(
@@ -25,10 +29,12 @@ public class 判定_InstanceMethodか:共通{
         //    )
         //);
         //this.MemoryMessageJson_Expression_ExpressionAssertEqual(()=>F(()=>3));
-        this.Expression実行AssertEqual(()=>F(()=>3));
+        this.Expression実行AssertEqual(() => F(() => 3));
     }
-    [Fact]public void Block(){
-        var p=Expression.Parameter(typeof(int));
+    [Fact]
+    public void Block()
+    {
+        var p = Expression.Parameter(typeof(int));
         var s = new Set<int>();
         //var 判定_内部LambdaにParameterが存在するか=this._判定_内部LambdaにParameterが存在するか;
         //var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
@@ -37,7 +43,7 @@ public class 判定_InstanceMethodか:共通{
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
-                    new[]{p},
+                    new[] { p },
                     Expression.Lambda<Func<int>>(p),
                     p
                 )
@@ -46,7 +52,7 @@ public class 判定_InstanceMethodか:共通{
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
-                    new[]{p},
+                    new[] { p },
                     Expression.Lambda<Func<int>>(Expression.Constant(0)),
                     p
                 )

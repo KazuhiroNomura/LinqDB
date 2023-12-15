@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 // ReSharper disable All
-namespace LinqDB.Optimizers.Comparison;
+namespace LinqDB.Optimizers.Comparer;
 /// <summary>
 /// 先行評価式の(t=x)の場合tを評価するようにする
 /// </summary>

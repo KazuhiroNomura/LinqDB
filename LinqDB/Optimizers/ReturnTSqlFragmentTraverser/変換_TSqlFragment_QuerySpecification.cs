@@ -5,7 +5,7 @@ using System;
 using Generic = System.Collections.Generic;
 using System.Linq.Expressions;
 using LinqDB.Helpers;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 /// <summary>

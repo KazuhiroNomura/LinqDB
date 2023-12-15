@@ -9,7 +9,7 @@ using System.Reflection.Emit;
 //using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
-namespace LinqDB.Optimizers.Comparison;
+namespace LinqDB.Optimizers.Comparer;
 using Generic = System.Collections.Generic;
 /// <summary>
 /// 式の各要素を参照により等価性を見る

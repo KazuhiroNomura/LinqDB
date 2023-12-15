@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using LinqDB.Sets;
 using MemoryPack;
 using IEnumerable = System.Collections.IEnumerable;

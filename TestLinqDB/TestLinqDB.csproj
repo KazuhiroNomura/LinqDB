@@ -50,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Optimizers\VoidExpressionTraverser\" />
     <Folder Include="Serializers\Generic\" />
     <Folder Include="ドキュメント\テスト結果\" />
   </ItemGroup>

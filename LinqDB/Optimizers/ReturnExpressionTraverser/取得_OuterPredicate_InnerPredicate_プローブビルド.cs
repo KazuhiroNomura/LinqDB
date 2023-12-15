@@ -43,19 +43,17 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
     private IList<ParameterExpression>? 外側Parameters;
     private ParameterExpression? 内側Parameter;
     private Expression? OuterPredicate;
-    private Expression? Comparer;
     //条件式CNFに分解して取得しその式のラムダの深さをListに入れる
     //ソートしてつまりラムダの浅い順に入れる
     //そのリストを走査し
-    public (Expression? OuterPredicate, Expression? InnerPredicate, Expression? Comparer,List<(Expression プローブ, Expression ビルド)> Listプローブビルド) 実行(Expression predicate_Body,IList<ParameterExpression> 外側Parameters,ParameterExpression 内側Parameter) {
+    public (Expression? OuterPredicate, Expression? InnerPredicate,List<(Expression プローブ, Expression ビルド)> Listプローブビルド) 実行(Expression predicate_Body,IList<ParameterExpression> 外側Parameters,ParameterExpression 内側Parameter) {
         this.外側Parameters=外側Parameters;
         this.内側Parameter=内側Parameter;
         this.OuterPredicate=null;
-        this.Comparer=null;
         var Listプローブビルド = this.Listプローブビルド;
         Listプローブビルド.Clear();
         var InnerPredicate = this.PrivateTraverseNullable(predicate_Body);
-        return (this.OuterPredicate, InnerPredicate,this.Comparer,Listプローブビルド);
+        return (this.OuterPredicate, InnerPredicate,Listプローブビルド);
     }
     //public (Expression? OuterPredicate, Expression? InnerPredicate, List<(Expression プローブ, Expression ビルド)> Listプローブビルド) TSQLから実行(Expression predicate_Body,IList<ParameterExpression> 外側Parameters,ParameterExpression 内側Parameter) {
     //    this.外側Parameters=外側Parameters;

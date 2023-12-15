@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 namespace LinqDB.Optimizers.VoidExpressionTraverser;
 
 /// <summary>

@@ -12,7 +12,6 @@ using AdventureWorks2017.Tables.Production;
 using AdventureWorks2017.Tables.Purchasing;
 using AdventureWorks2017.Tables.Sales;
 using AdventureWorks2017;
-using Generic=System.Collections.Generic;
 using System.Linq;
 using System.Xml.XPath;
 using System.Xml;

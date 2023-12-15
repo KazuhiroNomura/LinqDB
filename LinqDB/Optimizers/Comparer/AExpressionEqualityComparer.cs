@@ -10,7 +10,7 @@ using System.Reflection.Emit;
 using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable All
-namespace LinqDB.Optimizers.Comparison;
+namespace LinqDB.Optimizers.Comparer;
 using Generic = System.Collections.Generic;
 public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expression>
 //,Generic.IEqualityComparer<ParameterExpression>//,Generic.IEqualityComparer<LabelTarget>,Generic.IEqualityComparer<CatchBlock>,Generic.IEqualityComparer<CSharpArgumentInfo>,Generic.IEqualityComparer<SwitchCase>,

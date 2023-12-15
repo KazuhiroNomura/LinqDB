@@ -4,80 +4,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
 using MemoryPack;
 using MessagePack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace TestLinqDB.Optimizers;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+namespace TestLinqDB.Optimizers.Comparer;
 
 
 

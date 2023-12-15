@@ -4,8 +4,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 namespace LinqDB.Optimizers;
 using static Common;
-using static LinqDB.Optimizers.作業配列;
-
 /// <summary>
 /// ガベージヒープを節約するための作業用メモリプール。
 /// </summary>

@@ -15,7 +15,7 @@ using System.Globalization;
 using System.Text;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 //using ColumnReferenceExpression=Microsoft.SqlServer.TransactSql.ScriptDom.ColumnReferenceExpression;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
@@ -5030,7 +5030,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         var 作業配列=this.作業配列;
         var ValueTuple2=作業配列.MakeGenericType(Reflection.ValueTuple.ValueTuple2,TOuter,TInner);
         var SearchCondition=this.BooleanExpression(x.SearchCondition);
-        var(OuterPredicate,InnerPredicate,_,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+        var(OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
             SearchCondition,作業配列.Parameters設定(o),i
         );
         e.Expression プローブ,ビルド;

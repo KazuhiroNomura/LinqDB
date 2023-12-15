@@ -6,9 +6,12 @@ using Microsoft.CSharp.RuntimeBinder;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
-namespace TestLinqDB.Optimizers;
-public class 取得_Dictionary:共通{
-    [Fact]public void Constant(){
+namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
+public class 取得_ラムダを跨ぐParameter : 共通
+{
+    [Fact]
+    public void Constant()
+    {
         //if(ILで直接埋め込めるか(Constant.Type))return;
         this.Expression実行AssertEqual(() => 0);
         this.Expression実行AssertEqual(() => 0m);
@@ -20,11 +23,13 @@ public class 取得_Dictionary:共通{
     }
     private delegate int Int32_Delegate_ref_Int32(ref int input);
     private static int Int32_Lambda_ref_Int32(ref int input, Int32_Delegate_ref_Int32 d) => d(ref input);
-    [Fact]public void Dynamic(){
-        var CSharpArgumentInfo1=CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None,null);
-        var CSharpArgumentInfoArray1=new[]{CSharpArgumentInfo1};
-        var CSharpArgumentInfoArray2=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1};
-        var CSharpArgumentInfoArray3=new[]{CSharpArgumentInfo1,CSharpArgumentInfo1,CSharpArgumentInfo1};
+    [Fact]
+    public void Dynamic()
+    {
+        var CSharpArgumentInfo1 = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
+        var CSharpArgumentInfoArray1 = new[] { CSharpArgumentInfo1 };
+        var CSharpArgumentInfoArray2 = new[] { CSharpArgumentInfo1, CSharpArgumentInfo1 };
+        var CSharpArgumentInfoArray3 = new[] { CSharpArgumentInfo1, CSharpArgumentInfo1, CSharpArgumentInfo1 };
         //if(!this.SequenceEqual(a.Arguments,b.Arguments)) return false;
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<object>>(
@@ -32,28 +37,32 @@ public class 取得_Dictionary:共通{
                     Binder.UnaryOperation(
                         CSharpBinderFlags.None,
                         ExpressionType.Increment,
-                        typeof(取得_Dictionary),
+                        typeof(取得_ラムダを跨ぐParameter),
                         CSharpArgumentInfoArray1
                     ),
                     typeof(object),
-                    Expression.Constant(1,typeof(object))
+                    Expression.Constant(1, typeof(object))
                 )
             )
         );
     }
-    [Fact]public void Lambda(){
+    [Fact]
+    public void Lambda()
+    {
         var s = new Set<int>();
         //if(!this.Quote内か&&this.Lambdas.Contains(Lambda,this.ExpressionEqualityComparer))
         //else
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Let(s=>s.Let(p=>new{s})));
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => (1).Let(a=>a.Let((Func<int,int>)(p=>a))));
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Let(s=>s.Select(p=>ValueTuple.Create(s))));
-        this.Expression実行AssertEqual(() => s.Let(s=>s.Select((Func<int,ValueTuple<Set<int>>>)(p=>ValueTuple.Create(s)))));
-        this.Expression実行AssertEqual(() => s.Select((Func<int,int>)(p=>p+1)));
-        this.Expression実行AssertEqual(() => s.Let(s=>s.Select((Func<int,int>)(p=>p+1))));
+        this.Expression実行AssertEqual(() => s.Let(s => s.Select(p => ValueTuple.Create(s))));
+        this.Expression実行AssertEqual(() => s.Select(p => p+1));
+        this.Expression実行AssertEqual(() => s.Let(s => s.Select(p => p+1)));
     }
-    [Fact]public void Block(){
-        var p=Expression.Parameter(typeof(int));
+    [Fact]
+    public void Block()
+    {
+        var p = Expression.Parameter(typeof(int));
         var s = new Set<int>();
         //var 判定_内部LambdaにParameterが存在するか=this._判定_内部LambdaにParameterが存在するか;
         //var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
@@ -62,7 +71,7 @@ public class 取得_Dictionary:共通{
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
-                    new[]{p},
+                    new[] { p },
                     Expression.Lambda<Func<int>>(p),
                     p
                 )
@@ -71,7 +80,7 @@ public class 取得_Dictionary:共通{
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Block(
-                    new[]{p},
+                    new[] { p },
                     Expression.Lambda<Func<int>>(Expression.Constant(0)),
                     p
                 )

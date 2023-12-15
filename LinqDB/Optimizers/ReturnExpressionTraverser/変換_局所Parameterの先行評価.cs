@@ -4,7 +4,7 @@ using System.Linq;
 using Generic=System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 //using LinqDB.Sets;
 

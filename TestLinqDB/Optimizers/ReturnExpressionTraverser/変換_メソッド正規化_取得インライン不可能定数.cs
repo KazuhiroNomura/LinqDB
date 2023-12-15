@@ -1,6 +1,10 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
+
 using LinqDB.Databases.Tables;
 using LinqDB.Helpers;
+using LinqDB.Optimizers;
 using LinqDB.Sets;
 
 
@@ -549,19 +553,29 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
         );
     }
     [Fact]
-    public void Call_Average()
-    {
-        var s0 = new Set<int> { 1 };
+    public void Call_Average(){
         var s1 = new int[10];
         //if(Reflection.ExtensionEnumerable.AverageDecimal==MethodCall0_GenericMethodDefinition)
         this.Expression実行AssertEqual(() => s1.Select(p => (decimal)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageDouble==MethodCall0_GenericMethodDefinition)
         this.Expression実行AssertEqual(() => s1.Select(p => (double)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageSingle==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (float)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageInt64==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (long)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageInt32==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (int)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDecimal==MethodCall0_GenericMethodDefinition)
         this.Expression実行AssertEqual(() => s1.Select(p => (decimal?)p).Average());
         //if(Reflection.ExtensionEnumerable.AverageNullableDouble==MethodCall0_GenericMethodDefinition)
         this.Expression実行AssertEqual(() => s1.Select(p => (double?)p).Average());
-        this.Expression実行AssertEqual(() => s0.Select(p => (decimal)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageNullableSingle==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (float?)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageNullableInt64==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (long?)p).Average());
+        //if(Reflection.ExtensionEnumerable.AverageNullableInt32==MethodCall0_GenericMethodDefinition)
+        this.Expression実行AssertEqual(() => s1.Select(p => (int?)p).Average());
+        this.Expression実行AssertEqual(() => s1.Average(p=>p));
     }
     private static System.Collections.Generic.IEnumerable<T> そのまま<T>(System.Collections.Generic.IEnumerable<T> i) => i;
     [Fact]
@@ -642,20 +656,36 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
         //}
     }
     [Fact]
-    public void Call_GroupJoin()
-    {
-        var s0 = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }.GroupJoin(new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, o => o, i => i, (o, i) => new { o, i }, EqualityComparer<int>.Default).ToArray();
-        var s1 = new Set<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }.GroupJoin(new Set<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, o => o, i => i, (o, i) => new { o, i }, EqualityComparer<int>.Default).ToArray();
-        var s2 = new int[] { 0, 0 }.GroupJoin(new int[] { 0, 0 }, o => o, i => i, (o, i) => new { o, i }, EqualityComparer<int>.Default).ToArray();
-        var s3 = new Set<int> { 0, 0 }.GroupJoin(new Set<int> { 0, 0 }, o => o, i => i, (o, i) => new { o, i }, EqualityComparer<int>.Default).ToArray();
-        this.Expression実行AssertEqual(() => new int[10].GroupJoin(new int[10], o => o, i => i, (o, i) => new { o, i }, EqualityComparer<int>.Default));
-        this.Expression実行AssertEqual(() => new int[10].GroupJoin(new int[10], o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new int[10].GroupJoin(new int[10], o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new int[10].GroupJoin(new int[10], o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new Set<int>().GroupJoin(new Set<int>(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new Set<int>().GroupJoin(new Set<int>(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new Set<int>().GroupJoin(new Set<int>(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => new int[10].GroupJoin(new int[10], o => o, i => i, (o, i) => o+i.Count()));
+    public void GroupJoin(){
+        //if(MethodCall1_Arguments.Count==6)
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), o => o, i => i, (o, i) => new{o,i}, EqualityComparer<int>.Default));//0
+        //else
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), o => o, i => i, (o, i) => new { o, i }));//1
+        //if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
+        //0
+        //} else {
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), Anonymous((int o) => o), i => i, (o, i) => new { o, i }));//1
+        //if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
+        //0
+        //} else {
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), o => o,Anonymous((int i)=> i), (o, i) => new { o, i }));//1
+        //}
+        //if(typeof(Linq.Enumerable)==MethodCall0_Method.DeclaringType) {
+        //0
+        //} else {
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), o => o, i => i, (o, i) => new { o, i }));//1
+        //1
+        //}
+        //if(MethodCall1_Arguments_5 is not null) {
+        //0
+        //} else {
+        //1
+        //}
+        //if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+        //0
+        //} else {
+        this.Expression実行AssertEqual(() => CreateSet().GroupJoin(CreateSet(), o => o, i => i, Anonymous((int o, LinqDB.Sets.IEnumerable<int>i) => new { o, i })));//1
+        //}
     }
     //private static Set<int>CreateSet()=>new();
     [Fact]
@@ -669,18 +699,48 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
     }
     private static List<int> CreateEnum() => new();
     [Fact]
-    public void Call_Join()
-    {
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => CreateEnum().Join(CreateEnum(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i));
-        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i, EqualityComparer<int>.Default));
+    public void Join(){
+        //if(MethodCall1_Arguments.Count==6)
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i, EqualityComparer<int>.Default));//0
+        //else
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));//1
+        //if(Reflection.ExtensionSet.Join==MethodCall0_GenericMethodDefinition) {
+        //1
+        //} else {
+        //0
+        //}
+        //if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
+        //    if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
+        //        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+        //0
+        //        } else {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i,Anonymous((int o,int i) => o+i), EqualityComparer<int>.Default));//2
+        //        }
+        //    } else {
+        //        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o,Anonymous((int i) => i), (o, i) => o+i, EqualityComparer<int>.Default));//0
+        //        } else {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o,Anonymous((int i) => i),Anonymous((int o,int i) => o+i), EqualityComparer<int>.Default));//0
+        //    }
+        //} else {
+        //    if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
+        //        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), Anonymous((int o) => o),i => i,(o,i) => o+i, EqualityComparer<int>.Default));//0
+        //        } else {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), Anonymous((int o) => o),i => i,Anonymous((int o,int i) => o+i), EqualityComparer<int>.Default));//0
+        //        }
+        //    } else {
+        //        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), Anonymous((int o) => o),Anonymous((int i) => i),(int o,int i) => o+i, EqualityComparer<int>.Default));//0
+        //        } else {
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), Anonymous((int o) => o),Anonymous((int i) => i),Anonymous((int o,int i) => o+i), EqualityComparer<int>.Default));
+        //    }
+        //}
+        //if(MethodCall1_Arguments_5 is not null) {
+        //0
+        //} else {
+        //1
+        //}
     }
     [Fact]
     public void Call_OfType()
@@ -834,8 +894,8 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
         //        }else{
         this.Expression実行AssertEqual(() => CreateSet().SelectMany(Anonymous<int, Set<int>>(o => CreateSet()), Anonymous((int o, int i) => o*i)));
         //        if(indexSelectorか) {
-        this.Expression実行AssertEqual(() => CreateEnum().SelectMany((o, index) => CreateEnum(), Anonymous((int o, int i) => o*i)));
-        this.Expression実行AssertEqual(() => CreateSet().SelectMany((Func<int, System.Collections.Generic.IEnumerable<int>>)(o => CreateSet()), (o, i) => o+i));
+        this.Expression実行AssertEqual(() => CreateEnum().SelectMany(Anonymous((int o,int  index) => CreateEnum()), (int o, int i) => o*i));
+        this.Expression実行AssertEqual(() => CreateEnum().SelectMany(Anonymous((int o,int  index) => CreateEnum()), Anonymous((int o, int i) => o*i)));
     }
     [Fact]
     public void Call_SelectMany_共通()

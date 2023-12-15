@@ -11,7 +11,7 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using Array = System.Array;
@@ -25,7 +25,6 @@ using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using static LinqDB.Optimizers.Common;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.VoidTSqlFragmentTraverser;
-using LinqDB.Serializers.MemoryPack.Formatters;
 using Expression=System.Linq.Expressions.Expression;
 // ReSharper disable All
 namespace LinqDB.Optimizers;

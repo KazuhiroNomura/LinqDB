@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Linq;
 using System.Reflection;
-using LinqDB.Optimizers.Comparison;
+using LinqDB.Optimizers.Comparer;
 using LinqDB.Sets;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 
