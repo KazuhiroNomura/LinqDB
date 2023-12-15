@@ -70,6 +70,8 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
     protected static Set<int>CreateSet()=>new();
+    protected static Expressions.Expression GetLambda(Expressions.LambdaExpression Lambda)=>Lambda.Body;
+    protected static Func<TResult> Anonymous<TResult>(Func<TResult> i)=>i;
     protected static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
     protected static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
     private string ファイル名(string プリフィックス){

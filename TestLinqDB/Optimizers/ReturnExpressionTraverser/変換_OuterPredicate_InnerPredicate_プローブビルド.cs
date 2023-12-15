@@ -13,7 +13,7 @@ using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser;
+namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_OuterPredicate_InnerPredicate_プローブビルド:共通{
     private class Class{
         public bool Equals(int other)=>true;

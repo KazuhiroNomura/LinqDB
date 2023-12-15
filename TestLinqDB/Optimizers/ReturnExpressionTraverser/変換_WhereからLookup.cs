@@ -8,7 +8,7 @@ using LinqDB.Serializers.MemoryPack.Formatters.Others;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
-namespace TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser;
+namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_WhereからLookup : 共通
 {
     struct OI

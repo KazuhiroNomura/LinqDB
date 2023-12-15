@@ -7,7 +7,7 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser;
+namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_局所Parameterの先行評価 : 共通
 {
     public class 辺を作る : 共通

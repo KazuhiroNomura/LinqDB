@@ -189,47 +189,12 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                     case nameof(ExtensionSet.Union): 
                     case nameof(ExtensionSet.DUnion): 
                     case nameof(ExtensionSet.Except): {
-                        //Debug.Assert(
-                        //    MethodCall.Arguments.Count==3
-                        //    &&
-                        //    Reflection.ExtensionEnumerable.Except_comparer==MethodCall_GenericMethodDefinition
-                        //    ||
-                        //    MethodCall.Arguments.Count==2
-                        //    &&(
-                        //        Reflection.ExtensionEnumerable.Except==MethodCall_GenericMethodDefinition
-                        //        ||
-                        //        Reflection.ExtensionSet.Except==MethodCall_GenericMethodDefinition
-                        //    )
-                        //);
-                        ////他のExceptは[1],[0]の順に処理するがここは違う。
-                        //this.Traverse(MethodCall0_Arguments[0]);
-                        //if(this.結果Expression is not null)
-                        //    return;
-                        //var 結果の場所 = this.結果の場所;
-                        //Debug.Assert(this.結果Expression is null);
-                        //this.結果の場所=結果の場所|場所.ループ跨ぎ;
-                        //this.Traverse(MethodCall0_Arguments[1]);
-                        //if(this.結果Expression is not null)
-                        //    return;
-                        //this.結果の場所=結果の場所;
-                        ////if(巻き上げ処理(MethodCall0_Arguments[1]))
-                        ////    return;
-                        //if(MethodCall.Arguments.Count==3)
-                        //    this.Traverse(MethodCall0_Arguments[2]);
+                        //ループの外出しをしない理由はインライン展開するときにそれぞれ別に処理する2パス方式だから
                         break;
                     }
-                    //case nameof(Enumerable.Join): {
-                    //    //正常系では通らない。部分テストの時に必要。
-                    //    this.Traverse(MethodCall0_Arguments[0]);
-                    //    if(this.結果Expression is not null) return;
-                    //    if(巻き上げ処理(MethodCall0_Arguments[1])) return;
-                    //    if(巻き上げ処理(MethodCall0_Arguments[2])) return;
-                    //    if(巻き上げ処理(MethodCall0_Arguments[3])) return;
-                    //    break;
-                    //}
                     default: {
-                        Debug.Assert(nameof(ExtensionSet.Join)!=MethodCall_GenericMethodDefinition.Name);
-                        Debug.Assert(nameof(ExtensionSet.GroupJoin)!=MethodCall_GenericMethodDefinition.Name);
+                        Debug.Assert(nameof(ExtensionSet.Join)!=MethodCall_GenericMethodDefinition.Name,"SelectMany,Whereで処理される");
+                        Debug.Assert(nameof(ExtensionSet.GroupJoin)!=MethodCall_GenericMethodDefinition.Name,"Select,Whereで処理される");
                         this.Traverse(MethodCall0_Arguments[0]);
                         if(this.結果Expression is not null)
                             return;
@@ -252,12 +217,10 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                     if(this.結果Expression is not null)
                         return true;
                     this.結果の場所=結果の場所;
-                } else if(Expression0.NodeType!=ExpressionType.Parameter) {
-                    var Result = this._判定_移動できるか.実行(Expression0);
-                    if(Result==判定_移動できるか.EResult.移動できる) {
-                        this.結果Expression=Expression0;
-                        return true;
-                    }
+                } else if(Expression0.NodeType!=ExpressionType.Parameter){
+                    Debug.Assert(判定_移動できるか.EResult.移動できる==this._判定_移動できるか.実行(Expression0));
+                    this.結果Expression=Expression0;
+                    return true;
                 }
                 //if(Expression0 is LambdaExpression Lambda0) {
                 //    var 結果の場所 = this.結果の場所;
@@ -477,7 +440,6 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
     protected override Expression Lambda(LambdaExpression Lambda0) {
         var 旧ループ跨ぎParameters=this.ループ跨ぎParameters;
         var 新ループ跨ぎParameters=this.ループ跨ぎParameters=new Generic.List<ParameterExpression>();
-        //var 新ループ跨ぎParameters=this.ループ跨ぎParameters=new();
         var List束縛Parameter情報 = this.List束縛Parameter情報;
         var List束縛Parameter情報_Count = List束縛Parameter情報.Count;
         List束縛Parameter情報.Add((Lambda0.Parameters,new()));
@@ -490,17 +452,6 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             Lambda0.Type,LinkedList.Count==1&&新ループ跨ぎParameters.Count==0 ? LinkedList.First!.Value : Expression.Block(新ループ跨ぎParameters,LinkedList),
             Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters
         );
-        //var List束縛Parameter情報 = this.List束縛Parameter情報;
-        //var List束縛Parameter情報_Count = List束縛Parameter情報.Count;
-        //List束縛Parameter情報.Add((Lambda0.Parameters,new()));
-        //var LinkedList = new Generic.LinkedList<Expression>();
-        //LinkedList.AddFirst(Lambda0.Body);
-        //this.外だし(LinkedList);
-        //List束縛Parameter情報.RemoveAt(List束縛Parameter情報_Count);
-        //return Expression.Lambda(
-        //    Lambda0.Type,LinkedList.Count==1 ? LinkedList.First!.Value : Expression.Block(LinkedList),
-        //    Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters
-        //);
     }
     protected override Expression Call(MethodCallExpression MethodCall0) {
         if(!ループ展開可能メソッドか(MethodCall0))
@@ -517,8 +468,6 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         }else if(Reflection.ExtensionSet.Inline2==GetGenericMethodDefinition(MethodCall0.Method)) {
             var MethodCall1_Arguments_0 =this.Traverse(MethodCall0_Arguments[0]);
             var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
-            //var MethodCall1_Arguments_1 = MethodCall0_Arguments_1 is LambdaExpression Lambda0
-                //? this.Lambda(Lambda0) : MethodCall0_Arguments_1;
             Expression MethodCall1_Arguments_1;
             if(MethodCall0_Arguments_1 is LambdaExpression Lambda0)
                 MethodCall1_Arguments_1=this.Lambda(Lambda0);
@@ -529,43 +478,12 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
         var MethodCall1_Arguments = new Expression[MethodCall0_Arguments_Count];
         MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
-        //var Method = MethodCall0.Method;
-        //var Name = Method.Name;
-        //switch(Name){
-        //    case nameof(Enumerable.Cast          ):
-        //    case nameof(Enumerable.DefaultIfEmpty):
-        //    case nameof(Enumerable.Distinct      ):
-        //    case nameof(Enumerable.Except        ):
-        //    case nameof(Enumerable.GroupBy       ):
-        //    case nameof(Enumerable.Intersect     ):
-        //    case nameof(Enumerable.OfType        ):
-        //    case nameof(Enumerable.Range         ):
-        //    case nameof(Enumerable.Repeat        ):
-        //    case nameof(Enumerable.Reverse       ):
-        //    case nameof(Enumerable.Select        ):
-        //    case nameof(Enumerable.SelectMany    ):
-        //    case nameof(Enumerable.Take          ):
-        //    case nameof(Enumerable.TakeWhile     ):
-        //    case nameof(Enumerable.Union         ):
-        //    case nameof(ExtensionSet.DUnion      ):
-        //    case nameof(Enumerable.Where         ):
-        //}
         for(var a = 1;a<MethodCall0_Arguments_Count;a++) {
             var MethodCall0_Argument = MethodCall0_Arguments[a];
             if(MethodCall0_Argument is LambdaExpression Lambda0)
                 MethodCall1_Arguments[a]=this.Lambda(Lambda0);
             else{
                 MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Argument);
-                ////MethodCall1_Arguments[a]=MethodCall0_Argument;
-                //var List束縛Parameter情報 = this.List束縛Parameter情報;
-                //var ListVariables = List束縛Parameter情報[^1].ListVariables;
-                //ListVariables.Add(Block0_Variables);
-                //var LinkedList = new Generic.LinkedList<Expression>();
-                //LinkedList.AddFirst(MethodCall0_Argument);
-                //this.外だし(LinkedList);
-                //Debug.Assert(LinkedList.Last!=null,"LinkedList.Last != null");
-                //Debug.Assert(!(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type),"この式は最適化されて存在しないはず。");
-                //return Expression.Block(Block0.Type,Block0_Variables,LinkedList);
             }
         }
         return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);

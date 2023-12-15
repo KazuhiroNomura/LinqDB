@@ -13,7 +13,7 @@ using Expression = System.Linq.Expressions.Expression;
 //using MemoryPack;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
-namespace TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser;
+namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_メソッド正規化_取得インライン不可能定数 : 共通
 {
     [Fact]
