@@ -1,7 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
 using LinqDB.Databases.PrimaryKeys;
 using LinqDB.Helpers;
 using LinqDB.Sets;
+using TestLinqDB.Serializers;
+
 using Expression = System.Linq.Expressions.Expression;
 using ExtensionSet = LinqDB.Sets.ExtensionSet;
 //using MemoryPack;
@@ -24,8 +28,221 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
 
     }
     public class 取得_先行評価式:共通{
+        private void TraceWrite(Expression Expression){
+            this.Optimizer.Lambda最適化(Expression);
+        }
+        class A{
+            private int a;
+        }
+        class B:A{
+        }
+        class C:B{
+        }
         [Fact]
-        public void Traverse(){
+        public void 変形確認(){
+            var s=new Set<int>();
+            var x0=typeof(A).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
+            var x1=typeof(B).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
+            var x2=typeof(C).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
+            var x3=typeof(B).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.FlattenHierarchy);
+            var x4=typeof(C).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.FlattenHierarchy);
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Let(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Inline(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Inline(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Let(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Let(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Inline(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+        }
+        [Fact]public void Traverse(){
+            var s=new Set<int>();
+            this.Optimizer.Lambda最適化(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.Optimizer.Lambda最適化(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.Optimizer.Lambda最適化(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Let(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+            this.Optimizer.Lambda最適化(()=>"".Let(a=>"".Let(b=>"".Let(c=>new{a=a+a,b=b+b,c=c+c}).ToString()+new{a=a+a,b=b+b})));
+
+            this.Optimizer.Lambda最適化(()=>"".Let(a=>"".Let(b=>a+a)));
+            this.Optimizer.Lambda最適化(()=>"".Let(a=>"".Inline(b=>a)));
+            this.Optimizer.Lambda最適化(()=>"".Let(a=>"".Inline(b=>a+a)));
+            this.Optimizer.Lambda最適化(()=>"".Let(a=>a));
+            this.Expression実行AssertEqual(()=>s.Select(p=>s.Select(q=>new{a=s.Intersect(s),b=s.Intersect(s)})));
+            this.Expression実行AssertEqual(()=>s.Select(p=>s.Select(q=>q+1)));
+            //if(this.結果Expression is not null)return;
+            this.Expression実行AssertEqual(()=>s.Join(s,o=>o,i=>i,(o,i)=>new{o,i}).Where(p=>p.i==0));//0
+            //switch(e.NodeType) {
+            //    case ExpressionType.Constant: {
+            //        if(ILで直接埋め込めるか((ConstantExpression)e))return;
+            //0
+            //0
+            //    }
+            //    case ExpressionType.Default:return;
+            //    case ExpressionType.Parameter: {
+            //        if(this.ラムダ跨ぎParameters.Contains(e))return;
+            //0
+            //        if(this.ループ跨ぎParameters.Contains(e))return;
+            //
+            //0
+            //    }
+            //}
+            //if(e.Type!=typeof(void)) {
+            //    if(this.結果の場所==場所.ループ跨ぎ) {
+            //        if((e.NodeType!=ExpressionType.Lambda)&&e.NodeType!=ExpressionType.Parameter) {
+            //            var Result = this._判定_移動できるか.実行(e);
+            //            if(Result==判定_移動できるか.EResult.移動できる) {
+            //0
+            //            }
+            //0
+            //        }
+            //    } else if(this.結果の場所==場所.ラムダ跨ぎ) {
+            //        if(e.NodeType!=ExpressionType.Lambda) {
+            //            var Result = this._判定_移動できるか.実行(e);
+            //            if(Result==判定_移動できるか.EResult.移動できる) {
+            //0
+            //            }
+            //0
+            //        }
+            //    }
+            //0
+            //}
+            //0
+        }
+        [Fact]
+        public void Traverse1(){
             var s=new Set<int>();
             //if(this.結果Expression is not null)return;
             this.Expression実行AssertEqual(()=>s.Join(s,o=>new{key=o},i=>new{key=i},(o,i)=>o+i));
@@ -156,8 +373,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             );
         }
         public class 判定_移動できるか:共通{
-            [Fact]
-            public void MakeAssign(){
+            [Fact]public void MakeAssign(){
                 var a=Expression.Parameter(typeof(int),"a");
                 this.ExpressionAssertEqual(
                     Expression.Lambda<Action>(

@@ -237,12 +237,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Assign = (BinaryExpression)Expression;
                     var Assign_Left = Assign.Left;
                     if(Assign_Left.NodeType is ExpressionType.Parameter) {
-                        //判定_左辺Expressionsが含まれる.Add(Assign_Left);
-                        this.Traverse(Assign.Right);
-                    } else {
+                    } else
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
-                        this.Traverse(Assign.Right);
-                    }
+                    this.Traverse(Assign.Right);
                     //if(Assign.Left is not ParameterExpression)
                     //    base.Traverse(Assign.Left);
                     //this.Traverse(Assign.Right);
@@ -493,13 +490,11 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 case ExpressionType.Assign: {
                     var Assign = (BinaryExpression)Expression;
                     var Assign_Left = Assign.Left;
-                    if(Assign_Left.NodeType is ExpressionType.Parameter) {
+                    if(Assign_Left.NodeType is ExpressionType.Parameter)
                         this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
-                        base.Traverse(Assign.Right);
-                    } else {
+                    else
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
-                        this.Traverse(Assign.Right);
-                    }
+                    this.Traverse(Assign.Right);
                     //var Assign_Left = Assign.Left;
                     //if(Assign_Left is IndexExpression Index)
                     //    base.Index(Index);
@@ -696,11 +691,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Assign_Left = Assign.Left;
                     if(Assign_Left.NodeType is ExpressionType.Parameter) {
                         this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
-                        base.Traverse(Assign.Right);
-                    } else {
+                    }else
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
-                        this.Traverse(Assign.Right);
-                    }
+                    this.Traverse(Assign.Right);
                     //var Assign_Left = Assign.Left;
                     //if(Assign_Left is IndexExpression Index)
                     //    base.Index(Index);
@@ -902,7 +895,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         /// <summary>
         /// Except argumentsを1,0の順で置換する。NoEvaluationで置換しないようにする
         /// </summary>
-        internal bool IsInline=true;
+        internal bool IsInline;
         private int 辺番号;
         private 辺 辺=default!;
         private bool 既に置換された式を走査中;
@@ -961,15 +954,13 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     //var Assign1_Left = base.Traverse(Assign0_Left);
                     //this.判定_左辺Expressionsが含まれる.Add(Assign0_Left);
                     //var Assign1_Right=this.Traverse(Assign0.Right);
-                    if(Assign0_Left.NodeType is ExpressionType.Parameter) {
+                    Expression Assign1_Left;
+                    if(Assign0_Left.NodeType is ExpressionType.Parameter){
                         this.判定_左辺Expressionsが含まれる.Add(Assign0_Left);
-                        var Assign1_Right=base.Traverse(Assign0.Right);
-                        return Expression.Assign(Assign0_Left,Assign1_Right);
-                    } else {
-                        var Assign1_Left= base.Traverse(Assign0_Left);//.static_field,array[ここ]など
-                        var Assign1_Right=this.Traverse(Assign0.Right);
-                        return Expression.Assign(Assign1_Left,Assign1_Right);
-                    }
+                        Assign1_Left=Assign0_Left;
+                    } else
+                        Assign1_Left= base.Traverse(Assign0_Left);//.static_field,array[ここ]など
+                    return Expression.Assign(Assign1_Left,this.Traverse(Assign0.Right));
                 }
                 case ExpressionType.Call: {
                     if(Reflection.Helpers.NoEarlyEvaluation==GetGenericMethodDefinition(((MethodCallExpression)Expression0).Method))return Expression0;

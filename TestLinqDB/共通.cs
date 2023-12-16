@@ -68,7 +68,7 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
     protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
-    protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll"};
+    protected readonly Optimizer Optimizer=new(){IsGenerateAssembly=(C.O&テストオプション.アセンブリ保存)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll",IsInline = true};
     protected static Set<int>CreateSet()=>new();
     protected static Expressions.Expression GetLambda(Expressions.LambdaExpression Lambda)=>Lambda.Body;
     protected static Func<TResult> Anonymous<TResult>(Func<TResult> i)=>i;

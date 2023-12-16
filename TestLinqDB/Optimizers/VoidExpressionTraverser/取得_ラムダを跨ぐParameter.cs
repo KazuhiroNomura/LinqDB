@@ -55,9 +55,9 @@ public class 取得_ラムダを跨ぐParameter : 共通
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Let(s=>s.Let(p=>new{s})));
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => (1).Let(a=>a.Let((Func<int,int>)(p=>a))));
         //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => s.Let(s=>s.Select(p=>ValueTuple.Create(s))));
-        this.Expression実行AssertEqual(() => s.Let(s => s.Select(p => ValueTuple.Create(s))));
-        this.Expression実行AssertEqual(() => s.Select(p => p+1));
-        this.Expression実行AssertEqual(() => s.Let(s => s.Select(p => p+1)));
+        this.Optimizer.Lambda最適化(() => s.Let(s => s.Select(p => ValueTuple.Create(s))));
+        this.Optimizer.Lambda最適化(() => s.Select(p => p+1));
+        this.Optimizer.Lambda最適化(() => s.Let(s => s.Select(p => p+1)));
     }
     [Fact]
     public void Block()

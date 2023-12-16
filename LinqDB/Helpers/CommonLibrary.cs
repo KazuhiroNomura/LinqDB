@@ -681,5 +681,9 @@ public static class CommonLibrary {
             Count-=ReadしたBytes;
         } while(Count>0);
     }
+    public static string DebugView(Expression Expression){
+        dynamic n=new NonPublicAccessor(Expression);
+        return n.DebugView;
+    }
 }
 //560

@@ -67,15 +67,27 @@ public class NonPublicAccessor:DynamicObject{
     public override bool TryGetMember(GetMemberBinder binder,out object? result) {
         var Type=this.Type;
         var Name=binder.Name;
-        var Field=Type.GetField(Name,Flags);
-        if(Field is not null) {
-            result=Field.GetValue(this.Object);
-            return true;
+        {
+            var Type0=Type;
+            do{
+                var Field=Type0.GetField(Name,Flags);
+                if(Field is not null){
+                    result=Field.GetValue(this.Object);
+                    return true;
+                }
+                Type0=Type0.BaseType;
+            } while(Type0 is not null);
         }
-        var Property=Type.GetProperty(Name,Flags);
-        if(Property is not null) {
-            result=Property.GetMethod!.Invoke(this.Object,Array.Empty<object>());
-            return true;
+        {
+            var Type0=Type;
+            do{
+                var Property=Type0.GetProperty(Name,Flags);
+                if(Property is not null){
+                    result=Property.GetMethod!.Invoke(this.Object,Array.Empty<object>());
+                    return true;
+                }
+                Type0=Type0.BaseType;
+            } while(Type0 is not null);
         }
         var NestedType=Type.GetNestedType(Name,Flags);
         if(NestedType is not null) {
