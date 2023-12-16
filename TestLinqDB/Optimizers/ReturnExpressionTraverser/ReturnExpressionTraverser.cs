@@ -8,8 +8,8 @@ using TestLinqDB.Optimizers.Comparer;
 using ExpressionEqualityComparer=LinqDB.Optimizers.Comparer.ExpressionEqualityComparer;
 
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
-public class ReturnExpressionTraverser2 : 共通
-{
+public class ReturnExpressionTraverser2 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     private static readonly dynamic o = new NonPublicAccessor(typeof(LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser)!.GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance, new[] { typeof(作業配列) })!.Invoke(new object[] { new 作業配列() }));
     //private static readonly dynamic o=new NonPublicAccessor(new LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser(new 作業配列()));
     [Fact]
@@ -377,7 +377,7 @@ public class ReturnExpressionTraverser2 : 共通
         //this.MemoryMessageJson_Assert(new{a=default(LoopExpression)});
         var Label_decimal = Expression.Label(typeof(decimal), "Label_decimal");
         var Label_void = Expression.Label("Label");
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Loop(
                     Expression.Block(

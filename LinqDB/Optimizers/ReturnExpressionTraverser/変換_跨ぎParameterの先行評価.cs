@@ -261,8 +261,10 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             var Binary1_Left=this.Traverse(Binary0_Left);
             this.書き込み項か=書き込み項か;
             var Binary1_Conversion = this.TraverseNullable(Binary0_Conversion);
-            if(Binary0_Right==Binary1_Right&&Binary0_Left==Binary1_Left&&Binary0_Conversion==Binary1_Conversion)
-                return Binary0;
+            //if(Binary0_Right==Binary1_Right)
+            //    if(Binary0_Left==Binary1_Left)
+            //        if(Binary0_Conversion==Binary1_Conversion)
+            //            return Binary0;
             return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
         }
         protected override Expression Block(BlockExpression Block0){
@@ -292,94 +294,105 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             return Expression.Lambda(Lambda0.Type,Lambda1_Body,Lambda0.Name,Lambda0.TailCall,Lambda0.Parameters);
         }
         protected override Expression Call(MethodCallExpression MethodCall0){
-            var MethodCall_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall0.Method);
+            var MethodCall_GenericMethodDefinition=GetGenericMethodDefinition(MethodCall0.Method);
             //if(false&&Reflection.Helpers.NoLoopUnrolling==MethodCall_GenericMethodDefinition)
             //    return MethodCall0;
-            if(!(this.IsInline&&ループ展開可能メソッドか(MethodCall0)))
-                return base.Call(MethodCall0);
-            var MethodCall0_Arguments = MethodCall0.Arguments;
-            var MethodCall0_Arguments_Count = MethodCall0_Arguments.Count;
-            var MethodCall1_Arguments = new Expression[MethodCall0_Arguments_Count];
-            switch(MethodCall_GenericMethodDefinition.Name){
-                case nameof(ExtensionSet.Inline):{
-                    if(MethodCall0_Arguments.Count==1){
-                        Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition);
-                        var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
-                        if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
-                            var 現在探索場所=this.現在探索場所;
-                            this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                            var Lambda1_Body=this.Traverse(Lambda0.Body);
-                            MethodCall1_Arguments[0]=Expression.Lambda(
-                                Lambda0.Type,
-                                Lambda1_Body,
-                                Lambda0.Name,
-                                Lambda0.TailCall,
-                                Lambda0.Parameters
-                            );
-                            this.現在探索場所=現在探索場所;
-                        } else{
-                            MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
+            if(this.IsInline){
+                if(ループ展開可能メソッドか(MethodCall0)){
+                    var MethodCall0_Arguments=MethodCall0.Arguments;
+                    var MethodCall0_Arguments_Count=MethodCall0_Arguments.Count;
+                    var MethodCall1_Arguments=new Expression[MethodCall0_Arguments_Count];
+                    switch(MethodCall_GenericMethodDefinition.Name){
+                        case nameof(ExtensionSet.Inline):{
+                            if(MethodCall0_Arguments.Count==1){
+                                Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition);
+                                var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
+                                if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
+                                    var 現在探索場所=this.現在探索場所;
+                                    this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
+                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    MethodCall1_Arguments[0]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
+                                    this.現在探索場所=現在探索場所;
+                                } else{
+                                    MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
+                                }
+                            } else{
+                                Debug.Assert(MethodCall0_Arguments.Count==2);
+                                Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition);
+                                MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
+                                var MethodCall0_Arguments_1=MethodCall0_Arguments[1];
+                                if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
+                                    var 現在探索場所=this.現在探索場所;
+                                    this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
+                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    MethodCall1_Arguments[1]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
+                                    this.現在探索場所=現在探索場所;
+                                } else{
+                                    MethodCall1_Arguments[1]=this.Traverse(MethodCall0_Arguments_1);
+                                }
+                            }
+                            break;
                         }
-                    } else{
-                        Debug.Assert(MethodCall0_Arguments.Count==2);
-                        Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition);
-                        MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
-                        var MethodCall0_Arguments_1=MethodCall0_Arguments[1];
-                        if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
+                        default:{
+                            MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
                             var 現在探索場所=this.現在探索場所;
-                            this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                            var Lambda1_Body=this.Traverse(Lambda0.Body);
-                            MethodCall1_Arguments[1]=Expression.Lambda(
-                                Lambda0.Type,
-                                Lambda1_Body,
-                                Lambda0.Name,
-                                Lambda0.TailCall,
-                                Lambda0.Parameters
-                            );
-                            this.現在探索場所=現在探索場所;
-                        } else{
-                            MethodCall1_Arguments[1]=this.Traverse(MethodCall0_Arguments_1);
+                            for(var a=1;a<MethodCall0_Arguments_Count;a++){
+                                var MethodCall_Arguments_a=MethodCall0_Arguments[a];
+                                //Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda
+                                //したいところだがAggregate(a,b,func)のbがLambdaではないので使えない。
+                                if(MethodCall_Arguments_a is LambdaExpression Lambda0){
+                                    this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
+                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    this.現在探索場所=現在探索場所;
+                                    MethodCall1_Arguments[a]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
+                                } else{
+                                    MethodCall1_Arguments[a]=this.Traverse(MethodCall_Arguments_a);
+                                }
+                            }
+                            break;
                         }
                     }
-                    break;
-                }
-                default:{
-                    MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
-                    var 現在探索場所=this.現在探索場所;
-                    for(var a=1;a<MethodCall0_Arguments_Count;a++){
-                        var MethodCall_Arguments_a=MethodCall0_Arguments[a];
-                        //Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda
-                        //したいところだがAggregate(a,b,func)のbがLambdaではないので使えない。
-                        if(MethodCall_Arguments_a is LambdaExpression Lambda0){
-                            this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                            var Lambda1_Body=this.Traverse(Lambda0.Body);
-                            this.現在探索場所=現在探索場所;
-                            MethodCall1_Arguments[a]=Expression.Lambda(
-                                Lambda0.Type,
-                                Lambda1_Body,
-                                Lambda0.Name,
-                                Lambda0.TailCall,
-                                Lambda0.Parameters
-                            );
-                        } else{
-                            MethodCall1_Arguments[a]=this.Traverse(MethodCall_Arguments_a);
-                        }
-                    }
-                    break;
+                    return Expression.Call(
+                        MethodCall0.Method,
+                        MethodCall1_Arguments
+                    );
                 }
             }
-            return Expression.Call(
-                MethodCall0.Method,
-                MethodCall1_Arguments
-            );
+            return base.Call(MethodCall0);
         }
         protected override Expression Traverse(Expression Expression0) {
-            if(this.現在探索場所==this.希望探索場所&&this.ExpressionEqualityComparer.Equals(Expression0,this.旧Expression!)) {
-                if(this.書き込み項か)this.書き戻しがあるか=true;
-                else                 this.読み込みがあるか=true;
-                return this.新Parameter!;
+            if(this.現在探索場所==this.希望探索場所){
+                if(this.ExpressionEqualityComparer.Equals(Expression0,this.旧Expression!)){
+                    if(this.書き込み項か)
+                        this.書き戻しがあるか=true;
+                    else
+                        this.読み込みがあるか=true;
+                    return this.新Parameter!;
+                }
             }
-            return base.Traverse(Expression0);
+            var 書き込み項か=this.書き込み項か;
+            this.書き込み項か=false;
+            var Expression1=base.Traverse(Expression0);
+            this.書き込み項か=書き込み項か;
+            return Expression1;
         }
     }
     private readonly 変換_先行評価式 _変換_先行評価式;

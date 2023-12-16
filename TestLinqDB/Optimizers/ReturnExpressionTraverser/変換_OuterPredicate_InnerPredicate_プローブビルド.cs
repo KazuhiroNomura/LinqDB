@@ -15,6 +15,7 @@ using Expression = System.Linq.Expressions.Expression;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_OuterPredicate_InnerPredicate_プローブビルド:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     private class Class{
         public bool Equals(int other)=>true;
     }
@@ -264,7 +265,7 @@ public class 変換_OuterPredicate_InnerPredicate_プローブビルド:共通{
     [Fact]
     public void PreIncrementAssign()=>this.共通Unary(ExpressionType.PreIncrementAssign);
     [Fact]
-    public void Lambda()=>this.ExpressionAssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
+    public void Lambda()=>this.Expression実行AssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     [Fact]
     public void Not(){
         //this.共通Unary(ExpressionType.Not);
@@ -1446,13 +1447,13 @@ public class 変換_OuterPredicate_InnerPredicate_プローブビルド:共通{
     }
     [Fact]
     public void Block(){
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Default(typeof(void))

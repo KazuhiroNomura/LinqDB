@@ -14,6 +14,6 @@ public class Switch : 共通
                 Expression.Constant(124)
             )
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

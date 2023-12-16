@@ -12,7 +12,7 @@ public class New : 共通
                 typeof(int)
             );
             //this.Memory_Assert(new{input});
-            this.AssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //} else{
         {
@@ -20,7 +20,7 @@ public class New : 共通
                 typeof(ValueTuple<int>).GetConstructors()[0],
                 Expression.Constant(1)
             );
-            this.AssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
         //}
     }
@@ -31,6 +31,6 @@ public class New : 共通
             typeof(ValueTuple<int>).GetConstructors()[0],
             Expression.Constant(1)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

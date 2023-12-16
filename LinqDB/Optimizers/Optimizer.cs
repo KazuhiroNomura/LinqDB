@@ -1228,7 +1228,7 @@ public sealed class Optimizer:IDisposable {
         //Lambda07=Lambda06;
         this._検証_変形状態.実行(Lambda07);
         var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;
-        Trace.WriteLine(CommonLibrary.DebugView(Lambda07));
+        //Trace.WriteLine(CommonLibrary.DebugView(Lambda07));
         //DictionaryDynamic add
         //DictionaryLambda  add
         //Dictionaryラムダ跨ぎParameter read

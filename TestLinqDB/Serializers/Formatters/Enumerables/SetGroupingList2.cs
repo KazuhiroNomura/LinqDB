@@ -3,7 +3,7 @@ using LinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
 public class SetGroupingList2 : CollectionTest<SetGroupingList<int, int>>
 {
-    public SetGroupingList2() : base(C.O, new())
+    public SetGroupingList2() : base(new())
     {
         var Data = this.Data;
         for (var a = 0; a<10; a++)

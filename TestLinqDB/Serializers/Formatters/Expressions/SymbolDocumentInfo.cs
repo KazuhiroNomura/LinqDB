@@ -8,6 +8,6 @@ public class SymbolDocumentInfo : 共通
     {
         //if(writer.TryWriteNil(value)) return;
         var input = Expression.SymbolDocument("ソースファイル名0.cs");
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
 }

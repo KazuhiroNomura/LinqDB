@@ -14,6 +14,7 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     struct OI
     {
         public readonly int o, i;
@@ -28,6 +29,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
 
     }
     public class 取得_先行評価式:共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         private void TraceWrite(Expression Expression){
             this.Optimizer.Lambda最適化(Expression);
         }
@@ -253,7 +255,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             this.Expression実行AssertEqual(()=>s);
             //    }
             //    case ExpressionType.Default:return;
-            this.ExpressionAssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(int))));
+            this.Lambda最適化(Expression.Lambda<Action>(Expression.Default(typeof(int))));
             //    case ExpressionType.Parameter: {
             //        if(this.ラムダ跨ぎParameters.Contains(e)||this.ループ跨ぎParameters.Contains(e))return;
             this.Expression実行AssertEqual(()=>"".Let(a=>"".Let(b=>a)));
@@ -270,7 +272,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //            }
             this.Expression実行AssertEqual(()=>"".Let(a=>"".Inline(b=>b)));
             //            if(Result==判定_移動できるか.EResult.NoLoopUnrollingがあったので移動できない)return;
-            //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => "".Let(a=>"".Inline(b=>a).NoLoopUnrolling()));
+            //this.共通MemoryMessageJson_Expression_Lambda最適化(() => "".Let(a=>"".Inline(b=>a).NoLoopUnrolling()));
             //        }
             //    } else if(this.結果の場所==場所.ラムダ跨ぎ) {
             //        if(this.ラムダ式は取り出す||e.NodeType!=ExpressionType.Lambda) {
@@ -280,7 +282,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //            }
             this.Expression実行AssertEqual(()=>"".Let(a=>"".Let(b=>b)));
             //            if(Result==判定_移動できるか.EResult.NoLoopUnrollingがあったので移動できない)return;
-            //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(() => "".Let(a=>"".Let(b=>a).NoLoopUnrolling()));
+            //this.共通MemoryMessageJson_Expression_Lambda最適化(() => "".Let(a=>"".Let(b=>a).NoLoopUnrolling()));
             //        }
             //    }
             //}
@@ -363,7 +365,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
         [Fact]
         public void Block(){
-            this.ExpressionAssertEqual(
+            this.Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Constant(0),
@@ -375,7 +377,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         public class 判定_移動できるか:共通{
             [Fact]public void MakeAssign(){
                 var a=Expression.Parameter(typeof(int),"a");
-                this.ExpressionAssertEqual(
+                this.Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<int,int>>(
                             Expression.Block(
@@ -408,7 +410,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                 this.Expression実行AssertEqual(()=>s.Join(s,o=>o,i=>i,(o,i)=>new{o,i}).Where(p=>p.i==0));
                 //    foreach(var Variables in a.ListVariables)
                 //        if(Variables.Contains(Parameter)){
-                this.ExpressionAssertEqual(
+                this.Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<Func<int>>>(
                             Expression.Block(
@@ -421,7 +423,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                     )
                 );
                 //        }
-                this.ExpressionAssertEqual(
+                this.Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<Func<int>>>(
                             Expression.Block(
@@ -438,33 +440,64 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
     }
     public class 変換_先行評価式:共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]
         public void Block(){
-            this.ExpressionAssertEqual(
-                Expression.Lambda<Action>(
+            var @int=Expression.Parameter(typeof(int),"a");
+            //this.Lambda最適化(
+            //    Expression.Lambda(
+            //        Expression.AddAssign(
+            //            @int,
+            //            Expression.Invoke(
+            //                Expression.Lambda<Func<int>>(
+            //                    @int
+            //                )
+            //            )
+            //        ),
+            //        @int
+            //    )
+            //);
+            //var a=Expression.Parameter(typeof(int),"a");
+            this.Lambda最適化(
+                Expression.Lambda(
                     Expression.Block(
-                        Expression.Constant(0),
-                        Expression.Constant(0)
-                    )
+                        Expression.Lambda(
+                            @int
+                        ),
+                        @int
+                    ),
+                    @int
                 )
             );
         }
         [Fact]
         public void Lambda(){
-            var a=Expression.Parameter(typeof(int),"a");
-            this.ExpressionAssertEqual(
-                Expression.Lambda<Action>(
-                    Expression.Lambda<Func<int,int>>(
-                        Expression.Block(
-                            Expression.Lambda<Func<int>>(
-                                a
-                            ),
-                            a
-                        ),
-                        a
-                    )
+            var @int=Expression.Parameter(typeof(int),"a");
+            this.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Lambda(
+                        Expression.Add(
+                            @int,
+                            @int
+                        )
+                    ),
+                    @int
                 )
             );
+            //var a=Expression.Parameter(typeof(int),"a");
+            //this.Lambda最適化(
+            //    Expression.Lambda<Action>(
+            //        Expression.Lambda<Func<int,int>>(
+            //            Expression.Block(
+            //                Expression.Lambda<Func<int>>(
+            //                    a
+            //                ),
+            //                a
+            //            ),
+            //            a
+            //        )
+            //    )
+            //);
         }
         [Fact]
         public void Traverse(){
@@ -472,7 +505,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             var s=new Set<int>();
             //    if(this.現在探索場所==this.希望探索場所&&this.ExpressionEqualityComparer.Equals(Expression0,this.旧Expression!)) {
             //        if(this.書き込み項か)this.書き戻しがあるか=true;
-            this.ExpressionAssertEqual(
+            this.Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Lambda<Func<int,int>>(
                         Expression.Block(
@@ -486,7 +519,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                 )
             );
             //        else                 this.読み込みがあるか=true;
-            this.ExpressionAssertEqual(
+            this.Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Lambda<Func<int,int>>(
                         Expression.Block(
@@ -507,44 +540,135 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         [Fact]
         public void Call(){
             var s=new Set<int>();
-            this.Expression実行AssertEqual(()=>"".Let(a=>"".Inline(b=>1m)));
-            //if(!(this.ループ跨ぎを使うか&&ループ展開可能メソッドか(MethodCall0)))
-            this.Expression実行AssertEqual(()=>s.Select(a=>a+a));
-            //switch(MethodCall_GenericMethodDefinition.Name) {
-            //    case nameof(ExtensionSet.Inline): {
-            //        if(MethodCall0_Arguments.Count==1) {
-            this.Expression実行AssertEqual(()=>"".Let(a=>ExtensionSet.Inline(()=>1m)));
-            //        }else{
-            this.Expression実行AssertEqual(()=>"".Let(a=>"".Inline(b=>1m)));
-            //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>ExtensionSet.Inline(()=>"".Inline(s=>s+"x")));
-            //        }
-            //    }
-            //    default: {
-            //        for(var a=1;a<MethodCall0_Arguments_Count;a++){
-            this.Expression実行AssertEqual(()=>s.Select(a=>s));
+            //if(this.Inline){
+            //    if(ループ展開可能メソッドか(MethodCall0)){
+            //this.Expression実行AssertEqual(()=>s.Select(a=>a+a));
+            //        switch(MethodCall_GenericMethodDefinition.Name) {
+            //            case nameof(ExtensionSet.Inline): {
+            //                if(MethodCall0_Arguments.Count==1) {
+            //                    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
+            this.Lambda最適化((string a)=>ExtensionSet.Inline(()=>1m));
+            //                    }else{
+            this.Lambda最適化((string a)=>ExtensionSet.Inline(Anonymous(()=>1m)));
+            //                    }
+            //                }else{
+            //                    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
+            this.Expression実行AssertEqual((int a)=>"".Inline(b=>1m));
+            //                    }else{
+            this.Lambda最適化((int a)=>"".Inline(Anonymous((string b)=>1m)));
+            //                    }
+            //                }
+            //            }
+            //            default: {
+            //                for(var a=1;a<MethodCall0_Arguments_Count;a++){
+            //                    if(MethodCall_Arguments_a is LambdaExpression Lambda0){
+            this.Lambda最適化(()=>s.Select(a=>s));
+            //                    }else{
+            this.Lambda最適化(()=>s.Select(Anonymous((int a)=>s)));
+            //                    }
+            //            }
             //        }
             //    }
             //}
+            //0
+        }
+        static int ind(){
+            return 3;
+        }
+        [Fact]
+        public void 左辺値書き換え(){
+            var array=Expression.Variable(typeof(decimal[]),"array");
+            this.Lambda最適化(
+                Expression.Lambda(
+                    Expression.AddAssign(
+                        Expression.ArrayAccess(
+                            array,
+                            Expression.Convert(
+                                Expression.Invoke(
+                                    Expression.Lambda<Func<decimal>>(
+                                        Expression.Constant(1m)
+                                    )
+                                ),
+                                typeof(int)
+                            )
+                        ),
+                        Expression.Constant(1m)
+                    ),
+                    array
+                )
+            );
         }
         [Fact]
         public void MakeAssign(){
-            //if(Binary0_Right==Binary1_Right&&Binary0_Left==Binary1_Left&&Binary0_Conversion==Binary1_Conversion)
-            var a=Expression.Parameter(typeof(int),"a");
-            this.ExpressionAssertEqual(
-                Expression.Lambda<Action>(
-                    Expression.Block(
-                        new[]{a},
-                        Expression.AddAssign(a,Expression.Constant(0)),
-                        Expression.Lambda<Func<decimal>>(
-                            Expression.Add(
-                                Expression.Constant(0m),
-                                Expression.Constant(0m)
+            //var x=Expression.ArrayAccess(
+            //    array,
+            //    Expression.Convert(
+            //        Expression.Invoke(
+            //            Expression.Lambda<Func<decimal>>(
+            //                Expression.Constant(1m)
+            //            )
+            //        ),
+            //        typeof(int)
+            //    )
+            //);
+            //var t=Expression.Parameter(typeof(decimal).MakeByRefType());
+            //var y=Expression.Block(
+            //    new[]{t},
+            //    Expression.Assign(t,x),
+            //    Expression.Assign(
+            //        t,
+            //        Expression.Add(
+            //            t,
+            //            Expression.Constant(1m)
+            //        )
+            //    )
+            //);
+            ////x=Expression.MakeIndex(
+            ////    array,
+            ////    Expression.Constant(0)
+            ////);
+            //var z=Expression.Assign(
+            //    x,
+            //    Expression.Constant(1m)
+            //);
+            //this.Expression実行AssertEqual((int a)=>"".Inline(b=>1m));
+            //if(Binary0_Right==Binary1_Right){
+            //    if(Binary0_Left==Binary1_Left){
+            //        if(Binary0_Conversion==Binary1_Conversion){
+            //        }else{
+            //        }
+            //    }else{
+            //    }
+            //}else{
+            var @int=Expression.Parameter(typeof(int),"a");
+            this.Lambda最適化(
+                Expression.Lambda(
+                    Expression.AddAssign(
+                        @int,
+                        Expression.Invoke(
+                            Expression.Lambda<Func<int>>(
+                                @int
                             )
                         )
-                    )
+                    ),
+                    @int
                 )
             );
-            this.Expression実行AssertEqual(()=>"");
+            //}
+            var @decimal=Expression.Parameter(typeof(decimal),"a");
+            this.Lambda最適化(
+                Expression.Lambda(
+                    Expression.AddAssign(
+                        @decimal,
+                        Expression.Invoke(
+                            Expression.Lambda<Func<decimal>>(
+                                Expression.Constant(1m)
+                            )
+                        )
+                    ),
+                    @decimal
+                )
+            );
         }
     }
     [Fact]
@@ -573,7 +697,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
     [Fact]
     public void Block()
     {
-        this.ExpressionAssertEqual(
+        this.Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Constant(0),
@@ -582,7 +706,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             )
         );
         //if(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type) return LinkedList.Last.Value;
-        this.ExpressionAssertEqual(
+        this.Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Constant(0)
@@ -619,7 +743,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         //        if(読み込みがあるか)LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
         this.Expression実行AssertEqual(() => "a".Let(o => o.Let(i => o)));
         //        if(書き込みがあるか)LinkedList.AddLast(Expression.Assign(旧,新));
-        this.ExpressionAssertEqual(
+        this.Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Lambda<Func<int, int>>(
                     Expression.Block(
@@ -639,7 +763,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         this.Expression実行AssertEqual(() => s.SelectMany(o => s.Let(i => new { o, i }).i.Where(i => i==3)));
     }
     //var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
-    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
-    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
-    //this.共通MemoryMessageJson_Expression_ExpressionAssertEqual(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
+    //this.共通MemoryMessageJson_Expression_Lambda最適化(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
+    //this.共通MemoryMessageJson_Expression_Lambda最適化(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));
+    //this.共通MemoryMessageJson_Expression_Lambda最適化(()=>st.Where(p=>p.Key.Equals(new Sets.Key(new(0)))));
 }

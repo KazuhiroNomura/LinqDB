@@ -6,8 +6,8 @@ using Types;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
-public class 変換_インラインループ独立 : 共通
-{
+public class 変換_インラインループ独立 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     [Fact]
     public void Inline()
     {

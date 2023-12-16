@@ -13,6 +13,6 @@ public class Goto : 共通
             Expression.Constant(5),
             typeof(byte)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

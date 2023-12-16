@@ -1,11 +1,12 @@
 ﻿using System.Linq.Expressions;
 namespace TestLinqDB.Serializers.Formatters.Expressions;
 public class Parameter:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void エラー特定(){
         var p=Expression.Parameter(typeof(int),"p");
-        this.AssertEqual(Expression.Assign(p,Expression.Constant(0)));
-        this.ExpressionシリアライズCoverage(
+        this.ExpressionシリアライズAssertEqual(Expression.Assign(p,Expression.Constant(0)));
+        this.Expressionシリアライズ(
             Expression.Lambda<Func<int,object>>(
                 Expression.Constant(
                     p
@@ -13,15 +14,7 @@ public class Parameter:共通{
                 p
             )
         );
-        this.ExpressionシリアライズCoverage(
-            Expression.Lambda<Func<int,object>>(
-                Expression.Constant(
-                    new{p}
-                ),
-                p
-            )
-        );
-        this.AssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.Lambda<Func<int,int>>(
                 p,
                 p
@@ -33,12 +26,12 @@ public class Parameter:共通{
         var p=Expression.Parameter(typeof(int),"p");
         //if(index0<0){
         //    if(index1<0){
-        this.AssertEqual(new object[]{p},_=>{});
+        this.Objectシリアライズ(new object[]{p});
         //    }else{
-        this.AssertEqual(new object[]{p,p},_=>{});
+        this.Objectシリアライズ(new object[]{p,p});
         //    }
         //}else{
-        this.AssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.Lambda<Func<int,int>>(
                 p,
                 p
@@ -51,21 +44,12 @@ public class Parameter:共通{
         var p=Expression.Parameter(typeof(int));
         //if(index0<0){
         //    if(index1<0){
-        this.Coverage(new []{p});
+        this.Objectシリアライズ(new []{p});
         //    }else{
-        this.Coverage(new []{p,p});
-        //this.AssertEqual(Expression.Block(new[]{p},p,p));
-        //this.AssertEqual(new{p,q=p});
+        //this.Objectシリアライズ(new []{p,p});
+        this.Objectシリアライズ(new{p,q=p});
         //    }
-        //}else{
-        this.ExpressionシリアライズCoverage(
-            Expression.Lambda<Func<int,object>>(
-                Expression.Constant(
-                    new{p}
-                ),
-                p
-            )
-        );
         //}
+        this.ExpressionシリアライズAssertEqual(Expression.Block(new[]{p},p,p));
     }
 }

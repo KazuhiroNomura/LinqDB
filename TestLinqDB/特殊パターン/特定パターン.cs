@@ -32,13 +32,13 @@ public class 特定パターン : 共通
     public void ClassIEnumerableInt32シリアライズ()
     {
         System.Collections.Generic.IEnumerable<int> input = new ClassIEnumerableInt32();
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
     [Fact]
     public void ClassIEnumerableInt32Doubleシリアライズ()
     {
         System.Collections.Generic.IEnumerable<int> input = new ClassIEnumerableInt32Double();
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
     [Fact]
     public void IEnumerableInt32シリアライズ()
@@ -54,7 +54,7 @@ public class 特定パターン : 共通
         //Listをobjectでシリアライズするとobjectの内部でListでデシリアライズ
         //UnionBy<Iterator>をIEnumerableでシリアライズするとIEnumerableの解釈でデシリアライズしたい
         //UnionBy<Iterator>をobjectでシリアライズするとIEnumerableの解釈でデシリアライズしたい
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
     [Fact]
     public void UnionBy結果シリアライズ()
@@ -63,7 +63,7 @@ public class 特定パターン : 共通
         var b = new[] { 4, 6, 8 };
         var input = a.UnionBy(b, x => x+1);
         var g = input.GetType().GetMethod("GetEnumerator", BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance);
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
     [Fact]
     public void IEnumerableAnonymous()
@@ -88,7 +88,7 @@ public class 特定パターン : 共通
             //var bytes = Serializer.Serialize(expected);
             //var output = Serializer.Deserialize<char>(bytes);
             //Assert.Equal(expected,output!,new 汎用Comparer());
-            SerializeDeserialize<object>(this.MemoryPack, expected);
+            SerializeDeserializeAreEqual<object>(this.MemoryPack, expected);
         }
         {
             var input = new[] { 'a', 'b', 'c' };
@@ -104,7 +104,7 @@ public class 特定パターン : 共通
             //var bytes=Serializer.Serialize<object>(expected);
             //var output=Serializer.Deserialize<object>(bytes);
             //Assert.Equal(expected,output!,new 汎用Comparer());
-            SerializeDeserialize<object>(this.MemoryPack, expected);
+            SerializeDeserializeAreEqual<object>(this.MemoryPack, expected);
         }
     }
     [Fact]

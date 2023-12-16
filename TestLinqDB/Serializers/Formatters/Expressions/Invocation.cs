@@ -11,6 +11,6 @@ public class Invocation : 共通
             Expression.Lambda(@string, @string),
             Expression.Constant("B")
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

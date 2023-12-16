@@ -147,6 +147,7 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     public override int GetHashCode()=>this.内部の値;
 }
 public class ExpressionEqualityComparer:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
@@ -357,18 +358,18 @@ public class ExpressionEqualityComparer:共通{
     }
     private void AssertEqual(Expression? a,Expression? b){
         Assert.Equal(a,b,new 汎用Comparer());
-        this.AssertEqual(a,c=>{
+        this.ExpressionシリアライズAssertEqual(a,c=>{
             Assert.Equal(a,c,new 汎用Comparer());
             Assert.Equal(b,c,new 汎用Comparer());
         });
-        this.AssertEqual(b,c=>{
+        this.ExpressionシリアライズAssertEqual(b,c=>{
             Assert.Equal(a,c,new 汎用Comparer());
             Assert.Equal(b,c,new 汎用Comparer());
         });
     }
     private void AssertNotEqual(Expression? a,Expression? b){
-        this.AssertEqual(a,c=>Assert.NotEqual(c,b,new 汎用Comparer()));
-        this.AssertEqual(b,c=>Assert.NotEqual(c,a,new 汎用Comparer()));
+        this.ExpressionシリアライズAssertEqual(a,c=>Assert.NotEqual(c,b,new 汎用Comparer()));
+        this.ExpressionシリアライズAssertEqual(b,c=>Assert.NotEqual(c,a,new 汎用Comparer()));
     }
 
     [Fact]

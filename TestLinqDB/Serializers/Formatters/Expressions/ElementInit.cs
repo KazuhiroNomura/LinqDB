@@ -15,7 +15,7 @@ public class ElementInit : 共通
             Constant_1
         );
         var Add = typeof(List<int>).GetMethod("Add")!;
-        this.AssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(

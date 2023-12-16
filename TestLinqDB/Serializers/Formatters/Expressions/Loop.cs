@@ -14,7 +14,7 @@ public class Loop : 共通
                 Expression.Default(typeof(void))
             );
             //var expected=new{a=input};
-            this.AssertEqual(input);
+            this.ObjectシリアライズAssertEqual(input);
         }
         //} else {
         //    if(value.ContinueLabel is null) {//break,body
@@ -25,7 +25,7 @@ public class Loop : 共通
                 ),
                 Label_decimal
             );
-            this.AssertEqual(input);
+            this.ObjectシリアライズAssertEqual(input);
         }
         //    } else {//break,continue,body
         {
@@ -37,7 +37,7 @@ public class Loop : 共通
                 Label_decimal,
                 Label_void
             );
-            this.AssertEqual(input);
+            this.ObjectシリアライズAssertEqual(input);
         }
         //    }
         //}
@@ -47,13 +47,13 @@ public class Loop : 共通
     {
         //if(writer.TryWriteNil(value)) return;
         var Default = default(LoopExpression);
-        this.AssertEqual(Default);
+        this.ObjectシリアライズAssertEqual(Default);
         {
             var input = Expression.Loop(
                 Expression.Default(typeof(void))
             );
             var expected = new { a = input, b = input };
-            this.AssertEqual(expected);
+            this.ObjectシリアライズAssertEqual(expected);
         }
     }
 }

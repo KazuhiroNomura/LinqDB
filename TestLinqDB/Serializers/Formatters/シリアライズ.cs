@@ -6,6 +6,6 @@ public abstract class シリアライズ<T>:共通 {
     }
     [Fact]
     public void Test0() {
-        this.AssertEqual(this.対象);
+        this.ObjectシリアライズAssertEqual(this.対象);
     }
 }

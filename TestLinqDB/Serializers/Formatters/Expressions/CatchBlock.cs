@@ -9,14 +9,14 @@ public class CatchBlock : 共通
         //if(writer.TryWriteNil(value)) return;
         //if(value.Variable is null){
         //    if(value.Filter is null){
-        this.AssertEqual(
+        this.ObjectシリアライズAssertEqual(
             Expression.Catch(
                 typeof(Exception),
                 Expression.Default(typeof(void))
             )
         );
         //    } else{
-        this.AssertEqual(
+        this.ObjectシリアライズAssertEqual(
             Expression.Catch(
                 typeof(Exception),
                 Expression.Constant(0),
@@ -26,14 +26,14 @@ public class CatchBlock : 共通
         //    }
         //} else{
         //    if(value.Filter is null){
-        this.AssertEqual(
+        this.ObjectシリアライズAssertEqual(
             Expression.Catch(
                 Variable,
                 Expression.Default(typeof(void))
             )
         );
         //    } else{
-        this.AssertEqual(
+        this.ObjectシリアライズAssertEqual(
             Expression.Catch(
                 Variable,
                 Expression.Constant(0),
@@ -48,7 +48,7 @@ public class CatchBlock : 共通
     public void Block0()
     {
         var ParameterDecimmal = Expression.Parameter(typeof(decimal));
-        this.ExpressionシリアライズAssertEqual(
+        this.ObjectシリアライズAssertEqual(
             Expression.Block(
                 new[] { ParameterDecimmal },
                 Expression.Block(

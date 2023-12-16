@@ -10,6 +10,6 @@ public class SwitchCase : 共通
             Expression.Constant(64m),
             Expression.Constant(124)
         );
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
 }

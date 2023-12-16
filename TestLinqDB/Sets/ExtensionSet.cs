@@ -351,7 +351,7 @@ public class ExtensionSet:共通{
         //this.AssertEqual全パターン(l);
         //global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection<>();
         global::MemoryPack.MemoryPackFormatterProvider.RegisterCollection(typeof(Sets.HashSet<int>));
-        this.AssertEqual(h);
+        this.ObjectシリアライズAssertEqual(h);
     }
     [Fact]public void Lookup(){
         var x=typeof(L);

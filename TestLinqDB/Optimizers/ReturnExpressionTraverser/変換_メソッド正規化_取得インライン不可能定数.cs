@@ -14,8 +14,8 @@ using Expression = System.Linq.Expressions.Expression;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
-public class 変換_メソッド正規化_取得インライン不可能定数 : 共通
-{
+public class 変換_メソッド正規化_取得インライン不可能定数 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     [Fact]
     public void Constant()
     {
@@ -249,7 +249,7 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
     [Fact]
     public void PreIncrementAssign() => this.共通Unary(ExpressionType.PreIncrementAssign);
     [Fact]
-    public void Lambda() => this.ExpressionAssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
+    public void Lambda() => this.Expression実行AssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     [Fact]
     public void Not()
     {
@@ -1479,13 +1479,13 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
     [Fact]
     public void Block()
     {
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                 )
             )
         );
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Default(typeof(void))

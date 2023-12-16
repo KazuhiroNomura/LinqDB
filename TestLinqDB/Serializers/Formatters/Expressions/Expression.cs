@@ -52,7 +52,7 @@ public class Expression1 : 共通
                 new[] { Parameter },
                 Expression.MakeBinary(NodeType, Parameter, Constant)
             );
-            this.AssertEqual(input);
+            this.ExpressionシリアライズAssertEqual(input);
         }
     }
     private static 演算子 Unary演算子(演算子 a) => ~a;

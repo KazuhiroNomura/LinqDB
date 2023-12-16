@@ -7,8 +7,8 @@ using Microsoft.CSharp.RuntimeBinder;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
-public class 取得_ラムダを跨ぐParameter : 共通
-{
+public class 取得_ラムダを跨ぐParameter : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     [Fact]
     public void Constant()
     {

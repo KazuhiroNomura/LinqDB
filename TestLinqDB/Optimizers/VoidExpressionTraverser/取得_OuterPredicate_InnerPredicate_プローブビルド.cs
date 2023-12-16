@@ -11,6 +11,7 @@ internal partial struct 嘘Equals{
     public bool Equals2()=>true;
 }
 public class 取得_OuterPredicate_InnerPredicate_プローブビルド:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     private readonly static int[]array={1,2,3,4,5,6,7};
     [Fact]public void 実行(){
         this.Expression実行AssertEqual(() => array.Where(p => p==0));

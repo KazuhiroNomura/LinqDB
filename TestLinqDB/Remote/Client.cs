@@ -49,7 +49,7 @@ public class Client : 共通{
             Expression.Constant(5),
             typeof(byte)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
     [Fact]public void SerializeSendReceive(){
         const int receiveTimeout = 1000;
@@ -67,7 +67,7 @@ public class Client : 共通{
             Expression.Constant(5),
             typeof(byte)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
     [Fact]public void BytesSendReceive(){
         const int receiveTimeout = 1000;
@@ -85,7 +85,7 @@ public class Client : 共通{
             Expression.Constant(5),
             typeof(byte)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
     [Fact]public void EmptySendReceive(){
         const int receiveTimeout = 1000;
@@ -103,6 +103,6 @@ public class Client : 共通{
             Expression.Constant(5),
             typeof(byte)
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

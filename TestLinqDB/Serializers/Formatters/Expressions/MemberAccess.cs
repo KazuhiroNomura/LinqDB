@@ -42,6 +42,6 @@ public class MemberAccess:共通{
             Expression.Constant(new MemberAccess対象()),
             typeof(MemberAccess対象).GetProperty(nameof(MemberAccess対象.property))!
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

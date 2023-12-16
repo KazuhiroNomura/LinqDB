@@ -10,6 +10,6 @@ public class Label : 共通
         //this.MemoryMessageJson_Expression(Expression.Label(labelTarget));
         //this.MemoryMessageJson_Expression(Expression.Label(labelTarget,Expression.Constant(1)));
         var input = Expression.Label(labelTarget);
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

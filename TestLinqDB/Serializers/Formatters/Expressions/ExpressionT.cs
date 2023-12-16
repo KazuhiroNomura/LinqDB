@@ -8,6 +8,6 @@ public class ExpressionT : 共通
     {
         //if(writer.TryWriteNil(value)) return;
         var input = Expression.Lambda<Action>(Expression.Default(typeof(void)));
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

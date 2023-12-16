@@ -22,7 +22,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通
         var int_refint = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(変換_跨ぎParameterの先行評価.int_refint), f)!;
         var p = Expression.Parameter(typeof(int), "p");
         //()=>{var p;int_Lambda0_refint_intFuncRef(
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -166,7 +166,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通
         var Lambda0 = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(int_refint), f)!;
         var Int32_Lambda_ref_Int32 = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(int_refint), f)!;
         var p = Expression.Parameter(typeof(int), "p");
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },
@@ -211,7 +211,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通
         var Lambda0 = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(int_refint), f)!;
         var Int32_Lambda_ref_Int32 = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(int_refint), f)!;
         var p = Expression.Parameter(typeof(int), "p");
-        this.ExpressionAssertEqual(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Action>(
                 Expression.Block(
                     new[] { p },

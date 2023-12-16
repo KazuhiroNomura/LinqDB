@@ -541,7 +541,7 @@ public class Serializer:共通 {
         this.ExpressionシリアライズAssertEqual(Expressions.Expression.Constant(1111m,typeof(object)));
     }
     [Fact]public void Constructor(){
-        this.AssertEqual(
+        this.ExpressionシリアライズAssertEqual(
             typeof(string).GetConstructor(new[]{typeof(char),typeof(int)}),Assert.NotNull
         );
         this.ExpressionシリアライズAssertEqual(
@@ -1093,9 +1093,9 @@ public class Serializer:共通 {
         this.ExpressionシリアライズAssertEqual(Expressions.Expression.Label(labelTarget,Expressions.Expression.Constant(1)));
     }
     [Fact]public void LabelTarget(){
-        this.AssertEqual(Expressions.Expression.Label());
-        this.AssertEqual(Expressions.Expression.Label(typeof(int)));
-        this.AssertEqual(Expressions.Expression.Label(typeof(double),"abc"));
+        this.ObjectシリアライズAssertEqual(Expressions.Expression.Label());
+        this.ObjectシリアライズAssertEqual(Expressions.Expression.Label(typeof(int)));
+        this.ObjectシリアライズAssertEqual(Expressions.Expression.Label(typeof(double),"abc"));
     }
     static Expressions.LambdaExpression Lambda<T>(Expressions.Expression<Func<T>> e)=>e;
     [Fact]
@@ -1463,7 +1463,7 @@ public class Serializer:共通 {
             Constant_1
         );
         //if(a_Bindings.Count!=b_Bindings.Count) return false;
-        this.AssertEqual<Expressions.MemberBinding>(
+        this.ObjectシリアライズAssertEqual<Expressions.MemberBinding>(
             Expressions.Expression.Bind(
                 Int32フィールド1,
                 Constant_1
@@ -1540,7 +1540,7 @@ public class Serializer:共通 {
     [Fact]
     public void Parameter(){
         var p0=Expressions.Expression.Parameter(typeof(int));
-        this.ExpressionシリアライズCoverage(p0);
+        this.Expressionシリアライズ(p0);
     }
     [Fact]
     public void Switch(){

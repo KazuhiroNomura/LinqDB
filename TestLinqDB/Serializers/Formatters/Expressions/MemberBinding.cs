@@ -46,9 +46,9 @@ public class MemberBinding : 共通
             MemberListBinding,
             MemberMemberBinding
         );
-        this.AssertEqual(MemberAsignment);
-        this.AssertEqual(MemberListBinding);
-        this.AssertEqual(MemberMemberBinding);
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(MemberAsignment);
+        this.ObjectシリアライズAssertEqual(MemberListBinding);
+        this.ObjectシリアライズAssertEqual(MemberMemberBinding);
+        this.ObjectシリアライズAssertEqual(input);
     }
 }

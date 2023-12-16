@@ -16,7 +16,7 @@ public class NewArray : 共通
             Expression.Constant(2),
             Expression.Constant(1)
         );
-        this.AssertEqual(NewArrayBounds);
-        this.AssertEqual(NewArrayInit);
+        this.ExpressionシリアライズAssertEqual(NewArrayBounds);
+        this.ExpressionシリアライズAssertEqual(NewArrayInit);
     }
 }

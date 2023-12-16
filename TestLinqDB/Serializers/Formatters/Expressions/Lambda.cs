@@ -7,7 +7,7 @@ public class Lambda : 共通
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.ExpressionAssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
+        this.Expression実行AssertEqual(Expression.Lambda<Action>(Expression.Default(typeof(void))));
     }
 }
 

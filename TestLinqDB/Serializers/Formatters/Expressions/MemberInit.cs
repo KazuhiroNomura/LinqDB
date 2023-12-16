@@ -24,6 +24,6 @@ public class MemberInit:共通{
                 Constant_1
             )
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

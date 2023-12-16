@@ -7,6 +7,6 @@ public class Constant : 共通
     public void Serialize()
     {
         //if(writer.TryWriteNil(value)) return;
-        this.AssertEqual(Expression.Constant(true));
+        this.ExpressionシリアライズAssertEqual(Expression.Constant(true));
     }
 }

@@ -11,6 +11,6 @@ public class ListInit : 共通
             Expression.New(typeof(List<int>)),
             Expression.ElementInit(typeof(List<int>).GetMethod("Add")!, Expression.Constant(1))
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

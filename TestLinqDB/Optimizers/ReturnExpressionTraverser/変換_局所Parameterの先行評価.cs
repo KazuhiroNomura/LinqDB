@@ -8,14 +8,13 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
-public class 変換_局所Parameterの先行評価 : 共通
-{
-    public class 辺を作る : 共通
-    {
+public class 変換_局所Parameterの先行評価 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+    public class 辺を作る : 共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]
         public void Traverse()
         {
-            /*
             //switch(Expression.NodeType) {
             //    case ExpressionType.DebugInfo:
             //    case ExpressionType.Default:
@@ -36,7 +35,6 @@ public class 変換_局所Parameterの先行評価 : 共通
                     )
                 );
             }
-            */
             //    case ExpressionType.Label:{
             //        if(Label.DefaultValue is not null)
             {
@@ -427,8 +425,8 @@ public class 変換_局所Parameterの先行評価 : 共通
             //}
         }
     }
-    public class 変換_二度出現したExpression : 共通
-    {
+    public class 変換_二度出現したExpression : 共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]
         public void Traverse()
         {
@@ -911,8 +909,8 @@ public class 変換_局所Parameterの先行評価 : 共通
             //}
         }
     }
-    public class List辺 : 共通
-    {
+    public class List辺 : 共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]
         public void 親()
         {

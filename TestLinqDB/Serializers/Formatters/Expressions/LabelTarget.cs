@@ -7,6 +7,6 @@ public class LabelTarget : 共通
     public void Serialize()
     {
         var input = Expression.Label();
-        this.AssertEqual(input);
+        this.ObjectシリアライズAssertEqual(input);
     }
 }

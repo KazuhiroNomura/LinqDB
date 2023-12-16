@@ -242,6 +242,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
     private Expression 共通BinaryAssign(BinaryExpression Binary0, ExpressionType NodeType) {
         var Binary1_Left=this.Traverse(Binary0.Left);
         var Binary1_Right=this.Traverse(Binary0.Right);
+        //if(Binary1_Left.NodeType is ExpressionType.Parameter or ExpressionType.Constant){}
         Expression Binary2_Right=Expression.MakeBinary(
             NodeType,
             Binary1_Left,
@@ -250,6 +251,19 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
             Binary0.Method,
             null
         );
+        //var p=Expression.Parameter(Binary1_Left.Type,"t");
+        //Binary2_Right=Expression.Block(
+        //    new[]{p},
+        //    Expression.Assign(p,Binary1_Left),
+        //    Expression.MakeBinary(
+        //        NodeType,
+        //        p,
+        //        Binary1_Right,
+        //        Binary0.IsLiftedToNull,
+        //        Binary0.Method,
+        //        null
+        //    )
+        //);
         if(Binary0.Conversion is not null){
             var Binary0_Conversion=Binary0.Conversion;
             var Binary1_Conversion_Body=this.Traverse(Binary0_Conversion.Body);

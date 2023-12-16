@@ -15,6 +15,6 @@ public class Index : 共通
                 new[] { Expression.Constant(0) }
             )
         );
-        this.AssertEqual(input);
+        this.ExpressionシリアライズAssertEqual(input);
     }
 }

@@ -988,7 +988,7 @@ public class Client:IDisposable {
     /// Optimizerオブジェクト
     /// </summary>
     [field:NonSerialized]
-    protected Optimizer Optimizer { get; } = new();
+    protected Optimizer Optimizer { get; } = new(){IsInline = true};
     /// <summary>
     /// 戻り値のあるリモート処理を行う。
     /// </summary>
