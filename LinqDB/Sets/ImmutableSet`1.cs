@@ -207,7 +207,16 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <returns>追加に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal virtual bool InternalIsAdded(T Item) {
-        var HashCode = typeof(T).IsNullable()?(uint)Item!.GetHashCode():Item is not null?(long)(uint)Item.GetHashCode():0;
+        long HashCode=0;
+        if(typeof(T).IsNullable())
+            HashCode=(uint)Item!.GetHashCode();
+        else if(Item is not null){
+            try{
+                HashCode=(long)(uint)Item.GetHashCode();
+            } catch{
+            }
+        } else
+            HashCode=0;
         if(this.InternalIsAdded前半(out var 下限,out var 上限,out var TreeNode,HashCode)) {
             var Comparer = this.Comparer;
             LinkedNodeT LinkedNode = TreeNode;

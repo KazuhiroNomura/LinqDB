@@ -2054,6 +2054,25 @@ abstract class Program :共通{
     }
     private static void vAssocSeqLineItems(Container e,SqlCommand Command) {
         {
+            var x0=
+                from pc in e.dbo.DimProductCategory
+                select new vDMPrep(
+                    pc.EnglishProductCategoryName,
+                    "model",
+                    0,
+                    "region",
+                    0,
+                    "incomegroup",
+                    2003,
+                    2002,
+                    1,"ordernumber",
+                    1,1,0);
+            var s0=x0.First();
+            foreach(var a in vDMPrep(e)){
+
+            }
+        }
+        {
             var r = (
                 from s in vDMPrep(e)
                 where s.FiscalYear==2013

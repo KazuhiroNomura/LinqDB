@@ -105,7 +105,7 @@ public partial class AssemblyGenerator {
             if(Column.NullableAttribute)Parameter.SetCustomAttribute(Nullable_CustomAttributeBuilder);
         }
         for(var a = 0;a<Columns_Count;)
-            this.Column共通処理(Columns[a],a++,Types1,Object_TypeBuilder,View_ctor_I,View_ToStringBuilder_I,View_IEquatable_Equals_I,View_IEquatable_Equalsでfalseの時);
+            this.Column共通処理(Columns[a],++a,Types1,Object_TypeBuilder,View_ctor_I,View_ToStringBuilder_I,View_IEquatable_Equals_I,View_IEquatable_Equalsでfalseの時);
         View_ctor_I.Ret();
         View_ToStringBuilder_I.Ret();
         共通override_IEquatable_Equalsメソッド終了(View_IEquatable_Equals_I,View_IEquatable_Equalsでfalseの時);

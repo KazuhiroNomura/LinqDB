@@ -12,6 +12,55 @@ public class 変換_局所Parameterの先行評価 : 共通{
     protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     public class 辺を作る : 共通{
         protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+        [Fact]public void Loop無限(){
+            var Label = Expression.Label();
+            var _5 = this.Optimizer.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m),
+                        Expression.Loop(
+                            Expression.Constant(1m)
+                        )
+                    )
+                )
+            );
+        }
+        [Fact]public void Loop無条件break(){
+            var Label=Expression.Label();
+            this.Optimizer.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m),
+                        Expression.Loop(
+                            Expression.Goto(Label),
+                            Label
+                        )
+                    )
+                )
+            );
+        }
+        [Fact]public void Loop条件break(){
+            var p=Expression.Parameter(typeof(bool),"p");
+            var Label=Expression.Label();
+            this.Optimizer.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m),
+                        Expression.Loop(
+                            Expression.IfThen(
+                                p,
+                                Expression.Goto(Label)
+                            ),
+                            Label
+                        )
+                    ),
+                    p
+                )
+            );
+        }
         [Fact]
         public void Traverse()
         {
@@ -195,8 +244,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //if(this.判定_左辺Expressionsが含まれる.実行(Expression)) {
             //}
         }
-        [Fact]
-        public void Conditional()
+        [Fact]public void Conditional()
         {
             //if(Test==Conditional1_Test)
             //    if(IfTrue==Conditional1_IfTrue)
@@ -314,6 +362,37 @@ public class 変換_局所Parameterの先行評価 : 共通{
                             Constant,
                             Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
                         )
+                    )
+                );
+            }
+        }
+        [Fact]
+        public void Conditional0(){
+            {
+                var p=Expression.Parameter(typeof(int),"p");
+                var @true=Expression.Constant(true);
+                var _0=this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Condition(
+                            Expression.Equal(
+                                p,
+                                p
+                            ),
+                            Expression.Condition(
+                                @true,
+                                p,
+                                Expression.Add(
+                                    Expression.Add(p,p),
+                                    Expression.Add(p,p)
+                                )
+                            ),
+                            Expression.Condition(
+                                @true,
+                                p,
+                                p
+                            )
+                        ),
+                        p
                     )
                 );
             }

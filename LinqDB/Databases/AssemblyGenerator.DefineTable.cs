@@ -277,20 +277,10 @@ public partial class AssemblyGenerator {
         Table_IEquatable_Equals_I.Call(Key_IEquatable_Equals);
         Table_IEquatable_Equals_I.Brfalse(Table_IEquatable_Equalsでfalseの時);
         for(var a = 0;a<Columns_Count;) {
-            var Column = Columns[a];
-            a++;
+            var Column = Columns[a++];
             //キーフィールドからプロパティはすでに実装されている。
             if(PrimaryKeyColumns.Contains(Column)) continue;
-            this.Column共通処理(
-                Column,
-                a,
-                Types1,
-                Table_TypeBuilder,
-                Table_ctor_I,
-                Table_ToStringBuilder_I,
-                Table_IEquatable_Equals_I,
-                Table_IEquatable_Equalsでfalseの時
-            );
+            this.Column共通処理(Column,a,Types1,Table_TypeBuilder,Table_ctor_I,Table_ToStringBuilder_I,Table_IEquatable_Equals_I,Table_IEquatable_Equalsでfalseの時);
         }
         Table_ToStringBuilder_I.Ret();
         共通override_IEquatable_Equalsメソッド終了(Table_IEquatable_Equals_I,Table_IEquatable_Equalsでfalseの時);
