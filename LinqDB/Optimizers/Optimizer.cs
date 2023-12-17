@@ -41,7 +41,7 @@ public sealed class Optimizer:IDisposable {
     /// </summary>
     //private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
     private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
-    private readonly Generic.List<ParameterExpression> Listループ跨ぎParameter = new();
+    private readonly Generic.List<ParameterExpression> ループ跨ぎParameters = new();
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
     private readonly 変換_TSqlFragmentからExpression _変換_TSqlFragmentからExpression;
@@ -144,13 +144,13 @@ public sealed class Optimizer:IDisposable {
         var 変換_旧Parameterを新Expression2 = new 変換_旧Parameterを新Expression2(作業配列);
         this._変換_メソッド正規化_取得インライン不可能定数=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
         this._変換_WhereからLookup=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
-        var Listループ跨ぎParameter = this.Listループ跨ぎParameter;
-        this._変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer,Listループ跨ぎParameter);
+        var ループ跨ぎParameters = this.ループ跨ぎParameters;
+        this._変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer);
         //var ExpressionEqualityComparer_Assign_Leftで比較 = new ExpressionEqualityComparer_Assign_Leftで比較();
         this._変換_局所Parameterの先行評価=new(作業配列);
         this.取得ラムダを跨ぐParameter=new();
         this._検証_変形状態=new();
-        this._検証_Parameterの使用状態=new(Listループ跨ぎParameter);
+        this._検証_Parameterの使用状態=new(ループ跨ぎParameters);
         this._変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
         this._変換_Stopwatchに埋め込む=new(作業配列);
         this._作成_DynamicMethod=new(判定_InstanceMethodか);

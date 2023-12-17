@@ -14,7 +14,7 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+    protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
     struct OI
     {
         public readonly int o, i;
@@ -29,7 +29,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
 
     }
     public class 取得_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
         private void TraceWrite(Expression Expression){
             this.Optimizer.Lambda最適化(Expression);
         }
@@ -51,9 +51,14 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             this.TraceWrite(
                 ()=>"".Let(
                     a=>"".Let(
-                        b=>"".Let(
-                            c=>new{a,b,c}
-                        ).ToString()+new{a,b}
+                        b=>a+a
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>a+a
                     )
                 )
             );
@@ -63,6 +68,53 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                         b=>"".Let(
                             c=>new{a=a+a,b=b+b,c=c+c}
                         ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a=a+a,b=b+b,c=c+c}
+                        ).ToString()+new{a=a+a,b=b+b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )
+                )
+            );
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Inline(
+                        b=>"".Inline(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
+                    )+"".Inline(
+                        c=>new{a,c}
+                    ).ToString()+new{a}
+                )
+            );
+            //this.TraceWrite(
+            //    ()=>"".Let(
+            //        a=>"".Let(
+            //            b=>"".Let(
+            //                c=>c+c
+            //            ).ToString()
+            //        )
+            //    )
+            //);
+            this.TraceWrite(
+                ()=>"".Let(
+                    a=>"".Let(
+                        b=>"".Let(
+                            c=>new{a,b,c}
+                        ).ToString()+new{a,b}
                     )
                 )
             );
@@ -131,35 +183,6 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                             c=>new{a,b,c}
                         ).ToString()+new{a,b}
                     )+"".Let(
-                        c=>new{a,c}
-                    ).ToString()+new{a}
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>"".Inline(
-                            c=>new{a,b,c}
-                        ).ToString()+new{a,b}
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>"".Inline(
-                            c=>new{a=a+a,b=b+b,c=c+c}
-                        ).ToString()+new{a=a+a,b=b+b}
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>"".Inline(
-                            c=>new{a,b,c}
-                        ).ToString()+new{a,b}
-                    )+"".Inline(
                         c=>new{a,c}
                     ).ToString()+new{a}
                 )
@@ -167,7 +190,13 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
         [Fact]public void Traverse(){
             var s=new Set<int>();
-            this.Optimizer.Lambda最適化(
+            this.Expression実行AssertEqual(
+                ()=>
+                    s.Let(
+                        p=>p.Select(q=>new{p,pp=p})
+                    )
+            );
+            this.TraceWrite(
                 ()=>"".Let(
                     a=>"".Let(
                         b=>"".Let(
@@ -176,7 +205,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                     )
                 )
             );
-            this.Optimizer.Lambda最適化(
+            this.TraceWrite(
                 ()=>"".Let(
                     a=>"".Let(
                         b=>"".Let(
@@ -185,7 +214,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                     )
                 )
             );
-            this.Optimizer.Lambda最適化(
+            this.TraceWrite(
                 ()=>"".Let(
                     a=>"".Let(
                         b=>"".Let(
@@ -440,7 +469,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
     }
     public class 変換_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
         [Fact]
         public void Block(){
             var @int=Expression.Parameter(typeof(int),"a");
