@@ -4,7 +4,7 @@
 //using Binder=System.Reflection.Binder;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
-namespace TestLinqDB.Optimizers;
+namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
 internal partial struct 嘘Equals{
     public bool Equals(嘘Equals x)=>true;

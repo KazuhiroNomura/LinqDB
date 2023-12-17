@@ -162,20 +162,33 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 //}
             }
             if(e.Type!=typeof(void)) {
-                if(e.NodeType!=ExpressionType.Lambda){
-                    if(this.結果の場所==場所.ループ跨ぎ){
-                        if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
-                            this.結果Expression=e;
-                            return;
-                        }
-                    } else if(this.結果の場所==場所.ラムダ跨ぎ){
-                        if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
-                            this.結果Expression=e;
-                            return;
-                        }
+                if(this.結果の場所==場所.ループ跨ぎ){
+                    if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
+                        this.結果Expression=e;
+                        return;
+                    }
+                } else if(this.結果の場所==場所.ラムダ跨ぎ){
+                    if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
+                        this.結果Expression=e;
+                        return;
                     }
                 }
             }
+            //if(e.Type!=typeof(void)) {
+            //    if(e.NodeType!=ExpressionType.Lambda){
+            //        if(this.結果の場所==場所.ループ跨ぎ){
+            //            if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
+            //                this.結果Expression=e;
+            //                return;
+            //            }
+            //        } else if(this.結果の場所==場所.ラムダ跨ぎ){
+            //            if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
+            //                this.結果Expression=e;
+            //                return;
+            //            }
+            //        }
+            //    }
+            //}
             base.Traverse(e);
         }
         protected override void Call(MethodCallExpression MethodCall) {

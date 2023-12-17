@@ -31,7 +31,12 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
     public class 取得_先行評価式:共通{
         protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
         private void TraceWrite(Expression Expression){
-            this.Optimizer.Lambda最適化(Expression);
+            var Optimizer=this.Optimizer;
+            Optimizer.IsInline=true;
+            var Expression1=Optimizer.Lambda最適化(Expression);
+            var s=LinqDB.Optimizers.Optimizer.インラインラムダテキスト(Expression1);
+            //var s=CommonLibrary.DebugView(Expression1);
+            Trace.WriteLine(s);
         }
         class A{
             private int a;
@@ -48,57 +53,69 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             var x2=typeof(C).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
             var x3=typeof(B).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.FlattenHierarchy);
             var x4=typeof(C).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic|BindingFlags.FlattenHierarchy);
+            ////ラムダを跨ぐ
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>
+            //            (int b)=>
+            //                a+a
+            //);
+            ////ラムダラムダを跨ぐ
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>
+            //            (int b)=>
+            //                (int c)=>
+            //                    a+a
+            //);
+            ////ループを跨ぐ
+            //this.TraceWrite(
+            //    () =>
+            //        (int a) => a.Inline(
+            //            b => a+a
+            //        )
+            //);
+            ////ループループを跨ぐ0
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>a.Inline(
+            //            (int b)=>b.Inline(
+            //                c=>a+a
+            //            )
+            //        )
+            //);
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>
+            //            (int b)=>
+            //                (int c)=>new{a=a+a,b=b+b,c=c+c}
+                        
+            //);
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>"".Inline(
+            //            b=>"".Inline(
+            //                c=>new{a=a+a,b=b+b,c=c+c}
+            //            ).ToString()+new{a=a+a,b=b+b}
+            //        )
+            //);
+            //this.TraceWrite(
+            //    ()=>
+            //        (int a)=>"".Inline(
+            //            b=>"".Inline(
+            //                c=>new{a,b,c}
+            //            ).ToString()+new{a,b}
+            //        )
+            //);
             this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Let(
-                        b=>a+a
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>a+a
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Let(
-                        b=>"".Let(
-                            c=>new{a=a+a,b=b+b,c=c+c}
-                        ).ToString()+new{a=a+a,b=b+b}
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>"".Inline(
-                            c=>new{a=a+a,b=b+b,c=c+c}
-                        ).ToString()+new{a=a+a,b=b+b}
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
-                        b=>"".Inline(
-                            c=>new{a,b,c}
-                        ).ToString()+new{a,b}
-                    )
-                )
-            );
-            this.TraceWrite(
-                ()=>"".Let(
-                    a=>"".Inline(
+                ()=>
+                    (int a)=>"".Inline(
                         b=>"".Inline(
                             c=>new{a,b,c}
                         ).ToString()+new{a,b}
                     )+"".Inline(
                         c=>new{a,c}
                     ).ToString()+new{a}
-                )
             );
             //this.TraceWrite(
             //    ()=>"".Let(

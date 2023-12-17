@@ -153,7 +153,7 @@
     <Compile Include="Optimizers\VoidExpressionTraverser\判定_指定Parameter無_他Parameter有.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_CSharp.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_ラムダを跨ぐParameter.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
+    <Compile Include="Optimizers\VoidExpressionTraverser\取得_OuterPredicate_InnerPredicate_プローブビルド.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_出力Table.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\取得_命令ツリー.cs" />
     <Compile Include="Optimizers\VoidExpressionTraverser\検証_Parameterの使用状態.cs" />
