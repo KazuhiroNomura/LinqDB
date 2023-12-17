@@ -8,11 +8,12 @@ using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.Utf8Json;
 internal sealed class FormatterResolver:IJsonFormatterResolver{
     //キャッシュする条件が見つからない
-    //private readonly Generic.Dictionary<Type,IJsonFormatter> DictionaryTypeFormatter=new();
+    private readonly Generic.Dictionary<Type,IJsonFormatter> TypeFormatter=new();
     public IJsonFormatter<T> GetFormatter<T>(){
         var type=typeof(T);
         if(type.GetCustomAttribute(typeof(SerializableAttribute))!=null)return global::Utf8Json.Resolvers.StandardResolver.AllowPrivate.GetFormatter<T>();;
-        //if(this.DictionaryTypeFormatter.TryGetValue(type,out var value))return(IJsonFormatter<T>)value;
+        Debug.Assert(!this.TypeFormatter.ContainsKey(type));
+        if(this.TypeFormatter.TryGetValue(type,out var value))return(IJsonFormatter<T>)value;
         if(type.IsArray)
             return default!;
 
@@ -50,7 +51,7 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
         return default!;
         IJsonFormatter<T> Return(object Formatter0){
             var result=(IJsonFormatter<T>)Formatter0;
-            //this.DictionaryTypeFormatter.Add(typeof(T),result);
+            this.TypeFormatter.Add(typeof(T),result);
             return result;
         }
         IJsonFormatter<T>?RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition){

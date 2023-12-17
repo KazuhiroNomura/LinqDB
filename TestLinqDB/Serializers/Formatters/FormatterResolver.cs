@@ -17,35 +17,31 @@ public class FormatterResolver : 共通
 {
     protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     private static void M(){}
+    private class C<T>{
+        public T M;
+        public C(T M)=>this.M=M;
+    }
     [Fact]
-    public void GetFormatter0()
-    {
+    public void GetFormatter0(){
         //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IJsonFormatter<T>)Formatter;
         //this.ObjectシリアライズAssertEqual(new Set<Tables.Table>());
         //if(type.IsDisplay())return Return(Formatters.Others.DisplayClass<T>.Instance);
-        //if(type.IsArray) {
-        //}else if(type.IsGenericType) {
-        //    if(type.IsAnonymous()) {
-        //    } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
-        //    }else if(type.IsInterface){
-        //        IJsonFormatter<T>?Formatter_T;
-        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Formatter_T;
-        //        if((Formatter_T=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Formatter_T;
-        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Formatter_T;
-        //        if((Formatter_T=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Formatter_T;
-        //        do{
-        //            if((Formatter_T=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)return Formatter_T;
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)return Formatter_T;
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)return Formatter_T;
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)return Formatter_T;
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)return Formatter_T;
         //if(type.IsArray){
         this.ObjectシリアライズAssertEqual(new Tables.Table[10]);
         //}
         //if(type.IsAnonymous())
         this.ObjectシリアライズAssertEqual(new { a = 1 });
         //if(type.IsDisplay())//classしか想定してない。structはローカル関数のキャプチャ。ジェネリックstructはローカル関数の親関数がジェネリック関数だった場合
-        this.ObjectシリアライズAssertEqual(ClassDisplay取得());
+        //{
+        //    var x=ClassDisplay取得();
+        //    var C=typeof(ValueTuple<>).MakeGenericType(x.GetType());
+        //    var ctor=C.GetConstructors()[0];
+        //    var y=Activator.CreateInstance(
+        //        C,new object[]{x}
+        //    );
+        //    this.ObjectシリアライズAssertEqual(y);
+        //}
+        //this.ObjectシリアライズAssertEqual(ClassDisplay取得());
         //if(typeof(Delegate).IsAssignableFrom(type))
         this.ObjectシリアライズAssertEqual(new{a=(Action)M,b=(Action)M});
         this.ObjectシリアライズAssertEqual((Action)M);

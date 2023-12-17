@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using Utf8Json;
 using Utf8Json.Formatters;
+using System.Reflection.PortableExecutable;
 
 
 
@@ -18,7 +19,7 @@ internal static class Extension{
     public static readonly MethodInfo SerializeMethod = typeof(Extension).GetMethod(nameof(Serialize), BindingFlags.Static|BindingFlags.NonPublic)!;
     private static void Serialize<T>(ref Writer writer,T value,O Resolver){
         var Formatter=Resolver.GetFormatter<T>();
-        Formatter?.Serialize(ref writer,value,Resolver);
+        if(Formatter is not null) Formatter.Serialize(ref writer,value,Resolver);
     }
 
 
@@ -27,7 +28,8 @@ internal static class Extension{
     public static readonly MethodInfo DeserializeMethod = typeof(Extension).GetMethod(nameof(Deserialize), BindingFlags.Static|BindingFlags.NonPublic)!;
     private static T Deserialize<T>(ref Reader reader,O Resolver){
         var Formatter=Resolver.GetFormatter<T>();
-        return Formatter is not null?reader.Read(Formatter,Resolver):default!;
+        if(Formatter is not null) return reader.Read(Formatter,Resolver);
+        return default!;
     }
 
 

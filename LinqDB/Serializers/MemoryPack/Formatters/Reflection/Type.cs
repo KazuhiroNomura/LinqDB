@@ -19,6 +19,7 @@ public class Type:MemoryPackFormatter<T>{
         return reader.ReadType();
     }
     public override void Deserialize(ref Reader reader,scoped ref T? value){
+        if(reader.TryReadNil()) return;
         value=reader.ReadType();
     }
 }

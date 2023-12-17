@@ -9,20 +9,21 @@ using Expressions = System.Linq.Expressions;
 namespace LinqDB.Serializers.MessagePack;
 internal sealed class FormatterResolver:IFormatterResolver {
     //キャッシュできる条件が見つからなかった
-    //internal readonly System.Collections.Concurrent.ConcurrentDictionary<Type,IMessagePackFormatter> TypeFormatter = new();
+    internal readonly System.Collections.Concurrent.ConcurrentDictionary<Type,IMessagePackFormatter> TypeFormatter = new();
     public IMessagePackFormatter<T> GetFormatter<T>() {
         var type=typeof(T);
         if(type.GetCustomAttribute(typeof(MessagePackObjectAttribute))!=null)return null!;
-        //if(this.TypeFormatter.TryGetValue(type,out var value))return(IMessagePackFormatter<T>)value;
+        Debug.Assert(!this.TypeFormatter.ContainsKey(type));
+        if(this.TypeFormatter.TryGetValue(type,out var value))return(IMessagePackFormatter<T>)value;
         if(type.IsArray)
             return default!;
             
             
         if(type.IsAnonymous())
             return default!;
-        Debug.Assert(!type.IsDisplay(),"<>__Displayが具体的な型で宣言されていることは想定していない");
-        //if(type.IsDisplay())
-        //    return Return(Formatters.Others.DisplayClass<T>.Instance);
+        //Debug.Assert(!type.IsDisplay(),"<>__Displayが具体的な型で宣言されていることは想定していない");
+        if(type.IsDisplay())
+            return Return(Formatters.Others.DisplayClass<T>.Instance);
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return((IMessagePackFormatter<T>)typeof(Formatters.Others.Delegate<>).MakeGenericType(type).GetValue("Instance"));
         if(type.IsGenericType) {
@@ -67,7 +68,7 @@ internal sealed class FormatterResolver:IFormatterResolver {
         return default!;
         IMessagePackFormatter<T> Return(object Formatter0){
             var result=(IMessagePackFormatter<T>)Formatter0;
-            //this.TypeFormatter.TryAdd(typeof(T),result);
+            this.TypeFormatter.TryAdd(typeof(T),result);
             return result;
         }
         IMessagePackFormatter<T>? RegisterInterface(Type type0,Type 検索したいキーGenericInterfaceDefinition,Type FormatterGenericInterfaceDefinition) {

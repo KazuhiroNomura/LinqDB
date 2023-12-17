@@ -10,11 +10,13 @@ using Expressions = System.Linq.Expressions;
 using LinqDB.Remote.Clients;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using LinqDB;
 using LinqDB.Helpers;
 using LinqDB.Optimizers.Comparer;
 using LinqDB.Sets;
 using TestLinqDB.Serializers;
+using Utf8Json;
 namespace TestLinqDB;
 [Flags]
 public enum テストオプション{
@@ -102,6 +104,7 @@ public abstract class 共通{
     }
     private protected static void SerializeDeserializeAreEqual<T>(LinqDB.Serializers.Serializer Serializer,T input){
         var bytes = Serializer.Serialize(input);
+//        var json = Encoding.UTF8.GetString(bytes);
         var actual=Serializer.Deserialize<T>(bytes);
         Assert.Equal(input,actual,new 汎用Comparer());
     }
@@ -512,6 +515,8 @@ public abstract class 共通{
     //}
     protected static object ClassDisplay取得(){
         var a=1;
+        var b=2;
+        var _=GetLambda(()=>b);
         var body=GetLambda(()=>a);
         var member=(Expressions.MemberExpression)body;
         var constant=(Expressions.ConstantExpression)member.Expression!;
