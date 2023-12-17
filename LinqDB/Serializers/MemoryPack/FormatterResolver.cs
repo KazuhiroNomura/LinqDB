@@ -20,8 +20,9 @@ internal static class FormatterResolver {
         }
         if(type.IsAnonymous())
             return Return(Register(type,typeof(Formatters.Others.Anonymous<>)));
-        if(type.IsDisplay())
-            return Return(Register(type,typeof(Formatters.Others.DisplayClass<>)));
+        Debug.Assert(!type.IsDisplay(),"<>__Displayが具体的な型で宣言されていることは想定していない");
+        //if(type.IsDisplay())
+        //    return Return(Register(type,typeof(Formatters.Others.DisplayClass<>)));
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
         if(type.IsGenericType) {
@@ -33,7 +34,9 @@ internal static class FormatterResolver {
                 if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Return(Formatter);
-                if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Return(Formatter);
+                //if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Return(Formatter);
+                Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >));
+                return Return(Formatter);
             }else{
                 if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
@@ -43,7 +46,9 @@ internal static class FormatterResolver {
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
+                //if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
+                Formatter=RegisterType(type,typeof(Sets.HashSet<>));
+                return Return(Formatter);
             }
         }
         return default;
@@ -83,7 +88,7 @@ internal static class FormatterResolver {
         }
         if(type.IsAnonymous())
             return Return(Register(type,typeof(Formatters.Others.Anonymous<>)));
-        if(type.IsDisplay())
+        if(type.IsDisplay())//classしか想定してない。structはローカル関数のキャプチャ。ジェネリックstructはローカル関数の親関数がジェネリック関数だった場合
             return Return(Register(type,typeof(Formatters.Others.DisplayClass<>)));
         if(typeof(Delegate).IsAssignableFrom(type))
             return Return(Register(type,typeof(Formatters.Others.Delegate<>)));
@@ -96,7 +101,10 @@ internal static class FormatterResolver {
                 if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping<,>),typeof(Formatters.Sets.IGrouping<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable<>),typeof(Formatters.Sets.IEnumerable<>))) is not null) return Return(Formatter);
-                if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null) return Return(Formatter);
+                //if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null) return Return(Formatter);
+                Formatter=RegisterInterface(type,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>));
+                Debug.Assert(Formatter is not null,"UnionByでエラーになるかも？");
+                return Return(Formatter);
             } else {
                 if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
@@ -107,11 +115,8 @@ internal static class FormatterResolver {
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
-                //if(type.GetGenericArguments(typeof(Generic.ICollection<>),out var GenericArguments1)) {
-                //    var GenericArguments_0 = GenericArguments1[0];
-                //    var FormatterGenericType = typeof(InterfaceEnumerableFormatter<>).MakeGenericType(GenericArguments_0);
-                //    return Return(Activator.CreateInstance(FormatterGenericType)!);
-                //}
+                //Formatter=RegisterType(type,typeof(Sets.HashSet<>));
+                //return Return(Formatter);
             }
         }
         {

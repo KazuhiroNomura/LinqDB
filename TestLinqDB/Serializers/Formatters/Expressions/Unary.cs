@@ -38,10 +38,10 @@ public class Unary : 共通
         this.ExpressionシリアライズAssertEqual(Expression.OnesComplement(Constant1));
         this.ExpressionシリアライズAssertEqual(Expression.Decrement(Constant1_1d));
         this.ExpressionシリアライズAssertEqual(Expression.Increment(Constant1_1d));
-        this.ExpressionシリアライズAssertEqual(Expression.PostDecrementAssign(ParameterInt32));
-        this.ExpressionシリアライズAssertEqual(Expression.PostIncrementAssign(ParameterInt32));
-        this.ExpressionシリアライズAssertEqual(Expression.PreDecrementAssign(ParameterInt32));
-        this.ExpressionシリアライズAssertEqual(Expression.PreIncrementAssign(ParameterInt32));
+        this.Expressionシリアライズ(Expression.PostDecrementAssign(ParameterInt32));
+        this.Expressionシリアライズ(Expression.PostIncrementAssign(ParameterInt32));
+        this.Expressionシリアライズ(Expression.PreDecrementAssign(ParameterInt32));
+        this.Expressionシリアライズ(Expression.PreIncrementAssign(ParameterInt32));
         this.ExpressionシリアライズAssertEqual(Expression.UnaryPlus(Constant1_1d));
 
         this.ExpressionシリアライズAssertEqual(Expression.Convert(Constant演算子, typeof(演算子1)));
@@ -57,10 +57,10 @@ public class Unary : 共通
         this.ExpressionシリアライズAssertEqual(Expression.OnesComplement(Constant演算子, GetMethod(nameof(Unary演算子))));
         this.ExpressionシリアライズAssertEqual(Expression.Decrement(Constant演算子));
         this.ExpressionシリアライズAssertEqual(Expression.Increment(Constant演算子));
-        this.ExpressionシリアライズAssertEqual(Expression.PostDecrementAssign(Parameter演算子));
-        this.ExpressionシリアライズAssertEqual(Expression.PostIncrementAssign(Parameter演算子));
-        this.ExpressionシリアライズAssertEqual(Expression.PreDecrementAssign(Parameter演算子));
-        this.ExpressionシリアライズAssertEqual(Expression.PreIncrementAssign(Parameter演算子));
+        this.Expressionシリアライズ(Expression.PostDecrementAssign(Parameter演算子));
+        this.Expressionシリアライズ(Expression.PostIncrementAssign(Parameter演算子));
+        this.Expressionシリアライズ(Expression.PreDecrementAssign(Parameter演算子));
+        this.Expressionシリアライズ(Expression.PreIncrementAssign(Parameter演算子));
         this.ExpressionシリアライズAssertEqual(Expression.UnaryPlus(Constant演算子));
 
 

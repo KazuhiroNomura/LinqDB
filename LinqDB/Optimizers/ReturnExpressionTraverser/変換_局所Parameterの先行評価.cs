@@ -490,10 +490,10 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 case ExpressionType.Assign: {
                     var Assign = (BinaryExpression)Expression;
                     var Assign_Left = Assign.Left;
-                    if(Assign_Left.NodeType is ExpressionType.Parameter)
-                        this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
-                    else
+                    if(Assign_Left.NodeType is not ExpressionType.Parameter)
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
+                    //else
+                    //    this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
                     this.Traverse(Assign.Right);
                     //var Assign_Left = Assign.Left;
                     //if(Assign_Left is IndexExpression Index)
@@ -625,11 +625,11 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
     }
     private readonly 作成_二度出現したExpression _作成_二度出現したExpression;
     private sealed class 取得_二度出現したExpression:VoidExpressionTraverser_Quoteを処理しない{
-        private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
+        //private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly List辺 List辺;
         public 取得_二度出現したExpression(List辺 List辺,判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる){
             this.List辺=List辺;
-            this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
+            //this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
         }
         internal Generic.IEnumerable<Expression> ラムダ跨ぎParameters=default!;
         /// <summary>
@@ -644,7 +644,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             this.計算量=0;
             this.辺番号=1;
             this.辺=this.Top辺;
-            this.判定_左辺Expressionsが含まれる.Clear();
+            //this.判定_左辺Expressionsが含まれる.Clear();
             this.Traverse(Expression0);
             Trace.WriteLine($"取得_二度出現したExpression2.計算量 {this.計算量}");
             return this.List辺.二度出現したExpressionと辺();
@@ -689,10 +689,11 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 case ExpressionType.Assign: {
                     var Assign = (BinaryExpression)Expression;
                     var Assign_Left = Assign.Left;
-                    if(Assign_Left.NodeType is ExpressionType.Parameter) {
-                        this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
-                    }else
+                    if(Assign_Left.NodeType is not ExpressionType.Parameter)
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
+                    //else{
+                    //    this.判定_左辺Expressionsが含まれる.Add(Assign_Left);
+                    //}
                     this.Traverse(Assign.Right);
                     //var Assign_Left = Assign.Left;
                     //if(Assign_Left is IndexExpression Index)
@@ -879,14 +880,14 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         }
     }
     private sealed class 変換_二度出現したExpression:ReturnExpressionTraverser{
-        private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
+        //private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
         private readonly List辺 List辺;
         public 変換_二度出現したExpression(作業配列 作業配列,List辺 List辺,Generic.Dictionary<LabelTarget,辺> Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer_Assign_Leftで比較 ExpressionEqualityComparer,
             判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる) : base(作業配列){
             this.List辺=List辺;
             this.ExpressionEqualityComparer=ExpressionEqualityComparer;
-            this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
+            //this.判定_左辺Expressionsが含まれる=判定_左辺Expressionsが含まれる;
         }
         internal Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters=default!;
         private Expression? 二度出現した一度目のExpression;
@@ -906,10 +907,10 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             this.辺番号=1;
             this.辺=this.List辺[0];
             this.二度出現した一度目のExpression = 二度出現した一度目のExpression;
-            this.判定_左辺Expressionsが含まれる.Clear();
+            //this.判定_左辺Expressionsが含まれる.Clear();
             this.二度目以降のParameter = 二度目以降のParameter;
             this.一度目のAssign = Expression.Assign(二度目以降のParameter,二度出現した一度目のExpression);
-            this.判定_左辺Expressionsが含まれる.Clear();
+            //this.判定_左辺Expressionsが含まれる.Clear();
             var Expression1=this.Traverse(Expression0);
             Trace.WriteLine($"変換_二度出現したExpression.計算量 {this.計算量}");
             return Expression1;
@@ -956,7 +957,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     //var Assign1_Right=this.Traverse(Assign0.Right);
                     Expression Assign1_Left;
                     if(Assign0_Left.NodeType is ExpressionType.Parameter){
-                        this.判定_左辺Expressionsが含まれる.Add(Assign0_Left);
+                        //this.判定_左辺Expressionsが含まれる.Add(Assign0_Left);
                         Assign1_Left=Assign0_Left;
                     } else
                         Assign1_Left= base.Traverse(Assign0_Left);//.static_field,array[ここ]など
@@ -1381,9 +1382,6 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var 辺から二度出現したExpressionを取得 = this._取得_二度出現したExpression;
         var 変換_二度出現したExpression = this._変換_二度出現したExpression;
         while(true) {
-            if(BlockVariables.Count>20){
-
-            }
             辺を作る.実行(Lambda1_Body);
             辺に二度出現したExpressionを作る.実行(Lambda1_Body);
             var (二度出現した一度目のExpression,辺に関する情報)=辺から二度出現したExpressionを取得.実行(Lambda1_Body);

@@ -1,6 +1,6 @@
 ﻿namespace TestLinqDB.Serializers.Formatters;
-public class Primitive : 共通
-{
+public class Primitive : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact] public void @sbyte() => this.ObjectシリアライズAssertEqual((sbyte)1);
     [Fact] public void @byte() => this.ObjectシリアライズAssertEqual((byte)1);
     [Fact] public void @short() => this.ObjectシリアライズAssertEqual((short)1);

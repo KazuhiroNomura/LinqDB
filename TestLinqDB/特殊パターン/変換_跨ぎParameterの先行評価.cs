@@ -8,8 +8,8 @@ using LinqDB.Sets;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
 namespace TestLinqDB.特殊パターン;
-public class 変換_跨ぎParameterの先行評価 : 共通
-{
+public class 変換_跨ぎParameterの先行評価 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     private delegate void delegate_refint(ref int input);
     private static void refint(ref int input, Action d) =>
         d();

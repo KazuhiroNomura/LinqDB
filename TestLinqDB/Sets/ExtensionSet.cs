@@ -8,6 +8,7 @@ using Generic=Collections.Generic;
 using Sets=LinqDB.Sets;
 
 public class ExtensionSet:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     private static Random r=new Random(1);
     static T 数値<T>(int number)where T:struct,IIncrementOperators<T>,IComparisonOperators<T,T,bool>{
         T a=default;

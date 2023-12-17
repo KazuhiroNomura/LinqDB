@@ -3,6 +3,7 @@ namespace TestLinqDB.Sets;
 
 
 public class ExtensionEnumerable:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.None;
     private const int Count=100;
     private static Random r=new Random(1);
     private static Set<int>IntSet(int Count){

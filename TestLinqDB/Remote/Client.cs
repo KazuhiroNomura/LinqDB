@@ -5,6 +5,7 @@ using LinqDB;
 using LinqDB.Remote.Servers;
 namespace TestLinqDB.Remote;
 public class Client : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.リモート実行;
     private static string CreateRequest(string server,string path){
         return $"GET {path} HTTP/1.1\r\n"+
                $"Host: {server}\r\n"+

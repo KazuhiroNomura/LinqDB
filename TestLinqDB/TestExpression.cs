@@ -153,7 +153,8 @@ public partial struct TestDynamic<T>
         this.メンバー2 = メンバー2;
     }
 }
-public class Serializer:共通 {
+public class Serializer:共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     //private readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected readonly IJsonFormatterResolver JsonFormatterResolver;
     //protected readonly MessagePackSerializerOptions MessagePackSerializerOptions;

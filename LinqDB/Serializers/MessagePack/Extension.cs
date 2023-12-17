@@ -295,7 +295,7 @@ internal static class Extension{
         }
         return Resolver.Resolver.GetFormatterDynamic(type);
         IMessagePackFormatter Return(IMessagePackFormatter Formatter0){
-            Resolver.Serializer().Resolver.TypeFormatter.TryAdd(type,Formatter0);
+            //Resolver.Serializer().Resolver.TypeFormatter.TryAdd(type,Formatter0);
             //this.DictionaryTypeFormatter.Add(type,Formatter0);
             return Formatter0;
         }

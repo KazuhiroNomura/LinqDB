@@ -2,6 +2,10 @@
 using E = System.Collections.Generic;
 using Q = System.Linq;
 using LinqDB.Sets;
+using System.Diagnostics;
+using MemoryPack;
+using System.Runtime.Serialization;
+using System.Reflection;
 //using Microsoft.SqlServer.Dac.Deployment;
 //using System.Diagnostics;
 //using System.Runtime.Serialization;
@@ -11,63 +15,99 @@ using LinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters;
 public class FormatterResolver : 共通
 {
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
+    private static void M(){}
     [Fact]
     public void GetFormatter0()
     {
         //if(this.DictionaryTypeFormatter.TryGetValue(type,out var Formatter))return(IJsonFormatter<T>)Formatter;
-        this.ObjectシリアライズAssertEqual(new Set<Tables.Table>());
+        //this.ObjectシリアライズAssertEqual(new Set<Tables.Table>());
         //if(type.IsDisplay())return Return(Formatters.Others.DisplayClass<T>.Instance);
-        this.ObjectシリアライズAssertEqual(ClassDisplay取得());
         //if(type.IsArray) {
-        this.ObjectシリアライズAssertEqual(new Tables.Table[10]);
         //}else if(type.IsGenericType) {
         //    if(type.IsAnonymous()) {
-        this.ObjectシリアライズAssertEqual(new { a = 1 });
         //    } else if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type)) {
+        //    }else if(type.IsInterface){
+        //        IJsonFormatter<T>?Formatter_T;
+        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Formatter_T;
+        //        if((Formatter_T=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Formatter_T;
+        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Formatter_T;
+        //        if((Formatter_T=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Formatter_T;
+        //        do{
+        //            if((Formatter_T=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)return Formatter_T;
+        //            if((Formatter_T=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)return Formatter_T;
+        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)return Formatter_T;
+        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)return Formatter_T;
+        //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)return Formatter_T;
+        //if(type.IsArray){
+        this.ObjectシリアライズAssertEqual(new Tables.Table[10]);
+        //}
+        //if(type.IsAnonymous())
+        this.ObjectシリアライズAssertEqual(new { a = 1 });
+        //if(type.IsDisplay())//classしか想定してない。structはローカル関数のキャプチャ。ジェネリックstructはローカル関数の親関数がジェネリック関数だった場合
+        this.ObjectシリアライズAssertEqual(ClassDisplay取得());
+        //if(typeof(Delegate).IsAssignableFrom(type))
+        this.ObjectシリアライズAssertEqual(new{a=(Action)M,b=(Action)M});
+        this.ObjectシリアライズAssertEqual((Action)M);
+        //if(type.IsGenericType) {
+        //    foreach(var GenericArgument in type.GetGenericArguments())GetFormatterDynamic(GenericArgument);
+        //    if(typeof(Expressions.LambdaExpression).IsAssignableFrom(type))
         this.ExpressionシリアライズAssertEqual(
             Q.Expressions.Expression.Lambda<Func<int>>(
                 Q.Expressions.Expression.Constant(1)
             )
         );
-        //    }else if(type.IsInterface){
-        //        IJsonFormatter<T>?Formatter_T;
-        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Formatter_T;
+        //    if(type.IsInterface){
+        //        if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new Set<int>().GroupBy(p => p).SingleOrDefault());
-        //        if((Formatter_T=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Return(Formatter);
         this.ObjectシリアライズAssertEqual((Q.IGrouping<int, int>)new Set<int>().GroupBy(p => p).SingleOrDefault());
-        //        if((Formatter_T=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Formatter_T;
-        this.ObjectシリアライズAssertEqual((S.IEnumerable<int>)new Set<int>());
-        //        if((Formatter_T=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Return(Formatter);
+        this.ObjectシリアライズAssertEqual((S.IEnumerable<int>)new Set<int>());//0
+        //        Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >));
         this.ObjectシリアライズAssertEqual((E.IEnumerable<int>)new Set<int>());
-        //        do{
-        //            if((Formatter_T=RegisterType(type0,typeof(Enumerables.GroupingList<, >)))is not null)return Formatter_T;
+        //    }else{
+        //        if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new GroupingSet<int, int>(1));
         this.ObjectシリアライズAssertEqual(new LinqDB.Enumerables.GroupingList<int, int>(1));
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.GroupingSet        <, >)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new GroupingSet<int, int>(1));
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingList    <, >)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new SetGroupingList<int, int>());
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.SetGroupingSet     <, >)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new SetGroupingSet<int, int>());
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <,,>)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new Set<Keys.Key, Tables.Table, LinqDB.Databases.Container>());
-    }
-    [Fact]
-    public void GetFormatter1()
-    {
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)return Formatter_T;
+        //        if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new Set<Keys.Key, Tables.Table>());
-        //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)return Formatter_T;
-        this.ObjectシリアライズAssertEqual(new Set<Tables.Table>());
-        //            do{
-        //                if(type0.BaseType is null) return default!;
-        //            }while(!type0.IsGenericType);
-        //        } while(typeof(object)!=type0);
-        //    }            
-        //this.MemoryMessageJson_Assert(new{a=1);
-        //this.MemoryMessageJson_Assert(new LinqDB.Sets.Set<Tables.Table>();
-        //this.MemoryMessageJson_Assert(new{a=(S.IEnumerable<Tables.Table>)new S.Set<Tables.Table>());
+        //        if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
+        this.ObjectシリアライズAssertEqual(new Set<int>());//0
+        //        if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
+        this.ObjectシリアライズAssertEqual(new LinqDB.Enumerables.List<int>());
+        //        if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
+        this.ObjectシリアライズAssertEqual(new LinqDB.Sets.HashSet<int>());
+        var a = new[] { 3, 5, 7 };
+        this.ObjectシリアライズAssertEqual(a.UnionBy(a, x => x+1));
+        this.ObjectシリアライズAssertEqual(a.UnionBy(a, x => x+1));//同じものを2つやればMessagePack.FormatterResolver.GetFormatterでキャッシュされる
+        //    }
+        //}
     }
+    //[Fact]
+    //public void GetFormatter1()
+    //{
+    //    //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <, >)))is not null)return Formatter_T;
+    //    this.ObjectシリアライズAssertEqual(new Set<Keys.Key, Tables.Table>());
+    //    //            if((Formatter_T=RegisterType(type0,typeof(Sets.Set                <  >)))is not null)return Formatter_T;
+    //    this.ObjectシリアライズAssertEqual(new Set<Tables.Table>());
+    //    //            do{
+    //    //                if(type0.BaseType is null) return default!;
+    //    //            }while(!type0.IsGenericType);
+    //    //        } while(typeof(object)!=type0);
+    //    //    }            
+    //    //this.MemoryMessageJson_Assert(new{a=1);
+    //    //this.MemoryMessageJson_Assert(new LinqDB.Sets.Set<Tables.Table>();
+    //    //this.MemoryMessageJson_Assert(new{a=(S.IEnumerable<Tables.Table>)new S.Set<Tables.Table>());
+    //}
     [Fact]
     public void GetFormatter_RegisterInterface()
     {

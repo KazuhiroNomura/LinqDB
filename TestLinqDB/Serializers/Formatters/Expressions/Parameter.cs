@@ -1,7 +1,9 @@
 ﻿using System.Linq.Expressions;
+
+using TestLinqDB.Sets;
+using System.Reflection.PortableExecutable;
 namespace TestLinqDB.Serializers.Formatters.Expressions;
 public class Parameter:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void エラー特定(){
         var p=Expression.Parameter(typeof(int),"p");
@@ -51,5 +53,12 @@ public class Parameter:共通{
         //    }
         //}
         this.ExpressionシリアライズAssertEqual(Expression.Block(new[]{p},p,p));
+    }
+    [Fact]
+    public void Desrialize(){
+        //if(reader.TryReadNil()) return;
+        var p=Expression.Parameter(typeof(int));
+        this.Expressionシリアライズ(p);
+        this.Expressionシリアライズ((ParameterExpression?)null);
     }
 }

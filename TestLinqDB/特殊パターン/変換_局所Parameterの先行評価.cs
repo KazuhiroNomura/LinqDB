@@ -9,6 +9,7 @@ using LinqDB.Sets;
 // ReSharper disable All
 namespace TestLinqDB.特殊パターン;
 public class 変換_局所Parameterの先行評価 : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     [Fact]public void Pattern0(){
         var p = Expression.Parameter(typeof(int), "p");
         this.Expression実行AssertEqual(

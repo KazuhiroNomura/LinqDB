@@ -4,6 +4,7 @@ using LinqDB.Optimizers.Comparer;
 namespace TestLinqDB.特殊パターン;
 public class フロー: 共通
 {
+    protected override テストオプション テストオプション{get;}=テストオプション.None;
     [Fact]public void 辺に関する情報Conditional0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //├┐　　　　　　　　　　　　　　　　　　0,IfTest:

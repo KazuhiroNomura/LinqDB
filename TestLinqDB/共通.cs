@@ -33,7 +33,7 @@ public enum テストオプション{
 }
 public abstract class 共通{
     private protected static int ポート番号;
-    protected virtual テストオプション テストオプション{get;}=テストオプション.None;
+    protected abstract テストオプション テストオプション{get;}
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);
@@ -233,7 +233,7 @@ public abstract class 共通{
     //        this.SerializeDeserializeAreEqual(new {t0,t1});
     //    }
     //}
-    protected void Expressionシリアライズ<T>(T input) where T:Expressions.Expression{
+    protected void Expressionシリアライズ<T>(T? input) where T:Expressions.Expression{
         if((テストオプション.MemoryPack&this.テストオプション)!=0)
             共通(this.MemoryPack);
         if((テストオプション.MessagePack&this.テストオプション)!=0)
@@ -512,11 +512,10 @@ public abstract class 共通{
     //}
     protected static object ClassDisplay取得(){
         var a=1;
-        var body=GetLambda(()=>a).Body;
+        var body=GetLambda(()=>a);
         var member=(Expressions.MemberExpression)body;
         var constant=(Expressions.ConstantExpression)member.Expression!;
         return constant.Value!;
-        static Expressions.LambdaExpression GetLambda<T>(Expressions.Expression<Func<T>> e)=>e;
     }
     protected static Reflection.MethodInfo GetMethod<T>(Expressions.Expression<Func<T>> e)=>((Expressions.MethodCallExpression)e.Body).Method;
     protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(Serializer).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;

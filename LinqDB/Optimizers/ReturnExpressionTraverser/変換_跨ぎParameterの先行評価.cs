@@ -32,7 +32,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             internal Generic.Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter=default!;
             private Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters=>
                 this.Dictionaryラムダ跨ぎParameter.Keys;
-            private readonly ParameterExpression ContainerParameter=default!;
+            //private readonly ParameterExpression ContainerParameter=default!;
             private EResult Result;
             public enum EResult {
                 移動できる,
@@ -53,7 +53,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             //}
             protected override void MakeAssign(BinaryExpression Binary)=>this.Result=EResult.移動できない;
             protected override void Parameter(ParameterExpression Parameter) {
-                if(this.ContainerParameter==Parameter)return;
+                //if(this.ContainerParameter==Parameter)return;
                 if(this.ラムダ跨ぎParameters.Contains(Parameter))return;
                 if(this.ループ跨ぎParameters.Contains(Parameter))return;
                 foreach(var 内部Parameters in this.List内部Parameters)
@@ -414,7 +414,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
 
     private int 番号;
     public bool IsInline{
-        get=>this._取得_先行評価式.IsInline;
+        //get=>this._取得_先行評価式.IsInline;
         set{
             this._取得_先行評価式.IsInline=value;
             this._変換_先行評価式.IsInline=value;

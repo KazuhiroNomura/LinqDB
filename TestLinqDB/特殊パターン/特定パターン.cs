@@ -26,8 +26,8 @@ internal class ClassIEnumerableInt32 : System.Collections.Generic.IEnumerable<in
     }
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 }
-public class 特定パターン : 共通
-{
+public class 特定パターン : 共通{
+    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void ClassIEnumerableInt32シリアライズ()
     {
@@ -62,7 +62,6 @@ public class 特定パターン : 共通
         var a = new[] { 3, 5, 7 };
         var b = new[] { 4, 6, 8 };
         var input = a.UnionBy(b, x => x+1);
-        var g = input.GetType().GetMethod("GetEnumerator", BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance);
         this.ObjectシリアライズAssertEqual(input);
     }
     [Fact]
