@@ -15,7 +15,6 @@ using Expression = System.Linq.Expressions.Expression;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_メソッド正規化_取得インライン不可能定数 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     [Fact]
     public void Constant()
     {

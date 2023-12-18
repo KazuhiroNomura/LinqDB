@@ -223,21 +223,16 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     //var EndLoop=this.辺に関する情報=new(this.ExpressionEqualityComparer,ref this.辺番号,this.辺に関する情報){親コメント="End Loop"};
                     //List辺に関する情報.Add(EndLoop);
                     if(Loop.BreakLabel is not null){
-                        if(Dictionary_LabelTarget_辺に関する情報.TryGetValue(Loop.BreakLabel,out var 移動先)){
-                            //gotoで指定したラベルでまだ定義されてない奴
-                            //└┐0 goto 下
-                            //..................
-                            //┌┘1 下:←ここ
-                            //変換_局所Parameterの先行評価.辺.接続(LoopBody1,);
-                            //LoopBody1.List子辺.Add(移動先);
-                            移動先.親コメント=$"End Loop {Loop.BreakLabel.Name}:";
-                            List辺.Add(移動先);
-                            this.辺=移動先;
-                        } else{
-                            //始めて出現。後でgoto命令で飛んでループを形成する
-                            List辺.Add(this.辺=new 辺(ExpressionEqualityComparer){子コメント="End Loop"});
-                        }
-
+                        var 移動先=Dictionary_LabelTarget_辺に関する情報[Loop.BreakLabel];
+                        //gotoで指定したラベルでまだ定義されてない奴
+                        //└┐0 goto 下
+                        //..................
+                        //┌┘1 下:←ここ
+                        //変換_局所Parameterの先行評価.辺.接続(LoopBody1,);
+                        //LoopBody1.List子辺.Add(移動先);
+                        移動先.親コメント=$"End Loop {Loop.BreakLabel.Name}:";
+                        List辺.Add(移動先);
+                        this.辺=移動先;
                     } else{
                         List辺.Add(this.辺=new 辺(ExpressionEqualityComparer){子コメント="End Loop"});
                     }
@@ -1204,17 +1199,24 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 var Count=列Array.Count;
                 for(var b=0;b<Count;b++){
                     var 列=列Array[b];
+                    //Debug.Assert(列.移動元==親辺);
                     if(列.移動元==親辺) {
-                        if(列.移動先==辺){
-                            Debug.Assert(列.移動先==辺);
-                            //Debug.Assert(Line[b]!='┘');
-                            if(Line[b]!='┘')
-                                if(書き込みした右端列<b)
-                                    書き込みした右端列=b;
-                            Line[b]='┘';
-                            上Count++;
-                            goto 終了;
-                        }
+                        Debug.Assert(列.移動先==辺);
+                        if(Line[b]!='┘')
+                            if(書き込みした右端列<b)
+                                書き込みした右端列=b;
+                        Line[b]='┘';
+                        上Count++;
+                        goto 終了;
+                        //if(列.移動先==辺){
+                        //    //Debug.Assert(Line[b]!='┘');
+                        //    if(Line[b]!='┘')
+                        //        if(書き込みした右端列<b)
+                        //            書き込みした右端列=b;
+                        //    Line[b]='┘';
+                        //    上Count++;
+                        //    goto 終了;
+                        //}
                     }
                 }
                 for(var b=0;b<Count;b++){
@@ -1343,6 +1345,19 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         this._作成_二度出現したExpression=new(List辺に関する情報,判定_左辺Parametersが含まれる);
         this._取得_二度出現したExpression=new(List辺に関する情報,判定_左辺Parametersが含まれる);
         this._変換_二度出現したExpression=new(作業配列,List辺に関する情報,Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer,判定_左辺Parametersが含まれる);
+    }
+    public 変換_局所Parameterの先行評価() : base(new 作業配列()){
+        var ListスコープParameter=this.ListスコープParameter=new();
+        var ExpressionEqualityComparer=new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
+        var 判定_左辺Parametersが含まれる=new 判定_左辺Expressionsが含まれる(ExpressionEqualityComparer);
+        var Dictionary_LabelTarget_辺に関する情報=this.Dictionary_LabelTarget_辺に関する情報;
+        var Top辺に関する情報=new 辺(ExpressionEqualityComparer){辺番号=0,子コメント = "開始"};
+        var List辺に関する情報=new List辺();
+        this._作成_辺=new(Top辺に関する情報,List辺に関する情報,Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer,判定_左辺Parametersが含まれる);
+        this._作成_二度出現したExpression=new(List辺に関する情報,判定_左辺Parametersが含まれる);
+        this._取得_二度出現したExpression=new(List辺に関する情報,判定_左辺Parametersが含まれる);
+        this._変換_二度出現したExpression=new(this.作業配列,List辺に関する情報,Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer,判定_左辺Parametersが含まれる);
+        this.ラムダ跨ぎParameters=new Generic.List<ParameterExpression>();
     }
     internal Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters{
         set{

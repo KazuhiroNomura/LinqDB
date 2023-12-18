@@ -3,7 +3,7 @@ using System.Diagnostics;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 
-internal class 変換_旧Parameterを新Expression1:ReturnExpressionTraverser {
+public class 変換_旧Parameterを新Expression1:ReturnExpressionTraverser {
     private ParameterExpression? 旧Parameter;
     private Expression? 新Expression;
     public 変換_旧Parameterを新Expression1(作業配列 作業配列) : base(作業配列){}

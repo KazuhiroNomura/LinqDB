@@ -7,7 +7,6 @@ using LinqDB.Sets;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
 public class 判定_InstanceMethodか : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     private static int F(Expression<Func<int>> f)
     {
         var m = f.Compile();

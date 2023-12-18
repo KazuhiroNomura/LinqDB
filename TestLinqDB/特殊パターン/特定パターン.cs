@@ -80,7 +80,7 @@ public class 特定パターン : 共通{
             var bytes0 = new byte[bytes.Length+1];
             Array.Copy(bytes, bytes0, bytes.Length);
             var output = Serializer.Deserialize<object>(bytes0);
-            Assert.Equal(expected, output!, new 汎用Comparer());
+            Assert.Equal(expected, output, new 汎用Comparer());
         }
         {
             var expected = 'A';
@@ -95,7 +95,7 @@ public class 特定パターン : 共通{
             Serializer.Serialize(m, input);
             m.Position=0;
             var output = Serializer.Deserialize<char[]>(m);
-            Assert.Equal(input, output!, new 汎用Comparer());
+            Assert.Equal(input, output, new 汎用Comparer());
         }
         {
             var expected = new[] { 'a', 'b', 'c' };

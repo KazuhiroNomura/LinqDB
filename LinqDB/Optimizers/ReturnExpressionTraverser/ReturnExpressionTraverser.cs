@@ -401,41 +401,50 @@ public class ReturnExpressionTraverser {
         var Block0_Expressions_Count = Block0_Expressions.Count;
         if(Block0_Expressions_Count>=6||Block0.Variables.Count>=1||Block0_Expressions[Block0_Expressions_Count-1].Type!=Block0.Type){
             var Block1_Expressions=this.TraverseExpressions(Block0_Expressions);
-            return ReferenceEquals(Block0_Expressions,Block1_Expressions)?Block0:Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
+            if(ReferenceEquals(Block0_Expressions,Block1_Expressions))
+                return Block0;
+            else 
+                return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
         }
         var Block0_Expression0=Block0_Expressions[0];
         var Block1_Expression0=this.Traverse(Block0_Expression0);
         var b=Block1_Expression0==Block0_Expression0;
-        if(Block0_Expressions_Count<=1){
-            if(b) return Block0;
-            return Block1_Expression0;
-        }
+        if(Block0_Expressions_Count==1)
+            if(b) 
+                return Block0;
+            else
+                return Block1_Expression0;
         var Block0_Expression1=Block0_Expressions[1];
         var Block1_Expression1=this.Traverse(Block0_Expression1);
         b&=Block1_Expression1==Block0_Expression1;
-        if(Block0_Expressions_Count<=2){
-            if(b) return Block0;
-            return Expression.Block(Block1_Expression0,Block1_Expression1);
-        }
+        if(Block0_Expressions_Count==2)
+            if(b) 
+                return Block0;
+            else
+                return Expression.Block(Block1_Expression0,Block1_Expression1);
         var Block0_Expression2=Block0_Expressions[2];
         var Block1_Expression2=this.Traverse(Block0_Expression2);
         b&=Block1_Expression2==Block0_Expression2;
-        if(Block0_Expressions_Count<=3){
-            if(b) return Block0;
-            return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
-        }
+        if(Block0_Expressions_Count==3)
+            if(b) 
+                return Block0;
+            else
+                return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2);
         var Block0_Expression3=Block0_Expressions[3];
         var Block1_Expression3=this.Traverse(Block0_Expression3);
         b&=Block1_Expression3==Block0_Expression3;
-        if(Block0_Expressions_Count<=4){
-            if(b) return Block0;
-            return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
-        }
+        if(Block0_Expressions_Count==4)
+            if(b) 
+                return Block0;
+            else
+                return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3);
         var Block0_Expression4=Block0_Expressions[4];
         var Block1_Expression4=this.Traverse(Block0_Expression4);
         b&=Block1_Expression4==Block0_Expression4;
-        if(b)return Block0;
-        return                               Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
+        if(b)
+            return Block0;
+        else
+            return Expression.Block(Block1_Expression0,Block1_Expression1,Block1_Expression2,Block1_Expression3,Block1_Expression4);
     }
     /// <summary>
     /// a?b:c
@@ -481,26 +490,30 @@ public class ReturnExpressionTraverser {
     protected virtual Expression Dynamic(DynamicExpression Dynamic0) {
         var Dynamic0_Arguments=Dynamic0.Arguments;
         var Dynamic0_Arguments_Count=Dynamic0_Arguments.Count;
-        if(Dynamic0_Arguments_Count >= 5){
+        if(Dynamic0_Arguments_Count >= 4){
             var Dynamic1_Arguments=this.TraverseExpressions(Dynamic0_Arguments);
-            return ReferenceEquals(Dynamic0_Arguments,Dynamic1_Arguments)?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments);
+            if(ReferenceEquals(Dynamic0_Arguments,Dynamic1_Arguments))return Dynamic0;
+            return Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments);
         }
         var Dynamic0_Arguments_0 =Dynamic0_Arguments[0];
         var Dynamic1_Arguments_0=this.Traverse(Dynamic0_Arguments_0);
         var b=Dynamic0_Arguments_0==Dynamic1_Arguments_0;
-        if(Dynamic0_Arguments_Count<=1)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0);
+        if(Dynamic0_Arguments_Count<=1){
+            if(b) return Dynamic0;
+            return Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0);
+        }
         var Dynamic0_Arguments_1=Dynamic0_Arguments[1];
         var Dynamic1_Arguments_1=this.Traverse(Dynamic0_Arguments_1);
         b&=Dynamic0_Arguments_1==Dynamic1_Arguments_1;
-        if(Dynamic0_Arguments_Count<=2)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1);
+        if(Dynamic0_Arguments_Count<=2){
+            if(b)return Dynamic0;
+            return Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1);
+        }
         var Dynamic0_Arguments_2=Dynamic0_Arguments[2];
         var Dynamic1_Arguments_2=this.Traverse(Dynamic0_Arguments_2);
         b&=Dynamic0_Arguments_2==Dynamic1_Arguments_2;
-        if(Dynamic0_Arguments_Count<=3)return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1,Dynamic1_Arguments_2);
-        var Dynamic0_Arguments_3=Dynamic0_Arguments[3];
-        var Dynamic1_Arguments_3=this.Traverse(Dynamic0_Arguments_3);
-        b&=Dynamic0_Arguments_3==Dynamic1_Arguments_3;
-        return b?Dynamic0:Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1,Dynamic1_Arguments_2,Dynamic1_Arguments_3);
+        if(b) return Dynamic0;
+        return Expression.Dynamic(Dynamic0.Binder,Dynamic0.Type,Dynamic1_Arguments_0,Dynamic1_Arguments_1,Dynamic1_Arguments_2);
     }
     /// <summary>
     /// goto Label;
@@ -739,30 +752,51 @@ public class ReturnExpressionTraverser {
         if(MethodCall0_Object is null) {
             if(MethodCall0_Arguments_Count>=6){
                 var MethodCall1_Arguments = this.TraverseExpressions(MethodCall0_Arguments);
-                return ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
+                if(ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)) 
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
             }
             if(MethodCall0_Arguments_Count==0)return MethodCall0;
             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
             var b = MethodCall0_Arguments_0==MethodCall1_Arguments_0;
-            if(MethodCall0_Arguments_Count<=1)return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0);
+            if(MethodCall0_Arguments_Count==1)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0);
             var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments_1);
             b&=MethodCall0_Arguments_1==MethodCall1_Arguments_1;
-            if(MethodCall0_Arguments_Count<=2)return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
+            if(MethodCall0_Arguments_Count==2)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
             var MethodCall0_Arguments_2 = MethodCall0_Arguments[2];
             var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments_2);
             b&=MethodCall0_Arguments_2==MethodCall1_Arguments_2;
-            if(MethodCall0_Arguments_Count<=3)return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
+            if(MethodCall0_Arguments_Count==3)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
             var MethodCall0_Arguments_3 = MethodCall0_Arguments[3];
             var MethodCall1_Arguments_3 = this.Traverse(MethodCall0_Arguments_3);
             b&=MethodCall0_Arguments_3==MethodCall1_Arguments_3;
-            if(MethodCall0_Arguments_Count<=4)return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3);
+            if(MethodCall0_Arguments_Count==4)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3);
             var MethodCall0_Arguments_4 = MethodCall0_Arguments[4];
             var MethodCall1_Arguments_4 = this.Traverse(MethodCall0_Arguments_4);
             b&=MethodCall0_Arguments_4==MethodCall1_Arguments_4;
-            if(b) return MethodCall0;
-            return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
+            if(b) 
+                return MethodCall0;
+            else
+                return Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
             //return b?MethodCall0:Expression.Call(MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2,MethodCall1_Arguments_3,MethodCall1_Arguments_4);
         } else {
             var MethodCall1_Object = this.Traverse(MethodCall0_Object);
@@ -775,19 +809,35 @@ public class ReturnExpressionTraverser {
                 return Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
                 //return b&&ReferenceEquals(MethodCall0_Arguments,MethodCall1_Arguments)?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments);
             }
-            if(MethodCall0_Arguments_Count==0)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method);
+            if(MethodCall0_Arguments_Count==0)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall1_Object,MethodCall0.Method);
             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
             var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments_0);
             b&=MethodCall0_Arguments_0==MethodCall1_Arguments_0;
-            if(MethodCall0_Arguments_Count<=1)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,this.作業配列.Expressions設定(MethodCall1_Arguments_0));
+            if(MethodCall0_Arguments_Count==1)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall1_Object,MethodCall0.Method,this.作業配列.Expressions設定(MethodCall1_Arguments_0));
             var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments_1);
             b&=MethodCall0_Arguments_1==MethodCall1_Arguments_1;
-            if(MethodCall0_Arguments_Count<=2)return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
+            if(MethodCall0_Arguments_Count==2)
+                if(b)
+                    return MethodCall0;
+                else 
+                    return Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
             var MethodCall0_Arguments_2 = MethodCall0_Arguments[2];
             var MethodCall1_Arguments_2 = this.Traverse(MethodCall0_Arguments_2);
             b&=MethodCall0_Arguments_2==MethodCall1_Arguments_2;
-            return b?MethodCall0:Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
+            Debug.Assert(MethodCall0_Arguments_Count==3);
+            if(b) 
+                return MethodCall0;
+            else
+                return Expression.Call(MethodCall1_Object,MethodCall0.Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,MethodCall1_Arguments_2);
         }
     }
     /// <summary>
@@ -867,25 +917,30 @@ public class ReturnExpressionTraverser {
         var 変化したか=Switch0_SwitchValue !=Switch1_SwitchValue;
         for(var a=0; a < Switch0_Cases_Count; a++) {
             var Switch0_Case=Switch0_Cases[a];
-            var Switch0_Case_TestValues=Switch0_Case.TestValues;
-            var Switch0_Case_TestValues_Count=Switch0_Case_TestValues.Count;
-            var Switch1_Case_TestValues=new Expression[Switch0_Case_TestValues_Count];
-            var 変化したか1=false;
-            for(var b=0; b < Switch0_Case_TestValues_Count; b++) {
-                //c#上は定数(Constant)しかできないが式木で作った場合はそれにとらわれない
-                var Switch0_Case_TestValue=Switch0_Case_TestValues[b];
-                var Switch1_Case_TestValue=this.Traverse(Switch0_Case_TestValue);
-                Switch1_Case_TestValues[b]=Switch1_Case_TestValue;
-                if(Switch0_Case_TestValue !=Switch1_Case_TestValue)
-                    変化したか1=true;
-            }
+            //var Switch0_Case_TestValues=Switch0_Case.TestValues;
+            //var Switch0_Case_TestValues_Count=Switch0_Case_TestValues.Count;
+            //var Switch1_Case_TestValues=new Expression[Switch0_Case_TestValues_Count];
+            //var 変化したか1=false;
+            //for(var b=0; b < Switch0_Case_TestValues_Count; b++) {
+            //    //c#上は定数(Constant)しかできないが式木で作った場合はそれにとらわれない
+            //    var Switch0_Case_TestValue=Switch0_Case_TestValues[b];
+            //    var Switch1_Case_TestValue=this.Traverse(Switch0_Case_TestValue);
+            //    Switch1_Case_TestValues[b]=Switch1_Case_TestValue;
+            //    if(Switch0_Case_TestValue !=Switch1_Case_TestValue)
+            //        変化したか1=true;
+            //}
             var Switch0_Case_Body=Switch0_Case.Body;
             var Switch1_Case_Body=this.Traverse(Switch0_Case_Body);
-            if(Switch0_Case_Body !=Switch1_Case_Body || 変化したか1) {
-                Switch1_Cases[a]=Expression.SwitchCase(Switch1_Case_Body,Switch1_Case_TestValues);
+            if(Switch0_Case_Body !=Switch1_Case_Body) {
+                Switch1_Cases[a]=Expression.SwitchCase(Switch1_Case_Body,Switch0_Case.TestValues);
                 変化したか=true;
             } else
                 Switch1_Cases[a]=Switch0_Case;
+            //if(Switch0_Case_Body !=Switch1_Case_Body || 変化したか1) {
+            //    Switch1_Cases[a]=Expression.SwitchCase(Switch1_Case_Body,Switch1_Case_TestValues);
+            //    変化したか=true;
+            //} else
+            //    Switch1_Cases[a]=Switch0_Case;
         }
         var Switch0_DefaultBody=Switch0.DefaultBody;
         var Switch1_DefaultBody=this.Traverse(Switch0_DefaultBody);

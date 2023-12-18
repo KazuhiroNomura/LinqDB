@@ -383,6 +383,16 @@ public abstract class 共通{
     /// <param name="input"></param>
     protected void Expression実行AssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input){
         var 引数=default(T)!;
+        if((テストオプション.最適化&this.テストオプション)!=0){
+            var Optimizer=this.Optimizer;
+            if((テストオプション.インライン&this.テストオプション)!=0){
+                Optimizer.IsInline=true;
+                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+            } else{
+                Optimizer.IsInline=false;
+                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+            }
+        }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
             var expected = 標準(引数);

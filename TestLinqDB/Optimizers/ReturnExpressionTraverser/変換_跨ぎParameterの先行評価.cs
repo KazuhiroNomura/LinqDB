@@ -14,7 +14,7 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
+    //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
     struct OI
     {
         public readonly int o, i;

@@ -97,20 +97,16 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             get=>this._判定_移動できるか.Dictionaryラムダ跨ぎParameter;
             set=>this._判定_移動できるか.Dictionaryラムダ跨ぎParameter=value;
         }
-        /// <summary>
-        /// ラムダ跨ぎParameterとはより上位で定義された変数で上位に移動する必要がない
-        /// </summary>
-        private Generic.IEnumerable<Expression> ラムダ跨ぎParameters=>this.Dictionaryラムダ跨ぎParameter.Keys;
+        ///// <summary>
+        ///// ラムダ跨ぎParameterとはより上位で定義された変数で上位に移動する必要がない
+        ///// </summary>
+        //private Generic.IEnumerable<Expression> ラムダ跨ぎParameters=>this.Dictionaryラムダ跨ぎParameter.Keys;
         /// <summary>
         /// 変換_跨ぎParameterの先行評価.Lambdaで呼び出される
         /// </summary>
         public Generic.IEnumerable<Expression> ループ跨ぎParameters{
-            get{
-                return this._判定_移動できるか.ループ跨ぎParameters;
-            }
-            set{
-                this._判定_移動できるか.ループ跨ぎParameters=value;
-            }
+            //get=>this._判定_移動できるか.ループ跨ぎParameters;
+            set=>this._判定_移動できるか.ループ跨ぎParameters=value;
         }
         private 場所 結果の場所;
         private Expression?結果Expression;
@@ -555,7 +551,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 var 書き込みがあるか = false;
                 do {
                     if(回数==10){
-
+                        Debugger.Break();
                     }
                     var (LinkedListNode0_Value, 読み込みがあるか0, 書き込みがあるか0)=
                         変換_先行評価式.実行(LinkedListNode0.Value,旧,新,分離Expressionの場所);
