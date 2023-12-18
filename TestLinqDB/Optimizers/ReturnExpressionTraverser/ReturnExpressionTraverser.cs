@@ -41,6 +41,7 @@ public class ReturnExpressionTraverser : 共通{
     };
     private static readonly ParameterExpression p_int = Expression.Parameter(typeof(int));
     private static readonly ParameterExpression p_double = Expression.Parameter(typeof(double));
+    private static readonly ParameterExpression p_decimal= Expression.Parameter(typeof(decimal));
     private static readonly Expression p_List = Expression.Parameter(typeof(List<int>));
     private static readonly Expression @int = Expression.Constant(1);
     private static readonly Expression @double = Expression.Constant(1d);
@@ -164,6 +165,21 @@ public class ReturnExpressionTraverser : 共通{
         Expression.Parameter(typeof(double));
         var @int = Expression.Constant(1);
         this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Add(@int, @int));
+    }
+    [Fact]public void AndAlso(){
+        //if(Binary0_Left==Binary1_Left)
+        //    if(Binary0_Right==Binary1_Right)
+        //        if(Binary0_Conversion==Binary1_Conversion)
+        var Equal=Expression.Equal(
+            Expression.Constant(0m), 
+            Expression.Constant(0m)
+        );
+        this.Lambdaを作って実行(
+            Expression.AndAlso(
+                Equal,
+                Equal
+            )
+        );
     }
     [Fact]
     public void Bindings(){
@@ -309,7 +325,6 @@ public class ReturnExpressionTraverser : 共通{
     [Fact]public void AddChecked()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.AddChecked(@int, @int));
     [Fact]public void And()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.And(@int, @int));
     [Fact]public void AndAssign()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.AndAssign(p_int, @int));
-    [Fact]public void AndAlso()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.AndAlso(@bool, @bool));
     [Fact]public void ArrayIndex()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.ArrayIndex(@array, @int));
     [Fact]public void Assign()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Assign(p_int, @int));
     [Fact]public void Coalesce()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Coalesce(@string, @string));
@@ -333,7 +348,21 @@ public class ReturnExpressionTraverser : 共通{
     [Fact]public void NotEqual()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.NotEqual(@int, @int));
     [Fact]public void Or()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Or(@int, @int));
     [Fact]public void OrAssign()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.OrAssign(p_int, @int));
-    [Fact]public void OrElse()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.OrElse(@bool, @bool));
+    [Fact]public void OrElse(){
+        //if(Binary0_Left==Binary1_Left)
+        //    if(Binary0_Right==Binary1_Right)
+        //        if(Binary0_Conversion==Binary1_Conversion)
+        var Equal=Expression.Equal(
+            Expression.Constant(0m), 
+            Expression.Constant(0m)
+        );
+        this.Lambdaを作って実行(
+            Expression.OrElse(
+                Equal,
+                Equal
+            )
+        );
+    }
     [Fact]public void Power()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Power(@double, @double));
     [Fact]public void PowerAssign()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.PowerAssign(p_double, @double));
     [Fact]public void RightShift()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.RightShift(@int, @int));
@@ -553,8 +582,50 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
     }
-    [Fact]public void Invoke()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Invoke(Expression.Lambda(p_int, p_int), @int));
-    [Fact]public void Label()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Label(Expression.Label()));
+    [Fact]
+    public void Invoke(){
+        this.Lambdaを作って実行(
+            Expression.Invoke(
+                Expression.Lambda(
+                    Expression.Constant(0m),
+                    p_decimal
+                ),
+                Expression.Constant(0m)
+            )
+        );
+        this.Lambdaを作って実行(
+            Expression.Invoke(
+                Expression.Lambda(
+                    Expression.Add(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m)
+                    ),
+                    p_decimal
+                ),
+                Expression.Add(
+                    Expression.Constant(2m),
+                    Expression.Constant(2m)
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Label(){
+        //if(Label0_DefaultValue==Label1_DefaultValue) return Label0;
+        var Label=Expression.Label(typeof(string));
+        this.Lambdaを作って実行(Expression.Label(Label,Expression.Constant("ABC")));
+        var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
+        this.Lambdaを作って実行(
+            Expression.Label(
+                Label,
+                Expression.Call(
+                    typeof(string).GetMethod("Concat",new []{typeof(string),typeof(string)})!,
+                    Call,
+                    Call
+                )
+            )
+        );
+    }
     [Fact]
     public void Lambda(){
         //if(Lambda0_Body==Lambda1_Body)return Lambda0;
@@ -823,7 +894,7 @@ public class ReturnExpressionTraverser : 共通{
     }
     private void Lambdaを作って実行(Expression Expression0){
         var Lambda = Expression.Lambda(Expression0);
-        this.変換_局所Parameterの先行評価.Traverse(Lambda);
+        this.変換_局所Parameterの先行評価.実行(Lambda);
         //var Lambda = Expression.Lambda(Expression0);
         //this.Lambda最適化(Lambda );
     }
@@ -860,8 +931,73 @@ public class ReturnExpressionTraverser : 共通{
         );
     }
     [Fact]
-    public void MakeAssign()
-    {
+    public void MakeAssign(){
+        var ParameterDecimmal = Expression.Parameter(typeof(decimal));
+        var Constant1 = Expression.Constant(1m);
+        var ConversionDecimal = Expression.Lambda<Func<decimal, decimal>>(Expression.Add(ParameterDecimmal, ParameterDecimmal), ParameterDecimmal);
+        //if(Binary0_Left==Binary1_Left)
+        //    if(Binary0_Right==Binary1_Right)
+        //        if(Binary0_Conversion==Binary1_Conversion)
+        var Add=Expression.Add(
+            ParameterDecimmal, 
+            ParameterDecimmal
+        );
+        Add=Expression.Add(Add,Add);
+        this.Lambdaを作って実行(
+            Expression.AddAssign(
+                ParameterDecimmal,
+                Expression.Constant(0m),
+                null,
+                null
+            )
+        );
+        this.Lambdaを作って実行(
+            Expression.AddAssign(
+                ParameterDecimmal, 
+                Constant1, 
+                typeof(decimal).GetMethod("op_Addition"), 
+                Expression.Lambda(
+                    Add, 
+                    ParameterDecimmal
+                )
+            )
+        );
+        this.Lambdaを作って実行(
+            Expression.AddAssign(
+                ParameterDecimmal, 
+                Add, 
+                typeof(decimal).GetMethod("op_Addition"), 
+                Expression.Lambda(
+                    ParameterDecimmal, 
+                    ParameterDecimmal
+                )
+            )
+        );
+        var array= Expression.Parameter(typeof(decimal[]));
+        this.Lambdaを作って実行(
+            Expression.AddAssign(
+                Expression.ArrayAccess(
+                    array,
+                    Expression.Convert(
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        ),
+                        typeof(int)
+                    )
+                ), 
+                Expression.Constant(0m),
+                typeof(decimal).GetMethod("op_Addition"), 
+                Expression.Lambda(
+                    ParameterDecimmal, 
+                    ParameterDecimmal
+                )
+            )
+        );
+        void 共通(Expression Expression0){
+            var Lambda = Expression.Lambda(Expression0);
+            this.変換_旧Parameterを新Expression1.実行(Lambda,ParameterDecimmal,ParameterDecimmal);
+        }
     }
     [Fact]
     public void MakeBinary()

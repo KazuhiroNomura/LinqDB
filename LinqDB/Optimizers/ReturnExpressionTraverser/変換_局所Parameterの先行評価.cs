@@ -1429,7 +1429,11 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var Lambda2_Body = this.Traverse(Lambda1_Body);
         this.Block_Variables=Block0_Variables;
         if(Block1_Variables.Count>0) Lambda2_Body=Expression.Block(Block1_Variables,this.作業配列.Expressions設定(Lambda2_Body));
-        var Lambda1 = Expression.Lambda(Lambda0.Type,Lambda2_Body,Lambda0.Name,Lambda0.TailCall,Lambda0_Parameters);
+        Expression Lambda1;
+        if(Lambda1_Body==Lambda2_Body) 
+            Lambda1=Lambda0;
+        else 
+            Lambda1 = Expression.Lambda(Lambda0.Type,Lambda2_Body,Lambda0.Name,Lambda0.TailCall,Lambda0_Parameters);
         ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
         return Lambda1;
     }
