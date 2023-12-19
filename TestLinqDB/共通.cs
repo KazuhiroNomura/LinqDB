@@ -6,7 +6,8 @@ using Reflection = System.Reflection;
 using LinqDB.Optimizers;
 using LinqDB.Remote.Servers;
 using static LinqDB.Helpers.Configulation;
-using Expressions = System.Linq.Expressions;
+using System.Linq.Expressions;
+//using Expressions = System.Linq.Expressions;
 using LinqDB.Remote.Clients;
 using System.Net;
 using System.Reflection;
@@ -59,6 +60,21 @@ public abstract class 共通{
         this.Optimizer=new(){IsGenerateAssembly=(テストオプション.アセンブリ保存&this.テストオプション)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll",IsInline = true};
 
     }
+    protected readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
+        typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>()));
+    /// <summary>
+    /// 変換_局所Parameterの先行評価.実行
+    /// </summary>
+    /// <param name="Body"></param>
+    protected void 変換_局所Parameterの先行評価_実行(Expression Body){
+        var Lambda=Expression.Lambda(Body);
+        var s0=CommonLibrary.インラインラムダテキスト(Lambda);
+        var s1=CommonLibrary.インラインラムダテキスト((Expression)this.変換_局所Parameterの先行評価.実行(Lambda));
+        Trace.WriteLine(s0);
+        Trace.WriteLine(s1);
+        //var Lambda = Expression.Lambda(Expression0);
+        //this.Lambda最適化(Lambda );
+    }
     private void ServerClient(Action<Client>Action){
         const int receiveTimeout = 1000;
         var port=Interlocked.Increment(ref ポート番号);
@@ -75,11 +91,15 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
     protected readonly Optimizer Optimizer;
     protected static Set<int>CreateSet()=>new();
-    protected static Expressions.Expression GetLambda(Expressions.LambdaExpression Lambda)=>Lambda.Body;
+    protected static Expression GetLambda(LambdaExpression Lambda)=>Lambda.Body;
     protected static Func<TResult> Anonymous<TResult>(Func<TResult> i)=>i;
     protected static Func<TO,TResult> Anonymous<TO,TResult>(Func<TO,TResult> i)=>i;
     protected static Func<TO,T1,TResult> Anonymous<TO,T1,TResult>(Func<TO,T1,TResult> i)=>i;
-    protected void Lambda最適化(Expressions.Expression Expression){
+    /// <summary>
+    /// Optimizer.Lambda最適化(Expression);
+    /// </summary>
+    /// <param name="Expression"></param>
+    protected void Optimizer_Lambda最適化(Expression Expression){
         var Optimizer=this.Optimizer;
         Optimizer.IsInline=false;
         Optimizer.Lambda最適化(Expression);
@@ -198,14 +218,14 @@ public abstract class 共通{
             AssertAction(output);
         }
     }
-    protected void ExpressionシリアライズCoverage<T>(T input)where T:Expressions.Expression{
+    protected void ExpressionシリアライズCoverage<T>(T input)where T:Expression{
         共通(
-            input     ,(Expressions.Expression?)input ,(object?)input     ,
-            default(T),default(Expressions.Expression),(object?)default(T)
+            input     ,(Expression?)input ,(object?)input     ,
+            default(T),default(Expression),(object?)default(T)
         );
         共通(
-            new   []{input  ,input  },new Expressions.Expression?[]{input  ,input  },new object?[]{input  ,input  },
-            new T?[]{default,default},new Expressions.Expression?[]{default,default},new object?[]{default,default}
+            new   []{input  ,input  },new Expression?[]{input  ,input  },new object?[]{input  ,input  },
+            new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default}
         );
         void 共通<T0,T1,T2,T3,T4,T5>(T0 t0,T1 t1,T2 t2,T3 t3,T4 t4,T5 t5) {
             this.SerializeDeserializeAreEqual(t0);
@@ -236,7 +256,7 @@ public abstract class 共通{
     //        this.SerializeDeserializeAreEqual(new {t0,t1});
     //    }
     //}
-    protected void Expressionシリアライズ<T>(T? input) where T:Expressions.Expression{
+    protected void Expressionシリアライズ<T>(T? input) where T:Expression{
         if((テストオプション.MemoryPack&this.テストオプション)!=0)
             共通(this.MemoryPack);
         if((テストオプション.MessagePack&this.テストオプション)!=0)
@@ -244,10 +264,10 @@ public abstract class 共通{
         if((テストオプション.Utf8Json&this.テストオプション)!=0)
             共通(this.Utf8Json);
         void 共通(LinqDB.Serializers.Serializer Serializer){
-            共通0(Serializer,input,(Expressions.Expression?)input,(object?)input);
-            共通0(Serializer,default(T),default(Expressions.Expression),(object?)default(T));
-            共通0(Serializer,new[]{input,input},new Expressions.Expression?[]{input,input},new object?[]{input,input});
-            共通0(Serializer,new T?[]{default,default},new Expressions.Expression?[]{default,default},new object?[]{default,default});
+            共通0(Serializer,input,(Expression?)input,(object?)input);
+            共通0(Serializer,default(T),default(Expression),(object?)default(T));
+            共通0(Serializer,new[]{input,input},new Expression?[]{input,input},new object?[]{input,input});
+            共通0(Serializer,new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
             void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
                 SerializeDeserialize(Serializer,t0);
                 SerializeDeserialize(Serializer,t1);
@@ -259,7 +279,7 @@ public abstract class 共通{
             }
         }
     }
-    protected void ExpressionシリアライズAssertEqual<T>(T input) where T:Expressions.Expression{
+    protected void ExpressionシリアライズAssertEqual<T>(T input) where T:Expression{
         if((テストオプション.MemoryPack&this.テストオプション)!=0)
             共通(this.MemoryPack);
         if((テストオプション.MessagePack&this.テストオプション)!=0)
@@ -267,10 +287,10 @@ public abstract class 共通{
         if((テストオプション.Utf8Json&this.テストオプション)!=0)
             共通(this.Utf8Json);
         void 共通(LinqDB.Serializers.Serializer Serializer){
-            共通0(Serializer,input,(Expressions.Expression?)input,(object?)input);
-            共通0(Serializer,default(T),default(Expressions.Expression),(object?)default(T));
-            共通0(Serializer,new[]{input,input},new Expressions.Expression?[]{input,input},new object?[]{input,input});
-            共通0(Serializer,new T?[]{default,default},new Expressions.Expression?[]{default,default},new object?[]{default,default});
+            共通0(Serializer,input,(Expression?)input,(object?)input);
+            共通0(Serializer,default(T),default(Expression),(object?)default(T));
+            共通0(Serializer,new[]{input,input},new Expression?[]{input,input},new object?[]{input,input});
+            共通0(Serializer,new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
             void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
                 SerializeDeserializeAreEqual(Serializer,t0);
                 SerializeDeserializeAreEqual(Serializer,t1);
@@ -282,9 +302,9 @@ public abstract class 共通{
             }
         }
     }
-    //protected void ExpressionAssertEqual<T>(Expressions.Expression<Func<T>> input)where T: Expressions.LambdaExpression=>this.ExpressionAssertEqual(input,actual=>Assert.Equal(input,actual,this.汎用Comparer));
-    //protected void ExpressionAssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T ServerObject)where T: Expressions.LambdaExpression=>this.ExpressionAssertEqual(input,ServerObject,actual=>Assert.Equal(input,actual,this.汎用Comparer));
-    protected void Expression実行AssertEqual(Expressions.Expression<Action> input) {
+    //protected void ExpressionAssertEqual<T>(Expression<Func<T>> input)where T: LambdaExpression=>this.ExpressionAssertEqual(input,actual=>Assert.Equal(input,actual,this.汎用Comparer));
+    //protected void ExpressionAssertEqual<T,TResult>(Expression<Func<T,TResult>> input,T ServerObject)where T: LambdaExpression=>this.ExpressionAssertEqual(input,ServerObject,actual=>Assert.Equal(input,actual,this.汎用Comparer));
+    protected void Expression実行AssertEqual(Expression<Action> input) {
         this.ExpressionシリアライズAssertEqual(input);
         var Optimizer = this.Optimizer;
         var 標準 = input.Compile();
@@ -294,15 +314,15 @@ public abstract class 共通{
         Optimizer.IsInline=true;
         Optimizer.CreateDelegate(input)();
     }
-    protected void Expression実行AssertEqual<T>(Expressions.Expression<Func<T>> input){
+    protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
         if((テストオプション.最適化&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             } else{
                 Optimizer.IsInline=false;
-                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             }
         }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
@@ -346,10 +366,10 @@ public abstract class 共通{
                 共通(this.Utf8Json);
         }
         void 共通(LinqDB.Serializers.Serializer Serializer){
-            共通0(Serializer,input,(Expressions.Expression?)input,(object?)input);
-            共通0(Serializer,default(T),default(Expressions.Expression),(object?)default(T));
-            共通0(Serializer,new[]{input,input},new Expressions.Expression?[]{input,input},new object?[]{input,input});
-            共通0(Serializer,new T?[]{default,default},new Expressions.Expression?[]{default,default},new object?[]{default,default});
+            共通0(Serializer,input,(Expression?)input,(object?)input);
+            共通0(Serializer,default(T),default(Expression),(object?)default(T));
+            共通0(Serializer,new[]{input,input},new Expression?[]{input,input},new object?[]{input,input});
+            共通0(Serializer,new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
             void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
                 SerializeDeserializeAreEqual(Serializer,t0);
                 SerializeDeserializeAreEqual(Serializer,t1);
@@ -361,7 +381,7 @@ public abstract class 共通{
             }
         }
     }
-    protected T Expression実行<T>(Expressions.Expression<Func<T>> input){
+    protected T Expression実行<T>(Expression<Func<T>> input){
         if((テストオプション.最適化&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
@@ -381,16 +401,16 @@ public abstract class 共通{
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="input"></param>
-    protected void Expression実行AssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input){
+    protected void Expression実行AssertEqual<T,TResult>(Expression<Func<T,TResult>> input){
         var 引数=default(T)!;
         if((テストオプション.最適化&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             } else{
                 Optimizer.IsInline=false;
-                Trace.WriteLine(CommonLibrary.DebugView(Optimizer.Lambda最適化(input)));
+                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             }
         }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
@@ -434,10 +454,10 @@ public abstract class 共通{
                 共通(this.Utf8Json);
         }
         void 共通(LinqDB.Serializers.Serializer Serializer){
-            共通0(Serializer,input,(Expressions.Expression?)input,(object?)input);
-            共通0(Serializer,default(T),default(Expressions.Expression),(object?)default(T));
-            共通0(Serializer,new[]{input,input},new Expressions.Expression?[]{input,input},new object?[]{input,input});
-            共通0(Serializer,new T?[]{default,default},new Expressions.Expression?[]{default,default},new object?[]{default,default});
+            共通0(Serializer,input,(Expression?)input,(object?)input);
+            共通0(Serializer,default(T),default(Expression),(object?)default(T));
+            共通0(Serializer,new[]{input,input},new Expression?[]{input,input},new object?[]{input,input});
+            共通0(Serializer,new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
             void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
                 SerializeDeserializeAreEqual(Serializer,t0);
                 SerializeDeserializeAreEqual(Serializer,t1);
@@ -449,12 +469,12 @@ public abstract class 共通{
             }
         }
     }
-    protected void Expression比較実行AssertEqual<T0, T1>(Expressions.Expression<Func<T0>> input0,Expressions.Expression<Func<T1>> input1) {
+    protected void Expression比較実行AssertEqual<T0, T1>(Expression<Func<T0>> input0,Expression<Func<T1>> input1) {
         var actual0 = this.Expression実行(input0);
         var actual1 = this.Expression実行(input1);
         Assert.Equal(actual0,actual1,new 汎用Comparer());
     }
-    //protected void ExpressionAssertEqual<T,TResult>(Expressions.Expression<Func<T,TResult>> input,T ServerObject,Action<T> Action)where T: Expressions.LambdaExpression{
+    //protected void ExpressionAssertEqual<T,TResult>(Expression<Func<T,TResult>> input,T ServerObject,Action<T> Action)where T: LambdaExpression{
     //    if((テストオプション.MemoryPack&C.O)!=0)
     //        Serialize(this.MemoryPack,nameof(this.MemoryPack));
     //    if((テストオプション.MessagePack&C.O)!=0)
@@ -528,11 +548,11 @@ public abstract class 共通{
         var b=2;
         var _=GetLambda(()=>b);
         var body=GetLambda(()=>a);
-        var member=(Expressions.MemberExpression)body;
-        var constant=(Expressions.ConstantExpression)member.Expression!;
+        var member=(MemberExpression)body;
+        var constant=(ConstantExpression)member.Expression!;
         return constant.Value!;
     }
-    protected static Reflection.MethodInfo GetMethod<T>(Expressions.Expression<Func<T>> e)=>((Expressions.MethodCallExpression)e.Body).Method;
+    protected static Reflection.MethodInfo GetMethod<T>(Expression<Func<T>> e)=>((MethodCallExpression)e.Body).Method;
     protected static Reflection.MethodInfo GetMethod(string Name)=>typeof(Serializer).GetMethod(Name,Reflection.BindingFlags.Static|Reflection.BindingFlags.NonPublic)!;
-    protected static Reflection.MethodInfo M(Expressions.Expression<Action> f)=>((Expressions.MethodCallExpression)f.Body).Method;
+    protected static Reflection.MethodInfo M(Expression<Action> f)=>((MethodCallExpression)f.Body).Method;
 }

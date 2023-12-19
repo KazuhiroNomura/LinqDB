@@ -161,5 +161,103 @@ public class 特定パターン : 共通{
             )
         );
     }
+    [Fact]
+    public void 明示暗黙ローカル変数(){
+        {
+            var p = Expression.Parameter(typeof(decimal), "p");
+            this.Optimizer_Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Add(
+                            Expression.Constant(1m), 
+                            Expression.Constant(1m)
+                        ),
+                        Expression.Constant(1m)
+                    )
+                )
+            );
+            this.Optimizer_Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Assign(
+                            p, 
+                            Expression.Add(
+                                Expression.Constant(1m), 
+                                Expression.Constant(1m)
+                            )
+                        ),
+                        Expression.Constant(1m)
+                    )
+                )
+            );
+        }
+        //        } else{
+        //        }
+        //    }
+        //    case ExpressionType.Call: {
+        //        if(Reflection.Helpers.NoEarlyEvaluation==GetGenericMethodDefinition(((MethodCallExpression)Expression).Method))return;
+        {
+            var _1m = 1m;
+            var _7 = this.Optimizer.Lambda最適化(
+                () => _1m+_1m+_1m.NoEarlyEvaluation()
+            );
+        }
+        {
+            var _1m = 1m;
+            var set = new Set<int>();
+            var _8 = this.Optimizer.Lambda最適化(
+                () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
+            );
+        }
+        //    }
+        //    case ExpressionType.Constant: {
+        //        if(ILで直接埋め込めるか((ConstantExpression)Expression))return;
+        {
+            var _1 = 1;
+            var _10 = this.Optimizer.Lambda最適化(
+                () => _1+_1+1
+            );
+        }
+        //    }
+        //    case ExpressionType.Parameter: {
+        //        if(this.ラムダ跨ぎParameters.Contains(Expression))break;
+        {
+            var p = Expression.Parameter(typeof(int), "p");
+            var _1 = 1;
+            var _11 = this.Optimizer.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m),
+                        Expression.Lambda(p)
+                    ), p
+                )
+            );
+            var q = Expression.Parameter(typeof(int), "q");
+            var _12 = this.Optimizer.Lambda最適化(
+                Expression.Lambda(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m),
+                        p,
+                        Expression.Lambda(
+                            Expression.Block(
+                                p,
+                                Expression.Add(
+                                    Expression.Add(q, q),
+                                    Expression.Add(q, q)
+                                )
+                            ),
+                            q
+                        )
+                    ), p
+                )
+            );
+        }
+        //    }
+        //}
+        //if(this.判定_左辺Expressionsが含まれる.実行(Expression)) {
+        //}
+    }
 
 }

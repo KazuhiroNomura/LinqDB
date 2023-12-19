@@ -358,11 +358,11 @@ public class 変換_インラインループ独立 : 共通{
         var double1 = new Set<double> { 1, 2, 3 };
         this.Expression実行AssertEqual(() => double0.SequenceEqual(double1));
     }
-    private struct StructSingle
-    {
-        public readonly int a;
-        public StructSingle(int a) => this.a=a;
-    }
+    //private struct StructSingle
+    //{
+    //    public readonly int a;
+    //    public StructSingle(int a) => this.a=a;
+    //}
     [Fact]
     public void Single()
     {

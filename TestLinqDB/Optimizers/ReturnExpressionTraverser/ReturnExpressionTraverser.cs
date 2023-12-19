@@ -14,14 +14,23 @@ using System.Diagnostics;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 [SuppressMessage("ReSharper","InconsistentNaming")]
 public class ReturnExpressionTraverser : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     //private readonly dynamic  Traverser= new NonPublicAccessor(typeof(LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser).GetConstructor(System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance, new[] { typeof(作業配列) })!.Invoke(new object[] { new 作業配列() }));
     //private readonly dynamic o =new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価();
     //private static readonly dynamic o = new NonPublicAccessor(typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(BindingFlags.NonPublic|BindingFlags.Instance, new[] { typeof(作業配列) })!.Invoke(new object[] { new 作業配列() }));
     private readonly dynamic 変換_旧Parameterを新Expression1 = new NonPublicAccessor(
         typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression1).GetConstructors()[0]!.Invoke(new[]{new 作業配列()}));
-    private readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
-        typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>()));
+    //private readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
+    //    typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>()));
+    ///// <summary>
+    ///// 変換_局所Parameterの先行評価.実行
+    ///// </summary>
+    ///// <param name="Body"></param>
+    //private void 変換_局所Parameterの先行評価_実行(Expression Body){
+    //    var Lambda = Expression.Lambda(Body);
+    //    this.変換_局所Parameterの先行評価.実行(Lambda);
+    //    //var Lambda = Expression.Lambda(Expression0);
+    //    //this.Lambda最適化(Lambda );
+    //}
     static ReturnExpressionTraverser(){
     }
     //private static readonly LinqDB.Optimizers.ReturnExpressionTraverser o=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価(new 作業配列());
@@ -174,7 +183,7 @@ public class ReturnExpressionTraverser : 共通{
             Expression.Constant(0m), 
             Expression.Constant(0m)
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.AndAlso(
                 Equal,
                 Equal
@@ -202,7 +211,7 @@ public class ReturnExpressionTraverser : 共通{
         //    switch (Binding0.BindingType) {
         //        case MemberBindingType.Assignment: {
         //            if(Binding0_Expression==Binding1_Expression) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.Bind(
@@ -212,7 +221,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //            } else {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.Bind(
@@ -225,7 +234,7 @@ public class ReturnExpressionTraverser : 共通{
         //        }
         //        case MemberBindingType.MemberBinding: {
         //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.MemberBind(
@@ -238,7 +247,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //            } else {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.MemberBind(
@@ -255,7 +264,7 @@ public class ReturnExpressionTraverser : 共通{
         //        default: {
         //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
         //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(
@@ -268,7 +277,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //                } else {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.MemberInit(
                 New,
                 Expression.ListBind(
@@ -356,7 +365,7 @@ public class ReturnExpressionTraverser : 共通{
             Expression.Constant(0m), 
             Expression.Constant(0m)
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.OrElse(
                 Equal,
                 Equal
@@ -375,7 +384,7 @@ public class ReturnExpressionTraverser : 共通{
     public void Block(){
         //if(Block0_Expressions_Count>=6||Block0.Variables.Count>=1||Block0_Expressions[Block0_Expressions_Count-1].Type!=Block0.Type){
         //    if(ReferenceEquals(Block0_Expressions,Block1_Expressions))
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -386,7 +395,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    else 
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -399,7 +408,7 @@ public class ReturnExpressionTraverser : 共通{
         //}
         //if(Block0_Expressions_Count<=1)
         //    if(b) 
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Add(
                     Expression.Constant(0m),
@@ -408,21 +417,21 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m)
             )
         );
         //if(Block0_Expressions_Count<=2)
         //    if(b) 
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m)
             )
         );
         //    else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m)
@@ -430,7 +439,7 @@ public class ReturnExpressionTraverser : 共通{
         );
         //if(Block0_Expressions_Count<=3)
         //    if(b) 
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -438,7 +447,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -447,7 +456,7 @@ public class ReturnExpressionTraverser : 共通{
         );
         //if(Block0_Expressions_Count<=4)
         //    if(b) 
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -456,7 +465,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -465,7 +474,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //if(b)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -475,7 +484,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -494,28 +503,28 @@ public class ReturnExpressionTraverser : 共通{
         //if(Conditional0_Test==Conditional1_Test)
         //    if(Conditional0_IfTrue==Conditional1_IfTrue)
         //        if(Conditional0_IfFalse==Conditional1_IfFalse)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),
                 Expression.Constant(true)
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),
                 Equal
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Condition(
                 Expression.Constant(true),
                 Equal,
                 Expression.Constant(true)
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Condition(
                 Equal,
                 Expression.Constant(true),
@@ -548,13 +557,13 @@ public class ReturnExpressionTraverser : 共通{
         //if(Index1_Object==Index0_Object)
         //    if(ReferenceEquals(Index0_Arguments,Index1_Arguments)) 
         var array = Expression.Parameter(typeof(decimal[]), "array");
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.ArrayAccess(
                 array,
                 Expression.Constant(0)
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.ArrayAccess(
                 array,
                 Expression.Convert(
@@ -566,7 +575,7 @@ public class ReturnExpressionTraverser : 共通{
                 )
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.ArrayAccess(
                 Expression.ArrayAccess(
                     Expression.Constant(new decimal[][]{new decimal[1]}),
@@ -584,7 +593,7 @@ public class ReturnExpressionTraverser : 共通{
     }
     [Fact]
     public void Invoke(){
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Invoke(
                 Expression.Lambda(
                     Expression.Constant(0m),
@@ -593,7 +602,7 @@ public class ReturnExpressionTraverser : 共通{
                 Expression.Constant(0m)
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Invoke(
                 Expression.Lambda(
                     Expression.Add(
@@ -613,9 +622,9 @@ public class ReturnExpressionTraverser : 共通{
     public void Label(){
         //if(Label0_DefaultValue==Label1_DefaultValue) return Label0;
         var Label=Expression.Label(typeof(string));
-        this.Lambdaを作って実行(Expression.Label(Label,Expression.Constant("ABC")));
+        this.変換_局所Parameterの先行評価_実行(Expression.Label(Label,Expression.Constant("ABC")));
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Label(
                 Label,
                 Expression.Call(
@@ -656,69 +665,69 @@ public class ReturnExpressionTraverser : 共通{
         //if(MethodCall0_Object is null) {
         //    if(MethodCall0_Arguments_Count>=6){
         //        if(ReferenceEquals(MethodCall0_Argumentsm,MethodCall1_Arguments)) 
-        this.Lambda最適化(()=>static6(1m,2m,3m,4m,5m,6m));
+        this.Optimizer_Lambda最適化(()=>static6(1m,2m,3m,4m,5m,6m));
         //        else 
-        this.Lambda最適化(()=>static6(1m,1m,1m,1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>static6(1m,1m,1m,1m,1m,1m));
         //    }
         //    if(MethodCall0_Arguments_Count==0)return MethodCall0;
-        this.Lambda最適化(()=>static0());
+        this.Optimizer_Lambda最適化(()=>static0());
         //    if(MethodCall0_Arguments_Count==1)
         //        if(b)
-        this.Lambda最適化(()=>static1(1m));
+        this.Optimizer_Lambda最適化(()=>static1(1m));
         //        else 
-        this.Lambda最適化(()=>static1(d*d));
+        this.Optimizer_Lambda最適化(()=>static1(d*d));
         //    if(MethodCall0_Arguments_Count==2)
         //        if(b)
-        this.Lambda最適化(()=>static2(1m,2m));
+        this.Optimizer_Lambda最適化(()=>static2(1m,2m));
         //        else 
-        this.Lambda最適化(()=>static2(1m,1m));
+        this.Optimizer_Lambda最適化(()=>static2(1m,1m));
         //    if(MethodCall0_Arguments_Count==3)
         //        if(b)
-        this.Lambda最適化(()=>static3(1m,2m,3m));
+        this.Optimizer_Lambda最適化(()=>static3(1m,2m,3m));
         //        else 
-        this.Lambda最適化(()=>static3(1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>static3(1m,1m,1m));
         //    if(MethodCall0_Arguments_Count==4)
         //        if(b)
-        this.Lambda最適化(()=>static4(1m,2m,3m,4m));
+        this.Optimizer_Lambda最適化(()=>static4(1m,2m,3m,4m));
         //        else 
-        this.Lambda最適化(()=>static4(1m,1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>static4(1m,1m,1m,1m));
         //    if(b) 
-        this.Lambda最適化(()=>static5(1m,2m,3m,4m,5m));
+        this.Optimizer_Lambda最適化(()=>static5(1m,2m,3m,4m,5m));
         //    else
-        this.Lambda最適化(()=>static5(1m,1m,1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>static5(1m,1m,1m,1m,1m));
         //} else {
         //    if(MethodCall0_Arguments_Count>=4){
         //        if(b)
         //            if(ReferenceEquals(MethodCall0_Argumentsm,MethodCall1_Arguments))
         var f4=(decimal p1m,decimal p2m,decimal p3m,decimal p4)=>0;
-        this.Lambda最適化(()=>f4.Invoke(1m,2m,3m,4m));
+        this.Optimizer_Lambda最適化(()=>f4.Invoke(1m,2m,3m,4m));
         //                return MethodCall0;
-        this.Lambda最適化(()=>f4.Invoke(1m,1m,1m,1m));
-        this.Lambda最適化(()=>new[]{f4}[(int)(d*d)].Invoke(1m,1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>f4.Invoke(1m,1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>new[]{f4}[(int)(d*d)].Invoke(1m,1m,1m,1m));
         //    }
         //    if(MethodCall0_Arguments_Count==0)
         //        if(b)
         var f0=()=>0;
-        this.Lambda最適化(()=>f0.Invoke());
+        this.Optimizer_Lambda最適化(()=>f0.Invoke());
         //        else 
-        this.Lambda最適化(()=>new[]{f0}[(int)(d*d)].Invoke());
+        this.Optimizer_Lambda最適化(()=>new[]{f0}[(int)(d*d)].Invoke());
         //    if(MethodCall0_Arguments_Count==1)
         //        if(b)
         var f1=(decimal p1)=>0;
-        this.Lambda最適化(()=>f1.Invoke(1m));
+        this.Optimizer_Lambda最適化(()=>f1.Invoke(1m));
         //        else 
-        this.Lambda最適化(()=>f1.Invoke(d*d));
+        this.Optimizer_Lambda最適化(()=>f1.Invoke(d*d));
         //    if(MethodCall0_Arguments_Count==2)
         //        if(b)
         var f2=(decimal p1m,decimal p2)=>0;
-        this.Lambda最適化(()=>f2.Invoke(1m,2m));
+        this.Optimizer_Lambda最適化(()=>f2.Invoke(1m,2m));
         //        else 
-        this.Lambda最適化(()=>f2.Invoke(1m,1m));
+        this.Optimizer_Lambda最適化(()=>f2.Invoke(1m,1m));
         //    if(b) 
         var f3=(decimal p1m,decimal p2m,decimal p3)=>0;
-        this.Lambda最適化(()=>f3.Invoke(1m,2m,3m));
+        this.Optimizer_Lambda最適化(()=>f3.Invoke(1m,2m,3m));
         //    else
-        this.Lambda最適化(()=>f3.Invoke(1m,1m,1m));
+        this.Optimizer_Lambda最適化(()=>f3.Invoke(1m,1m,1m));
         //}
     }
     [Fact]public void NewArrayBounds()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.NewArrayBounds(typeof(int), @int));
@@ -769,7 +778,7 @@ public class ReturnExpressionTraverser : 共通{
                 CSharpArgumentInfoArray4
             );
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -781,7 +790,7 @@ public class ReturnExpressionTraverser : 共通{
                 );
             }
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -804,7 +813,7 @@ public class ReturnExpressionTraverser : 共通{
                 CSharpArgumentInfoArray1
             );
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -813,7 +822,7 @@ public class ReturnExpressionTraverser : 共通{
                 );
             }
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -841,7 +850,7 @@ public class ReturnExpressionTraverser : 共通{
                 CSharpArgumentInfoArray2
             );
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -851,7 +860,7 @@ public class ReturnExpressionTraverser : 共通{
                 );
             }
             {
-                this.Lambdaを作って実行(
+                this.変換_局所Parameterの先行評価_実行(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -872,7 +881,7 @@ public class ReturnExpressionTraverser : 共通{
                 typeof(Serializer),
                 CSharpArgumentInfoArray3
             );
-            this.Lambdaを作って実行(
+            this.変換_局所Parameterの先行評価_実行(
                 Expression.Dynamic(
                     binder,
                     typeof(object),
@@ -881,7 +890,7 @@ public class ReturnExpressionTraverser : 共通{
                     Expression.Constant(1)
                 )
             );
-            this.Lambdaを作って実行(
+            this.変換_局所Parameterの先行評価_実行(
                 Expression.Dynamic(
                     binder,
                     typeof(object),
@@ -891,12 +900,6 @@ public class ReturnExpressionTraverser : 共通{
                 )
             );
         }
-    }
-    private void Lambdaを作って実行(Expression Expression0){
-        var Lambda = Expression.Lambda(Expression0);
-        this.変換_局所Parameterの先行評価.実行(Lambda);
-        //var Lambda = Expression.Lambda(Expression0);
-        //this.Lambda最適化(Lambda );
     }
     [Fact]
     public void ListInit()
@@ -943,7 +946,7 @@ public class ReturnExpressionTraverser : 共通{
             ParameterDecimmal
         );
         Add=Expression.Add(Add,Add);
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.AddAssign(
                 ParameterDecimmal,
                 Expression.Constant(0m),
@@ -951,7 +954,7 @@ public class ReturnExpressionTraverser : 共通{
                 null
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.AddAssign(
                 ParameterDecimmal, 
                 Constant1, 
@@ -962,7 +965,7 @@ public class ReturnExpressionTraverser : 共通{
                 )
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.AddAssign(
                 ParameterDecimmal, 
                 Add, 
@@ -974,7 +977,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         var array= Expression.Parameter(typeof(decimal[]));
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.AddAssign(
                 Expression.ArrayAccess(
                     array,
@@ -1071,7 +1074,7 @@ public class ReturnExpressionTraverser : 共通{
         );
         //for(var a=0; a < Switch0_Cases_Count; a++) {
         //    if(Switch0_Case_Body !=Switch1_Case_Body) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Switch(
                 Expression.Constant(true),
                 Expression.Constant(true),
@@ -1082,7 +1085,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    } else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Switch(
                 Expression.Constant(true),
                 Expression.Constant(true),
@@ -1093,7 +1096,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //    } else
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.Switch(
                 Expression.Constant(true),
                 Equal,
@@ -1108,7 +1111,7 @@ public class ReturnExpressionTraverser : 共通{
     public void Try(){
         var ex = Expression.Parameter(typeof(Exception), "ex");
         //if(Try0_Body !=Try1_Body)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Add(
                     Expression.Constant(0m),
@@ -1121,7 +1124,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //if(Try0_Finally!=Try1_Finally)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryFinally(
                 Expression.Constant(0),
                 Expression.Add(
@@ -1132,7 +1135,7 @@ public class ReturnExpressionTraverser : 共通{
         );
         //for(var a=0; a < Try0_Handlers_Count; a++) {
         //    if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1144,7 +1147,7 @@ public class ReturnExpressionTraverser : 共通{
                 )
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1158,7 +1161,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //        if(Try0_Handler.Variable is not null) {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1171,7 +1174,7 @@ public class ReturnExpressionTraverser : 共通{
             )
         );
         //        } else {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1186,7 +1189,7 @@ public class ReturnExpressionTraverser : 共通{
         );
         //        }
         //    } else {
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TryCatch(
                 Expression.Default(typeof(void)),
                 Expression.Catch(
@@ -1205,14 +1208,14 @@ public class ReturnExpressionTraverser : 共通{
     [Fact]
     public void TypeAs(){
         //if(Unary0_Operand==Unary1_Operand)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeAs(
                 Expression.Constant("string"),
                 typeof(string)
             )
         );
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeAs(
                 Expression.Call(
                     typeof(string).GetMethod("Concat",new []{typeof(string),typeof(string)})!,
@@ -1226,14 +1229,14 @@ public class ReturnExpressionTraverser : 共通{
     [Fact]
     public void TypeEqual(){
         //if(TypeBinary0_Expression==TypeBinary1_Expression)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeEqual(
                 Expression.Constant("string"),
                 typeof(string)
             )
         );
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeEqual(
                 Expression.Call(
                     typeof(string).GetMethod("Concat",new []{typeof(string),typeof(string)})!,
@@ -1247,13 +1250,13 @@ public class ReturnExpressionTraverser : 共通{
     [Fact]
     public void TypeIs(){
         //if(TypeBinary0_Expression==TypeBinary1_Expression)
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeIs(
                 Expression.Constant(0m),
                 typeof(int)
             )
         );
-        this.Lambdaを作って実行(
+        this.変換_局所Parameterの先行評価_実行(
             Expression.TypeIs(
                 Expression.Equal(
                     Expression.Constant(0m),

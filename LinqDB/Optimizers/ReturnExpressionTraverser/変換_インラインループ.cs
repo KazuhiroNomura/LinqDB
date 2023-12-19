@@ -15,8 +15,6 @@ namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = Collections.Generic;
 using static Common;
 internal class 変換_インラインループ:ReturnExpressionTraverser {
-    protected static bool Compare_Defaultを使うべきか(ExpressionType NodeType,Type Type) =>
-        NodeType==ExpressionType.LessThan&&Type.GetMethod(op_LessThan) is not null||NodeType==ExpressionType.GreaterThan&&Type.GetMethod(op_GreaterThan) is not null;
     protected static MethodCallExpression Call(Expression instance,string MethodName) => Expression.Call(
         instance,
         instance.Type.GetMethod(MethodName,Instance_NonPublic_Public)
@@ -244,18 +242,18 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     //    Debug.Assert(e.Type.IsInterface);
     //    if(e.Type.get.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName) is not null&&!this.重複除去されているか(e);
     //}
-    private static bool Enumerableメソッドで結果にSetを要求するか(Expression Expression) {
-        if(Expression is MethodCallExpression MethodCall&&typeof(Linq.Enumerable)==MethodCall.Method.DeclaringType) {
-            var Name = MethodCall.Method.Name;
-            if(nameof(Linq.Enumerable.SelectMany)==Name)
-                return false;
-            if(nameof(Linq.Enumerable.Except)==Name||nameof(Linq.Enumerable.Intersect)==Name||nameof(Linq.Enumerable.Union)==Name)
-                return true;
-            if(nameof(Linq.Enumerable.Where)==Name)
-                return Enumerableメソッドで結果にSetを要求するか(MethodCall.Arguments[0]);
-        }
-        return false;
-    }
+    //private static bool Enumerableメソッドで結果にSetを要求するか(Expression Expression) {
+    //    if(Expression is MethodCallExpression MethodCall&&typeof(Linq.Enumerable)==MethodCall.Method.DeclaringType) {
+    //        var Name = MethodCall.Method.Name;
+    //        if(nameof(Linq.Enumerable.SelectMany)==Name)
+    //            return false;
+    //        if(nameof(Linq.Enumerable.Except)==Name||nameof(Linq.Enumerable.Intersect)==Name||nameof(Linq.Enumerable.Union)==Name)
+    //            return true;
+    //        if(nameof(Linq.Enumerable.Where)==Name)
+    //            return Enumerableメソッドで結果にSetを要求するか(MethodCall.Arguments[0]);
+    //    }
+    //    return false;
+    //}
     internal static Expression LambdaExpressionを展開1(Expression Lambda,Expression argument,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression) {
         Debug.Assert(typeof(Delegate).IsAssignableFrom(Lambda.Type));
         return Lambda is LambdaExpression Lambda1
@@ -313,15 +311,13 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     protected Expression ループ起点(Expression Expression0,ループの内部処理 ループの内部処理) {
         var 作業配列 = this.作業配列;
         var Expression1 = base.Traverse(Expression0);
-        if(Expression0.NodeType==ExpressionType.Assign&&Expression1.NodeType==ExpressionType.Block) {
-            return Expression.Assign(
-                ((BinaryExpression)Expression0).Left,
-                Expression1
-            );
-        }
+        if(Expression0.NodeType==ExpressionType.Assign)//代入式を更新したら
+            if(Expression1.NodeType==ExpressionType.Block)//複雑な展開された
+                return Expression.Assign(((BinaryExpression)Expression0).Left,Expression1);
         var Expression1_Type = Expression1.Type;
-        var EnumeratorExpression = Expression1_Type.IsArray
-            ? (Expression)Expression.New(
+        Expression EnumeratorExpression;
+        if(Expression1_Type.IsArray){
+            EnumeratorExpression=Expression.New(
                 作業配列.GetConstructor(
                     作業配列.MakeGenericType(
                         typeof(SZArrayEnumerator<>),
@@ -330,11 +326,13 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     Expression1_Type
                 ),
                 Expression1
-            )
-            : Expression.Call(
+            );
+        } else{
+            EnumeratorExpression=Expression.Call(
                 Expression1,
                 Expression1_Type.GetMethod(nameof(IEnumerable.GetEnumerator))??Expression1_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!.GetMethod(nameof(IEnumerable.GetEnumerator))!
             );
+        }
         var GetEnumerator_ReturnType = EnumeratorExpression.Type;
         var 変数名 = $"Setﾟ{this.番号++}ﾟ";
         var Enumerator変数 = Expression.Parameter(

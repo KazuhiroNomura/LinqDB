@@ -14,27 +14,14 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
-    //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
-    struct OI
-    {
-        public readonly int o, i;
-        public OI(int o, int i)
-        {
-            this.o=o;
-            this.i=i;
-        }
-    }
-    class SetT : Set<OI>
-    {
-
-    }
     public class 取得_先行評価式:共通{
         protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
         private void TraceWrite(Expression Expression){
             var Optimizer=this.Optimizer;
             Optimizer.IsInline=true;
             var Expression1=Optimizer.Lambda最適化(Expression);
-            var s=LinqDB.Optimizers.Optimizer.インラインラムダテキスト(Expression1);
+            var s=CommonLibrary.インラインラムダテキスト(Expression1);
+
             //var s=CommonLibrary.DebugView(Expression1);
             Trace.WriteLine(s);
         }
@@ -46,7 +33,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         class C:B{
         }
         [Fact]
-        public void 変形確認(){
+        public void 変形確認0(){
             var s=new Set<int>();
             var x0=typeof(A).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
             var x1=typeof(B).GetField("a",BindingFlags.Instance|BindingFlags.NonPublic);
@@ -301,7 +288,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             this.Expression実行AssertEqual(()=>s);
             //    }
             //    case ExpressionType.Default:return;
-            this.Lambda最適化(Expression.Lambda<Action>(Expression.Default(typeof(int))));
+            this.Optimizer_Lambda最適化(Expression.Lambda<Action>(Expression.Default(typeof(int))));
             //    case ExpressionType.Parameter: {
             //        if(this.ラムダ跨ぎParameters.Contains(e)||this.ループ跨ぎParameters.Contains(e))return;
             this.Expression実行AssertEqual(()=>"".Let(a=>"".Let(b=>a)));
@@ -411,7 +398,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
         [Fact]
         public void Block(){
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Constant(0),
@@ -423,7 +410,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         public class 判定_移動できるか:共通{
             [Fact]public void MakeAssign(){
                 var a=Expression.Parameter(typeof(int),"a");
-                this.Lambda最適化(
+                this.Optimizer_Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<int,int>>(
                             Expression.Block(
@@ -456,7 +443,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                 this.Expression実行AssertEqual(()=>s.Join(s,o=>o,i=>i,(o,i)=>new{o,i}).Where(p=>p.i==0));
                 //    foreach(var Variables in a.ListVariables)
                 //        if(Variables.Contains(Parameter)){
-                this.Lambda最適化(
+                this.Optimizer_Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<Func<int>>>(
                             Expression.Block(
@@ -469,7 +456,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                     )
                 );
                 //        }
-                this.Lambda最適化(
+                this.Optimizer_Lambda最適化(
                     Expression.Lambda<Action>(
                         Expression.Lambda<Func<Func<int>>>(
                             Expression.Block(
@@ -504,7 +491,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //    )
             //);
             //var a=Expression.Parameter(typeof(int),"a");
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda(
                     Expression.Block(
                         Expression.Lambda(
@@ -519,7 +506,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         [Fact]
         public void Lambda(){
             var @int=Expression.Parameter(typeof(int),"a");
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda(
                     Expression.Lambda(
                         Expression.Add(
@@ -551,7 +538,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             var s=new Set<int>();
             //    if(this.現在探索場所==this.希望探索場所&&this.ExpressionEqualityComparer.Equals(Expression0,this.旧Expression!)) {
             //        if(this.書き込み項か)this.書き戻しがあるか=true;
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Lambda<Func<int,int>>(
                         Expression.Block(
@@ -565,7 +552,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                 )
             );
             //        else                 this.読み込みがあるか=true;
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda<Action>(
                     Expression.Lambda<Func<int,int>>(
                         Expression.Block(
@@ -593,24 +580,24 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //            case nameof(ExtensionSet.Inline): {
             //                if(MethodCall0_Arguments.Count==1) {
             //                    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
-            this.Lambda最適化((string a)=>ExtensionSet.Inline(()=>1m));
+            this.Optimizer_Lambda最適化((string a)=>ExtensionSet.Inline(()=>1m));
             //                    }else{
-            this.Lambda最適化((string a)=>ExtensionSet.Inline(Anonymous(()=>1m)));
+            this.Optimizer_Lambda最適化((string a)=>ExtensionSet.Inline(Anonymous(()=>1m)));
             //                    }
             //                }else{
             //                    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
             this.Expression実行AssertEqual((int a)=>"".Inline(b=>1m));
             //                    }else{
-            this.Lambda最適化((int a)=>"".Inline(Anonymous((string b)=>1m)));
+            this.Optimizer_Lambda最適化((int a)=>"".Inline(Anonymous((string b)=>1m)));
             //                    }
             //                }
             //            }
             //            default: {
             //                for(var a=1;a<MethodCall0_Arguments_Count;a++){
             //                    if(MethodCall_Arguments_a is LambdaExpression Lambda0){
-            this.Lambda最適化(()=>s.Select(a=>s));
+            this.Optimizer_Lambda最適化(()=>s.Select(a=>s));
             //                    }else{
-            this.Lambda最適化(()=>s.Select(Anonymous((int a)=>s)));
+            this.Optimizer_Lambda最適化(()=>s.Select(Anonymous((int a)=>s)));
             //                    }
             //            }
             //        }
@@ -618,13 +605,10 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //}
             //0
         }
-        static int ind(){
-            return 3;
-        }
         [Fact]
         public void 左辺値書き換え(){
             var array=Expression.Variable(typeof(decimal[]),"array");
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda(
                     Expression.AddAssign(
                         Expression.ArrayAccess(
@@ -687,7 +671,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             //    }
             //}else{
             var @int=Expression.Parameter(typeof(int),"a");
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda(
                     Expression.AddAssign(
                         @int,
@@ -702,7 +686,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             );
             //}
             var @decimal=Expression.Parameter(typeof(decimal),"a");
-            this.Lambda最適化(
+            this.Optimizer_Lambda最適化(
                 Expression.Lambda(
                     Expression.AddAssign(
                         @decimal,
@@ -743,7 +727,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
     [Fact]
     public void Block()
     {
-        this.Lambda最適化(
+        this.Optimizer_Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Constant(0),
@@ -752,7 +736,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             )
         );
         //if(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type) return LinkedList.Last.Value;
-        this.Lambda最適化(
+        this.Optimizer_Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Block(
                     Expression.Constant(0)
@@ -789,7 +773,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         //        if(読み込みがあるか)LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
         this.Expression実行AssertEqual(() => "a".Let(o => o.Let(i => o)));
         //        if(書き込みがあるか)LinkedList.AddLast(Expression.Assign(旧,新));
-        this.Lambda最適化(
+        this.Optimizer_Lambda最適化(
             Expression.Lambda<Action>(
                 Expression.Lambda<Func<int, int>>(
                     Expression.Block(

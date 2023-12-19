@@ -15,7 +15,6 @@ using Expression = System.Linq.Expressions.Expression;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_OuterPredicate_InnerPredicate_プローブビルド:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
     private class Class{
         public bool Equals(int other)=>true;
     }

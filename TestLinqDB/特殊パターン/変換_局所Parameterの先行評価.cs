@@ -1193,7 +1193,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             ),
             pp
         );
-        var 最適化Lambda=this.Optimizer.Lambda最適化(
+        this.Optimizer.Lambda最適化(
             Expression.Lambda<Func<decimal,decimal>>(
                 Block,
                 p

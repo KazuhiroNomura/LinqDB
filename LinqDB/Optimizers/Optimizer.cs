@@ -636,7 +636,6 @@ public sealed class Optimizer:IDisposable {
                 Dictionaryラムダ跨ぎParameter[a.Key]=(Field, Expression.Field(DispParameter,Field));
             }
         }
-        var s = インラインラムダテキスト(Lambda1);
         //var Tuple=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理(ContainerType,DictionaryConstant,DictionaryLambda,Dictionaryラムダ跨ぎParameter,out var TupleParameter1);
         this._作成_DynamicAssembly.Impl作成(Lambda1,DispParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
         Debug.Assert(Disp_Type.GetField("Container",Instance_NonPublic_Public) is not null);
@@ -918,43 +917,43 @@ public sealed class Optimizer:IDisposable {
         public static readonly FieldInfo SetIndex = F(nameof(SetIndex));
     }
 
-    private static string 整形したDebugView(Expression Lambda) {
-        var 旧String = インラインラムダテキスト(Lambda);
-        var 新StringBuilder = new StringBuilder();
-        //var キー定義 = new Regex(@"^\..*>\( \{$",RegexOptions.Singleline);
-        var キー本体 = new Regex(@"^\..*\}$",RegexOptions.Singleline);
-        {
-            var キー参照 = new Regex(@"\..*>\)",RegexOptions.Multiline);
-            for(var キー定義_Match = キー本体.Match(旧String);キー定義_Match.Success;キー定義_Match=キー定義_Match.NextMatch()) {
-                var 前index = 0;
-                for(var キー参照_Match = キー参照.Match(旧String);キー参照_Match.Success;キー参照_Match=キー参照_Match.NextMatch()) {
-                    var 後index = キー参照_Match.Index;
-                    新StringBuilder.Append(旧String[前index..後index]);
-                    前index=後index;
-                    新StringBuilder.Append(キー定義_Match.Value);
-                    新StringBuilder.Append(')');
-                }
-                旧String=新StringBuilder.ToString();
-                新StringBuilder.Clear();
-            }
-        }
-        {
-            var キー参照 = new Regex(@"\..*>,",RegexOptions.Multiline);
-            for(var キー定義_Match = キー本体.Match(旧String);キー定義_Match.Success;キー定義_Match=キー定義_Match.NextMatch()) {
-                var 前index = 0;
-                for(var キー参照_Match = キー参照.Match(旧String);キー参照_Match.Success;キー参照_Match=キー参照_Match.NextMatch()) {
-                    var 後index = キー参照_Match.Index;
-                    新StringBuilder.Append(旧String[前index..後index]);
-                    前index=後index;
-                    新StringBuilder.Append(キー定義_Match.Value);
-                    新StringBuilder.Append(',');
-                }
-                旧String=新StringBuilder.ToString();
-                新StringBuilder.Clear();
-            }
-        }
-        return 旧String;
-    }
+    //private static string 整形したDebugView(Expression Lambda) {
+    //    var 旧String = CommonLibrary.インラインラムダテキスト(Lambda);
+    //    var 新StringBuilder = new StringBuilder();
+    //    //var キー定義 = new Regex(@"^\..*>\( \{$",RegexOptions.Singleline);
+    //    var キー本体 = new Regex(@"^\..*\}$",RegexOptions.Singleline);
+    //    {
+    //        var キー参照 = new Regex(@"\..*>\)",RegexOptions.Multiline);
+    //        for(var キー定義_Match = キー本体.Match(旧String);キー定義_Match.Success;キー定義_Match=キー定義_Match.NextMatch()) {
+    //            var 前index = 0;
+    //            for(var キー参照_Match = キー参照.Match(旧String);キー参照_Match.Success;キー参照_Match=キー参照_Match.NextMatch()) {
+    //                var 後index = キー参照_Match.Index;
+    //                新StringBuilder.Append(旧String[前index..後index]);
+    //                前index=後index;
+    //                新StringBuilder.Append(キー定義_Match.Value);
+    //                新StringBuilder.Append(')');
+    //            }
+    //            旧String=新StringBuilder.ToString();
+    //            新StringBuilder.Clear();
+    //        }
+    //    }
+    //    {
+    //        var キー参照 = new Regex(@"\..*>,",RegexOptions.Multiline);
+    //        for(var キー定義_Match = キー本体.Match(旧String);キー定義_Match.Success;キー定義_Match=キー定義_Match.NextMatch()) {
+    //            var 前index = 0;
+    //            for(var キー参照_Match = キー参照.Match(旧String);キー参照_Match.Success;キー参照_Match=キー参照_Match.NextMatch()) {
+    //                var 後index = キー参照_Match.Index;
+    //                新StringBuilder.Append(旧String[前index..後index]);
+    //                前index=後index;
+    //                新StringBuilder.Append(キー定義_Match.Value);
+    //                新StringBuilder.Append(',');
+    //            }
+    //            旧String=新StringBuilder.ToString();
+    //            新StringBuilder.Clear();
+    //        }
+    //    }
+    //    return 旧String;
+    //}
     //private static readonly Stopwatch 標準 = new Stopwatch(), 独自 = new Stopwatch();
     private static void 実行計画文字列のAssert(string[] expecteds,string テキスト化された実行計画) {
         if(expecteds.Length>0) {
@@ -1052,106 +1051,106 @@ public sealed class Optimizer:IDisposable {
     public void Execute(Expression<Action> Lambda) =>
         this.CreateDelegate(Lambda)();
     //private static readonly Regex RegexLambda=new("[#].*{",RegexOptions.Compiled);
-    private static readonly Regex Regex単純な識別子 = new("[^ ,^$,^#,^<,^[,^>,^(]*[.]",RegexOptions.Compiled);
-    /// <summary>
-    /// 式木をわかりやすくテキストにする
-    /// </summary>
-    /// <param name="e"></param>
-    /// <returns></returns>
-    public static string インラインラムダテキスト(Expression e) {
-        //[^ ]*[.]
-        dynamic NonPublicAccessor = new NonPublicAccessor(typeof(Expression),e);
-        var 変換前 = NonPublicAccessor.DebugView;
-        //変換前=変換前.Replace("LinqDB.Sets.","");
-        //変換前=変換前.Replace("System.Collections.Generic.","");
-        //変換前=変換前.Replace("System.Collections.","");
-        //変換前=変換前.Replace("System.","");
-        変換前=変換前.Replace("\r\n{","{");
-        var KeyValues = new Generic.List<(string Key, Generic.List<string> Values)>();
-        {
-            var r = new StringReader(変換前);
-            var ラムダ式定義 = new Generic.List<string>();
-            var ラムダ定義の1行目 = new Regex(@"^\.Lambda .*\(.*$",RegexOptions.Compiled);
-            while(true) {
-                var Line = r.ReadLine();
-                if(string.IsNullOrEmpty(Line)) {
-                    KeyValues.Add(("", ラムダ式定義));
-                    break;
-                }
-                ラムダ式定義.Add(Line);
-            }
-            while(true) {
-                var Line = r.ReadLine();
-                if(Line is null)
-                    break;
-                if(ラムダ定義の1行目.IsMatch(Line)) {
-                    var Key = Line[..Line.IndexOf("(",StringComparison.Ordinal)];
-                    ラムダ式定義=new Generic.List<string>();
-                    KeyValues.Add((Key, ラムダ式定義));
-                    ラムダ式定義.Add(Line);
-                } else if(string.Equals(Line,"}",StringComparison.Ordinal)) {
-                    ラムダ式定義.Add(Line);
-                } else if(!string.Equals(Line,string.Empty,StringComparison.Ordinal)) {
-                    if(Line[^2]=='>'&&Line[^1]==')') Line=Line.Substring(0,Line.Length-1);
-                    ラムダ式定義.Add(Line);
-                }
-            }
-        }
-        {
-            //Debug.Assert(ルートラムダ is not null,"ルートラムダ != null");
-            //var ルートラムダ2=ルートラムダ;
-            //再試行:
-            //var r = new StringReader(ルートラムダ);
-            //var sb = new StringBuilder();
-            while(true) {
-                for(var a = KeyValues.Count-1;a>=0;a--) {
-                    var a_KeyValue = KeyValues[a];
-                    var a_Values = a_KeyValue.Values;
-                    for(var b = a_Values.Count-1;b>=0;b--) {
-                        var 変換元Line = a_Values[b];
-                        for(var c = KeyValues.Count-1;c>=0;c--) {
-                            var 変換先Value = KeyValues[c];
-                            var 変換先キー = 変換先Value.Key;
-                            var Lambda位置Index = 変換元Line.IndexOf(変換先キー,StringComparison.Ordinal);
-                            if(Lambda位置Index>0) {
-                                var 変換先Values = 変換先Value.Values;
-                                a_Values[b]=変換元Line[..Lambda位置Index]+変換先Values[0];
-                                var Index = 変換元Line.TakeWhile(文字 => 文字==' ').Count();
-                                for(var d = 1;d<変換先Values.Count-1;d++)
-                                    a_Values.Insert(b+d,new string(' ',Index)+変換先Values[d]);
-                                a_Values.Insert(b+変換先Values.Count-1,new string(' ',Index)+変換先Values[^1]+変換元Line[(Lambda位置Index+変換先キー.Length)..]);
-                                break;
-                            }
-                        }
-                    }
-                }
-                var sb = new StringBuilder();
-                foreach(var Value in KeyValues[0].Values) sb.AppendLine(Value);
-                //var RegxLambda = new Regex(@"\.Lambda #Lambda.*<",RegexOptions.Compiled);
-                //foreach(var Value in KeyValues[0].Values) {
-                //    var Value2 = RegxLambda.Replace(Value,"");
-                //    if(Value2!=Value) {
-                //        Value2=Value2.Replace(">(","(");
-                //    }
-                //    sb.AppendLine(Value2);
-                //}
-                var Result1 = sb.ToString();
-                var Constant = new Regex(@"\.Constant<.*?>\(.*?\)",RegexOptions.Compiled);
-                var Result2 = Constant.Replace(Result1,"");
-                //var Result3 = Result2.Replace("ExtensionSet","");
-                //var Result4 = Result3.Replace("ExtensionEnumerable","");
-                //var NodeType= new Regex(@"#Lambda.*\(",RegexOptions.Compiled);
-                //var Result5 = NodeType.Replace(Result4,"(");
-                var NodeTypeを除く = new Regex(@" \..*? ",RegexOptions.Compiled);
-                //var Regx5= new Regex(@"Lambda #Lambda.*<",RegexOptions.Compiled);
-                var Result5 = NodeTypeを除く.Replace(Result2," ");
-                //var Result6 = Result5.Replace(" ."," ");
-                if(Result5[0]=='.') Result5=Result5[1..];
-                var Result6 = Regex単純な識別子.Replace(Result5,"");
-                return Result6;
-            }
-        }
-    }
+    //private static readonly Regex Regex単純な識別子 = new("[^ ,^$,^#,^<,^[,^>,^(]*[.]",RegexOptions.Compiled);
+    ///// <summary>
+    ///// 式木をわかりやすくテキストにする
+    ///// </summary>
+    ///// <param name="e"></param>
+    ///// <returns></returns>
+    //public static string インラインラムダテキスト(Expression e) {
+    //    //[^ ]*[.]
+    //    dynamic NonPublicAccessor = new NonPublicAccessor(typeof(Expression),e);
+    //    var 変換前 = NonPublicAccessor.DebugView;
+    //    //変換前=変換前.Replace("LinqDB.Sets.","");
+    //    //変換前=変換前.Replace("System.Collections.Generic.","");
+    //    //変換前=変換前.Replace("System.Collections.","");
+    //    //変換前=変換前.Replace("System.","");
+    //    変換前=変換前.Replace("\r\n{","{");
+    //    var KeyValues = new Generic.List<(string Key, Generic.List<string> Values)>();
+    //    {
+    //        var r = new StringReader(変換前);
+    //        var ラムダ式定義 = new Generic.List<string>();
+    //        var ラムダ定義の1行目 = new Regex(@"^\.Lambda .*\(.*$",RegexOptions.Compiled);
+    //        while(true) {
+    //            var Line = r.ReadLine();
+    //            if(string.IsNullOrEmpty(Line)) {
+    //                KeyValues.Add(("", ラムダ式定義));
+    //                break;
+    //            }
+    //            ラムダ式定義.Add(Line);
+    //        }
+    //        while(true) {
+    //            var Line = r.ReadLine();
+    //            if(Line is null)
+    //                break;
+    //            if(ラムダ定義の1行目.IsMatch(Line)) {
+    //                var Key = Line[..Line.IndexOf("(",StringComparison.Ordinal)];
+    //                ラムダ式定義=new Generic.List<string>();
+    //                KeyValues.Add((Key, ラムダ式定義));
+    //                ラムダ式定義.Add(Line);
+    //            } else if(string.Equals(Line,"}",StringComparison.Ordinal)) {
+    //                ラムダ式定義.Add(Line);
+    //            } else if(!string.Equals(Line,string.Empty,StringComparison.Ordinal)) {
+    //                if(Line[^2]=='>'&&Line[^1]==')') Line=Line.Substring(0,Line.Length-1);
+    //                ラムダ式定義.Add(Line);
+    //            }
+    //        }
+    //    }
+    //    {
+    //        //Debug.Assert(ルートラムダ is not null,"ルートラムダ != null");
+    //        //var ルートラムダ2=ルートラムダ;
+    //        //再試行:
+    //        //var r = new StringReader(ルートラムダ);
+    //        //var sb = new StringBuilder();
+    //        while(true) {
+    //            for(var a = KeyValues.Count-1;a>=0;a--) {
+    //                var a_KeyValue = KeyValues[a];
+    //                var a_Values = a_KeyValue.Values;
+    //                for(var b = a_Values.Count-1;b>=0;b--) {
+    //                    var 変換元Line = a_Values[b];
+    //                    for(var c = KeyValues.Count-1;c>=0;c--) {
+    //                        var 変換先Value = KeyValues[c];
+    //                        var 変換先キー = 変換先Value.Key;
+    //                        var Lambda位置Index = 変換元Line.IndexOf(変換先キー,StringComparison.Ordinal);
+    //                        if(Lambda位置Index>0) {
+    //                            var 変換先Values = 変換先Value.Values;
+    //                            a_Values[b]=変換元Line[..Lambda位置Index]+変換先Values[0];
+    //                            var Index = 変換元Line.TakeWhile(文字 => 文字==' ').Count();
+    //                            for(var d = 1;d<変換先Values.Count-1;d++)
+    //                                a_Values.Insert(b+d,new string(' ',Index)+変換先Values[d]);
+    //                            a_Values.Insert(b+変換先Values.Count-1,new string(' ',Index)+変換先Values[^1]+変換元Line[(Lambda位置Index+変換先キー.Length)..]);
+    //                            break;
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            var sb = new StringBuilder();
+    //            foreach(var Value in KeyValues[0].Values) sb.AppendLine(Value);
+    //            //var RegxLambda = new Regex(@"\.Lambda #Lambda.*<",RegexOptions.Compiled);
+    //            //foreach(var Value in KeyValues[0].Values) {
+    //            //    var Value2 = RegxLambda.Replace(Value,"");
+    //            //    if(Value2!=Value) {
+    //            //        Value2=Value2.Replace(">(","(");
+    //            //    }
+    //            //    sb.AppendLine(Value2);
+    //            //}
+    //            var Result1 = sb.ToString();
+    //            var Constant = new Regex(@"\.Constant<.*?>\(.*?\)",RegexOptions.Compiled);
+    //            var Result2 = Constant.Replace(Result1,"");
+    //            //var Result3 = Result2.Replace("ExtensionSet","");
+    //            //var Result4 = Result3.Replace("ExtensionEnumerable","");
+    //            //var NodeType= new Regex(@"#Lambda.*\(",RegexOptions.Compiled);
+    //            //var Result5 = NodeType.Replace(Result4,"(");
+    //            var NodeTypeを除く = new Regex(@" \..*? ",RegexOptions.Compiled);
+    //            //var Regx5= new Regex(@"Lambda #Lambda.*<",RegexOptions.Compiled);
+    //            var Result5 = NodeTypeを除く.Replace(Result2," ");
+    //            //var Result6 = Result5.Replace(" ."," ");
+    //            if(Result5[0]=='.') Result5=Result5[1..];
+    //            var Result6 = Regex単純な識別子.Replace(Result5,"");
+    //            return Result6;
+    //        }
+    //    }
+    //}
     public string 命令ツリー(Expression Expression) => this._取得_命令ツリー.実行(Expression);
     //private static object Set_ValueTuple(object ValueTuple,int Index,object Value) {
     //    switch(Index) {

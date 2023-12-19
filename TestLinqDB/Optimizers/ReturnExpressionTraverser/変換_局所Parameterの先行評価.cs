@@ -1,5 +1,10 @@
 ﻿using LinqDB.Sets;
+
+using System.Diagnostics;
 using System.Globalization;
+
+using static LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価;
+
 
 //using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
@@ -10,6 +15,79 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_局所Parameterの先行評価 : 共通{
     protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+    [Fact]
+    public void 変形確認1(){
+        var p = Expression.Parameter(typeof(decimal));
+        var Assign=Expression.Assign(
+            p,
+            Expression.Constant(0m)
+        );
+        var Add=Expression.Add(p,p);
+        Add=Expression.Add(Add,Add);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Lambda(
+                Expression.Block(
+                    new[] { p },
+                    Add,
+                    Assign,
+                    Add
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Lambda(
+                Expression.Block(
+                    new[] { p },
+                    Add,
+                    Assign,
+                    Add,
+                    Assign,
+                    Add
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Lambda(
+                Expression.Block(
+                    new[] { p },
+                    Expression.Assign(
+                        p,
+                        Expression.Constant(0m)
+                    ),
+                    Expression.Add(
+                        p,
+                        p
+                    ),
+                    Expression.Add(
+                        p,
+                        Expression.Add(
+                            p,
+                            p
+                        )
+                    )
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Lambda(
+                Expression.Block(
+                    Expression.Add(
+                        p,
+                        p
+                    ),
+                    Expression.Add(
+                        p,
+                        Expression.Add(
+                            p,
+                            p
+                        )
+                    )
+                ),
+                p
+            )
+        );
+        ////ラムダを跨ぐ
+    }
     public class 辺を作る : 共通{
         protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]public void Loop無限(){
@@ -988,6 +1066,296 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //}
         }
     }
+    public class 判定_左辺Expressionが含まれる : 共通{
+        protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+        //[Fact]
+        //public void Label(){
+        //    {
+        //        var Label=Expression.Label(typeof(decimal),"L0");
+        //        var _0 = this.Optimizer.Lambda最適化(
+        //            Expression.Lambda(
+        //                Expression.Block(
+        //                    Expression.Add(
+        //                        Expression.Constant(1m),
+        //                        Expression.Goto(Label,Expression.Constant(3m))
+        //                    ),
+        //                    Expression.Label(Label,Expression.Constant(2m))
+        //                )
+        //            )
+        //        );
+        //        _0.Compile();
+        //    }
+        //    {
+        //        var Label=Expression.Label(typeof(decimal),"L0");
+        //        var _0 = this.Optimizer.Lambda最適化(
+        //            Expression.Lambda(
+        //                Expression.Block(
+        //                    Expression.Goto(Label,Expression.Constant(3m)),
+        //                    Expression.Add(
+        //                        Expression.Constant(1m),
+        //                        Expression.Label(Label,Expression.Constant(2m))
+        //                    )
+        //                )
+        //            )
+        //        );
+        //        _0.Compile();
+        //    }
+        //}
+        [Fact]
+        public void Traverse()
+        {
+            //todo 手動変数を巻き上げないように確認したい
+
+            //switch(Expression0.NodeType){
+            //    case ExpressionType.DebugInfo:
+            //    case ExpressionType.Default:
+            //    case ExpressionType.Lambda :
+            //    case ExpressionType.PostDecrementAssign:
+            //    case ExpressionType.PostIncrementAssign:
+            //    case ExpressionType.PreDecrementAssign:
+            //    case ExpressionType.PreIncrementAssign:
+            //    case ExpressionType.Throw:
+            {
+                var _0 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Throw(Expression.New(typeof(NotImplementedException)), typeof(bool))
+                        )
+                    )
+                );
+            }
+            //    case ExpressionType.Label: {
+            {
+                var Label = Expression.Label();
+                var _1 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Label(Label)
+                        )
+                    )
+                );
+            }
+            //    }
+            //    case ExpressionType.Goto:{
+            {
+                var Label = Expression.Label();
+                var _2 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Goto(Label),
+                            Expression.Label(Label)
+                        )
+                    )
+                );
+            }
+            //    }
+            //    case ExpressionType.Loop: {
+            {
+                var Label = Expression.Label();
+                var _3 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Loop(
+                                Expression.Goto(Label),
+                                Label
+                            )
+                        )
+                    )
+                );
+            }
+            //    }
+            //    case ExpressionType.Assign: {
+            {
+                var p = Expression.Parameter(typeof(int), "p");
+                var _4 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Assign(p, Expression.Constant(1))
+                        )
+                    )
+                );
+            }
+            //    }
+            //    case ExpressionType.Call: {
+            //        if(Reflection.Helpers.NoEarlyEvaluation==GenericMethodDefinition)return Expression0;
+            {
+                var _1m = 1m;
+                var _5 = this.Optimizer.Lambda最適化(
+                    () => _1m+_1m+_1m.NoEarlyEvaluation()
+                );
+            }
+            //        if(ループ展開可能メソッドか(GenericMethodDefinition)) {
+            //            switch(MethodCall0_Method.Name) {
+            //                case nameof(Sets.ExtensionSet.Except): {
+            //                    if(MethodCall0.Arguments.Count==3) return Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1,this.Traverse(MethodCall0_Arguments[2]));
+            {
+                var _1m = 1m;
+                var set = new Set<int>();
+                var _6 = this.Optimizer.Lambda最適化(
+                    () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
+                );
+            }
+            //                    else return Expression.Call(MethodCall0_Method,MethodCall1_Arguments_0,MethodCall1_Arguments_1);
+            {
+                var _1m = 1m;
+                var set = new Set<int>();
+                var _7 = this.Optimizer.Lambda最適化(
+                    () => new { a = _1m+_1m, b = set.Except(set) }
+                );
+            }
+            //                }
+            //                default:
+            {
+                var _1m = 1m;
+                var set = new Set<int>();
+                var _8 = this.Optimizer.Lambda最適化(
+                    () => new { a = _1m+_1m, b = set.Join(set, o => o, i => i, (o, i) => o+i) }
+                );
+            }
+            //            }
+            //        }
+            {
+                var _1m = 1m;
+                var _9 = this.Optimizer.Lambda最適化(
+                    () => _1m+_1m+_1m.ToString(CultureInfo.InvariantCulture)
+                );
+            }
+            //    }
+            //    case ExpressionType.Constant: {
+            //        if(ILで直接埋め込めるか((ConstantExpression)Expression0))return Expression0;
+            {
+                var _1 = 1;
+                var _10 = this.Optimizer.Lambda最適化(
+                    () => _1+_1+1
+                );
+            }
+            //    }
+            //    case ExpressionType.Parameter: {
+            //        if(!this.ラムダ跨ぎParameters.Contains(Expression0))return Expression0;
+            {
+                var p = Expression.Parameter(typeof(int), "p");
+                var _1 = 1;
+                var _11 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Lambda(p)
+                        ), p
+                    )
+                );
+                var q = Expression.Parameter(typeof(int), "q");
+                var _12 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            p,
+                            Expression.Lambda(
+                                Expression.Block(
+                                    p,
+                                    Expression.Add(
+                                        Expression.Add(q, q),
+                                        Expression.Add(q, q)
+                                    )
+                                ),
+                                q
+                            )
+                        ), p
+                    )
+                );
+            }
+            //    }
+            //}
+            //if(Expression0.Type!=typeof(void)){
+            //    if(!this.既に置換された式を走査中){
+            //        if(this.ExpressionEqualityComparer.Equals(Expression0,this.二度出現した一度目のExpression)){
+            //            if(this.辺.この辺に二度出現存在するか_削除する(Expression0)){
+            {
+                var @true = Expression.Constant(true);
+                var _13 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Condition(
+                            Expression.Equal(
+                                Expression.Constant(1m),
+                                Expression.Constant(1m)
+                            ),
+                            Expression.Condition(
+                                @true,
+                                @true,
+                                @true
+                            ),
+                            Expression.Condition(
+                                @true,
+                                @true,
+                                @true
+                            )
+                        )
+                    )
+                );
+            }
+            //            }
+            //_13
+            //            if(this.辺.この辺に存在するか(Expression0)){
+            {
+                var @true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var _14 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Condition(
+                            Expression.Call(
+                                @true.Type.GetMethod("op_True")!,
+                                @true
+                            ),
+                            Expression.Condition(
+                                Expression.Call(
+                                    @true.Type.GetMethod("op_True")!,
+                                    @true
+                                ),
+                                @true,
+                                @true
+                            ),
+                            Expression.Condition(
+                                Expression.Call(
+                                    @true.Type.GetMethod("op_True")!,
+                                    @true
+                                ),
+                                @true,
+                                @true
+                            )
+                        )
+                    )
+                );
+            }
+            //            }
+            {
+                var Label = Expression.Label();
+                var _15 = this.Optimizer.Lambda最適化(
+                    Expression.Lambda(
+                        Expression.Block(
+                            Expression.Constant(1m),
+                            Expression.Constant(1m),
+                            Expression.Label(Label)
+                        )
+                    )
+                );
+            }
+            //        }
+            //_0
+            //    }
+            //_1
+            //}
+        }
+    }
     public class List辺 : 共通{
         protected override テストオプション テストオプション{get;}=テストオプション.最適化;
         [Fact]
@@ -1163,8 +1531,68 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //}
         }
         [Fact]
-        public void 子()
-        {
+        public void 子(){
+            //var 子辺Array_Length=子辺Array.Length;
+            //if(子辺Array_Length<=0)return;
+            this.変換_局所Parameterの先行評価_実行(//0
+                Expression.Loop(
+                    Expression.Default(typeof(void))
+                )
+            );
+            //for(var a=0;a<子辺Array_Length;a++){
+            //    for(var b=0;b<Count;b++){
+            //        if(列.移動元==辺) {
+            //            if(列.移動先==子辺) {
+            //                if(Line[b]=='│') {
+            //                    if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
+            //0
+            //                }
+            //            }
+            //        }
+            //0
+            //    }
+            //    for(var b=0;b<Count;b++){
+            //        if(Line[b]=='　'){
+            //            if(書き換えLineIndexEnd<b)
+            this.変換_局所Parameterの先行評価_実行(//1
+                Expression.Condition(
+                    Expression.Condition(
+                        Expression.Constant(false),
+                        Expression.Constant(false),
+                        Expression.Constant(false)
+                    ),
+                    Expression.Condition(
+                        Expression.Constant(false),
+                        Expression.Constant(false),
+                        Expression.Constant(false)
+                    ),
+                    Expression.Condition(
+                        Expression.Constant(false),
+                        Expression.Constant(false),
+                        Expression.Constant(false)
+                    )
+                )
+            );
+            //                書き換えLineIndexEnd=b;
+            //        } 
+            //0
+            //    }
+            //}
+            //for(var a=0;a<書き換えLineIndexEnd;a++){
+            //    switch(Line[a]){
+            //        case '　':
+            //0
+            //        case '┘':
+            //        case '│':
+            //1
+            //        case '┐':
+            //1
+            //    }
+            //0
+            //}
+            //if(ループか)
+            //0
+            //0
             //if(子辺Array_Length<=0)return;
             //for(var a=0;a<子辺Array_Length;a++){
             //    for(var b=0;b<Count;b++){
@@ -1195,6 +1623,21 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //}
             //if(ループか)
             //    列Array0[書き換えLineIndexEnd]=(null,null);
+            var p = Expression.Parameter(typeof(decimal), "p");
+            var pp=Expression.Add(p,p);
+            var Break=Expression.Label("Break");
+            var Block=Expression.Block(
+                Expression.Loop(
+                    Expression.Break(Break),
+                    Break
+                )
+            );
+            this.変換_局所Parameterの先行評価_実行(
+                Expression.Loop(
+                    Expression.Break(Break),
+                    Break
+                )
+            );
         }
     }
     [Fact]
