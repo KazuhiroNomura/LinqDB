@@ -943,7 +943,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 Expression2=Parameter;
             } else{
                 //Set(10).Select(p=>p/2).Count()==5
-                (Parameter,var Add,Expression0)=具象Type(MethodCall0_Arguments_0,変数名,false,true);
+                (Parameter,var Add,Expression0)=具象SetType戻り値なしCountあり(MethodCall0_Arguments_0,変数名);//具象Type(MethodCall0_Arguments_0,変数名,false,true);
                 Expression1=this.ループ展開(
                     MethodCall0_Arguments_0,
                     argument=>Expression.Call(
@@ -1049,16 +1049,10 @@ internal class 変換_インラインループ独立:変換_インラインル�
             var MethodCall = ループ展開可能なSetのCall(MethodCall0_Arguments_0);
             if(MethodCall is not null) {
                 if(this.重複除去されているか(MethodCall)) {
-                    //逆数の合計
-                    ListExpression.Add(
-                        this.ループ展開(
-                            MethodCall0_Arguments_0,
-                            ループ内部処理Block
-                        )
-                    );
+                    逆数の合計();
                 } else {
                     //Setメソッドで結果が重複除去されていない
-                    var (Parameter,IsAdded, Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,false);
+                    var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountなし(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,false);
                     ListParameter.Add(Parameter);
                     ListExpression.Add(Assign);
                     //逆数の合計
@@ -1078,14 +1072,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     );
                 }
             } else {
-                //重複を許す。例えば{0,1,2,2,2,5}というシーケンスを許すEnumerable
-                //逆数の合計
-                ListExpression.Add(
-                    this.ループ展開(
-                        MethodCall0_Arguments_0,
-                        ループ内部処理Block
-                    )
-                );
+                逆数の合計();
             }
             ListExpression.Add(
                 Expression.Condition(
@@ -1106,6 +1093,14 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     )
                 )
             );
+            void 逆数の合計(){
+                ListExpression.Add(
+                    this.ループ展開(
+                        MethodCall0_Arguments_0,
+                        ループ内部処理Block
+                    )
+                );
+            }
         } else {
             var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
             var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
@@ -1161,8 +1156,8 @@ internal class 変換_インラインループ独立:変換_インラインル�
                         Item
                     )
                 );
-            } else {
-                var (Parameter,IsAdded, Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
+            } else{
+                var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountあり(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
                 ListParameter.Add(Parameter);
                 ListExpression.Add(Assign);
                 ListExpression.Add(
@@ -1276,7 +1271,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     )
                 );
             } else{
-                var (Parameter,IsAdded,Assign)=具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
+                var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountあり(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
                 ListParameter.Add(Parameter);
                 ListExpression.Add(Assign);
                 ListExpression.Add(
@@ -1431,7 +1426,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                         );
                     } else {
                         //MethodCall0_Arguments_0が重複除去されていない。重複除去すべき。
-                        var (Parameter,IsAdded, Assign)= 具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,false);
+                        var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountなし(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,false);
                         ListParameter.Add(Parameter);
                         ListExpression.Add(Assign);
                         ListExpression.Add(
@@ -1606,9 +1601,11 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 argument => {
                     var ListParameter0 = new List<ParameterExpression>();
                     var ListExpression0 = new List<Expression>();
-                    var Element = MethodCall0_Arguments.Count==1
-                        ? argument
-                        : this.LambdaExpressionを展開1(
+                    Expression Element;
+                    if(MethodCall0_Arguments.Count==1)
+                        Element=argument;
+                    else
+                        Element=this.LambdaExpressionを展開1(
                             this.Traverse(MethodCall0_Arguments[1]),
                             argument
                         );
@@ -2477,7 +2474,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 //case nameof(Enumerable  .Empty        ):return MethodCall0;
             }
             Debug.Assert(MethodCall0.Type!=typeof(void));
-            var (Result, Add,ResultAssign)=具象Type(MethodCall0,変数名,false,true);
+            var (Result,Add,ResultAssign)=具象SetType戻り値なしCountあり(MethodCall0,変数名);//具象Type(MethodCall0,変数名,false,true);
             var Expression1ループ = this.ループ展開(
                 MethodCall0,
                 argument => Expression.Call(

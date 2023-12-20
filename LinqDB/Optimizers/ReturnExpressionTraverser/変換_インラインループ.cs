@@ -5,12 +5,12 @@ using Linq = System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
-using LinqDB.Sets;
+using Sets=LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 using Collections = System.Collections;
 using LinqDB.Enumerables;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-
+using LinqDB.Sets;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = Collections.Generic;
 using static Common;
@@ -60,40 +60,12 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     );
     protected static readonly NewExpression New_ZeroTupleException = Expression.New(
         InvalidOperationException_ctor,
-        Expression.Constant(nameof(ExtensionSet.Single))
+        Expression.Constant(nameof(Sets.ExtensionSet.Single))
     );
-    protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象Type(Expression Expression0,string Name,bool 戻り値あり,bool Countあり){
-        var Type = Expression0.Type;
-        Type? Interface;
-        if(typeof(IEnumerable<>)==Type.GetGenericTypeDefinition()){
-            Interface=Type;
-            Type=typeof(Set<>);
-        }else if((Interface=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName)) is not null){
-            Type=typeof(Set<>);
-        }else if(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()){
-            Interface=Type;
-            Type=typeof(List<>);
-        }else if((Interface=Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)) is not null){
-            Type=typeof(List<>);
-        } else{
-            throw new NotSupportedException(Type.FullName);
-        }
-        var ReturnType=Type.MakeGenericType(Interface.GetGenericArguments());
-        string MethodName;
-        if(戻り値あり) {
-            if(Countあり) {
-                MethodName=nameof(Set<int>.IsAdded);
-            } else {
-                MethodName=nameof(Set<int>.InternalIsAdded);
-            }
-        } else {
-            if(Countあり) {
-                MethodName=nameof(Set<int>.Add);
-            } else {
-                MethodName=nameof(Set<int>.InternalAdd);
-            }
-        }
-        var Parameter = Expression.Parameter(ReturnType,Name);
+    private static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) Private具象SetType(Expression Expression0,string ParameterName,Type Type,string MethodName){
+        Debug.Assert(Expression0.Type.IsInterface);
+        var ReturnType=Type.MakeGenericType(Expression0.Type.GetGenericArguments());
+        var Parameter = Expression.Parameter(ReturnType,ParameterName);
         return (
             Parameter,
             ReturnType.GetMethod(MethodName,Instance_NonPublic_Public)!,
@@ -105,6 +77,63 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             )
         );
     }
+    protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象SetType戻り値ありCountあり(Expression Expression0,string ParameterName){
+        Debug.Assert(Expression0.Type.IsInterface);
+        return Private具象SetType(Expression0,ParameterName,typeof(Sets.Set<>),nameof(Sets.Set<int>.IsAdded));
+    }
+    protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象SetType戻り値ありCountなし(Expression Expression0,string ParameterName){
+        Debug.Assert(Expression0.Type.IsInterface);
+        return Private具象SetType(Expression0,ParameterName,typeof(Sets.Set<>),nameof(Sets.Set<int>.InternalIsAdded));
+    }
+    protected static(ParameterExpression Parameter,MethodInfo Added,BinaryExpression Assign) 具象SetType戻り値なしCountあり(Expression Expression0,string ParameterName){
+        var Type = Expression0.Type;
+        if(typeof(Sets.IEnumerable<>)==Type.GetGenericTypeDefinition()){
+            Type=typeof(Sets.Set<>);
+        }else{
+            Debug.Assert(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition());
+            Type=typeof(List<>);
+        }
+        return Private具象SetType(Expression0,ParameterName,Type,nameof(Sets.Set<int>.Add));
+    }
+    //protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象Type(Expression Expression0,string Name,bool 戻り値あり,bool Countあり){
+    //    var Type = Expression0.Type;
+    //    Debug.Assert(Type.IsInterface);
+    //    Type? Interface;
+    //    if(typeof(Sets.IEnumerable<>)==Type.GetGenericTypeDefinition()){
+    //        Interface=Type;
+    //        Type=typeof(Sets.Set<>);
+    //    }else{
+    //        Debug.Assert(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition());
+    //        Interface=Type;
+    //        Type=typeof(List<>);
+    //    }
+    //    var ReturnType=Type.MakeGenericType(Interface.GetGenericArguments());
+    //    string MethodName;
+    //    if(戻り値あり) {
+    //        if(Countあり) {
+    //            MethodName=nameof(Sets.Set<int>.IsAdded);
+    //        } else {
+    //            MethodName=nameof(Sets.Set<int>.InternalIsAdded);
+    //        }
+    //    } else {
+    //        if(Countあり) {
+    //            MethodName=nameof(Sets.Set<int>.Add);
+    //        } else {
+    //            MethodName=nameof(Sets.Set<int>.InternalAdd);
+    //        }
+    //    }
+    //    var Parameter = Expression.Parameter(ReturnType,Name);
+    //    return (
+    //        Parameter,
+    //        ReturnType.GetMethod(MethodName,Instance_NonPublic_Public)!,
+    //        Expression.Assign(
+    //            Parameter,
+    //            Expression.New(
+    //                ReturnType.GetConstructor(Type.EmptyTypes)!
+    //            )
+    //        )
+    //    );
+    //}
     private sealed class 判定_指定PrimaryKeyが存在する:VoidExpressionTraverser_Quoteを処理しない {
         private readonly Generic.HashSet<string> HashSetProperty_Name = new();
         private ParameterExpression? EntityParameter;
@@ -120,7 +149,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             var HashSetProperty_Name = this.HashSetProperty_Name;
             HashSetProperty_Name.Clear();
             var EntityParameter_Type = EntityParameter.Type;
-            var PrimaryKey = EntityParameter_Type.GetProperty(nameof(IKey<int>.Key));
+            var PrimaryKey = EntityParameter_Type.GetProperty(nameof(Sets.IKey<int>.Key));
             bool Anonymousか;
             // ReSharper disable once PossibleNullReferenceException
             if(PrimaryKey is not null) {
@@ -217,24 +246,27 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         )
     );
     [SuppressMessage("ReSharper","TailRecursiveCall")]
-    protected bool 重複除去されているか(Expression Expression)=>Expression is MethodCallExpression MethodCall?this.重複除去されているか(MethodCall):true;
+    protected bool 重複除去されているか(Expression Expression){
+        Debug.Assert(ループ展開可能メソッドか(Expression,out var _));
+        if(Expression is MethodCallExpression MethodCall)
+            return this.重複除去されているか(MethodCall);
+        else return false;
+    }
     protected bool 重複除去されているか(MethodCallExpression MethodCall) {
-        var GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
-        if(Reflection.ExtensionSet.GroupBy_keySelector==GenericMethodDefinition)
+        var Name=MethodCall.Method.Name;
+        if(nameof(Sets.ExtensionSet.GroupBy)==Name)
             return true;
-        if(Reflection.ExtensionSet.GroupBy_keySelector_elementSelector==GenericMethodDefinition)
-            return true;
-        if(Reflection.ExtensionSet.Except==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.Except)==Name)
             return this.重複除去されているか(MethodCall.Arguments[0]);
-        if(Reflection.ExtensionSet.Intersect==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.Intersect)==Name)
             return this.重複除去されているか(MethodCall.Arguments[0])||this.重複除去されているか(MethodCall.Arguments[1]);
-        if(Reflection.ExtensionSet.Select_selector==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.Select)==Name)
             return MethodCall.Arguments[1] is LambdaExpression selector&&this._判定_指定PrimaryKeyが存在する.実行(selector.Body,selector.Parameters[0]);
-        if(Reflection.ExtensionSet.SelectMany_selector==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.SelectMany)==Name)
             return false;
-        if(Reflection.ExtensionSet.Union==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.Union)==Name)
             return false;
-        if(Reflection.ExtensionSet.Where==GenericMethodDefinition)
+        if(nameof(Sets.ExtensionSet.Where)==Name)
             return this.重複除去されているか(MethodCall.Arguments[0]);
         return true;
     }
@@ -311,9 +343,9 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     protected Expression ループ起点(Expression Expression0,ループの内部処理 ループの内部処理) {
         var 作業配列 = this.作業配列;
         var Expression1 = base.Traverse(Expression0);
-        if(Expression0.NodeType==ExpressionType.Assign)//代入式を更新したら
-            if(Expression1.NodeType==ExpressionType.Block)//複雑な展開された
-                return Expression.Assign(((BinaryExpression)Expression0).Left,Expression1);
+        //if(Expression0.NodeType==ExpressionType.Assign)//代入式を更新したら
+        //    if(Expression1.NodeType==ExpressionType.Block)//複雑な展開された
+        //        return Expression.Assign(((BinaryExpression)Expression0).Left,Expression1);
         var Expression1_Type = Expression1.Type;
         Expression EnumeratorExpression;
         if(Expression1_Type.IsArray){
@@ -330,7 +362,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         } else{
             EnumeratorExpression=Expression.Call(
                 Expression1,
-                Expression1_Type.GetMethod(nameof(IEnumerable.GetEnumerator))??Expression1_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!.GetMethod(nameof(IEnumerable.GetEnumerator))!
+                Expression1_Type.GetMethod(nameof(Sets.IEnumerable.GetEnumerator))??Expression1_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!.GetMethod(nameof(Sets.IEnumerable.GetEnumerator))!
             );
         }
         var GetEnumerator_ReturnType = EnumeratorExpression.Type;
@@ -379,27 +411,47 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     /// <param name="Expression"></param>
     /// <returns></returns>
     private static Type 重複なし作業Type(Expression Expression) {
-        Debug.Assert(Expression.Type.IsGenericType);
-        var Type = Expression.Type;
-        var Generic_IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
-        if(Generic_IEnumerable1 is not null){
-            Type=Generic_IEnumerable1;
-        }else if(Type.IsGenericType&&(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||typeof(IEnumerable<>)==Type.GetGenericTypeDefinition())) {
-        }else{
-            var Sets_IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName);
-            if(Sets_IEnumerable1 is not null){
-                Type=Sets_IEnumerable1;
-            } else{
-                throw new NotSupportedException(Type.FullName);
-            }
-        }
-        return typeof(Set<>).MakeGenericType(Type.GetGenericArguments());
+        Debug.Assert(Expression.Type.IsInterface);
+        //var Expression_Type= Expression.Type;
+        //Type? Type;
+        //if(Expression_Type.IsGenericType){
+        //    if(typeof(Generic.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition()){
+        //    } else if(typeof(Sets.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition()){
+        //    }
+        //}
+        //Type[] GenericArguments;
+        //if(typeof(Sets.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition()){
+        //    GenericArguments=Expression_Type.GetGenericArguments();
+        //} else{
+        //    Debug.Assert(typeof(Generic.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition());
+        //}
+        //if((Type=Expression_Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName))is null){
+        //    if((Type=Expression_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)) is null){
+        //        if(typeof(Sets.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition()){
+        //        } else{
+        //            Debug.Assert(typeof(Generic.IEnumerable<>)==Expression_Type.GetGenericTypeDefinition());
+        //        }
+        //    }
+        //    Debug.Assert(Type is not null,$"{Type.FullName}はSets.IEnumerable<>を継承しているはず");
+        //}
+        //var Generic_IEnumerable1 = Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName);
+        //if(Generic_IEnumerable1 is not null){
+        //    Type=Generic_IEnumerable1;
+        //}else if(Type.IsGenericType&&(typeof(Generic.IEnumerable<>)==Type.GetGenericTypeDefinition()||typeof(IEnumerable<>)==Type.GetGenericTypeDefinition())) {
+        //}else{
+        //    var Sets_IEnumerable1=Type.GetInterface(CommonLibrary.Sets_IEnumerable1_FullName);
+        //    Debug.Assert(Sets_IEnumerable1 is not null,$"{Type.FullName}はSets.IEnumerable<>を継承しているはず");
+        //    Type=Sets_IEnumerable1;
+        //}
+        return typeof(Sets.Set<>).MakeGenericType(Expression.Type.GetGenericArguments());
     }
     protected delegate Expression ループの内部処理(Expression argument);
-    protected Expression ループ展開(Expression Expression,ループの内部処理 ループの内部処理) =>
-        Expression is MethodCallExpression MethodCall
-            ? this.ループ展開(MethodCall,ループの内部処理)
-            : this.ループ起点(Expression,ループの内部処理);
+    protected Expression ループ展開(Expression Expression,ループの内部処理 ループの内部処理){
+        if(Expression is MethodCallExpression MethodCall)
+            return this.ループ展開(MethodCall,ループの内部処理);
+        else
+            return this.ループ起点(Expression,ループの内部処理);
+    }
     protected override Expression Quote(UnaryExpression Unary0) => Unary0;
     protected Expression ループ展開(MethodCallExpression MethodCall0,ループの内部処理 ループの内部処理) {
         var Method = MethodCall0.Method;
@@ -502,7 +554,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     argument => Expression.IfThenElse(
                         Expression.Call(
                             Item,
-                            Item_Type.GetMethod(nameof(Set<int>.IsAdded))!,
+                            Item_Type.GetMethod(nameof(Sets.Set<int>.IsAdded))!,
                             argument
                         ),
                         ループの内部処理(argument),
@@ -534,7 +586,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     $"{変数名}作業"
                 );
                 Expression Expression0;
-                if(MethodCall0.Method.DeclaringType==typeof(ExtensionSet)&&ループ展開可能なSetのCall(second) is null) {
+                if(MethodCall0.Method.DeclaringType==typeof(Sets.ExtensionSet)&&ループ展開可能なSetのCall(second) is null) {
                     Expression0=Expression.Assign(
                         作業,
                         Expression.Convert(
@@ -563,7 +615,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             second,
                             argument1 => Expression.Call(
                                 作業,
-                                作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalIsAdded),Instance_NonPublic_Public),
+                                作業_Type.GetMethod(nameof(Sets.ImmutableSet<int>.InternalIsAdded),Instance_NonPublic_Public),
                                 argument1
                             )
                         )
@@ -574,7 +626,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     argument => Expression.IfThenElse(
                         Expression.Call(
                             作業,
-                            作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalContains),Instance_NonPublic_Public),
+                            作業_Type.GetMethod(nameof(Sets.ImmutableSet<int>.InternalContains),Instance_NonPublic_Public),
                             argument
                         ),
                         Default_void,
@@ -590,45 +642,49 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 );
             }
             case nameof(Linq.Enumerable.GroupBy       ): {
-                var SetGroupingSet_GenericTypeDefinition = GenericMethodDefinition.DeclaringType==typeof(ExtensionSet)
-                    ? typeof(SetGroupingSet<,>)
-                    : typeof(SetGroupingList<,>);
-                Expression? elementSelector;
-                Expression? resultSelector;
+                Type SetGroupingSet_GenericTypeDefinition;
+                if(GenericMethodDefinition.DeclaringType==typeof(Sets.ExtensionSet))
+                    SetGroupingSet_GenericTypeDefinition=typeof(Sets.SetGroupingSet<,>);
+                else
+                    SetGroupingSet_GenericTypeDefinition=typeof(Sets.SetGroupingList<,>);
+                Expression elementSelector;
+                //Expression? resultSelector;
                 Expression? comparer;
-                if(Reflection.ExtensionEnumerable.GroupBy_keySelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector==GenericMethodDefinition) {
-                    elementSelector=null;
-                    resultSelector=null;
-                    comparer=null;
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_comparer==GenericMethodDefinition) {
-                    elementSelector=null;
-                    resultSelector=null;
-                    comparer=this.Traverse(MethodCall0_Arguments[2]);
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_elementSelector==GenericMethodDefinition) {
+                //if(Reflection.ExtensionEnumerable.GroupBy_keySelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector==GenericMethodDefinition) {
+                //    elementSelector=null;
+                //    resultSelector=null;
+                //    comparer=null;
+                //} else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_comparer==GenericMethodDefinition) {
+                //    elementSelector=null;
+                //    resultSelector=null;
+                //    comparer=this.Traverse(MethodCall0_Arguments[2]);
+                //} else 
+                if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_elementSelector==GenericMethodDefinition) {
                     elementSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    resultSelector=null;
+                    //resultSelector=null;
                     comparer=null;
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer==GenericMethodDefinition) {
+                }else{
+                    Debug.Assert(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_comparer==GenericMethodDefinition);
                     elementSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    resultSelector=null;
+                    //resultSelector=null;
                     comparer=this.Traverse(MethodCall0_Arguments[3]);
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_resultSelector==GenericMethodDefinition) {
-                    elementSelector=null;
-                    resultSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    comparer=null;
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector_comparer==GenericMethodDefinition) {
-                    elementSelector=null;
-                    resultSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    comparer=this.Traverse(MethodCall0_Arguments[3]);
-                } else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==GenericMethodDefinition) {
-                    elementSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    resultSelector=this.Traverse(MethodCall0_Arguments[3]);
-                    comparer=null;
-                } else {
-                    Debug.Assert(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==GenericMethodDefinition);
-                    elementSelector=this.Traverse(MethodCall0_Arguments[2]);
-                    resultSelector=this.Traverse(MethodCall0_Arguments[3]);
-                    comparer=this.Traverse(MethodCall0_Arguments[4]);
+                //} else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_resultSelector==GenericMethodDefinition) {
+                //    elementSelector=null;
+                //    resultSelector=this.Traverse(MethodCall0_Arguments[2]);
+                //    comparer=null;
+                //} else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_resultSelector_comparer==GenericMethodDefinition) {
+                //    elementSelector=null;
+                //    resultSelector=this.Traverse(MethodCall0_Arguments[2]);
+                //    comparer=this.Traverse(MethodCall0_Arguments[3]);
+                //} else if(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector==GenericMethodDefinition||Reflection.ExtensionSet.GroupBy_keySelector_elementSelector_resultSelector==GenericMethodDefinition) {
+                //    elementSelector=this.Traverse(MethodCall0_Arguments[2]);
+                //    resultSelector=this.Traverse(MethodCall0_Arguments[3]);
+                //    comparer=null;
+                //} else {
+                //    Debug.Assert(Reflection.ExtensionEnumerable.GroupBy_keySelector_elementSelector_resultSelector_comparer==GenericMethodDefinition);
+                //    elementSelector=this.Traverse(MethodCall0_Arguments[2]);
+                //    resultSelector=this.Traverse(MethodCall0_Arguments[3]);
+                //    comparer=this.Traverse(MethodCall0_Arguments[4]);
                 }
                 var MethodCall0_Arguments_0 = MethodCall0_Arguments[0];
                 var MethodCall0_Arguments_1 = MethodCall0_Arguments[1];
@@ -636,8 +692,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 var Result_Type = 作業配列.MakeGenericType(
                     SetGroupingSet_GenericTypeDefinition,
                     KeyType,
-                    elementSelector is not null ? elementSelector.Type.GetGenericArguments()[1] :
-                        IEnumerable1のT(MethodCall0_Arguments_0.Type)
+                    elementSelector.Type.GetGenericArguments()[1]
                 );
                 var Result = Expression.Parameter(
                     Result_Type,
@@ -662,132 +717,39 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         Result_Type.GetConstructor(Type.EmptyTypes)!
                     );
                 }
+                //次の2つのクエリは同じ結果を生成します。
+                //source.GroupBy(x => x.Id).Select(g => new { Id = g.Key, Count = g.Count() });
+                //source.GroupBy(x => x.Id, (key, g) => new { Id = key, Count = g.Count() });
                 var Expression1ループ = this.ループ展開(
                     MethodCall0_Arguments_0,
-                    argument => {
-                        if(argument.NodeType==ExpressionType.Parameter) {
-                            return Expression.Call(
-                                Result,
-                                Result_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                                this.LambdaExpressionを展開1(
-                                    this.Traverse(MethodCall0_Arguments_1),
-                                    argument
-                                ),
-                                elementSelector is not null
-                                    ? this.LambdaExpressionを展開1(
-                                        this.Traverse(elementSelector),
-                                        argument
-                                    )
-                                    : argument
-                            );
-                        } else {
-                            //次の2つのクエリは同じ結果を生成します。
-                            //source.GroupBy(x => x.Id).Select(g => new { Id = g.Key, Count = g.Count() });
-                            //source.GroupBy(x => x.Id, (key, g) => new { Id = key, Count = g.Count() });
-                            var p = Expression.Parameter(
-                                argument.Type,
-                                $"{変数名}p"
-                            );
-                            var Key = this.LambdaExpressionを展開1(
-                                this.Traverse(MethodCall0_Arguments_1),
-                                p
-                            );
-                            //var Element = elementSelector is not null
-                            //    ? this.LambdaExpressionを展開1(
-                            //        this.Traverse(elementSelector),
-                            //        p
-                            //    )
-                            //    : p;
-                            //var Result = resultSelector is not null
-                            //    ? this.LambdaExpressionを展開2(
-                            //        this.Traverse(resultSelector),
-                            //        Key,
-                            //        Element
-                            //    )
-                            //    : Element;
-                            var 作業配列1 = 作業配列;
-                            return Expression.Block(
-                                作業配列1.Parameters設定(p),
-                                作業配列1.Expressions設定(
-                                    Expression.Assign(
-                                        p,
-                                        argument
-                                    ),
-                                    Expression.Call(
-                                        Result,
-                                        Result_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue),Instance_NonPublic_Public),
-                                        Key,
-                                        elementSelector is not null
-                                            ? this.LambdaExpressionを展開1(
-                                                this.Traverse(elementSelector),
-                                                p
-                                            )
-                                            : p
-                                    )
-                                )
-                            );
-                        }
-                    }
+                    argument =>Expression.Call(
+                        Result,
+                        Result_Type.GetMethod(nameof(Sets.SetGroupingSet<int,int>.AddKeyValue)),
+                        this.LambdaExpressionを展開1(
+                            this.Traverse(MethodCall0_Arguments_1),
+                            argument
+                        ),
+                        this.LambdaExpressionを展開1(
+                            this.Traverse(elementSelector),
+                            argument
+                        )
+                    )
                 );
-                if(resultSelector is null) {
-                    var Expression2ループ = this.ループ展開(
-                        Result,
-                        ループの内部処理
-                    );
-                    return Expression.Block(
-                        作業配列.Parameters設定(Result),
-                        作業配列.Expressions設定(
-                            Expression.Assign(
-                                Result,
-                                SetGroupingSetNew
-                            ),
-                            Expression1ループ,
-                            Expression2ループ
-                        )
-                    );
-                } else {
-                    this.ループ展開(
-                        Result,
-                        argument => {
-                            var u = this.LambdaExpressionを展開2(
-                                this.Traverse(resultSelector),
-                                Expression.Property(
-                                    argument,
-                                    nameof(IGrouping<int,int>.Key)
-                                ),
-                                argument
-                            );
-                            var r = ループの内部処理(
-                                u
-                            );
-                            return r;
-                        }
-                    );
-                    var Expression2ループ = this.ループ展開(
-                        Result,
-                        argument => ループの内部処理(
-                            this.LambdaExpressionを展開2(
-                                this.Traverse(resultSelector),
-                                Expression.Property(
-                                    argument,
-                                    nameof(IGrouping<int,int>.Key)
-                                ),
-                                argument
-                            )
-                        )
-                    );
-                    return Expression.Block(
-                        作業配列.Parameters設定(Result),
-                        作業配列.Expressions設定(
-                            Expression.Assign(
-                                Result,
-                                SetGroupingSetNew
-                            ),
-                            Expression1ループ,
-                            Expression2ループ
-                        )
-                    );
-                }
+                var Expression2ループ = this.ループ展開(
+                    Result,
+                    ループの内部処理
+                );
+                return Expression.Block(
+                    作業配列.Parameters設定(Result),
+                    作業配列.Expressions設定(
+                        Expression.Assign(
+                            Result,
+                            SetGroupingSetNew
+                        ),
+                        Expression1ループ,
+                        Expression2ループ
+                    )
+                );
             }
             case nameof(Linq.Enumerable.Intersect     ): {
                 var first = MethodCall0_Arguments[0];
@@ -813,8 +775,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             MethodCall0_Arguments[1],
                             argument => Expression.IfThenElse(
                                 Expression.Call(
+                                    Reflection.ExtensionSet.Contains_value.MakeGenericMethod(作業_Type.GetGenericArguments()),
                                     作業,
-                                    作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalContains),Instance_NonPublic_Public)!,
                                     argument
                                 ),
                                 ループの内部処理(argument),
@@ -830,7 +792,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         );
                     } else {
                         var 作業_Type=作業配列.MakeGenericType(
-                            typeof(Set<>),
+                            typeof(Sets.Set<>),
                             IEnumerable1のT(MethodCall0.Type)
                         );
                         var 作業=Expression.Parameter(
@@ -845,7 +807,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             first,
                             argument => Expression.Call(
                                 作業,
-                                作業_Type.GetMethod(nameof(Set<int>.InternalIsAdded),Instance_NonPublic_Public)!,
+                                作業_Type.GetMethod(nameof(Sets.Set<int>.InternalIsAdded),Instance_NonPublic_Public)!,
                                 argument
                             )
                         );
@@ -854,7 +816,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             argument => Expression.IfThenElse(
                                 Expression.Call(
                                     作業,
-                                    作業_Type.GetMethod(nameof(ImmutableSet<int>.InternalContains),Instance_NonPublic_Public)!,
+                                    作業_Type.GetMethod(nameof(Sets.ImmutableSet<int>.InternalContains),Instance_NonPublic_Public)!,
                                     argument
                                 ),
                                 ループの内部処理(argument),
@@ -937,28 +899,27 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         var 変換元Type = argument.Type;
                         var 変換先Type = Method.GetGenericArguments()[0];
                         Debug.Assert(変換元Type==IEnumerable1のT(MethodCall0_Arguments_0.Type));
-                        var 変換元TypeがNullableか = false;
-                        if(
-                            (変換元TypeがNullableか=変換元Type.IsNullable())&&変換元Type.GetGenericArguments()[0].IsAssignableFrom(変換先Type)||
-                            変換元Type.IsAssignableFrom(変換先Type)
-                        ) {
-                            return Expression.IfThenElse(
-                                Expression.TypeIs(
-                                    argument,
-                                    変換先Type
-                                ),
-                                ループの内部処理(
-                                    Expression.Convert(
-                                        argument,
-                                        変換先Type
-                                    )
-                                ),
-                                Default_void
-                            );
-                        } else if(
-                            変換元TypeがNullableか&&
-                            変換先Type.IsAssignableFrom(変換元Type.GetGenericArguments()[0])
-                        ) {
+                        //if(
+                        //    変換元Type.IsNullable()&&変換元Type.GetGenericArguments()[0].IsAssignableFrom(変換先Type)||
+                        //    変換元Type.IsAssignableFrom(変換先Type)
+                        //) {
+                        //    //int? is object
+                        //    return Expression.IfThenElse(
+                        //        Expression.TypeIs(
+                        //            argument,
+                        //            変換先Type
+                        //        ),
+                        //        ループの内部処理(
+                        //            Expression.Convert(
+                        //                argument,
+                        //                変換先Type
+                        //            )
+                        //        ),
+                        //        Default_void
+                        //    );
+                        //} else 
+                        if(変換元Type.IsNullable()&&変換先Type.IsAssignableFrom(変換元Type.GetGenericArguments()[0])) {
+                            //int? is object
                             return Expression.IfThenElse(
                                 Expression.Property(
                                     argument,
@@ -972,15 +933,16 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                                 ),
                                 Default_void
                             );
-                        } else if(変換先Type.IsAssignableFrom(変換元Type)) {
+                        }else{
+                            Debug.Assert(変換先Type.IsAssignableFrom(変換元Type));
                             return ループの内部処理(
                                 Expression.Convert(
                                     argument,
                                     変換先Type
                                 )
                             );
-                        } else {
-                            return Default_void;
+                        //} else {
+                        //    return Default_void;
                         }
                     }
                 );
@@ -1079,9 +1041,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             case nameof(Linq.Enumerable.Reverse       ): {
                 Debug.Assert(Reflection.ExtensionEnumerable.Reverse==GenericMethodDefinition);
                 var Arguments_0 = MethodCall0_Arguments[0];
-                var DescList_Type = typeof(DescList<>).MakeGenericType(
-                    IEnumerable1(Arguments_0.Type).GetGenericArguments()
-                );
+                var DescList_Type=typeof(DescList<>).MakeGenericType(Method.GetGenericArguments());
                 var DescList = Expression.Parameter(
                     DescList_Type,
                     $"{変数名}DescList"
@@ -1185,45 +1145,46 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             Expression1
                         )
                     );
-                } else if(Reflection.ExtensionEnumerable.SelectMany_indexCollectionSelector_resultSelector==GenericMethodDefinition) {
-                    var index = Expression.Parameter(
-                        typeof(int),
-                        $"{変数名}index"
+                //} else if(Reflection.ExtensionEnumerable.SelectMany_indexCollectionSelector_resultSelector==GenericMethodDefinition) {
+                //    var index = Expression.Parameter(
+                //        typeof(int),
+                //        $"{変数名}index"
+                //    );
+                //    var Expression1 = this.ループ展開(
+                //        MethodCall0_Arguments[0],
+                //        argument0 => Expression.Block(
+                //            this.ループ展開(
+                //                this.LambdaExpressionを展開2(
+                //                    this.Traverse(MethodCall0_Arguments[1]),
+                //                    argument0,
+                //                    index
+                //                ),
+                //                argument1 => ループの内部処理(
+                //                    this.LambdaExpressionを展開2(
+                //                        this.Traverse(MethodCall0_Arguments[2]),
+                //                        argument0,
+                //                        argument1
+                //                    )
+                //                )
+                //            ),
+                //            IncrementAssign(index)
+                //        )
+                //    );
+                //    return Expression.Block(
+                //        作業配列.Parameters設定(index),
+                //        作業配列.Expressions設定(
+                //            Expression.Assign(
+                //                index,
+                //                Constant_0
+                //            ),
+                //            Expression1
+                //        )
+                //    );
+                }else{
+                    Debug.Assert(
+                        Reflection.ExtensionSet.SelectMany_selector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.SelectMany_selector==GenericMethodDefinition
                     );
-                    var Expression1 = this.ループ展開(
-                        MethodCall0_Arguments[0],
-                        argument0 => Expression.Block(
-                            this.ループ展開(
-                                this.LambdaExpressionを展開2(
-                                    this.Traverse(MethodCall0_Arguments[1]),
-                                    argument0,
-                                    index
-                                ),
-                                argument1 => ループの内部処理(
-                                    this.LambdaExpressionを展開2(
-                                        this.Traverse(MethodCall0_Arguments[2]),
-                                        argument0,
-                                        argument1
-                                    )
-                                )
-                            ),
-                            IncrementAssign(index)
-                        )
-                    );
-                    return Expression.Block(
-                        作業配列.Parameters設定(index),
-                        作業配列.Expressions設定(
-                            Expression.Assign(
-                                index,
-                                Constant_0
-                            ),
-                            Expression1
-                        )
-                    );
-                } else if(
-                    Reflection.ExtensionSet.SelectMany_selector==GenericMethodDefinition||
-                    Reflection.ExtensionEnumerable.SelectMany_selector==GenericMethodDefinition
-                ) {
                     return this.ループ展開(
                         MethodCall0_Arguments[0],
                         argument => this.ループ展開(
@@ -1234,59 +1195,108 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             ループの内部処理
                         )
                     );
-                } else {
-                    Debug.Assert(
-                        Reflection.ExtensionSet.SelectMany_collectionSelector_resultSelector==GenericMethodDefinition||
-                        Reflection.ExtensionEnumerable.SelectMany_collectionSelector_resultSelector==GenericMethodDefinition
-                    );
-                    return this.ループ展開(
-                        MethodCall0_Arguments[0],
-                        source => this.ループ展開(
-                            this.LambdaExpressionを展開1(
-                                this.Traverse(MethodCall0_Arguments[1]),
-                                source
-                            ),
-                            collection => ループの内部処理(
-                                this.LambdaExpressionを展開2(
-                                    this.Traverse(MethodCall0_Arguments[2]),
-                                    source,
-                                    collection
-                                )
-                            )
-                        )
-                    );
+                //} else {
+                //    Debug.Assert(
+                //        Reflection.ExtensionSet.SelectMany_collectionSelector_resultSelector==GenericMethodDefinition||
+                //        Reflection.ExtensionEnumerable.SelectMany_collectionSelector_resultSelector==GenericMethodDefinition
+                //    );
+                //    return this.ループ展開(
+                //        MethodCall0_Arguments[0],
+                //        source => this.ループ展開(
+                //            this.LambdaExpressionを展開1(
+                //                this.Traverse(MethodCall0_Arguments[1]),
+                //                source
+                //            ),
+                //            collection => ループの内部処理(
+                //                this.LambdaExpressionを展開2(
+                //                    this.Traverse(MethodCall0_Arguments[2]),
+                //                    source,
+                //                    collection
+                //                )
+                //            )
+                //        )
+                //    );
                 }
             }
             case nameof(Linq.Enumerable.Take          ): {
-                Debug.Assert(Reflection.ExtensionEnumerable.Take==GenericMethodDefinition);
-                var Count = Expression.Parameter(
-                    typeof(int),
-                    $"{変数名}Count"
-                );
-                var Label = Expression.Label();
-                var Expression1ループ = this.ループ展開(
-                    MethodCall0_Arguments[0],
-                    argument => Expression.IfThenElse(
-                        Expression.LessThanOrEqual(
-                            Constant_0,
-                            DecrementAssign(Count)
-                        ),
-                        ループの内部処理(argument),
-                        Expression.Break(Label)
-                    )
-                );
-                var Assign = Expression.Assign(
-                    Count,
-                    this.Traverse(MethodCall0_Arguments[1])
-                );
-                return Expression.Block(
-                    作業配列.Parameters設定(Count),
-                    作業配列.Expressions設定(
-                        Assign,
-                        Expression1ループ,
-                        Expression.Label(Label)
-                    )
-                );
+                var Label=Expression.Label();
+                var Expression3=Expression.Label(Label);
+                if(Reflection.ExtensionEnumerable.Take_count==GenericMethodDefinition){
+                    var Count=Expression.Parameter(
+                        typeof(int),
+                        $"{変数名}Count"
+                    );
+                    var Expression1=this.ループ展開(
+                        MethodCall0_Arguments[0],
+                        argument=>Expression.IfThenElse(
+                            Expression.LessThanOrEqual(
+                                Constant_0,
+                                DecrementAssign(Count)
+                            ),
+                            ループの内部処理(argument),
+                            Expression.Break(Label)
+                        )
+                    );
+                    var Expression0=Expression.Assign(
+                        Count,
+                        this.Traverse(MethodCall0_Arguments[1])
+                    );
+                    return Expression.Block(
+                        作業配列.Parameters設定(Count),
+                        作業配列.Expressions設定(
+                            Expression0,
+                            Expression1,
+                            Expression3
+                        )
+                    );
+                } else{
+                    Debug.Assert(Reflection.ExtensionEnumerable.Take_range==GenericMethodDefinition);
+                    var Count=Expression.Parameter(
+                        typeof(int),
+                        $"{変数名}Count"
+                    );
+                    var Range=Expression.Parameter(
+                        typeof(Range),
+                        $"{変数名}Range"
+                    );
+                    var Expression0=Expression.Assign(Count,Constant_0);
+                    var Expression2=this.ループ展開(
+                        MethodCall0_Arguments[0],
+                        argument=>Expression.IfThenElse(
+                            Expression.AndAlso(
+                                Expression.LessThanOrEqual(
+                                    Expression.Property(
+                                        Expression.Property(Range,Reflection.Range.Start),
+                                        Reflection.Index.Value
+                                    ),
+                                    Count
+                                ),
+                                Expression.LessThan(
+                                    Count,
+                                    Expression.Property(
+                                        Expression.Property(Range,Reflection.Range.End),
+                                        Reflection.Index.Value
+                                    )
+                                )
+                            ),
+                            ループの内部処理(argument),
+                            Expression.Break(Label)
+                        )
+                    );
+                    var Expression1=Expression.Assign(
+                        Range,
+                        this.Traverse(MethodCall0_Arguments[1])
+                    );
+                    return Expression.Block(
+                        作業配列.Parameters設定(Count,Range),
+                        作業配列.Expressions設定(
+                            Expression0,
+                            Expression1,
+                            Expression2,
+                            Expression3
+                        )
+                    );
+                }
             }
             case nameof(Linq.Enumerable.TakeWhile     ): {
                 Debug.Assert(
@@ -1297,8 +1307,10 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         Reflection.ExtensionEnumerable.TakeWhile_index==GenericMethodDefinition
                     )
                 );
+                var Label = Expression.Label();
+                var Break=Expression.Break(Label);
+                var Expression2=Expression.Label(Label);
                 if(Reflection.ExtensionEnumerable.TakeWhile==GenericMethodDefinition) {
-                    var Label = Expression.Label();
                     var Expression1ループ = this.ループ展開(
                         MethodCall0_Arguments[0],
                         argument => Expression.IfThenElse(
@@ -1307,12 +1319,12 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                                 argument
                             ),
                             ループの内部処理(argument),
-                            Expression.Break(Label)
+                            Break
                         )
                     );
                     return Expression.Block(
                         Expression1ループ,
-                        Expression.Label(Label)
+                        Expression2
                     );
                 } else {
                     Debug.Assert(Reflection.ExtensionEnumerable.TakeWhile_index==GenericMethodDefinition);
@@ -1320,7 +1332,6 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         typeof(int),
                         $"{変数名}index"
                     );
-                    var Label = Expression.Label();
                     var Expression1ループ = this.ループ展開(
                         MethodCall0_Arguments[0],
                         argument => Expression.IfThenElse(
@@ -1333,7 +1344,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                                 ループの内部処理(argument),
                                 IncrementAssign(index)
                             ),
-                            Expression.Break(Label)
+                            Break
                         )
                     );
                     return Expression.Block(
@@ -1344,7 +1355,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                                 Constant_0
                             ),
                             Expression1ループ,
-                            Expression.Label(Label)
+                            Expression2
                         )
                     );
                 }
@@ -1363,14 +1374,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     Reflection.ExtensionEnumerable.Union_comparer==GenericMethodDefinition
                 );
                 var T = IEnumerable1のT(MethodCall0.Type);
-                var Item_Type = 作業配列.MakeGenericType(
-                    typeof(Generic.HashSet<>),
-                    T
-                );
-                var Item = Expression.Parameter(
-                    Item_Type,
-                    $"{変数名}作業"
-                );
+                var Item_Type = 作業配列.MakeGenericType(typeof(Generic.HashSet<>),T);
+                var Item = Expression.Parameter(Item_Type,$"{変数名}作業");
                 Expression Right;
                 if(MethodCall0_Arguments.Count==2) {
                     Debug.Assert(
@@ -1392,27 +1397,15 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         this.Traverse(MethodCall0_Arguments[2])
                     );
                 }
-                var Expression1 = Expression.Assign(
-                    Item,
-                    Right
-                );
+                var Expression1 = Expression.Assign(Item,Right);
                 ループの内部処理 Delegate = argument => Expression.Call(
                     Item,
                     Item_Type.GetMethod(nameof(Generic.HashSet<int>.Add)),
                     argument
                 );
-                var Expression2 = this.ループ展開(
-                    MethodCall0_Arguments[0],
-                    Delegate
-                );
-                var Expression3 = this.ループ展開(
-                    MethodCall0_Arguments[1],
-                    Delegate
-                );
-                var Expression4 = this.ループ展開(
-                    Item,
-                    ループの内部処理
-                );
+                var Expression2 = this.ループ展開(MethodCall0_Arguments[0],Delegate);
+                var Expression3 = this.ループ展開(MethodCall0_Arguments[1],Delegate);
+                var Expression4 = this.ループ展開(Item,ループの内部処理);
                 return Expression.Block(
                     作業配列.Parameters設定(Item),
                     作業配列.Expressions設定(
@@ -1423,7 +1416,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     )
                 );
             }
-            case nameof(ExtensionSet.DUnion           ): {
+            case nameof(Sets.ExtensionSet.DUnion           ): {
                 Debug.Assert(Reflection.ExtensionSet.DUnion==GenericMethodDefinition);
                 return Expression.Block(
                     this.ループ展開(
@@ -1519,12 +1512,12 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     );
                 }
             }
-            default: {
-                if(typeof(Linq.Enumerable)==Method.DeclaringType||typeof(ExtensionSet)==Method.DeclaringType) {
-                    Debug.Assert(nameof(Linq.Enumerable.Join)!=Name&&nameof(Linq.Enumerable.GroupJoin)!=Name);
-                }
-                break;
-            }
+            //default: {
+            //    if(typeof(Linq.Enumerable)==Method.DeclaringType||typeof(Sets.ExtensionSet)==Method.DeclaringType) {
+            //        Debug.Assert(nameof(Linq.Enumerable.Join)!=Name&&nameof(Linq.Enumerable.GroupJoin)!=Name);
+            //    }
+            //    break;
+            //}
         }
         return this.ループ起点(MethodCall0,ループの内部処理);
     }

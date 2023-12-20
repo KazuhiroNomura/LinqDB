@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using LinqDB.Sets;
 using System.Linq;
@@ -51,9 +52,21 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo DefaultIfEmpty = M(() => _Int32.DefaultIfEmpty());
     public static readonly MethodInfo DefaultIfEmpty_defaultValue = M(() => _Int32.DefaultIfEmpty(0));
     public static readonly MethodInfo Except = M(() => _Int32.Except(default!));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector = M(() => _Int32.GroupBy(p => p));
     public static readonly MethodInfo GroupBy_keySelector_elementSelector = M(() => _Int32.GroupBy(p => p,p => p));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector_resultSelector = M(() => _Int32.GroupBy(p => p,(a,b) => a));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector_elementSelector_resultSelector = M(() => _Int32.GroupBy(p => p,a => a,(a,b) => a));
     public static readonly MethodInfo GroupJoin = M(() => _Int32.GroupJoin(_Int32,o => 0,i => 0,(o,i) => 0));
     public static readonly MethodInfo Intersect = M(() => _Int32.Intersect(default!));
@@ -107,6 +120,10 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo Range = M(() => Extension.Range(0,0));
     public static readonly MethodInfo Select_selector = M(() => _Int32.Select(p => 0));
     public static readonly MethodInfo SelectMany_selector = M(() => _Int32.SelectMany(p => _Int32));
+    /// <summary>
+    /// SelectMany_collectionSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo SelectMany_collectionSelector_resultSelector = M(() => _Int32.SelectMany(p => _Int32,(p,q) => 0));        //変形で削除される
     public static readonly MethodInfo Single = M(() => _Int32.Single());
     public static readonly MethodInfo SingleOrDefault = M(() => _Int32.SingleOrDefault());
@@ -140,6 +157,10 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo Distinct1 = M(() => _Int32.Distinct(null));
     public static readonly MethodInfo Except_comparer = M(() => _Int32.Except(default!,null));
     public static readonly MethodInfo GroupBy_keySelector_comparer = M(() => _Int32.GroupBy(p => p,null));
+    /// <summary>
+    /// GroupBy_keySelector_comparer.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector_resultSelector_comparer = M(() => _Int32.GroupBy(p => p,(a,b) => a,null));
     public static readonly MethodInfo GroupBy_keySelector_elementSelector_comparer = M(() => _Int32.GroupBy(p => p,a => a,null));
     public static readonly MethodInfo GroupBy_keySelector_elementSelector_resultSelector_comparer = M(() => _Int32.GroupBy(p => p,a => a,(a,b) => a,null));
@@ -158,11 +179,16 @@ public static class ExtensionEnumerable {
     public static readonly MethodInfo Reverse = M(() => _Int32.Reverse());
     public static readonly MethodInfo Select_indexSelector = M(() => _Int32.Select((p,i) => p));
     public static readonly MethodInfo SelectMany_indexSelector = M(() => _Int32.SelectMany((p,i) => _Int32));
+    /// <summary>
+    /// SelectMany_indexCollectionSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo SelectMany_indexCollectionSelector_resultSelector = M(() => _Int32.SelectMany((p,i) => _Int32,(a,b) => a));//変形で削除される
     public static readonly MethodInfo Single_predicate = M(() => _Int32.Single(null!));
     public static readonly MethodInfo SingleOrDefault_predicate = M(() => _Int32.SingleOrDefault(null!));
     public static readonly MethodInfo SingleOrDefault_predicate_defaultValue = M(() => _Int32.SingleOrDefault(p=>true,0));
-    public static readonly MethodInfo Take = M(() => _Int32.Take(0));
+    public static readonly MethodInfo Take_count = M(() => _Int32.Take(0));
+    public static readonly MethodInfo Take_range= M(() => _Int32.Take(new System.Range()));
     public static readonly MethodInfo TakeWhile = M(() => _Int32.TakeWhile(p => true));
     public static readonly MethodInfo TakeWhile_index = M(() => _Int32.TakeWhile((p,i) => true));
     public static readonly MethodInfo ToArray = M(() => _Int32.ToArray());

@@ -45,14 +45,26 @@ public static class ExtensionSet {
     public static readonly MethodInfo AverageNullableInt32_selector = M(() => _Int32.Average(p => (int?)0));
     public static readonly MethodInfo AverageInt32_selector = M(() => _Int32.Average(p => 0));
     public static readonly MethodInfo Cast = M(() => _Int32.Cast<int>());
-    public static readonly MethodInfo Contains_value = M(() => _Int32.Contains(0));
+    public static readonly MethodInfo Contains_value = M(() =>Extension.Contains(_Int32,0));
     public static readonly MethodInfo Count = M(() => _Int32.Count());
     public static readonly MethodInfo DefaultIfEmpty = M(() => _Int32.DefaultIfEmpty());
     public static readonly MethodInfo DefaultIfEmpty_defaultValue = M(() => _Int32.DefaultIfEmpty(0));
     public static readonly MethodInfo Except = M(() => _Int32.Except(default!));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector = M(() => _Int32.GroupBy(p => p));
     public static readonly MethodInfo GroupBy_keySelector_elementSelector = M(() => _Int32.GroupBy(p => p,p => p));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector_resultSelector = M(() => _Int32.GroupBy(p => p,(a,b) => a));
+    /// <summary>
+    /// GroupBy_keySelector_elementSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo GroupBy_keySelector_elementSelector_resultSelector = M(() => _Int32.GroupBy(p => p,a => a,(a,b) => a));
     public static readonly MethodInfo GroupJoin = M(() => _Int32.GroupJoin(_Int32,o => 0,i => 0,(o,i) => 0));
     public static readonly MethodInfo Intersect = M(() => _Int32.Intersect(default!));
@@ -106,6 +118,10 @@ public static class ExtensionSet {
     public static readonly MethodInfo Range = M(() => Extension.Range(0,0));
     public static readonly MethodInfo Select_selector = M(() => _Int32.Select(p => 0));
     public static readonly MethodInfo SelectMany_selector = M(() => _Int32.SelectMany(p => _Int32));
+    /// <summary>
+    /// SelectMany_collectionSelector.Select_selector
+    /// 最適化で消される対象
+    /// </summary>
     public static readonly MethodInfo SelectMany_collectionSelector_resultSelector = M(() => _Int32.SelectMany(p => _Int32,(p,q) => 0));        //変形で削除される
     public static readonly MethodInfo Single = M(() => _Int32.Single());
     public static readonly MethodInfo SingleOrDefault = M(() => _Int32.SingleOrDefault());
