@@ -1438,7 +1438,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                         }
                     }
                     case nameof(Linq.Enumerable.Where):{
-                        if(Reflection.ExtensionEnumerable.Where_index==MethodCall0_GenericMethodDefinition) break;
+                        //if(Reflection.ExtensionEnumerable.Where_index==MethodCall0_GenericMethodDefinition) break;
                         var MethodCall1_Arguments_0 = MethodCall1_Arguments[0];
                         var MethodCall1_Arguments_1 = MethodCall1_Arguments[1];
                         if(ループ展開可能メソッドか(MethodCall1_Arguments_0,out var MethodCall1_MethodCall)) {

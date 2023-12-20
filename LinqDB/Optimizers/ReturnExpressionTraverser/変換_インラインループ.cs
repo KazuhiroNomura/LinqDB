@@ -10,7 +10,7 @@ using LinqDB.Sets.Exceptions;
 using Collections = System.Collections;
 using LinqDB.Enumerables;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-using LinqDB.Sets;
+//using LinqDB.Sets;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = Collections.Generic;
 using static Common;
@@ -85,7 +85,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         Debug.Assert(Expression0.Type.IsInterface);
         return Private具象SetType(Expression0,ParameterName,typeof(Sets.Set<>),nameof(Sets.Set<int>.InternalIsAdded));
     }
-    protected static(ParameterExpression Parameter,MethodInfo Added,BinaryExpression Assign) 具象SetType戻り値なしCountあり(Expression Expression0,string ParameterName){
+    protected static(ParameterExpression Parameter,MethodInfo Add,BinaryExpression Assign) 具象SetType戻り値なしCountあり(Expression Expression0,string ParameterName){
         var Type = Expression0.Type;
         if(typeof(Sets.IEnumerable<>)==Type.GetGenericTypeDefinition()){
             Type=typeof(Sets.Set<>);
@@ -135,7 +135,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     //    );
     //}
     private sealed class 判定_指定PrimaryKeyが存在する:VoidExpressionTraverser_Quoteを処理しない {
-        private readonly Generic.HashSet<string> HashSetProperty_Name = new();
+        private readonly Generic.HashSet<string> Properties = new();
         private ParameterExpression? EntityParameter;
         private bool PrimaryKeyを参照したか;
         private bool Parameterを参照したか;
@@ -146,8 +146,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             this.PrimaryKeyを参照したか=false;
             this.Parameterを参照したか=false;
             this.EntityParameter=EntityParameter;
-            var HashSetProperty_Name = this.HashSetProperty_Name;
-            HashSetProperty_Name.Clear();
+            var Properties = this.Properties;
+            Properties.Clear();
             var EntityParameter_Type = EntityParameter.Type;
             var PrimaryKey = EntityParameter_Type.GetProperty(nameof(Sets.IKey<int>.Key));
             bool Anonymousか;
@@ -155,23 +155,20 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             if(PrimaryKey is not null) {
                 Anonymousか=false;
                 this.ParameterKey=PrimaryKey;
-                foreach(var Property in PrimaryKey.PropertyType.GetProperties()) {
-                    HashSetProperty_Name.Add(Property.Name);
-                }
+                foreach(var Property in PrimaryKey.PropertyType.GetProperties())
+                    Properties.Add(Property.Name);
             } else {
                 Anonymousか=EntityParameter_Type.IsAnonymous();
                 this.ParameterKey=null;
-                if(Anonymousか) {
-                    foreach(var Property in EntityParameter_Type.GetProperties()) {
-                        HashSetProperty_Name.Add(Property.Name);
-                    }
-                }
+                if(Anonymousか)
+                    foreach(var Property in EntityParameter_Type.GetProperties())
+                        Properties.Add(Property.Name);
             }
             //PrimaryKeyが出現したら                  true
             //Anonymous&&HashSetフィールド名.LongCountGenericMethodDefinition==0 true
             //その他のType&&Parameterを参照したか     true
             this.Traverse(e);
-            return this.固有を許可する&&(this.Parameterを参照したか||this.PrimaryKeyを参照したか||Anonymousか&&HashSetProperty_Name.Count==0);
+            return this.固有を許可する&&(this.Parameterを参照したか||this.PrimaryKeyを参照したか||Anonymousか&&Properties.Count==0);
         }
         protected override void Traverse(Expression e) {
             switch(e.NodeType) {
@@ -198,7 +195,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         if(this.ParameterKey is not null&&MemberExpression.Member.MetadataToken==this.ParameterKey.MetadataToken) {
                             this.PrimaryKeyを参照したか=true;
                         } else {
-                            this.HashSetProperty_Name.Remove(MemberExpression.Member.Name);
+                            this.Properties.Remove(MemberExpression.Member.Name);
                         }
                     }
                     break;
@@ -763,14 +760,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     );
                     if(ループ展開可能なSetのCall(first) is not null) {
                         var 作業_Type=MethodCall0.Type;
-                        var 作業=Expression.Parameter(
-                            作業_Type,
-                            $"{変数名}作業"
-                        );
-                        var Expression0=Expression.Assign(
-                            作業,
-                            this.Traverse(first)
-                        );
+                        var 作業=Expression.Parameter(作業_Type,$"{変数名}作業");
+                        var Expression0=Expression.Assign(作業,this.Traverse(first));
                         var Expression2 = this.ループ展開(
                             MethodCall0_Arguments[1],
                             argument => Expression.IfThenElse(
@@ -838,14 +829,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         Reflection.ExtensionEnumerable.Intersect_comparer==GenericMethodDefinition
                     );
                     var T = IEnumerable1のT(MethodCall0.Type);
-                    var 作業_Type=作業配列.MakeGenericType(
-                        typeof(Generic.HashSet<>),
-                        T
-                    );
-                    var 作業=Expression.Parameter(
-                        作業_Type,
-                        $"{変数名}作業"
-                    );
+                    var 作業_Type=作業配列.MakeGenericType(typeof(Generic.HashSet<>),T);
+                    var 作業=Expression.Parameter(作業_Type,$"{変数名}作業");
                     var Constructor = 作業配列.GetConstructor(
                         作業_Type,
                         作業配列.MakeGenericType(
@@ -1374,6 +1359,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     Reflection.ExtensionEnumerable.Union_comparer==GenericMethodDefinition
                 );
                 var T = IEnumerable1のT(MethodCall0.Type);
+                //Setsを使わずGenericを使った理由はIEqualityComparerを引数に取るものがそれだから
                 var Item_Type = 作業配列.MakeGenericType(typeof(Generic.HashSet<>),T);
                 var Item = Expression.Parameter(Item_Type,$"{変数名}作業");
                 Expression Right;
@@ -1387,10 +1373,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     Debug.Assert(MethodCall0_Arguments.Count==3);
                     var Constructor = 作業配列.GetConstructor(
                         Item_Type,
-                        作業配列.MakeGenericType(
-                            typeof(Generic.IEqualityComparer<>),
-                            T
-                        )
+                        作業配列.MakeGenericType(typeof(Generic.IEqualityComparer<>),T)
                     );
                     Right=Expression.New(
                         Constructor,
@@ -1400,7 +1383,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 var Expression1 = Expression.Assign(Item,Right);
                 ループの内部処理 Delegate = argument => Expression.Call(
                     Item,
-                    Item_Type.GetMethod(nameof(Generic.HashSet<int>.Add)),
+                    Item_Type.GetMethod(nameof(Sets.HashSet<int>.Add)),
                     argument
                 );
                 var Expression2 = this.ループ展開(MethodCall0_Arguments[0],Delegate);
@@ -1435,61 +1418,26 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             }            
             case nameof(Linq.Enumerable.Where         ): {
                 if(Reflection.ExtensionEnumerable.Where_index==GenericMethodDefinition) {
-                    var index = Expression.Parameter(
-                        typeof(int),
-                        $"{変数名}index"
-                    );
+                    var index = Expression.Parameter(typeof(int),$"{変数名}index");
                     var Expression1 = this.ループ展開(
                         MethodCall0_Arguments[0],
-                        argument => {
-                            if(argument.NodeType==ExpressionType.Parameter) {
-                                return Expression.Block(
-                                    Expression.IfThenElse(
-                                        this.LambdaExpressionを展開2(
-                                            this.Traverse(MethodCall0_Arguments[1]),
-                                            argument,
-                                            index
-                                        ),
-                                        ループの内部処理(argument),
-                                        Default_void
-                                    ),
-                                    IncrementAssign(index)
-                                );
-                            } else {
-                                var p = Expression.Parameter(
-                                    argument.Type,
-                                    $"{変数名}argument"
-                                );
-                                var IfThenElse = Expression.IfThenElse(
-                                    this.LambdaExpressionを展開2(
-                                        this.Traverse(MethodCall0_Arguments[1]),
-                                        p,
-                                        index
-                                    ),
-                                    ループの内部処理(p),
-                                    Default_void
-                                );
-                                return Expression.Block(
-                                    作業配列.Parameters設定(p),
-                                    作業配列.Expressions設定(
-                                        Expression.Assign(
-                                            p,
-                                            argument
-                                        ),
-                                        IfThenElse,
-                                        IncrementAssign(index)
-                                    )
-                                );
-                            }
-                        }
+                        argument =>Expression.Block(
+                            Expression.IfThenElse(
+                                this.LambdaExpressionを展開2(
+                                    this.Traverse(MethodCall0_Arguments[1]),
+                                    argument,
+                                    index
+                                ),
+                                ループの内部処理(argument),
+                                Default_void
+                            ),
+                            IncrementAssign(index)
+                        )
                     );
                     return Expression.Block(
                         作業配列.Parameters設定(index),
                         作業配列.Expressions設定(
-                            Expression.Assign(
-                                index,
-                                Constant_0
-                            ),
+                            Expression.Assign(index,Constant_0),
                             Expression1
                         )
                     );

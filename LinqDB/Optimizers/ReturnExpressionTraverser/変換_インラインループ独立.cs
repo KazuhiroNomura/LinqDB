@@ -2474,21 +2474,29 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 //case nameof(Enumerable  .Empty        ):return MethodCall0;
             }
             Debug.Assert(MethodCall0.Type!=typeof(void));
-            var (Result,Add,ResultAssign)=具象SetType戻り値なしCountあり(MethodCall0,変数名);//具象Type(MethodCall0,変数名,false,true);
+            ParameterExpression Parameter;
+            MethodInfo Add;
+            BinaryExpression Assign;
+            //var (Result,Add,ResultAssign)=具象SetType戻り値なしCountあり(MethodCall0,変数名);//具象Type(MethodCall0,変数名,false,true);
+            if(nameof(ExtensionSet.DUnion)==Name) 
+                (Parameter,Add,Assign)=具象SetType戻り値ありCountあり(MethodCall0,変数名);
+            else 
+                (Parameter,Add,Assign)=具象SetType戻り値なしCountあり(MethodCall0,変数名);//具象Type(MethodCall0,変数名,false,true);
+
             var Expression1ループ = this.ループ展開(
                 MethodCall0,
                 argument => Expression.Call(
-                    Result,
+                    Parameter,
                     Add,
                     argument
                 )
             );
             return Expression.Block(
-                作業配列.Parameters設定(Result),
+                作業配列.Parameters設定(Parameter),
                 作業配列.Expressions設定(
-                    ResultAssign,
+                    Assign,
                     Expression1ループ,
-                    Result
+                    Parameter
                 )
             );
         }

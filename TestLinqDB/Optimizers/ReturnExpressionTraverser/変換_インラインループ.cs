@@ -221,7 +221,7 @@ public class 変換_インラインループ : 共通{
         //    }
         //    case nameof(Linq.Enumerable.Union         ): {
         //        if(MethodCall0_Arguments.Count==2) {
-        this.Cover(()=>e.Union(e));
+        this.Cover(()=>s.Union(s));
         //        } else {
         this.Cover(()=>e.Union(e,EqualityComparer<int>.Default));
         //        }
@@ -236,9 +236,8 @@ public class 変換_インラインループ : 共通{
         this.Cover(()=>s.Where(p=>p%2==0));
         //        }
         //    }
-        //    default: {
-        //    }
         //}
+        this.Cover(()=>s.SelectMany(q=>s.Where((p,index)=>p+index==q)));
     }
     [Fact]
     public void 具象SetType戻り値ありCountあり(){

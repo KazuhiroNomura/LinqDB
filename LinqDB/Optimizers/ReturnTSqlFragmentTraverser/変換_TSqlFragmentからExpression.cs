@@ -5031,7 +5031,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         var ValueTuple2=作業配列.MakeGenericType(Reflection.ValueTuple.ValueTuple2,TOuter,TInner);
         var SearchCondition=this.BooleanExpression(x.SearchCondition);
         var(OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
-            SearchCondition,作業配列.Parameters設定(o),i
+            SearchCondition,new[]{o},new[]{i}
         );
         e.Expression プローブ,ビルド;
         var 変換_旧Parameterを新Expression=this.変換_旧Parameterを新Expression1;

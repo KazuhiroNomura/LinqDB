@@ -46,7 +46,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                         //A.SelectMany(a=>
                         //    B.Dictionary(b=>b).Equal(a)
                         //    (a,b)=>a,b
-                        var predicate_Parameters=predicate.Parameters;
+                        var InnerParameters=predicate.Parameters;
                         //↓でDictionary().Equal()と連続しないようにする。
                         //REVENUE_S.Let(revenue_s=>
                         //    revenue_s.Where(revenue=>
@@ -65,7 +65,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                         var (OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
                             predicate.Body,
                             this.外側Parameters!,
-                            predicate_Parameters[0]
+                            InnerParameters
                         );
                         if(OuterPredicate is not null)
                             MethodCall1_Arguments_0=Expression.Call(
@@ -74,7 +74,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                 Expression.Lambda(
                                     predicate.Type,
                                     OuterPredicate,
-                                    predicate_Parameters
+                                    InnerParameters
                                 )
                             );
                         var Listプローブビルド_Count=Listプローブビルド.Count;
@@ -120,7 +120,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             Expression LookupExpression(Expression プローブ,Expression ビルド){
                                 var keySelector=Expression.Lambda(
                                     ビルド,
-                                    predicate_Parameters
+                                    InnerParameters
                                 );
                                 Expression Instance;
                                 var 作業配列=this.作業配列;
@@ -155,7 +155,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                             }
                         }
                         if(InnerPredicate is not null){
-                            if(this.判定_指定Parameters無.実行(InnerPredicate,predicate_Parameters)){
+                            if(this.判定_指定Parameters無.実行(InnerPredicate,InnerParameters)){
                                 var ReturnType=MethodCall0_Method.ReturnType;
                                 Expression ifFalse;
                                 if(typeof(Sets.ExtensionSet)==MethodCall0.Method.DeclaringType){
@@ -187,7 +187,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quote�
                                 Expression.Lambda(
                                     predicate.Type,
                                     InnerPredicate,
-                                    predicate_Parameters
+                                    InnerParameters
                                 )
                             );
                         }

@@ -6,10 +6,10 @@ namespace LinqDB.Optimizers.VoidExpressionTraverser;
 internal sealed class 判定_指定Parameter有_他Parameter無_Lambda内部走査:VoidExpressionTraverser_Quoteを処理しない {
     private readonly List<ParameterExpression> 全Parameters = new();
     private bool 指定Parameters有, 他Parameter無;
-    public bool 実行(Expression e,ParameterExpression 指定Parameter) {
+    public bool 実行(Expression e,IEnumerable<ParameterExpression>指定Parameters) {
         var 全Parameters = this.全Parameters;
         全Parameters.Clear();
-        全Parameters.Add(指定Parameter);
+        全Parameters.AddRange(指定Parameters);
         this.他Parameter無=true;
         this.指定Parameters有=false;
         this.Traverse(e);

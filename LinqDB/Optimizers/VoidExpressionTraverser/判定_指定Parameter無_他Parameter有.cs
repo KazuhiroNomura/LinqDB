@@ -11,31 +11,31 @@ namespace LinqDB.Optimizers.VoidExpressionTraverser;
 
 
 internal sealed class 判定_指定Parameter無_他Parameter有:VoidExpressionTraverser_Quoteを処理しない {
-    private readonly List<ParameterExpression> ListParameter = new();
-    private bool 指定Parametersが存在せず;
-    private bool 他Parametersが存在する;
-    public bool 実行(Expression e,ParameterExpression 指定Parameter) {
-        var ListParameter = this.ListParameter;
-        ListParameter.Clear();
-        ListParameter.Add(指定Parameter);
-        this.指定Parametersが存在せず=true;
-        this.他Parametersが存在する=false;
+    private readonly List<ParameterExpression> Parameters = new();
+    private bool 指定Parameters無;
+    private bool 他Parameters有;
+    public bool 実行(Expression e,IEnumerable<ParameterExpression> 指定Parameters) {
+        var Parameters = this.Parameters;
+        Parameters.Clear();
+        Parameters.AddRange(指定Parameters);
+        this.指定Parameters無=true;
+        this.他Parameters有=false;
         this.Traverse(e);
-        return this.指定Parametersが存在せず&&this.他Parametersが存在する;
+        return this.指定Parameters無&&this.他Parameters有;
     }
     protected override void Lambda(LambdaExpression Lambda) {
         var Lambda_Parameters = Lambda.Parameters;
-        var ListParameter = this.ListParameter;
-        var ListParameter_Count = ListParameter.Count;
-        ListParameter.AddRange(Lambda_Parameters);
+        var Parameters = this.Parameters;
+        var ListParameter_Count = Parameters.Count;
+        Parameters.AddRange(Lambda_Parameters);
         this.Traverse(Lambda.Body);
-        ListParameter.RemoveRange(ListParameter_Count,Lambda_Parameters.Count);
+        Parameters.RemoveRange(ListParameter_Count,Lambda_Parameters.Count);
     }
     protected override void Parameter(ParameterExpression Parameter) {
-        if(this.ListParameter.Contains(Parameter)) {
-            this.指定Parametersが存在せず=false;
+        if(this.Parameters.Contains(Parameter)) {
+            this.指定Parameters無=false;
         } else {
-            this.他Parametersが存在する=true;
+            this.他Parameters有=true;
         }
     }
 }
