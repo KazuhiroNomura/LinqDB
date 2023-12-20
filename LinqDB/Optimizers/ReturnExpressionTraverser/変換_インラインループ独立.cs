@@ -2156,15 +2156,31 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 );
             }
         );
-        //Expression 要素なしifTrue;
-        var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
-            ?MethodCall0_Arguments.Count==1
-                ?Expression.Default(ElementType)
-                :this.Traverse(MethodCall0_Arguments[1])
-            :Expression.Throw(
-                New_ZeroTupleException,
-                ElementType
+        Expression 要素なしifTrue;
+        if(nameof(ExtensionSet.SingleOrDefault)==Name)
+            if(MethodCall0_Arguments.Count==1)
+                要素なしifTrue=Expression.Default(ElementType);
+            else
+                要素なしifTrue=this.Traverse(MethodCall0_Arguments[1]);
+        else
+            要素なしifTrue=Throwシーケンスに要素が含まれていません(
+                this.作業配列,
+                ElementType,
+                Method
             );
+        //var 要素なしifTrue=nameof(ExtensionSet.SingleOrDefault)==Name
+        //    ?MethodCall0_Arguments.Count==1
+        //        ?Expression.Default(ElementType)
+        //        :this.Traverse(MethodCall0_Arguments[1])
+        //    :Expression.Throw(
+        //        New_ZeroTupleException,
+        //        ElementType
+        //    );
+        //var Throw = Throwシーケンスに要素が含まれていません(
+        //    this.作業配列,
+        //    ElementType,
+        //    Method
+        //);
         var 作業配列=this.作業配列;
         return Expression.Block(
             作業配列.Parameters設定(要素なし,Item0,Item1),

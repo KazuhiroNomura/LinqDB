@@ -316,12 +316,25 @@ public class 変換_インラインループ : 共通{
         //if(nameof(Sets.ExtensionSet.Select)==Name)
         //    if(MethodCall.Arguments[1] is LambdaExpression selector)
         this.Cover(()=>s.Select(p=>p.Key).Geomean(p=>3d));
-        this.Cover(()=>s.Select(p=>o).Geomean(p=>3d));
+        this.Cover(()=>s.Select(Anonymous((Tables.Table p)=>o)).Geomean(p=>3d));
         //if(nameof(Sets.ExtensionSet.SelectMany)==Name)
         this.Cover(()=>s.SelectMany(p=>s).Geomean(p=>3d));
         //if(nameof(Sets.ExtensionSet.Union)==Name)
         this.Cover(()=>s.Union(s).Geomean(p=>3d));
         //if(nameof(Sets.ExtensionSet.Where)==Name)
         this.Cover(()=>s.Where(p=>p==o).Geomean(p=>3d));
+    }
+    [Fact]public void Throwシーケンスに要素が含まれていません(){
+        var s = new int[]{
+            1,2,3,4,5,6,7
+        };
+        this.Cover(()=>s.Single());
+    }
+    private static int Quote引数<T>(Expression<Func<T>> x)=>1;
+    [Fact]public void Quote(){
+        var s = new int[]{
+            1,2,3,4,5,6,7
+        };
+        this.Cover(()=>Quote引数(()=>s));
     }
 }

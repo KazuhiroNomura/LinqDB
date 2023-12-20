@@ -58,10 +58,10 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         ),
         Type
     );
-    protected static readonly NewExpression New_ZeroTupleException = Expression.New(
-        InvalidOperationException_ctor,
-        Expression.Constant(nameof(Sets.ExtensionSet.Single))
-    );
+    //protected static readonly NewExpression New_ZeroTupleException = Expression.New(
+    //    InvalidOperationException_ctor,
+    //    Expression.Constant(nameof(Sets.ExtensionSet.Single))
+    //);
     private static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) Private具象SetType(Expression Expression0,string ParameterName,Type Type,string MethodName){
         //Debug.Assert(Expression0.Type.IsInterface);
         var ReturnType=Type.MakeGenericType(Expression0.Type.GetGenericArguments());
@@ -445,7 +445,6 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         else
             return this.ループ起点(Expression,ループの内部処理);
     }
-    protected override Expression Quote(UnaryExpression Unary0) => Unary0;
     protected Expression ループ展開(MethodCallExpression MethodCall0,ループの内部処理 ループの内部処理) {
         var Method = MethodCall0.Method;
         var GenericMethodDefinition = GetGenericMethodDefinition(Method);

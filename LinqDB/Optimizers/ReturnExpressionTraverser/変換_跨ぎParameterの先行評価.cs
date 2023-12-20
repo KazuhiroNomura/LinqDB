@@ -12,7 +12,7 @@ using LinqDB.Optimizers.VoidExpressionTraverser;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = System.Collections.Generic;
 using static Common;
-internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTraverser_Quoteを処理しない{
+internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTraverser{
     /// <summary>
     /// ループ+ラムダ=ラムダ
     /// </summary>

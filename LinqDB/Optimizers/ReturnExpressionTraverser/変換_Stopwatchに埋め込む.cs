@@ -1003,14 +1003,14 @@ internal sealed class 変換_Stopwatchに埋め込む:ReturnExpressionTraverser{
         );
     }
 
-    protected override Expression Quote(UnaryExpression Unary0) {
-        var (親計測, _)=this.プロファイル前処理(nameof(ExpressionType.Quote));
-        var Unqry1_Operand=this.Traverse(Unary0.Operand);
-        this.計測=親計測;
-        return Expression.Quote(
-            Unqry1_Operand
-        );
-    }
+    //protected override Expression Quote(UnaryExpression Unary0) {
+    //    var (親計測, _)=this.プロファイル前処理(nameof(ExpressionType.Quote));
+    //    var Unqry1_Operand=this.Traverse(Unary0.Operand);
+    //    this.計測=親計測;
+    //    return Expression.Quote(
+    //        Unqry1_Operand
+    //    );
+    //}
     protected override Expression Lambda(LambdaExpression Lambda0) {
         var sb = new StringBuilder();
         var Lambda_Parameters = Lambda0.Parameters;

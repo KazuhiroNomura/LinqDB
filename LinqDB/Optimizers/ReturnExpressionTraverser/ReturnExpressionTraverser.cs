@@ -1169,7 +1169,7 @@ public class ReturnExpressionTraverser {
     /// </summary>
     /// <param name="Unary0"></param>
     /// <returns></returns>
-    protected virtual Expression Throw(UnaryExpression Unary0)=> Unary0.Operand is not null?this.MakeUnary(Unary0):Unary0;
+    protected virtual Expression Throw(UnaryExpression Unary0)=> this.MakeUnary(Unary0);
     /// <summary>
     /// +a
     /// </summary>

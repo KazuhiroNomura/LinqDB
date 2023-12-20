@@ -10,7 +10,7 @@ using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 
-internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser_Quoteを処理しない {
+internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
     private readonly 取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド;
     private readonly 判定_指定Parameters無 判定_指定Parameters無;
     public 変換_WhereからLookup(作業配列 作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無 判定_指定Parameters無) : base(作業配列) {

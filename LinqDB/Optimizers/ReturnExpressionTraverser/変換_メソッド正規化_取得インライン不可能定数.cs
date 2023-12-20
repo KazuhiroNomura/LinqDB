@@ -27,7 +27,7 @@ using static Common;
 /// A.SelectMany(a=>B,(a,b)=>new{a,b})→A.SelectMany(a=>B.Select(b=>=>new{a,b}))にする。
 /// decimal.Parse("1111")→1111mに変換する
 /// </summary>
-internal sealed partial class 変換_メソッド正規化_取得インライン不可能定数:ReturnExpressionTraverser_Quoteを処理しない {
+internal sealed partial class 変換_メソッド正規化_取得インライン不可能定数:ReturnExpressionTraverser{
     private sealed class 取得_Parameter_OuterPredicate_InnerPredicate {
         private sealed class 判定_Parameter_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
             private ParameterExpression? 許可するParameter;
@@ -229,20 +229,17 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
     protected override Expression Constant(ConstantExpression Constant0) {
         if(!ILで直接埋め込めるか(Constant0))
             this.DictionaryConstant[Constant0]=default!;
-            //this.DictionaryConstant.TryAdd(Constant0,default!);
         return Constant0;
     }
     protected override Expression Quote(UnaryExpression Unary0) {
         var Constant=Expression.Constant(Unary0.Operand);
         this.DictionaryConstant[Constant]=default!;
-        //this.DictionaryConstant.TryAdd(Constant,default!);
         return Constant;
     }
 
     private Expression 共通BinaryAssign(BinaryExpression Binary0, ExpressionType NodeType) {
         var Binary1_Left=this.Traverse(Binary0.Left);
         var Binary1_Right=this.Traverse(Binary0.Right);
-        //if(Binary1_Left.NodeType is ExpressionType.Parameter or ExpressionType.Constant){}
         Expression Binary2_Right=Expression.MakeBinary(
             NodeType,
             Binary1_Left,
@@ -251,19 +248,6 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
             Binary0.Method,
             null
         );
-        //var p=Expression.Parameter(Binary1_Left.Type,"t");
-        //Binary2_Right=Expression.Block(
-        //    new[]{p},
-        //    Expression.Assign(p,Binary1_Left),
-        //    Expression.MakeBinary(
-        //        NodeType,
-        //        p,
-        //        Binary1_Right,
-        //        Binary0.IsLiftedToNull,
-        //        Binary0.Method,
-        //        null
-        //    )
-        //);
         if(Binary0.Conversion is not null){
             var Binary0_Conversion=Binary0.Conversion;
             var Binary1_Conversion_Body=this.Traverse(Binary0_Conversion.Body);

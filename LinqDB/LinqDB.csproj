@@ -120,7 +120,6 @@
     <Compile Include="Optimizers\Comparer\ブローブビルドExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\汎用Comparer.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_WhereからLookup.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs" />
