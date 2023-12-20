@@ -3,14 +3,14 @@ using System.Diagnostics.Metrics;
 using System.Linq.Expressions;
 
 using JetBrains.dotMemoryUnit.Client.Interface;
-
+using LinqDB.Databases;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using LinqDB.Sets;
 //using Sets=LinqDB.Sets;
 
 using TestLinqDB.Serializers.Formatters.Expressions;
-
+using TestLinqDB.Sets;
 using Xunit;
 //using System.Reflection;
 //using MemoryPack;
@@ -56,6 +56,20 @@ public class 変換_インラインループ : 共通{
     [Fact]public void Field(){
         var s = new int[]{1,2,3,4,5,6,7}.ToSet();
         this.Cover(() => s.Avedev(o => o+1));
+    }
+    [Fact]public void LambdaExpressionを展開1(){
+        var e = new int[]{1,2,3,4,5,6,7};
+        //if(Lambda is LambdaExpression Lambda1) {
+        this.Cover(()=>e.Where((p)=>p==0));
+        //}
+        this.Cover(()=>e.Where(Anonymous((int p)=>p==0)));
+    }
+    [Fact]public void LambdaExpressionを展開2(){
+        var e = new int[]{1,2,3,4,5,6,7};
+        //if(Lambda is LambdaExpression Lambda2) {
+        this.Cover(()=>e.Where((p,index)=>p==index));
+        //}
+        this.Cover(()=>e.Where(Anonymous((int p,int index)=>p==index)));
     }
     [Fact]public void ループ起点(){
         //if(Expression1_Type.IsArray){
@@ -288,5 +302,26 @@ public class 変換_インラインループ : 共通{
     }
     [Fact]public void 具象SetType戻り値なしCountあり(){
         this.Cover(()=>new int[]{1,2,3,4,5,6,7}.Select(p=>p+1).Count());
+    }
+    [Fact]public void 重複除去されているか(){
+        //global::TestLinqDB.Keys.;
+        var o=new Tables.Table();
+        var s=new Set<Keys.Key,Tables.Table,Container>(null!);
+        //if(nameof(Sets.ExtensionSet.GroupBy)==Name)
+        this.Cover(()=>s.GroupBy(p=>0m).Geomean(p=>p.Count+1));
+        //if(nameof(Sets.ExtensionSet.Except)==Name)
+        this.Cover(()=>s.Except(s).Geomean(p=>4d));
+        //if(nameof(Sets.ExtensionSet.Intersect)==Name)
+        this.Cover(()=>s.Intersect(s).Geomean(p=>3d));
+        //if(nameof(Sets.ExtensionSet.Select)==Name)
+        //    if(MethodCall.Arguments[1] is LambdaExpression selector)
+        this.Cover(()=>s.Select(p=>p.Key).Geomean(p=>3d));
+        this.Cover(()=>s.Select(p=>o).Geomean(p=>3d));
+        //if(nameof(Sets.ExtensionSet.SelectMany)==Name)
+        this.Cover(()=>s.SelectMany(p=>s).Geomean(p=>3d));
+        //if(nameof(Sets.ExtensionSet.Union)==Name)
+        this.Cover(()=>s.Union(s).Geomean(p=>3d));
+        //if(nameof(Sets.ExtensionSet.Where)==Name)
+        this.Cover(()=>s.Where(p=>p==o).Geomean(p=>3d));
     }
 }

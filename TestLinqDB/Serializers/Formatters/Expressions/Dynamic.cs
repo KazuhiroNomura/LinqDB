@@ -106,13 +106,13 @@ public class Dynamic : 共通
         }
         //case BinderType.InvokeMemberBinder:{
         {
-            var o = new テスト();
-            Action1(o, nameof(テスト.InstanceMethod), 1);
+            var o = new テスト1();
+            Action1(o, nameof(テスト1.InstanceMethod), 1);
             void Action1<T0, T1>(T0 arg0, string Name, T1 arg1)
             {
                 var CSharpArgumentInfos = new[] { RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None, null), RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null) };
                 var binder = RuntimeBinder.Binder.InvokeMember(
-                    RuntimeBinder.CSharpBinderFlags.ResultDiscarded, Name, null, typeof(テスト), CSharpArgumentInfos
+                    RuntimeBinder.CSharpBinderFlags.ResultDiscarded, Name, null, typeof(テスト1), CSharpArgumentInfos
                 );
                 var input = Expression.Dynamic(
                     binder, typeof(object),

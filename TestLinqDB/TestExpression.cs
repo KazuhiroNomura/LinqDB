@@ -90,7 +90,7 @@ public partial struct 演算子1{
 //    public static Binary operator |(Binary x,Binary y)=>x.HasValue&&y.HasValue?new Binary(x.Value|y.Value):new Binary();
 //}
 [Serializable,MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true)]
-public partial class テスト:IEquatable<テスト>{
+public partial class テスト1:IEquatable<テスト1>{
     public static int StaticMethodInt32()=>0;
     public static void StaticMethod(){}
     public static void StaticMethod(int a){}
@@ -110,7 +110,7 @@ public partial class テスト:IEquatable<テスト>{
         set{}
     }
     public static int static_Func(int a,int b)=>a+b;
-    public bool Equals(テスト? other){
+    public bool Equals(テスト1? other){
         if(ReferenceEquals(null,other)){
             return false;
         }
@@ -129,15 +129,15 @@ public partial class テスト:IEquatable<テスト>{
         if(obj.GetType()!=this.GetType()){
             return false;
         }
-        return this.Equals((テスト)obj);
+        return this.Equals((テスト1)obj);
     }
     public override int GetHashCode(){
         return 0;
     }
-    public static bool operator==(テスト? left,テスト? right){
+    public static bool operator==(テスト1? left,テスト1? right){
         return Equals(left,right);
     }
-    public static bool operator!=(テスト? left,テスト? right){
+    public static bool operator!=(テスト1? left,テスト1? right){
         return!Equals(left,right);
     }
 }
@@ -707,14 +707,14 @@ public class Serializer:共通{
         );
     }
     static dynamic テストStaticMethod(){
-        return テスト.StaticMethodInt32();
+        return テスト1.StaticMethodInt32();
     }
     static Expressions.Expression<Action<object, int>> DynamicCall()
     {
         //CallSiteBinderの構築
         var binder = RuntimeBinder.Binder.InvokeMember(
             RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
-            nameof(テスト.InstanceMethod), 
+            nameof(テスト1.InstanceMethod), 
             null, 
             typeof(Serializer),
             new[] { 
@@ -724,7 +724,7 @@ public class Serializer:共通{
         );
 
         //パラメータの構築
-        var a1=new テスト();
+        var a1=new テスト1();
         var a2=11;
         var p1 = Expressions.Expression.Parameter(typeof(object), "target");
         var p2 = Expressions.Expression.Parameter(typeof(int), "arg");
@@ -743,7 +743,7 @@ public class Serializer:共通{
     }    
     [Fact]
     public void BinderTest(){
-        var arg1=new テスト();
+        var arg1=new テスト1();
         var arg2=11;
         var Dynamic = DynamicCall().Compile();
 
@@ -755,7 +755,7 @@ public class Serializer:共通{
         };
         var binder=RuntimeBinder.Binder.InvokeMember(
             RuntimeBinder.CSharpBinderFlags.ResultDiscarded,
-            nameof(テスト.InstanceMethod),
+            nameof(テスト1.InstanceMethod),
             null,
             this.GetType(),
             CSharpArgumentInfos
@@ -765,11 +765,11 @@ public class Serializer:共通{
     }
 
     [Fact]public void DynamicInvokeMember(){
-        var o=new テスト();
-        Action3(o,nameof(テスト.Action),1,2.0,"string");
-        Action1(o,nameof(テスト.InstanceMethod),1);
+        var o=new テスト1();
+        Action3(o,nameof(テスト1.Action),1,2.0,"string");
+        Action1(o,nameof(テスト1.InstanceMethod),1);
         引数名();
-        Func3(o,nameof(テスト.Func),1,2.0,"string");
+        Func3(o,nameof(テスト1.Func),1,2.0,"string");
 
         void Action1<T0,T1>(T0 arg0,string Name,T1 arg1){
             var CSharpArgumentInfos=new[]{
@@ -777,7 +777,7 @@ public class Serializer:共通{
                 RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.UseCompileTimeType, null)
             };
             var binder=RuntimeBinder.Binder.InvokeMember(
-                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(テスト),CSharpArgumentInfos
+                RuntimeBinder.CSharpBinderFlags.ResultDiscarded,Name,null,typeof(テスト1),CSharpArgumentInfos
             );
             var Dynamic0=Expressions.Expression.Dynamic(
                 binder,typeof(object),
@@ -843,7 +843,7 @@ public class Serializer:共通{
             this.共通Dynamic(expected,Dynamic);
         }
         void 引数名(){
-            var arg1=new テスト();
+            var arg1=new テスト1();
             var arg2=11;
             var arg3=22;
             var arg4="cc";
@@ -966,7 +966,7 @@ public class Serializer:共通{
         this.共通Dynamic(CallSite.Target(CallSite,arg1,arg2,arg3),Dynamic0);
     }
     [Fact]public void DynamicGetIndex2(){
-        var arg1=new テスト();
+        var arg1=new テスト1();
         var arg2=1;
         var binder=RuntimeBinder.Binder.GetIndex(
             RuntimeBinder.CSharpBinderFlags.None,
@@ -1478,12 +1478,12 @@ public class Serializer:共通{
     private void InstanceMethod(int a){}
     private void InstanceMethod(int a,int b){}
     [Fact]public void MethodCall(){
-        var o=new テスト();
+        var o=new テスト1();
         var arg=Expressions.Expression.Constant(1);
         var @this=Expressions.Expression.Constant(o);
-        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod())));
-        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1)),arg));
-        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト.StaticMethod(1,2)),arg,arg));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト1.StaticMethod())));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト1.StaticMethod(1)),arg));
+        this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(M(()=>テスト1.StaticMethod(1,2)),arg,arg));
         this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod())));
         this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1)),arg));
         this.ExpressionシリアライズAssertEqual(Expressions.Expression.Call(@this,M(()=>o.InstanceMethod(1,2)),arg,arg));

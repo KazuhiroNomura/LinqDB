@@ -63,7 +63,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         Expression.Constant(nameof(Sets.ExtensionSet.Single))
     );
     private static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) Private具象SetType(Expression Expression0,string ParameterName,Type Type,string MethodName){
-        Debug.Assert(Expression0.Type.IsInterface);
+        //Debug.Assert(Expression0.Type.IsInterface);
         var ReturnType=Type.MakeGenericType(Expression0.Type.GetGenericArguments());
         var Parameter = Expression.Parameter(ReturnType,ParameterName);
         return (
@@ -78,11 +78,11 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         );
     }
     protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象SetType戻り値ありCountあり(Expression Expression0,string ParameterName){
-        Debug.Assert(Expression0.Type.IsInterface);
+        //Debug.Assert(Expression0.Type.IsInterface);
         return Private具象SetType(Expression0,ParameterName,typeof(Sets.Set<>),nameof(Sets.Set<int>.IsAdded));
     }
     protected static(ParameterExpression Parameter,MethodInfo IsAdded,BinaryExpression Assign) 具象SetType戻り値ありCountなし(Expression Expression0,string ParameterName){
-        Debug.Assert(Expression0.Type.IsInterface);
+        //Debug.Assert(Expression0.Type.IsInterface);
         return Private具象SetType(Expression0,ParameterName,typeof(Sets.Set<>),nameof(Sets.Set<int>.InternalIsAdded));
     }
     protected static(ParameterExpression Parameter,MethodInfo Add,BinaryExpression Assign) 具象SetType戻り値なしCountあり(Expression Expression0,string ParameterName){
@@ -220,7 +220,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         this.番号=0;
         return this.Traverse(Lambda);
     }
-    protected static BinaryExpression DecrementAssign(ParameterExpression Parameter) => Expression.Assign(
+    private static BinaryExpression DecrementAssign(ParameterExpression Parameter) => Expression.Assign(
         Parameter,
         Expression.Decrement(Parameter)
     );
@@ -244,7 +244,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     );
     [SuppressMessage("ReSharper","TailRecursiveCall")]
     protected bool 重複除去されているか(Expression Expression){
-        Debug.Assert(ループ展開可能メソッドか(Expression,out var _));
+        //Debug.Assert(ループ展開可能メソッドか(Expression,out var _));
         if(Expression is MethodCallExpression MethodCall)
             return this.重複除去されているか(MethodCall);
         else return false;
@@ -257,15 +257,17 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             return this.重複除去されているか(MethodCall.Arguments[0]);
         if(nameof(Sets.ExtensionSet.Intersect)==Name)
             return this.重複除去されているか(MethodCall.Arguments[0])||this.重複除去されているか(MethodCall.Arguments[1]);
-        if(nameof(Sets.ExtensionSet.Select)==Name)
-            return MethodCall.Arguments[1] is LambdaExpression selector&&this._判定_指定PrimaryKeyが存在する.実行(selector.Body,selector.Parameters[0]);
+        if(nameof(Sets.ExtensionSet.Select)==Name){
+            if(MethodCall.Arguments[1] is LambdaExpression selector)
+                return this._判定_指定PrimaryKeyが存在する.実行(selector.Body,selector.Parameters[0]);
+            return false;
+        }
         if(nameof(Sets.ExtensionSet.SelectMany)==Name)
             return false;
         if(nameof(Sets.ExtensionSet.Union)==Name)
             return false;
-        if(nameof(Sets.ExtensionSet.Where)==Name)
-            return this.重複除去されているか(MethodCall.Arguments[0]);
-        return true;
+        Debug.Assert(nameof(Sets.ExtensionSet.Where)==Name);
+        return this.重複除去されているか(MethodCall.Arguments[0]);
     }
     //protected bool Set結果かつ重複が残っているか(Expression e){
     //    Debug.Assert(e.Type.IsInterface);
@@ -283,18 +285,16 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     //    }
     //    return false;
     //}
-    internal static Expression LambdaExpressionを展開1(Expression Lambda,Expression argument,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression) {
+    private static Expression LambdaExpressionを展開1(Expression Lambda,Expression argument,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression){
         Debug.Assert(typeof(Delegate).IsAssignableFrom(Lambda.Type));
-        return Lambda is LambdaExpression Lambda1
-            ? 変換_旧Parameterを新Expression.実行(
+        if(Lambda is LambdaExpression Lambda1){
+            return 変換_旧Parameterを新Expression.実行(
                 Lambda1.Body,
                 Lambda1.Parameters[0],
                 argument
-            )
-            : Expression.Invoke(
-                Lambda,
-                argument
             );
+        }
+        return Expression.Invoke(Lambda,argument);
     }
     protected Expression LambdaExpressionを展開1(Expression Lambda,Expression argument1) => LambdaExpressionを展開1(
         Lambda,
@@ -312,11 +312,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 argument2
             );
         }
-        return Expression.Invoke(
-            Lambda,
-            argument1,
-            argument2
-        );
+        return Expression.Invoke(Lambda,argument1,argument2);
     }
     private static readonly UnaryExpression Throw_OneTupleException_DUnion = Expression.Throw(
         Expression.New(

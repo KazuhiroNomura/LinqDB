@@ -1112,71 +1112,31 @@ internal class 変換_インラインループ独立:変換_インラインル�
             );
             ListParameter.Add(Item);
             var MethodCall = ループ展開可能なSetのCall(MethodCall0_Arguments_0);
-            if(MethodCall is not null&&this.重複除去されているか(MethodCall)) {
-                //逆数の合計
-                var Int64Count = Expression.Parameter(
-                    typeof(long),
-                    $"{変数名}Int64Count"
-                );
-                ListParameter.Add(Int64Count);
-                ListExpression.Add(
-                    Expression.Assign(
-                        Int64Count,
-                        Constant_0L
-                    )
-                );
-                ListExpression.Add(
-                    Expression.Assign(
-                        Item,
-                        Expression.Default(Item_Type)
-                    )
-                );
-                ListExpression.Add(
-                    this.ループ展開(
-                        MethodCall0_Arguments_0,
-                        argument => Block_PreIncrementAssign_AddAssign(
+            if(MethodCall is not null) {
+                if(this.重複除去されているか(MethodCall)){
+                    //逆数の合計
+                    var Int64Count = Expression.Parameter(
+                        typeof(long),
+                        $"{変数名}Int64Count"
+                    );
+                    ListParameter.Add(Int64Count);
+                    ListExpression.Add(
+                        Expression.Assign(
                             Int64Count,
-                            Item,
-                            Expression.Divide(
-                                Constant_1,
-                                this.LambdaExpressionを展開1(
-                                    MethodCall1_Arguments_1,
-                                    argument
-                                )
-                            )
+                            Constant_0L
                         )
-                    )
-                );
-                ListExpression.Add(
-                    Expression.Divide(
-                        Convert必要なら(
-                            Int64Count,
-                            Item_Type
-                        ),
-                        Item
-                    )
-                );
-            } else{
-                var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountあり(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
-                ListParameter.Add(Parameter);
-                ListExpression.Add(Assign);
-                ListExpression.Add(
-                    Expression.Assign(
-                        Item,
-                        Constant_0
-                    )
-                );
-                //逆数の合計
-                ListExpression.Add(
-                    this.ループ展開(
-                        MethodCall0_Arguments_0,
-                        argument => Expression.IfThenElse(
-                            Expression.Call(
-                                Parameter,
-                                IsAdded,
-                                argument
-                            ),
-                            AddAssign(
+                    );
+                    ListExpression.Add(
+                        Expression.Assign(
+                            Item,
+                            Expression.Default(Item_Type)
+                        )
+                    );
+                    ListExpression.Add(
+                        this.ループ展開(
+                            MethodCall0_Arguments_0,
+                            argument => Block_PreIncrementAssign_AddAssign(
+                                Int64Count,
                                 Item,
                                 Expression.Divide(
                                     Constant_1,
@@ -1185,25 +1145,67 @@ internal class 変換_インラインループ独立:変換_インラインル�
                                         argument
                                     )
                                 )
-                            ),
-                            Default_void
+                            )
                         )
-                    )
-                );
-                ListExpression.Add(
-                    //逆数の平均の逆数
-                    Expression.Divide(
-                        Convert必要なら(
-                            Expression.Property(
-                                Parameter,
-                                Parameter.Type.GetProperty(nameof(Set<int>.LongCount))
+                    );
+                    ListExpression.Add(
+                        Expression.Divide(
+                            Convert必要なら(
+                                Int64Count,
+                                Item_Type
                             ),
-                            Item_Type
-                        ),
-                        Item
-                    )
-                );
+                            Item
+                        )
+                    );
+                    return Expression.Block(ListParameter,ListExpression);
+                }
             }
+            var (Parameter,IsAdded,Assign)=具象SetType戻り値ありCountあり(MethodCall0_Arguments_0,$"{変数名}作業");//具象Type(MethodCall0_Arguments_0,$"{変数名}作業",true,true);
+            ListParameter.Add(Parameter);
+            ListExpression.Add(Assign);
+            ListExpression.Add(
+                Expression.Assign(
+                    Item,
+                    Constant_0
+                )
+            );
+            //逆数の合計
+            ListExpression.Add(
+                this.ループ展開(
+                    MethodCall0_Arguments_0,
+                    argument => Expression.IfThenElse(
+                        Expression.Call(
+                            Parameter,
+                            IsAdded,
+                            argument
+                        ),
+                        AddAssign(
+                            Item,
+                            Expression.Divide(
+                                Constant_1,
+                                this.LambdaExpressionを展開1(
+                                    MethodCall1_Arguments_1,
+                                    argument
+                                )
+                            )
+                        ),
+                        Default_void
+                    )
+                )
+            );
+            ListExpression.Add(
+                //逆数の平均の逆数
+                Expression.Divide(
+                    Convert必要なら(
+                        Expression.Property(
+                            Parameter,
+                            Parameter.Type.GetProperty(nameof(Set<int>.LongCount))
+                        ),
+                        Item_Type
+                    ),
+                    Item
+                )
+            );
         }
         return Expression.Block(ListParameter,ListExpression);
     }
