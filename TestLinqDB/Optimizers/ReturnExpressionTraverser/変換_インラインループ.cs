@@ -34,16 +34,6 @@ public class 変換_インラインループ : 共通{
     [Fact]public void AddAssign(){
         var s = new int[]{1,2,3,4,5,6,7};
         this.Cover(() => s.Average(o => o+1));
-        //var p = Expression.Parameter(typeof(decimal));
-        //this.Cover(
-        //    Expression.Block(
-        //        new[]{p},
-        //        Expression.AddAssign(
-        //            p,
-        //            Expression.Constant(0m)
-        //        )
-        //    )
-        //);
     }
     [Fact]public void Block_PreIncrementAssign_AddAssign(){
         var s = new int[]{1,2,3,4,5,6,7};
@@ -304,7 +294,6 @@ public class 変換_インラインループ : 共通{
         this.Cover(()=>new int[]{1,2,3,4,5,6,7}.Select(p=>p+1).Count());
     }
     [Fact]public void 重複除去されているか(){
-        //global::TestLinqDB.Keys.;
         var o=new Tables.Table();
         var s=new Set<Keys.Key,Tables.Table,Container>(null!);
         //if(nameof(Sets.ExtensionSet.GroupBy)==Name)
@@ -336,5 +325,47 @@ public class 変換_インラインループ : 共通{
             1,2,3,4,5,6,7
         };
         this.Cover(()=>Quote引数(()=>s));
+    }
+    public class 判定_指定PrimaryKeyが存在する:共通{
+        private void Cover(Expression Expression){
+            this.Optimizer.Lambda最適化(
+                Expression.Lambda(Expression)
+            );
+        }
+        private void Cover(LambdaExpression Expression){
+            this.Optimizer.Lambda最適化(Expression);
+        }
+        [Fact]public void Traverse(){
+            var o=new Tables.Table();
+            var s=new Set<Keys.Key,Tables.Table,Container>(null!);
+            //switch(e.NodeType) {
+            //    case ExpressionType.Parameter:
+            //        if(e==this.EntityParameter)
+            this.Cover(()=>s.Select(p=>new{p}).Geomean(p=>3d));//0
+            this.Cover(()=>s.Select(p=>new ValueTuple<Tables.Table>(p)).Geomean(p=>3d));//0
+            //        break;
+            //    case ExpressionType.New: {
+            //        var New = (NewExpression)e;
+            //        if(e.Type.IsAnonymous())
+            //            foreach(var Argument in New.Arguments)
+            //0
+            //        else
+            this.Cover(()=>s.Select(p=>new string(p.ToString()[0],3)).Geomean(p=>3d));//0
+            //        break;
+            //    }
+            //    case ExpressionType.MemberAccess:
+            //        if(MemberExpression.Expression==this.EntityParameter)
+            //            if(this.ParameterKey is not null)
+            //                if(MemberExpression.Member.MetadataToken==this.ParameterKey.MetadataToken)
+            this.Cover(()=>s.Select(p=>p.Key).Geomean(p=>3d));
+            //                else
+            this.Cover(()=>s.Select(p=>p.field1).Geomean(p=>3d));
+            //            else
+            this.Cover(()=>new[]{new{a=1}}.ToSet().Select(p=>p.a).Geomean(p=>p+3d));            //        break;
+            //    default:
+            this.Cover(()=>s.Select(p=>p.ToString()).Geomean(p=>3d));
+            //}
+        }
+
     }
 }

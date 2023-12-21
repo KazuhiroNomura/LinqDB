@@ -139,71 +139,73 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         private ParameterExpression? EntityParameter;
         private bool PrimaryKeyを参照したか;
         private bool Parameterを参照したか;
-        private bool 固有を許可する;
+        private bool ユニークな結果になる;
         private PropertyInfo? ParameterKey;
-        public bool 実行(Expression e,ParameterExpression EntityParameter) {
-            this.固有を許可する=true;
+        public bool 実行(Expression e,ParameterExpression EntityParameter){
+            const string IKey="LinqDB.Sets.IKey`1";
+            this.ユニークな結果になる=true;
             this.PrimaryKeyを参照したか=false;
             this.Parameterを参照したか=false;
             this.EntityParameter=EntityParameter;
             var Properties = this.Properties;
             Properties.Clear();
-            var EntityParameter_Type = EntityParameter.Type;
-            var PrimaryKey = EntityParameter_Type.GetProperty(nameof(Sets.IKey<int>.Key));
             bool Anonymousか;
-            // ReSharper disable once PossibleNullReferenceException
-            if(PrimaryKey is not null) {
-                Anonymousか=false;
-                this.ParameterKey=PrimaryKey;
-                foreach(var Property in PrimaryKey.PropertyType.GetProperties())
-                    Properties.Add(Property.Name);
-            } else {
+            var EntityParameter_Type = EntityParameter.Type;
+            var Interface=EntityParameter_Type.GetInterface(IKey);
+            if(Interface is null){
                 Anonymousか=EntityParameter_Type.IsAnonymous();
                 this.ParameterKey=null;
                 if(Anonymousか)
                     foreach(var Property in EntityParameter_Type.GetProperties())
                         Properties.Add(Property.Name);
+            } else{
+                Anonymousか=false;
+                //var PrimaryKey = Interface.GetProperty(nameof(Sets.IKey<int>.Key));
+                var PrimaryKey = EntityParameter_Type.GetProperty(nameof(Sets.IKey<int>.Key));
+                Debug.Assert(PrimaryKey is not null);
+                this.ParameterKey=PrimaryKey;
+                foreach(var Property in PrimaryKey.PropertyType.GetProperties())
+                    Properties.Add(Property.Name);
             }
-            //PrimaryKeyが出現したら                  true
-            //Anonymous&&HashSetフィールド名.LongCountGenericMethodDefinition==0 true
-            //その他のType&&Parameterを参照したか     true
             this.Traverse(e);
-            return this.固有を許可する&&(this.Parameterを参照したか||this.PrimaryKeyを参照したか||Anonymousか&&Properties.Count==0);
+            if(this.ユニークな結果になる){
+                if(this.Parameterを参照したか) return true;
+                if(this.PrimaryKeyを参照したか) return true;
+                if(Anonymousか)
+                    return Properties.Count==0;
+                return false;
+            }
+            return false;
         }
         protected override void Traverse(Expression e) {
             switch(e.NodeType) {
-                case ExpressionType.Parameter: {
-                    if(e==this.EntityParameter) {
+                case ExpressionType.Parameter:
+                    if(e==this.EntityParameter)
                         this.Parameterを参照したか=true;
-                    }
                     break;
-                }
                 case ExpressionType.New: {
                     var New = (NewExpression)e;
-                    if(e.Type.IsAnonymous()) {
-                        foreach(var Argument in New.Arguments) {
+                    if(e.Type.IsAnonymousValueTuple())
+                        foreach(var Argument in New.Arguments)
                             this.Traverse(Argument);
-                        }
-                    } else {
-                        this.固有を許可する=false;
-                    }
+                    else
+                        this.ユニークな結果になる=false;
                     break;
                 }
-                case ExpressionType.MemberAccess: {
+                case ExpressionType.MemberAccess: 
                     var MemberExpression = (MemberExpression)e;
-                    if(MemberExpression.Expression==this.EntityParameter) {
-                        if(this.ParameterKey is not null&&MemberExpression.Member.MetadataToken==this.ParameterKey.MetadataToken) {
-                            this.PrimaryKeyを参照したか=true;
-                        } else {
+                    if(MemberExpression.Expression==this.EntityParameter) 
+                        if(this.ParameterKey is not null)
+                            if(MemberExpression.Member.MetadataToken==this.ParameterKey.MetadataToken)
+                                this.PrimaryKeyを参照したか=true;
+                            else
+                                this.Properties.Remove(MemberExpression.Member.Name);
+                        else
                             this.Properties.Remove(MemberExpression.Member.Name);
-                        }
-                    }
                     break;
-                }
-                default: {
-                    this.固有を許可する=false;
+                default:
+                    this.ユニークな結果になる=false;
                     break;
-                }
             }
         }
     }
