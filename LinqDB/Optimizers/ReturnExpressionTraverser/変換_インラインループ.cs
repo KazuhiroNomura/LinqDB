@@ -249,7 +249,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         //Debug.Assert(ループ展開可能メソッドか(Expression,out var _));
         if(Expression is MethodCallExpression MethodCall)
             return this.重複除去されているか(MethodCall);
-        else return false;
+        else return true;
     }
     protected bool 重複除去されているか(MethodCallExpression MethodCall) {
         var Name=MethodCall.Method.Name;
@@ -323,17 +323,22 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         )
     );
     [SuppressMessage("ReSharper","UnusedMember.Local")]
-    private sealed class SZArrayEnumerator<T> {
+    private sealed class SZArrayEnumerator<T>{
         private readonly T[] Array;
         private int Index;
         private readonly int EndIndex;
-        public T Current => this.Array[this.Index];
+        public T Current{get;private set;}=default!;
         public SZArrayEnumerator(T[] Array) {
             this.Array=Array;
             this.Index=-1;
             this.EndIndex=Array.Length;
         }
-        public bool MoveNext() => this.Index<this.EndIndex&&++this.Index<this.EndIndex;
+        public bool MoveNext(){
+            this.Index++;
+            if(this.Index>=this.EndIndex) return false;
+            this.Current=this.Array[this.Index];
+            return true;
+        }
     }
     protected Expression ループ起点(Expression Expression0,ループの内部処理 ループの内部処理) {
         var 作業配列 = this.作業配列;
@@ -355,17 +360,14 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 Expression1
             );
         } else{
-            EnumeratorExpression=Expression.Call(
-                Expression1,
-                Expression1_Type.GetMethod(nameof(Sets.IEnumerable.GetEnumerator))??Expression1_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!.GetMethod(nameof(Sets.IEnumerable.GetEnumerator))!
-            );
+            var GetEnumerator=Expression1_Type.GetMethod(nameof(Sets.IEnumerable.GetEnumerator));
+            // ReSharper disable once ConvertIfStatementToNullCoalescingExpression
+            if(GetEnumerator is null)GetEnumerator=Expression1_Type.GetInterface(CommonLibrary.Generic_IEnumerable1_FullName)!.GetMethod(nameof(Sets.IEnumerable.GetEnumerator));
+            EnumeratorExpression=Expression.Call(Expression1,GetEnumerator);
         }
         var GetEnumerator_ReturnType = EnumeratorExpression.Type;
         var 変数名 = $"Setﾟ{this.番号++}ﾟ";
-        var Enumerator変数 = Expression.Parameter(
-            GetEnumerator_ReturnType,
-            $"{変数名}Enumerator"
-        );
+        var Enumerator変数 = Expression.Parameter(GetEnumerator_ReturnType,$"{変数名}Enumerator");
         var Break = Expression.Label(変数名);
         var Expression本体 = ループの内部処理(
             Expression.Property(
@@ -376,10 +378,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         return Expression.Block(
             作業配列.Parameters設定(Enumerator変数),
             作業配列.Expressions設定(
-                Expression.Assign(
-                    Enumerator変数,
-                    EnumeratorExpression
-                ),
+                Expression.Assign(Enumerator変数,EnumeratorExpression),
                 Expression.Loop(
                     Expression.Block(
                         Expression.IfThenElse(
