@@ -1,4 +1,49 @@
-﻿LV1
+﻿Block                  
+├Loop　               ┐
+│└Block              │
+│　├Assign           │
+│　│├Parameter p    │
+│　│└Add op_Addition│
+│　│　├Parameter p  │
+│　│　└Parameter p  │
+│　├Add op_Addition  │
+│　│├Parameter p    │
+│　│└Parameter p    │
+│　└Goto goto()Break ┐│
+└Add op_Addition      ┘
+　├Parameter p        
+　└Parameter p        
+
+Condition
+├Assign           ┬┐
+│└Add op_Addition││
+│　├Parameter p  ││
+│　└Parameter p  ││
+├Add op_Addition  ┘│
+│├Parameter p    　│
+│└Parameter p    　│
+└Goto goto()Break ─┘┐│
+
+Loop  ┐
+└Body┘
+Condition
+├test ┬┐
+├true ┘│
+└false─┘
+Switch
+├test   ┬┬┐
+├case 0 ┘││
+├case 1 ─┘│
+└default──┘
+Block
+├goto L0┐
+├L1:    ┼┐
+├goto L2┼┼┐
+├L0:    ┘││
+├goto L1─┘│
+└L2:    ──┘
+
+LV1
 分岐しない辺のみ対象
 ①
 後退辺を含んでループ作ってよいが先頭にジャンプ。

@@ -26,6 +26,7 @@ using static LinqDB.Optimizers.Common;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.VoidTSqlFragmentTraverser;
 using Expression=System.Linq.Expressions.Expression;
+using System.Collections.Generic;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic = System.Collections.Generic;
@@ -49,7 +50,7 @@ public sealed class Optimizer:IDisposable {
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
-    private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
+    public readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
     private readonly 取得_ラムダを跨ぐParameter 取得ラムダを跨ぐParameter;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
@@ -60,6 +61,12 @@ public sealed class Optimizer:IDisposable {
     private readonly 作成_DynamicMethod _作成_DynamicMethod;
     private readonly 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
+    private readonly List計測 List計測 = new();
+    //private readonly A計測 Top辺;
+    //private readonly List計測 List辺= new();
+    private readonly Dictionary<LabelTarget,A計測> Dictionary_LabelTarget_辺=new();
+    //private readonly ConstantExpression ConstantList計測;
+    private readonly StringBuilder sb=new();
     private Generic.Dictionary<ConstantExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryConstant {
         get => this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
         set {
@@ -152,7 +159,9 @@ public sealed class Optimizer:IDisposable {
         this._検証_変形状態=new();
         this._検証_Parameterの使用状態=new(ループ跨ぎParameters);
         this._変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
-        this._変換_Stopwatchに埋め込む=new(作業配列);
+        var List計測=this.List計測;
+        //this.Top辺=new 計測する{子コメント="開始"};
+        this._変換_Stopwatchに埋め込む=new(作業配列,this.List計測,this.Dictionary_LabelTarget_辺);
         this._作成_DynamicMethod=new(判定_InstanceMethodか);
         this._作成_DynamicAssembly=new(判定_InstanceMethodか);
         this.DictionaryConstant=new(ExpressionEqualityComparer);
@@ -750,48 +759,100 @@ public sealed class Optimizer:IDisposable {
             var Disp0 = Disp;
             var Item番号 = 2;//1はContainerが入る
             foreach(var a in DictionaryConstant.AsEnumerable())
-                DictionaryConstant[a.Key]=(default!, ValueTuple_Item0(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,a.Key.Value));
+                DictionaryConstant[a.Key]=(default!, ValueTuple_Item0(ref Disp0,Item番号++,TupleExpression,a.Key.Value));
             foreach(var a in DictionaryDynamic.AsEnumerable()) {
                 var Dynamic = a.Key;
                 var CallSite0 = CallSite.Create(this.Dynamicに対応するFunc(Dynamic),Dynamic.Binder);
-                DictionaryDynamic[Dynamic]=(default!, ValueTuple_Item0(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression,CallSite0));
+                DictionaryDynamic[Dynamic]=(default!, ValueTuple_Item0(ref Disp0,Item番号++,TupleExpression,CallSite0));
             }
             foreach(var a in DictionaryLambda.AsEnumerable())
-                DictionaryLambda[a.Key]=(default!, ValueTuple_Item1(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression), default!);
+                DictionaryLambda[a.Key]=(default!, ValueTuple_Item1(ref Disp0,Item番号++,TupleExpression), default!);
             foreach(var a in Dictionaryラムダ跨ぎParameter.AsEnumerable())
-                Dictionaryラムダ跨ぎParameter[a.Key]=(default!, ValueTuple_Item1(ref DispType0,ref Disp0,ref Item番号,ref TupleExpression));
+                Dictionaryラムダ跨ぎParameter[a.Key]=(default!, ValueTuple_Item1(ref Disp0,Item番号++,TupleExpression));
         }
         return (Disp, DispParameter);
-        static MemberExpression ValueTuple_Item0(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression,object Value) {
-            if(Item番号==8) {
+        static MemberExpression ValueTuple_Item0(ref object TupleValue,int Item番号,Expression TupleExpression,object Value) {
+            if(Item番号<8){
+                (var Member,TupleValue)=共通(Item番号,TupleValue,Value);
+                return Member;
+            } else {
+                //return 共通(Switch);
+                var TupleType=TupleValue.GetType();
                 var Rest = TupleType.GetField("Rest");
                 Debug.Assert(Rest!=null);
                 TupleType=Rest.FieldType;
-                var Value0 = Rest.GetValue(TupleValue);
-                Debug.Assert(Value0!=null);
-                TupleValue=Value0;
+                var Rest_Item = Rest.GetValue(TupleValue);
+                Debug.Assert(Rest_Item!=null);
+                //TupleValue=Rest_Item;
                 TupleExpression=Expression.Field(TupleExpression,Rest);
-                Item番号=1;
+                var Rest0_Item=Rest_Item;
+                var Member=ValueTuple_Item0(ref Rest0_Item,Item番号-7,TupleExpression,Value);
+                Rest.SetValue(TupleValue,Rest0_Item);
+                return Member;
             }
-            var TupleField = TupleType.GetField($"Item{Item番号++}");
-            Debug.Assert(TupleField!=null);
-            TupleField.SetValue(TupleValue,Value);
-            return Expression.Field(TupleExpression,TupleField);
+            (MemberExpression Member,object TupleValue)共通(int Item番号0,object TupleValue0,object Value0){
+                var TupleField=TupleValue0.GetType().GetField($"Item{Item番号0}");
+                Debug.Assert(TupleField!=null);
+                TupleField.SetValue(TupleValue0,Value0);
+                return (Expression.Field(TupleExpression,TupleField),TupleValue0);
+            }
         }
-        static MemberExpression ValueTuple_Item1(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression) {
-            if(Item番号==8) {
+        static MemberExpression ValueTuple_Item1(ref object TupleValue,int Item番号,Expression TupleExpression) {
+            if(Item番号<8){
+                var TupleField=TupleValue.GetType().GetField($"Item{Item番号}");
+                return Expression.Field(TupleExpression,TupleField);
+            }else{
+                //var Rest = TupleValue.GetType().GetField("Rest");
+                //Debug.Assert(Rest!=null);
+                ////TupleType=Rest.FieldType;
+                //var Value0 = Rest.GetValue(TupleValue);
+                //Debug.Assert(Value0!=null);
+                //TupleValue=Value0;
+                //TupleExpression=Expression.Field(TupleExpression,Rest);
+                //Item番号=1;
+                var TupleType=TupleValue.GetType();
                 var Rest = TupleType.GetField("Rest");
                 Debug.Assert(Rest!=null);
                 TupleType=Rest.FieldType;
-                var Value0 = Rest.GetValue(TupleValue);
-                Debug.Assert(Value0!=null);
-                TupleValue=Value0;
+                var Rest_Item = Rest.GetValue(TupleValue);
+                Debug.Assert(Rest_Item!=null);
+                //TupleValue=Rest_Item;
                 TupleExpression=Expression.Field(TupleExpression,Rest);
-                Item番号=1;
+                var Rest0_Item=Rest_Item;
+                var Member=ValueTuple_Item1(ref Rest0_Item,Item番号-7,TupleExpression);
+                return Member;
             }
-            var TupleField = TupleType.GetField($"Item{Item番号++}");
-            return Expression.Field(TupleExpression,TupleField);
         }
+        //static MemberExpression ValueTuple_Item0(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression,object Value) {
+        //    if(Item番号==8) {
+        //        var Rest = TupleType.GetField("Rest");
+        //        Debug.Assert(Rest!=null);
+        //        TupleType=Rest.FieldType;
+        //        var Value0 = Rest.GetValue(TupleValue);
+        //        Debug.Assert(Value0!=null);
+        //        TupleValue=Value0;
+        //        TupleExpression=Expression.Field(TupleExpression,Rest);
+        //        Item番号=1;
+        //    }
+        //    var TupleField = TupleType.GetField($"Item{Item番号++}");
+        //    Debug.Assert(TupleField!=null);
+        //    TupleField.SetValue(TupleValue,Value);
+        //    return Expression.Field(TupleExpression,TupleField);
+        //}
+        //static MemberExpression ValueTuple_Item1(ref Type TupleType,ref object TupleValue,ref int Item番号,ref Expression TupleExpression) {
+        //    if(Item番号==8) {
+        //        var Rest = TupleType.GetField("Rest");
+        //        Debug.Assert(Rest!=null);
+        //        TupleType=Rest.FieldType;
+        //        var Value0 = Rest.GetValue(TupleValue);
+        //        Debug.Assert(Value0!=null);
+        //        TupleValue=Value0;
+        //        TupleExpression=Expression.Field(TupleExpression,Rest);
+        //        Item番号=1;
+        //    }
+        //    var TupleField = TupleType.GetField($"Item{Item番号++}");
+        //    return Expression.Field(TupleExpression,TupleField);
+        //}
     }
     internal static class DynamicReflection {
         public static readonly RuntimeBinder.CSharpArgumentInfo CSharpArgumentInfo = RuntimeBinder.CSharpArgumentInfo.Create(RuntimeBinder.CSharpArgumentInfoFlags.None,null);
@@ -1207,6 +1268,8 @@ public sealed class Optimizer:IDisposable {
         DictionaryDynamic.Clear();
         DictionaryLambda.Clear();
         Dictionaryラムダ跨ぎParameter.Clear();
+        //var List計測 =this.List計測;
+        //DictionaryConstant.Add(this.ConstantList計測,default!);
         //分離するアイデア。ここで以下を取得する
         //DictionaryConstant add
 
@@ -1215,25 +1278,38 @@ public sealed class Optimizer:IDisposable {
         //DictionaryConstant read
         var Lambda02 = this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
         //プロファイル=false;
-        //var List計測 = new List<A計測>();
-        //var ConstantList計測 = Expression.Constant(List計測);
         //プロファイル=false;
-        //if(プロファイル)HashSetConstant.Add(ConstantList計測);
+        //if(プロファイル)
         var Lambda04 = this._変換_WhereからLookup.実行(Lambda02);
         //Dictionaryラムダ跨ぎParameter add
         var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
         //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
-        {
-            var Lambda=(LambdaExpression)Lambda05;
-            if(Lambda.Name is not null){
-                if(Lambda.Name.IndexOf("AAAATest")>=0){
-                }
-            }
-        }
-        var Lambda07 = this._変換_局所Parameterの先行評価.実行(Lambda05);
+        var Lambda06 = this._変換_局所Parameterの先行評価.実行(Lambda05);
+        //List計測.Clear();
+        //this.List辺.Clear();
+        var Lambda07 = this._変換_Stopwatchに埋め込む.実行(Lambda06);
         //Lambda07=Lambda06;
+        //Lambda07=Lambda06;
+        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);
+        Trace.WriteLine(this._変換_Stopwatchに埋め込む.Analize);
+        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.フロー0);
+        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.フロー1);
+
         this._検証_変形状態.実行(Lambda07);
         var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;
+
+        
+        
+        //var ListスコープParameter=new Generic.List<ParameterExpression>();
+        //var ExpressionEqualityComparer=new ExpressionEqualityComparer_Assign_Leftで比較(ListスコープParameter);
+        ////var 判定_左辺Parametersが含まれる=new 判定_左辺Expressionsが含まれる(ExpressionEqualityComparer);
+        //var Dictionary_LabelTarget_辺に関する情報=new Generic.Dictionary<LabelTarget,辺>();
+        //var Top辺=new 辺(ExpressionEqualityComparer){辺番号=0,子コメント = "開始"};
+        //var List辺=this.List辺;
+        //var 作成_辺=new 作成_辺(Top辺,List辺,Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer);
+        //作成_辺.実行(Lambda06);
+        //Trace.WriteLine(List辺.フロー);
+
         //var s=this.命令ツリー(Lambda07);
         //Trace.WriteLine(インラインラムダテキスト(Lambda07));
         //DictionaryDynamic add

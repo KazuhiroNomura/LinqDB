@@ -68,10 +68,11 @@ public abstract class 共通{
     /// <param name="Body"></param>
     protected void 変換_局所Parameterの先行評価_実行(Expression Body){
         var Lambda=Expression.Lambda(Body);
-        var s0=CommonLibrary.インラインラムダテキスト(Lambda);
-        var s1=CommonLibrary.インラインラムダテキスト((Expression)this.変換_局所Parameterの先行評価.実行(Lambda));
-        Trace.WriteLine(s0);
-        Trace.WriteLine(s1);
+        this.変換_局所Parameterの先行評価.実行(Lambda);
+        //var s0=CommonLibrary.インラインラムダテキスト(Lambda);
+        //var s1=CommonLibrary.インラインラムダテキスト((Expression)this.変換_局所Parameterの先行評価.実行(Lambda));
+        //Trace.WriteLine(s0);
+        //Trace.WriteLine(s1);
         //var Lambda = Expression.Lambda(Expression0);
         //this.Lambda最適化(Lambda );
     }
@@ -420,11 +421,13 @@ public abstract class 共通{
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                var actual=Optimizer.CreateDelegate(input)(引数);
+                var Delegate=Optimizer.CreateDelegate(input);
+                var actual=Delegate(引数);
                 Assert.Equal(expected,actual,汎用Comparer);
             } else{
                 Optimizer.IsInline=false;
-                var actual=Optimizer.CreateDelegate(input)(引数);
+                var Delegate=Optimizer.CreateDelegate(input);
+                var actual=Delegate(引数);
                 Assert.Equal(expected,actual,汎用Comparer);
             }
         }

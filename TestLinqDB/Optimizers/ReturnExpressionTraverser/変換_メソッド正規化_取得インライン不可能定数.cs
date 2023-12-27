@@ -96,13 +96,12 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
     [Fact]
     public void SubtractAssignChecked() => this.共通BinaryAssign(ExpressionType.SubtractAssignChecked);
     [Fact]
-    public void Try()
-    {
-        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
+    public void Try0(){
+        var ParameterInt32=Expression.Parameter(typeof(int),"int32");
         this.Expression実行AssertEqual(
-            Expression.Lambda<Func<int, int>>(
+            Expression.Lambda<Func<int,int>>(
                 Expression.TryCatch(
-                    Expression.AddAssign(ParameterInt32, ParameterInt32),
+                    Expression.AddAssign(ParameterInt32,ParameterInt32),
                     Expression.Catch(
                         typeof(Exception),
                         Expression.Constant(0)
@@ -111,6 +110,9 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ParameterInt32
             )
         );
+    }
+    [Fact]public void Try1(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
                 Expression.TryCatchFinally(
@@ -119,6 +121,9 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ), ParameterInt32
             )
         );
+    }
+    [Fact]public void Try2(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
@@ -130,6 +135,9 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 )
             )
         );
+    }
+    [Fact]public void Try3(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
         var ex = Expression.Parameter(typeof(Exception), "ex");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
@@ -143,6 +151,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ParameterInt32
             )
         );
+    }
+    [Fact]public void Try4(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
+        var ex = Expression.Parameter(typeof(Exception), "ex");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
                 Expression.TryCatch(
@@ -159,6 +171,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ParameterInt32
             )
         );
+    }
+    [Fact]public void Try5(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
+        var ex = Expression.Parameter(typeof(Exception), "ex");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.TryCatch(
@@ -170,6 +186,10 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 )
             )
         );
+    }
+    [Fact]public void Try6(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
+        //var ex = Expression.Parameter(typeof(Exception), "ex");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
                 Expression.TryCatch(
@@ -198,6 +218,9 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ParameterInt32
             )
         );
+    }
+    [Fact]public void Try8(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
                 Expression.TryCatch(
@@ -210,6 +233,9 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
                 ParameterInt32
             )
         );
+    }
+    [Fact]public void Try9(){
+        var ParameterInt32 = Expression.Parameter(typeof(int), "int32");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int, int>>(
                 Expression.TryFault(

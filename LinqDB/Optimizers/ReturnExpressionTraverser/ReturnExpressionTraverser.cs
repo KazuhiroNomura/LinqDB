@@ -963,52 +963,54 @@ public class ReturnExpressionTraverser {
     /// <param name="Try0"></param>
     /// <returns></returns>
     protected virtual Expression Try(TryExpression Try0) {
+        Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
         var Try0_Handlers=Try0.Handlers;
         var Try0_Handlers_Count=Try0_Handlers.Count;
         var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
         var 変化したか=false;
         var Try0_Body=Try0.Body;
         var Try1_Body=this.Traverse(Try0_Body);
-        if(Try0_Body !=Try1_Body)
+        if(Try0_Body!=Try1_Body)
             変化したか=true;
         var Try0_Finally=Try0.Finally;
         var Try1_Finally=this.TraverseNullable(Try0_Finally);
         if(Try0_Finally!=Try1_Finally)
             変化したか=true;
-        for(var a=0; a < Try0_Handlers_Count; a++) {
+        for(var a=0;a<Try0_Handlers_Count;a++) {
             var Try0_Handler=Try0_Handlers[a];
-            var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
-            var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
+            Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
+            var Try0_Handler_Variable=Try0_Handler.Variable;
             CatchBlock Try1_Handler;
-            if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
-                変化したか=true;
-                if(Try0_Handler.Variable is not null) {
-                    Try1_Handler=Expression.Catch(
-                        Try0_Handler.Variable,
-                        Try1_Handler_Body,
-                        Try1_Handler_Filter
-                    );
-                } else {
-                    Try1_Handler=Expression.Catch(
-                        Try0_Handler.Test,
-                        Try1_Handler_Body,
-                        Try1_Handler_Filter
-                    );
-                }
+            if(Try0_Handler_Variable is not null) {
+                var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
+                var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
+                //Debug.Assert(Try1_Handler_Filter!=null,nameof(Try1_Handler_Filter)+" != null");
+                if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
+                    変化したか=true;
+                    Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
+                } else
+                    Try1_Handler=Try0_Handler;
             } else {
-                Try1_Handler=Try0_Handler;
+                var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
+                var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
+                if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
+                    変化したか=true;
+                    Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
+                } else
+                    Try1_Handler=Try0_Handler;
             }
             Try1_Handlers[a]=Try1_Handler;
         }
-        if(変化したか) {
-            return Expression.TryCatchFinally(
-                Try1_Body,
-                Try1_Finally,
-                Try1_Handlers
-            );
-        } else {
-            return Try0;
-        }
+        if(Try0.Fault is not null){
+            Debug.Assert(Try0_Finally is null);
+            var Try0_Fault=Try0.Fault;
+            var Try1_Fault=this.Traverse(Try0_Fault);
+            if(Try0_Fault!=Try1_Fault)変化したか=true;
+            if(変化したか)
+                return Expression.TryFault(Try1_Body,Try1_Fault);
+        } else if(変化したか)
+            return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
+        return Try0;
     }
     /// <summary>
     /// a as b

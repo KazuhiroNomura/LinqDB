@@ -268,8 +268,11 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             return false;
         if(nameof(Sets.ExtensionSet.Union)==Name)
             return false;
-        Debug.Assert(nameof(Sets.ExtensionSet.Where)==Name);
-        return this.重複除去されているか(MethodCall.Arguments[0]);
+        if(nameof(Sets.ExtensionSet.Where)==Name)
+            return this.重複除去されているか(MethodCall.Arguments[0]);
+        //Debug.Assert(nameof(Sets.ExtensionSet.Where)==Name);
+        return true;
+        //return this.重複除去されているか(MethodCall.Arguments[0]);
     }
     //protected bool Set結果かつ重複が残っているか(Expression e){
     //    Debug.Assert(e.Type.IsInterface);

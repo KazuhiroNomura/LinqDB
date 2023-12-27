@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using LinqDB.Sets;
@@ -143,6 +144,34 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
+    [Fact]public void Condition0(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Expression.Condition(
+                    p,
+                    p,
+                    p
+                ),
+                p
+            )
+        );
+        Trace.WriteLine(this.Optimizer._変換_Stopwatchに埋め込む.Analize);
+    }
+    [Fact]public void Condition1(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        var pp=Expression.And(p,p);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Expression.Condition(
+                    p,
+                    pp,
+                    pp
+                ),
+                p
+            )
+        );
+    }
     [Fact]public void Condition1分岐と2分岐の先行評価(){
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
@@ -160,9 +189,21 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Condition3(){
+    [Fact]public void Condition2連続(){
         var p = Expression.Parameter(typeof(bool), "p");
         var pp=Expression.And(p,p);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Expression.Block(
+                    Expression.Condition(pp,p,p),
+                    Expression.Condition(p,p,pp)
+                ),
+                p
+            )
+        );
+    }
+    [Fact]public void Condition2入れ子(){
+        var p = Expression.Parameter(typeof(bool), "p");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<bool,bool>>(
                 Expression.Condition(
@@ -728,6 +769,52 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
+    [Fact]public void 経路3(){
+        //├L1:────────────┐
+        //├Conditional───┬┐      │
+        //│├Conditional──┼┼┬┐  │
+        //││├Parameter p  ││││  │
+        //││├AssignA計測─┼┼┘│  │
+        //││└goto L0───┼┼─┴┐│
+        //│├Conditional──┴┼┬┐││
+        //││├Parameter p　　│││││
+        //││├AssignA計測──┼┘│││
+        //││└Assign ────┼─┘││
+        //│├Conditional───┴┬┐││
+        //││├Parameter p      ││││
+        //││├AssignA計測───┘│││
+        //││└Assign ──────┘││
+        //├L0:───────────┘│
+        //└goto L1──────────┘
+        var p = Expression.Parameter(typeof(bool), "p");
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var ppp=Expression.Condition(
+            p,
+            p,p
+        );
+        var ppGoto=Expression.IfThenElse(
+            p,
+            p,
+            Expression.Goto(L0)
+        );
+        var Block=Expression.Block(
+            Expression.Label(L1),
+            Expression.IfThenElse(
+                ppp,
+                ppGoto,
+                ppp
+            ),
+            Expression.Label(L0),
+            Expression.Goto(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block,
+                p
+            )
+        );
+    }
     [Fact]public void 無条件ジャンプ0下(){
         //     物理番号
         //       論隷番号
@@ -755,77 +842,133 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void 無条件ジャンプ1下上下0(){
-        //            物理番号
-        //              論隷番号
-        //└──┐    0 0 goto L0
-        //┌─┐│    2 0 L1:
-        //1m  ││    
-        //└┐││        goto L2
-        //┌┼┼┘    1 0 L0:
-        //1m││  
-        //└┼┘          goto L1
-        //┌┘        3 0 L2:
-        //↓
-        //└────┐0 0 goto L0
-        //┌───┐│2 0 L1:
-        //t0      ││
-        //└──┐││    goto L2
-        //┌──┼┼┘1 L0:
-        //t0=1m ││  
-        //└──┼┘      goto L1
-        //┌──┘    3 L2:
+    [Fact]public void 無条件下ジャンプのみ0(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var Block=Expression.Block(
+            Expression.Goto(L0),
+            Expression.Label(L0),
+            Expression.Goto(L1),
+            Expression.Label(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件上ジャンプのみ0(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var Block=Expression.Block(
+            Expression.Label(L0),
+            Expression.Goto(L0),
+            Expression.Label(L1),
+            Expression.Goto(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件下ジャンプのみ1(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var Block=Expression.Block(
+            Expression.Goto(L0),
+            Expression.Label(L0),
+            Expression.Goto(L1),
+            Expression.Label(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件上ジャンプのみ1(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var Block=Expression.Block(
+            Expression.Label(L0),
+            Expression.Goto(L0),
+            Expression.Label(L1),
+            Expression.Goto(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件下ジャンプのみ2(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var L2=Expression.Label("L2");
+        var Block=Expression.Block(
+            Expression.Goto(L0),
+            Expression.Label(L0),
+            Expression.Goto(L1),
+            Expression.Label(L1),
+            Expression.Goto(L2),
+            Expression.Label(L2)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件ジャンプ0213制御文のみ0(){
+        var L1=Expression.Label("L1");
+        var L2=Expression.Label("L2");
+        var Block=Expression.Block(
+            Expression.Label(L1),
+            Expression.Goto(L2),
+            Expression.Goto(L1),
+            Expression.Label(L2)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件ジャンプ0213制御文のみ1(){
+        var L0=Expression.Label("L0");
+        var L1=Expression.Label("L1");
+        var Block=Expression.Block(
+            Expression.Goto(L0),
+            Expression.Label(L1),
+            Expression.Label(L0),
+            Expression.Goto(L1)
+        );
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Block
+            )
+        );
+    }
+    [Fact]public void 無条件ジャンプ0213制御文のみ2(){
         var L0=Expression.Label("L0");
         var L1=Expression.Label("L1");
         var L2=Expression.Label("L2");
         var Block=Expression.Block(
             Expression.Goto(L0),
             Expression.Label(L1),
-            Expression.Constant(1m),
             Expression.Goto(L2),
             Expression.Label(L0),
-            Expression.Constant(2m),
             Expression.Goto(L1),
-            Expression.Label(L2),
-            Expression.Constant(true)
+            Expression.Label(L2)
         );
-        this.Expression実行AssertEqual(
-            Expression.Lambda<Func<bool>>(
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
                 Block
             )
         );
     }
-    [Fact]public void 無条件ジャンプ1下上下1(){
-        //            物理番号
-        //              論隷番号
-        //└──┐    0 0 goto L0
-        //┌─┐│    2 0 L1:
-        //1m  ││    
-        //└┐││        goto L2
-        //┌┼┼┘    1 0 L0:
-        //1m││  
-        //└┼┘          goto L1
-        //┌┘        3 0 L2:
-        //↓
-        //└────┐0 0 goto L0
-        //┌───┐│2 0 L1:
-        //t0      ││
-        //└──┐││    goto L2
-        //┌──┼┼┘1 L0:
-        //t0=1m ││  
-        //└──┼┘      goto L1
-        //┌──┘    3 L2:
-        //.Goto L0 { };    0   [1,[0]]
-        //.Label
-        //.LabelTarget L1:;2   [2,[1]]
-        //1M;
-        //.Goto L2 { };    2 3 [3,[2,[1,[0]]]]
-        //.Label
-        //.LabelTarget L0:;1   [1,[0]]
-        //1M;
-        //.Goto L1 { };    1 2 [2,[1]]
-        //.Label
-        //.LabelTarget L2:;3   [3,[2,[1,[0]]]]
+    [Fact]public void 無条件ジャンプ0213値有り(){
         var L0=Expression.Label("L0");
         var L1=Expression.Label("L1");
         var L2=Expression.Label("L2");
@@ -1087,7 +1230,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Loop0(){
+    [Fact]public void Loop無限(){
         var p = Expression.Parameter(typeof(bool), "p");
         var Block=Expression.Block(
             Expression.Loop(
@@ -1102,7 +1245,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Loop1(){
+    [Fact]public void Loop2ステートメント無限(){
         //└┐　　　　　　　　0,最上位,子 
         //┌┴┐　　　　　　　1,Begin Loop,親 (辺番号1 , 辺番号1 )
         //└┬┘　　　　　　　1,,子 
@@ -1134,39 +1277,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Loop2(){
-        //└┐　　　　　　　　0,最上位,子 
-        //┌┴┐　　　　　　　1,Begin Loop,親 (辺番号1 , 辺番号1 )
-        //└┬┘　　　　　　　1,,子 
-        //┌┘　　　　　　　　2,End Loop,親 (辺番号1 , 辺番号2 )
-        //.Block() {
-        //    .Loop  {
-        //        .Block() {
-        //            $局所0 = $p & $p;
-        //                $局所0
-        //        }
-        //    };
-        //    $局所0
-        //}
-        var p = Expression.Parameter(typeof(bool), "p");
-        var pp=Expression.And(p,p);
-        var Block=Expression.Block(
-            Expression.Loop(
-                Expression.Block(
-                    pp,
-                    pp
-                )
-            ),
-            pp
-        );
-        var 最適化Lambda=this.Optimizer.Lambda最適化(
-            Expression.Lambda<Func<bool,bool>>(
-                Block,
-                p
-            )
-        );
-    }
-    [Fact]public void Loop3(){
+    [Fact]public void Loop局所先行評価(){
         //└┐　　　　　　　　0,最上位,子 
         //┌┴┐　　　　　　　1,Begin Loop,親 (辺番号1 , 辺番号1 )
         //└┬┘　　　　　　　1,,子 

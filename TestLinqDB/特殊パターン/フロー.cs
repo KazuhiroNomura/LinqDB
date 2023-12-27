@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using LinqDB.Optimizers.Comparer;
+using LinqDB.Optimizers.ReturnExpressionTraverser;
 namespace TestLinqDB.特殊パターン;
 public class フロー: 共通
 {
@@ -13,15 +14,15 @@ public class フロー: 共通
         //├─┘　　　　　　　　　　　　　　　　　3,IfEnd:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var test=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer);
-        var ifTrue=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer);
-        var ifFalse=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer);
-        var endif=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺();
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(test,ifTrue);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(test,ifFalse);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(ifTrue,endif);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(ifFalse,endif);
+        var test=new 辺(Comparer);
+        var ifTrue=new 辺(Comparer);
+        var ifFalse=new 辺(Comparer);
+        var endif=new 辺(Comparer);
+        var l=new List辺();
+        辺.接続(test,ifTrue);
+        辺.接続(test,ifFalse);
+        辺.接続(ifTrue,endif);
+        辺.接続(ifFalse,endif);
         l.Add(test);
         l.Add(ifTrue);
         l.Add(ifFalse);
@@ -34,10 +35,10 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        辺.接続(L0,L1);
+        var l=new List辺{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報Goto01(){
@@ -48,12 +49,12 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        辺.接続(L0,L1);
+        辺.接続(L1,L2);
+        var l=new List辺{L0,L1,L2};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報Goto1(){
@@ -64,17 +65,29 @@ public class フロー: 共通
         //┌┘││
         //└─┘│
         //┌──┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2,L3};
-        Trace.WriteLine(l.フロー);
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 辺(Comparer){親コメント="L0"};
+            var L1=new 辺(Comparer){親コメント="L1"};
+            var L2=new 辺(Comparer){親コメント="L2"};
+            var L3=new 辺(Comparer){親コメント="L3"};
+            辺.接続(L0,L2);
+            辺.接続(L2,L1);
+            辺.接続(L1,L3);
+            var l=new List辺{L0,L1,L2,L3};
+            Trace.WriteLine(l.フロー);
+        }
+        {
+            var L0=new 計測する親(0,"Label","L0");
+            var L1=new 計測する親(1,"Label","L1");
+            var L2=new 計測する親(2,"Label","L2");
+            var L3=new 計測する親(3,"Label","L3");
+            A計測.接続(L0,L2);
+            A計測.接続(L2,L1);
+            A計測.接続(L1,L3);
+            var l=new List計測{L0,L1,L2,L3};
+            Trace.WriteLine(l.フロー1);
+        }
     }
     [Fact]public void 辺に関する情報Goto2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -84,13 +97,13 @@ public class フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2,L3};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        辺.接続(L0,L3);
+        辺.接続(L1,L2);
+        var l=new List辺{L0,L1,L2,L3};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ00(){
@@ -99,9 +112,9 @@ public class フロー: 共通
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L0);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        辺.接続(L0,L0);
+        var l=new List辺{L0};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ01(){
@@ -111,11 +124,11 @@ public class フロー: 共通
         //└─┘1,
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        辺.接続(L0,L1);
+        辺.接続(L1,L1);
+        var l=new List辺{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ1(){
@@ -126,11 +139,11 @@ public class フロー: 共通
         //└┘　　　　　　　　　1,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L0);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        辺.接続(L0,L1);
+        辺.接続(L1,L0);
+        var l=new List辺{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ2(){
@@ -143,13 +156,13 @@ public class フロー: 共通
         //└┘　　　　　　　　　2,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L0);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        辺.接続(L0,L1);
+        辺.接続(L1,L2);
+        辺.接続(L2,L0);
+        var l=new List辺{L0,L1,L2};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 辺に関する情報ループ3(){
@@ -160,12 +173,12 @@ public class フロー: 共通
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
         //辺に関する情報.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1};
+        辺.接続(L0,L1);
+        辺.接続(L1,L1);
+        var l=new List辺{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void IfThenElseEnd0(){
@@ -178,15 +191,15 @@ public class フロー: 共通
         //┌┴┘3,IfEnd,L3:親
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L2);
+        辺.接続(L1,L3);
+        辺.接続(L2,L3);
+        var l=new List辺{
             L0,
             L1,
             L2,
@@ -202,13 +215,13 @@ public class フロー: 共通
         //┌┘　2,L2
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        辺.接続(L0,L1);
+        辺.接続(L1,L2);
+        辺.接続(L1,L1);
+        var l=new List辺{L0,L1,L2};
         Trace.WriteLine(l.フロー);
     }
     /// <summary>
@@ -235,24 +248,24 @@ public class フロー: 共通
         //┌┴┘L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        var L4=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L4" };
-        var L5=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L5" };
-        var L6=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L6" };
-        var L7=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L7" };
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        var L4=new 辺(Comparer) { 親コメント="L4" };
+        var L5=new 辺(Comparer) { 親コメント="L5" };
+        var L6=new 辺(Comparer) { 親コメント="L6" };
+        var L7=new 辺(Comparer) { 親コメント="L7" };
 
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L4,L5);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L4,L6);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L5,L7);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L6,L7);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        辺.接続(L0,L1);
+        辺.接続(L0,L2);
+        辺.接続(L1,L3);
+        辺.接続(L2,L3);
+        辺.接続(L4,L5);
+        辺.接続(L4,L6);
+        辺.接続(L5,L7);
+        辺.接続(L6,L7);
+        var l=new List辺{
             L0,
             L1,
             L2,
@@ -290,26 +303,26 @@ public class フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L2, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L00=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L00" };
-        var L01=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L01" };
-        var L02=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L02" };
-        var L03=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L03" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L00);
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L00=new 辺(Comparer) { 親コメント="L00" };
+        var L01=new 辺(Comparer) { 親コメント="L01" };
+        var L02=new 辺(Comparer) { 親コメント="L02" };
+        var L03=new 辺(Comparer) { 親コメント="L03" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        辺.接続(L0,L00);
 
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L00,L01);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L00,L02);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L01,L03);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L02,L03);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L03,L1);
+        辺.接続(L00,L01);
+        辺.接続(L00,L02);
+        辺.接続(L01,L03);
+        辺.接続(L02,L03);
+        辺.接続(L03,L1);
 
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        辺.接続(L0,L2);
+        辺.接続(L1,L3);
+        辺.接続(L2,L3);
+        var l=new List辺{
             L0,
             L00,
             L01,
@@ -347,26 +360,26 @@ public class フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L23, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L20=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L20" };
-        var L21=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L21" };
-        var L22=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L22" };
-        var L23=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L23" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L20);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L20,L21);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L20,L22);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L21,L23);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L22,L23);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L23,L3);
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L20=new 辺(Comparer) { 親コメント="L20" };
+        var L21=new 辺(Comparer) { 親コメント="L21" };
+        var L22=new 辺(Comparer) { 親コメント="L22" };
+        var L23=new 辺(Comparer) { 親コメント="L23" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L2);
+        辺.接続(L1,L3);
+        辺.接続(L2,L20);
+        辺.接続(L20,L21);
+        辺.接続(L20,L22);
+        辺.接続(L21,L23);
+        辺.接続(L22,L23);
+        辺.接続(L23,L3);
 
 
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        var l=new List辺{
             L0,
             L1,
             L2,
@@ -389,36 +402,36 @@ public class フロー: 共通
         //├─┘L3
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺();
+        var l=new List辺();
         共通(3,out var L0,out var L3,"");
         Trace.WriteLine(l.フロー);
 
-        bool 共通(int 深さ,out LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺 out_L0,out LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺 out_L3,string c){
+        bool 共通(int 深さ,out 辺 out_L0,out 辺 out_L3,string c){
             if(深さ==0){
                 out_L0=null!;
                 out_L3=null!;
                 return false;
             }
-            var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer){親コメント=$"L{c}0"};
-            var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer){親コメント=$"L{c}1"};
-            var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer){親コメント=$"L{c}2"};
-            var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer){親コメント=$"L{c}3" };
+            var L0=new 辺(Comparer){親コメント=$"L{c}0"};
+            var L1=new 辺(Comparer){親コメント=$"L{c}1"};
+            var L2=new 辺(Comparer){親コメント=$"L{c}2"};
+            var L3=new 辺(Comparer){親コメント=$"L{c}3" };
             l.Add(L0);
             if(共通(深さ-1,out var L00,out var L03,"0"+c)) {
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L00);
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L03,L1);
+                辺.接続(L0,L00);
+                辺.接続(L03,L1);
             } else{
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
+                辺.接続(L0,L1);
             }
-            LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-            LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
+            辺.接続(L0,L2);
+            辺.接続(L1,L3);
             l.Add(L1);
             l.Add(L2);
             if(共通(深さ-1,out var L20,out var L23,"2"+c)) {
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L20);
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L23,L3);
+                辺.接続(L2,L20);
+                辺.接続(L23,L3);
             } else{
-                LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
+                辺.接続(L2,L3);
             }
             l.Add(L3);
             out_L0=L0;
@@ -434,31 +447,57 @@ public class フロー: 共通
         //┌┘││L3
         //├─┼┘L4
         //├─┘  L5
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        var L4=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L4" };
-        var L5=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L5" };
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 辺(Comparer){親コメント="L0"};
+            var L1=new 辺(Comparer){親コメント="L1"};
+            var L2=new 辺(Comparer){親コメント="L2"};
+            var L3=new 辺(Comparer){親コメント="L3"};
+            var L4=new 辺(Comparer){親コメント="L4"};
+            var L5=new 辺(Comparer){親コメント="L5"};
 
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L5);
+            辺.接続(L0,L1);
+            辺.接続(L0,L3);
+            辺.接続(L1,L5);
 
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L4);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L3,L4);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L4,L5);
-        var l =new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
-            L0,
-            L1,
-            L2,
-            L3,
-            L4,
-            L5
-        };
-        Trace.WriteLine(l.フロー);
+            辺.接続(L2,L4);
+            辺.接続(L3,L4);
+            辺.接続(L4,L5);
+            var l=new List辺{
+                L0,
+                L1,
+                L2,
+                L3,
+                L4,
+                L5
+            };
+            Trace.WriteLine(l.フロー);
+        }
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 計測する親(0,"Label","L0");
+            var L1=new 計測する親(1,"Label","L1");
+            var L2=new 計測する親(2,"Label","L2");
+            var L3=new 計測する親(3,"Label","L3");
+            var L4=new 計測する親(4,"Label","L4");
+            var L5=new 計測する親(5,"Label","L5");
+
+            A計測.接続(L0,L1);
+            A計測.接続(L0,L3);
+            A計測.接続(L1,L5);
+            A計測.接続(L2,L4);
+            A計測.接続(L3,L4);
+            A計測.接続(L4,L5);
+            var l=new List計測{
+                L0,
+                L1,
+                L2,
+                L3,
+                L4,
+                L5
+            };
+            Trace.WriteLine(l.フロー1);
+        }
     }
     [Fact]public void IfFallseでジャンプ(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -470,19 +509,19 @@ public class フロー: 共通
         //├┘　　L5
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        var L4=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L4" };
-        var L5=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L5" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L4);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L3,L5);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L4,L5);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        var L4=new 辺(Comparer) { 親コメント="L4" };
+        var L5=new 辺(Comparer) { 親コメント="L5" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L2);
+        辺.接続(L1,L4);
+        辺.接続(L2,L3);
+        辺.接続(L3,L5);
+        辺.接続(L4,L5);
+        var l=new List辺{
             L0,
             L1,
             L2,
@@ -504,22 +543,22 @@ public class フロー: 共通
         //┌┘　　L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        var L4=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L4" };
-        var L5=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L5" };
-        var L6=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L6" };
-        var L7=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L7" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L7);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L5);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L3,L4);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L4,L6);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L5,L6);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        var L4=new 辺(Comparer) { 親コメント="L4" };
+        var L5=new 辺(Comparer) { 親コメント="L5" };
+        var L6=new 辺(Comparer) { 親コメント="L6" };
+        var L7=new 辺(Comparer) { 親コメント="L7" };
+        辺.接続(L0,L7);
+        辺.接続(L1,L2);
+        辺.接続(L1,L3);
+        辺.接続(L2,L5);
+        辺.接続(L3,L4);
+        辺.接続(L4,L6);
+        辺.接続(L5,L6);
+        var l=new List辺{
             L0,
             L1,
             L2,
@@ -538,12 +577,12 @@ public class フロー: 共通
         //┌┴┘  jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump0" };
-        var jump1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump1" };
-        var label=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump0,label);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump1,label);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{jump0,jump1,label};
+        var jump0=new 辺(Comparer) { 親コメント="jump0" };
+        var jump1=new 辺(Comparer) { 親コメント="jump1" };
+        var label=new 辺(Comparer) { 親コメント="label" };
+        辺.接続(jump0,label);
+        辺.接続(jump1,label);
+        var l=new List辺{jump0,jump1,label};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 複数3経路から単一経路に(){
@@ -554,14 +593,14 @@ public class フロー: 共通
         //┌┴┴┘jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump0" };
-        var jump1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump1" };
-        var jump=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump2" };
-        var label=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump0,label);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump1,label);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{jump0,jump1,jump,label};
+        var jump0=new 辺(Comparer) { 親コメント="jump0" };
+        var jump1=new 辺(Comparer) { 親コメント="jump1" };
+        var jump=new 辺(Comparer) { 親コメント="jump2" };
+        var label=new 辺(Comparer) { 親コメント="label" };
+        辺.接続(jump0,label);
+        辺.接続(jump1,label);
+        辺.接続(jump,label);
+        var l=new List辺{jump0,jump1,jump,label};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 単一経路から複数2経路に(){
@@ -571,12 +610,12 @@ public class フロー: 共通
         //┌┘　　　　　　　　1,Label,label0,親 (辺番号0 jump, 辺番号1 label0)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump" };
-        var label0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label0" };
-        var label1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label0);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{jump,label0,label1};
+        var jump=new 辺(Comparer) { 親コメント="jump" };
+        var label0=new 辺(Comparer) { 親コメント="label0" };
+        var label1=new 辺(Comparer) { 親コメント="label1" };
+        辺.接続(jump,label0);
+        辺.接続(jump,label1);
+        var l=new List辺{jump,label0,label1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 単一経路から複数3経路に(){
@@ -587,14 +626,14 @@ public class フロー: 共通
         //┌┴┴┘jump:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var jump=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="jump" };
-        var label0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label0" };
-        var label1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label1" };
-        var label2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="label2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label0);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(jump,label2);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{jump,label0,label1,label2};
+        var jump=new 辺(Comparer) { 親コメント="jump" };
+        var label0=new 辺(Comparer) { 親コメント="label0" };
+        var label1=new 辺(Comparer) { 親コメント="label1" };
+        var label2=new 辺(Comparer) { 親コメント="label2" };
+        辺.接続(jump,label0);
+        辺.接続(jump,label1);
+        辺.接続(jump,label2);
+        var l=new List辺{jump,label0,label1,label2};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 複数2経路から複数2経路に0(){
@@ -603,11 +642,11 @@ public class フロー: 共通
         //┌┴┘  1
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L1);
+        var l=new List辺{L0,L1};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 複数2経路から複数2経路に2(){
@@ -618,14 +657,14 @@ public class フロー: 共通
         //┌┴┘  3
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L1);
+        辺.接続(L1,L2);
+        辺.接続(L1,L2);
+        var l=new List辺{L0,L1,L2};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void 複数2経路から複数2経路に3(){
@@ -638,32 +677,37 @@ public class フロー: 共通
         //┌┴┘　　　　　　　　3,Label,goto L3:        //└┼┐  0
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{L0,L1,L2,L3};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        var L3=new 辺(Comparer) { 親コメント="L3" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L1);
+        辺.接続(L1,L2);
+        辺.接続(L2,L3);
+        辺.接続(L2,L3);
+        var l=new List辺{L0,L1,L2,L3};
         Trace.WriteLine(l.フロー);
     }
     [Fact]public void Switch0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
-        //├┐
-        //├┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
-            L0,
-            L1,
-        };
-        Trace.WriteLine(l.フロー);
+        //└┐0,
+        //┌┘1,L1
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 辺(Comparer){親コメント="L0"};
+            var L1=new 辺(Comparer){親コメント="L1"};
+            辺.接続(L0,L1);
+            var l=new List辺{L0,L1,};
+            Trace.WriteLine(l.フロー);
+        }
+        {
+            var L0=new 計測する親(0,"Label","L0");
+            var L1=new 計測する親(1,"Label","L1");
+            A計測.接続(L0,L1);
+            var l=new List計測{L0,L1};
+            Trace.WriteLine(l.フロー0);
+        }
     }
     [Fact]public void Switch1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -671,41 +715,78 @@ public class フロー: 共通
         //└┼┐L1 default
         //┌┘│L2 case 1
         //├─┘L3 end swtich
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        var L3=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L3" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L2);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L1,L3);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L2,L3);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
-            L0,
-            L1,
-            L2,
-            L3
-        };
-        Trace.WriteLine(l.フロー);
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 辺(Comparer){親コメント="L0"};
+            var L1=new 辺(Comparer){親コメント="L1"};
+            var L2=new 辺(Comparer){親コメント="L2"};
+            var L3=new 辺(Comparer){親コメント="L3"};
+            辺.接続(L0,L1);
+            辺.接続(L0,L2);
+            辺.接続(L1,L3);
+            辺.接続(L2,L3);
+            var l=new List辺{L0,L1,L2,L3};
+            Trace.WriteLine(l.フロー);
+        }
+        {
+            var L0=new 計測する親(0,"switch","SelectValue");
+            var L1=new 計測する親(1,"case","1:");
+            var L2=new 計測する親(2,"case","2:");
+            var L3=new 計測する親(3,"end switch","");
+            A計測.接続(L0,L1);
+            A計測.接続(L0,L2);
+            A計測.接続(L1,L3);
+            A計測.接続(L2,L3);
+            var l=new List計測{L0,L1,L2,L3};
+            Trace.WriteLine(l.フロー1);
+        }
     }
     [Fact]public void Switch2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┬┐0,switch
         //┌┴┘1,
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L0" };
-        var L1=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L1" };
-        var L2=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺(Comparer) { 親コメント="L2" };
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺.接続(L0,L1);
-        var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺{
-            L0,
-            L1,
-            L2,
-        };
-        Trace.WriteLine(l.フロー);
+        {
+            var Comparer=new ExpressionEqualityComparer();
+            var L0=new 辺(Comparer){親コメント="L0"};
+            var L1=new 辺(Comparer){親コメント="L1"};
+            var L2=new 辺(Comparer){親コメント="L2"};
+            辺.接続(L0,L1);
+            辺.接続(L0,L1);
+            var l=new List辺{L0,L1,L2,};
+            Trace.WriteLine(l.フロー);
+        }
+        {
+            var L0=new 計測する親(0,"switch","SelectValue");
+            var L1=new 計測する親(1,"case","1:");
+            var L2=new 計測する親(2,"case","2:");
+            var L3=new 計測する親(3,"end switch","");
+            A計測.接続(L0,L1);
+            A計測.接続(L0,L2);
+            A計測.接続(L1,L3);
+            A計測.接続(L2,L3);
+            var l=new List計測{L0,L1,L2,L3};
+            Trace.WriteLine(l.フロー1);
+        }
+    }
+    [Fact]public void Switch3(){
+        Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
+        //└┬┐0,switch
+        //┌┴┘1,
+        {
+            var L0=new 計測する親(0,"switch","SelectValue");
+            var L1=new 計測する親(1,"case","1:");
+            var L2=new 計測する親(2,"case","2:");
+            var L3=new 計測する親(3,"case","3:");
+            var L4=new 計測する親(4,"end switch","");
+            A計測.接続(L0,L1);
+            A計測.接続(L0,L2);
+            A計測.接続(L0,L3);
+            A計測.接続(L1,L4);
+            A計測.接続(L2,L4);
+            A計測.接続(L3,L4);
+            var l=new List計測{L0,L1,L2,L3,L4};
+            Trace.WriteLine(l.フロー1);
+        }
     }
     //[Fact]public void ラベルフォールスルー(){
     //    Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -719,7 +800,7 @@ public class フロー: 共通
     //    var L1=new 辺に関する情報(Comparer,ref 番号,"L3");
     //    辺に関する情報.接続(L0,L1);
     //    辺に関する情報.接続(L0,L1);
-    //    var l=new LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺に関する情報{
+    //    var l=new LinqDB.Optimizers.ReturnExpressionTraverser.List辺に関する情報{
     //        L0,
     //        L1,
     //        L2
