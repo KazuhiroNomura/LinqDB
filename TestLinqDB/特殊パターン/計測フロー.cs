@@ -15,10 +15,10 @@ public class 計測フロー: 共通
         //├─┘　　　　　　　　　　　　　　　　　3,IfEnd:
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var test=new 計測する親(0);
-        var ifTrue=new 計測する親(1);
-        var ifFalse=new 計測する親(2);
-        var endif=new 計測する親(3);
+        var test=new 計測する右辺値(0);
+        var ifTrue=new 計測する右辺値(1);
+        var ifFalse=new 計測する右辺値(2);
+        var endif=new 計測する右辺値(3);
         var l=new List計測();
         A計測.接続(test,ifTrue);
         A計測.接続(test,ifFalse);
@@ -36,8 +36,8 @@ public class 計測フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
         A計測.接続(L0,L1);
         var l=new List計測{L0,L1};
         Trace.WriteLine(l.Analize);
@@ -50,9 +50,9 @@ public class 計測フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
         A計測.接続(L0,L1);
         A計測.接続(L1,L2);
         var l=new List計測{L0,L1,L2};
@@ -67,10 +67,10 @@ public class 計測フロー: 共通
         //└─┘│
         //┌──┘
         {
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
-            var L2=new 計測する親(2,"Label","L2");
-            var L3=new 計測する親(3,"Label","L3");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
+            var L2=new 計測する右辺値(2,"Label","L2");
+            var L3=new 計測する右辺値(3,"Label","L3");
             A計測.接続(L0,L2);
             A計測.接続(L2,L1);
             A計測.接続(L1,L3);
@@ -86,10 +86,10 @@ public class 計測フロー: 共通
         //┌┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
         A計測.接続(L0,L3);
         A計測.接続(L1,L2);
         var l=new List計測{L0,L1,L2,L3};
@@ -101,7 +101,7 @@ public class 計測フロー: 共通
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
         A計測.接続(L0,L0);
         var l=new List計測{L0};
         Trace.WriteLine(l.Analize);
@@ -113,8 +113,8 @@ public class 計測フロー: 共通
         //└─┘1,
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
         A計測.接続(L0,L1);
         A計測.接続(L1,L1);
         var l=new List計測{L0,L1};
@@ -128,8 +128,8 @@ public class 計測フロー: 共通
         //└┘　　　　　　　　　1,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
         A計測.接続(L0,L1);
         A計測.接続(L1,L0);
         var l=new List計測{L0,L1};
@@ -145,9 +145,9 @@ public class 計測フロー: 共通
         //└┘　　　　　　　　　2,Label,L0,子 
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
         A計測.接続(L0,L1);
         A計測.接続(L1,L2);
         A計測.接続(L2,L0);
@@ -162,8 +162,8 @@ public class 計測フロー: 共通
         //└─┘
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
         //辺に関する情報.接続(L0,L1);
         A計測.接続(L0,L1);
         A計測.接続(L1,L1);
@@ -180,11 +180,11 @@ public class 計測フロー: 共通
         //┌┴┘3,IfEnd,L3:親
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var If=new 計測する親(4,"If","If");
-        var L0=new 計測する親(0,"IfTest","L0");
-        var L1=new 計測する親(1,"IfTrue","L1");
-        var L2=new 計測する親(2,"IfFalse","L2");
-        var L3=new 計測する親(3,"IfEnd","L3");
+        var If=new 計測する右辺値(4,"If","If");
+        var L0=new 計測する右辺値(0,"IfTest","L0");
+        var L1=new 計測する右辺値(1,"IfTrue","L1");
+        var L2=new 計測する右辺値(2,"IfFalse","L2");
+        var L3=new 計測する右辺値(3,"IfEnd","L3");
         If.List子演算.Add(L0);
         If.List子演算.Add(L1);
         If.List子演算.Add(L2);
@@ -206,9 +206,9 @@ public class 計測フロー: 共通
         //┌┘　2,L2
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
         A計測.接続(L0,L1);
         A計測.接続(L1,L2);
         A計測.接続(L1,L1);
@@ -239,14 +239,14 @@ public class 計測フロー: 共通
         //┌┴┘L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
-        var L4=new 計測する親(4) { 親コメント="L4" };
-        var L5=new 計測する親(5) { 親コメント="L5" };
-        var L6=new 計測する親(6) { 親コメント="L6" };
-        var L7=new 計測する親(7) { 親コメント="L7" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
+        var L4=new 計測する右辺値(4) { 親コメント="L4" };
+        var L5=new 計測する右辺値(5) { 親コメント="L5" };
+        var L6=new 計測する右辺値(6) { 親コメント="L6" };
+        var L7=new 計測する右辺値(7) { 親コメント="L7" };
 
         A計測.接続(L0,L1);
         A計測.接続(L0,L2);
@@ -294,14 +294,14 @@ public class 計測フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L2, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L00=new 計測する親(100) { 親コメント="L00" };
-        var L01=new 計測する親(101) { 親コメント="L01" };
-        var L02=new 計測する親(102) { 親コメント="L02" };
-        var L03=new 計測する親(103) { 親コメント="L03" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(12) { 親コメント="L2" };
-        var L3=new 計測する親(13) { 親コメント="L3" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L00=new 計測する右辺値(100) { 親コメント="L00" };
+        var L01=new 計測する右辺値(101) { 親コメント="L01" };
+        var L02=new 計測する右辺値(102) { 親コメント="L02" };
+        var L03=new 計測する右辺値(103) { 親コメント="L03" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(12) { 親コメント="L2" };
+        var L3=new 計測する右辺値(13) { 親コメント="L3" };
         A計測.接続(L0,L00);
 
         A計測.接続(L00,L01);
@@ -351,14 +351,14 @@ public class 計測フロー: 共通
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L23, 辺番号7 L3)
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L20=new 計測する親(20) { 親コメント="L20" };
-        var L21=new 計測する親(21) { 親コメント="L21" };
-        var L22=new 計測する親(22) { 親コメント="L22" };
-        var L23=new 計測する親(23) { 親コメント="L23" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L20=new 計測する右辺値(20) { 親コメント="L20" };
+        var L21=new 計測する右辺値(21) { 親コメント="L21" };
+        var L22=new 計測する右辺値(22) { 親コメント="L22" };
+        var L23=new 計測する右辺値(23) { 親コメント="L23" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
         A計測.接続(L0,L1);
         A計測.接続(L0,L2);
         A計測.接続(L1,L3);
@@ -403,10 +403,10 @@ public class 計測フロー: 共通
                 out_L3=null!;
                 return false;
             }
-            var L0=new 計測する親(0){親コメント=$"L{c}0"};
-            var L1=new 計測する親(1){親コメント=$"L{c}1"};
-            var L2=new 計測する親(2){親コメント=$"L{c}2"};
-            var L3=new 計測する親(3){親コメント=$"L{c}3" };
+            var L0=new 計測する右辺値(0){親コメント=$"L{c}0"};
+            var L1=new 計測する右辺値(1){親コメント=$"L{c}1"};
+            var L2=new 計測する右辺値(2){親コメント=$"L{c}2"};
+            var L3=new 計測する右辺値(3){親コメント=$"L{c}3" };
             l.Add(L0);
             if(共通(深さ-1,out var L00,out var L03,"0"+c)) {
                 A計測.接続(L0,L00);
@@ -440,12 +440,12 @@ public class 計測フロー: 共通
         //├─┘  L5
         {
             var Comparer=new ExpressionEqualityComparer();
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
-            var L2=new 計測する親(2,"Label","L2");
-            var L3=new 計測する親(3,"Label","L3");
-            var L4=new 計測する親(4,"Label","L4");
-            var L5=new 計測する親(5,"Label","L5");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
+            var L2=new 計測する右辺値(2,"Label","L2");
+            var L3=new 計測する右辺値(3,"Label","L3");
+            var L4=new 計測する右辺値(4,"Label","L4");
+            var L5=new 計測する右辺値(5,"Label","L5");
 
             A計測.接続(L0,L1);
             A計測.接続(L0,L3);
@@ -474,12 +474,12 @@ public class 計測フロー: 共通
         //├┘　　L5
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
-        var L4=new 計測する親(4) { 親コメント="L4" };
-        var L5=new 計測する親(5) { 親コメント="L5" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
+        var L4=new 計測する右辺値(4) { 親コメント="L4" };
+        var L5=new 計測する右辺値(5) { 親コメント="L5" };
         A計測.接続(L0,L1);
         A計測.接続(L0,L2);
         A計測.接続(L1,L4);
@@ -508,14 +508,14 @@ public class 計測フロー: 共通
         //┌┘　　L7
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
-        var L4=new 計測する親(4) { 親コメント="L4" };
-        var L5=new 計測する親(5) { 親コメント="L5" };
-        var L6=new 計測する親(6) { 親コメント="L6" };
-        var L7=new 計測する親(7) { 親コメント="L7" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
+        var L4=new 計測する右辺値(4) { 親コメント="L4" };
+        var L5=new 計測する右辺値(5) { 親コメント="L5" };
+        var L6=new 計測する右辺値(6) { 親コメント="L6" };
+        var L7=new 計測する右辺値(7) { 親コメント="L7" };
         A計測.接続(L0,L7);
         A計測.接続(L1,L2);
         A計測.接続(L1,L3);
@@ -540,9 +540,9 @@ public class 計測フロー: 共通
         //└┐    goto jump
         //└┼┐  goto jump
         //┌┴┘  jump:
-        var jump0=new 計測する親(0) { 親コメント="jump0" };
-        var jump1=new 計測する親(1) { 親コメント="jump1" };
-        var label=new 計測する親(2) { 親コメント="label" };
+        var jump0=new 計測する右辺値(0) { 親コメント="jump0" };
+        var jump1=new 計測する右辺値(1) { 親コメント="jump1" };
+        var label=new 計測する右辺値(2) { 親コメント="label" };
         A計測.接続(jump0,label);
         A計測.接続(jump1,label);
         var l=new List計測{jump0,jump1,label};
@@ -554,10 +554,10 @@ public class 計測フロー: 共通
         //└┼┐  goto jump
         //└┼┼┐goto jump
         //┌┴┴┘jump:
-        var jump0=new 計測する親(0) { 親コメント="jump0" };
-        var jump1=new 計測する親(1) { 親コメント="jump1" };
-        var jump=new 計測する親(2) { 親コメント="jump2" };
-        var label=new 計測する親(3) { 親コメント="label" };
+        var jump0=new 計測する右辺値(0) { 親コメント="jump0" };
+        var jump1=new 計測する右辺値(1) { 親コメント="jump1" };
+        var jump=new 計測する右辺値(2) { 親コメント="jump2" };
+        var label=new 計測する右辺値(3) { 親コメント="label" };
         A計測.接続(jump0,label);
         A計測.接続(jump1,label);
         A計測.接続(jump,label);
@@ -569,9 +569,9 @@ public class 計測フロー: 共通
         //└┬┐　　　　　　　0,Label,jump,子 
         //┌┼┘　　　　　　　2,Label,label1,親 (辺番号0 jump, 辺番号2 label1)
         //┌┘　　　　　　　　1,Label,label0,親 (辺番号0 jump, 辺番号1 label0)
-        var jump=new 計測する親(0) { 親コメント="jump" };
-        var label0=new 計測する親(1) { 親コメント="label0" };
-        var label1=new 計測する親(2) { 親コメント="label1" };
+        var jump=new 計測する右辺値(0) { 親コメント="jump" };
+        var label0=new 計測する右辺値(1) { 親コメント="label0" };
+        var label1=new 計測する右辺値(2) { 親コメント="label1" };
         A計測.接続(jump,label0);
         A計測.接続(jump,label1);
         var l=new List計測{jump,label0,label1};
@@ -583,10 +583,10 @@ public class 計測フロー: 共通
         //└┼┐  goto jump
         //└┼┼┐goto jump
         //┌┴┴┘jump:
-        var jump=new 計測する親(0) { 親コメント="jump" };
-        var label0=new 計測する親(1) { 親コメント="label0" };
-        var label1=new 計測する親(2) { 親コメント="label1" };
-        var label2=new 計測する親(3) { 親コメント="label2" };
+        var jump=new 計測する右辺値(0) { 親コメント="jump" };
+        var label0=new 計測する右辺値(1) { 親コメント="label0" };
+        var label1=new 計測する右辺値(2) { 親コメント="label1" };
+        var label2=new 計測する右辺値(3) { 親コメント="label2" };
         A計測.接続(jump,label0);
         A計測.接続(jump,label1);
         A計測.接続(jump,label2);
@@ -599,8 +599,8 @@ public class 計測フロー: 共通
         //┌┴┘  1
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
         A計測.接続(L0,L1);
         A計測.接続(L0,L1);
         var l=new List計測{L0,L1};
@@ -614,9 +614,9 @@ public class 計測フロー: 共通
         //┌┴┘  3
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
         A計測.接続(L0,L1);
         A計測.接続(L0,L1);
         A計測.接続(L1,L2);
@@ -634,10 +634,10 @@ public class 計測フロー: 共通
         //┌┴┘　　　　　　　　3,Label,goto L3:        //└┼┐  0
         var Comparer=new ExpressionEqualityComparer();
         var 番号=0;
-        var L0=new 計測する親(0) { 親コメント="L0" };
-        var L1=new 計測する親(1) { 親コメント="L1" };
-        var L2=new 計測する親(2) { 親コメント="L2" };
-        var L3=new 計測する親(3) { 親コメント="L3" };
+        var L0=new 計測する右辺値(0) { 親コメント="L0" };
+        var L1=new 計測する右辺値(1) { 親コメント="L1" };
+        var L2=new 計測する右辺値(2) { 親コメント="L2" };
+        var L3=new 計測する右辺値(3) { 親コメント="L3" };
         A計測.接続(L0,L1);
         A計測.接続(L0,L1);
         A計測.接続(L1,L2);
@@ -651,8 +651,8 @@ public class 計測フロー: 共通
         //└┐0,
         //┌┘1,L1
         {
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
             A計測.接続(L0,L1);
             var l=new List計測{L0,L1};
             Trace.WriteLine(l.Analize);
@@ -665,10 +665,10 @@ public class 計測フロー: 共通
         //┌┘│L2 case 1
         //├─┘L3 end swtich
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L1,L3);
@@ -682,10 +682,10 @@ public class 計測フロー: 共通
         //└┬┐0,switch
         //┌┴┘1,
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L1,L3);
@@ -699,11 +699,11 @@ public class 計測フロー: 共通
         //└┬┐0,switch
         //┌┴┘1,
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"case","3:");
-            var L4=new 計測する親(4,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"case","3:");
+            var L4=new 計測する右辺値(4,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L0,L3);

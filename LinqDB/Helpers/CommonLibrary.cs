@@ -326,6 +326,29 @@ public static class CommonLibrary {
     /// <param name="Type"></param>
     /// <returns></returns>
     public static bool IsNullable(this Type Type) => Type.IsGenericType&&Type.GetGenericTypeDefinition()==typeof(Nullable<>);
+    public static bool IsWriteable(this Expression expression){
+        switch(expression.NodeType){
+            case ExpressionType.Index:
+                var indexer=((IndexExpression)expression).Indexer;
+                if(indexer is null) return true;
+                if(indexer.CanWrite) return true;
+                break;
+            case ExpressionType.MemberAccess:
+                var Member=((MemberExpression)expression).Member;
+                if(Member is PropertyInfo Property){
+                    if(Property.CanWrite)
+                        return true;
+                    break;
+                } else{
+                    Debug.Assert(Member is FieldInfo);
+                    var field=(FieldInfo)Member;
+                    if(field.IsInitOnly)return false;
+                    if(field.IsLiteral) return false;
+                    return true;
+                }
+        }
+        return false;
+    }
     public static bool GetIEnumerableTGenericArguments(this Type type,out Type[] GenericArguments) {
         var GetEnumerator = type.GetMethod(nameof(Generic.IEnumerable<int>.GetEnumerator));
         var GenericTypeDefinition = typeof(Generic.IEnumerable<>);

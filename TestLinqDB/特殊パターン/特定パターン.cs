@@ -307,12 +307,23 @@ public class 特定パターン:共通{
         );
     }
     [Fact]public void 計測埋め込み(){
-        this.Expression実行(
+        this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
                     Expression.Constant(1),
                     Expression.Constant(1)
                 )
+            )
+        );
+    }
+    [Fact]public void Assign(){
+        var a = Expression.Parameter(typeof(int), "a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Assign(
+                    a,
+                    Expression.Constant(3)
+                ),a
             )
         );
     }

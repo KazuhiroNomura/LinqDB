@@ -353,8 +353,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
-                var operator_false = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true(false));
+                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
+                var operator_false = Expression.Constant(new 特殊パターン.operator_true(false));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -375,7 +375,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _1 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -404,7 +404,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_0
 
             {
-                var @true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -433,12 +433,12 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 );
             }
             {
-                var Constant = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var Constant = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.AndAlso(
                             Constant,
-                            Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                            Expression.New(typeof(特殊パターン.operator_true))
                         )
                     )
                 );
@@ -789,7 +789,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_13
             //            if(this.辺.この辺に存在するか(Expression0)){
             {
-                var @true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _14 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -868,8 +868,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
-                var operator_false = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true(false));
+                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
+                var operator_false = Expression.Constant(new 特殊パターン.operator_true(false));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -890,7 +890,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _1 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -919,7 +919,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_0
 
             {
-                var @true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -948,12 +948,12 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 );
             }
             {
-                var Constant = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var Constant = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _0 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.AndAlso(
                             Constant,
-                            Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                            Expression.New(typeof(特殊パターン.operator_true))
                         )
                     )
                 );
@@ -1308,7 +1308,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_13
             //            if(this.辺.この辺に存在するか(Expression0)){
             {
-                var @true = Expression.Constant(new 特殊パターン.変換_局所Parameterの先行評価.operator_true());
+                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
                 var _14 = this.Optimizer.Lambda最適化(
                     Expression.Lambda(
                         Expression.Condition(
@@ -1820,7 +1820,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
         //else
     }
-    private static readonly 特殊パターン.変換_局所Parameterの先行評価.operator_true Op = new(true);
+    private static readonly 特殊パターン.operator_true Op = new(true);
     // private static bool boolを返す関数()=>true;
     [Fact]
     public void AndAlso_OrElse()
@@ -1833,7 +1833,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             Expression.Lambda(
                 Expression.AndAlso(
                     Constant,
-                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                    Expression.New(typeof(特殊パターン.operator_true))
                 )
             )
         );
@@ -1850,7 +1850,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
         //}
         //if(Binary2_Left is ParameterExpression Parameter){
-        var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        var p = Expression.Parameter(typeof(特殊パターン.operator_true));
         this.Optimizer.Lambda最適化(
             Expression.Lambda(
                 Expression.AndAlso(p,Constant),
@@ -1869,7 +1869,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             Expression.Lambda(
                 Expression.AndAlso(
                     p,
-                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                    Expression.New(typeof(特殊パターン.operator_true))
                 ),
                 p
             )
@@ -1892,7 +1892,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
         //}
         //if(Binary2_Left is ParameterExpression Parameter){
-        var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        var p = Expression.Parameter(typeof(特殊パターン.operator_true));
         this.Optimizer.Lambda最適化(
             Expression.Lambda(
                 Expression.OrElse(p,Constant),
@@ -1914,7 +1914,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         //        Expression.OrElse(Constant, Constant)
         //    )
         //);
-        //var p = Expression.Parameter(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true));
+        //var p = Expression.Parameter(typeof(特殊パターン.operator_true));
         //this.Optimizer.Lambda最適化(
         //    Expression.Lambda(
         //        Expression.OrElse(Constant, p),
@@ -1926,7 +1926,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         //    Expression.Lambda(
         //        Expression.OrElse(
         //            Constant,
-        //            Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+        //            Expression.New(typeof(特殊パターン.operator_true))
         //        ),
         //        p
         //    )
@@ -1935,7 +1935,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             Expression.Lambda(
                 Expression.OrElse(
                     p,
-                    Expression.New(typeof(特殊パターン.変換_局所Parameterの先行評価.operator_true))
+                    Expression.New(typeof(特殊パターン.operator_true))
                 ),
                 p
             )

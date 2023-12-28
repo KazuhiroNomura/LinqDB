@@ -307,24 +307,35 @@ public abstract class 共通{
     //protected void ExpressionAssertEqual<T,TResult>(Expression<Func<T,TResult>> input,T ServerObject)where T: LambdaExpression=>this.ExpressionAssertEqual(input,ServerObject,actual=>Assert.Equal(input,actual,this.汎用Comparer));
     protected void Expression実行AssertEqual(Expression<Action> input) {
         this.ExpressionシリアライズAssertEqual(input);
-        var Optimizer = this.Optimizer;
-        var 標準 = input.Compile();
-        標準();
-        Optimizer.IsInline=false;
-        Optimizer.CreateDelegate(input)();
-        Optimizer.IsInline=true;
-        Optimizer.CreateDelegate(input)();
+        //var Optimizer = this.Optimizer;
+        //var 標準 = input.Compile();
+        //標準();
+        //Optimizer.IsInline=false;
+        //Optimizer.CreateDelegate(input)();
+        //Optimizer.IsInline=true;
+        //Optimizer.CreateDelegate(input)();
+        if((テストオプション.ローカル実行&this.テストオプション)!=0){
+            var 標準 = input.Compile();
+            標準();
+            var Optimizer=this.Optimizer;
+            if((テストオプション.インライン&this.テストオプション)!=0){
+                Optimizer.IsInline=true;
+            } else{
+                Optimizer.IsInline=false;
+            }
+            Optimizer.CreateDelegate(input)();
+            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+        }
     }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
         if((テストオプション.最適化&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             } else{
                 Optimizer.IsInline=false;
-                Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
             }
+            Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Optimizer.Lambda最適化(input)));
         }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
@@ -333,13 +344,12 @@ public abstract class 共通{
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                var actual=Optimizer.CreateDelegate(input)();
-                Assert.Equal(expected,actual,汎用Comparer);
             } else{
                 Optimizer.IsInline=false;
-                var actual=Optimizer.CreateDelegate(input)();
-                Assert.Equal(expected,actual,汎用Comparer);
             }
+            var actual=Optimizer.CreateDelegate(input)();
+            Assert.Equal(expected,actual,汎用Comparer);
+            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
@@ -383,18 +393,15 @@ public abstract class 共通{
         }
     }
     protected T Expression実行<T>(Expression<Func<T>> input){
-        if((テストオプション.最適化&this.テストオプション)!=0){
-            var Optimizer=this.Optimizer;
-            if((テストオプション.インライン&this.テストオプション)!=0){
-                Optimizer.IsInline=true;
-                return Optimizer.CreateDelegate(input)();
-            } else{
-                Optimizer.IsInline=false;
-                return Optimizer.CreateDelegate(input)();
-            }
-        }else{
-            return input.Compile()();
+        var Optimizer=this.Optimizer;
+        if((テストオプション.インライン&this.テストオプション)!=0){
+            Optimizer.IsInline=true;
+        } else{
+            Optimizer.IsInline=false;
         }
+        var result=Optimizer.CreateDelegate(input)();
+        Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+        return result;
     }
     /// <summary>
     /// 3種シリアライズ、サーバー実行
@@ -421,15 +428,13 @@ public abstract class 共通{
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
-                var Delegate=Optimizer.CreateDelegate(input);
-                var actual=Delegate(引数);
-                Assert.Equal(expected,actual,汎用Comparer);
             } else{
                 Optimizer.IsInline=false;
-                var Delegate=Optimizer.CreateDelegate(input);
-                var actual=Delegate(引数);
-                Assert.Equal(expected,actual,汎用Comparer);
             }
+            var Delegate=Optimizer.CreateDelegate(input);
+            var actual=Delegate(引数);
+            Assert.Equal(expected,actual,汎用Comparer);
+            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){
             var 標準 = input.Compile();

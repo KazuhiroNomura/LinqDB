@@ -78,10 +78,10 @@ public class フロー: 共通
             Trace.WriteLine(l.フロー);
         }
         {
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
-            var L2=new 計測する親(2,"Label","L2");
-            var L3=new 計測する親(3,"Label","L3");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
+            var L2=new 計測する右辺値(2,"Label","L2");
+            var L3=new 計測する右辺値(3,"Label","L3");
             A計測.接続(L0,L2);
             A計測.接続(L2,L1);
             A計測.接続(L1,L3);
@@ -475,12 +475,12 @@ public class フロー: 共通
         }
         {
             var Comparer=new ExpressionEqualityComparer();
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
-            var L2=new 計測する親(2,"Label","L2");
-            var L3=new 計測する親(3,"Label","L3");
-            var L4=new 計測する親(4,"Label","L4");
-            var L5=new 計測する親(5,"Label","L5");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
+            var L2=new 計測する右辺値(2,"Label","L2");
+            var L3=new 計測する右辺値(3,"Label","L3");
+            var L4=new 計測する右辺値(4,"Label","L4");
+            var L5=new 計測する右辺値(5,"Label","L5");
 
             A計測.接続(L0,L1);
             A計測.接続(L0,L3);
@@ -702,8 +702,8 @@ public class フロー: 共通
             Trace.WriteLine(l.フロー);
         }
         {
-            var L0=new 計測する親(0,"Label","L0");
-            var L1=new 計測する親(1,"Label","L1");
+            var L0=new 計測する右辺値(0,"Label","L0");
+            var L1=new 計測する右辺値(1,"Label","L1");
             A計測.接続(L0,L1);
             var l=new List計測{L0,L1};
             Trace.WriteLine(l.フロー0);
@@ -729,10 +729,10 @@ public class フロー: 共通
             Trace.WriteLine(l.フロー);
         }
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L1,L3);
@@ -756,10 +756,10 @@ public class フロー: 共通
             Trace.WriteLine(l.フロー);
         }
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L1,L3);
@@ -773,11 +773,11 @@ public class フロー: 共通
         //└┬┐0,switch
         //┌┴┘1,
         {
-            var L0=new 計測する親(0,"switch","SelectValue");
-            var L1=new 計測する親(1,"case","1:");
-            var L2=new 計測する親(2,"case","2:");
-            var L3=new 計測する親(3,"case","3:");
-            var L4=new 計測する親(4,"end switch","");
+            var L0=new 計測する右辺値(0,"switch","SelectValue");
+            var L1=new 計測する右辺値(1,"case","1:");
+            var L2=new 計測する右辺値(2,"case","2:");
+            var L3=new 計測する右辺値(3,"case","3:");
+            var L4=new 計測する右辺値(4,"end switch","");
             A計測.接続(L0,L1);
             A計測.接続(L0,L2);
             A計測.接続(L0,L3);

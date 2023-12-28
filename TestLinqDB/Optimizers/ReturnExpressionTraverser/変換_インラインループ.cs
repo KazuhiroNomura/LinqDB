@@ -35,7 +35,7 @@ public class 変換_インラインループ : 共通{
         protected override テストオプション テストオプション{get;}=テストオプション.最適化|テストオプション.インライン;
         [Fact]public void MoveNext(){
             var s = new int[]{1,2,3,4,5,6,7};
-            var x=this.Expression実行(() => s.Select(o => o+1));
+            this.Expression実行AssertEqual(() => s.Select(o => o+1));
         }
     }
     [Fact]public void AddAssign(){

@@ -9,6 +9,38 @@ using LinqDB.Sets;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable All
 namespace TestLinqDB.特殊パターン;
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+public partial class operator_true{
+    [MemoryPack.MemoryPackInclude]
+    private readonly bool 内部のBoolean;
+    //public operator_true()=>this.内部のBoolean=true;
+    public operator_true(){
+        this.内部のBoolean=false;
+    }
+    [MemoryPack.MemoryPackConstructor]
+    public operator_true(bool 内部のBoolean){
+        this.内部のBoolean=内部のBoolean;
+    }
+    public static bool operator false(operator_true a)=>!a.内部のBoolean;
+    public static bool operator true(operator_true a)=>a.内部のBoolean;
+    public static operator_true operator&(operator_true a,operator_true b)=>new(a.内部のBoolean&b.内部のBoolean);
+    public static operator_true operator|(operator_true a,operator_true b)=>new(a.内部のBoolean|b.内部のBoolean);
+    public override bool Equals(object? obj){
+        return obj is operator_true other&&this.内部のBoolean==other.内部のBoolean;
+    }
+    protected bool Equals(operator_true other){
+        return this.内部のBoolean==other.内部のBoolean;
+    }
+    public override int GetHashCode(){
+        return this.内部のBoolean.GetHashCode();
+    }
+    public static bool operator==(operator_true? left,operator_true? right){
+        return Equals(left,right);
+    }
+    public static bool operator!=(operator_true? left,operator_true? right){
+        return!Equals(left,right);
+    }
+}
 public class 変換_局所Parameterの先行評価 : 共通{
     protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     [Fact]public void Pattern0(){
@@ -1110,20 +1142,56 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    [Fact]public void Conditional内部がジャンプ0(){
-        //p&p 　　　　0
-        //├────┐1 br_false 2 ifFalse
-        //r=p|p 　　│
-        //└───┐│  goto 3 endif
-        //┌───┼┘2 ifFalse:
-        //r=p&p 　│
-        //├───┘　3 endif:
-
-        //if(p&p)goto ifFalse
-        //r=p|p
-        //ifFalse:
-        //r=p&p
-        //r
+    [Fact]public void Conditional内部がジャンプ00(){
+        var r = Expression.Parameter(typeof(bool), "r");
+        var p = Expression.Parameter(typeof(bool), "p");
+        var p_And_p=Expression.And(p,p);
+        var p_Or_p=Expression.Or(p,p);
+        var ifFalse=Expression.Label("ifFalse");
+        var Block=Expression.Block(
+            new[]{r},
+            Expression.IfThen(
+                Expression.Not(p_And_p),
+                Expression.Goto(ifFalse)
+            ),
+            Expression.Assign(r,p_Or_p),
+            Expression.Label(ifFalse),
+            r
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Block,
+                p
+            )
+        );
+    }
+    [Fact]public void Conditional内部がジャンプ01(){
+        var p = Expression.Parameter(typeof(int), "p");
+        var ifFalse=Expression.Label(typeof(int),"ifFalse");
+        var Block=Expression.Block(
+            Expression.IfThen(
+                Expression.GreaterThan(
+                    p,
+                    Expression.Constant(0)
+                ),
+                Expression.Goto(
+                    ifFalse,
+                    Expression.Constant(1)
+                )
+            ),
+            Expression.Label(
+                ifFalse,
+                Expression.Constant(2)
+            )
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Block,
+                p
+            )
+        );
+    }
+    [Fact]public void Conditional内部がジャンプ02(){
         var r = Expression.Parameter(typeof(bool), "r");
         var p = Expression.Parameter(typeof(bool), "p");
         var p_And_p=Expression.And(p,p);
@@ -1349,17 +1417,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
-    public class operator_true{
-        private bool 内部のBoolean;
-        public operator_true()=>this.内部のBoolean=true;
-        public operator_true(bool 内部のBoolean){
-            this.内部のBoolean=内部のBoolean;
-        }
-        public static bool operator false(operator_true a)=>!a.内部のBoolean;
-        public static bool operator true(operator_true a)=>a.内部のBoolean;
-        public static operator_true operator&(operator_true a,operator_true b)=>new(a.内部のBoolean&b.内部のBoolean);
-        public static operator_true operator|(operator_true a,operator_true b)=>new(a.内部のBoolean|b.内部のBoolean);
-    }
     public class Tuple2<T>{
         public T Item1=>default!;
         public T Item2=>default!;
@@ -1427,12 +1484,15 @@ public class 変換_局所Parameterの先行評価 : 共通{
     private static operator_true op=new(true);
     [Fact]
     public void AndAlso2(){
-        var l0=this.Optimizer.Lambda最適化(() =>
+        this.Expression実行AssertEqual(() =>
             Tuple.Create(op,op).Let(
                 p=>
                     p.Item1&&p.Item2
             )
         );
+    }
+    [Fact]
+    public void AndAlso21(){
         var l1=this.Optimizer.Lambda最適化(() =>
             ValueTuple.Create(op,op).Let(
                 p=>

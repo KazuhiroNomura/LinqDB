@@ -62,11 +62,84 @@
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpUseContinuousIndentInsideBracesMigration/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=09382b30_002Db41c_002D42cd_002D9923_002De8c1b7d00f22/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Condition1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.特殊パターン.変換_局所Parameterの先行評価.Condition1&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=129ac813_002D3e62_002D48c2_002D9df1_002De22a0c69357e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.特殊パターン.変換_跨ぎParameterの先行評価.Assign&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
+    &lt;Namespace&gt;TestLinqDB.特殊パターン&lt;/Namespace&gt;&#xD;
+    &lt;Project Location="D:\GitHub\LinqDB\TestLinqDB" Presentation="&amp;lt;TestLinqDB&amp;gt;" /&gt;&#xD;
+    &lt;Test&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.AddAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.AddAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.AndAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.DivideAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.ExclusiveOrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.LeftShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.ModuloAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.MultiplyAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.MultiplyAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.OrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.PowerAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.RightShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.SubtractAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.SubtractAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.PostDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.PostIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.特殊パターン.変換_跨ぎParameterの先行評価.Assign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.PreDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.PreIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_メソッド正規化_取得インライン不可能定数.MakeAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ.AddAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ.Block_PreIncrementAssign_AddAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.PowerAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.RightShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.SubtractAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.SubtractAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価+取得_先行評価式+判定_移動できるか.MakeAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.AddAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.AddAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.PostDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.AndAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.PostIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.PreDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.PreIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価+変換_先行評価式.MakeAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.Assign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.DivideAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.ExclusiveOrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.MakeAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.LeftShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.ModuloAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.MultiplyAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.MultiplyAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.AddAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.AddAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser.OrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.AndAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.DivideAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.ExclusiveOrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.LeftShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.ModuloAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.MultiplyAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.MultiplyAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.OrAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.PowerAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.RightShiftAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.SubtractAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.SubtractAssignChecked&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.PostDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.PostIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.PreDecrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.PreIncrementAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_OuterPredicate_InnerPredicate_プローブビルド.MakeAssign&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.Assign&lt;/TestId&gt;&#xD;
+    &lt;/Test&gt;&#xD;
+  &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	
 	
 	
 	

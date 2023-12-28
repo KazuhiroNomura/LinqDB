@@ -1,4 +1,6 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
 namespace TestLinqDB.仕様;
 public class Expressions:共通{
     protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
@@ -52,8 +54,7 @@ public class Expressions:共通{
             Assert.Throws<InvalidProgramException>(()=>Delegate());
         }
     }
-    [Fact]
-    public void Labelをオペランドに使う方法() {
+    [Fact]public void Labelをオペランドに使う方法() {
         const decimal input=2;
         const decimal expected=input+input;
         var Goto = Expression.Label(typeof(decimal),"L0");
@@ -74,5 +75,27 @@ public class Expressions:共通{
             var actual=this.Optimizer.Execute(Lambda);
             Assert.Equal(expected,actual);
         }
+    }
+    private static ref int Private左辺値を返すメソッド(ref int input){
+        Trace.WriteLine(input.ToString());
+        input+=1;
+        return ref input;
+    }
+    [Fact]public void 左辺値を返すメソッド(){
+        //const int input=1;
+        //const int expected=2;
+        //var p=Expression.Parameter(typeof(int));
+        //var Call=Expression.Call(
+        //    typeof(Expressions).GetMethod(nameof(Private左辺値を返すメソッド),BindingFlags.NonPublic|BindingFlags.Static)!,
+        //    p
+        //);
+        //var Lambda=Expression.Lambda<Func<int,int>>(
+        //    Expression.Assign(
+        //        Call,
+        //        p
+        //    ),p
+        //);
+        //var actual=Lambda.Compile()(input);
+        //Assert.Equal(expected,actual);
     }
 }
