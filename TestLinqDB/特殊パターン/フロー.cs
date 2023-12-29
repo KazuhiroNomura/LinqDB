@@ -86,7 +86,7 @@ public class フロー: 共通
             A計測.接続(L2,L1);
             A計測.接続(L1,L3);
             var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.フロー1);
+            Trace.WriteLine(l.Analize);
         }
     }
     [Fact]public void 辺に関する情報Goto2(){
@@ -496,7 +496,7 @@ public class フロー: 共通
                 L4,
                 L5
             };
-            Trace.WriteLine(l.フロー1);
+            Trace.WriteLine(l.Analize);
         }
     }
     [Fact]public void IfFallseでジャンプ(){
@@ -706,7 +706,7 @@ public class フロー: 共通
             var L1=new 計測する右辺値(1,"Label","L1");
             A計測.接続(L0,L1);
             var l=new List計測{L0,L1};
-            Trace.WriteLine(l.フロー0);
+            Trace.WriteLine(l.Analize);
         }
     }
     [Fact]public void Switch1(){
@@ -738,7 +738,7 @@ public class フロー: 共通
             A計測.接続(L1,L3);
             A計測.接続(L2,L3);
             var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.フロー1);
+            Trace.WriteLine(l.Analize);
         }
     }
     [Fact]public void Switch2(){
@@ -765,7 +765,7 @@ public class フロー: 共通
             A計測.接続(L1,L3);
             A計測.接続(L2,L3);
             var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.フロー1);
+            Trace.WriteLine(l.Analize);
         }
     }
     [Fact]public void Switch3(){
@@ -785,7 +785,7 @@ public class フロー: 共通
             A計測.接続(L2,L4);
             A計測.接続(L3,L4);
             var l=new List計測{L0,L1,L2,L3,L4};
-            Trace.WriteLine(l.フロー1);
+            Trace.WriteLine(l.Analize);
         }
     }
     //[Fact]public void ラベルフォールスルー(){

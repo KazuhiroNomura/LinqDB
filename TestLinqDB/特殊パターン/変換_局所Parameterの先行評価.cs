@@ -1417,6 +1417,64 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
+    [Fact]public void LoopBreakContinue0(){
+        var p = Expression.Parameter(typeof(decimal), "p");
+        var pp=Expression.Add(p,p);
+        var Continue=Expression.Label("Continue");
+        var Break=Expression.Label("Break");
+        var Block=Expression.Block(
+            Expression.Loop(
+                Expression.Block(
+                    Expression.Assign(
+                        p,pp
+                    ),
+                    pp,
+                    Expression.Break(Break),
+                    Expression.Continue(Continue)
+                ),
+                Break,
+                Continue
+            ),
+            pp
+        );
+        this.Optimizer.Lambda最適化(Expression.Lambda<Func<decimal,decimal>>(Block,p));
+    }
+    [Fact]public void LoopContinueBreak(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        var Continue=Expression.Label("Continue");
+        var Break=Expression.Label(typeof(bool),"Break");
+        var Block=Expression.Loop(
+            Expression.Block(
+                p,
+                Expression.IfThenElse(
+                    p,
+                    Expression.Continue(Continue),
+                    Expression.Break(Break,Expression.Constant(true))
+                )
+            ),
+            Break,
+            Continue
+        );
+        this.Expression実行AssertEqual(Expression.Lambda<Func<bool,bool>>(Block,p));
+    }
+    [Fact]public void LoopBreakContinue1(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        var Continue=Expression.Label("Continue");
+        var Break=Expression.Label(typeof(bool),"Break");
+        var Block=Expression.Loop(
+            Expression.Block(
+                p,
+                Expression.IfThenElse(
+                    Expression.Not(p),
+                    Expression.Break(Break,Expression.Constant(true)),
+                    Expression.Continue(Continue)
+                )
+            ),
+            Break,
+            Continue
+        );
+        this.Expression実行AssertEqual(Expression.Lambda<Func<bool,bool>>(Block,p));
+    }
     public class Tuple2<T>{
         public T Item1=>default!;
         public T Item2=>default!;

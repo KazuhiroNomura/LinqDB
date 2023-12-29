@@ -15,6 +15,7 @@ using LinqDB.Helpers;
 using LinqDB.Optimizers.Comparer;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable PossibleNullReferenceException
+// ReSharper disable All
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 /// <summary>
@@ -49,131 +50,8 @@ public abstract class A計測 {
         this.制御番号=制御番号;
         this.Name="";
     }
-    private static void Line初期化(List<(A計測? 移動元, A計測? 移動先)> 列Array,StringBuilder 制御罫線) {
-        for(var b = 0;b<列Array.Count;b++)
-            if(列Array[b].移動元 is null)
-                制御罫線[b]='　';
-            else
-                制御罫線[b]='│';
-    }
-    internal void 行(List<(A計測? 移動元, A計測? 移動先)> 列Array,A計測 辺,StringBuilder sb,StringBuilder 制御フロー行) {
-        var 親辺Array = this.List親辺;
-        var 子辺Array = this.List子辺;
-        var 親辺Array_Length = 親辺Array.Count;
-        var 子辺Array_Length = 子辺Array.Count;
-        Line初期化(列Array,制御フロー行);
-        for(var a = 0;a<制御フロー行.Length;a++)
-            制御フロー行[a]=制御フロー行[a] switch {
-                '┤' or '┬' or '┐' or '│' => '│',
-                '┴' or '┘' => '　',
-                _ => 制御フロー行[a]
-            };
-        var 書き込みした右端列 = -1;
-        for(var a = 0;a<親辺Array_Length;a++) {
-            var 親辺 = 親辺Array[a];
-            var Count = 列Array.Count;
-            for(var b = 0;b<Count;b++) {
-                var 列 = 列Array[b];
-                if(列.移動元==親辺) {
-                    Debug.Assert(列.移動先==辺);
-                    if(列.移動先==辺) {
-                        if(制御フロー行[b]=='│')
-                            if(書き込みした右端列<b)
-                                書き込みした右端列=b;
-                        制御フロー行[b]='┘';
-                        列Array[b]=(null, null);
-                        goto 終了;
-                    }
-                }
-            }
-            for(var b = 0;b<Count;b++) {
-                if(列Array[b].移動元 is null) {
-                    列Array[b]=(親辺, 辺);
-                    Debug.Assert(書き込みした右端列<b);
-                    書き込みした右端列=b;
-                    制御フロー行[b]='┐';
-                    goto 終了;
-                }
-            }
-            書き込みした右端列=制御フロー行.Length;
-            列Array.Add((親辺, 辺));
-            制御フロー行.Append('┐');
-終了:;
-        }
-        if(書き込みした右端列>0) {
-            for(var a = 0;a<書き込みした右端列;a++) {
-                switch(制御フロー行[a]) {
-                    case '　':
-                        制御フロー行[a]='─';
-                        break;
-                    case '┐':
-                        制御フロー行[a]='┬';
-                        break;
-                    case '┘':
-                        制御フロー行[a]='┴';
-                        break;
-                    case '│':
-                        制御フロー行[a]='┼';
-                        break;
-                }
-            }
-            if(制御フロー行[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null, null);
-        }
-        var ループか = false;
-        var 書き換えLineIndexEnd = -1;
-        for(var a = 0;a<子辺Array_Length;a++) {
-            var 子辺 = 子辺Array[a];
-            var Count = 列Array.Count;
-            for(var b = 0;b<Count;b++) {
-                var 列 = 列Array[b];
-                if(列.移動元==辺) {
-                    if(列.移動先==子辺) {
-                        if(制御フロー行[b]=='│') {
-                            Debug.Assert(書き換えLineIndexEnd<b);
-                            if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
-                            制御フロー行[b]='┘';
-                            ループか=true;
-                            goto 終了;
-                        }
-                    }
-                }
-            }
-            for(var b = 0;b<Count;b++) {
-                if(列Array[b].移動元 is null) {
-                    Debug.Assert(列Array[b].移動元 is null);
-                    列Array[b]=(辺, 子辺);
-                    Debug.Assert(書き換えLineIndexEnd<b);
-                    if(書き換えLineIndexEnd<b)
-                        書き換えLineIndexEnd=b;
-                    if(制御フロー行[b]=='┘')
-                        制御フロー行[b]='┤';
-                    else
-                        制御フロー行[b]='┐';
-                    goto 終了;
-                }
-            }
-            書き換えLineIndexEnd=制御フロー行.Length;
-            列Array.Add((辺, 子辺));
-            制御フロー行.Append('┐');
-終了:;
-        }
-        for(var a = 0;a<書き換えLineIndexEnd;a++) {
-            制御フロー行[a]=制御フロー行[a] switch {
-                '　' => '─',
-                '┘' => '┤',
-                '│' => '┼',
-                '┐' => '┬',
-                _ => 制御フロー行[a]
-            };
-        }
-        if(ループか)
-            列Array[書き換えLineIndexEnd]=(null, null);
-        var 行 = 制御フロー行.ToString();
-        Trace.WriteLine($"{行}{辺.Name} {辺.Value}");
-        sb.AppendLine($"{行}{辺.Name} {辺.Value}");
-    }
-    public string 親コメント { get; set; } = "";
-    public string 子コメント { get; set; } = "";
+    //public string 親コメント { get; set; } = "";
+    //public string 子コメント { get; set; } = "";
     internal A計測? 親演算;
     internal string Name { get; set; }
     internal string? Value { get; set; }
@@ -185,7 +63,7 @@ public abstract class A計測 {
     }
     [NonSerialized]
     internal ParameterExpression? Parameter;
-    internal readonly A計測? 制御計測=null;
+    internal A計測? 制御計測=null;
     internal int 制御番号;
     /// <summary>
     /// 子要素のプロファイル│。
@@ -197,42 +75,60 @@ public abstract class A計測 {
         this.List子辺.Clear();
     }
     protected string? 数値表;
-    private protected static void Append(string s) {
-        Console.Write(s);
-    }
-    private static void AppendLine(string s) {
-        Console.WriteLine(s);
-    }
-    private static void AppendLine() {
-        Console.WriteLine();
-    }
     protected const string 空表 =
-                      "│      │      │                      │          │";
-    public void Consoleに出力(List<string> ListString) {
-        ListString.Add("┌───┬───┬───────────┬─────┐");
-        ListString.Add("│包含ms│排他ms│割合                  │ 呼出回数 │");
-        ListString.Add("│      │      ├───┬───┬───┤          │");
-        ListString.Add("│      │      │部分木│  節  │  節  │          │");
-        ListString.Add("│      │      │───│───│───│          │");
-        ListString.Add("│      │      │全体木│全体木│部分木│          │");
-        ListString.Add("├───┼───┼───┼───┼───┼─────┤");
-        var offset = ListString.Count;
+                               "│      │      │      │      │      │          │";
+    private readonly StringBuilder sb=new();
+    public void Consoleに出力(List<string> List表とツリー) {
+        List表とツリー.Add("┌───┬───┬───────────┬─────┐");
+        List表とツリー.Add("│包含ms│排他ms│割合                  │ 呼出回数 │");
+        List表とツリー.Add("│      │      ├───┬───┬───┤          │");
+        List表とツリー.Add("│      │      │部分木│  節  │  節  │          │");
+        List表とツリー.Add("│      │      │───│───│───│          │");
+        List表とツリー.Add("│      │      │全体木│全体木│部分木│          │");
+        List表とツリー.Add("├───┼───┼───┼───┼───┼─────┤");
+        var 行offset = List表とツリー.Count;
         this.割合計算();
         var 制御罫線 = new StringBuilder();
         var 列Array = new List<(A計測? 移動元, A計測? 移動先)>();
-        var 最大行数 = 0;
+        //var 最大行数 = 0;
         var List制御 = new List<string>();
-        this.データフロー(ListString,"",ref 最大行数);
+        this.データフロー(List表とツリー,"");
         this.制御フロー(列Array,List制御,制御罫線);
-        Debug.Assert(ListString.Count-offset==List制御.Count);
+        Debug.Assert(List表とツリー.Count-行offset==List制御.Count);
         var Count = List制御.Count;
         var Span制御 = CollectionsMarshal.AsSpan(List制御);
-        var SpanString = CollectionsMarshal.AsSpan(ListString);
-        for(var a = 0;a<Count;a++) {
-            ref var s = ref SpanString[offset+a];
-            s+=new string(' ',最大行数-半角換算文字数(s))+Span制御[a];
+        var Span表とツリー = CollectionsMarshal.AsSpan(List表とツリー);
+        var 最大半角文字数=-1;
+        for(var a = 0;a<Count;a++){
+            if(Span制御[a].Length<=0)continue;
+            var s=Span表とツリー[行offset+a];
+            var 半角文字数=ShiftJIS半角換算文字数(s);
+            if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
         }
-        ListString.Add("└───┴───┴───┴───┴───┴─────┘");
+        if(最大半角文字数%2==1)
+            最大半角文字数+=2;
+        else
+            最大半角文字数+=1;
+        var sb=this.sb;
+        sb.Clear();
+        for(var a = 0;a<Count;a++){
+            if(Span制御[a].Length<=0)continue;
+            ref var s=ref Span表とツリー[行offset+a];
+            var 空き半角文字数=最大半角文字数-ShiftJIS半角換算文字数(s);
+            sb.Clear();
+            sb.Append(s);
+            //if(空き半角文字数%2==1)
+            //    sb.Append(' ');
+            if(Span制御[a][0] is'┐' or'┼' or'┘' or'┬' or'┴'or'─'){
+                if(空き半角文字数%2==1)
+                    sb.Append(' ');
+                sb.Append(new string('─',空き半角文字数/2));
+            } else
+                sb.Append(new string(' ',空き半角文字数));
+            sb.Append(Span制御[a]);
+            s=sb.ToString();
+        }
+        List表とツリー.Add("└───┴───┴───┴───┴───┴─────┘");
     }
     private bool 親フロー(List<(A計測? 移動元, A計測? 移動先)> 列Array,StringBuilder 制御罫線) {
         var 親辺Array = this.List親辺.ToArray();
@@ -266,16 +162,17 @@ public abstract class A計測 {
                         //else
                         //    制御罫線[b]='┘';
                         列Array[b]=(null, null);
-                        for(b++;b<列Array_Count;b++){
+                        for(b++;b<列Array_Count;b++)
                             if(制御罫線[b]=='┐')
                                 制御罫線[b]='│';
-                        }
+                        //    else if(制御罫線[b]=='┴')
+                        //        制御罫線[b]='─';
                         goto 終了;
                     }
                 }
                 if(制御罫線[b]is'│'or'┐')
                     制御罫線[b]='┼';
-                else if(制御罫線[b]is'　')
+                else if(制御罫線[b]is'┴'or'┘'or'　')
                     制御罫線[b]='─';
             }
             for(var b =0;b<列Array_Count;b++) {
@@ -327,9 +224,9 @@ public abstract class A計測 {
             //} else
             //    制御罫線[0]='│';
         } else if(親に重ねるか) {
-            for(var a = 0;a<制御罫線.Length;a++)
-                if(制御罫線[a] is '┘')
-                    制御罫線[a]='┴';
+        //    for(var a = 0;a<制御罫線.Length;a++)
+        //        if(制御罫線[a] is '┘')
+        //            制御罫線[a]='┴';
         } else {
             for(var a = 0;a<制御罫線.Length;a++)
                 if(制御罫線[a] is '└' or '┴' or '┘' or '─')
@@ -346,16 +243,23 @@ public abstract class A計測 {
                 if(列.移動元==this) {
                     if(列.移動先==子辺) {
                         制御罫線[b]=右下(b);
-                        //if(制御罫線[b]=='│')
-                        {
-                            //Debug.Assert(書き換えLineIndexEnd<b);
-                            //if(b<列Array_Count-1)
-                            //    制御罫線[b]=右下(b);'┴';
-                            //else
-                            //    制御罫線[b]='┘';
-                            列Array[b]=(null, null);
-                            goto 終了;
+                        列Array[b]=(null, null);
+                        for(var c=0;c<b;c++)
+                            if(制御罫線[c]=='　')
+                                制御罫線[c]='─';
+                            else{
+                                Debug.Fail(c.ToString());
+                            }
+                        if(親に重ねるか){
+                            for(var c=0;c<=b;c++)
+                                if(制御罫線[c] is'┘')
+                                    制御罫線[c]='┴';
+                            for(var c=b+1;c<列Array_Count;c++)
+                                if(制御罫線[c] is'┴')
+                                    制御罫線[c]='┘';
                         }
+                        //        else　if(制御罫線[c] is'┘') 制御罫線[c]='　';
+                        goto 終了;
                     }
                 }
             }
@@ -405,7 +309,7 @@ public abstract class A計測 {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         Shift_JIS=Encoding.GetEncoding("shift_jis");
     }
-    private static int 半角換算文字数(string str) {
+    private static int ShiftJIS半角換算文字数(string str) {
         return Shift_JIS.GetByteCount(str);
     }
 
@@ -417,15 +321,17 @@ public abstract class A計測 {
         sb.Add(s);
         //Trace.WriteLine(s);
     }
-    private void データフロー(List<string> ListString,string ツリー罫線,ref int 最大行数) {
+    private void データフロー(List<string> List表とツリー,string ツリー罫線) {
         //Append(全行,this.数値表);
         //全行.Append(this.数値表);
         var 行 = $"{this.数値表}{this.制御番号,3}{ツリー罫線}";
         行+=this.Name;
-        if(this.Value is not null) 行+=' '+this.Value;
-        Append(ListString,行);
-        var 行数 = 半角換算文字数(行);
-        if(最大行数<行数) 最大行数=行数;
+        if(this.Value is not null){
+            if(this.Name.Length%2==0)
+                行+=' ';
+            行+=' '+this.Value;
+        }
+        Append(List表とツリー,行);
         var List計測 = this.List子演算;
         var List計測_Count_1 = List計測.Count-1;
         if(List計測_Count_1>=0) {
@@ -439,29 +345,24 @@ public abstract class A計測 {
                     ツリー罫線=ツリー罫線前半+'　';
             }
             var ツリー罫線0 = ツリー罫線+'├';
-            for(var a = 0;a<List計測_Count_1;a++) {
-                List計測[a].データフロー(ListString,ツリー罫線+'├',ref 最大行数);
-            }
-            {
-                List計測[List計測_Count_1].データフロー(ListString,ツリー罫線+'└',ref 最大行数);
-            }
+            for(var a = 0;a<List計測_Count_1;a++)
+                List計測[a].データフロー(List表とツリー,ツリー罫線0);
+            List計測[List計測_Count_1].データフロー(List表とツリー,ツリー罫線+'└');
         }
     }
-    private void 制御フロー(List<(A計測? 移動元, A計測? 移動先)> 列Array,List<string> ListString,StringBuilder 制御罫線) {
-        if(this.親フロー(列Array,制御罫線)) {
+    private void 制御フロー(List<(A計測? 移動元, A計測? 移動先)> 列Array,List<string> List制御,StringBuilder 制御罫線) {
+        if(this.親フロー(列Array,制御罫線))
             this.子フロー(列Array,制御罫線,true);
-
-        } else {
+        else
             this.子フロー(列Array,制御罫線,false);
-        }
         //this.フロー(列Array,制御罫線);
-        Append(ListString,制御罫線.ToString());
+        Append(List制御,制御罫線.ToString());
         var List計測 = this.List子演算;
         var List計測_Count_1 = List計測.Count-1;
         if(List計測_Count_1>=0) {
             for(var a = 0;a<List計測_Count_1;a++)
-                List計測[a].制御フロー(列Array,ListString,制御罫線);
-            List計測[List計測_Count_1].制御フロー(列Array,ListString,制御罫線);
+                List計測[a].制御フロー(列Array,List制御,制御罫線);
+            List計測[List計測_Count_1].制御フロー(列Array,List制御,制御罫線);
         }
     }
     internal abstract long ms {
@@ -718,112 +619,8 @@ public class 計測する左辺値:計測する右辺値{
         }
     }
 }
-//public  class 計測する:計測する{
-//    public 計測する(int 制御番号,string Name,string? Value,object Object) : base(制御番号,Name,Value,Object) {
-//    }
-//    public 計測する(int 制御番号,string Name,string? Value) : base(制御番号,Name,Value) {
-//    }
-//    public 計測する(int 制御番号) : base(制御番号) {
-//    }
-//    /// <summary>
-//    /// 全体木に対する木のms割合
-//    /// </summary>
-//    [NonSerialized]
-//    private double 全体木に対する木のms割合;
-//    /// <summary>
-//    /// 全体木に対する節のms割合
-//    /// </summary>
-//    [NonSerialized]
-//    private double 全体木に対する節のms割合;
-//    /// <summary>
-//    /// 木に対する節のms割合
-//    /// </summary>
-//    [NonSerialized]
-//    private double 木に対する節のms割合;
-//    [NonSerialized]
-//    private readonly Stopwatch Stopwatch = new();
-//    private long 呼出回数;
-//    internal override long ms => this.Stopwatch.ElapsedMilliseconds;
-
-//    /// <summary>
-//    /// 計測開始
-//    /// </summary>
-//    protected override A計測 Start() {
-//        this.Stopwatch.Start();
-//        this.呼出回数++;
-//        return this;
-//    }
-
-//    /// <summary>
-//    /// 計測終了
-//    /// </summary>
-//    protected override void Stop() => this.Stopwatch.Stop();
-//    protected override T StopReturn<T>(T item) {
-//        this.Stopwatch.Stop();
-//        return item;
-//    }
-//    internal override void 割合計算(long 全体木のms) {
-//        var 木ms = this.ms;
-//        var 節ms = 木ms;
-//        foreach(var 子 in this.List子演算) {
-//            子.割合計算(全体木のms);
-//            節ms-=子.ms;
-//        }
-//        this.全体木に対する木のms割合=全体木のms==0 ? 0 : (double)this.ms/全体木のms;
-//        this.全体木に対する節のms割合=全体木のms==0 ? 0.0 : (double)節ms/全体木のms;
-//        this.木に対する節のms割合=木ms==0 ? 0.0 : (double)節ms/木ms;
-//        var sb = new StringBuilder();
-//        sb.Append('│');
-//        void 共通ms(long Value) {
-//            sb.Append($"{Value,6}");
-//            sb.Append('│');
-//        }
-//        void 共通割合(double 割合) {
-//            sb.Append(割合.ToString("0.0000",CultureInfo.InvariantCulture));
-//            sb.Append('│');
-//        }
-//        共通ms(木ms);
-//        共通ms(this.排他ms);
-//        共通割合(this.全体木に対する木のms割合);
-//        共通割合(this.全体木に対する節のms割合);
-//        共通割合(this.木に対する節のms割合);
-//        var 呼出回数 = this.呼出回数;
-//        sb.Append(呼出回数>=10000000000 ? "MAX       " : $"{呼出回数,10}");
-//        sb.Append('│');
-//        this.数値表=sb.ToString();
-//    }
-//    internal override void 割合計算() {
-//        this.全体木に対する木のms割合=0.0;
-//        this.全体木に対する節のms割合=0.0;
-//        this.木に対する節のms割合=0.0;
-//        this.割合計算(this.ms);
-//    }
-//    private long 排他ms {
-//        get {
-//            var ElapsedMilliseconds = this.Stopwatch.ElapsedMilliseconds;
-//            // ReSharper disable once LoopCanBeConvertedToQuery
-//            foreach(var 子 in this.List子演算)
-//                ElapsedMilliseconds-=子.ms;
-//            return ElapsedMilliseconds;
-//        }
-//    }
-//}
 public sealed class List計測:List<A計測>{
     private readonly StringBuilder sb=new();
-    //public string Analize{
-    //    get{
-    //        var sb=this.sb;
-    //        sb.Clear();
-    //        this[0].Consoleに出力(sb);
-    //        return sb.ToString();
-    //    }
-    //}
-    private void 制御フローを正規化(){
-        var Count=this.Count;
-        for(var a=0;a<Count;a++){
-            var b=this[a];
-        }
-    }
     private readonly List<string>ListString=new();
     public string Analize{
         get{
@@ -835,332 +632,5 @@ public sealed class List計測:List<A計測>{
             return sb.ToString();
         }
     }
-    public string フロー0 {
-        get {
-            var 列Array0=new List<(A計測? 移動元,A計測? 移動先)>{(null,null)};
-            var Line=new StringBuilder();
-            Line.Append('　');
-            var 前回のLine=Line.ToString();
-            var Count = this.Count;
-            var sb = new StringBuilder();
-            for(var a = 0;a<Count;a++) {
-                var 辺 = this[a];
-                var 親辺Array = 辺.List親辺.ToArray();
-                var 子辺Array = 辺.List子辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-            }
-            return sb.ToString();
-        }
-    }
-    public string フロー1 {
-        get {
-            var 列Array=new List<(A計測? 移動元,A計測? 移動先)>();
-            var Line=new StringBuilder();
-            var Count = this.Count;
-            var sb = new StringBuilder();
-            for(var a = 0;a<Count;a++) {
-                var 辺 = this[a];
-                var 親辺Array = 辺.List親辺.ToArray();
-                var 子辺Array = 辺.List子辺.ToArray();
-                親子(親辺Array,子辺Array,列Array,辺,sb,Line);
-            }
-            return sb.ToString();
-        }
-    }
-    public IEnumerator<string> GetLineEnumerator(){
-        var 列Array0=new List<(A計測? 移動元,A計測? 移動先)>{(null,null)};
-        var Line=new StringBuilder();
-        Line.Append('　');
-        var 前回のLine=Line.ToString();
-        var sb = new StringBuilder();
-        var Count=this.Count-1;
-        if(Count>=0){
-            {
-                var 辺=this[0];
-                var 子辺Array=辺.List子辺.ToArray();
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-            for(var a=1;a<Count;a++){
-                var 辺=this[a];
-                var 親辺Array = 辺.List親辺.ToArray();
-                var 子辺Array = 辺.List子辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-            {
-                var 辺=this[Count];
-                var 親辺Array = 辺.List親辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-        }
-    }
-    private static void Line初期化(List<(A計測? 移動元,A計測? 移動先)>列Array0,StringBuilder Line){
-        for(var b = 0;b<列Array0.Count;b++)
-            if(列Array0[b].移動元 is null)
-                Line[b]='　';
-            else
-                Line[b]='│';
-    }
-    /// <summary>
-    /// 親とはラベルのことであり、このラベルを使うジャンプ命令の属する複数辺を保持する
-    /// </summary>
-    /// <param name="親辺Array"></param>
-    /// <param name="列Array"></param>
-    /// <param name="前回のLine"></param>
-    /// <param name="辺"></param>
-    /// <param name="sb"></param>
-    /// <param name="Line"></param>
-    private static void 親(A計測[] 親辺Array,List<(A計測? 移動元,A計測? 移動先)> 列Array,ref string 前回のLine,A計測 辺,StringBuilder sb,StringBuilder Line){
-        var 親辺Array_Length=親辺Array.Length;
-        if(親辺Array_Length<=0)return;
-        Line初期化(列Array,Line);
-        Line[0]='┌';
-        var 書き込みした右端列=-1;
-        for(var a=0;a<親辺Array_Length;a++){
-            var 親辺=親辺Array[a];
-            var Count=列Array.Count;
-            for(var b=0;b<Count;b++){
-                var 列=列Array[b];
-                //Debug.Assert(列.移動元==親辺);
-                if(列.移動元==親辺) {
-                    if(列.移動先==辺){
-                        if(Line[b]!='┘')
-                            if(書き込みした右端列<b)
-                                書き込みした右端列=b;
-                        Line[b]='┘';
-                        goto 終了;
-                    }
-                }
-            }
-            for(var b=0;b<Count;b++){
-                if(Line[b]is'　'){
-                    列Array[b]=(親辺,辺);
-                    Debug.Assert(書き込みした右端列<b); 
-                    書き込みした右端列=b;
-                    Line[b]='┐';
-                    goto 終了;
-                }
-            }
-            書き込みした右端列=Line.Length;
-            列Array.Add((親辺,辺));
-            Line.Append('┐');
-            終了: ;
-        }
-        if(書き込みした右端列>0){
-            for(var a=1;a<書き込みした右端列;a++){
-                switch(Line[a]){
-                    case '　':
-                        Line[a]='─';
-                        break;
-                    case '┐':
-                        Line[a]='┬';
-                        break;
-                    case '┘':
-                        Line[a]='┴';
-                        列Array[a]=(null,null);
-                        break;
-                    case '│':
-                        Line[a]='┼';
-                        break;
-                }
-            }
-            if(Line[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null,null);
-        }
-        var 行=Line.ToString();
-        前回のLine=行;
-        sb.AppendLine($"{行},{辺.Name} {辺.Value}");
-    }
-    /// <summary>
-    /// 親とはジャンプ命令のことであり、この複数のジャンプ命令(if,switch,goto)の飛び先のラベルの属する複数辺を保持する
-    /// </summary>
-    /// <param name="子辺Array"></param>
-    /// <param name="列Array0"></param>
-    /// <param name="前回のLine"></param>
-    /// <param name="辺"></param>
-    /// <param name="sb"></param>
-    /// <param name="Line"></param>
-    private static void 子(A計測[] 子辺Array,List<(A計測? 移動元,A計測? 移動先)> 列Array0,ref string 前回のLine,A計測 辺,StringBuilder sb,StringBuilder Line){
-        var 子辺Array_Length=子辺Array.Length;
-        if(子辺Array_Length<=0)return;
-        Line初期化(列Array0,Line);
-        Line[0]='└';
-        var ループか=false;
-        var 書き換えLineIndexEnd=-1;
-        for(var a=0;a<子辺Array_Length;a++){
-            var 子辺=子辺Array[a];
-            var Count=列Array0.Count;
-            for(var b=0;b<Count;b++){
-                var 列=列Array0[b];
-
-                if(列.移動元==辺) {
-                    if(列.移動先==子辺) {
-                        if(Line[b]=='│') {
-                            Debug.Assert(書き換えLineIndexEnd<b);
-                            if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
-                            Line[b]='┘';
-                            ループか=true;
-                            goto 終了;
-                        }
-                    }
-                }
-            }
-            for(var b=0;b<Count;b++){
-                if(Line[b]=='　'){
-                    Debug.Assert(列Array0[b].移動元 is null);
-                    列Array0[b]=(辺,子辺);
-                    Debug.Assert(書き換えLineIndexEnd<b);
-                    if(書き換えLineIndexEnd<b)
-                        書き換えLineIndexEnd=b;
-                    Line[b]='┐';
-                    goto 終了;
-                } 
-            }
-            書き換えLineIndexEnd=Line.Length;
-            列Array0.Add((辺,子辺));
-            Line.Append('┐');
-            終了: ;
-        }
-        for(var a=0;a<書き換えLineIndexEnd;a++){
-            switch(Line[a]){
-                case '　':Line[a]='─'; break;
-                //case '┘':
-                //    Line[a]='┴';
-                //    break;
-                case '│':Line[a]='┼'; break;
-                case '┐':Line[a]='┬'; break;
-            }
-        }
-        if(ループか)
-            列Array0[書き換えLineIndexEnd]=(null,null);
-        var 行=Line.ToString();
-        前回のLine=行;
-        sb.AppendLine($"{行},{辺.Name} {辺.Value}");
-    }
-    private static void 親子(A計測[] 親辺Array,A計測[] 子辺Array,List<(A計測? 移動元,A計測? 移動先)> 列Array,A計測 辺,StringBuilder sb,StringBuilder Line){
-        var 親辺Array_Length=親辺Array.Length;
-        var 子辺Array_Length=子辺Array.Length;
-        Line初期化(列Array,Line);
-        for(var a=0;a<Line.Length;a++)
-            Line[a]=Line[a]switch{
-                '┤'or'┬'or'┐'or'│'=>'│',
-                '┴'or'┘'=>'　',
-                _=>Line[a]
-            };
-        var 書き込みした右端列=-1;
-        for(var a=0;a<親辺Array_Length;a++){
-            var 親辺=親辺Array[a];
-            var Count=列Array.Count;
-            for(var b=0;b<Count;b++){
-                var 列=列Array[b];
-                if(列.移動元==親辺) {
-                    //Debug.Assert(列.移動先==辺);
-                    if(列.移動先==辺){
-                        if(Line[b]=='│')
-                            if(書き込みした右端列<b)
-                                書き込みした右端列=b;
-                        Line[b]='┘';
-                        列Array[b]=(null,null);
-                        goto 終了;
-                    }
-                }
-            }
-            for(var b=0;b<Count;b++){
-                if(列Array[b].移動元 is null){
-                    列Array[b]=(親辺,辺);
-                    //Debug.Assert(書き込みした右端列<b); 
-                    書き込みした右端列=b;
-                    Line[b]='┐';
-                    goto 終了;
-                }
-            }
-            書き込みした右端列=Line.Length;
-            列Array.Add((親辺,辺));
-            Line.Append('┐');
-            終了: ;
-        }
-        if(書き込みした右端列>0){
-            for(var a=0;a<書き込みした右端列;a++){
-                switch(Line[a]){
-                    case '　':
-                        Line[a]='─';
-                        break;
-                    case '┐':
-                        Line[a]='┬';
-                        break;
-                    case '┘':
-                        Line[a]='┴';
-                        break;
-                    case '│':
-                        Line[a]='┼';
-                        break;
-                }
-            }
-            if(Line[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null,null);
-            //if(Line[書き込みした右端列]=='┐') Line[書き込みした右端列]='│';
-        }
-        var ループか=false;
-        var 書き換えLineIndexEnd=-1;
-        for(var a=0;a<子辺Array_Length;a++){
-            var 子辺=子辺Array[a];
-            var Count=列Array.Count;
-            for(var b=0;b<Count;b++){
-                var 列=列Array[b];
-                if(列.移動元==辺) {
-                    if(列.移動先==子辺) {
-                        if(Line[b]=='│') {
-                            Debug.Assert(書き換えLineIndexEnd<b);
-                            if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
-                            Line[b]='┘';
-                            ループか=true;
-                            goto 終了;
-                        }
-                    }
-                }
-            }
-            for(var b=0;b<Count;b++){
-                if(列Array[b].移動元 is null){
-                    //Debug.Assert(列Array[b].移動元 is null);
-                    列Array[b]=(辺,子辺);
-                    Debug.Assert(書き換えLineIndexEnd<b);
-                    if(書き換えLineIndexEnd<b)
-                        書き換えLineIndexEnd=b;
-                    if(Line[b]=='┘')
-                        Line[b]='┤';
-                    else
-                        Line[b]='┐';
-                    goto 終了;
-                } 
-            }
-            書き換えLineIndexEnd=Line.Length;
-            列Array.Add((辺,子辺));
-            Line.Append('┐');
-            終了: ;
-        }
-        for(var a=0;a<書き換えLineIndexEnd;a++){
-            //switch(Line[a]){
-            //    case '　':Line[a]='─'; break;
-            //    case '┘':Line[a]='┴'; break;
-            //    case '│':Line[a]='┼'; break;
-            //    case '┐':Line[a]='┬'; break;
-            //}
-            Line[a]=Line[a] switch{
-                '　'=>'─',
-                '┘'=>'┤',
-                '│'=>'┼',
-                '┐'=>'┬',
-                _=>Line[a]
-            };
-        }
-        if(ループか)
-            列Array[書き換えLineIndexEnd]=(null,null);
-        var 行=Line.ToString();
-        Trace.WriteLine($"{行}{辺.Name} {辺.Value}");
-        sb.AppendLine($"{行}{辺.Name} {辺.Value}");
-    }
 }
-
+//20311228 1166
