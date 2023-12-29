@@ -32,7 +32,7 @@ internal class ClassIEnumerableInt32 : System.Collections.Generic.IEnumerable<in
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 }
 public class 特定パターン:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
+    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     [Fact]
     public void ClassIEnumerableInt32シリアライズ(){
         System.Collections.Generic.IEnumerable<int> input=new ClassIEnumerableInt32();

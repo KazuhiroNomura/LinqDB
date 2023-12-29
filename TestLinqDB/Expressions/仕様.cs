@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
-using System.Reflection;
 namespace TestLinqDB.仕様;
 public class Expressions:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
+    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void GotoはVoidになる(){
         var Label=Expression.Label(typeof(decimal),"L0");

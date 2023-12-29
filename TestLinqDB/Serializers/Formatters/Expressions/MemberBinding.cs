@@ -1,8 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Reflection.PortableExecutable;
-
-using TestLinqDB.Sets;
-
 namespace TestLinqDB.Serializers.Formatters.Expressions;
 public class MemberBinding : 共通{
     [Fact]public void Serialize(){

@@ -1,6 +1,6 @@
 ﻿namespace TestLinqDB.Serializers.Formatters;
 public abstract class CollectionTest<T>:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
+    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     public readonly T Data;
     public CollectionTest(T Data)=>this.Data=Data;
     [Fact]

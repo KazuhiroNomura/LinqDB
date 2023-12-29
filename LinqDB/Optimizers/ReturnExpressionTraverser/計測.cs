@@ -133,12 +133,13 @@ public abstract class A計測 {
     private bool 親フロー(List<(A計測? 移動元, A計測? 移動先)> 列Array,StringBuilder 制御罫線) {
         var 親辺Array = this.List親辺.ToArray();
         var 親辺Array_Length = 親辺Array.Length;
-        //for(var a = 0;a<制御罫線.Length;a++) {
-        //    制御罫線[a]=制御罫線[a] switch {
-        //        '┌' or '┐' or '┬' => '│',
-        //        _ => 制御罫線[a]
-        //    };
-        //}
+        for(var a = 0;a<制御罫線.Length;a++) {
+            制御罫線[a]=制御罫線[a] switch {
+                '┼' or '┐' or '┬' => '│',
+                '─' or '┘' or '┴' => '　',
+                _ => 制御罫線[a]
+            };
+        }
         ////Debug.Assert(!(親辺Array_Length>0&&this.List子辺.Count>0));
         if(親辺Array_Length==0) return false;
         //} else {
@@ -146,6 +147,7 @@ public abstract class A計測 {
         //    //制御罫線[0]='┌';
         //    //Append(制御罫線,"┌");
         //}
+        var 書き込み列=-1;
         var 列Array_Count = 列Array.Count;
         for(var a = 0;a<親辺Array_Length;a++) {
             var 親辺 = 親辺Array[a];
@@ -157,29 +159,26 @@ public abstract class A計測 {
                         //    if(書き込みした右端列<b)
                         //        書き込みした右端列=b;
                         制御罫線[b]=右下(b);
+                        if(書き込み列<b) 書き込み列=b;
                         //if(a<親辺Array_Length-1)
                         //    制御罫線[b]='┴';
                         //else
                         //    制御罫線[b]='┘';
                         列Array[b]=(null, null);
-                        for(b++;b<列Array_Count;b++)
-                            if(制御罫線[b]=='┐')
-                                制御罫線[b]='│';
-                        //    else if(制御罫線[b]=='┴')
-                        //        制御罫線[b]='─';
                         goto 終了;
                     }
                 }
-                if(制御罫線[b]is'│'or'┐')
-                    制御罫線[b]='┼';
-                else if(制御罫線[b]is'┴'or'┘'or'　')
-                    制御罫線[b]='─';
+                //if(制御罫線[b]is'│'or'┐')
+                //    制御罫線[b]='┼';
+                //else if(制御罫線[b]is'┴'or'┘'or'　')
+                //    制御罫線[b]='─';
             }
             for(var b =0;b<列Array_Count;b++) {
                 if(制御罫線[b] is '　') {
                     列Array[b]=(親辺, this);
                     //Debug.Assert(書き込みした右端列<b);
                     制御罫線[b]=右上(b);
+                    if(書き込み列<b) 書き込み列=b;
                     //if(b<列Array_Count-1)
                     //    制御罫線[b]='┬';
                     //else
@@ -188,9 +187,19 @@ public abstract class A計測 {
                 }
             }
             列Array.Add((親辺, this));
+            書き込み列=制御罫線.Length;
             Append(制御罫線,"┐");
 終了:;
         }
+        for(var c=0;c<書き込み列;c++)
+            if(制御罫線[c]is'│')
+                制御罫線[c]='┼';
+            else if(制御罫線[c] is '┘')
+                制御罫線[c]='┴';
+            else if(制御罫線[c] is '┐')
+                制御罫線[c]='┬';
+            else if(制御罫線[c] is '　')
+                制御罫線[c]='─';
         return true;
         char 右上(int index)=>A計測.右上(index,親辺Array_Length);
         char 右下(int index)=>A計測.右下(index,親辺Array_Length);
@@ -208,31 +217,6 @@ public abstract class A計測 {
                         制御罫線[a]='　';
                     else if(制御罫線[a] is'┼' or'┐') 制御罫線[a]='│';
             }
-            //if(制御罫線[0] is '│') {
-            //    制御罫線[0]='└';
-            //    //for(var a = 1;a<制御罫線.Length;a++)
-            //    //    if(制御罫線[a] is '　')
-            //    //        制御罫線[a]='┐';
-            //    //else if(制御罫線[a] is '┼')
-            //    //    制御罫線[a]='│';
-            //} else
-            //if(制御罫線[0] is '└') {
-            //    制御罫線[0]='　';
-            //    for(var a = 1;a<制御罫線.Length;a++)
-            //        if(制御罫線[a] is '┼')
-            //            制御罫線[a]='│';
-            //} else
-            //    制御罫線[0]='│';
-        } else if(親に重ねるか) {
-        //    for(var a = 0;a<制御罫線.Length;a++)
-        //        if(制御罫線[a] is '┘')
-        //            制御罫線[a]='┴';
-        } else {
-            for(var a = 0;a<制御罫線.Length;a++)
-                if(制御罫線[a] is '└' or '┴' or '┘' or '─')
-                    制御罫線[a]='　';
-                else if(制御罫線[a] is '┼' or '┐')
-                    制御罫線[a]='│';
         }
         var 列Array_Count = 列Array.Count;
         for(var a = 0;a<子辺Array_Length;a++) {
@@ -244,19 +228,26 @@ public abstract class A計測 {
                     if(列.移動先==子辺) {
                         制御罫線[b]=右下(b);
                         列Array[b]=(null, null);
-                        for(var c=0;c<b;c++)
-                            if(制御罫線[c]=='　')
-                                制御罫線[c]='─';
-                            else{
-                                Debug.Fail(c.ToString());
-                            }
+                        //for(var c=0;c<b;c++)
+                        //    if(制御罫線[c]=='　')
+                        //        制御罫線[c]='─';
+                        //    else{
+                        //        Debug.Fail(c.ToString());
+                        //    }
                         if(親に重ねるか){
-                            for(var c=0;c<=b;c++)
-                                if(制御罫線[c] is'┘')
+                            for(var c = 0;c<b;c++)
+                                if(制御罫線[c] is '┘')
                                     制御罫線[c]='┴';
-                            for(var c=b+1;c<列Array_Count;c++)
-                                if(制御罫線[c] is'┴')
-                                    制御罫線[c]='┘';
+                            for(b++;b<列Array_Count;b++)
+                                if(制御罫線[b] is '│')
+                                    制御罫線[b]='┼';
+                        } else{
+                            for(var c = 0;c<b;c++)
+                                if(制御罫線[c] is'┴'or'┘')
+                                    制御罫線[c]='─';
+                            for(b++;b<列Array_Count;b++)
+                                if(制御罫線[b] is '┴'or'─'or'┘')
+                                    制御罫線[b]='　';
                         }
                         //        else　if(制御罫線[c] is'┘') 制御罫線[c]='　';
                         goto 終了;
@@ -264,19 +255,26 @@ public abstract class A計測 {
                 }
             }
             for(var b = 0;b<列Array_Count;b++) {
-                if(制御罫線[b]=='　') {
+                if(制御罫線[b] is'　'){
                     //Debug.Assert(列Array[b].移動元 is null);
-                    列Array[b]=(this, 子辺);
+                    列Array[b]=(this,子辺);
                     制御罫線[b]=右上(a);
                     //if(a<子辺Array_Length-1)
                     //    制御罫線[b]='┬';
                     //else
                     //    制御罫線[b]='┐';
                     goto 終了;
-                }else if(制御罫線[b]=='┘'){
-                    制御罫線[b]='┴';
-                }else if(制御罫線[b]=='│'){
+                }
+                if(制御罫線[b]is'│')
                     制御罫線[b]='┼';
+                else if(親に重ねるか){
+                    if(制御罫線[b] is'┘') 
+                        制御罫線[b] ='┴';
+                    else if(制御罫線[b]is'│')
+                        制御罫線[b]='┼';
+                } else{
+                    if(制御罫線[b]=='┘')
+                        制御罫線[b]='─';
                 }
             }
             列Array.Add((this, 子辺));
@@ -351,6 +349,9 @@ public abstract class A計測 {
         }
     }
     private void 制御フロー(List<(A計測? 移動元, A計測? 移動先)> 列Array,List<string> List制御,StringBuilder 制御罫線) {
+        if(List制御.Count==25){
+
+        }
         if(this.親フロー(列Array,制御罫線))
             this.子フロー(列Array,制御罫線,true);
         else

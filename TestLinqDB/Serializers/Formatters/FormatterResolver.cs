@@ -2,10 +2,6 @@
 using E = System.Collections.Generic;
 using Q = System.Linq;
 using LinqDB.Sets;
-using System.Diagnostics;
-using MemoryPack;
-using System.Runtime.Serialization;
-using System.Reflection;
 //using Microsoft.SqlServer.Dac.Deployment;
 //using System.Diagnostics;
 //using System.Runtime.Serialization;
@@ -15,7 +11,7 @@ using System.Reflection;
 namespace TestLinqDB.Serializers.Formatters;
 public class FormatterResolver : 共通
 {
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
+    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     private static void M(){}
     private class C<T>{
         public T M;

@@ -6,7 +6,7 @@ using LinqDB.Optimizers.ReturnExpressionTraverser;
 namespace TestLinqDB.特殊パターン;
 public class 計測フロー: 共通
 {
-    protected override テストオプション テストオプション{get;}=テストオプション.None;
+    protected override テストオプション テストオプション=>テストオプション.None;
     [Fact]public void 辺に関する情報Conditional0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //├┐　　　　　　　　　　　　　　　　　　0,IfTest:

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using LinqDB.Helpers;
 using LinqDB.Optimizers;
 using Microsoft.CSharp.RuntimeBinder;
@@ -9,8 +8,6 @@ using System.Reflection;
 using TestLinqDB.Optimizers.Comparer;
 using Binder=Microsoft.CSharp.RuntimeBinder.Binder;
 using ExpressionEqualityComparer=LinqDB.Optimizers.Comparer.ExpressionEqualityComparer;
-using System.Diagnostics;
-
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 [SuppressMessage("ReSharper","InconsistentNaming")]
 public class ReturnExpressionTraverser:共通{

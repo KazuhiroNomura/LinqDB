@@ -147,7 +147,7 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     public override int GetHashCode()=>this.内部の値;
 }
 public class ExpressionEqualityComparer:共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json;
+    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
