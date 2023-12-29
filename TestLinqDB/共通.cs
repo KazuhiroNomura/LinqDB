@@ -19,16 +19,17 @@ namespace TestLinqDB;
 [Flags]
 public enum テストオプション{
     None=0,
-    MemoryPack                                        =0b100000000,
-    MessagePack                                       =0b010000000,
-    Utf8Json                                          =0b001000000,
-    ローカル実行                                      =0b000100000,
-    リモート実行                                      =0b000010000,
-    ファイルが無ければシリアライズ有ればデシリアライズ=0b000001000,
-    最適化                                            =0b000000100,
-    インライン                                        =0b000000010,
-    アセンブリ保存                                    =0b000000001,
-    全て                                              =0b111111111,
+    MemoryPack                                        =0b1000000000,
+    MessagePack                                       =0b0100000000,
+    Utf8Json                                          =0b0010000000,
+    ローカル実行                                      =0b0001000000,
+    リモート実行                                      =0b0000100000,
+    ファイルが無ければシリアライズ有ればデシリアライズ=0b0000010000,
+    最適化                                            =0b0000001000,
+    インライン                                        =0b0000000100,
+    アセンブリ保存                                    =0b0000000010,
+    プロファイラ                                      =0b0000000001,
+    全て                                              =0b1111111111,
     MemoryPack_MessagePack_Utf8Json=MemoryPack|MessagePack|Utf8Json,
 }
 public abstract class 共通{
@@ -54,7 +55,12 @@ public abstract class 共通{
     }
     protected 共通(){
         // ReSharper disable once VirtualMemberCallInConstructor
-        this.Optimizer=new(){IsGenerateAssembly=(テストオプション.アセンブリ保存&this.テストオプション)!=0,Context=typeof(共通),AssemblyFileName="デバッグ.dll",IsInline = true};
+        this.Optimizer=new(){
+            IsGenerateAssembly=(テストオプション.アセンブリ保存&this.テストオプション)!=0,
+            IsProfiling = (テストオプション.プロファイラ&this.テストオプション)!=0,
+            Context=typeof(共通),AssemblyFileName="デバッグ.dll",
+            IsInline = (テストオプション.インライン&this.テストオプション)!=0,
+        };
 
     }
     protected readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
@@ -321,7 +327,7 @@ public abstract class 共通{
                 Optimizer.IsInline=false;
             }
             Optimizer.CreateDelegate(input)();
-            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+            Trace.WriteLine(Optimizer.Analize);
         }
     }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
@@ -346,7 +352,7 @@ public abstract class 共通{
             }
             var actual=Optimizer.CreateDelegate(input)();
             Assert.Equal(expected,actual,汎用Comparer);
-            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+            Trace.WriteLine(Optimizer.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
@@ -397,7 +403,7 @@ public abstract class 共通{
             Optimizer.IsInline=false;
         }
         var result=Optimizer.CreateDelegate(input)();
-        Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+        Trace.WriteLine(Optimizer.Analize);
         return result;
     }
     /// <summary>
@@ -431,7 +437,7 @@ public abstract class 共通{
             var Delegate=Optimizer.CreateDelegate(input);
             var actual=Delegate(引数);
             Assert.Equal(expected,actual,汎用Comparer);
-            Trace.WriteLine(Optimizer._変換_Stopwatchに埋め込む.Analize);
+            Trace.WriteLine(Optimizer.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){
             var 標準 = input.Compile();

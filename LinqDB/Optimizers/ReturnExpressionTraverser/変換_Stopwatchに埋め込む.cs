@@ -77,13 +77,6 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
     }
     public string Analize=>List計測.Analize;
 
-    private static void Line初期化(List<(A計測? 移動元,A計測? 移動先)>列Array0,StringBuilder Line){
-        for(var b = 0;b<列Array0.Count;b++)
-            if(列Array0[b].移動元 is null)
-                Line[b]='　';
-            else
-                Line[b]='│';
-    }
     protected override Expression Block(BlockExpression Block0){
         var sb=this.sb;
         sb.Clear();

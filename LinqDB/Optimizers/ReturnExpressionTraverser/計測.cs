@@ -625,6 +625,7 @@ public sealed class List計測:List<A計測>{
     private readonly List<string>ListString=new();
     public string Analize{
         get{
+            if(this.Count==0) return string.Empty;
             var ListString=this.ListString;
             ListString.Clear();
             this[0].Consoleに出力(ListString);

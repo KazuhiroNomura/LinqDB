@@ -41,7 +41,7 @@ public sealed class Optimizer:IDisposable {
     /// pは要素数2の匿名型かValueTule&lt;,>
     /// </summary>
     //private static Expression AndAlsoで繋げる(Expression? predicate,Expression e) => predicate is null ? e : Expression.AndAlso(predicate,e);
-    private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
+    //private readonly ExpressionEqualityComparer _ExpressionEqualityComparer;
     private readonly Generic.List<ParameterExpression> ループ跨ぎParameters = new();
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
@@ -50,7 +50,7 @@ public sealed class Optimizer:IDisposable {
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
     private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
     private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
-    public readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
+    private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
     private readonly 変換_インラインループ独立 _変換_インラインループ独立;
     private readonly 取得_ラムダを跨ぐParameter 取得ラムダを跨ぐParameter;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
@@ -113,6 +113,7 @@ public sealed class Optimizer:IDisposable {
             this._作成_DynamicAssembly.DispParameter=value;
         }
     }
+    public string Analize=>this._変換_Stopwatchに埋め込む.Analize;
     /// <summary>
     /// コンストラクタ
     /// </summary>
@@ -137,7 +138,7 @@ public sealed class Optimizer:IDisposable {
             }
         );
         var 変換_旧Parameterを新Expression1 = new 変換_旧Parameterを新Expression1(作業配列);
-        var ExpressionEqualityComparer = this._ExpressionEqualityComparer=new();
+        var ExpressionEqualityComparer = new ExpressionEqualityComparer();
         //TSQLでは1度だけnewすればいいが
         var 判定_InstanceMethodか = this.判定InstanceMethodか=new(ExpressionEqualityComparer);
         this._変換_TSqlFragment正規化=new(ScriptGenerator);
@@ -458,7 +459,8 @@ public sealed class Optimizer:IDisposable {
             this._変換_局所Parameterの先行評価.IsInline=value;
         }
     }
-    public bool IsGenerateAssembly { get; set; } = true;
+    public bool IsProfiling{ get; set; }
+    public bool IsGenerateAssembly { get; set; }
     /// <summary>
     /// 式木を最適化してコンパイルしてデリゲートを作る。
     /// </summary>
@@ -1287,7 +1289,9 @@ public sealed class Optimizer:IDisposable {
         var Lambda06 = this._変換_局所Parameterの先行評価.実行(Lambda05);
         //List計測.Clear();
         //this.List辺.Clear();
-        var Lambda07 = this._変換_Stopwatchに埋め込む.実行(Lambda06);
+        var Lambda07=Lambda06;
+        if(this.IsProfiling)
+            Lambda07=this._変換_Stopwatchに埋め込む.実行(Lambda07);
         //Lambda07=Lambda06;
         //Lambda07=Lambda06;
         //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);

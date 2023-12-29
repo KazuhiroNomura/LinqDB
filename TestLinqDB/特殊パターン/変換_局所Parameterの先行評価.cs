@@ -188,7 +188,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 p
             )
         );
-        Trace.WriteLine(this.Optimizer._変換_Stopwatchに埋め込む.Analize);
     }
     [Fact]public void Condition1(){
         var p = Expression.Parameter(typeof(bool), "p");

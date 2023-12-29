@@ -1,7 +1,7 @@
 ﻿using Expression = System.Linq.Expressions.Expression;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_Stopwatchに埋め込む : 共通{
-    protected override テストオプション テストオプション=>テストオプション.ローカル実行;
+    protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;//|テストオプション.プロファイラ;
     private class 時間計測{
         public bool Method(int x){
             Thread.Sleep(100);
