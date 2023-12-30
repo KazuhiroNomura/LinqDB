@@ -543,9 +543,10 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
             )
         );
     }
-    protected override Expression Conditional(ConditionalExpression Conditional0){
+    #if false
+    protected override Expression Conditional(ConditionalExpression Conditional0) {
         //var 親演算計測=this.演算計測;
-        var 親子演算計測= this.計測する前処理演算(Conditional0,nameof(ExpressionType.Conditional));
+        var 親子演算計測 = this.計測する前処理演算(Conditional0,nameof(ExpressionType.Conditional));
         var List子演算 = 親子演算計測.子演算計測.List子演算;
         var Conditional0_IfTest = Conditional0.Test;
         var Conditional0_IfTrue = Conditional0.IfTrue;
@@ -590,6 +591,70 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
             //return Conditional2_IfTrueFalse;
         }
     }
+#else
+    protected override Expression Conditional(ConditionalExpression Conditional0){
+        //var 親子演算計測= this.仮想ノード前処理演算(Conditional0,nameof(ExpressionType.Conditional));
+        ref var ref_制御計測=ref this.制御計測;
+        int 制御番号1;
+        if(ref_制御計測 is null)
+            制御番号1=++this.制御番号;
+        else
+            制御番号1=this.制御番号;//上の制御計測.制御番号;
+        //var 親の演算計測 = this.演算計測;
+        var 子演算計測=new 計測Label(制御番号1,"Condition","");
+        if(ref_制御計測 is null)
+            ref_制御計測=子演算計測;
+        var 親演算計測=this.演算計測;
+        if(親演算計測 is not null)
+            親演算計測.List子演算.Add(子演算計測);
+        this.演算計測=子演算計測;
+        List計測.Add(子演算計測);
+        //return 親の演算計測;
+        var 親子演算計測 = ((計測? 親演算計測,計測 子演算計測))(親演算計測,子演算計測);
+
+        
+        
+        var List子演算 = 親子演算計測.子演算計測.List子演算;
+        var Conditional0_IfTest = Conditional0.Test;
+        var Conditional0_IfTrue = Conditional0.IfTrue;
+        var Conditional0_IfFalse = Conditional0.IfFalse;
+        var 演算計測 = this.演算計測!;
+
+        var Conditional1_Test = this.Traverse(Conditional0_IfTest);
+        var Test計測0 = List子演算[^1];
+        Test計測0.Value=$"{Conditional0_IfTest}";
+        var Test計測1 = new 仮想ノード(Test計測0,"→");
+        //Debug.Assert(this.制御番号==BeginTest.制御番号);
+        //EndTest.Value=BeginTest.Value;
+        Test計測0.List子演算.Add(Test計測1);
+        var EndCondition = new 仮想ノード("←");
+        //var List制御計測 = this.List制御計測;
+        var Conditional1_IfTrue = TrueFalse共通(Conditional0_IfTrue,"True:");
+        var Conditional1_IfFalse = TrueFalse共通(Conditional0_IfFalse,"False:");
+        //List制御計測.Add(this.制御計測=EndCondition);
+        List子演算.Add(EndCondition);
+        EndCondition.制御番号=++this.制御番号;
+        this.制御計測=EndCondition;
+        this.演算計測=親子演算計測.親演算計測;
+        var 計測Expression = Expression.Constant(子演算計測);
+        var Count=Expression.Call(計測Expression,計測Label.Reflection.Count);
+        Conditional1_Test=Expression.Block(Count,Conditional1_Test);
+        return Expression.Condition(Conditional1_Test,Conditional1_IfTrue,Conditional1_IfFalse,Conditional0.Type);
+        Expression TrueFalse共通(Expression Conditional0_IfTrueFalse,string Name) {
+            this.演算計測=演算計測;
+            this.制御計測=null;
+            var Conditional1_IfTrueFalse = this.Traverse(Conditional0_IfTrueFalse);
+            var TrueFalse計測0 = List子演算[^1];
+            var TrueFalse計測1 = new 仮想ノード(TrueFalse計測0,"→");
+            TrueFalse計測0.List子演算.Add(TrueFalse計測1);
+            計測.接続(Test計測1,TrueFalse計測0);
+            計測.接続(TrueFalse計測1,EndCondition);
+            //List制御計測.Add(TrueFalse計測0);
+            return Conditional1_IfTrueFalse;
+            //return Conditional2_IfTrueFalse;
+        }
+    }
+    #endif
     protected override Expression Switch(SwitchExpression Switch0){
         var 計測=this.計測する前処理演算(Switch0,nameof(ExpressionType.Switch));
         var List計測=this.演算計測!.List子演算;
@@ -643,7 +708,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
         else
             制御番号1=this.制御番号;//上の制御計測.制御番号;
         //var 親の演算計測 = this.演算計測;
-        var 子演算計測=new 計測Label(制御番号1,Goto0.Kind.ToString(),"231321");
+        var 子演算計測=new 計測Label(制御番号1,Goto0.Kind.ToString(),"");
         if(ref_制御計測 is null)
             ref_制御計測=子演算計測;
         var 親演算計測=this.演算計測;
@@ -670,8 +735,9 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
         var Goto0_Target = Goto0.Target;
         //var 親子演算計測 =new 計測Label(++this.制御番号,Goto0.Kind.ToString(),$"({Goto0.Value}){Goto0_Target.Name}→");
         //var List子演算 = 親子演算計測.子演算計測.List子演算;
+        //this.演算計測=子演算計測;
         var Goto1_Value=this.TraverseNullable(Goto0.Value);
-        //var List子演算 = 親演算計測!.List子演算;
+        //var Goto1_Value演算 = this.演算計測.List子演算[^1];
         var ジャンプ元計測 = 子演算計測;//this.制御計測!;
         if(!Dictionary_LabelTarget_辺.TryGetValue(Goto0_Target,out var ジャンプ先計測Label)) {
             ジャンプ先計測Label=new 計測Label(-1,"Goto時に定義された仮のLabel",$"({Goto0.Value}){Goto0_Target.Name}");

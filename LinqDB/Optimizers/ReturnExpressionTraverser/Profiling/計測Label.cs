@@ -17,14 +17,15 @@ public class 計測Label:計測{
     public 計測Label(int 制御番号):base(制御番号){
     }
     private readonly Stopwatch Stopwatch=new();
-    private long 呼出回数;
-    internal override long 部分ms=>this.Stopwatch.ElapsedMilliseconds;
+    internal override long 部分100ns=>0;
     private void Count(){
         this.呼出回数++;
     }
-    internal override void 割合計算(long 全体ms){
-        foreach(var 子 in this.List子演算)
-            子.割合計算(全体ms);
+    internal override long 割合計算(long 全体100ns){
         this.数値表=$"│      │      │    │    │    │{this.呼出回数,10}│";
+        var 子の部分100ns合計 = 0L;
+        foreach(var 子 in this.List子演算)
+            子の部分100ns合計+=子.割合計算(全体100ns);
+        return 子の部分100ns合計;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -65,6 +66,7 @@ public abstract class 計測{
             Debug.Assert(value is not null);
         }
     }
+    private protected long 呼出回数{get;set;}
     //internal string Value{get;set;}
     internal string? NameValue{
         get{
@@ -376,9 +378,43 @@ public abstract class 計測{
             List計測[List計測_Count_1].制御フロー(列Array,List制御,制御罫線);
         }
     }
-    internal abstract long 部分ms{get;}
-    internal abstract void 割合計算(long 全体ms);
-    internal void 割合計算()=>this.割合計算(this.部分ms);
+    internal abstract long 部分100ns{get;}
+    internal virtual long 割合計算(long 全体100ns){
+        var 子の部分100ns合計=this.部分100ns;
+        var 部分100ns=this.部分100ns;
+        foreach(var 子 in this.List子演算)
+            子.割合計算(全体100ns);
+        var 節100ns=部分100ns;
+        var sb=new StringBuilder();
+        sb.Append('│');
+        共通100ns(部分100ns);
+        共通100ns(節100ns);
+        共通割合(部分100ns,全体100ns);
+        共通割合(節100ns,全体100ns);
+        共通割合(節100ns,部分100ns);
+        var 呼出回数=this.呼出回数;
+        if(呼出回数>=10000000000)
+            sb.Append("MAX       ");
+        else
+            sb.Append($"{呼出回数,10}");
+        sb.Append('│');
+        this.数値表=sb.ToString();
+        return 子の部分100ns合計;
+        void 共通100ns(long Value){
+            sb.Append($"{Value/10000,6}");
+            sb.Append('│');
+        }
+        void 共通割合(double 分子100ns,double 分母100ns){
+            if(分母100ns==0){
+                sb.Append("    ");
+            } else{
+                sb.Append(((double)分子100ns/分母100ns).ToString("0.00",CultureInfo.InvariantCulture));
+            }
+            sb.Append('│');
+        }
+    }
+    //internal abstract long 割合計算(long 全体100ns);
+    internal void 割合計算()=>this.割合計算(this.部分100ns);
     /// <summary>
     /// 計測開始
     /// </summary>
