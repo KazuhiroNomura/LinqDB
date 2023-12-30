@@ -1,126 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser" Collapsed="true">
-    <Position X="11.5" Y="2" Width="2" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.仮想ノード">
+    <Position X="5.5" Y="12.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>IC4UQISIEZpqAKtB4IUHImogiKAyICwhGVEECSR+QKg=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs</FileName>
+      <HashCode>AABAAAAAACAAAAAAAAAAAAAAAIAAAAAAIAQAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\計測.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.ReturnExpressionTraverser_Quoteを処理しない" Collapsed="true">
-    <Position X="3.75" Y="3.25" Width="2.75" />
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.計測しない">
+    <Position X="7" Y="9" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser_Quoteを処理しない.cs</FileName>
+      <HashCode>AABAAAAAACAAAAAAAAAAAAAAAIAAAAAAIAQAAAAAAAA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\計測.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_Stopwatchに埋め込む" Collapsed="true">
-    <Position X="9" Y="3.25" Width="2" />
-    <TypeIdentifier>
-      <HashCode>Ii4EQISIAZJKAqoB4IUnICAggIAzIA0hCEEFCSRGRCQ=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_インラインループ" Collapsed="true">
-    <Position X="11.75" Y="3.25" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>CQgAQICKAAIAAAAAIIgAAABggAAAABAhQACAAJCIoAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_インラインループ.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Expressionを新Expression1" Collapsed="true">
-    <Position X="14.25" Y="3.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAEABAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Expressionを新Expression1.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression1" Collapsed="true">
-    <Position X="17.5" Y="3.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAAAAQAAACAAAAAAAAAAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression1.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_旧Parameterを新Expression2" Collapsed="true">
-    <Position X="20.75" Y="3.25" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAIA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_旧Parameterを新Expression2.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価">
-    <Position X="2" Y="4.75" Width="2.75" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.計測">
+    <Position X="3.75" Y="1" Width="2.25" />
     <NestedTypes>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.変換_二度出現したExpression" Collapsed="true">
+      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.計測.Reflection" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺を作る" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺に二度出現したExpressionを作る" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.辺から二度出現したExpressionを取得" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.判定_左辺Expressionsが含まれる" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価.List辺" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</NewMemberFileName>
+          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\計測.cs</NewMemberFileName>
         </TypeIdentifier>
       </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>ACgEAMQAIBAIAAAAAAAAAACAAQCAAAAAAADAAAAAAAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_局所Parameterの先行評価.cs</FileName>
+      <HashCode>AIBAAAAAACABABAAgATIAAQAQIEQAQAkIAQgCBBAABA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\計測.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価">
-    <Position X="5.5" Y="4.75" Width="2.75" />
-    <Compartments>
-      <Compartment Name="Nested Types" Collapsed="false" />
-    </Compartments>
-    <NestedTypes>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.変換_先行評価式" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-      <Enum Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.場所" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.変換_跨ぎParameterの先行評価.取得_先行評価式" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
+  <Class Name="LinqDB.Optimizers.ReturnExpressionTraverser.計測する右辺値">
+    <Position X="2" Y="9.25" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAgEQIAAAAAAAAAAAACAAAAAEACAAAAAAACEAAgAAAA=</HashCode>
-      <FileName>Optimizers\ReturnExpressionTraverser\変換_跨ぎParameterの先行評価.cs</FileName>
+      <HashCode>AABAAAAAACAAAAAAAAAgAAAAAIAAAAAAIAQAAAAAABA=</HashCode>
+      <FileName>Optimizers\ReturnExpressionTraverser\計測.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Yu Gothic UI" Size="9" />

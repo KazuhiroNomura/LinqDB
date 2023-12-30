@@ -1682,6 +1682,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 Dictionary_Name_Label.Add(Loop_BreakLabel,BreakLabel);
                 this.VoidTraverse(Loop.Body);
                 I.Br(ContinueLabel);
+                this.Default(Loop.BreakLabel.Type);
                 I.MarkLabel(BreakLabel);
                 Dictionary_Name_Label.Remove(Loop_BreakLabel);
             } else{
@@ -1697,6 +1698,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             Dictionary_Name_Label.Add(Loop_BreakLabel,BreakLabel);
             this.VoidTraverse(Loop.Body);
             I.Br(ContinueLabel);
+            this.Default(Loop.BreakLabel.Type);
             I.MarkLabel(BreakLabel);
             Dictionary_Name_Label.Remove(Loop_BreakLabel);
         } else{

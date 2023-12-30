@@ -5,7 +5,7 @@
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_WhereからLookup : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化;
+    protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行;
     struct OI
     {
         public readonly int o, i;

@@ -5,7 +5,6 @@ using Linq = System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Helpers;
-using Sets=LinqDB.Sets;
 using LinqDB.Sets.Exceptions;
 using Collections = System.Collections;
 using LinqDB.Enumerables;

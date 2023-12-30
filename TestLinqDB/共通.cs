@@ -25,7 +25,7 @@ public enum テストオプション{
     ローカル実行                                      =0b0001000000,
     リモート実行                                      =0b0000100000,
     ファイルが無ければシリアライズ有ればデシリアライズ=0b0000010000,
-    最適化                                            =0b0000001000,
+    式木の最適化を試行                                            =0b0000001000,
     インライン                                        =0b0000000100,
     アセンブリ保存                                    =0b0000000010,
     プロファイラ                                      =0b0000000001,
@@ -331,7 +331,7 @@ public abstract class 共通{
         }
     }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
-        if((テストオプション.最適化&this.テストオプション)!=0){
+        if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;
@@ -414,7 +414,7 @@ public abstract class 共通{
     /// <param name="input"></param>
     protected void Expression実行AssertEqual<T,TResult>(Expression<Func<T,TResult>> input){
         var 引数=default(T)!;
-        if((テストオプション.最適化&this.テストオプション)!=0){
+        if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
                 Optimizer.IsInline=true;

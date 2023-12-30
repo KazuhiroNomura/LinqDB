@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
+// ReSharper disable All
 namespace TestLinqDB.仕様;
 public class Expressions:共通{
     protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
@@ -8,6 +9,11 @@ public class Expressions:共通{
         var Label=Expression.Label(typeof(decimal),"L0");
         var Goto=Expression.Goto(Label,Expression.Constant(3m));
         Assert.Equal(typeof(void),Goto.Type);
+    }
+    [Fact]
+    public void LoopはVoidになる(){
+        var Loop=Expression.Loop(Expression.Constant(3m));
+        Assert.Equal(typeof(void),Loop.Type);
     }
     [Fact]
     public void Loopはオペランドに使える(){

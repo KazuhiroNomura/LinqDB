@@ -138,6 +138,11 @@
     &lt;/Test&gt;&#xD;
   &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=150e9873_002D394b_002D4df3_002D83c5_002D2ea27c7acaed/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Goto0" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::9C144205-1B32-4F7F-8507-71653455E70E::net8.0::TestLinqDB.Optimizers.ReturnExpressionTraverser.変換_Stopwatchに埋め込む.Goto0&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	

@@ -12,7 +12,7 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
     public class 取得_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
+        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         private void TraceWrite(Expression Expression){
             var Optimizer=this.Optimizer;
             Optimizer.IsInline=true;
@@ -470,7 +470,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
     }
     public class 変換_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.最適化;
+        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         [Fact]
         public void Block(){
             var @int=Expression.Parameter(typeof(int),"a");

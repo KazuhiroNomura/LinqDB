@@ -7,7 +7,6 @@ using LinqDB.Helpers;
 using LinqDB.Sets;
 using Linq=System.Linq;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
-using static Common;
 partial class 変換_メソッド正規化_取得インライン不可能定数{
     protected Expression GroupJoin(MethodCallExpression MethodCall0) {
         var MethodCall0_Method = MethodCall0.Method;

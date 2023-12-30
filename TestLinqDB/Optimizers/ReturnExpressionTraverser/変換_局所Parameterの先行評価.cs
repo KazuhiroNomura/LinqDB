@@ -9,7 +9,7 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_局所Parameterの先行評価 : 共通{
-    protected override テストオプション テストオプション=>テストオプション.最適化;
+    protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
     [Fact]
     public void 変形確認1(){
         var p = Expression.Parameter(typeof(decimal));
@@ -84,7 +84,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         ////ラムダを跨ぐ
     }
     public class 辺を作る : 共通{
-        protected override テストオプション テストオプション=>テストオプション.最適化;
+        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]public void Loop無限(){
             var Label = Expression.Label();
             var _5 = this.Optimizer.Lambda最適化(
@@ -578,7 +578,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class 変換_二度出現したExpression : 共通{
-        protected override テストオプション テストオプション=>テストオプション.最適化;
+        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]
         public void Traverse()
         {
@@ -1062,7 +1062,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class 判定_左辺Expressionが含まれる : 共通{
-        protected override テストオプション テストオプション=>テストオプション.最適化;
+        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         //[Fact]
         //public void Label(){
         //    {
@@ -1352,7 +1352,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class List辺 : 共通{
-        protected override テストオプション テストオプション=>テストオプション.最適化;
+        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]
         public void 親()
         {

@@ -25,8 +25,9 @@ using SQLServer = Microsoft.SqlServer.TransactSql.ScriptDom;
 using static LinqDB.Optimizers.Common;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.VoidTSqlFragmentTraverser;
-using Expression=System.Linq.Expressions.Expression;
+using Expression = System.Linq.Expressions.Expression;
 using System.Collections.Generic;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 // ReSharper disable All
 namespace LinqDB.Optimizers;
 using Generic = System.Collections.Generic;
@@ -64,7 +65,7 @@ public sealed class Optimizer:IDisposable {
     private readonly List計測 List計測 = new();
     //private readonly A計測 Top辺;
     //private readonly List計測 List辺= new();
-    private readonly Dictionary<LabelTarget,A計測> Dictionary_LabelTarget_辺=new();
+    private readonly Dictionary<LabelTarget,計測> Dictionary_LabelTarget_辺=new();
     //private readonly ConstantExpression ConstantList計測;
     private readonly StringBuilder sb=new();
     private Generic.Dictionary<ConstantExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryConstant {

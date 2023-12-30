@@ -2,6 +2,7 @@
 using System.Reflection;
 using LinqDB.Optimizers.Comparer;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 namespace TestLinqDB.特殊パターン;
 public class フロー: 共通
 {
@@ -82,9 +83,9 @@ public class フロー: 共通
             var L1=new 計測する右辺値(1,"Label","L1");
             var L2=new 計測する右辺値(2,"Label","L2");
             var L3=new 計測する右辺値(3,"Label","L3");
-            A計測.接続(L0,L2);
-            A計測.接続(L2,L1);
-            A計測.接続(L1,L3);
+            計測.接続(L0,L2);
+            計測.接続(L2,L1);
+            計測.接続(L1,L3);
             var l=new List計測{L0,L1,L2,L3};
             Trace.WriteLine(l.Analize);
         }
@@ -482,12 +483,12 @@ public class フロー: 共通
             var L4=new 計測する右辺値(4,"Label","L4");
             var L5=new 計測する右辺値(5,"Label","L5");
 
-            A計測.接続(L0,L1);
-            A計測.接続(L0,L3);
-            A計測.接続(L1,L5);
-            A計測.接続(L2,L4);
-            A計測.接続(L3,L4);
-            A計測.接続(L4,L5);
+            計測.接続(L0,L1);
+            計測.接続(L0,L3);
+            計測.接続(L1,L5);
+            計測.接続(L2,L4);
+            計測.接続(L3,L4);
+            計測.接続(L4,L5);
             var l=new List計測{
                 L0,
                 L1,
@@ -704,7 +705,7 @@ public class フロー: 共通
         {
             var L0=new 計測する右辺値(0,"Label","L0");
             var L1=new 計測する右辺値(1,"Label","L1");
-            A計測.接続(L0,L1);
+            計測.接続(L0,L1);
             var l=new List計測{L0,L1};
             Trace.WriteLine(l.Analize);
         }
@@ -733,10 +734,10 @@ public class フロー: 共通
             var L1=new 計測する右辺値(1,"case","1:");
             var L2=new 計測する右辺値(2,"case","2:");
             var L3=new 計測する右辺値(3,"end switch","");
-            A計測.接続(L0,L1);
-            A計測.接続(L0,L2);
-            A計測.接続(L1,L3);
-            A計測.接続(L2,L3);
+            計測.接続(L0,L1);
+            計測.接続(L0,L2);
+            計測.接続(L1,L3);
+            計測.接続(L2,L3);
             var l=new List計測{L0,L1,L2,L3};
             Trace.WriteLine(l.Analize);
         }
@@ -760,10 +761,10 @@ public class フロー: 共通
             var L1=new 計測する右辺値(1,"case","1:");
             var L2=new 計測する右辺値(2,"case","2:");
             var L3=new 計測する右辺値(3,"end switch","");
-            A計測.接続(L0,L1);
-            A計測.接続(L0,L2);
-            A計測.接続(L1,L3);
-            A計測.接続(L2,L3);
+            計測.接続(L0,L1);
+            計測.接続(L0,L2);
+            計測.接続(L1,L3);
+            計測.接続(L2,L3);
             var l=new List計測{L0,L1,L2,L3};
             Trace.WriteLine(l.Analize);
         }
@@ -778,12 +779,12 @@ public class フロー: 共通
             var L2=new 計測する右辺値(2,"case","2:");
             var L3=new 計測する右辺値(3,"case","3:");
             var L4=new 計測する右辺値(4,"end switch","");
-            A計測.接続(L0,L1);
-            A計測.接続(L0,L2);
-            A計測.接続(L0,L3);
-            A計測.接続(L1,L4);
-            A計測.接続(L2,L4);
-            A計測.接続(L3,L4);
+            計測.接続(L0,L1);
+            計測.接続(L0,L2);
+            計測.接続(L0,L3);
+            計測.接続(L1,L4);
+            計測.接続(L2,L4);
+            計測.接続(L3,L4);
             var l=new List計測{L0,L1,L2,L3,L4};
             Trace.WriteLine(l.Analize);
         }

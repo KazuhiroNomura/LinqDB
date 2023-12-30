@@ -6,5 +6,5 @@
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
 public class 共通 : TestLinqDB.共通{
-    protected sealed override テストオプション テストオプション{get;}=テストオプション.最適化;
+    protected sealed override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行;
 }

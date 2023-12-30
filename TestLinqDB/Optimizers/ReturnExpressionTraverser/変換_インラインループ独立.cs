@@ -7,7 +7,7 @@ using Types;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_インラインループ独立 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.最適化|テストオプション.インライン;
+    protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン;
     [Fact]
     public void Inline()
     {

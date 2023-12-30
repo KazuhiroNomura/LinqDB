@@ -1,6 +1,7 @@
 ﻿using LinqDB.Optimizers;
 using LinqDB.Optimizers.Comparer;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 using LinqDB.Sets;
 
 using MemoryPack;
@@ -263,7 +264,7 @@ public class 特定パターン:共通{
     }
     private void 変換_Stopwatchに埋め込む(Expression Expression){
         var List計測=new List計測();
-        var 変換_Stopwatchに埋め込む=new 変換_Stopwatchに埋め込む(new 作業配列(),List計測,new Dictionary<LabelTarget,A計測>());
+        var 変換_Stopwatchに埋め込む=new 変換_Stopwatchに埋め込む(new 作業配列(),List計測,new Dictionary<LabelTarget,計測>());
 
         変換_Stopwatchに埋め込む.実行(Expression);
         //Lambda07=Lambda06;
