@@ -693,9 +693,12 @@ internal class VoidExpressionTraverser {
     /// <param name="Try"></param>
     protected virtual void Try(TryExpression Try) {
         this.Traverse(Try.Body);
-        foreach(var Try_Handler in Try.Handlers)
+        foreach(var Try_Handler in Try.Handlers){
+            this.TraverseNulllable(Try_Handler.Filter);
             this.Traverse(Try_Handler.Body);
+        }
         this.TraverseNulllable(Try.Finally);
+        this.TraverseNulllable(Try.Fault);
     }
     /// <summary>
     /// TypeBinaryExpressionの走査

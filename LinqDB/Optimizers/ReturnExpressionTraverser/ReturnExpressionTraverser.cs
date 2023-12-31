@@ -972,10 +972,10 @@ public class ReturnExpressionTraverser {
         var Try1_Body=this.Traverse(Try0_Body);
         if(Try0_Body!=Try1_Body)
             変化したか=true;
-        var Try0_Finally=Try0.Finally;
-        var Try1_Finally=this.TraverseNullable(Try0_Finally);
-        if(Try0_Finally!=Try1_Finally)
-            変化したか=true;
+        //var Try0_Finally=Try0.Finally;
+        //var Try1_Finally=this.TraverseNullable(Try0_Finally);
+        //if(Try0_Finally!=Try1_Finally)
+        //    変化したか=true;
         for(var a=0;a<Try0_Handlers_Count;a++) {
             var Try0_Handler=Try0_Handlers[a];
             Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
@@ -1001,6 +1001,10 @@ public class ReturnExpressionTraverser {
             }
             Try1_Handlers[a]=Try1_Handler;
         }
+        var Try0_Finally=Try0.Finally;
+        var Try1_Finally=this.TraverseNullable(Try0_Finally);
+        if(Try0_Finally!=Try1_Finally)
+            変化したか=true;
         if(Try0.Fault is not null){
             Debug.Assert(Try0_Finally is null);
             var Try0_Fault=Try0.Fault;

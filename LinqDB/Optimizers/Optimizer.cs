@@ -448,9 +448,10 @@ public sealed class Optimizer:IDisposable {
     private Delegate PrivateDelegate(LambdaExpression Lambda) {
         var Lambda0 = this.Lambda最適化(Lambda);
         this.取得ラムダを跨ぐParameter.実行(Lambda0);
-        return this.IsGenerateAssembly
-            ? this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda0)
-            : this.DynamicMethod(typeof(object),Lambda0);
+        if(this.IsGenerateAssembly)
+            return this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda0);
+        else
+            return this.DynamicMethod(typeof(object),Lambda0);
     }
 
     public bool IsInline {

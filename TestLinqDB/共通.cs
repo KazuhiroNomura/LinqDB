@@ -330,6 +330,14 @@ public abstract class 共通{
             Trace.WriteLine(Optimizer.Analize);
         }
     }
+    private static(T result,Exception? ex) 例外と戻り値<T>(Func<T> func){
+        T result=default;
+        try{
+            return(func(),default);
+        } catch(Exception ex){
+            return(default,ex);
+        }
+    }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
         if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
@@ -342,7 +350,7 @@ public abstract class 共通{
         }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
-            var expected = 標準();
+            var expected =例外と戻り値(()=>標準());
             var 汎用Comparer=new 汎用Comparer();
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
@@ -350,8 +358,13 @@ public abstract class 共通{
             } else{
                 Optimizer.IsInline=false;
             }
-            var actual=Optimizer.CreateDelegate(input)();
-            Assert.Equal(expected,actual,汎用Comparer);
+            var actual=例外と戻り値(()=>Optimizer.CreateDelegate(input)());
+            if(expected.ex is null&&actual.ex is null)
+                Assert.Equal(expected.result,actual.result,汎用Comparer);
+            else{
+                Assert.Equal(expected.ex.GetType(),actual.ex.GetType());
+                Assert.Equal(expected.ex.Message,actual.ex.Message);
+            }
             Trace.WriteLine(Optimizer.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){

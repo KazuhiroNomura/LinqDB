@@ -448,6 +448,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         else
             return this.ループ起点(Expression,ループの内部処理);
     }
+    private static readonly ConstructorInfo InvalidCastException_ctor=typeof(InvalidCastException).GetConstructor(CommonLibrary.Types_String)!;
     protected Expression ループ展開(MethodCallExpression MethodCall0,ループの内部処理 ループの内部処理) {
         var Method = MethodCall0.Method;
         var GenericMethodDefinition = GetGenericMethodDefinition(Method);
@@ -464,12 +465,28 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 Debug.Assert(Reflection.ExtensionSet.Cast==GenericMethodDefinition||Reflection.ExtensionEnumerable.Cast==GenericMethodDefinition);
                 return this.ループ展開(
                     MethodCall0_Arguments[0],
-                    argument => ループの内部処理(
-                        Expression.Convert(
-                            argument,
-                            Method.GetGenericArguments()[0]
-                        )
-                    )
+                    argument=>{
+                        var 変換先Type=Method.GetGenericArguments()[0];
+                        return Expression.IfThenElse(
+                            Expression.TypeIs(
+                                argument,
+                                変換先Type
+                            ),
+                            ループの内部処理(
+                                Expression.Convert(
+                                    argument,
+                                    変換先Type
+                                )
+                            ),
+                            Expression.Throw(
+                                Expression.New(
+                                    InvalidCastException_ctor,
+                                    Expression.Constant($"Unable to cast object of type '{argument.Type.FullName}' to type '{変換先Type.FullName}'.")
+                                ),
+                                argument.Type
+                            )
+                        );
+                    }
                 );
             }
             case nameof(Linq.Enumerable.DefaultIfEmpty): {
@@ -882,15 +899,112 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         var 変換元Type = argument.Type;
                         var 変換先Type = Method.GetGenericArguments()[0];
                         Debug.Assert(変換元Type==IEnumerable1のT(MethodCall0_Arguments_0.Type));
+                        //(object)int
+                        if(変換先Type.IsValueType){
+                            if(変換元Type.IsValueType){
+                                //(struct1)struct0
+                                return ループの内部処理(
+                                    Expression.Convert(
+                                        argument,
+                                        変換先Type
+                                    )
+                                );
+                            } else{
+                                //(int)object
+                                return Expression.IfThenElse(
+                                    Expression.TypeIs(
+                                        argument,
+                                        変換先Type
+                                    ),
+                                    ループの内部処理(
+                                        Expression.Convert(
+                                            argument,
+                                            変換先Type
+                                        )
+                                    ),
+                                    Default_void
+                                );
+                            }
+                        } else{
+                            if(変換元Type.IsValueType){
+                                return ループの内部処理(
+                                    Expression.Convert(
+                                        argument,
+                                        変換先Type
+                                    )
+                                );
+                            } else{
+                                //(object2)object1
+                                return Expression.IfThenElse(
+                                    Expression.TypeIs(
+                                        argument,
+                                        変換先Type
+                                    ),
+                                    ループの内部処理(
+                                        Expression.Convert(
+                                            argument,
+                                            変換先Type
+                                        )
+                                    ),
+                                    Default_void
+                                );
+                            }
+                        }
+                        //if(変換先Type.IsValueType){
+                        //} else{
+                        //    var t=Expression.Parameter(変換先Type,"OfType");
+                        //    return Expression.Block(
+                        //        作業配列.Parameters設定(t),
+                        //        Expression.Assign(
+                        //            t,
+                        //            Expression.TypeAs(
+                        //                argument,
+                        //                変換先Type
+                        //            )
+                        //        ),
+                        //        Expression.IfThenElse(
+                        //            Expression.NotEqual(
+                        //                t,
+                        //                Constant_null
+                        //            ),
+                        //            ループの内部処理(t),
+                        //            Default_void
+                        //        )
+                        //    );
+                        //}
                         //if(
                         //    変換元Type.IsNullable()&&変換元Type.GetGenericArguments()[0].IsAssignableFrom(変換先Type)||
                         //    変換元Type.IsAssignableFrom(変換先Type)
                         //) {
                         //    //int? is object
+                        //    var t=Expression.Parameter(変換先Type,"OfType");
+                        //    return Expression.Block(
+                        //        作業配列.Parameters設定(t),
+                        //        Expression.Assign(
+                        //            t,
+                        //            Expression.TypeAs(
+                        //                argument,
+                        //                変換先Type
+                        //            )
+                        //        ),
+                        //        Expression.IfThenElse(
+                        //            Expression.Equal(
+                        //                t,
+                        //                Constant_null
+                        //            ),
+                        //            ループの内部処理(t),
+                        //            Default_void
+                        //        )
+                        //    );
+                        //} else{
+
+                        //}
+                        //if(変換元Type.IsNullable()&&変換先Type.IsAssignableFrom(変換元Type.GetGenericArguments()[0])) {
+                        //    //int? is object
                         //    return Expression.IfThenElse(
-                        //        Expression.TypeIs(
+                        //        Expression.Property(
                         //            argument,
-                        //            変換先Type
+                        //            nameof(Nullable<int>.HasValue)
                         //        ),
                         //        ループの内部処理(
                         //            Expression.Convert(
@@ -900,33 +1014,17 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         //        ),
                         //        Default_void
                         //    );
-                        //} else 
-                        if(変換元Type.IsNullable()&&変換先Type.IsAssignableFrom(変換元Type.GetGenericArguments()[0])) {
-                            //int? is object
-                            return Expression.IfThenElse(
-                                Expression.Property(
-                                    argument,
-                                    nameof(Nullable<int>.HasValue)
-                                ),
-                                ループの内部処理(
-                                    Expression.Convert(
-                                        argument,
-                                        変換先Type
-                                    )
-                                ),
-                                Default_void
-                            );
-                        }else{
-                            Debug.Assert(変換先Type.IsAssignableFrom(変換元Type));
-                            return ループの内部処理(
-                                Expression.Convert(
-                                    argument,
-                                    変換先Type
-                                )
-                            );
-                        //} else {
-                        //    return Default_void;
-                        }
+                        //}else{
+                        //    Debug.Assert(変換先Type.IsAssignableFrom(変換元Type));
+                        //    return ループの内部処理(
+                        //        Expression.Convert(
+                        //            argument,
+                        //            変換先Type
+                        //        )
+                        //    );
+                        ////} else {
+                        ////    return Default_void;
+                        //}
                     }
                 );
             }

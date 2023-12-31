@@ -135,9 +135,22 @@ internal sealed class 検証_Parameterの使用状態:VoidExpressionTraverser_Qu
             //    this.DictionaryCローカル読込回数.Add(Try_Handler_Variable,0);
             //}
             this.Traverse(Try_Handler.Body);
+            this.PrivateTryFilterCatch(Try_Handler);
             ListスコープParameter.RemoveAt(ListスコープParameter.Count-1);
         }
         this.TraverseNulllable(Try.Finally);
+    }
+    private void PrivateTryFilterCatch(CatchBlock Try_Handler){
+        if(Try_Handler.Variable is not null){
+            var ListスコープParameter = this.ListスコープParameter;
+            var Try_Handler_Variable=Try_Handler.Variable;
+            ListスコープParameter.Add(Try_Handler_Variable);
+            this.Traverse(Try_Handler.Body);
+            ListスコープParameter.RemoveAt(ListスコープParameter.Count-1);
+        } else{
+            this.TraverseNulllable(Try_Handler.Filter);
+            this.Traverse(Try_Handler.Body);
+        }
     }
     protected override void Lambda(LambdaExpression Lambda) {
         var Lambda_Parameters = Lambda.Parameters;
