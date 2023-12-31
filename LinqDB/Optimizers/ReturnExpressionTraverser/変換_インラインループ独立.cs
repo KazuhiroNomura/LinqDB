@@ -860,7 +860,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
             comparer=this.Traverse(MethodCall0_Arguments[2]);
         } else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition) {
             comparer=this.Traverse(MethodCall0_Arguments[3]);
-        } else{
+        }else{
             comparer=null;
         }
         var 作業配列 = this.作業配列;
@@ -870,52 +870,123 @@ internal class 変換_インラインループ独立:変換_インラインル�
             作業配列.GetConstructor(Dictionary_Type,comparer.Type),
             comparer
         );
+        var Parameters=new List<ParameterExpression>();
         var Dictionary = Expression.Parameter(Dictionary_Type,変数名);
+        Parameters.Add(Dictionary);
+        ParameterExpression?index=null;
         var Expression1ループ = this.ループ展開(
             MethodCall0_Arguments[0],
             argument => {
-                var keySelector=this.Traverse(MethodCall0_Arguments[1]);
+                var MethodCall1_Arguments_1=this.Traverse(MethodCall0_Arguments[1]);
                 //if(argument.NodeType==ExpressionType.Parameter)return 共通(argument);
-                var p = Expression.Parameter(argument.Type,$"{変数名}argument");
-                var 作業配列1 = this.作業配列;
-                Expression elementSelector;
-                if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector         ==GenericMethodDefinition||
-                   Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
-                    elementSelector=this.LambdaExpressionを展開1(
-                        this.Traverse(MethodCall0_Arguments[2]),
-                        p
+                var 作業配列1=this.作業配列;
+                Expression? keySelector0=null;
+                Expression? elementSelector0=null;
+                Expression? comparer0=null;
+                //IReadOnlyList<ParameterExpression> Parameters0;
+                ParameterExpression p;
+                ParameterExpression? index=null;
+                if(MethodCall1_Arguments_1 is LambdaExpression keySelector){
+                    var Parameters0=keySelector.Parameters;
+                    Parameters.AddRange(Parameters0);
+                    p=Parameters0[0];
+                    //Expression argument1=(Expression)p;
+                    //var keySelector1=LambdaExpressionを展開1(
+                    //    MethodCall1_Arguments_1,
+                    //    argument1,
+                    //    this.変換_旧Parameterを新Expression1
+                    //);
+                    keySelector0=this.変換_旧Parameterを新Expression1.実行(keySelector.Body,p,argument);
+                    if(Parameters0.Count==1){
+                        if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector==GenericMethodDefinition)
+                            elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
+                        else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector==GenericMethodDefinition)
+                            elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
+                        else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+                            elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
+                            comparer0=this.Traverse(MethodCall0_Arguments[3]);
+                        } else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+                            elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
+                            comparer0=this.Traverse(MethodCall0_Arguments[3]);
+                        }
+                    } else{
+                        if(Reflection.ExtensionEnumerable.ToLookup_indexKeySelector==GenericMethodDefinition)
+                            index=Parameters0[1];
+                        else{
+                            Debug.Assert(Reflection.ExtensionEnumerable.ToLookup_indexKeySelector_comparer==GenericMethodDefinition);
+                            index=Parameters0[1];
+                        }
+                    }
+                } else{
+                    p=Expression.Parameter(argument.Type,$"{変数名}argument");
+                    index=Expression.Parameter(typeof(int),$"{変数名}index");
+                    Parameters.Add(p);
+                    Parameters.Add(index);
+                    Debug.Assert(
+                        Reflection.ExtensionSet.ToLookup_keySelector_elementSelector==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector==GenericMethodDefinition||
+                        Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||
+                        Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition
                     );
-                }else{
-                    elementSelector=p;
+                    elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
+                    if(MethodCall0_Arguments.Count==4) comparer=this.Traverse(MethodCall0_Arguments[3]);
+                    keySelector0=Expression.Invoke(MethodCall1_Arguments_1,argument);
                 }
-                return Expression.Block(
-                    作業配列1.Parameters設定(p),
-                    作業配列1.Expressions設定(
+                Expression elementSelector;
+                if(elementSelector0 is null)
+                    elementSelector=p;
+                else
+                    elementSelector=this.LambdaExpressionを展開1(this.Traverse(elementSelector0),p);
+                if(index is null)
+                    return Expression.Block(
                         Expression.Assign(p,argument),
                         Expression.Call(
                             Dictionary,
                             Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                            this.LambdaExpressionを展開1(
-                                keySelector,
-                                p
-                            ),
+                            keySelector0,
+                            //this.LambdaExpressionを展開1(
+                            //    keySelector0,
+                            //    p
+                            //),
                             elementSelector
                         )
-                    )
-                );
+                    );
+                else
+                    return Expression.Block(
+                        Expression.Assign(p,argument),
+                        Expression.Call(
+                            Dictionary,
+                            Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
+                            keySelector0,
+                            //this.LambdaExpressionを展開1(
+                            //    keySelector0,
+                            //    p
+                            //),
+                            elementSelector
+                        ),
+                        Expression.PostIncrementAssign(index)
+                    );
             }
         );
-        return Expression.Block(
-            作業配列.Parameters設定(Dictionary),
-            作業配列.Expressions設定(
-                Expression.Assign(
-                    Dictionary,
-                    New
-                ),
-                Expression1ループ,
-                Dictionary
-            )
-        );
+        if(index is null)
+            return Expression.Block(
+                Parameters,
+                作業配列.Expressions設定(
+                    Expression.Assign(Dictionary,New),
+                    Expression1ループ,
+                    Dictionary
+                )
+            );
+        else
+            return Expression.Block(
+                Parameters,
+                作業配列.Expressions設定(
+                    Expression.Assign(Dictionary,New),
+                    Expression.Assign(index,Constant_0),
+                    Expression1ループ,
+                    Dictionary
+                )
+            );
     }
     private Expression Count(MethodCallExpression MethodCall0){
         var MethodCall0_Arguments = MethodCall0.Arguments;

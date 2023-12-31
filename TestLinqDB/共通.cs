@@ -331,12 +331,12 @@ public abstract class 共通{
         }
     }
     private static(T result,Exception? ex) 例外と戻り値<T>(Func<T> func){
-        T result=default;
-        try{
-            return(func(),default);
-        } catch(Exception ex){
-            return(default,ex);
-        }
+        return(func(),default);
+        //try{
+        //    return(func(),default);
+        //} catch(Exception ex){
+        //    return(default,ex);
+        //}
     }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
         if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){

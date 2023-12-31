@@ -130,7 +130,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
                                 else if(ExtensionEnumerable.Where==MethodCall0_Method.GetGenericMethodDefinition())
                                     Lookup=ExtensionEnumerable.ToLookup_keySelector;
                                 else
-                                    Lookup=ExtensionEnumerable.ToLookup_index;
+                                    Lookup=ExtensionEnumerable.ToLookup_indexKeySelector;
                                 Instance=Expression.Call(
                                     作業配列.MakeGenericMethod(
                                         Lookup,

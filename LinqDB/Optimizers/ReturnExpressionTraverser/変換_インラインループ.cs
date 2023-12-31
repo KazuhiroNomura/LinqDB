@@ -209,7 +209,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         }
     }
     private readonly 判定_指定PrimaryKeyが存在する _判定_指定PrimaryKeyが存在する;
-    private readonly 変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1;
+    private protected readonly 変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1;
     private readonly 変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2;
     public 変換_インラインループ(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2) : base(作業配列) {
         this._判定_指定PrimaryKeyが存在する=new 判定_指定PrimaryKeyが存在する();

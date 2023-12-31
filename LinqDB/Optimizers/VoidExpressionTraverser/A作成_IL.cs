@@ -1414,8 +1414,48 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         }
         this.ConvertNullableMethod(Unary);
     }
-    protected override void Increment(UnaryExpression Unary)=>this.共通IncrementDecrement(Unary,OpCodes.Add);
     protected override void Decrement(UnaryExpression Unary)=>this.共通IncrementDecrement(Unary,OpCodes.Sub);
+    protected override void Increment(UnaryExpression Unary)=>this.共通IncrementDecrement(Unary,OpCodes.Add);
+    protected override void PreDecrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Sub);
+    protected override void PreIncrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Add);
+    private void 共通PreIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
+        this.格納先設定IncrementDecrement(Unary,AddSub);
+        this.I!.Dup();
+        this.Void格納先に格納(Unary.Operand);
+    }
+    protected override void PostDecrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Sub);
+    protected override void PostIncrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Add);
+    private void 共通PostIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
+        var Unary_Operand=Unary.Operand;
+        this.格納先設定(Unary_Operand);
+        this.I!.Dup();
+        this.共通IncrementDecrement(Unary,AddSub);
+        this.Void格納先に格納(Unary_Operand);
+    }
+    public static (int a,int b)incrimentポスト(int a){
+        return (a++,a);
+    }
+    public static (int a,int b)incrimentプレ(int a){
+        return (++a,a);
+    }
+    public static (int a,int b)incrimentポスト(ref int a){
+        return (a++,a);
+    }
+    public static(int a,int b) incrimentプレ(ref int a){
+        return (++a,a);
+    }
+    public static(int a,int b) incrimentポスト(int[] a){
+        return (a[0]++,a[0]);
+    }
+    public static(int a,int b) incrimentプレ(int[] a){
+        return(++a[0],a[0]);
+    }
+    public static(int a,int b) incrimentポスト(System.Drawing.Point a){
+        return(a.X++,a.X);
+    }
+    public static(int a,int b) incrimentプレ(ref System.Drawing.Point a){
+        return(++a.Y,a.Y);
+    }
     private static readonly Action<ILGenerator> DelegateNegate = I => I.Neg();
     protected override void Negate(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
     protected override void NegateChecked(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
@@ -2353,8 +2393,8 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.I!.Throw();
         this.Default(Unary.Type);
     }
-    private static readonly Action<ILGenerator> I_Empty=_=>{};
-    protected override void UnaryPlus(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,I_Empty);
+    private static readonly Action<ILGenerator> Empty=_=>{};
+    protected override void UnaryPlus(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,Empty);
     protected override void Unbox(UnaryExpression Unary){
         Debug.Assert(Unary.Method is null);
         this.Traverse(Unary.Operand);
@@ -2435,13 +2475,36 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         // ReSharper disable once SwitchStatementMissingSomeCases
         switch(e.NodeType){
             case ExpressionType.Assign:
-                this.VoidAssign((BinaryExpression)e);
+                var binary=(BinaryExpression)e;
+                var Binary_Left = binary.Left;
+                var Binary_Right = binary.Right;
+                if(Binary_Right.NodeType==ExpressionType.Label) {
+                    this.Traverse(Binary_Right);
+                    var x = this.I!;
+                    var Right値 = x.M_DeclareLocal_Stloc(Binary_Right.Type);
+                    this.格納先設定(Binary_Left);
+                    x.Ldloc(Right値);
+                } else if(Binary_Right.NodeType==ExpressionType.Try) {
+                    var Try値 = this.PrivateTry値を代入した変数((TryExpression)Binary_Right);
+                    this.格納先設定(Binary_Left);
+                    this.I!.Ldloc(Try値);
+                } else {
+                    this.格納先設定(Binary_Left);
+                    this.Traverse(Binary_Right);
+                }
+                this.Void格納先に格納(Binary_Left);
                 break;
             case ExpressionType.PreDecrementAssign:
-                this.VoidPreDecrementAssign((UnaryExpression)e);
+                VoidPreIncrementAssign(e,OpCodes.Sub);
                 break;
             case ExpressionType.PreIncrementAssign:
-                this.VoidPreIncrementAssign((UnaryExpression)e);
+                VoidPreIncrementAssign(e,OpCodes.Add);
+                break;
+            case ExpressionType.PostDecrementAssign:
+                VoidPostIncrementAssign(e,OpCodes.Sub);
+                break;
+            case ExpressionType.PostIncrementAssign:
+                VoidPostIncrementAssign(e,OpCodes.Add);
                 break;
             case ExpressionType.Block:
                 this.VoidBlock((BlockExpression)e);
@@ -2453,41 +2516,18 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 break;
             }
         }
-    }
-    private void VoidAssign(BinaryExpression Binary) {
-        var Binary_Left = Binary.Left;
-        var Binary_Right = Binary.Right;
-        if(Binary_Right.NodeType==ExpressionType.Label) {
-            this.Traverse(Binary_Right);
-            var I = this.I!;
-            var Right値 = I.M_DeclareLocal_Stloc(Binary_Right.Type);
-            this.格納先設定(Binary_Left);
-            I.Ldloc(Right値);
-        } else if(Binary_Right.NodeType==ExpressionType.Try) {
-            var Try値 = this.PrivateTry値を代入した変数((TryExpression)Binary_Right);
-            this.格納先設定(Binary_Left);
-            this.I!.Ldloc(Try値);
-        } else {
-            this.格納先設定(Binary_Left);
-            this.Traverse(Binary_Right);
+        void VoidPreIncrementAssign(Expression e0,OpCode OpCode) {
+            var Unary=(UnaryExpression)e0;
+            this.格納先設定IncrementDecrement(Unary,OpCode);
+            this.Void格納先に格納(Unary.Operand);
         }
-        this.Void格納先に格納(Binary_Left);
-    }
-    /// <summary>
-    /// ++a,--a,a++,a--
-    /// </summary>
-    /// <param name="Unary"></param>
-    private void VoidPreDecrementAssign(UnaryExpression Unary) {
-        this.格納先設定IncrementDecrement(Unary,OpCodes.Sub);
-        this.Void格納先に格納(Unary.Operand);
-    }
-    /// <summary>
-    /// ++a,--a,a++,a--
-    /// </summary>
-    /// <param name="Unary"></param>
-    private void VoidPreIncrementAssign(UnaryExpression Unary) {
-        this.格納先設定IncrementDecrement(Unary,OpCodes.Add);
-        this.Void格納先に格納(Unary.Operand);
+        void VoidPostIncrementAssign(Expression e0,OpCode OpCode) {
+            var Unary=(UnaryExpression)e0;
+            //var I=this.I!;
+            this.格納先設定IncrementDecrement(Unary,OpCode);
+            //I.Dup();
+            this.Void格納先に格納(Unary.Operand);
+        }
     }
     private void VoidBlock(BlockExpression Block) {
         var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
