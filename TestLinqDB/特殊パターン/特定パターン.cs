@@ -262,16 +262,16 @@ public class 特定パターン:共通{
         var Array10=Expression.NewArrayBounds(typeof(int),Expression.Constant(10));
         var Array2_210=Expression.NewArrayBounds(typeof(int),Expression.Constant(2),Expression.Constant(3));
     }
-    private void 変換_Stopwatchに埋め込む(Expression Expression){
-        var List計測=new List計測();
-        var 変換_Stopwatchに埋め込む=new 変換_Stopwatchに埋め込む(new 作業配列(),List計測,new Dictionary<LabelTarget,計測>());
+    //private void 変換_Stopwatchに埋め込む(Expression Expression){
+    //    var List計測=new List計測();
+    //    var 変換_Stopwatchに埋め込む=new 変換_Stopwatchに埋め込む(new 作業配列(),List計測,new Dictionary<LabelTarget,計測>());
 
-        変換_Stopwatchに埋め込む.実行(Expression);
-        //Lambda07=Lambda06;
-        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);
-        Trace.WriteLine(変換_Stopwatchに埋め込む.Analize);
+    //    変換_Stopwatchに埋め込む.実行(Expression);
+    //    //Lambda07=Lambda06;
+    //    //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);
+    //    Trace.WriteLine(変換_Stopwatchに埋め込む.Analize);
 
-    }
+    //}
     [Fact]public void Condition1(){
         //└Conditional      │
         //　├Parameter a    │
@@ -283,15 +283,19 @@ public class 特定パターン:共通{
         //　└Parameter c  　┌┼┘
         //　  ├Parameter a  ││
         //　  └Parameter c  └┼┐
-        var a = Expression.Parameter(typeof(bool), "a");
-        var b = Expression.Parameter(typeof(bool), "b");
-        var c = Expression.Parameter(typeof(bool), "c");
-        //var pp=Expression.And(p,p);
-        this.変換_Stopwatchに埋め込む(
-            Expression.Condition(
-                Expression.And(a,b),
-                Expression.And(b,c),
-                Expression.And(a,c)
+        var a = Expression.Constant(0);
+        var b = Expression.Constant(1);
+        var c = Expression.Constant(2);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Condition(
+                    Expression.Equal(
+                        Expression.And(a,b),
+                        Expression.Constant(0)
+                    ),
+                    Expression.And(b,c),
+                    Expression.And(a,c)
+                )
             )
         );
     }

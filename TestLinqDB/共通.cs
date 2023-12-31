@@ -409,11 +409,11 @@ public abstract class 共通{
     /// <summary>
     /// 3種シリアライズ、サーバー実行
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T0"></typeparam>
     /// <typeparam name="TResult"></typeparam>
     /// <param name="input"></param>
-    protected void Expression実行AssertEqual<T,TResult>(Expression<Func<T,TResult>> input){
-        var 引数=default(T)!;
+    protected void Expression実行AssertEqual<T0,TResult>(Expression<Func<T0,TResult>> input){
+        var 引数0=default(T0)!;
         if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
@@ -426,7 +426,7 @@ public abstract class 共通{
         }
         if((テストオプション.ローカル実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
-            var expected = 標準(引数);
+            var expected = 標準(引数0);
             var 汎用Comparer=new 汎用Comparer();
             var Optimizer=this.Optimizer;
             if((テストオプション.インライン&this.テストオプション)!=0){
@@ -435,14 +435,14 @@ public abstract class 共通{
                 Optimizer.IsInline=false;
             }
             var Delegate=Optimizer.CreateDelegate(input);
-            var actual=Delegate(引数);
+            var actual=Delegate(引数0);
             Assert.Equal(expected,actual,汎用Comparer);
             Trace.WriteLine(Optimizer.Analize);
         }
         if((テストオプション.リモート実行&this.テストオプション)!=0){
             var 標準 = input.Compile();
             this.ServerClient(Client=>{
-                var expected = 標準(引数);
+                var expected = 標準(引数0);
                 if((テストオプション.MemoryPack&this.テストオプション)!=0){
                     var actual=Client.Expression(input,SerializeType.MemoryPack);
                     Assert.Equal(expected,actual,new 汎用Comparer());
@@ -466,9 +466,9 @@ public abstract class 共通{
         }
         void 共通(LinqDB.Serializers.Serializer Serializer){
             共通0(Serializer,input,(Expression?)input,(object?)input);
-            共通0(Serializer,default(T),default(Expression),(object?)default(T));
+            共通0(Serializer,default(T0),default(Expression),(object?)default(T0));
             共通0(Serializer,new[]{input,input},new Expression?[]{input,input},new object?[]{input,input});
-            共通0(Serializer,new T?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
+            共通0(Serializer,new T0?[]{default,default},new Expression?[]{default,default},new object?[]{default,default});
             void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
                 SerializeDeserializeAreEqual(Serializer,t0);
                 SerializeDeserializeAreEqual(Serializer,t1);
@@ -479,6 +479,15 @@ public abstract class 共通{
                 SerializeDeserializeAreEqual(Serializer,new{t0,t1,t2});
             }
         }
+    }
+    static void 共通0<T0,T1,T2>(LinqDB.Serializers.Serializer Serializer,T0 t0,T1 t1,T2 t2){
+        SerializeDeserializeAreEqual(Serializer,t0);
+        SerializeDeserializeAreEqual(Serializer,t1);
+        SerializeDeserializeAreEqual(Serializer,t2);
+        SerializeDeserializeAreEqual(Serializer,new{t0});
+        SerializeDeserializeAreEqual(Serializer,new{t1});
+        SerializeDeserializeAreEqual(Serializer,new{t2});
+        SerializeDeserializeAreEqual(Serializer,new{t0,t1,t2});
     }
     protected void Expression比較実行AssertEqual<T0, T1>(Expression<Func<T0>> input0,Expression<Func<T1>> input1) {
         var actual0 = this.Expression実行(input0);
