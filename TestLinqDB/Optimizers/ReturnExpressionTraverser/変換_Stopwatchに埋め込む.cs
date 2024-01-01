@@ -1,16 +1,21 @@
 ﻿using System.Reflection;
+using MemoryPack;
+using MessagePack;
 using Expression = System.Linq.Expressions.Expression;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
-public class 変換_Stopwatchに埋め込む : 共通{
-    protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
-    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
-    private class 時間計測{
-        public bool BooleanMethod(int x){
-            //Thread.Sleep(100);
-            return true;
-        }
-        public int Int32Method(int x)=>x;
+[MemoryPackable,MessagePackObject(true)]
+public partial class 時間計測{
+    public bool BooleanMethod(int x){
+        //Thread.Sleep(100);
+        return true;
     }
+    public int Int32Method(int x)=>x;
+    public override int GetHashCode()=>0;
+    public override bool Equals(object? obj)=>true;
+}
+public class 変換_Stopwatchに埋め込む : 共通{
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     private static readonly MethodInfo BooleanMethod=typeof(時間計測).GetMethod(nameof(時間計測.BooleanMethod))!;
     private static readonly MethodInfo Int32Method=typeof(時間計測).GetMethod(nameof(時間計測.Int32Method))!;
 

@@ -125,37 +125,6 @@ public sealed class List辺:Generic.List<辺>{
             return sb.ToString();
         }
     }
-    public Generic.IEnumerator<string> GetLineEnumerator(){
-        var 列Array0=new Generic.List<(辺? 移動元,辺? 移動先)>{(null,null)};
-        var Line=new StringBuilder();
-        Line.Append('　');
-        var 前回のLine=Line.ToString();
-        var sb = new StringBuilder();
-        var Count=this.Count-1;
-        if(Count>=0){
-            {
-                var 辺=this[0];
-                var 子辺Array=辺.List子辺.ToArray();
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-            for(var a=1;a<Count;a++){
-                var 辺=this[a];
-                var 親辺Array = 辺.List親辺.ToArray();
-                var 子辺Array = 辺.List子辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-            {
-                var 辺=this[Count];
-                var 親辺Array = 辺.List親辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                yield return Line.ToString();
-            }
-        }
-    }
     public void 一度出現したExpressionを上位に移動(){
         foreach(var a in this) a.探索済みか=false;
         this[0].Create部分木_二度出現したExpressions();

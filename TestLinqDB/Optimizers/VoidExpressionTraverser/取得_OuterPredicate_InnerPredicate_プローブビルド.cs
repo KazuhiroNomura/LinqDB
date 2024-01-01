@@ -6,7 +6,7 @@
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.VoidExpressionTraverser;
 [MemoryPack.MemoryPackable,MessagePack.MessagePackObject,Serializable]
-internal partial struct 嘘Equals{
+public partial struct 嘘Equals{
     public bool Equals(嘘Equals x)=>true;
     public bool Equals2()=>true;
 }
@@ -36,6 +36,9 @@ public class 取得_OuterPredicate_InnerPredicate_プローブビルド:共通{
     private sealed class EqualityComparer2:EqualityComparer<int>{
         public override bool Equals(int x,int y)=>x==y;
         public override int GetHashCode(int obj)=>obj;
+    }
+    [Fact]public void バグ(){
+        this.Expression実行AssertEqual(() => (1).Let(q=>new 嘘Equals[2].Where(p=>p.Equals(new 嘘Equals()))));
     }
     [Fact]public void PrivateTraverseNullable(){
         //switch(Expression0.NodeType){

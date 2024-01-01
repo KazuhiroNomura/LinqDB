@@ -936,7 +936,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 if(elementSelector0 is null)
                     elementSelector=p;
                 else
-                    elementSelector=this.LambdaExpressionを展開1(this.Traverse(elementSelector0),p);
+                    elementSelector=elementSelector0;
                 if(index is null)
                     return Expression.Block(
                         Expression.Assign(p,argument),

@@ -25,7 +25,7 @@ public enum テストオプション{
     ローカル実行                                      =0b0001000000,
     リモート実行                                      =0b0000100000,
     ファイルが無ければシリアライズ有ればデシリアライズ=0b0000010000,
-    式木の最適化を試行                                            =0b0000001000,
+    式木の最適化を試行                                =0b0000001000,
     インライン                                        =0b0000000100,
     アセンブリ保存                                    =0b0000000010,
     プロファイラ                                      =0b0000000001,
@@ -34,7 +34,8 @@ public enum テストオプション{
 }
 public abstract class 共通{
     private protected static int ポート番号;
-    protected abstract テストオプション テストオプション{get;}
+    //protected virtual テストオプション テストオプション{get;}=テストオプション.全て;
+    protected virtual テストオプション テストオプション{get;}=テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);
@@ -52,16 +53,6 @@ public abstract class 共通{
         } catch{
             File.WriteAllText(ファイル,Serialize);
         }
-    }
-    protected 共通(){
-        // ReSharper disable once VirtualMemberCallInConstructor
-        this.Optimizer=new(){
-            IsGenerateAssembly=(テストオプション.アセンブリ保存&this.テストオプション)!=0,
-            IsProfiling = (テストオプション.プロファイラ&this.テストオプション)!=0,
-            Context=typeof(共通),AssemblyFileName="デバッグ.dll",
-            IsInline = (テストオプション.インライン&this.テストオプション)!=0,
-        };
-
     }
     protected readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
         typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>()));
@@ -93,7 +84,13 @@ public abstract class 共通{
     protected readonly LinqDB.Serializers.Utf8Json.Serializer Utf8Json=new();
     protected readonly LinqDB.Serializers.MessagePack.Serializer MessagePack=new();
     protected readonly LinqDB.Serializers.MemoryPack.Serializer MemoryPack=new();
-    protected readonly Optimizer Optimizer;
+    protected Optimizer Optimizer=>new(){
+        IsGenerateAssembly=(テストオプション.アセンブリ保存&this.テストオプション)!=0,
+        IsProfiling = (テストオプション.プロファイラ&this.テストオプション)!=0,
+        Context=typeof(共通),AssemblyFileName="デバッグ.dll",
+        IsInline = (テストオプション.インライン&this.テストオプション)!=0,
+    };
+
     protected static Set<int>CreateSet()=>new();
     protected static Expression GetLambda(LambdaExpression Lambda)=>Lambda.Body;
     protected static Func<TResult> Anonymous<TResult>(Func<TResult> i)=>i;
@@ -331,12 +328,12 @@ public abstract class 共通{
         }
     }
     private static(T result,Exception? ex) 例外と戻り値<T>(Func<T> func){
-        return(func(),default);
-        //try{
-        //    return(func(),default);
-        //} catch(Exception ex){
-        //    return(default,ex);
-        //}
+        //return(func(),default);
+        try {
+            return (func(), default);
+        } catch(Exception ex) {
+            return (default, ex);
+        }
     }
     protected void Expression実行AssertEqual<T>(Expression<Func<T>> input){
         if((テストオプション.式木の最適化を試行&this.テストオプション)!=0){

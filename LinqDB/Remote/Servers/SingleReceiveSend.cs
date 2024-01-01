@@ -389,11 +389,12 @@ internal class SingleReceiveSend:IDisposable{
         //  :パスワード
         // 1:リクエストヘッダ
         //  :本体
+        var NetworkStream = this.NetworkStream=new NetworkStream(Socket) {
+            ReadTimeout=this.ReadTimeout,
+            WriteTimeout=this.WriteTimeout
+        };
+        var _SerializeType=SerializeType.MemoryPack;
         try {
-            var NetworkStream = this.NetworkStream=new NetworkStream(Socket) {
-                ReadTimeout=this.ReadTimeout,
-                WriteTimeout=this.WriteTimeout
-            };
             //var WriteBuffer=this.WriteBuffer;
             //this.Buffer0
             Stream Stream;
@@ -540,16 +541,16 @@ internal class SingleReceiveSend:IDisposable{
                     break;
                 }
                 case Request.TimeoutException_ThrowException: {
-                    var SerializeType = (SerializeType)Stream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+                    _SerializeType = (SerializeType)Stream.ReadByte();
+                    Debug.Assert(_SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
                     throw new TimeoutException("テスト");
                 }
                 case Request.Object_Object:
                 case Request.Delegate_Invoke:
                 case Request.Expression_Invoke: 
                 {
-                    var SerializeType = (SerializeType)Stream.ReadByte();
-                    Debug.Assert(SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
+                    _SerializeType = (SerializeType)Stream.ReadByte();
+                    Debug.Assert(_SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
                     //if(ReadBuffer_Length>MemoryStreamBufferSize) {
                     //    this.Privateデシリアライズした(
                     //        Request.Exception_ThrowException,
@@ -594,7 +595,7 @@ internal class SingleReceiveSend:IDisposable{
                     var ReadBuffer=共通();
                     if(ReadBuffer is null)return;
                     try {
-                        var Object= SerializeType switch{
+                        var Object= _SerializeType switch{
                             SerializeType.MemoryPack =>this.MemoryPack.Deserialize<object>(ReadBuffer),
                             SerializeType.MessagePack=>this.MessagePack.Deserialize<object>(ReadBuffer),
                             _                        =>this.Utf8Json.Deserialize<object>(ReadBuffer)
@@ -602,14 +603,14 @@ internal class SingleReceiveSend:IDisposable{
                         this.Privateデシリアライズした(
                             Request,
                             Object,
-                            SerializeType
+                            _SerializeType
                         );
                     } catch(SerializationException ex) {
                         Trace_WriteLine(4,"Server.Function受信 catch(SerializationException)");
                         this.Privateデシリアライズした(
                             Request.Exception_ThrowException,
                             ex,
-                            SerializeType
+                            _SerializeType
                         );
                     }
                     break;
@@ -646,11 +647,9 @@ internal class SingleReceiveSend:IDisposable{
                 Provider.Initialize();
                 Provider.ComputeHash(ReadBuffer,0,ReadBuffer_Length);
                 var Provider_Hash=Provider.Hash!;
-                for(var a=0;a<HashLength;a++){
-                    if(Provider_Hash[a]!=Hash[a]){
+                for(var a=0;a<HashLength;a++)
+                    if(Provider_Hash[a]!=Hash[a])
                         throw new InvalidDataException("ハッシュ値が一致しなかった");
-                    }
-                }
                 return ReadBuffer;
             }
         } catch(ObjectDisposedException) {
@@ -669,10 +668,9 @@ internal class SingleReceiveSend:IDisposable{
             this.Privateデシリアライズした(
                 Request.Exception_ThrowException,
                 ex,
-                SerializeType.Utf8Json
+                _SerializeType
             );
             Trace_WriteLine(8,$"Server.Function受信 catch({ex.GetType().FullName})");
-            //throw;
         }
     }
     private void Function受信終了(IAsyncResult IAsyncResult) {
@@ -864,12 +862,12 @@ internal class SingleReceiveSend:IDisposable{
         );
         this.Server.Add(this);
     }
-    private void Privateデシリアライズした(Request Request,Exception Exception,SerializeType SerializeType)=>
-        this.Privateデシリアライズした(
-            Request,
-            ExceptionのString(Exception),
-            SerializeType
-        );
+    //private void Privateデシリアライズした(Request Request,Exception Exception,SerializeType SerializeType)=>
+    //    this.Privateデシリアライズした(
+    //        Request,
+    //        ExceptionのString(Exception),
+    //        SerializeType
+    //    );
     //private readonly Optimizer.作成_DynamicMethodによるDelegate 作成DynamicMethodによるDelegate=new Optimizer.作成_DynamicMethodによるDelegate(
     //    new Optimizer.作業配列(),
     //    new Optimizer.ExpressionEqualityComparer(new List<ParameterExpression>())
@@ -968,7 +966,7 @@ internal class SingleReceiveSend:IDisposable{
     //    this.Delegate送信終了,
     //    null
     //);
-    internal void 送信(Response Response,object? Object,SerializeType SerializeType = SerializeType.Utf8Json) => this.Task送信=Task.Run(
+    internal void 送信(Response Response,object? Object,SerializeType SerializeType) => this.Task送信=Task.Run(
         ()=>this.Function送信(
             new シリアライズしたい(
                 this,

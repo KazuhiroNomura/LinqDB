@@ -108,9 +108,20 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                             if(this.インスタンスメソッドか) index++;
                             if(Parameter.IsByRef)I.Ldarg((ushort)index);
                             else I.Ldarga((ushort)index);
+                        } else if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
+                            var Member_Expression=Disp_Member.Member.Expression;
+                            this.PointerTraverseNulllable(Member_Expression);
+                            var Member_Member=Disp_Member.Member.Member;
+                            if(Member_Member.MemberType==MemberTypes.Field){
+                                var Member_Field=(FieldInfo)Member_Member;
+                                if(Member_Field.IsStatic)
+                                    I.Ldsflda(Member_Field);
+                                else
+                                    I.Ldflda(Member_Field);
+                            } else
+                                this.PrivateCall(((PropertyInfo)Member_Member).GetMethod!);
                         } else{
-                            Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                            Debug.Assert(this.Dictionary_Parameter_LocalBuilder.ContainsKey(Parameter));
+                            Debug.Assert(this.DispParameter!=Parameter,"thisは明示的に呼び出されることはないはず。");
                             I.Ldloca(this.Dictionary_Parameter_LocalBuilder[Parameter]);
                         }
                         break;
@@ -299,14 +310,13 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                         if(this.インスタンスメソッドか) index++;
                         I.Starg((ushort)index);
                     }
+                } else if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
+                    this.Void格納先に格納(Disp_Member.Member);
+                //} else if(this.DispParameter==Parameter) {
+                //    I.Ldarg_0();
                 } else{
-                    if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
-                        this.Void格納先に格納(Disp_Member.Member);
-                    } else{
-                        Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                        Debug.Assert(this.Dictionary_Parameter_LocalBuilder.ContainsKey(Parameter));
-                        I.Stloc(this.Dictionary_Parameter_LocalBuilder[Parameter]);
-                    }
+                    Debug.Assert(this.DispParameter!=Parameter,"thisは明示的に呼び出されることはないはず。");
+                    I.Stloc(this.Dictionary_Parameter_LocalBuilder[Parameter]);
                 }
                 break;
             }
@@ -1753,189 +1763,18 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             if(this.インスタンスメソッドか)index++;
             I.Ldarg((ushort)index);
             if(Parameter.IsByRef)I.Ldobj(Parameter.Type);
-        } else {
-            if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)) {
-                this.MemberAccess(Disp_Member.Member);
-            } else if(this.DispParameter==Parameter){
-                I.Ldarg_0();
-            } else {
-                Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                I.Ldloc(this.Dictionary_Parameter_LocalBuilder[Parameter]);
-            }
-        }
+        } else if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member))
+            this.MemberAccess(Disp_Member.Member);
+        else if(this.DispParameter==Parameter) 
+            I.Ldarg_0();
+        else 
+            I.Ldloc(this.Dictionary_Parameter_LocalBuilder[Parameter]);
     }
-    private void PointerAssign(BinaryExpression Assign){
-        var Assign_Left=Assign.Left;
-        var I=this.I!;
-        var NodeType=Assign_Left.NodeType;
-        var Assign_Type=Assign.Type;
-        if(Assign_Type.IsValueType){
-            switch(NodeType){
-                case ExpressionType.Index: {
-                    var Index = (IndexExpression)Assign_Left;
-                    var Index_Object = Index.Object;
-                    this.PointerTraverseNulllable(Index_Object);
-                    this.TraverseExpressions(Index.Arguments);
-                    //foreach(var Argument in Index.Arguments)
-                      //  this.Traverse(Argument);
-                    Debug.Assert(Index_Object!=null);
-                    var Index_Object_Type = Index_Object.Type;
-                    Debug.Assert(Index_Object_Type.IsArray);
-                    Debug.Assert(Index.Indexer is null);
-                    Debug.Assert(Index.Arguments.Count==Index_Object_Type.GetArrayRank());
-                    var Index_Arguments =Index.Arguments;
-                    if(Index_Arguments.Count==1){
-                        I.Ldelema(Index.Type);
-                        I.Dup();
-                        this.Traverse(Assign.Right);
-                        I.Stobj(Assign_Type);
-                    } else {
-                        Debug.Assert(Index.Indexer is null);
-                        Debug.Assert(Index_Object_Type.GetMethod("Set")!.GetParameters().Length==Index.Arguments.Count+1);
-                        this.Traverse(Assign.Right);
-                        var Local = I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
-                        I.Call(Index_Object_Type.GetMethod("Set"));
-                        I.Ldloca(Local);
-                    }
-                    break;
-                }
-                case ExpressionType.MemberAccess:{
-                    var Member=(MemberExpression)Assign_Left;
-                    var Member_Member=Member.Member;
-                    if(Member_Member.MemberType==MemberTypes.Field){
-                        var Member_Field=(FieldInfo)Member_Member;
-                        if(Member_Field.IsStatic) {
-                            I.Ldsflda(Member_Field);
-                        } else {
-                            this.PointerTraverseNulllable(Member.Expression);
-                            I.Ldflda(Member_Field);
-                        }
-                        I.Dup();
-                        this.Traverse(Assign.Right);
-                        I.Stobj(Assign_Type);
-                    } else{
-                        var Member_Property=(PropertyInfo)Member_Member;
-                        this.PointerTraverseNulllable(Member.Expression);
-                        this.Traverse(Assign.Right);
-                        var Local=I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
-                        this.PrivateCall(Member_Property.SetMethod!);
-                        I.Ldloca(Local);
-                    }
-                    break;
-                }
-                default:{
-                    Debug.Assert(NodeType==ExpressionType.Parameter);
-                    var Parameter=(ParameterExpression)Assign_Left;
-                    //Debug.Assert(this.Parameters is not null);
-                    var index =this.Parameters!.IndexOf(Parameter);
-                    if(index>=0) {
-                        if(this.インスタンスメソッドか) index++;
-                        if(Parameter.IsByRef) {
-                            I.Ldarg((ushort)index);
-                            I.Dup();
-                            this.Traverse(Assign.Right);
-                            I.Stobj(Assign_Type);
-                        } else {
-                            this.Traverse(Assign.Right);
-                            I.Starg((ushort)index);
-                            I.Ldarga((ushort)index);
-                        }
-                    } else {
-                        this.Traverse(Assign.Right);
-                        Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                        var Local = this.Dictionary_Parameter_LocalBuilder[Parameter];
-                        I.Stloc(Local);
-                        I.Ldloca(Local);
-                    }
-                    break;
-                }
-            }
-        } else{
-            switch(NodeType){
-                case ExpressionType.Index: {
-                    var Index = (IndexExpression)Assign_Left;
-                    var Index_Object = Index.Object;
-                    this.PointerTraverseNulllable(Index_Object);
-                    this.TraverseExpressions(Index.Arguments);
-                    //foreach(var Argument in Index.Arguments) {
-                    //    this.Traverse(Argument);
-                    //}
-                    Debug.Assert(Index_Object!=null);
-                    var Index_Object_Type = Index_Object.Type;
-                    Debug.Assert(Index_Object_Type.IsArray);
-                    Debug.Assert(Index.Indexer is null);
-                    Debug.Assert(Index.Arguments.Count==Index_Object_Type.GetArrayRank());
-                    this.Traverse(Assign.Right);
-                    var Local = I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
-                    var Index_Arguments = Index.Arguments;
-                    if(Index_Arguments.Count==1) {
-                        I.Stelem(Index.Type);
-                    } else {
-                        Debug.Assert(Index.Indexer is null);
-                        Debug.Assert(Index_Object_Type.GetMethod("Set")!.GetParameters().Length==Index.Arguments.Count+1);
-                        I.Call(Index_Object_Type.GetMethod("Set"));
-                    }
-                    I.Ldloc(Local);
-                    break;
-                }
-                case ExpressionType.MemberAccess:{
-                    this.Traverse(Assign.Right);
-                    var Local=I.M_DeclareLocal_Stloc(Assign_Type);
-                    var Member=(MemberExpression)Assign_Left;
-                    var Member_Member=Member.Member;
-                    if(Member_Member.MemberType==MemberTypes.Field){
-                        var Member_Field=(FieldInfo)Member_Member;
-                        if(Member_Field.IsStatic){
-                            I.Ldloc(Local);
-                            I.Stsfld(Member_Field);
-                        } else{
-                            this.PointerTraverseNulllable(Member.Expression);
-                            I.Ldloc(Local);
-                            I.Stfld(Member_Field);
-                        }
-                    } else{
-                        var Member_Property=(PropertyInfo)Member_Member;
-                        this.PointerTraverseNulllable(Member.Expression);
-                        I.Ldloc(Local);
-                        this.PrivateCall(Member_Property.SetMethod!);
-                    }
-                    I.Ldloc(Local);
-                    break;
-                }
-                default:{
-                    Debug.Assert(NodeType==ExpressionType.Parameter);
-                    var Parameter =(ParameterExpression)Assign_Left;
-                    var index =this.Parameters!.IndexOf(Parameter);
-                    if(index>=0){
-                        if(this.インスタンスメソッドか) index++;
-                        if(Parameter.IsByRef){
-                            I.Ldarg((ushort)index);
-                            this.Traverse(Assign.Right);
-                            var Local=I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
-                            I.Stobj(Assign_Type);
-                            I.Ldloc(Local);
-                        } else{
-                            this.Traverse(Assign.Right);
-                            I.Starg((ushort)index);
-                            I.Ldarg((ushort)index);
-                        }
-                    } else{
-                        this.Traverse(Assign.Right);
-                        Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                        var Local=this.Dictionary_Parameter_LocalBuilder[Parameter];
-                        I.Stloc(Local);
-                        I.Ldloc(Local);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
     private void PointerTraverseNulllable(Expression? e){
         if(e is null)
             return;
         // ReSharper disable once SwitchStatementMissingSomeCases
+        var I=this.I!;
         switch(e.NodeType){
             case ExpressionType.ArrayIndex:{
                 var Binary=(BinaryExpression)e;
@@ -1944,13 +1783,176 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 Debug.Assert(Binary.Method is null);
                 var e_Type=e.Type;
                 if(e_Type.IsValueType)
-                    this.I!.Ldelema(e_Type);
+                    I.Ldelema(e_Type);
                 else
-                    this.I!.Ldelem(e_Type);
+                    I.Ldelem(e_Type);
                 break;
             }
             case ExpressionType.Assign:{
-                this.PointerAssign((BinaryExpression)e);
+                var Assign=(BinaryExpression)e;
+                var Assign_Left=Assign.Left;
+                var NodeType=Assign_Left.NodeType;
+                var Assign_Type=Assign.Type;
+                if(Assign_Type.IsValueType){
+                    switch(NodeType){
+                        case ExpressionType.Index: {
+                            var index1 = (IndexExpression)Assign_Left;
+                            var Index_Object = index1.Object;
+                            this.PointerTraverseNulllable(Index_Object);
+                            this.TraverseExpressions(index1.Arguments);
+                            //foreach(var Argument in Index.Arguments)
+                            //  this.Traverse(Argument);
+                            Debug.Assert(Index_Object!=null);
+                            var Index_Object_Type = Index_Object.Type;
+                            Debug.Assert(Index_Object_Type.IsArray);
+                            Debug.Assert(index1.Indexer is null);
+                            Debug.Assert(index1.Arguments.Count==Index_Object_Type.GetArrayRank());
+                            var Index_Arguments =index1.Arguments;
+                            if(Index_Arguments.Count==1){
+                                I.Ldelema(index1.Type);
+                                I.Dup();
+                                this.Traverse(Assign.Right);
+                                I.Stobj(Assign_Type);
+                            } else {
+                                Debug.Assert(index1.Indexer is null);
+                                Debug.Assert(Index_Object_Type.GetMethod("Set")!.GetParameters().Length==index1.Arguments.Count+1);
+                                this.Traverse(Assign.Right);
+                                var Local = I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
+                                I.Call(Index_Object_Type.GetMethod("Set"));
+                                I.Ldloca(Local);
+                            }
+                            break;
+                        }
+                        case ExpressionType.MemberAccess:{
+                            var Member=(MemberExpression)Assign_Left;
+                            var Member_Member=Member.Member;
+                            if(Member_Member.MemberType==MemberTypes.Field){
+                                var Member_Field=(FieldInfo)Member_Member;
+                                if(Member_Field.IsStatic) {
+                                    I.Ldsflda(Member_Field);
+                                } else {
+                                    this.PointerTraverseNulllable(Member.Expression);
+                                    I.Ldflda(Member_Field);
+                                }
+                                I.Dup();
+                                this.Traverse(Assign.Right);
+                                I.Stobj(Assign_Type);
+                            } else{
+                                var Member_Property=(PropertyInfo)Member_Member;
+                                this.PointerTraverseNulllable(Member.Expression);
+                                this.Traverse(Assign.Right);
+                                var Local=I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
+                                this.PrivateCall(Member_Property.SetMethod!);
+                                I.Ldloca(Local);
+                            }
+                            break;
+                        }
+                        default:{
+                            Debug.Assert(NodeType==ExpressionType.Parameter);
+                            var Parameter=(ParameterExpression)Assign_Left;
+                            var index =this.Parameters!.IndexOf(Parameter);
+                            if(index>=0) {
+                                if(this.インスタンスメソッドか) index++;
+                                if(Parameter.IsByRef) {
+                                    I.Ldarg((ushort)index);
+                                    I.Dup();
+                                    this.Traverse(Assign.Right);
+                                    I.Stobj(Assign_Type);
+                                } else {
+                                    this.Traverse(Assign.Right);
+                                    I.Starg((ushort)index);
+                                    I.Ldarga((ushort)index);
+                                }
+                            } else {
+                                this.Traverse(Assign.Right);
+                                Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
+                                var Local = this.Dictionary_Parameter_LocalBuilder[Parameter];
+                                I.Stloc(Local);
+                                I.Ldloca(Local);
+                            }
+                            break;
+                        }
+                    }
+                } else{
+                    switch(NodeType){
+                        case ExpressionType.Index: {
+                            var index2 = (IndexExpression)Assign_Left;
+                            var Index_Object = index2.Object;
+                            this.PointerTraverseNulllable(Index_Object);
+                            this.TraverseExpressions(index2.Arguments);
+                            //foreach(var Argument in Index.Arguments) {
+                            //    this.Traverse(Argument);
+                            //}
+                            Debug.Assert(Index_Object!=null);
+                            var Index_Object_Type = Index_Object.Type;
+                            Debug.Assert(Index_Object_Type.IsArray);
+                            Debug.Assert(index2.Indexer is null);
+                            Debug.Assert(index2.Arguments.Count==Index_Object_Type.GetArrayRank());
+                            this.Traverse(Assign.Right);
+                            var Local = I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
+                            var Index_Arguments = index2.Arguments;
+                            if(Index_Arguments.Count==1) {
+                                I.Stelem(index2.Type);
+                            } else {
+                                Debug.Assert(index2.Indexer is null);
+                                Debug.Assert(Index_Object_Type.GetMethod("Set")!.GetParameters().Length==index2.Arguments.Count+1);
+                                I.Call(Index_Object_Type.GetMethod("Set"));
+                            }
+                            I.Ldloc(Local);
+                            break;
+                        }
+                        case ExpressionType.MemberAccess:{
+                            this.Traverse(Assign.Right);
+                            var Local=I.M_DeclareLocal_Stloc(Assign_Type);
+                            var Member=(MemberExpression)Assign_Left;
+                            var Member_Member=Member.Member;
+                            if(Member_Member.MemberType==MemberTypes.Field){
+                                var Member_Field=(FieldInfo)Member_Member;
+                                if(Member_Field.IsStatic){
+                                    I.Ldloc(Local);
+                                    I.Stsfld(Member_Field);
+                                } else{
+                                    this.PointerTraverseNulllable(Member.Expression);
+                                    I.Ldloc(Local);
+                                    I.Stfld(Member_Field);
+                                }
+                            } else{
+                                var Member_Property=(PropertyInfo)Member_Member;
+                                this.PointerTraverseNulllable(Member.Expression);
+                                I.Ldloc(Local);
+                                this.PrivateCall(Member_Property.SetMethod!);
+                            }
+                            I.Ldloc(Local);
+                            break;
+                        }
+                        default:{
+                            Debug.Assert(NodeType==ExpressionType.Parameter);
+                            var parameter1 =(ParameterExpression)Assign_Left;
+                            var index =this.Parameters!.IndexOf(parameter1);
+                            if(index>=0){
+                                if(this.インスタンスメソッドか) index++;
+                                if(parameter1.IsByRef){
+                                    I.Ldarg((ushort)index);
+                                    this.Traverse(Assign.Right);
+                                    var Local=I.M_DeclareLocal_Stloc_Ldloc(Assign_Type);
+                                    I.Stobj(Assign_Type);
+                                    I.Ldloc(Local);
+                                } else{
+                                    this.Traverse(Assign.Right);
+                                    I.Starg((ushort)index);
+                                    I.Ldarg((ushort)index);
+                                }
+                            } else{
+                                this.Traverse(Assign.Right);
+                                Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
+                                var Local=this.Dictionary_Parameter_LocalBuilder[parameter1];
+                                I.Stloc(Local);
+                                I.Ldloc(Local);
+                            }
+                            break;
+                        }
+                    }
+                }
                 break;
             }
             case ExpressionType.MemberAccess:{
@@ -1960,40 +1962,62 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                     var Member_Field=(FieldInfo)Member_Member;
                     if(Member_Field.IsStatic){
                         if(Member.Type.IsValueType) {
-                            this.I!.Ldsflda(Member_Field);
+                            I.Ldsflda(Member_Field);
                         } else {
-                            this.I!.Ldsfld(Member_Field);
+                            I.Ldsfld(Member_Field);
                         }
                     } else{
                         this.PointerTraverseNulllable(Member.Expression);
                         if(Member.Type.IsValueType) {
-                            this.I!.Ldflda(Member_Field);
+                            I.Ldflda(Member_Field);
                         } else {
-                            this.I!.Ldfld(Member_Field);
+                            I.Ldfld(Member_Field);
                         }
                     }
                 } else{
                     var Member_Expression = Member.Expression;
                     this.PointerTraverseNulllable(Member_Expression);
                     this.PrivateCall(((PropertyInfo)Member_Member).GetMethod!);
-                    this.I!.M_Valueは参照(e.Type);
+                    I.M_Valueは参照(e.Type);
                 }
                 break;
             }
             case ExpressionType.Parameter:{
-                this.PointerParameterNulllable((ParameterExpression)e);
+                var Parameter=(ParameterExpression)e;
+                var index = this.Parameters!.IndexOf(Parameter);
+                if(index>=0) {
+                    if(this.インスタンスメソッドか)index++;
+                    if(Parameter.Type.IsValueType) {
+                        if(Parameter.IsByRef)I.Ldarg((ushort)index);
+                        else                 I.Ldarga((ushort)index);
+                    } else {
+                        I.Ldarg((ushort)index);
+                        if(Parameter.IsByRef)I.Ldobj(Parameter.Type);
+                    }
+                } else if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
+                    this.PointerTraverseNulllable(Disp_Member.Member);
+                }else if(this.DispParameter==Parameter){
+                    Debug.Assert(!Parameter.Type.IsValueType&&!Parameter.IsByRef||Parameter.Type.IsValueType&&Parameter.IsByRef);
+                    I.Ldarg_0();
+                }else{
+                    var Local = this.Dictionary_Parameter_LocalBuilder[Parameter];
+                    if(Local.LocalType.IsValueType)
+                        I.Ldloca(Local);
+                    else                          
+                        I.Ldloc(Local);
+                }
                 break;
             }
             case ExpressionType.Unbox:{
                 var Unary=(UnaryExpression)e;
                 this.Traverse(Unary.Operand);
                 Debug.Assert(Unary.Type.IsValueType);
-                this.I!.Unbox(Unary.Type);
+                I.Unbox(Unary.Type);
                 break;
             }
             default:{
                 this.Traverse(e);
-                this.I!.M_Valueは参照(e.Type);
+                I.M_Valueは参照(e.Type);
                 break;
             }
         }
@@ -2543,33 +2567,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     protected void Clear(){
         this.番号=0;
         this.Dictionary_Parameter_LocalBuilder.Clear();
-    }
-    private void PointerParameterNulllable(ParameterExpression Parameter) {
-        var I = this.I!;
-        var index = this.Parameters!.IndexOf(Parameter);
-        if(index>=0) {
-            if(this.インスタンスメソッドか)index++;
-            if(Parameter.Type.IsValueType) {
-                if(Parameter.IsByRef)I.Ldarg((ushort)index);
-                else                 I.Ldarga((ushort)index);
-            } else {
-                I.Ldarg((ushort)index);
-                if(Parameter.IsByRef)I.Ldobj(Parameter.Type);
-            }
-        } else{
-            if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
-                this.PointerTraverseNulllable(Disp_Member.Member);
-            }else if(this.DispParameter==Parameter){
-                Debug.Assert(!Parameter.Type.IsValueType&&!Parameter.IsByRef||Parameter.Type.IsValueType&&Parameter.IsByRef);
-                I.Ldarg_0();
-            }else{
-                Debug.Assert(this.Dictionary_Parameter_LocalBuilder is not null);
-                Debug.Assert(this.Dictionary_Parameter_LocalBuilder.ContainsKey(Parameter));
-                var Local = this.Dictionary_Parameter_LocalBuilder[Parameter];
-                if(Parameter.Type.IsValueType)I.Ldloca(Local);
-                else                          I.Ldloc(Local);
-            }
-        }
     }
 }
 

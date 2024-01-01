@@ -11,8 +11,13 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
+    //protected override テストオプション テストオプション {
+    //    get {
+    //        return base.テストオプション&(~テストオプション.プロファイラ);
+    //    }
+    //}
     public class 取得_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
+        //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         private void TraceWrite(Expression Expression){
             var Optimizer=this.Optimizer;
             Optimizer.IsInline=true;
@@ -470,7 +475,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
     }
     public class 変換_先行評価式:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
+        //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         [Fact]
         public void Block(){
             var @int=Expression.Parameter(typeof(int),"a");
@@ -740,6 +745,10 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                 )
             )
         );
+    }
+    [Fact]
+    public void バグ0(){
+        this.Expression実行AssertEqual(()=>"a".Let(o=>o.Let(i=>o)));
     }
     [Fact]
     public void 外だし()

@@ -11,7 +11,8 @@ using Expression = System.Linq.Expressions.Expression;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_メソッド正規化_取得インライン不可能定数 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン|テストオプション.プロファイラ|テストオプション.ローカル実行;
+    //protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン|テストオプション.プロファイラ|テストオプション.ローカル実行;
+    protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン|テストオプション.アセンブリ保存|テストオプション.ローカル実行;
     [Fact]
     public void Constant()
     {
@@ -767,11 +768,12 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
         //1
         //}
     }
-    [Fact]
-    public void Call_OfType(){
+    [Fact]public void Call_OfType0(){
         this.Expression実行AssertEqual(() => CreateSet().SelectMany(o => CreateSet()).OfType<string>());
         this.Expression実行AssertEqual(() => CreateSet().SelectMany(o => CreateSet().SelectMany(i => CreateSet())).OfType<string>());
         this.Expression実行AssertEqual(() => CreateSet().SelectMany(p => CreateSet()).OfType<string>());
+    }
+    [Fact]public void Call_OfType1(){
         this.Expression実行AssertEqual(() => new object[] { "ABC", 1, 3.0 }.OfType<string>());
         this.Expression実行AssertEqual(() => new string[] { "A", "B", "C" }.OfType<object>());
     }

@@ -9,7 +9,7 @@ namespace LinqDB.Sets;
 //    bool Contains(TKey key);
 //}
 
-public interface ILookup<TKey,out TElement>:IEnumerable<IGrouping<TKey,TElement>>,IEnumerable{
+public interface ILookup<TKey,out TElement>:IEnumerable<IGrouping<TKey,TElement>>{
     //int Count { get; }
     IEnumerable<TElement> this[TKey key] { get; }
     bool Contains(TKey key);

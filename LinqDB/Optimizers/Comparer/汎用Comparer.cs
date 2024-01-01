@@ -284,7 +284,7 @@ public sealed class 汎用Comparer : EqualityComparer<object>
             ExpressionEqualityComparer.Clear();
             return (x, y) switch
             {
-                (Delegate x0, Delegate y0) => x0.Method==y0.Method&&this.Equals(x0.Target, y0.Target),
+                (Delegate x0, Delegate y0) => x0.Method==y0.Method&&this.Equals(x0.Target, y0.Target)||x0.Method.IsCollectible&&y0.Method.IsCollectible,
                 (Expression x0, Expression y0) => ExpressionEqualityComparer.Equals(x0, y0),
                 (LabelTarget x0, LabelTarget y0) => ExpressionEqualityComparer.Equals(x0, y0),
                 (CatchBlock x0, CatchBlock y0) => ExpressionEqualityComparer.Equals(x0, y0),

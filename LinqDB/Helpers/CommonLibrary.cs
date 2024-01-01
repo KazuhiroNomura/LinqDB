@@ -27,6 +27,7 @@ using Generic= Collections.Generic;
 public static class CommonLibrary {
     static CommonLibrary(){
     }
+    internal const SerializeType DefaultSerializeType=SerializeType.MemoryPack;
     public static (AssemblyBuilder AssemblyBuilder,ModuleBuilder ModuleBuilder) DefineAssemblyModule(string Name) {
         var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(
             new AssemblyName { Name=Name },

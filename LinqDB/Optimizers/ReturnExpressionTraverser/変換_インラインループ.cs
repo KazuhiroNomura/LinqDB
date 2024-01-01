@@ -899,57 +899,99 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                         var 変換元Type = argument.Type;
                         var 変換先Type = Method.GetGenericArguments()[0];
                         Debug.Assert(変換元Type==IEnumerable1のT(MethodCall0_Arguments_0.Type));
-                        //(object)int
-                        if(変換先Type.IsValueType){
-                            if(変換元Type.IsValueType){
-                                //(struct1)struct0
-                                return ループの内部処理(
-                                    Expression.Convert(
-                                        argument,
-                                        変換先Type
-                                    )
-                                );
-                            } else{
-                                //(int)object
-                                return Expression.IfThenElse(
-                                    Expression.TypeIs(
-                                        argument,
-                                        変換先Type
-                                    ),
-                                    ループの内部処理(
-                                        Expression.Convert(
-                                            argument,
-                                            変換先Type
-                                        )
-                                    ),
-                                    Default_void
-                                );
-                            }
-                        } else{
-                            if(変換元Type.IsValueType){
-                                return ループの内部処理(
-                                    Expression.Convert(
-                                        argument,
-                                        変換先Type
-                                    )
-                                );
-                            } else{
-                                //(object2)object1
-                                return Expression.IfThenElse(
-                                    Expression.TypeIs(
-                                        argument,
-                                        変換先Type
-                                    ),
-                                    ループの内部処理(
-                                        Expression.Convert(
-                                            argument,
-                                            変換先Type
-                                        )
-                                    ),
-                                    Default_void
-                                );
+                        int? a=3;
+                        var b=(double?)a;
+                        if(変換元Type.IsNullable()){
+                            if(変換元Type.IsNullable()){
+
                             }
                         }
+                        if(変換元Type.IsAssignableFrom(変換先Type)){
+                            //class 変換先:変換元
+                            //(変換元)変換先←これは暗黙でできるが(参照型)値型の場合ボクシングの為にConvertが必要
+                            if(変換先Type.IsValueType)
+                                return ループの内部処理(
+                                    Expression.Convert(
+                                        argument,
+                                        変換先Type
+                                    )
+                                );
+                            return Expression.IfThenElse(
+                                Expression.TypeIs(
+                                    argument,
+                                    変換先Type
+                                ),
+                                ループの内部処理(
+                                    Expression.Convert(
+                                        argument,
+                                        変換先Type
+                                    )
+                                ),
+                                Default_void
+                            );
+                        }else if(変換先Type.IsAssignableFrom(変換元Type)){
+                            //class 変換先:変換元
+                            //(変換先)変換元
+                            return ループの内部処理(
+                                Expression.Convert(
+                                    argument,
+                                    変換先Type
+                                )
+                            );
+                        } else
+                            //キャストなし
+                            return Default_void;
+                        ////(object)int
+                        //if(変換先Type.IsValueType){
+                        //    if(変換元Type.IsValueType){
+                        //        //(struct1)struct0
+                        //        return ループの内部処理(
+                        //            Expression.Convert(
+                        //                argument,
+                        //                変換先Type
+                        //            )
+                        //        );
+                        //    } else{
+                        //        //(int)object
+                        //        return Expression.IfThenElse(
+                        //            Expression.TypeIs(
+                        //                argument,
+                        //                変換先Type
+                        //            ),
+                        //            ループの内部処理(
+                        //                Expression.Convert(
+                        //                    argument,
+                        //                    変換先Type
+                        //                )
+                        //            ),
+                        //            Default_void
+                        //        );
+                        //    }
+                        //} else{
+                        //    if(変換元Type.IsAssignableTo(変換先Type)){
+                        //        //(object2)object1
+                        //        return Expression.IfThenElse(
+                        //            Expression.TypeIs(
+                        //                argument,
+                        //                変換先Type
+                        //            ),
+                        //            ループの内部処理(
+                        //                Expression.Convert(
+                        //                    argument,
+                        //                    変換先Type
+                        //                )
+                        //            ),
+                        //            Default_void
+                        //        );
+                        //    } else{
+                        //        return ループの内部処理(
+                        //            Expression.Convert(
+                        //                argument,
+                        //                変換先Type
+                        //            )
+                        //        );
+                        //    }
+                        //}
                         //if(変換先Type.IsValueType){
                         //} else{
                         //    var t=Expression.Parameter(変換先Type,"OfType");

@@ -9,7 +9,7 @@ using LinqDB.Sets;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_インラインループ : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン| テストオプション.ローカル実行|テストオプション.プロファイラ;
+    //protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン| テストオプション.ローカル実行|テストオプション.プロファイラ;
     public 変換_インラインループ(){
         this.Optimizer.IsInline=true;
     }

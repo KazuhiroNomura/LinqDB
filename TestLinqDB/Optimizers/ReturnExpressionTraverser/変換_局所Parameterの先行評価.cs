@@ -1,6 +1,9 @@
 ﻿using LinqDB.Sets;
 using System.Globalization;
 
+using TestLinqDB.特殊パターン;
+
+
 //using Exception=System.Exception;
 using Expression = System.Linq.Expressions.Expression;
 using SwitchCase = System.Linq.Expressions.SwitchCase;
@@ -9,7 +12,7 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 // ReSharper disable AssignNullToNotNullAttribute
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_局所Parameterの先行評価 : 共通{
-    protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
+    //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
     [Fact]
     public void 変形確認1(){
         var p = Expression.Parameter(typeof(decimal));
@@ -20,7 +23,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         var Add=Expression.Add(p,p);
         Add=Expression.Add(Add,Add);
         this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda(
+            Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Add,
@@ -30,7 +33,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
         this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda(
+            Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Add,
@@ -42,7 +45,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
         this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda(
+            Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Expression.Assign(
@@ -64,7 +67,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
         this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda(
+            Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.Add(
                         p,
@@ -86,9 +89,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
     public class 辺を作る : 共通{
         protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]public void Loop無限(){
-            var Label = Expression.Label();
-            var _5 = this.Optimizer.Lambda最適化(
-                Expression.Lambda(
+            this.Optimizer_Lambda最適化(
+                Expression.Lambda<Action>(
                     Expression.Block(
                         Expression.Constant(1m),
                         Expression.Constant(1m),
@@ -100,15 +102,18 @@ public class 変換_局所Parameterの先行評価 : 共通{
             );
         }
         [Fact]public void Loop無条件break(){
-            var Label=Expression.Label();
-            this.Optimizer.Lambda最適化(
-                Expression.Lambda(
+            var Break=Expression.Label(typeof(decimal));
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
                     Expression.Block(
                         Expression.Constant(1m),
                         Expression.Constant(1m),
                         Expression.Loop(
-                            Expression.Goto(Label),
-                            Label
+                            Expression.Break(
+                                Break,
+                                Expression.Constant(1m)
+                            ),
+                            Break
                         )
                     )
                 )
@@ -116,16 +121,17 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
         [Fact]public void Loop条件break(){
             var p=Expression.Parameter(typeof(bool),"p");
-            var Label=Expression.Label();
-            this.Optimizer.Lambda最適化(
-                Expression.Lambda(
+            var Label=Expression.Label(typeof(bool));
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<bool,bool>>(
                     Expression.Block(
                         Expression.Constant(1m),
                         Expression.Constant(1m),
                         Expression.Loop(
-                            Expression.IfThen(
+                            Expression.IfThenElse(
                                 p,
-                                Expression.Goto(Label)
+                                Expression.Default(typeof(void)),
+                                Expression.Goto(Label,Expression.Constant(true))
                             ),
                             Label
                         )
@@ -147,8 +153,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    case ExpressionType.PreIncrementAssign:
             //    case ExpressionType.Throw:
             {
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
@@ -161,8 +167,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(Label.DefaultValue is not null)
             {
                 var Label = Expression.Label(typeof(int));
-                var _1 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int>>(
                         Expression.Block(
                             Expression.Goto(Label, Expression.Constant(1)),
                             Expression.Label(Label, Expression.Constant(2))
@@ -173,11 +179,12 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(this.Dictionary_LabelTarget_辺に関する情報.TryGetValue(Label.Target,out var 移動先)){
             {
                 var Label = Expression.Label();
-                var _2 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Goto(Label),
-                            Expression.Label(Label)
+                            Expression.Label(Label),
+                            Expression.Constant(true)
                         )
                     )
                 );
@@ -185,12 +192,19 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        } else{
             //        }
             {
-                var Label = Expression.Label();
-                var _3 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label1 = Expression.Label();
+                var Label2 = Expression.Label();
+                var Label3 = Expression.Label();
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
-                            Expression.Label(Label),
-                            Expression.Goto(Label)
+                            Expression.Goto(Label2),
+                            Expression.Label(Label1),
+                            Expression.Goto(Label3),
+                            Expression.Label(Label2),
+                            Expression.Goto(Label1),
+                            Expression.Label(Label3),
+                            Expression.Constant(true)
                         )
                     )
                 );
@@ -204,14 +218,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_3
             //            }
             {
-                var Label = Expression.Label();
-                var _4 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Goto(Label),
-                            Expression.Label(Label)
+                            Expression.Goto(Label,Expression.Constant(false)),
+                            Expression.Label(Label,Expression.Constant(true))
                         )
                     )
                 );
@@ -219,14 +233,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //    case ExpressionType.Loop:{
             {
-                var Label = Expression.Label();
-                var _5 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Loop(
-                                Expression.Goto(Label),
+                                Expression.Goto(Label,Expression.Constant(false)),
                                 Label
                             )
                         )
@@ -239,8 +253,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        else if(Assign_Left is ParameterExpression){
             {
                 var p = Expression.Parameter(typeof(int), "p");
-                var _6 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
@@ -256,14 +270,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(Reflection.Helpers.NoEarlyEvaluation==GetGenericMethodDefinition(((MethodCallExpression)Expression).Method))return;
             {
                 var _1m = 1m;
-                var _7 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1m+_1m+_1m.NoEarlyEvaluation()
                 );
             }
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _8 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
                 );
             }
@@ -272,7 +286,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(ILで直接埋め込めるか((ConstantExpression)Expression))return;
             {
                 var _1 = 1;
-                var _10 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1+_1+1
                 );
             }
@@ -282,23 +296,23 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var p = Expression.Parameter(typeof(int), "p");
                 var _1 = 1;
-                var _11 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,Func<int>>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Lambda(p)
+                            Expression.Lambda<Func<int>>(p)
                         ), p
                     )
                 );
                 var q = Expression.Parameter(typeof(int), "q");
-                var _12 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,Func<int,int>>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             p,
-                            Expression.Lambda(
+                            Expression.Lambda<Func<int,int>>(
                                 Expression.Block(
                                     p,
                                     Expression.Add(
@@ -324,8 +338,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(IfFalse==Conditional1_IfFalse)
             {
                 var @true = Expression.Constant(true);
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Condition(
                             Expression.Equal(
                                 Expression.Constant(1m),
@@ -348,10 +362,10 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var operator_false = Expression.Constant(new 特殊パターン.operator_true(false));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var operator_true = Expression.Constant(new operator_true(true));
+                var operator_false = Expression.Constant(new operator_true(false));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             @true,
                             operator_false,
@@ -370,9 +384,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _1 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var operator_true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             @true,
                             Expression.Condition(
@@ -399,9 +413,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_0
 
             {
-                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var @true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             Expression.Call(
                                 @true.Type.GetMethod("op_True")!,
@@ -428,12 +442,12 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 );
             }
             {
-                var Constant = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Constant = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.AndAlso(
                             Constant,
-                            Expression.New(typeof(特殊パターン.operator_true))
+                            Expression.New(typeof(operator_true))
                         )
                     )
                 );
@@ -444,8 +458,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var p=Expression.Parameter(typeof(int),"p");
                 var @true=Expression.Constant(true);
-                var _0=this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,int>>(
                         Expression.Condition(
                             Expression.Equal(
                                 p,
@@ -483,7 +497,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     pp,
                     Expression.SwitchCase(pp, Expression.Constant(0))
                 );
-                var _0 = this.Optimizer.Lambda最適化(Expression.Lambda<Func<int, int>>(e, p));
+                this.Expression実行AssertEqual(Expression.Lambda<Func<int, int>>(e, p));
             }
             //    } else
             {
@@ -503,7 +517,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                         ), Expression.Constant(3)
                     )
                 );
-                var _1 = this.Optimizer.Lambda最適化(Expression.Lambda<Func<int, int>>(e, p));
+                this.Expression実行AssertEqual(Expression.Lambda<Func<int, int>>(e, p));
             }
             //}
             //if(!変化したか) return Switch0;
@@ -524,8 +538,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
                         ), Expression.Constant(3)
                     )
                 );
-                var _2 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,int>>(
                         Expression.Switch(
                             pp,
                             pp,
@@ -560,13 +574,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var set = new Set<int>();
                 var _1m = 1m;
-                var _1 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Join(set, o => o, i => i, (o, i) => o+i) }
                 );
-                var _0 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
                 );
-                var _2 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set) }
                 );
             }
@@ -592,8 +606,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    case ExpressionType.PreIncrementAssign:
             //    case ExpressionType.Throw:
             {
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
@@ -604,13 +618,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             }
             //    case ExpressionType.Label: {
             {
-                var Label = Expression.Label();
-                var _1 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Label(Label)
+                            Expression.Label(Label,Expression.Constant(true))
                         )
                     )
                 );
@@ -618,14 +632,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //    case ExpressionType.Goto:{
             {
-                var Label = Expression.Label();
-                var _2 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Goto(Label),
-                            Expression.Label(Label)
+                            Expression.Goto(Label,Expression.Constant(false)),
+                            Expression.Label(Label,Expression.Constant(true))
                         )
                     )
                 );
@@ -633,14 +647,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //    case ExpressionType.Loop: {
             {
-                var Label = Expression.Label();
-                var _3 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Loop(
-                                Expression.Goto(Label),
+                                Expression.Goto(Label,Expression.Constant(false)),
                                 Label
                             )
                         )
@@ -651,8 +665,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    case ExpressionType.Assign: {
             {
                 var p = Expression.Parameter(typeof(int), "p");
-                var _4 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
@@ -666,7 +680,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(Reflection.Helpers.NoEarlyEvaluation==GenericMethodDefinition)return Expression0;
             {
                 var _1m = 1m;
-                var _5 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1m+_1m+_1m.NoEarlyEvaluation()
                 );
             }
@@ -677,7 +691,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _6 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
                 );
             }
@@ -685,7 +699,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _7 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set) }
                 );
             }
@@ -694,7 +708,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _8 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Join(set, o => o, i => i, (o, i) => o+i) }
                 );
             }
@@ -702,7 +716,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        }
             {
                 var _1m = 1m;
-                var _9 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1m+_1m+_1m.ToString(CultureInfo.InvariantCulture)
                 );
             }
@@ -711,7 +725,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(ILで直接埋め込めるか((ConstantExpression)Expression0))return Expression0;
             {
                 var _1 = 1;
-                var _10 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1+_1+1
                 );
             }
@@ -721,23 +735,23 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var p = Expression.Parameter(typeof(int), "p");
                 var _1 = 1;
-                var _11 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,Func<int>>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Lambda(p)
+                            Expression.Lambda<Func<int>>(p)
                         ), p
                     )
                 );
                 var q = Expression.Parameter(typeof(int), "q");
-                var _12 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,Func<int,int>>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             p,
-                            Expression.Lambda(
+                            Expression.Lambda<Func<int,int>>(
                                 Expression.Block(
                                     p,
                                     Expression.Add(
@@ -759,8 +773,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //            if(this.辺.この辺に二度出現存在するか_削除する(Expression0)){
             {
                 var @true = Expression.Constant(true);
-                var _13 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Condition(
                             Expression.Equal(
                                 Expression.Constant(1m),
@@ -784,9 +798,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_13
             //            if(this.辺.この辺に存在するか(Expression0)){
             {
-                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _14 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var @true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             Expression.Call(
                                 @true.Type.GetMethod("op_True")!,
@@ -814,13 +828,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             }
             //            }
             {
-                var Label = Expression.Label();
-                var _15 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Label(Label)
+                            Expression.Label(Label,Expression.Constant(true))
                         )
                     )
                 );
@@ -839,8 +853,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(IfFalse==Conditional1_IfFalse)
             {
                 var @true = Expression.Constant(true);
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Condition(
                             Expression.Equal(
                                 Expression.Constant(1m),
@@ -863,10 +877,10 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var operator_false = Expression.Constant(new 特殊パターン.operator_true(false));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var operator_true = Expression.Constant(new operator_true(true));
+                var operator_false = Expression.Constant(new operator_true(false));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             @true,
                             operator_false,
@@ -885,9 +899,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    else
             {
                 var @true = Expression.Constant(true);
-                var operator_true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _1 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var operator_true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             @true,
                             Expression.Condition(
@@ -914,9 +928,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_0
 
             {
-                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var @true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             Expression.Call(
                                 @true.Type.GetMethod("op_True")!,
@@ -943,12 +957,12 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 );
             }
             {
-                var Constant = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Constant = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.AndAlso(
                             Constant,
-                            Expression.New(typeof(特殊パターン.operator_true))
+                            Expression.New(typeof(operator_true))
                         )
                     )
                 );
@@ -967,7 +981,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     pp,
                     Expression.SwitchCase(pp, Expression.Constant(0))
                 );
-                var _0 = this.Optimizer.Lambda最適化(Expression.Lambda<Func<int, int>>(e, p));
+                this.Expression実行AssertEqual(Expression.Lambda<Func<int, int>>(e, p));
             }
             //    } else
             {
@@ -987,29 +1001,15 @@ public class 変換_局所Parameterの先行評価 : 共通{
                         ), Expression.Constant(3)
                     )
                 );
-                var _1 = this.Optimizer.Lambda最適化(Expression.Lambda<Func<int, int>>(e, p));
+                this.Expression実行AssertEqual(Expression.Lambda<Func<int, int>>(e, p));
             }
             //}
             //if(!変化したか) return Switch0;
             {
                 var p = Expression.Parameter(typeof(int), "p");
                 var pp = Expression.Add(p, p);
-                var ppp = Expression.Add(pp, pp);
-                var e = Expression.Switch(
-                    pp,
-                    pp,
-                    Expression.SwitchCase(pp, Expression.Constant(0)),
-                    Expression.SwitchCase(
-                        Expression.Switch(
-                            pp,
-                            p,
-                            Expression.SwitchCase(p, Expression.Constant(1)),
-                            Expression.SwitchCase(p, Expression.Constant(2))
-                        ), Expression.Constant(3)
-                    )
-                );
-                var _2 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int,int>>(
                         Expression.Switch(
                             pp,
                             pp,
@@ -1044,13 +1044,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var set = new Set<int>();
                 var _1m = 1m;
-                var _1 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Join(set, o => o, i => i, (o, i) => o+i) }
                 );
-                var _0 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
                 );
-                var _2 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set) }
                 );
             }
@@ -1062,40 +1062,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class 判定_左辺Expressionが含まれる : 共通{
-        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
-        //[Fact]
-        //public void Label(){
-        //    {
-        //        var Label=Expression.Label(typeof(decimal),"L0");
-        //        var _0 = this.Optimizer.Lambda最適化(
-        //            Expression.Lambda(
-        //                Expression.Block(
-        //                    Expression.Add(
-        //                        Expression.Constant(1m),
-        //                        Expression.Goto(Label,Expression.Constant(3m))
-        //                    ),
-        //                    Expression.Label(Label,Expression.Constant(2m))
-        //                )
-        //            )
-        //        );
-        //        _0.Compile();
-        //    }
-        //    {
-        //        var Label=Expression.Label(typeof(decimal),"L0");
-        //        var _0 = this.Optimizer.Lambda最適化(
-        //            Expression.Lambda(
-        //                Expression.Block(
-        //                    Expression.Goto(Label,Expression.Constant(3m)),
-        //                    Expression.Add(
-        //                        Expression.Constant(1m),
-        //                        Expression.Label(Label,Expression.Constant(2m))
-        //                    )
-        //                )
-        //            )
-        //        );
-        //        _0.Compile();
-        //    }
-        //}
+        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行|テストオプション.ローカル実行|テストオプション.アセンブリ保存;
         [Fact]
         public void Traverse()
         {
@@ -1111,8 +1078,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    case ExpressionType.PreIncrementAssign:
             //    case ExpressionType.Throw:
             {
-                var _0 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
@@ -1123,13 +1090,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             }
             //    case ExpressionType.Label: {
             {
-                var Label = Expression.Label();
-                var _1 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(decimal));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<decimal>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Label(Label)
+                            Expression.Label(Label,Expression.Constant(1m))
                         )
                     )
                 );
@@ -1137,14 +1104,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //    case ExpressionType.Goto:{
             {
-                var Label = Expression.Label();
-                var _2 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Goto(Label),
-                            Expression.Label(Label)
+                            Expression.Goto(Label,Expression.Constant(true)),
+                            Expression.Label(Label,Expression.Constant(false))
                         )
                     )
                 );
@@ -1152,14 +1119,14 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //    case ExpressionType.Loop: {
             {
-                var Label = Expression.Label();
-                var _3 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Loop(
-                                Expression.Goto(Label),
+                                Expression.Goto(Label,Expression.Constant(true)),
                                 Label
                             )
                         )
@@ -1170,9 +1137,10 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    case ExpressionType.Assign: {
             {
                 var p = Expression.Parameter(typeof(int), "p");
-                var _4 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<int>>(
                         Expression.Block(
+                            new[]{p},
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Assign(p, Expression.Constant(1))
@@ -1185,7 +1153,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(Reflection.Helpers.NoEarlyEvaluation==GenericMethodDefinition)return Expression0;
             {
                 var _1m = 1m;
-                var _5 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1m+_1m+_1m.NoEarlyEvaluation()
                 );
             }
@@ -1196,7 +1164,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _6 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set, EqualityComparer<int>.Default) }
                 );
             }
@@ -1204,7 +1172,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _7 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Except(set) }
                 );
             }
@@ -1213,7 +1181,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var _1m = 1m;
                 var set = new Set<int>();
-                var _8 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => new { a = _1m+_1m, b = set.Join(set, o => o, i => i, (o, i) => o+i) }
                 );
             }
@@ -1221,7 +1189,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        }
             {
                 var _1m = 1m;
-                var _9 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1m+_1m+_1m.ToString(CultureInfo.InvariantCulture)
                 );
             }
@@ -1230,7 +1198,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //        if(ILで直接埋め込めるか((ConstantExpression)Expression0))return Expression0;
             {
                 var _1 = 1;
-                var _10 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     () => _1+_1+1
                 );
             }
@@ -1240,33 +1208,36 @@ public class 変換_局所Parameterの先行評価 : 共通{
             {
                 var p = Expression.Parameter(typeof(int), "p");
                 var _1 = 1;
-                var _11 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<Func<int>>>(
                         Expression.Block(
+                            new[]{p},
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Lambda(p)
-                        ), p
+                            Expression.Lambda<Func<int>>(p)
+                        )
                     )
                 );
                 var q = Expression.Parameter(typeof(int), "q");
-                var _12 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<Func<int>>>(
                         Expression.Block(
+                            new[]{p,q},
+                            Expression.Assign(p, Expression.Constant(1)),
+                            Expression.Assign(q, Expression.Constant(2)),
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             p,
-                            Expression.Lambda(
+                            Expression.Lambda<Func<int>>(
                                 Expression.Block(
                                     p,
                                     Expression.Add(
                                         Expression.Add(q, q),
                                         Expression.Add(q, q)
                                     )
-                                ),
-                                q
+                                )
                             )
-                        ), p
+                        )
                     )
                 );
             }
@@ -1278,8 +1249,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //            if(this.辺.この辺に二度出現存在するか_削除する(Expression0)){
             {
                 var @true = Expression.Constant(true);
-                var _13 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Condition(
                             Expression.Equal(
                                 Expression.Constant(1m),
@@ -1303,9 +1274,9 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //_13
             //            if(this.辺.この辺に存在するか(Expression0)){
             {
-                var @true = Expression.Constant(new 特殊パターン.operator_true(true));
-                var _14 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var @true = Expression.Constant(new operator_true(true));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<operator_true>>(
                         Expression.Condition(
                             Expression.Call(
                                 @true.Type.GetMethod("op_True")!,
@@ -1333,13 +1304,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
             }
             //            }
             {
-                var Label = Expression.Label();
-                var _15 = this.Optimizer.Lambda最適化(
-                    Expression.Lambda(
+                var Label = Expression.Label(typeof(bool));
+                this.Expression実行AssertEqual(
+                    Expression.Lambda<Func<bool>>(
                         Expression.Block(
                             Expression.Constant(1m),
                             Expression.Constant(1m),
-                            Expression.Label(Label)
+                            Expression.Label(Label,Expression.Constant(true))
                         )
                     )
                 );
@@ -1352,7 +1323,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class List辺 : 共通{
-        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
+        //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]
         public void 親()
         {
@@ -1380,7 +1351,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     Expression.Label(endif),
                     r
                 );
-                var _0 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     Expression.Lambda<Func<bool, bool>>(
                         Block,
                         p
@@ -1389,7 +1360,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             }
             {
                 var Label1 = Expression.Label(typeof(int), "Label1");
-                var _1 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     Expression.Lambda<Func<int>>(
                         Expression.Block(
                             Expression.Goto(Label1, Expression.Constant(1)),
@@ -1413,7 +1384,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                         Expression.Constant(1)
                     )
                 );
-                var _2 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     Expression.Lambda<Func<int, int>>(
                         e,
                         @int
@@ -1446,7 +1417,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     Expression.Label(L4),
                     Expression.Constant(2m)
                 );
-                var _3 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     Expression.Lambda<Func<decimal>>(
                         Block
                     )
@@ -1500,14 +1471,25 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     SwitchCases.Add(SwitchCase);
                     TestValues.Clear();
                 }
+                var index = Expression.Parameter(typeof(int), "index");
+                var endswitch = Expression.Label(typeof(int),"endswitch");
                 var e = Expression.Block(
+                    new[]{index},
+                    Expression.Assign(index,Expression.Constant(100)),
                     Expression.Label(先頭),
+                    Expression.IfThen(
+                        Expression.GreaterThan(
+                            Expression.Constant(0),
+                            Expression.PostDecrementAssign(index)
+                        ),
+                        Expression.Goto(endswitch,p)
+                    ),
                     Expression.Switch(
                         p, Goto, SwitchCases.ToArray()
                     ),
-                    p
+                    Expression.Label(endswitch,p)
                 );
-                var _4 = this.Optimizer.Lambda最適化(
+                this.Expression実行AssertEqual(
                     Expression.Lambda<Func<int, int>>(
                         e,
                         p
@@ -1815,20 +1797,20 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
         //else
     }
-    private static readonly 特殊パターン.operator_true Op = new(true);
+    private static readonly operator_true Op = new(true);
     // private static bool boolを返す関数()=>true;
     [Fact]
     public void AndAlso_OrElse()
     {
         //if(test.Type==typeof(bool)) {
-        this.Optimizer.Lambda最適化(() => true&&ReferenceEquals(null, ""));
+        this.Expression実行AssertEqual(() => true&&ReferenceEquals(null, ""));
         //} else {
         var Constant = Expression.Constant(Op);
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true>>(
                 Expression.AndAlso(
                     Constant,
-                    Expression.New(typeof(特殊パターン.operator_true))
+                    Expression.New(typeof(operator_true))
                 )
             )
         );
@@ -1838,38 +1820,49 @@ public class 変換_局所Parameterの先行評価 : 共通{
     public void AndAlso(){
         //if(Binary1_Test.NodeType is ExpressionType.Assign){
         var Constant = Expression.Constant(Op);//定数が先行評価で変数にAssignされるため
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true>>(
                 Expression.AndAlso(Constant, Constant)
             )
         );
         //}
         //if(Binary2_Left is ParameterExpression Parameter){
-        var p = Expression.Parameter(typeof(特殊パターン.operator_true));
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.AndAlso(p,Constant),
-                p
-            )
-        );
-        //} else{
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.AndAlso(Constant, p),
-                p
-            )
-        );
-        //}
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.AndAlso(
-                    p,
-                    Expression.New(typeof(特殊パターン.operator_true))
+        var p = Expression.Parameter(typeof(operator_true));
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    new []{p},
+                    Expression.Assign(p,Constant),
+                    Expression.AndAlso(p,Constant)
                 ),
                 p
             )
         );
-        this.Optimizer.Lambda最適化(() =>
+        //} else{
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    new []{p},
+                    Expression.Assign(p,Constant),
+                    Expression.AndAlso(Constant, p)
+                ),
+                p
+            )
+        );
+        //}
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    Expression.Assign(p,Constant),
+                    Expression.AndAlso(
+                        p,
+                        Expression.New(typeof(operator_true))
+                    )
+                ),
+                p
+            )
+        );
+        this.Expression実行AssertEqual(() =>
             Tuple.Create(Op, Op).Let(
                 p =>
                     p.Item1&&p.Item2
@@ -1880,45 +1873,53 @@ public class 変換_局所Parameterの先行評価 : 共通{
     public void OrElse(){
         //if(Binary1_Test.NodeType is ExpressionType.Assign){
         var Constant = Expression.Constant(Op);//定数が先行評価で変数にAssignされるため
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true>>(
                 Expression.OrElse(Constant, Constant)
             )
         );
         //}
         //if(Binary2_Left is ParameterExpression Parameter){
-        var p = Expression.Parameter(typeof(特殊パターン.operator_true));
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.OrElse(p,Constant),
+        var p = Expression.Parameter(typeof(operator_true));
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    new []{p},
+                    Expression.Assign(p,Constant),
+                    Expression.OrElse(p,Constant)
+                ),
                 p
             )
         );
         //} else{
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.OrElse(Constant, p),
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    new []{p},
+                    Expression.Assign(p,Constant),
+                    Expression.OrElse(Constant, p)
+                ),
                 p
             )
         );
         //}
         ////if(Binary1_Right.NodeType is ExpressionType.Constant or ExpressionType.Parameter) return Expression.Or(Binary1_Left,Binary1_Right);
         //var Constant = Expression.Constant(Op);
-        //this.Optimizer.Lambda最適化(
-        //    Expression.Lambda(
+        //this.Expression実行AssertEqual(
+        //    Expression.Lambda<Func<operator_true>>(
         //        Expression.OrElse(Constant, Constant)
         //    )
         //);
         //var p = Expression.Parameter(typeof(特殊パターン.operator_true));
-        //this.Optimizer.Lambda最適化(
-        //    Expression.Lambda(
+        //this.Expression実行AssertEqual(
+        //    Expression.Lambda<Func<operator_true>>(
         //        Expression.OrElse(Constant, p),
         //        p
         //    )
         //);
         ////if(Binary1_Left.NodeType is ExpressionType.Constant or ExpressionType.Parameter){
-        //this.Optimizer.Lambda最適化(
-        //    Expression.Lambda(
+        //this.Expression実行AssertEqual(
+        //    Expression.Lambda<Func<operator_true>>(
         //        Expression.OrElse(
         //            Constant,
         //            Expression.New(typeof(特殊パターン.operator_true))
@@ -1926,16 +1927,20 @@ public class 変換_局所Parameterの先行評価 : 共通{
         //        p
         //    )
         //);
-        this.Optimizer.Lambda最適化(
-            Expression.Lambda(
-                Expression.OrElse(
-                    p,
-                    Expression.New(typeof(特殊パターン.operator_true))
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<operator_true,operator_true>>(
+                Expression.Block(
+                    new []{p},
+                    Expression.Assign(p,Constant),
+                    Expression.OrElse(
+                        p,
+                        Expression.New(typeof(operator_true))
+                    )
                 ),
                 p
             )
         );
-        this.Optimizer.Lambda最適化(() =>
+        this.Expression実行AssertEqual(() =>
             Tuple.Create(Op, Op).Let(
                 p =>
                     p.Item1||p.Item2

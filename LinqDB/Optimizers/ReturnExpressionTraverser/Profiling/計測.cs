@@ -113,7 +113,7 @@ public sealed class 計測{
     protected const string フッター=
         "└───┴───┴──┴──┴──┴─────┘";
     public void Consoleに出力(List<string> List表とツリー,StringBuilder sb,long ElapsedMilliseconds){
-        string 単位="";
+        var 単位="";
         //           1 100ns
         //          10 1micro
         //       10000 1milli

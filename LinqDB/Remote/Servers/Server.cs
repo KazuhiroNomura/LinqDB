@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using LinqDB.Helpers;
 using static LinqDB.Helpers.Configulation;
 using static LinqDB.Helpers.CommonLibrary;
 namespace LinqDB.Remote.Servers;
@@ -258,7 +259,7 @@ public class Server:IDisposable{
         var RequestResponseSingleReceiveSends = (BlockingCollection<SingleReceiveSend>)obj!;
         var Threadで実行するDelegate_Target = new Threadで実行するMethodデータ(this.ServerObject);
         var Token = this.CancellationTokenSourceループRequestResponse.Token;
-        var Optimizer=new Optimizers.Optimizer(){IsGenerateAssembly=false};
+        var Optimizer=new Optimizers.Optimizer{IsGenerateAssembly=false};
         try {
             while(true) {
                 var SingleReceiveSend = RequestResponseSingleReceiveSends.Take(Token);
@@ -268,32 +269,19 @@ public class Server:IDisposable{
                     Trace_WriteLine(1,$"Server.Function実行 {Request}");
                     switch(Request) {
                         case Request.Bytes0_Bytes0: {
-                            SingleReceiveSend.送信(
-                                Response.Bytes0,
-                                null
-                            );
+                            SingleReceiveSend.送信(Response.Bytes0,null,デシリアライズした.SerializeType);
                             break;
                         }
                         case Request.Byte_Byte: {
-                            SingleReceiveSend.送信(
-                                Response.Byte,
-                                (byte)デシリアライズした.Object!
-                            );
+                            SingleReceiveSend.送信(Response.Byte,(byte)デシリアライズした.Object!,デシリアライズした.SerializeType);
                             break;
                         }
                         case Request.BytesN_BytesN: {
-                            SingleReceiveSend.送信(
-                                Response.BytesN,
-                                デシリアライズした.Object!
-                            );
+                            SingleReceiveSend.送信(Response.BytesN,デシリアライズした.Object!,デシリアライズした.SerializeType);
                             break;
                         }
                         case Request.TimeoutException_ThrowException: {
-                            SingleReceiveSend.送信(
-                                Response.ThrowException,
-                                new TimeoutException("テスト"),
-                                デシリアライズした.SerializeType
-                            );
+                            SingleReceiveSend.送信(Response.ThrowException,new TimeoutException(nameof(Request.TimeoutException_ThrowException)),デシリアライズした.SerializeType);
                             break;
                         }
                         case Request.Object_Object:
@@ -302,11 +290,7 @@ public class Server:IDisposable{
                             try {
                                 switch(Request) {
                                     case Request.Object_Object: {
-                                        SingleReceiveSend.送信(
-                                            Response.Object,
-                                            デシリアライズした.Object!,
-                                            デシリアライズした.SerializeType
-                                        );
+                                        SingleReceiveSend.送信(Response.Object,デシリアライズした.Object!,デシリアライズした.SerializeType);
                                         break;
                                     }
                                     case Request.Delegate_Invoke:
@@ -314,14 +298,8 @@ public class Server:IDisposable{
                                         Debug.Assert(デシリアライズした.SerializeType is SerializeType.MemoryPack or SerializeType.MessagePack or SerializeType.Utf8Json);
                                         var Lambda=(LambdaExpression)デシリアライズした.Object!;
                                         var Delegate=Optimizer.CreateServerDelegate(Lambda);
-                                        var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(
-                                            Delegate
-                                        );
-                                        SingleReceiveSend.送信(
-                                            ResponseType,
-                                            Result,
-                                            デシリアライズした.SerializeType
-                                        );
+                                        var (ResponseType, Result)=Threadで実行するDelegate_Target.Threadで実行(Delegate);
+                                        SingleReceiveSend.送信(ResponseType,Result,デシリアライズした.SerializeType);
                                         break;
                                     }
                                 }
@@ -335,10 +313,7 @@ public class Server:IDisposable{
                             break;
                         }
                         case Request.Exception_ThrowException: {
-                            SingleReceiveSend.送信(
-                                Response.ThrowException,
-                                デシリアライズした.Object
-                            );
+                            SingleReceiveSend.送信(Response.ThrowException,デシリアライズした.Object,デシリアライズした.SerializeType);
                             break;
                         }
                         default: throw new InvalidDataException("不正な通信方式"+Request);

@@ -31,6 +31,7 @@ internal static class FormatterResolver {
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter;
             if(type.IsInterface){
+                if((Formatter=RegisterInterface(type,typeof(Sets.ILookup         <,>),typeof(Formatters.Sets.ILookup           <,>)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping       <,>),typeof(Formatters.Sets.IGrouping         <,>)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping  <,>)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Return(Formatter);
@@ -98,7 +99,9 @@ internal static class FormatterResolver {
                 return Return(Register(type,typeof(Formatters.ExpressionT<>)));
             object? Formatter = null;
             if(type.IsInterface) {
+                if((Formatter=RegisterInterface(type,typeof(Sets.ILookup<,>),typeof(Formatters.Sets.ILookup<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IGrouping<,>),typeof(Formatters.Sets.IGrouping<,>))) is not null) return Return(Formatter);
+                if((Formatter=RegisterInterface(type,typeof(System.Linq.ILookup<,>),typeof(Formatters.Enumerables.ILookup<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(System.Linq.IGrouping<,>),typeof(Formatters.Enumerables.IGrouping<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable<>),typeof(Formatters.Sets.IEnumerable<>))) is not null) return Return(Formatter);
                 //if((Formatter=RegisterInterface(type,typeof(Generic.IEnumerable<>),typeof(Formatters.Enumerables.IEnumerable<>))) is not null) return Return(Formatter);

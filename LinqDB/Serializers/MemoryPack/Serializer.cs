@@ -87,6 +87,11 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         this.Clear();
         FormatterResolver.GetFormatterDynamic<T>();
         return MemoryPackSerializer.Serialize(value,this.Options);
+        //var Formatter=FormatterResolver.GetFormatterDynamic<T>();
+        //if(Formatter is null)
+        //    return MemoryPackSerializer.Serialize((object?)value,this.Options);
+        //else
+        //    return MemoryPackSerializer.Serialize(value,this.Options);
     }
     public override void Serialize<T>(Stream stream,T value){
         this.Clear();
@@ -98,6 +103,11 @@ public class Serializer:Serializers.Serializer,System.IServiceProvider{
         this.Clear();
         FormatterResolver.GetFormatterDynamic<T>();
         return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
+        //var Formatter=FormatterResolver.GetFormatterDynamic<T>();
+        //if(Formatter is null)
+        //    return (T)MemoryPackSerializer.Deserialize<object>(bytes,this.Options)!;
+        //else
+        //    return MemoryPackSerializer.Deserialize<T>(bytes,this.Options)!;
     }
     public override T Deserialize<T>(Stream stream){
         this.Clear();
