@@ -1,4 +1,5 @@
-﻿using S = LinqDB.Sets;
+﻿using LinqDB.Enumerables;
+using S = LinqDB.Sets;
 using E = System.Collections.Generic;
 using Q = System.Linq;
 using LinqDB.Sets;
@@ -60,12 +61,12 @@ public class FormatterResolver : 共通
         this.ObjectシリアライズAssertEqual((E.IEnumerable<int>)new Set<int>());
         //    }else{
         //        if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
-        this.ObjectシリアライズAssertEqual(new GroupingSet<int, int>(1));
-        this.ObjectシリアライズAssertEqual(new LinqDB.Enumerables.GroupingList<int, int>(1));
+        this.ObjectシリアライズAssertEqual(new S.Grouping<int, int>(1));
+        this.ObjectシリアライズAssertEqual(new LinqDB.Enumerables.Grouping<int, int>(1));
         //        if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
-        this.ObjectシリアライズAssertEqual(new GroupingSet<int, int>(1));
+        this.ObjectシリアライズAssertEqual(new S.Grouping<int, int>(1));
         //        if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
-        this.ObjectシリアライズAssertEqual(new SetGroupingList<int, int>());
+        this.ObjectシリアライズAssertEqual(new LinqDB.Enumerables.Lookup<int, int>());
         //        if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
         this.ObjectシリアライズAssertEqual(new SetGroupingSet<int, int>());
         //        if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);

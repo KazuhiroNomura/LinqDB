@@ -6,36 +6,6 @@ using LinqDB.Sets;
 using Linq = System.Linq;
 namespace LinqDB.Enumerables;
 using Generic=Collections.Generic;
-public class InternalList<T>:Generic.ICollection<T>{
-    [MemoryPack.MemoryPackInclude]
-    protected readonly Generic.List<T>List=new();
-    /// <summary>
-    /// コレクション初期化につかった
-    /// </summary>
-    /// <param name="Item"></param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void Add(T Item)=>this.List.Add(Item);
-    /// <summary>
-    /// インラインループ独立の都合上"IsAdded"という名前。戻り値は必要ないのでvoid
-    /// </summary>
-    /// <param name="Item"></param>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void IsAdded(T Item)=>this.List.Add(Item);
-    public int Count=> this.List.Count;
-    [MessagePack.IgnoreMember]
-    public long LongCount=> this.List.Count;
-
-    bool Generic.ICollection<T>.IsReadOnly => throw new NotImplementedException();
-
-    public virtual Generic.List<T>.Enumerator GetEnumerator()=>this.List.GetEnumerator();
-    Generic.IEnumerator<T> Generic.IEnumerable<T>.GetEnumerator()=>this.List.GetEnumerator();
-    Collections.IEnumerator Collections.IEnumerable.GetEnumerator()=>this.List.GetEnumerator();
-
-    void Generic.ICollection<T>.Clear()=>this.List.Clear();
-    bool Generic.ICollection<T>.Contains(T item)=>this.List.Contains(item);
-    void Generic.ICollection<T>.CopyTo(T[] array,int arrayIndex)=>this.List.CopyTo(array,arrayIndex);
-    bool Generic.ICollection<T>.Remove(T item)=>this.List.Remove(item);
-}
 /// <summary>
 /// IEnumerable&lt;T>.GroupByの結果の実体
 /// </summary>
@@ -43,7 +13,7 @@ public class InternalList<T>:Generic.ICollection<T>{
 /// <typeparam name="TKey">キー</typeparam>
 [DebuggerDisplay("Key = {Key}")]
 [DebuggerTypeProxy(typeof(SystemLinq_GroupingDebugView<,>))]
-public sealed class GroupingList<TKey,TElement>:InternalList<TElement>
+public sealed class Grouping<TKey,TElement>:InternalList<TElement>
     ,Linq.IGrouping<TKey,TElement>
     ,IEquatable<IGrouping<TKey,TElement>>
     ,IEquatable<Linq.IGrouping<TKey,TElement>>{//.IGrouping<TKey,TValue>{
@@ -60,13 +30,13 @@ public sealed class GroupingList<TKey,TElement>:InternalList<TElement>
     /// コンストラクタ。
     /// </summary>
     /// <param name="Key"></param>
-    public GroupingList(TKey Key)=>this.Key=Key;
+    public Grouping(TKey Key)=>this.Key=Key;
     /// <summary>
     /// コンストラクタ。
     /// </summary>
     /// <param name="Key">このキーに関連するタプルの集合</param>
     /// <param name="Value">1つのタプル</param>
-    public GroupingList(TKey Key,TElement Value):this(Key){
+    public Grouping(TKey Key,TElement Value):this(Key){
         this.Key=Key;
         this.Add(Value);
     }
@@ -84,7 +54,7 @@ public sealed class GroupingList<TKey,TElement>:InternalList<TElement>
     /// </summary>
     /// <returns>HashCode</returns>
     public override int GetHashCode()=>this.Key!.GetHashCode();
-    private bool PrivateEquals(IGrouping<TKey,TElement> other)=>System.Collections.Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key)&&this.Equals(other);
+    private bool PrivateEquals(IGrouping<TKey,TElement> other)=>Generic.EqualityComparer<TKey>.Default.Equals(this.Key,other.Key)&&this.Equals(other);
     public bool Equals(IGrouping<TKey,TElement>? other){
         if(ReferenceEquals(null,other)) return false;
         if(ReferenceEquals(this,other)) return true;
@@ -93,7 +63,7 @@ public sealed class GroupingList<TKey,TElement>:InternalList<TElement>
     public bool Equals(Linq.IGrouping<TKey,TElement>? other){
         if(ReferenceEquals(null,other)) return false;
         if(ReferenceEquals(this,other)) return true;
-        var value=new GroupingSet<TKey,TElement>(other.Key);
+        var value=new Sets.Grouping<TKey,TElement>(other.Key);
         foreach(var a in other) value.Add(a);
         return this.PrivateEquals(value);
     }

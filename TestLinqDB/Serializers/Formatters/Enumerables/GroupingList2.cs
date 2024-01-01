@@ -1,7 +1,7 @@
 ﻿
 using LinqDB.Enumerables;
 namespace TestLinqDB.Serializers.Formatters.Enumerables;
-public class GroupingList2 : CollectionTest<GroupingList<int, double>>
+public class GroupingList2 : CollectionTest<Grouping<int, double>>
 {
     public GroupingList2() : base( new(1))
     {

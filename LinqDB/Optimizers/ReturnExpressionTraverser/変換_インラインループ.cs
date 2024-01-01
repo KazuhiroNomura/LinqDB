@@ -374,7 +374,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
         var Expression本体 = ループの内部処理(
             Expression.Property(
                 Enumerator変数,
-                nameof(System.Collections.IEnumerator.Current)
+                nameof(Collections.IEnumerator.Current)
             )
         );
         return Expression.Block(
@@ -387,7 +387,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                             Expression.Call(
                                 Enumerator変数,
                                 GetEnumerator_ReturnType.GetMethod(
-                                    nameof(System.Collections.IEnumerator.MoveNext),
+                                    nameof(Collections.IEnumerator.MoveNext),
                                     Type.EmptyTypes
                                 )??Reflection.IEnumerator.MoveNext
                             ),
@@ -658,7 +658,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                 if(GenericMethodDefinition.DeclaringType==typeof(Sets.ExtensionSet))
                     SetGroupingSet_GenericTypeDefinition=typeof(Sets.SetGroupingSet<,>);
                 else
-                    SetGroupingSet_GenericTypeDefinition=typeof(Sets.SetGroupingList<,>);
+                    SetGroupingSet_GenericTypeDefinition=typeof(Lookup<,>);
                 Expression elementSelector;
                 //Expression? resultSelector;
                 Expression? comparer;
@@ -1173,7 +1173,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     Arguments_0,
                     argument => Expression.Call(
                         DescList,
-                        DescList_Type.GetMethod(nameof(System.Collections.Generic.ICollection<int>.Add)),
+                        DescList_Type.GetMethod(nameof(Generic.ICollection<int>.Add)),
                         argument
                     )
                 );

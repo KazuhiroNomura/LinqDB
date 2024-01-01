@@ -14,7 +14,7 @@ using Generic=System.Collections.Generic;
 /// <typeparam name="TKey">キー</typeparam>
 [DebuggerDisplay("Key = {Key}")]
 [DebuggerTypeProxy(typeof(SystemLinq_GroupingDebugView<, >))]
-public sealed class GroupingSet<TKey,TElement>:Set<TElement>
+public sealed class Grouping<TKey,TElement>:Set<TElement>
     ,IGrouping<TKey,TElement>/*,ICollection<TElement>*/,IEquatable<IGrouping<TKey,TElement>>
     ,IEquatable<Linq.IGrouping<TKey,TElement>>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
@@ -35,13 +35,13 @@ public sealed class GroupingSet<TKey,TElement>:Set<TElement>
     /// コンストラクタ。キーは必須
     /// </summary>
     /// <param name="Key">このキーに関連するタプルの集合</param>
-    public GroupingSet(TKey Key)=>this._Key=Key;
+    public Grouping(TKey Key)=>this._Key=Key;
     /// <summary>
     /// コンストラクタ。キーは必須
     /// </summary>
     /// <param name="Key">このキーに関連するタプルの集合</param>
     /// <param name="Value">1つのタプル</param>
-    public GroupingSet(TKey Key,TElement Value){
+    public Grouping(TKey Key,TElement Value){
         this._Key=Key;
         this.InternalIsAdded(Value);
         this._LongCount=1;
@@ -56,7 +56,7 @@ public sealed class GroupingSet<TKey,TElement>:Set<TElement>
     public bool Equals(Linq.IGrouping<TKey,TElement>? other) {
         if(ReferenceEquals(null,other)) return false;
         if(ReferenceEquals(this,other)) return true;
-        var value=new GroupingSet<TKey,TElement>(other.Key);
+        var value=new Grouping<TKey,TElement>(other.Key);
         foreach(var a in other) value.Add(a);
         return this.PrivateEquals(value);
     }
@@ -70,7 +70,7 @@ public sealed class GroupingSet<TKey,TElement>:Set<TElement>
     }
 }
 internal sealed class SystemLinq_GroupingDebugView<TKey,TElement>{
-    private readonly GroupingSet<TKey,TElement> _grouping;
+    private readonly Grouping<TKey,TElement> _grouping;
 
     private TElement[]? _cachedValues;
 
@@ -79,7 +79,7 @@ internal sealed class SystemLinq_GroupingDebugView<TKey,TElement>{
     [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
     public TElement[] Values=>this._cachedValues??=this._grouping.ToArray();
 
-    public SystemLinq_GroupingDebugView(GroupingSet<TKey,TElement> grouping){
+    public SystemLinq_GroupingDebugView(Grouping<TKey,TElement> grouping){
         this._grouping=grouping;
     }
 }

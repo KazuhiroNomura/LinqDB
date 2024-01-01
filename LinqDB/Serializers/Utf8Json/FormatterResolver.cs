@@ -5,6 +5,7 @@ using LinqDB.Helpers;
 using Utf8Json;
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Enumerables;
 namespace LinqDB.Serializers.Utf8Json;
 internal sealed class FormatterResolver:IJsonFormatterResolver{
     //キャッシュする条件が見つからない
@@ -37,14 +38,14 @@ internal sealed class FormatterResolver:IJsonFormatterResolver{
                 Debug.Assert(Formatter is not null);
                 return Return(Formatter);
             }else{
-                if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Grouping<, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Grouping        <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Lookup    <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set<,,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set<,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set<>))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(List        <  >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
             }
         }

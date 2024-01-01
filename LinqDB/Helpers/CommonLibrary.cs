@@ -240,8 +240,8 @@ public static class CommonLibrary {
     internal static readonly string Generic_ICollection1_FullName = typeof(Generic.ICollection<>).FullName!;
     internal static readonly string Generic_IEnumerable1_FullName = typeof(Generic.IEnumerable<>).FullName!;
     internal static readonly string Collections_IEnumerable_FullName = typeof(Collections.IEnumerable).FullName!;
-    internal static readonly string Linq_IGrouping2_FullName = typeof(Linq.IGrouping<,>).FullName!;
-    internal static readonly string Linq_ILookup2_FullName = typeof(Linq.ILookup<,>).FullName!;
+    internal static readonly string Linq_IGrouping2_FullName = typeof(IGrouping<,>).FullName!;
+    internal static readonly string Linq_ILookup2_FullName = typeof(ILookup<,>).FullName!;
     internal static readonly string Sets_IEnumerable1_FullName = typeof(Sets.IEnumerable<>).FullName!;
     internal static readonly string Sets_IGrouping2_FullName = typeof(Sets.IGrouping<,>).FullName!;
     internal static readonly string Sets_ILookup2_FullName = typeof(Sets.ILookup<,>).FullName!;
@@ -807,7 +807,7 @@ public static class CommonLibrary {
         }
     }
     public static string 整形したDebugView(Expression Lambda) {
-        var 旧String = CommonLibrary.インラインラムダテキスト(Lambda);
+        var 旧String = インラインラムダテキスト(Lambda);
         var 新StringBuilder = new StringBuilder();
         //var キー定義 = new Regex(@"^\..*>\( \{$",RegexOptions.Singleline);
         var キー本体 = new Regex(@"^\..*\}$",RegexOptions.Singleline);

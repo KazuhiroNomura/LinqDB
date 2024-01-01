@@ -1,13 +1,14 @@
-﻿using Utf8Json;
+﻿using LinqDB.Enumerables;
+using Utf8Json;
 
 namespace LinqDB.Serializers.Utf8Json.Formatters.Enumerables;
 using O = IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = LinqDB.Sets;
-public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKey,TElement>>{
+public class SetGroupingList<TKey,TElement>:IJsonFormatter<Lookup<TKey,TElement>>{
     public new static readonly SetGroupingList<TKey,TElement> Instance=new();
-    public void Serialize(ref Writer writer,G.SetGroupingList<TKey,TElement>? value,O Resolver){
+    public void Serialize(ref Writer writer,Lookup<TKey,TElement>? value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         var Formatter=GroupingList<TKey,TElement>.Instance;
@@ -21,11 +22,11 @@ public class SetGroupingList<TKey,TElement>:IJsonFormatter<G.SetGroupingList<TKe
         }
         writer.WriteEndArray();
     }
-    public G.SetGroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+    public Lookup<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if (reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Formatter=GroupingList<TKey,TElement>.Instance;
-        var value=new G.SetGroupingList<TKey,TElement>();
+        var value=new Lookup<TKey,TElement>();
         // ReSharper disable once InvertIf
         if(!reader.ReadIsEndArray()) {
             value.Add(reader.Read(Formatter,Resolver));

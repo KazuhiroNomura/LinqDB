@@ -1,6 +1,6 @@
 ﻿using LinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters.Sets;
-public class GroupingSet2 : CollectionTest<GroupingSet<int, double>>
+public class GroupingSet2 : CollectionTest<Grouping<int, double>>
 {
     public GroupingSet2() : base(new(1))
     {

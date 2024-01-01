@@ -107,7 +107,7 @@ public partial class AssemblyGenerator {
         Table_ctor.InitLocals=false;
         var Table_ctor_I = Table_ctor.GetILGenerator();
         var (_, Key_InputHashCode_I)=メソッド開始引数名(Key_TypeBuilder,"InputHashCode",Assembly_HideBySig,typeof(void),Types_InputHashCode,"CRC");
-        var (Key_GetHashCode, Key_GetHashCode_I)=メソッド開始(Key_TypeBuilder,nameof(GetHashCode),Public_HideBySig_Virtual,typeof(int));
+        var (Key_GetHashCode, Key_GetHashCode_I)=メソッド開始(Key_TypeBuilder,nameof(this.GetHashCode),Public_HideBySig_Virtual,typeof(int));
         Key_TypeBuilder.DefineMethodOverride(Key_GetHashCode,Object_GetHashCode);
         var (Key_ToStringBuilder, Key_ToStringBuilder_I)=メソッド開始引数名(Key_TypeBuilder,"ToStringBuilder",Assembly_HideBySig,typeof(void),Types_StringBuilder,"sb");
         var (_, Table_ToStringBuilder_I)=メソッド開始引数名(Table_TypeBuilder,"ToStringBuilder",Family_Virtual,typeof(void),Types_StringBuilder,"sb");
@@ -211,7 +211,7 @@ public partial class AssemblyGenerator {
                 } else {
                     Key_GetHashCode_I.Ldflda(Key_FieldBuilder);
                     Key_GetHashCode_I.Constrained(PrimaryKeyColumn_Type);
-                    Key_GetHashCode_I.Callvirt(PrimaryKeyColumn_Type.GetMethod(nameof(GetHashCode),Type.EmptyTypes)!);
+                    Key_GetHashCode_I.Callvirt(PrimaryKeyColumn_Type.GetMethod(nameof(this.GetHashCode),Type.EmptyTypes)!);
                 }
             } else {
                 Key_GetHashCode_I.Ldloca(KeyTable_GetHashCode_CRC);

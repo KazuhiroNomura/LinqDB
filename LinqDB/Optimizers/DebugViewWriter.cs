@@ -837,7 +837,7 @@ internal sealed class DebugViewWriter:ExpressionVisitor{
         this.Out("(");
         this.Visit(node.SwitchValue);
         this.Out(") {",Flow.NewLine);
-        ExpressionVisitor.Visit(node.Cases,this.VisitSwitchCase);
+        Visit(node.Cases,this.VisitSwitchCase);
         if(node.DefaultBody!=null){
             this.Out(".Default:",Flow.NewLine);
             this.Indent();
@@ -873,7 +873,7 @@ internal sealed class DebugViewWriter:ExpressionVisitor{
         this.Indent();
         this.Visit(node.Body);
         this.Dedent();
-        ExpressionVisitor.Visit(node.Handlers,this.VisitCatchBlock);
+        Visit(node.Handlers,this.VisitCatchBlock);
         if(node.Finally!=null){
             this.Out(Flow.NewLine,"} .Finally {",Flow.NewLine);
             this.Indent();

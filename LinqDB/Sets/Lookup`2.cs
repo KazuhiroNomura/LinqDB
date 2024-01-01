@@ -6,7 +6,7 @@ namespace LinqDB.Sets;
 /// </summary>
 /// <typeparam name="TKey">結合式のType</typeparam>
 /// <typeparam name="TElement">値のType</typeparam>
-public sealed class SetGroupingSet<TKey,TElement>:Set<GroupingSet<TKey,TElement>>,ILookup<TKey,TElement>{
+public sealed class SetGroupingSet<TKey,TElement>:Set<Grouping<TKey,TElement>>,ILookup<TKey,TElement>{
 #pragma warning disable CA1823 // 使用されていないプライベート フィールドを使用しません
     private new static readonly Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMemoryPack=Serializers.MemoryPack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
     private new static readonly Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement> InstanceMessagePack=Serializers.MessagePack.Formatters.Sets.SetGroupingSet<TKey,TElement>.Instance;
@@ -39,7 +39,7 @@ public sealed class SetGroupingSet<TKey,TElement>:Set<GroupingSet<TKey,TElement>
             while(true) {
                 var LinkedNode_LinkedNodeItem = LinkedNode._LinkedNodeItem;
                 if(LinkedNode_LinkedNodeItem is null) {
-                    LinkedNode._LinkedNodeItem=new LinkedNodeItemT(new GroupingSet<TKey,TElement>(Key,Value));
+                    LinkedNode._LinkedNodeItem=new LinkedNodeItemT(new Grouping<TKey,TElement>(Key,Value));
                     this._LongCount++;
                     return;
                 }
@@ -50,7 +50,7 @@ public sealed class SetGroupingSet<TKey,TElement>:Set<GroupingSet<TKey,TElement>
                 LinkedNode=LinkedNode_LinkedNodeItem;
             }
         }
-        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(new GroupingSet<TKey,TElement>(Key,Value)));
+        InternalIsAdded後半(下限,上限,TreeNode,HashCode,new LinkedNodeItemT(new Grouping<TKey,TElement>(Key,Value)));
         this._LongCount++;
     }
     public bool Contains(TKey Key)=>this.GetCollection(Key) is not null;

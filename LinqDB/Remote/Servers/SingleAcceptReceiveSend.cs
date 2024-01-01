@@ -46,7 +46,7 @@ internal class SingleAcceptReceiveSend:IDisposable {
     /// <param name="ListenPort"></param>
     public SingleAcceptReceiveSend(Server Server,int ReceiveSendスレッド数,int ListenPort){
         this.Server=Server;
-        this.IPEndPoint=new IPEndPoint(System.Net.IPAddress.Any,ListenPort);
+        this.IPEndPoint=new IPEndPoint(IPAddress.Any,ListenPort);
         Debug.WriteLine("7");
         this.MultiReceiveSend=new MultiReceiveSend(Server,ReceiveSendスレッド数);
         Debug.WriteLine("8");
@@ -62,7 +62,7 @@ internal class SingleAcceptReceiveSend:IDisposable {
     public void Open(CancellationToken CancellationToken){
         this.CancellationToken=CancellationToken;
         var ListenerSocket = this.ListenerSocket=new Socket(
-            System.Net.Sockets.AddressFamily.InterNetwork,
+            AddressFamily.InterNetwork,
             SocketType.Stream,
             ProtocolType.Tcp);
         ListenerSocket.SetSocketOption(SocketOptionLevel.Socket,SocketOptionName.ReuseAddress,true);

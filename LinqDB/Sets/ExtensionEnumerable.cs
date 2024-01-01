@@ -1,5 +1,6 @@
 ﻿using System;
-using Generic=System.Collections.Generic;
+using LinqDB.Enumerables;
+using Generic = System.Collections.Generic;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable RedundantAssignment
@@ -24,8 +25,8 @@ public static class ExtensionEnumerable{
     //    Debug.Assert(source is not null&&aggregatesSelector is not null);
     //    return aggregatesSelector(source);
     //}
-    private static SetGroupingList<TKey,TElement> PrivateDictionaryList<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) {
-        var r = new SetGroupingList<TKey,TElement>(comparer);
+    private static Lookup<TKey,TElement> PrivateDictionaryList<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) {
+        var r = new Lookup<TKey,TElement>(comparer);
         foreach(var value in source)
             r.AddKeyValue(
                 keySelector(value),
@@ -33,8 +34,8 @@ public static class ExtensionEnumerable{
             );
         return r;
     }
-    private static SetGroupingList<TKey,TElement> PrivateDictionaryList<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,int,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) {
-        var r = new SetGroupingList<TKey,TElement>(comparer);
+    private static Lookup<TKey,TElement> PrivateDictionaryList<TElement, TKey>(this Generic.IEnumerable<TElement> source,Func<TElement,int,TKey> keySelector,Generic.IEqualityComparer<TKey> comparer) {
+        var r = new Lookup<TKey,TElement>(comparer);
         var Index=0;
         foreach(var value in source)
             r.AddKeyValue(

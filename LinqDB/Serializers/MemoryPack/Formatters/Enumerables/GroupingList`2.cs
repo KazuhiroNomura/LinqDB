@@ -5,10 +5,10 @@ namespace LinqDB.Serializers.MemoryPack.Formatters.Enumerables;
 
 using Reader = MemoryPackReader;
 using G = LinqDB.Enumerables;
-public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey,TElement>>{
+public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.Grouping<TKey,TElement>>{
     public static readonly GroupingList<TKey,TElement> Instance=new();
     private GroupingList(){}
-    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.GroupingList<TKey,TElement>? value){
+    public override void Serialize<TBufferWriter>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref G.Grouping<TKey,TElement>? value){
         if(writer.TryWriteNil(value)) return;
         writer.WriteVarInt(value!.LongCount);
         writer.Write(value.Key);
@@ -19,12 +19,12 @@ public class GroupingList<TKey,TElement>:MemoryPackFormatter<G.GroupingList<TKey
         }
     }
     
-    public override void Deserialize(ref Reader reader,scoped ref G.GroupingList<TKey,TElement>? value){
+    public override void Deserialize(ref Reader reader,scoped ref G.Grouping<TKey,TElement>? value){
         if(reader.TryReadNil())return;
         var Count=reader.ReadVarIntInt64();
         var Key=reader.Read<TKey>();
         var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??reader.GetFormatter<TElement>();
-        var value0=new G.GroupingList<TKey,TElement>(Key);
+        var value0=new G.Grouping<TKey,TElement>(Key);
         while(Count-->0)
             value0.Add(reader.Read(Formatter));
 

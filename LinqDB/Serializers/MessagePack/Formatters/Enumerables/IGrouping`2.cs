@@ -25,7 +25,7 @@ public class IGrouping<TKey,TElement>:IMessagePackFormatter<G.IGrouping<TKey,TEl
         var Count=reader.ReadArrayHeader();
         var Key=reader.Read<TKey>(Resolver);
         var Formatter = Resolver.GetFormatter<TElement>();
-        var value = new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        var value = new LinqDB.Enumerables.Grouping<TKey,TElement>(Key);
         while(Count-->1)
             value.Add(reader.Read(Formatter,Resolver));
         return value;

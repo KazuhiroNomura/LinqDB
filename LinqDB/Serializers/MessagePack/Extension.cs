@@ -8,12 +8,13 @@ using System.Reflection.Emit;
 using LinqDB.Helpers;
 using MessagePack;
 using MessagePack.Formatters;
+using LinqDB.Enumerables;
 //using Expressions = System.Linq.Expressions;
 
 
 
 namespace LinqDB.Serializers.MessagePack;
-using O=MessagePackSerializerOptions;
+using O = MessagePackSerializerOptions;
 using Writer = MessagePackWriter;
 using Reader = MessagePackReader;
 internal static class Extension{
@@ -282,9 +283,9 @@ internal static class Extension{
                 if((Formatter=RegisterInterface(type,typeof(Sets.IEnumerable     < >),typeof(Formatters.Sets.IEnumerable       < >)))is not null)return Return(Formatter);
                 if((Formatter=RegisterInterface(type,typeof(IEnumerable          < >),typeof(Formatters.Enumerables.IEnumerable< >)))is not null)return Return(Formatter);
             }else{
-                if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Grouping<, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Grouping        <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Lookup    <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);

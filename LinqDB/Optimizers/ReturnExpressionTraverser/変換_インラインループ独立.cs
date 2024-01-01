@@ -6,8 +6,8 @@ using System.Reflection;
 using LinqDB.Sets;
 using LinqDB.Helpers;
 using Math = LinqDB.Reflection.Math;
-using System.Collections.Generic;
 using Generic = System.Collections.Generic;
+using LinqDB.Enumerables;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 
@@ -322,7 +322,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                         var Constructor = 作業配列.GetConstructor(
                             作業_Type,
                             作業配列.MakeGenericType(
-                                typeof(IEqualityComparer<>),
+                                typeof(Generic.IEqualityComparer<>),
                                 T
                             )
                         );
@@ -853,7 +853,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
         var Method=MethodCall0.Method;
         var 変数名 = $"{Method.Name}ﾟ{this.番号++}ﾟ";
         var GenericMethodDefinition=Method.GetGenericMethodDefinition();
-        var Dictionary_Type=typeof(ExtensionSet)==Method.DeclaringType?typeof(SetGroupingSet<,>):typeof(SetGroupingList<,>);
+        var Dictionary_Type=typeof(ExtensionSet)==Method.DeclaringType?typeof(SetGroupingSet<,>):typeof(Enumerables.Lookup<,>);
         Dictionary_Type=Dictionary_Type.MakeGenericType(MethodCall0.Type.GetGenericArguments());
         Expression? comparer;
         if(Reflection.ExtensionSet.ToLookup_keySelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_comparer==GenericMethodDefinition) {

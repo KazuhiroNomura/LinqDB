@@ -24,7 +24,7 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>
         reader.ReadIsBeginArrayWithVerify();
         var Key=reader.Read<TKey>(Resolver);
         var Formatter=Resolver.GetFormatter<TElement>();
-        var value=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        var value=new LinqDB.Enumerables.Grouping<TKey,TElement>(Key);
         while(!reader.ReadIsEndArray()){
             reader.ReadIsValueSeparatorWithVerify();
             value.Add(reader.Read(Formatter,Resolver));

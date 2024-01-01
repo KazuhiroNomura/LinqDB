@@ -4,6 +4,7 @@ using LinqDB.Helpers;
 using MemoryPack;
 using Generic = System.Collections.Generic;
 using Expressions = System.Linq.Expressions;
+using LinqDB.Enumerables;
 namespace LinqDB.Serializers.MemoryPack;
 internal static class FormatterResolver {
     //private static void Serialize<TBufferWriter, T>(ref MemoryPackWriter<TBufferWriter> writer,scoped ref T? value) where TBufferWriter :IBufferWriter<byte>{
@@ -39,14 +40,14 @@ internal static class FormatterResolver {
                 Formatter=RegisterInterface(type,typeof(Generic.IEnumerable  < >),typeof(Formatters.Enumerables.IEnumerable< >));
                 return Return(Formatter);
             }else{
-                if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Grouping<, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Grouping        <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Lookup    <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(List        <  >))) is not null) return Return(Formatter);
                 //if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
                 Formatter=RegisterType(type,typeof(Sets.HashSet<>));
                 return Return(Formatter);
@@ -109,14 +110,14 @@ internal static class FormatterResolver {
                 Debug.Assert(Formatter is not null,"UnionByでエラーになるかも？");
                 return Return(Formatter);
             } else {
-                if((Formatter=RegisterType(type,typeof(Enumerables.GroupingList<, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.GroupingSet        <, >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Sets.SetGroupingList    <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Grouping<, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Sets.Grouping        <, >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(Lookup    <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.SetGroupingSet     <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <,,>))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <, >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.Set                <  >))) is not null) return Return(Formatter);
-                if((Formatter=RegisterType(type,typeof(Enumerables.List        <  >))) is not null) return Return(Formatter);
+                if((Formatter=RegisterType(type,typeof(List        <  >))) is not null) return Return(Formatter);
                 if((Formatter=RegisterType(type,typeof(Sets.HashSet            <  >))) is not null) return Return(Formatter);
                 //Formatter=RegisterType(type,typeof(Sets.HashSet<>));
                 //return Return(Formatter);

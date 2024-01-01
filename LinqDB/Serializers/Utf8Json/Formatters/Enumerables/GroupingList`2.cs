@@ -5,10 +5,10 @@ using O = IJsonFormatterResolver;
 using Writer = JsonWriter;
 using Reader = JsonReader;
 using G = LinqDB.Enumerables;
-public class GroupingList<TKey,TElement>:IJsonFormatter<G.GroupingList<TKey,TElement>>{
+public class GroupingList<TKey,TElement>:IJsonFormatter<G.Grouping<TKey,TElement>>{
     public static readonly GroupingList<TKey,TElement> Instance=new();
     private GroupingList(){}
-    public void Serialize(ref Writer writer,G.GroupingList<TKey,TElement> value,O Resolver){
+    public void Serialize(ref Writer writer,G.Grouping<TKey,TElement> value,O Resolver){
         if(writer.TryWriteNil(value)) return;
         writer.WriteBeginArray();
         writer.Write(value.Key,Resolver);
@@ -19,12 +19,12 @@ public class GroupingList<TKey,TElement>:IJsonFormatter<G.GroupingList<TKey,TEle
         }
         writer.WriteEndArray();
     }
-    public G.GroupingList<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
+    public G.Grouping<TKey,TElement> Deserialize(ref Reader reader,O Resolver){
         if(reader.TryReadNil()) return null!;
         reader.ReadIsBeginArrayWithVerify();
         var Key=reader.Read<TKey>(Resolver);
         var Formatter=Resolver.GetFormatter<TElement>();
-        var value=new G.GroupingList<TKey,TElement>(Key);
+        var value=new G.Grouping<TKey,TElement>(Key);
         while(!reader.ReadIsEndArray()){
             reader.ReadIsValueSeparatorWithVerify();
             value.Add(reader.Read(Formatter,Resolver));

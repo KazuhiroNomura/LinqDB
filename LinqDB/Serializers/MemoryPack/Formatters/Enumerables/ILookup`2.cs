@@ -23,7 +23,7 @@ public class ILookup<TKey,TElement>:MemoryPackFormatter<G.ILookup<TKey,TElement>
         if(reader.TryReadNil()) return;
         var Count = reader.ReadVarIntInt64();
         //var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??reader.GetFormatter<TElement>();
-        var value0=new LinqDB.Sets.SetGroupingList<TKey,TElement>();
+        var value0=new LinqDB.Enumerables.Lookup<TKey,TElement>();
         var Formatter=GroupingList<TKey,TElement>.Instance;
         while(Count-->0)
             value0.Add(reader.Read(Formatter));

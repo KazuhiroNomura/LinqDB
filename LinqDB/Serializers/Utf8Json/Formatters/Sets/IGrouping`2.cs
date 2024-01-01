@@ -30,7 +30,7 @@ public class IGrouping<TKey,TElement>:IJsonFormatter<G.IGrouping<TKey,TElement>>
         var Key= Resolver.GetFormatter<TKey>().Deserialize(ref reader,Resolver);
         reader.ReadIsValueSeparatorWithVerify();
         var Formatter = Resolver.GetFormatter<TElement>();
-        var value=new G.GroupingSet<TKey,TElement>(Key);
+        var value=new G.Grouping<TKey,TElement>(Key);
         // ReSharper disable once InvertIf
         if(!reader.ReadIsEndArray()) {
             value.Add(reader.Read(Formatter,Resolver));

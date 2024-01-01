@@ -25,7 +25,7 @@ public class IGrouping<TKey,TElement>:MemoryPackFormatter<G.IGrouping<TKey,TElem
         var Count = reader.ReadVarIntInt64();
         var Key=reader.ReadValue<TKey>();
         var Formatter=FormatterResolver.GetFormatterDynamic<TElement>()??reader.GetFormatter<TElement>();
-        var value0=new LinqDB.Enumerables.GroupingList<TKey,TElement>(Key);
+        var value0=new LinqDB.Enumerables.Grouping<TKey,TElement>(Key);
         while(Count-->0)
             value0.Add(reader.Read(Formatter));
         value=value0;

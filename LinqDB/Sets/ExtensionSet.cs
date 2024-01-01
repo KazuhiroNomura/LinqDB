@@ -488,7 +488,7 @@ public static class ExtensionSet{
     /// <returns></returns>
     // ReSharper disable once ParameterTypeCanBeEnumerable.Global
     public static ILookup<TKey, TSource>ToLookup<TSource, TKey>(this IEnumerable<TSource> source,Func<TSource,TKey> keySelector)=>
-        ToLookup(source,keySelector,Generic.EqualityComparer<TKey>.Default);
+        ToLookup(source,keySelector,EqualityComparer<TKey>.Default);
     public static ILookup<TKey, TSource> ToLookup<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer){
         var r = new SetGroupingSet<TKey,TSource>(comparer);
         foreach(var a in source)r.AddKeyValue(keySelector(a),a);
@@ -496,7 +496,7 @@ public static class ExtensionSet{
     }
 
     public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector) =>
-        ToLookup(source, keySelector, elementSelector, Generic.EqualityComparer<TKey>.Default);
+        ToLookup(source, keySelector, elementSelector, EqualityComparer<TKey>.Default);
 
     public static ILookup<TKey, TElement> ToLookup<TSource, TKey, TElement>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, Func<TSource, TElement> elementSelector, IEqualityComparer<TKey>? comparer){
         var r = new SetGroupingSet<TKey,TElement>(comparer);
@@ -583,7 +583,7 @@ public static class ExtensionSet{
     ///</paramref>型のオブジェクトのコレクション、およびキーが格納されています。</returns>
     /// <param name="source">グループ化する要素を含む <see cref="IEnumerable{TSource}" />。</param>
     /// <param name="keySelector">各要素のキーを抽出する関数。</param>
-    /// <param name="elementSelector">ソースの各要素を <see cref="GroupingSet{TKey,TElement}" /> の要素に割り当てる関数。</param>
+    /// <param name="elementSelector">ソースの各要素を <see cref="Grouping{TKey,TElement}" /> の要素に割り当てる関数。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TKey">
@@ -830,7 +830,7 @@ public static class ExtensionSet{
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Result = Enumerator.Current;
-        var Default =Generic.Comparer<TSource>.Default;
+        var Default =Comparer<TSource>.Default;
         while(Enumerator.MoveNext())
             if(Default.Compare(Result,Enumerator.Current)<0)Result=Enumerator.Current;
         return Result;
@@ -842,13 +842,13 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     public static TSource Min<TSource>(this IEnumerable<TSource> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
-        var Default =Generic.Comparer<TSource>.Default;
+        var Default =Comparer<TSource>.Default;
         var Result = Enumerator.Current;
         while(Enumerator.MoveNext())
             if(Default.Compare(Result,Enumerator.Current)>0)Result=Enumerator.Current;
         return Result;
     }
-    private static (Generic.IEnumerator<TSource?> Enumerator, TSource? Result) PrivateMaxMin<TSource>(this IEnumerable<TSource?> source) where TSource : struct {
+    private static (IEnumerator<TSource?> Enumerator, TSource? Result) PrivateMaxMin<TSource>(this IEnumerable<TSource?> source) where TSource : struct {
         TSource? Result = null;
         var Enumerator = source.GetEnumerator();
         while(Enumerator.MoveNext()) {
@@ -969,7 +969,7 @@ public static class ExtensionSet{
         }
         return Result;
     }
-    private static bool PrivateMaxMin<TSource>(this IEnumerable<TSource> source,out Generic.IEnumerator<TSource> Enumerator) {
+    private static bool PrivateMaxMin<TSource>(this IEnumerable<TSource> source,out IEnumerator<TSource> Enumerator) {
         Enumerator = source.GetEnumerator();
         return Enumerator.MoveNext();
     }
@@ -1103,7 +1103,7 @@ public static class ExtensionSet{
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
     public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
-        var Default =Generic.Comparer<TResult>.Default;
+        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             while(Enumerator.MoveNext()) {
@@ -1124,7 +1124,7 @@ public static class ExtensionSet{
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
     public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
         using var Enumerator = source.GetEnumerator();
-        var Default =Generic.Comparer<TResult>.Default;
+        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
@@ -1146,7 +1146,7 @@ public static class ExtensionSet{
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
     public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
-        var Default =Generic.Comparer<TResult>.Default;
+        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             while(Enumerator.MoveNext()) {
@@ -1167,7 +1167,7 @@ public static class ExtensionSet{
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
     public static TResult? Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
         using var Enumerator = source.GetEnumerator();
-        var Default =Generic.Comparer<TResult>.Default;
+        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
@@ -1180,7 +1180,7 @@ public static class ExtensionSet{
         }
         return default;
     }
-    private static bool PrivateMaxMin<TSource,TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector,out Generic.IEnumerator<TSource> Enumerator,out TResult? Result) where TResult:struct{
+    private static bool PrivateMaxMin<TSource,TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector,out IEnumerator<TSource> Enumerator,out TResult? Result) where TResult:struct{
         var Enumerator0 = source.GetEnumerator();
         while(Enumerator0.MoveNext()) {
             var value = selector(Enumerator0.Current);
@@ -1351,7 +1351,7 @@ public static class ExtensionSet{
     //    }
     //    return Result;
     //}
-    private static bool PrivateMaxMin<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector,out Generic.IEnumerator<TSource> Enumerator,out TResult Result) {
+    private static bool PrivateMaxMin<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector,out IEnumerator<TSource> Enumerator,out TResult Result) {
         //private static Boolean PrivateMaxMin<TSource, TResult>(this IOutIEnumerable<TSource> source,Func<TSource,TResult> selector,out IOutIEnumerable<TSource>.Enumerator Enumerator,out TResult Result){
         var Enumerator0 = source.GetEnumerator();
         if(Enumerator0.MoveNext()) {

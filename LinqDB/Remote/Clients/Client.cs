@@ -565,11 +565,11 @@ public class Client:IDisposable {
                     }
 
                     if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNameMismatch)!=0){
-                        Trace_WriteLine(3,Properties.Resources.サーバーで証明書名が不一致だった);
+                        Trace_WriteLine(3,Resources.サーバーで証明書名が不一致だった);
                     }
 
                     if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNotAvailable)!=0){
-                        Trace_WriteLine(4,Properties.Resources.サーバーで証明書が利用できなかった);
+                        Trace_WriteLine(4,Resources.サーバーで証明書が利用できなかった);
                     }
                     //検証失敗とする
                     return false;
@@ -795,11 +795,11 @@ public class Client:IDisposable {
                     }
 
                     if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNameMismatch)!=0){
-                        Trace_WriteLine(3,Properties.Resources.サーバーで証明書名が不一致だった);
+                        Trace_WriteLine(3,Resources.サーバーで証明書名が不一致だった);
                     }
 
                     if((SslPolicyErrors&SslPolicyErrors.RemoteCertificateNotAvailable)!=0){
-                        Trace_WriteLine(4,Properties.Resources.サーバーで証明書が利用できなかった);
+                        Trace_WriteLine(4,Resources.サーバーで証明書が利用できなかった);
                     }
                     //検証失敗とする
                     return false;
