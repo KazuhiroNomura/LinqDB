@@ -1,5 +1,4 @@
-﻿#define 省略
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Generic=System.Collections.Generic;
 using System.Linq.Expressions;

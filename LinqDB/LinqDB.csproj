@@ -32,6 +32,7 @@
     <DocumentationFile>C:\Team\kazuhiro.visualstudio.com\Lite\LinqDB\LinqDB.xml</DocumentationFile>
     <WarningLevel>3</WarningLevel>
     <WarningsNotAsErrors>CA1031</WarningsNotAsErrors>
+    <DefineConstants>$(DefineConstants);プロファイルにAssignを対応</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Optimizers\Comparer\**" />

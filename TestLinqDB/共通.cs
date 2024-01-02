@@ -1,6 +1,4 @@
-﻿#define MEMORY
-#define MESSAGE
-#define JSON
+﻿
 using System.Diagnostics;
 using Reflection = System.Reflection;
 using LinqDB.Optimizers;
@@ -35,7 +33,8 @@ public enum テストオプション{
 public abstract class 共通{
     private protected static int ポート番号;
     //protected virtual テストオプション テストオプション{get;}=テストオプション.全て;
-    protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
+    //protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
+    protected テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);

@@ -11,11 +11,6 @@ using ExtensionSet = LinqDB.Sets.ExtensionSet;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_跨ぎParameterの先行評価 : 共通{
-    //protected override テストオプション テストオプション {
-    //    get {
-    //        return base.テストオプション&(~テストオプション.プロファイラ);
-    //    }
-    //}
     public class 取得_先行評価式:共通{
         //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         private void TraceWrite(Expression Expression){

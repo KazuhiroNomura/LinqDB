@@ -1,5 +1,4 @@
-﻿#define アセンブリに保存
-//#define タイム出力
+﻿
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using LinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters.Others;
 public class Object : 共通
 {
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.MessagePack;
+    //protected override テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.MessagePack;
     //private static T serialize<T>(T input){
     //    var bytes=global::Utf8Json.JsonSerializer.Serialize(input);
     //    var output=global::Utf8Json.JsonSerializer.Deserialize<T>(bytes);

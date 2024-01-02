@@ -274,7 +274,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
     protected override Expression SubtractAssignChecked(BinaryExpression Binary0)=> this.共通BinaryAssign(Binary0, ExpressionType.SubtractChecked);
     private Expression 共通Post(UnaryExpression Unary0, ExpressionType NodeType) {
         var Unary1_Operand=this.Traverse(Unary0.Operand);
-        var 変数=Expression.Parameter(Unary0.Operand.Type);
+        var 変数=Expression.Parameter(Unary0.Operand.Type,"pre");
         var 作業配列=this.作業配列;
         return Expression.Block(
             作業配列.Parameters設定(変数),

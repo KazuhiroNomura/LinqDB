@@ -1,5 +1,4 @@
-﻿#define 並列化
-using System;
+﻿using System;
 using System.Text;
 using Collections=System.Collections;
 using System.Diagnostics;

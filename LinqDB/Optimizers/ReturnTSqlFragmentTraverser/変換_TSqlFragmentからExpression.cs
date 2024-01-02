@@ -1,5 +1,4 @@
 ﻿#pragma warning disable CA1822 // Mark members as static
-//#define タイム出力
 using System.Linq;
 using LinqDB.Sets;
 using System.Diagnostics;

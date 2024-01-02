@@ -1,6 +1,4 @@
-﻿//#define クエリは別プロセスで実行
-//#define クエリは別スレッドで実行
-#define クエリは同スレッドで実行
+﻿
 namespace LinqDB.Remote.Servers;
 
 public class Server<T>:Server{

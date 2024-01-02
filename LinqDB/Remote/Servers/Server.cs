@@ -1,7 +1,4 @@
-﻿//#define クエリは別プロセスで実行
-//#define クエリは別スレッドで実行
-#define クエリは同スレッドで実行
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.IO;
@@ -65,7 +62,6 @@ public class Server:IDisposable{
         /// <param name="Delegate"></param>
         /// <returns>(Response Response,Object Result)</returns>
         internal (Response Response, object? Result) Threadで実行(object Delegate) {
-#if クエリは同スレッドで実行
             try {
                 var MulticastDelegate = (MulticastDelegate)Delegate;
                 var Method = MulticastDelegate.Method;
@@ -98,21 +94,19 @@ public class Server:IDisposable{
 #pragma warning restore CA1031 // 一般的な例外の種類はキャッチしません
                 return (Response.ThrowException, ex);
             }
-#else
-                this.Delegate=(Delegate)Delegate;
-                var Thread =スレッド実行(
-                    "タイムアウトのためのスレッドCommit<TResult>",
-                    true,
-                    this.DelegateをDynamicInvokeDelegate
-                );
-                if(Thread.Join(this.処理のTimeout)) {
-                    return (this.Sendヘッダー, this.Result);
-                }
-                Thread.Abort();
-                var CurrentMethod = MethodBase.GetCurrentMethod();
-                Debug.Assert(CurrentMethod.DeclaringType is not null,"CurrentMethod.DeclaringType  is not null");
-                return (Response.ThrowException, new TimeoutException(CurrentMethod.DeclaringType.AssemblyQualifiedName+"."+CurrentMethod.Name));
-#endif
+            //this.Delegate=(Delegate)Delegate;
+            //var Thread =スレッド実行(
+            //    "タイムアウトのためのスレッドCommit<TResult>",
+            //    true,
+            //    this.DelegateをDynamicInvokeDelegate
+            //);
+            //if(Thread.Join(this.処理のTimeout)) {
+            //    return (this.Sendヘッダー, this.Result);
+            //}
+            //Thread.Abort();
+            //var CurrentMethod = MethodBase.GetCurrentMethod();
+            //Debug.Assert(CurrentMethod.DeclaringType is not null,"CurrentMethod.DeclaringType  is not null");
+            //return (Response.ThrowException, new TimeoutException(CurrentMethod.DeclaringType.AssemblyQualifiedName+"."+CurrentMethod.Name));
         }
         private readonly ThreadStart DelegateをDynamicInvokeDelegate;
         /// <summary>

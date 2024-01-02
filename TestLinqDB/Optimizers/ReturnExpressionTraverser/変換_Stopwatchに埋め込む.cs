@@ -111,7 +111,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         var Break=Expression.Label(typeof(int));
         var e=Expression.Block(
             new[]{i},
-            Expression.Assign(i,Expression.Constant(10000000)),
+            Expression.Assign(i,Expression.Constant(ループ回数)),
             Expression.Loop(
                 Expression.Block(
                     Expression.IfThen(
@@ -186,9 +186,9 @@ public class 変換_Stopwatchに埋め込む : 共通{
         );
         this.Expression実行AssertEqual(Expression.Lambda<Func<int,int>>(Loop,p));
     }
-    private int ループ回数=10000000;
+    private const int ループ回数=10000000;
     [Fact]public void ContinueBreakを組み合わせてLoop1(){
-        var i=Expression.Parameter(typeof(int));
+        var i=Expression.Parameter(typeof(int),"i");
         var p=Expression.Parameter(typeof(int),"p");
         var Continue=Expression.Label("Continue");
         var Break=Expression.Label(typeof(int),"Break");

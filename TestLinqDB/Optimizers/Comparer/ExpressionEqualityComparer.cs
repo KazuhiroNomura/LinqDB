@@ -148,7 +148,7 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
 }
 public class ExpressionEqualityComparer:共通{
     //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
-    protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
@@ -1837,8 +1837,50 @@ public class ExpressionEqualityComparer:共通{
         );
     }
 
-    [Fact]
-    public void TryCatch(){
+    [Fact]public void バグ1(){
+        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                )
+            )
+        );
+        this.ExpressionシリアライズAssertEqual(
+            (Expression)Expression.Lambda<Action>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatch(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(

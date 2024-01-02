@@ -1,6 +1,4 @@
-﻿#define アセンブリに保存
-//#define タイム出力
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;

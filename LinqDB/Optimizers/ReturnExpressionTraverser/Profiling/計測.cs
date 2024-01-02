@@ -20,7 +20,8 @@ public sealed class 計測{
         public static readonly MethodInfo Assign= typeof(計測).GetMethod(nameof(計測.Assign),Instance_NonPublic_Public)!;
         public static readonly MethodInfo Count = typeof(計測).GetMethod(nameof(計測.Count),Instance_NonPublic_Public)!;
     }
-    public 計測(int 制御番号,string Name,string Value){
+    private string? _Value;
+    public 計測(int 制御番号,string Name,string? Value){
         this.制御番号=制御番号;
         this._Name=Name;
         this._Value=Value;
@@ -28,23 +29,19 @@ public sealed class 計測{
     public 計測(int 制御番号,string Name){
         this.制御番号=制御番号;
         this._Name=Name;
-        this._Value="";
     }
     public 計測(計測 制御計測,string Name){
         this.制御番号=制御計測.制御番号;
         this.制御計測=制御計測;
         this._Name=Name;
-        this._Value="";
     }
     public 計測(string Name){
         this.制御番号=-1;
         this._Name=Name;
-        this._Value="";
     }
     public 計測(int 制御番号){
         this.制御番号=制御番号;
         this._Name="";
-        this._Value="";
     }
     //private ref T Assign<T>(ref T Left){
     //    this.呼出回数++;
@@ -61,32 +58,20 @@ public sealed class 計測{
     //internal string Name{get;set;}
     internal string _Name;
     internal string Name{
-        get=>this._Name;
-        set{
-            this._Name=value;
-        }
+        set=>this._Name=value;
     }
-    private string _Value;
     internal string Value{
-        get=>this._Value;
         set{
             this._Value=value;
-            Debug.Assert(value is not null);
         }
     }
     private protected long 呼出回数{get;set;}
     //internal string Value{get;set;}
     internal string? NameValue{
         get{
-            var Name=this.Name;
-            var Value=this.Value;
-            var length=Name.Length+Value.Length;
-            string Space;
-            if(length%2==0)
-                Space="  ";
-            else
-                Space=" ";
-            return Name+Space+Value;
+            var Value=this._Value;
+            if(Value is not null) Value=' '+Value;
+            return this._Name+Value;
         }
     }
     internal readonly List<計測> List親辺=new();
@@ -120,7 +105,19 @@ public sealed class 計測{
         //    10000000 1sec 
         //   600000000 min
         // 36000000000 hour
-        var 全100ns0=this.割合計算(this.総呼び出し回数(),ElapsedMilliseconds);
+        var ms=this.割合計算(this.総呼び出し回数(),ElapsedMilliseconds);
+        if(ms>=1000*60*60){
+            ms/=1000*60*60;
+            単位="hour";
+        }else if(ms>=1000*60){
+            ms/=1000*60;
+            単位="minute";
+        }else if(ms>=1000){
+            ms/=1000;
+            単位="second";
+        }else{
+            単位="ms";
+        }
         //Debug.Assert(全100ns==全100ns0);
         List表とツリー.Add($"┌───────┬────────┬─────┐");
         List表とツリー.Add($"│{単位,-14}│割合            │ 呼出回数 │");
@@ -147,27 +144,35 @@ public sealed class 計測{
             var 半角文字数=ShiftJIS半角換算文字数(s);
             if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
         }
-        if(最大半角文字数%2==1)
-            最大半角文字数+=2;
-        else
+        if(最大半角文字数%2==0)
             最大半角文字数+=1;
         for(var a=0;a<Count;a++){
             if(Span制御[a].Length<=0) continue;
             ref var s=ref Span表とツリー[行offset+a];
-            var 空き半角文字数=最大半角文字数-ShiftJIS半角換算文字数(s);
+            var Span表とツリー半角文字数=ShiftJIS半角換算文字数(s);
+            var 埋めたい半角文字数=最大半角文字数-Span表とツリー半角文字数;
             sb.Clear();
             sb.Append(s);
-            //if(空き半角文字数%2==1)
-            //    sb.Append(' ');
             if(Span制御[a][0] is'┐' or'┼' or'┘' or'┬' or'┴' or'─'){
-                if(空き半角文字数%2==1) sb.Append(' ');
-                sb.Append(new string('─',空き半角文字数/2));
-            } else
-                sb.Append(new string(' ',空き半角文字数));
+                char 横線;
+                if(s[^1] is'←' or'→') 
+                    横線=s[^1];
+                else
+                    横線='─';
+                var 埋めたい全角文字数=埋めたい半角文字数/2;
+                if(埋めたい全角文字数*2!=埋めたい半角文字数)
+                    sb.Append(' ');
+                sb.Append(new string(横線,埋めたい全角文字数));
+            } else{
+                sb.Append(new string(' ',埋めたい半角文字数));
+            }
             sb.Append(Span制御[a]);
             s=sb.ToString();
         }
         List表とツリー.Add(フッター);
+        static int ShiftJIS半角換算文字数(string str){
+            return Shift_JIS.GetByteCount(str);
+        }
     }
     private bool 親フロー(List<(計測? 移動元,計測? 移動先)> 列Array,StringBuilder 制御罫線){
         var 親辺Array=this.List親辺.ToArray();
@@ -342,9 +347,6 @@ public sealed class 計測{
     static 計測(){
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         Shift_JIS=Encoding.GetEncoding("shift_jis");
-    }
-    private static int ShiftJIS半角換算文字数(string str){
-        return Shift_JIS.GetByteCount(str);
     }
     private void 演算フロー(List<string> List表とツリー,string ツリー罫線){
         //Append(全行,this.数値表);

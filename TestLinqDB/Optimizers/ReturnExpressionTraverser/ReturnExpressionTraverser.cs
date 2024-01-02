@@ -282,39 +282,39 @@ public class ReturnExpressionTraverser:共通{
         //        }
         //    }
         //}
-        ////for(var a=0; a < Bindings0_Count; a++) {
-        ////    switch (Binding0.BindingType) {
-        ////        case MemberBindingType.Assignment: {
-        ////            if(Binding0_Expression==Binding1_Expression) {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { Int32フィールド=3 });
-        ////            } else {
-        //var a = 3;
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { Int32フィールド=a*a });
-        ////            }
-        ////        }
-        ////        case MemberBindingType.MemberBinding: {
-        ////            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ 1 } });
-        ////            } else {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ a*a } });
-        ////            }
-        ////        }
-        ////        default: {
-        ////            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
-        ////                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { 自己参照=new() { StructCollectionフィールド={ 1 } } });
-        ////                } else {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { 自己参照=new() { StructCollectionフィールド={ a*a } } });
-        ////                }
-        ////            }
-        ////            if(変化したか1) {
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ a*a } });
-        ////            } else
-        //this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ 1 } });
-        ////        }
-        ////        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
-        ////    }
-        ////}
+        //for(var a=0; a < Bindings0_Count; a++) {
+        //    switch (Binding0.BindingType) {
+        //        case MemberBindingType.Assignment: {
+        //            if(Binding0_Expression==Binding1_Expression) {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { Int32フィールド=3 });
+        //            } else {
+        var a = 3;
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { Int32フィールド=a*a });
+        //            }
+        //        }
+        //        case MemberBindingType.MemberBinding: {
+        //            if(ReferenceEquals(Binding0_Bindings,Binding1_Bindings)) {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ 1 } });
+        //            } else {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ a*a } });
+        //            }
+        //        }
+        //        default: {
+        //            for(var b=0; b < MemberListBinding0_Initializers_Count; b++) {
+        //                if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { 自己参照=new() { StructCollectionフィールド={ 1 } } });
+        //                } else {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { 自己参照=new() { StructCollectionフィールド={ a*a } } });
+        //                }
+        //            }
+        //            if(変化したか1) {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ a*a } });
+        //            } else
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード { StructCollectionフィールド={ 1 } });
+        //        }
+        //        default:throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
+        //    }
+        //}
     }
     [Fact]
     public void Add()=>this.変換_局所Parameterの先行評価.TraverseNullable(Expression.Add(@int,@int));

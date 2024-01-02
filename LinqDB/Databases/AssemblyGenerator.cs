@@ -1,7 +1,5 @@
 ﻿#pragma warning disable CS8604 // Null 参照引数の可能性があります。
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
-#define FUNCTION
-#define VIEW
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -195,7 +195,6 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
     //    return (親の演算計測,今回の計測する左辺値);
     //}
     private(計測? 親演算計測,計測 子演算計測) 計測する前処理演算(string Name,string? Value=null){
-        if(Value is null) Value="";
         ref var 制御計測=ref this.制御計測;
         int 制御番号;
         if(制御計測 is null)
@@ -414,16 +413,15 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
         }
         if(NodeType==ExpressionType.MemberAccess) {
             var Member0 = (MemberExpression)Expression0;
-            return Expression.MakeMemberAccess(
-                Expression0.Type.IsValueType
-                    ? this.PointerTraverseNullable(Member0.Expression)
-                    : this.TraverseNullable(Member0.Expression),
-                Member0.Member
-            );
+            Expression? Member1_Expression;
+            if(Expression0.Type.IsValueType)
+                Member1_Expression=this.PointerTraverseNullable(Member0.Expression);
+            else
+                Member1_Expression=this.TraverseNullable(Member0.Expression);
+            return Expression.MakeMemberAccess(Member1_Expression,Member0.Member);
         }
         return this.Traverse(Expression0);
     }
-    private static readonly MethodInfo List計測する_Item= typeof(List<計測>).GetProperty("Item",Instance_NonPublic_Public)!.GetMethod!;
     protected override Expression Assign(BinaryExpression Assign0){
         Debug.Assert(
             Assign0.Left.NodeType==ExpressionType.Parameter||
@@ -431,21 +429,21 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
             Assign0.Left.NodeType==ExpressionType.ArrayIndex||
             Assign0.Left.NodeType==ExpressionType.Index
         );
-        var Binary0_Left = Assign0.Left;
-        var Binary0_Left_NodeType = Binary0_Left.NodeType;
+        var Assign0_Left = Assign0.Left;
+        var Binary0_Left_NodeType = Assign0_Left.NodeType;
         var 親子演算計測=this.計測する前処理演算(nameof(ExpressionType.Assign));
-        var Binary1_Left =Binary0_Left;
-        計測 子演算計測;
+        var Binary1_Left =Assign0_Left;
+        計測? 親演算計測;
         switch(Binary0_Left_NodeType){
             case ExpressionType.Parameter: {
                 //.NETのバージョンによっては変数の参照も計測できるかもしれない。
-                var Parameter0 = (ParameterExpression)Binary0_Left;
-                子演算計測=計測する前処理演算(nameof(ExpressionType.Parameter), Parameter0.Name);
+                var Parameter0 = (ParameterExpression)Assign0_Left;
+                親演算計測=計測する前処理演算(nameof(ExpressionType.Parameter), Parameter0.Name);
                 break;
             }
             case ExpressionType.MemberAccess:{
-                var Member0 = (MemberExpression)Binary0_Left;
-                子演算計測=計測する前処理演算(nameof(ExpressionType.MemberAccess),Member0.Member.Name);
+                var Member0 = (MemberExpression)Assign0_Left;
+                親演算計測=計測する前処理演算(nameof(ExpressionType.MemberAccess),Member0.Member.Name);
                 Binary1_Left=Expression.MakeMemberAccess(
                     this.PointerTraverseNullable(Member0.Expression),
                     Member0.Member
@@ -456,8 +454,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
                 Debug.Assert(ExpressionType.Index==Binary0_Left_NodeType);
                 //Int32[]
                 //ArrayAccess
-                var Index0 = (IndexExpression)Binary0_Left;
-                子演算計測= 計測する前処理演算(nameof(ExpressionType.Index));
+                var Index0 = (IndexExpression)Assign0_Left;
+                親演算計測= 計測する前処理演算(nameof(ExpressionType.Index));
                 Binary1_Left=Expression.MakeIndex(
                     this.Traverse(Index0.Object),
                     Index0.Indexer,
@@ -466,42 +464,43 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
                 break;
             }
         }
-        ;
+        this.演算計測=親演算計測;
+        var Assign1_Right=this.Traverse(Assign0.Right);
         this.演算計測=親子演算計測.親演算計測;
+        //this.計測しない後処理(
+        //    親子演算計測,Assign0
+        //);
+#if プロファイルにAssignを対応
+        return Expression.Block(
+            //Expression.Assign(
+            //    Expression.Call(
+            //        Expression.Constant(子演算計測),
+            //        this.作業配列.MakeGenericMethod(
+            //            計測.Reflection.Assign,
+            //            Binary1_Left.Type
+            //        ),
+            //        Binary1_Left
+            //    ),
+            //    this.Traverse(Assign0.Right)
+            //)
+            Expression.Call(
+                Expression.Constant(親演算計測),
+                this.作業配列.MakeGenericMethod(
+                    計測.Reflection.Assign,
+                    Binary1_Left.Type
+                ),
+                Binary1_Left,
+                Assign1_Right
+            )
+        );
+#else
         return Expression.Assign(
             Binary1_Left,
             this.Traverse(Assign0.Right)
         );
+#endif
         //↓Assignの情報取得
-        //return Expression.Block(
-        //    Expression.Call(
-        //        Expression.Constant(
-        //            親子演算計測.子演算計測
-        //        ),
-        //        計測.Reflection.Count
-        //    ),
-        //    //Expression.Assign(
-        //    //    Expression.Call(
-        //    //        Expression.Constant(子演算計測),
-        //    //        this.作業配列.MakeGenericMethod(
-        //    //            計測.Reflection.Assign,
-        //    //            Binary1_Left.Type
-        //    //        ),
-        //    //        Binary1_Left
-        //    //    ),
-        //    //    this.Traverse(Assign0.Right)
-        //    //)
-        //    Expression.Call(
-        //        Expression.Constant(子演算計測),
-        //        this.作業配列.MakeGenericMethod(
-        //            計測.Reflection.Assign,
-        //            Binary1_Left.Type
-        //        ),
-        //        Binary1_Left,
-        //        this.Traverse(Assign0.Right)
-        //    )
-        //);
-        計測 計測する前処理演算(string Name,string? Value=null){
+        計測? 計測する前処理演算(string Name,string? Value=null){
             if(Value is null) Value="";
             ref var 制御計測=ref this.制御計測;
             int 制御番号;
@@ -509,7 +508,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
                 制御番号=++this.制御番号;
             else
                 制御番号=this.制御番号;//上の制御計測.制御番号;
-            //var 親の演算計測 = this.演算計測;
+            var 親の演算計測 = this.演算計測;
             var 子演算計測=new 計測(制御番号,Name,Value);
             if(制御計測 is null)
                 制御計測=子演算計測;
@@ -518,8 +517,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
                 親演算計測.List子演算.Add(子演算計測);
             this.演算計測=子演算計測;
             List計測.Add(子演算計測);
-            //return 親の演算計測;
-            return 子演算計測;
+            return 親の演算計測;
+            //return 子演算計測;
         }
     }
     protected override Expression Add(BinaryExpression Binary0) => this.共通Binary(Binary0);
@@ -696,8 +695,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
         Test計測0.List子演算.Add(Test計測1);
         var EndCondition = new 計測("←");
         //var List制御計測 = this.List制御計測;
-        var Conditional1_IfTrue = TrueFalse共通(Conditional0_IfTrue,"True:");
-        var Conditional1_IfFalse = TrueFalse共通(Conditional0_IfFalse,"False:");
+        var Conditional1_IfTrue = TrueFalse共通(Conditional0_IfTrue,"[EndIfTrue]");
+        var Conditional1_IfFalse = TrueFalse共通(Conditional0_IfFalse,"[EndIfFalse]");
         //List制御計測.Add(this.制御計測=EndCondition);
         List子演算.Add(EndCondition);
         EndCondition.制御番号=++this.制御番号;
@@ -746,7 +745,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
             this.制御計測=null;
             var Conditional1_IfTrueFalse = this.Traverse(Conditional0_IfTrueFalse);
             var TrueFalse計測0=List子演算[^1];
-            TrueFalse計測0.Name+=Name;
+            //TrueFalse計測0.Name+=Name;
             var TrueFalse計測1 = new 計測(TrueFalse計測0,Name+"→");
             TrueFalse計測0.List子演算.Add(TrueFalse計測1);
             計測.接続(Test計測1,TrueFalse計測0);
@@ -997,7 +996,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,Li
             //移動先=new 計測Label(++this.制御番号,"Label0",$"{Label0.Target.Name}:");
             //var 親子演算計測=this.計測Label前処理演算(nameof(ExpressionType.Label),$"{Label0.Target.Name}:");
 
-            var 子演算計測 =new 計測(++this.制御番号,nameof(ExpressionType.Label),$"{Label0.Target.Name}:");
+            var 子演算計測 =new 計測(++this.制御番号,nameof(ExpressionType.Label),$"{Label0.Target.Name}:←");
             //var 子演算計測 =new 計測Label(制御番号,nameof(ExpressionType.Label),$"ggggg:");
             if(this.制御計測 is null)
                 this.制御計測=子演算計測;
