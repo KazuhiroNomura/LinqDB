@@ -3,6 +3,7 @@
 using System.Drawing;
 using Reflection = System.Reflection;
 using System.Runtime.CompilerServices;
+using LinqDB.Sets;
 //using System.Linq.Expressions;
 //using Expressions = System.Linq.Expressions;
 using RuntimeBinder = Microsoft.CSharp.RuntimeBinder;
@@ -154,7 +155,8 @@ public partial struct TestDynamic<T>
     }
 }
 public class Serializer:共通{
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.MemoryPack_MessagePack_Utf8Json;
     //private readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected readonly IJsonFormatterResolver JsonFormatterResolver;
     //protected readonly MessagePackSerializerOptions MessagePackSerializerOptions;
@@ -263,6 +265,44 @@ public class Serializer:共通{
     //    return new AlsoElse(a.Value|b.Value);
     //}
     private static double double_dobuble_double(double a,double b)=>Math.Pow(a,b);
+    [Fact]
+    public void バグ(){
+        this.Expression実行AssertEqual(
+            ()=>((Func<int,int>)((int b)=>b+3))(4)
+        );
+        //this.Expression実行AssertEqual(
+        //    ()=>((Func<int,int>)((int b)=>b+3))(4)
+        //);
+        //var x=((Func<int,int>)((int b)=>b+3))(4);
+        //var x0=(()=>Console.WriteLine("A"))();
+        //var y=()=>3;
+    }
+    [Fact]
+    public void バグ1(){
+        var ParameterString=Expressions.Expression.Parameter(typeof(string),"string");
+        var ConstantString=Expressions.Expression.Constant("string");
+        //var ConstantStringNull=Expressions.Expression.Constant(null,typeof(string));
+        var ConversionString=Expressions.Expression.Lambda<Func<string,string>>(
+            Expressions.Expression.Call(
+                null,
+                GetMethod(()=>string_string_string("","")),
+                ParameterString,
+                ParameterString
+            ),
+            ParameterString
+        );
+        共通0(Expressions.Expression.Coalesce(ConstantString,ConstantString,ConversionString));
+        void 共通0(Expressions.BinaryExpression Binary){
+            this.Expression実行AssertEqual(
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Convert(
+                        Binary,
+                        typeof(object)
+                    )
+                )
+            );
+        }
+    }
     [Fact]
     public void Binary(){
         var ParameterDouble=Expressions.Expression.Parameter(typeof(double));
@@ -399,7 +439,6 @@ public class Serializer:共通{
             );
         }
         void 共通1(Expressions.BinaryExpression Binary){
-            this.ExpressionシリアライズAssertEqual(Binary);
             this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Block(
@@ -1688,7 +1727,6 @@ public class Serializer:共通{
             );
         }
         void 共通1(Expressions.UnaryExpression Unary){
-            this.ExpressionシリアライズAssertEqual(Unary);
             this.Expression実行AssertEqual(
                 Expressions.Expression.Lambda<Func<object>>(
                     Expressions.Expression.Convert(

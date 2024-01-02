@@ -87,7 +87,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         ////ラムダを跨ぐ
     }
     public class 辺を作る : 共通{
-        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
+        //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]public void Loop無限(){
             this.Optimizer_Lambda最適化(
                 Expression.Lambda<Action>(
@@ -256,6 +256,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 this.Expression実行AssertEqual(
                     Expression.Lambda<Func<int>>(
                         Expression.Block(
+                            new[]{p},
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Assign(p, Expression.Constant(1))
@@ -592,7 +593,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class 変換_二度出現したExpression : 共通{
-        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
+        //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
         [Fact]
         public void Traverse()
         {
@@ -668,6 +669,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 this.Expression実行AssertEqual(
                     Expression.Lambda<Func<int>>(
                         Expression.Block(
+                            new[]{p},
                             Expression.Constant(1m),
                             Expression.Constant(1m),
                             Expression.Assign(p, Expression.Constant(1))
@@ -1062,7 +1064,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
     }
     public class 判定_左辺Expressionが含まれる : 共通{
-        protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行|テストオプション.ローカル実行|テストオプション.アセンブリ保存;
+        //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行|テストオプション.ローカル実行|テストオプション.アセンブリ保存;
         [Fact]
         public void Traverse()
         {

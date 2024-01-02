@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 // ReSharper disable All
 namespace TestLinqDB.仕様;
 public class Expressions:共通{
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void GotoはVoidになる(){
         var Label=Expression.Label(typeof(decimal),"L0");

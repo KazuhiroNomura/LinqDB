@@ -1,7 +1,7 @@
 ﻿namespace TestLinqDB.Serializers.Formatters.Others;
 public class DisplayClass : 共通
 {
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     [Fact]
     public void Serialize(){
         //if(writer.TryWriteNil(value)) return;

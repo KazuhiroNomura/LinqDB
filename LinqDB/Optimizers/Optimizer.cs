@@ -649,7 +649,6 @@ public sealed class Optimizer:IDisposable {
                 Dictionaryラムダ跨ぎParameter[a.Key]=(Field, Expression.Field(DispParameter,Field));
             }
         }
-        //var Tuple=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理(ContainerType,DictionaryConstant,DictionaryLambda,Dictionaryラムダ跨ぎParameter,out var TupleParameter1);
         this._作成_DynamicAssembly.Impl作成(Lambda1,DispParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
         Debug.Assert(Disp_Type.GetField("Container",Instance_NonPublic_Public) is not null);
         var (Tuple, TupleParameter)=this.DynamicAssemblyとDynamicMethod_DynamicMethodの共通処理1(ContainerType);
@@ -659,7 +658,16 @@ public sealed class Optimizer:IDisposable {
             //var t=Stopwatch.StartNew();
             //Console.Write("GenerateAssembly,");
             //new AssemblyGenerator()をフィールドに保存すると２度目以降前回のアセンブリ情報が残る
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\{Name}.dll");
+            var 試行回数=0;
+            for(var a=0;a<10000;a++){
+                try{
+                    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\{Name}.dll");
+                    break;
+                } catch(IOException){
+                    試行回数++;
+                }
+            }
+            if(最大の試行回数<試行回数) 最大の試行回数=試行回数;
             //this.AssemblyGenerator.GenerateAssembly(DynamicAssembly,@$"{Folder}\{Name}.dll");
             //Console.WriteLine($"GenerateAssembly {t.ElapsedMilliseconds}ms");
         }
@@ -668,6 +676,7 @@ public sealed class Optimizer:IDisposable {
         var Delegate1 = (Delegate)Value;
         return Delegate1;
     }
+    private static int 最大の試行回数=0;
     //private readonly AssemblyGenerator AssemblyGenerator=new();
     /// <summary>
     /// 動的ラムダ。

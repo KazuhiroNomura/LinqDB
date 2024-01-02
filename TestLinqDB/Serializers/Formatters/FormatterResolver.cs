@@ -12,7 +12,7 @@ using LinqDB.Sets;
 namespace TestLinqDB.Serializers.Formatters;
 public class FormatterResolver : 共通
 {
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     private static void M(){}
     private class C<T>{
         public T M;

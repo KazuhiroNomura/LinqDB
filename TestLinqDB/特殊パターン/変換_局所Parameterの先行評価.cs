@@ -42,7 +42,7 @@ public partial class operator_true{
     }
 }
 public class 変換_局所Parameterの先行評価 : 共通{
-    protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
+    //protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
     [Fact]public void Pattern0(){
         var p = Expression.Parameter(typeof(int), "p");
         this.Expression実行AssertEqual(
@@ -1149,6 +1149,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
         var ifFalse=Expression.Label("ifFalse");
         var Block=Expression.Block(
             new[]{r},
+            Expression.Assign(r,Expression.Constant(false)),
             Expression.IfThen(
                 Expression.Not(p_And_p),
                 Expression.Goto(ifFalse)

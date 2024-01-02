@@ -22,7 +22,7 @@ public class 変換_インラインループ : 共通{
         this.Optimizer.Lambda最適化(Expression);
     }
     public class SZArrayEnumerator:共通{
-        protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン;
+        //protected override テストオプション テストオプション{get;}=テストオプション.式木の最適化を試行|テストオプション.インライン;
         [Fact]public void MoveNext(){
             var s = new int[]{1,2,3,4,5,6,7};
             this.Expression実行AssertEqual(() => s.Select(o => o+1));

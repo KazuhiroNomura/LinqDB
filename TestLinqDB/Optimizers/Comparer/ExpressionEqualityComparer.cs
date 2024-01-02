@@ -147,7 +147,8 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     public override int GetHashCode()=>this.内部の値;
 }
 public class ExpressionEqualityComparer:共通{
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
+    protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
@@ -1820,6 +1821,17 @@ public class ExpressionEqualityComparer:共通{
                             Expression.Constant(0)
                         )
                     )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void バグ(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.Add(
+                    Expression.Constant(1m),
+                    Expression.Constant(1m)
                 )
             )
         );

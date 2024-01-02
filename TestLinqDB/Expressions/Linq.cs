@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 // ReSharper disable All
 namespace TestLinqDB.仕様;
 public class Linq:共通{
-    protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
+    //protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json;
     //[Fact]
     //public void ループ展開1(){
     //    var e=new int[]{1,2,3,4,5};

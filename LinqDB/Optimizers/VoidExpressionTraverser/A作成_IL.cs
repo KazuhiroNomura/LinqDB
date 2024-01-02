@@ -82,10 +82,18 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     private void PrivateCall(MethodInfo Method,ReadOnlyCollection<Expression> Expressions){
         var Method_Parameters = Method.GetParameters();
         var Expressions_Count = Expressions.Count;
-        var ArrayTry値 = new LocalBuilder[Expressions_Count];
+        var TryCount=0;
         for(var a = 0;a<Expressions_Count;a++)
             if(Expressions[a].NodeType==ExpressionType.Try)
-                ArrayTry値[a]=this.PrivateTry値を代入した変数((TryExpression)Expressions[a]);
+                TryCount++;
+        LocalBuilder[]? TryLocal=null;
+        if(TryCount>0)
+            TryLocal=new LocalBuilder[TryCount];
+        var TryIndex=0;
+        for(var a = 0;a<Expressions_Count;a++)
+            if(Expressions[a].NodeType==ExpressionType.Try)
+                TryLocal![TryIndex++]=this.PrivateTry値を代入した変数((TryExpression)Expressions[a]);
+        TryIndex=0;
         var I=this.I!;
         for(var a = 0;a<Expressions_Count;a++) {
             var Expression = Expressions[a];
@@ -127,7 +135,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                         break;
                     }
                     case ExpressionType.Try:{
-                        I.Ldloca(ArrayTry値[a]);
+                        I.Ldloca(TryLocal![TryIndex++]);
                         break;
                     }
                     case ExpressionType.MemberAccess:{
@@ -157,7 +165,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                     }
                 }
             } else if(Expression.NodeType==ExpressionType.Try){
-                this.I!.Ldloc(ArrayTry値[a]);
+                I.Ldloc(TryLocal![TryIndex++]);
             } else{
                 this.Traverse(Expression);
             }
@@ -2425,6 +2433,9 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.I!.Unbox_Any(Unary.Type);
     }
     protected override void Coalesce(BinaryExpression Binary){
+        var Binary_Conversion=Binary.Conversion;
+        if(Binary_Conversion is not null)
+            this.Lambda(Binary_Conversion);
         var Binary_Left=Binary.Left;
         this.PointerTraverseNulllable(Binary_Left);
         var Binary_Left_Type=Binary_Left.Type;
@@ -2454,6 +2465,16 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             I.Ldloc(Class変数);
         }
         I.MarkLabel(HasValueがfalseだった);
+        if(Binary_Conversion is not null){
+            //var 変数 = I.M_DeclareLocal_Stloc(Binary_Left_Type);
+            //var Invoke = Expression.Invoke(Lambda,変数);
+            //this.Invoke(Invoke);
+            //var Invocation_Expression = Invocation.Expression;
+            //this.Traverse(Invocation_Expression);
+            var Method = Binary_Conversion.Type.GetMethod(nameof(Action.Invoke))!;
+            Debug.Assert(Method.IsVirtual);
+            I.Callvirt(Method);
+        }
     }
     protected override void Conditional(ConditionalExpression Conditional){
         this.Traverse(Conditional.Test);
