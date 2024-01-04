@@ -5,7 +5,7 @@ namespace LinqDB.CRC;
 /// <summary>
 /// CRC32をハッシュコードとして使う
 /// </summary>
-public unsafe struct CRC32{
+public struct CRC32{
     private HashCode HashCode;
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void PrivateInput(uint 入力HashCode) {

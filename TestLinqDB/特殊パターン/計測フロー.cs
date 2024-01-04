@@ -6,6 +6,7 @@ using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 namespace TestLinqDB.特殊パターン;
 public class 計測フロー: 共通
 {
+    private 計測Maneger 計測Maneger=>new();
     //protected override テストオプション テストオプション=>テストオプション.None;
     [Fact]public void 辺に関する情報Conditional0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -13,34 +14,26 @@ public class 計測フロー: 共通
         //└┼┐　　　　　　　　　　　　　　　　　1,IfTrue:
         //┌┘│　　　　　　　　　　　　　　　　　2,IfFalse:
         //├─┘　　　　　　　　　　　　　　　　　3,IfEnd:
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var test=new 計測(0);
-        var ifTrue=new 計測(1);
-        var ifFalse=new 計測(2);
-        var endif=new 計測(3);
-        var l=new List計測();
+        var 計測Maneger=this.計測Maneger;
+        var test=new 計測(計測Maneger,0);
+        var ifTrue=new 計測(計測Maneger,1);
+        var ifFalse=new 計測(計測Maneger,2);
+        var endif=new 計測(計測Maneger,3);
         計測.接続(test,ifTrue);
         計測.接続(test,ifFalse);
         計測.接続(ifTrue,endif);
         計測.接続(ifFalse,endif);
-        l.Add(test);
-        l.Add(ifTrue);
-        l.Add(ifFalse);
-        l.Add(endif);
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(test));
     }
     [Fact]public void 辺に関する情報Goto00(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┐
         //┌┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
         計測.接続(L0,L1);
-        var l=new List計測{L0,L1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報Goto01(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -48,15 +41,13 @@ public class 計測フロー: 共通
         //┌┘
         //└┐
         //┌┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
         計測.接続(L0,L1);
         計測.接続(L1,L2);
-        var l=new List計測{L0,L1,L2};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報Goto1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -67,15 +58,15 @@ public class 計測フロー: 共通
         //└─┘│
         //┌──┘
         {
-            var L0=new 計測(0,"Label","L0");
-            var L1=new 計測(1,"Label","L1");
-            var L2=new 計測(2,"Label","L2");
-            var L3=new 計測(3,"Label","L3");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"Label","L0");
+            var L1=new 計測(計測Maneger,1,"Label","L1");
+            var L2=new 計測(計測Maneger,2,"Label","L2");
+            var L3=new 計測(計測Maneger,3,"Label","L3");
             計測.接続(L0,L2);
             計測.接続(L2,L1);
             計測.接続(L1,L3);
-            var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     [Fact]public void 辺に関する情報Goto2(){
@@ -84,41 +75,35 @@ public class 計測フロー: 共通
         //└┼┐
         //┌┼┘
         //┌┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L3=new 計測(3,"L3","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L3=new 計測(計測Maneger,3,"L3","");
         計測.接続(L0,L3);
         計測.接続(L1,L2);
-        var l=new List計測{L0,L1,L2,L3};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報ループ00(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //├←┐
         //└─┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
         計測.接続(L0,L0);
-        var l=new List計測{L0};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報ループ01(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┐0,
         //┌┴┐1,L1
         //└─┘1,
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
         計測.接続(L0,L1);
         計測.接続(L1,L1);
-        var l=new List計測{L0,L1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報ループ1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -126,14 +111,12 @@ public class 計測フロー: 共通
         //└┼┐　　　　　　　　0,Label,Root,子 (辺番号0 Root, 辺番号1 L0)
         //┌┼┘　　　　　　　　1,Label,L0,親 (辺番号0 Root, 辺番号1 L0)
         //└┘　　　　　　　　　1,Label,L0,子 
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
         計測.接続(L0,L1);
         計測.接続(L1,L0);
-        var l=new List計測{L0,L1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報ループ2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -143,16 +126,14 @@ public class 計測フロー: 共通
         //└┼┐　　　　　　　　1,Label,L0,子 (辺番号1 L0, 辺番号2 L0)
         //┌┼┘　　　　　　　　2,Label,L0,親 (辺番号1 L0, 辺番号2 L0)
         //└┘　　　　　　　　　2,Label,L0,子 
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
         計測.接続(L0,L1);
         計測.接続(L1,L2);
         計測.接続(L2,L0);
-        var l=new List計測{L0,L1,L2};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 辺に関する情報ループ3(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -160,15 +141,13 @@ public class 計測フロー: 共通
         //┌┘
         //├←┐
         //└─┘
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
         //辺に関する情報.接続(L0,L1);
         計測.接続(L0,L1);
         計測.接続(L1,L1);
-        var l=new List計測{L0,L1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void IfThenElseEnd0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -178,13 +157,12 @@ public class 計測フロー: 共通
         //┌┼┘2,IfFalse,L2:親
         //└┼┐2,IfFalse,L2:親
         //┌┴┘3,IfEnd,L3:親
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var If=new 計測(4,"If","If");
-        var L0=new 計測(0,"IfTest","L0");
-        var L1=new 計測(1,"IfTrue","L1");
-        var L2=new 計測(2,"IfFalse","L2");
-        var L3=new 計測(3,"IfEnd","L3");
+        var 計測Maneger=this.計測Maneger;
+        var If=new 計測(計測Maneger,4,"If","If");
+        var L0=new 計測(計測Maneger,0,"IfTest","L0");
+        var L1=new 計測(計測Maneger,1,"IfTrue","L1");
+        var L2=new 計測(計測Maneger,2,"IfFalse","L2");
+        var L3=new 計測(計測Maneger,3,"IfEnd","L3");
         If.List子演算.Add(L0);
         If.List子演算.Add(L1);
         If.List子演算.Add(L2);
@@ -192,11 +170,7 @@ public class 計測フロー: 共通
         計測.接続(L0,L2);
         計測.接続(L1,L3);
         計測.接続(L2,L3);
-        var l=new List計測{
-
-            If
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(If));
     }
     [Fact]public void 辺に関する情報ループBreak(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -204,16 +178,14 @@ public class 計測フロー: 共通
         //┌┴┐1,L1
         //└┬┘1,
         //┌┘　2,L2
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
         計測.接続(L0,L1);
         計測.接続(L1,L2);
         計測.接続(L1,L1);
-        var l=new List計測{L0,L1,L2};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     /// <summary>
     /// if{
@@ -237,16 +209,15 @@ public class 計測フロー: 共通
         //┌┼┘L6
         //└┼┐L6
         //┌┴┘L7
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L3=new 計測(3,"L3","");
-        var L4=new 計測(4,"L4","");
-        var L5=new 計測(5,"L5","");
-        var L6=new 計測(6,"L6","");
-        var L7=new 計測(7,"L7","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L3=new 計測(計測Maneger,3,"L3","");
+        var L4=new 計測(計測Maneger,4,"L4","");
+        var L5=new 計測(計測Maneger,5,"L5","");
+        var L6=new 計測(計測Maneger,6,"L6","");
+        var L7=new 計測(計測Maneger,7,"L7","");
 
         計測.接続(L0,L1);
         計測.接続(L0,L2);
@@ -256,17 +227,7 @@ public class 計測フロー: 共通
         計測.接続(L4,L6);
         計測.接続(L5,L7);
         計測.接続(L6,L7);
-        var l=new List計測{
-            L0,
-            L1,
-            L2,
-            L3,
-            L4,
-            L5,
-            L6,
-            L7,
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     /// <summary>
     /// if(test){
@@ -292,16 +253,15 @@ public class 計測フロー: 共通
         //┌┼┘　　　　　　　6,IfFalse,L2,親 (辺番号0 L0, 辺番号6 L2)
         //└┼┐　　　　　　　6,IfFalse,L2,子 
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L2, 辺番号7 L3)
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L00=new 計測(100,"L00","");
-        var L01=new 計測(101,"L01","");
-        var L02=new 計測(102,"L02","");
-        var L03=new 計測(103,"L03","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(12,"L2","");
-        var L3=new 計測(13,"L3","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L00=new 計測(計測Maneger,100,"L00","");
+        var L01=new 計測(計測Maneger,101,"L01","");
+        var L02=new 計測(計測Maneger,102,"L02","");
+        var L03=new 計測(計測Maneger,103,"L03","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,12,"L2","");
+        var L3=new 計測(計測Maneger,13,"L3","");
         計測.接続(L0,L00);
 
         計測.接続(L00,L01);
@@ -313,17 +273,7 @@ public class 計測フロー: 共通
         計測.接続(L0,L2);
         計測.接続(L1,L3);
         計測.接続(L2,L3);
-        var l=new List計測{
-            L0,
-            L00,
-            L01,
-            L02,
-            L03,
-            L1,
-            L2,
-            L3
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     /// <summary>
     /// if(test){
@@ -349,16 +299,15 @@ public class 計測フロー: 共通
         //┌┼┴┘　　　　　　6,IfEnd,L23,親 (辺番号5 L22, 辺番号6 L23)
         //└┼┐　　　　　　　6,IfEnd,L23,子 
         //┌┴┘　　　　　　　7,IfEnd,L3,親 (辺番号6 L23, 辺番号7 L3)
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L20=new 計測(20,"L20","");
-        var L21=new 計測(21,"L21","");
-        var L22=new 計測(22,"L22","");
-        var L23=new 計測(23,"L23","");
-        var L3=new 計測(3,"L3","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L20=new 計測(計測Maneger,20,"L20","");
+        var L21=new 計測(計測Maneger,21,"L21","");
+        var L22=new 計測(計測Maneger,22,"L22","");
+        var L23=new 計測(計測Maneger,23,"L23","");
+        var L3=new 計測(計測Maneger,3,"L3","");
         計測.接続(L0,L1);
         計測.接続(L0,L2);
         計測.接続(L1,L3);
@@ -368,19 +317,7 @@ public class 計測フロー: 共通
         計測.接続(L21,L23);
         計測.接続(L22,L23);
         計測.接続(L23,L3);
-
-
-        var l=new List計測{
-            L0,
-            L1,
-            L2,
-            L20,
-            L21,
-            L22,
-            L23,
-            L3
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     /// <summary>
     /// ifelseをネスト
@@ -391,23 +328,21 @@ public class 計測フロー: 共通
         //└┼┐L1
         //┌┘│L2
         //├─┘L3
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var l=new List計測();
-        共通(3,out var L0,out var L3,"");
-        Trace.WriteLine(l.Analize);
-
+        var 計測Maneger=this.計測Maneger;
+        {
+            共通(3,out var L0,out _,"");
+            Trace.WriteLine(計測Maneger.Analize(L0));
+        }
         bool 共通(int 深さ,out 計測 out_L0,out 計測 out_L3,string c){
             if(深さ==0){
                 out_L0=null!;
                 out_L3=null!;
                 return false;
             }
-            var L0=new 計測(0,$"L{c}0","");
-            var L1=new 計測(1,$"L{c}1","");
-            var L2=new 計測(2,$"L{c}2","");
-            var L3=new 計測(3,$"L{c}3","");
-            l.Add(L0);
+            var L0=new 計測(計測Maneger,0,$"L{c}0","");
+            var L1=new 計測(計測Maneger,1,$"L{c}1","");
+            var L2=new 計測(計測Maneger,2,$"L{c}2","");
+            var L3=new 計測(計測Maneger,3,$"L{c}3","");
             if(共通(深さ-1,out var L00,out var L03,"0"+c)) {
                 計測.接続(L0,L00);
                 計測.接続(L03,L1);
@@ -416,15 +351,12 @@ public class 計測フロー: 共通
             }
             計測.接続(L0,L2);
             計測.接続(L1,L3);
-            l.Add(L1);
-            l.Add(L2);
             if(共通(深さ-1,out var L20,out var L23,"2"+c)) {
                 計測.接続(L2,L20);
                 計測.接続(L23,L3);
             } else{
                 計測.接続(L2,L3);
             }
-            l.Add(L3);
             out_L0=L0;
             out_L3=L3;
             return true;
@@ -439,13 +371,13 @@ public class 計測フロー: 共通
         //├─┼┘L4
         //├─┘  L5
         {
-            var Comparer=new ExpressionEqualityComparer();
-            var L0=new 計測(0,"Label","L0");
-            var L1=new 計測(1,"Label","L1");
-            var L2=new 計測(2,"Label","L2");
-            var L3=new 計測(3,"Label","L3");
-            var L4=new 計測(4,"Label","L4");
-            var L5=new 計測(5,"Label","L5");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"Label","L0");
+            var L1=new 計測(計測Maneger,1,"Label","L1");
+            var L2=new 計測(計測Maneger,2,"Label","L2");
+            var L3=new 計測(計測Maneger,3,"Label","L3");
+            var L4=new 計測(計測Maneger,4,"Label","L4");
+            var L5=new 計測(計測Maneger,5,"Label","L5");
 
             計測.接続(L0,L1);
             計測.接続(L0,L3);
@@ -453,15 +385,7 @@ public class 計測フロー: 共通
             計測.接続(L2,L4);
             計測.接続(L3,L4);
             計測.接続(L4,L5);
-            var l=new List計測{
-                L0,
-                L1,
-                L2,
-                L3,
-                L4,
-                L5
-            };
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     [Fact]public void IfFallseでジャンプ(){
@@ -472,29 +396,20 @@ public class 計測フロー: 共通
         //└┐│　L3
         //┌┼┘　L4
         //├┘　　L5
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L3=new 計測(3,"L3","");
-        var L4=new 計測(4,"L4","");
-        var L5=new 計測(5,"L5","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L3=new 計測(計測Maneger,3,"L3","");
+        var L4=new 計測(計測Maneger,4,"L4","");
+        var L5=new 計測(計測Maneger,5,"L5","");
         計測.接続(L0,L1);
         計測.接続(L0,L2);
         計測.接続(L1,L4);
         計測.接続(L2,L3);
         計測.接続(L3,L5);
         計測.接続(L4,L5);
-        var l=new List計測{
-            L0,
-            L1,
-            L2,
-            L3,
-            L4,
-            L5,
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void IfFallseでジャンプ先頭から末尾迄無条件ジャンプ1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -506,16 +421,15 @@ public class 計測フロー: 共通
         //┌┼┼┘L5
         //├┼┘　L6
         //┌┘　　L7
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L3=new 計測(3,"L3","");
-        var L4=new 計測(4,"L4","");
-        var L5=new 計測(5,"L5","");
-        var L6=new 計測(6,"L6","");
-        var L7=new 計測(7,"L7","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L3=new 計測(計測Maneger,3,"L3","");
+        var L4=new 計測(計測Maneger,4,"L4","");
+        var L5=new 計測(計測Maneger,5,"L5","");
+        var L6=new 計測(計測Maneger,6,"L6","");
+        var L7=new 計測(計測Maneger,7,"L7","");
         計測.接続(L0,L7);
         計測.接続(L1,L2);
         計測.接続(L1,L3);
@@ -523,30 +437,20 @@ public class 計測フロー: 共通
         計測.接続(L3,L4);
         計測.接続(L4,L6);
         計測.接続(L5,L6);
-        var l=new List計測{
-            L0,
-            L1,
-            L2,
-            L3,
-            L4,
-            L5,
-            L6,
-            L7
-        };
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 複数2経路から単一経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┐    goto jump
         //└┼┐  goto jump
         //┌┴┘  jump:
-        var jump0=new 計測(0,"jump0","");
-        var jump1=new 計測(1,"jump1","");
-        var label=new 計測(2,"label","");
+        var 計測Maneger=this.計測Maneger;
+        var jump0=new 計測(計測Maneger,0,"jump0","");
+        var jump1=new 計測(計測Maneger,1,"jump1","");
+        var label=new 計測(計測Maneger,2,"label","");
         計測.接続(jump0,label);
         計測.接続(jump1,label);
-        var l=new List計測{jump0,jump1,label};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(jump0));
     }
     [Fact]public void 複数3経路から単一経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -554,28 +458,28 @@ public class 計測フロー: 共通
         //└┼┐  goto jump
         //└┼┼┐goto jump
         //┌┴┴┘jump:
-        var jump0=new 計測(0,"jump0","");
-        var jump1=new 計測(1,"jump1","");
-        var jump=new 計測(2,"jump2","");
-        var label=new 計測(3,"label","");
+        var 計測Maneger=this.計測Maneger;
+        var jump0=new 計測(計測Maneger,0,"jump0","");
+        var jump1=new 計測(計測Maneger,1,"jump1","");
+        var jump=new 計測(計測Maneger,2,"jump2","");
+        var label=new 計測(計測Maneger,3,"label","");
         計測.接続(jump0,label);
         計測.接続(jump1,label);
         計測.接続(jump,label);
-        var l=new List計測{jump0,jump1,jump,label};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(jump0));
     }
     [Fact]public void 単一経路から複数2経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┬┐　　　　　　　0,Label,jump,子 
         //┌┼┘　　　　　　　2,Label,label1,親 (辺番号0 jump, 辺番号2 label1)
         //┌┘　　　　　　　　1,Label,label0,親 (辺番号0 jump, 辺番号1 label0)
-        var jump=new 計測(0,"jump","");
-        var label0=new 計測(1,"label0","");
-        var label1=new 計測(2,"label1","");
+        var 計測Maneger=this.計測Maneger;
+        var jump=new 計測(計測Maneger,0,"jump","");
+        var label0=new 計測(計測Maneger,1,"label0","");
+        var label1=new 計測(計測Maneger,2,"label1","");
         計測.接続(jump,label0);
         計測.接続(jump,label1);
-        var l=new List計測{jump,label0,label1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(jump));
     }
     [Fact]public void 単一経路から複数3経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -583,28 +487,26 @@ public class 計測フロー: 共通
         //└┼┐  goto jump
         //└┼┼┐goto jump
         //┌┴┴┘jump:
-        var jump=new 計測(0,"jump","");
-        var label0=new 計測(1,"label0","");
-        var label1=new 計測(2,"label1","");
-        var label2=new 計測(3,"label2","");
+        var 計測Maneger=this.計測Maneger;
+        var jump=new 計測(計測Maneger,0,"jump","");
+        var label0=new 計測(計測Maneger,1,"label0","");
+        var label1=new 計測(計測Maneger,2,"label1","");
+        var label2=new 計測(計測Maneger,3,"label2","");
         計測.接続(jump,label0);
         計測.接続(jump,label1);
         計測.接続(jump,label2);
-        var l=new List計測{jump,label0,label1,label2};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(jump));
     }
     [Fact]public void 複数2経路から複数2経路に0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┬┐  0
         //┌┴┘  1
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
         計測.接続(L0,L1);
         計測.接続(L0,L1);
-        var l=new List計測{L0,L1};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 複数2経路から複数2経路に2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -612,17 +514,15 @@ public class 計測フロー: 共通
         //┌┴┘  1
         //└┬┐  2
         //┌┴┘  3
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
         計測.接続(L0,L1);
         計測.接続(L0,L1);
         計測.接続(L1,L2);
         計測.接続(L1,L2);
-        var l=new List計測{L0,L1,L2};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void 複数2経路から複数2経路に3(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -632,30 +532,28 @@ public class 計測フロー: 共通
         //┌┘　　　　　　　　　2,Label,goto L2:
         //└┬┐　　　　　　　　2,Label:L2
         //┌┴┘　　　　　　　　3,Label,goto L3:        //└┼┐  0
-        var Comparer=new ExpressionEqualityComparer();
-        var 番号=0;
-        var L0=new 計測(0,"L0","");
-        var L1=new 計測(1,"L1","");
-        var L2=new 計測(2,"L2","");
-        var L3=new 計測(3,"L3","");
+        var 計測Maneger=this.計測Maneger;
+        var L0=new 計測(計測Maneger,0,"L0","");
+        var L1=new 計測(計測Maneger,1,"L1","");
+        var L2=new 計測(計測Maneger,2,"L2","");
+        var L3=new 計測(計測Maneger,3,"L3","");
         計測.接続(L0,L1);
         計測.接続(L0,L1);
         計測.接続(L1,L2);
         計測.接続(L2,L3);
         計測.接続(L2,L3);
-        var l=new List計測{L0,L1,L2,L3};
-        Trace.WriteLine(l.Analize);
+        Trace.WriteLine(計測Maneger.Analize(L0));
     }
     [Fact]public void Switch0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
         //└┐0,
         //┌┘1,L1
         {
-            var L0=new 計測(0,"Label","L0");
-            var L1=new 計測(1,"Label","L1");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"Label","L0");
+            var L1=new 計測(計測Maneger,1,"Label","L1");
             計測.接続(L0,L1);
-            var l=new List計測{L0,L1};
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     [Fact]public void Switch1(){
@@ -665,16 +563,16 @@ public class 計測フロー: 共通
         //┌┘│L2 case 1
         //├─┘L3 end swtich
         {
-            var L0=new 計測(0,"switch","SelectValue");
-            var L1=new 計測(1,"case","1:");
-            var L2=new 計測(2,"case","2:");
-            var L3=new 計測(3,"end switch","");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
+            var L1=new 計測(計測Maneger,1,"case","1:");
+            var L2=new 計測(計測Maneger,2,"case","2:");
+            var L3=new 計測(計測Maneger,3,"end switch","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L1,L3);
             計測.接続(L2,L3);
-            var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     [Fact]public void Switch2(){
@@ -682,16 +580,16 @@ public class 計測フロー: 共通
         //└┬┐0,switch
         //┌┴┘1,
         {
-            var L0=new 計測(0,"switch","SelectValue");
-            var L1=new 計測(1,"case","1:");
-            var L2=new 計測(2,"case","2:");
-            var L3=new 計測(3,"end switch","");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
+            var L1=new 計測(計測Maneger,1,"case","1:");
+            var L2=new 計測(計測Maneger,2,"case","2:");
+            var L3=new 計測(計測Maneger,3,"end switch","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L1,L3);
             計測.接続(L2,L3);
-            var l=new List計測{L0,L1,L2,L3};
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     [Fact]public void Switch3(){
@@ -699,19 +597,19 @@ public class 計測フロー: 共通
         //└┬┐0,switch
         //┌┴┘1,
         {
-            var L0=new 計測(0,"switch","SelectValue");
-            var L1=new 計測(1,"case","1:");
-            var L2=new 計測(2,"case","2:");
-            var L3=new 計測(3,"case","3:");
-            var L4=new 計測(4,"end switch","");
+            var 計測Maneger=this.計測Maneger;
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
+            var L1=new 計測(計測Maneger,1,"case","1:");
+            var L2=new 計測(計測Maneger,2,"case","2:");
+            var L3=new 計測(計測Maneger,3,"case","3:");
+            var L4=new 計測(計測Maneger,4,"end switch","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L0,L3);
             計測.接続(L1,L4);
             計測.接続(L2,L4);
             計測.接続(L3,L4);
-            var l=new List計測{L0,L1,L2,L3,L4};
-            Trace.WriteLine(l.Analize);
+            Trace.WriteLine(計測Maneger.Analize(L0));
         }
     }
     //[Fact]public void ラベルフォールスルー(){
@@ -731,6 +629,6 @@ public class 計測フロー: 共通
     //        L1,
     //        L2
     //    };
-    //    Trace.WriteLine(l.Analize);
+    //    Trace.WriteLine(計測Maneger.Analize(L0));
     //}
 }

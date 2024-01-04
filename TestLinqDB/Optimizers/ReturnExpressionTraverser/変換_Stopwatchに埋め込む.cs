@@ -194,7 +194,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         var Break=Expression.Label(typeof(int),"Break");
         var Loop=Expression.Block(
             new[]{i},
-            Expression.Assign(i,Expression.Constant(1)),
+            Expression.Assign(i,Expression.Constant(ループ回数)),
             Expression.Label(Continue),
             Expression.IfThen(
                 Expression.LessThan(
@@ -215,7 +215,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         var Break=Expression.Label(typeof(int),"Break");
         var Loop=Expression.Block(
             new[]{i},
-            Expression.Assign(i,Expression.Constant(10)),
+            Expression.Assign(i,Expression.Constant(ループ回数)),
             Expression.Label(Continue),
             Expression.IfThenElse(
                 Expression.LessThan(
@@ -235,7 +235,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         var p=Expression.Parameter(typeof(int),"p");
         var Loop=Expression.Block(
             new[]{i},
-            Expression.Assign(i,Expression.Constant(1)),
+            Expression.Assign(i,Expression.Constant(ループ回数)),
             Expression.IfThenElse(
                 Expression.LessThan(
                     Expression.PostDecrementAssign(i),

@@ -26,7 +26,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoWarn />
     <WarningsAsErrors />
     <DocumentationFile>C:\Team\kazuhiro.visualstudio.com\Lite\LinqDB\LinqDB.xml</DocumentationFile>
@@ -120,7 +120,7 @@
     <Compile Include="Optimizers\Comparer\AExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\ブローブビルドExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\汎用Comparer.cs" />
-    <Compile Include="Optimizers\ReturnExpressionTraverser\Profiling\List計測.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\Profiling\計測Maneger.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\Profiling\計測.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\変換_Stopwatchに埋め込む.cs" />

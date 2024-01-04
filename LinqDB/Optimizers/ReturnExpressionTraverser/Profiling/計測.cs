@@ -20,35 +20,63 @@ public sealed class 計測{
         public static readonly MethodInfo Assign= typeof(計測).GetMethod(nameof(計測.Assign),Instance_NonPublic_Public)!;
         public static readonly MethodInfo Count = typeof(計測).GetMethod(nameof(計測.Count),Instance_NonPublic_Public)!;
     }
-    private string? _Value;
-    public 計測(int 制御番号,string Name,string? Value){
+    internal 計測Maneger? 計測Maneger{get;init;}
+    public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string? Value) {
+        this.計測Maneger=計測Maneger;
         this.制御番号=制御番号;
-        this._Name=Name;
-        this._Value=Value;
+        this.Name=Name;
+        this.Value=Value;
     }
-    public 計測(int 制御番号,string Name){
+    public 計測(計測Maneger 計測Maneger,int 制御番号,string Name) {
+        this.計測Maneger=計測Maneger;
         this.制御番号=制御番号;
-        this._Name=Name;
+        this.Name=Name;
     }
-    public 計測(計測 制御計測,string Name){
+    public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name) {
+        this.計測Maneger=計測Maneger;
         this.制御番号=制御計測.制御番号;
         this.制御計測=制御計測;
-        this._Name=Name;
+        this.Name=Name;
     }
-    public 計測(string Name){
+    public 計測(計測Maneger 計測Maneger,string Name) {
+        this.計測Maneger=計測Maneger;
         this.制御番号=-1;
-        this._Name=Name;
+        this.Name=Name;
     }
-    public 計測(int 制御番号){
+    public 計測(計測Maneger 計測Maneger,int 制御番号){
+        this.計測Maneger=計測Maneger;
         this.制御番号=制御番号;
-        this._Name="";
+        this.Name="";
     }
+    //public 計測(int 制御番号,string Name,string? Value) {
+    //    this.制御番号=制御番号;
+    //    this.Name=Name;
+    //    this.Value=Value;
+    //}
+    //public 計測(int 制御番号,string Name) {
+    //    this.制御番号=制御番号;
+    //    this.Name=Name;
+    //}
+    //public 計測(計測 制御計測,string Name) {
+    //    this.制御番号=制御計測.制御番号;
+    //    this.制御計測=制御計測;
+    //    this.Name=Name;
+    //}
+    //public 計測(string Name) {
+    //    this.制御番号=-1;
+    //    this.Name=Name;
+    //}
+    //public 計測(int 制御番号) {
+    //    this.制御番号=制御番号;
+    //    this.Name="";
+    //}
     //private ref T Assign<T>(ref T Left){
     //    this.呼出回数++;
     //    return ref Left;
     //}
     private T Assign<T>(out T Left,T Right) {
         this.呼出回数++;
+        //Trace.WriteLine(label);
         Left=Right;
         return Right;
     }
@@ -56,22 +84,16 @@ public sealed class 計測{
     //public string 子コメント { get; set; } = "";
     internal 計測? 親演算;
     //internal string Name{get;set;}
-    internal string _Name;
-    internal string Name{
-        set=>this._Name=value;
-    }
-    internal string Value{
-        set{
-            this._Value=value;
-        }
-    }
-    private protected long 呼出回数{get;set;}
+    internal string? Name{get;set;}
+    internal string? Value{get;set;}
+    internal long 呼出回数;
+    internal long サンプリング数;
     //internal string Value{get;set;}
     internal string? NameValue{
         get{
-            var Value=this._Value;
+            var Value=this.Value;
             if(Value is not null) Value=' '+Value;
-            return this._Name+Value;
+            return this.Name+Value;
         }
     }
     internal readonly List<計測> List親辺=new();
@@ -92,12 +114,11 @@ public sealed class 計測{
         this.List親辺.Clear();
         this.List子辺.Clear();
     }
-    protected string? 数値表;
-    protected private const string 空表=
-        "│      │      │    │    │    │          │";
-    protected const string フッター=
-        "└───┴───┴──┴──┴──┴─────┘";
-    public void Consoleに出力(List<string> List表とツリー,StringBuilder sb,long ElapsedMilliseconds){
+    internal double 経過時間;
+    protected string? 行;
+    //protected private const string 空表=
+    //    "│      │      │    │    │    │          │";
+    public void Analize(List<string> List表とツリー,StringBuilder sb,long ElapsedMilliseconds){
         var 単位="";
         //           1 100ns
         //          10 1micro
@@ -105,31 +126,32 @@ public sealed class 計測{
         //    10000000 1sec 
         //   600000000 min
         // 36000000000 hour
-        var ms=this.割合計算(this.総呼び出し回数(),ElapsedMilliseconds);
-        if(ms>=1000*60*60){
-            ms/=1000*60*60;
-            単位="hour";
-        }else if(ms>=1000*60){
-            ms/=1000*60;
+        double 除算;
+        if(ElapsedMilliseconds>=1000000*60) {
+            除算=1000000*60;
             単位="minute";
-        }else if(ms>=1000){
-            ms/=1000;
+        } else if(ElapsedMilliseconds>=1000000) {
+            //1000000→1000
+            除算=1000000;
             単位="second";
-        }else{
+        } else {
+            //000000-999999
+            除算=1;
             単位="ms";
         }
+        var ms2=(double)this.割合計算(this.総呼び出し回数(),除算,ElapsedMilliseconds);
         //Debug.Assert(全100ns==全100ns0);
-        List表とツリー.Add($"┌───────┬────────┬─────┐");
-        List表とツリー.Add($"│{単位,-14}│割合            │ 呼出回数 │");
-        List表とツリー.Add($"├───┬───┼──┬──┬──┤          │");
-        List表とツリー.Add($"│部分  │節    │部分│ 節 │ 節 │          │");
-        List表とツリー.Add($"│      │      │──│──│──│          │");
-        List表とツリー.Add($"│      │      │全体│全体│部分│          │");
-        List表とツリー.Add($"├───┼───┼──┼──┼──┼─────┤");
+        List表とツリー.Add($"┌───────┬────────┬─────┬─────┐");
+        List表とツリー.Add($"│{単位,-14    }│割合            │Samplings │Calls     │");
+        List表とツリー.Add($"├───┬───┼──┬──┬──┼─────┤          │");
+        List表とツリー.Add($"│部分  │節    │部分│ 節 │ 節 │          │          │");
+        List表とツリー.Add($"│      │      │──│──│──│          │          │");
+        List表とツリー.Add($"│      │      │全体│全体│部分│          │          │");
+        List表とツリー.Add($"├───┼───┼──┼──┼──┼─────┼─────┤");
+        const string フッター=   "└───┴───┴──┴──┴──┴─────┴─────┘";
         var 行offset=List表とツリー.Count;
         var 制御罫線=new StringBuilder();
         var 列Array=new List<(計測? 移動元,計測? 移動先)>();
-        //var 最大行数 = 0;
         var List制御=new List<string>();
         this.演算フロー(List表とツリー,"");
         this.制御フロー(列Array,List制御,制御罫線);
@@ -170,9 +192,7 @@ public sealed class 計測{
             s=sb.ToString();
         }
         List表とツリー.Add(フッター);
-        static int ShiftJIS半角換算文字数(string str){
-            return Shift_JIS.GetByteCount(str);
-        }
+        static int ShiftJIS半角換算文字数(string str)=>Shift_JIS.GetByteCount(str);
     }
     private bool 親フロー(List<(計測? 移動元,計測? 移動先)> 列Array,StringBuilder 制御罫線){
         var 親辺Array=this.List親辺.ToArray();
@@ -351,7 +371,7 @@ public sealed class 計測{
     private void 演算フロー(List<string> List表とツリー,string ツリー罫線){
         //Append(全行,this.数値表);
         //全行.Append(this.数値表);
-        var 行=$"{this.数値表}{this.制御番号,3}{ツリー罫線}";
+        var 行=$"{this.行}{this.制御番号,3}{ツリー罫線}";
         行+=this.NameValue;
         List表とツリー.Add(行);
         var List計測=this.List子演算;
@@ -398,31 +418,89 @@ public sealed class 計測{
             呼出回数+=子.総呼び出し回数();
         return 呼出回数;
     }
-    internal long 割合計算(long 総呼び出し回数,long ElapsedMilliseconds){
-        if(総呼び出し回数==0) return 0;
-        var 節ms=this.呼出回数*ElapsedMilliseconds/総呼び出し回数;
+    //internal long 割合計算(long 総呼び出し回数,long ElapsedMilliseconds){
+    //    //if(総呼び出し回数==0) return 0;
+    //    long 節ms;
+    //    if(総呼び出し回数==0){
+    //        節ms=0;
+    //    } else{
+    //        節ms=this.呼出回数*ElapsedMilliseconds/総呼び出し回数;
+    //    }
+    //    var 部分ms=節ms;
+    //    foreach(var 子 in this.List子演算)
+    //        部分ms+=子.割合計算(総呼び出し回数,ElapsedMilliseconds);
+    //    //var 節100ns=部分100ns;
+    //    var sb=new StringBuilder();
+    //    sb.Append('│');
+    //    //├───┬───┼──┬──┬──┼─────┤          │
+    //    共通100ns(部分ms);
+    //    共通100ns(節ms);
+    //    共通割合(部分ms,ElapsedMilliseconds);
+    //    共通割合(節ms,ElapsedMilliseconds);
+    //    共通割合(節ms,部分ms);
+    //    var サンプリング数=this.サンプリング数;
+    //    if(サンプリング数>=10000000000)
+    //        sb.Append("MAX       ");
+    //    else
+    //        sb.Append($"{サンプリング数,10}");
+    //    sb.Append('│');
+    //    var 呼出回数=this.呼出回数;
+    //    if(呼出回数>=10000000000)
+    //        sb.Append("MAX       ");
+    //    else
+    //        sb.Append($"{呼出回数,10}");
+    //    sb.Append('│');
+    //    this.行=sb.ToString();
+    //    return 部分ms;
+    //    void 共通100ns(long Value){
+    //        sb.Append($"{Value,6}");
+    //        sb.Append('│');
+    //    }
+    //    void 共通割合(double 分子100ns,double 分母100ns){
+    //        if(分母100ns==0){
+    //            sb.Append("    ");
+    //        } else{
+    //            sb.Append(((double)分子100ns/分母100ns).ToString("0.00",CultureInfo.InvariantCulture));
+    //        }
+    //        sb.Append('│');
+    //    }
+    //}
+    internal long 割合計算(long 総呼び出し回数,double 除算,long ElapsedMilliseconds){
+        //if(総呼び出し回数==0) return 0;
+        long 節ms;
+        if(総呼び出し回数==0){
+            節ms=0;
+        } else{
+            節ms=this.呼出回数*ElapsedMilliseconds/総呼び出し回数;
+        }
         var 部分ms=節ms;
         foreach(var 子 in this.List子演算)
-            部分ms+=子.割合計算(総呼び出し回数,ElapsedMilliseconds);
+            部分ms+=子.割合計算(総呼び出し回数,除算,ElapsedMilliseconds);
         //var 節100ns=部分100ns;
         var sb=new StringBuilder();
         sb.Append('│');
+        //├───┬───┼──┬──┬──┼─────┤          │
         共通100ns(部分ms);
         共通100ns(節ms);
         共通割合(部分ms,ElapsedMilliseconds);
         共通割合(節ms,ElapsedMilliseconds);
         共通割合(節ms,部分ms);
+        var サンプリング数=this.サンプリング数;
+        if(サンプリング数>=10000000000)
+            sb.Append("MAX       ");
+        else
+            sb.Append($"{サンプリング数,10}");
+        sb.Append('│');
         var 呼出回数=this.呼出回数;
         if(呼出回数>=10000000000)
             sb.Append("MAX       ");
         else
             sb.Append($"{呼出回数,10}");
         sb.Append('│');
-        this.数値表=sb.ToString();
+        this.行=sb.ToString();
         return 部分ms;
         void 共通100ns(long Value){
-            sb.Append($"{Value,6}");
-            //sb.Append($"{0,6}");
+            sb.Append($"{Value/除算,6}");
             sb.Append('│');
         }
         void 共通割合(double 分子100ns,double 分母100ns){
@@ -434,11 +512,14 @@ public sealed class 計測{
             sb.Append('│');
         }
     }
-    private readonly Stopwatch Stopwatch=new Stopwatch();
-    public void Count(){
+    //private readonly Stopwatch Stopwatch=new Stopwatch();
+    public void Count(string label){
+        //this.呼出回数++;
+        Debug.Assert(this.計測Maneger is not null);
         this.呼出回数++;
+        this.計測Maneger.実行中=this;
+        Trace.WriteLine(label);
         //const int 全100ns=1000*1000*10,半100ns=全100ns/2;
         //if(Stopwatch.ElapsedTicks%全100ns<半100ns) this.節100ns+=半100ns;
     }
-    //internal abstract long 割合計算(long 全体100ns);
 }

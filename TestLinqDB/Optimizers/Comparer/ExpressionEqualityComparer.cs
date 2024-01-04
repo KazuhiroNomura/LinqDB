@@ -5,6 +5,7 @@ using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Optimizers.Comparer;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 using Binder = Microsoft.CSharp.RuntimeBinder;
 using Expression = System.Linq.Expressions.Expression;
 using MemoryPack;
@@ -147,8 +148,9 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     public override int GetHashCode()=>this.内部の値;
 }
 public class ExpressionEqualityComparer:共通{
-    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
-    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
+
+    //private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
+    private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
@@ -1717,6 +1719,22 @@ public class ExpressionEqualityComparer:共通{
             )
         );
     }
+    public int TryCatch_Filter0CS(計測 Constant){
+        try{
+            return 0;
+        } catch(Exception)when(true){
+            Constant.Count("Constant true");
+            return 1;
+        }
+    }
+    public int TryCatch_Filter0CS1(計測 Constant){
+        try{
+            return 0;
+        } catch(Exception ex)when(ex.Message=="abc"){
+            Constant.Count("Constant true");
+            return 1;
+        }
+    }
     [Fact]
     public void TryCatch_Filter0(){
         this.Expression実行AssertEqual(
@@ -1725,7 +1743,7 @@ public class ExpressionEqualityComparer:共通{
                     Expression.Constant(0),
                     Expression.Catch(
                         typeof(Exception),
-                        Expression.Constant(0),
+                        Expression.Constant(1),
                         Expression.Constant(true)
 
                     )

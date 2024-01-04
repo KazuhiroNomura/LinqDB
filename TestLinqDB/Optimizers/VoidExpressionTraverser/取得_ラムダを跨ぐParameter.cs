@@ -71,6 +71,7 @@ public class 取得_ラムダを跨ぐParameter : 共通{
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
+                    Expression.Assign(p,Expression.Constant(0)),
                     Expression.Lambda<Func<int>>(p),
                     p
                 )
@@ -80,6 +81,7 @@ public class 取得_ラムダを跨ぐParameter : 共通{
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
+                    Expression.Assign(p,Expression.Constant(0)),
                     Expression.Lambda<Func<int>>(Expression.Constant(0)),
                     p
                 )

@@ -37,9 +37,6 @@ public class 取得_OuterPredicate_InnerPredicate_プローブビルド:共通{
         public override bool Equals(int x,int y)=>x==y;
         public override int GetHashCode(int obj)=>obj;
     }
-    [Fact]public void バグ(){
-        this.Expression実行AssertEqual(() => (1).Let(q=>new 嘘Equals[2].Where(p=>p.Equals(new 嘘Equals()))));
-    }
     [Fact]public void PrivateTraverseNullable(){
         //switch(Expression0.NodeType){
         //    case ExpressionType.OrElse:

@@ -30,6 +30,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestNorthwind", "TestNorthw
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLinqDB", "TestLinqDB\TestLinqDB.csproj", "{9C144205-1B32-4F7F-8507-71653455E70E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLinqDBExe", "TestLinqDBExe\TestLinqDBExe.csproj", "{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C144205-1B32-4F7F-8507-71653455E70E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

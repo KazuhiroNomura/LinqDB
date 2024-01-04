@@ -30,13 +30,8 @@ public class 判定_InstanceMethodか : 共通{
         //this.MemoryMessageJson_Expression_ExpressionAssertEqual(()=>F(()=>3));
         this.Expression実行AssertEqual(() => F(() => 3));
     }
-    [Fact]
-    public void Block()
-    {
+    [Fact]public void Block(){
         var p = Expression.Parameter(typeof(int));
-        var s = new Set<int>();
-        //var 判定_内部LambdaにParameterが存在するか=this._判定_内部LambdaにParameterが存在するか;
-        //var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
         //foreach(var Variable in Block.Variables)
         //    if(判定_内部LambdaにParameterが存在するか.実行(Block,Variable))
         this.Expression実行AssertEqual(
@@ -52,6 +47,7 @@ public class 判定_InstanceMethodか : 共通{
             Expression.Lambda<Func<int>>(
                 Expression.Block(
                     new[] { p },
+                    Expression.Assign(p,Expression.Constant(0)),
                     Expression.Lambda<Func<int>>(Expression.Constant(0)),
                     p
                 )

@@ -2189,6 +2189,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         //this.PrivateFilter1(Try_Handler);
         var Isinst = I.DefineLabel();
         I.Brtrue(Isinst);
+        I.Pop();
         I.Ldc_I4_0();
         var endfilter = I.DefineLabel();
         I.Br(endfilter);
@@ -2198,6 +2199,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         I.MarkLabel(endfilter);
         //I.Endfilter();
         I.BeginCatchBlock(null);
+        I.Pop();
     }
     protected abstract void ProtectedFault(Expression? Fault);
     /// <summary>
@@ -2519,26 +2521,27 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     protected void VoidTraverse(Expression e){
         // ReSharper disable once SwitchStatementMissingSomeCases
         switch(e.NodeType){
-            case ExpressionType.Assign:
-                var binary=(BinaryExpression)e;
-                var Binary_Left = binary.Left;
-                var Binary_Right = binary.Right;
-                if(Binary_Right.NodeType==ExpressionType.Label) {
+            case ExpressionType.Assign:{
+                var Binary=(BinaryExpression)e;
+                var Binary_Left=Binary.Left;
+                var Binary_Right=Binary.Right;
+                if(Binary_Right.NodeType==ExpressionType.Label){
                     this.Traverse(Binary_Right);
-                    var x = this.I!;
-                    var Right値 = x.M_DeclareLocal_Stloc(Binary_Right.Type);
+                    var I=this.I!;
+                    var Right値=I.M_DeclareLocal_Stloc(Binary_Right.Type);
                     this.格納先設定(Binary_Left);
-                    x.Ldloc(Right値);
-                } else if(Binary_Right.NodeType==ExpressionType.Try) {
-                    var Try値 = this.PrivateTry値を代入した変数((TryExpression)Binary_Right);
+                    I.Ldloc(Right値);
+                } else if(Binary_Right.NodeType==ExpressionType.Try){
+                    var Try値=this.PrivateTry値を代入した変数((TryExpression)Binary_Right);
                     this.格納先設定(Binary_Left);
                     this.I!.Ldloc(Try値);
-                } else {
+                } else{
                     this.格納先設定(Binary_Left);
                     this.Traverse(Binary_Right);
                 }
                 this.Void格納先に格納(Binary_Left);
                 break;
+            }
             case ExpressionType.PreDecrementAssign:
                 VoidPreIncrementAssign(e,OpCodes.Sub);
                 break;

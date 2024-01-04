@@ -62,7 +62,7 @@ public sealed class Optimizer:IDisposable {
     private readonly 作成_DynamicMethod _作成_DynamicMethod;
     private readonly 作成_DynamicAssembly _作成_DynamicAssembly;
     private readonly 取得_命令ツリー _取得_命令ツリー = new();
-    private readonly List計測 List計測 = new();
+    private readonly 計測Maneger 計測Maneger = new();
     //private readonly A計測 Top辺;
     //private readonly List計測 List辺= new();
     private readonly Dictionary<LabelTarget,計測> Dictionary_LabelTarget_辺=new();
@@ -161,9 +161,9 @@ public sealed class Optimizer:IDisposable {
         this._検証_変形状態=new();
         this._検証_Parameterの使用状態=new(ループ跨ぎParameters);
         this._変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
-        var List計測=this.List計測;
+        var List計測=this.計測Maneger;
         //this.Top辺=new 計測する{子コメント="開始"};
-        this._変換_Stopwatchに埋め込む=new(作業配列,this.List計測,this.Dictionary_LabelTarget_辺);
+        this._変換_Stopwatchに埋め込む=new(作業配列,this.計測Maneger,this.Dictionary_LabelTarget_辺);
         this._作成_DynamicMethod=new(判定_InstanceMethodか);
         this._作成_DynamicAssembly=new(判定_InstanceMethodか);
         this.DictionaryConstant=new(ExpressionEqualityComparer);

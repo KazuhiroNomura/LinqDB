@@ -751,7 +751,7 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         var a = Expression.Parameter(typeof(int), "Pワーク変数a");
         var b = Expression.Parameter(typeof(int), "Pワーク変数b");
         var c = Expression.Parameter(typeof(int), "Pワーク変数c");
-        var s = new Set<int>();
+        var s = new Set<int>{1,2,3,4,5};
         //do {
         //    Debug.Assert(LinkedListNode!=null);
         //    var LinkedListNode_Value = LinkedListNode.Value;
