@@ -143,11 +143,11 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         //        this.Traverse(Binary.Left);
         //    this.Traverse(Binary.Right);
         //}
-        protected override void Traverse(Expression e) {
+        protected override void Traverse(Expression Expression) {
             if(this.結果Expression is not null)return;
-            switch(e.NodeType) {
+            switch(Expression.NodeType) {
                 case ExpressionType.Constant: {
-                    if(ILで直接埋め込めるか((ConstantExpression)e))return;
+                    if(ILで直接埋め込めるか((ConstantExpression)Expression))return;
                     break;
                 }
                 case ExpressionType.Default:return;
@@ -157,15 +157,15 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 //    break;
                 //}
             }
-            if(e.Type!=typeof(void)) {
+            if(Expression.Type!=typeof(void)) {
                 if(this.結果の場所==場所.ループ跨ぎ){
-                    if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
-                        this.結果Expression=e;
+                    if(this._判定_移動できるか.実行(Expression)==判定_移動できるか.EResult.移動できる){
+                        this.結果Expression=Expression;
                         return;
                     }
                 } else if(this.結果の場所==場所.ラムダ跨ぎ){
-                    if(this._判定_移動できるか.実行(e)==判定_移動できるか.EResult.移動できる){
-                        this.結果Expression=e;
+                    if(this._判定_移動できるか.実行(Expression)==判定_移動できるか.EResult.移動できる){
+                        this.結果Expression=Expression;
                         return;
                     }
                 }
@@ -185,7 +185,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             //        }
             //    }
             //}
-            base.Traverse(e);
+            base.Traverse(Expression);
         }
         protected override void Call(MethodCallExpression MethodCall) {
             var MethodCall_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
@@ -299,7 +299,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             for(var a = 0;a<Block0_Expressions_Count;a++)
                 Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
             //スコープParameters.RemoveRange(スコープParameters_Count,Block0_Variables.Count);
-            return Expression.Block(Block0_Variables,Block1_Expressions);
+            return Expression.Block(Block0.Type,Block0_Variables,Block1_Expressions);
         }
         protected override Expression Lambda(LambdaExpression Lambda0){
             var 現在探索場所 = this.現在探索場所;
@@ -462,7 +462,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         var LinkedList = new Generic.LinkedList<Expression>(Block0.Expressions);
         this.外だし(LinkedList);
         Debug.Assert(LinkedList.Last!=null,"LinkedList.Last != null");
-        Debug.Assert(!(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type),"この式は最適化されて存在しないはず。");
+        Debug.Assert(!(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type&&Block0.Type!=typeof(void)),"この式は最適化されて存在しないはず。");
         return Expression.Block(Block0.Type,Block0_Variables,LinkedList);
     }
     protected override Expression Lambda(LambdaExpression Lambda0) {

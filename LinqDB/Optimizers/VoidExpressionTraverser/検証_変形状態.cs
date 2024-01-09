@@ -9,18 +9,18 @@ using Generic = System.Collections.Generic;
 using static Common;
 internal sealed class 検証_変形状態:VoidExpressionTraverser_Quoteを処理しない{
     public void 実行(Expression e)=>this.Traverse(e);
-    protected override void Traverse(Expression e) {
-        if(e is BinaryExpression Binary) {
+    protected override void Traverse(Expression Expression) {
+        if(Expression is BinaryExpression Binary) {
             var Binary_Method = Binary.Method;
             if(Binary_Method is not null&&!Binary_Method.IsStatic)
                 throw new InvalidOperationException("Binary演算子のメソッドはstaticであるべき");
         }
-        if(e is UnaryExpression Unary) {
+        if(Expression is UnaryExpression Unary) {
             var Unary_Method = Unary.Method;
             if(Unary_Method is not null&&!Unary_Method.IsStatic)
                 throw new InvalidOperationException("Unary演算子のメソッドはstaticであるべき");
         }
-        base.Traverse(e);
+        base.Traverse(Expression);
     }
 
     protected override void Call(MethodCallExpression MethodCall) {

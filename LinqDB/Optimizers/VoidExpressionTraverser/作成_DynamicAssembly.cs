@@ -86,7 +86,7 @@ internal class 作成_DynamicAssembly:A作成_IL{
         if(旧I is not null)this.MemberAccess(Member);
     }
     protected override void Block(BlockExpression Block) {
-        var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
+        //var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter;
         var Dictionary_Parameter_LocalBuilder = this.Dictionary_Parameter_LocalBuilder;
         Debug.Assert(Dictionary_Parameter_LocalBuilder is not null);
         var Block_Expressions = Block.Expressions;

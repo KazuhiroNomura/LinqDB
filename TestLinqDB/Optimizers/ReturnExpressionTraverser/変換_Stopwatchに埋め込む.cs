@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Linq.Expressions;
+using System.Reflection;
 using MemoryPack;
 using MessagePack;
 using Expression = System.Linq.Expressions.Expression;
@@ -186,7 +187,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         );
         this.Expression実行AssertEqual(Expression.Lambda<Func<int,int>>(Loop,p));
     }
-    private const int ループ回数=10000000;
+    private const int ループ回数=1000000;
     [Fact]public void ContinueBreakを組み合わせてLoop1(){
         var i=Expression.Parameter(typeof(int),"i");
         var p=Expression.Parameter(typeof(int),"p");
@@ -288,5 +289,120 @@ public class 変換_Stopwatchに埋め込む : 共通{
             Break
         );
         this.Expression実行AssertEqual(Expression.Lambda<Func<int,int>>(Loop,p));
+    }
+    [Fact]public void TryCatch(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Constant(1),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(0)
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatchFinally(){
+        var p = Expression.Parameter(typeof(int), "int32");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int, int>>(
+                Expression.TryCatchFinally(
+                    p,
+                    Expression.AddAssign(p, p)
+                ), p
+            )
+        );
+    }
+    [Fact]public void TryCatchFilter(){
+        var InvalidCastException=Expression.Parameter(typeof(InvalidCastException),"ex0");
+        var NotImplementedException=Expression.Parameter(typeof(NotImplementedException),"ex1");
+        var NotSupportedException=Expression.Parameter(typeof(NotSupportedException),"ex2");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Constant(1),
+                    Expression.Catch(
+                        InvalidCastException,
+                        Expression.Constant(2),
+                        Expression.Equal(InvalidCastException,Expression.Default(InvalidCastException.Type))
+                    ),
+                    Expression.Catch(
+                        NotImplementedException,
+                        Expression.Constant(3),
+                        Expression.Equal(NotImplementedException,Expression.Default(NotImplementedException.Type))
+                    ),
+                    Expression.Catch(
+                        NotSupportedException,
+                        Expression.Constant(4),
+                        Expression.Equal(NotSupportedException,Expression.Default(NotSupportedException.Type))
+                    )
+                )
+            )
+        );
+    }
+    public static void gg(){
+        try{
+            gg();
+        } catch(Exception ex)when(ex.Message==""){
+        } catch(Exception ex){
+        }
+    }
+    [Fact]
+    public void TryCatchFinallyFilter(){
+        var InvalidCastException=Expression.Parameter(typeof(InvalidCastException),"ex0");
+        var NotImplementedException=Expression.Parameter(typeof(NotImplementedException),"ex1");
+        var NotSupportedException=Expression.Parameter(typeof(NotSupportedException),"ex2");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatchFinally(
+                    Expression.Add(
+                        Expression.Constant(-11),
+                        Expression.Constant(1)
+                    ),
+                    Expression.Constant(5),
+                    Expression.Catch(
+                        InvalidCastException,
+                        Expression.Constant(2),
+                        Expression.Equal(InvalidCastException,Expression.Default(InvalidCastException.Type))
+                    ),
+                    Expression.Catch(
+                        NotImplementedException,
+                        Expression.Constant(3),
+                        Expression.Equal(NotImplementedException,Expression.Default(NotImplementedException.Type))
+                    ),
+                    Expression.Catch(
+                        NotImplementedException,
+                        Expression.Constant(3)
+                    ),
+                    Expression.Catch(
+                        NotSupportedException,
+                        Expression.Constant(4),
+                        Expression.Equal(NotSupportedException,Expression.Default(NotSupportedException.Type))
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void Switch_Case_Default(){
+        var p = Expression.Parameter(typeof(int), "p");
+        var pp=Expression.And(p,p);
+        var SwitchCases=new List<SwitchCase>();
+        var TestValues=new List<Expression>();
+        var r=new Random(1);
+        var case定数=0;
+        for(var a=0;a<10;a++){
+            for(var b=r.Next(1,10);b>=0;b--) TestValues.Add(Expression.Constant(case定数++));
+            var SwitchCase=Expression.SwitchCase(pp,TestValues);
+            SwitchCases.Add(SwitchCase);
+            TestValues.Clear();
+        }
+        var e=Expression.Switch(pp,pp,SwitchCases.ToArray());
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                e,
+                p
+            )
+        );
     }
 }

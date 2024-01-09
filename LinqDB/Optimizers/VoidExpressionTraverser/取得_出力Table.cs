@@ -24,9 +24,9 @@ internal sealed class 取得_出力Table:VoidExpressionTraverser {
         this.Traverse(e);
     }
 
-    protected override void Traverse(Expression e) {
-        base.Traverse(e);
-        if(!this.List出力TableExpression.Contains(e)&&this.指定TableExpressions!.Contains(e,this.ExpressionEqualityComparer))
-            this.List出力TableExpression.Add(e);
+    protected override void Traverse(Expression Expression) {
+        base.Traverse(Expression);
+        if(!this.List出力TableExpression.Contains(Expression)&&this.指定TableExpressions!.Contains(Expression,this.ExpressionEqualityComparer))
+            this.List出力TableExpression.Add(Expression);
     }
 }

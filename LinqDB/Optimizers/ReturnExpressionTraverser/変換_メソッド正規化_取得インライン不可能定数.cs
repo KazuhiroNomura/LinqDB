@@ -219,12 +219,17 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
     protected override Expression Block(BlockExpression Block0) {
         var Block0_Expressions=Block0.Expressions;
         var Block0_Expressions_Count = Block0_Expressions.Count;
-        if(Block0_Expressions_Count==0) return Default_void;
-        if(Block0.Variables.Count==0)
-            if(Block0_Expressions_Count==1) return this.Traverse(Block0_Expressions[0]);
+        if(Block0_Expressions_Count==0){
+            Debug.Assert(Block0.Type==typeof(void));
+            return Default_void;
+        }
+        if(Block0.Type!=typeof(void))
+            if(Block0.Variables.Count==0)
+                if(Block0_Expressions_Count==1) 
+                    return this.Traverse(Block0_Expressions[0]);
         var Block1_Expressions = new Expression[Block0_Expressions_Count];
         for(var a = 0;a<Block0_Expressions_Count;a++)Block1_Expressions[a]=this.Traverse(Block0_Expressions[a]);
-        return Expression.Block(Block0.Variables,Block1_Expressions);
+        return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
     }
     protected override Expression Constant(ConstantExpression Constant0) {
         if(!ILで直接埋め込めるか(Constant0))

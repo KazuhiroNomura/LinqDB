@@ -9,7 +9,7 @@ using MemoryPack;
 using System.Collections;
 using System.Diagnostics;
 using System.Linq.Expressions;
-
+using System.Reflection;
 using IEnumerable = System.Collections.IEnumerable;
 namespace TestLinqDB.特殊パターン;
 internal class ClassIEnumerableInt32Double : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IEnumerable<double>
@@ -32,8 +32,21 @@ internal class ClassIEnumerableInt32 : System.Collections.Generic.IEnumerable<in
     }
     IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
 }
+[MemoryPack.MemoryPackable,MessagePack.MessagePackObject(true),Serializable]
+public partial class Instance{
+    public static class Reflection{
+        public static readonly MethodInfo InstanceCallAssignRef=typeof(Instance).GetMethod(nameof(Instance.InstanceCallAssignRef),特定パターン.F)!;
+        public static readonly MethodInfo StaticCallAssignRef=typeof(Instance).GetMethod(nameof(Instance.StaticCallAssignRef),特定パターン.F)!;
+    }
+
+    public int InstanceCallAssignRef(ref int a,int b)=>a=b;
+    public static int StaticCallAssignRef(Instance @this, ref int a,int b)=>a=b;
+    public override bool Equals(object? obj)=>true;
+    public override int GetHashCode()=>0;
+}
 public class 特定パターン:共通{
-    //protected override テストオプション テストオプション=>テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
+    //private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
+    internal const BindingFlags F=BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static;
     [Fact]
     public void ClassIEnumerableInt32シリアライズ(){
         System.Collections.Generic.IEnumerable<int> input=new ClassIEnumerableInt32();
@@ -329,6 +342,581 @@ public class 特定パターン:共通{
                     a,
                     Expression.Constant(3)
                 ),a
+            )
+        );
+    }
+    public void Switch(){
+        var Equal=Expression.Equal(
+            Expression.Constant(0m),
+            Expression.Constant(0m)
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool>>(
+                Expression.Switch(
+                    Expression.Constant(true),
+                    Expression.Constant(true),
+                    Expression.SwitchCase(
+                        Equal,
+                        Expression.Constant(true)
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatch2ネスト0(){
+        //try{
+        //    try{
+        //        1
+        //    }catch{
+        //        2
+        //    }
+        //}catch{
+        //    try{
+        //        3
+        //    }catch{
+        //        4
+        //    }
+        //}
+        //try{
+        //    try{
+        //        t0=1
+        //    }catch{
+        //        t0=2
+        //    }
+        //    t2=t0
+        //}catch{
+        //    try{
+        //        t1=3
+        //    }catch{
+        //        t1=4
+        //    }
+        //    t2=t1
+        //}
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(2)
+                        )
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.TryCatch(
+                            Expression.Constant(3),
+                            Expression.Catch(
+                                typeof(Exception),
+                                Expression.Constant(4)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    public static int MethodInt32(int a,int b)=>a+b;
+    [Fact]public void TryCatch2ネスト1(){
+        var Method3=typeof(特定パターン).GetMethod(nameof(特定パターン.MethodInt32),F|BindingFlags.Public|BindingFlags.Instance)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Call(
+                    Method3,
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(1)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(2)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatchをAddオペランドに(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(0),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    private static int CallAssignValue(int a,int b)=>a+b;
+    [Fact]public void CallAssignValue0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Assign(p,Expression.Constant(2)),
+                    Expression.Call(
+                        typeof(特定パターン).GetMethod(nameof(CallAssignValue),F)!,
+                        p,
+                        p
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void InstanceCallAssignRef0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Call(
+                    Expression.Constant(new Instance()),
+                    Instance.Reflection.InstanceCallAssignRef,
+                    p,
+                    p
+                ),p
+            )
+        );
+    }
+    [Fact]public void StaticCallAssignRef0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Call(
+                    Instance.Reflection.StaticCallAssignRef,
+                    Expression.Constant(new Instance()),
+                    p,
+                    p
+                ),p
+            )
+        );
+    }
+    [Fact]public void TryCatchをInstanceCallAssignRef0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Call(
+                        Expression.Constant(new Instance()),
+                        Instance.Reflection.InstanceCallAssignRef,
+                        p,
+                        Expression.TryCatch(
+                            Expression.Constant(2),
+                            Expression.Catch(
+                                typeof(Exception),
+                                Expression.Constant(0)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatchをStaticCallAssignRef0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p},
+                    Expression.Call(
+                        Instance.Reflection.StaticCallAssignRef,
+                        Expression.Constant(new Instance()),
+                        p,
+                        Expression.TryCatch(
+                            Expression.Constant(2),
+                            Expression.Catch(
+                                typeof(Exception),
+                                Expression.Constant(0)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void TryCatchをCallオペランドに2(){
+        var p=Expression.Parameter(typeof(int),"p");
+        var t=Expression.Parameter(typeof(int),"t");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{p,t},
+                    Expression.Call(
+                        Expression.Constant(new Instance()),
+                        Instance.Reflection.InstanceCallAssignRef,
+                        p,
+                        Expression.Assign(
+                            t,
+                            Expression.TryCatch(
+                                Expression.Constant(2),
+                                Expression.Catch(
+                                    typeof(Exception),
+                                    Expression.Constant(0)
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    private static readonly ParameterExpression ParameterInt32 = Expression.Parameter(typeof(int),"int");
+    [Fact]public void Lambda_TryCatch0Finally0(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{ParameterInt32},
+                    Expression.Assign(ParameterInt32,Expression.Constant(0)),
+                    Expression.TryCatchFinally(
+                        ParameterInt32,
+                        Expression.Default(typeof(void))
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void AddTryTry0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(2)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(3),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(4)
+                        )
+                    )
+                ),
+                p
+            )
+        );
+    }
+    private static int Return(int a)=>a;
+    [Fact]
+    public void AddのオペランドをTryCatch(){
+        //.try
+        //{
+        //    IL_0000: ldc.i4.1
+        //    IL_0001: stloc.0
+        //    IL_0002: leave IL_000f
+        //} // end .try
+        //catch [System.Private.CoreLib]System.Exception
+        //{
+        //    IL_0007: pop
+        //    IL_0008: ldc.i4.2
+        //    IL_0009: stloc.0
+        //    IL_000a: leave IL_000f
+        //} // end handler
+
+        //IL_000f: ldloc.0　　　この2行はIL_0024に挿入するべき
+        //IL_0010: call int32 [TestLinqDB]TestLinqDB.特殊パターン.特定パターン::Return(int32)
+        //    .try
+        //{
+        //    IL_0015: ldc.i4.3
+        //    IL_0016: stloc.1
+        //    IL_0017: leave IL_0024
+        //} // end .try
+        //catch [System.Private.CoreLib]System.Exception
+        //{
+        //    IL_001c: pop
+        //    IL_001d: ldc.i4.4
+        //    IL_001e: stloc.1
+        //    IL_001f: leave IL_0024
+        //} // end handler
+
+        //IL_0024: ldloc.1
+        //IL_0025: call int32 [TestLinqDB]TestLinqDB.特殊パターン.特定パターン::Return(int32)
+        //IL_002a: add
+        //IL_002b: ret
+        var Return=typeof(特定パターン).GetMethod(nameof(特定パターン.Return),F)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Add(
+                    Expression.Call(
+                        Return,
+                        Expression.TryCatch(
+                            Expression.Constant(1),
+                            Expression.Catch(
+                                typeof(Exception),
+                                Expression.Constant(2)
+                            )
+                        )
+                    ),
+                    Expression.Call(
+                        Return,
+                        Expression.TryCatch(
+                            Expression.Constant(3),
+                            Expression.Catch(
+                                typeof(Exception),
+                                Expression.Constant(4)
+                            )
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void TryCatchのBodyでAddのオペランドにTryCatch(){
+        //try{
+        //    IL_0000: ldc.i4.1   
+        //    IL_0001: stloc.3    
+        //    IL_0002: leave      IL_000f
+        //}catch{
+        //    IL_0007: pop        
+        //    IL_0008: ldc.i4.2   
+        //    IL_0009: stloc.3    
+        //    IL_000a: leave      IL_000f
+        //}
+        //IL_000f: ldloc.3    
+        //IL_0010: call       Int32 Return(Int32)/NET48.Program
+        //IL_0015: stloc.1    
+        //try{
+        //    IL_0016: ldc.i4.3   
+        //    IL_0017: stloc.3    
+        //    IL_0018: leave      IL_0025
+        //}catch{
+        //    IL_001d: pop        
+        //    IL_001e: ldc.i4.4   
+        //    IL_001f: stloc.3    
+        //    IL_0020: leave      IL_0025
+        //}
+        //IL_0025: ldloc.3    
+        //IL_0026: stloc.0    
+        //IL_0027: ldloc.0    
+        //IL_0028: call       Int32 Return(Int32)/NET48.Program
+        //IL_002d: stloc.2    
+        //IL_002e: ldloc.1    
+        //IL_002f: ldloc.2    
+        //IL_0030: add        
+        //IL_0031: ret        
+        var Return=typeof(特定パターン).GetMethod(nameof(特定パターン.Return),F)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Add(
+                        Expression.Call(
+                            Return,
+                            Expression.TryCatch(
+                                Expression.Constant(1),
+                                Expression.Catch(
+                                    typeof(Exception),
+                                    Expression.Constant(2)
+                                )
+                            )
+                        ),
+                        Expression.Call(
+                            Return,
+                            Expression.TryCatch(
+                                Expression.Constant(3),
+                                Expression.Catch(
+                                    typeof(Exception),
+                                    Expression.Constant(4)
+                                )
+                            )
+                        )
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(2)
+                    )
+                )
+            )
+        );
+    }
+    private static string Concat(string arg0,string arg1,string arg2)=>arg0+arg1+arg2;
+    [Fact]
+    public void Tryの変形0(){
+        //a+try{
+        //    b
+        //}catch{
+        //    c
+        //}
+        //t0=a
+        //try{
+        //    t1=b
+        //}catch{
+        //    t1=c
+        //}
+        //t0+t1
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.Add(
+                    Expression.Constant(1m),
+                    Expression.TryCatch(
+                        Expression.Constant(2m),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(3m)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Tryの変形1(){
+        //a+try{
+        //    b
+        //}catch{
+        //    c
+        //}+p
+        //t0=a
+        //try{
+        //    t1=b
+        //}catch{
+        //    t1=c
+        //}
+        //t2=d
+        //t0+t1+t2
+        var Concat=typeof(特定パターン).GetMethod(nameof(特定パターン.Concat),F)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<string>>(
+                Expression.Call(
+                    Concat,
+                    Expression.Constant("a"),
+                    Expression.TryCatch(
+                        Expression.Constant("b"),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant("c")
+                        )
+                    ),
+                    Expression.Constant("d")
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Tryの変形2(){
+        //1*try{
+        //    2*try{
+        //        3
+        //    }catch{
+        //        4
+        //    }*5*try{
+        //        6
+        //    }catch{
+        //        7
+        //    }*8
+        //}catch{
+        //    9*try{
+        //        10.
+        //    }catch{
+        //        11
+        //    }*12*try{
+        //        13
+        //    }catch{
+        //        14
+        //    }*15
+        //}*16
+        //t0=1
+        //try{
+        //    t1=2
+        //    try{
+        //        t2=3
+        //    }catch{
+        //        t2=4
+        //    }
+        //    t3=5
+        //    try{
+        //        t4=6
+        //    }catch{
+        //        t4=7
+        //    }
+        //    t5=8
+        //    t6=t0*t1*t2*t3*t4*t5
+        //}catch{
+        //    t7=i
+        //    try{
+        //        t8=j
+        //    }catch{
+        //        t8=k
+        //    }
+        //    t9=l
+        //    try{
+        //        t10=m
+        //    }catch{
+        //        t10=n
+        //    }
+        //    t11=o
+        //    t6=t6*t7*t8*t9*t10
+        //}
+        //t12=p
+        //t0*t6*t12
+        var Return=typeof(特定パターン).GetMethod(nameof(特定パターン.Return),F)!;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Add(
+                        Expression.Call(
+                            Return,
+                            Expression.TryCatch(
+                                Expression.Constant(1),
+                                Expression.Catch(
+                                    typeof(Exception),
+                                    Expression.Constant(2)
+                                )
+                            )
+                        ),
+                        Expression.Call(
+                            Return,
+                            Expression.TryCatch(
+                                Expression.Constant(3),
+                                Expression.Catch(
+                                    typeof(Exception),
+                                    Expression.Constant(4)
+                                )
+                            )
+                        )
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Constant(2)
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void TryCatch_Filter2(){
+        var Variable=Expression.Parameter(typeof(Exception),"ex");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatch(
+                    Expression.Constant(0),
+                    Expression.Catch(
+                        Variable,
+                        Expression.Constant(0),
+                        Expression.Equal(Variable,Expression.Default(Variable.Type))
+
+                    )
+                )
             )
         );
     }

@@ -1071,9 +1071,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         protected override void Lambda(LambdaExpression Lambda) {
         }
 
-        protected override void Traverse(Expression e) {
-            if(this.左辺Expressions.Contains(e)) this.左辺Expressionが含まれる=true;
-            else base.Traverse(e);
+        protected override void Traverse(Expression Expression) {
+            if(this.左辺Expressions.Contains(Expression)) this.左辺Expressionが含まれる=true;
+            else base.Traverse(Expression);
         }
     }
     private sealed class 変換_二度出現したExpression:ReturnExpressionTraverser{
@@ -1099,7 +1099,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         private 辺 辺=default!;
         private bool 既に置換された式を走査中;
         private int 計算量;
-        public Expression 実行(Expression Expression0,Expression 二度出現した一度目のExpression,辺 二度出現した一度目のExpressionが属する辺に関する情報,ParameterExpression 二度目以降のParameter){
+        public Expression 実行(Expression Expression0,Expression 二度出現した一度目のExpression,ParameterExpression 二度目以降のParameter){
             this.計算量=0;
             this.既に置換された式を走査中=false;
             this.辺番号=1;
@@ -1418,7 +1418,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Variable = Expression.Variable(二度出現した一度目のExpression.Type,$"局所{this.番号++}");
             BlockVariables.Add(Variable);
             ListスコープParameter.Add(Variable);
-            var Expression0 = 変換_二度出現したExpression.実行(Lambda1_Body,二度出現した一度目のExpression,辺,Variable);
+            var Expression0 = 変換_二度出現したExpression.実行(Lambda1_Body,二度出現した一度目のExpression,Variable);
             Lambda1_Body=Expression0;
         }
         var Lambda2_Body = this.Traverse(Lambda1_Body);

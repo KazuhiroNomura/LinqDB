@@ -19,10 +19,16 @@ internal class ExpressionEqualityComparer_Assign_Leftで比較:ExpressionEqualit
                 return true;
         return @false;
     }
+    /// <summary>
+    /// (t=a*a),tを等価としたい。先行評価式用
+    /// しかしt0=a*a,t1=a*aも等価としたい
+    /// </summary>
+    /// <param name="Expression0"></param>
+    /// <returns></returns>
     protected override Expression Assignの比較対象(Expression Expression0){
-        if(Expression0.NodeType==ExpressionType.Assign)
-            if(((BinaryExpression)Expression0).Left is ParameterExpression Parameter)
-                return Parameter;
+        //if(Expression0.NodeType==ExpressionType.Assign)
+        //    if(((BinaryExpression)Expression0).Left is ParameterExpression Parameter)
+        //        return Parameter;
         return Expression0;
     }
     public override int GetHashCode(Expression Expression0){

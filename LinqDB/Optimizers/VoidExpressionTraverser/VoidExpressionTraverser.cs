@@ -16,263 +16,263 @@ internal class VoidExpressionTraverser {
     /// <summary>
     /// 走査する起点メソッド。
     /// </summary>
-    /// <param name="e"></param>
-    protected virtual void Traverse(Expression e) {
-        switch(e.NodeType){
+    /// <param name="Expression"></param>
+    protected virtual void Traverse(Expression Expression) {
+        switch(Expression.NodeType){
             case ExpressionType.Add:
-                this.Add((BinaryExpression)e);
+                this.Add((BinaryExpression)Expression);
                 return;
             case ExpressionType.AddAssign:
-                this.AddAssign((BinaryExpression)e);
+                this.AddAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.AddAssignChecked:
-                this.AddAssignChecked((BinaryExpression)e);
+                this.AddAssignChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.AddChecked:
-                this.AddChecked((BinaryExpression)e);
+                this.AddChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.And:
-                this.And((BinaryExpression)e);
+                this.And((BinaryExpression)Expression);
                 return;
             case ExpressionType.AndAssign:
-                this.AndAssign((BinaryExpression)e);
+                this.AndAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.AndAlso:
-                this.AndAlso((BinaryExpression)e);
+                this.AndAlso((BinaryExpression)Expression);
                 return;
             case ExpressionType.ArrayIndex:
-                this.ArrayIndex((BinaryExpression)e);
+                this.ArrayIndex((BinaryExpression)Expression);
                 return;
             case ExpressionType.Assign:
-                this.Assign((BinaryExpression)e);
+                this.Assign((BinaryExpression)Expression);
                 return;
             case ExpressionType.Coalesce:
-                this.Coalesce((BinaryExpression)e);
+                this.Coalesce((BinaryExpression)Expression);
                 return;
             case ExpressionType.Divide:
-                this.Divide((BinaryExpression)e);
+                this.Divide((BinaryExpression)Expression);
                 return;
             case ExpressionType.DivideAssign:
-                this.DivideAssign((BinaryExpression)e);
+                this.DivideAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.Equal:
-                this.Equal((BinaryExpression)e);
+                this.Equal((BinaryExpression)Expression);
                 return;
             case ExpressionType.ExclusiveOr:
-                this.ExclusiveOr((BinaryExpression)e);
+                this.ExclusiveOr((BinaryExpression)Expression);
                 return;
             case ExpressionType.ExclusiveOrAssign:
-                this.ExclusiveOrAssign((BinaryExpression)e);
+                this.ExclusiveOrAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.GreaterThan:
-                this.GreaterThan((BinaryExpression)e);
+                this.GreaterThan((BinaryExpression)Expression);
                 return;
             case ExpressionType.GreaterThanOrEqual:
-                this.GreaterThanOrEqual((BinaryExpression)e);
+                this.GreaterThanOrEqual((BinaryExpression)Expression);
                 return;
             case ExpressionType.LeftShift:
-                this.LeftShift((BinaryExpression)e);
+                this.LeftShift((BinaryExpression)Expression);
                 return;
             case ExpressionType.LeftShiftAssign:
-                this.LeftShiftAssign((BinaryExpression)e);
+                this.LeftShiftAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.LessThan:
-                this.LessThan((BinaryExpression)e);
+                this.LessThan((BinaryExpression)Expression);
                 return;
             case ExpressionType.LessThanOrEqual:
-                this.LessThanOrEqual((BinaryExpression)e);
+                this.LessThanOrEqual((BinaryExpression)Expression);
                 return;
             case ExpressionType.Modulo:
-                this.Modulo((BinaryExpression)e);
+                this.Modulo((BinaryExpression)Expression);
                 return;
             case ExpressionType.ModuloAssign:
-                this.ModuloAssign((BinaryExpression)e);
+                this.ModuloAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.Multiply:
-                this.Multiply((BinaryExpression)e);
+                this.Multiply((BinaryExpression)Expression);
                 return;
             case ExpressionType.MultiplyAssign:
-                this.MultiplyAssign((BinaryExpression)e);
+                this.MultiplyAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.MultiplyAssignChecked:
-                this.MultiplyAssignChecked((BinaryExpression)e);
+                this.MultiplyAssignChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.MultiplyChecked:
-                this.MultiplyChecked((BinaryExpression)e);
+                this.MultiplyChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.NotEqual:
-                this.NotEqual((BinaryExpression)e);
+                this.NotEqual((BinaryExpression)Expression);
                 return;
             case ExpressionType.Or:
-                this.Or((BinaryExpression)e);
+                this.Or((BinaryExpression)Expression);
                 return;
             case ExpressionType.OrAssign:
-                this.OrAssign((BinaryExpression)e);
+                this.OrAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.OrElse:
-                this.OrElse((BinaryExpression)e);
+                this.OrElse((BinaryExpression)Expression);
                 return;
             case ExpressionType.Power:
-                this.Power((BinaryExpression)e);
+                this.Power((BinaryExpression)Expression);
                 return;
             case ExpressionType.PowerAssign:
-                this.PowerAssign((BinaryExpression)e);
+                this.PowerAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.RightShift:
-                this.RightShift((BinaryExpression)e);
+                this.RightShift((BinaryExpression)Expression);
                 return;
             case ExpressionType.RightShiftAssign:
-                this.RightShiftAssign((BinaryExpression)e);
+                this.RightShiftAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.Subtract:
-                this.Subtract((BinaryExpression)e);
+                this.Subtract((BinaryExpression)Expression);
                 return;
             case ExpressionType.SubtractAssign:
-                this.SubtractAssign((BinaryExpression)e);
+                this.SubtractAssign((BinaryExpression)Expression);
                 return;
             case ExpressionType.SubtractAssignChecked:
-                this.SubtractAssignChecked((BinaryExpression)e);
+                this.SubtractAssignChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.SubtractChecked:
-                this.SubtractChecked((BinaryExpression)e);
+                this.SubtractChecked((BinaryExpression)Expression);
                 return;
             case ExpressionType.Block:
-                this.Block((BlockExpression)e);
+                this.Block((BlockExpression)Expression);
                 return;
             case ExpressionType.Conditional:
-                this.Conditional((ConditionalExpression)e);
+                this.Conditional((ConditionalExpression)Expression);
                 return;
             case ExpressionType.Constant:
-                this.Constant((ConstantExpression)e);
+                this.Constant((ConstantExpression)Expression);
                 return;
             case ExpressionType.DebugInfo:
-                this.DebugInfo((DebugInfoExpression)e);
+                this.DebugInfo((DebugInfoExpression)Expression);
                 return;
             case ExpressionType.Default:
-                this.Default((DefaultExpression)e);
+                this.Default((DefaultExpression)Expression);
                 return;
             case ExpressionType.Dynamic:
-                this.Dynamic((DynamicExpression)e);
+                this.Dynamic((DynamicExpression)Expression);
                 return;
             case ExpressionType.Goto:
-                this.Goto((GotoExpression)e);
+                this.Goto((GotoExpression)Expression);
                 return;
             case ExpressionType.Index:
-                this.Index((IndexExpression)e);
+                this.Index((IndexExpression)Expression);
                 return;
             case ExpressionType.Invoke:
-                this.Invoke((InvocationExpression)e);
+                this.Invoke((InvocationExpression)Expression);
                 return;
             case ExpressionType.Label:
-                this.Label((LabelExpression)e);
+                this.Label((LabelExpression)Expression);
                 return;
             case ExpressionType.Lambda:
-                this.Lambda((LambdaExpression)e);
+                this.Lambda((LambdaExpression)Expression);
                 return;
             case ExpressionType.ListInit:
-                this.ListInit((ListInitExpression)e);
+                this.ListInit((ListInitExpression)Expression);
                 return;
             case ExpressionType.Loop:
-                this.Loop((LoopExpression)e);
+                this.Loop((LoopExpression)Expression);
                 return;
             case ExpressionType.MemberAccess:
-                this.MemberAccess((MemberExpression)e);
+                this.MemberAccess((MemberExpression)Expression);
                 return;
             case ExpressionType.MemberInit:
-                this.MemberInit((MemberInitExpression)e);
+                this.MemberInit((MemberInitExpression)Expression);
                 return;
             case ExpressionType.Call:
-                this.Call((MethodCallExpression)e);
+                this.Call((MethodCallExpression)Expression);
                 return;
             case ExpressionType.NewArrayBounds:
-                this.NewArrayBound((NewArrayExpression)e);
+                this.NewArrayBound((NewArrayExpression)Expression);
                 return;
             case ExpressionType.NewArrayInit:
-                this.NewArrayInit((NewArrayExpression)e);
+                this.NewArrayInit((NewArrayExpression)Expression);
                 return;
             case ExpressionType.New:
-                this.New((NewExpression)e);
+                this.New((NewExpression)Expression);
                 return;
             case ExpressionType.Parameter:
-                this.Parameter((ParameterExpression)e);
+                this.Parameter((ParameterExpression)Expression);
                 return;
             case ExpressionType.RuntimeVariables:
-                this.RuntimeVariables((RuntimeVariablesExpression)e);
+                this.RuntimeVariables((RuntimeVariablesExpression)Expression);
                 return;
             case ExpressionType.Switch:
-                this.Switch((SwitchExpression)e);
+                this.Switch((SwitchExpression)Expression);
                 return;
             case ExpressionType.Try:
-                this.Try((TryExpression)e);
+                this.Try((TryExpression)Expression);
                 return;
             case ExpressionType.TypeEqual:
-                this.TypeEqual((TypeBinaryExpression)e);
+                this.TypeEqual((TypeBinaryExpression)Expression);
                 return;
             case ExpressionType.TypeIs:
-                this.TypeIs((TypeBinaryExpression)e);
+                this.TypeIs((TypeBinaryExpression)Expression);
                 return;
             case ExpressionType.ArrayLength:
-                this.ArrayLength((UnaryExpression)e);
+                this.ArrayLength((UnaryExpression)Expression);
                 return;
             case ExpressionType.Convert:
-                this.Convert((UnaryExpression)e);
+                this.Convert((UnaryExpression)Expression);
                 return;
             case ExpressionType.ConvertChecked:
-                this.ConvertChecked((UnaryExpression)e);
+                this.ConvertChecked((UnaryExpression)Expression);
                 return;
             case ExpressionType.Decrement:
-                this.Decrement((UnaryExpression)e);
+                this.Decrement((UnaryExpression)Expression);
                 return;
             case ExpressionType.Increment:
-                this.Increment((UnaryExpression)e);
+                this.Increment((UnaryExpression)Expression);
                 return;
             case ExpressionType.IsFalse:
-                this.IsFalse((UnaryExpression)e);
+                this.IsFalse((UnaryExpression)Expression);
                 return;
             case ExpressionType.IsTrue:
-                this.IsTrue((UnaryExpression)e);
+                this.IsTrue((UnaryExpression)Expression);
                 return;
             case ExpressionType.Negate:
-                this.Negate((UnaryExpression)e);
+                this.Negate((UnaryExpression)Expression);
                 return;
             case ExpressionType.NegateChecked:
-                this.NegateChecked((UnaryExpression)e);
+                this.NegateChecked((UnaryExpression)Expression);
                 return;
             case ExpressionType.Not:
-                this.Not((UnaryExpression)e);
+                this.Not((UnaryExpression)Expression);
                 return;
             case ExpressionType.OnesComplement:
-                this.OnesComplement((UnaryExpression)e);
+                this.OnesComplement((UnaryExpression)Expression);
                 return;
             case ExpressionType.PostDecrementAssign:
-                this.PostDecrementAssign((UnaryExpression)e);
+                this.PostDecrementAssign((UnaryExpression)Expression);
                 return;
             case ExpressionType.PostIncrementAssign:
-                this.PostIncrementAssign((UnaryExpression)e);
+                this.PostIncrementAssign((UnaryExpression)Expression);
                 return;
             case ExpressionType.PreDecrementAssign:
-                this.PreDecrementAssign((UnaryExpression)e);
+                this.PreDecrementAssign((UnaryExpression)Expression);
                 return;
             case ExpressionType.PreIncrementAssign:
-                this.PreIncrementAssign((UnaryExpression)e);
+                this.PreIncrementAssign((UnaryExpression)Expression);
                 return;
             case ExpressionType.Quote:
-                this.Quote((UnaryExpression)e);
+                this.Quote((UnaryExpression)Expression);
                 return;
             case ExpressionType.Throw:
-                this.Throw((UnaryExpression)e);
+                this.Throw((UnaryExpression)Expression);
                 return;
             case ExpressionType.TypeAs:
-                this.TypeAs((UnaryExpression)e);
+                this.TypeAs((UnaryExpression)Expression);
                 return;
             case ExpressionType.UnaryPlus:
-                this.UnaryPlus((UnaryExpression)e);
+                this.UnaryPlus((UnaryExpression)Expression);
                 return;
             case ExpressionType.Unbox:
-                this.Unbox((UnaryExpression)e);
+                this.Unbox((UnaryExpression)Expression);
                 return;
             default:
-                throw new NotSupportedException($"{e.NodeType}はサポートされていない。");
+                throw new NotSupportedException($"{Expression.NodeType}はサポートされていない。");
         }
     }
     /// <summary>

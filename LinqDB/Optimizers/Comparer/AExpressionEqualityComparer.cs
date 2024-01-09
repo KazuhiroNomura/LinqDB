@@ -53,6 +53,12 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         return this.ProtectedAssign後処理(x,y);
         //return x==y;
     }
+    /// <summary>
+    /// ラムダ跨ぎParameterが出現したときの扱い
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     protected abstract bool ProtectedAssign後処理(ParameterExpression x,ParameterExpression y);
     public bool Equals(ParameterExpression? x,ParameterExpression? y){
         var x_Index0=this.x_Parameters.IndexOf(x);
@@ -61,6 +67,12 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         if(x_Index0>=0) return true;
         return this.Equals後処理(x,y);
     }
+    /// <summary>
+    /// Parameters外のParameterのスコープParameterによる比較するか単にfalseにするか
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
     protected abstract bool Equals後処理(ParameterExpression x,ParameterExpression y);
     /// <summary>
     /// 式木同士が一致するか。

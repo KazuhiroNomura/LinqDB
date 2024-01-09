@@ -318,6 +318,55 @@ internal sealed class 取得_命令ツリー:VoidExpressionTraverser,IDisposable
         this.Traverse(Unary.Operand);
         this.RemoveIndent();
     }
+    protected override void Try(TryExpression Try){
+        this.WriteLine("Try");
+        this.AddIndent('├');
+        this.Traverse(Try.Body);
+        //this.RemoveIndent();
+        var Handlers=Try.Handlers;
+        var Handlers_Count_1=Handlers.Count-1;
+        if(Handlers_Count_1>=0){
+            for(var a=0;a<Handlers_Count_1;a++){
+                this.Indent('├');
+                var Handler=Handlers[a];
+                if(Handler.Variable is null){
+                    this.WriteLine($"catch {Handler.Test.FullName}");
+                } else{
+                    var Variable=Handler.Variable;
+                    this.WriteLine($"catch {Variable.Type.FullName} {Variable.Name}");
+                }
+                this.AddIndent('└');
+                this.Traverse(Handler.Body);
+                this.RemoveIndent();
+            }
+            {
+                if(Try.Finally is null){
+                    this.Indent('└');
+                } else{
+                    this.Indent('├');
+                }
+                var Handler=Handlers[Handlers_Count_1];
+                if(Handler.Variable is null){
+                    this.WriteLine($"catch {Handler.Test.FullName}");
+                } else{
+                    var Variable=Handler.Variable;
+                    this.WriteLine($"catch {Variable.Type.FullName} {Variable.Name}");
+                }
+                this.AddIndent('└');
+                this.Traverse(Handler.Body);
+                this.RemoveIndent();
+            }
+        }
+        if(Try.Finally is not null){
+            this.Indent('└');
+            this.WriteLine("finally");
+            this.AddIndent('└');
+            this.Traverse(Try.Finally);
+            this.RemoveIndent();
+
+        }
+        this.RemoveIndent();
+    }
     protected override void MemberAccess(MemberExpression Member){
         this.WriteLine($"{nameof(ExpressionType.MemberAccess)} {Member.Member.Name}");
         this.AddIndent('└');

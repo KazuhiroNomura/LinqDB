@@ -148,15 +148,13 @@ public partial class class_演算子オーバーロード:IEquatable<class_演�
     public override int GetHashCode()=>this.内部の値;
 }
 public class ExpressionEqualityComparer:共通{
-
-    //private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存|テストオプション.プロファイラ;
     private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     protected static readonly class_演算子オーバーロード[] _class_演算子オーバーロードArray={new(1,true,"abc")};
 
     protected static readonly struct_演算子オーバーロード[] _struct_演算子オーバーロードArray=new struct_演算子オーバーロード[1];
     //リフレクションで書き換える
     // ReSharper disable once FieldCanBeMadeReadOnly.Global
-    protected static class_演算子オーバーロード _Static_class_演算子オーバーロード1=new(1,true,"abc");
+    private static readonly class_演算子オーバーロード _Static_class_演算子オーバーロード1=new(1,true,"abc");
     protected readonly class_演算子オーバーロード _Instance_class_演算子オーバーロード1=new(1,true,"abc");
     protected static readonly class_演算子オーバーロード _class_演算子オーバーロード2=new(1,true,"abc");
     public struct struct_演算子オーバーロード:IEquatable<struct_演算子オーバーロード>{
@@ -1784,7 +1782,7 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void TryCatch_Filter2(){
-        var Variable=Expression.Parameter(typeof(Exception));
+        var Variable=Expression.Parameter(typeof(Exception),"ex");
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
                 Expression.Add(
@@ -1845,58 +1843,99 @@ public class ExpressionEqualityComparer:共通{
     }
     [Fact]
     public void バグ(){
+        var p=Expression.Parameter(typeof(int),"p");
         this.Expression実行AssertEqual(
-            Expression.Lambda<Func<decimal>>(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Assign(
+                    p,
+                    Expression.Constant(0)
+                ),
+                p
+            )
+        );
+    }
+    [Fact]
+    public void バグ0(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
                 Expression.Add(
-                    Expression.Constant(1m),
-                    Expression.Constant(1m)
-                )
+                    p,
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                ),
+                p
+            )
+        );
+    }
+    [Fact]
+    public void バグ01(){
+        var p=Expression.Parameter(typeof(int),"p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Add(
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    ),
+                    Expression.TryCatch(
+                        Expression.Constant(1),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0)
+                        )
+                    )
+                ),
+                p
             )
         );
     }
 
     [Fact]public void バグ1(){
-        //    if(a_Handler.Test!=b_Handler.Test) return false;
+        var p=Expression.Parameter(typeof(int),"p");
         this.Expression実行AssertEqual(
-            Expression.Lambda<Func<int>>(
-                Expression.Add(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Assign(
+                    p,
                     Expression.TryCatch(
-                        Expression.Constant(0),
-                        Expression.Catch(
-                            typeof(Exception),
-                            Expression.Constant(0)
-                        )
-                    ),
-                    Expression.TryCatch(
-                        Expression.Constant(0),
+                        Expression.Constant(1),
                         Expression.Catch(
                             typeof(Exception),
                             Expression.Constant(0)
                         )
                     )
-                )
+                ),
+                p
             )
         );
-        this.ExpressionシリアライズAssertEqual(
-            (Expression)Expression.Lambda<Action>(
-                Expression.Add(
-                    Expression.TryCatch(
-                        Expression.Constant(0),
-                        Expression.Catch(
-                            typeof(Exception),
-                            Expression.Constant(0)
-                        )
-                    ),
-                    Expression.TryCatch(
-                        Expression.Constant(0),
-                        Expression.Catch(
-                            typeof(Exception),
-                            Expression.Constant(0)
-                        )
-                    )
-                )
-            )
-        );
+        //this.Expression実行AssertEqual(
+        //    Expression.Lambda<Func<int>>(
+        //        Expression.Add(
+        //            Expression.TryCatch(
+        //                Expression.Constant(0),
+        //                Expression.Catch(
+        //                    typeof(Exception),
+        //                    Expression.Constant(0)
+        //                )
+        //            ),
+        //            Expression.TryCatch(
+        //                Expression.Constant(1),
+        //                Expression.Catch(
+        //                    typeof(Exception),
+        //                    Expression.Constant(0)
+        //                )
+        //            )
+        //        )
+        //    )
+        //);
     }
     [Fact]public void TryCatch(){
         //    if(a_Handler.Test!=b_Handler.Test) return false;

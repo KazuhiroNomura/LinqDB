@@ -171,6 +171,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
         return this.計測しない後処理(
             親子演算計測,
             Expression.Block(
+                Block0.Type,
                 Block0.Variables,
                 Block1_Expressions
             )
@@ -514,11 +515,12 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
             //    this.Traverse(Assign0.Right)
             //)
             Expression.Call(
-                Expression.Constant(親演算計測),
+                //Expression.Constant(親演算計測),
                 this.作業配列.MakeGenericMethod(
                     計測.Reflection.Assign,
                     Assign1_Left.Type
                 ),
+                Expression.Constant(親演算計測),
                 Assign1_Left,
                 Assign1_Right
             )
@@ -762,12 +764,12 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
     }
 #else
     protected override Expression Conditional(ConditionalExpression Conditional0){
-        var 親子演算計測= this.計測する前処理演算(nameof(ExpressionType.Conditional)+"gg");
+        var 親子演算計測= this.計測する前処理演算(nameof(ExpressionType.Conditional));
         var List子演算 = 親子演算計測.子演算計測.List子演算;
+        var 演算計測 = this.演算計測!;
         var Conditional0_IfTest = Conditional0.Test;
         var Conditional0_IfTrue = Conditional0.IfTrue;
         var Conditional0_IfFalse = Conditional0.IfFalse;
-        var 演算計測 = this.演算計測!;
 
         var Conditional1_Test = this.Traverse(Conditional0_IfTest);
         var Test計測0 = List子演算[^1];
@@ -851,7 +853,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
             //return Conditional2_IfTrueFalse;
         }
     }
-    #endif
+#endif
+    /*
     protected override Expression Switch(SwitchExpression Switch0){
         var 計測=this.計測する前処理演算(nameof(ExpressionType.Switch));
         var List計測=this.演算計測!.List子演算;
@@ -896,6 +899,189 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
                 Switch1_Cases
             )
         );
+    }
+    */
+    protected override Expression Switch(SwitchExpression Switch0) {
+        var 親子演算計測 = this.計測する前処理演算(nameof(ExpressionType.Switch));
+        var List子計測 = this.演算計測!.List子演算;
+        //var 演算計測 = this.演算計測!;
+        var Switch0_SwitchValue = Switch0.SwitchValue;
+        var Switch1_SwitchValue = this.Traverse(Switch0_SwitchValue);
+        var 計測0SwitchValue = List子計測[^1];
+        //計測0SwitchValue.Value=$"switch value";
+        var 計測1SwitchValue = new 計測(計測Maneger,計測0SwitchValue,"→");
+        計測0SwitchValue.List子演算.Add(計測1SwitchValue);
+        var 計測EndSwitch = new 計測(計測Maneger,"←");
+        計測.接続(計測1SwitchValue,計測EndSwitch);
+        var sb = new StringBuilder();
+        var Switch0_Cases = Switch0.Cases;
+        var Switch0_Cases_Count = Switch0_Cases.Count;
+        var Switch1_Cases = new SwitchCase[Switch0_Cases_Count];
+        //var End_Switch=new 計測する{親コメント="end switch"};
+        for(var a = 0;a<Switch0_Cases_Count;a++) {
+            var Case0 = Switch0_Cases[a];
+            sb.Append("case ");
+            foreach(var TestValue in Case0.TestValues) {
+                sb.Append(TestValue);
+                sb.Append(',');
+            }
+            sb[^1]=':';
+            sb.Append('←');
+            //List辺.Add(this.兄弟直前計測=new 計測する{親コメント=sb.ToString()});
+            var 計測case = new 計測(計測Maneger,sb.ToString());
+            計測.接続(計測1SwitchValue,計測case );
+            List子計測.Add(計測case);
+            this.演算計測=計測case;
+            //計測.接続(計測1SwitchValue,計測case);
+            var Case1_Body = this.Traverse(Case0.Body);
+            var List子計測0 = this.演算計測!.List子演算;
+            var 計測0Case_Body = List子計測0[^1];
+            計測0Case_Body.Value=sb.ToString();
+            Switch1_Cases[a]=Expression.SwitchCase(Case1_Body,Case0.TestValues);
+            var 計測EndCase = new 計測(計測Maneger,計測0Case_Body,"→");
+            List子計測0.Add(計測EndCase);
+            //計測.接続(計測1Case_Body,計測EndSwitch);
+            //計測.接続(計測0SwitchValue,計測case);
+            計測.接続(計測EndCase,計測EndSwitch);
+            sb.Clear();
+        }
+        var 計測default= new 計測(計測Maneger,"default:←");
+        計測.接続(計測1SwitchValue,計測default);
+        List子計測.Add(計測default);
+        this.演算計測=計測default;
+        var Switch0_DefaultBody = Switch0.DefaultBody;
+        var Switch1_DefaultBody = this.Traverse(Switch0_DefaultBody);
+        var List子計測1 = this.演算計測!.List子演算;
+        var 計測0DefaultBody = List子計測1[^1];
+        計測0DefaultBody.Value="default:←";
+        List子計測.Add(計測EndSwitch);
+        var 計測1DefaultBody = new 計測(計測Maneger,"→");
+        List子計測1.Add(計測1DefaultBody);
+        計測.接続(計測1DefaultBody,計測EndSwitch);
+        計測EndSwitch.制御番号=++this.制御番号;
+        return this.計測する後処理(
+            親子演算計測,
+            Expression.Switch(
+                Switch1_SwitchValue,
+                Switch1_DefaultBody,
+                Switch0.Comparison,
+                Switch1_Cases
+            )
+        );
+        //Expression TrueFalse共通(Expression Conditional0_IfTrueFalse,string Name) {
+        //    this.演算計測=演算計測;
+        //    this.制御計測=null;
+        //    var Conditional1_IfTrueFalse = this.Traverse(Conditional0_IfTrueFalse);
+        //    var TrueFalse計測0=List子演算![^1];
+        //    if(TrueFalse計測0.Value is null)
+        //        TrueFalse計測0.Value="←";
+        //    else
+        //        TrueFalse計測0.Value+='←';
+        //    var TrueFalse計測1 = new 計測(計測Maneger,TrueFalse計測0,Name+"→");
+        //    TrueFalse計測0.List子演算.Add(TrueFalse計測1);
+        //    計測.接続(SwitchValue計測1,TrueFalse計測0);
+        //    計測.接続(TrueFalse計測1,EndSwitch);
+        //    //List制御計測.Add(TrueFalse計測0);
+        //    //return Conditional1_IfTrueFalse;
+        //    return Expression.Block(
+        //        Expression.Call(
+        //            Expression.Constant(TrueFalse計測1),
+        //            親子演算計測.Reflection.Count,
+        //            Expression.Constant(Name)
+        //        ),
+        //        Conditional1_IfTrueFalse
+        //    );
+        //    //return Conditional2_IfTrueFalse;
+        //}
+    }
+    protected override Expression Try(TryExpression Try0) {
+        var 親子計測 = this.計測する前処理演算(nameof(ExpressionType.Try));
+        var List子計測=this.演算計測!.List子演算;
+        var Try0_Handlers=Try0.Handlers;
+        var Try0_Handlers_Count=Try0_Handlers.Count;
+        var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
+        var Try0_Body=Try0.Body;
+        var Try1_Body=this.Traverse(Try0_Body);
+        var 計測0Body = List子計測[^1];
+        var 計測finally= new 計測(計測Maneger,"finally←");
+        //計測0Body.Value=$"Try {計測0Body}";
+        //var EndTry = new 計測(計測Maneger,計測0Body,"EndTry");
+        //計測0Body.List子演算.Add(EndTry);
+        //var List計測0=this.演算計測!.List子演算;
+        for(var a=0;a<Try0_Handlers_Count;a++) {
+            var 計測catch= new 計測(計測Maneger,++this.制御番号,"catch");
+            //計測.接続(計測0Body,計測catch);
+            List子計測.Add(計測catch);
+            //計測0Body.Value+='→';
+            //計測.接続(計測catch,計測finally);
+            this.演算計測=計測catch;
+            var Try0_Handler=Try0_Handlers[a];
+            Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
+            var Try0_Handler_Variable=Try0_Handler.Variable;
+            CatchBlock Try1_Handler;
+            if(Try0_Handler_Variable is not null){
+                計測catch.Value=$"{Try0_Handler_Variable.Type.FullName} {Try0_Handler_Variable.Name}";
+                var Try1_Handler_Filter=Try0_Handler.Filter;
+                if(Try1_Handler_Filter is not null){
+                    Try1_Handler_Filter=this.Traverse(Try1_Handler_Filter);
+                    //var Handler_Filter=List子計測[^1];
+                    計測.接続(this.演算計測.List子演算[^1],計測finally);
+                } else{
+                    計測.接続(計測catch,計測finally);
+                }
+                計測.接続(計測0Body,計測catch);
+                var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
+                //var Handler_Body=List子計測[^1];
+                //計測.接続(List子計測[^2],Handler_Body);
+                Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
+            } else {
+                計測catch.Value=$"{Try0_Handler.Test.FullName}";
+                var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
+                var Handler_Body=List子計測[^1];
+                //計測.接続(計測0Body,Handler_Body);
+                var Try1_Handler_Filter=Try0_Handler.Filter;
+                if(Try1_Handler_Filter is not null){
+                    Try1_Handler_Filter=this.Traverse(Try1_Handler_Filter);
+                    var Handler_Filter=List子計測[^1];
+                    計測.接続(Handler_Filter,計測finally);
+                    this.演算計測=Handler_Filter;
+                    //計測.接続(List子計測[^2],Handler_Filter);
+                } else{
+                    計測.接続(計測catch,計測finally);
+                    this.演算計測=計測catch;
+                }
+                Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
+            }
+            Try1_Handlers[a]=Try1_Handler;
+        }
+        var Try1_Finally=Try0.Finally;
+        if(Try1_Finally is not null){
+            計測finally.制御番号=++this.制御番号;
+            //var 計測finally= new 計測(計測Maneger,++this.制御番号,"finally←");
+            計測0Body.Value+='→';
+            計測.接続(計測0Body,計測finally);
+            this.演算計測=計測finally;
+            Try1_Finally=this.Traverse(Try1_Finally);
+            //var Finally=List子計測[^1];
+            List子計測.Add(計測finally);
+            //計測.接続(List子計測[^2],Finally);
+        }
+        if(Try0.Fault is not null){
+            Debug.Assert(Try1_Finally is null);
+            var Try0_Fault=Try0.Fault;
+            var Try1_Fault=this.Traverse(Try0_Fault);
+            var Fault=List子計測[^1];
+            計測.接続(List子計測[^2],Fault);
+            return this.計測する後処理(
+                親子計測,
+                Expression.TryFault(Try1_Body,Try1_Fault)
+            );
+        } else{
+            return this.計測する後処理(
+                親子計測,
+                Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers)
+            );
+        }
     }
     protected override Expression Goto(GotoExpression Goto0) {
         

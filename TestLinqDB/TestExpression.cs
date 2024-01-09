@@ -155,7 +155,7 @@ public partial struct TestDynamic<T>
     }
 }
 public class Serializer:共通{
-    //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
+    //private protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.MemoryPack_MessagePack_Utf8Json;
     //private readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     //protected readonly IJsonFormatterResolver JsonFormatterResolver;
@@ -298,6 +298,25 @@ public class Serializer:共通{
                     Expressions.Expression.Convert(
                         Binary,
                         typeof(object)
+                    )
+                )
+            );
+        }
+    }
+    [Fact]
+    public void バグ2(){
+        var ParameterInt32= Expressions.Expression.Parameter(typeof(int),"int32");
+        var Constant0= Expressions.Expression.Constant(0);
+        var Constant1= Expressions.Expression.Constant(1);
+        var ConversionInt32=Expressions.Expression.Lambda<Func<int,int>>(Expressions.Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
+        var Method_int=GetMethod(()=>int_int_int(1,1));
+        共通1(Expressions.Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        void 共通1(Expressions.BinaryExpression Binary){
+            this.Expression実行AssertEqual(
+                Expressions.Expression.Lambda<Func<object>>(
+                    Expressions.Expression.Block(
+                        Expressions.Expression.Assign(MemberInt32,Constant0),
+                        Expressions.Expression.Convert(Binary,typeof(object))
                     )
                 )
             );
@@ -1145,7 +1164,7 @@ public class Serializer:共通{
     [Fact]public void Lambda1(){
         this.Expression実行AssertEqual(Expressions.Expression.Lambda<Func<decimal>>(Expressions.Expression.Constant(2m)));
     }
-    [Fact]public void Lambda3(){
+    [Fact]public void Lambda_TryCaatch1Finaally(){
         //const decimal Catch値 = 40, Finally値 = 30;
         //Expressions.Expressions.Expression.TryCatchFinally(
         //    //Expressions.Expressions.Expression.PostIncrementAssign(@decimal),
@@ -1173,8 +1192,8 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda31(){
-        this.ExpressionシリアライズAssertEqual(
+    [Fact]public void Lambda_TryCatch0Finally0(){
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.Block(
                     Expressions.Expression.Assign(ParameterDecimal,Expressions.Expression.Constant(0m)),
@@ -1187,7 +1206,7 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda32(){
+    [Fact]public void Lambda_TryCatch0Finally1(){
         this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
@@ -1202,7 +1221,7 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda33(){
+    [Fact]public void Lambda_TryCatch0Finally2(){
         this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
@@ -1220,7 +1239,7 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda34(){
+    [Fact]public void Lambda_TryCatch0Finally3(){
         this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
@@ -1238,7 +1257,7 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda35(){
+    [Fact]public void Lambda_TryCatch0Finally4(){
         this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal>>(
                 Expressions.Expression.Block(
@@ -1256,9 +1275,9 @@ public class Serializer:共通{
             )
         );
     }
-    [Fact]public void Lambda4(){
+    [Fact]public void Lambda_TryCatch1Finally0(){
         var Exception=Expressions.Expression.Parameter(typeof(Exception));
-        this.ExpressionシリアライズAssertEqual(
+        this.Expression実行AssertEqual(
             Expressions.Expression.Lambda<Func<decimal,decimal>>(
                 Expressions.Expression.TryCatchFinally(
                     ParameterDecimal,

@@ -9,13 +9,36 @@ using LinqDB.Sets;
 // ReSharper disable All
 namespace TestLinqDB.特殊パターン;
 public class 変換_跨ぎParameterの先行評価 : 共通{
-    //protected override テストオプション テストオプション{get;}=テストオプション.MemoryPack_MessagePack_Utf8Json|テストオプション.ローカル実行;
+    //private protected override テストオプション テストオプション=>テストオプション.ローカル実行;
     private delegate void delegate_refint(ref int input);
     private static void refint(ref int input, Action d) =>
         d();
     [Fact]
-    public void Assign()
-    {
+    public void Assign0(){
+        var f = BindingFlags.Static|BindingFlags.NonPublic;
+        var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
+        var int_refint_intFuncRef = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(変換_跨ぎParameterの先行評価.int_refint), f)!;
+        var int_refint = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(変換_跨ぎParameterの先行評価.int_refint), f)!;
+        var p = Expression.Parameter(typeof(int), "p");
+        //()=>{var p;int_Lambda0_refint_intFuncRef(
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    new[] { p },
+                    Expression.Call(
+                        int_refint,
+                        p,
+                        Expression.Lambda<delegate_int_refint>(
+                            Expression.Constant(4),
+                            ref_p
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Assign1(){
         var f = BindingFlags.Static|BindingFlags.NonPublic;
         var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
         var int_refint_intFuncRef = typeof(変換_跨ぎParameterの先行評価).GetMethod(nameof(変換_跨ぎParameterの先行評価.int_refint), f)!;

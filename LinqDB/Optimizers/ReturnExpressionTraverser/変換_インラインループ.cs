@@ -176,15 +176,15 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             }
             return false;
         }
-        protected override void Traverse(Expression e) {
-            switch(e.NodeType) {
+        protected override void Traverse(Expression Expression) {
+            switch(Expression.NodeType) {
                 case ExpressionType.Parameter:
-                    if(e==this.EntityParameter)
+                    if(Expression==this.EntityParameter)
                         this.Parameterを参照したか=true;
                     break;
                 case ExpressionType.New: {
-                    var New = (NewExpression)e;
-                    if(e.Type.IsAnonymousValueTuple())
+                    var New = (NewExpression)Expression;
+                    if(Expression.Type.IsAnonymousValueTuple())
                         foreach(var Argument in New.Arguments)
                             this.Traverse(Argument);
                     else
@@ -192,7 +192,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
                     break;
                 }
                 case ExpressionType.MemberAccess: 
-                    var MemberExpression = (MemberExpression)e;
+                    var MemberExpression = (MemberExpression)Expression;
                     if(MemberExpression.Expression==this.EntityParameter) 
                         if(this.ParameterKey is not null)
                             if(MemberExpression.Member.MetadataToken==this.ParameterKey.MetadataToken)

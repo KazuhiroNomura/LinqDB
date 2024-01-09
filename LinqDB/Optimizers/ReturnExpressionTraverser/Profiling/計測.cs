@@ -17,7 +17,7 @@ using static Common;
 [DebuggerDisplay("{Name} {Value}")]
 public sealed class 計測{
     internal static class Reflection{
-        public static readonly MethodInfo Assign= typeof(計測).GetMethod(nameof(計測.Assign),Instance_NonPublic_Public)!;
+        public static readonly MethodInfo Assign= typeof(計測).GetMethod(nameof(計測.Assign),Instance_NonPublic_Public|BindingFlags.Static)!;
         public static readonly MethodInfo Count = typeof(計測).GetMethod(nameof(計測.Count),Instance_NonPublic_Public)!;
     }
     internal 計測Maneger? 計測Maneger{get;init;}
@@ -74,11 +74,26 @@ public sealed class 計測{
     //    this.呼出回数++;
     //    return ref Left;
     //}
-    private T Assign<T>(out T Left,T Right) {
-        this.呼出回数++;
-        //Trace.WriteLine(label);
+    //private T Assign<T>(out T Left,T Right) {
+    //    Trace.WriteLine(this.呼出回数);
+    //    this.呼出回数++;
+    //    Left=Right;
+    //    return Right;
+    //}
+    private static T Assign<T>(計測 @this,out T Left,T Right) {
+        //Trace.WriteLine(@this.呼出回数);
+        @this.呼出回数++;
         Left=Right;
         return Right;
+    }
+    public void Count(string label){
+        //this.呼出回数++;
+        Debug.Assert(this.計測Maneger is not null);
+        this.呼出回数++;
+        this.計測Maneger.実行中=this;
+        //Trace.WriteLine(label);
+        //const int 全100ns=1000*1000*10,半100ns=全100ns/2;
+        //if(Stopwatch.ElapsedTicks%全100ns<半100ns) this.節100ns+=半100ns;
     }
     //public string 親コメント { get; set; } = "";
     //public string 子コメント { get; set; } = "";
@@ -513,13 +528,4 @@ public sealed class 計測{
         }
     }
     //private readonly Stopwatch Stopwatch=new Stopwatch();
-    public void Count(string label){
-        //this.呼出回数++;
-        Debug.Assert(this.計測Maneger is not null);
-        this.呼出回数++;
-        this.計測Maneger.実行中=this;
-        Trace.WriteLine(label);
-        //const int 全100ns=1000*1000*10,半100ns=全100ns/2;
-        //if(Stopwatch.ElapsedTicks%全100ns<半100ns) this.節100ns+=半100ns;
-    }
 }

@@ -47,12 +47,13 @@ public sealed class Optimizer:IDisposable {
     private readonly SQLServer.TSql160Parser Parser = new(true);
     private readonly 変換_TSqlFragment正規化 _変換_TSqlFragment正規化;
     private readonly 変換_TSqlFragmentからExpression _変換_TSqlFragmentからExpression;
-    private readonly 変換_メソッド正規化_取得インライン不可能定数 _変換_メソッド正規化_取得インライン不可能定数;
+    private readonly 変換_メソッド正規化_取得インライン不可能定数 変換_メソッド正規化_取得インライン不可能定数;
+    private readonly 変換_Tryの先行評価 変換_Tryの先行評価;
     private readonly 変換_WhereからLookup _変換_WhereからLookup;
-    private readonly 変換_跨ぎParameterの先行評価 _変換_跨ぎParameterの先行評価;
-    private readonly 変換_局所Parameterの先行評価 _変換_局所Parameterの先行評価;
-    private readonly 変換_Stopwatchに埋め込む _変換_Stopwatchに埋め込む;
-    private readonly 変換_インラインループ独立 _変換_インラインループ独立;
+    private readonly 変換_跨ぎParameterの先行評価 変換_跨ぎParameterの先行評価;
+    private readonly 変換_局所Parameterの先行評価 変換_局所Parameterの先行評価;
+    private readonly 変換_Stopwatchに埋め込む 変換_Stopwatchに埋め込む;
+    private readonly 変換_インラインループ独立 変換_インラインループ独立;
     private readonly 取得_ラムダを跨ぐParameter 取得ラムダを跨ぐParameter;
     private readonly 検証_Parameterの使用状態 _検証_Parameterの使用状態;
     private readonly 取得_CSharp _取得_CSharp = new();
@@ -69,10 +70,10 @@ public sealed class Optimizer:IDisposable {
     //private readonly ConstantExpression ConstantList計測;
     private readonly StringBuilder sb=new();
     private Generic.Dictionary<ConstantExpression,(FieldInfo Disp, MemberExpression Member)> DictionaryConstant {
-        get => this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
+        get => this.変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant;
         set {
             this.取得ラムダを跨ぐParameter.DictionaryConstant=value;
-            this._変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant=value;
+            this.変換_メソッド正規化_取得インライン不可能定数.DictionaryConstant=value;
             this.判定InstanceMethodか.DictionaryConstant=value;
             Debug.Assert(this._作成_DynamicMethod.DictionaryConstant==value);
             Debug.Assert(this._作成_DynamicAssembly.DictionaryConstant==value);
@@ -100,8 +101,8 @@ public sealed class Optimizer:IDisposable {
         get => this.取得ラムダを跨ぐParameter.Dictionaryラムダ跨ぎParameter;
         set {
             this.取得ラムダを跨ぐParameter.Dictionaryラムダ跨ぎParameter=value;
-            this._変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
-            this._変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
+            this.変換_跨ぎParameterの先行評価.Dictionaryラムダ跨ぎParameter=value;
+            this.変換_局所Parameterの先行評価.ラムダ跨ぎParameters=value.Keys;
             this._検証_Parameterの使用状態.ラムダ跨ぎParameters=value.Keys;
             this._作成_DynamicMethod.Dictionaryラムダ跨ぎParameter=value;
             this._作成_DynamicAssembly.Dictionaryラムダ跨ぎParameter=value;
@@ -114,7 +115,7 @@ public sealed class Optimizer:IDisposable {
             this._作成_DynamicAssembly.DispParameter=value;
         }
     }
-    public string Analize=>this._変換_Stopwatchに埋め込む.Analize;
+    public string Analize=>this.変換_Stopwatchに埋め込む.Analize;
     /// <summary>
     /// コンストラクタ
     /// </summary>
@@ -151,19 +152,20 @@ public sealed class Optimizer:IDisposable {
         var 変換_旧Expressionを新Expression1 = new 変換_旧Expressionを新Expression1(作業配列,ExpressionEqualityComparer);
         this._変換_TSqlFragmentからExpression=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,ExpressionEqualityComparer,変換_旧Parameterを新Expression1,変換_旧Expressionを新Expression1,判定_指定Parameters無,ScriptGenerator);
         var 変換_旧Parameterを新Expression2 = new 変換_旧Parameterを新Expression2(作業配列);
-        this._変換_メソッド正規化_取得インライン不可能定数=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
+        this.変換_メソッド正規化_取得インライン不可能定数=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2,変換_旧Expressionを新Expression1);
+        this.変換_Tryの先行評価=new(作業配列);
         this._変換_WhereからLookup=new(作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無);
         var ループ跨ぎParameters = this.ループ跨ぎParameters;
-        this._変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer);
+        this.変換_跨ぎParameterの先行評価=new(作業配列,ExpressionEqualityComparer);
         //var ExpressionEqualityComparer_Assign_Leftで比較 = new ExpressionEqualityComparer_Assign_Leftで比較();
-        this._変換_局所Parameterの先行評価=new(作業配列);
+        this.変換_局所Parameterの先行評価=new(作業配列);
         this.取得ラムダを跨ぐParameter=new();
         this._検証_変形状態=new();
         this._検証_Parameterの使用状態=new(ループ跨ぎParameters);
-        this._変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
+        this.変換_インラインループ独立=new(作業配列,変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2);
         var List計測=this.計測Maneger;
         //this.Top辺=new 計測する{子コメント="開始"};
-        this._変換_Stopwatchに埋め込む=new(作業配列,this.計測Maneger,this.Dictionary_LabelTarget_辺);
+        this.変換_Stopwatchに埋め込む=new(作業配列,this.計測Maneger,this.Dictionary_LabelTarget_辺);
         this._作成_DynamicMethod=new(判定_InstanceMethodか);
         this._作成_DynamicAssembly=new(判定_InstanceMethodか);
         this.DictionaryConstant=new(ExpressionEqualityComparer);
@@ -455,10 +457,10 @@ public sealed class Optimizer:IDisposable {
     }
 
     public bool IsInline {
-        get => this._変換_局所Parameterの先行評価.IsInline;
+        get => this.変換_局所Parameterの先行評価.IsInline;
         set {
-            this._変換_跨ぎParameterの先行評価.IsInline=value;
-            this._変換_局所Parameterの先行評価.IsInline=value;
+            this.変換_跨ぎParameterの先行評価.IsInline=value;
+            this.変換_局所Parameterの先行評価.IsInline=value;
         }
     }
     public bool IsProfiling{ get; set; }
@@ -1263,14 +1265,15 @@ public sealed class Optimizer:IDisposable {
     }
     internal LambdaExpression Lambda非最適化(Expression Lambda00) {
         this.DictionaryConstant.Clear();
-        var Lambda02 = this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
+        var Lambda02 = this.変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
+        var Lambda03=this.変換_Tryの先行評価.実行(Lambda02);
         //プロファイル=false;
         //var List計測 = new List<A計測>();
         //var ConstantList計測 = Expression.Constant(List計測);
         //プロファイル=false;
         //if(プロファイル)HashSetConstant.Add(ConstantList計測);
-        this._検証_変形状態.実行(Lambda02);
-        return (LambdaExpression)Lambda02;
+        this._検証_変形状態.実行(Lambda03);
+        return (LambdaExpression)Lambda03;
     }
     public LambdaExpression Lambda最適化(Expression Lambda00) {
         var DictionaryConstant = this.DictionaryConstant;
@@ -1289,29 +1292,31 @@ public sealed class Optimizer:IDisposable {
         //var Lambda01 = this._変換_KeySelectorの匿名型をValueTuple.実行(Lambda00);
         //以下で更新されるコレクション
         //DictionaryConstant read
-        var Lambda02 = this._変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
+        var Lambda02 = this.変換_メソッド正規化_取得インライン不可能定数.実行(Lambda00);
+        var Lambda03=this.変換_Tryの先行評価.実行(Lambda02);
         //プロファイル=false;
         //プロファイル=false;
         //if(プロファイル)
-        var Lambda04 = this._変換_WhereからLookup.実行(Lambda02);
+        var Lambda04 = this._変換_WhereからLookup.実行(Lambda03);
         //Dictionaryラムダ跨ぎParameter add
-        var Lambda05 = this._変換_跨ぎParameterの先行評価.実行(Lambda04);
+        var Lambda05 = this.変換_跨ぎParameterの先行評価.実行(Lambda04);
         //var Lambda06 = this._変換_跨ぎParameterの不要置換復元.実行(Lambda05);
-        var Lambda06 = this._変換_局所Parameterの先行評価.実行(Lambda05);
+        var Lambda06 = this.変換_局所Parameterの先行評価.実行(Lambda05);
         //List計測.Clear();
         //this.List辺.Clear();
         var Lambda07=Lambda06;
         if(this.IsProfiling)
-            Lambda07=this._変換_Stopwatchに埋め込む.実行(Lambda07);
+            Lambda07=this.変換_Stopwatchに埋め込む.実行(Lambda07);
         //Lambda07=Lambda06;
         //Lambda07=Lambda06;
         //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);
-        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.Analize);
-        //Trace.WriteLine(this._変換_Stopwatchに埋め込む.フロー0);
+        Trace.WriteLine(this.Analize);
+        Trace.WriteLine(this.命令ツリー(Lambda07));
+        Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Lambda07));
         //Trace.WriteLine(this._変換_Stopwatchに埋め込む.フロー1);
 
         this._検証_変形状態.実行(Lambda07);
-        var Lambda08 = this.IsInline ? this._変換_インラインループ独立.実行(Lambda07) : Lambda07;
+        var Lambda08 = this.IsInline ? this.変換_インラインループ独立.実行(Lambda07) : Lambda07;
 
         
         
