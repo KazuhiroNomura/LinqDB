@@ -21,33 +21,57 @@ public sealed class 計測{
         public static readonly MethodInfo Count = typeof(計測).GetMethod(nameof(計測.Count),Instance_NonPublic_Public)!;
     }
     internal 計測Maneger? 計測Maneger{get;init;}
-    public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string? Value) {
+    //public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string? Value) {
+    //    this.計測Maneger=計測Maneger;
+    //    this.制御番号=制御番号;
+    //    this.Name=Name;
+    //    this.Value=Value;
+    //}
+    public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=制御番号;
         this.Name=Name;
         this.Value=Value;
+        this.矢印=矢印;
     }
-    public 計測(計測Maneger 計測Maneger,int 制御番号,string Name) {
-        this.計測Maneger=計測Maneger;
-        this.制御番号=制御番号;
-        this.Name=Name;
-    }
-    public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name) {
+    //public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name) {
+    //    this.計測Maneger=計測Maneger;
+    //    this.制御番号=制御計測.制御番号;
+    //    this.制御計測=制御計測;
+    //    this.Name=Name;
+    //}
+    //public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name,string Value) {
+    //    this.計測Maneger=計測Maneger;
+    //    this.制御番号=制御計測.制御番号;
+    //    this.制御計測=制御計測;
+    //    this.Name=Name;
+    //    this.Value=Value;
+    //}
+    public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=制御計測.制御番号;
         this.制御計測=制御計測;
         this.Name=Name;
+        this.Value=Value;
+        this.矢印=矢印;
     }
-    public 計測(計測Maneger 計測Maneger,string Name) {
+    //public 計測(計測Maneger 計測Maneger,string Name) {
+    //    this.計測Maneger=計測Maneger;
+    //    this.制御番号=-1;
+    //    this.Name=Name;
+    //}
+    public 計測(計測Maneger 計測Maneger,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=-1;
         this.Name=Name;
+        this.Value=Value;
+        this.矢印=矢印;
     }
-    public 計測(計測Maneger 計測Maneger,int 制御番号){
-        this.計測Maneger=計測Maneger;
-        this.制御番号=制御番号;
-        this.Name="";
-    }
+    //public 計測(計測Maneger 計測Maneger,int 制御番号){
+    //    this.計測Maneger=計測Maneger;
+    //    this.制御番号=制御番号;
+    //    this.Name="";
+    //}
     //public 計測(int 制御番号,string Name,string? Value) {
     //    this.制御番号=制御番号;
     //    this.Name=Name;
@@ -101,14 +125,23 @@ public sealed class 計測{
     //internal string Name{get;set;}
     internal string? Name{get;set;}
     internal string? Value{get;set;}
+    internal string? 矢印{get;set;}
     internal long 呼出回数;
     internal long サンプリング数;
     //internal string Value{get;set;}
     internal string? NameValue{
         get{
             var Value=this.Value;
-            if(Value is not null) Value=' '+Value;
-            return this.Name+Value;
+            if(Value!=string.Empty&&Value is not null) Value=' '+Value;
+            var NameValue=this.Name+Value;
+            var 矢印=this.矢印;
+            if(矢印!=string.Empty&&矢印 is not null){
+                var NameValueCount=ShiftJIS半角換算文字数(NameValue);
+                var 矢印Count=ShiftJIS半角換算文字数(矢印);
+                if((NameValueCount+矢印Count)%2==1) 矢印=' '+矢印;
+                return NameValue+矢印;
+            }
+            return NameValue;
         }
     }
     internal readonly List<計測> List親辺=new();
@@ -196,9 +229,10 @@ public sealed class 計測{
                     横線=s[^1];
                 else
                     横線='─';
+                横線='─';
                 var 埋めたい全角文字数=埋めたい半角文字数/2;
-                if(埋めたい全角文字数*2!=埋めたい半角文字数)
-                    sb.Append(' ');
+                //if(埋めたい全角文字数*2!=埋めたい半角文字数)
+                //    sb.Append(' ');
                 sb.Append(new string(横線,埋めたい全角文字数));
             } else{
                 sb.Append(new string(' ',埋めたい半角文字数));
@@ -207,8 +241,8 @@ public sealed class 計測{
             s=sb.ToString();
         }
         List表とツリー.Add(フッター);
-        static int ShiftJIS半角換算文字数(string str)=>Shift_JIS.GetByteCount(str);
     }
+    private static int ShiftJIS半角換算文字数(string str)=>Shift_JIS.GetByteCount(str);
     private bool 親フロー(List<(計測? 移動元,計測? 移動先)> 列Array,StringBuilder 制御罫線){
         var 親辺Array=this.List親辺.ToArray();
         var 親辺Array_Length=親辺Array.Length;

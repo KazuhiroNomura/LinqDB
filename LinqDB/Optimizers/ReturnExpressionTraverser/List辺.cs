@@ -579,6 +579,40 @@ internal sealed class 作成_辺(辺 Top辺,List辺 List辺,Generic.Dictionary<L
         辺.接続(this.辺,End_Switch);
         List辺.Add(this.辺=End_Switch);
     }
+    protected override void Try(TryExpression Try){
+        this.Traverse(Try.Body);
+        var Body = this.辺;
+        Body.子コメント=$"begin switch {Body}";
+        var sb=new StringBuilder();
+        var Try_Handlers=Try.Handlers;
+        var Try_Handlers_Count=Try_Handlers.Count;
+        var EndTry=new 辺(ExpressionEqualityComparer){親コメント="finally"};
+        for(var a=0;a<Try_Handlers_Count;a++){
+            var Try_Handle=Try_Handlers[a];
+            sb.Append($"catch({Try_Handle.Test.FullName}");
+            if(Try_Handle.Variable is not null)
+                sb.Append($"{Try_Handle.Variable.Name}");
+            sb.Append(')');
+            var Handler_Body=Try_Handle.Body;
+            sb.Append(Handler_Body);
+            List辺.Add(this.辺=new(ExpressionEqualityComparer, Body){親コメント=sb.ToString()});
+            this.Traverse(Handler_Body);
+            辺.接続(this.辺,EndTry);
+            sb.Clear();
+        }
+        var Try_Fault=Try.Fault;
+
+        if(Try_Fault is not null){
+            List辺.Add(this.辺=new(ExpressionEqualityComparer,Body){親コメント=$"fault {Try_Fault}"});
+            this.Traverse(Try_Fault);
+        } else{
+            var Try_Finally=Try.Finally;
+            List辺.Add(this.辺=new(ExpressionEqualityComparer,Body){親コメント=$"finally {Try_Finally}"});
+            this.Traverse(Try_Finally);
+        }
+        辺.接続(this.辺,EndTry);
+        List辺.Add(this.辺=EndTry);
+    }
     protected override void Call(MethodCallExpression MethodCall) {
         if(this.IsInline){
             if(ループ展開可能メソッドか(MethodCall)) {

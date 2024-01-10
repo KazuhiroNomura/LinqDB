@@ -1310,9 +1310,9 @@ public sealed class Optimizer:IDisposable {
         //Lambda07=Lambda06;
         //Lambda07=Lambda06;
         //Trace.WriteLine(this._変換_Stopwatchに埋め込む.データフローチャート);
-        Trace.WriteLine(this.Analize);
-        Trace.WriteLine(this.命令ツリー(Lambda07));
-        Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Lambda07));
+        //Trace.WriteLine(this.Analize);
+        //Trace.WriteLine(this.命令ツリー(Lambda07));
+        //Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Lambda07));
         //Trace.WriteLine(this._変換_Stopwatchに埋め込む.フロー1);
 
         this._検証_変形状態.実行(Lambda07);

@@ -822,7 +822,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             base.Call(MethodCall);
         }
     }
-    private readonly 作成_二度出現したExpression _作成_二度出現したExpression;
+    private readonly 作成_二度出現したExpression _作成_辺に二度出現したExpression;
     private sealed class 取得_二度出現したExpression:VoidExpressionTraverser_Quoteを処理しない{
         private readonly 判定_左辺Expressionsが含まれる 判定_左辺Expressionsが含まれる;
         private readonly List辺 List辺;
@@ -1053,7 +1053,7 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             //base.Call(MethodCall);
         }
     }
-    private readonly 取得_二度出現したExpression _取得_二度出現したExpression;
+    private readonly 取得_二度出現したExpression _取得_辺から二度出現したExpression;
     private sealed class 判定_左辺Expressionsが含まれる:VoidExpressionTraverser_Quoteを処理しない {
         private readonly Generic.HashSet<Expression> 左辺Expressions;
         public 判定_左辺Expressionsが含まれる(ExpressionEqualityComparer ExpressionEqualityComparer) {
@@ -1345,8 +1345,8 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var Top辺に関する情報=new 辺(ExpressionEqualityComparer){辺番号=0,子コメント = "開始"};
         var List辺=new List辺();
         this._作成_辺=new(Top辺に関する情報,List辺,Dictionary_LabelTarget_辺に関する情報,ExpressionEqualityComparer);
-        this._作成_二度出現したExpression=new(List辺,ListスコープParameter,判定_左辺Parametersが含まれる);
-        this._取得_二度出現したExpression=new(List辺,判定_左辺Parametersが含まれる);
+        this._作成_辺に二度出現したExpression=new(List辺,ListスコープParameter,判定_左辺Parametersが含まれる);
+        this._取得_辺から二度出現したExpression=new(List辺,判定_左辺Parametersが含まれる);
         this._変換_二度出現したExpression=new(作業配列,List辺,ListスコープParameter,判定_左辺Parametersが含まれる,ExpressionEqualityComparer);
     }
     /// <summary>
@@ -1356,8 +1356,8 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
     internal Generic.IEnumerable<ParameterExpression> ラムダ跨ぎParameters{
         set{
             this._作成_辺.ラムダ跨ぎParameters=value;
-            this._作成_二度出現したExpression.ラムダ跨ぎParameters=value;
-            this._取得_二度出現したExpression.ラムダ跨ぎParameters=value;
+            this._作成_辺に二度出現したExpression.ラムダ跨ぎParameters=value;
+            this._取得_辺から二度出現したExpression.ラムダ跨ぎParameters=value;
             this._変換_二度出現したExpression.ラムダ跨ぎParameters=value;
         }
     }
@@ -1370,8 +1370,8 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         get=>this._変換_二度出現したExpression.IsInline;
         set{
             this._作成_辺.IsInline=value;
-            this._作成_二度出現したExpression.IsInline=value;
-            this._取得_二度出現したExpression.IsInline=value;
+            this._作成_辺に二度出現したExpression.IsInline=value;
+            this._取得_辺から二度出現したExpression.IsInline=value;
             this._変換_二度出現したExpression.IsInline=value;
         }
     }
@@ -1405,14 +1405,14 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var Block1_Variables = this.Block_Variables=new();
         var Lambda1_Body = Lambda0.Body;
         var BlockVariables = this.Block_Variables;
-        var 辺を作る=this._作成_辺;
-        var 辺に二度出現したExpressionを作る = this._作成_二度出現したExpression;
-        var 辺から二度出現したExpressionを取得 = this._取得_二度出現したExpression;
+        var 作成_辺=this._作成_辺;
+        var 作成_辺に二度出現したExpression = this._作成_辺に二度出現したExpression;
+        var 取得_辺から二度出現したExpression = this._取得_辺から二度出現したExpression;
         var 変換_二度出現したExpression = this._変換_二度出現したExpression;
         while(true) {
-            辺を作る.実行(Lambda1_Body);
-            辺に二度出現したExpressionを作る.実行(Lambda1_Body);
-            var (二度出現した一度目のExpression,辺)=辺から二度出現したExpressionを取得.実行(Lambda1_Body);
+            作成_辺.実行(Lambda1_Body);
+            作成_辺に二度出現したExpression.実行(Lambda1_Body);
+            var (二度出現した一度目のExpression,辺)=取得_辺から二度出現したExpression.実行(Lambda1_Body);
             if(二度出現した一度目のExpression is null)
                 break;
             var Variable = Expression.Variable(二度出現した一度目のExpression.Type,$"局所{this.番号++}");

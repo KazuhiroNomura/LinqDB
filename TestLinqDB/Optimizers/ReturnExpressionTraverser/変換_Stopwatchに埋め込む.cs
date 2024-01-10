@@ -349,7 +349,7 @@ public class 変換_Stopwatchに埋め込む : 共通{
         }
     }
     [Fact]
-    public void TryCatchFinallyFilter(){
+    public void TryCatchFinallyFilter0(){
         var InvalidCastException=Expression.Parameter(typeof(InvalidCastException),"ex0");
         var NotImplementedException=Expression.Parameter(typeof(NotImplementedException),"ex1");
         var NotSupportedException=Expression.Parameter(typeof(NotSupportedException),"ex2");
@@ -379,6 +379,42 @@ public class 変換_Stopwatchに埋め込む : 共通{
                         NotSupportedException,
                         Expression.Constant(4),
                         Expression.Equal(NotSupportedException,Expression.Default(NotSupportedException.Type))
+                    )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void TryCatchFinallyFilter1(){
+        //var InvalidCastException=Expression.Parameter(typeof(InvalidCastException),"ex0");
+        var NotImplementedException=Expression.Parameter(typeof(NotImplementedException),"ex1");
+        //var NotSupportedException=Expression.Parameter(typeof(NotSupportedException),"ex2");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.TryCatchFinally(
+                    Expression.Add(
+                        Expression.Constant(-11),
+                        Expression.Constant(1)
+                    ),
+                    Expression.Constant(5),
+                    Expression.Catch(
+                        typeof(InvalidCastException),
+                        Expression.Constant(2),
+                        Expression.Constant(true)
+                    ),
+                    Expression.Catch(
+                        NotImplementedException,
+                        Expression.Constant(3),
+                        Expression.Equal(NotImplementedException,Expression.Default(NotImplementedException.Type))
+                    ),
+                    Expression.Catch(
+                        NotImplementedException,
+                        Expression.Constant(3)
+                    ),
+                    Expression.Catch(
+                        typeof(NotSupportedException),
+                        Expression.Constant(4),
+                        Expression.Constant(false)
                     )
                 )
             )

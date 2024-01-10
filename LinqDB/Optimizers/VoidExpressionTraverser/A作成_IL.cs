@@ -252,99 +252,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.PrivateCall(Method);
         this.IsRefのあるMethod=IsRefのあるMethod;
     }
-    //private void PrivateCall(MethodInfo Method,ReadOnlyCollection<Expression> Expressions){
-    //    var Method_Parameters = Method.GetParameters();
-    //    var Expressions_Count = Expressions.Count;
-    //    var TryCount=0;
-    //    for(var a = 0;a<Expressions_Count;a++)
-    //        if(Expressions[a].NodeType==ExpressionType.Try)
-    //            TryCount++;
-    //    LocalBuilder[]? TryLocal=null;
-    //    if(TryCount>0)
-    //        TryLocal=new LocalBuilder[TryCount];
-    //    var TryIndex=0;
-    //    for(var a = 0;a<Expressions_Count;a++)
-    //        if(Expressions[a].NodeType==ExpressionType.Try)
-    //            TryLocal![TryIndex++]=this.PrivateTry値を代入した変数((TryExpression)Expressions[a]);
-    //    TryIndex=0;
-    //    var I=this.I!;
-    //    for(var a = 0;a<Expressions_Count;a++) {
-    //        var Expression = Expressions[a];
-    //        if(Method_Parameters[a].ParameterType.IsByRef) {
-    //            // ReSharper disable once SwitchStatementMissingSomeCases
-    //            switch(Expression.NodeType){
-    //                case ExpressionType.ArrayIndex:{
-    //                    var Binary=(BinaryExpression)Expression;
-    //                    this.Traverse(Binary.Left);
-    //                    this.Traverse(Binary.Right);
-    //                    Debug.Assert(Binary.Method is null);
-    //                    I.Ldelema(Binary.Type);
-    //                    break;
-    //                }
-    //                case ExpressionType.Parameter:{
-    //                    var Parameter=(ParameterExpression)Expression;
-    //                    //Debug.Assert(this.Parameters is not null);
-    //                    var index=this.Parameters!.IndexOf(Parameter);
-    //                    if(index>=0){
-    //                        if(this.インスタンスメソッドか) index++;
-    //                        if(Parameter.IsByRef)I.Ldarg((ushort)index);
-    //                        else I.Ldarga((ushort)index);
-    //                    } else if(this.Dictionaryラムダ跨ぎParameter.TryGetValue(Parameter,out var Disp_Member)){
-    //                        var Member_Expression=Disp_Member.Member.Expression;
-    //                        this.PointerTraverseNulllable(Member_Expression);
-    //                        var Member_Member=Disp_Member.Member.Member;
-    //                        if(Member_Member.MemberType==MemberTypes.Field){
-    //                            var Member_Field=(FieldInfo)Member_Member;
-    //                            if(Member_Field.IsStatic)
-    //                                I.Ldsflda(Member_Field);
-    //                            else
-    //                                I.Ldflda(Member_Field);
-    //                        } else
-    //                            this.PrivateCall(((PropertyInfo)Member_Member).GetMethod!);
-    //                    } else{
-    //                        Debug.Assert(this.DispParameter!=Parameter,"thisは明示的に呼び出されることはないはず。");
-    //                        I.Ldloca(this.Dictionary_Parameter_LocalBuilder[Parameter]);
-    //                    }
-    //                    break;
-    //                }
-    //                case ExpressionType.Try:{
-    //                    I.Ldloca(TryLocal![TryIndex++]);
-    //                    break;
-    //                }
-    //                case ExpressionType.MemberAccess:{
-    //                    var Member=(MemberExpression)Expression;
-    //                    var Member_Member=Member.Member;
-    //                    this.PointerTraverseNulllable(Member.Expression);
-    //                    if(Member_Member.MemberType==MemberTypes.Property){
-    //                        I.Call(((PropertyInfo)Member_Member).GetMethod);
-    //                        var 変数=I.M_DeclareLocal_Stloc(Method_Parameters[a].ParameterType);
-    //                        I.Ldloca(変数);
-    //                    } else{
-    //                        Debug.Assert(Member_Member.MemberType==MemberTypes.Field);
-    //                        var Member_Field=(FieldInfo)Member_Member;
-    //                        if(Member_Field.IsStatic) {
-    //                            I.Ldsflda(Member_Field);
-    //                        } else {
-    //                            I.Ldflda(Member_Field);
-    //                        }
-    //                    }
-    //                    break;
-    //                }
-    //                default:{
-    //                    this.RefTraverse(Expression);
-    //                    //var 変数=I.M_DeclareLocal_Stloc(Method_Parameters[a].ParameterType);
-    //                    //I.Ldloca(変数);
-    //                    break;
-    //                }
-    //            }
-    //        } else if(Expression.NodeType==ExpressionType.Try){
-    //            I.Ldloc(TryLocal![TryIndex++]);
-    //        } else{
-    //            this.Traverse(Expression);
-    //        }
-    //    }
-    //    this.PrivateCall(Method);
-    //}
     private void 共通UnaryExpression(UnaryExpression Unary,Action<ILGenerator>IL出力){
         var Unary_Operand=Unary.Operand;
         var Unary_Operand_Type=Unary_Operand.Type;
@@ -559,10 +466,10 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 this.PointerTraverseNulllable(Index.Object);
                 this.TraverseExpressions(Index.Arguments);
                 I.Ldelema(e.Type);
-                //foreach(var Argument in Index.Arguments)this.Traverse(Argument);
                 break;
             }
-            case ExpressionType.MemberAccess:{
+            default:{
+                Debug.Assert(e.NodeType==ExpressionType.MemberAccess);
                 var Member=(MemberExpression)e;
                 this.PointerTraverseNulllable(Member.Expression);
                 var Member_Member=Member.Member;
@@ -575,8 +482,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 }
                 break;
             }
-            default:
-                throw new NotSupportedException($"{e.NodeType}はサポートされてない");
         }
     }
     private static bool IsUnsigned(Type p)=>
@@ -1454,11 +1359,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.Traverse(Binary.Right);
         this.I!.Ldelem(Binary.Type);
     }
-    /// <summary>
-    /// Ldloc Array
-    /// Ldlen
-    /// </summary>
-    /// <param name="Unary"></param>
     protected override void ArrayLength(UnaryExpression Unary){
         Debug.Assert(Unary.Method is null);
         this.Traverse(Unary.Operand);
@@ -1664,30 +1564,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.共通IncrementDecrement(Unary,AddSub);
         this.格納先に格納(Unary_Operand);
     }
-    public static (int a,int b)incrimentポスト(int a){
-        return (a++,a);
-    }
-    public static (int a,int b)incrimentプレ(int a){
-        return (++a,a);
-    }
-    public static (int a,int b)incrimentポスト(ref int a){
-        return (a++,a);
-    }
-    public static(int a,int b) incrimentプレ(ref int a){
-        return (++a,a);
-    }
-    public static(int a,int b) incrimentポスト(int[] a){
-        return (a[0]++,a[0]);
-    }
-    public static(int a,int b) incrimentプレ(int[] a){
-        return(++a[0],a[0]);
-    }
-    public static(int a,int b) incrimentポスト(System.Drawing.Point a){
-        return(a.X++,a.X);
-    }
-    public static(int a,int b) incrimentプレ(ref System.Drawing.Point a){
-        return(++a.Y,a.Y);
-    }
     private static readonly Action<ILGenerator> DelegateNegate = I => I.Neg();
     protected override void Negate(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
     protected override void NegateChecked(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
@@ -1789,7 +1665,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             }
         }
     }
-
     protected override void MemberInit(MemberInitExpression MemberInit){
         this.New(MemberInit.NewExpression);
         var MemberInit_Type=MemberInit.Type;
@@ -1804,14 +1679,10 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         }
         I.Ldloc(local);
     }
-
     protected override void Call(MethodCallExpression MethodCall){
         this.PointerTraverseNulllable(MethodCall.Object);
         this.PrivateCall(MethodCall.Method,MethodCall.Arguments);
     }
-
-    [SuppressMessage("ReSharper","HeuristicUnreachableCode")]
-    [SuppressMessage("ReSharper","ConditionIsAlwaysTrueOrFalse")]
     protected override void New(NewExpression New){
         if(New.Constructor is not null){
             this.TraverseExpressions(New.Arguments);
@@ -1824,7 +1695,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             I.M_Initobjで値型を初期化してスタックに積む(New.Type);
         }
     }
-
     protected override void NewArrayBound(NewArrayExpression NewArray){
         var NewArray_Expressions=NewArray.Expressions;
         var NewArray_Expressions_Count=NewArray_Expressions.Count;
@@ -1841,7 +1711,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             this.I!.Newobj(NewArray.Type.GetConstructor(Types)!);
         }
     }
-
     protected override void NewArrayInit(NewArrayExpression NewArray){
         var I=this.I;
         Debug.Assert(I is not null);
@@ -2022,8 +1891,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                             var Index_Object = index1.Object;
                             this.PointerTraverseNulllable(Index_Object);
                             this.TraverseExpressions(index1.Arguments);
-                            //foreach(var Argument in Index.Arguments)
-                            //  this.Traverse(Argument);
                             Debug.Assert(Index_Object!=null);
                             var Index_Object_Type = Index_Object.Type;
                             Debug.Assert(Index_Object_Type.IsArray);
@@ -2102,9 +1969,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                             var Index_Object = index2.Object;
                             this.PointerTraverseNulllable(Index_Object);
                             this.TraverseExpressions(index2.Arguments);
-                            //foreach(var Argument in Index.Arguments) {
-                            //    this.Traverse(Argument);
-                            //}
                             Debug.Assert(Index_Object!=null);
                             var Index_Object_Type = Index_Object.Type;
                             Debug.Assert(Index_Object_Type.IsArray);
@@ -2363,18 +2227,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         }
         this.Traverse(Switch.DefaultBody);
         I.MarkLabel(EndSwitch);
-    }
-    private void PrivateFilter1(CatchBlock Try_Handler){
-        var I = this.I!;
-        var Isinst = I.DefineLabel();
-        I.Brtrue(Isinst);
-        I.Ldc_I4_0();
-        var endfilter = I.DefineLabel();
-        I.Br(endfilter);
-        I.MarkLabel(Isinst);
-        this.Traverse(Try_Handler.Filter);
-        I.MarkLabel(endfilter);
-        I.BeginCatchBlock(null);//endfilter
     }
     private void PrivateFilter0(CatchBlock Try_Handler,LocalBuilder Variable) {
         //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
@@ -2656,8 +2508,8 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         var Binary_Left=Binary.Left;
         this.PointerTraverseNulllable(Binary_Left);
         var Binary_Left_Type=Binary_Left.Type;
-        var I=this.I!;
-        //Debug.Assert(I is not null);
+        var I=this.I;
+        Debug.Assert(I is not null);
         var HasValueがfalseだった =I.DefineLabel();
         if(Binary_Left_Type.IsValueType){
             var Nullable変数=I.M_DeclareLocal_Stloc(Binary_Left_Type.MakeByRefType());
@@ -2695,14 +2547,13 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     }
     protected override void Conditional(ConditionalExpression Conditional){
         this.Traverse(Conditional.Test);
-        var I = this.I!;
-        //Debug.Assert(I is not null);
+        var I = this.I;
+        Debug.Assert(I is not null);
         var EndIf = I.DefineLabel();
         var IfFalse = I.DefineLabel();
         I.Brfalse(IfFalse);
         if(Conditional.Type==typeof(void)){
             this.VoidTraverse(Conditional.IfTrue);
-            //Brするとスタックが0になる。変数に代入すべき
             I.Br(EndIf);
             I.MarkLabel(IfFalse);
             this.VoidTraverse(Conditional.IfFalse);
@@ -2807,7 +2658,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     /// ref戻り値が欲しいTraverse
     /// </summary>
     /// <param name="e"></param>
-    protected void RefTraverse(Expression e) {
+    private void RefTraverse(Expression e) {
         Trace.WriteLine($"RefTraverse{count++}");
         var I = this.I!;
         switch(e.NodeType) {
@@ -2852,28 +2703,8 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             case ExpressionType.MemberAccess:{
                 var Member=(MemberExpression)e;
                 共通(Member);
-                //this.PointerTraverseNulllable(Member.Expression);
-                //var Member_Member=Member.Member;
-                //Debug.Assert(Member_Member.MemberType==MemberTypes.Field);
-                //var Member_Field=(FieldInfo)Member_Member;
-                //if(Member_Field.IsStatic)
-                //    I.Ldsflda(Member_Field);
-                //else
-                //    I.Ldflda(Member_Field);
                 break;
             }
-            //case ExpressionType.PreDecrementAssign:
-            //    RefPreIncrementAssign(e,OpCodes.Sub);
-            //    break;
-            //case ExpressionType.PreIncrementAssign:
-            //    RefPreIncrementAssign(e,OpCodes.Add);
-            //    break;
-            //case ExpressionType.PostDecrementAssign:
-            //    RefPostIncrementAssign(e,OpCodes.Sub);
-            //    break;
-            //case ExpressionType.PostIncrementAssign:
-            //    RefPostIncrementAssign(e,OpCodes.Add);
-            //    break;
             case ExpressionType.Block:{
                 var Block=(BlockExpression)e;
                 var DictionaryParameterLocalBuilder = this.Dictionary_Parameter_LocalBuilder;
@@ -2896,18 +2727,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 break;
             }
         }
-        //void RefPreIncrementAssign(Expression e0,OpCode OpCode) {
-        //    var Unary = (UnaryExpression)e0;
-        //    this.格納先設定IncrementDecrement(Unary,OpCode);
-        //    this.Void格納先に格納(Unary.Operand);
-        //}
-        //void RefPostIncrementAssign(Expression e0,OpCode OpCode) {
-        //    var Unary = (UnaryExpression)e0;
-        //    //var I=this.I!;
-        //    this.格納先設定IncrementDecrement(Unary,OpCode);
-        //    //I.Dup();
-        //    this.Void格納先に格納(Unary.Operand);
-        //}
         void 共通(MemberExpression Member){
             this.PointerTraverseNulllable(Member.Expression);
             var Member_Member=Member.Member;
@@ -2931,4 +2750,4 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
 //2690 20220520
 //2492 20220516
 //3277 20220516
-//3073
+//2928 20240110

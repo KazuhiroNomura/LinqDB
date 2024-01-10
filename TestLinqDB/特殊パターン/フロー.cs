@@ -81,10 +81,10 @@ public class フロー: 共通
         }
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"Label","L0");
-            var L1=new 計測(計測Maneger,1,"Label","L1");
-            var L2=new 計測(計測Maneger,2,"Label","L2");
-            var L3=new 計測(計測Maneger,3,"Label","L3");
+            var L0=new 計測(計測Maneger,0,"Label","L0","");
+            var L1=new 計測(計測Maneger,1,"Label","L1","");
+            var L2=new 計測(計測Maneger,2,"Label","L2","");
+            var L3=new 計測(計測Maneger,3,"Label","L3","");
             計測.接続(L0,L2);
             計測.接続(L2,L1);
             計測.接続(L1,L3);
@@ -466,12 +466,12 @@ public class フロー: 共通
         }
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"Label","L0");
-            var L1=new 計測(計測Maneger,1,"Label","L1");
-            var L2=new 計測(計測Maneger,2,"Label","L2");
-            var L3=new 計測(計測Maneger,3,"Label","L3");
-            var L4=new 計測(計測Maneger,4,"Label","L4");
-            var L5=new 計測(計測Maneger,5,"Label","L5");
+            var L0=new 計測(計測Maneger,0,"Label","L0","");
+            var L1=new 計測(計測Maneger,1,"Label","L1","");
+            var L2=new 計測(計測Maneger,2,"Label","L2","");
+            var L3=new 計測(計測Maneger,3,"Label","L3","");
+            var L4=new 計測(計測Maneger,4,"Label","L4","");
+            var L5=new 計測(計測Maneger,5,"Label","L5","");
 
             計測.接続(L0,L1);
             計測.接続(L0,L3);
@@ -677,8 +677,8 @@ public class フロー: 共通
         }
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"Label","L0");
-            var L1=new 計測(計測Maneger,1,"Label","L1");
+            var L0=new 計測(計測Maneger,0,"Label","L0","");
+            var L1=new 計測(計測Maneger,1,"Label","L1","");
             計測.接続(L0,L1);
             Trace.WriteLine(計測Maneger.Analize(L0));
         }
@@ -704,10 +704,10 @@ public class フロー: 共通
         }
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
-            var L1=new 計測(計測Maneger,1,"case","1:");
-            var L2=new 計測(計測Maneger,2,"case","2:");
-            var L3=new 計測(計測Maneger,3,"end switch","");
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue","");
+            var L1=new 計測(計測Maneger,1,"case","1:","");
+            var L2=new 計測(計測Maneger,2,"case","2:","");
+            var L3=new 計測(計測Maneger,3,"end switch","","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L1,L3);
@@ -731,10 +731,10 @@ public class フロー: 共通
         }
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
-            var L1=new 計測(計測Maneger,1,"case","1:");
-            var L2=new 計測(計測Maneger,2,"case","2:");
-            var L3=new 計測(計測Maneger,3,"end switch","");
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue","");
+            var L1=new 計測(計測Maneger,1,"case","1:","");
+            var L2=new 計測(計測Maneger,2,"case","2:","");
+            var L3=new 計測(計測Maneger,3,"end switch","","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L1,L3);
@@ -748,11 +748,11 @@ public class フロー: 共通
         //┌┴┘1,
         {
             var 計測Maneger=this.計測Maneger;
-            var L0=new 計測(計測Maneger,0,"switch","SelectValue");
-            var L1=new 計測(計測Maneger,1,"case","1:");
-            var L2=new 計測(計測Maneger,2,"case","2:");
-            var L3=new 計測(計測Maneger,3,"case","3:");
-            var L4=new 計測(計測Maneger,4,"end switch","");
+            var L0=new 計測(計測Maneger,0,"switch","SelectValue","");
+            var L1=new 計測(計測Maneger,1,"case","1:","");
+            var L2=new 計測(計測Maneger,2,"case","2:","");
+            var L3=new 計測(計測Maneger,3,"case","3:","");
+            var L4=new 計測(計測Maneger,4,"end switch","","");
             計測.接続(L0,L1);
             計測.接続(L0,L2);
             計測.接続(L0,L3);
