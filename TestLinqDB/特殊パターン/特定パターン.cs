@@ -324,6 +324,36 @@ public class 特定パターン:共通{
             )
         );
     }
+    [Fact]public void Condition3(){
+        var a = Expression.Parameter(typeof(bool), "a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,decimal>>(
+                Expression.Condition(
+                    a,
+                    Expression.Constant(1m),
+                    Expression.Add(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m)
+                    )
+                ),a
+            )
+        );
+    }
+    [Fact]public void Condition4(){
+        var a = Expression.Parameter(typeof(bool), "a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,decimal>>(
+                Expression.Condition(
+                    a,
+                    Expression.Add(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m)
+                    ),
+                    Expression.Constant(1m)
+                ),a
+            )
+        );
+    }
     [Fact]public void 計測埋め込み(){
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
@@ -916,6 +946,90 @@ public class 特定パターン:共通{
                         Expression.Equal(Variable,Expression.Default(Variable.Type))
 
                     )
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Try(){
+        var ex=Expression.Parameter(typeof(Exception),"ex");
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Add(
+                    Expression.Constant(0m),
+                    Expression.Constant(0m)
+                ),
+                Expression.Catch(
+                    ex,
+                    Expression.Default(typeof(decimal))
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryFinally(
+                Expression.Constant(0),
+                Expression.Add(
+                    Expression.Constant(0m),
+                    Expression.Constant(0m)
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Constant(0m),
+                Expression.Catch(
+                    ex,
+                    Expression.Add(
+                        Expression.Constant(0m),
+                        Expression.Constant(0m)
+                    )
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Constant(0m),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(0m),
+                    Expression.Equal(
+                        Expression.Constant(0m),
+                        Expression.Constant(0m)
+                    )
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Constant(0m),
+                Expression.Catch(
+                    ex,
+                    Expression.Add(
+                        Expression.Constant(0m),
+                        Expression.Constant(0m)
+                    )
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Constant(0m),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(0m),
+                    Expression.Equal(
+                        Expression.Constant(0m),
+                        Expression.Constant(0m)
+                    )
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Default(typeof(void)),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Default(typeof(void))
                 )
             )
         );

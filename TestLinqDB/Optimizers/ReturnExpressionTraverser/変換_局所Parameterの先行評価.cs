@@ -13,8 +13,7 @@ using SwitchCase = System.Linq.Expressions.SwitchCase;
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 public class 変換_局所Parameterの先行評価 : 共通{
     //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
-    [Fact]
-    public void 変形確認1(){
+    [Fact]public void 変形確認1(){
         var p = Expression.Parameter(typeof(decimal));
         var Assign=Expression.Assign(
             p,
@@ -85,6 +84,179 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
         ////ラムダを跨ぐ
+    }
+    [Fact]public void 変形確認2TryCatch(){
+        var _1m = Expression.Constant(1m);
+        var _2m = Expression.Constant(2m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Condition(
+                    Expression.Equal(_1m,_1m),
+                    Expression.Add(_1m,_1m),
+                    Expression.Subtract(_1m,_1m)
+                ),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Condition(
+                        Expression.NotEqual(_1m,_1m),
+                        Expression.Divide(_1m,_1m),
+                        Expression.Multiply(_1m,_1m)
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void 変形確認3TryCatch(){
+        var _1m = Expression.Constant(1m);
+        var _2m = Expression.Constant(2m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Add(_1m,_1m),
+                Expression.TryCatch(
+                    Expression.Condition(
+                        Expression.Equal(_1m,_1m),
+                        Expression.Add(_1m,_1m),
+                        Expression.Subtract(_1m,_1m)
+                    ),
+                    Expression.Catch(
+                        typeof(Exception),
+                        Expression.Condition(
+                            Expression.NotEqual(_1m,_1m),
+                            Expression.Add(_1m,_1m),
+                            Expression.Multiply(_1m,_1m)
+                        )
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void 変形確認5Condition後式(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,_1m),
+                    Expression.Subtract(_1m,_1m)
+                ),
+                Expression.Equal(_1m,_1m)
+            )
+        );
+    }
+    [Fact]public void 変形確認6Condition後式0(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,_1m),
+                    _1m
+                ),
+                Expression.Add(_1m,_1m)
+            )
+        );
+    }
+    [Fact]public void 変形確認6Condition後式1(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    _1m,
+                    Expression.Add(_1m,_1m)
+                ),
+                Expression.Add(_1m,_1m)
+            )
+        );
+    }
+    [Fact]public void 変形確認4Condition前式0(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Expression.Equal(_1m,_1m),
+                Expression.Add(_1m,_1m),
+                Expression.Subtract(_1m,_1m)
+            )
+        );
+    }
+    [Fact]public void 変形確認7Condition前式1(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Equal(_1m,_1m),
+                    Expression.Equal(_1m,_1m),
+                    Expression.NotEqual(_1m,_1m)
+                )
+            )
+        );
+    }
+    [Fact]public void 変形確認8Condition後式0(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,Expression.Add(_1m,_1m)),
+                    Expression.Add(_1m,Expression.Add(_1m,_1m))
+                ),
+                Expression.Add(_1m,Expression.Add(_1m,_1m))
+            )
+        );
+    }
+    [Fact]public void 変形確認8Condition後式1(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,Expression.Add(_1m,_1m)),
+                    Expression.Subtract(_1m,Expression.Add(_1m,_1m))
+                ),
+                Expression.Add(_1m,Expression.Add(_1m,_1m))
+            )
+        );
+    }
+    [Fact]public void 変形確認8Condition後式2(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,Expression.Add(_1m,_1m)),
+                    Expression.Subtract(_1m,Expression.Add(_1m,_1m))
+                ),
+                Expression.Multiply(_1m,Expression.Add(_1m,_1m))
+            )
+        );
+    }
+    [Fact]public void 変形確認8Condition後式3(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,_1m),
+                    Expression.Subtract(_1m,_1m)
+                ),
+                _1m
+            )
+        );
+    }
+    [Fact]public void 変形確認9Condition後式(){
+        var _1m = Expression.Constant(1m);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,Expression.Add(_1m,_1m)),
+                    Expression.Subtract(_1m,Expression.Add(_1m,_1m))
+                ),
+                Expression.Equal(_1m,Expression.Add(_1m,_1m)),
+                Expression.Add(_1m,Expression.Add(_1m,_1m)),
+                Expression.Subtract(_1m,Expression.Add(_1m,_1m))
+            )
+        );
     }
     public class 辺を作る : 共通{
         //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
@@ -1326,9 +1498,40 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     public class List辺 : 共通{
         //protected override テストオプション テストオプション=>テストオプション.式木の最適化を試行;
-        [Fact]
-        public void 親()
-        {
+        [Fact]public void 特定パターン0(){
+            var L0 = Expression.Label("L0");
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.Block(
+                        Expression.Constant(1m),
+                        Expression.Goto(L0),
+                        Expression.Label(L0),
+                        Expression.Constant(1m)
+                    )
+                )
+            );
+        }
+        [Fact]public void 特定パターン1(){
+            var L0 = Expression.Label("L0");
+            var L1 = Expression.Label("L1");
+            var L2 = Expression.Label("L2");
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.Block(
+                        Expression.Goto(L1),
+                        Expression.Label(L0),
+                        Expression.Constant(1m),
+                        Expression.Goto(L2),
+                        Expression.Label(L1),
+                        Expression.Constant(1m),
+                        Expression.Goto(L0),
+                        Expression.Label(L2),
+                        Expression.Constant(1m)
+                    )
+                )
+            );
+        }
+        [Fact]public void 親(){
             //for(var a=0;a<親辺Array_Length;a++){
             //    for(var b=0;b<Count;b++){
             //        if(列.移動元==親辺) {

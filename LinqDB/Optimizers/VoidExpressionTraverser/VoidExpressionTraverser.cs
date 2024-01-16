@@ -327,8 +327,8 @@ internal class VoidExpressionTraverser {
     /// <summary>
     /// a=b
     /// </summary>
-    /// <param name="Binary"></param>
-    protected virtual void Assign(BinaryExpression Binary)=> this.MakeAssign(Binary);
+    /// <param name="Assign"></param>
+    protected virtual void Assign(BinaryExpression Assign)=> this.MakeAssign(Assign);
     /// <summary>
     /// a??b
     /// </summary>

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using LinqDB.Optimizers.Comparer;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
@@ -29,7 +30,7 @@ public class フロー: 共通
         l.Add(ifTrue);
         l.Add(ifFalse);
         l.Add(endif);
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報Goto00(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -41,7 +42,7 @@ public class フロー: 共通
         var L1=new 辺(Comparer) { 親コメント="L1" };
         辺.接続(L0,L1);
         var l=new List辺{L0,L1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報Goto01(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -57,7 +58,7 @@ public class フロー: 共通
         辺.接続(L0,L1);
         辺.接続(L1,L2);
         var l=new List辺{L0,L1,L2};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報Goto1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -77,7 +78,7 @@ public class フロー: 共通
             辺.接続(L2,L1);
             辺.接続(L1,L3);
             var l=new List辺{L0,L1,L2,L3};
-            Trace.WriteLine(l.フロー);
+            Trace.WriteLine(l.Analize);
         }
         {
             var 計測Maneger=this.計測Maneger;
@@ -105,7 +106,7 @@ public class フロー: 共通
         辺.接続(L0,L3);
         辺.接続(L1,L2);
         var l=new List辺{L0,L1,L2,L3};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループ00(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -115,7 +116,7 @@ public class フロー: 共通
         var L0=new 辺(Comparer) { 親コメント="L0" };
         辺.接続(L0,L0);
         var l=new List辺{L0};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループ01(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -128,7 +129,7 @@ public class フロー: 共通
         辺.接続(L0,L1);
         辺.接続(L1,L1);
         var l=new List辺{L0,L1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループ1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -142,7 +143,7 @@ public class フロー: 共通
         辺.接続(L0,L1);
         辺.接続(L1,L0);
         var l=new List辺{L0,L1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループ2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -160,7 +161,7 @@ public class フロー: 共通
         辺.接続(L1,L2);
         辺.接続(L2,L0);
         var l=new List辺{L0,L1,L2};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループ3(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -175,7 +176,7 @@ public class フロー: 共通
         辺.接続(L0,L1);
         辺.接続(L1,L1);
         var l=new List辺{L0,L1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void IfThenElseEnd0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -200,7 +201,7 @@ public class フロー: 共通
             L2,
             L3
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 辺に関する情報ループBreak(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -216,7 +217,7 @@ public class フロー: 共通
         辺.接続(L1,L2);
         辺.接続(L1,L1);
         var l=new List辺{L0,L1,L2};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     /// <summary>
     /// if{
@@ -268,7 +269,7 @@ public class フロー: 共通
             L6,
             L7,
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     /// <summary>
     /// if(test){
@@ -324,7 +325,7 @@ public class フロー: 共通
             L2,
             L3
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     /// <summary>
     /// if(test){
@@ -380,7 +381,7 @@ public class フロー: 共通
             L23,
             L3
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     /// <summary>
     /// ifelseをネスト
@@ -394,7 +395,7 @@ public class フロー: 共通
         var Comparer=new ExpressionEqualityComparer();
         var l=new List辺();
         共通(3,out var L0,out var L3,"");
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
 
         bool 共通(int 深さ,out 辺 out_L0,out 辺 out_L3,string c){
             if(深さ==0){
@@ -462,7 +463,7 @@ public class フロー: 共通
                 L4,
                 L5
             };
-            Trace.WriteLine(List辺.フロー);
+            Trace.WriteLine(List辺.Analize);
         }
         {
             var 計測Maneger=this.計測Maneger;
@@ -511,7 +512,7 @@ public class フロー: 共通
             L4,
             L5,
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void IfFallseでジャンプ先頭から末尾迄無条件ジャンプ1(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -549,7 +550,7 @@ public class フロー: 共通
             L6,
             L7
         };
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 複数2経路から単一経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -563,7 +564,7 @@ public class フロー: 共通
         辺.接続(jump0,label);
         辺.接続(jump1,label);
         var l=new List辺{jump0,jump1,label};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 複数3経路から単一経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -580,7 +581,7 @@ public class フロー: 共通
         辺.接続(jump1,label);
         辺.接続(jump,label);
         var l=new List辺{jump0,jump1,jump,label};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 単一経路から複数2経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -594,7 +595,7 @@ public class フロー: 共通
         辺.接続(jump,label0);
         辺.接続(jump,label1);
         var l=new List辺{jump,label0,label1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 単一経路から複数3経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -611,7 +612,7 @@ public class フロー: 共通
         辺.接続(jump,label1);
         辺.接続(jump,label2);
         var l=new List辺{jump,label0,label1,label2};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 複数2経路から複数2経路に0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -623,7 +624,7 @@ public class フロー: 共通
         辺.接続(L0,L1);
         辺.接続(L0,L1);
         var l=new List辺{L0,L1};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 複数2経路から複数2経路に2(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -640,7 +641,7 @@ public class フロー: 共通
         辺.接続(L1,L2);
         辺.接続(L1,L2);
         var l=new List辺{L0,L1,L2};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void 複数2経路から複数2経路に3(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -661,7 +662,7 @@ public class フロー: 共通
         辺.接続(L2,L3);
         辺.接続(L2,L3);
         var l=new List辺{L0,L1,L2,L3};
-        Trace.WriteLine(l.フロー);
+        Trace.WriteLine(l.Analize);
     }
     [Fact]public void Switch0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
@@ -673,7 +674,7 @@ public class フロー: 共通
             var L1=new 辺(Comparer){親コメント="L1"};
             辺.接続(L0,L1);
             var l=new List辺{L0,L1,};
-            Trace.WriteLine(l.フロー);
+            Trace.WriteLine(l.Analize);
         }
         {
             var 計測Maneger=this.計測Maneger;
@@ -700,7 +701,7 @@ public class フロー: 共通
             辺.接続(L1,L3);
             辺.接続(L2,L3);
             var l=new List辺{L0,L1,L2,L3};
-            Trace.WriteLine(l.フロー);
+            Trace.WriteLine(l.Analize);
         }
         {
             var 計測Maneger=this.計測Maneger;
@@ -727,7 +728,7 @@ public class フロー: 共通
             辺.接続(L0,L1);
             辺.接続(L0,L1);
             var l=new List辺{L0,L1,L2,};
-            Trace.WriteLine(l.フロー);
+            Trace.WriteLine(l.Analize);
         }
         {
             var 計測Maneger=this.計測Maneger;
@@ -761,6 +762,160 @@ public class フロー: 共通
             計測.接続(L3,L4);
             Trace.WriteLine(計測Maneger.Analize(L0));
         }
+    }
+    [Fact]public void LabelLabel(){
+        var Label0=Expression.Label("Label0");
+        var Label1=Expression.Label("Label1");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Label(Label0),
+                    Expression.Label(Label1)
+                )
+            )
+        );
+    }
+    private void 式変形のみ(Expression<Action> input) {
+        var Optimizer=this.Optimizer;
+        Optimizer.IsInline=true;
+        Optimizer.CreateDelegate(input);
+        Trace.WriteLine(Optimizer.Analize);
+    }
+    [Fact]public void Loop(){
+        this.式変形のみ(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Add(Expression.Constant(1m),Expression.Constant(1m))
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価.TraverseNullable(
+            Expression.Loop(
+                Expression.Add(Expression.Constant(1m),Expression.Constant(1m))
+            )
+        );
+    }
+    [Fact]public void LoopBreak_外Continue(){
+        var Break=Expression.Label(typeof(decimal),"Break");
+        var Continue=Expression.Label("Continue");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Label(Continue),
+                    Expression.Loop(
+                        Expression.Block(
+                            Expression.Add(Expression.Constant(1m),Expression.Constant(1m)),
+                            Expression.Break(Break,Expression.Constant(1m)),
+                            Expression.Continue(Continue)
+                        ),
+                        Break
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void LoopBreak_内Continue(){
+        //│0,
+        //└┐0,開始
+        //┌┴┐1,Loop
+        //└┐│1,
+        //┌┴┼┐2,()Continue:
+        //└┐││2,goto(局所0)Break
+        //││││3,デッドコード先頭
+        //└┼┼┘3,goto()Continue
+        //│││　4,デッドコード先頭
+        //└┼┘　4,End Loop
+        //┌┘　　5,Loop Break Break:
+        //│　　　5,goto(局所0)Break
+        var Break=Expression.Label(typeof(decimal),"Break");
+        var Continue=Expression.Label("Continue");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Label(Continue),
+                        Expression.Add(Expression.Constant(1m),Expression.Constant(1m)),
+                        Expression.Break(Break,Expression.Constant(1m)),
+                        Expression.Continue(Continue)
+                    ),
+                    Break
+                )
+            )
+        );
+    }
+    [Fact]public void LoopBreak0(){
+        var Break=Expression.Label(typeof(decimal),"Break");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Add(Expression.Constant(1m),Expression.Constant(1m)),
+                        Expression.Break(Break,Expression.Constant(1m))
+                    ),
+                    Break
+                )
+            )
+        );
+    }
+    [Fact]public void LoopBreak1(){
+        var Break=Expression.Label(typeof(decimal),"Break");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Add(Expression.Constant(1m),Expression.Constant(1m)),
+                        Expression.IfThen(
+                            Expression.Constant(true),
+                            Expression.Break(Break,Expression.Constant(1m))
+                        )
+                    ),
+                    Break
+                )
+            )
+        );
+    }
+    [Fact]public void LoopBreakContinue0(){
+        var Label_decimal=Expression.Label(typeof(decimal),"Break decimal");
+        var Label_void=Expression.Label("Continue void");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Break(Label_decimal,Expression.Constant(1m)),
+                        Expression.Continue(Label_void)
+                    ),
+                    Label_decimal,
+                    Label_void
+                )
+            )
+        );
+    }
+    [Fact]public void LoopBreakContinue1(){
+        //│0,
+        //└┐0,開始
+        //┌┴┐1,Loop Continue void:
+        //└┐│1,goto(局所0)Break decimal
+        //│││2,デッドコード先頭
+        //└┼┼┐2,goto()Continue void
+        //││││3,デッドコード先頭
+        //└┼┘│3,End Loop
+        //┌┘　│4,Loop Break Break decimal:
+        //│　　│4,goto(局所0)Break decimal
+        var Label_decimal=Expression.Label(typeof(decimal),"Break decimal");
+        var Label_void=Expression.Label("Continue void");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Loop(
+                    Expression.Block(
+                        Expression.Add(Expression.Constant(1m),Expression.Constant(1m)),
+                        Expression.Break(Label_decimal,Expression.Constant(1m)),
+                        Expression.Continue(Label_void)
+                    ),
+                    Label_decimal,
+                    Label_void
+                )
+            )
+        );
     }
     //[Fact]public void ラベルフォールスルー(){
     //    Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);

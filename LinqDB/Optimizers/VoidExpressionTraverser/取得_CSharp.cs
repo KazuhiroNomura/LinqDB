@@ -705,8 +705,8 @@ internal sealed class 取得_CSharp:VoidExpressionTraverser,IDisposable {
     /// <summary>
     /// a=b
     /// </summary>
-    /// <param name="Binary"></param>
-    protected override void Assign(BinaryExpression Binary) => this.Binary(Binary,'=');
+    /// <param name="Assign"></param>
+    protected override void Assign(BinaryExpression Assign) => this.Binary(Assign,'=');
     /// <summary>
     /// a??b
     /// </summary>

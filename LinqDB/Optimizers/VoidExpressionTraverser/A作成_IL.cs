@@ -699,10 +699,10 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.共通四則演算(Binary,OpCodes.Shl);
     protected override void RightShift(BinaryExpression Binary)=>
         this.共通四則演算(Binary,OpCodes.Shr,OpCodes.Shr_Un);
-    protected override void Assign(BinaryExpression Binary){
-        var Binary_Left=Binary.Left;
+    protected override void Assign(BinaryExpression Assign){
+        var Binary_Left=Assign.Left;
         this.格納先設定(Binary_Left);
-        this.Traverse(Binary.Right);
+        this.Traverse(Assign.Right);
         var I=this.I!;
         var 作業=I.M_DeclareLocal_Stloc_Ldloc(Binary_Left.Type);
         this.格納先に格納(Binary_Left);

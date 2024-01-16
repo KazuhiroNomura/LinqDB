@@ -17,10 +17,10 @@ internal sealed class 作成_実行計画サンキーダイアグラム:VoidExpr
         sb.AppendLine("];");
         File.WriteAllText(@"data.js", sb.ToString(), Encoding.Unicode);
     }
-    protected override void Assign(BinaryExpression Binary) {
+    protected override void Assign(BinaryExpression Assign) {
         var 旧上位ノード=this.上位ノード;
         //var 新上位ノード=this.上位ノード=Binary.Left.ToString();
-        this.Traverse(Binary.Right);
+        this.Traverse(Assign.Right);
         this.上位ノード=旧上位ノード;
         //this.sb.AppendLine("['"+新上位ノード+"','"+旧上位ノード+"',50],");
         //base.Assign(特定の形式はなし);

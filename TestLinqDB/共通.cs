@@ -61,11 +61,11 @@ public abstract class 共通{
     /// <param name="Body"></param>
     protected void 変換_局所Parameterの先行評価_実行(Expression Body){
         var Lambda=Expression.Lambda(Body);
-        this.変換_局所Parameterの先行評価.実行(Lambda);
+        var Lambda0=this.変換_局所Parameterの先行評価.実行(Lambda);
         //var s0=CommonLibrary.インラインラムダテキスト(Lambda);
-        //var s1=CommonLibrary.インラインラムダテキスト((Expression)this.変換_局所Parameterの先行評価.実行(Lambda));
+        var s1=CommonLibrary.インラインラムダテキスト((Expression)Lambda0);
         //Trace.WriteLine(s0);
-        //Trace.WriteLine(s1);
+        Trace.WriteLine(s1);
         //var Lambda = Expression.Lambda(Expression0);
         //this.Lambda最適化(Lambda );
     }

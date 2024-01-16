@@ -81,8 +81,8 @@ internal sealed class 検証_Parameterの使用状態:VoidExpressionTraverser_Qu
         //foreach(var p in DictionaryCループ跨ぎ読込回数)
         //    Debug.Assert(p.Value>=1);
     }
-    protected override void Assign(BinaryExpression Binary) {
-        if(Binary.Left is ParameterExpression Parameter){
+    protected override void Assign(BinaryExpression Assign) {
+        if(Assign.Left is ParameterExpression Parameter){
             if(this.ラムダ跨ぎParameters.Contains(Parameter)){
                 var DictionaryCラムダ跨書込回数=this.DictionaryCラムダ跨書込回数;
                 if( DictionaryCラムダ跨書込回数.ContainsKey(Parameter))
@@ -101,9 +101,9 @@ internal sealed class 検証_Parameterの使用状態:VoidExpressionTraverser_Qu
                 this.DictionaryCパラメーター読込回数[Parameter]++;
             }
         } else {
-            this.Traverse(Binary.Left);
+            this.Traverse(Assign.Left);
         }
-        this.Traverse(Binary.Right);
+        this.Traverse(Assign.Right);
     }
     protected override void Block(BlockExpression Block) {
         var Block_Variables=Block.Variables;

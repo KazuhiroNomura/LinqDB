@@ -21,12 +21,6 @@ public sealed class 計測{
         public static readonly MethodInfo Count = typeof(計測).GetMethod(nameof(計測.Count),Instance_NonPublic_Public)!;
     }
     internal 計測Maneger? 計測Maneger{get;init;}
-    //public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string? Value) {
-    //    this.計測Maneger=計測Maneger;
-    //    this.制御番号=制御番号;
-    //    this.Name=Name;
-    //    this.Value=Value;
-    //}
     public 計測(計測Maneger 計測Maneger,int 制御番号,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=制御番号;
@@ -34,19 +28,6 @@ public sealed class 計測{
         this.Value=Value;
         this.矢印=矢印;
     }
-    //public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name) {
-    //    this.計測Maneger=計測Maneger;
-    //    this.制御番号=制御計測.制御番号;
-    //    this.制御計測=制御計測;
-    //    this.Name=Name;
-    //}
-    //public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name,string Value) {
-    //    this.計測Maneger=計測Maneger;
-    //    this.制御番号=制御計測.制御番号;
-    //    this.制御計測=制御計測;
-    //    this.Name=Name;
-    //    this.Value=Value;
-    //}
     public 計測(計測Maneger 計測Maneger,計測 制御計測,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=制御計測.制御番号;
@@ -55,11 +36,6 @@ public sealed class 計測{
         this.Value=Value;
         this.矢印=矢印;
     }
-    //public 計測(計測Maneger 計測Maneger,string Name) {
-    //    this.計測Maneger=計測Maneger;
-    //    this.制御番号=-1;
-    //    this.Name=Name;
-    //}
     public 計測(計測Maneger 計測Maneger,string Name,string Value,string 矢印) {
         this.計測Maneger=計測Maneger;
         this.制御番号=-1;
@@ -67,43 +43,6 @@ public sealed class 計測{
         this.Value=Value;
         this.矢印=矢印;
     }
-    //public 計測(計測Maneger 計測Maneger,int 制御番号){
-    //    this.計測Maneger=計測Maneger;
-    //    this.制御番号=制御番号;
-    //    this.Name="";
-    //}
-    //public 計測(int 制御番号,string Name,string? Value) {
-    //    this.制御番号=制御番号;
-    //    this.Name=Name;
-    //    this.Value=Value;
-    //}
-    //public 計測(int 制御番号,string Name) {
-    //    this.制御番号=制御番号;
-    //    this.Name=Name;
-    //}
-    //public 計測(計測 制御計測,string Name) {
-    //    this.制御番号=制御計測.制御番号;
-    //    this.制御計測=制御計測;
-    //    this.Name=Name;
-    //}
-    //public 計測(string Name) {
-    //    this.制御番号=-1;
-    //    this.Name=Name;
-    //}
-    //public 計測(int 制御番号) {
-    //    this.制御番号=制御番号;
-    //    this.Name="";
-    //}
-    //private ref T Assign<T>(ref T Left){
-    //    this.呼出回数++;
-    //    return ref Left;
-    //}
-    //private T Assign<T>(out T Left,T Right) {
-    //    Trace.WriteLine(this.呼出回数);
-    //    this.呼出回数++;
-    //    Left=Right;
-    //    return Right;
-    //}
     private static T Assign<T>(計測 @this,out T Left,T Right) {
         //Trace.WriteLine(@this.呼出回数);
         @this.呼出回数++;
@@ -115,12 +54,7 @@ public sealed class 計測{
         Debug.Assert(this.計測Maneger is not null);
         this.呼出回数++;
         this.計測Maneger.実行中=this;
-        //Trace.WriteLine(label);
-        //const int 全100ns=1000*1000*10,半100ns=全100ns/2;
-        //if(Stopwatch.ElapsedTicks%全100ns<半100ns) this.節100ns+=半100ns;
     }
-    //public string 親コメント { get; set; } = "";
-    //public string 子コメント { get; set; } = "";
     internal 計測? 親演算;
     //internal string Name{get;set;}
     internal string? Name{get;set;}

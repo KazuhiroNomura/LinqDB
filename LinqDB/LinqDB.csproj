@@ -120,6 +120,8 @@
     <Compile Include="Optimizers\Comparer\AExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\ブローブビルドExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\汎用Comparer.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\辺.cs" />
+    <Compile Include="Optimizers\ReturnExpressionTraverser\作成_辺.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\Profiling\計測Maneger.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\ReturnExpressionTraverser.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\Profiling\計測.cs" />
