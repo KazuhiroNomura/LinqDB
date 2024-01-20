@@ -148,7 +148,7 @@
 	
 	
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9adbed5b_002Ddec4_002D4814_002D8a85_002D41d2a0acfb14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9adbed5b_002Ddec4_002D4814_002D8a85_002D41d2a0acfb14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" IsLocked="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	

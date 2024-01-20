@@ -2,60 +2,66 @@
 using Generic=System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using LinqDB.Enumerables;
+using LinqDB.Helpers;
 using LinqDB.Optimizers.Comparer;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 public sealed class List辺:Generic.List<辺>{
+    private static readonly Encoding Shift_JIS;
+    static List辺(){
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Shift_JIS=Encoding.GetEncoding("shift_jis");
+    }
+    private static int ShiftJIS半角換算文字数(string str)=>Shift_JIS.GetByteCount(str);
     public string Analize {
-        get {
+        get{
+            var List制御フロー=new Generic.List<string>();
+            var Listテキスト=new Generic.List<string>();
             var Count = this.Count;
             var 列Array0=new Generic.List<(辺? 移動元,辺? 移動先)>{(null,null)};
             var Line=new StringBuilder();
             Line.Append('　');
-            var 前回のLine=Line.ToString();
             var 辺に関する情報Array = this.ToArray();
-            var sb = new StringBuilder();
             for(var a = 0;a<Count;a++) {
                 var 辺 = 辺に関する情報Array[a];
                 辺.辺番号=a;
                 var 親辺Array = 辺.List親辺.ToArray();
                 var 子辺Array = 辺.List子辺.ToArray();
-                親(親辺Array,列Array0,ref 前回のLine,辺,sb,Line);
-                子(子辺Array,列Array0,ref 前回のLine,辺,sb,Line);
+                親(親辺Array,列Array0,List制御フロー,Listテキスト,辺,Line);
+                子(子辺Array,列Array0,List制御フロー,Listテキスト,辺,Line);
+            }
+            var sb = new StringBuilder();
+            var Listテキスト_Count=Listテキスト.Count;
+            var 最大半角文字数=-1;
+            for(var a=0;a<Listテキスト_Count;a++){
+                if(Listテキスト[a].Length<=0) continue;
+                var s=List制御フロー[a];
+                var 半角文字数=ShiftJIS半角換算文字数(s);
+                if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
+            }
+            if(最大半角文字数%2==0)
+                最大半角文字数+=1;
+            for(var a=0;a<Listテキスト_Count;a++){
+                if(Listテキスト[a].Length<=0) continue;
+                var s=List制御フロー[a];
+                var 半角文字数=ShiftJIS半角換算文字数(s);
+                var 埋めたい半角文字数=最大半角文字数-半角文字数;
+                sb.AppendLine(s+new string(' ',埋めたい半角文字数)+Listテキスト[a]);
             }
             return sb.ToString();
         }
     }
-    private static readonly Generic.HashSet<Expression>EmptyHashSet=new(new ExpressionEqualityComparer());
     public void 一度出現したExpressionを上位に移動(){
         var 先頭=this[0];
         this.Reset();
-        var ana=this.Analize;
-        先頭.節二度出現Expressions追加();
+        先頭.節子孫二度出現Expressions作成0();
+        //this.Reset();
+        //先頭.Assginしてない辺を買いに伝搬させる1();
         var 末尾=this[^1];
-        //末尾.節祖先一度出現Expressions追加();
-        //foreach(var a in this)
-        //    a.節一度出現Expressions追加();
-        //Reset();
-        //末尾.節二度出現Expressions追加();
-        //根.節二度出現Expressions追加();
         this.Reset();
-        末尾.節二度出現Expressions除去();
-        //foreach(var a in this)
-        //    a.節二度出現Expressions除去();
-        //根.作成1();
+        先頭.祖先二度出現Expressions作成();
         this.Reset();
-        //Reset();
-        //foreach(var a in this)
-        //    a.節一度出現Expressions追加();
-        //Reset();
-        //根.節二度出現Expressions追加();
-        //Reset();
-        //foreach(var a in this)
-        //    a.節二度出現Expressions除去();
-        ////根.作成1();
-        //Reset();
-        //根.作成2();
-        //Reset();
+        先頭.親節祖先二度出現Expressions除去();
     }
     internal void Reset(){
         foreach(var a in this) a.探索済みか=false;
@@ -76,43 +82,29 @@ public sealed class List辺:Generic.List<辺>{
     /// </summary>
     /// <param name="親辺Array"></param>
     /// <param name="列Array"></param>
-    /// <param name="前回のLine"></param>
+    /// <param name="List制御フロー"></param>
+    /// <param name="Listテキスト"></param>
     /// <param name="辺"></param>
-    /// <param name="sb"></param>
     /// <param name="Line"></param>
-    private static void 親(辺[] 親辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array,ref string 前回のLine,辺 辺,StringBuilder sb,StringBuilder Line){
+    private static void 親(辺[] 親辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
         var 親辺Array_Length=親辺Array.Length;
         Line初期化(列Array,Line);
         if(親辺Array_Length<=0){
             Line[0]='│';
         } else{
             Line[0]='┌';
-            var 上Count=0;
-            var 下Count=0;
             var 書き込みした右端列=-1;
             for(var a=0;a<親辺Array_Length;a++){
                 var 親辺=親辺Array[a];
                 var Count=列Array.Count;
                 for(var b=0;b<Count;b++){
                     var 列=列Array[b];
-                    //Debug.Assert(列.移動元==親辺);
                     if(列.移動元==親辺){
-                        //Debug.Assert(列.移動先==辺);
                         if(Line[b]!='┘')
                             if(書き込みした右端列<b)
                                 書き込みした右端列=b;
                         Line[b]='┘';
-                        上Count++;
                         goto 終了;
-                        //if(列.移動先==辺){
-                        //    //Debug.Assert(Line[b]!='┘');
-                        //    if(Line[b]!='┘')
-                        //        if(書き込みした右端列<b)
-                        //            書き込みした右端列=b;
-                        //    Line[b]='┘';
-                        //    上Count++;
-                        //    goto 終了;
-                        //}
                     }
                 }
                 for(var b=0;b<Count;b++){
@@ -121,14 +113,12 @@ public sealed class List辺:Generic.List<辺>{
                         Debug.Assert(書き込みした右端列<b);
                         書き込みした右端列=b;
                         Line[b]='┐';
-                        下Count++;
                         goto 終了;
                     }
                 }
                 書き込みした右端列=Line.Length;
                 列Array.Add((親辺,辺));
                 Line.Append('┐');
-                下Count++;
                 終了: ;
             }
             if(書き込みした右端列>0){
@@ -152,20 +142,22 @@ public sealed class List辺:Generic.List<辺>{
                 if(Line[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null,null);
             }
         }
-        var 行=Line.ToString();
-        前回のLine=行;
-        sb.AppendLine($"{行}{辺.辺番号},{辺.親コメント}");
+        List制御フロー.Add($"{Line}");
+        var sb=new StringBuilder();
+        foreach(var 節一度 in 辺.節一度出現Expressions) sb.Append(節一度.ToString()+',');
+        if(sb.Length>0) sb.Length--;
+        Listテキスト.Add($"{辺.辺番号},{辺.親コメント}{{{sb}}}");
     }
     /// <summary>
     /// 親とはジャンプ命令のことであり、この複数のジャンプ命令(if,switch,goto)の飛び先のラベルの属する複数辺を保持する
     /// </summary>
     /// <param name="子辺Array"></param>
     /// <param name="列Array0"></param>
-    /// <param name="前回のLine"></param>
+    /// <param name="List制御フロー"></param>
+    /// <param name="Listテキスト"></param>
     /// <param name="辺"></param>
-    /// <param name="sb"></param>
     /// <param name="Line"></param>
-    private static void 子(辺[] 子辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array0,ref string 前回のLine,辺 辺,StringBuilder sb,StringBuilder Line){
+    private static void 子(辺[] 子辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array0,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
         var 子辺Array_Length=子辺Array.Length;
         Line初期化(列Array0,Line);
         if(子辺Array_Length<=0){
@@ -212,9 +204,6 @@ public sealed class List辺:Generic.List<辺>{
                     case'　':
                         Line[a]='─';
                         break;
-                    //case '┘':
-                    //    Line[a]='┴';
-                    //    break;
                     case'│':
                         Line[a]='┼';
                         break;
@@ -225,8 +214,8 @@ public sealed class List辺:Generic.List<辺>{
             }
             if(ループか) 列Array0[書き換えLineIndexEnd]=(null,null);
         }
-        var 行=Line.ToString();
-        前回のLine=行;
-        sb.AppendLine($"{行}{辺.辺番号},{辺.子コメント}");
+        List制御フロー.Add($"{Line}");
+        Listテキスト.Add($"{辺.辺番号},{辺.子コメント}");
     }
 }
+//20240116 232

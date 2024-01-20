@@ -936,4 +936,44 @@ public class フロー: 共通
     //    };
     //    Trace.WriteLine(l.フロー);
     //}
+    [Fact]public void 変形確認2TryCatch(){
+        var _1m = Expression.Constant(1m);
+        //this.変換_局所Parameterの先行評価_実行(
+        //    Expression.Condition(
+        //        Expression.Constant(true),
+        //        Expression.Add(_1m,_1m),
+        //        _1m
+        //    )
+        //);
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Add(_1m,_1m),
+                    _1m
+                ),
+                Expression.Catch(
+                    typeof(Exception),
+                    _1m
+                )
+            )
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.TryCatch(
+                Expression.Condition(
+                    Expression.Equal(_1m,_1m),
+                    Expression.Add(_1m,_1m),
+                    Expression.Subtract(_1m,_1m)
+                ),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Condition(
+                        Expression.NotEqual(_1m,_1m),
+                        Expression.Divide(_1m,_1m),
+                        Expression.Multiply(_1m,_1m)
+                    )
+                )
+            )
+        );
+    }
 }

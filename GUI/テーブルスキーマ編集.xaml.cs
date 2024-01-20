@@ -76,24 +76,9 @@ public partial class テーブルスキーマ編集:Window {
 				}
 			}
 		}
-		//var ScriptGenerator = new Sql150ScriptGenerator(
-		//    new SqlScriptGeneratorOptions {
-		//        KeywordCasing=KeywordCasing.Lowercase,
-		//        IncludeSemicolons=true,
-		//        NewLineBeforeFromClause=true,
-		//        NewLineBeforeJoinClause=true,
-		//        NewLineBeforeWhereClause=true,
-		//        NewLineBeforeGroupByClause=true,
-		//        NewLineBeforeOrderByClause=true,
-		//        NewLineBeforeHavingClause=true,
-		//    }
-		//);
-		//ScriptGenerator.GenerateScript(Parsed,out var SQL2);
-		
 		var Container = this.Container;
 		this.DataContext=Container;
 		this.DiagramControl.DataContext=Container;
-		//this.DiagramControl0.DataContext=Database;
 		Container.Name="D0";
 		this.dbo=Container.CreateSchema("dbo");
 		//監視するディレクトリを指定
@@ -122,24 +107,6 @@ public partial class テーブルスキーマ編集:Window {
 			this.DragDelta(Thumb,new DragDeltaEventArgs(index,index));
 			index+=32;
 		}
-        //@$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";
-        //{
-        //    var ItemsSource=new List<string>();
-        //    using var Connection=new SqlConnection("Data Source=localhost;Initial Catalog=master;Integrated Security=false;{SQLServerログイン}");
-        //    Connection.Open();
-        //    using var Command=Connection.CreateCommand();
-        //    Command.CommandText=
-        //        "USE master\r\n"+
-        //        "SELECT name\r\n"+
-        //        "FROM sys.databases\r\n"+
-        //        "ORDER BY database_id";
-        //    using(var Reader=Command.ExecuteReader()){
-        //        while(Reader.Read()){
-        //            ItemsSource.Add(Reader.GetString(0));
-        //        }
-        //    }
-        //    this.SQLServer.ItemsSource=ItemsSource;
-        //}
         {
             var ItemsSource=new List<string>();
             using var Connection=new SqlConnection(SQLServer接続文字列);
@@ -181,7 +148,7 @@ public partial class テーブルスキーマ編集:Window {
         //this.データベース保存("TPC_C");
         //this.データベース保存("TPC_H");
         //this.データベース保存("TPC_E");
-        this.SQLServer保存("WideWorldImporters");
+        this.SQLServer保存("AdventureWorks2016_EXT");
         foreach (var Database in Databases){
             this.SQLServer保存(Database);
         }

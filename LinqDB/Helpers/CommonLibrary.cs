@@ -18,6 +18,8 @@ using LinqDB.Sets.Exceptions;
 using Collections=System.Collections;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
 namespace LinqDB.Helpers;
 using Generic= Collections.Generic;
 
@@ -26,6 +28,8 @@ using Generic= Collections.Generic;
 /// </summary>
 public static class CommonLibrary {
     static CommonLibrary(){
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        Shift_JIS=Encoding.GetEncoding("shift_jis");
     }
     internal const SerializeType DefaultSerializeType=SerializeType.MemoryPack;
     public static (AssemblyBuilder AssemblyBuilder,ModuleBuilder ModuleBuilder) DefineAssemblyModule(string Name) {
@@ -842,6 +846,28 @@ public static class CommonLibrary {
             }
         }
         return 旧String;
+    }
+    private static readonly Encoding Shift_JIS;
+    private static int ShiftJIS半角換算文字数(string str)=>Shift_JIS.GetByteCount(str);
+
+    public static void 結合(Generic.List<string>List制御フロー,Generic.List<string>Listテキスト){
+        var Count=Listテキスト.Count;
+        var 最大半角文字数=-1;
+        for(var a=0;a<Count;a++){
+            if(Listテキスト[a].Length<=0) continue;
+            var s=List制御フロー[a];
+            var 半角文字数=ShiftJIS半角換算文字数(s);
+            if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
+        }
+        if(最大半角文字数%2==0)
+            最大半角文字数+=1;
+        for(var a=0;a<Count;a++){
+            if(Listテキスト[a].Length<=0) continue;
+            var s=List制御フロー[a];
+            var 半角文字数=ShiftJIS半角換算文字数(s);
+            var 埋めたい半角文字数=最大半角文字数-半角文字数;
+            List制御フロー[a]=s+new string(' ',埋めたい半角文字数)+Listテキスト[a];
+        }
     }
 }
 //560

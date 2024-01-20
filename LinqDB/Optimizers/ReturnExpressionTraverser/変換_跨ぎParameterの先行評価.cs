@@ -187,6 +187,16 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
             //}
             base.Traverse(Expression);
         }
+        protected override void Switch(SwitchExpression Switch){
+            this.Traverse(Switch.SwitchValue);
+            foreach(var Switch_Case in Switch.Cases) {
+                //caseは探索しない
+                //foreach(var Switch_Case_TestValue in Switch_Case.TestValues)
+                //    this.Traverse(Switch_Case_TestValue);
+                this.Traverse(Switch_Case.Body);
+            }
+            this.Traverse(Switch.DefaultBody);
+        }
         protected override void Call(MethodCallExpression MethodCall) {
             var MethodCall_GenericMethodDefinition = GetGenericMethodDefinition(MethodCall.Method);
             if(this.IsInline){
@@ -550,9 +560,9 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 var 読み込みがあるか = false;
                 var 書き込みがあるか = false;
                 do {
-                    if(回数==10){
-                        Debugger.Break();
-                    }
+                    //if(回数==10){
+                    //    Debugger.Break();
+                    //}
                     var (LinkedListNode0_Value, 読み込みがあるか0, 書き込みがあるか0)=
                         変換_先行評価式.実行(LinkedListNode0.Value,旧,新,分離Expressionの場所);
                     読み込みがあるか|=読み込みがあるか0;

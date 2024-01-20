@@ -2812,9 +2812,20 @@ internal partial class 変換_TSqlFragmentからExpression{
         var Break=e.Expression.Label();
         var Stack_WHILEのBreak先=this.Stack_WHILEのBreak先;
         Stack_WHILEのBreak先.Push(Break);
+        var Predicate=this.BooleanExpression(x.Predicate);
         var Body=this.TSqlStatement(x.Statement);
         Stack_WHILEのBreak先.Pop();
-        return e.Expression.Loop(Body,Break);
+        return e.Expression.Loop(
+            e.Expression.Block(
+                e.Expression.IfThenElse(
+                    Predicate,
+                    e.Expression.Break(Break),
+                    Default_void
+                ),
+                Body
+            ),
+            Break
+        );
     }
     private e.Expression CreateSchemaStatement(CreateSchemaStatement x){
         throw this.単純NotSupportedException(x);

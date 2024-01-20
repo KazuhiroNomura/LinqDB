@@ -735,7 +735,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
     }
     protected override Expression Goto(GotoExpression Goto0) {
         var Goto0_Target = Goto0.Target;
-        var 親子演算計測= this.計測する前処理演算(Goto0.Kind.ToString(),$"({Goto0.Value}){Goto0_Target.Name}→");
+        var 親子演算計測= this.計測する前処理演算(Goto0.Kind.ToString(),$"({Goto0.Value}){Goto0_Target.Name}");
+        親子演算計測.子演算計測.矢印="→";
         var Goto1_Value=this.TraverseNullable(Goto0.Value);
         var ジャンプ元計測 = 親子演算計測.子演算計測;//this.制御計測!;
         if(!Dictionary_LabelTarget_辺.TryGetValue(Goto0_Target,out var ジャンプ先計測Label)) {
@@ -1063,7 +1064,8 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
         if(Loop0.ContinueLabel is null)
             this.辺=null;
         else{
-            var 親子演算計測0=this.計測する前処理演算("ContinueLabel",$"{Loop0.ContinueLabel.Name}:←");
+            var 親子演算計測0=this.計測する前処理演算("ContinueLabel",$"{Loop0.ContinueLabel.Name}:");
+            親子演算計測0.子演算計測.矢印="←";
             var 親演算計測=親子演算計測0.親演算計測!;// 計測Maneger[^1];
             //todo nullの時どうしよう
             Dictionary_LabelTarget_辺[Loop0.ContinueLabel]=親演算計測;

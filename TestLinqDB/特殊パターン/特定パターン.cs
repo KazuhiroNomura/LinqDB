@@ -354,6 +354,185 @@ public class 特定パターン:共通{
             )
         );
     }
+    [Fact]public void Condition5(){
+        var Equal=Expression.Equal(
+            Expression.Constant(false),
+            Expression.Constant(true)
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool>>(
+                Expression.Condition(
+                    Equal,
+                    Equal,
+                    Equal
+                )
+            )
+        );
+    }
+    [Fact]public void Condition7(){
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Expression.Condition(
+                    Expression.Constant(false),
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Expression.Condition(
+                    Expression.Constant(false),
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Expression.Condition(
+                    Expression.Constant(false),
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                )
+            )
+        );
+    }
+    [Fact]public void Condition71(){
+        var Equal=Expression.Equal(
+            Expression.Constant(1m),
+            Expression.Constant(1m)
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Equal,
+                Equal,
+                Expression.Condition(
+                    Expression.Constant(false),
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                )
+            )
+        );
+    }
+    [Fact]public void Condition72(){
+        var Equal=Expression.Equal(
+            Expression.Constant(1m),
+            Expression.Constant(1m)
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Equal,
+                Expression.Condition(
+                    Expression.Constant(false),
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Equal
+            )
+        );
+    }
+    [Fact]public void Condition73(){
+        //│     0,{IIF(局所0, 局所0, 局所0)}
+        //└┬┐ 0,IfTest(局所0)
+        //┌┘│ 1,IfTrue 局所0{}
+        //└┐│ 1,
+        //┌┼┘ 2,IfFalse 局所0{}
+        //└┼┐ 2,
+        //┌┴┘ 3,end if{}
+        //│　　 3,
+
+        //{IIF(局所0, 局所0, 局所0)}
+        var Equal=Expression.Equal(
+            Expression.Constant(1m),
+            Expression.Constant(1m)
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Equal,
+                Equal,
+                Equal
+            )
+        );
+    }
+    [Fact]public void Condition75(){
+        var Equal=Expression.Equal(
+            Expression.Constant(1m),
+            Expression.Constant(1m)
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.IfThen(
+                Expression.Condition(
+                    Equal,
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Equal
+            )
+        );
+    }
+    [Fact]
+    public void Condition8ネスト(){
+        var Equal=Expression.Equal(
+            Expression.Constant(1m),
+            Expression.Constant(1m)
+        );
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Condition(
+                Expression.Condition(
+                    Equal,
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Expression.Condition(
+                    Equal,
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                ),
+                Expression.Condition(
+                    Equal,
+                    Expression.Constant(false),
+                    Expression.Constant(false)
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Condition9前にExpression(){
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Constant(1m),
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Constant(1m),
+                    Expression.Constant(1m)
+                )
+            )
+        );
+    }
+    [Fact]
+    public void Condition10後にExpression(){
+        //│     0,{{ ... },IIF(True, 局所0, 1)}
+        //└┬┐ 0,IfTest(True)
+        //┌┘│ 1,IfTrue 局所0{}
+        //└┐│ 1,
+        //┌┼┘ 2,IfFalse 1{1}
+        //└┼┐ 2,
+        //┌┴┘ 3,end if{}
+        //│　　 3,
+        //.Block() {
+        //    .If (
+        //        True
+        //    ) {
+        //        $局所0 = 1M
+        //    } .Else {
+        //        $局所0 = 1M
+        //    };
+        //    $局所0
+        //}
+        this.変換_局所Parameterの先行評価_実行(
+            Expression.Block(
+                Expression.Condition(
+                    Expression.Constant(true),
+                    Expression.Constant(1m),
+                    Expression.Constant(1m)
+                ),
+                Expression.Constant(1m)
+            )
+        );
+    }
     [Fact]public void 計測埋め込み(){
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
@@ -375,7 +554,7 @@ public class 特定パターン:共通{
             )
         );
     }
-    public void Switch(){
+    [Fact]public void Switch0(){
         var Equal=Expression.Equal(
             Expression.Constant(0m),
             Expression.Constant(0m)
@@ -388,6 +567,20 @@ public class 特定パターン:共通{
                     Expression.SwitchCase(
                         Equal,
                         Expression.Constant(true)
+                    )
+                )
+            )
+        );
+    }
+    [Fact]public void Switch1(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.Switch(
+                    Expression.Constant(1m),
+                    Expression.Constant(1m),
+                    Expression.SwitchCase(
+                        Expression.Constant(1m),
+                        Expression.Constant(1m)
                     )
                 )
             )
@@ -1030,6 +1223,26 @@ public class 特定パターン:共通{
                 Expression.Catch(
                     typeof(Exception),
                     Expression.Default(typeof(void))
+                )
+            )
+        );
+    }
+    [Fact]public void GotoGotoGoto(){
+        var L0 = Expression.Label("L0");
+        var L1 = Expression.Label("L1");
+        var L2 = Expression.Label("L2");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.Block(
+                    Expression.Goto(L1),
+                    Expression.Label(L0),
+                    Expression.Constant(1m),
+                    Expression.Goto(L2),
+                    Expression.Label(L1),
+                    Expression.Constant(1m),
+                    Expression.Goto(L0),
+                    Expression.Label(L2),
+                    Expression.Constant(1m)
                 )
             )
         );

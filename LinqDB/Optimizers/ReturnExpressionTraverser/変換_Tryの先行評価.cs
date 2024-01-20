@@ -31,7 +31,7 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
         }
     }
     private readonly 取得_IsTry _取得_IsTry=new();
-    private sealed class 変換Try:ReturnExpressionTraverser{
+    private sealed class 変換Try(作業配列 作業配列,List<ParameterExpression> ListParameter,List<Expression> ListAssign):ReturnExpressionTraverser(作業配列){
         private sealed class 変換Assign:ReturnExpressionTraverser{
             public 変換Assign(作業配列 作業配列):base(作業配列){}
             private ParameterExpression 新Parameter=default!;
@@ -89,15 +89,8 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
                 }
             }
         }
-        private readonly 変換Assign _変換Assign;
-        private readonly List<ParameterExpression> ListParameter;
-        private readonly List<Expression> ListAssign;
+        private readonly 変換Assign _変換Assign=new(作業配列);
         private readonly 取得_IsTry _取得_IsTry=new();
-        public 変換Try(作業配列 作業配列,List<ParameterExpression> ListParameter,List<Expression> ListAssign):base(作業配列){
-            this.ListParameter=ListParameter;
-            this.ListAssign=ListAssign;
-            this._変換Assign=new(作業配列);
-        }
         private int ListIndex;
         public Expression 実行(Expression e){
             this.ListIndex=0;
@@ -113,8 +106,7 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
                     var Try0_Handlers_Count=Try0_Handlers.Count;
                     var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
                     var 新Parameter=Expression.Parameter(Try0.Type,$"Try{this.ListIndex++}");
-                    this.ListParameter.Add(新Parameter);
-                    var ListAssign=this.ListAssign;
+                    ListParameter.Add(新Parameter);
                     var Try1_Body= this._変換Assign.実行(Try0.Body,新Parameter);
                     Try1_Body=Expression.Block(typeof(void),Try1_Body);
                     for(var a=0;a<Try0_Handlers_Count;a++){
@@ -151,7 +143,7 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
                 default:{
                     if(this._取得_IsTry.実行(Expression0)) return base.Traverse(Expression0);
                     var 新Parameter=Expression.Parameter(Expression0.Type,$"Try{this.ListIndex++}");
-                    this.ListParameter.Add(新Parameter);
+                    ListParameter.Add(新Parameter);
                     var Assign=Expression.Block(
                         typeof(void),
                         Expression.Assign(
@@ -159,7 +151,7 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
                             Expression0
                         )
                     );
-                    this.ListAssign.Add(Assign);
+                    ListAssign.Add(Assign);
                     return 新Parameter;
                 }
             }
@@ -195,37 +187,37 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
         }
         return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
     }
-        protected override Expression Try(TryExpression Try0){
-            if(Try0.Type==typeof(void)) return base.Try(Try0);
-            Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
-            var Try0_Handlers = Try0.Handlers;
-            var Try0_Handlers_Count = Try0_Handlers.Count;
-            var Try1_Handlers = new CatchBlock[Try0_Handlers_Count];
-            var Try1_Body = this.Tryを先行評価(Try0.Body);
-            for(var a = 0;a<Try0_Handlers_Count;a++) {
-                var Try0_Handler = Try0_Handlers[a];
-                Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
-                var Try0_Handler_Variable = Try0_Handler.Variable;
-                var Try1_Handler_Body=this.Tryを先行評価(Try0_Handler.Body);
-                var Try1_Handler_Filter = this.TraverseNullable(Try0_Handler.Filter);
-                if(Try0_Handler_Variable is not null)
-                    Try1_Handlers[a]=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
-                else
-                    Try1_Handlers[a]=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
-            }
-            if(Try0.Finally is not null)
-                return Expression.TryCatchFinally(
-                    Try1_Body,
-                    this.Traverse(Try0.Finally),
-                    Try1_Handlers
-                );
-            Debug.Assert(Try0.Finally is null);
-            if(Try0.Fault is not null) {
-                Debug.Assert(Try0.Finally is null);
-                return Expression.TryFault(Try1_Body,this.Traverse(Try0.Fault));
-            }
-            return Expression.TryCatchFinally(Try1_Body,this.TraverseNullable(Try0.Finally),Try1_Handlers);
+    protected override Expression Try(TryExpression Try0){
+        if(Try0.Type==typeof(void)) return base.Try(Try0);
+        Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
+        var Try0_Handlers = Try0.Handlers;
+        var Try0_Handlers_Count = Try0_Handlers.Count;
+        var Try1_Handlers = new CatchBlock[Try0_Handlers_Count];
+        var Try1_Body = this.Tryを先行評価(Try0.Body);
+        for(var a = 0;a<Try0_Handlers_Count;a++) {
+            var Try0_Handler = Try0_Handlers[a];
+            Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
+            var Try0_Handler_Variable = Try0_Handler.Variable;
+            var Try1_Handler_Body=this.Tryを先行評価(Try0_Handler.Body);
+            var Try1_Handler_Filter = this.TraverseNullable(Try0_Handler.Filter);
+            if(Try0_Handler_Variable is not null)
+                Try1_Handlers[a]=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
+            else
+                Try1_Handlers[a]=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
         }
+        if(Try0.Finally is not null)
+            return Expression.TryCatchFinally(
+                Try1_Body,
+                this.Traverse(Try0.Finally),
+                Try1_Handlers
+            );
+        Debug.Assert(Try0.Finally is null);
+        if(Try0.Fault is not null) {
+            Debug.Assert(Try0.Finally is null);
+            return Expression.TryFault(Try1_Body,this.Traverse(Try0.Fault));
+        }
+        return Expression.TryCatchFinally(Try1_Body,this.TraverseNullable(Try0.Finally),Try1_Handlers);
+    }
     private Expression Tryを先行評価(Expression Expression0){
         //引数のtrycatchを引数を置く場所から前に移動して変数で置換したい。
         if(Expression0.NodeType==ExpressionType.Block) return this.Block((BlockExpression)Expression0);

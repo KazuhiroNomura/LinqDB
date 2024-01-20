@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using LinqDB.Helpers;
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable All
@@ -101,7 +102,7 @@ public sealed class 計測{
     //protected private const string 空表=
     //    "│      │      │    │    │    │          │";
     public void Analize(List<string> List表とツリー,StringBuilder sb,long ElapsedMilliseconds){
-        var 単位="";
+        string 単位;
         //           1 100ns
         //          10 1micro
         //       10000 1milli
@@ -131,48 +132,43 @@ public sealed class 計測{
         List表とツリー.Add($"│      │      │全体│全体│部分│          │          │");
         List表とツリー.Add($"├───┼───┼──┼──┼──┼─────┼─────┤");
         const string フッター=   "└───┴───┴──┴──┴──┴─────┴─────┘";
-        var 行offset=List表とツリー.Count;
-        var 制御罫線=new StringBuilder();
-        var 列Array=new List<(計測? 移動元,計測? 移動先)>();
-        var List制御=new List<string>();
+        var 行offset = List表とツリー.Count;
+        var 制御罫線 = new StringBuilder();
+        var 列Array = new List<(計測? 移動元, 計測? 移動先)>();
+        var List制御 = new List<string>();
         this.演算フロー(List表とツリー,"");
         this.制御フロー(列Array,List制御,制御罫線);
         Debug.Assert(List表とツリー.Count-行offset==List制御.Count);
-        var Count=List制御.Count;
-        var Span制御=CollectionsMarshal.AsSpan(List制御);
-        var Span表とツリー=CollectionsMarshal.AsSpan(List表とツリー);
-        var 最大半角文字数=-1;
-        for(var a=0;a<Count;a++){
+        var Count = List制御.Count;
+        var Span制御 = CollectionsMarshal.AsSpan(List制御);
+        var Span表とツリー = CollectionsMarshal.AsSpan(List表とツリー);
+        var 最大半角文字数 = -1;
+        for(var a = 0;a<Count;a++) {
             if(Span制御[a].Length<=0) continue;
-            var s=Span表とツリー[行offset+a];
-            var 半角文字数=ShiftJIS半角換算文字数(s);
+            var s = Span表とツリー[行offset+a];
+            var 半角文字数 = ShiftJIS半角換算文字数(s);
             if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
         }
         if(最大半角文字数%2==0)
             最大半角文字数+=1;
-        for(var a=0;a<Count;a++){
+        for(var a = 0;a<Count;a++) {
             if(Span制御[a].Length<=0) continue;
-            ref var s=ref Span表とツリー[行offset+a];
-            var Span表とツリー半角文字数=ShiftJIS半角換算文字数(s);
-            var 埋めたい半角文字数=最大半角文字数-Span表とツリー半角文字数;
+            ref var s = ref Span表とツリー[行offset+a];
+            var Span表とツリー半角文字数 = ShiftJIS半角換算文字数(s);
+            var 埋めたい半角文字数 = 最大半角文字数-Span表とツリー半角文字数;
             sb.Clear();
             sb.Append(s);
-            if(Span制御[a][0] is'┐' or'┼' or'┘' or'┬' or'┴' or'─'){
-                char 横線;
-                if(s[^1] is'←' or'→') 
-                    横線=s[^1];
-                else
-                    横線='─';
-                横線='─';
-                var 埋めたい全角文字数=埋めたい半角文字数/2;
+            if(Span制御[a][0] is '┐' or '┼' or '┘' or '┬' or '┴' or '─') {
+                var 埋めたい全角文字数 = 埋めたい半角文字数/2;
                 //if(埋めたい全角文字数*2!=埋めたい半角文字数)
                 //    sb.Append(' ');
-                sb.Append(new string(横線,埋めたい全角文字数));
-            } else{
+                sb.Append(new string('─',埋めたい全角文字数));
+            } else {
                 sb.Append(new string(' ',埋めたい半角文字数));
             }
             sb.Append(Span制御[a]);
             s=sb.ToString();
+            //Trace.WriteLine(s);
         }
         List表とツリー.Add(フッター);
     }
@@ -374,14 +370,10 @@ public sealed class 計測{
         }
     }
     private void 制御フロー(List<(計測? 移動元,計測? 移動先)> 列Array,List<string> List制御,StringBuilder 制御罫線){
-        if(List制御.Count==25){
-
-        }
         if(this.親フロー(列Array,制御罫線))
             this.子フロー(列Array,制御罫線,true);
         else
             this.子フロー(列Array,制御罫線,false);
-        //this.フロー(列Array,制御罫線);
         List制御.Add(制御罫線.ToString());
         var List計測=this.List子演算;
         var List計測_Count_1=List計測.Count-1;

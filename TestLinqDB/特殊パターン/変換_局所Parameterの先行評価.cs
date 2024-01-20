@@ -763,6 +763,26 @@ public class 変換_局所Parameterの先行評価 : 共通{
             )
         );
     }
+    [Fact]public void 経路121_31(){
+        var p = Expression.Parameter(typeof(bool), "p");
+        var pp=Expression.And(p,p);
+        var Block=Expression.Block(
+            Expression.Block(
+                Expression.Condition(
+                    p,
+                    p,
+                    pp
+                ),
+                pp
+            )
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool,bool>>(
+                Block,
+                p
+            )
+        );
+    }
     [Fact]public void 経路121_4(){
         //p&p 　　　　0
         //├────┐1 br_false 2 ifFalse
@@ -1275,7 +1295,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
         var r = Expression.Parameter(typeof(bool), "r");
         var p = Expression.Parameter(typeof(bool), "p");
         var p_And_p=Expression.And(p,p);
-        var p_Or_p=Expression.Or(p,p);
         var ifFalse=Expression.Label("ifFalse");
         var endif=Expression.Label("endif");
         var Block=Expression.Block(

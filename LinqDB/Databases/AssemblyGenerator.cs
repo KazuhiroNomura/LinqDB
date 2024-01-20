@@ -330,11 +330,11 @@ public partial class AssemblyGenerator {
     private readonly Dictionary<IScalarFunction,Information> Dictionary_ScalarFunction = new();
     private readonly Dictionary<IColumn,FieldBuilder> Dictionary_Column = new();
     public void Save(IContainer Container,string Folder) {
-        var Dictionary_Schema=this.Dictionary_Schema;Dictionary_Schema.Clear();
-        var Dictionary_Table = this.Dictionary_Table;Dictionary_Table.Clear();
-        var Dictionary_View = this.Dictionary_View;Dictionary_View.Clear();
-        var Dictionary_TableFunction = this.Dictionary_TableFunction;Dictionary_TableFunction.Clear();
-        var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;Dictionary_ScalarFunction.Clear();
+        this.Dictionary_Schema.Clear();
+        this.Dictionary_Table.Clear();
+        this.Dictionary_View.Clear();
+        this.Dictionary_TableFunction.Clear();
+        this.Dictionary_ScalarFunction.Clear();
         this.Dictionary_Column.Clear();
         var Types1 = this.Types1;
         var Container_Name = Container.EscapedName;
@@ -443,8 +443,8 @@ public partial class AssemblyGenerator {
          *         from Table1 in Container.Table select Table1
          */
         //Schemaを作る。それが呼び出しているDisp.Evaluateはまだ作られていない
-        foreach(var a in Dictionary_Schema.Values)a.CreateType(Container_Type);
-        foreach(var a in Dictionary_Table.Values)a.Create();
+        foreach(var a in this.Dictionary_Schema.Values)a.CreateType(Container_Type);
+        foreach(var a in this.Dictionary_Table.Values)a.Create();
         //foreach(var a in Dictionary_View.Values)a.CreateType();
         //foreach(var a in Dictionary_TableFunction.Values)a.CreateType();
         foreach(var a in Schemas)this.Disp作成(a,ContainerParameter);
@@ -561,7 +561,7 @@ public partial class AssemblyGenerator {
         var (Schema_Assign, Schema_Assign_I)=メソッド開始引数名(Schema_TypeBuilder,"Assign",MethodAttributes.Assembly,typeof(void),Types1,"source");
         var (Schema_Clear, Schema_Clear_I)=メソッド開始(Schema_TypeBuilder,"Clear",MethodAttributes.Assembly,typeof(void));
         var Schema_ToString = Schema_TypeBuilder.DefineMethod(
-            nameof(ToString),
+            nameof(this.ToString),
             MethodAttributes.Public|MethodAttributes.Virtual,
             typeof(string),
             Type.EmptyTypes
