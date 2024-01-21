@@ -124,28 +124,30 @@ public class 辺(ExpressionEqualityComparer ExpressionEqualityComparer){
         節子孫二度出現Expressions.UnionWith(this.節二度出現Expressions);
     }
     /// <summary>
-    /// 祖先でAssignしたExpressionsを親辺の共通"節祖先でAssignしたExpressions"から作る。
+    /// "祖先二度出現Expressions"を親辺の共通"節祖先二度出現Expressions"から作る。
+    /// "祖先二度出現Expressions","二度出現Expression"をUnionして"節祖先二度出現Expressions"を作る
     /// </summary>
-    public void 祖先二度出現Expressions作成(){
+    public void 祖先二度出現Expressions作成1(){
         if(this.探索済みか) return;
         this.探索済みか=true;
         var 祖先二度出現Expressions=this.祖先二度出現Expressions;
         var 最初か=true;
-        var List子辺=this.List子辺;
-        foreach(var 子辺 in List子辺){
+        //var List子辺=this.List子辺;
+        foreach(var 親辺 in this.List親辺){
+            if(親辺.List親辺.Count==0) continue;
             if(最初か){
-                if(子辺.節祖先二度出現Expressions.Count==0) continue;
                 最初か=false;
-                祖先二度出現Expressions.UnionWith(子辺.節祖先二度出現Expressions);
+                祖先二度出現Expressions.UnionWith(親辺.節祖先二度出現Expressions);
             } else{
-                祖先二度出現Expressions.IntersectWith(子辺.節祖先二度出現Expressions);
+                祖先二度出現Expressions.IntersectWith(親辺.節祖先二度出現Expressions);
             }
         }
         var 節祖先二度出現Expressions = this.節祖先二度出現Expressions;
         節祖先二度出現Expressions.UnionWith(祖先二度出現Expressions);
-        節祖先二度出現Expressions.UnionWith(this.節子孫二度出現Expressions);
-        foreach(var 子辺 in List子辺)
-            子辺.祖先二度出現Expressions作成();
+        節祖先二度出現Expressions.UnionWith(this.節二度出現Expressions);
+        //節祖先二度出現Expressions.UnionWith(this.節子孫二度出現Expressions);
+        foreach(var 子辺 in this.List子辺)
+            子辺.祖先二度出現Expressions作成1();
     }
     //public void 祖先二度出現Expressions作成(){
     //    if(this.探索済みか) return;
@@ -167,9 +169,10 @@ public class 辺(ExpressionEqualityComparer ExpressionEqualityComparer){
     //    節祖先二度出現Expressions.UnionWith(this.節子孫二度出現Expressions);
     //}
     /// <summary>
-    /// 節子孫二度出現Expressionsから親辺の共通"節祖先二度出現Expressions"を削除
+    /// 親辺の共通"節祖先二度出現Expressions"から"祖先二度出現Expressions"を作成
+    /// 親辺"祖先二度出現Expressions".IntersectWith("祖先二度出現Expressions")
     /// </summary>
-    public void 親節祖先二度出現Expressions除去() {
+    public void 親節祖先二度出現Expressions除去2() {
         //親辺.祖先二度出現Expressions.IntersectWith(祖先二度出現Expressions)
         if(this.探索済みか) return;
         this.探索済みか=true;
@@ -178,15 +181,18 @@ public class 辺(ExpressionEqualityComparer ExpressionEqualityComparer){
         var List親辺=this.List親辺;
         using var Enumerator = List親辺.GetEnumerator();
         if(Enumerator.MoveNext()) {
-            祖先二度出現Expressions.UnionWith(Enumerator.Current.祖先二度出現Expressions);
+            祖先二度出現Expressions.UnionWith(Enumerator.Current.節祖先二度出現Expressions);
             while(Enumerator.MoveNext()) {
-                祖先二度出現Expressions.IntersectWith(Enumerator.Current.祖先二度出現Expressions);
+                祖先二度出現Expressions.IntersectWith(Enumerator.Current.節祖先二度出現Expressions);
             }
         }
         foreach(var 親辺 in List親辺)
             親辺.祖先二度出現Expressions.IntersectWith(祖先二度出現Expressions);
+        var 節祖先二度出現Expressions=this.節祖先二度出現Expressions;
+        節祖先二度出現Expressions.UnionWith(祖先二度出現Expressions);
+        節祖先二度出現Expressions.UnionWith(this.節二度出現Expressions);
         foreach(var 子辺 in this.List子辺)
-            子辺.親節祖先二度出現Expressions除去();
+            子辺.親節祖先二度出現Expressions除去2();
     }
     //public void 親節祖先二度出現Expressions除去() {
     //    //親辺.祖先二度出現Expressions.IntersectWith(祖先二度出現Expressions)

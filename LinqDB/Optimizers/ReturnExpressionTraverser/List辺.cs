@@ -55,13 +55,10 @@ public sealed class List辺:Generic.List<辺>{
         var 先頭=this[0];
         this.Reset();
         先頭.節子孫二度出現Expressions作成0();
-        //this.Reset();
-        //先頭.Assginしてない辺を買いに伝搬させる1();
-        var 末尾=this[^1];
         this.Reset();
-        先頭.祖先二度出現Expressions作成();
+        先頭.祖先二度出現Expressions作成1();
         this.Reset();
-        先頭.親節祖先二度出現Expressions除去();
+        先頭.親節祖先二度出現Expressions除去2();
     }
     internal void Reset(){
         foreach(var a in this) a.探索済みか=false;
