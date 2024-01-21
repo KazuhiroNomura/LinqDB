@@ -925,31 +925,13 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 無条件下ジャンプのみ1(){
         var L0=Expression.Label("L0");
-        var L1=Expression.Label("L1");
-        var Block=Expression.Block(
-            Expression.Goto(L0),
-            Expression.Label(L0),
-            Expression.Goto(L1),
-            Expression.Label(L1)
-        );
         this.Optimizer_Lambda最適化(
             Expression.Lambda(
-                Block
-            )
-        );
-    }
-    [Fact]public void 無条件上ジャンプのみ1(){
-        var L0=Expression.Label("L0");
-        var L1=Expression.Label("L1");
-        var Block=Expression.Block(
-            Expression.Label(L0),
-            Expression.Goto(L0),
-            Expression.Label(L1),
-            Expression.Goto(L1)
-        );
-        this.Optimizer_Lambda最適化(
-            Expression.Lambda(
-                Block
+                Expression.Block(
+                    Expression.Goto(L0),
+                    Expression.Goto(L0),
+                    Expression.Label(L0)
+                )
             )
         );
     }
@@ -968,6 +950,44 @@ public class 変換_局所Parameterの先行評価 : 共通{
         this.Optimizer_Lambda最適化(
             Expression.Lambda(
                 Block
+            )
+        );
+    }
+    [Fact]public void 無条件上ジャンプのみ1(){
+        var L0=Expression.Label("L0");
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Expression.Block(
+                    Expression.Label(L0),
+                    Expression.Goto(L0),
+                    Expression.Goto(L0)
+                )
+            )
+        );
+    }
+    [Fact]public void 無条件上下ジャンプのみ0(){
+        var L0=Expression.Label("L0");
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Expression.Block(
+                    Expression.Goto(L0),
+                    Expression.Label(L0),
+                    Expression.Goto(L0)
+                )
+            )
+        );
+    }
+    [Fact]public void 無条件上下ジャンプのみ1(){
+        var L0=Expression.Label("L0");
+        this.Optimizer_Lambda最適化(
+            Expression.Lambda(
+                Expression.Block(
+                    Expression.Goto(L0),
+                    Expression.Goto(L0),
+                    Expression.Label(L0),
+                    Expression.Goto(L0),
+                    Expression.Goto(L0)
+                )
             )
         );
     }

@@ -25,10 +25,8 @@ public sealed class List辺:Generic.List<辺>{
             for(var a = 0;a<Count;a++) {
                 var 辺 = 辺に関する情報Array[a];
                 辺.辺番号=a;
-                var 親辺Array = 辺.List親辺.ToArray();
-                var 子辺Array = 辺.List子辺.ToArray();
-                親(親辺Array,列Array0,List制御フロー,Listテキスト,辺,Line);
-                子(子辺Array,列Array0,List制御フロー,Listテキスト,辺,Line);
+                親(辺.List親辺,列Array0,List制御フロー,Listテキスト,辺,Line);
+                子(辺.List子辺,列Array0,List制御フロー,Listテキスト,辺,Line);
             }
             var sb = new StringBuilder();
             var Listテキスト_Count=Listテキスト.Count;
@@ -77,25 +75,25 @@ public sealed class List辺:Generic.List<辺>{
     /// <summary>
     /// 親とはラベルのことであり、このラベルを使うジャンプ命令の属する複数辺を保持する
     /// </summary>
-    /// <param name="親辺Array"></param>
-    /// <param name="列Array"></param>
+    /// <param name="List親辺"></param>
+    /// <param name="List列"></param>
     /// <param name="List制御フロー"></param>
     /// <param name="Listテキスト"></param>
     /// <param name="辺"></param>
     /// <param name="Line"></param>
-    private static void 親(辺[] 親辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
-        var 親辺Array_Length=親辺Array.Length;
-        Line初期化(列Array,Line);
-        if(親辺Array_Length<=0){
+    private static void 親(Generic.List<辺> List親辺,Generic.List<(辺? 移動元,辺? 移動先)> List列,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
+        var 親辺Array_Count=List親辺.Count;
+        Line初期化(List列,Line);
+        if(親辺Array_Count<=0){
             Line[0]='│';
         } else{
             Line[0]='┌';
             var 書き込みした右端列=-1;
-            for(var a=0;a<親辺Array_Length;a++){
-                var 親辺=親辺Array[a];
-                var Count=列Array.Count;
+            for(var a=0;a<親辺Array_Count;a++){
+                var 親辺=List親辺[a];
+                var Count=List列.Count;
                 for(var b=0;b<Count;b++){
-                    var 列=列Array[b];
+                    var 列=List列[b];
                     if(列.移動元==親辺){
                         if(Line[b]!='┘')
                             if(書き込みした右端列<b)
@@ -106,7 +104,7 @@ public sealed class List辺:Generic.List<辺>{
                 }
                 for(var b=0;b<Count;b++){
                     if(Line[b] is'　'){
-                        列Array[b]=(親辺,辺);
+                        List列[b]=(親辺,辺);
                         Debug.Assert(書き込みした右端列<b);
                         書き込みした右端列=b;
                         Line[b]='┐';
@@ -114,7 +112,7 @@ public sealed class List辺:Generic.List<辺>{
                     }
                 }
                 書き込みした右端列=Line.Length;
-                列Array.Add((親辺,辺));
+                List列.Add((親辺,辺));
                 Line.Append('┐');
                 終了: ;
             }
@@ -129,14 +127,14 @@ public sealed class List辺:Generic.List<辺>{
                             break;
                         case'┘':
                             Line[a]='┴';
-                            列Array[a]=(null,null);
+                            List列[a]=(null,null);
                             break;
                         case'│':
                             Line[a]='┼';
                             break;
                     }
                 }
-                if(Line[書き込みした右端列]=='┘') 列Array[書き込みした右端列]=(null,null);
+                if(Line[書き込みした右端列]=='┘') List列[書き込みした右端列]=(null,null);
             }
         }
         List制御フロー.Add($"{Line}");
@@ -148,26 +146,26 @@ public sealed class List辺:Generic.List<辺>{
     /// <summary>
     /// 親とはジャンプ命令のことであり、この複数のジャンプ命令(if,switch,goto)の飛び先のラベルの属する複数辺を保持する
     /// </summary>
-    /// <param name="子辺Array"></param>
-    /// <param name="列Array0"></param>
+    /// <param name="List子辺"></param>
+    /// <param name="List列"></param>
     /// <param name="List制御フロー"></param>
     /// <param name="Listテキスト"></param>
     /// <param name="辺"></param>
     /// <param name="Line"></param>
-    private static void 子(辺[] 子辺Array,Generic.List<(辺? 移動元,辺? 移動先)> 列Array0,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
-        var 子辺Array_Length=子辺Array.Length;
-        Line初期化(列Array0,Line);
-        if(子辺Array_Length<=0){
+    private static void 子(Generic.List<辺> List子辺,Generic.List<(辺? 移動元,辺? 移動先)> List列,Generic.List<string> List制御フロー,Generic.List<string> Listテキスト,辺 辺,StringBuilder Line){
+        var 子辺Array_Count=List子辺.Count;
+        Line初期化(List列,Line);
+        if(子辺Array_Count<=0){
             Line[0]='│';
         } else{
             Line[0]='└';
             var ループか=false;
             var 書き換えLineIndexEnd=-1;
-            for(var a=0;a<子辺Array_Length;a++){
-                var 子辺=子辺Array[a];
-                var Count=列Array0.Count;
+            for(var a=0;a<子辺Array_Count;a++){
+                var 子辺=List子辺[a];
+                var Count=List列.Count;
                 for(var b=0;b<Count;b++){
-                    var 列=列Array0[b];
+                    var 列=List列[b];
 
                     if(列.移動元==辺){
                         if(列.移動先==子辺){
@@ -183,8 +181,8 @@ public sealed class List辺:Generic.List<辺>{
                 }
                 for(var b=0;b<Count;b++){
                     if(Line[b]=='　'){
-                        Debug.Assert(列Array0[b].移動元 is null);
-                        列Array0[b]=(辺,子辺);
+                        Debug.Assert(List列[b].移動元 is null);
+                        List列[b]=(辺,子辺);
                         //Debug.Assert(書き換えLineIndexEnd<b);
                         if(書き換えLineIndexEnd<b) 書き換えLineIndexEnd=b;
                         Line[b]='┐';
@@ -192,7 +190,7 @@ public sealed class List辺:Generic.List<辺>{
                     }
                 }
                 書き換えLineIndexEnd=Line.Length;
-                列Array0.Add((辺,子辺));
+                List列.Add((辺,子辺));
                 Line.Append('┐');
                 終了: ;
             }
@@ -209,7 +207,7 @@ public sealed class List辺:Generic.List<辺>{
                         break;
                 }
             }
-            if(ループか) 列Array0[書き換えLineIndexEnd]=(null,null);
+            if(ループか) List列[書き換えLineIndexEnd]=(null,null);
         }
         List制御フロー.Add($"{Line}");
         Listテキスト.Add($"{辺.辺番号},{辺.子コメント}");

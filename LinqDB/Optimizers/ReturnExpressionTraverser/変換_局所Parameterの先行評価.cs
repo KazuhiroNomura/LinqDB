@@ -643,8 +643,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Expression2=変換_二度出現したExpression.実行(Expression1,二度出現した一度目のExpression,Variable);
             Expression1=Expression2;
         }
+        Trace.WriteLine(作成_辺.Analize);
         var Expression3 = this.Traverse(Expression1);
-        Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Expression3));
+        //Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Expression3));
         this.Block_Variables=Block0_Variables;
         if(Block1_Variables.Count>0) Expression3=Expression.Block(Block1_Variables,this.作業配列.Expressions設定(Expression3));
         return Expression3

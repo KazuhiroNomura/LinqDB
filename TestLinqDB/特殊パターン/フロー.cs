@@ -180,12 +180,14 @@ public class フロー: 共通
     }
     [Fact]public void IfThenElseEnd0(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
-        //└┬┐0子
-        //┌┘│1子
-        //└┐│1子
-        //┌┼┘2,IfFalse,L2:親
-        //└┼┐2,IfFalse,L2:親
-        //┌┴┘3,IfEnd,L3:親
+        //│     0,L0{}
+        //└┬┐ 0,
+        //┌┘│ 1,L1{}
+        //└┐│ 1,
+        //┌┼┘ 2,L2{}
+        //└┼┐ 2,
+        //┌┴┘ 3,L3{}
+        //│　　 3,
         var Comparer=new ExpressionEqualityComparer();
         var L0=new 辺(Comparer) { 親コメント="L0" };
         var L1=new 辺(Comparer) { 親コメント="L1" };
@@ -585,24 +587,31 @@ public class フロー: 共通
     }
     [Fact]public void 単一経路から複数2経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
-        //└┬┐　　　　　　　0,Label,jump,子 
-        //┌┼┘　　　　　　　2,Label,label1,親 (辺番号0 jump, 辺番号2 label1)
-        //┌┘　　　　　　　　1,Label,label0,親 (辺番号0 jump, 辺番号1 label0)
+        //│     0,jump{}
+        //└┬┐ 0,
+        //┌┘│ 1,label0{}
+        //│　│ 1,
+        //┌─┘ 2,label1{}
+        //│　　 2,
         var Comparer=new ExpressionEqualityComparer();
-        var jump=new 辺(Comparer) { 親コメント="jump" };
-        var label0=new 辺(Comparer) { 親コメント="label0" };
-        var label1=new 辺(Comparer) { 親コメント="label1" };
-        辺.接続(jump,label0);
-        辺.接続(jump,label1);
-        var l=new List辺{jump,label0,label1};
+        var L0=new 辺(Comparer) { 親コメント="L0" };
+        var L1=new 辺(Comparer) { 親コメント="L1" };
+        var L2=new 辺(Comparer) { 親コメント="L2" };
+        辺.接続(L0,L1);
+        辺.接続(L0,L2);
+        var l=new List辺{L0,L1,L2};
         Trace.WriteLine(l.Analize);
     }
     [Fact]public void 単一経路から複数3経路に(){
         Trace.WriteLine(MethodBase.GetCurrentMethod()!.Name);
-        //└┐    goto jump
-        //└┼┐  goto jump
-        //└┼┼┐goto jump
-        //┌┴┴┘jump:
+        //│       0,jump{}
+        //└┬┬┐ 0,
+        //┌┘││ 1,label0{}
+        //│　││ 1,
+        //┌─┘│ 2,label1{}
+        //│　　│ 2,
+        //┌──┘ 3,label2{}
+        //│　　　 3,
         var Comparer=new ExpressionEqualityComparer();
         var jump=new 辺(Comparer) { 親コメント="jump" };
         var label0=new 辺(Comparer) { 親コメント="label0" };
