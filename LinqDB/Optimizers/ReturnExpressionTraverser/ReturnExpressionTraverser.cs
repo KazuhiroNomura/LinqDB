@@ -603,13 +603,8 @@ public class ReturnExpressionTraverser {
                 );
             }
         }
-        return 変化したか?Expression.ListInit(
-            ListInit1_NewExpression,
-            ListInit1_Initializers
-        ): Expression.ListInit(
-            ListInit1_NewExpression,
-            ListInit0_Initializers
-        );
+        if(変化したか) return Expression.ListInit(ListInit1_NewExpression,ListInit1_Initializers);
+        return Expression.ListInit(ListInit1_NewExpression,ListInit0_Initializers);
     }
     /// <summary>
     /// while(true){}

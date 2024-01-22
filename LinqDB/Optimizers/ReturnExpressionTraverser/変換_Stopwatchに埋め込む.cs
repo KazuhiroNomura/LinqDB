@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using LinqDB.Helpers;
+// ReSharper disable All
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 using Profiling;

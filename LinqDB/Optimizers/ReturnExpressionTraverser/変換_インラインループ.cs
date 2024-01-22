@@ -13,7 +13,7 @@ using LinqDB.Optimizers.VoidExpressionTraverser;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = Collections.Generic;
 using static Common;
-internal class 変換_インラインループ:ReturnExpressionTraverser {
+internal class 変換_インラインループ(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2):ReturnExpressionTraverser(作業配列){
     protected static MethodCallExpression Call(Expression instance,string MethodName) => Expression.Call(
         instance,
         instance.Type.GetMethod(MethodName,Instance_NonPublic_Public)
@@ -208,14 +208,8 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
             }
         }
     }
-    private readonly 判定_指定PrimaryKeyが存在する _判定_指定PrimaryKeyが存在する;
-    private protected readonly 変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1;
-    private readonly 変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2;
-    public 変換_インラインループ(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2) : base(作業配列) {
-        this._判定_指定PrimaryKeyが存在する=new 判定_指定PrimaryKeyが存在する();
-        this.変換_旧Parameterを新Expression1=変換_旧Parameterを新Expression1;
-        this.変換_旧Parameterを新Expression2=変換_旧Parameterを新Expression2;
-    }
+    private readonly 判定_指定PrimaryKeyが存在する _判定_指定PrimaryKeyが存在する=new();
+    private protected readonly 変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1=変換_旧Parameterを新Expression1;
     protected int 番号;
     public virtual Expression 実行(Expression Lambda) {
         this.番号=0;
@@ -308,7 +302,7 @@ internal class 変換_インラインループ:ReturnExpressionTraverser {
     protected Expression LambdaExpressionを展開2(Expression Lambda,Expression argument1,Expression argument2) {
         if(Lambda is LambdaExpression Lambda2) {
             var Parameters = Lambda2.Parameters;
-            return this.変換_旧Parameterを新Expression2.実行(
+            return 変換_旧Parameterを新Expression2.実行(
                 Lambda2.Body,
                 Parameters[0],
                 argument1,

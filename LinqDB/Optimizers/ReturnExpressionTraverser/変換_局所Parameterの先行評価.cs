@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
-using Generic=System.Collections.Generic;
+using Generic = System.Collections.Generic;
 using System.Linq.Expressions;
 using LinqDB.Helpers;
 using LinqDB.Optimizers.Comparer;

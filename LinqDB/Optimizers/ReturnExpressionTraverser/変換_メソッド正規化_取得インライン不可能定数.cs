@@ -19,6 +19,7 @@ using Type = System.Type;
 //using System.Runtime.Remoting.Messaging;
 using Linq=System.Linq;
 // ReSharper disable MemberHidesStaticFromOuterClass
+// ReSharper disable All
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 /// <summary>
@@ -27,7 +28,10 @@ using static Common;
 /// A.SelectMany(a=>B,(a,b)=>new{a,b})→A.SelectMany(a=>B.Select(b=>=>new{a,b}))にする。
 /// decimal.Parse("1111")→1111mに変換する
 /// </summary>
-internal sealed partial class 変換_メソッド正規化_取得インライン不可能定数:ReturnExpressionTraverser{
+internal sealed partial class 変換_メソッド正規化_取得インライン不可能定数(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,
+        変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2,
+        変換_旧Expressionを新Expression1 変換_旧Expressionを新Expression1)
+    :ReturnExpressionTraverser(作業配列){
     private sealed class 取得_Parameter_OuterPredicate_InnerPredicate {
         private sealed class 判定_Parameter_葉に移動したいPredicate:VoidExpressionTraverser_Quoteを処理しない {
             private ParameterExpression? 許可するParameter;
@@ -54,6 +58,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
             return (this.OuterPredicate, this.OtherPredicate);
         }
         private void Traverse(Expression e) {
+            /*
             var 判定_Parameter_葉に移動したいPredicate = this._判定_Parameter_葉に移動したいPredicate;
             if(e.NodeType==ExpressionType.AndAlso) {
                 var Binary = (BinaryExpression)e;
@@ -75,7 +80,8 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                     this.Traverse(Binary_Left);
                     this.Traverse(Binary_Right);
                 }
-            } else if(this._判定_Parameter_葉に移動したいPredicate.実行(e,this.Outer!)) {
+            } else */
+            if(this._判定_Parameter_葉に移動したいPredicate.実行(e,this.Outer!)) {
                 this.OuterPredicate=AndAlsoで繋げる(this.OuterPredicate,e);
             } else {
                 this.OtherPredicate=AndAlsoで繋げる(this.OtherPredicate,e);
@@ -83,16 +89,6 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
         }
     }
     private readonly 取得_Parameter_OuterPredicate_InnerPredicate _取得_Parameter_OuterPredicate_InnerPredicate=new();
-    private readonly 変換_旧Expressionを新Expression1 変換_旧Expressionを新Expression1;
-    private readonly 変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1;
-    private readonly 変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2;
-    public 変換_メソッド正規化_取得インライン不可能定数(作業配列 作業配列,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression1,
-        変換_旧Parameterを新Expression2 変換_旧Parameterを新Expression2,
-        変換_旧Expressionを新Expression1 変換_旧Expressionを新Expression1) : base(作業配列) {
-        this.変換_旧Parameterを新Expression1=変換_旧Parameterを新Expression1;
-        this.変換_旧Parameterを新Expression2=変換_旧Parameterを新Expression2;
-        this.変換_旧Expressionを新Expression1=変換_旧Expressionを新Expression1;
-    }
     private int 番号;
     public Expression 実行(Expression e) {
         this.番号=0;
@@ -256,7 +252,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
         if(Binary0.Conversion is not null){
             var Binary0_Conversion=Binary0.Conversion;
             var Binary1_Conversion_Body=this.Traverse(Binary0_Conversion.Body);
-            Binary2_Right=this.変換_旧Expressionを新Expression1.実行(Binary1_Conversion_Body,Binary0_Conversion.Parameters[0],Binary2_Right);
+            Binary2_Right=変換_旧Expressionを新Expression1.実行(Binary1_Conversion_Body,Binary0_Conversion.Parameters[0],Binary2_Right);
         }
         return Expression.Assign(
             Binary1_Left,
@@ -708,7 +704,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                 //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                        (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
                                 //O.GroupBy<TSource,TKey>        (MethodCall1_Arguments_1).Select<TResult>((IGrouping<TKey,TSource>Grouping=>new{Id=Grouping.Key,Count=Grouping.Count()})
                                 var resultSelector_Parameters = resultSelector.Parameters;
-                                selector_Body=this.変換_旧Parameterを新Expression2.実行(
+                                selector_Body=変換_旧Parameterを新Expression2.実行(
                                     resultSelector.Body,
                                     resultSelector_Parameters[0],
                                     p_Key,
@@ -787,7 +783,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                 //O.GroupBy<TSource,TKey,TResult>(MethodCall1_Arguments_1,                         (TKey Key,TSource Source)=>new{Id=         Key,Count=Source  .Count()})
                                 //O.GroupBy<TSource,TKey>        (MethodCall1_Arguments_1).Select<TResult>((IGrouping<TKey,TSource>Grouping)=>new{Id=Grouping.Key,Count=Grouping.Count()})
                                 var resultSelector_Parameters = resultSelector.Parameters;
-                                selector_Body=this.変換_旧Parameterを新Expression2.実行(
+                                selector_Body=変換_旧Parameterを新Expression2.実行(
                                     resultSelector.Body,
                                     resultSelector_Parameters[0],
                                     p_Key,
@@ -954,7 +950,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                             //O.Select_selector(p1=>p1+p1).Select_selector(p0=>p0*p0)
                                             //O.Select_selector(p1=>(p1+p1)*(p1+p1))
                                             Lambda=Expression.Lambda(
-                                                this.変換_旧Parameterを新Expression1.実行(
+                                                変換_旧Parameterを新Expression1.実行(
                                                     selector0.Body,
                                                     selector0.Parameters[0],
                                                     selector1.Body
@@ -978,7 +974,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                             //O.Select_selector(MethodCall1_MethodCall_Arguments_1).Select_selector(p0=>p0+p0)
                                             //O.Select_selector(p1=>MethodCall1_MethodCall_Arguments_1(p1)+MethodCall1_MethodCall_Arguments_1(p1)))
                                             Lambda=Expression.Lambda(
-                                                this.変換_旧Parameterを新Expression1.実行(
+                                                変換_旧Parameterを新Expression1.実行(
                                                     selector0.Body,
                                                     selector0.Parameters[0],
                                                     Expression.Invoke(
@@ -1277,7 +1273,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                     //        I+index
                                     //        i=>o+i
                                     Select_selector=Expression.Lambda(
-                                        this.変換_旧Parameterを新Expression1.実行(
+                                        変換_旧Parameterを新Expression1.実行(
                                             resultSelector.Body,
                                             resultSelector_o,
                                             collectionSelector_o
@@ -1452,7 +1448,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                                                     predicate外.Type,
                                                     AndAlsoで繋げる(
                                                         predicate外.Body,
-                                                        this.変換_旧Parameterを新Expression1.実行(
+                                                        変換_旧Parameterを新Expression1.実行(
                                                             predicate内.Body,
                                                             predicate内.Parameters[0],
                                                             predicate外_Parameters[0]
@@ -1995,7 +1991,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
                 }
             }
         }
-        return this.変換_旧Expressionを新Expression1.実行(対象,Instance,selector_Body);
+        return 変換_旧Expressionを新Expression1.実行(対象,Instance,selector_Body);
     }
 }
 

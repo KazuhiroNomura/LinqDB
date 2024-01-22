@@ -8,7 +8,6 @@ using System.Reflection;
 using LinqDB.Optimizers.Comparer;
 using LinqDB.Sets;
 using LinqDB.Optimizers.VoidExpressionTraverser;
-
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using Generic = System.Collections.Generic;
 using static Common;
@@ -17,8 +16,8 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
     /// ループ+ラムダ=ラムダ
     /// </summary>
     [Flags]private enum 場所{None=0b000,ループ跨ぎ=0b001,ラムダ跨ぎ=0b011}
-    private sealed class 取得_先行評価式:VoidExpressionTraverser_Quoteを処理しない {
-        private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報;
+    [method:SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
+    private sealed class 取得_先行評価式(Generic.List<(Generic.IEnumerable<ParameterExpression> Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>> ListVariables)> List束縛Parameter情報):VoidExpressionTraverser_Quoteを処理しない {
         private sealed class 判定_移動できるか:VoidExpressionTraverser_Quoteを処理しない {
             private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)>List束縛Parameter情報;
             private readonly Generic.List<Generic.IEnumerable<ParameterExpression>> List内部Parameters=new();
@@ -84,15 +83,9 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 List内部Parameters.RemoveAt(index);
             }
         }
-        private readonly 判定_移動できるか _判定_移動できるか;
+        private readonly 判定_移動できるか _判定_移動できるか=new(List束縛Parameter情報);
         private readonly Generic.List<Generic.IEnumerable<ParameterExpression>> List移動できないVariables=new();
-        [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
-        public 取得_先行評価式(Generic.List<(Generic.IEnumerable<ParameterExpression> Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>> ListVariables)> List束縛Parameter情報) {
-            this.List束縛Parameter情報=List束縛Parameter情報;
-            //List束縛Parameter情報を使う必要がア
-            this._判定_移動できるか=new 判定_移動できるか(List束縛Parameter情報);
-        }
-
+        //List束縛Parameter情報を使う必要がア
         internal Generic.Dictionary<ParameterExpression,(FieldInfo Disp,MemberExpression Member)> Dictionaryラムダ跨ぎParameter{
             get=>this._判定_移動できるか.Dictionaryラムダ跨ぎParameter;
             set=>this._判定_移動できるか.Dictionaryラムダ跨ぎParameter=value;
@@ -224,10 +217,7 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         }
     }
     private readonly 取得_先行評価式 _取得_先行評価式;
-    private sealed class 変換_先行評価式:ReturnExpressionTraverser {
-        private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
-        public 変換_先行評価式(作業配列 作業配列,ExpressionEqualityComparer ExpressionEqualityComparer) : base(作業配列) =>
-            this.ExpressionEqualityComparer=ExpressionEqualityComparer;
+    private sealed class 変換_先行評価式(作業配列 作業配列,ExpressionEqualityComparer Comparer):ReturnExpressionTraverser(作業配列){
         private bool 書き込み項か;
         private bool 読み込みがあるか;
         private bool 書き戻しがあるか;
@@ -287,85 +277,126 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                     var MethodCall0_Arguments=MethodCall0.Arguments;
                     var MethodCall0_Arguments_Count=MethodCall0_Arguments.Count;
                     var MethodCall1_Arguments=new Expression[MethodCall0_Arguments_Count];
+                    var 変化したか=false;
                     switch(MethodCall_GenericMethodDefinition.Name){
                         case nameof(ExtensionSet.Inline):{
+                            var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
                             if(MethodCall0_Arguments.Count==1){
                                 Debug.Assert(Reflection.ExtensionSet.Inline1==MethodCall_GenericMethodDefinition);
-                                var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
                                 if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
                                     var 現在探索場所=this.現在探索場所;
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
-                                    MethodCall1_Arguments[0]=Expression.Lambda(
-                                        Lambda0.Type,
-                                        Lambda1_Body,
-                                        Lambda0.Name,
-                                        Lambda0.TailCall,
-                                        Lambda0.Parameters
-                                    );
+                                    var Lambda0_Body=Lambda0.Body;
+                                    var Lambda1_Body=this.Traverse(Lambda0_Body);
+                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[0]=Lambda0;
+                                    else {
+                                        MethodCall1_Arguments[0]=Expression.Lambda(
+                                            Lambda0.Type,
+                                            Lambda1_Body,
+                                            Lambda0.Name,
+                                            Lambda0.TailCall,
+                                            Lambda0.Parameters
+                                        );
+                                        変化したか=true;
+                                    }
                                     this.現在探索場所=現在探索場所;
                                 } else{
-                                    MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
+                                    var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
+                                    if(MethodCall0_Arguments_0==MethodCall1_Arguments_0) MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                    else{
+                                        MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                        変化したか=true;
+                                    }
                                 }
                             } else{
                                 Debug.Assert(MethodCall0_Arguments.Count==2);
                                 Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition);
-                                MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
+                                var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
+                                if(MethodCall0_Arguments_0==MethodCall1_Arguments_0)MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                else{
+                                    MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
+                                    変化したか=true;
+                                }
                                 var MethodCall0_Arguments_1=MethodCall0_Arguments[1];
                                 if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
                                     var 現在探索場所=this.現在探索場所;
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
-                                    MethodCall1_Arguments[1]=Expression.Lambda(
-                                        Lambda0.Type,
-                                        Lambda1_Body,
-                                        Lambda0.Name,
-                                        Lambda0.TailCall,
-                                        Lambda0.Parameters
-                                    );
+                                    var Lambda0_Body=Lambda0.Body;
+                                    var Lambda1_Body=this.Traverse(Lambda0_Body);
+                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[1]=MethodCall0_Arguments_1;
+                                    else {
+                                        MethodCall1_Arguments[1]=Expression.Lambda(
+                                            Lambda0.Type,
+                                            Lambda1_Body,
+                                            Lambda0.Name,
+                                            Lambda0.TailCall,
+                                            Lambda0.Parameters
+                                        );
+                                        変化したか=true;
+                                    }
                                     this.現在探索場所=現在探索場所;
                                 } else{
-                                    MethodCall1_Arguments[1]=this.Traverse(MethodCall0_Arguments_1);
+                                    var MethodCall1_Arguments_1=this.Traverse(MethodCall0_Arguments_1);
+                                    if(MethodCall0_Arguments_1==MethodCall1_Arguments_1) MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
+                                    else{
+                                        MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
+                                        変化したか=true;
+                                    }
                                 }
                             }
                             break;
                         }
                         default:{
-                            MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments[0]);
+                            var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
+                            var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
+                            if(MethodCall0_Arguments_0==MethodCall1_Arguments_0)MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                            else{
+                                MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                変化したか=true;
+                            }
                             var 現在探索場所=this.現在探索場所;
                             for(var a=1;a<MethodCall0_Arguments_Count;a++){
-                                var MethodCall_Arguments_a=MethodCall0_Arguments[a];
+                                var MethodCall0_Arguments_a=MethodCall0_Arguments[a];
                                 //Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda
                                 //したいところだがAggregate(a,b,func)のbがLambdaではないので使えない。
-                                if(MethodCall_Arguments_a is LambdaExpression Lambda0){
+                                if(MethodCall0_Arguments_a is LambdaExpression Lambda0){
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    var Lambda0_Body=Lambda0.Body;
+                                    var Lambda1_Body=this.Traverse(Lambda0_Body);
                                     this.現在探索場所=現在探索場所;
-                                    MethodCall1_Arguments[a]=Expression.Lambda(
-                                        Lambda0.Type,
-                                        Lambda1_Body,
-                                        Lambda0.Name,
-                                        Lambda0.TailCall,
-                                        Lambda0.Parameters
-                                    );
+                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=Lambda1_Body;
+                                    else{
+                                        MethodCall1_Arguments[a]=Expression.Lambda(
+                                            Lambda0.Type,
+                                            Lambda1_Body,
+                                            Lambda0.Name,
+                                            Lambda0.TailCall,
+                                            Lambda0.Parameters
+                                        );
+                                        変化したか=true;
+                                    }
                                 } else{
-                                    MethodCall1_Arguments[a]=this.Traverse(MethodCall_Arguments_a);
+                                    var MethodCall1_Arguments_a=this.Traverse(MethodCall0_Arguments_a);
+                                    if(MethodCall0_Arguments_a==MethodCall1_Arguments_a) MethodCall1_Arguments[a]=MethodCall1_Arguments_a;
+                                    else{
+                                        MethodCall1_Arguments[a]=MethodCall1_Arguments_a;
+                                        変化したか=true;
+                                    }
+                                    //MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Arguments_a);
                                 }
                             }
                             break;
                         }
                     }
-                    return Expression.Call(
-                        MethodCall0.Method,
-                        MethodCall1_Arguments
-                    );
+                    if(変化したか) return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
+                    return MethodCall0;
                 }
             }
             return base.Call(MethodCall0);
         }
         protected override Expression Traverse(Expression Expression0) {
             if(this.現在探索場所==this.希望探索場所){
-                if(this.ExpressionEqualityComparer.Equals(Expression0,this.旧Expression!)){
+                if(Comparer.Equals(Expression0,this.旧Expression!)){
                     if(this.書き込み項か)
                         this.書き戻しがあるか=true;
                     else
@@ -382,7 +413,6 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
     }
     private readonly 変換_先行評価式 _変換_先行評価式;
     private readonly Generic.List<(Generic.IEnumerable<ParameterExpression>Parameters,Generic.List<Generic.IEnumerable<ParameterExpression>>ListVariables)> List束縛Parameter情報 = new();
-    //private readonly Dictionary<Expression,ParameterExpression> Dictionary_Expression_ループラムダ跨ぎParameter;
     /// <summary>
     /// 既定コンストラクタ
     /// </summary>
@@ -391,20 +421,16 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
     public 変換_跨ぎParameterの先行評価(作業配列 作業配列,ExpressionEqualityComparer ExpressionEqualityComparer) : base(作業配列){
         this._取得_先行評価式=new(this.List束縛Parameter情報);
         this._変換_先行評価式=new(作業配列,ExpressionEqualityComparer);
-        //this.ループ跨ぎParameters=ループ跨ぎParameters;
-        //this.Dictionary_Expression_ループラムダ跨ぎParameter=new(ExpressionEqualityComparer);
     }
 
     private Generic.ICollection<ParameterExpression> ループ跨ぎParameters=default!;
     private int 番号;
     public bool IsInline{
-        //get=>this._取得_先行評価式.IsInline;
         set{
             this._取得_先行評価式.IsInline=value;
             this._変換_先行評価式.IsInline=value;
         }
     }
-    [SuppressMessage("ReSharper","PossibleMultipleEnumeration")]
     public Expression 実行(Expression Lambda0){
         this.番号=0;
         this.List束縛Parameter情報.Clear();

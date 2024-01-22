@@ -32,7 +32,6 @@ public sealed class List辺:Generic.List<辺>{
             var Listテキスト_Count=Listテキスト.Count;
             var 最大半角文字数=-1;
             for(var a=0;a<Listテキスト_Count;a++){
-                if(Listテキスト[a].Length<=0) continue;
                 var s=List制御フロー[a];
                 var 半角文字数=ShiftJIS半角換算文字数(s);
                 if(最大半角文字数<半角文字数) 最大半角文字数=半角文字数;
@@ -40,7 +39,6 @@ public sealed class List辺:Generic.List<辺>{
             if(最大半角文字数%2==0)
                 最大半角文字数+=1;
             for(var a=0;a<Listテキスト_Count;a++){
-                if(Listテキスト[a].Length<=0) continue;
                 var s=List制御フロー[a];
                 var 半角文字数=ShiftJIS半角換算文字数(s);
                 var 埋めたい半角文字数=最大半角文字数-半角文字数;
@@ -168,6 +166,7 @@ public sealed class List辺:Generic.List<辺>{
                     var 列=List列[b];
 
                     if(列.移動元==辺){
+                        //Debug.Assert(列.移動先==子辺);
                         if(列.移動先==子辺){
                             if(Line[b]=='│'){
                                 //Debug.Assert(書き換えLineIndexEnd<b);

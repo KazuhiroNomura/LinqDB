@@ -2700,6 +2700,19 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
 
                 break;
             }
+            case ExpressionType.Index:{
+                //ArrayAccess
+                var Index=(IndexExpression)e;
+                this.Traverse(Index.Object);
+                this.TraverseExpressions(Index.Arguments);
+                if(Index.Indexer is null)
+                    I.Ldelema(e.Type);
+                else
+                    //Debug.Assert(!Index.Indexer!.GetMethod!.IsVirtual);
+                    I.Call(Index.Indexer.GetMethod);
+
+                break;
+            }
             case ExpressionType.MemberAccess:{
                 var Member=(MemberExpression)e;
                 共通(Member);

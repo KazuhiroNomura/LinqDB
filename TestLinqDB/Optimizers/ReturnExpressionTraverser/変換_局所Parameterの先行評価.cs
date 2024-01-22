@@ -108,7 +108,6 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認3TryCatch(){
         var _1m = Expression.Constant(1m);
-        var _2m = Expression.Constant(2m);
         this.変換_局所Parameterの先行評価_実行(
             Expression.Block(
                 Expression.Add(_1m,_1m),

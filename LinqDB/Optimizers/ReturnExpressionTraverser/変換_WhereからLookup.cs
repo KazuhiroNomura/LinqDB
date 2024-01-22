@@ -10,13 +10,8 @@ using ExtensionSet = LinqDB.Reflection.ExtensionSet;
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 using static Common;
 
-internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
-    private readonly 取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド;
-    private readonly 判定_指定Parameters無 判定_指定Parameters無;
-    public 変換_WhereからLookup(作業配列 作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無 判定_指定Parameters無) : base(作業配列) {
-        this.取得_OuterPredicate_InnerPredicate_プローブビルド=取得_OuterPredicate_InnerPredicate_プローブビルド;
-        this.判定_指定Parameters無=判定_指定Parameters無;
-    }
+internal sealed class 変換_WhereからLookup(作業配列 作業配列,取得_OuterPredicate_InnerPredicate_プローブビルド 取得_OuterPredicate_InnerPredicate_プローブビルド,判定_指定Parameters無 判定_指定Parameters無)
+    :ReturnExpressionTraverser(作業配列){
     private ReadOnlyCollection<ParameterExpression>? 外側Parameters;
     public Expression 実行(Expression e) {
         Debug.Assert(e.NodeType==ExpressionType.Lambda);
@@ -37,7 +32,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
                 var MethodCall0_Arguments = MethodCall0.Arguments;
                 var MethodCall1_Arguments_0 = this.Traverse(MethodCall0_Arguments[0]);
                 var MethodCall1_Arguments_1 = this.Traverse(MethodCall0_Arguments[1]);
-                if(this.判定_指定Parameters無.実行(MethodCall1_Arguments_0,this.外側Parameters!)){
+                if(判定_指定Parameters無.実行(MethodCall1_Arguments_0,this.外側Parameters!)){
                     if(MethodCall1_Arguments_1 is LambdaExpression predicate){
                         //A.SelectMany(a=>
                         //    B.Where(b=>b==a)
@@ -62,7 +57,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
                         //    B.Select(b=>
                         //        Dictionary.Equal(b).Where(c=>c+1==a)
                         //Debug.Assert(this.外側Parameters is not null);
-                        var (OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+                        var (OuterPredicate,InnerPredicate,Listプローブビルド)=取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
                             predicate.Body,
                             this.外側Parameters!,
                             InnerParameters
@@ -155,7 +150,7 @@ internal sealed class 変換_WhereからLookup:ReturnExpressionTraverser{
                             }
                         }
                         if(InnerPredicate is not null){
-                            if(this.判定_指定Parameters無.実行(InnerPredicate,InnerParameters)){
+                            if(判定_指定Parameters無.実行(InnerPredicate,InnerParameters)){
                                 var ReturnType=MethodCall0_Method.ReturnType;
                                 Expression ifFalse;
                                 if(typeof(Sets.ExtensionSet)==MethodCall0.Method.DeclaringType){

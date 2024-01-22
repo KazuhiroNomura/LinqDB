@@ -117,7 +117,7 @@ partial class 変換_メソッド正規化_取得インライン不可能定数{
             //O.GroupJoin<TOuter,TInner,TKey,TResult>(I,o=>o,i=>i,(o,i)=>o,i)
             //O.Select   <TOuter,            TResult>(o=>o,I.Where(i=>o.Equals(i)))
             var resultSelector_Parameters = resultSelector.Parameters;
-            selector_Body=this.変換_旧Parameterを新Expression2.実行(
+            selector_Body=変換_旧Parameterを新Expression2.実行(
                 resultSelector.Body,
                 resultSelector_Parameters[0],
                 o,

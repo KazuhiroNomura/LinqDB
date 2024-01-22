@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using LinqDB.Enumerables;
 using LinqDB.Optimizers.VoidExpressionTraverser;
+// ReSharper disable All
 namespace LinqDB.Optimizers.ReturnExpressionTraverser;
 /// <summary>
 /// 型つきTryは形無しでtry,catch内部で変数に代入してそのご変数で評価する必要がある
@@ -83,9 +84,7 @@ internal sealed class 変換_Tryの先行評価:ReturnExpressionTraverser{
                             Block1_Expressions[Block0_Expressions_Count_1]=Expression.Assign(this.新Parameter,Block0_Expressions_N);
                         return Expression.Block(Block0.Type,Block0.Variables,Block1_Expressions);
                     }
-                    default:{
-                        return Expression.Assign(this.新Parameter,Expression0);
-                    }
+                    default:return Expression.Assign(this.新Parameter,Expression0);
                 }
             }
         }

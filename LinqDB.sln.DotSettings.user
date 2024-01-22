@@ -151,6 +151,9 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9adbed5b_002Ddec4_002D4814_002D8a85_002D41d2a0acfb14/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" IsLocked="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bcd013eb_002Ded0b_002D409b_002D9068_002De3ab2be6f022/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests in category '&amp;lt;Uncategorized&amp;gt;'" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Category&gt;&amp;lt;Uncategorized&amp;gt;&lt;/Category&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	
