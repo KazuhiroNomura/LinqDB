@@ -2630,10 +2630,10 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 break;
             }
             default:{
-                Debug.Assert(e.NodeType is not ExpressionType.PreIncrementAssign);
-                Debug.Assert(e.NodeType is not ExpressionType.PreDecrementAssign);
-                Debug.Assert(e.NodeType is not ExpressionType.PostDecrementAssign);
-                Debug.Assert(e.NodeType is not ExpressionType.PostIncrementAssign);
+                //Debug.Assert(e.NodeType is not ExpressionType.PreIncrementAssign);
+                //Debug.Assert(e.NodeType is not ExpressionType.PreDecrementAssign);
+                //Debug.Assert(e.NodeType is not ExpressionType.PostDecrementAssign);
+                //Debug.Assert(e.NodeType is not ExpressionType.PostIncrementAssign);
                 this.Traverse(e);
                 if(e.Type!=typeof(void))
                     this.I!.Pop();

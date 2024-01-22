@@ -286,62 +286,73 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                                 if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
                                     var 現在探索場所=this.現在探索場所;
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                    var Lambda0_Body=Lambda0.Body;
-                                    var Lambda1_Body=this.Traverse(Lambda0_Body);
-                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[0]=Lambda0;
-                                    else {
-                                        MethodCall1_Arguments[0]=Expression.Lambda(
-                                            Lambda0.Type,
-                                            Lambda1_Body,
-                                            Lambda0.Name,
-                                            Lambda0.TailCall,
-                                            Lambda0.Parameters
-                                        );
-                                        変化したか=true;
-                                    }
+                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    Debug.Assert(Lambda0.Body!=Lambda1_Body);
+                                    //if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[0]=Lambda0;
+                                    //else {
+                                    //    MethodCall1_Arguments[0]=Expression.Lambda(
+                                    //        Lambda0.Type,
+                                    //        Lambda1_Body,
+                                    //        Lambda0.Name,
+                                    //        Lambda0.TailCall,
+                                    //        Lambda0.Parameters
+                                    //    );
+                                    //    変化したか=true;
+                                    //}
+                                    MethodCall1_Arguments[0]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
                                     this.現在探索場所=現在探索場所;
+                                    変化したか=true;
                                 } else{
                                     var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
-                                    if(MethodCall0_Arguments_0==MethodCall1_Arguments_0) MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
-                                    else{
-                                        MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
-                                        変化したか=true;
-                                    }
+                                    if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+                                    MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
+                                    //MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
+                                    //Debug.Assert(MethodCall1_Arguments[0]!=MethodCall0_Arguments_0);
                                 }
                             } else{
                                 Debug.Assert(MethodCall0_Arguments.Count==2);
                                 Debug.Assert(Reflection.ExtensionSet.Inline2==MethodCall_GenericMethodDefinition);
                                 var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
-                                if(MethodCall0_Arguments_0==MethodCall1_Arguments_0)MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
-                                else{
-                                    MethodCall1_Arguments[0]=this.Traverse(MethodCall0_Arguments_0);
-                                    変化したか=true;
-                                }
+                                if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+                                MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
                                 var MethodCall0_Arguments_1=MethodCall0_Arguments[1];
                                 if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
                                     var 現在探索場所=this.現在探索場所;
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
                                     var Lambda0_Body=Lambda0.Body;
                                     var Lambda1_Body=this.Traverse(Lambda0_Body);
-                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[1]=MethodCall0_Arguments_1;
-                                    else {
-                                        MethodCall1_Arguments[1]=Expression.Lambda(
-                                            Lambda0.Type,
-                                            Lambda1_Body,
-                                            Lambda0.Name,
-                                            Lambda0.TailCall,
-                                            Lambda0.Parameters
-                                        );
-                                        変化したか=true;
-                                    }
+                                    //if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[1]=MethodCall0_Arguments_1;
+                                    //else {
+                                    //    MethodCall1_Arguments[1]=Expression.Lambda(
+                                    //        Lambda0.Type,
+                                    //        Lambda1_Body,
+                                    //        Lambda0.Name,
+                                    //        Lambda0.TailCall,
+                                    //        Lambda0.Parameters
+                                    //    );
+                                    //    変化したか=true;
+                                    //}
+                                    MethodCall1_Arguments[1]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
                                     this.現在探索場所=現在探索場所;
+                                    変化したか=true;
                                 } else{
                                     var MethodCall1_Arguments_1=this.Traverse(MethodCall0_Arguments_1);
-                                    if(MethodCall0_Arguments_1==MethodCall1_Arguments_1) MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
-                                    else{
-                                        MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
-                                        変化したか=true;
-                                    }
+                                    if(MethodCall0_Arguments_1!=MethodCall1_Arguments_1)変化したか=true;
+                                    MethodCall1_Arguments[1]=MethodCall1_Arguments_1;
+                                    //MethodCall1_Arguments[1]=this.Traverse(MethodCall0_Arguments_1);
+                                    //Debug.Assert(MethodCall1_Arguments[1]!=MethodCall0_Arguments_1);
                                 }
                             }
                             break;
@@ -349,40 +360,40 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                         default:{
                             var MethodCall0_Arguments_0=MethodCall0_Arguments[0];
                             var MethodCall1_Arguments_0=this.Traverse(MethodCall0_Arguments_0);
-                            if(MethodCall0_Arguments_0==MethodCall1_Arguments_0)MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
-                            else{
-                                MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
-                                変化したか=true;
-                            }
+                            if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+                            MethodCall1_Arguments[0]=MethodCall1_Arguments_0;
                             var 現在探索場所=this.現在探索場所;
                             for(var a=1;a<MethodCall0_Arguments_Count;a++){
                                 var MethodCall0_Arguments_a=MethodCall0_Arguments[a];
-                                //Debug.Assert(MethodCall_Arguments_a.NodeType==ExpressionType.Lambda
                                 //したいところだがAggregate(a,b,func)のbがLambdaではないので使えない。
                                 if(MethodCall0_Arguments_a is LambdaExpression Lambda0){
                                     this.現在探索場所=現在探索場所|場所.ループ跨ぎ;
-                                    var Lambda0_Body=Lambda0.Body;
-                                    var Lambda1_Body=this.Traverse(Lambda0_Body);
+                                    var Lambda1_Body=this.Traverse(Lambda0.Body);
+                                    Debug.Assert(Lambda0.Body!=Lambda1_Body);
                                     this.現在探索場所=現在探索場所;
-                                    if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=Lambda1_Body;
-                                    else{
-                                        MethodCall1_Arguments[a]=Expression.Lambda(
-                                            Lambda0.Type,
-                                            Lambda1_Body,
-                                            Lambda0.Name,
-                                            Lambda0.TailCall,
-                                            Lambda0.Parameters
-                                        );
-                                        変化したか=true;
-                                    }
+                                    //if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=MethodCall0_Arguments_a;
+                                    //else {
+                                    //    MethodCall1_Arguments[a]=Expression.Lambda(
+                                    //        Lambda0.Type,
+                                    //        Lambda1_Body,
+                                    //        Lambda0.Name,
+                                    //        Lambda0.TailCall,
+                                    //        Lambda0.Parameters
+                                    //    );
+                                    //    変化したか=true;
+                                    //}
+                                    MethodCall1_Arguments[a]=Expression.Lambda(
+                                        Lambda0.Type,
+                                        Lambda1_Body,
+                                        Lambda0.Name,
+                                        Lambda0.TailCall,
+                                        Lambda0.Parameters
+                                    );
+                                    変化したか=true;
                                 } else{
                                     var MethodCall1_Arguments_a=this.Traverse(MethodCall0_Arguments_a);
-                                    if(MethodCall0_Arguments_a==MethodCall1_Arguments_a) MethodCall1_Arguments[a]=MethodCall1_Arguments_a;
-                                    else{
-                                        MethodCall1_Arguments[a]=MethodCall1_Arguments_a;
-                                        変化したか=true;
-                                    }
-                                    //MethodCall1_Arguments[a]=this.Traverse(MethodCall0_Arguments_a);
+                                    if(MethodCall0_Arguments_a!=MethodCall1_Arguments_a)変化したか=true;
+                                    MethodCall1_Arguments[a]=MethodCall1_Arguments_a;
                                 }
                             }
                             break;

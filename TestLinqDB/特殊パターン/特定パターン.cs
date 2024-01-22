@@ -1247,4 +1247,8 @@ public class 特定パターン:共通{
             )
         );
     }
+    [Fact]public void Call_GroupBy0(){
+        this.Expression実行AssertEqual(()=>new int[10].GroupBy(p=>new{p},(key,g)=>1m));
+        //this.Expression実行AssertEqual(()=>new int[10].GroupBy(p=>p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
+    }
 }

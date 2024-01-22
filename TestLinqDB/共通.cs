@@ -34,7 +34,7 @@ public abstract class 共通{
     private protected static int ポート番号;
     //protected virtual テストオプション テストオプション{get;}=テストオプション.全て;
     //protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
-    private protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
+    private protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存|テストオプション.インライン;
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);

@@ -366,10 +366,13 @@ internal static class Common {
 
 
 
-    public static MethodInfo GetGenericMethodDefinition(MethodInfo Method) =>
-        Method.IsGenericMethod
-            ? Method.GetGenericMethodDefinition()
-            : Method;
+    public static MethodInfo GetGenericMethodDefinition(MethodInfo Method){
+        if(Method.IsGenericMethod){
+            return Method.GetGenericMethodDefinition();
+        } else{
+            return Method;
+        }
+    }
     internal static bool ループ展開可能メソッドか(MethodInfo GenericMethodDefinition) {
         Debug.Assert(!GenericMethodDefinition.IsGenericMethod||GenericMethodDefinition.IsGenericMethodDefinition);
         var DeclaringType = GenericMethodDefinition.DeclaringType;

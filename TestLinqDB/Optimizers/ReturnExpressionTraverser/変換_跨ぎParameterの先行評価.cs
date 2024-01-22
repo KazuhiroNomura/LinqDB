@@ -572,28 +572,40 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             var s=new Set<int>();
             //if(this.Inline){
             //    if(ループ展開可能メソッドか(MethodCall0)){
-            //this.Expression実行AssertEqual(()=>s.Select(a=>a+a));
+            this.Expression実行AssertEqual(() => s.Select(a => a+a));
             //        switch(MethodCall_GenericMethodDefinition.Name) {
             //            case nameof(ExtensionSet.Inline): {
             //                if(MethodCall0_Arguments.Count==1) {
             //                    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
-            this.Optimizer_Lambda最適化((string a)=>ExtensionSet.Inline(()=>1m));
+            this.Expression実行AssertEqual(() => ExtensionSet.Inline(() => 1m));
             //                    }else{
-            this.Optimizer_Lambda最適化((string a)=>ExtensionSet.Inline(Anonymous(()=>1m)));
+            this.Expression実行AssertEqual(() => ExtensionSet.Inline(Anonymous(() => 1m)));//(1)
+            //                        (1)
             //                    }
             //                }else{
+            //                    if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+            this.Expression実行AssertEqual(()=>"".Inline(a=>s).Inline(a=>s));//(2)
+            //(2)
             //                    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
-            this.Expression実行AssertEqual((int a)=>"".Inline(b=>1m));
+            this.Expression実行AssertEqual((int a) => "".Inline(b => 1m));
             //                    }else{
-            this.Optimizer_Lambda最適化((int a)=>"".Inline(Anonymous((string b)=>1m)));
+            this.Expression実行AssertEqual((int a) => "".Inline(Anonymous((string b) => 1m)));
             //                    }
             //                }
             //            }
             //            default: {
+            //                if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+            this.Expression実行AssertEqual(()=>ExtensionSet.Inline(()=>s).Select(a=>s));
+            this.Expression実行AssertEqual(()=>s.Select(a=>s));//(0)
             //                for(var a=1;a<MethodCall0_Arguments_Count;a++){
             //                    if(MethodCall_Arguments_a is LambdaExpression Lambda0){
-            this.Optimizer_Lambda最適化(()=>s.Select(a=>s));
+            //(0)
+            //                        if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=Lambda1_Body;
+            //                        else{
+            //(0)
+            //                        }
             //                    }else{
+            //                        if(MethodCall0_Arguments_a!=MethodCall1_Arguments_a)変化したか=true;
             this.Optimizer_Lambda最適化(()=>s.Select(Anonymous((int a)=>s)));
             //                    }
             //            }
@@ -699,27 +711,64 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
         }
     }
     [Fact]
-    public void Call()
-    {
+    public void Call(){
         var s = new Set<int>();
-        //if(!ループ展開可能メソッドか(MethodCall0))
-        this.Expression実行AssertEqual(() => s.Join(s, o => o, i => i, (o, i) => o+i));
-        //if(Reflection.ExtensionSet.Inline1==GetGenericMethodDefinition(MethodCall0.Method)){
-        //    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0)
-        this.Expression実行AssertEqual(() => ExtensionSet.Inline(() => ""));
-        //    else
-        this.Expression実行AssertEqual(() => ExtensionSet.Inline(Anonymous(() => "")));
-        //}else if(Reflection.ExtensionSet.Inline2==GetGenericMethodDefinition(MethodCall0.Method)) {
-        //    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0)
-        this.Expression実行AssertEqual(() => "".Inline(s => ""));
-        //    else
-        this.Expression実行AssertEqual(() => "".Inline(Anonymous((string s) => "")));
-        //}
-        //for(var a = 1;a<MethodCall0_Arguments_Count;a++)
-        //    if(MethodCall0_Argument is LambdaExpression Lambda0)
-        this.Expression実行AssertEqual(() => s.Select(p => p+1));
-        //    else
+        //if(this.IsInline){
+        //    if(ループ展開可能メソッドか(MethodCall0)){
+        //        switch(MethodCall_GenericMethodDefinition.Name){
+        //            case nameof(ExtensionSet.Inline):{
+        //                if(MethodCall0_Arguments.Count==1){
+        //                    if(MethodCall0_Arguments_0 is LambdaExpression Lambda0){
+        this.Expression実行AssertEqual(() => ExtensionSet.Inline(() => 1m));
+        //                    } else{
+        //                        if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+        this.Expression実行AssertEqual(() => ExtensionSet.Inline(Anonymous(() => 1m)));//(2)
+        //(2)
+        //                    }
+        //                } else{
+        //                    if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+        //                    if(MethodCall0_Arguments_1 is LambdaExpression Lambda0){
+        this.Expression実行AssertEqual(() => "".Inline(a => 1m));
+        //                      }else {
+        //                          if(MethodCall0_Arguments_1!=MethodCall1_Arguments_1)変化したか=true;
+        this.Expression実行AssertEqual(()=>"".Inline(Anonymous((string a)=>1m)));//(1)
+        //(1)
+        //                      }
+        //                   }
+        //                }
+        //            }
+        //            default:{
+        //                if(MethodCall0_Arguments_0!=MethodCall1_Arguments_0)変化したか=true;
+        //                for(var a=1;a<MethodCall0_Arguments_Count;a++){
+        //                    if(MethodCall0_Arguments_a is LambdaExpression Lambda0){
+        //                        if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=MethodCall0_Arguments_a;
+        this.Expression実行AssertEqual(() => s.Join(s, o => o, i => i, (o, i) => o+i));//(0)
+        //                        else {
+        //                            (0)
+        //                        }
+        //                    } else{
+        //                        if(MethodCall0_Arguments_a!=MethodCall1_Arguments_a)変化したか=true;
         this.Expression実行AssertEqual(() => s.Select(Anonymous((int p) => p+1)));
+        this.Expression実行AssertEqual(() => s.Select(Anonymous((int p) => 1m)));
+        //this.Expression実行AssertEqual(() => "".Inline(Anonymous((string s) => "")));
+        //this.Optimizer_Lambda最適化((int a) => "".Inline(Anonymous((string b) => 1m)));
+        //                    }
+        //                }reak;
+        //            }
+        //        }
+        //        if(変化したか)(0) return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
+
+        this.Expression実行AssertEqual(
+            ()=>"".Let(
+                a=>"".Let(
+                    b=>"".Inline(
+                        c=>new{a=a+a,b=b+b,c=c+c}
+                    ).ToString()+new{a=a+a,b=b+b}
+                )
+            )
+        );
+        //    }
+        //}
     }
     [Fact]
     public void Block()
