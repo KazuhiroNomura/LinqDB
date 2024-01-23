@@ -116,6 +116,7 @@ public class 作成_辺 : 共通{
         //} else{
         //}
     }
+    private protected override テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     [Fact]public void Assign(){
         //if(Assign_Left.NodeType is not ExpressionType.Parameter) base.Traverse(Assign_Left);
         var array=new int[3];

@@ -94,7 +94,7 @@ internal class 作成_DynamicAssembly:A作成_IL{
         foreach(var Block_Variable in Block.Variables) {
             //Debug.Assert(!this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable));
             //if(this.Dictionaryラムダ跨ぎParameter.ContainsKey(Block_Variable))
-                Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
+            Dictionary_Parameter_LocalBuilder.Add(Block_Variable,I.DeclareLocal(Block_Variable.Type));
         }
         var Block_Expressions_Count_1 = Block_Expressions.Count-1;
         for(var a = 0;a<Block_Expressions_Count_1;a++)

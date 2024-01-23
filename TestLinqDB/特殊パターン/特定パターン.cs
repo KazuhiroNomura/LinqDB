@@ -1251,4 +1251,145 @@ public class 特定パターン:共通{
         this.Expression実行AssertEqual(()=>new int[10].GroupBy(p=>new{p},(key,g)=>1m));
         //this.Expression実行AssertEqual(()=>new int[10].GroupBy(p=>p,(key,g)=>key+g.Count(),EqualityComparer<decimal>.Default));
     }
+    [Fact]public void 跨ぎ左辺値0(){
+        //.Lambda #Lambda1<System.Action>() {
+        //    .Block(
+        //        System.Int32[] $ラムダ.0,
+        //        System.Int32 $ラムダ.1) {
+        //        .Block() {
+        //            $ラムダ.0 = .Constant<System.Int32[]>(System.Int32[]);
+        //                $ラムダ.1 = (System.Int32)1M;
+        //                .Lambda #Lambda2<System.Func`1[System.Int32]>
+        //        }
+        //    }
+        //}
+
+        //.Lambda #Lambda2<System.Func`1[System.Int32]>() {
+        //    $ラムダ.0[$ラムダ.1] = 10
+        //}
+        var a=Expression.Parameter(typeof(int),"a");
+        //this.Expression実行AssertEqual(
+        //    Expression.Lambda<Func<int,int>>(
+        //        Expression.Block(
+        //            Expression.Lambda<Func<int>>(
+        //                Expression.Multiply(a,Expression.Constant(0))
+        //            ),
+        //            a
+        //        ),
+        //        a
+        //    )
+        //);
+        const int expected=10,index=1;
+        var array=new int[30];
+        array[index]=expected;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Lambda<Func<int>>(
+                        Expression.Assign(
+                            Expression.ArrayAccess(
+                                Expression.Constant(array),
+                                Expression.Convert(
+                                    Expression.Constant((decimal)index),
+                                    typeof(int)
+                                )
+                            ),
+                            Expression.Constant(10)
+                        )
+                    )
+                )
+            )
+        );
+        Assert.Equal(expected,array[index]);
+    }
+    [Fact]public void 跨ぎ右辺値Assign1(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Block(
+                    Expression.Lambda<Func<int>>(
+                        Expression.Multiply(a,Expression.Constant(0))
+                    ),
+                    a
+                ),
+                a
+            )
+        );
+    }
+    [Fact]public void 跨ぎ右左辺値Assign2(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{a},
+                    Expression.Lambda<Func<int>>(
+                        Expression.Multiply(a,Expression.Constant(0))
+                    ),
+                    a
+                )
+            )
+        );
+    }
+    [Fact]public void 跨ぎ左辺値Assign1(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Block(
+                    Expression.Lambda<Func<int>>(
+                        Expression.Assign(a,Expression.Constant(0))
+                    ),
+                    a
+                ),
+                a
+            )
+        );
+    }
+    [Fact]public void 跨ぎ左辺値Assign2(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{a},
+                    Expression.Lambda<Func<int>>(
+                        Expression.Assign(a,Expression.Constant(0))
+                    ),
+                    a
+                )
+            )
+        );
+    }
+    [Fact]public void 跨ぎ左右辺値Assign1(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Block(
+                    Expression.Lambda<Func<int>>(
+                        Expression.Block(
+                            Expression.Multiply(a,Expression.Constant(0)),
+                            Expression.Assign(a,Expression.Constant(0))
+                        )
+                    ),
+                    a
+                ),
+                a
+            )
+        );
+    }
+    [Fact]public void 跨ぎ左右辺値Assign2(){
+        var a=Expression.Parameter(typeof(int),"a");
+        this.Expression実行(
+            Expression.Lambda<Func<int>>(
+                Expression.Block(
+                    new[]{a},
+                    Expression.Lambda<Func<int>>(
+                        Expression.Block(
+                            Expression.Multiply(a,Expression.Constant(0)),
+                            Expression.Assign(a,Expression.Constant(0))
+                        )
+                    ),
+                    a
+                )
+            )
+        );
+    }
 }

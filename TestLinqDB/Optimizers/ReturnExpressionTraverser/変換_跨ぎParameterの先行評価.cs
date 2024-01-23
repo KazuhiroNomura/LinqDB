@@ -472,33 +472,65 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
     public class 変換_先行評価式:共通{
         //protected override テストオプション テストオプション{get;}=テストオプション.インライン|テストオプション.式木の最適化を試行;
         [Fact]
-        public void Block(){
+        public void MakeAssign(){
+            var s=new Set<int>{1,2,3};
+            //if(Binary0_Right==Binary1_Right)
+            //    if(Binary0_Left==Binary1_Left)
+            this.Expression実行AssertEqual(()=>s.Join(s,o=>o,i=>i,(o,i)=>new{o,i}).Where(p=>p.i==0));//0
+            var array=Expression.Constant(new int[3]);
             var @int=Expression.Parameter(typeof(int),"a");
-            //this.Lambda最適化(
-            //    Expression.Lambda(
-            //        Expression.AddAssign(
-            //            @int,
-            //            Expression.Invoke(
-            //                Expression.Lambda<Func<int>>(
-            //                    @int
-            //                )
-            //            )
-            //        ),
-            //        @int
-            //    )
-            //);
-            //var a=Expression.Parameter(typeof(int),"a");
-            this.Optimizer_Lambda最適化(
-                Expression.Lambda(
-                    Expression.Block(
-                        Expression.Lambda(
-                            @int
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<int,int>>(
+                    Expression.Assign(
+                        Expression.ArrayAccess(
+                            array,
+                            Expression.Invoke(
+                                Expression.Lambda<Func<int>>(
+                                    @int
+                                )
+                            )
                         ),
-                        @int
+                        Expression.Constant(0)
                     ),
                     @int
                 )
             );
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<int,int>>(
+                    Expression.Assign(
+                        @int,
+                        Expression.Invoke(
+                            Expression.Lambda<Func<int>>(
+                                @int
+                            )
+                        )
+                    ),
+                    @int
+                )
+            );
+        }
+        [Fact]
+        public void Block(){
+            var @int=Expression.Parameter(typeof(int),"a");
+            //if(ReferenceEquals(Block0_Expressions,Block1_Expressions)) return Block0;(0)
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<int,int>>(
+                    Expression.Add(
+                        Expression.Block(
+                            Expression.Lambda(
+                                @int
+                            ),
+                            @int
+                        ),
+                        Expression.Block(
+                            @int,
+                            @int
+                        )
+                    ),
+                    @int
+                )
+            );
+            //(0)
         }
         [Fact]
         public void Lambda(){
@@ -599,10 +631,10 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
             this.Expression実行AssertEqual(()=>s.Select(a=>s));//(0)
             //                for(var a=1;a<MethodCall0_Arguments_Count;a++){
             //                    if(MethodCall_Arguments_a is LambdaExpression Lambda0){
-            //(0)
             //                        if(Lambda0_Body==Lambda1_Body) MethodCall1_Arguments[a]=Lambda1_Body;
+            this.Expression実行AssertEqual(()=>"".Let(b=>s).Select(a=>a+a));
             //                        else{
-            //(0)
+            this.Expression実行AssertEqual(()=>ExtensionSet.Inline(()=>s).Select(a=>s));
             //                        }
             //                    }else{
             //                        if(MethodCall0_Arguments_a!=MethodCall1_Arguments_a)変化したか=true;
@@ -634,78 +666,6 @@ public class 変換_跨ぎParameterの先行評価 : 共通{
                         Expression.Constant(1m)
                     ),
                     array
-                )
-            );
-        }
-        [Fact]
-        public void MakeAssign(){
-            //var x=Expression.ArrayAccess(
-            //    array,
-            //    Expression.Convert(
-            //        Expression.Invoke(
-            //            Expression.Lambda<Func<decimal>>(
-            //                Expression.Constant(1m)
-            //            )
-            //        ),
-            //        typeof(int)
-            //    )
-            //);
-            //var t=Expression.Parameter(typeof(decimal).MakeByRefType());
-            //var y=Expression.Block(
-            //    new[]{t},
-            //    Expression.Assign(t,x),
-            //    Expression.Assign(
-            //        t,
-            //        Expression.Add(
-            //            t,
-            //            Expression.Constant(1m)
-            //        )
-            //    )
-            //);
-            ////x=Expression.MakeIndex(
-            ////    array,
-            ////    Expression.Constant(0)
-            ////);
-            //var z=Expression.Assign(
-            //    x,
-            //    Expression.Constant(1m)
-            //);
-            //this.Expression実行AssertEqual((int a)=>"".Inline(b=>1m));
-            //if(Binary0_Right==Binary1_Right){
-            //    if(Binary0_Left==Binary1_Left){
-            //        if(Binary0_Conversion==Binary1_Conversion){
-            //        }else{
-            //        }
-            //    }else{
-            //    }
-            //}else{
-            var @int=Expression.Parameter(typeof(int),"a");
-            this.Optimizer_Lambda最適化(
-                Expression.Lambda(
-                    Expression.AddAssign(
-                        @int,
-                        Expression.Invoke(
-                            Expression.Lambda<Func<int>>(
-                                @int
-                            )
-                        )
-                    ),
-                    @int
-                )
-            );
-            //}
-            var @decimal=Expression.Parameter(typeof(decimal),"a");
-            this.Optimizer_Lambda最適化(
-                Expression.Lambda(
-                    Expression.AddAssign(
-                        @decimal,
-                        Expression.Invoke(
-                            Expression.Lambda<Func<decimal>>(
-                                Expression.Constant(1m)
-                            )
-                        )
-                    ),
-                    @decimal
                 )
             );
         }

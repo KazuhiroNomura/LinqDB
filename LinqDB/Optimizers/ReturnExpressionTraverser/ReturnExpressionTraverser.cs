@@ -143,17 +143,25 @@ public class ReturnExpressionTraverser {
     /// <param name="NodeType"></param>
     /// <returns></returns>
     protected virtual Expression MakeAssign(BinaryExpression Binary0, ExpressionType NodeType) {
+        //var Binary0_Left=Binary0.Left;
+        //var Binary0_Right=Binary0.Right;
+        //var Binary0_Conversion=Binary0.Conversion;
+        //var Binary1_Left=this.Traverse(Binary0_Left);
+        //var Binary1_Right=this.Traverse(Binary0_Right);
+        //var Binary1_Conversion= this.TraverseNullable(Binary0_Conversion);
+        //if(Binary0_Left==Binary1_Left)
+        //    if(Binary0_Right==Binary1_Right)
+        //        if(Binary0_Conversion==Binary1_Conversion)
+        //            return Binary0;
+        //return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
         var Binary0_Left=Binary0.Left;
         var Binary0_Right=Binary0.Right;
-        var Binary0_Conversion=Binary0.Conversion;
         var Binary1_Left=this.Traverse(Binary0_Left);
         var Binary1_Right=this.Traverse(Binary0_Right);
-        var Binary1_Conversion= this.TraverseNullable(Binary0_Conversion);
         if(Binary0_Left==Binary1_Left)
             if(Binary0_Right==Binary1_Right)
-                if(Binary0_Conversion==Binary1_Conversion)
-                    return Binary0;
-        return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method,Binary1_Conversion as LambdaExpression);
+                return Binary0;
+        return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method);
     }
     /// <summary>
     /// a+b
