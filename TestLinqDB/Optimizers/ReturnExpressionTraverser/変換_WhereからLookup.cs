@@ -48,6 +48,8 @@ public class 変換_WhereからLookup : 共通{
         //                                    //Set1.GetGenericArguments()[0].GetProperty(nameof(IKey<int>.Key))==Member.Member
         //                                ) {
         //0
+    }
+    [Fact]public void Call01(){
         //                                } else {
         this.Expression実行AssertEqual(()=> st.SelectMany(o=> st.Where(i=>i.Key.メンバー11.Equals(o.Key.メンバー11))));//1
         //                                }
@@ -55,6 +57,8 @@ public class 変換_WhereからLookup : 共通{
         //                            }
         //                            Set1=Set1.BaseType;
         //                        }
+    }
+    [Fact]public void Call02(){
         //                    } else {
         this.Expression実行AssertEqual(()=> s.SelectMany(o=> s.Where(i=>o==i&&i+1==o+1)));
         //                    }
@@ -80,6 +84,19 @@ public class 変換_WhereからLookup : 共通{
         //                        }
         //                    }
     }
+    [Fact]public void Call2(){
+        this.Expression実行AssertEqual(() => s.SelectMany(o => new int[]{0,1,2,3}.Where((i, index) => index==o)));
+        //                }
+        this.Expression実行AssertEqual(() => s.SelectMany(o => new int[3].Where((i, index) => o==0)));
+        //            }
+        this.Expression実行AssertEqual(() => new int[1].Where(Anonymous((int p) => true)));
+        //        }
+        this.Expression実行AssertEqual(() => s.Let(o => o.Where((i) => true)));
+        //    }
+        this.Expression実行AssertEqual(() => new int[1].Select(p => true));
+        //}
+        this.Expression実行AssertEqual(() => "".ToString());
+    }
     //public static System.Collections.Generic.IEnumerable<int> Impl_Method1()
     //{
     //    SetGroupingList<int, int> setGroupingList = new SetGroupingList<int, int>();
@@ -102,19 +119,6 @@ public class 変換_WhereからLookup : 共通{
     //    }
     //    return list;
     //}
-    [Fact]public void Call2(){
-        this.Expression実行AssertEqual(() => s.SelectMany(o => new int[]{0,1,2,3}.Where((i, index) => index==o)));
-        //                }
-        this.Expression実行AssertEqual(() => s.SelectMany(o => new int[3].Where((i, index) => o==0)));
-        //            }
-        this.Expression実行AssertEqual(() => new int[1].Where(Anonymous((int p) => true)));
-        //        }
-        this.Expression実行AssertEqual(() => s.Let(o => o.Where((i) => true)));
-        //    }
-        this.Expression実行AssertEqual(() => new int[1].Select(p => true));
-        //}
-        this.Expression実行AssertEqual(() => "".ToString());
-    }
     //var st=new Set<TestLinqDB.Sets.Key,Sets.Value>{new(new(0)),new(new(1))};
     //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st).Where(i=>i.Key.メンバー.value==0));
     //this.共通MemoryMessageJson_Expression_コンパイル実行(()=>st.SelectMany(o=>st.Where(i=>i.Key.メンバー.value==0&& o.Equals(i))));

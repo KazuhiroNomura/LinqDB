@@ -96,7 +96,7 @@ internal sealed partial class 変換_メソッド正規化_取得インライン
         return this.Traverse(e);
     }
     internal Generic.Dictionary<ConstantExpression,(FieldInfo Disp,MemberExpression Member)> DictionaryConstant=default!;
-    #if true
+    #if false
     private Expression AndAlso_OrElse(Expression test,Expression ifTrue,Expression ifFalse) {
         if(test.Type==typeof(bool)) {
             return Expression.Condition(
