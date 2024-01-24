@@ -1,2 +1,6 @@
 # LinqDB
 Optimize Expression Tree,RPC for MessagePack,load schema from SQL Server
+Expression Treeを最適化する
+Delegate.Compileではラムダを跨ぐParameter,ILに直接書き込めない定数,キャプチャ変数はClosureというobject配列に書き込まれているが配列範囲チェック、アンボクシングのコストがかかるのでそれを回避するためにジェネリックはTuple<>に値を格納するようにした。
+リモートプロシージャルコール。Serverを実行しているホストにClientを実行しているホストからリクエストを出しレスポンスを受け取る。
+通信はMemoryPackを使う。試験的にMessagePack,Utf8Jsonも使っている。
