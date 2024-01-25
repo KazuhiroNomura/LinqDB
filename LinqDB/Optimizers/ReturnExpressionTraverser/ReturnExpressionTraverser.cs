@@ -690,7 +690,7 @@ public class ReturnExpressionTraverser {
                     break;
                 }
                 default: {
-                    Debug.Assert(Binding0.BindingType==MemberBindingType.ListBinding);
+                    Debug.Assert(Binding0.BindingType is MemberBindingType.ListBinding);
                     var MemberListBinding0=(MemberListBinding)Binding0;
                     var MemberListBinding0_Initializers=MemberListBinding0.Initializers;
                     var MemberListBinding0_Initializers_Count=MemberListBinding0_Initializers.Count;

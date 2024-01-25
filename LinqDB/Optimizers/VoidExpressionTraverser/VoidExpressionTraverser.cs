@@ -595,13 +595,13 @@ internal class VoidExpressionTraverser {
                     this.Bindings(((MemberMemberBinding)Binding).Bindings);
                     break;
                 }
-                case MemberBindingType.ListBinding: {
+                default: {
+                    Debug.Assert(Binding.BindingType is MemberBindingType.ListBinding);
                     foreach(var Initializer in ((MemberListBinding)Binding).Initializers) {
                         this.TraverseExpressions(Initializer.Arguments);
                     }
                     break;
                 }
-                default: throw new NotSupportedException($"{Binding.BindingType}はサポートされていない。");
             }
         }
     }

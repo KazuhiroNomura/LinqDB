@@ -26,10 +26,12 @@ public partial struct TestDynamic<T>{
         this.メンバー2=メンバー2;
     }
 }
-//[Serializable,MessagePackObject(true),MemoryPackable]
+[Serializable,MessagePackObject(true),MemoryPackable]
 public partial class class_演算子オーバーロード2{
     // ReSharper disable once CollectionNeverQueried.Global
+    [MemoryPack.MemoryPackIgnore,MessagePack.IgnoreMember,NonSerialized]
     public readonly StructCollection StructCollectionフィールド=new();
+    public int a;
 
     //[MemoryPackConstructor]
 }
@@ -66,6 +68,7 @@ public partial struct StructCollection:ICollection<int>{
 }
 [Serializable,MessagePackObject(true),MemoryPackable]
 public partial class class_演算子オーバーロード:IEquatable<class_演算子オーバーロード>{
+    public class_演算子オーバーロード2 class_演算子オーバーロード2=new();
     public class_演算子オーバーロード 自己参照;
     //public class_演算子オーバーロード(){
     //}

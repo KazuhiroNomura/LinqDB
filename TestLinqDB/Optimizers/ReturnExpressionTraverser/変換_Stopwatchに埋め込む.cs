@@ -1,7 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Reflection;
 using MemoryPack;
 using MessagePack;
+using TestLinqDB.Optimizers.Comparer;
+using TestLinqDB.仕様;
+
 using Expression = System.Linq.Expressions.Expression;
 // ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
@@ -591,15 +595,100 @@ public class 変換_Stopwatchに埋め込む : 共通{
         //    }
         //}
     }
-    //[Fact]public void Bindings(){
-    //    cover
-    //}
-    //[Fact]public void Constant(){
-    //    cover
-    //}
-    //[Fact]public void Assign(){
-    //    cover
-    //}
+    [Fact]public void Bindings(){
+        //for(var a = 0;a < Bindings0_Count;a++) {
+        //    switch(Binding0.BindingType) {
+        //        case MemberBindingType.Assignment:{
+        this.Expression実行AssertEqual(()=>new class_演算子オーバーロード{Int32フィールド=3});
+        //        }
+        //        case MemberBindingType.MemberBinding: {
+        this.Expression実行AssertEqual(() => new class_演算子オーバーロード {class_演算子オーバーロード2= {a = 1}});
+        //        }
+        //        default: {
+        //            for(var b = 0;b < MemberListBinding0_Initializers_Count;b++) {
+        this.Expression実行AssertEqual(()=>new class_演算子オーバーロード{StructCollectionフィールド = {1,2}});
+        //            }
+        //        }
+        //    }
+        //}
+    }
+    private delegate int delegate_int_refint(ref int input);
+    private static int int_refint(ref int input, delegate_int_refint d) => d(ref input);
+    private const BindingFlags f = BindingFlags.Static|BindingFlags.NonPublic;
+    private static int int_int_int(int a,int b){
+        var r=1;
+        for(var x=0;x<b;x++){
+            r*=a;
+        }
+        return r;
+    }
+    private static int FieldInt32;
+    private static readonly MemberExpression MemberInt32 =Expression.MakeMemberAccess(
+        null,
+        typeof(変換_Stopwatchに埋め込む).GetField(nameof(FieldInt32),BindingFlags.Static|BindingFlags.NonPublic)!
+    );
+    [Fact]public void Assign(){
+        //switch(Binary0_Left_NodeType){
+        //    case ExpressionType.Parameter: {
+        //    }
+        //    case ExpressionType.MemberAccess:{
+        //    }
+        //    default:{
+        //    }
+        //}
+        var f = BindingFlags.Static|BindingFlags.NonPublic;
+        var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
+        var int_refint_intFuncRef = typeof(変換_Stopwatchに埋め込む).GetMethod(nameof(変換_Stopwatchに埋め込む.int_refint), f)!;
+        var int_refint = typeof(変換_Stopwatchに埋め込む).GetMethod(nameof(変換_Stopwatchに埋め込む.int_refint), f)!;
+        var p = Expression.Parameter(typeof(int), "p");
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int,int>>(
+                Expression.Assign(
+                    p,
+                    Expression.Constant(4)
+                ),
+                p
+            )
+        );
+        var ParameterInt32= Expression.Parameter(typeof(int),"int32");
+        var Constant0= Expression.Constant(0);
+        var Constant1= Expression.Constant(1);
+        var ConversionInt32=Expression.Lambda<Func<int,int>>(Expression.Add(ParameterInt32,ParameterInt32),ParameterInt32);
+        var Method_int=GetMethod(()=>int_int_int(1,1));
+        共通1(Expression.AddAssign            (MemberInt32 ,Constant1 ,Method_int,ConversionInt32 ));
+        void 共通1(BinaryExpression Binary){
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<object>>(
+                    Expression.Block(
+                        Expression.Assign(MemberInt32,Constant0),
+                        Expression.Convert(Binary,typeof(object))
+                    )
+                )
+            );
+        }
+        var a=Expression.Parameter(typeof(int),"a");
+        const int expected=10,index=1;
+        var array=new int[30];
+        array[index]=expected;
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Action>(
+                Expression.Block(
+                    Expression.Lambda<Func<int>>(
+                        Expression.Assign(
+                            Expression.ArrayAccess(
+                                Expression.Constant(array),
+                                Expression.Convert(
+                                    Expression.Constant((decimal)index),
+                                    typeof(int)
+                                )
+                            ),
+                            Expression.Constant(10)
+                        )
+                    )
+                )
+            )
+        );
+    }
 }
 [MemoryPackable,MessagePackObject(true)]
 public partial struct S{

@@ -1620,7 +1620,8 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                     this.Bindings(Local2,MemberMemberBinding.Bindings);
                     break;
                 }
-                case MemberBindingType.ListBinding:{
+                default: {
+                    Debug.Assert(Binding.BindingType is MemberBindingType.ListBinding);
                     Type LocalType;
                     var Binding_Member=Binding.Member;
                     if(Binding_Member.MemberType==MemberTypes.Field){
@@ -1660,8 +1661,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                     }
                     break;
                 }
-                default:
-                    throw new NotSupportedException($"{Binding.BindingType}はサポートされてない");
             }
         }
     }

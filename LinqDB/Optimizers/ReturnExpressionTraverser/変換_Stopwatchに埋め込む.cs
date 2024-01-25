@@ -386,18 +386,13 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
         計測? 計測する前処理演算(string Name,string ? Value=null){
             if(Value is null) Value="";
             ref var 制御計測 = ref this.辺;
-            int 制御番号;
-            if(制御計測 is null)
-                制御番号=++this.制御番号;
-            else
-                制御番号=this.制御番号;//上の制御計測.制御番号;
+            Debug.Assert(制御計測 is not null,"先頭のthis.計測する前処理演算で代入される");
+            var 制御番号=this.制御番号;//上の制御計測.制御番号;
             var 親の演算計測 = this.演算計測;
             var 子演算計測 = new 計測(計測Maneger,制御番号,Name,Value,"");
-            if(制御計測 is null)
-                制御計測=子演算計測;
             var 親演算計測 = this.演算計測;
-            if(親演算計測 is not null)
-                親演算計測.List子演算.Add(子演算計測);
+            Debug.Assert(this.演算計測 is not null,"先頭のthis.計測する前処理演算で代入される");
+            this.演算計測.List子演算.Add(子演算計測);
             this.演算計測=子演算計測;
             return 親の演算計測;
             //return 子演算計測;
@@ -896,7 +891,6 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
     protected override IList<MemberBinding> Bindings(ReadOnlyCollection<MemberBinding> Bindings0) {
         var Bindings0_Count = Bindings0.Count;
         var Bindings1 = new MemberBinding[Bindings0_Count];
-        var 変化したか = false;
         for(var a = 0;a < Bindings0_Count;a++) {
             var Binding0 = Bindings0[a];
             switch(Binding0.BindingType) {
@@ -912,7 +906,6 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
                             Binding1_Expression
                         )
                     );
-                    変化したか=true;
                     break;
                 }
                 case MemberBindingType.MemberBinding: {
@@ -920,58 +913,41 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
                     var 親計測=this.計測する前処理演算(MemberMemberBinding.Member.Name).親演算計測;
                     var Binding0_Bindings = MemberMemberBinding.Bindings;
                     var Binding1_Bindings = this.Bindings(Binding0_Bindings);
-                    if(Binding0_Bindings==Binding1_Bindings){
-                        Bindings1[a]=Binding0;
-                    } else {
-                        Bindings1[a]=Expression.MemberBind(
-                            Binding0.Member,
-                            Binding1_Bindings
-                        );
-                        変化したか=true;
-                    }
+                    Bindings1[a]=Expression.MemberBind(
+                        Binding0.Member,
+                        Binding1_Bindings
+                    );
                     this.演算計測=親計測;
                     break;
                 }
-                case MemberBindingType.ListBinding: {
+                default: {
+                    Debug.Assert(Binding0.BindingType is MemberBindingType.ListBinding);
                     var MemberListBinding0 = (MemberListBinding)Binding0;
                     var MemberListBinding0_Initializers = MemberListBinding0.Initializers;
                     var MemberListBinding0_Initializers_Count = MemberListBinding0_Initializers.Count;
                     var MemberListBinding1_Initializers = new ElementInit[MemberListBinding0_Initializers_Count];
                     var 親計測=this.計測する前処理演算(MemberListBinding0.Member.Name).親演算計測;
-                    var 変化したか1 = false;
                     for(var b = 0;b < MemberListBinding0_Initializers_Count;b++) {
                         var MemberListBinding0_Initializer = MemberListBinding0_Initializers[b];
                         var 親計測2=this.計測する前処理演算(MemberListBinding0_Initializer.AddMethod.ToString()).親演算計測;
                         var MemberListBinding0_Initializer_Arguments=MemberListBinding0_Initializer.Arguments;
                         var MemberListBinding1_Initializer_Arguments=this.TraverseExpressions(MemberListBinding0_Initializer_Arguments);
-                        if(ReferenceEquals(MemberListBinding0_Initializer_Arguments,MemberListBinding1_Initializer_Arguments)) {
-                            MemberListBinding1_Initializers[b]=MemberListBinding0_Initializer;
-                        } else {
-                            MemberListBinding1_Initializers[b]=Expression.ElementInit(
-                                MemberListBinding0_Initializer.AddMethod,
-                                MemberListBinding1_Initializer_Arguments
-                            );
-                            変化したか1=true;
-                        }
+                        MemberListBinding1_Initializers[b]=Expression.ElementInit(
+                            MemberListBinding0_Initializer.AddMethod,
+                            MemberListBinding1_Initializer_Arguments
+                        );
                         this.演算計測=親計測2;
                     }
-                    if(変化したか1) {
-                        Bindings1[a]=Expression.ListBind(
-                            Binding0.Member,
-                            MemberListBinding1_Initializers
-                        );
-                        変化したか=true;
-                    } else{
-                        Bindings1[a]=MemberListBinding0;
-                    }
+                    Bindings1[a]=Expression.ListBind(
+                        Binding0.Member,
+                        MemberListBinding1_Initializers
+                    );
                     this.演算計測=親計測;
                     break;
                 }
-                default:
-                    throw new NotSupportedException($"{Binding0.BindingType}はサポートされていない");
             }
         }
-        return 変化したか ? Bindings1 : Bindings0;
+        return Bindings1;
     }
     protected override Expression MemberInit(MemberInitExpression MemberInit0){
         var 前処理データ=this.計測する前処理演算(nameof(ExpressionType.MemberInit));
