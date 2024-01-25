@@ -630,12 +630,6 @@ public class 変換_Stopwatchに埋め込む : 共通{
     [Fact]public void Assign(){
         //switch(Binary0_Left_NodeType){
         //    case ExpressionType.Parameter: {
-        //    }
-        //    case ExpressionType.MemberAccess:{
-        //    }
-        //    default:{
-        //    }
-        //}
         var f = BindingFlags.Static|BindingFlags.NonPublic;
         var ref_p = Expression.Parameter(typeof(int).MakeByRefType(), "ref_p");
         var int_refint_intFuncRef = typeof(変換_Stopwatchに埋め込む).GetMethod(nameof(変換_Stopwatchに埋め込む.int_refint), f)!;
@@ -650,6 +644,8 @@ public class 変換_Stopwatchに埋め込む : 共通{
                 p
             )
         );
+        //    }
+        //    case ExpressionType.MemberAccess:{
         var ParameterInt32= Expression.Parameter(typeof(int),"int32");
         var Constant0= Expression.Constant(0);
         var Constant1= Expression.Constant(1);
@@ -666,6 +662,8 @@ public class 変換_Stopwatchに埋め込む : 共通{
                 )
             );
         }
+        //    }
+        //    default:{
         var a=Expression.Parameter(typeof(int),"a");
         const int expected=10,index=1;
         var array=new int[30];
@@ -688,6 +686,8 @@ public class 変換_Stopwatchに埋め込む : 共通{
                 )
             )
         );
+        //    }
+        //}
     }
 }
 [MemoryPackable,MessagePackObject(true)]

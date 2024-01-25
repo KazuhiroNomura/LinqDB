@@ -1022,7 +1022,107 @@ public class 変換_局所Parameterの先行評価 : 共通{
         }
         [Fact]
         public void Try(){
-            //cover
+            var ex=Expression.Parameter(typeof(Exception),"ex");
+            //for(var a=0;a<Try0_Handlers_Count;a++) {
+            //    if(Try0_Handler.Filter!=Try1_Handler_Filter||Try0_Handler.Body!=Try1_Handler_Body){
+            //        if(Try0_Handler_Variable is not null)
+            //(0)
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryCatch(
+                        Expression.Constant(0m),
+                        Expression.Catch(
+                            ex,
+                            Expression.Add(
+                                Expression.Constant(0m),
+                                Expression.Constant(0m)
+                            )
+                        )
+                    )
+                )
+            );
+            //        else
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryCatch(
+                        Expression.Constant(0m),
+                        Expression.Catch(
+                            typeof(Exception),
+                            Expression.Constant(0m),
+                            Expression.Equal(
+                                Expression.Constant(0m),
+                                Expression.Constant(0m)
+                            )
+                        )
+                    )
+                )
+            );
+            //    } else
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryCatch(
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        ),
+                        Expression.Catch(
+                            ex,
+                            Expression.Default(typeof(decimal))
+                        )
+                    )
+                )
+            );
+            //}
+            //if(Try0.Fault is not null){
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryFault(
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        ),
+                        Expression.Constant(0m)
+                    )
+                )
+            );
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryFault(
+                        Expression.Constant(0m),
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        )
+                    )
+                )
+            );
+            //} else if(Try0.Finally is not null){
+            //    if(Try0_Finally!=Try1_Finally)
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryFinally(
+                        Expression.Constant(0m),
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        )
+                    )
+                )
+            );
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryFinally(
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        ),
+                        Expression.Constant(0m)
+                    )
+                )
+            );
+            //} else{
+            //(0)
+            //}
         }
         [Fact]
         public void Conditional()

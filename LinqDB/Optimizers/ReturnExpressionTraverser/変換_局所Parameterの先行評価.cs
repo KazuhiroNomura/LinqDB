@@ -145,9 +145,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Try_Handlers_Count=Try_Handlers.Count;
             for(var a=0;a<Try_Handlers_Count;a++){
                 var Try_Handle=Try_Handlers[a];
-                var Handler_Body=Try_Handle.Body;
                 this.辺インクリメント();
-                this.Traverse(Handler_Body);
+                this.TraverseNulllable(Try_Handle.Filter);
+                this.Traverse(Try_Handle.Body);
             }
             if(Try.Fault is not null){
                 this.辺インクリメント();
@@ -385,7 +385,12 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                         Assign1_Left=Assign0_Left;
                     } else
                         Assign1_Left= base.Traverse(Assign0_Left);//.static_field,array[ここ]など
-                    return Expression.Assign(Assign1_Left,this.Traverse(Assign0.Right));
+                    var Assign0_Right=Assign0.Right;
+                    var Assign1_Right=this.Traverse(Assign0_Right);
+                    if(Assign0_Left==Assign1_Left)
+                        if(Assign0_Right==Assign1_Right)
+                            return Assign0;
+                    return Expression.Assign(Assign1_Left,Assign1_Right);
                 }
                 case ExpressionType.Call: {
                     if(Reflection.Helpers.NoEarlyEvaluation==GetGenericMethodDefinition(((MethodCallExpression)Expression0).Method))return Expression0;
@@ -474,12 +479,9 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Try0_Handlers=Try0.Handlers;
             var Try0_Handlers_Count=Try0_Handlers.Count;
             var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
-            var 変化したか=false;
             var Try0_Body=Try0.Body;
             this.辺インクリメント();
             var Try1_Body=this.Traverse(Try0_Body);
-            if(Try0_Body!=Try1_Body)
-                変化したか=true;
             for(var a=0;a<Try0_Handlers_Count;a++) {
                 var Try0_Handler=Try0_Handlers[a];
                 Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
@@ -488,13 +490,12 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
                 var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
                 CatchBlock Try1_Handler;
-                if(Try0_Handler.Filter!=Try1_Handler_Filter||Try0_Handler.Body!=Try1_Handler_Body){
-                    変化したか=true;
+                if(Try0_Handler.Filter!=Try1_Handler_Filter||Try0_Handler.Body!=Try1_Handler_Body)
                     if(Try0_Handler_Variable is not null)
                         Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
                     else
                         Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
-                } else
+                else
                     Try1_Handler=Try0_Handler;
                 Try1_Handlers[a]=Try1_Handler;
             }
@@ -503,25 +504,17 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                 var Try0_Fault=Try0.Fault;
                 var Try1_Fault=this.Traverse(Try0_Fault);
                 this.辺インクリメント();
-                if(Try0_Fault!=Try1_Fault)
-                    変化したか=true;
-                if(変化したか)
-                    return Expression.TryFault(Try1_Body,Try1_Fault);
+                return Expression.TryFault(Try1_Body,Try1_Fault);
             } else if(Try0.Finally is not null){
                 this.辺インクリメント();
                 var Try0_Finally=Try0.Finally;
                 var Try1_Finally=this.Traverse(Try0_Finally);
                 this.辺インクリメント();
-                if(Try0_Finally!=Try1_Finally)
-                    変化したか=true;
-                if(変化したか)
-                    return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
+                return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
             } else{
                 this.辺インクリメント();
-                if(変化したか)
-                    return Expression.TryCatch(Try1_Body,Try1_Handlers);
+                return Expression.TryCatch(Try1_Body,Try1_Handlers);
             }
-            return Try0;
         }
         protected override Expression Call(MethodCallExpression MethodCall0) {
             if(this.IsInline){

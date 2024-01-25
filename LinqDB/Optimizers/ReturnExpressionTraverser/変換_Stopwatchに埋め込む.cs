@@ -341,28 +341,20 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
         計測? 親演算計測;
         switch(Binary0_Left_NodeType){
             case ExpressionType.Parameter: {
-                //.NETのバージョンによっては変数の参照も計測できるかもしれない。
                 var Parameter0 = (ParameterExpression)Assign0_Left;
-                //Assign1_Left=this.Parameter(Parameter0);
                 親演算計測=計測する前処理演算(nameof(ExpressionType.Parameter), Parameter0.Name);
                 break;
             }
             case ExpressionType.MemberAccess:{
                 var Member0 = (MemberExpression)Assign0_Left;
                 親演算計測=計測する前処理演算(nameof(ExpressionType.MemberAccess),Member0.Member.Name);
-                //Assign1_Left=Expression.MakeMemberAccess(
-                //    this.PointerTraverseNullable(Member0.Expression),
-                //    Member0.Member
-                //);
                 Assign1_Left=this.MemberAccess(Member0);
                 break;
             }
             default:{
                 Debug.Assert(ExpressionType.Index==Binary0_Left_NodeType);
-                //Int32[]
-                //ArrayAccess
                 var Index0 = (IndexExpression)Assign0_Left;
-                親演算計測= 計測する前処理演算(nameof(ExpressionType.Index));
+                親演算計測= 計測する前処理演算(nameof(ExpressionType.Index),"");
                 Assign1_Left=this.Index(Index0);
                 break;
             }
@@ -383,8 +375,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
             )
         );
         //↓Assignの情報取得
-        計測? 計測する前処理演算(string Name,string ? Value=null){
-            if(Value is null) Value="";
+        計測? 計測する前処理演算(string Name,string Value){
             ref var 制御計測 = ref this.辺;
             Debug.Assert(制御計測 is not null,"先頭のthis.計測する前処理演算で代入される");
             var 制御番号=this.制御番号;//上の制御計測.制御番号;
@@ -395,7 +386,6 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
             this.演算計測.List子演算.Add(子演算計測);
             this.演算計測=子演算計測;
             return 親の演算計測;
-            //return 子演算計測;
         }
     }
     protected override Expression Add(BinaryExpression Binary0) => this.共通Binary(Binary0);
