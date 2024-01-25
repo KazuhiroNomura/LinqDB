@@ -595,10 +595,13 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         this.ListスコープParameter.Clear();
         return this.Traverse(Expression0);
     }
-    protected override Expression Assign(BinaryExpression Assign0)=>Expression.Assign(
-        this.Traverse(Assign0.Left),
-        this.Traverse(Assign0.Right)
-    );
+    //protected override Expression Assign(BinaryExpression Assign0){
+    //    base.Assign()
+    //    return Expression.Assign(
+    //        this.Traverse(Assign0.Left),
+    //        this.Traverse(Assign0.Right)
+    //    );
+    //}
     protected override Expression Block(BlockExpression Block0){
         var ListスコープParameter = this.ListスコープParameter;
         var ListスコープParameter_Count = ListスコープParameter.Count;
@@ -666,78 +669,78 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
         return Lambda1;
     }
-    protected override Expression Try(TryExpression Try0){
-        Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
-        var Try0_Handlers=Try0.Handlers;
-        var Try0_Handlers_Count=Try0_Handlers.Count;
-        var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
-        var 変化したか=false;
-        var Try0_Body=Try0.Body;
-        var Try1_Body=this.先行評価スコープブロック(Try0_Body);
-        if(Try0_Body!=Try1_Body) 変化したか=true;
-        for(var a=0;a<Try0_Handlers_Count;a++){
-            var Try0_Handler=Try0_Handlers[a];
-            Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
-            var Try0_Handler_Variable=Try0_Handler.Variable;
-            var Try0_Handler_Body=Try0_Handler.Body;
-            var Try0_Handler_Filter=Try0_Handler.Filter;
-            var Try1_Handler_Body=this.先行評価スコープブロック(Try0_Handler_Body);
-            CatchBlock Try1_Handler;
-            if(Try0_Handler_Variable is not null){
-                if(Try0_Handler_Filter is not null){
-                    var Try1_Handler_Filter=this.先行評価スコープブロック(Try0_Handler_Filter);
-                    if(Try0_Handler_Body!=Try1_Handler_Body||Try0_Handler_Filter!=Try1_Handler_Filter){
-                        変化したか=true;
-                        Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
-                    } else
-                        Try1_Handler=Try0_Handler;
-                } else{
-                    if(Try0_Handler_Body!=Try1_Handler_Body){
-                        変化したか=true;
-                        Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body);
-                    } else
-                        Try1_Handler=Try0_Handler;
-                }
-            } else{
-                if(Try0_Handler_Filter is not null){
-                    var Try1_Handler_Filter=this.先行評価スコープブロック(Try0_Handler_Filter);
-                    if(Try0_Handler_Body!=Try1_Handler_Body||Try0_Handler_Filter!=Try1_Handler_Filter){
-                        変化したか=true;
-                        Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
-                    } else
-                        Try1_Handler=Try0_Handler;
-                } else{
-                    if(Try0_Handler_Body!=Try1_Handler_Body){
-                        変化したか=true;
-                        Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body);
-                    } else
-                        Try1_Handler=Try0_Handler;
-                }
-            }
-            Try1_Handlers[a]=Try1_Handler;
-        }
-        if(Try0.Fault is not null){
-            Debug.Assert(Try0.Finally is null);
-            var Try0_Fault=Try0.Fault;
-            var Try1_Fault=this.Traverse(Try0_Fault);
-            if(Try0_Fault!=Try1_Fault) 
-                変化したか=true;
-            if(変化したか) 
-                return Expression.TryFault(Try1_Body,Try1_Fault);
-        } else{
-            var Try0_Finally=Try0.Finally;
-            if(Try0_Finally is not null){
-                var Try1_Finally=this.Traverse(Try0_Finally);
-                if(Try0_Finally!=Try1_Finally) 
-                    変化したか=true;
-                if(変化したか) 
-                    return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
-            }else if(変化したか) 
-                return Expression.TryCatch(Try1_Body,Try1_Handlers);
-        }
-        Debug.Assert(!変化したか);
-        return Try0;
-    }
+    //protected override Expression Try(TryExpression Try0){
+    //    Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
+    //    var Try0_Handlers=Try0.Handlers;
+    //    var Try0_Handlers_Count=Try0_Handlers.Count;
+    //    var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
+    //    var 変化したか=false;
+    //    var Try0_Body=Try0.Body;
+    //    var Try1_Body=this.先行評価スコープブロック(Try0_Body);
+    //    if(Try0_Body!=Try1_Body) 変化したか=true;
+    //    for(var a=0;a<Try0_Handlers_Count;a++){
+    //        var Try0_Handler=Try0_Handlers[a];
+    //        Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
+    //        var Try0_Handler_Variable=Try0_Handler.Variable;
+    //        var Try0_Handler_Body=Try0_Handler.Body;
+    //        var Try0_Handler_Filter=Try0_Handler.Filter;
+    //        var Try1_Handler_Body=this.先行評価スコープブロック(Try0_Handler_Body);
+    //        CatchBlock Try1_Handler;
+    //        if(Try0_Handler_Variable is not null){
+    //            if(Try0_Handler_Filter is not null){
+    //                var Try1_Handler_Filter=this.先行評価スコープブロック(Try0_Handler_Filter);
+    //                if(Try0_Handler_Body!=Try1_Handler_Body||Try0_Handler_Filter!=Try1_Handler_Filter){
+    //                    変化したか=true;
+    //                    Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
+    //                } else
+    //                    Try1_Handler=Try0_Handler;
+    //            } else{
+    //                if(Try0_Handler_Body!=Try1_Handler_Body){
+    //                    変化したか=true;
+    //                    Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body);
+    //                } else
+    //                    Try1_Handler=Try0_Handler;
+    //            }
+    //        } else{
+    //            if(Try0_Handler_Filter is not null){
+    //                var Try1_Handler_Filter=this.先行評価スコープブロック(Try0_Handler_Filter);
+    //                if(Try0_Handler_Body!=Try1_Handler_Body||Try0_Handler_Filter!=Try1_Handler_Filter){
+    //                    変化したか=true;
+    //                    Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
+    //                } else
+    //                    Try1_Handler=Try0_Handler;
+    //            } else{
+    //                if(Try0_Handler_Body!=Try1_Handler_Body){
+    //                    変化したか=true;
+    //                    Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body);
+    //                } else
+    //                    Try1_Handler=Try0_Handler;
+    //            }
+    //        }
+    //        Try1_Handlers[a]=Try1_Handler;
+    //    }
+    //    if(Try0.Fault is not null){
+    //        Debug.Assert(Try0.Finally is null);
+    //        var Try0_Fault=Try0.Fault;
+    //        var Try1_Fault=this.Traverse(Try0_Fault);
+    //        if(Try0_Fault!=Try1_Fault) 
+    //            変化したか=true;
+    //        if(変化したか) 
+    //            return Expression.TryFault(Try1_Body,Try1_Fault);
+    //    } else{
+    //        var Try0_Finally=Try0.Finally;
+    //        if(Try0_Finally is not null){
+    //            var Try1_Finally=this.Traverse(Try0_Finally);
+    //            if(Try0_Finally!=Try1_Finally) 
+    //                変化したか=true;
+    //            if(変化したか) 
+    //                return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
+    //        }else if(変化したか) 
+    //            return Expression.TryCatch(Try1_Body,Try1_Handlers);
+    //    }
+    //    Debug.Assert(!変化したか);
+    //    return Try0;
+    //}
     private Expression AndAlso_OrElse(Expression test,Expression ifTrue,Expression ifFalse) {
         if(test.Type==typeof(bool)) {
             return Expression.Condition(

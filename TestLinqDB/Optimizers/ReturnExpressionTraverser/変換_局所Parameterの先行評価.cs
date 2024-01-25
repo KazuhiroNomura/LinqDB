@@ -1,4 +1,6 @@
 ﻿using LinqDB.Sets;
+
+using System.Diagnostics;
 using System.Globalization;
 
 using TestLinqDB.特殊パターン;
@@ -1017,6 +1019,10 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    }
             //_1
             //}
+        }
+        [Fact]
+        public void Try(){
+            //cover
         }
         [Fact]
         public void Conditional()

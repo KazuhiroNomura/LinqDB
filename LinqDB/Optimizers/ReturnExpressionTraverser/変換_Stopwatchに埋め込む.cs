@@ -299,34 +299,34 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
             )
         );
     }
-    /// <summary>
-    /// MemberAccessで使われる
-    /// </summary>
-    /// <param name="Expression0"></param>
-    /// <returns></returns>
-    private Expression? PointerTraverseNullable(Expression? Expression0) {
-        if(Expression0 is null)
-            return null;
-        var NodeType = Expression0.NodeType;
-        if(NodeType==ExpressionType.Parameter) {
-            if(Expression0.Type.IsValueType) {
-                var Parameter0 = (ParameterExpression)Expression0;
-                this.計測する前処理演算(nameof(ExpressionType.Parameter),Parameter0.Name);
-                return Expression0;
-            }
-            return Expression0;
-        }
-        if(NodeType==ExpressionType.MemberAccess) {
-            var Member0 = (MemberExpression)Expression0;
-            Expression? Member1_Expression;
-            if(Expression0.Type.IsValueType)
-                Member1_Expression=this.PointerTraverseNullable(Member0.Expression);
-            else
-                Member1_Expression=this.TraverseNullable(Member0.Expression);
-            return Expression.MakeMemberAccess(Member1_Expression,Member0.Member);
-        }
-        return this.Traverse(Expression0);
-    }
+    ///// <summary>
+    ///// MemberAccessで使われる
+    ///// </summary>
+    ///// <param name="Expression0"></param>
+    ///// <returns></returns>
+    //private Expression? PointerTraverseNullable(Expression? Expression0) {
+    //    if(Expression0 is null)
+    //        return null;
+    //    var NodeType = Expression0.NodeType;
+    //    if(NodeType==ExpressionType.Parameter) {
+    //        if(Expression0.Type.IsValueType) {
+    //            var Parameter0 = (ParameterExpression)Expression0;
+    //            this.計測する前処理演算(nameof(ExpressionType.Parameter),Parameter0.Name);
+    //            return Expression0;
+    //        }
+    //        return Expression0;
+    //    }
+    //    if(NodeType==ExpressionType.MemberAccess) {
+    //        var Member0 = (MemberExpression)Expression0;
+    //        Expression? Member1_Expression;
+    //        if(Expression0.Type.IsValueType)
+    //            Member1_Expression=this.PointerTraverseNullable(Member0.Expression);
+    //        else
+    //            Member1_Expression=this.TraverseNullable(Member0.Expression);
+    //        return Expression.MakeMemberAccess(Member1_Expression,Member0.Member);
+    //    }
+    //    return this.Traverse(Expression0);
+    //}
     protected override Expression Assign(BinaryExpression Assign0){
         Debug.Assert(
             Assign0.Left.NodeType==ExpressionType.Parameter||
@@ -825,7 +825,7 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
                     Name=Constant0.Value.ToString()!;
                 }else if(Constant_Type==typeof(long)){
                     Name="(Int64)" + Constant0.Value;
-                }else if(Constant_Type==typeof(IntPtr)){
+                }else if(Constant_Type==typeof(nint)){
                     Name="(IntPtr)" + Constant0.Value;
                 }else if(Constant_Type==typeof(byte)){
                     Name="(Byte)" + Constant0.Value;
@@ -835,10 +835,13 @@ public sealed class 変換_Stopwatchに埋め込む(作業配列 作業配列,�
                     Name=Constant0.Value + "u";
                 }else if(Constant_Type==typeof(ulong)){
                     Name=Constant0.Value + "ul";
-                }else if(Constant_Type==typeof(UIntPtr)){
+                }else if(Constant_Type==typeof(nuint)){
                     Name="(UIntPtr)" + Constant0.Value;
                 }else if(Constant_Type==typeof(bool)){
-                    Name=(bool)Constant0.Value ? "true" : "false";
+                    if((bool)Constant0.Value)
+                        Name="true";
+                    else
+                        Name="false";
                 }else if(Constant_Type==typeof(char)){
                     Name="'" + Constant0.Value + '"';
                 }else if(Constant_Type==typeof(float)){

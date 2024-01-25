@@ -279,9 +279,9 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         //            return Binary0;
         //    return Expression.MakeBinary(NodeType,Binary1_Left,Binary1_Right,Binary0.IsLiftedToNull,Binary0.Method);
         //}
-        protected override Expression MakeAssign(BinaryExpression Binary0,ExpressionType NodeType){
-            throw new NotSupportedException();
-        }
+        //protected override Expression MakeAssign(BinaryExpression Binary0,ExpressionType NodeType){
+        //    throw new NotSupportedException();
+        //}
         protected override Expression Assign(BinaryExpression Binary0) {
             var 書き込み項か=this.書き込み項か;
             var Binary0_Left = Binary0.Left;
@@ -552,45 +552,43 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         do {
             Debug.Assert(LinkedListNode!=null);
             var LinkedListNode_Value = LinkedListNode.Value;
-            {
-                var (分離Expressionの場所,旧)=取得_先行評価式.実行(LinkedListNode_Value);
-                if(旧 is null){
-                    LinkedListNode=LinkedListNode.Next;
+            var (分離Expressionの場所,旧)=取得_先行評価式.実行(LinkedListNode_Value);
+            if(旧 is null){
+                LinkedListNode=LinkedListNode.Next;
+            } else{
+                Debug.Assert(旧.Type!=typeof(void));
+                Debug.Assert(旧.NodeType is not ExpressionType.Assign);
+                ParameterExpression 新;
+                string?Name;
+                if(旧 is ParameterExpression Parameter)
+                    Name=Parameter.Name;
+                else
+                    Name=string.Empty;
+                if(分離Expressionの場所==場所.ラムダ跨ぎ){
+                    新=Expression.Parameter(旧.Type,$"ラムダ{Name}.{this.番号++}");
+                    this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
                 } else{
-                    Debug.Assert(旧.Type!=typeof(void));
-                    ParameterExpression 新;
-                    string?Name;
-                    if(旧 is ParameterExpression Parameter)
-                        Name=Parameter.Name;
-                    else
-                        Name=string.Empty;
-                    if(分離Expressionの場所==場所.ラムダ跨ぎ){
-                        新=Expression.Parameter(旧.Type,$"ラムダ{Name}.{this.番号++}");
-                        this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
-                    } else{
-                        新=Expression.Parameter(旧.Type,$"ループ{Name}.{this.番号++}");
-                        this.ループ跨ぎParameters.Add(新);
-                    }
-                    var LinkedListNode0=LinkedListNode;
-                    var 読み込みがあるか=false;
-                    var 書き込みがあるか=false;
-                    do{
-                        //if(回数==10){
-                        //    Debugger.Break();
-                        //}
-                        var (LinkedListNode0_Value,読み込みがあるか0,書き込みがあるか0)=
-                            変換_先行評価式.実行(LinkedListNode0.Value,旧,新,分離Expressionの場所);
-                        読み込みがあるか|=読み込みがあるか0;
-                        書き込みがあるか|=書き込みがあるか0;
-                        LinkedListNode0.Value=LinkedListNode0_Value;
-                        LinkedListNode0=LinkedListNode0.Next;
-                    } while(LinkedListNode0 is not null);
-                    //LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
-                    if(読み込みがあるか) LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
-                    if(書き込みがあるか) LinkedList.AddLast(Expression.Assign(旧,新));
+                    新=Expression.Parameter(旧.Type,$"ループ{Name}.{this.番号++}");
+                    this.ループ跨ぎParameters.Add(新);
                 }
+                var LinkedListNode0=LinkedListNode;
+                var 読み込みがあるか=false;
+                var 書き込みがあるか=false;
+                do{
+                    //if(回数==10){
+                    //    Debugger.Break();
+                    //}
+                    var (LinkedListNode0_Value,読み込みがあるか0,書き込みがあるか0)=
+                        変換_先行評価式.実行(LinkedListNode0.Value,旧,新,分離Expressionの場所);
+                    読み込みがあるか|=読み込みがあるか0;
+                    書き込みがあるか|=書き込みがあるか0;
+                    LinkedListNode0.Value=LinkedListNode0_Value;
+                    LinkedListNode0=LinkedListNode0.Next;
+                } while(LinkedListNode0 is not null);
+                //LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
+                if(読み込みがあるか) LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
+                if(書き込みがあるか) LinkedList.AddLast(Expression.Assign(旧,新));
             }
-            //Continue:
             回数++;
         } while(LinkedListNode is not null);
         for(var Node = LinkedList.First;Node is not null;Node=Node.Next) Node.Value=this.Traverse(Node.Value);

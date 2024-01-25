@@ -3,6 +3,7 @@ using System.Reflection;
 using MemoryPack;
 using MessagePack;
 using Expression = System.Linq.Expressions.Expression;
+// ReSharper disable All
 namespace TestLinqDB.Optimizers.ReturnExpressionTraverser;
 [MemoryPackable,MessagePackObject(true)]
 public partial class 時間計測{
@@ -441,4 +442,167 @@ public class 変換_Stopwatchに埋め込む : 共通{
             )
         );
     }
+    [Fact]public void TypeAs(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<string>>(
+                Expression.TypeAs(
+                    Expression.Constant("string"),
+                    typeof(string)
+                )
+            )
+        );
+    }
+    [Fact]public void TypeIs(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool>>(
+                Expression.TypeIs(
+                    Expression.Constant(0m),
+                    typeof(int)
+                )
+            )
+        );
+    }
+    [Fact]public void Constant(){
+        //if(Constant0.Value is null){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<object?>>(
+                Expression.Constant(null)
+            )
+        );
+        //} else {
+        //    if(Constant_Type==typeof(string)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<object>>(
+                Expression.Constant("abc")
+            )
+        );
+        //    }else if(Constant_Type==typeof(decimal)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.Constant(1m)
+            )
+        );
+        //    }else {
+        //        if(Constant_Type.IsEnum){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<TypeCode>>(
+                Expression.Constant(TypeCode.Boolean)
+            )
+        );
+        //        }
+        //        if(Constant_Type==typeof(sbyte)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<sbyte>>(
+                Expression.Constant((sbyte)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(short)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<short>>(
+                Expression.Constant((short)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(int)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Constant(1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(long)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<long>>(
+                Expression.Constant((long)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(nint)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<nint>>(
+                Expression.Constant((nint)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(byte)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<byte>>(
+                Expression.Constant((byte)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(ushort)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<ushort>>(
+                Expression.Constant((ushort)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(uint)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<uint>>(
+                Expression.Constant(1u)
+            )
+        );
+        //        }else if(Constant_Type==typeof(ulong)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<ulong>>(
+                Expression.Constant((ulong)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(nuint)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<nuint>>(
+                Expression.Constant((nuint)1)
+            )
+        );
+        //        }else if(Constant_Type==typeof(bool)){
+        //            if((bool)Constant0.Value)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool>>(
+                Expression.Constant(true)
+            )
+        );
+        //            else
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<bool>>(
+                Expression.Constant(false)
+            )
+        );
+        //        }else if(Constant_Type==typeof(char)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<char>>(
+                Expression.Constant('a')
+            )
+        );
+        //        }else if(Constant_Type==typeof(float)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<float>>(
+                Expression.Constant(1f)
+            )
+        );
+        //        }else if(Constant_Type==typeof(double)){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<double>>(
+                Expression.Constant(1d)
+            )
+        );
+        //        } else{
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<object>>(
+                Expression.Constant("object",typeof(object))
+            )
+        );
+        //        }
+        //    }
+        //}
+    }
+    //[Fact]public void Bindings(){
+    //    cover
+    //}
+    //[Fact]public void Constant(){
+    //    cover
+    //}
+    //[Fact]public void Assign(){
+    //    cover
+    //}
+}
+[MemoryPackable,MessagePackObject(true)]
+public partial struct S{
+    public int a=3;
+    public S(){}
 }

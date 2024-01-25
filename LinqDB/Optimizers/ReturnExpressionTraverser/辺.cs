@@ -71,32 +71,6 @@ public class 辺(ExpressionEqualityComparer ExpressionEqualityComparer){
         this.List親辺.Clear();
         this.List子辺.Clear();
     }
-    public void Assginしてない辺を買いに伝搬させる1(){
-        if(this.探索済みか) return;
-        this.探索済みか=true;
-        foreach(var 子辺 in this.List子辺)
-            子辺.Assginしてない辺を買いに伝搬させる1();
-        {
-            var 節一度出現Expressions=this.節一度出現Expressions;
-            var 節子孫一度出現Expressions=this.節子孫一度出現Expressions;
-            var 節子孫二度出現Expressions=this.節子孫二度出現Expressions;
-            using var Enumerator=this.List子辺.GetEnumerator();
-            if(Enumerator.MoveNext()){
-                節子孫一度出現Expressions.UnionWith(Enumerator.Current.節子孫一度出現Expressions);
-                節子孫二度出現Expressions.UnionWith(Enumerator.Current.節子孫二度出現Expressions);
-                //節子孫二度出現Expressions.UnionWith(Enumerator.Current.節子孫一度出現Expressions);
-                while(Enumerator.MoveNext()){
-                    節子孫一度出現Expressions.IntersectWith(Enumerator.Current.節子孫一度出現Expressions);
-                    節子孫二度出現Expressions.IntersectWith(Enumerator.Current.節子孫二度出現Expressions);
-                    //節子孫二度出現Expressions.IntersectWith(Enumerator.Current.節子孫一度出現Expressions);
-                }
-            }
-            節子孫二度出現Expressions.UnionWith(節子孫一度出現Expressions.Intersect(節一度出現Expressions,ExpressionEqualityComparer));
-            節子孫一度出現Expressions.UnionWith(節一度出現Expressions);
-            節子孫二度出現Expressions.IntersectWith(節一度出現Expressions);
-            節子孫二度出現Expressions.UnionWith(this.節二度出現Expressions);
-        }
-    }
     /// <summary>
     /// "節子孫一度出現Expressions"を子辺の"節子孫一度出現Expressions"と自身の"節一度出現Expressions"から作る
     /// "節子孫二度出現Expressions"を子辺の"節子孫二度出現Expressions"と自身の"節二度出現Expressions"から作る
