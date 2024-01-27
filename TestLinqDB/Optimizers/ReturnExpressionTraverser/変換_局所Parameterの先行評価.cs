@@ -1074,17 +1074,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             );
             //}
             //if(Try0.Fault is not null){
-            this.Expression実行AssertEqual(
-                Expression.Lambda<Func<decimal>>(
-                    Expression.TryFault(
-                        Expression.Add(
-                            Expression.Constant(0m),
-                            Expression.Constant(0m)
-                        ),
-                        Expression.Constant(0m)
-                    )
-                )
-            );
+            //  if(Try0_Fault!=Try1_Fault)
             this.Expression実行AssertEqual(
                 Expression.Lambda<Func<decimal>>(
                     Expression.TryFault(
@@ -1093,6 +1083,17 @@ public class 変換_局所Parameterの先行評価 : 共通{
                             Expression.Constant(0m),
                             Expression.Constant(0m)
                         )
+                    )
+                )
+            );
+            this.Expression実行AssertEqual(
+                Expression.Lambda<Func<decimal>>(
+                    Expression.TryFault(
+                        Expression.Add(
+                            Expression.Constant(0m),
+                            Expression.Constant(0m)
+                        ),
+                        Expression.Constant(0m)
                     )
                 )
             );

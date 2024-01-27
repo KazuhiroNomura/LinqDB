@@ -148,7 +148,7 @@ public partial class テーブルスキーマ編集:Window {
         //this.データベース保存("TPC_C");
         //this.データベース保存("TPC_H");
         //this.データベース保存("TPC_E");
-        this.SQLServer保存("AdventureWorks2016_EXT");
+        //this.SQLServer保存("AdventureWorks2016_EXT");
         foreach (var Database in Databases){
             this.SQLServer保存(Database);
         }

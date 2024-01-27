@@ -68,7 +68,10 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     var Assign = (BinaryExpression)Expression;
                     var Assign_Left = Assign.Left;
                     if(Assign_Left.NodeType is ExpressionType.Parameter) {
-                        base.Traverse(Assign.Right);
+                        //LambdaをTraverseしない
+                        //baseを読んでいるのはt=1mという先行評価のための代入式の右辺を無限に先行評価してしまうため
+                        if(Assign.Right is not LambdaExpression)
+                            base.Traverse(Assign.Right);//a=1mの1mを２度出現とみなす
                     } else {
                         base.Traverse(Assign_Left);//.static_field,array[ここ]など
                         this.Traverse(Assign.Right);
@@ -475,13 +478,13 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             );
         }
         protected override Expression Try(TryExpression Try0){
+#if true
             Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
             var Try0_Handlers=Try0.Handlers;
             var Try0_Handlers_Count=Try0_Handlers.Count;
             var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
-            var Try0_Body=Try0.Body;
             this.辺インクリメント();
-            var Try1_Body=this.Traverse(Try0_Body);
+            var Try1_Body=this.Traverse(Try0.Body);
             for(var a=0;a<Try0_Handlers_Count;a++) {
                 var Try0_Handler=Try0_Handlers[a];
                 Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
@@ -499,22 +502,72 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
                     Try1_Handler=Try0_Handler;
                 Try1_Handlers[a]=Try1_Handler;
             }
+            this.辺インクリメント();
+            if(Try0.Fault is not null){
+                var Try1_Fault=this.Traverse(Try0.Fault);
+                this.辺インクリメント();
+                return Expression.TryFault(Try1_Body,Try1_Fault);
+            }
+            if(Try0.Finally is not null){
+                var Try1_Finally=this.Traverse(Try0.Finally);
+                this.辺インクリメント();
+                return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
+            }
+            return Expression.TryCatch(Try1_Body,Try1_Handlers);
+#else
+            Debug.Assert(!(Try0.Finally is not null&&Try0.Fault is not null));
+            var Try0_Handlers=Try0.Handlers;
+            var Try0_Handlers_Count=Try0_Handlers.Count;
+            var Try1_Handlers=new CatchBlock[Try0_Handlers_Count];
+            var 変化したか=false;
+            var Try0_Body=Try0.Body;
+            this.辺インクリメント();
+            var Try1_Body=this.Traverse(Try0_Body);
+            if(Try0_Body!=Try1_Body)
+                変化したか=true;
+            for(var a=0;a<Try0_Handlers_Count;a++) {
+                var Try0_Handler=Try0_Handlers[a];
+                Debug.Assert(Try0_Handler!=null,nameof(Try0_Handler)+" != null");
+                var Try0_Handler_Variable=Try0_Handler.Variable;
+                this.辺インクリメント();
+                var Try1_Handler_Filter=this.TraverseNullable(Try0_Handler.Filter);
+                var Try1_Handler_Body=this.Traverse(Try0_Handler.Body);
+                CatchBlock Try1_Handler;
+                if(Try0_Handler.Filter!=Try1_Handler_Filter||Try0_Handler.Body!=Try1_Handler_Body){
+                    変化したか=true;
+                    if(Try0_Handler_Variable is not null)
+                        Try1_Handler=Expression.Catch(Try0_Handler_Variable,Try1_Handler_Body,Try1_Handler_Filter);
+                    else
+                        Try1_Handler=Expression.Catch(Try0_Handler.Test,Try1_Handler_Body,Try1_Handler_Filter);
+                } else
+                    Try1_Handler=Try0_Handler;
+                Try1_Handlers[a]=Try1_Handler;
+            }
             if(Try0.Fault is not null){
                 this.辺インクリメント();
                 var Try0_Fault=Try0.Fault;
                 var Try1_Fault=this.Traverse(Try0_Fault);
                 this.辺インクリメント();
-                return Expression.TryFault(Try1_Body,Try1_Fault);
+                if(Try0_Fault!=Try1_Fault)
+                    変化したか=true;
+                if(変化したか)
+                    return Expression.TryFault(Try1_Body,Try1_Fault);
             } else if(Try0.Finally is not null){
                 this.辺インクリメント();
                 var Try0_Finally=Try0.Finally;
                 var Try1_Finally=this.Traverse(Try0_Finally);
                 this.辺インクリメント();
-                return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
+                if(Try0_Finally!=Try1_Finally)
+                    変化したか=true;
+                if(変化したか)
+                    return Expression.TryCatchFinally(Try1_Body,Try1_Finally,Try1_Handlers);
             } else{
                 this.辺インクリメント();
-                return Expression.TryCatch(Try1_Body,Try1_Handlers);
+                if(変化したか)
+                    return Expression.TryCatch(Try1_Body,Try1_Handlers);
             }
+            return Try0;
+#endif
         }
         protected override Expression Call(MethodCallExpression MethodCall0) {
             if(this.IsInline){
@@ -603,14 +656,16 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
         return Block1;
     }
-    private Expression 先行評価スコープブロック(Expression Expression0){
-        var ListスコープParameter = this.ListスコープParameter;
-        var ListスコープParameter_Count = ListスコープParameter.Count;
-        var Expression1=this.先行評価(Expression0);
-        ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
-        return Expression1;
-    }
+    //private Expression 先行評価スコープブロック(Expression Expression0){
+    //    var ListスコープParameter = this.ListスコープParameter;
+    //    var ListスコープParameter_Count = ListスコープParameter.Count;
+    //    var Expression1=this.先行評価(Expression0);
+    //    ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
+    //    return Expression1;
+    //}
+    private static int aa=0;
     private Expression 先行評価(Expression Expression0){
+        aa++;
         var ListスコープParameter=this.ListスコープParameter;
         var Expression1 = Expression0;
         var Block0_Variables = this.Block_Variables;
@@ -621,11 +676,17 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var 取得_辺から二度出現したExpression = this._取得_辺から二度出現したExpression;
         var 変換_二度出現したExpression = this._変換_二度出現したExpression;
         var List辺=this.List辺;
+        dynamic p=new NonPublicAccessor(Expression1);
+        var d=p.DebugView;
+        Trace.WriteLine((string)d);
         while(true) {
-            作成_辺.実行(Expression1);
-            if(ListスコープParameter.Count>100){
-                Debug.Fail("");
+            if(aa==33){
+
             }
+            作成_辺.実行(Expression1);
+            //if(ListスコープParameter.Count>100){
+            //    Debug.Fail("");
+            //}
             作成_辺に二度出現したExpression.実行(Expression1);
             var (二度出現した一度目のExpression,辺)=取得_辺から二度出現したExpression.実行(Expression1);
             if(二度出現した一度目のExpression is null)
@@ -639,13 +700,12 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
             var Expression2=変換_二度出現したExpression.実行(Expression1,二度出現した一度目のExpression,Variable);
             Expression1=Expression2;
         }
-        Trace.WriteLine(作成_辺.Analize);
+        //Trace.WriteLine(作成_辺.Analize);
         var Expression3 = this.Traverse(Expression1);
         //Trace.WriteLine(CommonLibrary.インラインラムダテキスト(Expression3));
         this.Block_Variables=Block0_Variables;
         if(Block1_Variables.Count>0) Expression3=Expression.Block(Block1_Variables,this.作業配列.Expressions設定(Expression3));
-        return Expression3
-            ;
+        return Expression3;
     }
     protected override Expression Lambda(LambdaExpression Lambda0){
         var ListスコープParameter = this.ListスコープParameter;
