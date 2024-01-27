@@ -202,23 +202,53 @@ partial class 変換_メソッド正規化_取得インライン不可能定数{
                 o
             );
         }
-        Type MethodCall1_Arguments_5_Type;
+        //Type MethodCall1_Arguments_5_Type;
+        Expression predicate_Body;
         if(MethodCall1_Arguments_5 is not null) {
             //引数5にはComparerがあるのでそれで比較する。
             //O.Group     (I,o=>o,i=>i,???)
             //O.SelectMany(o=>I.Where(i=>EqualityComparer.Equal(i,o).???)
-            MethodCall1_Arguments_5_Type = MethodCall1_Arguments_5.Type;
+            var MethodCall1_Arguments_5_Type = MethodCall1_Arguments_5.Type;
             Debug.Assert(MethodCall1_Arguments_5_Type.GetInterface(CommonLibrary.IEqualityComparer_FullName)!.GetGenericArguments()[0]==TKey);
+            predicate_Body=Expression.Call(
+                MethodCall1_Arguments_5,
+                作業配列.GetMethod(MethodCall1_Arguments_5_Type,nameof(Generic.EqualityComparer<int>.Equals),TKey,TKey),
+                Equals_this,
+                Equals_Argument
+            );
         } else {
-            MethodCall1_Arguments_5_Type = 作業配列.MakeGenericType(typeof(Generic.EqualityComparer<>),TKey);
-            MethodCall1_Arguments_5=Expression.Call(MethodCall1_Arguments_5_Type.GetProperty(nameof(Generic.EqualityComparer<int>.Default))!.GetMethod);
+            //MethodCall1_Arguments_5_Type = 作業配列.MakeGenericType(typeof(Generic.EqualityComparer<>),TKey);
+            //MethodCall1_Arguments_5=Expression.Call(MethodCall1_Arguments_5_Type.GetProperty(nameof(Generic.EqualityComparer<int>.Default))!.GetMethod);
+
+
+            if(TKey.IsNullable()){
+                Debug.Assert(Equals_Argument.Type.IsNullable());
+                //var HasValue = Expression.Property(Equals_this,"HasValue");
+
+                var Equals_this_GetValueOrDefault=Equals_this.GetValueOrDefault();
+                var ElementTKey=Equals_this_GetValueOrDefault.Type;
+                predicate_Body=Expression.AndAlso(
+                    Expression.Property(Equals_this,"HasValue"),
+                    Expression.Call(
+                        Equals_this_GetValueOrDefault,
+                        作業配列.GetMethod(ElementTKey,nameof(object.Equals),ElementTKey),
+                        Equals_Argument.GetValueOrDefault()
+                    )
+                );
+            } else{
+                predicate_Body=Expression.Call(
+                    Equals_this,
+                    作業配列.GetMethod(Equals_this.Type,nameof(object.Equals),TKey),
+                    Equals_Argument
+                );
+            }
         }
-        var predicate_Body=Expression.Call(
-            MethodCall1_Arguments_5,
-            作業配列.GetMethod(MethodCall1_Arguments_5_Type,nameof(Generic.EqualityComparer<int>.Equals),TKey,TKey),
-            Equals_this,
-            Equals_Argument
-        );
+        //var predicate_Body=Expression.Call(
+        //    MethodCall1_Arguments_5,
+        //    作業配列.GetMethod(MethodCall1_Arguments_5_Type,nameof(Generic.EqualityComparer<int>.Equals),TKey,TKey),
+        //    Equals_this,
+        //    Equals_Argument
+        //);
         var Where = Expression.Call(
             作業配列.MakeGenericMethod(
                 Where_predicate,

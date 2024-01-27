@@ -2,6 +2,7 @@
 #pragma warning disable CS8601 // Null 参照代入の可能性があります。
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Reflection.Emit;
 using System.Reflection;
@@ -16,6 +17,7 @@ using System.Numerics;
 using LinqDB.Databases.Dom;
 using LinqDB.Optimizers;
 using LinqDB.Optimizers.Comparer;
+using Microsoft.SqlServer.Types;
 using AssemblyName=System.Reflection.AssemblyName;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
@@ -48,7 +50,8 @@ public partial class AssemblyGenerator {
     private static readonly MethodInfo Set2_ContainsKey = typeof(Set<,>).GetMethod("ContainsKey");
     private static readonly MethodInfo Set2_TryGetValue = typeof(Set<,>).GetMethod("TryGetValue");
     private static readonly MethodInfo Set1_Add = typeof(Set<>).GetMethod(nameof(Set<int>.Add));
-    private static readonly MethodInfo Set1_Remove = typeof(Set<>).GetMethod(nameof(Set<int>.Remove));
+    private static readonly MethodInfo Set1_VoidRemove = typeof(Set<>).GetMethod(nameof(Set<int>.VoidRemove));
+    //private static readonly MethodInfo Set1_BoolRemove = typeof(Set<>).GetMethod(nameof(Set<int>.Remove));
     private static readonly MethodInfo CRC32_GetHashCode = typeof(CRC32).GetMethod(nameof(CRC32.GetHashCode));
     private static readonly MethodInfo IEquatable_Equals = typeof(IEquatable<>).GetMethod(nameof(IEquatable<int>.Equals));
     //private static readonly MethodInfo IWriteRead_BinaryWrite = typeof(IWriteRead<>).GetMethod(nameof(IWriteRead<int>.BinaryWrite));
@@ -228,7 +231,26 @@ public partial class AssemblyGenerator {
                 I.Ldloca(Right);
                 I.Call(GetValueOrDefault);
                 Types1[0]=GetValueOrDefault_ReturnType;
-                I.Call(GetValueOrDefault_ReturnType.GetMethod(nameof(Equals),Types1));
+                if(GetValueOrDefault_ReturnType==typeof(Microsoft.SqlServer.Types.SqlHierarchyId)){
+                }
+                var Equals = GetValueOrDefault_ReturnType.GetMethod(nameof(object.Equals),Types1);
+                Debug.Assert(Equals!=null,nameof(Equals)+" != null");
+                if(typeof(IEquatable<>).MakeGenericType(Types1).IsAssignableFrom(Equals.DeclaringType)){
+                    I.Call(Equals);
+                } else{
+                    I.Box(GetValueOrDefault_ReturnType);
+                    I.Constrained(GetValueOrDefault_ReturnType);
+                    I.Callvirt(Equals);
+                }
+                //if(Reflection.Object.Equals_==Equals) {
+                //    I.Box(FieldType);
+                //    I.Constrained(FieldType);
+                //    I.Callvirt(Equals);
+                //} else{
+                //    Debug.Assert(typeof(IEquatable<>).MakeGenericType(Types1).IsAssignableFrom(Equals.DeclaringType));
+                //    I.Call(Equals);
+                //}
+                //I.Call(GetValueOrDefault_ReturnType.GetMethod(nameof(Equals),Types1));
                 var 一致した = I.DefineLabel();
                 I.Brtrue_S(一致した);
                 I.Br(Equalsでfalseの時);
@@ -241,8 +263,10 @@ public partial class AssemblyGenerator {
                 I.Brfalse(Equalsでfalseの時);
             } else {
                 Types1[0]=FieldType;
+
                 //Stringにはoverride bool Equals(string)が存在してしまっている
                 var Equals = FieldType.GetMethod(nameof(object.Equals),Types1);
+                Debug.Assert(Equals!=null,nameof(Equals)+" != null");
                 I.Ldflda(Field);
                 I.Ldarg_1();
                 I.Ldfld(Field);
@@ -250,8 +274,10 @@ public partial class AssemblyGenerator {
                     I.Box(FieldType);
                     I.Constrained(FieldType);
                     I.Callvirt(Equals);
-                } else
+                } else{
+                    Debug.Assert(typeof(IEquatable<>).MakeGenericType(FieldType).IsAssignableFrom(Equals.DeclaringType));
                     I.Call(Equals);
+                }
                 I.Brfalse(Equalsでfalseの時);
             }
         } else {
@@ -787,7 +813,7 @@ public partial class AssemblyGenerator {
         var Set2_TryGetValue = TypeBuilder.GetMethod(typeof(Set<,>).MakeGenericType(Types2),AssemblyGenerator.Set2_TryGetValue);
         Types1[0]=子Table_TypeBuilder;
         var Set1 = typeof(Set<>).MakeGenericType(Types1);
-        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,Set1_Remove);
+        var Set1_VoidRemove = TypeBuilder.GetMethod(Set1,AssemblyGenerator.Set1_VoidRemove);
         var AddRelationship_I = 子Table_Information.AddRelationship_I;
         var RemoveRelationship_I = 子Table_Information.RemoveRelationship_I;
         var AddRelationship_親タプル = this.共通AddRelationship0(

@@ -106,6 +106,7 @@ public abstract class 共通 {
         AssemblyFileName = "共通.dll"
     };
     protected static void 比較<T>(Expression<Func<System.Collections.Generic.IEnumerable<T>>> LINQ,SqlCommand Command,string SQL,Func<SqlDataReader,T> SQLSelector) {
+        var s = Stopwatch.StartNew();
         var LINQ結果 = o.Execute(LINQ);
         var SQL結果 = SQL実行(
             Command,
@@ -113,7 +114,6 @@ public abstract class 共通 {
             SQLSelector
         );
         WriteLine(new StackFrame(1).GetMethod()!.Name);
-        var s = Stopwatch.StartNew();
         var LINQ結果1 = LINQ結果.ToArray();
         var SQL結果1 = SQL結果.ToArray();
         Array.Sort(LINQ結果1,(a,b) => string.CompareOrdinal(a!.ToString(),b!.ToString()));
@@ -125,7 +125,7 @@ public abstract class 共通 {
             }
         }
         var ComparerElapsedMilliseconds=s.ElapsedMilliseconds;
-        WriteLine($"{ComparerElapsedMilliseconds,7}ms");
+        WriteLine($"{LINQ結果1.Length}行,{ComparerElapsedMilliseconds,7}ms");
     }
     private static readonly Random r = new(1);
     protected static int ID<T>(Set<T> Set) => r.Next(((int)Set.LongCount+1)*2);
@@ -206,7 +206,7 @@ public abstract class 共通 {
     protected static void E<T>(System.Collections.Generic.IEnumerable<T> Set,Action<T> Action){
         var Count=0L;
         Debug.Assert(Set!=null,nameof(Set)+" != null");
-        foreach(var a in Set!) {
+        foreach(var a in Set) {
             Action(a);
             Count++;
         }

@@ -443,6 +443,7 @@ internal static class Common {
             ? Type
             : Type.GetInterface(CommonLibrary.Collections_IEnumerable_FullName)!;
     }
+    public static Expression GetValueOrDefault(this Expression 入力)=>Expression.Call(入力,入力.Type.GetMethod("GetValueOrDefault",Type.EmptyTypes));
 }
 //2122 20220516
 //2708 20220514

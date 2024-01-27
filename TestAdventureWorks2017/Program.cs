@@ -462,17 +462,16 @@ namespace TestAdventureWorks2019 {
                 )
             );
             var Document = Production.Document;
-            var sb=new StringBuilder("/0/");
+            var DocumentNode番号=1;
             short DocumentLevel=0;
             E(
                 Employee,
                 _=>{
                     for(var b=0;b<2;b++){
-                        var DocumentNode=new SqlHierarchyId();
                         Document.AddOrThrow(
                             new Document(
-                                DocumentNode,
-                                DocumentLevel,
+                                SqlHierarchyId.Parse($"/{DocumentNode番号++}/"),
+                                DocumentLevel++,
                                 "",
                                 b,
                                 false,
@@ -487,28 +486,6 @@ namespace TestAdventureWorks2019 {
                                 DateTime.Now
                             )
                         );
-                        var c = sb.Length-2;
-                        while(true) {
-                            if(c==-1) {
-                                sb[1]='1';
-                                c=3;
-                                while(c<sb.Length) {
-                                    sb[c]='0';
-                                    c+=2;
-                                }
-                                sb.Append("0/");
-                                break;
-                            }
-                            if(sb[c]=='0') {
-                                sb[c]='1';
-                                while((c+=2)<sb.Length) {
-                                    sb[c]='0';
-                                }
-                                break;
-                            }
-                            c-=2;
-                        }
-                        DocumentLevel++;
                     }
                 }
             );
@@ -1233,7 +1210,6 @@ namespace TestAdventureWorks2019 {
             var SalesOrderHeader = Sales.SalesOrderHeader;
             var SalesOrderHeaderSalesReason = Sales.SalesOrderHeaderSalesReason;
             var SalesOrderDetail = Sales.SalesOrderDetail;
-
             var s = Stopwatch.StartNew();
             var AWBuildVersion情報 = new AddDel情報();
             var DatabaseLog情報 = new AddDel情報();
@@ -1306,8 +1282,8 @@ namespace TestAdventureWorks2019 {
             var SalesOrderHeader情報 = new AddDel情報();
             var SalesOrderHeaderSalesReason情報 = new AddDel情報();
             var SalesOrderDetail情報 = new AddDel情報();
-            var Document_DocumentNode = new StringBuilder("/0/");
-            var ProductDocument_DocumentNode = new StringBuilder("/0/");
+            var Document_DocumentNode番号=0;// new StringBuilder("/0/");
+            var ProductDocument_DocumentNode番号=0;// = new StringBuilder("/0/");
             for(var a=0;a<試行回数;a++){
                 switch(Switchパターン()%71) {
                     case 0: Add(ref AWBuildVersion情報,AWBuildVersion,new AWBuildVersion((byte)ID(AWBuildVersion),"",DateTime.Now,DateTime.Now)); break;
@@ -1563,15 +1539,11 @@ namespace TestAdventureWorks2019 {
                         break;
                     case 43:{
                         if(Employee.Count==0) goto case 35;
-                        var MemoryStream=new MemoryStream(Encoding.UTF8.GetBytes(Document_DocumentNode.ToString()));
-                        var BinaryReader=new BinaryReader(MemoryStream);
-                        var DocumentNode=new SqlHierarchyId();
-                        DocumentNode.Read(BinaryReader);
                         Add(
                             ref Document情報,
                             Document,
                             new Document(
-                                DocumentNode,
+                                SqlHierarchyId.Parse($"/{Document_DocumentNode番号++}/"),
                                 0,
                                 "",
                                 0,
@@ -1614,16 +1586,12 @@ namespace TestAdventureWorks2019 {
                         break;
                     case 46:{
                         if(Document.Count==0) goto case 43;
-                        var MemoryStream=new MemoryStream(Encoding.UTF8.GetBytes(ProductDocument_DocumentNode.ToString()));
-                        var BinaryReader=new BinaryReader(MemoryStream);
-                        var SqlHierarchyId=new SqlHierarchyId();
-                        SqlHierarchyId.Read(BinaryReader);
                         Add(
                             ref ProductDocument情報,
                             ProductDocument,
                             new ProductDocument(
                                 Product.Sampling.ProductID,
-                                SqlHierarchyId,
+                                SqlHierarchyId.Parse($"/{ProductDocument_DocumentNode番号++}/"),
                                 DateTime.Now
                             )
                         );
@@ -3933,7 +3901,7 @@ namespace TestAdventureWorks2019 {
             ContactInfo.AddNamespace(nameof(ContactInfo),"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo");
         }
         //private static String? EvaluateString(XNode Resume_ref,String 式,XmlNamespaceManager XmlNamespaceManager) => Resume_ref.XPathEvaluate(式,XmlNamespaceManager)?.ToString();
-        private static string? InnerString(XNode? XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
+        private static string? InnerString(XNode XNode,string 式,XmlNamespaceManager XmlNamespaceManager) {
             var x = XNode?.XPathEvaluate(式,XmlNamespaceManager);
             if(x==null) return null;
             if(x is System.Collections.Generic.IEnumerable<object> Enumerable1) {
@@ -3957,11 +3925,6 @@ namespace TestAdventureWorks2019 {
             if(XElement==null) return null;
             return XElement.Value=="1";
         }
-        //private static Int32? AttributeInt32(XNode XNode,String 式,String Attribute,XmlNamespaceManager XmlNamespaceManager) {
-        //    var XElement = XNode.XPathSelectElement(式,XmlNamespaceManager);
-        //    if(XElement==null) return null;
-        //    return Int32.Parse(XElement.Attribute(Attribute).Value,CultureInfo.InvariantCulture);
-        //}
         private static string? AttributeString(XElement XNode,string Attribute) {
             return XNode.Attribute(Attribute)?.Value;
         }
@@ -4128,49 +4091,6 @@ namespace TestAdventureWorks2019 {
                 });
         }
         private static void vAdditionalContactInfo(Container e,SqlCommand Command) {
-            //{
-            //    var x = (from Person in e.Person.Person
-            //             let AdditionalContactInfo = Person.AdditionalContactInfo
-            //             where AdditionalContactInfo!=null
-            //             from ContactInfo_ref in AdditionalContactInfo.XPathSelectElements("/ContactInfo:AdditionalContactInfo",ContactInfo)
-            //             select new {
-            //                 Person.BusinessEntityID,
-            //                 Person.FirstName,
-            //                 Person.MiddleName,
-            //                 Person.LastName,
-            //                 TelephoneNumber = SelectString(ContactInfo_ref,"(act:telephoneNumber)[1]/act:number",act,50),
-            //                 TelephoneSpecialInstructions = EvaluateString(ContactInfo_ref,"(act:telephoneNumber/act:SpecialInstructions/text())[1]",act),
-            //                 Street = SelectString(ContactInfo_ref,"(act:homePostalAddress/act:Street)[1]",act),
-            //                 City = SelectString(ContactInfo_ref,"(act:homePostalAddress/act:City)[1]",act,50),
-            //                 StateProvince = SelectString(ContactInfo_ref,"(act:homePostalAddress/act:StateProvince)[1]",act,50),
-            //                 PostalCode = SelectString(ContactInfo_ref,"(act:homePostalAddress/act:PostalCode)[1]",act,50),
-            //                 CountryRegion = SelectString(ContactInfo_ref," (act:homePostalAddress/act:CountryRegion)[1]",act,50),
-            //                 HomeAddressSpecialInstructions = EvaluateString(ContactInfo_ref,"(act:homePostalAddress/act:SpecialInstructions/text())[1]",act),
-            //                 EMailAddress = SelectString(ContactInfo_ref,"(act:eMail/act:eMailAddress)[1]",act,128),
-            //                 EMailSpecialInstructions = EvaluateString(ContactInfo_ref,"(act:eMail/act:SpecialInstructions/text())[1]",act),
-            //                 EMailTelephoneNumber = SelectString(ContactInfo_ref,"(act:eMail/act:SpecialInstructions/act:telephoneNumber/act:number)[1]",act,50),
-            //                 Person.rowguid,
-            //                 Person.ModifiedDate,
-            //             }).ToArray();
-            //    var y = (from Person in e.Person.Person
-            //             let AdditionalContactInfo = Person.AdditionalContactInfo
-            //             where AdditionalContactInfo!=null
-            //             from ContactInfo_ref in AdditionalContactInfo.XPathSelectElements("/ContactInfo:AdditionalContactInfo",ContactInfo)
-            //             select Person
-            //    ).Select(p => {
-            //        var r=p.AdditionalContactInfo.XPathSelectElements("/act:AdditionalContactInfo",act);
-            //        return r;
-            //    });
-            //    var z = (from Person in e.Person.Person
-            //             let AdditionalContactInfo = Person.AdditionalContactInfo
-            //             where AdditionalContactInfo!=null
-            //             from ContactInfo_ref in AdditionalContactInfo.XPathSelectElements("/AdditionalContactInfo")
-            //             select Person
-            //    ).Select(p => {
-            //        var r = p.AdditionalContactInfo.XPathSelectElements("/act:AdditionalContactInfo",act);
-            //        return r;
-            //    });
-            //}
             比較(
                 () =>
                     from Person in e.Person.Person
@@ -4338,41 +4258,6 @@ namespace TestAdventureWorks2019 {
         private static void vProductModelInstructions(Container e,SqlCommand Command) {
             var ns = new XmlNamespaceManager(new NameTable());
             ns.AddNamespace("ns","http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelManuInstructions");
-            //ns.AddNamespace(String.Empty,"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ProductModelManuInstructions");
-            {
-                var s = (
-                    e.Production.ProductModel.Where(
-                        pm=> pm.Instructions!=null
-                    ).SelectMany(
-                        pm=> pm.Instructions.XPathSelectElements("/ns:root/ns:Location",ns),
-                        (pm,MfgInstructions_ref)=>new { pm,MfgInstructions_ref }
-                    ).SelectMany(
-                        X=> X.MfgInstructions_ref.XPathSelectElements("ns:step",ns),
-                        (pm_MfgInstructions_ref,Steps_ref) => new { pm_MfgInstructions_ref,Steps_ref }
-                    )
-                ).ToArray();
-            }
-            {
-                var s=(
-                    from pm in e.Production.ProductModel
-                    where pm.Instructions!=null
-                    from MfgInstructions_ref in pm.Instructions.XPathSelectElements("/ns:root/ns:Location",ns)
-                    from Steps_ref in MfgInstructions_ref.XPathSelectElements("ns:step",ns)
-                    select new {
-                        pm.ProductModelID,
-                        pm.Name,
-                        Instructions = InnerString(pm.Instructions,"(/ns:root/text())[1]",ns),
-                        LocationID = AttributeInt32(MfgInstructions_ref,"LocationID"),
-                        SetupHours = AttributeDecimal(MfgInstructions_ref,"SetupHours"),
-                        MachineHours = AttributeDecimal(MfgInstructions_ref,"MachineHours"),
-                        LaborHours = AttributeDecimal(MfgInstructions_ref,"LaborHours"),
-                        LotSize = AttributeInt32(MfgInstructions_ref,"LotSize"),
-                        Steps = InnerString(Steps_ref,"string(.)",ns),
-                        pm.rowguid,
-                        pm.ModifiedDate,
-                    }
-                ).ToArray();
-            }
             比較(
                 () =>
                     from pm in e.Production.ProductModel
@@ -4443,34 +4328,6 @@ namespace TestAdventureWorks2019 {
                 });
         }
         private static void vVendorWithContacts(Container e,SqlCommand Command) {
-            {
-                var s=(
-                    from v in e.Purchasing.Vendor
-                    join bec in e.Person.BusinessEntityContact on v.BusinessEntityID equals bec.BusinessEntityID
-                    join ct in e.Person.ContactType on bec.ContactTypeID equals ct.ContactTypeID
-                    join p in e.Person.Person on bec.PersonID equals p.BusinessEntityID
-                    join ea in e.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID into ea0
-                    from ea in ea0
-                    join pp in e.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID into pp0
-                    from pp in pp0
-                    join pnt in e.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID into pnt0
-                    from pnt in pnt0
-                    select new {
-                        v.BusinessEntityID,
-                        v.Name,
-                        ContactType = ct.Name,
-                        p.Title,
-                        p.FirstName,
-                        p.MiddleName,
-                        p.LastName,
-                        p.Suffix,
-                        pp.PhoneNumber,
-                        PhoneNumberType = pnt.Name,
-                        ea.EmailAddress,
-                        p.EmailPromotion,
-                    }
-                ).ToArray();
-            }
             比較(
                 () =>
                     from v in e.Purchasing.Vendor
@@ -4515,41 +4372,6 @@ namespace TestAdventureWorks2019 {
                 });
         }
         private static void vIndividualCustomer(Container e,SqlCommand Command) {
-            {
-                var s = (
-                    from p in e.Person.Person
-                    join bea in e.Person.BusinessEntityAddress on p.BusinessEntityID equals bea.BusinessEntityID
-                    join a in e.Person.Address on bea.AddressID equals a.AddressID
-                    join sp in e.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                    join cr in e.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                    join at in e.Person.AddressType on bea.AddressTypeID equals at.AddressTypeID
-                    join c in e.Sales.Customer on p.BusinessEntityID equals c.PersonID
-                    join ea in e.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID
-                    join pp in e.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID
-                    join pnt in e.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID
-                    where c.StoreID==null
-                    select new {
-                        p.BusinessEntityID,
-                        p.Title,
-                        p.FirstName,
-                        p.MiddleName,
-                        p.LastName,
-                        p.Suffix,
-                        pp.PhoneNumber,
-                        PhoneNumberType = pnt.Name,
-                        ea.EmailAddress,
-                        p.EmailPromotion,
-                        AddressType = at.Name,
-                        a.AddressLine1,
-                        a.AddressLine2,
-                        a.City,
-                        StateProvinceName = sp.Name,
-                        a.PostalCode,
-                        CountryRegionName = cr.Name,
-                        p.Demographics,
-                    }
-                ).ToArray();
-            }
             比較(
                 () =>
                     from p in e.Person.Person
@@ -4667,273 +4489,6 @@ namespace TestAdventureWorks2019 {
                 });
         }
         private static void vSalesPerson(Container C,SqlCommand Command) {
-            //{
-            //    Expression<Func<IOutImmutableSet<Int32>>> LINQ = () =>
-            //        from s in C.Sales.SalesPerson
-            //        select s.BusinessEntityID;
-            //    var LINQ結果 = Optimizer.Execute(LINQ,"LINQ");
-            //}
-            {
-                var SalesPerson = new Set<int>();
-                Expression<Func<object>> LINQ = () =>
-                     from a in SalesPerson
-                     join b in SalesPerson on a equals b
-                     select new { a,b };
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                var SalesPerson = new Set<int>();
-                Expression<Func<object>> LINQ = () =>
-                     from a in SalesPerson
-                     join b in SalesPerson on a equals b
-                     join c in SalesPerson on b equals c
-                     select new { a,b,c };
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                var SalesPerson = new Set<int>();
-                Expression<Func<object>> LINQ = () =>
-                     from a in SalesPerson
-                     join b in SalesPerson on a equals b
-                     join c in SalesPerson on b equals c
-                     join d in SalesPerson on c equals d
-                     select new { a,b,c,d };
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                var SalesPerson = new Set<int>();
-                Expression<Func<object>> LINQ = () =>
-                     from a in SalesPerson
-                     join b in SalesPerson on a equals b
-                     join c in SalesPerson on b equals c
-                     join d in SalesPerson on c equals d
-                     select new { a,b,c,d,SalesPerson };
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                var SalesPerson = new Set<int>();
-                var Employee = new Set<int>();
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in SalesPerson
-                     join e in Employee on s equals e
-                     select s+e;
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                Expression<Func<IEnumerable<Guid>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     select s.rowguid;
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                Expression<Func<IEnumerable<Guid>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     select s.rowguid;
-                var LINQ結果 = o.Execute(LINQ);
-            }
-            {
-                //14,17検討中
-                Expression<Func<object>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     where s.BusinessEntityID==274
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select new { s,st };
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果 = (
-                     from s in C.Sales.SalesPerson
-                     where s.BusinessEntityID==274
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select new { s,st }
-                ).ToArray();
-            }
-            {
-                //14,17検討中
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     where s.BusinessEntityID==274||s.BusinessEntityID==275||s.BusinessEntityID==277
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID;
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果 = (
-                     from s in C.Sales.SalesPerson
-                     where s.BusinessEntityID==274||s.BusinessEntityID==275||s.BusinessEntityID==277
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID
-                ).ToArray();
-            }
-            {
-                //14,17検討中
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID;
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果 = (
-                     from s in C.Sales.SalesPerson
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID
-                ).ToArray();
-            }
-            {
-                //17,17
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     select s.BusinessEntityID;
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果 = (
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     select s.BusinessEntityID
-                ).ToArray();
-            }
-            {
-                //14,17
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID;
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果 = (
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     select s.BusinessEntityID
-                ).ToArray();
-            }
-            {
-                //17行入るべき
-                //BusinnessEntityID274,285,287入るべき
-                Expression<Func<IEnumerable<int>>> LINQ = () =>
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     join ea in C.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID into ea0
-                     from ea in ea0.DefaultIfEmpty()
-                     join pp in C.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID into pp0
-                     from pp in pp0.DefaultIfEmpty()
-                     join pnt in C.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID into pnt0
-                     from pnt in pnt0.DefaultIfEmpty()
-                     select s.BusinessEntityID;
-                var LINQ結果 = o.Execute(LINQ);
-                var 直接結果=(
-                     from s in C.Sales.SalesPerson
-                     join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                     join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                     join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                     join a in C.Person.Address on bea.AddressID equals a.AddressID
-                     join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                     join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                     join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                     from st in st0.DefaultIfEmpty()
-                     join ea in C.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID into ea0
-                     from ea in ea0.DefaultIfEmpty()
-                     join pp in C.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID into pp0
-                     from pp in pp0.DefaultIfEmpty()
-                     join pnt in C.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID into pnt0
-                     from pnt in pnt0.DefaultIfEmpty()
-                     select s.BusinessEntityID
-                ).ToArray();
-            }
-            var A = (
-                from s in C.Sales.SalesPerson
-                join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                join a in C.Person.Address on bea.AddressID equals a.AddressID
-                join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                from st in st0.DefaultIfEmpty()
-                //join ea in C.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID into ea0
-                //from ea in ea0.DefaultIfEmpty()
-                //join pp in C.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID into pp0
-                //from pp in pp0.DefaultIfEmpty()
-                //join pnt in C.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID into pnt0
-                //from pnt in pnt0.DefaultIfEmpty()
-                select e.rowguid
-            ).ToArray();
-            //Array.Sort(A,(a,b) =>a-b);
-            var B = (
-                from s in C.Sales.SalesPerson
-                join e in C.HumanResources.Employee on s.BusinessEntityID equals e.BusinessEntityID
-                join p in C.Person.Person on s.BusinessEntityID equals p.BusinessEntityID
-                join bea in C.Person.BusinessEntityAddress on s.BusinessEntityID equals bea.BusinessEntityID
-                join a in C.Person.Address on bea.AddressID equals a.AddressID
-                join sp in C.Person.StateProvince on a.StateProvinceID equals sp.StateProvinceID
-                join cr in C.Person.CountryRegion on sp.CountryRegionCode equals cr.CountryRegionCode
-                join st in C.Sales.SalesTerritory on s.TerritoryID equals st.TerritoryID into st0
-                from st in st0.DefaultIfEmpty()
-                join ea in C.Person.EmailAddress on p.BusinessEntityID equals ea.BusinessEntityID into ea0
-                from ea in ea0.DefaultIfEmpty()
-                join pp in C.Person.PersonPhone on p.BusinessEntityID equals pp.BusinessEntityID into pp0
-                from pp in pp0.DefaultIfEmpty()
-                join pnt in C.Person.PhoneNumberType on pp.PhoneNumberTypeID equals pnt.PhoneNumberTypeID into pnt0
-                from pnt in pnt0.DefaultIfEmpty()
-                select new {
-                    s.BusinessEntityID,
-                    p.Title,
-                    p.FirstName,
-                    p.MiddleName,
-                    p.LastName,
-                    p.Suffix,
-                    e.JobTitle,
-                    PhoneNumber = pp==null ? null : pp.PhoneNumber,
-                    PhoneNumberType = pnt==null ? null : pnt.Name,
-                    EmailAddress = ea==null ? null : ea.EmailAddress,
-                    p.EmailPromotion,
-                    a.AddressLine1,
-                    a.AddressLine2,
-                    a.City,
-                    StateProvinceName = sp.Name,
-                    a.PostalCode,
-                    CountryRegionName = cr.Name,
-                    TerritoryName = st==null ? null : st.Name,
-                    TerritoryGroup = st==null ? null : st.Group,
-                    s.SalesQuota,
-                    s.SalesYTD,
-                    s.SalesLastYear,
-                }
-            ).ToArray();
             比較(
                 () =>
                     from s in C.Sales.SalesPerson
@@ -5701,160 +5256,7 @@ namespace TestAdventureWorks2019 {
             public static bool operator !=(G a,G b) => a.v!=b.v;
             public override int GetHashCode() => 0;
         }
-        private static void GroupJoin0() {
-            var G1 = new G(1);
-            var S0 = new Set<G> { G1 };
-            var S1 = new Set<G>();
-            var S2 = new Set<G>();
-            //var S0 = new G[] { new G(1) };
-            //var S1 = Array.Empty<G>();
-            //var S2 = Array.Empty<G>();
-            var x =
-                S0.GroupJoin(
-                    S1,
-                    (G s0) => s0,
-                    (G s1) => s1,
-                    (G s0,IEnumerable<G> g1) => (s0, g1)
-                ).SelectMany(
-                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0,G s1) => (
-                        h__TransparentIdentifier0,
-                        s1
-                    )
-                ).GroupJoin(
-                    S2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1)h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
-                    (G s2) => s2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,IEnumerable<G> g2) => (
-                        h__TransparentIdentifier1,
-                        g2
-                    )
-                ).SelectMany(
-                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2)h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
-                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2)h__TransparentIdentifier2,G s2) => (
-                        h__TransparentIdentifier2.h__TransparentIdentifier1.h__TransparentIdentifier0.s0,
-                        h__TransparentIdentifier2.h__TransparentIdentifier1.s1,
-                        s2
-                    )
-                ).ToArray();
-        }
-        private static void GroupJoin1() {
-            var G1 = new G(1);
-            var S0 = new G[] { new G(1) };
-            var S1 = Array.Empty<G>();
-            var S2 = Array.Empty<G>();
-            /*
-            var x =
-                S0.GroupJoin(
-                    S1,
-                    (G s0) => s0,
-                    (G s1) => s1,
-                    (G s0,IEnumerable<G> g1) => (s0, g1)
-                ).SelectMany(
-                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0) => h__TransparentIdentifier0.g1.DefaultIfEmpty(),
-                    ((G s0, IEnumerable<G> g1)h__TransparentIdentifier0,G? s1) => (
-                        h__TransparentIdentifier0,
-                        ss1:s1!
-                    )
-                ).GroupJoin(
-                    S2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1) => h__TransparentIdentifier1.s1,
-                    (G s2) => s2,
-                    (((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1,IEnumerable<G> g2) => (
-                        h__TransparentIdentifier1,
-                        g2
-                    )
-                ).SelectMany(
-                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2) h__TransparentIdentifier2) => h__TransparentIdentifier2.g2.DefaultIfEmpty(),
-                    ((((G s0, IEnumerable<G> g1) h__TransparentIdentifier0, G s1) h__TransparentIdentifier1, IEnumerable<G> g2) h__TransparentIdentifier2,G s2) => (
-                        h__TransparentIdentifier2.h__TransparentIdentifier1.h__TransparentIdentifier0.s0,
-                        h__TransparentIdentifier2.h__TransparentIdentifier1.s1,
-                        s2!
-                    )
-                ).ToArray();
-            */
-        }
-        private static void GroupJoin2() {
-            var G1 = new G(1);
-            var S0 = new G[] { new G(1) };
-            var S1 = Array.Empty<G>();
-            var S2 = Array.Empty<G>();
-            var x = (
-                from s0 in S0
-                join s1 in S1 on s0 equals s1 into g1
-                from s1 in g1.DefaultIfEmpty()
-                join s2 in S2 on s1 equals s2 into g2
-                from s2 in g2.DefaultIfEmpty()
-                select new {
-                    s0,s1,s2
-                }
-            ).ToArray();
-        }
         private static void Main() {
-            var sb = new StringBuilder("/0/");
-            Console.WriteLine(sb.ToString());
-            for(var a=0;a<16;a++){
-                //Debug.Assert(sb[sb.Length-2]=='1');
-                var c=sb.Length-2;
-                while(true){
-                    if(c==-1){
-                        sb[1]='1';
-                        c=3;
-                        while(c<sb.Length) {
-                            sb[c]='0';
-                            c+=2;
-                        }
-                        sb.Append("0/");
-                        break;
-                    }
-                    if(sb[c]=='0'){
-                        sb[c]='1';
-                        while((c+=2)<sb.Length){
-                            sb[c]='0';
-                        }
-                        break;
-                    }
-                    c-=2;
-                }
-                Console.WriteLine(sb.ToString());
-            }
-            //GroupJoin2();
-            //var n = new NumberFormatInfo();
-            //n.CurrencyDecimalDigits=2;
-            //Console.WriteLine(Decimal.Parse("1.123456",NumberStyles.AllowDecimalPoint, n));
-            //n.CurrencyDecimalDigits=3;
-            //Console.WriteLine(Decimal.Parse("1.123456",NumberStyles.AllowDecimalPoint,n));
-            //n.NumberDecimalDigits=2;
-            //Console.WriteLine(Decimal.Parse("1.123456",NumberStyles.AllowDecimalPoint,n));
-            //n.NumberDecimalDigits=3;
-            //Console.WriteLine(Decimal.Parse("1.123456",NumberStyles.AllowDecimalPoint,n));
-            //{
-            //    var A_Difinition = typeof(A<>);
-            //    var A = A_Difinition.MakeGenericType(typeof(Int32));
-            //    var A_Difinition_M_Difinition = A_Difinition.GetMethod("M");
-            //    var A_Difinition_N_Difinition = A_Difinition.GetMethod("N");
-            //    var A_Difinition_M = A_Difinition_M_Difinition.MakeGenericMethod(typeof(String));
-            //    var A_M = A_Difinition.GetMethod(
-            //        "M",
-            //        A_Difinition_M_Difinition.GetParameters().Select(p=>p.ParameterType).ToArray()
-            //    );
-            //}
-            //XmlNamespaceManager manager = new XmlNamespaceManager(new NameTable());
-            //manager.AddNamespace("books","http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo");
-            //var d=XDocument.Parse(
-            //    "<AdditionalContactInfo xmlns=\"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactInfo\" "+
-            //    "xmlns:crm=\"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactRecord\" "+
-            //    "xmlns:act=\"http://schemas.microsoft.com/sqlserver/2004/07/adventure-works/ContactTypes\" "+
-            //    ">"+
-            //    "    <crm:ContactRecord date=\"2002-09-02Z\">"+
-            //    "        The customer is interested in the Road-450 and Mountain-500 series bicycles. Customer called us. We need to follow up. Pager "+
-            //    "        <act:pager>"+
-            //    "            <act:number>206-555-1234</act:number>"+
-            //    "        </act:pager> is the best way to reach."+
-            //    "    </crm:ContactRecord>"+
-            //    "</AdditionalContactInfo>"
-            //);
-            //var re = d.XPathSelectElements("/books:AdditionalContactInfo",manager);
             Load();
             var index = 0;
             Transaction(() => index++);

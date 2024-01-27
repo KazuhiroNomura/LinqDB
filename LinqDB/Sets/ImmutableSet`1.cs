@@ -731,7 +731,7 @@ public abstract class ImmutableSet<T>:ImmutableSet, IEnumerable<T>,IEquatable<IE
     /// <param name="Item"></param>
     /// <returns>削除に成功すればtrue、失敗すればfalse。</returns>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal virtual bool InternalRemove(T Item) {
+    internal bool InternalRemove(T Item) {
         Debug.Assert(Item is not null);
         var TreeNode = this.InternalHashCodeに一致するTreeNodeを取得する((uint)Item.GetHashCode());
         if(TreeNode is not null){

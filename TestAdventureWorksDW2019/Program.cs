@@ -2049,17 +2049,6 @@ abstract class Program :共通{
         Console.WriteLine($"Add {s.ElapsedMilliseconds,7}ms");
     }
     private static void vAssocSeqLineItems(Container e,SqlCommand Command) {
-        {
-            var r = (
-                from s in vDMPrep(e)
-                where s.FiscalYear==2013
-                select new {
-                    s.OrderNumber,
-                    s.LineNumber,
-                    s.Model
-                }
-            ).ToArray();
-        }
         比較(
             () =>
                 from s in vDMPrep(e)
@@ -2118,7 +2107,7 @@ abstract class Program :共通{
                 IncomeGroup = GetString(Reader,3)
             });
     }
-    private static LinqDB.Sets.IEnumerable<AdventureWorksDW2019.Views.dbo.vDMPrep> vDMPrep(Container e)=>
+    private static IEnumerable<AdventureWorksDW2019.Views.dbo.vDMPrep> vDMPrep(Container e)=>
         from f in e.dbo.FactInternetSales
         join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
         join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
@@ -2151,59 +2140,6 @@ abstract class Program :共通{
         var LINQ結果=o.Execute(LINQ);
     }
     private static void vDMPrep(Container e,SqlCommand Command) {
-        //実行(
-        //    () =>
-        //        from f in e.dbo.FactInternetSales
-        //        join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-        //        join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-        //        join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-        //        join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-        //        join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-        //        join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-        //        join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-        //        select new {
-        //            Region = s.SalesTerritoryGroup,
-        //            Age =
-        //                c.BirthDate.HasValue&&DateTime.Now.Month<c.BirthDate.Value.Month ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-        //                : c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-        //                : c.BirthDate.HasValue ? (Int32?)DateTime.Now.Year-c.BirthDate.Value.Year
-        //                : null,
-        //            IncomeGroup =
-        //                c.YearlyIncome<40000 ? "Low" :
-        //                c.YearlyIncome>60000 ? "High" :
-        //                "Moderate",
-        //            d.CalendarYear,
-        //            d.FiscalYear,
-        //            Month = d.MonthNumberOfYear,
-        //            OrderNumber = f.SalesOrderNumber,
-        //            LineNumber = f.SalesOrderLineNumber,
-        //            Quantity = f.OrderQuantity,
-        //            Amount = f.ExtendedAmount
-        //        }
-        //    );
-        //実行(
-        //    () =>
-        //        from f in e.dbo.FactInternetSales
-        //        join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-        //        join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-        //        join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-        //        join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-        //        select new {
-        //            Age =
-        //                c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-        //                : f.OrderDate.HasValue ? (Int32?)DateTime.Now.Year
-        //                : null,
-        //            IncomeGroup =
-        //                p.ProductKey<40000 ? "Low" :
-        //                p.ProductKey>60000 ? "High" :
-        //                "Moderate",
-        //            //d,
-        //            OrderNumber = f.SalesOrderNumber,
-        //            LineNumber = f.SalesOrderLineNumber,
-        //            Quantity = f.OrderQuantity,
-        //            Amount = f.ExtendedAmount,
-        //        }
-        //);
         実行(
             () =>
                 from f in e.dbo.FactInternetSales

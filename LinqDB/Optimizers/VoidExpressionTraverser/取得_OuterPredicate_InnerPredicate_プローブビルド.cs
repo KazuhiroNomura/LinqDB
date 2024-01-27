@@ -140,27 +140,27 @@ internal sealed class 取得_OuterPredicate_InnerPredicate_プローブビルド
                             MethodCall.Arguments[0]
                         );
                     }
-                    //if(Reflection.Helpers.EqualityComparer_Equals==GetGenericMethodDefinition(MethodCall.Method)) {
-                    //    //Reflection.Helpers.EqualityComparer_Equals==MethodCall.Method.GetGenericMethodDefinition()) {
-                    //    this.Comparer=MethodCall.Object;
-                    //    var MethodCall_Arguments = MethodCall.Arguments;
-                    //    return this.等号が出現した時にDictionaryHashとEqualに分離(
-                    //        Expression0,
-                    //        MethodCall_Arguments[0],
-                    //        MethodCall_Arguments[1]
-                    //    );
-                    //}
-                    //var T=typeof(IEqualityComparer<>).GetGenericArguments()[0];
-                    //var xx=typeof(IEqualityComparer<>).GetMethod("Equals",new []{T,T});
-                    //if(MethodCall.Object!.Type.GetGenericArguments(typeof(IEqualityComparer<>),out var _)){
-                    //    this.Comparer=MethodCall.Object;
-                    //    var MethodCall_Arguments = MethodCall.Arguments;
-                    //    return this.等号が出現した時にDictionaryHashとEqualに分離(
-                    //        Expression0,
-                    //        MethodCall_Arguments[0],
-                    //        MethodCall_Arguments[1]
-                    //    );
-                    //}
+                    if(Reflection.Helpers.EqualityComparer_Equals==GetGenericMethodDefinition(MethodCall.Method)) {
+                        //Reflection.Helpers.EqualityComparer_Equals==MethodCall.Method.GetGenericMethodDefinition()) {
+                        //this.Comparer=MethodCall.Object;
+                        var MethodCall_Arguments = MethodCall.Arguments;
+                        return this.等号が出現した時にDictionaryHashとEqualに分離(
+                            Expression0,
+                            MethodCall_Arguments[0],
+                            MethodCall_Arguments[1]
+                        );
+                    }
+                    var T = typeof(IEqualityComparer<>).GetGenericArguments()[0];
+                    var xx = typeof(IEqualityComparer<>).GetMethod("Equals",new[] { T,T });
+                    if(MethodCall.Object!.Type.GetGenericArguments(typeof(IEqualityComparer<>),out var _)) {
+                        //this.Comparer=MethodCall.Object;
+                        var MethodCall_Arguments = MethodCall.Arguments;
+                        return this.等号が出現した時にDictionaryHashとEqualに分離(
+                            Expression0,
+                            MethodCall_Arguments[0],
+                            MethodCall_Arguments[1]
+                        );
+                    }
                     var IEquatable=MethodCall.Arguments[0].Type.GetInterface(CommonLibrary.IEquatable_FullName);
                     if(IEquatable is not null) return this.等号が出現した時にDictionaryHashとEqualに分離(Expression0,MethodCall.Object,MethodCall.Arguments[0]);
                 }

@@ -1392,4 +1392,25 @@ public class 特定パターン:共通{
             )
         );
     }
+    [Fact]public void Dictionarey0(){
+        var st=new Set<int>();
+        this.Expression実行AssertEqual(
+            ()=> st.SelectMany(
+                o=> st.Where(
+                    i=>i.Equals(o)
+                )
+            )
+        );
+    }
+
+    [Fact]public void Dictionarey1(){
+        var st=new Set<int>();
+        this.Expression実行AssertEqual(
+            ()=> st.SelectMany(
+                o=> st.Where(
+                    i=>EqualityComparer<int>.Default.Equals(i,o)
+                )
+            )
+        );
+    }
 }

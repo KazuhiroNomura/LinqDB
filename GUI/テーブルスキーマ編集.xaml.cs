@@ -40,42 +40,6 @@ public partial class テーブルスキーマ編集:Window {
 	private readonly VM.Schema dbo;
 	public テーブルスキーマ編集(){
 		this.InitializeComponent();
-		{
-			var Parsers = new TSqlParser[] {
-				new TSql80Parser(false),
-				new TSql90Parser(false),
-				new TSql100Parser(false),
-				new TSql110Parser(false),
-				new TSql120Parser(false),
-				new TSql130Parser(false),
-				new TSql140Parser(false),
-				new TSql150Parser(false),
-				new TSql160Parser(false),
-				new TSql80Parser(true),
-				new TSql90Parser(true),
-				new TSql100Parser(true),
-				new TSql110Parser(true),
-				new TSql120Parser(true),
-				new TSql130Parser(true),
-				new TSql140Parser(true),
-				new TSql150Parser(true),
-				new TSql160Parser(true),
-			};
-			const string SQL = @"
-			CREATE VIEW sys.dm_resource_governor_resource_pool_volumes AS
-			SELECT *
-			FROM OpenRowSet( DM_RG_POOL_VOLUMES)
-			";
-			foreach(var Parser in Parsers) {
-				var Parsed = Parser.Parse(new StringReader(SQL),out var errors);
-				if(errors!.Count>0) {
-					Trace.WriteLine(Parser.GetType().Name);
-					foreach(var error in errors!) {
-						Trace.WriteLine(error.Message);
-					}
-				}
-			}
-		}
 		var Container = this.Container;
 		this.DataContext=Container;
 		this.DiagramControl.DataContext=Container;
@@ -137,33 +101,34 @@ public partial class テーブルスキーマ編集:Window {
             }
             this.MySQL.ItemsSource=ItemsSource;
         }
-        //this.SQLServer保存("AdventureWorksDW2008R2");
-        //this.MySQL保存("sakila");
-        //this.SQLServer保存("AdventureWorks2008R2");
-        //this.SQLServer保存("Pubs");
-        //this.SQLServer保存("単純");
-        //this.SQLServer保存("実験_new");
-        //this.SQLServer保存("実験");
-        //this.データベース保存("VIEWテスト");
-        //this.データベース保存("TPC_C");
-        //this.データベース保存("TPC_H");
-        //this.データベース保存("TPC_E");
-        //this.SQLServer保存("AdventureWorks2016_EXT");
-        foreach (var Database in Databases){
-            this.SQLServer保存(Database);
-        }
-        //foreach (var Database in Databases){
-        //}
-        //this.データベース保存("AdventureWorks2017");
-        //this.SQLServer保存("AdventureWorks2019");
-        //this.データベース保存("DWConfiguration");
-        //this.データベース保存("DWQueue");
-        //this.データベース保存("WideWorldImporters");
-        //this.データベース保存("WideWorldImportersDW");
+		//this.SQLServer保存("AdventureWorksDW2008R2");
+		//this.MySQL保存("sakila");
+		//this.SQLServer保存("AdventureWorks2008R2");
+		//this.SQLServer保存("Pubs");
+		//this.SQLServer保存("単純");
+		//this.SQLServer保存("実験_new");
+		//this.SQLServer保存("実験");
+		//this.データベース保存("VIEWテスト");
+		//this.データベース保存("TPC_C");
+		//this.データベース保存("TPC_H");
+		//this.データベース保存("TPC_E");
+		//this.SQLServer保存("AdventureWorks2016_EXT");
+		//this.SQLServer保存("AdventureWorks2017");
+		foreach(var Database in Databases)
+			this.SQLServer保存(Database);
+		//}
+		//foreach (var Database in Databases){
+		//}
+		//this.データベース保存("AdventureWorks2017");
+		//this.SQLServer保存("AdventureWorks2019");
+		//this.データベース保存("DWConfiguration");
+		//this.データベース保存("DWQueue");
+		//this.データベース保存("WideWorldImporters");
+		//this.データベース保存("WideWorldImportersDW");
 		//this.データベース保存("AdventureWorksDW2017");
 		//this.データベース保存("AdventureWorksDW2019");
 		//this.データベース保存("DWDiagnostics");
-        //this.データベース保存("msdb");
+		//this.データベース保存("msdb");
 	}
     private static readonly string[]Databases={
         "Pubs",

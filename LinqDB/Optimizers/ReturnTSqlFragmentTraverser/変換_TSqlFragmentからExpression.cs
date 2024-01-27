@@ -104,7 +104,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         //n<=n=false
         if(Left.Type.IsNullable()) {
             e.Expression test = e.Expression.Property(Left,"HasValue");
-            Left = GetValueOrDefault(Left);
+            Left = Common.GetValueOrDefault(Left);
             if(Right.Type.IsNullable()) {
                 test = e.Expression.AndAlso(test,e.Expression.Property(Right,"HasValue"));
                 Right = GetValueOrDefault(Right);
@@ -222,7 +222,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         Debug.Assert(Result0_Type.IsValueType);
         return e.Expression.Condition(Condition,e.Expression.Convert(Result0,Result0_Type),e.Expression.Constant(null,Result0_Type));
     }
-    private static e.Expression GetValueOrDefault(e.Expression 入力)=>e.Expression.Call(入力,入力.Type.GetMethod("GetValueOrDefault",Type.EmptyTypes));
+    private static e.Expression GetValueOrDefault(e.Expression 入力)=>入力.GetValueOrDefault();
     private static Type DataTypeReferenceからTypeに変換(DataTypeReference x){
         var DBType=x.Name.BaseIdentifier.Value;
         return CommonLibrary.SQLのTypeからTypeに変換(DBType);
