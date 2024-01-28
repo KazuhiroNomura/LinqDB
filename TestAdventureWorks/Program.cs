@@ -2200,7 +2200,7 @@ namespace TestAdventureWorks2019 {
             var Production = e.Production;
             var Purchasing = e.Purchasing;
             var Sales = e.Sales;
-            using var C = new SqlConnection(@"Data Source=localhost\MSSQLSERVER2019;Initial Catalog=AdventureWorks2019;Integrated Security=True");
+            using var C = new SqlConnection(SQLServer接続文字列);
             C.Open();
             using var Command = new SqlCommand { Connection=C };
             Command.CommandText=

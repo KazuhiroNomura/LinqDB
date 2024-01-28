@@ -10,6 +10,7 @@ using LinqDB.Sets;
 using LinqDB.Optimizers;
 using LinqDB.Optimizers.Comparer;
 using IEnumerable=System.Collections.IEnumerable;
+using System.IO;
 public abstract class 共通 {
     protected static readonly ExpressionEqualityComparer ExpressionEqualityComparer=new();
     protected static readonly 汎用Comparer ProtectedComparer=new(ExpressionEqualityComparer);
@@ -288,4 +289,5 @@ public abstract class 共通 {
     //        Console.WriteLine($"IEnumerable {s.ElapsedMilliseconds,7}ms");
     //    }
     //}
+    public static string SQLServer接続文字列=>$@"Data Source=localhost\MSSQLSERVER2019;Initial Catalog={Path.GetFileNameWithoutExtension(Environment.ProcessPath).AsSpan(4)};Integrated Security=True";
 }

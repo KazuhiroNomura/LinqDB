@@ -1,4 +1,13 @@
-﻿Block                  
+﻿AdventureWorksDW2008R2はスキーマが異なるのでディレクティブで対応した。
+Where(a==b)→ToLookup(a).OperatorEqual(b)に
+Where(a.Equals(b))→ToLookup(a).IEquatableEquals(b)
+Where(a.Equals(b))→ToLookup(a).ObjectEquals(b)
+Where(comparer.Equals(a,b))→ToLookup(a,comparer).IEqualityComparerEquals(b)
+Where(comparer(a).Equals(a,b))はToLookup(a,comparer(a)).IEqualityComparerEquals(b)
+Where(comparer(b).Equals(a,b))はToLookup(a).IEqualityComparerEquals(b,comparer(b))
+に変換したい。
+
+Block                  
 ├Loop　               ┐
 │└Block              │
 │　├Assign           │

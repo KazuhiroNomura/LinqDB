@@ -41,7 +41,7 @@ abstract class Program:共通 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization","CA1305:IFormatProvider を指定します",Justification = "<保留中>")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization","CA1303:ローカライズされるパラメーターとしてリテラルを渡さない",Justification = "<保留中>")]
     private static void Load() {
-        using var C = new SqlConnection(@"Data Source=localhost\MSSQLSERVER2019;Initial Catalog=Northwind;Integrated Security=True");
+        using var C = new SqlConnection(SQLServer接続文字列);
         C.Open();
         using var Command = new SqlCommand { Connection=C };
         using var e = new Container();

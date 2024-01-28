@@ -1126,8 +1126,7 @@ namespace TestWideWorldImportersDW{
         [SuppressMessage("Globalization","CA1303:ローカライズされるパラメーターとしてリテラルを渡さない",Justification="<保留中>")]
         private static void Load(){
             using var Connection=
-                new SqlConnection(
-                    @"Data Source=localhost\MSSQLSERVER2019;Initial Catalog=WideWorldImportersDW;Integrated Security=True");
+                new SqlConnection(SQLServer接続文字列);
             Connection.Open();
             using var Command=new SqlCommand{Connection=Connection};
             using var e=new Container2();

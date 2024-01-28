@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 //using AdventureWorksDW;
 //using Tables.dbo;
 using System.Globalization;
+using Microsoft.SqlServer.Dac;
 namespace TestAdventureWorksDW;
 abstract class Program :共通{
     ///// <summary>アンマネージ リソースの解放またはリセットに関連付けられているアプリケーション定義のタスクを実行します。</summary>
@@ -1035,8 +1036,8 @@ abstract class Program :共通{
         DelWriteLine(FactResellerSales情報);
         DelWriteLine(FactSalesQuota情報);
     }
-    private static void Load() {
-        using var C = new SqlConnection(@"Data Source=localhost\MSSQLSERVER2019;Initial Catalog=AdventureWorksDW2019;Integrated Security=True");
+    private static void Load(){
+        using var C=new SqlConnection(SQLServer接続文字列);
         C.Open();
         using var Command = new SqlCommand { Connection=C };
         using var e = new Container();
@@ -2527,6 +2528,7 @@ abstract class Program :共通{
         );
     }
     private static void Main() {
+        var s=Path.GetFileNameWithoutExtension(Environment.ProcessPath).AsSpan(4);
         Load();
         Create();
         var r = new Random(2);
