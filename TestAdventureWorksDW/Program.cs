@@ -47,7 +47,9 @@ abstract class Program :共通{
         var FactCurrencyRate = dbo.FactCurrencyRate;
         var FactInternetSales = dbo.FactInternetSales;
         var FactInternetSalesReason = dbo.FactInternetSalesReason;
+#if !AdventureWorksDW2008R2
         var FactProductInventory = dbo.FactProductInventory;
+#endif
         var FactResellerSales = dbo.FactResellerSales;
         var FactSalesQuota = dbo.FactSalesQuota;
         var s = Stopwatch.StartNew();
@@ -224,8 +226,10 @@ abstract class Program :共通{
                     SalesTerritoryKey,
                     "",
                     "",
-                    "",
-                    null
+                    ""
+#if !AdventureWorksDW2008R2
+                    ,null
+#endif
                 )
             );
             for(var a=1;a<=2;a++){
@@ -260,8 +264,10 @@ abstract class Program :共通{
                         null,
                         null,
                         null,
-                        null,
                         null
+#if !AdventureWorksDW2008R2
+                        ,null
+#endif
                     )
                 );
                 EmployeeKey++;
@@ -278,8 +284,10 @@ abstract class Program :共通{
                         null,
                         null,
                         null,
-                        SalesTerritoryKey,
-                        null
+                        SalesTerritoryKey
+#if !AdventureWorksDW2008R2
+                        ,null
+#endif
                     )
                 );
                 for(var b=1;b<=2;b++){
@@ -372,8 +380,10 @@ abstract class Program :共通{
                                     ProductCategory.ProductCategoryKey,
                                     ProductCategory.EnglishProductCategoryName,
                                     ProductSubcategory.ProductSubcategoryKey,
-                                    ProductSubcategory.EnglishProductSubcategoryName,
-                                    null
+                                    ProductSubcategory.EnglishProductSubcategoryName
+#if !AdventureWorksDW2008R2
+                                    ,null
+#endif
                                 )
                             )
                         )
@@ -398,8 +408,10 @@ abstract class Program :共通{
                     0,
                     0,
                     0,
-                    0,
-                    null
+                    0
+#if !AdventureWorksDW2008R2
+                    ,null
+#endif
                 )
             )
         );
@@ -447,8 +459,10 @@ abstract class Program :共通{
                                         DepartmentGroup.DepartmentGroupKey,
                                         Scenario.ScenarioKey,
                                         Account.AccountKey,
-                                        0,
-                                        null
+                                        0
+#if !AdventureWorksDW2008R2
+                                        ,null
+#endif
                                     )
                                 )
                             )
@@ -466,8 +480,10 @@ abstract class Program :共通{
                         Currency.CurrencyKey,
                         Date.DateKey,
                         0,
-                        0,
-                        Date.FullDateAlternateKey
+                        0
+#if !AdventureWorksDW2008R2
+                        ,Date.FullDateAlternateKey
+#endif
                     )
                 )
             )
@@ -516,10 +532,12 @@ abstract class Program :共通{
                                                             0,
                                                             0,
                                                             null,
-                                                            null,
-                                                            null,
-                                                            null,
                                                             null
+#if !AdventureWorksDW2008R2
+                                                            ,null
+                                                            ,null
+                                                            ,null
+#endif
                                                         )
                                                     );
                                                     E(
@@ -544,6 +562,7 @@ abstract class Program :共通{
                 )
             )
         );
+#if !AdventureWorksDW2008R2
         E(
             DimProduct,
             Product=>E(
@@ -561,6 +580,7 @@ abstract class Program :共通{
                 )
             )
         );
+#endif
         SalesOrderNumber=1;
         E(
             DimProduct,
@@ -607,10 +627,12 @@ abstract class Program :共通{
                                                             null,
                                                             null,
                                                             null,
-                                                            null,
-                                                            null,
+                                                            null
+#if !AdventureWorksDW2008R2
+                                                            ,null,
                                                             null,
                                                             null
+#endif
                                                         )
                                                     );
                                                 }
@@ -636,8 +658,10 @@ abstract class Program :共通{
                         Date.DateKey,
                         2001,
                         1,
-                        0,
-                        null
+                        0
+#if !AdventureWorksDW2008R2
+                        ,null
+#endif
                     )
                 )
             )
@@ -672,7 +696,9 @@ abstract class Program :共通{
         var FactCurrencyRate = dbo.FactCurrencyRate;
         var FactInternetSales = dbo.FactInternetSales;
         var FactInternetSalesReason = dbo.FactInternetSalesReason;
+#if !AdventureWorksDW2008R2
         var FactProductInventory = dbo.FactProductInventory;
+#endif
         var FactResellerSales = dbo.FactResellerSales;
         var FactSalesQuota = dbo.FactSalesQuota;
 
@@ -712,9 +738,21 @@ abstract class Program :共通{
                 case 5: Add(ref DimProduct情報,DimProduct,new DimProduct(ID(DimProduct),null,null,null,null,"","","",null,false,"",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)); break;
                 case 6: Add(ref DimPromotion情報,DimPromotion,new DimPromotion(ID(DimPromotion),null,null,null,null,null,null,null,null,null,null,null,DateTime.Now,null,null,null)); break;
                 case 7: Add(ref DimSalesReason情報,DimSalesReason,new DimSalesReason(ID(DimSalesReason),0,"","")); break;
-                case 8: Add(ref DimSalesTerritory情報,DimSalesTerritory,new DimSalesTerritory(ID(DimSalesTerritory),null,"","",null,null)); break;
-                case 9: Add(ref DimEmployee情報,DimEmployee,new DimEmployee(ID(DimEmployee),null,null,null,null,null,null,null,false,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,false,null,null,null,null,null)); break;
-                case 10: Add(ref DimGeography情報,DimGeography,new DimGeography(ID(DimGeography),null,null,null,null,null,null,null,null,null,null)); break;
+                case 8: Add(ref DimSalesTerritory情報,DimSalesTerritory,new DimSalesTerritory(ID(DimSalesTerritory),null,"","",null
+#if !AdventureWorksDW2008R2
+                    ,null
+#endif
+                )); break;
+                case 9: Add(ref DimEmployee情報,DimEmployee,new DimEmployee(ID(DimEmployee),null,null,null,null,null,null,null,false,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,false,false,null,null,null,null
+#if !AdventureWorksDW2008R2
+                    ,null
+#endif
+                )); break;
+                case 10: Add(ref DimGeography情報,DimGeography,new DimGeography(ID(DimGeography),null,null,null,null,null,null,null,null,null
+#if !AdventureWorksDW2008R2
+                    ,null
+#endif
+                )); break;
                 case 11: Add(ref DimCustomer情報,DimCustomer,new DimCustomer(ID(DimCustomer),null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)); break;
                 case 12: Add(ref DimReseller情報,DimReseller,new DimReseller(ID(DimReseller),null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)); break;
                 case 13: Add(ref DimScenario情報,DimScenario,new DimScenario(ID(DimScenario),"")); break;
@@ -730,7 +768,10 @@ abstract class Program :共通{
                             DimDate.Sampling.DateKey,
                             DimCustomer.Sampling.CustomerKey,
                             DimProductCategory.Sampling.ProductCategoryKey,
-                            "",0,"",null
+                            "",0,""
+#if !AdventureWorksDW2008R2
+                            ,null
+#endif
                         )
                     );
                     break;
@@ -742,7 +783,10 @@ abstract class Program :共通{
                         new FactCallCenter(
                             ID(FactCallCenter),
                             DimDate.Sampling.DateKey,
-                            "","",0,0,0,0,0,0,0,0,0,null
+                            "","",0,0,0,0,0,0,0,0,0
+#if !AdventureWorksDW2008R2
+                            ,null
+#endif
                         )
                     );
                     break;
@@ -788,12 +832,21 @@ abstract class Program :共通{
                     if(DimDepartmentGroup.Count==0) goto case 17;
                     if(DimScenario.Count==0) goto case 13;
                     if(DimAccount.Count==0) goto case 0;
-                    Add(ref FactFinance情報,FactFinance,new FactFinance(ID(FactFinance),DimDate.Sampling.DateKey,DimOrganization.Sampling.OrganizationKey,DimDepartmentGroup.Sampling.DepartmentGroupKey,DimScenario.Sampling.ScenarioKey,DimAccount.Sampling.AccountKey,0,null));
+                    Add(ref FactFinance情報,FactFinance,new FactFinance(ID(FactFinance),DimDate.Sampling.DateKey,DimOrganization.Sampling.OrganizationKey,DimDepartmentGroup.Sampling.DepartmentGroupKey,DimScenario.Sampling.ScenarioKey,DimAccount.Sampling.AccountKey,0
+#if !AdventureWorksDW2008R2
+                        ,null
+#endif
+                    ));
                     break;
                 case 19:
                     if(DimDate.Count==0) goto case 2;
                     if(DimCurrency.Count==0) goto case 1;
-                    Add(ref FactCurrencyRate情報,FactCurrencyRate,new FactCurrencyRate(ID(FactCurrencyRate),0,0,0,null));
+                    Add(ref FactCurrencyRate情報,FactCurrencyRate,new FactCurrencyRate(
+                        ID(FactCurrencyRate),0,0,0
+#if !AdventureWorksDW2008R2
+                        ,null
+#endif
+                    ));
                     break;
                 case 20:
                     if(DimDate.Count==0) goto case 2;
@@ -813,7 +866,10 @@ abstract class Program :共通{
                             DimPromotion.Sampling.PromotionKey,
                             DimCurrency.Sampling.CurrencyKey,
                             DimSalesTerritory.Sampling.SalesTerritoryKey,
-                            "",0,0,0,0,0,0,0,0,0,0,0,0,null,null,null,null,null
+                            "",0,0,0,0,0,0,0,0,0,0,0,0,null,null
+#if !AdventureWorksDW2008R2
+                            ,null,null,null
+#endif
                         )
                     );
                     break;
@@ -832,6 +888,7 @@ abstract class Program :共通{
                     break;
                 }
                 case 22:
+#if !AdventureWorksDW2008R2
                     if(DimProduct.Count==0) goto case 5;
                     if(DimDate.Count==0) goto case 2;
                     Add(ref FactProductInventory情報,FactProductInventory,
@@ -841,6 +898,7 @@ abstract class Program :共通{
                             DateTime.Now,0,0,0,0
                         )
                     );
+#endif
                     break;
                 case 23: {
                     if(DimDate.Count==0) goto case 2;
@@ -866,7 +924,10 @@ abstract class Program :共通{
                             DimSalesTerritory.Sampling.SalesTerritoryKey,
                             Sampling.SalesOrderNumber,
                             Sampling.SalesOrderLineNumber,
-                            null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+                            null,null,null,null,null,null,null,null,null,null,null,null,null
+#if !AdventureWorksDW2008R2
+                            ,null,null,null
+#endif
                         )
                     );
                     break;
@@ -881,7 +942,10 @@ abstract class Program :共通{
                             ID(FactSalesQuota),
                             DimEmployee.Sampling.EmployeeKey,
                             DimDate.Sampling.DateKey,
-                            0,0,0,null
+                            0,0,0
+#if !AdventureWorksDW2008R2
+                            ,null
+#endif
                         )
                     );
                     break;
@@ -936,7 +1000,9 @@ abstract class Program :共通{
                 case 19: Del(ref FactCurrencyRate情報,FactCurrencyRate); break;
                 case 20: Del(ref FactInternetSales情報,FactInternetSales); break;
                 case 21: Del(ref FactInternetSalesReason情報,FactInternetSalesReason); break;
+#if !AdventureWorksDW2008R2
                 case 22: Del(ref FactProductInventory情報,FactProductInventory); break;
+#endif
                 case 23: Del(ref FactResellerSales情報,FactResellerSales); break;
                 case 24: Del(ref FactSalesQuota情報,FactSalesQuota); break;
             }
@@ -1099,7 +1165,9 @@ abstract class Program :共通{
                 +",[SalesTerritoryRegion]"
                 +",[SalesTerritoryCountry]"
                 +",[SalesTerritoryGroup]"
+#if !AdventureWorksDW2008R2
                 +",[SalesTerritoryImage]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[DimSalesTerritory];"
                 +"WITH 再帰("
                 +"    [EmployeeKey]"
@@ -1132,7 +1200,9 @@ abstract class Program :共通{
                 +"    ,[StartDate]"
                 +"    ,[EndDate]"
                 +"    ,[Status]"
+#if !AdventureWorksDW2008R2
                 +"    ,[EmployeePhoto]"
+#endif
                 +")AS("
                 +"    SELECT"
                 +"        [EmployeeKey]"
@@ -1165,7 +1235,9 @@ abstract class Program :共通{
                 +"        ,[StartDate]"
                 +"        ,[EndDate]"
                 +"        ,[Status]"
+#if !AdventureWorksDW2008R2
                 +"        ,[EmployeePhoto]"
+#endif
                 +"    FROM [AdventureWorksDW2019].[dbo].[DimEmployee]"
                 +"    WHERE [ParentEmployeeKey]IS NULL"
                 +"    UNION ALL"
@@ -1200,7 +1272,9 @@ abstract class Program :共通{
                 +"        ,A.[StartDate]"
                 +"        ,A.[EndDate]"
                 +"        ,A.[Status]"
+#if !AdventureWorksDW2008R2
                 +"        ,A.[EmployeePhoto]"
+#endif
                 +"    FROM 再帰"
                 +"    JOIN[AdventureWorksDW2019].[dbo].[DimEmployee]A ON 再帰.EmployeeKey=A.ParentEmployeeKey"
                 +")"
@@ -1216,7 +1290,9 @@ abstract class Program :共通{
                 +",[FrenchCountryRegionName]"
                 +",[PostalCode]"
                 +",[SalesTerritoryKey]"
+#if !AdventureWorksDW2008R2
                 +",[IpAddressLocator]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[DimGeography]"
                 +"SELECT "
                 +"[CustomerKey]"
@@ -1283,7 +1359,9 @@ abstract class Program :共通{
                 +",[EnglishProductCategoryName]"
                 +",[ProductSubcategoryKey]"
                 +",[EnglishProductSubcategoryName]"
+#if !AdventureWorksDW2008R2
                 +",[Date]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactSurveyResponse]"
                 +"SELECT "
                 +"[FactCallCenterID]"
@@ -1299,7 +1377,9 @@ abstract class Program :共通{
                 +",[IssuesRaised]"
                 +",[AverageTimePerIssue]"
                 +",[ServiceGrade]"
+#if !AdventureWorksDW2008R2
                 +",[Date]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactCallCenter];"
                 +"WITH 再帰("
                 +"    [OrganizationKey]"
@@ -1340,14 +1420,18 @@ abstract class Program :共通{
                 +",[ScenarioKey]"
                 +",[AccountKey]"
                 +",[Amount]"
+#if !AdventureWorksDW2008R2
                 +",[Date]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactFinance]"
                 +"SELECT "
                 +"[CurrencyKey]"
                 +",[DateKey]"
                 +",[AverageRate]"
                 +",[EndOfDayRate]"
+#if !AdventureWorksDW2008R2
                 +",[Date]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactCurrencyRate]"
                 +"SELECT "
                 +"[ProductKey]"
@@ -1373,15 +1457,18 @@ abstract class Program :共通{
                 +",[Freight]"
                 +",[CarrierTrackingNumber]"
                 +",[CustomerPONumber]"
+#if !AdventureWorksDW2008R2
                 +",[OrderDate]"
                 +",[DueDate]"
                 +",[ShipDate]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactInternetSales]"
                 +"SELECT "
                 +"[SalesOrderNumber]"
                 +",[SalesOrderLineNumber]"
                 +",[SalesReasonKey]"
                 +"FROM [AdventureWorksDW2019].[dbo].[FactInternetSalesReason]"
+#if !AdventureWorksDW2008R2
                 +"SELECT "
                 +"[ProductKey]"
                 +",[DateKey]"
@@ -1391,6 +1478,7 @@ abstract class Program :共通{
                 +",[UnitsOut]"
                 +",[UnitsBalance]"
                 +"FROM [AdventureWorksDW2019].[dbo].[FactProductInventory]"
+#endif
                 +"SELECT "
                 +"[ProductKey]"
                 +",[OrderDateKey]"
@@ -1416,9 +1504,11 @@ abstract class Program :共通{
                 +",[Freight]"
                 +",[CarrierTrackingNumber]"
                 +",[CustomerPONumber]"
+#if !AdventureWorksDW2008R2
                 +",[OrderDate]"
                 +",[DueDate]"
                 +",[ShipDate]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactResellerSales]"
                 +"SELECT "
                 +"[SalesQuotaKey]"
@@ -1427,7 +1517,9 @@ abstract class Program :共通{
                 +",[CalendarYear]"
                 +",[CalendarQuarter]"
                 +",[SalesAmountQuota]"
+#if !AdventureWorksDW2008R2
                 +",[Date]"
+#endif
                 +"FROM [AdventureWorksDW2019].[dbo].[FactSalesQuota]"
                 +"SELECT "
                 +"[ProductKey]"
@@ -1641,8 +1733,10 @@ abstract class Program :共通{
                         GetInt32(Reader,1),
                         Reader.GetString(2),
                         Reader.GetString(3),
-                        GetString(Reader,4),
-                        GetBytes(Reader,5)
+                        GetString(Reader,4)
+#if !AdventureWorksDW2008R2
+                        ,GetBytes(Reader,5)
+#endif
                     )
                 );
             }
@@ -1680,8 +1774,10 @@ abstract class Program :共通{
                         GetString(Reader,26),
                         GetDateTime(Reader,27),
                         GetDateTime(Reader,28),
-                        GetString(Reader,29),
-                        GetBytes(Reader,30)
+                        GetString(Reader,29)
+#if !AdventureWorksDW2008R2
+                        ,GetBytes(Reader,30)
+#endif
                     )
                 );
             }
@@ -1699,8 +1795,10 @@ abstract class Program :共通{
                         GetString(Reader,6),
                         GetString(Reader,7),
                         GetString(Reader,8),
-                        GetInt32(Reader,9),
-                        GetString(Reader,10)
+                        GetInt32(Reader,9)
+#if !AdventureWorksDW2008R2
+                        ,GetString(Reader,10)
+#endif
                     )
                 );
             }
@@ -1790,8 +1888,10 @@ abstract class Program :共通{
                         Reader.GetInt32(3),
                         Reader.GetString(4),
                         Reader.GetInt32(5),
-                        Reader.GetString(6),
-                        GetDateTime(Reader,7)
+                        Reader.GetString(6)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,7)
+#endif
                     )
                 );
             }
@@ -1812,8 +1912,10 @@ abstract class Program :共通{
                         Reader.GetInt32(9),
                         Reader.GetInt16(10),
                         Reader.GetInt16(11),
-                        Reader.GetDouble(12),
-                        GetDateTime(Reader,13)
+                        Reader.GetDouble(12)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,13)
+#endif
                     )
                 );
             }
@@ -1852,8 +1954,10 @@ abstract class Program :共通{
                         Reader.GetInt32(3),
                         Reader.GetInt32(4),
                         Reader.GetInt32(5),
-                        Reader.GetDouble(6),
-                        GetDateTime(Reader,7)
+                        Reader.GetDouble(6)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,7)
+#endif
                     )
                 );
             }
@@ -1865,8 +1969,10 @@ abstract class Program :共通{
                         Reader.GetInt32(0),
                         Reader.GetInt32(1),
                         Reader.GetDouble(2),
-                        Reader.GetDouble(3),
-                        GetDateTime(Reader,4)
+                        Reader.GetDouble(3)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,4)
+#endif
                     )
                 );
             }
@@ -1897,10 +2003,12 @@ abstract class Program :共通{
                         Reader.GetDecimal(19),
                         Reader.GetDecimal(20),
                         GetString(Reader,21),
-                        GetString(Reader,22),
-                        GetDateTime(Reader,23),
+                        GetString(Reader,22)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,23),
                         GetDateTime(Reader,24),
                         GetDateTime(Reader,25)
+#endif
                     )
                 );
             }
@@ -1916,6 +2024,7 @@ abstract class Program :共通{
                 );
             }
             Reader.NextResult();
+#if !AdventureWorksDW2008R2
             var FactProductInventory = dbo.FactProductInventory;
             while(Reader.Read()) {
                 FactProductInventory.AddOrThrow(
@@ -1931,6 +2040,7 @@ abstract class Program :共通{
                 );
             }
             Reader.NextResult();
+#endif
             var FactResellerSales = dbo.FactResellerSales;
             while(Reader.Read()) {
                 FactResellerSales.AddOrThrow(
@@ -1958,10 +2068,12 @@ abstract class Program :共通{
                         GetDecimal(Reader,20),
                         GetDecimal(Reader,21),
                         GetString(Reader,22),
-                        GetString(Reader,23),
-                        GetDateTime(Reader,24),
+                        GetString(Reader,23)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,24),
                         GetDateTime(Reader,25),
                         GetDateTime(Reader,26)
+#endif
                     )
                 );
             }
@@ -1975,8 +2087,10 @@ abstract class Program :共通{
                         Reader.GetInt32(2),
                         Reader.GetInt16(3),
                         Reader.GetByte(4),
-                        Reader.GetDecimal(5),
-                        GetDateTime(Reader,6)
+                        Reader.GetDecimal(5)
+#if !AdventureWorksDW2008R2
+                        ,GetDateTime(Reader,6)
+#endif
                     )
                 );
             }
@@ -1992,6 +2106,7 @@ abstract class Program :共通{
                 );
             }
             Reader.NextResult();
+#if !AdventureWorksDW2008R2
             var NewFactCurrencyRate = dbo.NewFactCurrencyRate;
             while(Reader.Read()) {
                 NewFactCurrencyRate.AddOrThrow(
@@ -2005,6 +2120,7 @@ abstract class Program :共通{
                     )
                 );
             }
+#endif
             Reader.NextResult();
             var ProspectiveBuyer = dbo.ProspectiveBuyer;
             while(Reader.Read()) {
@@ -2134,287 +2250,7 @@ abstract class Program :共通{
             f.OrderQuantity,
             f.ExtendedAmount
         );
-    private static void 実行<T>(System.Linq.Expressions.Expression<Func<System.Collections.Generic.IEnumerable<T>>> LINQ){
-        var LINQ結果=o.Execute(LINQ);
-    }
     private static void vDMPrep(Container e,SqlCommand Command) {
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                select new {
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : f.OrderDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        p.ProductKey<40000 ? "Low" :
-                        p.ProductKey>60000 ? "High" :
-                        "Moderate",
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount,
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                select new {
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : f.OrderDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        p.ProductKey<40000 ? "Low" :
-                        p.ProductKey>60000 ? "High" :
-                        "Moderate",
-                    c,
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount,
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                select new {
-                    c,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : f.OrderDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        p.ProductKey<40000 ? "Low" :
-                        p.ProductKey>60000 ? "High" :
-                        "Moderate",
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount,
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                select new {
-                    c,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : f.OrderDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                select new {
-                    c,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : c.BirthDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-                select new {
-                    g,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year
-                        : c.BirthDate.HasValue ? (int?)DateTime.Now.Year
-                        : null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-        );
-        実行(
-            ()=>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-                select new{
-                    s,
-                    Age=
-                        c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day?DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        :c.BirthDate.HasValue?(int?)DateTime.Now.Year
-                        :null,
-                    IncomeGroup=
-                        c.YearlyIncome<40000?"Low":
-                        c.YearlyIncome>60000?"High":
-                        "Moderate",
-                    d,
-                    OrderNumber=f.SalesOrderNumber,
-                    LineNumber=f.SalesOrderLineNumber,
-                    Quantity=f.OrderQuantity,
-                    Amount=f.ExtendedAmount
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-                select new {
-                    Region = s.SalesTerritoryGroup,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        :c.BirthDate.HasValue ? (int?)DateTime.Now.Year
-                        :null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d.CalendarYear,
-                    d.FiscalYear,
-                    Month = d.MonthNumberOfYear,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-        );
-        実行(
-            () =>
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-                select new {
-                    //pc.EnglishProductCategoryName,
-                    //Model = p.ModelName??p.EnglishProductName,
-                    //c.CustomerKey,
-                    Region = s.SalesTerritoryGroup,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Month<c.BirthDate.Value.Month ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue ? (int?)DateTime.Now.Year-c.BirthDate.Value.Year
-                        : null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d.CalendarYear,
-                    d.FiscalYear,
-                    Month = d.MonthNumberOfYear,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-        );
-        {
-            var r = (
-                from f in e.dbo.FactInternetSales
-                join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
-                join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey
-                join psc in e.dbo.DimProductSubcategory on p.ProductSubcategoryKey equals psc.ProductSubcategoryKey
-                join pc in e.dbo.DimProductCategory on psc.ProductCategoryKey equals pc.ProductCategoryKey
-                join c in e.dbo.DimCustomer on f.CustomerKey equals c.CustomerKey
-                join g in e.dbo.DimGeography on c.GeographyKey equals g.GeographyKey
-                join s in e.dbo.DimSalesTerritory on g.SalesTerritoryKey equals s.SalesTerritoryKey
-                select new {
-                    pc.EnglishProductCategoryName,
-                    Model = p.ModelName??p.EnglishProductName
-                    ,c.CustomerKey,
-                    Region = s.SalesTerritoryGroup,
-                    Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Month<c.BirthDate.Value.Month ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue ? (int?)DateTime.Now.Year-c.BirthDate.Value.Year
-                        : null,
-                    IncomeGroup =
-                        c.YearlyIncome<40000 ? "Low" :
-                        c.YearlyIncome>60000 ? "High" :
-                        "Moderate",
-                    d.CalendarYear,
-                    d.FiscalYear,
-                    Month = d.MonthNumberOfYear,
-                    OrderNumber = f.SalesOrderNumber,
-                    LineNumber = f.SalesOrderLineNumber,
-                    Quantity = f.OrderQuantity,
-                    Amount = f.ExtendedAmount
-                }
-            ).ToArray();
-        }
         比較(
             () =>
                 from f in e.dbo.FactInternetSales
@@ -2431,9 +2267,12 @@ abstract class Program :共通{
                     ,c.CustomerKey,
                     Region = s.SalesTerritoryGroup,
                     Age =
-                        c.BirthDate.HasValue&&DateTime.Now.Month<c.BirthDate.Value.Month ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day ? DateTime.Now.Year-c.BirthDate.Value.Year-1
-                        : c.BirthDate.HasValue ? (int?)DateTime.Now.Year-c.BirthDate.Value.Year
+                        c.BirthDate.HasValue&&DateTime.Now.Month<c.BirthDate.Value.Month 
+                            ? DateTime.Now.Year-c.BirthDate.Value.Year-1
+                        : c.BirthDate.HasValue&&DateTime.Now.Month==c.BirthDate.Value.Month&&DateTime.Now.Day<c.BirthDate.Value.Day
+                            ? DateTime.Now.Year-c.BirthDate.Value.Year-1
+                        : c.BirthDate.HasValue 
+                            ? (int?)DateTime.Now.Year-c.BirthDate.Value.Year
                         : null,
                     IncomeGroup =
                         c.YearlyIncome<40000 ? "Low" :
