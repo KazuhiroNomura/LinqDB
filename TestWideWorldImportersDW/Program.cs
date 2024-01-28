@@ -1715,7 +1715,7 @@ namespace TestWideWorldImportersDW{
                             from Sale in e.Fact.Sale
                             where Sale.Sale_Key>StartingSaleKey&&Sale.Invoice_Date_Key>=new DateTime(2013,1,1)
                             select new Sale(
-                                e.Fact.Sale.Count,
+                                e.Fact.Sale.LongCount,
                                 Sale.City_Key,
                                 Sale.Customer_Key,
                                 Sale.Bill_To_Customer_Key,

@@ -14,6 +14,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TestAdventureWorksDW2019</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -27,24 +29,31 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LinqDB\LinqDB.csproj" />
     <ProjectReference Include="..\Test共通\Test共通.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AdventureWorksDW2017">
-      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\AdventureWorksDW2017.dll</HintPath>
+    <Reference Include="AdventureWorksDW2019">
+      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\AdventureWorksDW2019.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="localhost.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="AdventureWorksDW2019" />
+    <Using Include="AdventureWorksDW2019.Tables.dbo" />
+    <Using Include="AdventureWorksDW2019.Views.dbo" />
   </ItemGroup>
 </Project>

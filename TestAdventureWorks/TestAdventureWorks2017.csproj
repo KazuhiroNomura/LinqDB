@@ -14,6 +14,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
     <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -45,5 +46,14 @@
     <None Update="localhost.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="AdventureWorks2017" />
+    <Using Include="AdventureWorks2017.Tables.dbo" />
+    <Using Include="AdventureWorks2017.Tables.HumanResources" />
+    <Using Include="AdventureWorks2017.Tables.Person" />
+    <Using Include="AdventureWorks2017.Tables.Production" />
+    <Using Include="AdventureWorks2017.Tables.Purchasing" />
+    <Using Include="AdventureWorks2017.Tables.Sales" />
   </ItemGroup>
 </Project>

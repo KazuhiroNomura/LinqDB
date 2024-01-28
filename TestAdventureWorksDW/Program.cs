@@ -1,15 +1,11 @@
-﻿using System;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System.Data.SqlClient;
 using LinqDB.Sets;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using AdventureWorksDW2017;
-using AdventureWorksDW2017.Tables.dbo;
-using AdventureWorksDW2017.Views.dbo;
-using LinqDB.Sets;
+//using AdventureWorksDW;
+//using Tables.dbo;
 using System.Globalization;
-namespace TestAdventureWorksDW2017;
+namespace TestAdventureWorksDW;
 abstract class Program :共通{
     ///// <summary>アンマネージ リソースの解放またはリセットに関連付けられているアプリケーション定義のタスクを実行します。</summary>
     ///// <filterpriority>2</filterpriority>
@@ -2109,7 +2105,7 @@ abstract class Program :共通{
                 IncomeGroup = GetString(Reader,3)
             });
     }
-    private static IEnumerable<vDMPrep> vDMPrep(Container e)=>
+    private static LinqDB.Sets.IEnumerable<vDMPrep> vDMPrep(Container e)=>
         from f in e.dbo.FactInternetSales
         join d in e.dbo.DimDate on f.OrderDateKey equals d.DateKey
         join p in e.dbo.DimProduct on f.ProductKey equals p.ProductKey

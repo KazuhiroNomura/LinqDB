@@ -38,8 +38,8 @@
     <ProjectReference Include="..\Test共通\Test共通.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AdventureWorks2019">
-      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\AdventureWorks2019.dll</HintPath>
+    <Reference Include="AdventureWorks2016">
+      <HintPath>..\GUI\bin\Debug\net8.0-windows7.0\AdventureWorks2016.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -48,12 +48,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Using Include="AdventureWorks2019" />
-    <Using Include="AdventureWorks2019.Tables.dbo" />
-    <Using Include="AdventureWorks2019.Tables.HumanResources" />
-    <Using Include="AdventureWorks2019.Tables.Person" />
-    <Using Include="AdventureWorks2019.Tables.Production" />
-    <Using Include="AdventureWorks2019.Tables.Purchasing" />
-    <Using Include="AdventureWorks2019.Tables.Sales" />
+    <Using Include="AdventureWorks2016" />
+    <Using Include="AdventureWorks2016.Tables.dbo" />
+    <Using Include="AdventureWorks2016.Tables.HumanResources" />
+    <Using Include="AdventureWorks2016.Tables.Person" />
+    <Using Include="AdventureWorks2016.Tables.Production" />
+    <Using Include="AdventureWorks2016.Tables.Purchasing" />
+    <Using Include="AdventureWorks2016.Tables.Sales" />
   </ItemGroup>
 </Project>

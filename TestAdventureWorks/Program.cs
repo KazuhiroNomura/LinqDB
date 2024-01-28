@@ -1,24 +1,13 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Linq.Expressions;
 using System.Xml.Linq;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using LinqDB.Sets;
-using AdventureWorks2017.Tables.dbo;
-using AdventureWorks2017.Tables.HumanResources;
-using AdventureWorks2017.Tables.Person;
-using AdventureWorks2017.Tables.Production;
-using AdventureWorks2017.Tables.Purchasing;
-using AdventureWorks2017.Tables.Sales;
-using AdventureWorks2017;
-using System.Linq;
 using System.Xml.XPath;
 using System.Xml;
 using System.Globalization;
-using System.IO;
 using Microsoft.SqlServer.Types;
-using System.Text;
 namespace TestAdventureWorks2019 {
     abstract class Program:共通 {
         [SuppressMessage("Globalization","CA1305:IFormatProvider を指定します",Justification = "<保留中>")]
@@ -5205,7 +5194,7 @@ namespace TestAdventureWorks2019 {
                         group b by new { b.ComponentID,b.ComponentDesc,b.ProductAssemblyID,b.BOMLevel,b.RecursionLevel,b.StandardCost,b.ListPrice } into g
                         select new { g.Key.ProductAssemblyID,g.Key.ComponentID,g.Key.ComponentDesc, TotalQuantity = g.Sum(p => p.PerAssemblyQty),g.Key.StandardCost,g.Key.ListPrice,g.Key.BOMLevel,g.Key.RecursionLevel };
                 var array = r.ToArray();
-                IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> BOM_cte(IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> source,int RecursionLevel) {
+                LinqDB.Sets.IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> BOM_cte(LinqDB.Sets.IEnumerable<(int? ProductAssemblyID, int ComponentID, string ComponentDesc, decimal PerAssemblyQty, decimal StandardCost, decimal ListPrice, short BOMLevel, int RecursionLevel)> source,int RecursionLevel) {
                     if(source.Count==0) return source;
                     return source.Union(
                         BOM_cte(
