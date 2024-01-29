@@ -24,6 +24,17 @@ public class 変換_Stopwatchに埋め込む : 共通{
     //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     private static readonly MethodInfo BooleanMethod=typeof(時間計測).GetMethod(nameof(時間計測.BooleanMethod))!;
     private static readonly MethodInfo Int32Method=typeof(時間計測).GetMethod(nameof(時間計測.Int32Method))!;
+    [Fact]
+    public void Add(){
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<int>>(
+                Expression.Add(
+                    Expression.Constant(-11),
+                    Expression.Constant(1)
+                )
+            )
+        );
+    }
 
     [Fact]public void Condition0(){
         var p=Expression.Constant(new 時間計測());

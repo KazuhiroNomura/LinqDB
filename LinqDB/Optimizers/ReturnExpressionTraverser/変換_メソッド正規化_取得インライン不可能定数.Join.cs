@@ -208,6 +208,7 @@ partial class 変換_メソッド正規化_取得インライン不可能定数{
             //引数5にはComparerがあるのでそれで比較する。
             //O.Group     (I,o=>o,i=>i,???)
             //O.SelectMany(o=>I.Where(i=>EqualityComparer.Equal(i,o).???)
+            //nullの比較の仕方をEqualityComparerに任せる
             var MethodCall1_Arguments_5_Type = MethodCall1_Arguments_5.Type;
             Debug.Assert(MethodCall1_Arguments_5_Type.GetInterface(CommonLibrary.IEqualityComparer_FullName)!.GetGenericArguments()[0]==TKey);
             predicate_Body=Expression.Call(
@@ -223,16 +224,20 @@ partial class 変換_メソッド正規化_取得インライン不可能定数{
 
             if(TKey.IsNullable()){
                 Debug.Assert(Equals_Argument.Type.IsNullable());
-                //var HasValue = Expression.Property(Equals_this,"HasValue");
-
+                //nullの比較の仕方をDBのnullの比較と同様にする。
+                //null==nullはC#だとtrueだがDBと同様にfalseにする
+                var HasValue = Equals_this.Type.GetProperty("HasValue");
                 var Equals_this_GetValueOrDefault=Equals_this.GetValueOrDefault();
                 var ElementTKey=Equals_this_GetValueOrDefault.Type;
                 predicate_Body=Expression.AndAlso(
-                    Expression.Property(Equals_this,"HasValue"),
-                    Expression.Call(
-                        Equals_this_GetValueOrDefault,
-                        作業配列.GetMethod(ElementTKey,nameof(object.Equals),ElementTKey),
-                        Equals_Argument.GetValueOrDefault()
+                    Expression.Property(Equals_this,HasValue),
+                    Expression.AndAlso(
+                        Expression.Property(Equals_Argument,HasValue),
+                        Expression.Call(
+                            Equals_this_GetValueOrDefault,
+                            作業配列.GetMethod(ElementTKey,nameof(object.Equals),ElementTKey),
+                            Equals_Argument.GetValueOrDefault()
+                        )
                     )
                 );
             } else{

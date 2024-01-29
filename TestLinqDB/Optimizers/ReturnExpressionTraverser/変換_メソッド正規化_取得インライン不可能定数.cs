@@ -727,18 +727,20 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
     [Fact]
     public void Join(){
         //if(MethodCall1_Arguments.Count==6)
+        //(0)
         this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => o+i, EqualityComparer<int>.Default));//0
         //else
+        //(1)
         this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i, (o, i) => new { o, i }));//1
         //if(Reflection.ExtensionSet.Join==MethodCall0_GenericMethodDefinition) {
-        //1
+        //(1)
         //} else {
-        //0
+        //(0)
         //}
         //if(MethodCall1_Arguments_2 is LambdaExpression outerKeySelector) {
         //    if(MethodCall1_Arguments_3 is LambdaExpression innerKeySelector) {
         //        if(MethodCall1_Arguments_4 is LambdaExpression resultSelector) {
-        //0
+        //(0)
         //        } else {
         this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(), o => o, i => i,Anonymous((int o,int i) => o+i), EqualityComparer<int>.Default));//2
         //        }
@@ -763,9 +765,14 @@ public class 変換_メソッド正規化_取得インライン不可能定数 :
         //    }
         //}
         //if(MethodCall1_Arguments_5 is not null) {
-        //0
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(),o=>(int?)o,i=>(int?)i,(o, i) => o+i, EqualityComparer<int?>.Default));//0
+        //(0)
         //} else {
-        //1
+        //    if(TKey.IsNullable()){
+        this.Expression実行AssertEqual(() => CreateSet().Join(CreateSet(),o =>(int?)o,i =>(int?)i, (o, i) => new { o, i }));//1
+        //    } else{
+        //(1)
+        //    }
         //}
     }
     [Fact]public void Call_OfType0(){

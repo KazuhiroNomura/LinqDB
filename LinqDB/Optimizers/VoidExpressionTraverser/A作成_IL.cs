@@ -1613,19 +1613,19 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     //    //this.I!.Dup();
     //    //this.格納先に格納(Unary_Operand);
     //}
-    protected override void PostDecrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Sub);
-    protected override void PostIncrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Add);
-    private void 共通PostIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
-        var Unary_Operand=Unary.Operand;
-        this.格納先設定(Unary_Operand);
-        this.共通IncrementDecrement(Unary,AddSub);
-        this.I!.Dup();
-        this.格納先に格納(Unary_Operand);
-        //this.格納先設定(Unary_Operand);
-        //this.I!.Dup();
-        //this.共通IncrementDecrement(Unary,AddSub);
-        //this.格納先に格納(Unary_Operand);
-    }
+    //protected override void PostDecrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Sub);
+    //protected override void PostIncrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Add);
+    //private void 共通PostIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
+    //    var Unary_Operand=Unary.Operand;
+    //    this.格納先設定(Unary_Operand);
+    //    this.共通IncrementDecrement(Unary,AddSub);
+    //    this.I!.Dup();
+    //    this.格納先に格納(Unary_Operand);
+    //    //this.格納先設定(Unary_Operand);
+    //    //this.I!.Dup();
+    //    //this.共通IncrementDecrement(Unary,AddSub);
+    //    //this.格納先に格納(Unary_Operand);
+    //}
     private static readonly Action<ILGenerator> DelegateNegate = I => I.Neg();
     protected override void Negate(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
     protected override void NegateChecked(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);

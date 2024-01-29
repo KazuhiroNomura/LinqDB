@@ -172,7 +172,7 @@ public static class ExtensionSet {
     public static readonly MethodInfo Inline2 = M(() => new object().Inline(p => 0));
     public static readonly MethodInfo ToLookup_keySelector = M(() => _Int32.ToLookup(p => p));
     public static readonly MethodInfo ToLookup_keySelector_comparer = M(() => _Int32.ToLookup(p => p,EqualityComparer<int>.Default));
-    public static readonly MethodInfo ToLookup_keySelector_elementSelector = M(() => _Int32.ToLookup(p => p,p=>p));
-    public static readonly MethodInfo ToLookup_keySelector_elementSelector_comparer = M(() => _Int32.ToLookup(p => p,p=>p,EqualityComparer<int>.Default));
+    public static readonly MethodInfo ToLookup_keySelector_elementSelector = M(() => _Int32.ToLookup(p => p,p => p));
+    public static readonly MethodInfo ToLookup_keySelector_elementSelector_comparer = M(() => _Int32.ToLookup(p => p,p => p,EqualityComparer<int>.Default));
     //public static readonly MethodInfo Update = M(() => _Int32.Update(p => true,p => 0));
 }

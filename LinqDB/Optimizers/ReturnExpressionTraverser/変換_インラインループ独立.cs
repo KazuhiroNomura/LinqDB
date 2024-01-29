@@ -860,7 +860,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
             comparer=this.Traverse(MethodCall0_Arguments[2]);
         } else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition||Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition) {
             comparer=this.Traverse(MethodCall0_Arguments[3]);
-        }else{
+        } else {
             comparer=null;
         }
         var 作業配列 = this.作業配列;
@@ -882,7 +882,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
                 var 作業配列1=this.作業配列;
                 Expression? keySelector0=null;
                 Expression? elementSelector0=null;
-                Expression? comparer0=null;
+                //Expression? comparer0=null;
                 //IReadOnlyList<ParameterExpression> Parameters0;
                 ParameterExpression p;
                 ParameterExpression? index=null;
@@ -902,13 +902,10 @@ internal class 変換_インラインループ独立:変換_インラインル�
                             elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
                         else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector==GenericMethodDefinition)
                             elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
-                        else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+                        else if(Reflection.ExtensionSet.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition)
                             elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
-                            comparer0=this.Traverse(MethodCall0_Arguments[3]);
-                        } else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition){
+                        else if(Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition)
                             elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
-                            comparer0=this.Traverse(MethodCall0_Arguments[3]);
-                        }
                     } else{
                         if(Reflection.ExtensionEnumerable.ToLookup_indexKeySelector==GenericMethodDefinition)
                             index=Parameters0[1];
@@ -929,7 +926,6 @@ internal class 変換_インラインループ独立:変換_インラインル�
                         Reflection.ExtensionEnumerable.ToLookup_keySelector_elementSelector_comparer==GenericMethodDefinition
                     );
                     elementSelector0=this.LambdaExpressionを展開1(this.Traverse(MethodCall0_Arguments[2]),p);
-                    if(MethodCall0_Arguments.Count==4) comparer=this.Traverse(MethodCall0_Arguments[3]);
                     keySelector0=Expression.Invoke(MethodCall1_Arguments_1,argument);
                 }
                 Expression elementSelector;
@@ -937,42 +933,37 @@ internal class 変換_インラインループ独立:変換_インラインル�
                     elementSelector=p;
                 else
                     elementSelector=elementSelector0;
+                var Expression0=Expression.Assign(p,argument);
+                var Expression1=Expression.Call(
+                    Dictionary,
+                    Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
+                    keySelector0,
+                    elementSelector
+                );
                 if(index is null)
                     return Expression.Block(
-                        Expression.Assign(p,argument),
-                        Expression.Call(
-                            Dictionary,
-                            Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                            keySelector0,
-                            //this.LambdaExpressionを展開1(
-                            //    keySelector0,
-                            //    p
-                            //),
-                            elementSelector
-                        )
+                        Expression0,
+                        Expression1
                     );
                 else
                     return Expression.Block(
-                        Expression.Assign(p,argument),
-                        Expression.Call(
-                            Dictionary,
-                            Dictionary_Type.GetMethod(nameof(SetGroupingSet<int,int>.AddKeyValue)),
-                            keySelector0,
-                            //this.LambdaExpressionを展開1(
-                            //    keySelector0,
-                            //    p
-                            //),
-                            elementSelector
-                        ),
-                        Expression.PostIncrementAssign(index)
+                        Expression0,
+                        Expression1,
+                        Expression.Assign(
+                            index,
+                            Expression.Increment(
+                                index
+                            )
+                        )
                     );
             }
         );
+        var Assign=Expression.Assign(Dictionary,New);
         if(index is null)
             return Expression.Block(
                 Parameters,
                 作業配列.Expressions設定(
-                    Expression.Assign(Dictionary,New),
+                    Assign,
                     Expression1ループ,
                     Dictionary
                 )
@@ -981,7 +972,7 @@ internal class 変換_インラインループ独立:変換_インラインル�
             return Expression.Block(
                 Parameters,
                 作業配列.Expressions設定(
-                    Expression.Assign(Dictionary,New),
+                    Assign,
                     Expression.Assign(index,Constant_0),
                     Expression1ループ,
                     Dictionary
