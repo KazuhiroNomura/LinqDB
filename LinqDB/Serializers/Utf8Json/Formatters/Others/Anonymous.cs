@@ -42,23 +42,23 @@ public class Anonymous<T>:IJsonFormatter<T>{
             this.Write=(delegate_Write)WriteMethod.CreateDelegate(typeof(delegate_Write));
             this.Read=(delegate_Read)ReadMethod.CreateDelegate(typeof(delegate_Read));
         }
-        {
-            var AssemblyName=new AssemblyName{Name="Name"};
-            var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
-            var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
-            var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
-            var Write=Disp_TypeBuilder.DefineMethod("Write",MethodAttributes.Static|MethodAttributes.Public,typeof(void),WriteTypes);
-            Write.DefineParameter(1,ParameterAttributes.None,"writer");
-            Write.DefineParameter(2,ParameterAttributes.None,"value");
-            Write.DefineParameter(3,ParameterAttributes.None,"Resolver");
-            var Read=Disp_TypeBuilder.DefineMethod("Read",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
-            Read.DefineParameter(1,ParameterAttributes.None,"writer");
-            Read.DefineParameter(2,ParameterAttributes.None,"Resolver");
-            Read.InitLocals=false;
-            共通(Write.GetILGenerator(),Read.GetILGenerator());
-            Disp_TypeBuilder.CreateType();
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\Utf8Json.DisplayClass,WriteRead.dll");
-        }
+        //{
+        //    var AssemblyName=new AssemblyName{Name="Name"};
+        //    var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        //    var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
+        //    var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
+        //    var Write=Disp_TypeBuilder.DefineMethod("Write",MethodAttributes.Static|MethodAttributes.Public,typeof(void),WriteTypes);
+        //    Write.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Write.DefineParameter(2,ParameterAttributes.None,"value");
+        //    Write.DefineParameter(3,ParameterAttributes.None,"Resolver");
+        //    var Read=Disp_TypeBuilder.DefineMethod("Read",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
+        //    Read.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    Read.DefineParameter(2,ParameterAttributes.None,"Resolver");
+        //    Read.InitLocals=false;
+        //    共通(Write.GetILGenerator(),Read.GetILGenerator());
+        //    Disp_TypeBuilder.CreateType();
+        //    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\Utf8Json.DisplayClass,WriteRead.dll");
+        //}
         void 共通(ILGenerator WI,ILGenerator RI){
             if(Properties_Length>0){
                 var index=0;

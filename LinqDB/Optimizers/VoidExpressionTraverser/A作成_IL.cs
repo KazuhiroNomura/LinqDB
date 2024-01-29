@@ -486,6 +486,11 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     }
     private static bool IsUnsigned(Type p)=>
         p==typeof(byte)||p==typeof(ushort)||p==typeof(char)||p==typeof(uint)||p==typeof(ulong)||p==typeof(UIntPtr);
+    /// <summary>
+    /// 1をpushしてAdd,Sub演算する
+    /// </summary>
+    /// <param name="Unary"></param>
+    /// <param name="AddSub"></param>
     private void 共通IncrementDecrement(UnaryExpression Unary,OpCode AddSub) => this.共通UnaryExpression(Unary,I => {
         var Unary_Type = Unary.Type;
         if(Unary_Type.IsNullable()) {
@@ -510,11 +515,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         }
         I.Emit(AddSub);
     });
-    private void 格納先設定IncrementDecrement(UnaryExpression Unary,OpCode AddSub){
-        var Unary_Operand=Unary.Operand;
-        this.格納先設定(Unary_Operand);
-        this.共通IncrementDecrement(Unary,AddSub);
-    }
     protected override void Add(BinaryExpression Binary)=>
         this.共通四則演算(Binary,OpCodes.Add);
     protected override void AddChecked(BinaryExpression Binary)=>
@@ -1548,21 +1548,83 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
     }
     protected override void Decrement(UnaryExpression Unary)=>this.共通IncrementDecrement(Unary,OpCodes.Sub);
     protected override void Increment(UnaryExpression Unary)=>this.共通IncrementDecrement(Unary,OpCodes.Add);
-    protected override void PreDecrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Sub);
-    protected override void PreIncrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Add);
-    private void 共通PreIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
-        this.格納先設定IncrementDecrement(Unary,AddSub);
-        this.I!.Dup();
-        this.格納先に格納(Unary.Operand);
-    }
+    //Pre....はループ展開でしか作られない
+    //protected override void PreDecrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Sub);
+    //protected override void PreIncrementAssign(UnaryExpression Unary)=>this.共通PreIncrementDecrementAssign(Unary,OpCodes.Add);
+    //private void 共通PreIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
+    //    var Unary_Operand=Unary.Operand;
+    //    switch(Unary_Operand.NodeType){
+    //        case ExpressionType.Parameter:{
+    //            this.Traverse(Unary_Operand);
+    //            this.共通IncrementDecrement(Unary,AddSub);
+    //            var I=this.I!;
+    //            I.Dup();
+    //            this.格納先に格納(Unary_Operand);
+    //            break;
+    //        }
+    //        default:{
+    //            this.格納先設定(Unary_Operand);
+    //            this.共通UnaryExpression(Unary,I => {
+    //                this.I!.Dup();
+    //                var Unary_Type = Unary.Type;
+    //                if(Unary_Type.IsNullable()) {
+    //                    Unary_Type=Unary_Type.GetGenericArguments()[0];
+    //                }
+    //                if(
+    //                    Unary_Type==typeof(sbyte)||
+    //                    Unary_Type==typeof(short)||
+    //                    Unary_Type==typeof(int)||
+    //                    Unary_Type==typeof(byte)||
+    //                    Unary_Type==typeof(ushort)||
+    //                    Unary_Type==typeof(uint)
+    //                ) {
+    //                    I.Ldc_I4_1();
+    //                } else if(Unary_Type==typeof(long)||Unary_Type==typeof(ulong)) {
+    //                    I.Ldc_I8(1L);
+    //                } else if(Unary_Type==typeof(float)) {
+    //                    I.Ldc_R4(1F);
+    //                } else {
+    //                    Debug.Assert(Unary_Type==typeof(double));
+    //                    I.Ldc_R8(1D);
+    //                }
+    //                I.Emit(AddSub);
+    //            });
+    //            this.共通IncrementDecrement(Unary,AddSub);
+    //            this.格納先に格納(Unary_Operand);
+    //            //this.格納先設定(Unary_Operand);
+    //            //this.Traverse(Unary_Operand);
+    //            //this.共通IncrementDecrement(Unary,AddSub);
+    //            //var I=this.I!;
+    //            //var L=I.M_DeclareLocal_Stloc_Ldloc(Unary_Operand.Type);
+    //            //this.格納先に格納(Unary_Operand);
+    //            //I.Ldloc(L);
+    //            break;
+    //        }
+    //    }
+    //    //this.格納先設定(Unary_Operand);
+    //    //this.Traverse(Unary_Operand);
+    //    //this.共通IncrementDecrement(Unary,AddSub);
+    //    //var I=this.I!;
+    //    //var L=I.M_DeclareLocal_Stloc_Ldloc(Unary_Operand.Type);
+    //    //this.格納先に格納(Unary_Operand);
+    //    //I.Ldloc(L);
+    //    //this.格納先設定(Unary_Operand);
+    //    //this.共通IncrementDecrement(Unary,AddSub);
+    //    //this.I!.Dup();
+    //    //this.格納先に格納(Unary_Operand);
+    //}
     protected override void PostDecrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Sub);
     protected override void PostIncrementAssign(UnaryExpression Unary)=>this.共通PostIncrementDecrementAssign(Unary,OpCodes.Add);
     private void 共通PostIncrementDecrementAssign(UnaryExpression Unary,OpCode AddSub){
         var Unary_Operand=Unary.Operand;
         this.格納先設定(Unary_Operand);
-        this.I!.Dup();
         this.共通IncrementDecrement(Unary,AddSub);
+        this.I!.Dup();
         this.格納先に格納(Unary_Operand);
+        //this.格納先設定(Unary_Operand);
+        //this.I!.Dup();
+        //this.共通IncrementDecrement(Unary,AddSub);
+        //this.格納先に格納(Unary_Operand);
     }
     private static readonly Action<ILGenerator> DelegateNegate = I => I.Neg();
     protected override void Negate(UnaryExpression Unary)=>this.共通UnaryExpression(Unary,DelegateNegate);
@@ -2227,45 +2289,6 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
         this.Traverse(Switch.DefaultBody);
         I.MarkLabel(EndSwitch);
     }
-    private void PrivateFilter0(CatchBlock Try_Handler,LocalBuilder Variable) {
-        //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
-        var I = this.I!;
-        I.BeginExceptFilterBlock();
-        I.Isinst(Try_Handler.Test);
-        I.Dup();
-        var Isinst = I.DefineLabel();
-        I.Brtrue(Isinst);
-        I.Pop();//Dup,Popは不要では？
-        I.Ldc_I4_0();
-        var endfilter = I.DefineLabel();
-        I.Br(endfilter);
-        I.MarkLabel(Isinst);
-        I.Stloc(Variable);
-        this.Traverse(Try_Handler.Filter);
-        I.MarkLabel(endfilter);
-        I.BeginCatchBlock(null);//endfilter
-    }
-    private void PrivateFilter0(CatchBlock Try_Handler) {
-        //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
-        var I = this.I!;
-        I.BeginExceptFilterBlock();
-        I.Isinst(Try_Handler.Test);
-        I.Dup();
-        //this.PrivateFilter1(Try_Handler);
-        var Isinst = I.DefineLabel();
-        I.Brtrue(Isinst);
-        I.Pop();
-        I.Ldc_I4_0();
-        var endfilter = I.DefineLabel();
-        I.Br(endfilter);
-        I.MarkLabel(Isinst);
-        I.Pop();
-        this.Traverse(Try_Handler.Filter);
-        I.MarkLabel(endfilter);
-        //I.Endfilter();
-        I.BeginCatchBlock(null);
-        I.Pop();
-    }
     protected abstract void ProtectedFault(Expression? Fault);
     /// <summary>
     /// Filter,Catchブロック
@@ -2279,29 +2302,92 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
             var Try_Handler_Variable=Try_Handler.Variable;
             var Variable=I.DeclareLocal(Try_Handler_Variable.Type);
             Dictionary_Parameter_LocalBuilder.Add(Try_Handler_Variable,Variable);
-            if(Try_Handler.Filter is null){
+            //共通(Variable);
+            if(Try_Handler.Filter is null) {
                 I.BeginCatchBlock(Try_Handler.Test);
                 I.Stloc(Variable);
-            } else{
-                this.PrivateFilter0(Try_Handler,Variable);
+            } else {
+                //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+                I.BeginExceptFilterBlock();//Variable
+                I.Isinst(Try_Handler.Test);//==Test
+                I.Dup();                   //Type一致するかA,Type一致するかB
+                var Isinst = I.DefineLabel();
+                I.Brtrue(Isinst);
+                I.Pop();
+                I.Ldc_I4_0();              //Type一致しない
+                var endfilter = I.DefineLabel();
+                I.Br(endfilter);
+                I.MarkLabel(Isinst);       //Type一致するかA
+                I.Stloc(Variable);
+                this.Traverse(Try_Handler.Filter);
+                I.MarkLabel(endfilter);    //Type一致しない
+                I.BeginCatchBlock(null);
                 I.Pop();
             }
             this.Traverse(Try_Handler.Body);
             Dictionary_Parameter_LocalBuilder.Remove(Try_Handler_Variable);
-        } else{
+        } else {
+            //共通(null);
             //if(Try_Handler.Filter is null){
             //    I.BeginCatchBlock(Try_Handler.Test);
             //    I.Pop();
             //} else
             //    this.ProtectedFilter(Try_Handler);
             //この時点で例外オブジェクトがpushされている。変数はないのでポップする
-            if(Try_Handler.Filter is null){
+            if(Try_Handler.Filter is null) {
                 I.BeginCatchBlock(Try_Handler.Test);
                 I.Pop();
-            } else
-                this.PrivateFilter0(Try_Handler);
+            } else {
+                //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+                I.BeginExceptFilterBlock();
+                I.Isinst(Try_Handler.Test);
+                I.Dup();
+                var Isinst = I.DefineLabel();
+                I.Brtrue(Isinst);
+                I.Pop();
+                I.Ldc_I4_0();
+                var endfilter = I.DefineLabel();
+                I.Br(endfilter);
+                I.MarkLabel(Isinst);
+                I.Pop();
+                this.Traverse(Try_Handler.Filter);
+                I.MarkLabel(endfilter);
+                I.BeginCatchBlock(null);
+                I.Pop();
+            }
             this.Traverse(Try_Handler.Body);
         }
+        //void 共通(LocalBuilder?Variable){
+        //    var I0=this.I!;
+        //    if(Try_Handler.Filter is null){
+        //        I0.BeginCatchBlock(Try_Handler.Test);//endfilter
+        //        if(Variable is null)
+        //            I0.Pop();
+        //        else
+        //            I0.Stloc(Variable);
+        //    } else{
+        //        //throw new NotSupportedException(Properties.Resources.DynamicMethodでFilterはサポートされていない);
+        //        I0.BeginExceptFilterBlock();
+        //        I0.Isinst(Try_Handler.Test);
+        //        I0.Dup();
+        //        var Isinst=I0.DefineLabel();
+        //        I0.Brtrue(Isinst);
+        //        I0.Pop();//Dup,Popは不要では？
+        //        I0.Ldc_I4_0();
+        //        var endfilter=I0.DefineLabel();
+        //        I0.Br(endfilter);
+        //        I0.MarkLabel(Isinst);
+        //        I0.Stloc(Variable);
+        //        this.Traverse(Try_Handler.Filter);
+        //        I0.MarkLabel(endfilter);
+        //        I0.BeginCatchBlock(null);//FilterはCatchTypeはなし
+        //        if(Variable is null)
+        //            I0.Pop();
+        //        else
+        //            I0.Stloc(Variable);
+        //    }
+        //    this.Traverse(Try_Handler.Body);
+        //}
     }
     private LocalBuilder PrivateTry値を代入した変数(TryExpression Try){
         Debug.Assert(Try.Type!=typeof(void));
@@ -2365,7 +2451,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                     var Leave先1 = I.DefineLabel();
                     foreach(var Try_Handler in Try.Handlers) {
                         this.PrivateTryFilterCatch(Try_Handler);
-                        if(Try_Handler.Body.Type==typeof(void))I.Pop();
+                        if(Try_Handler.Body.Type!=typeof(void))I.Pop();
                     }
                     I.EndExceptionBlock();//leave Leave先1
                     I.MarkLabel(Leave先1);
@@ -2404,7 +2490,7 @@ internal abstract class A作成_IL:VoidExpressionTraverser{
                 } else{
                     foreach(var Try_Handler in Try.Handlers){
                         this.PrivateTryFilterCatch(Try_Handler);
-                        if(Try_Handler.Body.Type==typeof(void)) I.Pop();
+                        if(Try_Handler.Body.Type!=typeof(void)) I.Pop();
                     }
                 }
             }

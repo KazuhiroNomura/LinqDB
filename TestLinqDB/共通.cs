@@ -35,6 +35,7 @@ public abstract class 共通{
     //protected virtual テストオプション テストオプション{get;}=テストオプション.全て;
     //protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存;
     private protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.プロファイラ|テストオプション.アセンブリ保存|テストオプション.インライン;
+    //private protected virtual テストオプション テストオプション=>テストオプション.MemoryPack|テストオプション.ローカル実行|テストオプション.インライン|テストオプション.アセンブリ保存;
     const string フォルダ="シリアライズテスト";
     static 共通(){
         const string Serialize=nameof(Serialize);
@@ -55,6 +56,10 @@ public abstract class 共通{
     }
     protected readonly dynamic 変換_局所Parameterの先行評価 = new NonPublicAccessor(
         typeof(LinqDB.Optimizers.ReturnExpressionTraverser.変換_局所Parameterの先行評価).GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object>()));
+    protected void Expression実行AssertEqual(Expression Body){
+        dynamic Lambda=Expression.Lambda(Body);
+        this.Expression実行AssertEqual(Lambda);
+    }
     /// <summary>
     /// 変換_局所Parameterの先行評価.実行
     /// </summary>

@@ -23,8 +23,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
         );
         var Add=Expression.Add(p,p);
         Add=Expression.Add(Add,Add);
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda<Func<decimal>>(
+        this.Expression実行AssertEqual(
+            (Expression)Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Add,
@@ -33,8 +33,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda<Func<decimal>>(
+        this.Expression実行AssertEqual(
+            (Expression)Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Add,
@@ -45,8 +45,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda<Func<decimal>>(
+        this.Expression実行AssertEqual(
+            (Expression)Expression.Lambda<Func<decimal>>(
                 Expression.Block(
                     new[] { p },
                     Expression.Assign(
@@ -67,8 +67,8 @@ public class 変換_局所Parameterの先行評価 : 共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.Lambda<Func<decimal,decimal>>(
+        this.Expression実行AssertEqual(
+            (Expression)Expression.Lambda<Func<decimal,decimal>>(
                 Expression.Block(
                     Expression.Add(
                         p,
@@ -90,7 +90,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     [Fact]public void 変形確認2TryCatch(){
         var _1m = Expression.Constant(1m);
         var _2m = Expression.Constant(2m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Condition(
                     Expression.Equal(_1m,_1m),
@@ -110,7 +110,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認3TryCatch(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Add(_1m,_1m),
                 Expression.TryCatch(
@@ -133,7 +133,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認5Condition後式(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -146,7 +146,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認6Condition後式0(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -159,7 +159,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認6Condition後式1(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -172,7 +172,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認4Condition前式0(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Equal(_1m,_1m),
                 Expression.Add(_1m,_1m),
@@ -182,7 +182,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認7Condition前式1(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Equal(_1m,_1m),
@@ -194,7 +194,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認8Condition後式0(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -207,7 +207,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認8Condition後式1(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -220,7 +220,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認8Condition後式2(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -233,7 +233,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認8Condition後式3(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -246,7 +246,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
     }
     [Fact]public void 変形確認9Condition後式(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -1842,7 +1842,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
             //    for(var b=0;b<Count;b++){
             //        if(Line[b]=='　'){
             //            if(書き換えLineIndexEnd<b)
-            this.変換_局所Parameterの先行評価_実行(//1
+            this.Expression実行AssertEqual(//1
                 Expression.Condition(
                     Expression.Condition(
                         Expression.Constant(false),
@@ -1920,7 +1920,7 @@ public class 変換_局所Parameterの先行評価 : 共通{
                     Break
                 )
             );
-            this.変換_局所Parameterの先行評価_実行(
+            this.Expression実行AssertEqual(
                 Expression.Loop(
                     Expression.Break(Break),
                     Break

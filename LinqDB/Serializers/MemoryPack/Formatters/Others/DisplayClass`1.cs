@@ -34,23 +34,23 @@ public class DisplayClass<T>:MemoryPackFormatter<T>{
 
             this.Read=(delegate_Read)ReadMethod.CreateDelegate(typeof(delegate_Read));
         }
-        {
-            var AssemblyName=new AssemblyName{Name="Name"};
-            var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
-            var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
-            var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
+        //{
+        //    var AssemblyName=new AssemblyName{Name="Name"};
+        //    var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        //    var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
+        //    var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
 
 
 
 
-            var ReadMethod=Disp_TypeBuilder.DefineMethod("Read",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
-            ReadMethod.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    var ReadMethod=Disp_TypeBuilder.DefineMethod("Read",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
+        //    ReadMethod.DefineParameter(1,ParameterAttributes.None,"writer");
 
-            ReadMethod.InitLocals=false;
-            共通(ReadMethod.GetILGenerator());
-            Disp_TypeBuilder.CreateType();
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\MemoryPack.DisplayClass.Read.dll");
-        }
+        //    ReadMethod.InitLocals=false;
+        //    共通(ReadMethod.GetILGenerator());
+        //    Disp_TypeBuilder.CreateType();
+        //    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\MemoryPack.DisplayClass.Read.dll");
+        //}
         void 共通(ILGenerator RI){
             RI.Emit(OpCodes.Newobj,ctor);
             var value=RI.M_DeclareLocal_Stloc(typeof(T));

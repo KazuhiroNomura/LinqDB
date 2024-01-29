@@ -2538,6 +2538,6 @@ abstract class Program :共通{
 #pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
         Console.WriteLine("終了");
 #pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-        Console.ReadKey();
+        //Console.ReadKey();
     }
 }

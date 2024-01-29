@@ -5255,7 +5255,7 @@ namespace TestAdventureWorks2019 {
 #pragma warning disable CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
             Console.WriteLine("終了");
 #pragma warning restore CA1303 // ローカライズされるパラメーターとしてリテラルを渡さない
-            Console.ReadKey();
+            //Console.ReadKey();
         }
     }
     public class A<T0> {

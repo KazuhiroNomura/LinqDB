@@ -10,6 +10,8 @@ using System.Collections;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using TestLinqDB.Optimizers.ReturnExpressionTraverser;
+
 using IEnumerable = System.Collections.IEnumerable;
 namespace TestLinqDB.特殊パターン;
 internal class ClassIEnumerableInt32Double : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IEnumerable<double>
@@ -370,7 +372,7 @@ public class 特定パターン:共通{
         );
     }
     [Fact]public void Condition7(){
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Condition(
                     Expression.Constant(false),
@@ -395,7 +397,7 @@ public class 特定パターン:共通{
             Expression.Constant(1m),
             Expression.Constant(1m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Equal,
                 Equal,
@@ -412,7 +414,7 @@ public class 特定パターン:共通{
             Expression.Constant(1m),
             Expression.Constant(1m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Equal,
                 Expression.Condition(
@@ -439,7 +441,7 @@ public class 特定パターン:共通{
             Expression.Constant(1m),
             Expression.Constant(1m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Equal,
                 Equal,
@@ -452,7 +454,7 @@ public class 特定パターン:共通{
             Expression.Constant(1m),
             Expression.Constant(1m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.IfThen(
                 Expression.Condition(
                     Equal,
@@ -469,7 +471,7 @@ public class 特定パターン:共通{
             Expression.Constant(1m),
             Expression.Constant(1m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Condition(
                     Equal,
@@ -491,7 +493,7 @@ public class 特定パターン:共通{
     }
     [Fact]
     public void Condition9前にExpression(){
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(1m),
                 Expression.Condition(
@@ -522,7 +524,7 @@ public class 特定パターン:共通{
         //    };
         //    $局所0
         //}
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -1146,7 +1148,7 @@ public class 特定パターン:共通{
     [Fact]
     public void Try(){
         var ex=Expression.Parameter(typeof(Exception),"ex");
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Add(
                     Expression.Constant(0m),
@@ -1158,7 +1160,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryFinally(
                 Expression.Constant(0),
                 Expression.Add(
@@ -1167,7 +1169,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1179,7 +1181,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1192,7 +1194,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1204,7 +1206,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1217,7 +1219,7 @@ public class 特定パターン:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Default(typeof(void)),
                 Expression.Catch(
@@ -1409,6 +1411,26 @@ public class 特定パターン:共通{
             ()=> st.SelectMany(
                 o=> st.Where(
                     i=>EqualityComparer<int>.Default.Equals(i,o)
+                )
+            )
+        );
+    }
+    [Fact]public void Call02(){
+        var s=new Set<int>();
+        this.Expression実行AssertEqual(()=> s.SelectMany(o=>new int[3].Where((i,index)=>o==i&&i+1==o+1&&index==0)));//3
+    }
+    [Fact]
+    public void Try0(){
+        this.Expression実行AssertEqual(
+            Expression.TryCatch(
+                Expression.Constant(0m),
+                Expression.Catch(
+                    typeof(Exception),
+                    Expression.Constant(0m),
+                    Expression.Equal(
+                        Expression.Constant(0m),
+                        Expression.Constant(0m)
+                    )
                 )
             )
         );

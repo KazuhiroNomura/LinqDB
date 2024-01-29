@@ -954,7 +954,7 @@ public class フロー: 共通
         //        _1m
         //    )
         //);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Condition(
                     Expression.Constant(true),
@@ -967,7 +967,7 @@ public class フロー: 共通
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Condition(
                     Expression.Equal(_1m,_1m),

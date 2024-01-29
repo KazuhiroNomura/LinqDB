@@ -450,8 +450,8 @@ public sealed class Optimizer:IDisposable {
     private Delegate PrivateDelegate(LambdaExpression Lambda) {
         var Lambda0 = this.Lambda最適化(Lambda);
         this.取得ラムダを跨ぐParameter.実行(Lambda0);
-        dynamic NonPublicAccessor = new NonPublicAccessor(Lambda0);
-        Trace.WriteLine((string)NonPublicAccessor.DebugView);
+        //dynamic NonPublicAccessor = new NonPublicAccessor(Lambda0);
+        //Trace.WriteLine((string)NonPublicAccessor.DebugView);
         if(this.IsGenerateAssembly)
             return this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda0);
         else
@@ -662,6 +662,7 @@ public sealed class Optimizer:IDisposable {
             //var t=Stopwatch.StartNew();
             //Console.Write("GenerateAssembly,");
             //new AssemblyGenerator()をフィールドに保存すると２度目以降前回のアセンブリ情報が残る
+            var Save=typeof(AssemblyBuilder).GetMethod("Save",BindingFlags.NonPublic|BindingFlags.Instance);
             var 試行回数=0;
             for(var a=0;a<10000;a++){
                 try{

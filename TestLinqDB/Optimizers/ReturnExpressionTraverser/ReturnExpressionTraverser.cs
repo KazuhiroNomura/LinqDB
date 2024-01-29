@@ -171,7 +171,7 @@ public class ReturnExpressionTraverser:共通{
             Expression.Constant(0m),
             Expression.Constant(0m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.AndAlso(
                 Equal,
                 Equal
@@ -383,7 +383,7 @@ public class ReturnExpressionTraverser:共通{
             Expression.Constant(0m),
             Expression.Constant(0m)
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.OrElse(
                 Equal,
                 Equal
@@ -410,7 +410,7 @@ public class ReturnExpressionTraverser:共通{
     public void Block(){
         //if(Block0_Expressions_Count>=6||Block0.Variables.Count>=1||Block0_Expressions[Block0_Expressions_Count-1].Type!=Block0.Type){
         //    if(ReferenceEquals(Block0_Expressions,Block1_Expressions))
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -421,7 +421,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    else 
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -434,7 +434,7 @@ public class ReturnExpressionTraverser:共通{
         //}
         //if(Block0_Expressions_Count<=1)
         //    if(b) 
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Add(
                     Expression.Constant(0m),
@@ -443,21 +443,21 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m)
             )
         );
         //if(Block0_Expressions_Count<=2)
         //    if(b) 
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m)
             )
         );
         //    else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m)
@@ -465,7 +465,7 @@ public class ReturnExpressionTraverser:共通{
         );
         //if(Block0_Expressions_Count<=3)
         //    if(b) 
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -473,7 +473,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -482,7 +482,7 @@ public class ReturnExpressionTraverser:共通{
         );
         //if(Block0_Expressions_Count<=4)
         //    if(b) 
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -491,7 +491,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -500,7 +500,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //if(b)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(0m),
@@ -510,7 +510,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Block(
                 Expression.Constant(0m),
                 Expression.Constant(1m),
@@ -529,28 +529,28 @@ public class ReturnExpressionTraverser:共通{
         //if(Conditional0_Test==Conditional1_Test)
         //    if(Conditional0_IfTrue==Conditional1_IfTrue)
         //        if(Conditional0_IfFalse==Conditional1_IfFalse)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),
                 Expression.Constant(true)
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Constant(true),
                 Expression.Constant(true),
                 Equal
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.Constant(true),
                 Equal,
                 Expression.Constant(true)
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Equal,
                 Expression.Constant(true),
@@ -588,14 +588,14 @@ public class ReturnExpressionTraverser:共通{
     public void Index(){
         //if(Index1_Object==Index0_Object)
         //    if(ReferenceEquals(Index0_Arguments,Index1_Arguments)) 
-        var array=Expression.Parameter(typeof(decimal[]),"array");
-        this.変換_局所Parameterの先行評価_実行(
+        var array=Expression.Constant(new decimal[]{1,2,3});
+        this.Expression実行AssertEqual(
             Expression.ArrayAccess(
                 array,
                 Expression.Constant(0)
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.ArrayAccess(
                 array,
                 Expression.Convert(
@@ -607,7 +607,7 @@ public class ReturnExpressionTraverser:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.ArrayAccess(
                 Expression.ArrayAccess(
                     Expression.Constant(new decimal[][]{new decimal[1]}),
@@ -625,7 +625,7 @@ public class ReturnExpressionTraverser:共通{
     }
     [Fact]
     public void Invoke(){
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Invoke(
                 Expression.Lambda(
                     Expression.Constant(0m),
@@ -634,7 +634,7 @@ public class ReturnExpressionTraverser:共通{
                 Expression.Constant(0m)
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Invoke(
                 Expression.Lambda(
                     Expression.Add(
@@ -654,9 +654,9 @@ public class ReturnExpressionTraverser:共通{
     public void Label(){
         //if(Label0_DefaultValue==Label1_DefaultValue) return Label0;
         var Label=Expression.Label(typeof(string));
-        this.変換_局所Parameterの先行評価_実行(Expression.Label(Label,Expression.Constant("ABC")));
+        this.Expression実行AssertEqual(Expression.Label(Label,Expression.Constant("ABC")));
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Label(
                 Label,
                 Expression.Call(
@@ -698,69 +698,69 @@ public class ReturnExpressionTraverser:共通{
         //if(MethodCall0_Object is null) {
         //    if(MethodCall0_Arguments_Count>=6){
         //        if(ReferenceEquals(MethodCall0_Argumentsm,MethodCall1_Arguments)) 
-        this.Optimizer_Lambda最適化(()=>static6(1m,2m,3m,4m,5m,6m));
+        this.Expression実行AssertEqual(()=>static6(1m,2m,3m,4m,5m,6m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>static6(1m,1m,1m,1m,1m,1m));
+        this.Expression実行AssertEqual(()=>static6(1m,1m,1m,1m,1m,1m));
         //    }
         //    if(MethodCall0_Arguments_Count==0)return MethodCall0;
-        this.Optimizer_Lambda最適化(()=>static0());
+        this.Expression実行AssertEqual(()=>static0());
         //    if(MethodCall0_Arguments_Count==1)
         //        if(b)
-        this.Optimizer_Lambda最適化(()=>static1(1m));
+        this.Expression実行AssertEqual(()=>static1(1m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>static1(d*d));
+        this.Expression実行AssertEqual(()=>static1(d*d));
         //    if(MethodCall0_Arguments_Count==2)
         //        if(b)
-        this.Optimizer_Lambda最適化(()=>static2(1m,2m));
+        this.Expression実行AssertEqual(()=>static2(1m,2m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>static2(1m,1m));
+        this.Expression実行AssertEqual(()=>static2(1m,1m));
         //    if(MethodCall0_Arguments_Count==3)
         //        if(b)
-        this.Optimizer_Lambda最適化(()=>static3(1m,2m,3m));
+        this.Expression実行AssertEqual(()=>static3(1m,2m,3m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>static3(1m,1m,1m));
+        this.Expression実行AssertEqual(()=>static3(1m,1m,1m));
         //    if(MethodCall0_Arguments_Count==4)
         //        if(b)
-        this.Optimizer_Lambda最適化(()=>static4(1m,2m,3m,4m));
+        this.Expression実行AssertEqual(()=>static4(1m,2m,3m,4m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>static4(1m,1m,1m,1m));
+        this.Expression実行AssertEqual(()=>static4(1m,1m,1m,1m));
         //    if(b) 
-        this.Optimizer_Lambda最適化(()=>static5(1m,2m,3m,4m,5m));
+        this.Expression実行AssertEqual(()=>static5(1m,2m,3m,4m,5m));
         //    else
-        this.Optimizer_Lambda最適化(()=>static5(1m,1m,1m,1m,1m));
+        this.Expression実行AssertEqual(()=>static5(1m,1m,1m,1m,1m));
         //} else {
         //    if(MethodCall0_Arguments_Count>=4){
         //        if(b)
         //            if(ReferenceEquals(MethodCall0_Argumentsm,MethodCall1_Arguments))
         var f4=(decimal p1m,decimal p2m,decimal p3m,decimal p4)=>0;
-        this.Optimizer_Lambda最適化(()=>f4.Invoke(1m,2m,3m,4m));
+        this.Expression実行AssertEqual(()=>f4.Invoke(1m,2m,3m,4m));
         //                return MethodCall0;
-        this.Optimizer_Lambda最適化(()=>f4.Invoke(1m,1m,1m,1m));
-        this.Optimizer_Lambda最適化(()=>new[]{f4}[(int)(d*d)].Invoke(1m,1m,1m,1m));
+        this.Expression実行AssertEqual(()=>f4.Invoke(1m,1m,1m,1m));
+        this.Expression実行AssertEqual(()=>new[]{f4}[(int)(d*d)].Invoke(1m,1m,1m,1m));
         //    }
         //    if(MethodCall0_Arguments_Count==0)
         //        if(b)
         var f0=()=>0;
-        this.Optimizer_Lambda最適化(()=>f0.Invoke());
+        this.Expression実行AssertEqual(()=>f0.Invoke());
         //        else 
-        this.Optimizer_Lambda最適化(()=>new[]{f0}[(int)(d*d)].Invoke());
+        this.Expression実行AssertEqual(()=>new[]{f0}[(int)(d*d)].Invoke());
         //    if(MethodCall0_Arguments_Count==1)
         //        if(b)
         var f1=(decimal p1)=>0;
-        this.Optimizer_Lambda最適化(()=>f1.Invoke(1m));
+        this.Expression実行AssertEqual(()=>f1.Invoke(1m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>f1.Invoke(d*d));
+        this.Expression実行AssertEqual(()=>f1.Invoke(d*d));
         //    if(MethodCall0_Arguments_Count==2)
         //        if(b)
         var f2=(decimal p1m,decimal p2)=>0;
-        this.Optimizer_Lambda最適化(()=>f2.Invoke(1m,2m));
+        this.Expression実行AssertEqual(()=>f2.Invoke(1m,2m));
         //        else 
-        this.Optimizer_Lambda最適化(()=>f2.Invoke(1m,1m));
+        this.Expression実行AssertEqual(()=>f2.Invoke(1m,1m));
         //    if(b) 
         var f3=(decimal p1m,decimal p2m,decimal p3)=>0;
-        this.Optimizer_Lambda最適化(()=>f3.Invoke(1m,2m,3m));
+        this.Expression実行AssertEqual(()=>f3.Invoke(1m,2m,3m));
         //    else
-        this.Optimizer_Lambda最適化(()=>f3.Invoke(1m,1m,1m));
+        this.Expression実行AssertEqual(()=>f3.Invoke(1m,1m,1m));
         //}
     }
     [Fact]
@@ -833,7 +833,7 @@ public class ReturnExpressionTraverser:共通{
                 CSharpArgumentInfoArray4
             );
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -845,7 +845,7 @@ public class ReturnExpressionTraverser:共通{
                 );
             }
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -868,7 +868,7 @@ public class ReturnExpressionTraverser:共通{
                 CSharpArgumentInfoArray1
             );
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -877,7 +877,7 @@ public class ReturnExpressionTraverser:共通{
                 );
             }
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -905,7 +905,7 @@ public class ReturnExpressionTraverser:共通{
                 CSharpArgumentInfoArray2
             );
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -915,7 +915,7 @@ public class ReturnExpressionTraverser:共通{
                 );
             }
             {
-                this.変換_局所Parameterの先行評価_実行(
+                this.Expression実行AssertEqual(
                     Expression.Dynamic(
                         binder,
                         typeof(object),
@@ -936,7 +936,7 @@ public class ReturnExpressionTraverser:共通{
                 typeof(Serializer),
                 CSharpArgumentInfoArray3
             );
-            this.変換_局所Parameterの先行評価_実行(
+            this.Expression実行AssertEqual(
                 Expression.Dynamic(
                     binder,
                     typeof(object),
@@ -945,7 +945,7 @@ public class ReturnExpressionTraverser:共通{
                     Expression.Constant(1)
                 )
             );
-            this.変換_局所Parameterの先行評価_実行(
+            this.Expression実行AssertEqual(
                 Expression.Dynamic(
                     binder,
                     typeof(object),
@@ -999,54 +999,65 @@ public class ReturnExpressionTraverser:共通{
             ParameterDecimmal
         );
         Add=Expression.Add(Add,Add);
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.AddAssign(
-                ParameterDecimmal,
-                Expression.Constant(0m),
-                null,
-                null
-            )
-        );
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.AddAssign(
-                ParameterDecimmal,
-                Constant1,
-                typeof(decimal).GetMethod("op_Addition"),
-                Expression.Lambda(
-                    Add,
-                    ParameterDecimmal
-                )
-            )
-        );
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.AddAssign(
-                ParameterDecimmal,
-                Add,
-                typeof(decimal).GetMethod("op_Addition"),
-                Expression.Lambda(
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal,decimal>>(
+                Expression.AddAssign(
                     ParameterDecimmal,
-                    ParameterDecimmal
-                )
+                    Expression.Constant(0m),
+                    null,
+                    null
+                ),
+                ParameterDecimmal
             )
         );
-        var array=Expression.Parameter(typeof(decimal[]));
-        this.変換_局所Parameterの先行評価_実行(
-            Expression.AddAssign(
-                Expression.ArrayAccess(
-                    array,
-                    Expression.Convert(
-                        Expression.Add(
-                            Expression.Constant(0m),
-                            Expression.Constant(0m)
-                        ),
-                        typeof(int)
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal,decimal>>(
+                Expression.AddAssign(
+                    ParameterDecimmal,
+                    Constant1,
+                    typeof(decimal).GetMethod("op_Addition"),
+                    Expression.Lambda(
+                        Add,
+                        ParameterDecimmal
                     )
                 ),
-                Expression.Constant(0m),
-                typeof(decimal).GetMethod("op_Addition"),
-                Expression.Lambda(
+                ParameterDecimmal
+            )
+        );
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal,decimal>>(
+                Expression.AddAssign(
                     ParameterDecimmal,
-                    ParameterDecimmal
+                    Add,
+                    typeof(decimal).GetMethod("op_Addition"),
+                    Expression.Lambda(
+                        ParameterDecimmal,
+                        ParameterDecimmal
+                    )
+                ),
+                ParameterDecimmal
+            )
+        );
+        var array=Expression.Constant(new decimal[3]);
+        this.Expression実行AssertEqual(
+            Expression.Lambda<Func<decimal>>(
+                Expression.AddAssign(
+                    Expression.ArrayAccess(
+                        array,
+                        Expression.Convert(
+                            Expression.Add(
+                                Expression.Constant(0m),
+                                Expression.Constant(0m)
+                            ),
+                            typeof(int)
+                        )
+                    ),
+                    Expression.Constant(0m),
+                    typeof(decimal).GetMethod("op_Addition"),
+                    Expression.Lambda(
+                        ParameterDecimmal,
+                        ParameterDecimmal
+                    )
                 )
             )
         );
@@ -1121,7 +1132,7 @@ public class ReturnExpressionTraverser:共通{
         );
         //for(var a=0; a < Switch0_Cases_Count; a++) {
         //    if(Switch0_Case_Body !=Switch1_Case_Body) {
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Switch(
                 Expression.Constant(true),
                 Expression.Constant(true),
@@ -1132,7 +1143,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    } else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Switch(
                 Expression.Constant(true),
                 Expression.Constant(true),
@@ -1143,7 +1154,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //    } else
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Switch(
                 Expression.Constant(true),
                 Equal,
@@ -1158,7 +1169,7 @@ public class ReturnExpressionTraverser:共通{
     public void Try(){
         var ex=Expression.Parameter(typeof(Exception),"ex");
         //if(Try0_Body !=Try1_Body)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Add(
                     Expression.Constant(0m),
@@ -1171,7 +1182,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //if(Try0_Finally!=Try1_Finally)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryFinally(
                 Expression.Constant(0),
                 Expression.Add(
@@ -1182,7 +1193,7 @@ public class ReturnExpressionTraverser:共通{
         );
         //for(var a=0; a < Try0_Handlers_Count; a++) {
         //    if(Try0_Handler.Body!=Try1_Handler_Body||Try0_Handler.Filter!=Try1_Handler_Filter) {
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1194,7 +1205,7 @@ public class ReturnExpressionTraverser:共通{
                 )
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1208,7 +1219,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //        if(Try0_Handler.Variable is not null) {
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1221,7 +1232,7 @@ public class ReturnExpressionTraverser:共通{
             )
         );
         //        } else {
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Constant(0m),
                 Expression.Catch(
@@ -1236,7 +1247,7 @@ public class ReturnExpressionTraverser:共通{
         );
         //        }
         //    } else {
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TryCatch(
                 Expression.Default(typeof(void)),
                 Expression.Catch(
@@ -1255,14 +1266,14 @@ public class ReturnExpressionTraverser:共通{
     [Fact]
     public void TypeAs(){
         //if(Unary0_Operand==Unary1_Operand)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeAs(
                 Expression.Constant("string"),
                 typeof(string)
             )
         );
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeAs(
                 Expression.Call(
                     typeof(string).GetMethod("Concat",new[]{typeof(string),typeof(string)})!,
@@ -1276,14 +1287,14 @@ public class ReturnExpressionTraverser:共通{
     [Fact]
     public void TypeEqual(){
         //if(TypeBinary0_Expression==TypeBinary1_Expression)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeEqual(
                 Expression.Constant("string"),
                 typeof(string)
             )
         );
         var Call=Expression.Call(typeof(ReturnExpressionTraverser).GetMethod(nameof(static_string),BindingFlags.Static|BindingFlags.NonPublic)!);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeEqual(
                 Expression.Call(
                     typeof(string).GetMethod("Concat",new[]{typeof(string),typeof(string)})!,
@@ -1297,13 +1308,13 @@ public class ReturnExpressionTraverser:共通{
     [Fact]
     public void TypeIs(){
         //if(TypeBinary0_Expression==TypeBinary1_Expression)
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeIs(
                 Expression.Constant(0m),
                 typeof(int)
             )
         );
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.TypeIs(
                 Expression.Equal(
                     Expression.Constant(0m),

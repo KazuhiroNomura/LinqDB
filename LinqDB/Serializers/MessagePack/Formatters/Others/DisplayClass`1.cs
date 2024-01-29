@@ -36,23 +36,23 @@ public class DisplayClass<T>:IMessagePackFormatter<T>{
             this.Write=(delegate_Write)WriteMethod.CreateDelegate(typeof(delegate_Write));
             this.Read=(delegate_Read)ReadMethod.CreateDelegate(typeof(delegate_Read));
         }
-        {
-            var AssemblyName=new AssemblyName{Name="Name"};
-            var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
-            var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
-            var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
-            var WriteMethod=Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),WriteTypes);
-            WriteMethod.DefineParameter(1,ParameterAttributes.None,"writer");
-            WriteMethod.DefineParameter(2,ParameterAttributes.None,"value");
-            WriteMethod.DefineParameter(3,ParameterAttributes.None,"Resolver");
-            var ReadMethod=Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
-            ReadMethod.DefineParameter(1,ParameterAttributes.None,"writer");
-            ReadMethod.DefineParameter(2,ParameterAttributes.None,"Resolver");
-            ReadMethod.InitLocals=false;
-            共通(WriteMethod.GetILGenerator(),ReadMethod.GetILGenerator());
-            Disp_TypeBuilder.CreateType();
-            new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\MessagePack.DisplayClass.WriteRead.dll");
-        }
+        //{
+        //    var AssemblyName=new AssemblyName{Name="Name"};
+        //    var DynamicAssembly=AssemblyBuilder.DefineDynamicAssembly(AssemblyName,AssemblyBuilderAccess.RunAndCollect);
+        //    var ModuleBuilder=DynamicAssembly.DefineDynamicModule("動的");
+        //    var Disp_TypeBuilder=ModuleBuilder.DefineType("Disp",TypeAttributes.Public);
+        //    var WriteMethod=Disp_TypeBuilder.DefineMethod($"Serialize",MethodAttributes.Static|MethodAttributes.Public,typeof(void),WriteTypes);
+        //    WriteMethod.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    WriteMethod.DefineParameter(2,ParameterAttributes.None,"value");
+        //    WriteMethod.DefineParameter(3,ParameterAttributes.None,"Resolver");
+        //    var ReadMethod=Disp_TypeBuilder.DefineMethod($"Deserialize",MethodAttributes.Static|MethodAttributes.Public,typeof(T),ReadTypes);
+        //    ReadMethod.DefineParameter(1,ParameterAttributes.None,"writer");
+        //    ReadMethod.DefineParameter(2,ParameterAttributes.None,"Resolver");
+        //    ReadMethod.InitLocals=false;
+        //    共通(WriteMethod.GetILGenerator(),ReadMethod.GetILGenerator());
+        //    Disp_TypeBuilder.CreateType();
+        //    new AssemblyGenerator().GenerateAssembly(DynamicAssembly,@$"{Environment.CurrentDirectory}\MessagePack.DisplayClass.WriteRead.dll");
+        //}
         void 共通(ILGenerator I0,ILGenerator I1){
             I0.Ldarg_0();//writer
             I0.Ldc_I4(Fields_Length);

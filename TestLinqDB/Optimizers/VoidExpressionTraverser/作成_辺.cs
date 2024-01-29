@@ -66,7 +66,7 @@ public class 作成_辺 : 共通{
     }
     [Fact]public void Conditional(){
         var _1m = Expression.Constant(1m);
-        this.変換_局所Parameterの先行評価_実行(
+        this.Expression実行AssertEqual(
             Expression.Condition(
                 Expression.NotEqual(_1m,_1m),
                 Expression.Add(_1m,_1m),
