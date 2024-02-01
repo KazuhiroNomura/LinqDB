@@ -56,11 +56,11 @@ public class Container:DependencyObject, IContainer {
         this.Schemas.Add(Schema);
         return Schema;
     }
-    public Relation CreateRelation(string Name,Table 親Table,Table 子Table) {
-        var Relation = new Relation(Name,親Table,子Table);
+    public Relation CreateRelation(string Name,TableUI 親TableUi,TableUI 子TableUI) {
+        var Relation = new Relation(Name,親TableUi,子TableUI);
         this.Add(Relation);
-        子Table.親Relations.Add(Relation);
-        親Table.子Relations.Add(Relation);
+        子TableUI.親Relations.Add(Relation);
+        親TableUi.子Relations.Add(Relation);
         return Relation;
     }
     //public Table CreateTable(String Name) {
@@ -72,7 +72,7 @@ public class Container:DependencyObject, IContainer {
     //}
     public override string ToString() => this.Name;
     public Schema this[string Schema] => this.Schemas.First(p => p.Name==Schema);
-    public ObservableCollection<Table> Tables { get; } = new();
+    public ObservableCollection<TableUI> Tables { get; } = new();
     //public ObservableCollection<View> Views { get; } = new ObservableCollection<View>();
     //public ObservableCollection<ForeignKey> ForeignKeys { get; } = new ObservableCollection<ForeignKey>();
     public ObservableCollection<Relation> Relations { get; } = new();
@@ -86,11 +86,11 @@ public class Container:DependencyObject, IContainer {
         this.Relations.Remove(Value);
         this.DiagramObjects.Remove(Value);
     }
-    public void Add(Table Value) {
+    public void Add(TableUI Value) {
         this.Tables.Add(Value);
         this.DiagramObjects.Add(Value);
     }
-    public void Remove(Table Value) {
+    public void Remove(TableUI Value) {
         this.Tables.Remove(Value);
         this.DiagramObjects.Remove(Value);
     }

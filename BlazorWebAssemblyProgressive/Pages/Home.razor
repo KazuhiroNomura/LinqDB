@@ -1,0 +1,29 @@
+﻿@page "/"
+@using LinqDB.Optimizers
+@using System.Diagnostics
+@using System.Net.Sockets
+@using LinqDB.Sets
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+@{
+    var st=Stopwatch.StartNew();
+    // var f=typeof(string).GetMethods()[0];
+    //  var o=new LinqDB.CRC.CRC32();
+    // o.Input("a");
+    // var x=o.GetHashCode();
+        
+    for(var a=0;a<1;a++){
+        try{
+            var o=new Optimizer();
+            var s0=o.CreateDelegate(()=>"abc")();
+            //var t=new Socket(SocketType.Stream,ProtocolType.IPv6);
+        } catch(Exception ex){
+            var s1=st.ElapsedMilliseconds.ToString();
+        }
+    }
+    var s=st.ElapsedMilliseconds.ToString();
+}
+@s<br/>
+Welcome to your new app.

@@ -39,9 +39,9 @@ public class Schema:DependencyObject,ISchema {
     ICollection<(string Name,ITableFunction TableFunction)> ISchema.SynonymTableFunctions => this.SynonymTableFunctions;
     public ObservableCollection<(string Synonym, IProcedure)> SynonymProcedures { get; } = new();
     ICollection<(string Name,IProcedure Procedure)> ISchema.SynonymProcedures => this.SynonymProcedures;
-    public ObservableCollection<Table> Tables { get; } = new();
+    public ObservableCollection<TableUI> Tables { get; } = new();
     IEnumerable<ITable> ISchema.Tables => this.Tables;
-    public Table this[string Table] => this.Tables.First(p => p.Name==Table);
+    public TableUI this[string Table] => this.Tables.First(p => p.Name==Table);
     public ObservableCollection<View> Views { get; } = new();
     IEnumerable<IView> ISchema.Views => this.Views;
     public ObservableCollection<ScalarFunction> ScalarFunctions { get; } = new();
@@ -55,8 +55,8 @@ public class Schema:DependencyObject,ISchema {
     //public FieldBuilder? Container_Schema_FieldBuilder { get; set; }
     //public LocalBuilder? Container_RelationValidate_LocalBuilder { get; set; }
     //public Type? Type{ get; set; }
-    public Table CreateTable(string Name) {
-        var Table = new Table(Name,this);
+    public TableUI CreateTable(string Name) {
+        var Table = new TableUI(Name,this);
         this.Container!.Add(Table);
         this.Tables.Add(Table);
         return Table;
@@ -66,8 +66,8 @@ public class Schema:DependencyObject,ISchema {
     //public void CreateSynonymScalarFunction(string Synonym,ScalarFunction ScalarFunction)=>this.SynonymScalarFunctions.Add((Synonym,ScalarFunction));
     //public void CreateSynonymTableFunction(string Synonym,TableFunction TableFunction)=>this.SynonymTableFunctions.Add((Synonym,TableFunction));
     //public void CreateSynonymProcedure(string Synonym,Procedure Procedure)=>this.SynonymProcedures.Add((Synonym,Procedure));
-    public Table CreateTable(string Name,double Left,double Top) {
-        var Table = new Table(Name,this,Left,Top);
+    public TableUI CreateTable(string Name,double Left,double Top) {
+        var Table = new TableUI(Name,this,Left,Top);
         this.Container!.Add(Table);
         this.Tables.Add(Table);
         return Table;

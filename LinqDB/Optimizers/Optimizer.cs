@@ -306,13 +306,13 @@ public sealed class Optimizer:IDisposable {
                 }
                 Disp_MethodBuilder_I.Call(Impl_MethodBuilder);
                 Disp_MethodBuilder_I.Ret();
-                var Delegate = Disp_TypeBuilder.DefineField($"Delegate{Field番号}",Lambda.Type,FieldAttributes.Public);
+                var DispDelegate = Disp_TypeBuilder.DefineField($"DispDelegate{Field番号}",Lambda.Type,FieldAttributes.Public);
                 Disp_ctor_I.Ldarg_0();
                 Disp_ctor_I.Ldarg_0();
                 Disp_ctor_I.Ldftn(Disp_MethodBuilder);
                 Disp_ctor_I.Newobj(Lambda.Type.GetConstructor(Types2)!);
-                Disp_ctor_I.Stfld(Delegate);
-                DictionaryLambda[a.Key]=(Delegate, a.Value.Member, Impl_MethodBuilder);
+                Disp_ctor_I.Stfld(DispDelegate);
+                DictionaryLambda[a.Key]=(DispDelegate, a.Value.Member, Impl_MethodBuilder);
                 Field番号++;
             }
             Disp_ctor_I.Ret();
@@ -350,7 +350,7 @@ public sealed class Optimizer:IDisposable {
                 DictionaryDynamic[a.Key]=(Field, Expression.Field(DispParameter,Field));
             }
             foreach(var a in DictionaryLambda.AsEnumerable()) {
-                Debug.Assert($"Delegate{Field番号}"==a.Value.Disp.Name);
+                Debug.Assert($"DispDelegate{Field番号}"==a.Value.Disp.Name);
                 Field番号++;
                 var Field = DispType.GetField(a.Value.Disp.Name,Instance_NonPublic_Public)!;
                 DictionaryLambda[a.Key]=(
@@ -609,13 +609,13 @@ public sealed class Optimizer:IDisposable {
             }
             Disp_MethodBuilder_I.Call(Impl_MethodBuilder);
             Disp_MethodBuilder_I.Ret();
-            var Delegate = Disp_TypeBuilder.DefineField($"Delegate{Field番号}",Lambda.Type,FieldAttributes.Public);
+            var DispDelegate = Disp_TypeBuilder.DefineField($"DispDelegate{Field番号}",Lambda.Type,FieldAttributes.Public);
             Disp_ctor_I.Ldarg_0();
             Disp_ctor_I.Ldarg_0();
             Disp_ctor_I.Ldftn(Disp_MethodBuilder);
             Disp_ctor_I.Newobj(Lambda.Type.GetConstructor(Types2)!);
-            Disp_ctor_I.Stfld(Delegate);
-            DictionaryLambda[a.Key]=(Delegate, default!, Impl_MethodBuilder);
+            Disp_ctor_I.Stfld(DispDelegate);
+            DictionaryLambda[a.Key]=(DispDelegate, default!, Impl_MethodBuilder);
             Field番号++;
         }
         Disp_ctor_I.Ret();
@@ -642,7 +642,7 @@ public sealed class Optimizer:IDisposable {
                 Debug.Assert(this.Dynamicに対応するCallSite(a.Key)==Expression.Field(DispParameter,Field).Type);
             }
             foreach(var a in DictionaryLambda.AsEnumerable()) {
-                Debug.Assert($"Delegate{番号}"==a.Value.Disp.Name);
+                Debug.Assert($"DispDelegate{番号}"==a.Value.Disp.Name);
                 番号++;
                 var Field = Disp_Type.GetField(a.Value.Disp.Name,Instance_NonPublic_Public)!;
                 DictionaryLambda[a.Key]=(

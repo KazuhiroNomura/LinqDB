@@ -15,7 +15,7 @@ public class Relation:DependencyObject,IRelation,IDiagramObject {
     }
     public string ToolTip {
         get {
-            var sb = new StringBuilder($"{this.Name}:{this.親Table!.Name}<-{this.子Table!.Name}(");
+            var sb = new StringBuilder($"{this.Name}:{this.親TableUi!.Name}<-{this.子TableUI!.Name}(");
             foreach(var Column in this.Columns) {
                 sb.Append($"{Column.Name},");
             }
@@ -23,17 +23,17 @@ public class Relation:DependencyObject,IRelation,IDiagramObject {
             return sb.ToString();
         }
     }
-    public Table? 親Table { get;internal set; }
+    public TableUI? 親TableUi { get;internal set; }
     /// <summary>
     /// テーブルからは親が分かればいいのでこれが重要
     /// </summary>
-    ITable? IRelation.親ITable => this.親Table;
+    ITable? IRelation.親ITable => this.親TableUi;
     //internal Point 親Point;
-    public Table? 子Table { get; internal set; }
+    public TableUI? 子TableUI { get; internal set; }
     /// <summary>
     /// ダイアグラムでの子
     /// </summary>
-    ITable? IRelation.子ITable => this.子Table;
+    ITable? IRelation.子ITable => this.子TableUI;
     private static readonly DependencyProperty 親LeftProperty = DependencyProperty.Register(nameof(親Left),typeof(double),typeof(Relation));
     public double 親Left {
         get => (double)this.GetValue(親LeftProperty);
@@ -71,10 +71,10 @@ public class Relation:DependencyObject,IRelation,IDiagramObject {
         this.Points=new PointCollection();
         this.PathGeometry=new PathGeometry(new List<PathFigure>());
     }
-    public Relation(string Name,Table 親Table,Table 子Table):this() {
+    public Relation(string Name,TableUI 親TableUi,TableUI 子TableUI):this() {
         this.Name=Name;
-        this.親Table=親Table;
-        this.子Table=子Table;
+        this.親TableUi=親TableUi;
+        this.子TableUI=子TableUI;
     }
     public void AddColumn(Column Column) {
         this.Columns.Add(Column);

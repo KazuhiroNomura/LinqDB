@@ -79,10 +79,10 @@ public partial class AssemblyGenerator {
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
         //Table_TypeBuilder.SetCustomAttribute(Serializable_CustomAttributeBuilder);
-        var Objects2 = this.Objects2;
-        Objects2[0]=Object.Left;
-        Objects2[1]=Object.Top;
-        Table_TypeBuilder.SetCustomAttribute(new CustomAttributeBuilder(Meta_ctor,Objects2));
+        //var Objects2 = this.Objects2;
+        //Objects2[0]=Object.Left;
+        //Objects2[1]=Object.Top;
+        //Table_TypeBuilder.SetCustomAttribute(new CustomAttributeBuilder(Meta_ctor,Objects2));
         var Columns = Object.Columns.ToList();
         var PrimaryKeyColumns = Columns.Where(p => p.IsPrimaryKey).ToList();
         var PrimaryKeyColumns_Count = PrimaryKeyColumns.Count;
@@ -353,7 +353,7 @@ public partial class AssemblyGenerator {
         Schema_ToString_I.Callvirt(Object_ToString);
         Schema_ToString_I.Call(StringBuilder_AppendLine_String);
         Schema_ToString_I.Pop();
-        this.Dictionary_Table.Add(Object,new ITable.Information(
+        this.Dictionary_Table.Add(Object,new ITableUI.Information(
             Key_TypeBuilder,
             Key_IEquatable_Equals,
             Key_ctor,

@@ -10,7 +10,7 @@
              xmlns:Microsoft_SqlServer_Types="clr-namespace:Microsoft.SqlServer.Types;assembly=Microsoft.SqlServer.Types"
              xmlns:VM="clr-namespace:GUI.VM"
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             d:DataContext="{d:DesignInstance {x:Type VM:Table}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type VM:TableUI}, IsDesignTimeCreatable=True}"
              BorderThickness="1" 
              BorderBrush="Black">
     <UserControl.Resources>

@@ -665,7 +665,6 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
     //}
     private static int aa=0;
     private Expression 先行評価(Expression Expression0){
-        aa++;
         var ListスコープParameter=this.ListスコープParameter;
         var Expression1 = Expression0;
         var Block0_Variables = this.Block_Variables;
@@ -676,13 +675,13 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
         var 取得_辺から二度出現したExpression = this._取得_辺から二度出現したExpression;
         var 変換_二度出現したExpression = this._変換_二度出現したExpression;
         var List辺=this.List辺;
-        dynamic p=new NonPublicAccessor(Expression1);
-        var d=p.DebugView;
-        Trace.WriteLine((string)d);
         while(true) {
-            if(aa==33){
+            //if(aa==2){
 
-            }
+            //}
+            //dynamic p=new NonPublicAccessor(Expression1);
+            //var d=p.DebugView;
+            //Trace.WriteLine((string)d);
             作成_辺.実行(Expression1);
             //if(ListスコープParameter.Count>100){
             //    Debug.Fail("");

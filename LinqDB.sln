@@ -54,6 +54,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestAdventureWorksDW2008R2"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPubs", "TestPubs\TestPubs.csproj", "{7DB7C98A-46C2-4306-977F-107F5992108E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateDatabase", "GenerateDatabase\GenerateDatabase.csproj", "{8C83078B-90CA-4E48-AA2D-F8A14979121B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +154,10 @@ Global
 		{7DB7C98A-46C2-4306-977F-107F5992108E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DB7C98A-46C2-4306-977F-107F5992108E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DB7C98A-46C2-4306-977F-107F5992108E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C83078B-90CA-4E48-AA2D-F8A14979121B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C83078B-90CA-4E48-AA2D-F8A14979121B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C83078B-90CA-4E48-AA2D-F8A14979121B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C83078B-90CA-4E48-AA2D-F8A14979121B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

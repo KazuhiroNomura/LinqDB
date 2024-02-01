@@ -45,7 +45,7 @@ public partial class DiagramControl:UserControl {
         var Thumb = e.Source as Thumb;
         if(Thumb==null)
             return;
-        if(Thumb.DataContext is VM.Table Table) {
+        if(Thumb.DataContext is VM.TableUI Table) {
             var ListBoxItem = (ListBoxItem)ItemsControl.ContainerFromElement(this.DiagramListBox,Thumb);
             var Top = Canvas.GetTop(ListBoxItem)+e.VerticalChange;
             var Left = Canvas.GetLeft(ListBoxItem)+e.HorizontalChange;
@@ -57,16 +57,16 @@ public partial class DiagramControl:UserControl {
         }
     }
     private void つまみMouseLeftButtonDown(object sender,System.Windows.Input.MouseButtonEventArgs e) {
-        if(((FrameworkElement)sender).DataContext is VM.Table Table) {
+        if(((FrameworkElement)sender).DataContext is VM.TableUI Table) {
             var DiagramObjects = ((VM.Container)Table.Schema.Container!).DiagramObjects;
-            var TableCount = DiagramObjects.OfType<VM.Table>().Count();
+            var TableCount = DiagramObjects.OfType<VM.TableUI>().Count();
             var oldIndex = DiagramObjects.IndexOf(Table);
             DiagramObjects.Move(oldIndex,TableCount-1);
         }
     }
     private void RemoveTable_Click(object sender,RoutedEventArgs e) {
         var Database = (VM.Container)this.DataContext;
-        var VMTable = (VM.Table)((Button)sender).DataContext;
+        var VMTable = (VM.TableUI)((Button)sender).DataContext;
         var 親Relations = VMTable.親Relations;
         var DiagramObjects = Database.DiagramObjects;
         DiagramObjects.Remove(VMTable);

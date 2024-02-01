@@ -87,7 +87,9 @@ public partial class テーブルスキーマ編集:Window {
                     ItemsSource.Add(Database);
                     if(Database is"master") continue;
                     if(Database is"msdb") continue;
-                    this.SQLServer保存(Database);
+                    if("WideWorldImportersDW"==Database){
+                        this.SQLServer保存(Database);
+                    }
                 }
             }
             this.SQLServer.ItemsSource=ItemsSource;
@@ -119,8 +121,8 @@ public partial class テーブルスキーマ編集:Window {
 		//this.データベース保存("TPC_E");
 		//this.SQLServer保存("AdventureWorks2016_EXT");
 		//this.SQLServer保存("AdventureWorks2017");
-		foreach(var Database in Databases)
-			this.SQLServer保存(Database);
+		//foreach(var Database in Databases)
+		//	this.SQLServer保存(Database);
 		//}
 		//foreach (var Database in Databases){
 		//}
@@ -170,7 +172,7 @@ public partial class テーブルスキーマ編集:Window {
 		VMSchema.Container!.Schemas.Remove(VMSchema);
 	}
 	private void CloseTable_Click(object sender,RoutedEventArgs e) {
-		var VMTable = (VM.Table)((Button)sender).DataContext;
+		var VMTable = (VM.TableUI)((Button)sender).DataContext;
 		//VMTable.Schema.Database.DiagramObjects.Remove(VMTable);
 		((VM.Container)VMTable.Schema.Container).Remove(VMTable);
 		((VM.Schema)VMTable.Schema).Tables.Remove(VMTable);
@@ -179,7 +181,7 @@ public partial class テーブルスキーマ編集:Window {
 
 	private void Schemas_SelectionChanged(object sender,SelectionChangedEventArgs e) {
 		var ComboBox = (ComboBox)sender;
-		if(ComboBox.DataContext is VM.Table Table) {
+		if(ComboBox.DataContext is VM.TableUI Table) {
 			foreach(var AddedItem in e.AddedItems) {
 				if(AddedItem is VM.Schema Schema) {
 					Schema.Tables.Add(Table);
@@ -249,7 +251,7 @@ public partial class テーブルスキーマ編集:Window {
 		var Thumb = e.Source as Thumb;
 		if(Thumb==null)
 			return;
-		if(Thumb.DataContext is VM.Table Table) {
+		if(Thumb.DataContext is VM.TableUI Table) {
 			var ListBoxItem = (ListBoxItem)ItemsControl.ContainerFromElement(this.DiagramListBox,Thumb);
 			var Top = Canvas.GetTop(ListBoxItem)+e.VerticalChange;
 			var Left= Canvas.GetLeft(ListBoxItem)+e.HorizontalChange;
@@ -828,16 +830,16 @@ public partial class テーブルスキーマ編集:Window {
 		this.GCLoad((string)e.AddedItems[0]!);
 	}
 	private void つまみMouseLeftButtonDown(object sender,System.Windows.Input.MouseButtonEventArgs e) {
-		if(((FrameworkElement)sender).DataContext is VM.Table Table) {
+		if(((FrameworkElement)sender).DataContext is VM.TableUI Table) {
 			var DiagramObjects =((VM.Container)Table.Schema.Container!).DiagramObjects;
-			var TableCount = DiagramObjects.OfType<VM.Table>().Count();
+			var TableCount = DiagramObjects.OfType<VM.TableUI>().Count();
 			var oldIndex = DiagramObjects.IndexOf(Table);
 			DiagramObjects.Move(oldIndex,TableCount-1);
 		}
 	}
 	private void RemoveTable_Click(object sender,RoutedEventArgs e) {
 		var VM_Container = (VM.Container)this.DataContext;
-		var VM_Table = (VM.Table)((Button)sender).DataContext;
+		var VM_Table = (VM.TableUI)((Button)sender).DataContext;
 		var 親Relations = VM_Table.親Relations;
 		var DiagramObjects=VM_Container.DiagramObjects;
 		DiagramObjects.Remove(VM_Table);
