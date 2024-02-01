@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using LinqDB.Optimizers.ReturnExpressionTraverser.Profiling;
+
 using MemoryPack;
 using MessagePack;
 using TestLinqDB.Optimizers.Comparer;
@@ -24,17 +26,30 @@ public class 変換_Stopwatchに埋め込む : 共通{
     //protected override テストオプション テストオプション=>テストオプション.ローカル実行|テストオプション.アセンブリ保存;
     private static readonly MethodInfo BooleanMethod=typeof(時間計測).GetMethod(nameof(時間計測.BooleanMethod))!;
     private static readonly MethodInfo Int32Method=typeof(時間計測).GetMethod(nameof(時間計測.Int32Method))!;
-    [Fact]
-    public void Add(){
+    private void 共通Binary(ExpressionType NodeType){
         this.Expression実行AssertEqual(
             Expression.Lambda<Func<int>>(
-                Expression.Add(
+                Expression.MakeBinary(
+                    NodeType,
                     Expression.Constant(-11),
                     Expression.Constant(1)
                 )
             )
         );
     }
+    [Fact]public void Add()=>this.共通Binary(ExpressionType.Add);
+    [Fact]public void AddChecked()=>this.共通Binary(ExpressionType.AddChecked);
+    //[Fact]
+    //public void AddChecked2(){
+    //    this.Expression実行AssertEqual(
+    //        Expression.Lambda<Func<int>>(
+    //            Expression.AddChecked(
+    //                Expression.Constant(-11),
+    //                Expression.Constant(1)
+    //            )
+    //        )
+    //    );
+    //}
 
     [Fact]public void Condition0(){
         var p=Expression.Constant(new 時間計測());

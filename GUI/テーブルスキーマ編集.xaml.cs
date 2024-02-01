@@ -83,7 +83,11 @@ public partial class テーブルスキーマ編集:Window {
                 "ORDER BY database_id";
             using(var Reader=Command.ExecuteReader()){
                 while(Reader.Read()){
-                    ItemsSource.Add(Reader.GetString(0));
+                    var Database=Reader.GetString(0);
+                    ItemsSource.Add(Database);
+                    if(Database is"master") continue;
+                    if(Database is"msdb") continue;
+                    this.SQLServer保存(Database);
                 }
             }
             this.SQLServer.ItemsSource=ItemsSource;
@@ -101,6 +105,7 @@ public partial class テーブルスキーマ編集:Window {
             }
             this.MySQL.ItemsSource=ItemsSource;
         }
+        //this.SQLServer保存("msdb");
 		//this.SQLServer保存("AdventureWorksDW2008R2");
 		//this.MySQL保存("sakila");
 		//this.SQLServer保存("AdventureWorks2008R2");
@@ -153,8 +158,8 @@ public partial class テーブルスキーマ編集:Window {
     };
 	private void SQLServer保存(string Name) {
 		Trace.WriteLine(Name);
-		this.SQLServer選択(Name);
-		this.保存_Click(null!,null!);
+		var Container=this.LoadSQLServer(Name);
+        this.AssemblyGenerator.Save(Container,Environment.CurrentDirectory);
 	}
     private void MySQL保存(string Name) {
         this.MySQL選択(Name);
@@ -306,8 +311,12 @@ public partial class テーブルスキーマ編集:Window {
         var データベース名 = (string)e.AddedItems[0]!;
         this.MySQL選択(データベース名);
     }
-
-	private void SQLServer選択(string データベース名){
+    private VM.Container LoadSQLServer(string データベース名){
+        var Container=new VM.Container();
+        this.LoadSQLServer(データベース名,Container);
+        return Container;
+    }
+    private void LoadSQLServer(string データベース名,VM.Container Container){
 		var information_schema=new LinqDB.Product.SQLServer.information_schema(false);
 		using var SqlConnection=new SqlConnection(SQLServer接続文字列);
 		DbConnection Connection=SqlConnection;
@@ -326,7 +335,6 @@ public partial class テーブルスキーマ編集:Window {
 			return p;
 		}
 		var Parameters=Command.Parameters;
-		var Container=this.Container;
 		Container.Clear();
 		Container.Name=データベース名;
 		Connection.ChangeDatabase(データベース名);
@@ -506,6 +514,11 @@ public partial class テーブルスキーマ編集:Window {
 			}
 		}
 		Connection.Close();
+	}
+
+	private void SQLServer選択(string データベース名){
+        var Container=new VM.Container();
+        this.LoadSQLServer(データベース名,Container);
 	}
 	private void MySQL選択(string データベース名){
 		var information_schema=new LinqDB.Product.MySQL.information_schema(false);

@@ -408,8 +408,12 @@ public sealed class Optimizer:IDisposable {
     /// </summary>
     /// <param name="Lambda"></param>
     /// <returns></returns>
-    public Delegate Create非最適化Delegate(LambdaExpression Lambda) =>
-        this.IsGenerateAssembly ? this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda) : this.DynamicMethod(typeof(object),Lambda);
+    public Delegate Create非最適化Delegate(LambdaExpression Lambda){
+        if(this.IsGenerateAssembly)
+            return this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda);
+        else
+            return this.DynamicMethod(typeof(object),Lambda);
+    }
 
     /// <summary>
     /// 最適化したたDelegateを返す
@@ -443,9 +447,10 @@ public sealed class Optimizer:IDisposable {
 
     public Delegate CreateServerDelegate(LambdaExpression Lambda) {
         this.取得ラムダを跨ぐParameter.実行(Lambda);
-        return this.IsGenerateAssembly
-            ? this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda)
-            : this.DynamicMethod(typeof(object),Lambda);
+        if(this.IsGenerateAssembly)
+            return this.DynamicAssemblyとDynamicMethod(typeof(object),Lambda);
+        else
+            return this.DynamicMethod(typeof(object),Lambda);
     }
     private Delegate PrivateDelegate(LambdaExpression Lambda) {
         var Lambda0 = this.Lambda最適化(Lambda);

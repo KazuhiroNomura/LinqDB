@@ -196,8 +196,8 @@ public static class CommonLibrary {
     /// InterNetwork,InterNetworkV6のいずれか
     /// </summary>
     internal const AddressFamily SocketAddressFamily = AddressFamily.InterNetwork;
-    internal static readonly IPAddress SocketIPAddress=IPAddress.Any;
-    internal static readonly LingerOption LingerState = new(false,0);
+    //internal static readonly IPAddress SocketIPAddress=IPAddress.Any;
+    //internal static readonly LingerOption LingerState = new(false,0);
     /// <summary>
     /// WCFで公開するURIの空きポートを求める。
     /// </summary>

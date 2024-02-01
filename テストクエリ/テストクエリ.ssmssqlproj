@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="テストクエリ">
+  <Items>
+    <LogicalFolder Name="接続" Type="2" Sorted="true">
+      <Items>
+        <ConnectionNode Name="COFFEELAKE\MSSQLSERVER2019:COFFEELAKE\kazuh">
+          <Created>2022-02-18T17:33:50.8821478+09:00</Created>
+          <Type>SQL</Type>
+          <Server>COFFEELAKE\MSSQLSERVER2019</Server>
+          <UserName />
+          <Authentication>Windows 認証</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - クエリ</ApplicationName>
+        </ConnectionNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="クエリ" Type="0" Sorted="true">
+      <Items>
+        <FileNode Name="msdbのビューでnullableじゃないのに.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>msdbのビューでnullableじゃないのに.sql</FullPath>
+        </FileNode>
+        <FileNode Name="nullable列.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>nullable列.sql</FullPath>
+        </FileNode>
+        <FileNode Name="pivot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>pivot.sql</FullPath>
+        </FileNode>
+        <FileNode Name="pivot実験0.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>pivot実験0.sql</FullPath>
+        </FileNode>
+        <FileNode Name="pivot実験1.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>pivot実験1.sql</FullPath>
+        </FileNode>
+        <FileNode Name="pivot実験2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>pivot実験2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="シノニム取得.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>シノニム取得.sql</FullPath>
+        </FileNode>
+        <FileNode Name="データ型.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>データ型.sql</FullPath>
+        </FileNode>
+        <FileNode Name="テーブルビューテーブル関数取得TSQL.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>テーブルビューテーブル関数取得TSQL.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ビュー取得TSQL.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ビュー取得TSQL.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ビュー取得標準.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ビュー取得標準.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ビュー列取得TSQL.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ビュー列取得TSQL.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ビュー列取得標準.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ビュー列取得標準.sql</FullPath>
+        </FileNode>
+        <FileNode Name="実験pivot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>実験pivot.sql</FullPath>
+        </FileNode>
+        <FileNode Name="実際のpivot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>実際のpivot.sql</FullPath>
+        </FileNode>
+        <FileNode Name="実際のpivot2.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>実際のpivot2.sql</FullPath>
+        </FileNode>
+        <FileNode Name="実際のpivotのfrom.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>実際のpivotのfrom.sql</FullPath>
+        </FileNode>
+        <FileNode Name="分析関数.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>分析関数.sql</FullPath>
+        </FileNode>
+        <FileNode Name="列のユーザTypeシステムType.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:COFFEELAKE\MSSQLSERVER2019:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>COFFEELAKE\MSSQLSERVER2019</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>列のユーザTypeシステムType.sql</FullPath>
+        </FileNode>
+      </Items>
+    </LogicalFolder>
+    <LogicalFolder Name="その他" Type="3" Sorted="true">
+      <Items />
+    </LogicalFolder>
+  </Items>
+</SqlWorkbenchSqlProject>
