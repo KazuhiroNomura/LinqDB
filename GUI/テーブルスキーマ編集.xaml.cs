@@ -87,9 +87,9 @@ public partial class テーブルスキーマ編集:Window {
                     ItemsSource.Add(Database);
                     if(Database is"master") continue;
                     if(Database is"msdb") continue;
-                    if("WideWorldImportersDW"==Database){
-                        this.SQLServer保存(Database);
-                    }
+                    //if("WideWorldImportersDW"==Database){
+                    //    this.SQLServer保存(Database);
+                    //}
                 }
             }
             this.SQLServer.ItemsSource=ItemsSource;
@@ -519,7 +519,9 @@ public partial class テーブルスキーマ編集:Window {
 	}
 
 	private void SQLServer選択(string データベース名){
-        var Container=new VM.Container();
+        var Container=this.Container;
+        Container.Clear();
+        Container.Name=データベース名;
         this.LoadSQLServer(データベース名,Container);
 	}
 	private void MySQL選択(string データベース名){

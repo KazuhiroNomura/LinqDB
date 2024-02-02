@@ -353,7 +353,7 @@ public partial class AssemblyGenerator {
         Schema_ToString_I.Callvirt(Object_ToString);
         Schema_ToString_I.Call(StringBuilder_AppendLine_String);
         Schema_ToString_I.Pop();
-        this.Dictionary_Table.Add(Object,new ITableUI.Information(
+        this.Dictionary_Table.Add(Object,new ITable.Information(
             Key_TypeBuilder,
             Key_IEquatable_Equals,
             Key_ctor,

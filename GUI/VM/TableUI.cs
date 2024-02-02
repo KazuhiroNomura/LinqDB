@@ -9,8 +9,15 @@ using System.Linq;
 using LinqDB.Databases.Dom;
 namespace GUI.VM;
 [DebuggerDisplay("{"+nameof(Name)+"}")]
-public class TableUI:DependencyObject, ITableUI,IDiagramObject {
-    public double RowHeight { get; } = Common.RowHeight;
+public class TableUI:DependencyObject, ITable,IDiagramObject {
+    //public static readonly DependencyProperty RowHeightProperty = DependencyProperty.Register(
+    //    nameof(RowHeight),
+    //    typeof(double),
+    //    typeof(TableUI),
+    //    new PropertyMetadata(Common.RowHeight)
+    //);
+    //public double RowHeight { get=>(double)this.GetValue(RowHeightProperty); }
+    public double RowHeight=>Common.RowHeight;
     public double ColumnHeaderHeight { get; } = Common.ColumnHeaderHeight;
     public double ColumnHeaderWidth { get; } = Common.ColumnHeaderWidth;
     private static readonly DependencyProperty TableNameTextBox_IsReadOnlyProperty = DependencyProperty.Register(nameof(TableNameTextBox_IsReadOnly),typeof(bool),typeof(TableUI));

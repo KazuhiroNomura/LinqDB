@@ -11,46 +11,6 @@ public class Container:DependencyObject, IContainer {
     public string Name { get; set; }="";
     public ObservableCollection<Schema> Schemas { get; } = new();
     IEnumerable<ISchema> IContainer.Schemas => this.Schemas;
-    //public ObservableCollection<ParentChild> ParentsChildren { get; } = new();
-    //IEnumerable<IParentChild> IContainer.ParentsChildren => this.ParentsChildren;
-    //public Schema this[String Schema] => this.Schemas.First(p => p.Name==Schema);
-
-    //public void Load(Marshal.Database Marshal_Database) {
-    //    this.Name=Marshal_Database.Name;
-    //    this.Clear();
-    //    foreach(var Marshal_Schema in Marshal_Database.Schemas) {
-    //        var Schema=this.CreateSchema(Marshal_Schema.Name);
-    //        foreach(var Marshal_Table in Marshal_Schema.Tables) {
-    //            var Table=Schema.CreateTable(Marshal_Table.Name);
-    //            var MetaAttribute=Marshal_Table.MetaAttribute;
-    //            if(MetaAttribute!=null) {
-    //                Table.Left=MetaAttribute.Left;
-    //                Table.Top=MetaAttribute.Top;
-    //            }
-    //            foreach(var Marshal_Column in Marshal_Table.Columns) {
-    //                Table.CreateColumn(Marshal_Column.Name,Marshal_Column.Type,Marshal_Column.IsNullable,Marshal_Column.IsPrimaryKey);
-    //            }
-    //        }
-    //    }
-    //    var Schemas=this.Schemas;
-    //    foreach(var Marshal_Relation in Marshal_Database.Relations) {
-    //        var Marshal_子Table = Marshal_Relation.子Table;
-    //        var Marshal_親Table = Marshal_Relation.親Table;
-    //        var Marshal_Relation_Name=Marshal_Relation.Name;
-    //        var 子Table = Schemas.Single(p => p.Name==Marshal_子Table.Schema.Name).Tables.Single(p => p.Name==Marshal_子Table.Name);
-    //        //var 子Table = this[Marshal_子Table.Schema.Name][Marshal_子Table.Name];
-    //        var 親Schema_Name = Marshal_親Table.Schema.Name;
-    //        var 親Table_Name = Marshal_親Table.Name;
-    //        var Relation =this.CreateRelation(
-    //            Marshal_Relation_Name,
-    //            Schemas.Single(p => p.Name==親Schema_Name).Tables.Single(p => p.Name==親Table_Name),
-    //            子Table
-    //        );
-    //        foreach(var Marshal_Column in Marshal_Relation.Columns) {
-    //            Relation.AddColumn(子Table.Columns.Single(p=>p.Name==Marshal_Column.Name));
-    //        }
-    //    }
-    //}
     public Schema CreateSchema(string Name) {
         var Schema = new Schema(Name,this);
         this.Schemas.Add(Schema);
@@ -63,13 +23,6 @@ public class Container:DependencyObject, IContainer {
         親TableUi.子Relations.Add(Relation);
         return Relation;
     }
-    //public Table CreateTable(String Name) {
-    //    var Table = new Table {
-    //        Name=Name
-    //    };
-    //    this.Add(Table);
-    //    return Table;
-    //}
     public override string ToString() => this.Name;
     public Schema this[string Schema] => this.Schemas.First(p => p.Name==Schema);
     public ObservableCollection<TableUI> Tables { get; } = new();

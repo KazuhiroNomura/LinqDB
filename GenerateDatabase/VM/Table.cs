@@ -12,7 +12,7 @@ namespace VM;
 public class Table:ITable{
     public List<Column> Columns { get; } = new();
     IEnumerable<IColumn> IColumns.Columns =>this.Columns;
-    IEnumerable<string> SchemaNames => ((ITableUI)this).Schema.Schemas.Select(p => p.Name!);
+    IEnumerable<string> SchemaNames => ((ITable)this).Schema.Schemas.Select(p => p.Name!);
     public IColumn this[string Column] => this.Columns.First(p => p.Name==Column);
     public readonly List<Trigger> BeforeTriggers = new();
     public readonly List<Trigger> AfterTriggers = new();

@@ -63,7 +63,7 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
         y_Parameters.AddRange(Lambdx_y_Parameters);
         Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
         //var count=this.count++;
-        var r=this.ProtectedEquals(x.Body,y.Body);
+        var r=this.ProtectedPrivateEquals(x.Body,y.Body);
         Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
         x_Parameters.RemoveRange(x_Parameters_Count,Lambdx_x_Parameters_Count);
         y_Parameters.RemoveRange(x_Parameters_Count,Lambdx_x_Parameters_Count);
@@ -83,7 +83,7 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
     }
     public bool Equals(LabelTarget? x,LabelTarget? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     //public bool Equals(ElementInit? x,ElementInit? y) {
     //    this.Clear();
@@ -91,34 +91,34 @@ public class ExpressionEqualityComparer:AExpressionEqualityComparer
     //}
     public bool Equals(ElementInit? x,ElementInit? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(MemberBinding? x,MemberBinding? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(MemberAssignment? x,MemberAssignment? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(MemberListBinding? x,MemberListBinding? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(MemberMemberBinding? x,MemberMemberBinding? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(CSharpArgumentInfo? x,CSharpArgumentInfo? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(CatchBlock? x,CatchBlock? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
     public bool Equals(SwitchCase? x,SwitchCase? y){
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
 }

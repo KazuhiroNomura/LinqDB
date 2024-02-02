@@ -43,16 +43,15 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var y_Left=y.Left;
         if(x_Left.NodeType!=y_Left.NodeType) return @false;
         if(x_Left.NodeType!=ExpressionType.Parameter) return this.T(x,y);
-        if(!this.ProtectedEquals(x.Right,y.Right)) return @false;
-        if(!this.InternalEquals(x.Conversion,y.Conversion)) return @false;
+        if(!this.ProtectedPrivateEquals(x.Right,y.Right)) return @false;
+        if(!this.NullableEquals(x.Conversion,y.Conversion)) return @false;
         var x_Parameter=(ParameterExpression)x_Left;
         var y_Parameter=(ParameterExpression)y_Left;
         var x_Index0=this.x_Parameters.IndexOf(x_Parameter);
         var y_Index0=this.y_Parameters.IndexOf(y_Parameter);
         if(x_Index0!=y_Index0) return @false;
         if(x_Index0>=0) return true;
-        if(!this.ProtectedAssign後処理(x_Parameter,y_Parameter)) return @false;
-        return true;
+        return this.ProtectedAssign後処理(x_Parameter,y_Parameter);
     }
     /// <summary>
     /// ラムダ跨ぎParameterが出現したときの扱い
@@ -67,8 +66,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var y_Index0=this.y_Parameters.IndexOf(y);
         if(x_Index0!=y_Index0) return @false;
         if(x_Index0>=0) return true;
-        if(!this.Equals後処理(x,y)) return @false;
-        return true;
+        return this.Equals後処理(x,y);
     }
     /// <summary>
     /// Parameters外のParameterのスコープParameterによる比較するか単にfalseにするか
@@ -87,7 +85,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         if(x==y) return true;
         if(x is null^y is null) return @false;
         this.Clear();
-        return this.InternalEquals(x,y);
+        return this.NullableEquals(x,y);
     }
 
     /// <summary>
@@ -96,14 +94,14 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     /// <param name="Expression0"></param>
     /// <returns></returns>
     protected virtual Expression Assignの比較対象(Expression Expression0)=>Expression0;
-    internal bool InternalEquals(Expression? x,Expression? y){
+    private protected bool NullableEquals(Expression? x,Expression? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         //if(x is null) return y is null;
         //if(y is null) return @false;
-        return this.ProtectedEquals(x,y);
+        return this.ProtectedPrivateEquals(x,y);
     }
-    protected bool ProtectedEquals(Expression x0,Expression y0){
+    protected private bool ProtectedPrivateEquals(Expression x0,Expression y0){
         var x=this.Assignの比較対象(x0);
         var y=this.Assignの比較対象(y0);
         if(x==y) return true;
@@ -152,9 +150,8 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             case ExpressionType.SubtractAssignChecked:
             case ExpressionType.SubtractChecked:
                 return this.T((BinaryExpression)x,(BinaryExpression)y);
-            case ExpressionType.Assign:{
+            case ExpressionType.Assign:
                 return this.ProtectedAssign((BinaryExpression)x,(BinaryExpression)y);
-            }
             case ExpressionType.ArrayLength:
             case ExpressionType.Convert:
             case ExpressionType.ConvertChecked:
@@ -228,7 +225,14 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
                 throw new NotSupportedException($"{x.NodeType}はサポートされていない");
         }
     }
-    protected bool T(BinaryExpression x,BinaryExpression y)=>x.Method==y.Method&&this.ProtectedEquals(x.Left,y.Left)&&this.ProtectedEquals(x.Right,y.Right)&&this.InternalEquals(x.Conversion,y.Conversion);
+    protected bool T(BinaryExpression x,BinaryExpression y){
+        if(x==y) return true;
+        if(x.Method!=y.Method) return @false;
+        if(!this.ProtectedPrivateEquals(x.Left,y.Left))return @false;
+        if(!this.ProtectedPrivateEquals(x.Right,y.Right))return @false;
+        if(!this.NullableEquals(x.Conversion,y.Conversion))return @false;
+        return true;
+    }
     protected bool T(BlockExpression x,BlockExpression y){
         if(x==y) return true;
         //if(!this.T(x.Variables,y.Variables)) return @false;
@@ -258,9 +262,9 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     }
     protected bool T(ConditionalExpression x,ConditionalExpression y){
         if(x==y) return true;
-        if(!this.ProtectedEquals(x.Test,y.Test))return @false;
-        if(!this.ProtectedEquals(x.IfTrue,y.IfTrue))return @false;
-        if(!this.ProtectedEquals(x.IfFalse,y.IfFalse)) return @false;
+        if(!this.ProtectedPrivateEquals(x.Test,y.Test))return @false;
+        if(!this.ProtectedPrivateEquals(x.IfTrue,y.IfTrue))return @false;
+        if(!this.ProtectedPrivateEquals(x.IfFalse,y.IfFalse)) return @false;
         return true;
     }
     protected bool T(ConstantExpression x,ConstantExpression y){
@@ -398,7 +402,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     //}
     protected bool T(MemberInitExpression x,MemberInitExpression y){
         if(x==y) return true;
-        if(this.ProtectedEquals(x.NewExpression,y.NewExpression))
+        if(this.ProtectedPrivateEquals(x.NewExpression,y.NewExpression))
             return this.SequenceEqual(x.Bindings,y.Bindings);
         return @false;
     }
@@ -414,7 +418,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         return @false;
     }
     public int GetHashCode(LabelTarget obj)=>0;
-    internal bool InternalEquals(LabelTarget? x,LabelTarget? y){
+    private protected bool NullableEquals(LabelTarget? x,LabelTarget? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         //if(x is null)
@@ -433,7 +437,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     }
     protected bool T(LabelExpression x,LabelExpression y){
         if(x==y) return true;
-        if(!this.InternalEquals(x.Target,y.Target)) return @false;
+        if(!this.NullableEquals(x.Target,y.Target)) return @false;
         var x_LabelTargets=this.x_LabelTargets;
         var y_LabelTargets=this.y_LabelTargets;
         var x_LabelTargets_Count=x_LabelTargets.Count;
@@ -441,7 +445,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         Debug.Assert(x_LabelTargets_Count==y_LabelTargets_Count);
         x_LabelTargets.Add(x.Target);
         y_LabelTargets.Add(y.Target);
-        var r=this.InternalEquals(x.DefaultValue,y.DefaultValue);
+        var r=this.NullableEquals(x.DefaultValue,y.DefaultValue);
         x_LabelTargets.RemoveRange(x_LabelTargets_Count,1);
         y_LabelTargets.RemoveRange(x_LabelTargets_Count,1);
         return r;
@@ -449,7 +453,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     protected abstract bool T(LambdaExpression x,LambdaExpression y);
     protected bool T(ListInitExpression x,ListInitExpression y){
         if(x==y) return true;
-        if(this.ProtectedEquals(x.NewExpression,y.NewExpression)) return this.SequenceEqual(x.Initializers,y.Initializers);
+        if(this.ProtectedPrivateEquals(x.NewExpression,y.NewExpression)) return this.SequenceEqual(x.Initializers,y.Initializers);
         return @false;
     }
     protected bool T(LoopExpression x,LoopExpression y){
@@ -473,7 +477,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             x_LabelTargets.Add(x_ContinueLabel);
             y_LabelTargets.Add(y_ContinueLabel);
         } else if(y_ContinueLabel is not null) return @false;
-        var r=this.ProtectedEquals(x.Body,y.Body);
+        var r=this.ProtectedPrivateEquals(x.Body,y.Body);
         Debug.Assert(x_LabelTargets.Count==y_LabelTargets.Count);
         x_LabelTargets.RemoveRange(x_LabelTargets_Count,x_LabelTargets.Count-x_LabelTargets_Count);
         y_LabelTargets.RemoveRange(y_LabelTargets_Count,y_LabelTargets.Count-y_LabelTargets_Count);
@@ -481,41 +485,43 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     }
     protected bool T(MemberExpression x,MemberExpression y){
         if(x==y) return true;
-        if(x.Member==y.Member)
-            if(this.InternalEquals(x.Expression,y.Expression))
-                return true;
-        return @false;
+        if(x.Member!=y.Member)return @false;
+        if(!this.NullableEquals(x.Expression,y.Expression))return @false;
+        return true;
     }
     protected bool T(IndexExpression x,IndexExpression y){
         if(x==y) return true;
-        if(x.Indexer==y.Indexer)
-            if(this.ProtectedEquals(x.Object,y.Object))
-                if(this.SequenceEqual(x.Arguments,y.Arguments))
-                    return true;
-        return @false;
+        if(x.Indexer!=y.Indexer) return @false;
+        if(!this.ProtectedPrivateEquals(x.Object,y.Object))return @false;
+        if(!this.SequenceEqual(x.Arguments,y.Arguments))return @false;
+        return true;
     }
     protected bool T(MethodCallExpression x,MethodCallExpression y){
         if(x==y) return true;
-        if(x.Method is DynamicMethod)
-            if(y.Method is DynamicMethod)
-                return this.SequenceEqual(x.Arguments,y.Arguments);
-        if(x.Method==y.Method)
-            if(this.InternalEquals(x.Object,y.Object))
-                if(this.SequenceEqual(x.Arguments,y.Arguments))
-                    return true;
-        return @false;
+        if(x.Method is not DynamicMethod)
+            if(y.Method is not DynamicMethod){
+                if(x.Method!=y.Method) return @false;
+                if(!this.NullableEquals(x.Object,y.Object))return @false;
+            }else return @false;
+        else if(y.Method is not DynamicMethod)
+            return @false;
+        return this.SequenceEqual(x.Arguments,y.Arguments);
+        //if(x.Method is DynamicMethod)
+        //    if(y.Method is DynamicMethod)
+        //        return this.SequenceEqual(x.Arguments,y.Arguments);
+        //if(x.Method!=y.Method) return @false;
+        //if(!this.PrivateProtectedEquals(x.Object,y.Object))return @false;
+        //return this.SequenceEqual(x.Arguments,y.Arguments);
     }
     protected bool T(InvocationExpression x,InvocationExpression y){
         if(x==y) return true;
-        if(this.ProtectedEquals(x.Expression,y.Expression)) 
-            return this.SequenceEqual(x.Arguments,y.Arguments);
-        return @false;
+        if(!this.ProtectedPrivateEquals(x.Expression,y.Expression)) return @false;
+        return this.SequenceEqual(x.Arguments,y.Arguments);
     }
     protected bool T(GotoExpression x,GotoExpression y){
         if(x==y) return true;
-        if(this.x_LabelTargets.IndexOf(x.Target)==this.y_LabelTargets.IndexOf(y.Target)) 
-            return this.InternalEquals(x.Value,y.Value);
-        return @false;
+        if(this.x_LabelTargets.IndexOf(x.Target)!=this.y_LabelTargets.IndexOf(y.Target)) return @false;
+        return this.NullableEquals(x.Value,y.Value);
     }
     public int GetHashCode(ParameterExpression obj)=>0;
     //protected abstract bool Equals(ParameterExpression? x,ParameterExpression? y);
@@ -526,8 +532,8 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     protected bool T(SwitchExpression x,SwitchExpression y){
         if(x==y) return true;
         if(x.Comparison!=y.Comparison) return @false;
-        if(!this.ProtectedEquals(x.DefaultBody,y.DefaultBody)) return @false;
-        if(!this.ProtectedEquals(x.SwitchValue,y.SwitchValue)) return @false;
+        if(!this.ProtectedPrivateEquals(x.DefaultBody,y.DefaultBody)) return @false;
+        if(!this.ProtectedPrivateEquals(x.SwitchValue,y.SwitchValue)) return @false;
         var x_Cases=x.Cases;
         var y_Cases=y.Cases;
         var x_Cases_Count=x_Cases.Count;
@@ -535,22 +541,22 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         for(var c=0;c<x_Cases_Count;c++){
             var x_Case=x_Cases[c];
             var y_Case=y_Cases[c];
-            if(!this.ProtectedEquals(x_Case.Body,y_Case.Body)) return @false;
+            if(!this.ProtectedPrivateEquals(x_Case.Body,y_Case.Body)) return @false;
             if(!this.SequenceEqual(x_Case.TestValues,y_Case.TestValues)) return @false;
         }
         return true;
     }
     protected bool T(TryExpression x,TryExpression y){
         if(x==y) return true;
-        if(!this.ProtectedEquals(x.Body,y.Body)) return @false;
-        if(!this.InternalEquals(x.Fault,y.Fault)) return @false;
-        if(!this.InternalEquals(x.Finally,y.Finally)) return @false;
+        if(!this.ProtectedPrivateEquals(x.Body,y.Body)) return @false;
+        if(!this.NullableEquals(x.Fault,y.Fault)) return @false;
+        if(!this.NullableEquals(x.Finally,y.Finally)) return @false;
         var x_Handlers=x.Handlers;
         var y_Handlers=y.Handlers;
         var x_Handlers_Count=x_Handlers.Count;
         if(x_Handlers_Count!=y_Handlers.Count) return @false;
         for(var c=0;c<x_Handlers_Count;c++)
-            if(!this.InternalEquals(x_Handlers[c],y_Handlers[c]))
+            if(!this.NullableEquals(x_Handlers[c],y_Handlers[c]))
                 return false;
         return true;
     }
@@ -558,7 +564,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         if(x==y) return true;
         if(x.Type!=y.Type) return @false;
         if(x.TypeOperand!=y.TypeOperand) return @false;
-        return this.ProtectedEquals(x.Expression,y.Expression);
+        return this.ProtectedPrivateEquals(x.Expression,y.Expression);
     }
     protected bool T(UnaryExpression x,UnaryExpression y){
         if(x==y) return true;
@@ -567,58 +573,49 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         //return this.Equals(x.Operand,y.Operand);
         //x.Operand is not null&&y.Operand is not null&&this.ProtectedEquals(x.Operand,y.Operand)||
         //    x.Operand is null&&y.Operand is null);
-        if(x.Operand is not null)
-            if(y.Operand is not null)
-                if(this.ProtectedEquals(x.Operand,y.Operand))
-                    return true;
-                else
-                    return @false;
-        if(x.Operand is null)
-            if(y.Operand is null)
-                return true;
-        return @false;
+        return this.NullableEquals(x.Operand,y.Operand);
     }
     public int GetHashCode(ElementInit obj)=>0;
-    internal bool InternalEquals(ElementInit? x,ElementInit? y){
+    private protected bool NullableEquals(ElementInit? x,ElementInit? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         if(x!.AddMethod!=y!.AddMethod) return @false;
         return this.SequenceEqual(x.Arguments,y.Arguments);
     }
-    internal bool InternalEquals(MemberBinding? x,MemberBinding? y){
+    public int GetHashCode(MemberBinding obj)=>0;
+    private protected bool NullableEquals(MemberBinding? x,MemberBinding? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         if(x!.BindingType!=y!.BindingType) return @false;
         return x.BindingType switch{
-            MemberBindingType.Assignment=>this.InternalEquals((MemberAssignment)x,(MemberAssignment)y),
-            MemberBindingType.ListBinding=>this.InternalEquals((MemberListBinding)x,(MemberListBinding)y),
-            _=>this.InternalEquals((MemberMemberBinding)x,(MemberMemberBinding)y),
+            MemberBindingType.Assignment=>this.NullableEquals((MemberAssignment)x,(MemberAssignment)y),
+            MemberBindingType.ListBinding=>this.NullableEquals((MemberListBinding)x,(MemberListBinding)y),
+            _=>this.NullableEquals((MemberMemberBinding)x,(MemberMemberBinding)y),
         };
     }
-    public int GetHashCode(MemberBinding obj)=>0;
     public int GetHashCode(MemberAssignment obj)=>0;
-    internal bool InternalEquals(MemberAssignment? x,MemberAssignment? y){
+    private protected bool NullableEquals(MemberAssignment? x,MemberAssignment? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         if(x!.Member!=y!.Member) return @false;
         return this.Equals(x.Expression,y.Expression);
     }
     public int GetHashCode(MemberListBinding obj)=>0;
-    internal bool InternalEquals(MemberListBinding? x,MemberListBinding? y){
+    private protected bool NullableEquals(MemberListBinding? x,MemberListBinding? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         if(x!.Member!=y!.Member) return @false;
         return this.SequenceEqual(x.Initializers,y.Initializers);
     }
     public int GetHashCode(MemberMemberBinding obj)=>0;
-    internal bool InternalEquals(MemberMemberBinding? x,MemberMemberBinding? y){
+    private protected bool NullableEquals(MemberMemberBinding? x,MemberMemberBinding? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         if(x!.Member!=y!.Member) return @false;
         return this.SequenceEqual(x.Bindings,y.Bindings);
     }
     public int GetHashCode(CSharpArgumentInfo obj)=>0;
-    internal bool InternalEquals(CSharpArgumentInfo? x,CSharpArgumentInfo? y){
+    private protected bool NullableEquals(CSharpArgumentInfo? x,CSharpArgumentInfo? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
         dynamic x0=new NonPublicAccessor(x),y0=new NonPublicAccessor(y);
@@ -632,7 +629,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         return true;
     }
     public int GetHashCode(CatchBlock obj)=>0;
-    internal bool InternalEquals(CatchBlock? x,CatchBlock? y){
+    private protected bool NullableEquals(CatchBlock? x,CatchBlock? y){
         if(x==y) return true;
         Debug.Assert((x is null^y is null)==(x is null^y is null));
         if(x is null^y is null) return @false;
@@ -648,8 +645,8 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
             x_Parameters.Add(x_Variable);
             y_Parameters.Add(y_Variable);
         }
-        if(!this.ProtectedEquals(x.Body,y.Body)) return @false;
-        if(!this.InternalEquals(x.Filter,y.Filter)) return @false;
+        if(!this.ProtectedPrivateEquals(x.Body,y.Body)) return @false;
+        if(!this.NullableEquals(x.Filter,y.Filter)) return @false;
         if(x_Variable is not null){
             x_Parameters.RemoveAt(x_Parameters_Count);
             y_Parameters.RemoveAt(x_Parameters_Count);
@@ -658,18 +655,18 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
     }
 
     public int GetHashCode(SwitchCase obj)=>0;
-    internal bool InternalEquals(SwitchCase? x,SwitchCase? y){
+    private protected bool NullableEquals(SwitchCase? x,SwitchCase? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
-        if(this.ProtectedEquals(x!.Body,y!.Body))
-            return this.SequenceEqual(x.TestValues,y.TestValues);
-        return @false;
+        if(!this.ProtectedPrivateEquals(x!.Body,y!.Body))return @false;
+        if(!this.SequenceEqual(x.TestValues,y.TestValues)) return @false;
+        return true;
     }
     private bool SequenceEqual(Generic.IList<Expression> x,Generic.IList<Expression> y){
         var x_Count=x.Count;
         if(x_Count!=y.Count) return @false;
         for(var i=0;i<x_Count;i++)
-            if(!this.InternalEquals(x[i],y[i]))
+            if(!this.NullableEquals(x[i],y[i]))
                 return @false;
         return true;
     }
@@ -677,7 +674,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var x_Count=x.Count;
         if(x_Count!=y.Count) return @false;
         for(var i=0;i<x_Count;i++)
-            if(!this.InternalEquals(x[i],y[i]))
+            if(!this.NullableEquals(x[i],y[i]))
                 return @false;
         return true;
     }
@@ -685,7 +682,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var x_Count=x.Count;
         if(x_Count!=y.Count) return @false;
         for(var i=0;i<x_Count;i++)
-            if(!this.InternalEquals(x[i],y[i]))
+            if(!this.NullableEquals(x[i],y[i]))
                 return @false;
         return true;
     }
@@ -693,7 +690,7 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         var x_Count=x.Count;
         if(x_Count!=y.Count) return @false;
         for(var i=0;i<x_Count;i++)
-            if(!this.InternalEquals(x[i],y[i]))
+            if(!this.NullableEquals(x[i],y[i]))
                 return @false;
         return true;
     }

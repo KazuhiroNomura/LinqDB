@@ -650,9 +650,6 @@ public partial class AssemblyGenerator {
         //var Schema_Type=Schema_TypeBuilder.CreateType();
     }
     private static readonly CustomAttributeBuilder IsReadOnlyAttribute = new(typeof(IsReadOnlyAttribute).GetConstructor(Array.Empty<Type>())!,Array.Empty<object>());
-    private static readonly ConstructorInfo Meta_ctor = typeof(MetaAttribute).GetConstructor(
-        new[] { typeof(double),typeof(double) }
-    )!;
     private void DefineSynonym(string Synonym,ITable Table,TypeBuilder Schema_TypeBuilder){
         var GetMethod = this.Dictionary_Table[Table].GetMethod;
         Schema_TypeBuilder.DefineProperty(Synonym,PropertyAttributes.None,CallingConventions.HasThis,GetMethod.ReturnType,Type.EmptyTypes).SetGetMethod(GetMethod);

@@ -99,7 +99,10 @@
             </DataGridCheckBoxColumn>
             <DataGridTextColumn Header="名前" Binding="{Binding Name}">
             </DataGridTextColumn>
-            <DataGridComboBoxColumn Header="データ型" SelectedValueBinding="{Binding Type}" SelectedValuePath="{Binding}" DisplayMemberPath="FullName" ItemsSource="{Binding Source={StaticResource ResourceKey=Types}}">
+            <DataGridComboBoxColumn Header="データ型" 
+                                    SelectedValueBinding="{Binding Type}" 
+                                    DisplayMemberPath="FullName" 
+                                    ItemsSource="{Binding Source={StaticResource ResourceKey=Types}}">
             </DataGridComboBoxColumn>
             <DataGridCheckBoxColumn Header="NULLを許容" Binding="{Binding IsNullable}">
             </DataGridCheckBoxColumn>

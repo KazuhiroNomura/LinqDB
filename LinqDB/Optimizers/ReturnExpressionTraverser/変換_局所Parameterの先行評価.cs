@@ -663,7 +663,6 @@ public sealed class 変換_局所Parameterの先行評価:ReturnExpressionTraver
     //    ListスコープParameter.RemoveRange(ListスコープParameter_Count,ListスコープParameter.Count-ListスコープParameter_Count);
     //    return Expression1;
     //}
-    private static int aa=0;
     private Expression 先行評価(Expression Expression0){
         var ListスコープParameter=this.ListスコープParameter;
         var Expression1 = Expression0;

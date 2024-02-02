@@ -9,6 +9,42 @@
              d:DataContext="{d:DesignInstance {x:Type VM:Container}, IsDesignTimeCreatable=True}"
              d:DesignHeight="450" d:DesignWidth="800">
     <ListBox ItemsSource="{Binding DiagramObjects}" x:Name="DiagramListBox" >
+        <ListBox.Resources>
+            <DataTemplate DataType="{x:Type VM:TableUI}">
+                <Thumb 
+                 x:Name="Thumb" 
+                 Canvas.Left="{Binding Left}" 
+                 Canvas.Top="{Binding Top}" 
+                 DragDelta="DragDelta" 
+                 HorizontalAlignment="Stretch" 
+                 PreviewMouseLeftButtonDown="つまみMouseLeftButtonDown">
+                    <Thumb.Template>
+                        <ControlTemplate>
+                            <Canvas x:Name="Canvas">
+                                <local:TableSchemaControl />
+                            </Canvas>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type VM:Relation}">
+                <Thumb 
+                    x:Name="Thumb" 
+                    DragDelta="DragDelta" 
+                    HorizontalAlignment="Stretch" 
+                    PreviewMouseLeftButtonDown="つまみMouseLeftButtonDown">
+                    <Thumb.Template>
+                        <ControlTemplate>
+                            <Canvas x:Name="Canvas">
+                                <local:RelationConnecter 
+                                    ToolTipService.ShowDuration="10000000" 
+                                    ToolTip="{Binding (VM:Relation.ToolTip)}" />
+                            </Canvas>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+            </DataTemplate>
+        </ListBox.Resources>
         <ListBox.ItemsPanel>
             <ItemsPanelTemplate>
                 <Canvas />
@@ -16,8 +52,8 @@
         </ListBox.ItemsPanel>
         <ListBox.ItemContainerStyle>
             <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                <Setter Property="Canvas.Top" Value="{Binding (VM:TableUI.Top)}" />
+                <Setter Property="Canvas.Left" Value="{Binding (VM:TableUI.Left)}" />
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -61,19 +97,5 @@
                 </Setter>
             </Style>
         </ListBox.ItemContainerStyle>
-        <ListBox.ItemTemplate>
-            <DataTemplate>
-                <Thumb x:Name="Thumb" Canvas.Left="{Binding Left}" Canvas.Top="{Binding Top}" DragDelta="DragDelta" HorizontalAlignment="Stretch" PreviewMouseLeftButtonDown="つまみMouseLeftButtonDown">
-                    <Thumb.Template>
-                        <ControlTemplate>
-                            <Canvas x:Name="Canvas">
-                                <local:RelationConnecter ToolTipService.ShowDuration="10000000" ToolTip="{Binding ToolTip}" Visibility="{Binding LineVisibility}" />
-                                <local:TableSchemaControl Visibility="{Binding DataGridVisibility}" />
-                            </Canvas>
-                        </ControlTemplate>
-                    </Thumb.Template>
-                </Thumb>
-            </DataTemplate>
-        </ListBox.ItemTemplate>
     </ListBox>
 </UserControl>

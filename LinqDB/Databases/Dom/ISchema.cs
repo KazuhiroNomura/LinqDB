@@ -22,16 +22,11 @@ public interface ISchema:IName {
     /// 兄弟Schemaのコレクション
     /// </summary>
     IEnumerable<ISchema> Schemas { get; }
-    public class Information {
-        internal readonly FieldBuilder Containerに定義されるSchema_FieldBuilder;
-        internal readonly LocalBuilder ContainerのRelationValidateで使うLocalBuilder;
-        internal TypeBuilder TypeBuilder { get;private set;}
+    public class Information(TypeBuilder TypeBuilder,FieldBuilder Containerに定義されるSchema_FieldBuilder,LocalBuilder ContainerのRelationValidateで使うLocalBuilder){
+        internal readonly FieldBuilder Containerに定義されるSchema_FieldBuilder=Containerに定義されるSchema_FieldBuilder;
+        internal readonly LocalBuilder ContainerのRelationValidateで使うLocalBuilder=ContainerのRelationValidateで使うLocalBuilder;
+        private TypeBuilder TypeBuilder { get;set;}=TypeBuilder;
         //internal TypeBuilder Lazy_TypeBuilder { get;private set;}
-        public Information(TypeBuilder TypeBuilder,FieldBuilder Containerに定義されるSchema_FieldBuilder,LocalBuilder ContainerのRelationValidateで使うLocalBuilder) {
-            this.TypeBuilder=TypeBuilder;
-            this.Containerに定義されるSchema_FieldBuilder=Containerに定義されるSchema_FieldBuilder;
-            this.ContainerのRelationValidateで使うLocalBuilder=ContainerのRelationValidateで使うLocalBuilder;
-        }
         //internal Type? Type { get; private set; }
         internal FieldInfo? Containerに定義されるSchema_Field;
         public void CreateType(Type Container_Type) {

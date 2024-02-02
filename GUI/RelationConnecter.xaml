@@ -33,8 +33,6 @@
             </Polyline.Stroke>
         </Polyline>
         <Path
-            Canvas.Left="{Binding 親Left}"
-            Canvas.Top="{Binding 親Top}"
             Fill="LightGreen"
             Stroke="Green"
             Style="{StaticResource 矢印}"
@@ -63,8 +61,6 @@
             </Path.RenderTransform>
         </Path>
         <Path
-            Canvas.Left="{Binding 子Left}"
-            Canvas.Top="{Binding 子Top}"
             Fill="LightBlue"
             Stroke="Blue"
             Style="{StaticResource 矢印}"

@@ -27,7 +27,7 @@
             <ComboBox Name="MySQL" VerticalAlignment="Stretch" Width="120" IsEditable="False" SelectionChanged="MySQL_SelectionChanged"/>
             <TextBlock Text="DLL" />
             <ComboBox 
-                Name="DLL" VerticalAlignment="Stretch" Width="120" IsEditable="False" ItemsSource="{Binding Files}"
+                Name="DLL" VerticalAlignment="Stretch" Width="120" IsEditable="False" ItemsSource="{Binding (VM:DllWatcher.Files)}"
                 SelectionChanged="DLL_SelectionChanged"
             />
             <Button Name="CreateTable" Content="CreateTable" DockPanel.Dock="Top"

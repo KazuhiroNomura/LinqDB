@@ -6,12 +6,12 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:VM="clr-namespace:GUI.VM"
-             d:DataContext="{d:DesignInstance {x:Type VM:TestRecords}, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance {x:Type VM:TableUI}, IsDesignTimeCreatable=True}"
              BorderThickness="1" 
              BorderBrush="Black">
     <DataGrid 
         Name="DataGrid" 
-        ItemsSource="{Binding Records}" 
+        ItemsSource="{Binding Columns}" 
         AutoGenerateColumns="True" 
         HeadersVisibility="All" 
         RowHeaderWidth="36" 

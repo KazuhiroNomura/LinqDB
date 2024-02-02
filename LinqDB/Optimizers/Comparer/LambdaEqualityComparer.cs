@@ -20,7 +20,7 @@ public class LambdaEqualityComparer : AExpressionEqualityComparer
         x_Parameters.AddRange(Lambdx_x_Parameters);
         y_Parameters.AddRange(Lambdx_y_Parameters);
         Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
-        var r = this.ProtectedEquals(x.Body, y.Body);
+        var r = this.ProtectedPrivateEquals(x.Body, y.Body);
         Debug.Assert(this.x_LabelTargets.Count==this.y_LabelTargets.Count);
         x_Parameters.RemoveRange(x_Parameters_Count, Lambdx_x_Parameters_Count);
         y_Parameters.RemoveRange(x_Parameters_Count, Lambdx_x_Parameters_Count);
