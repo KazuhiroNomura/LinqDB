@@ -1,8 +1,6 @@
 ﻿using System.Text;
 using System.Diagnostics;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using System.Windows;
 using LinqDB.Databases.Dom;
 namespace VM;
 [DebuggerDisplay("{"+nameof(Name)+"}")]

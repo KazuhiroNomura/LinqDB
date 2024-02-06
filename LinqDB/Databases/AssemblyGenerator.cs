@@ -275,7 +275,8 @@ public partial class AssemblyGenerator {
                     I.Constrained(FieldType);
                     I.Callvirt(Equals);
                 } else{
-                    Debug.Assert(typeof(IEquatable<>).MakeGenericType(FieldType).IsAssignableFrom(Equals.DeclaringType));
+                    //SqlHierarchyIdはIEquatable<>を継承しない
+                    //Debug.Assert(typeof(IEquatable<>).MakeGenericType(FieldType).IsAssignableFrom(Equals.DeclaringType));
                     I.Call(Equals);
                 }
                 I.Brfalse(Equalsでfalseの時);
@@ -354,6 +355,7 @@ public partial class AssemblyGenerator {
     private readonly Dictionary<IView,Information> Dictionary_View = new();
     private readonly Dictionary<ITableFunction,Information> Dictionary_TableFunction = new();
     private readonly Dictionary<IScalarFunction,Information> Dictionary_ScalarFunction = new();
+    private readonly Dictionary<IProcedure,Information> Dictionary_Procedure= new();
     private readonly Dictionary<IColumn,FieldBuilder> Dictionary_Column = new();
     public void Save(IContainer Container,string Folder) {
         this.Dictionary_Schema.Clear();
@@ -361,6 +363,7 @@ public partial class AssemblyGenerator {
         this.Dictionary_View.Clear();
         this.Dictionary_TableFunction.Clear();
         this.Dictionary_ScalarFunction.Clear();
+        this.Dictionary_Procedure.Clear();
         this.Dictionary_Column.Clear();
         var Types1 = this.Types1;
         var Container_Name = Container.EscapedName;
@@ -604,6 +607,7 @@ public partial class AssemblyGenerator {
         foreach(var a in Schema.Views          )this.DefineView          (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.TableFunctions )this.DefineTableFunction (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.ScalarFunctions)this.DefineScalarFunction(a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
+        foreach(var a in Schema.Procedures     )this.DefineProcedure     (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.SynonymTables  )this.DefineSynonym       (a.Name,a.Table,Schema_TypeBuilder);
         foreach(var a in Schema.SynonymViews   )this.DefineSynonym       (a.Name,a.View,Schema_TypeBuilder);
         //foreach(var TableFunction in Schema.TableFunctions)
@@ -726,7 +730,7 @@ public partial class AssemblyGenerator {
             I.Ldarg_0();
             var 親Table_子Many_FieldBuilder = Relation.I.親Table_子Many_FieldBuilder!;
             I.Ldfld(親Table_子Many_FieldBuilder);
-            I.Call(Reflection.ImmutableSet.get_Count);
+            I.Call(Reflection.ImmutableSet.get_LongCount);
             var Brfalse_S = I.DefineLabel();
             I.Brfalse_S(Brfalse_S);
             I.Ldstr('\"'+親Table_子Many_FieldBuilder.Name+"\"の要素が存在したので削除できなかった。");
@@ -998,6 +1002,8 @@ public partial class AssemblyGenerator {
         foreach(var a in Schema.TableFunctions)o.Disp作成(ContainerParameter,Dictionary_TableFunction[a],a.SQL);
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
         foreach(var a in Schema.ScalarFunctions)o.Disp作成(ContainerParameter,Dictionary_ScalarFunction[a],a.SQL);
+        var Dictionary_Procedure= this.Dictionary_Procedure;
+        foreach(var a in Schema.Procedures)o.Disp作成(ContainerParameter,Dictionary_Procedure[a],a.SQL);
     }
     private void Impl作成(ISchema Schema,ParameterExpression ContainerParameter) {
         var Optimizer=this.Optimizer;
@@ -1007,12 +1013,15 @@ public partial class AssemblyGenerator {
         foreach(var a in Schema.TableFunctions)Optimizer.Impl作成(Dictionary_TableFunction[a],ContainerParameter);
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
         foreach(var a in Schema.ScalarFunctions)Optimizer.Impl作成(Dictionary_ScalarFunction[a],ContainerParameter);
+        var Dictionary_Procedure= this.Dictionary_Procedure;
+        foreach(var a in Schema.Procedures)Optimizer.Impl作成(Dictionary_Procedure[a],ContainerParameter);
     }
     public void ClearDebug() {
         this.Dictionary_Schema.Clear();
         this.Dictionary_Table.Clear();
         this.Dictionary_View.Clear();
         this.Dictionary_ScalarFunction.Clear();
+        this.Dictionary_Procedure.Clear();
         this.Dictionary_Column.Clear();
     }
 }

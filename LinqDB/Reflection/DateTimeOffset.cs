@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using LinqDB.Optimizers;
+
+using System.Globalization;
 using System.Reflection;
 
 namespace LinqDB.Reflection;
@@ -6,11 +8,11 @@ namespace LinqDB.Reflection;
 using static Common;
 internal static class DateTimeOffset{
     public static readonly ConstructorInfo ctor_YearMonthDay = typeof(System.DateTimeOffset).GetConstructor(new[] { typeof(int),typeof(int),typeof(int) })!;
-    //public static readonly ConstructorInfo ctor_Int64 = typeof(System.DateTimeOffset).GetConstructor(new[] { typeof(long)})!;
+    //public static readonly ConstructorInfo ctor_Int64 = typeof(global::System.DateTimeOffset).GetConstructor(new[] { typeof(long)})!;
     public static readonly MethodInfo New_Int64_TimeSpan = M(() =>Private_New_Int64_TimeSpan(0,new System.TimeSpan()));
     private static System.DateTimeOffset Private_New_Int64_TimeSpan(long Ticks,System.TimeSpan TimeSpan)=>new(Ticks,TimeSpan);
     public static readonly MethodInfo TryGetValue2 = typeof(System.DateTimeOffset).GetMethod(nameof(System.DateTimeOffset.TryParse),new[] { typeof(string),typeof(System.DateTimeOffset).MakeByRefType() })!;
-    //public static readonly MethodInfo Parse1 = typeof(System.DateTimeOffset).GetMethod(nameof(System.DateTimeOffset.Parse),BindingFlags.Static|BindingFlags.Public,null,new[] { typeof(String) },null);
+    //public static readonly MethodInfo Parse1 = typeof(global::System.DateTimeOffset).GetMethod(nameof(global::System.DateTimeOffset.Parse),BindingFlags.Static|BindingFlags.Public,null,new[] { typeof(String) },null);
 #pragma warning disable CA1305 // Specify IFormatProvider
     public static readonly MethodInfo Parse_s = M(() => System.DateTimeOffset.Parse(""));
     public static readonly MethodInfo ParseExact_input_formats_formatProvider_styles = M(() => System.DateTimeOffset.ParseExact("",new string[3],null,DateTimeStyles.None));

@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Linq;
+﻿using System.Linq;
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
 using System.Collections.Generic;
+using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 namespace VM;
 [DebuggerDisplay("{"+nameof(Name)+"}")]
 public class Schema:ISchema {
@@ -29,6 +28,8 @@ public class Schema:ISchema {
     ICollection<(string Name,ITableFunction TableFunction)> ISchema.SynonymTableFunctions => this.SynonymTableFunctions;
     public List<(string Synonym, IProcedure)> SynonymProcedures { get; } = new();
     ICollection<(string Name,IProcedure Procedure)> ISchema.SynonymProcedures => this.SynonymProcedures;
+    public List<ScalarType> ScalarTypes { get; } = new();
+    public List<TableType> TableTypes { get; } = new();
     public List<Table> Tables { get; } = new();
     IEnumerable<ITable> ISchema.Tables => this.Tables;
     public Table this[string Table] => this.Tables.First(p => p.Name==Table);
@@ -45,11 +46,20 @@ public class Schema:ISchema {
     //public FieldBuilder? Container_Schema_FieldBuilder { get; set; }
     //public LocalBuilder? Container_RelationValidate_LocalBuilder { get; set; }
     //public Type? Type{ get; set; }
-    public Table CreateTable(string Name) {
+    public void CreateScalarType(string 新Name,string 旧Name) {
+        var Table = new ScalarType(this,新Name,旧Name);
+        this.Container!.Add(Table);
+        this.ScalarTypes.Add(Table);
+    }
+    public void CreateTableType(string Name) {
+        var Table = new TableType(this,Name);
+        this.Container!.Add(Table);
+        this.TableTypes.Add(Table);
+    }
+    public void CreateTable(string Name) {
         var Table = new Table(Name,this);
         this.Container!.Add(Table);
         this.Tables.Add(Table);
-        return Table;
     }
     //public void CreateSynonymTable(string Synonym,Table Table)=>this.SynonymTables.Add((Synonym,Table));
     //public void CreateSynonymView(string Synonym,View View)=>this.SynonymViews.Add((Synonym,View));
@@ -60,15 +70,13 @@ public class Schema:ISchema {
         var View = new View(Name,this,SQL);
         this.Views.Add(View);
     }
-    public ScalarFunction CreateScalarFunction(string Name,string SQL) {
+    public void CreateScalarFunction(string Name,string SQL) {
         var Function = new ScalarFunction(Name,this,SQL);
         this.ScalarFunctions.Add(Function);
-        return Function;
     }
-    public TableFunction CreateTableFunction(string Name,string SQL) {
+    public void CreateTableFunction(string Name,string SQL) {
         var TableFunction = new TableFunction(Name,this,SQL);
         this.TableFunctions.Add(TableFunction);
-        return TableFunction;
     }
     public Procedure CreateProcedure(string Name,string SQL) {
         var Procedure = new Procedure(Name,this,SQL);

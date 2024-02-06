@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows;
 using LinqDB.Databases.Dom;
 namespace VM;
 [Serializable,DebuggerDisplay("{Type.Name+\" \"+Name}")]

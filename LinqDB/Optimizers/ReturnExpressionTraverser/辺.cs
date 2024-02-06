@@ -71,12 +71,16 @@ public class 辺(ExpressionEqualityComparer ExpressionEqualityComparer){
         this.List親辺.Clear();
         this.List子辺.Clear();
     }
+    public static int 最大深さ;
+    public static int 深さ;
     /// <summary>
     /// "節子孫一度出現Expressions"を子辺の"節子孫一度出現Expressions"と自身の"節一度出現Expressions"から作る
     /// "節子孫二度出現Expressions"を子辺の"節子孫二度出現Expressions"と自身の"節二度出現Expressions"から作る
     /// </summary>
     public void 節子孫二度出現Expressions作成0(){
         if(this.探索済みか) return;
+        深さ++;
+        if(最大深さ<深さ) 最大深さ=深さ;
         this.探索済みか=true;
         foreach(var 子辺 in this.List子辺)
             子辺.節子孫二度出現Expressions作成0();

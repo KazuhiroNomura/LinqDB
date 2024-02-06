@@ -477,10 +477,11 @@ public static class CommonLibrary {
     //    }
     //    return New;
     //}
-    internal static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> 旧Arguments)=>
-        旧Arguments.Count==0
-            ?Expression.New(Reflection.ValueTuple.ValueTuple0)
-            :ValueTupleでNewする(作業配列,旧Arguments,0);
+    internal static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> 旧Arguments){
+        if(旧Arguments.Count==0)
+            return Expression.New(Reflection.ValueTuple.ValueTuple0);
+        return ValueTupleでNewする(作業配列,旧Arguments,0);
+    }
     private static NewExpression ValueTupleでNewする(作業配列 作業配列,Generic.IList<Expression> 旧Arguments,int Offset) {
         var 残りType数 = 旧Arguments.Count-Offset;
         switch(残りType数) {
@@ -633,26 +634,43 @@ public static class CommonLibrary {
         //            :throw new NotSupportedException(DBType)
         //};
         return DBType.ToUpperInvariant() switch {
-            "BIT"                                                                               => typeof(bool),
-            "TINYINT"                                                                           => typeof(byte),
-            "SMALLINT"                                                                          => typeof(short),
-            "INT" or "INTEGER"                                                                  => typeof(int),
-            "BIGINT"                                                                            => typeof(long),
-            "REAL"                                                                              => typeof(float),
-            "FLOAT"                                                                             => typeof(double),
-            "DECIMAL" or "NUMERIC" or "SMALLMONEY" or "MONEY"                                   => typeof(decimal),
-            "DATE" or "DATETIME" or "DATETIME2" or "SMALLDATETIME"                              => typeof(DateTime),
-            "DATETIMEOFFSET"                                                                    => typeof(DateTimeOffset),
-            "TIMESTAMP"                                                                         => typeof(DateTime),
-            "BINARY" or "VARBINARY"                                                             => typeof(byte[]),
-            "GEOGRAPHY"                                                                         => typeof(Microsoft.SqlServer.Types.SqlGeography),
-            "GEOMETRY"                                                                          => typeof(Microsoft.SqlServer.Types.SqlGeometry),
-            "IMAGE" or "SQL_VARIANT"                                                            => typeof(object),
-            "XML"                                                                               => typeof(XDocument),
-            "UNIQUEIDENTIFIER"                                                                  => typeof(Guid),
-            "TIME"                                                                              => typeof(TimeSpan),
-            "HIERARCHYID"                                                                       => typeof(Microsoft.SqlServer.Types.SqlHierarchyId),
-            "CHAR" or "VARCHAR" or "NCHAR" or "NVARCHAR" or "TEXT" or "NTEXT" or "SYSNAME" or _ =>DBType[..4]=="char"||DBType[..4]=="text"||DBType[..5]=="nchar"||DBType[..5]=="ntext"||DBType[..7]=="varchar"||DBType[..7]=="sysname"||DBType[..8]=="nvarchar"
+            "BIT"             => typeof(bool),
+            "TINYINT"         => typeof(byte),
+            "SMALLINT"        => typeof(short),
+            "INT"             => typeof(int),
+            "INTEGER"         => typeof(int),
+            "BIGINT"          => typeof(long),
+            "REAL"            => typeof(float),
+            "FLOAT"           => typeof(double),
+            "DECIMAL"         => typeof(decimal),
+            "NUMERIC"         => typeof(decimal),
+            "SMALLMONEY"      => typeof(decimal),
+            "MONEY"           => typeof(decimal),
+            "DATE"            => typeof(DateTime),
+            "DATETIME"        => typeof(DateTime),
+            "DATETIME2"       => typeof(DateTime),
+            "SMALLDATETIME"   => typeof(DateTime),
+            "DATETIMEOFFSET"  => typeof(DateTimeOffset),
+            "TIMESTAMP"       => typeof(DateTime),
+            "BINARY"          => typeof(byte[]),
+            "VARBINARY"       => typeof(byte[]),
+            "GEOGRAPHY"       => typeof(Microsoft.SqlServer.Types.SqlGeography),
+            "GEOMETRY"        => typeof(Microsoft.SqlServer.Types.SqlGeometry),
+            "IMAGE"           => typeof(object),
+            "SQL_VARIANT"     => typeof(object),
+            "XML"             => typeof(XDocument),
+            "UNIQUEIDENTIFIER"=> typeof(Guid),
+            "TIME"            => typeof(TimeSpan),
+            "HIERARCHYID"     => typeof(Microsoft.SqlServer.Types.SqlHierarchyId),
+            "CHAR"            =>typeof(string),
+            "VARCHAR"         =>typeof(string),
+            "NCHAR"           =>typeof(string),
+            "NVARCHAR"        =>typeof(string),
+            "TEXT"            =>typeof(string),
+            "NTEXT"           =>typeof(string),
+            "SYSNAME"         =>typeof(string),
+            "NAME"            =>typeof(string),
+            _                 =>DBType[..4]=="char"||DBType[..4]=="text"||DBType[..5]=="nchar"||DBType[..5]=="ntext"||DBType[..7]=="varchar"||DBType[..7]=="sysname"||DBType[..8]=="nvarchar"
                     ? typeof(string)
                     : throw new NotSupportedException(DBType)
         };

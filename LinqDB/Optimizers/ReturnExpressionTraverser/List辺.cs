@@ -47,10 +47,18 @@ public sealed class List辺:Generic.List<辺>{
             return sb.ToString();
         }
     }
+    private static int 最大深さ=-1;
     public void 一度出現したExpressionを上位に移動(){
         var 先頭=this[0];
         this.Reset();
+        辺.最大深さ=-1;
+        辺.深さ=0;
         先頭.節子孫二度出現Expressions作成0();
+        if(最大深さ<辺.最大深さ){
+            最大深さ=辺.最大深さ;
+            Trace.WriteLine($"最大深さ{最大深さ}");
+        }
+
         this.Reset();
         先頭.祖先二度出現Expressions作成1();
         this.Reset();

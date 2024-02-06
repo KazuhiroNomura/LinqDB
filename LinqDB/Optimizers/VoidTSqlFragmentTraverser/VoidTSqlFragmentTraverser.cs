@@ -1019,7 +1019,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual void IdentifierOrValueExpression(IdentifierOrValueExpression x) {
-        this.SwitchIdentifier(x.Identifier);
+        if(x.Identifier is not null)this.SwitchIdentifier(x.Identifier);
         this.ValueExpression(x.ValueExpression);
     }
     /// <summary>
@@ -1360,7 +1360,7 @@ public abstract class VoidTSqlFragmentTraverser {
     protected virtual void CreateProcedureStatement(CreateProcedureStatement x) {
         this.StatementList(x.StatementList);
         this.ProcedureReference(x.ProcedureReference);
-        this.MethodSpecifier(x.MethodSpecifier);
+        if(x.MethodSpecifier is not null)this.MethodSpecifier(x.MethodSpecifier);
         this.ProcedureParameters(x.Parameters);
         this.ProcedureOptions(x.Options);
     }
@@ -3297,7 +3297,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual void PredicateSetStatement(PredicateSetStatement x) {
-        throw new NotSupportedException();
+        //set nocount on
     }
     /// <summary>
     ///TSqlStatement:TSqlFragment
@@ -3523,12 +3523,12 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void CreateTableStatement(CreateTableStatement x) {
         this.TableDefinition(x.Definition);
-        this.FederationScheme(x.FederationScheme);
-        this.IdentifierOrValueExpression(x.FileStreamOn);
-        this.FileGroupOrPartitionScheme(x.OnFileGroupOrPartitionScheme);
+        if(x.FederationScheme is not null)this.FederationScheme(x.FederationScheme);
+        if(x.FileStreamOn is not null)this.IdentifierOrValueExpression(x.FileStreamOn);
+        if(x.OnFileGroupOrPartitionScheme is not null)this.FileGroupOrPartitionScheme(x.OnFileGroupOrPartitionScheme);
         this.SchemaObjectName(x.SchemaObjectName);
-        this.SelectStatement(x.SelectStatement);
-        this.IdentifierOrValueExpression(x.TextImageOn);
+        if(x.SelectStatement is not null)this.SelectStatement(x.SelectStatement);
+        if(x.TextImageOn is not null)this.IdentifierOrValueExpression(x.TextImageOn);
         this.Identifiers(x.CtasColumns);
         this.TableOptions(x.Options);
     }
@@ -4119,7 +4119,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void ExecuteAsStatement(ExecuteAsStatement x) {
         this.ExecuteContext(x.ExecuteContext);
-        this.VariableReference(x.Cookie);
+        if(x.Cookie is not null)this.VariableReference(x.Cookie);
     }
     /// <summary>
     ///TSqlStatement:TSqlFragment
@@ -4829,9 +4829,9 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void ExecuteSpecification(ExecuteSpecification x) {
         this.ExecutableEntity(x.ExecutableEntity);
-        this.ExecuteContext(x.ExecuteContext);
-        this.Identifier(x.LinkedServer);
-        this.VariableReference(x.Variable);
+        if(x.ExecuteContext is not null)this.ExecuteContext(x.ExecuteContext);
+        if(x.LinkedServer is not null)this.Identifier(x.LinkedServer);
+        if(x.Variable is not null)this.VariableReference(x.Variable);
     }
     /// <summary>
     ///TSqlFragment
@@ -5346,10 +5346,10 @@ public abstract class VoidTSqlFragmentTraverser {
         if(x.Alias is not null)this.SwitchIdentifier(x.Alias);
         this.ColumnReferenceExpressions(x.Columns);
         this.ValueExpression(x.Language);
-        this.StringLiteral(x.PropertyName);
+        if(x.PropertyName is not null)this.StringLiteral(x.PropertyName);
         this.ValueExpression(x.SearchCondition);
         this.SwitchSchemaObjectName(x.TableName);
-        this.ValueExpression(x.TopN);
+        if(x.TopN is not null)this.ValueExpression(x.TopN);
     }
     /// <summary>
     ///TableReferenceWithAlias:TableReference:TSqlFragment
@@ -6071,7 +6071,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual void DeleteSpecification(DeleteSpecification x){
-        this.FromClause(x.FromClause);
+        if(x.FromClause is not null)this.FromClause(x.FromClause);
     }
     /// <summary>
     ///UpdateDeleteSpecificationBase:DataModificationSpecification:TSqlFragment
@@ -6080,8 +6080,8 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void UpdateSpecification(UpdateSpecification x) {
         this.SetClauses(x.SetClauses);
-        this.OutputClause(x.OutputClause);
-        this.FromClause(x.FromClause);
+        if(x.OutputClause is not null)this.OutputClause(x.OutputClause);
+        if(x.FromClause is not null)this.FromClause(x.FromClause);
         if(x.OutputIntoClause is not null)this.OutputIntoClause(x.OutputIntoClause);
         this.TableReference(x.Target);
         if(x.TopRowFilter is not null)this.TopRowFilter(x.TopRowFilter);
@@ -6210,7 +6210,7 @@ public abstract class VoidTSqlFragmentTraverser {
     protected virtual void AssignmentSetClause(AssignmentSetClause x) {
         this.ColumnReferenceExpression(x.Column);
         this.ScalarExpression(x.NewValue);
-        this.VariableReference(x.Variable);
+        if(x.Variable is not null)this.VariableReference(x.Variable);
     }
     /// <summary>
     ///SetClause:TSqlFragment

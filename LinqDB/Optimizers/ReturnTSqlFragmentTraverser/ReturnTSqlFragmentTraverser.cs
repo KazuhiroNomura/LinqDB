@@ -28,7 +28,8 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual TSqlFragment XmlNamespaces(TSqlFragment x) => x switch{
+    protected virtual TSqlFragment TSqlFragment(TSqlFragment x) => x switch{
+        AdHocDataSource                                       y => this.AdHocDataSource(y),
         MultiPartIdentifier                                   y => this.MultiPartIdentifier(y),
         Identifier                                            y => this.Identifier(y),
         ScalarExpression                                      y => this.ScalarExpression(y),
@@ -43,7 +44,6 @@ public class ReturnTSqlFragmentTraverser{
         ExecuteParameter                                      y => this.ExecuteParameter(y),
         ExecutableEntity                                      y => this.ExecutableEntity(y),
         ProcedureReferenceName                                y => this.ProcedureReferenceName(y),
-        AdHocDataSource                                       y => this.AdHocDataSource(y),
         ViewOption                                            y => this.ViewOption(y),
         TriggerObject                                         y => this.TriggerObject(y),
         TriggerOption                                         y => this.TriggerOption(y),
@@ -86,8 +86,8 @@ public class ReturnTSqlFragmentTraverser{
         RowValue                                              y => this.RowValue(y),
         LiteralRange                                          y => this.LiteralRange(y),
         OptionValue                                           y => this.OptionValue(y),
-        IdentifierOrScalarExpression                          y => this.Traverse(y),
-        SchemaObjectNameOrValueExpression                     y => this.Traverse(y),
+        IdentifierOrScalarExpression                          y => this.IdentifierOrScalarExpression(y),
+        SchemaObjectNameOrValueExpression                     y => this.SchemaObjectNameOrValueExpression(y),
         SequenceOption                                        y => this.Traverse(y),
         SecurityPredicateAction                               y => this.Traverse(y),
         SecurityPolicyOption                                  y => this.Traverse(y),
@@ -129,7 +129,7 @@ public class ReturnTSqlFragmentTraverser{
         StatisticsOption                                      y => this.Traverse(y),
         StatisticsPartitionRange                              y => this.Traverse(y),
         CursorDefinition                                      y => this.Traverse(y),
-        CursorOption                                          y => this.XmlNamespaces(y),
+        CursorOption                                          y => this.Traverse(y),
         CursorId                                              y => this.Traverse(y),
         CryptoMechanism                                       y => this.Traverse(y),
         FetchType                                             y => this.Traverse(y),
@@ -207,7 +207,7 @@ public class ReturnTSqlFragmentTraverser{
         AuditSpecificationPart                                y => this.Traverse(y),
         AuditSpecificationDetail                              y => this.Traverse(y),
         DatabaseAuditAction                                   y => this.Traverse(y),
-        AuditTarget                                           y => this.XmlNamespaces(y),
+        AuditTarget                                           y => this.Traverse(y),
         AuditOption                                           y => this.Traverse(y),
         AuditTargetOption                                     y => this.Traverse(y),
         ResourcePoolParameter                                 y => this.Traverse(y),
@@ -3408,7 +3408,7 @@ public class ReturnTSqlFragmentTraverser{
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual ProcedureOption ProcedureOption(ProcedureOption x) => x switch{
-        ExecuteAsProcedureOption y => this.Traverse(y),
+        ExecuteAsProcedureOption y => this.ExecuteAsProcedureOption(y),
         _ =>Throw(x)
     };
     /// <summary>
@@ -3416,29 +3416,35 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ExecuteAsProcedureOption Traverse(ExecuteAsProcedureOption x)=>x;
+    protected virtual ExecuteAsProcedureOption ExecuteAsProcedureOption(ExecuteAsProcedureOption x)=>x;
     /// <summary>
     ///TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual FunctionOption FunctionOption(FunctionOption x) => x switch{
-        InlineFunctionOption    y => this.Traverse(y),
-        ExecuteAsFunctionOption y => this.Traverse(y),
+        InlineFunctionOption    y => this.InlineFunctionOption(y),
+        ExecuteAsFunctionOption y => this.ExecuteAsFunctionOption(y),
         _ =>Throw(x)
     };
+    protected virtual XmlNamespaces XmlNamespaces(XmlNamespaces x){
+        var r=new XmlNamespaces();
+        foreach(var XmlNamespacesElement in x.XmlNamespacesElements) 
+            x.XmlNamespacesElements.Add(this.XmlNamespacesElement(XmlNamespacesElement));
+        return x;
+    }
     /// <summary>
     ///FunctionOption:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual InlineFunctionOption Traverse(InlineFunctionOption x)=>x;
+    protected virtual InlineFunctionOption InlineFunctionOption(InlineFunctionOption x)=>x;
     /// <summary>
     ///FunctionOption:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ExecuteAsFunctionOption Traverse(ExecuteAsFunctionOption x)=>x;
+    protected virtual ExecuteAsFunctionOption ExecuteAsFunctionOption(ExecuteAsFunctionOption x)=>x;
     /// <summary>
     ///TSqlFragment
     /// </summary>
@@ -4350,13 +4356,13 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual IdentifierOrScalarExpression Traverse(IdentifierOrScalarExpression x)=>x;
+    protected virtual IdentifierOrScalarExpression IdentifierOrScalarExpression(IdentifierOrScalarExpression x)=>x;
     /// <summary>
     ///TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual SchemaObjectNameOrValueExpression Traverse(SchemaObjectNameOrValueExpression x)=>x;
+    protected virtual SchemaObjectNameOrValueExpression SchemaObjectNameOrValueExpression(SchemaObjectNameOrValueExpression x)=>x;
     /// <summary>
     ///TSqlFragment
     /// </summary>
@@ -5280,6 +5286,7 @@ public class ReturnTSqlFragmentTraverser{
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual CursorDefinition Traverse(CursorDefinition x)=>x;
+    protected virtual CursorOption Traverse(CursorOption x)=>x;
     /// <summary>
     ///TSqlFragment
     /// </summary>
@@ -6583,11 +6590,7 @@ public class ReturnTSqlFragmentTraverser{
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual DatabaseAuditAction Traverse(DatabaseAuditAction x)=>x;
-    /// <summary>
-    ///TSqlFragment
-    /// </summary>
-    /// <param name="x"></param>
-    /// <returns></returns>
+    protected virtual AuditTarget Traverse(AuditTarget x)=>x;
     protected virtual AuditOption Traverse(AuditOption x) => x switch{
         QueueDelayAuditOption y => this.Traverse(y),
         AuditGuidAuditOption  y => this.Traverse(y),

@@ -7,11 +7,11 @@ using static Common;
 internal static class DateTime{
     public static readonly MethodInfo FromBinary= M(() => System.DateTime.FromBinary(0));
     public static readonly ConstructorInfo ctor_YearMonthDay = typeof(System.DateTime).GetConstructor(new[] { typeof(int),typeof(int),typeof(int) })!;
-    //public static readonly ConstructorInfo ctor_Int64 = typeof(System.DateTime).GetConstructor(new[] { typeof(long)})!;
-    //public static readonly MethodInfo New_Int64_TimeSpan = M(() =>Private_New_Int64_TimeSpan(0,new System.TimeSpan()));
-    //private static System.DateTime Private_New_Int64_TimeSpan(long Ticks,System.TimeSpan TimeSpan)=>new(Ticks,DateTimeKind.Utc);
+    //public static readonly ConstructorInfo ctor_Int64 = typeof(global::System.DateTime).GetConstructor(new[] { typeof(long)})!;
+    //public static readonly MethodInfo New_Int64_TimeSpan = M(() =>Private_New_Int64_TimeSpan(0,new global::System.TimeSpan()));
+    //private static global::System.DateTime Private_New_Int64_TimeSpan(long Ticks,global::System.TimeSpan TimeSpan)=>new(Ticks,DateTimeKind.Utc);
     public static readonly MethodInfo TryGetValue2 = typeof(System.DateTime).GetMethod(nameof(System.DateTime.TryParse),new[] { typeof(string),typeof(System.DateTime).MakeByRefType() })!;
-    //public static readonly MethodInfo Parse1 = typeof(System.DateTime).GetMethod(nameof(System.DateTime.Parse),BindingFlags.Static|BindingFlags.Public,null,new[] { typeof(String) },null);
+    //public static readonly MethodInfo Parse1 = typeof(global::System.DateTime).GetMethod(nameof(global::System.DateTime.Parse),BindingFlags.Static|BindingFlags.Public,null,new[] { typeof(String) },null);
 #pragma warning disable CA1305 // Specify IFormatProvider
     public static readonly MethodInfo Parse_input = M(() => System.DateTime.Parse(""));
     public static readonly MethodInfo ParseExact_input_formats_formatProvider_styles = M(() => System.DateTime.ParseExact("",new string[3],null,DateTimeStyles.None));

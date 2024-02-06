@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using LinqDB.Databases.Dom;
 using System.Diagnostics;
@@ -72,6 +70,8 @@ public class Container:IContainer {
     //}
     public override string ToString() => this.Name;
     public Schema this[string Schema] => this.Schemas.First(p => p.Name==Schema);
+    public List<ScalarType> ScalarTypes{ get; } = new();
+    public List<TableType> TableTypes{ get; } = new();
     public List<Table> Tables { get; } = new();
     //public List<View> Views { get; } = new List<View>();
     //public List<ForeignKey> ForeignKeys { get; } = new List<ForeignKey>();
@@ -82,6 +82,12 @@ public class Container:IContainer {
     }
     public void Remove(Relation Value) {
         this.Relations.Remove(Value);
+    }
+    public void Add(ScalarType Value) {
+        this.ScalarTypes.Add(Value);
+    }
+    public void Add(TableType Value) {
+        this.TableTypes.Add(Value);
     }
     public void Add(Table Value) {
         this.Tables.Add(Value);

@@ -829,6 +829,18 @@ public class 作業配列 {
         Parameters[8]=Parameter8;
         return Parameters;
     }
+    internal readonly CatchBlock[] CatchBlocks1=new CatchBlock[1];
+    /// <summary>
+    /// Expression配列を作る。
+    /// </summary>
+    /// <param name="CatchBlock0"></param>
+    /// <returns></returns>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public CatchBlock[] CatchBlocks設定(CatchBlock CatchBlock0) {
+        var CatchBlocks=this.CatchBlocks1;
+        CatchBlocks[0]=CatchBlock0;
+        return CatchBlocks;
+    }
     internal readonly Expression[] Expressions1=new Expression[1];
     /// <summary>
     /// Expression配列を作る。

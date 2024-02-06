@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.OleDb;
-using System.Data.Odbc;
 using System.Data.SqlClient;
 using LinqDB.Databases.Dom;
 using LinqDB.Helpers;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics;
 using System.Linq;
 using LinqDB.Databases;
 using VM;
-namespace ImportDatabase;
 public static class Generate {
     private const string ホスト名= @"COFFEELAKE\MSSQLSERVER2019";
     private const string Windowsログイン = @"Integrated Security=SSPI;";
@@ -51,99 +47,112 @@ public static class Generate {
             }
         }
         Parameters.Add(SCHEMA);
-        {
-            Command.CommandText=information_schema.SQL_Table;
-            foreach(var Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                using var Reader = Command.ExecuteReader();
-                while(Reader.Read()) {
-                    var TableName = Reader.GetString(0);
-                    Schema.CreateTable(TableName);
-                }
+        Command.CommandText=information_schema.SQL_Types;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var 新Name = Reader.GetString(0);
+                var 旧Name = Reader.GetString(1);
+                var IsNullable= Reader.GetBoolean(2);
+                Schema.CreateScalarType(新Name,旧Name);
             }
         }
-        {
-            Command.CommandText=information_schema.SQL_View;
-            foreach(var Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                using var Reader = Command.ExecuteReader();
-                while(Reader.Read()) {
-                    var Name = Reader.GetString(0);
-                    var SQL = Reader.GetString(1);
-                    Schema.CreateView(Name,SQL);
-                }
-            }
-            Command.CommandText=information_schema.SQL_ScalarFunction;
-            foreach(var Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                using var Reader = Command.ExecuteReader();
-                while(Reader.Read()) {
-                    var Name = Reader.GetString(0);
-                    var SQL = Reader.GetString(1);
-                    Schema.CreateScalarFunction(Name,SQL);
-                }
-            }
-            Command.CommandText=information_schema.SQL_TableFunction;
-            foreach(var Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                using var Reader = Command.ExecuteReader();
-                while(Reader.Read()) {
-                    var Name = Reader.GetString(0);
-                    var SQL = Reader.GetString(1);
-                    Schema.CreateTableFunction(Name,SQL);
-                }
+        Command.CommandText=information_schema.SQL_Table;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var TableName = Reader.GetString(0);
+                Schema.CreateTable(TableName);
             }
         }
-        {
-            Command.CommandText=information_schema.SQL_Synonym;
-            foreach(ISchema Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                using var Reader = Command.ExecuteReader();
-                while(Reader.Read()) {
-                    var synonym = Reader.GetString(0);
-                    var base_object_name = Reader.GetString(1);
-                    Schema.CreateSynonym(synonym,base_object_name);
-                }
+        Command.CommandText=information_schema.SQL_View;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var Name = Reader.GetString(0);
+                var SQL = Reader.GetString(1);
+                Schema.CreateView(Name,SQL);
             }
         }
-        {
-            Command.CommandText=information_schema.SQL_Function_Parameter;
-            Parameters.Add(NAME);
-            foreach(var Schema in Schemas) {
-                SCHEMA.Value=Schema.Name;
-                foreach(var ScalarFunction in Schema.ScalarFunctions){
-                    NAME.Value=ScalarFunction.Name;
-                    var ScalarFunction_Parameters = ScalarFunction.Parameters;
-                    using var Reader = Command.ExecuteReader();
-                    while(Reader.Read()) {
-                        var name = Reader.GetString(0);
-                        var is_output = Reader.GetBoolean(1);
-                        var type = Reader.GetString(2);
-                        var has_default_value = Reader.GetBoolean(3);
-                        var default_value = Reader.GetValue(4);
-                        var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
-                        if(is_output) {
-                            ScalarFunction.Type=Type;
-                        } else {
-                            ScalarFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
-                        }
+        Command.CommandText=information_schema.SQL_ScalarFunction;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var Name = Reader.GetString(0);
+                var SQL = Reader.GetString(1);
+                Schema.CreateScalarFunction(Name,SQL);
+            }
+        }
+        Command.CommandText=information_schema.SQL_TableFunction;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var Name = Reader.GetString(0);
+                var SQL = Reader.GetString(1);
+                Schema.CreateTableFunction(Name,SQL);
+            }
+        }
+        Command.CommandText=information_schema.SQL_Procedure;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var Name = Reader.GetString(0);
+                var SQL = Reader.GetString(1);
+                Schema.CreateProcedure(Name,SQL);
+            }
+        }
+        Command.CommandText=information_schema.SQL_Synonym;
+        foreach(ISchema Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var synonym = Reader.GetString(0);
+                var base_object_name = Reader.GetString(1);
+                Schema.CreateSynonym(synonym,base_object_name);
+            }
+        }
+        Command.CommandText=information_schema.SQL_Function_Parameter;
+        Parameters.Add(NAME);
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            foreach(var ScalarFunction in Schema.ScalarFunctions){
+                NAME.Value=ScalarFunction.Name;
+                var ScalarFunction_Parameters = ScalarFunction.Parameters;
+                using var Reader = Command.ExecuteReader();
+                while(Reader.Read()) {
+                    var name = Reader.GetString(0);
+                    var is_output = Reader.GetBoolean(1);
+                    var type = Reader.GetString(2);
+                    var has_default_value = Reader.GetBoolean(3);
+                    var default_value = Reader.GetValue(4);
+                    var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
+                    if(is_output) {
+                        ScalarFunction.Type=Type;
+                    } else {
+                        ScalarFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
                     }
                 }
-                foreach(var TableFunction in Schema.TableFunctions){
-                    NAME.Value=TableFunction.Name;
-                    var TableFunction_Parameters = TableFunction.Parameters;
-                    using var Reader = Command.ExecuteReader();
-                    //TableFunction.Type=共通(TableFunction.Parameters);
-                    while(Reader.Read()) {
-                        var name = Reader.GetString(0);
-                        var is_output = Reader.GetBoolean(1);
-                        var type = Reader.GetString(2);
-                        var has_default_value = Reader.GetBoolean(3);
-                        var default_value = Reader.GetValue(4);
-                        var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
-                        Debug.Assert(!is_output);
-                        TableFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
-                    }
+            }
+            foreach(var TableFunction in Schema.TableFunctions){
+                NAME.Value=TableFunction.Name;
+                var TableFunction_Parameters = TableFunction.Parameters;
+                using var Reader = Command.ExecuteReader();
+                //TableFunction.Type=共通(TableFunction.Parameters);
+                while(Reader.Read()) {
+                    var name = Reader.GetString(0);
+                    var is_output = Reader.GetBoolean(1);
+                    var type = Reader.GetString(2);
+                    var has_default_value = Reader.GetBoolean(3);
+                    var default_value = Reader.GetValue(4);
+                    var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
+                    Debug.Assert(!is_output);
+                    TableFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
                 }
             }
         }
@@ -154,7 +163,24 @@ public static class Generate {
                 NAME.Value=Table.Name;
                 using var Reader=Command.ExecuteReader();
                 while(Reader.Read()) {
-                    Table.CreateColumn(Reader.GetString(1),CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(0)),Reader.GetString(2)=="YES",Reader.GetInt32(3)!=0);
+                    //var a=Reader.GetString(1);
+                    //var b=CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(0));
+
+                    //var c=Reader.GetString(2)=="YES";
+                    //var d=Reader.GetInt32(3)!=0);
+                    var TypeのSchemaName=Reader.GetString(0);
+                    var TypeのSchema=Schemas.Find(p=>p.Name==TypeのSchemaName);
+                    Debug.Assert(TypeのSchema is not null);
+                    var TypeName=Reader.GetString(1);
+                    var ScalarType=TypeのSchema.ScalarTypes.Find(p=>p.新Name==TypeName);
+                    if(ScalarType is not null)
+                        TypeName=ScalarType.旧Name;
+                    Table.CreateColumn(
+                        Reader.GetString(2),
+                        CommonLibrary.SQLのTypeからTypeに変換(TypeName),
+                        Reader.GetBoolean(3),
+                        Reader.GetInt32(4)>0
+                    );
                 }
             }
         }
@@ -165,13 +191,21 @@ public static class Generate {
                 NAME.Value=a.Name;
                 using var Reader=Command.ExecuteReader();
                 while(Reader.Read())
-                    a.CreateColumn(Reader.GetString(0),CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1)),Reader.GetString(2)=="YES");
+                    a.CreateColumn(
+                        Reader.GetString(0),
+                        CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1)),
+                        Reader.GetBoolean(2)
+                    );
             }
             foreach(var a in Schema.TableFunctions) {
                 NAME.Value=a.Name;
                 using var Reader=Command.ExecuteReader();
                 while(Reader.Read())
-                    a.CreateColumn(Reader.GetString(0),CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1)),Reader.GetString(2)=="YES");
+                    a.CreateColumn(
+                        Reader.GetString(0),
+                        CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1)),
+                        Reader.GetBoolean(2)
+                    );
             }
         }
         Command.CommandText=information_schema.SQL_Trigger;
@@ -246,6 +280,7 @@ public static class Generate {
                     LoadSQLServer(Database,Container);
                     //if(a++==0x
                     AssemblyGenerator.Save(Container,Environment.CurrentDirectory);
+                    //break;
                 }
             }
         }

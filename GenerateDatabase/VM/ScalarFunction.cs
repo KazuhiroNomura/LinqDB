@@ -2,10 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Windows;
-
 namespace VM;
 [DebuggerDisplay("{"+nameof(Name)+"}")]
 public class ScalarFunction(string Name,Schema Schema,string SQL):IScalarFunction {

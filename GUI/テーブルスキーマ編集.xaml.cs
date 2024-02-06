@@ -252,15 +252,16 @@ public partial class テーブルスキーマ編集:Window {
 		if(Thumb==null)
 			return;
 		if(Thumb.DataContext is VM.TableUI Table) {
-			var ListBoxItem = (ListBoxItem)ItemsControl.ContainerFromElement(this.DiagramListBox,Thumb);
-			var Top = Canvas.GetTop(ListBoxItem)+e.VerticalChange;
-			var Left= Canvas.GetLeft(ListBoxItem)+e.HorizontalChange;
-			Table.Top=Top;
-			Table.Left=Left;
-			var DataGridRowHeader = FindVisualChild<DataGridRowHeader>(ListBoxItem)!;
-			var Point = DataGridRowHeader.PointToScreen(new Point(Left-VM.Common.ColumnHeaderWidth/2,Top));
-			Table.Point=FindVisualChild<Canvas>(ListBoxItem)!.PointFromScreen(Point);
-		}
+            if(ItemsControl.ContainerFromElement(this.DiagramListBox,Thumb) is ListBoxItem ListBoxItem){
+                var Top=Canvas.GetTop(ListBoxItem)+e.VerticalChange;
+                var Left=Canvas.GetLeft(ListBoxItem)+e.HorizontalChange;
+                Table.Top=Top;
+                Table.Left=Left;
+                var DataGridRowHeader=FindVisualChild<DataGridRowHeader>(ListBoxItem)!;
+                var Point=DataGridRowHeader.PointToScreen(new Point(Left-VM.Common.ColumnHeaderWidth/2,Top));
+                Table.Point=FindVisualChild<Canvas>(ListBoxItem)!.PointFromScreen(Point);
+            }
+        }
 	}
 	//public static Type SQLのTypeからTypeに変換(String DBType) {
 	//    switch(DBType) {

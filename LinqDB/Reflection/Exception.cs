@@ -6,7 +6,7 @@ public static class Exception {
     /// <summary>
     /// TSQLでのRAISE ERRORで発生させる例外。
     /// </summary>
-    public sealed class RaiseErrorException:System.Exception {
+    public sealed class RaiseErrorException:global::System.Exception {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("スタイル","IDE0060:未使用のパラメーターを削除します",Justification = "<保留中>")]
         public RaiseErrorException(string msg_id,int severity,int state,params object[]arguents) : base(msg_id) {
         }

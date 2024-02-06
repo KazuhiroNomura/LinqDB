@@ -88,12 +88,12 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         return this.NullableEquals(x,y);
     }
 
-    /// <summary>
-    /// Cラムダ局所に代入している場合はその左辺で比較したい。デフォルトではそのままAssign式を比較する。「
-    /// </summary>
-    /// <param name="Expression0"></param>
-    /// <returns></returns>
-    protected virtual Expression Assignの比較対象(Expression Expression0)=>Expression0;
+    ///// <summary>
+    ///// Cラムダ局所に代入している場合はその左辺で比較したい。デフォルトではそのままAssign式を比較する。「
+    ///// </summary>
+    ///// <param name="Expression0"></param>
+    ///// <returns></returns>
+    //protected virtual Expression Assignの比較対象(Expression Expression0)=>Expression0;
     private protected bool NullableEquals(Expression? x,Expression? y){
         if(x==y) return true;
         if(x is null^y is null) return @false;
@@ -101,9 +101,9 @@ public abstract class AExpressionEqualityComparer:Generic.IEqualityComparer<Expr
         //if(y is null) return @false;
         return this.ProtectedPrivateEquals(x,y);
     }
-    protected private bool ProtectedPrivateEquals(Expression x0,Expression y0){
-        var x=this.Assignの比較対象(x0);
-        var y=this.Assignの比較対象(y0);
+    protected private bool ProtectedPrivateEquals(Expression x,Expression y){
+        //var x=this.Assignの比較対象(x0);
+        //var y=this.Assignの比較対象(y0);
         if(x==y) return true;
         if(x is null^y is null) return @false;
         //if(a1 is null^b1 is null) return @false;

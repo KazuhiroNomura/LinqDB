@@ -22,7 +22,20 @@ public class information_schema:Product.information_schema{
         WHERE O.type{predicate}AND S.name=@SCHEMA
         ORDER BY O.name
     ";
-
+    public override string SQL_Table_Column => $@"
+        SELECT SCHEMA_NAME(types.schema_id),TYPE_NAME(C.user_type_id),C.name,C.is_nullable,CASE WHEN C.is_identity=1 THEN 1 ELSE 0 END,CASE WHEN EXISTS(
+	        SELECT * FROM
+	        sys.index_columns IC
+	        JOIN sys.indexes I ON IC.object_id = I.object_id AND IC.index_id = I.index_id AND I.is_unique=1
+	        WHERE T.object_id=IC.object_id AND C.column_id = IC.column_id AND I.is_unique=1
+        )THEN 1 ELSE 0 END A
+        FROM sys.all_columns C
+		INNER JOIN sys.types types ON C.user_type_id=types.user_type_id
+        INNER JOIN sys.tables T ON C.object_id = T.object_id
+        INNER JOIN sys.schemas S ON T.schema_id = S.schema_id
+        WHERE S.name=@SCHEMA AND T.name=@NAME
+        order by C.column_id
+    ";
     public override string SQL_View_ScalarFunction_TableFunction=>this.SQL_View_ScalarFunction_TableFunction_Procedure(" IN('V','FN','TF','IF','P')");
     //public override String SQLView =>
     //    "WITH 表(     name,SQL                     ,  object_id,  type) AS (\r\n"+
@@ -132,7 +145,7 @@ public class information_schema:Product.information_schema{
     //    "ORDER BY B.name,A.name\r\n";
     //sys.types
     public override string SQL_View_FunctionTable_Column => @$"
-        SELECT C.name COLUMN_NAME,ISNULL(T1.name,T0.name)DATA_TYPE,CASE WHEN C.is_nullable=1 THEN 'YES' ELSE 'NO' END IS_NULLABLE
+        SELECT C.name COLUMN_NAME,ISNULL(T1.name,T0.name)DATA_TYPE,C.is_nullable IS_NULLABLE
         FROM      sys.{this.all}objects O
         JOIN      sys.schemas     S  ON O.schema_id     =S.schema_id
         JOIN      sys.{this.all}columns C  ON O.object_id     =C.object_id
@@ -140,4 +153,10 @@ public class information_schema:Product.information_schema{
         LEFT JOIN sys.types       T1 ON T0.system_type_id=T1.user_type_id
         WHERE O.type IN('V','TF','IF')AND S.name=@SCHEMA AND O.name=@NAME
         ORDER BY C.column_id";//column_idというのはコンストラクター順、列順として重要
+    public string SQL_Types=>@$"
+        SELECT types.name,baset.name SystemType,types.is_nullable
+        FROM sys.types AS types
+        JOIN sys.schemas AS sst ON sst.schema_id = types.schema_id
+        JOIN sys.types AS baset ON (baset.user_type_id = types.system_type_id and baset.user_type_id = baset.system_type_id) or ((baset.system_type_id = types.system_type_id) and (baset.user_type_id = types.user_type_id) and (baset.is_user_defined = 0) and (baset.is_assembly_type = 1)) 
+        WHERE types.is_user_defined=1 AND sst.name=@SCHEMA";
 }

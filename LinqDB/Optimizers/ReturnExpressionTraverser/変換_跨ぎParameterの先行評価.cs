@@ -479,13 +479,17 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         var Block0_Variables = Block0.Variables;
         var List束縛Parameter情報 = this.List束縛Parameter情報;
         var ListVariables = List束縛Parameter情報[^1].ListVariables;
-        var ListVariables_Count = ListVariables.Count;
         ListVariables.Add(Block0_Variables);
         var LinkedList = new Generic.LinkedList<Expression>(Block0.Expressions);
         this.外だし(LinkedList);
         ListVariables.RemoveAt(ListVariables.Count-1);
         Debug.Assert(LinkedList.Last!=null,"LinkedList.Last != null");
         Debug.Assert(!(Block0_Variables.Count==0&&LinkedList.Count==1&&Block0.Type==LinkedList.Last.Value.Type&&Block0.Type!=typeof(void)),"この式は最適化されて存在しないはず。");
+
+        if(Block0.Type!=LinkedList.Last.Value.Type){
+
+
+        }
         return Expression.Block(Block0.Type,Block0_Variables,LinkedList);
     }
     protected override Expression Lambda(LambdaExpression Lambda0) {
@@ -544,11 +548,17 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
         }
         return Expression.Call(MethodCall0.Method,MethodCall1_Arguments);
     }
+    private readonly Generic.List<Expression>List書き戻しExpression=new Generic.List<Expression>();
     private void 外だし(Generic.LinkedList<Expression> LinkedList) {
-        var LinkedListNode = LinkedList.First;
+        var LinkedListNode = LinkedList.First!;
+        var 結果LinkedListNode=LinkedListNode;
         var 取得_先行評価式 = this._取得_先行評価式;
         var 変換_先行評価式 = this._変換_先行評価式;
         var 回数 = 0;
+        var List書き戻しExpression=this.List書き戻しExpression;
+        List書き戻しExpression.Clear();
+        var Dictionaryラムダ跨ぎParameter=this.Dictionaryラムダ跨ぎParameter;
+        var ループ跨ぎParameters=this.ループ跨ぎParameters;
         do {
             Debug.Assert(LinkedListNode!=null);
             var LinkedListNode_Value = LinkedListNode.Value;
@@ -566,10 +576,10 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                     Name=string.Empty;
                 if(分離Expressionの場所==場所.ラムダ跨ぎ){
                     新=Expression.Parameter(旧.Type,$"ラムダ{Name}.{this.番号++}");
-                    this.Dictionaryラムダ跨ぎParameter.Add(新,default!);
+                    Dictionaryラムダ跨ぎParameter.Add(新,default!);
                 } else{
                     新=Expression.Parameter(旧.Type,$"ループ{Name}.{this.番号++}");
-                    this.ループ跨ぎParameters.Add(新);
+                    ループ跨ぎParameters.Add(新);
                 }
                 var LinkedListNode0=LinkedListNode;
                 var 読み込みがあるか=false;
@@ -587,11 +597,19 @@ internal sealed class 変換_跨ぎParameterの先行評価:ReturnExpressionTrav
                 } while(LinkedListNode0 is not null);
                 //LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
                 if(読み込みがあるか) LinkedListNode=LinkedList.AddBefore(LinkedListNode,Expression.Assign(新,旧));
-                if(書き込みがあるか) LinkedList.AddLast(Expression.Assign(旧,新));
+                if(書き込みがあるか) List書き戻しExpression.Add(Expression.Assign(旧,新));
             }
             回数++;
         } while(LinkedListNode is not null);
         for(var Node = LinkedList.First;Node is not null;Node=Node.Next) Node.Value=this.Traverse(Node.Value);
+        if(List書き戻しExpression.Count>0){
+            foreach(var 書き戻しExpression in List書き戻しExpression) LinkedList.AddLast(書き戻しExpression);
+            var 結果LinkedListNode_Value=結果LinkedListNode.Value;
+            var 結果=Expression.Parameter(結果LinkedListNode_Value.Type,"結果");
+            ループ跨ぎParameters.Add(結果);
+            結果LinkedListNode.Value=Expression.Assign(結果,結果LinkedListNode_Value);
+            LinkedList.AddLast(結果);
+        }
     }
 
 }

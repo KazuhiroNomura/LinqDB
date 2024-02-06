@@ -1,6 +1,5 @@
 ﻿#pragma warning disable CS8618 // null 非許容のフィールドには、コンストラクターの終了時に null 以外の値が入っていなければなりません。Null 許容として宣言することをご検討ください。
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 using LinqDB.Databases.Dom;
