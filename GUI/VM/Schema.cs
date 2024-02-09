@@ -48,6 +48,8 @@ public class Schema:DependencyObject,ISchema {
     IEnumerable<IScalarFunction> ISchema.ScalarFunctions => this.ScalarFunctions;
     public ObservableCollection<TableFunction> TableFunctions { get; } = new();
     IEnumerable<ITableFunction> ISchema.TableFunctions => this.TableFunctions;
+    IEnumerable<ISequence> ISchema.Sequences=>this.Sequences;
+    public List<Sequence> Sequences=new();
     public ObservableCollection<Schema> Schemas => this.Container!.Schemas;
     IEnumerable<ISchema> ISchema.Schemas => this.Schemas;
     public ObservableCollection<Procedure> Procedures { get; } = new();

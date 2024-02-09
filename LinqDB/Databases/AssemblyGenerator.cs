@@ -18,7 +18,8 @@ using LinqDB.Databases.Dom;
 using LinqDB.Optimizers;
 using LinqDB.Optimizers.Comparer;
 using Microsoft.SqlServer.Types;
-using AssemblyName=System.Reflection.AssemblyName;
+using AssemblyName = System.Reflection.AssemblyName;
+using LinqDB.Product.SQLServer;
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable InconsistentNaming
@@ -327,6 +328,7 @@ public partial class AssemblyGenerator {
             GetMethodBuilder.SetCustomAttribute(NullableContext_CustomAttributeBuilder);
         }
         ctor_I.Ldarg_0();
+        //ctor_I.Emit(OpCodes.Ldarg,a);
         ctor_I.Ldarg((ushort)a);
         ctor_I.Stfld(FieldBuilder);
         ToStringBuilder_I.Ldarg_1();
@@ -356,7 +358,9 @@ public partial class AssemblyGenerator {
     private readonly Dictionary<ITableFunction,Information> Dictionary_TableFunction = new();
     private readonly Dictionary<IScalarFunction,Information> Dictionary_ScalarFunction = new();
     private readonly Dictionary<IProcedure,Information> Dictionary_Procedure= new();
+    private readonly List<ISequence> ListSequence= new();
     private readonly Dictionary<IColumn,FieldBuilder> Dictionary_Column = new();
+    private readonly List<(object 対象,Exception 発生したException)> ListExpression=new();
     public void Save(IContainer Container,string Folder) {
         this.Dictionary_Schema.Clear();
         this.Dictionary_Table.Clear();
@@ -365,6 +369,7 @@ public partial class AssemblyGenerator {
         this.Dictionary_ScalarFunction.Clear();
         this.Dictionary_Procedure.Clear();
         this.Dictionary_Column.Clear();
+        this.ListExpression.Clear();
         var Types1 = this.Types1;
         var Container_Name = Container.EscapedName;
         var AssemblyName = new AssemblyName { Name=Container_Name };
@@ -608,6 +613,7 @@ public partial class AssemblyGenerator {
         foreach(var a in Schema.TableFunctions )this.DefineTableFunction (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.ScalarFunctions)this.DefineScalarFunction(a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.Procedures     )this.DefineProcedure     (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
+        foreach(var a in Schema.Sequences      )this.DefineSequence      (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.SynonymTables  )this.DefineSynonym       (a.Name,a.Table,Schema_TypeBuilder);
         foreach(var a in Schema.SynonymViews   )this.DefineSynonym       (a.Name,a.View,Schema_TypeBuilder);
         //foreach(var TableFunction in Schema.TableFunctions)
@@ -995,26 +1001,76 @@ public partial class AssemblyGenerator {
     }
 
     private void Disp作成(ISchema Schema,ParameterExpression ContainerParameter) {
-        var o=this.Optimizer;
+        var Optimizer=this.Optimizer;
+        var ListExpression=this.ListExpression;
         var Dictionary_View = this.Dictionary_View;
-        foreach(var a in Schema.Views)o.Disp作成(ContainerParameter,Dictionary_View[a],a.SQL);
+        foreach(var a in Schema.Views){
+            try{
+                Optimizer.Disp作成(ContainerParameter,Dictionary_View[a],a.SQL);
+            } catch(Exception ex){
+                ListExpression.Add((対象:(object)a,発生したException:ex));
+            }
+        }
         var Dictionary_TableFunction = this.Dictionary_TableFunction;
-        foreach(var a in Schema.TableFunctions)o.Disp作成(ContainerParameter,Dictionary_TableFunction[a],a.SQL);
+        foreach(var a in Schema.TableFunctions){
+            Optimizer.Disp作成(ContainerParameter,Dictionary_TableFunction[a],a.SQL);
+            try{
+            } catch(Exception ex){
+                ListExpression.Add((対象:(object)a,発生したException:ex));
+            }
+        }
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
-        foreach(var a in Schema.ScalarFunctions)o.Disp作成(ContainerParameter,Dictionary_ScalarFunction[a],a.SQL);
+        foreach(var a in Schema.ScalarFunctions){
+            try{
+                Optimizer.Disp作成(ContainerParameter,Dictionary_ScalarFunction[a],a.SQL);
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
         var Dictionary_Procedure= this.Dictionary_Procedure;
-        foreach(var a in Schema.Procedures)o.Disp作成(ContainerParameter,Dictionary_Procedure[a],a.SQL);
+        foreach(var a in Schema.Procedures){
+            Optimizer.Disp作成(ContainerParameter,Dictionary_Procedure[a],a.SQL);
+            try{
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
     }
     private void Impl作成(ISchema Schema,ParameterExpression ContainerParameter) {
         var Optimizer=this.Optimizer;
+        var ListExpression=this.ListExpression;
         var Dictionary_View = this.Dictionary_View;
-        foreach(var a in Schema.Views)Optimizer.Impl作成(Dictionary_View[a],ContainerParameter);
+        foreach(var a in Schema.Views){
+            try{
+                Optimizer.Impl作成(Dictionary_View[a],ContainerParameter);
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
         var Dictionary_TableFunction = this.Dictionary_TableFunction;
-        foreach(var a in Schema.TableFunctions)Optimizer.Impl作成(Dictionary_TableFunction[a],ContainerParameter);
+        foreach(var a in Schema.TableFunctions){
+            try{
+                Optimizer.Impl作成(Dictionary_TableFunction[a],ContainerParameter);
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
-        foreach(var a in Schema.ScalarFunctions)Optimizer.Impl作成(Dictionary_ScalarFunction[a],ContainerParameter);
+        foreach(var a in Schema.ScalarFunctions){
+            try{
+                Optimizer.Impl作成(Dictionary_ScalarFunction[a],ContainerParameter);
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
         var Dictionary_Procedure= this.Dictionary_Procedure;
-        foreach(var a in Schema.Procedures)Optimizer.Impl作成(Dictionary_Procedure[a],ContainerParameter);
+        foreach(var a in Schema.Procedures){
+            Optimizer.Impl作成(Dictionary_Procedure[a],ContainerParameter);
+            try{
+            } catch(Exception ex){
+                ListExpression.Add((a,ex));
+            }
+        }
     }
     public void ClearDebug() {
         this.Dictionary_Schema.Clear();

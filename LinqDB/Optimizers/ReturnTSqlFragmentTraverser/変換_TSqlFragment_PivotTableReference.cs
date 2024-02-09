@@ -1,12 +1,5 @@
 ﻿#pragma warning disable CA1822 // Mark members as static
 //#define タイム出力
-using System.Diagnostics;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
-using System;
-using System.Reflection;
-using LinqDB.Helpers;
-using LinqDB.Sets;
-using Expressions = System.Linq.Expressions;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 internal partial class 変換_TSqlFragmentからExpression{
     //private Expressions.Expression 集約関数(ScalarExpression x,string FunctionName){

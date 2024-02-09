@@ -9,7 +9,7 @@ using System.Linq;
 using LinqDB.Databases;
 using VM;
 public static class Generate {
-    private const string ホスト名= @"COFFEELAKE\MSSQLSERVER2019";
+    private const string ホスト名= @"COFFEELAKE\MSSQLSERVER2022";
     private const string Windowsログイン = @"Integrated Security=SSPI;";
     private const string SQLServerログイン = @"User ID=sa;Password=SQLSERVER711409;";
     private const string SQLServer接続文字列 = @$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";
@@ -63,8 +63,8 @@ public static class Generate {
             SCHEMA.Value=Schema.Name;
             using var Reader = Command.ExecuteReader();
             while(Reader.Read()) {
-                var TableName = Reader.GetString(0);
-                Schema.CreateTable(TableName);
+                var Name = Reader.GetString(0);
+                Schema.CreateTable(Name);
             }
         }
         Command.CommandText=information_schema.SQL_View;
@@ -78,33 +78,43 @@ public static class Generate {
             }
         }
         Command.CommandText=information_schema.SQL_ScalarFunction;
-        foreach(var Schema in Schemas) {
+        foreach(var Schema in Schemas)
+        {
             SCHEMA.Value=Schema.Name;
             using var Reader = Command.ExecuteReader();
-            while(Reader.Read()) {
+            while(Reader.Read())
+            {
                 var Name = Reader.GetString(0);
-                var SQL = Reader.GetString(1);
-                Schema.CreateScalarFunction(Name,SQL);
+                var Type = CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1));
+                var SQL = Reader.GetString(2);
+                Schema.CreateScalarFunction(Name,Type,SQL);
             }
         }
         Command.CommandText=information_schema.SQL_TableFunction;
-        foreach(var Schema in Schemas) {
+        foreach(var Schema in Schemas)
+        {
             SCHEMA.Value=Schema.Name;
             using var Reader = Command.ExecuteReader();
-            while(Reader.Read()) {
+            while(Reader.Read())
+            {
                 var Name = Reader.GetString(0);
                 var SQL = Reader.GetString(1);
                 Schema.CreateTableFunction(Name,SQL);
             }
         }
+        var count=0;
         Command.CommandText=information_schema.SQL_Procedure;
-        foreach(var Schema in Schemas) {
+        foreach(var Schema in Schemas)
+        {
             SCHEMA.Value=Schema.Name;
             using var Reader = Command.ExecuteReader();
-            while(Reader.Read()) {
+            while(Reader.Read())
+            {
                 var Name = Reader.GetString(0);
                 var SQL = Reader.GetString(1);
-                Schema.CreateProcedure(Name,SQL);
+                Schema.CreateProcedure(Name,typeof(int),SQL);
+                count++;
+                break;
             }
         }
         Command.CommandText=information_schema.SQL_Synonym;
@@ -117,8 +127,20 @@ public static class Generate {
                 Schema.CreateSynonym(synonym,base_object_name);
             }
         }
-        Command.CommandText=information_schema.SQL_Function_Parameter;
+        Command.CommandText=information_schema.Sequences;
+        foreach(var Schema in Schemas) {
+            SCHEMA.Value=Schema.Name;
+            using var Reader = Command.ExecuteReader();
+            while(Reader.Read()) {
+                var Name = Reader.GetString(0);
+                var start_value= Reader.GetValue(1);
+                var increment= Reader.GetValue(2);
+                var current_value= Reader.GetValue(3);
+                Schema.CreateSequence(Name,start_value,increment,current_value);
+            }
+        }
         Parameters.Add(NAME);
+        Command.CommandText=information_schema.SQL_Function_Parameter;
         foreach(var Schema in Schemas) {
             SCHEMA.Value=Schema.Name;
             foreach(var ScalarFunction in Schema.ScalarFunctions){
@@ -127,16 +149,10 @@ public static class Generate {
                 using var Reader = Command.ExecuteReader();
                 while(Reader.Read()) {
                     var name = Reader.GetString(0);
-                    var is_output = Reader.GetBoolean(1);
-                    var type = Reader.GetString(2);
-                    var has_default_value = Reader.GetBoolean(3);
-                    var default_value = Reader.GetValue(4);
-                    var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
-                    if(is_output) {
-                        ScalarFunction.Type=Type;
-                    } else {
-                        ScalarFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
-                    }
+                    var Type = CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1));
+                    var has_default_value = Reader.GetBoolean(2);
+                    var default_value = Reader.GetValue(3);
+                    ScalarFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
                 }
             }
             foreach(var TableFunction in Schema.TableFunctions){
@@ -146,12 +162,9 @@ public static class Generate {
                 //TableFunction.Type=共通(TableFunction.Parameters);
                 while(Reader.Read()) {
                     var name = Reader.GetString(0);
-                    var is_output = Reader.GetBoolean(1);
-                    var type = Reader.GetString(2);
-                    var has_default_value = Reader.GetBoolean(3);
-                    var default_value = Reader.GetValue(4);
-                    var Type = CommonLibrary.SQLのTypeからTypeに変換(type);
-                    Debug.Assert(!is_output);
+                    var Type = CommonLibrary.SQLのTypeからTypeに変換(Reader.GetString(1));
+                    var has_default_value = Reader.GetBoolean(2);
+                    var default_value = Reader.GetValue(3);
                     TableFunction_Parameters.Add(new Parameter(name,Type,has_default_value,default_value));
                 }
             }
@@ -253,36 +266,46 @@ public static class Generate {
         Connection.Close();
     }
     private static void Main() {
-        //const String Sql接続文字列 = @"Provider=SQLOLEDB;Data Source=localhost;Initial Catalog=master;Connect Timeout=60;Persist Security Info=True;User ID=sa;Password=password";
-        const string 接続文字列 = @"Data Source=localhost;Initial Catalog=master;Connect Timeout=60;Persist Security Info=True;User ID=sa;Password=password";
-        using var SqlConnection = new SqlConnection(接続文字列);
-        //using var OleDbConnection = new OleDbConnection("Provider=SQLOLEDB;"+接続文字列);
-        DbConnection DbConnection= SqlConnection;
-        var AssemblyGenerator=new AssemblyGenerator();
+        const string SQLServerログイン = @"User ID=sa;Password=SQLSERVER711409;";
         {
-            var ItemsSource=new List<string>();
-            using var Connection=new SqlConnection(SQLServer接続文字列);
+            const string ホスト名= @"COFFEELAKE\MSSQLSERVER2022";
+            const string SQLServer接続文字列 = @$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";
+            using var SqlConnection=new SqlConnection(SQLServer接続文字列);
+            DbConnection Connection=SqlConnection;
             Connection.Open();
-            using var Command=Connection.CreateCommand();
-            Command.CommandText=
-                "USE master\r\n"+
-                "SELECT name\r\n"+
-                "FROM sys.databases\r\n"+
-                "ORDER BY database_id";
-            var a=0;
-            using(var Reader=Command.ExecuteReader()){
-                while(Reader.Read()){
-                    var Database=Reader.GetString(0);
-                    ItemsSource.Add(Database);
-                    if(Database is"master") continue;
-                    if(Database is"msdb") continue;
-                    var Container=new VM.Container();
-                    LoadSQLServer(Database,Container);
-                    //if(a++==0x
-                    AssemblyGenerator.Save(Container,Environment.CurrentDirectory);
-                    //break;
-                }
-            }
+        }
+        //using var OleDbConnection = new OleDbConnection("Provider=SQLOLEDB;"+接続文字列);
+        var AssemblyGenerator=new AssemblyGenerator();
+        foreach(var Database in Databases){
+            var Container=new VM.Container();
+            LoadSQLServer(Database,Container);
+            //if(a++==0x
+            AssemblyGenerator.Save(Container,Environment.CurrentDirectory);
         }
     }
+    private static readonly string[]Databases={
+        //"TableFunction",
+        //"Sequence",
+        //"実験",
+        //"Pubs",
+        //"Northwind",
+        "WideWorldImportersDW",
+        "WideWorldImporters",
+        "AdventureWorksDW2008R2",
+        "AdventureWorksDW2012",
+        "AdventureWorksDW2014",
+        "AdventureWorksDW2016",
+        "AdventureWorksDW2016_EXT",
+        "AdventureWorksDW2017",
+        "AdventureWorksDW2019",
+        "AdventureWorksLT2008R2",
+        "AdventureWorksLT2012",
+        "AdventureWorksLT2014",
+        "AdventureWorksLT2016",
+        "AdventureWorksLT2016_EXT",
+        "AdventureWorksLT2017",
+        "AdventureWorksLT2019",
+        "AdventureWorksLT2022",
+        //"msdb",
+    };
 }

@@ -4,15 +4,8 @@ using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
-using System.Reflection;
-using System.Xml.Linq;
 using e = System.Linq.Expressions;
-using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
-using System.Globalization;
-using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Helpers;
-using LinqDB.Reflection;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
 internal partial class 変換_TSqlFragmentからExpression{
@@ -828,22 +821,23 @@ internal partial class 変換_TSqlFragmentからExpression{
         Types[x_Parameters_Count]=typeof(int);
         //e.Expression Body;
         //Debug(x.StatementList is not null) ;
-        this.ReturnLabel=e.Expression.Label(typeof(int),"procedure");
+        var ReturnLabel = this.ReturnLabel=e.Expression.Label(typeof(int),"procedure");
         //this.ReturnLabel=null;
         if(x.MethodSpecifier is not null) this.MethodSpecifier(x.MethodSpecifier);
         e.Expression Body;
         try{
             Body=this.StatementList(x.StatementList);
         } catch(KeyNotFoundException){
+            //"xxxxx"テーブルプロパティが定義されていなかった
             Body=Default_void;
         }
-        if(this.Variables.Any())
-            Body=e.Expression.Block(
-                this.Variables,
-                this.作業配列.Expressions設定(Body,Constant_0)
-            );
-        else
-            Body=e.Expression.Block(Body,Constant_0);
+        Body=e.Expression.Block(
+            this.Variables,
+            this.作業配列.Expressions設定(
+                Body,
+                e.Expression.Label(ReturnLabel,Constant_0)
+            )
+        );
         return e.Expression.Lambda(Reflection.Func.Get(x_Parameters_Count).MakeGenericType(Types),Body,Name_BaseIdentifier_Value,this.List_Parameter);
     }
     private e.Expression CreateOrAlterProcedureStatement(CreateOrAlterProcedureStatement x){
@@ -888,6 +882,70 @@ internal partial class 変換_TSqlFragmentからExpression{
         }
         Types[x_Parameters_Count]=ReturnType;
         e.Expression Body;
+        if(x.ReturnType is TableValuedFunctionReturnType TableValuedFunctionReturnType){
+            //テーブル値を返す
+            var Variable_Name=this.Identifier(TableValuedFunctionReturnType.DeclareTableVariableBody.VariableName);
+            var ReturnLabel=this.ReturnLabel=e.Expression.Label("function");
+            var 作業配列=this.作業配列;
+            var Variable_Type=作業配列.MakeGenericType(typeof(Set<>),ReturnType.GetGenericArguments()[0]);
+            var Variable=e.Expression.Parameter(Variable_Type,Variable_Name);
+            if(x.MethodSpecifier is not null) this.MethodSpecifier(x.MethodSpecifier);
+            //var Types = new Type[x_Parameters_Count+1];
+            this.AddTableVariable(Variable);//todo 名前がないからこれでいいのか？
+            Body=this.StatementList(x.StatementList);
+            Body=e.Expression.Block(
+                this.Variables,
+                作業配列.Expressions設定(
+                    e.Expression.Assign(
+                        Variable,
+                        e.Expression.New(Variable_Type.GetConstructor(Type.EmptyTypes))
+                    ),
+                    Body,
+                    e.Expression.Label(ReturnLabel),Variable
+                )
+            );
+        }else if(x.ReturnType is SelectFunctionReturnType SelectFunctionReturnType){
+            Body=this.SelectFunctionReturnType(SelectFunctionReturnType);
+            //Body=this.TableValuedFunctionReturnType((TableValuedFSelectFunctionReturnTypeunctionReturnType)x.ReturnType);
+            Body=this.ConvertNullable(Body);
+            if(this.Variables.Any())Body=e.Expression.Block(this.Variables,Body);
+            var ValueTuple_Type=IEnumerable1のT(Body.Type);
+            var ValueTuple_p=e.Expression.Parameter(ValueTuple_Type,"ValueTuple_p");
+            var Element_Type=IEnumerable1のT(ReturnType);
+            var Constructor=Element_Type.GetConstructors()[0];
+            var Parameters=Constructor.GetParameters();
+            var Parameters_Length=Constructor.GetParameters().Length;
+            var NewArguments=new e.Expression[Parameters_Length];
+            var 作業配列=this.作業配列;
+            e.Expression ValueTuple=ValueTuple_p;
+            var Item番号=1;
+            for(var a=0;a<Parameters_Length;a++)
+                NewArguments[a]=this.Convertデータ型を合わせるNullableは想定する(ValueTuple_Item(ref ValueTuple,ref Item番号),Parameters[a].ParameterType);
+            Body=e.Expression.Call(
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,ValueTuple_Type,Element_Type),
+                Body,
+                e.Expression.Lambda(e.Expression.New(Constructor,NewArguments),作業配列.Parameters設定(ValueTuple_p))
+            );
+        }else{
+            //スカラー値を返す
+            if(ReturnType.IsValueType){
+                var ReturnType0=(ScalarFunctionReturnType)x.ReturnType;
+                var DataTypeReference=this.DataTypeReference(ReturnType0.DataType);
+            }
+            Debug.Assert(
+                ReturnType.IsValueType&&ReturnType.GetGenericArguments()[0]==this.DataTypeReference(((ScalarFunctionReturnType)x.ReturnType).DataType)||
+                ReturnType==this.DataTypeReference(((ScalarFunctionReturnType)x.ReturnType).DataType)
+            );
+            var ReturnLabel = this.ReturnLabel=e.Expression.Label(ReturnType,"function");
+            if(x.MethodSpecifier is not null) this.MethodSpecifier(x.MethodSpecifier);
+            var StatementList=this.StatementList(x.StatementList);
+            Body=e.Expression.Block(
+                this.Variables,
+                StatementList,
+                e.Expression.Label(ReturnLabel,e.Expression.Default(ReturnType))
+            );
+        }
+        /*
         if(x.StatementList is not null) {
             //create function dbo.ufnGetContactInformation
             //(@ContactID int)
@@ -904,12 +962,10 @@ internal partial class 変換_TSqlFragmentからExpression{
             //end
 
             //var ReturnType=this.FunctionReturnType(x.ReturnType);
+            Debug.Assert(x.ReturnType is not null);
             if(x.ReturnType is TableValuedFunctionReturnType y){
+                //テーブル値を返す
                 var Variable_Name=this.Identifier(y.DeclareTableVariableBody.VariableName);
-                //                        ScalarFunctionReturnType:
-                //                      (TableValuedFunctionReturnType)x.ReturnType).Name;
-                //.Name:this.TableValuedFunctionReturnType((TableValuedFunctionReturnType)x.ReturnType);
-                //var 変数CreateFunctionStatement = this.変数CreateFunctionStatement;
                 var ReturnLabel = this.ReturnLabel=e.Expression.Label("function");
                 var 作業配列 = this.作業配列;
                 var Variable_Type =作業配列.MakeGenericType(typeof(Set<>),ReturnType.GetGenericArguments()[0]);
@@ -929,68 +985,25 @@ internal partial class 変換_TSqlFragmentからExpression{
                         e.Expression.Label(ReturnLabel),Variable
                     )
                 );
-                //if(ReturnType.IsGenericType&&ReturnType.GetGenericTypeDefinition()==typeof(Set<>)) { 
-                //    Body=e.Expression.Block(
-                //        this.Variables,
-                //        作業配列.Expressions設定(
-                //            e.Expression.Assign(
-                //                Variable,
-                //                e.Expression.New(Variable_Type.GetConstructor(Type.EmptyTypes))
-                //            ),
-                //            Body,
-                //            e.Expression.Label(ReturnLabel),Variable
-                //        )
-                //    );
-                //} else {
-                //    Body=e.Expression.Block(
-                //        this.Variables,
-                //        作業配列.Expressions設定(Body,e.Expression.Label(ReturnLabel),Variable)
-                //    );
-                //}
-                //return e.Expression.Lambda(Reflection.Func.Get(x_Parameters_Count).MakeGenericType(Types),StatementList,Name_BaseIdentifier_Value,List_Parameter);
             } else{
+                //スカラー値を返す
                 Debug.Assert(
                     ReturnType.IsValueType&&ReturnType.GetGenericArguments()[0]==this.DataTypeReference(((ScalarFunctionReturnType)x.ReturnType).DataType)||
                     ReturnType==this.DataTypeReference(((ScalarFunctionReturnType)x.ReturnType).DataType)
                 );
                 var ReturnLabel = this.ReturnLabel=e.Expression.Label(ReturnType,"function");
                 if(x.MethodSpecifier is not null) this.MethodSpecifier(x.MethodSpecifier);
+                var Bodyx=this.ScalarFunctionReturnType((ScalarFunctionReturnType)x.ReturnType);
                 var StatementList=this.StatementList(x.StatementList);
-                var Block=e.Expression.Block(
+                Body=e.Expression.Block(
+                    this.Variables,
                     StatementList,
                     e.Expression.Label(ReturnLabel,e.Expression.Default(ReturnType))
                 );
-                Body=Block;
-                //Body=this.Convertデータ型を合わせるNullableは想定する(Block,ReturnType);
-                if(this.Variables.Any()) Body=e.Expression.Block(this.Variables,Body);
-                //return e.Expression.Lambda(Reflection.Func.Get(x_Parameters_Count).MakeGenericType(Types),StatementList,Name_BaseIdentifier_Value,List_Parameter);
             }
         } else {
-            //create function Application.DetermineCustomerAccess
-            //(@CityID int)
-            //returns table 
-            //with schemabinding
-            //as
-            //return 
-            //    (select 1 as AccessResult
-            //     where  IS_ROLEMEMBER(N'db_owner') <> 0
-            //            or IS_ROLEMEMBER((select sp.SalesTerritory
-            //                              from   Application.Cities as c
-            //                                     inner join
-            //                                     Application.StateProvinces as sp
-            //                                     on c.StateProvinceID = sp.StateProvinceID
-            //                              where  c.CityID = @CityID) + N' Sales') <> 0
-            //            or (ORIGINAL_LOGIN() = N'Website'
-            //                and exists (select 1
-            //                            from   Application.Cities as c
-            //                                   inner join
-            //                                   Application.StateProvinces as sp
-            //                                   on c.StateProvinceID = sp.StateProvinceID
-            //                            where  c.CityID = @CityID
-            //                                   and sp.SalesTerritory = SESSION_CONTEXT(N'SalesTerritory'))))
-            //Body=this.SelectFunctionReturnType((SelectFunctionReturnType)x.ReturnType);
-            //Body=this.FunctionReturnType(x.ReturnType);
-            Body= this.StatementList(x.StatementList);
+            Body=this.SelectFunctionReturnType((SelectFunctionReturnType)x.ReturnType);
+            //Body=this.TableValuedFunctionReturnType((TableValuedFSelectFunctionReturnTypeunctionReturnType)x.ReturnType);
             Body=this.ConvertNullable(Body);
             if(this.Variables.Any())Body=e.Expression.Block(this.Variables,Body);
             var ValueTuple_Type=IEnumerable1のT(Body.Type);
@@ -1011,6 +1024,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 e.Expression.Lambda(e.Expression.New(Constructor,NewArguments),作業配列.Parameters設定(ValueTuple_p))
             );
         }
+        */
         return e.Expression.Lambda(
             Reflection.Func.Get(x_Parameters_Count).MakeGenericType(Types),
             Body,
@@ -1045,7 +1059,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         this.ScalarExpression(x.ThirdParameter);
         return e.Expression.Throw(
             e.Expression.New(
-                Reflection.Exception.RaiseErrorException_ctor,
+                Reflection.Exception.RelationshipException_ctor,
                 this.ScalarExpression(x.FirstParameter),
                 this.ScalarExpression(x.SecondParameter),
                 this.ScalarExpression(x.ThirdParameter),
@@ -1186,7 +1200,10 @@ internal partial class 変換_TSqlFragmentからExpression{
         SetIdentityInsertStatement y=>this.SetIdentityInsertStatement(y),
         _=>throw this.単純NotSupportedException(x)
     };
-    private e.Expression SetRowCountStatement(SetRowCountStatement x){throw this.単純NotSupportedException(x);}
+    private e.Expression SetRowCountStatement(SetRowCountStatement x){
+        //throw this.単純NotSupportedException(x);
+        return Default_void;
+    }
     private e.Expression SetTextSizeStatement(SetTextSizeStatement x){throw this.単純NotSupportedException(x);}
     private e.Expression SetTransactionIsolationLevelStatement(SetTransactionIsolationLevelStatement x){throw this.単純NotSupportedException(x);}
     private e.Expression SetUserStatement(SetUserStatement x){throw this.単純NotSupportedException(x);}
@@ -1284,7 +1301,23 @@ internal partial class 変換_TSqlFragmentからExpression{
     private e.Expression WriteTextStatement(WriteTextStatement x){
         throw this.単純NotSupportedException(x);
     }
-    private e.Expression ThrowStatement(ThrowStatement x){throw this.単純NotSupportedException(x);}
+    /// <summary>
+    /// THROW [ { error_number | @local_variable },  
+    /// { message | @local_variable },  
+    /// { state | @local_variable } ]   
+    /// </summary>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    private e.Expression ThrowStatement(ThrowStatement x)=>e.Expression.Throw(
+        e.Expression.New(
+            Product.SQLServer.Throw.ctor,
+            this.作業配列.Expressions設定(
+                this.ValueExpression(x.ErrorNumber),
+                this.ValueExpression(x.Message),
+                this.ValueExpression(x.State)
+            )
+        )
+    );
     private e.Expression TransactionStatement(TransactionStatement x)=>x switch{
         BeginTransactionStatement y=>this.BeginTransactionStatement(y),
         CommitTransactionStatement y=>this.CommitTransactionStatement(y),

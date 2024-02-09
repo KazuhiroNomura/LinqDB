@@ -1,6 +1,5 @@
 ﻿//#pragma warning disable CA1822 // Mark members as static
 using System.Diagnostics;
-using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using Generic = System.Collections.Generic;
 using System.Linq.Expressions;

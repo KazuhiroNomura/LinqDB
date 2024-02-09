@@ -1,16 +1,10 @@
 ﻿using System.Linq;
-using LinqDB.Sets;
 using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 //using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Reflection;
-using System.Xml.Linq;
 using e = System.Linq.Expressions;
-using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
-using System.Globalization;
-using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Helpers;
 using Expressions = System.Linq.Expressions;
 using System.Collections.Generic;
@@ -32,16 +26,15 @@ internal partial class 変換_TSqlFragmentからExpression{
         var SchemaObject=x.SchemaObject;
         Debug.Assert(SchemaObject is not null);
         var Table=SchemaObject.BaseIdentifier.Value;
-        if(this.Dictionary_With名_Set_ColumnAliases.TryGetValue(Table,out var Set_ColumnAliases)) {
+        if(this.Dictionary_With名_Set_ColumnAliases.TryGetValue(Table,out var Set_Element_ColumnAliases)) {
             //var Set_Type=Set.Type;
-            var Element=e.Expression.Parameter(IEnumerable1のT(Set_ColumnAliases.Set.Type),Table);
+            //var Element=e.Expression.Parameter(IEnumerable1のT(Set_ColumnAliases.Element.Type),Table);
             var x_Alias=x.Alias;
             if(x_Alias is not null) Table=x_Alias.Value;
             var TableDot=Table+'.';
-            e.Expression ValueTuple=Element;
-            var Item番号=1;
-            foreach(var ColumnAlias in Set_ColumnAliases.ColumnAliases){
-                var Item=ValueTuple_Item(ref ValueTuple,ref Item番号);
+            e.Expression ValueTuple=Set_Element_ColumnAliases.Element;
+            foreach(var (ColumnAlias,Item) in Set_Element_ColumnAliases.ComunAlias){
+                //var Item=ValueTuple_Item(ref ValueTuple,ref Item番号);
                 List_アスタリスクColumnAlias.Add(ColumnAlias);
                 List_アスタリスクColumnExpression.Add(Item);
                 ////Table.Column
@@ -50,7 +43,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,         ColumnAlias,Item);
                 DictionaryにKey0とKey1があればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,TableDot+ColumnAlias,ColumnAlias,Item);
             }
-            return (Set_ColumnAliases.Set,Element);
+            return (Set_Element_ColumnAliases.Set,Set_Element_ColumnAliases.Element);
         } else {
             var ContainerType=this.ContainerType;
             Debug.Assert(ContainerType!=null);
@@ -178,13 +171,13 @@ internal partial class 変換_TSqlFragmentからExpression{
     private e.Expression OdbcQualifiedJoinTableReference(OdbcQualifiedJoinTableReference x){throw this.単純NotSupportedException(x);}
     private(e.Expression Set,e.ParameterExpression Element)TableReferenceWithAliasAndColumns(TableReferenceWithAliasAndColumns x)=>x switch{
         SchemaObjectFunctionTableReference y=>this.SchemaObjectFunctionTableReference(y),
-        QueryDerivedTable y=>this.QueryDerivedTable(y),
-        InlineDerivedTable y=>this.InlineDerivedTable(y),
-        BulkOpenRowset y=>this.BulkOpenRowset(y),
-        DataModificationTableReference y=>this.DataModificationTableReference(y),
-        ChangeTableChangesTableReference y=>this.ChangeTableChangesTableReference(y),
-        ChangeTableVersionTableReference y=>this.ChangeTableVersionTableReference(y),
-        VariableMethodCallTableReference y=>this.VariableMethodCallTableReference(y),
+        QueryDerivedTable                  y=>this.QueryDerivedTable(y),
+        InlineDerivedTable                 y=>this.InlineDerivedTable(y),
+        BulkOpenRowset                     y=>this.BulkOpenRowset(y),
+        DataModificationTableReference     y=>this.DataModificationTableReference(y),
+        ChangeTableChangesTableReference   y=>this.ChangeTableChangesTableReference(y),
+        ChangeTableVersionTableReference   y=>this.ChangeTableVersionTableReference(y),
+        VariableMethodCallTableReference   y=>this.VariableMethodCallTableReference(y),
         _=>throw this.単純NotSupportedException(x)
     };
     private(e.Expression Set,e.ParameterExpression Element)FullTextTableReference(FullTextTableReference x){
@@ -496,8 +489,8 @@ internal partial class 変換_TSqlFragmentからExpression{
         //var x_Variable_Name=x.Variable.Name;
         //var ctor_Parameters = T.GetConstructors()[0].GetParameters();
         //var ctor_Parameters_Length = ctor_Parameters.Length;
-        string[]ColumnAliases;
-        var Set = PrivateFindVariable(this.List_定義型TableVariable,x.Variable.Name);
+        var x_Variable_Name = x.Variable.Name;
+        var Set = PrivateFindVariable(this.List_定義型TableVariable,x_Variable_Name);
         //var T = IEnumerable1のT(Set!.Type);
         //var Element = e.Expression.Parameter(T,x.Variable.Name);
         //return (Set, Element);
@@ -507,14 +500,13 @@ internal partial class 変換_TSqlFragmentからExpression{
             Table=x_Alias.Value;
             Table_Dot = Table+'.';
         }
-        var x_Variable_Name = x.Variable.Name;
         Debug.Assert(x_Variable_Name[0]=='@');
         if(Set is not null) {
             var T = IEnumerable1のT(Set.Type);
-            var Element = e.Expression.Parameter(T,x.Variable.Name);
+            var Element = e.Expression.Parameter(T,x_Variable_Name);
             var ctor_Parameters = T.GetConstructors()[0].GetParameters();
             var ctor_Parameters_Length = ctor_Parameters.Length;
-            ColumnAliases = new string[ctor_Parameters_Length];
+            var ColumnAliases = new string[ctor_Parameters_Length];
             if(Table is not null)Dictionary_TableAlias_ColumnAliases.Add(Table,ColumnAliases);
             for(var a = 0;a<ctor_Parameters_Length;a++) {
                 var ColumnAlias = ctor_Parameters[a].Name;
@@ -533,7 +525,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         } else {
             foreach(var 匿名型TableVariable in this.List_匿名型TableVariable) {
                 if(匿名型TableVariable.Variable.Name!=x_Variable_Name)continue;
-                ColumnAliases=匿名型TableVariable.Names;
+                var ColumnAliases=匿名型TableVariable.Names;
                 //var Element=e.Expression.Parameter(IEnumerable1のT(Set.Type),Name);
                 var Table_Type = 匿名型TableVariable.Variable.Type;
                 var T = IEnumerable1のT(Table_Type);
@@ -542,8 +534,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 Debug.Assert(x_Variable_Name[0]=='@');
                 e.Expression ValueTuple = Element;
                 var Item番号 = 1;
-                for(var a = 0;a<ColumnAliases.Length;a++) {
-                    var ColumnAlias = ColumnAliases[a];
+                foreach(var ColumnAlias in ColumnAliases){
                     var Item = ValueTuple_Item(ref ValueTuple,ref Item番号);
                     List_アスタリスクColumnAlias.Add(ColumnAlias);
                     List_アスタリスクColumnExpression.Add(Item);

@@ -1,24 +1,20 @@
 ﻿#pragma warning disable CA1822 // Mark members as static
 using System.Linq;
-using LinqDB.Sets;
 using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Reflection;
-using System.Xml.Linq;
+using System.Reflection.Emit;
 using e = System.Linq.Expressions;
 using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
-using System.Globalization;
 using System.Text;
 using LinqDB.Optimizers.VoidExpressionTraverser;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Optimizers.Comparer;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.SqlServer.Types;
 using LinqDB.Helpers;
-using System.Net;
+using LinqDB.Serializers.MemoryPack.Formatters.Sets;
 //using ColumnReferenceExpression=Microsoft.SqlServer.TransactSql.ScriptDom.ColumnReferenceExpression;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
@@ -280,7 +276,7 @@ internal partial class 変換_TSqlFragmentからExpression{
     private readonly SqlScriptGenerator ScriptGenerator;
     private readonly ExpressionEqualityComparer ExpressionEqualityComparer;
     private readonly 取得_出力Table 判定指定Table;
-    private readonly List<e.Expression>出力TableExpressions=new List<e.Expression>();
+    private readonly List<e.Expression>出力TableExpressions=new();
     //private readonly List<e.Expression>指定TableExpressions=new List<e.Expression>();
     /// <summary>
     /// コンストラクタ。
@@ -298,7 +294,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         this.変換_旧Expressionを新Expression1=new 変換_旧Expressionを新Expression1(作業配列,new ExpressionReferenceEqualityComparer());
         this.取得_OuterPredicate_InnerPredicate_プローブビルド=取得_OuterPredicate_InnerPredicate_プローブビルド;
         this.ScriptGenerator=ScriptGenerator;
-        this._StackSubquery単位の情報=new(ExpressionEqualityComparer);
+        this._StackSubquery単位の情報=new();
         this.ExpressionEqualityComparer=ExpressionEqualityComparer;
         this.判定指定Table=new(ExpressionEqualityComparer,this.出力TableExpressions);
     }
@@ -337,7 +333,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         ///// </summary>
         //public readonly List<(String ColumnAlias,Expressions.Expression Expression)> List_ColumnAlias_ColumnExpression=new();
         /// <summary>
-        /// GROUP BYの式
+        /// GROUP BYの"SELECT"式
         /// </summary>
         public readonly List<e.Expression> List_GroupByExpression=new();
         /// <summary>
@@ -364,7 +360,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         public bool 集約関数の内部か;
         public e.Expression? 集約関数のSource;
         public e.ParameterExpression? 集約関数のParameter;
-        public Subquery単位の情報(ExpressionEqualityComparer ExpressionEqualityComparer){
+        public Subquery単位の情報(){
             this.集約関数の内部か=false;
             this.集約関数のSource=null;
             this.集約関数のParameter=null;
@@ -395,10 +391,10 @@ internal partial class 変換_TSqlFragmentからExpression{
     private sealed class StackSubquery単位の情報{
         private const int 要素数=100;
         private readonly Subquery単位の情報[] ArraySubquery単位の情報=new Subquery単位の情報[要素数];
-        public StackSubquery単位の情報(ExpressionEqualityComparer ExpressionEqualityComparer){
+        public StackSubquery単位の情報(){
             var ArraySubquery単位の情報=this.ArraySubquery単位の情報;
             for(var a=0;a<要素数;a++){
-                ArraySubquery単位の情報[a]=new(ExpressionEqualityComparer);
+                ArraySubquery単位の情報[a]=new();
             }
         }
         private int index;
@@ -429,7 +425,7 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// <summary>
     /// WITH共通部分式
     /// </summary>
-    public readonly SortedDictionary<string,(e.ParameterExpression Set,string[]ColumnAliases)> Dictionary_With名_Set_ColumnAliases=new(StringComparer.OrdinalIgnoreCase);
+    public readonly SortedDictionary<string,(e.Expression Set,e.ParameterExpression Element,(string ColumnAlias,e.Expression Expression)[] ComunAlias)> Dictionary_With名_Set_ColumnAliases=new(StringComparer.OrdinalIgnoreCase);
     //GROUP BYで指定した式がSELECTでに現れたときにKeyのメンバーとして指定するようにする。
     //SELECT SUM(T1.F1),SUM(T2.F2),T1.F3,T2.F4
     //FROM T T1,T T2
@@ -502,15 +498,19 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// <param name="Container"></param>
     /// <param name="x"></param>
     /// <returns></returns>
-    public e.Expression 実行(Databases.Container Container,TSqlFragment x)=>this.Private実行(e.Expression.Constant(Container),x);
+    public e.Expression 実行(Databases.Container Container,TSqlFragment x){
+        return this.Private実行(e.Expression.Constant(Container),x);
+    }
     /// <summary>
     /// クライアントで使う
     /// </summary>
     /// <param name="Parameter"></param>
     /// <param name="x"></param>
     /// <returns></returns>
-    public e.Expression 実行(e.ParameterExpression Parameter,TSqlFragment x)=>this.Private実行(Parameter,x);
-    public e.Expression Private実行(TSqlFragment x){
+    public e.Expression 実行(e.ParameterExpression Parameter,TSqlFragment x){
+        return this.Private実行(Parameter,x);
+    }
+    private e.Expression Private実行(TSqlFragment x){
         var Result=this.TSqlFragment(x);
         if(Result.Type.IsValueType){
             //Result=Expressions.Expression.Convert(Result,typeof(Object));
@@ -879,6 +879,8 @@ internal partial class 変換_TSqlFragmentからExpression{
             if(typeof(Guid          )==変更先_Type)return e.Expression.Call(Reflection.Guid.Parse_s,変更元);
             if(typeof(byte[]        )==変更先_Type)return e.Expression.Call(this.Encoding,this.Encoding_GetBytes,変更元);
             //XDocument
+        } else if(typeof(DateTime)==変更元_Type){
+            if(typeof(string) == 変更先_Type) return e.Expression.Call(変更元,Reflection.DateTime.ToString_);
         } else if(typeof(DateTimeOffset)==変更元_Type){
             //if(typeof(byte    )==変更先_Type)return e.Expression.Call(Reflection.Byte.Parse_s,変更元);
             //if(typeof(short   )==変更先_Type)return e.Expression.Call(Reflection.Int16.Parse_s,変更元);
@@ -931,7 +933,7 @@ internal partial class 変換_TSqlFragmentからExpression{
             //XDocument
         //} else if(typeof(XDocument) == 変更元_Type) {
         }
-        throw new NotSupportedException($"{変更元_Type.FullName}と{変更先_Type.FullName}に変換出来ない");
+        throw new NotSupportedException($"{変更元_Type.FullName}から{変更先_Type.FullName}に変換出来ない");
     }
     /// <summary>
     /// Int32?aをDouble?にキャストするとき

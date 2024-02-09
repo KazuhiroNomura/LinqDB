@@ -7,6 +7,7 @@ using LinqDB.Sets;
 using LinqDB.Databases.Tables;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
+using LinqDB.Databases.Attributes;
 using LinqDB.Helpers;
 // ReSharper disable RedundantNameQualifier
 namespace LinqDB.Databases;
@@ -104,7 +105,10 @@ public class Container:IDisposable{
                 }
                 Schemas.Add(system_Schema);
                 foreach(var TableView_Property in Schema_Property.PropertyType.GetProperties(BindingFlags.Instance|BindingFlags.Public)){
+                    var SequenceAttribute=TableView_Property.GetCustomAttribute<SequenceAttribute>();
+                    if(SequenceAttribute is not null) continue;
                     var TableView_Type=TableView_Property.PropertyType;
+                    if(TableView_Type.GetGenericArguments().Length==0) continue;
                     var ElementType=TableView_Type.GetGenericArguments()[0];
                     var TableView_FullName=ElementType.FullName!;
                     var TableIndex=TableView_FullName.LastIndexOf('.');

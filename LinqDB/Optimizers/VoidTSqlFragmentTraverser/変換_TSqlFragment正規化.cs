@@ -3,6 +3,8 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using System.Reflection.Emit;
 namespace LinqDB.Optimizers.VoidTSqlFragmentTraverser;
 
 /// <summary>
@@ -18,6 +20,23 @@ internal class 変換_TSqlFragment正規化:VoidTSqlFragmentTraverser{
         //this.SQL=SQL;
         this.TSqlFragment(x);
     }
+    private TypeBuilder TypeBuilder=default!;
+    public void 実行(TSqlFragment x,TypeBuilder SchemaTypeBuilder){
+        this.TypeBuilder=SchemaTypeBuilder;
+        this.Dictionary_FROM句WITH.Clear();
+        //this.Database=Database;
+        //this.SQL=SQL;
+        this.TSqlFragment(x);
+    }
+    //protected override void CommonTableExpression(CommonTableExpression x){
+    //    var TypeBuilder=this.TypeBuilder;
+    //    var CommonType=TypeBuilder.DefineNestedType(Guid.NewGuid().ToString(),TypeAttributes.NestedPrivate);
+    //    x.QueryExpression
+    //    base.CommonTableExpression(x);
+    //}
+    //protected override void QueryExpression(QueryExpression x){
+    //    base.QueryExpression(x);
+    //}
     //private Dictionary<String,SchemaObjectName> Dictionary_PrimaryExpression_PrimaryExpression = new Dictionary<String,SchemaObjectName>();
     private readonly Dictionary<string,QueryDerivedTable> Dictionary_FROM句WITH=new(StringComparer.OrdinalIgnoreCase);
     protected override void FunctionCall(FunctionCall x){

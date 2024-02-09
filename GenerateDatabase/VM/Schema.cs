@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using LinqDB.Databases.Dom;
 using System.Collections.Generic;
+using System.Reflection.Emit;
 using LinqDB.Serializers.MemoryPack.Formatters.Reflection;
 namespace VM;
 [DebuggerDisplay("{"+nameof(Name)+"}")]
@@ -39,26 +40,29 @@ public class Schema:ISchema {
     IEnumerable<IScalarFunction> ISchema.ScalarFunctions => this.ScalarFunctions;
     public List<TableFunction> TableFunctions { get; } = new();
     IEnumerable<ITableFunction> ISchema.TableFunctions => this.TableFunctions;
+    public TypeBuilder TypeBuilder{get;set;}
     public List<Schema> Schemas => this.Container!.Schemas;
     IEnumerable<ISchema> ISchema.Schemas => this.Schemas;
-    public List<Procedure> Procedures { get; } = new();
+    private List<Procedure> Procedures { get; } = new();
     IEnumerable<IProcedure> ISchema.Procedures => this.Procedures;
+    public List<ISequence> Sequences{get;}=new();
+    IEnumerable<ISequence> ISchema.Sequences=> this.Sequences;
     //public FieldBuilder? Container_Schema_FieldBuilder { get; set; }
     //public LocalBuilder? Container_RelationValidate_LocalBuilder { get; set; }
     //public Type? Type{ get; set; }
     public void CreateScalarType(string 新Name,string 旧Name) {
         var Table = new ScalarType(this,新Name,旧Name);
-        this.Container!.Add(Table);
+        //this.Container!.Add(Table);
         this.ScalarTypes.Add(Table);
     }
     public void CreateTableType(string Name) {
         var Table = new TableType(this,Name);
-        this.Container!.Add(Table);
+        //this.Container!.Add(Table);
         this.TableTypes.Add(Table);
     }
     public void CreateTable(string Name) {
         var Table = new Table(Name,this);
-        this.Container!.Add(Table);
+        //this.Container!.Add(Table);
         this.Tables.Add(Table);
     }
     //public void CreateSynonymTable(string Synonym,Table Table)=>this.SynonymTables.Add((Synonym,Table));
@@ -70,18 +74,21 @@ public class Schema:ISchema {
         var View = new View(Name,this,SQL);
         this.Views.Add(View);
     }
-    public void CreateScalarFunction(string Name,string SQL) {
-        var Function = new ScalarFunction(Name,this,SQL);
+    public void CreateScalarFunction(string Name,System.Type Type,string SQL) {
+        var Function = new ScalarFunction(Name,Type,this,SQL);
         this.ScalarFunctions.Add(Function);
     }
     public void CreateTableFunction(string Name,string SQL) {
         var TableFunction = new TableFunction(Name,this,SQL);
         this.TableFunctions.Add(TableFunction);
     }
-    public Procedure CreateProcedure(string Name,string SQL) {
-        var Procedure = new Procedure(Name,this,SQL);
+    public void CreateProcedure(string Name,System.Type Type,string SQL) {
+        var Procedure = new Procedure(Name,Type,this,SQL);
         this.Procedures.Add(Procedure);
-        return Procedure;
+    }
+    public void CreateSequence(string Name,object start_value,object increment,object current_value){
+        var Sequence=new Sequence(Name,this,start_value,increment,current_value);
+        this.Sequences.Add(Sequence);
     }
 }
 class Schemas:List<Schema> {

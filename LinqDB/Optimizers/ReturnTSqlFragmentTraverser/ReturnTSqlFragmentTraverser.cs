@@ -278,14 +278,14 @@ public class ReturnTSqlFragmentTraverser{
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual ScalarExpression ScalarExpression(ScalarExpression x)=>x switch {
-        PrimaryExpression y => this.ScalarExpression(y),
-        ExtractFromExpression y => this.ScalarExpression(y),
-        OdbcConvertSpecification y => this.ScalarExpression(y),
-        BinaryExpression y =>this.ScalarExpression(y),
-        IdentityFunctionCall y => this.ScalarExpression(y),
-        UnaryExpression y => this.ScalarExpression(y),
-        ScalarExpressionSnippet y => this.ScalarExpression(y),
-        SourceDeclaration y => this.ScalarExpression(y),
+        PrimaryExpression        y => this.PrimaryExpression(y),
+        ExtractFromExpression    y => this.ExtractFromExpression(y),
+        OdbcConvertSpecification y => this.OdbcConvertSpecification(y),
+        BinaryExpression         y => this.BinaryExpression(y),
+        IdentityFunctionCall     y => this.IdentityFunctionCall(y),
+        UnaryExpression          y => this.UnaryExpression(y),
+        ScalarExpressionSnippet  y => this.ScalarExpressionSnippet(y),
+        SourceDeclaration        y => this.SourceDeclaration(y),
         _ =>Throw(x)
     };
 
@@ -294,30 +294,30 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(PrimaryExpression x) => x switch{
-        ValueExpression y => this.ScalarExpression(y),
-        UserDefinedTypePropertyAccess y => this.ScalarExpression(y),
-        CaseExpression y => this.ScalarExpression(y),
-        NullIfExpression y => this.ScalarExpression(y),
-        CoalesceExpression y => this.ScalarExpression(y),
-        IIfCall y => this.ScalarExpression(y),
-        ConvertCall y => this.ScalarExpression(y),
-        TryConvertCall y => this.ScalarExpression(y),
-        ParseCall y => this.ScalarExpression(y),
-        TryParseCall y => this.ScalarExpression(y),
-        CastCall y => this.ScalarExpression(y),
-        TryCastCall y => this.ScalarExpression(y),
-        AtTimeZoneCall y => this.ScalarExpression(y),
-        FunctionCall y => this.ScalarExpression(y),
-        LeftFunctionCall y => this.ScalarExpression(y),
-        RightFunctionCall y => this.ScalarExpression(y),
-        PartitionFunctionCall y => this.ScalarExpression(y),
-        ParameterlessCall y => this.ScalarExpression(y),
-        ScalarSubquery y => this.ScalarExpression(y),
-        OdbcFunctionCall y => this.ScalarExpression(y),
-        ParenthesisExpression y => this.ScalarExpression(y),
-        ColumnReferenceExpression y => this.ScalarExpression(y),
-        NextValueForExpression y => this.ScalarExpression(y),
+    protected virtual ScalarExpression PrimaryExpression(PrimaryExpression x) => x switch{
+        ValueExpression               y => this.ValueExpression(y),
+        UserDefinedTypePropertyAccess y => this.UserDefinedTypePropertyAccess(y),
+        CaseExpression                y => this.CaseExpression(y),
+        NullIfExpression              y => this.NullIfExpression(y),
+        CoalesceExpression            y => this.ScalarExpression(y),
+        IIfCall                       y => this.ScalarExpression(y),
+        ConvertCall                   y => this.ScalarExpression(y),
+        TryConvertCall                y => this.ScalarExpression(y),
+        ParseCall                     y => this.ScalarExpression(y),
+        TryParseCall                  y => this.ScalarExpression(y),
+        CastCall                      y => this.ScalarExpression(y),
+        TryCastCall                   y => this.ScalarExpression(y),
+        AtTimeZoneCall                y => this.ScalarExpression(y),
+        FunctionCall                  y => this.ScalarExpression(y),
+        LeftFunctionCall              y => this.ScalarExpression(y),
+        RightFunctionCall             y => this.ScalarExpression(y),
+        PartitionFunctionCall         y => this.ScalarExpression(y),
+        ParameterlessCall             y => this.ScalarExpression(y),
+        ScalarSubquery                y => this.ScalarExpression(y),
+        OdbcFunctionCall              y => this.ScalarExpression(y),
+        ParenthesisExpression         y => this.ScalarExpression(y),
+        ColumnReferenceExpression     y => this.ScalarExpression(y),
+        NextValueForExpression        y => this.ScalarExpression(y),
         _ => Throw(x)
     };
     /// <summary>
@@ -325,7 +325,7 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ValueExpression ScalarExpression(ValueExpression x)=>x switch{
+    protected virtual ValueExpression ValueExpression(ValueExpression x)=>x switch{
         Literal y=>this.ScalarExpression(y),
         VariableReference y => this.ScalarExpression(y),
         GlobalVariableExpression y => this.ScalarExpression(y),
@@ -433,15 +433,15 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual UserDefinedTypePropertyAccess ScalarExpression(UserDefinedTypePropertyAccess x)=>x;
+    protected virtual UserDefinedTypePropertyAccess UserDefinedTypePropertyAccess(UserDefinedTypePropertyAccess x)=>x;
     /// <summary>
     /// PrimaryExpression:ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual CaseExpression ScalarExpression(CaseExpression x) => x switch{
-        SimpleCaseExpression y => this.ScalarExpression(y),
-        SearchedCaseExpression y => this.ScalarExpression(y),
+    protected virtual CaseExpression CaseExpression(CaseExpression x) => x switch{
+        SimpleCaseExpression y => this.SimpleCaseExpression(y),
+        SearchedCaseExpression y => this.SearchedCaseExpression(y),
         _ =>Throw(x)
     };
     /// <summary>
@@ -449,19 +449,19 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual SimpleCaseExpression ScalarExpression(SimpleCaseExpression x)=>x;
+    protected virtual SimpleCaseExpression SimpleCaseExpression(SimpleCaseExpression x)=>x;
     /// <summary>
     ///CaseExpression:PrimaryExpression:ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual SearchedCaseExpression ScalarExpression(SearchedCaseExpression x)=>x;
+    protected virtual SearchedCaseExpression SearchedCaseExpression(SearchedCaseExpression x)=>x;
     /// <summary>
     ///PrimaryExpression:ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual NullIfExpression ScalarExpression(NullIfExpression x)=>x;
+    protected virtual NullIfExpression NullIfExpression(NullIfExpression x)=>x;
     /// <summary>
     ///PrimaryExpression:ScalarExpression:TSqlFragment
     /// </summary>
@@ -581,43 +581,43 @@ public class ReturnTSqlFragmentTraverser{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(ExtractFromExpression x)=>x;
+    protected virtual ScalarExpression ExtractFromExpression(ExtractFromExpression x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(OdbcConvertSpecification x)=>x;
+    protected virtual ScalarExpression OdbcConvertSpecification(OdbcConvertSpecification x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(BinaryExpression x)=>x;
+    protected virtual ScalarExpression BinaryExpression(BinaryExpression x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(IdentityFunctionCall x)=>x;
+    protected virtual ScalarExpression IdentityFunctionCall(IdentityFunctionCall x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(UnaryExpression x)=>x;
+    protected virtual ScalarExpression UnaryExpression(UnaryExpression x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(ScalarExpressionSnippet x)=>x;
+    protected virtual ScalarExpression ScalarExpressionSnippet(ScalarExpressionSnippet x)=>x;
     /// <summary>
     ///ScalarExpression:TSqlFragment
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    protected virtual ScalarExpression ScalarExpression(SourceDeclaration x)=>x;
+    protected virtual ScalarExpression SourceDeclaration(SourceDeclaration x)=>x;
     /// <summary>
     /// TSqlFragment
     /// </summary>

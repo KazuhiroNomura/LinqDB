@@ -1,16 +1,10 @@
 ﻿using System.Linq;
-using LinqDB.Sets;
 using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Reflection;
-using System.Xml.Linq;
 using e = System.Linq.Expressions;
-using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
-using System.Globalization;
-using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Helpers;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
@@ -222,6 +216,23 @@ internal partial class 変換_TSqlFragmentからExpression{
             //}
             case "ERROR_NUMBER":{
                 return Constant_0;
+            }
+            case "GROUPING":{
+                Debug.Assert(x_Parameters.Count==1);
+                //SELECT FirstName,PersonType,NameStyle,Title,grouping(NameStyle)
+                //    FROM Person.Person a
+                //GROUP BY ROLLUP(FirstName,PersonType,NameStyle,Title)
+                //A,B,C,D
+                //0,0,0,0 GROUPING(D)=0
+                //0,0,0,  GROUPING(D)=1
+                //0,0, ,  GROUPING(D)=1
+                //0, , ,  GROUPING(D)=1
+                return Constant_0;
+                //return e.Expression.Call(
+                //    this.ScalarExpression(x_Parameters[0]),
+                //    this.ScalarExpression(x_Parameters[0]);
+                //    Product.SQLServer.Reflection.Rank
+                //);
             }
             //システム関数
             case "ISNULL":{
@@ -445,15 +456,15 @@ internal partial class 変換_TSqlFragmentからExpression{
                 }
                 //メソッドが1つだけの場合
                 e.MethodCallExpression MethodCall=null!;
-                if(共通(名前一致Methods,ref MethodCall))return MethodCall;
+                if(共通default(名前一致Methods,ref MethodCall))return MethodCall;
                 //省略なくぴったり引数の数が一致しているもの
-                if(共通(名前一致Methods.Where(Method =>ScalarExpressions.Length==Method.GetParameters().Length),ref MethodCall))return MethodCall;
+                if(共通default(名前一致Methods.Where(Method =>ScalarExpressions.Length==Method.GetParameters().Length),ref MethodCall))return MethodCall;
                 //f(int a,int b=3,params int[]c)
                 //1,引数の数が一致         f(1 , 2,3 )
                 //2,引数の型が一致         f(1d,2d,3d)
                 //ぴったり一致する型(int,double),(int,int,double=1.0)に対して(int,int)は右で解決
                 if(
-                    共通(
+                    共通default(
                         名前一致Methods.Where(
                             Method => {
                                 var Method_Parameters = Method.GetParameters();
@@ -473,7 +484,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //4,親クラス多段に派生している場合、近い型ほど優先 インターフェースも同様だがインターフェースと親クラスの両方があった場合解決できない
                 //近い型は難しいので祖先であるかどうかだけ見る方法にしている
                 if(
-                    共通(
+                    共通default(
                         名前一致Methods.Where(
                             Method =>{
                                 var Method_Parameters = Method.GetParameters();
@@ -491,7 +502,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 )return MethodCall;
                 //暗黙的に変換できる型
                 if(
-                    共通(
+                    共通default(
                         名前一致Methods.Where(
                             Method =>{
                                 var Method_Parameters = Method.GetParameters();
@@ -570,7 +581,7 @@ internal partial class 変換_TSqlFragmentからExpression{
 
                 }
                 if(
-                    共通(
+                    共通default(
                         名前一致_既定値_可変長引数BaseMethods.Where(
                             Method => {
                                 var Method_Parameters = Method.GetParameters();
@@ -588,7 +599,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 )return MethodCall;
 
                 if(
-                    共通(
+                    共通default(
                         名前一致Methods.Where(
                             Method => {
                                 var Method_Parameters = Method.GetParameters();
@@ -608,7 +619,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                     )
                 ) return MethodCall;
                 break;
-                bool 共通(System.Collections.Generic.IEnumerable<MethodInfo> Methods,ref e.MethodCallExpression MethodCall) {
+                bool 共通default(System.Collections.Generic.IEnumerable<MethodInfo> Methods,ref e.MethodCallExpression MethodCall) {
                     var List_Method=Methods.ToList();
                     if(List_Method.Count!=1) return false;
                     var Method= List_Method[0];
@@ -688,7 +699,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //var arguments=new e.Expression[arguments_Length];
                 //for(var a=0;a<arguments_Length;a++) arguments[a]=this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[a]),Parameters[a].ParameterType);
                 var Schema_Type=Schema.Type;
-                e.Expression ifTrue=共通(
+                e.Expression ifTrue=共通CallTarget(
                     e.Expression.Call(
                         Schema,
                         Schema_Type.GetMethod(nameof(Nullable<int>.GetValueOrDefault),Type.EmptyTypes)!
@@ -722,11 +733,10 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //var arguments_Length=x_Parameters.Count;
                 //var arguments=new e.Expression[arguments_Length];
                 //for(var a=0;a<arguments_Length;a++) arguments[a]=this.Convertデータ型を合わせるNullableは想定する(this.ScalarExpression(x_Parameters[a]),Parameters[a].ParameterType);
-                return 共通(Schema);
+                return 共通CallTarget(Schema);
             }
-            e.MethodCallExpression 共通(e.Expression Instance){
-                var Method=Instance.Type.GetMethod(FunctionName,BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly|BindingFlags.IgnoreCase);
-                Debug.Assert(Method!=null);
+            e.MethodCallExpression 共通CallTarget(e.Expression Instance){
+                var Method=Instance.Type.GetMethod(FunctionName,BindingFlags.Instance|BindingFlags.Public|BindingFlags.DeclaredOnly|BindingFlags.IgnoreCase)!;
                 var Parameters=Method.GetParameters();
                 var arguments_Length=x_Parameters.Count;
                 var arguments=new e.Expression[arguments_Length];

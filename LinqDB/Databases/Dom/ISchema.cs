@@ -18,6 +18,7 @@ public interface ISchema:IName {
     IEnumerable<IScalarFunction> ScalarFunctions { get; }
     IEnumerable<ITableFunction> TableFunctions { get; }
     IEnumerable<IProcedure> Procedures { get; }
+    IEnumerable<ISequence> Sequences{ get; }
     /// <summary>
     /// 兄弟Schemaのコレクション
     /// </summary>

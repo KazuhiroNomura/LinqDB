@@ -20,7 +20,7 @@ public abstract class information_schema {
         ORDER BY TABLE_NAME
     ";
     public virtual string SQL_ScalarFunction=>@"
-        SELECT TABLE_NAME,VIEW_DEFINITION
+        SELECT TABLE_NAME,FUNCTION_DEFINITIONというのはない
         FROM INFORMATION_SCHEMA.VIEWS
         WHERE TABLE_SCHEMA=@SCHEMA
         ORDER BY TABLE_NAME

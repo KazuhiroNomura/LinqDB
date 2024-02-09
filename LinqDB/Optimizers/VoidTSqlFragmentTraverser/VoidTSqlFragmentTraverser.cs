@@ -952,7 +952,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void NextValueForExpression(NextValueForExpression x) {
         if(x.Collation is not null) this.SwitchIdentifier(x.Collation);
-        this.OverClause(x.OverClause);
+        if(x.OverClause is not null) this.OverClause(x.OverClause);
         this.SwitchSchemaObjectName(x.SequenceName);
     }
     /// <summary>
@@ -1570,7 +1570,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void BeginTransactionStatement(BeginTransactionStatement x) {
         this.ValueExpression(x.MarkDescription);
-        this.IdentifierOrValueExpression(x.Name);
+        if(x.Name is not null)this.IdentifierOrValueExpression(x.Name);
     }
     /// <summary>
     ///TransactionStatement:BeginEndBlockStatement:TSqlStatement:TSqlFragment
@@ -1578,7 +1578,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual void CommitTransactionStatement(CommitTransactionStatement x) {
-        this.IdentifierOrValueExpression(x.Name);
+        if(x.Name is not null)this.IdentifierOrValueExpression(x.Name);
     }
     /// <summary>
     ///TransactionStatement:BeginEndBlockStatement:TSqlStatement:TSqlFragment
@@ -2819,8 +2819,8 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void AlterIndexStatement(AlterIndexStatement x) {
         this.Identifier(x.Name);
-        this.PartitionSpecifier(x.Partition);
-        this.XmlNamespaces(x.XmlNamespaces);
+        if(x.Partition is not null)this.PartitionSpecifier(x.Partition);
+        if(x.XmlNamespaces is not null)this.XmlNamespaces(x.XmlNamespaces);
         this.IndexOptions(x.IndexOptions);
         this.PromotedPaths(x.PromotedPaths);
     }
@@ -2858,8 +2858,8 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void CreateIndexStatement(CreateIndexStatement x) {
         this.BooleanExpression(x.FilterPredicate);
-        this.IdentifierOrValueExpression(x.FileStreamOn);
-        this.FileGroupOrPartitionScheme(x.OnFileGroupOrPartitionScheme);
+        if(x.FileStreamOn is not null)this.IdentifierOrValueExpression(x.FileStreamOn);
+        if(x.OnFileGroupOrPartitionScheme is not null)this.FileGroupOrPartitionScheme(x.OnFileGroupOrPartitionScheme);
         this.ColumnWithSortOrders(x.Columns);
         this.ColumnReferenceExpressions(x.IncludeColumns);
         this.IndexOptions(x.IndexOptions);
@@ -4848,7 +4848,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <returns></returns>
     protected virtual void ExecuteParameter(ExecuteParameter x) {
         this.ScalarExpression(x.ParameterValue);
-        this.VariableReference(x.Variable);
+        if(x.Variable is not null)this.VariableReference(x.Variable);
         this.ScalarExpression(x.ParameterValue);
     }
     /// <summary>
@@ -6085,7 +6085,7 @@ public abstract class VoidTSqlFragmentTraverser {
         if(x.OutputIntoClause is not null)this.OutputIntoClause(x.OutputIntoClause);
         this.TableReference(x.Target);
         if(x.TopRowFilter is not null)this.TopRowFilter(x.TopRowFilter);
-        this.WhereClause(x.WhereClause);
+        if(x.WhereClause is not null)this.WhereClause(x.WhereClause);
     }
     /// <summary>
     ///DataModificationSpecification:TSqlFragment

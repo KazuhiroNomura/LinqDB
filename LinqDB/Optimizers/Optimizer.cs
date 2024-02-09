@@ -226,6 +226,12 @@ public sealed class Optimizer:IDisposable {
         this._変換_TSqlFragment正規化.実行(TSqlFragment);
         return this._変換_TSqlFragmentからExpression.実行(Parameter,TSqlFragment);
     }
+    //public Expression SQLToExpression(ParameterExpression Parameter,string SQL) {
+    //    var TSqlFragment = this.SQLからTSqlFragment(SQL);
+    //    this.SQL=SQL;
+    //    this._変換_TSqlFragment正規化.実行(TSqlFragment);
+    //    return this._変換_TSqlFragmentからExpression.実行(Parameter,TSqlFragment,ModuleBuilder);
+    //}
     private static object Get_ValueTuple(MemberExpression Member,object Tuple) {
         var Field = (FieldInfo)Member.Member;
         if(Member.Expression is MemberExpression Member1) {
@@ -263,7 +269,7 @@ public sealed class Optimizer:IDisposable {
                 var Lambda = a.Key;
                 var Lambda_Parameters = Lambda.Parameters;
                 var Lambda_Parameters_Count = Lambda_Parameters.Count;
-                var インスタンスメソッドか = 判定InstanceMethodか.実行(Lambda.Body)|true;
+                var インスタンスメソッドか = 判定InstanceMethodか.実行(Lambda.Body);
                 Type[] DispTypes, ImplTypes;
                 if(インスタンスメソッドか) {
                     DispTypes=new Type[Lambda_Parameters_Count];
@@ -271,9 +277,11 @@ public sealed class Optimizer:IDisposable {
                     ImplTypes[0]=Disp_TypeBuilder;
                     for(var b = 0;b<Lambda_Parameters_Count;b++) {
                         var 元Parameter = Lambda_Parameters[b];
-                        var Type = 元Parameter.IsByRef
-                            ? 元Parameter.Type.MakeByRefType()
-                            : 元Parameter.Type;
+                        Type Type;
+                        if(元Parameter.IsByRef)
+                            Type=元Parameter.Type.MakeByRefType();
+                        else
+                            Type=元Parameter.Type;
                         DispTypes[b+0]=Type;
                         ImplTypes[b+1]=Type;
                     }
@@ -281,7 +289,10 @@ public sealed class Optimizer:IDisposable {
                     DispTypes=ImplTypes=new Type[Lambda_Parameters_Count];
                     for(var b = 0;b<Lambda_Parameters_Count;b++) {
                         var 元Parameter = Lambda_Parameters[b];
-                        ImplTypes[b]=元Parameter.IsByRef ? 元Parameter.Type.MakeByRefType() : 元Parameter.Type;
+                        if(元Parameter.IsByRef)
+                            ImplTypes[b]=元Parameter.Type.MakeByRefType();
+                        else
+                            ImplTypes[b]=元Parameter.Type;
                     }
                 }
                 var Disp_MethodBuilder = Disp_TypeBuilder.DefineMethod($"DispMethod{Field番号}",MethodAttributes.Public,Lambda.ReturnType,DispTypes);
@@ -299,6 +310,7 @@ public sealed class Optimizer:IDisposable {
                 }
                 ushort index = 1;
                 for(var b = 0;b<Lambda_Parameters_Count;b++) {
+                    //Disp_MethodBuilder_I.Emit(OpCodes.Ldarg,index++);
                     Disp_MethodBuilder_I.Ldarg(index++);
                     var ParameterName = Lambda_Parameters[b].Name;
                     Disp_MethodBuilder.DefineParameter(Disp_index++,ParameterAttributes.None,ParameterName);
@@ -367,20 +379,22 @@ public sealed class Optimizer:IDisposable {
             }
         }
     }
+    private static int xx=0;
     internal void Impl作成(Information Information,ParameterExpression ContainerParameter) {
-        Debug.Assert(Information.DispParameter is not null);
-        var DispParameter = Information.DispParameter;
+        //Debug.Assert(Information.DispParameter is not null);
+        var DispParameter = Information.DispParameter!;
         this.DispParameter=DispParameter;
         var DictionaryConstant = this.DictionaryConstant=Information.DictionaryConstant;
         var DictionaryDynamic = this.DictionaryDynamic=Information.DictionaryDynamic;
         var DictionaryLambda = this.DictionaryLambda=Information.DictionaryLambda;
         var Dictionaryラムダ跨ぎParameter = this.Dictionaryラムダ跨ぎParameter=Information.Dictionaryラムダ跨ぎParameter;
-        Debug.Assert(Information.Disp_Type is not null);
-        var ContainerField = Information.Disp_Type.GetField("Container");
+        //Debug.Assert(Information.Disp_Type is not null);
+        var ContainerField = Information.Disp_Type!.GetField("Container");
         Debug.Assert(ContainerField is not null);
         Dictionaryラムダ跨ぎParameter.Add(ContainerParameter,(ContainerField, Expression.Field(DispParameter,ContainerField)));
         Debug.Assert(Information.Lambda is not null);
         this._作成_DynamicAssembly.Impl作成(Information.Lambda,DispParameter,DictionaryConstant,DictionaryDynamic,DictionaryLambda,Dictionaryラムダ跨ぎParameter);
+        xx++;
         Information.CreateImplType();
     }
     /// <summary>

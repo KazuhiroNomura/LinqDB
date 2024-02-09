@@ -70,35 +70,34 @@ public class Container:IContainer {
     //}
     public override string ToString() => this.Name;
     public Schema this[string Schema] => this.Schemas.First(p => p.Name==Schema);
-    public List<ScalarType> ScalarTypes{ get; } = new();
-    public List<TableType> TableTypes{ get; } = new();
-    public List<Table> Tables { get; } = new();
+    //public List<ScalarType> ScalarTypes{ get; } = new();
+    //public List<TableType> TableTypes{ get; } = new();
+    //public List<Table> Tables { get; } = new();
     //public List<View> Views { get; } = new List<View>();
     //public List<ForeignKey> ForeignKeys { get; } = new List<ForeignKey>();
     public List<Relation> Relations { get; } = new();
     IEnumerable<IRelation> IContainer.Relations => this.Relations;
-    public void Add(Relation Value) {
+    private void Add(Relation Value) {
         this.Relations.Add(Value);
     }
-    public void Remove(Relation Value) {
-        this.Relations.Remove(Value);
-    }
-    public void Add(ScalarType Value) {
-        this.ScalarTypes.Add(Value);
-    }
-    public void Add(TableType Value) {
-        this.TableTypes.Add(Value);
-    }
-    public void Add(Table Value) {
-        this.Tables.Add(Value);
-    }
-    public void Remove(Table Value) {
-        this.Tables.Remove(Value);
-    }
+    //public void Remove(Relation Value) {
+    //    this.Relations.Remove(Value);
+    //}
+    //public void Add(ScalarType Value) {
+    //    this.ScalarTypes.Add(Value);
+    //}
+    //public void Add(TableType Value) {
+    //    this.TableTypes.Add(Value);
+    //}
+    //public void Add(Table Value) {
+    //    this.Tables.Add(Value);
+    //}
+    //public void Remove(Table Value) {
+    //    this.Tables.Remove(Value);
+    //}
     public void Clear(){
         this.Schemas.Clear();
         this.Relations.Clear();
-        this.Tables.Clear();
     }
     //public IEnumerable<DiagramObject> DiagramObjects {
     //    get {

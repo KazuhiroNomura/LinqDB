@@ -551,23 +551,27 @@ public static class ILGenerator拡張メソッド {
     /// <param name="arg"></param>
     public static void Ldarg(this ILGenerator I,ushort arg){
         switch(arg){
-            case 0:
-                I.Emit(OpCodes.Ldarg_0);
-                break;
-            case 1:
-                I.Emit(OpCodes.Ldarg_1);
-                break;
-            case 2:
-                I.Emit(OpCodes.Ldarg_2);
-                break;
-            case 3:
-                I.Emit(OpCodes.Ldarg_3);
-                break;
+            //case 0:
+            //    I.Emit(OpCodes.Ldarg_0);
+            //    break;
+            //case 1:
+            //    I.Emit(OpCodes.Ldarg_1);
+            //    break;
+            //case 2:
+            //    I.Emit(OpCodes.Ldarg_2);
+            //    break;
+            //case 3:
+            //    I.Emit(OpCodes.Ldarg_3);
+            //    break;
+            //case<256:
+            //    I.Emit(OpCodes.Ldarg_S,(byte)arg);
+            //    break;
             default:
-                I.Emit(arg<=255?OpCodes.Ldarg_S:OpCodes.Ldarg,arg);
+                I.Emit(OpCodes.Ldarg,arg);
                 break;
         }
     }
+    private static int iii(int a0,int a1,int a2,int a3,int a4,int a5)=>a5;
     /// <summary>
     /// インデックス 0 の引数を評価スタックに読み込みます。
     /// </summary>

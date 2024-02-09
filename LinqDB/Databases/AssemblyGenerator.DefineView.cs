@@ -117,7 +117,8 @@ public partial class AssemblyGenerator {
             Disp_ctor_I,
             Impl_TypeBuilder,
             this.ExpressionEqualityComparer,
-            Impl_Evaluate
+            Impl_Evaluate,
+            Object.SQL
         ));
     }
 }

@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Reflection;
-using System.Xml.Linq;
 using e = System.Linq.Expressions;
 using AssemblyName = Microsoft.SqlServer.TransactSql.ScriptDom.AssemblyName;
 using System.Globalization;
 using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Helpers;
+using Microsoft.Build.Execution;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
 internal partial class 変換_TSqlFragmentからExpression{
@@ -364,7 +364,12 @@ internal partial class 変換_TSqlFragmentからExpression{
     private e.Expression ExecuteAsFunctionOption(ExecuteAsFunctionOption x){
         throw this.単純NotSupportedException(x);
     }
-    private Type FunctionReturnType(FunctionReturnType x)=>x switch{
+    //private Type FunctionReturnTypeのType(FunctionReturnType x)=>x switch{
+    //    TableValuedFunctionReturnType y=>this.TableValuedFunctionReturnTypeのType(y),
+    //    ScalarFunctionReturnType y=>this.ScalarFunctionReturnTypeのType(y),
+    //    _=>throw this.単純NotSupportedException(x)
+    //};
+    private  Type FunctionReturnType(FunctionReturnType x)=>x switch{
         //TableValuedFunctionReturnType y=>this.TableValuedFunctionReturnType(y),
         ScalarFunctionReturnType y=>this.ScalarFunctionReturnType(y),
         _=>throw this.単純NotSupportedException(x)
@@ -886,8 +891,8 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    private void TableValuedFunctionReturnType(TableValuedFunctionReturnType x){
-        this.DeclareTableVariableBody(x.DeclareTableVariableBody);
+    private e.Expression TableValuedFunctionReturnType(TableValuedFunctionReturnType x){
+        return this.DeclareTableVariableBody(x.DeclareTableVariableBody);
     }
     private e.Expression TableXmlCompressionOption(TableXmlCompressionOption x){throw this.単純NotSupportedException(x);}
     private e.Expression TargetDeclaration(TargetDeclaration x){throw this.単純NotSupportedException(x);}
@@ -1076,7 +1081,7 @@ internal partial class 変換_TSqlFragmentからExpression{
     private e.Expression WindowDefinition(WindowDefinition x){throw this.単純NotSupportedException(x);}
     private e.Expression WithCtesAndXmlNamespaces(WithCtesAndXmlNamespaces x){
         var StackSubquery単位の情報=this._StackSubquery単位の情報;
-        StackSubquery単位の情報.Push();
+        //StackSubquery単位の情報.Push();
         //WITH graph AS(
         //    SELECT *
         //    FROM v x
@@ -1115,10 +1120,10 @@ internal partial class 変換_TSqlFragmentからExpression{
         var x_CommonTableExpressions_Count=x_CommonTableExpressions.Count;
         if(x_CommonTableExpressions_Count==0)return Default_void;
         var List_Assign=new List<e.Expression>(x_CommonTableExpressions_Count);
-        ref var RefPeek=ref this.RefPeek;
+        //ref var RefPeek=ref this.RefPeek;
         for(var a=0;a<x_CommonTableExpressions_Count;a++)
             List_Assign.Add(this.CommonTableExpression(x_CommonTableExpressions[a]));
-        StackSubquery単位の情報.Pop();
+        //StackSubquery単位の情報.Pop();
         if(List_Assign.Count==1)return List_Assign[0];
         return e.Expression.Block(List_Assign);
     }
@@ -1204,6 +1209,8 @@ internal partial class 変換_TSqlFragmentからExpression{
         if(Property is not null)
             return e.Expression.Property(null,Property);
         if(Name=="IDENTITY")
+            return e.Expression.Default(typeof(int));
+        if(Name=="ROWCOUNT")
             return e.Expression.Default(typeof(int));
         throw new NotImplementedException(Name);
     }
@@ -1565,56 +1572,83 @@ internal partial class 変換_TSqlFragmentからExpression{
         //    ExpressionName.AddRange(t)
         //    if(t.Count==0)break;
         //}
+        e.Expression Result;
         var WITH名=this.Identifier(x.ExpressionName);
         //var QueryExpression=this.QueryExpression(x.QueryExpression);
-        var BinaryQueryExpression=(BinaryQueryExpression)x.QueryExpression;
-        var FirstQueryExpression=this.QueryExpression(BinaryQueryExpression.FirstQueryExpression);
-        var 作業配列=this.作業配列;
-        var SetType=作業配列.MakeGenericType(typeof(Set<>),IEnumerable1のT(FirstQueryExpression.Type));
-        var UnionWith=SetType.GetMethod(nameof(Set<int>.UnionWith));
-        var Parameter=e.Expression.Parameter(SetType,WITH名+"Set");
-        //var Parameter=e.Expression.Parameter(QueryExpression.Type,WITH名+"Set");
-        this.Dictionary_With名_Set_ColumnAliases.Add(WITH名,(Parameter,x.Columns.Select(p=>this.Identifier(p)).ToArray()));
-        this.AddTableVariable(Parameter);
-        this.RefPeek.Clear();
-        var SecondQueryExpression=this.QueryExpression(BinaryQueryExpression.SecondQueryExpression);
-        var LongCount0=e.Expression.Parameter(typeof(long),"LongCount0");
-        var LongCount1=e.Expression.Parameter(typeof(long),"LongCount0");
-        var LongCount=e.Expression.Call(
-            Parameter,
-            Reflection.ImmutableSet.get_LongCount
-        );
-        var Break=e.Expression.Label();
-        var Block=e.Expression.Block(
-            作業配列.Parameters設定(LongCount0,LongCount1),
-            e.Expression.Assign(
-                Parameter,
-                e.Expression.New(SetType)
-            ),
-            e.Expression.Call(
-                Parameter,
-                UnionWith,
-                FirstQueryExpression
-            ),
-            e.Expression.Loop(
-                e.Expression.Block(
-                    e.Expression.Assign(LongCount0,LongCount),
-                    e.Expression.Call(
-                        Parameter,
-                        UnionWith,
-                        SecondQueryExpression
-                    ),
-                    e.Expression.IfThenElse(
-                        e.Expression.Equal(LongCount1,LongCount),
-                        e.Expression.Break(Break),
-                        e.Expression.Assign(LongCount1,LongCount)
-                    )
+        var StackSubquery単位の情報=this._StackSubquery単位の情報;
+        StackSubquery単位の情報.Push();
+        ref var RefPeek12=ref this.RefPeek;
+        ref var RefPeek1=ref StackSubquery単位の情報.RefPeek;
+        Debug.Assert(RefPeek12.Dictionary_DatabaseSchemaTable_ColumnExpression==RefPeek1.Dictionary_DatabaseSchemaTable_ColumnExpression);
+        var RefPeek1_List_ColumnAlias=RefPeek1.List_ColumnAlias;
+        if(x.QueryExpression is BinaryQueryExpression BinaryQueryExpression){
+            var FirstQueryExpression=this.QueryExpression(BinaryQueryExpression.FirstQueryExpression);
+            var 作業配列=this.作業配列;
+            var SetType=作業配列.MakeGenericType(typeof(Set<>),IEnumerable1のT(FirstQueryExpression.Type));
+            var UnionWith=SetType.GetMethod(nameof(Set<int>.UnionWith));
+            var SetParameter=e.Expression.Parameter(SetType,WITH名+"Set");
+            //var Parameter=e.Expression.Parameter(QueryExpression.Type,WITH名+"Set");
+            this.AddTableVariable(SetParameter);
+            this.RefPeek.Clear();
+            var SecondQueryExpression=this.QueryExpression(BinaryQueryExpression.SecondQueryExpression);
+            var LongCount0=e.Expression.Parameter(typeof(long),"LongCount0");
+            var LongCount1=e.Expression.Parameter(typeof(long),"LongCount0");
+            var LongCount=e.Expression.Call(SetParameter,Reflection.ImmutableSet.get_LongCount);
+            var Break=e.Expression.Label();
+            Result=e.Expression.Block(
+                作業配列.Parameters設定(LongCount0,LongCount1),
+                e.Expression.Assign(
+                    SetParameter,
+                    e.Expression.New(SetType)
                 ),
-                Break
-            )
-        );
-        //this.List_ScalarVariable.Add(Parameter);
-        return Block;
+                e.Expression.Call(
+                    SetParameter,
+                    UnionWith,
+                    FirstQueryExpression
+                ),
+                e.Expression.Loop(
+                    e.Expression.Block(
+                        e.Expression.Assign(LongCount0,LongCount),
+                        e.Expression.Call(
+                            SetParameter,
+                            UnionWith,
+                            SecondQueryExpression
+                        ),
+                        e.Expression.IfThenElse(
+                            e.Expression.Equal(LongCount1,LongCount),
+                            e.Expression.Break(Break),
+                            e.Expression.Assign(LongCount1,LongCount)
+                        )
+                    ),
+                    Break
+                )
+            );
+        } else{
+            Result=this.QueryExpression(x.QueryExpression);
+        }
+        var RefPeek1_List_ColumnAlias_Count=RefPeek1_List_ColumnAlias.Count;
+        var RefPeek1_List_アスタリスクColumnAlias=RefPeek1.List_アスタリスクColumnAlias;
+        StackSubquery単位の情報.Pop();
+        //ref var RefPeek0=ref this.RefPeek;
+        //var RefPeek0_List_アスタリスクColumnAlias=RefPeek0.List_アスタリスクColumnAlias;
+        var ElementParameter=e.Expression.Parameter(Result.Type.GetGenericArguments()[0],WITH名);
+        string[]ColumnAliases;
+        var AliasExpressins=new(string Name,e.Expression Expression)[RefPeek1_List_ColumnAlias_Count];
+        if(x.Columns.Count>0){
+            ColumnAliases=x.Columns.Select(this.Identifier).ToArray();
+        } else{
+            ColumnAliases=RefPeek1_List_アスタリスクColumnAlias.ToArray();
+        }
+        {
+            e.Expression ValueTuple=ElementParameter;
+            var Item番号=1;
+            for(var a=0;a<RefPeek1_List_ColumnAlias_Count;a++){
+                var Item=ValueTuple_Item(ref ValueTuple,ref Item番号);
+                AliasExpressins[a]=(ColumnAliases[a],Item);
+            }
+        }
+        this.Dictionary_With名_Set_ColumnAliases.Add(WITH名,(Result,ElementParameter,AliasExpressins));
+        return Result;
     }
     //private e.Expression Type FunctionReturnType(FunctionReturnType x)=>x switch{
     //    TableValuedFunctionReturnType y=>this.TableValuedFunctionReturnType(y),
@@ -1622,6 +1656,10 @@ internal partial class 変換_TSqlFragmentからExpression{
     //    SelectFunctionReturnType y=>this.SelectFunctionReturnType(y),
     //    _=>throw this.単純NotSupportedException(x)
     //};
+    private Type ScalarFunctionReturnTypeのType(ScalarFunctionReturnType x){
+        var DataType=DataTypeReferenceからTypeに変換(x.DataType);
+        return DataType;
+    }
     private Type ScalarFunctionReturnType(ScalarFunctionReturnType x){
         var DataType=DataTypeReferenceからTypeに変換(x.DataType);
         return DataType;
@@ -1830,7 +1868,6 @@ internal partial class 変換_TSqlFragmentからExpression{
         //        Dictionary_DatabaseSchemaTable_ColumnExpression0[KV.Key]=変換_旧Parameterを新Expression0.実行(KV.Value!,Parameter0,物理Expression);
         //}
     }
-    private static int cou=0;
     /// <summary>
     /// FROM後にJOIN区切りでテーブルを並べる
     /// SELECT *
@@ -1869,12 +1906,8 @@ internal partial class 変換_TSqlFragmentからExpression{
             default:
                 throw new NotSupportedException(QualifiedJoinType.ToString());
         }
-        var c=cou++;
         var(OuterSet,o)=this.TableReference(FirstTableReference);
         var TOuter=IEnumerable1のT(OuterSet.Type);
-        if(c==21){
-
-        }
         var(InnerSet,i)=this.TableReference(SecondTableReference);
         var TInner=IEnumerable1のT(InnerSet.Type);
         var 作業配列=this.作業配列;
@@ -1932,8 +1965,6 @@ internal partial class 変換_TSqlFragmentからExpression{
                     作業配列.MakeGenericMethod(Reflection.ExtensionSet.DefaultIfEmpty,i.Type),
                     InnerSet
                 );
-                //iが含まれている式はnullだったらスカラ値をnullにする式に置き換える
-
             }
             //Joinだが変換_メソッド正規化_取得インラインでSelectManyに変換される
             (プローブ,ビルド)=Listプローブビルド.Count==1?Listプローブビルド[0]:ValueTupleでNewしてプローブとビルドに分解(作業配列,Listプローブビルド,0);
@@ -2163,11 +2194,17 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// <param name="x"></param>
     /// <returns></returns>
     private e.Expression InsertSpecification(InsertSpecification x){
+        ref var RefPeek=ref this.RefPeek;
         if(x.TopRowFilter is not null)
             this.TopRowFilter(x.TopRowFilter);
         var Columns=x.Columns;
         var Columns_Count= Columns.Count;
-        var (Set,Element)=this.TableReference(x.Target);
+        var (TargetSet,TargetElement)=this.TableReference(x.Target);
+        var List_ColumnAlias=RefPeek.List_ColumnAlias;
+        var List_ColumnAlias0=List_ColumnAlias.ToList();
+        var List_ColumnAlias_Count0=List_ColumnAlias0.Count;
+        var List_ColumnExpression0=RefPeek.List_ColumnExpression;
+        RefPeek.Clear();
         ////(_,Set)=this.NamedTableReference(NamedTableReference);
         //string[] Names;
         //if(Columns_Count==0){
@@ -2186,26 +2223,41 @@ internal partial class 変換_TSqlFragmentからExpression{
         //this.List_匿名型TableVariable[0].
         //ここでthis.RefPeek.Dictionary_DatabaseSchemaTable_ColumnExpressionが追加される
         if(x.InsertSource is not null) { 
-            var InsertSource=this.InsertSource(x.InsertSource);
+            var Source=this.InsertSource(x.InsertSource);
             //insert into Set InsertSource(select ... from ...)
             //Set=InsertSource
             //Debug.Assert(Set.NodeType==e.ExpressionType.Parameter);
             if(x.OutputClause is not null)this.OutputClause(x.OutputClause);
             if(x.OutputIntoClause is not null)this.OutputIntoClause(x.OutputIntoClause);
-            var ValueTuple_Type = IEnumerable1のT(InsertSource.Type);
-            var ValueTuple_p = e.Expression.Parameter(ValueTuple_Type,"ValueTuple_p");
-            var Element_Type =IEnumerable1のT(Set.Type);
-            var Constructor = Element_Type.GetConstructors()[0];
+            //var ValueTuple_Type = IEnumerable1のT(InsertSource.Type);
+            var SourceSetType=Source.Type;
+            if(SourceSetType.IsArray){
+
+            }
+            var SourceElementType=IEnumerable1のT(SourceSetType);
+            //Debug.Assert(Element.Type==IEnumerable1のT(InsertSource_Type));
+            //var Element = e.Expression.Parameter(ValueTuple_Type,"Element");
+            var Dictionary_With名_Set_ColumnAliases=this.Dictionary_With名_Set_ColumnAliases;
+            var TargetElementType =IEnumerable1のT(TargetSet.Type);
+            var Constructor = TargetElementType.GetConstructors()[0];
             var Parameters = Constructor.GetParameters();
             var NewArguments_Length = Parameters.Length;
-            var NewArguments = new e.Expression[NewArguments_Length];
+            var NewArguments = new e.Expression?[NewArguments_Length];
+            var SourceElement=e.Expression.Parameter(SourceElementType,"SourceElement");
             var 作業配列 = this.作業配列;
-            e.Expression ValueTuple = ValueTuple_p;
+            e.Expression ValueTuple = SourceElement;
             var Item番号 = 1;
-            if(Columns_Count==0) {
-                for(var a = 0;a < NewArguments_Length;a++) {
+            if(Columns_Count==0){
+                var List_ColumnAlias_Count=List_ColumnAlias.Count;
+                var List_ColumnExpression=RefPeek.List_ColumnExpression;
+                Debug.Assert(List_ColumnAlias_Count==NewArguments_Length);
+                Debug.Assert(List_ColumnExpression.Count==NewArguments_Length);
+                //for(var a=0;a<NewArguments.Length;a++){
+                //    NewArguments[a] = this.Convertデータ型を合わせるNullableは想定する(List_ColumnExpression[a],Parameters[a].ParameterType);
+                //}
+                for(var a = 0;a<NewArguments_Length;a++){
                     var Item = ValueTuple_Item(ref ValueTuple,ref Item番号);
-                    NewArguments[a] = this.Convertデータ型を合わせるNullableは想定する(Item,Parameters[a].ParameterType);
+                    NewArguments[a]=this.Convertデータ型を合わせるNullableは想定する(Item,Parameters[a].ParameterType);
                 }
             } else {
                 var Names=new string[Columns_Count];
@@ -2219,6 +2271,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                     NewArguments[index] = this.Convertデータ型を合わせるNullableは想定する(Item,Parameters[index].ParameterType);
                     //Names[a]=null;
                 }
+                //列がA,B,CあるテーブルにINSERT INTO(A,B)SELECT A,BしたときにCはデフォルト値を入れたい
                 for(var a = 0;a < Columns_Count;a++){
                     if(NewArguments[a] is not null) continue;
                     NewArguments[a]=e.Expression.Default(Parameters[a].ParameterType);
@@ -2230,16 +2283,28 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //    Names[a]=null;
                 //}
             }
+            var Select_selector=作業配列.MakeGenericMethod(
+                Reflection.ExtensionSet.Select_selector,
+                SourceElementType,
+                TargetElementType
+            );
+            var selector=e.Expression.Lambda(
+                e.Expression.New(Constructor,NewArguments!),
+                作業配列.Parameters設定(SourceElement)
+            );
             return e.Expression.Call(
-                Set,
-                Set.Type.GetMethod("AddRange"),
+                TargetSet,
+                TargetSet.Type.GetMethod("AddRange"),
                 e.Expression.Call(
-                    作業配列.MakeGenericMethod(InsertSource.Type.IsArray ? Reflection.ExtensionEnumerable.Select_selector:Reflection.ExtensionSet.Select_selector,ValueTuple_Type,Element_Type),
-                    InsertSource,
+                    作業配列.MakeGenericMethod(
+                        Reflection.ExtensionSet.Select_selector,
+                        SourceElementType,
+                        TargetElementType
+                    ),
+                    Source,
                     e.Expression.Lambda(
-                        e.Expression.New(Constructor,NewArguments),
-                        作業配列.Parameters設定(ValueTuple_p)
-
+                        e.Expression.New(Constructor,NewArguments!),
+                        作業配列.Parameters設定(SourceElement)
                     )
                 )
             );
@@ -2766,7 +2831,7 @@ internal partial class 変換_TSqlFragmentからExpression{
             RefPeek.List_ColumnAlias.Add(x.ColumnName.Value);
         }else if(x.Expression is ColumnReferenceExpression ColumnReferenceExpression){
             var Identifiers=ColumnReferenceExpression.MultiPartIdentifier.Identifiers;
-            RefPeek.List_ColumnAlias.Add(Identifiers[Identifiers.Count-1].Value);
+            RefPeek.List_ColumnAlias.Add(Identifiers[^1].Value);
         }else{
             //SELECT 列名1,列名2 UNION SELECT 345←列名無し
             RefPeek.List_ColumnAlias.Add(this.番号++.ToString(CultureInfo.CurrentCulture));
@@ -2854,14 +2919,14 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// SELECT xxxx;UPDATE yyyy;SELECT zzzz;
     /// ";"が1ステートメントに対応する。
     /// </summary>
-    /// <param name="Statements"></param>
+    /// <param name="x"></param>
     /// <returns></returns>
-    private e.Expression Statements(IList<TSqlStatement> Statements){
-        var Statements_Count=Statements.Count;
-        if(Statements_Count==1)return this.TSqlStatement(Statements[0]);
+    private e.Expression Statements(IList<TSqlStatement> x){
+        var Statements_Count=x.Count;
+        if(Statements_Count==1)return this.TSqlStatement(x[0]);
         var ListExpression=new List<e.Expression>();
         for(var a=0;a<Statements_Count;a++){
-            var Expression=this.TSqlStatement(Statements[a]);
+            var Expression=this.TSqlStatement(x[a]);
             if(Expression!=Default_void)ListExpression.Add(Expression);
             //SELECT @package_name = name,@folderid = folderid FROM dbo.sysssispackages
             //ここでクリアすべき

@@ -10,16 +10,38 @@ public class information_schema:Product.information_schema{
         WHERE name=@CATALOG
         ORDER BY database_id
     ";
-    public override string SQL_View =>this.SQL_View_ScalarFunction_TableFunction_Procedure("='V'");
-    public override string SQL_ScalarFunction =>this.SQL_View_ScalarFunction_TableFunction_Procedure("='FN'");
-    public override string SQL_TableFunction =>this.SQL_View_ScalarFunction_TableFunction_Procedure(" IN('TF','IF')");
-    public override string SQL_Procedure =>this.SQL_View_ScalarFunction_TableFunction_Procedure("='P'");
-    private string SQL_View_ScalarFunction_TableFunction_Procedure(string predicate)=>$@"
-        SELECT O.name,M.definition,O.type
+    public override string SQL_View =>$@"
+        SELECT O.name,M.definition
         FROM sys.{this.all}objects       O
         JOIN sys.schemas           S ON O.schema_id=S.schema_id
         JOIN sys.{this.all}sql_modules M ON O.object_id=M.object_id
-        WHERE O.type{predicate}AND S.name=@SCHEMA
+        WHERE O.type='V'AND S.name=@SCHEMA
+        ORDER BY O.name
+    ";
+    public override string SQL_ScalarFunction =>$@"
+        SELECT O.name,T.name,M.definition
+        FROM sys.{this.all}objects     O
+        JOIN sys.schemas               S ON O.schema_id=S.schema_id
+        JOIN sys.{this.all}sql_modules M ON O.object_id=M.object_id
+        JOIN sys.parameters            P ON O.object_id=P.object_id
+        JOIN sys.types                 T ON P.system_type_id=T.user_type_id
+        WHERE S.name=@SCHEMA AND P.is_output=1 AND O.type='FN'
+        ORDER BY O.name
+    ";
+    public override string SQL_TableFunction =>$@"
+        SELECT O.name,M.definition
+        FROM sys.{this.all}objects       O
+        JOIN sys.schemas           S ON O.schema_id=S.schema_id
+        JOIN sys.{this.all}sql_modules M ON O.object_id=M.object_id
+        WHERE S.name=@SCHEMA AND O.type IN('TF','IF')
+        ORDER BY O.name
+    ";
+    public override string SQL_Procedure =>$@"
+        SELECT O.name,M.definition
+        FROM sys.{this.all}objects       O
+        JOIN sys.schemas     S ON O.schema_id     =S.schema_id
+        JOIN sys.{this.all}sql_modules M ON O.object_id=M.object_id
+        WHERE S.name=@SCHEMA AND O.type='P'
         ORDER BY O.name
     ";
     public override string SQL_Table_Column => $@"
@@ -36,7 +58,14 @@ public class information_schema:Product.information_schema{
         WHERE S.name=@SCHEMA AND T.name=@NAME
         order by C.column_id
     ";
-    public override string SQL_View_ScalarFunction_TableFunction=>this.SQL_View_ScalarFunction_TableFunction_Procedure(" IN('V','FN','TF','IF','P')");
+    public override string SQL_View_ScalarFunction_TableFunction=>$@"
+        SELECT O.name,M.definition,O.type
+        FROM sys.{this.all}objects       O
+        JOIN sys.schemas           S ON O.schema_id=S.schema_id
+        JOIN sys.{this.all}sql_modules M ON O.object_id=M.object_id
+        WHERE O.type{" IN('V','FN','TF','IF','P')"}AND S.name=@SCHEMA
+        ORDER BY O.name
+    ";
     //public override String SQLView =>
     //    "WITH 表(     name,SQL                     ,  object_id,  type) AS (\r\n"+
     //    "    SELECT B.name,CAST(''AS NVARCHAR(MAX)),B.object_id,B.type\r\n"+
@@ -89,12 +118,12 @@ public class information_schema:Product.information_schema{
     //    "WHERE S.name=@SCHEMA AND O.type='TF'\r\n"+
     //    "ORDER BY O.name\r\n";
     public override string SQL_Function_Parameter =>@$"
-        SELECT P.name,P.is_output,T.name type,P.has_default_value,P.default_value
+        SELECT P.name,T.name type,P.has_default_value,P.default_value
         FROM sys.{this.all}objects    B
-        JOIN sys.schemas        S ON B.schema_id     =S.schema_id
+        JOIN sys.schemas              S ON B.schema_id     =S.schema_id
         JOIN sys.{this.all}parameters P ON B.object_id     =P.object_id
-        JOIN sys.types          T ON P.system_type_id=T.user_type_id
-        WHERE S.name=@SCHEMA AND B.name=@NAME
+        JOIN sys.types                T ON P.system_type_id=T.user_type_id
+        WHERE S.name=@SCHEMA AND B.name=@NAME AND P.is_output=1
         ORDER BY B.name,P.parameter_id
     ";
     public virtual string SQL_Synonym =>@$"
@@ -159,4 +188,9 @@ public class information_schema:Product.information_schema{
         JOIN sys.schemas AS sst ON sst.schema_id = types.schema_id
         JOIN sys.types AS baset ON (baset.user_type_id = types.system_type_id and baset.user_type_id = baset.system_type_id) or ((baset.system_type_id = types.system_type_id) and (baset.user_type_id = types.user_type_id) and (baset.is_user_defined = 0) and (baset.is_assembly_type = 1)) 
         WHERE types.is_user_defined=1 AND sst.name=@SCHEMA";
+    public string Sequences=>@$"
+        SELECT name,start_value,increment,current_value,type
+        FROM sys.sequences S
+        WHERE SCHEMA_NAME(schema_id)=@SCHEMA
+    ";
 }
