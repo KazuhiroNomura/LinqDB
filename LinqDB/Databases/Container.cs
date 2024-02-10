@@ -235,6 +235,12 @@ public class Container:IDisposable{
     protected virtual void UpdateRelationship() {
     }
     /// <summary>
+    /// コミット処理を実装。
+    /// </summary>
+    /// <param name="LogStream"></param>
+    protected virtual void Commit(Stream LogStream) {
+    }
+    /// <summary>
     /// コミットして上位のContainerに反映させる。
     /// </summary>
     public virtual void Commit() {

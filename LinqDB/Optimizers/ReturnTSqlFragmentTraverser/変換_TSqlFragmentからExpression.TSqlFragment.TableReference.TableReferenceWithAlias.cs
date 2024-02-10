@@ -8,6 +8,7 @@ using e = System.Linq.Expressions;
 using LinqDB.Helpers;
 using Expressions = System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Numerics;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
 internal partial class 変換_TSqlFragmentからExpression{
@@ -371,6 +372,9 @@ internal partial class 変換_TSqlFragmentからExpression{
             _=>throw new KeyNotFoundException($"{FunctionName}の実装がない")
         };
     }
+    //public static bool Min<TResult>(TResult selector)where TResult:IComparisonOperators<TResult,TResult,bool>{
+    //    return selector<selector;
+    //}
     private e.Expression? AggregateFunction(string FunctionName,ScalarExpression arg0){
         ref var RefPeek = ref this.RefPeek;
         var 集約関数のParameter = RefPeek.集約関数のParameter!;
@@ -427,17 +431,34 @@ internal partial class 変換_TSqlFragmentからExpression{
             case "MIN":{
                 var Body = 共通();
                 var Body_Type =Int32に変換して(ref Body);
-                if(Body_Type==typeof(int     ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinInt32_selector          :Reflection.ExtensionSet.MaxInt32_selector          );
-                if(Body_Type==typeof(long    ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinInt64_selector          :Reflection.ExtensionSet.MaxInt64_selector          );
-                if(Body_Type==typeof(float   ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinSingle_selector         :Reflection.ExtensionSet.MaxSingle_selector         );
-                if(Body_Type==typeof(double  ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinDouble_selector         :Reflection.ExtensionSet.MaxDouble_selector         );
-                if(Body_Type==typeof(decimal ))return 共通非Nullable用(Body,FunctionName=="min"?Reflection.ExtensionSet.MinDecimal_selector        :Reflection.ExtensionSet.MaxDecimal_selector        );
-                if(Body_Type==typeof(int?    ))return 共通Nullable用  (Body,FunctionName=="min"?Reflection.ExtensionSet.MinNullableInt32_selector  :Reflection.ExtensionSet.MaxNullableInt32_selector  );
-                if(Body_Type==typeof(long?   ))return 共通Nullable用  (Body,FunctionName=="min"?Reflection.ExtensionSet.MinNullableInt64_selector  :Reflection.ExtensionSet.MaxNullableInt64_selector  );
-                if(Body_Type==typeof(float?  ))return 共通Nullable用  (Body,FunctionName=="min"?Reflection.ExtensionSet.MinNullableSingle_selector :Reflection.ExtensionSet.MaxNullableSingle_selector );
-                if(Body_Type==typeof(double? ))return 共通Nullable用  (Body,FunctionName=="min"?Reflection.ExtensionSet.MinNullableDouble_selector :Reflection.ExtensionSet.MaxNullableDouble_selector );
-                if(Body_Type==typeof(decimal?))return 共通Nullable用  (Body,FunctionName=="min"?Reflection.ExtensionSet.MinNullableDecimal_selector:Reflection.ExtensionSet.MaxNullableDecimal_selector);
-                if(Body_Type==typeof(object  )){
+                if(Body_Type==typeof(int            ))return 共通非Nullable用(Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinInt32_selector          :Reflection.ExtensionSet.MaxInt32_selector          );
+                if(Body_Type==typeof(long           ))return 共通非Nullable用(Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinInt64_selector          :Reflection.ExtensionSet.MaxInt64_selector          );
+                if(Body_Type==typeof(float          ))return 共通非Nullable用(Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinSingle_selector         :Reflection.ExtensionSet.MaxSingle_selector         );
+                if(Body_Type==typeof(double         ))return 共通非Nullable用(Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinDouble_selector         :Reflection.ExtensionSet.MaxDouble_selector         );
+                if(Body_Type==typeof(decimal        ))return 共通非Nullable用(Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinDecimal_selector        :Reflection.ExtensionSet.MaxDecimal_selector        );
+                if(Body_Type==typeof(int?           ))return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableInt32_selector  :Reflection.ExtensionSet.MaxNullableInt32_selector  );
+                if(Body_Type==typeof(long?          ))return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableInt64_selector  :Reflection.ExtensionSet.MaxNullableInt64_selector  );
+                if(Body_Type==typeof(float?         ))return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableSingle_selector :Reflection.ExtensionSet.MaxNullableSingle_selector );
+                if(Body_Type==typeof(double?        ))return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableDouble_selector :Reflection.ExtensionSet.MaxNullableDouble_selector );
+                if(Body_Type==typeof(decimal?       ))return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableDecimal_selector:Reflection.ExtensionSet.MaxNullableDecimal_selector);
+                if(Body_Type==typeof(DateTime       )){
+                    var Method=FunctionName=="MIN"?Reflection.ExtensionSet.MinTSource_selector:Reflection.ExtensionSet.MaxTSource_selector;
+                    var 作業配列=this.作業配列;
+                    Method= 作業配列.MakeGenericMethod(Method,集約関数のParameter.Type,Body_Type);
+                    var Lambda = Expressions.Expression.Lambda(Body,作業配列.Parameters設定(集約関数のParameter));
+                    return Expressions.Expression.Call(Method,集約関数のSource,Lambda);
+                    //return 共通非Nullable用(
+                    //    e.Expression.Property(
+                    //        Body,
+                    //        Reflection.DateTime.Ticks
+                    //    ),
+                    //    FunctionName=="MIN"?Reflection.ExtensionSet.MinInt64_selector          :Reflection.ExtensionSet.MaxInt64_selector          
+                    //);
+                }
+                //if(Body_Type==typeof(DateTime?)){
+                //    return 共通Nullable用  (Body,FunctionName=="MIN"?Reflection.ExtensionSet.MinNullableInt32_selector  :Reflection.ExtensionSet.MaxNullableInt32_selector  );
+                //}
+                if(Body_Type==typeof(object         )){
                     var Method=FunctionName=="min"?Reflection.ExtensionSet.MinTSource_selector        :Reflection.ExtensionSet.MaxTSource_selector;
                     var 作業配列=this.作業配列;
                     Method= 作業配列.MakeGenericMethod(Method,集約関数のParameter.Type,typeof(object));
@@ -452,6 +473,12 @@ internal partial class 変換_TSqlFragmentからExpression{
                     var Lambda = Expressions.Expression.Lambda(Body0,作業配列.Parameters設定(集約関数のParameter));
                     return Expressions.Expression.Call(Method,集約関数のSource,Lambda);
                 }
+                //e.Expression ConvertNullable(e.Expression Expression) {
+                //    var Type = Expression.Type;
+                //    if(!Type.IsValueType)return Expression;//文字列など参照型はNullable<>にしない
+                //    if(Type.IsNullable()) return Expression;
+                //    return e.Expression.Convert(Expression,this.作業配列.MakeGenericType(typeof(Nullable<>),Type));
+                //}
             }
             default:return null;
                 //Expressions.Expression.Dynamic(

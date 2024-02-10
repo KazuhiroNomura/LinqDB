@@ -4,6 +4,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using LinqDB.Databases.Attributes;
 using e = System.Linq.Expressions;
 using LinqDB.Helpers;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
@@ -790,8 +791,34 @@ internal partial class 変換_TSqlFragmentからExpression{
         this.ConvertNullable(this.ScalarExpression(Parameters[0])),
         this.ConvertNullable(this.ScalarExpression(Parameters[1]))
     );
+    private static string Schema取得(SchemaObjectName x){
+        if(x.SchemaIdentifier is null) 
+            return "dbo";
+        else 
+            return x.SchemaIdentifier.Value;
+    }
     private e.Expression NextValueForExpression(NextValueForExpression x){
-        throw this.単純NotSupportedException(x);
+        var ContainerType=this.ContainerType;
+        var x_SchemaObjectName=x.SequenceName;
+        var Schema=x_SchemaObjectName.Name取得();
+        //var Schema=x_Name.SchemaIdentifier is null ? "dbo" orx_Name.SchemaIdentifier.Value;
+        var Schema_FulllName=this.ContainerType.Namespace+".Schemas."+Schema;
+        var Schema_Type=ContainerType.Assembly.GetType(Schema_FulllName.Replace("*",@"\*"),true,true);
+        Debug.Assert(Schema_Type!=null);
+        var x_SchemaObjectName_BaseIdentifier_Value=x_SchemaObjectName.BaseIdentifier.Value;
+        //var View = Schema_Type.GetProperty(x_SchemaObjectName_BaseIdentifier_Value,BindingFlags.Public|BindingFlags.Instance);
+        var Sequence=Schema_Type.GetProperties(BindingFlags.Public|BindingFlags.Instance).Single(p => string.Equals(p.Name,x_SchemaObjectName_BaseIdentifier_Value,StringComparison.OrdinalIgnoreCase));
+        var NextValue=Sequence.PropertyType.GetMethod(nameof(Sequence<int>.NextValue));
+        return e.Expression.Call(
+            e.Expression.Property(
+                e.Expression.Property(
+                    this.Container,
+                    Schema
+                ),
+                Sequence
+            ),
+            NextValue
+        );
     }
     /// <summary>
     /// TSqlFragment.ScalarExpression.PrimaryExpression

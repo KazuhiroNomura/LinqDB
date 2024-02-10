@@ -44,12 +44,12 @@ public class Container<TContainer>:Container where TContainer:Container<TContain
     //protected Container(Stream Reader) : base(Reader) {
     //    this.Parent=null;
     //}
-    /// <summary>
-    /// コミット処理を実装。
-    /// </summary>
-    /// <param name="LogStream"></param>
-    protected virtual void Commit(Stream LogStream) {
-    }
+    ///// <summary>
+    ///// コミット処理を実装。
+    ///// </summary>
+    ///// <param name="LogStream"></param>
+    //protected virtual void Commit(Stream LogStream) {
+    //}
 
     /// <summary>
     /// コンテナのメンバーのディープコピー処理。

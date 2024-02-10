@@ -121,6 +121,7 @@
     <Compile Include="Optimizers\Comparer\ブローブビルドExpressionEqualityComparer.cs" />
     <Compile Include="Optimizers\Comparer\汎用Comparer.cs" />
     <Compile Include="Optimizers\ReturnExpressionTraverser\辺.cs" />
+    <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\Extension.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.TSqlFragment.CopyStatementOptionBase.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs" />
     <Compile Include="Optimizers\ReturnTSqlFragmentTraverser\変換_TSqlFragmentからExpression.TSqlFragment.TableReference.TableReferenceWithAlias.cs" />

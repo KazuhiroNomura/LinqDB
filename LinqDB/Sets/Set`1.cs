@@ -3,6 +3,7 @@
 using System;
 //using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -350,6 +351,60 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// <param name="Item">削除したい値</param>
     public void ConcurrentVoidRemove(T Item)=>this.InternalRemove(Item);
     /// <summary>
+    /// 自身をJoinして書き換える。
+    /// </summary>
+    /// <param name="setSelector">置換する場合の式</param>
+    /// <returns></returns>
+    public (long Remove行数, long Add行数) UpdateWith(Func<T,IEnumerable<T>> setSelector) {
+        var TreeNode = this.TreeRoot;
+        var Remove数 = 0L;
+        LinkedNodeItemT? RemoveLinkedNodeItem = null;
+        LinkedNodeItem走査:
+        LinkedNodeT 前LinkedNodeItem = TreeNode;
+        var LinkedNodeItem = TreeNode._LinkedNodeItem;
+        while(LinkedNodeItem is not null) {
+            //predicateの違いだけ
+            var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
+            前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
+            LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
+            RemoveLinkedNodeItem=LinkedNodeItem;
+            Remove数++;
+            LinkedNodeItem=後LinkedNodeItem;
+        }
+        if(TreeNode.L is not null) {
+            TreeNode=TreeNode.L;
+            goto LinkedNodeItem走査;
+        }
+        右に移動:
+        if(TreeNode.R is not null) {
+            TreeNode=TreeNode.R;
+            goto LinkedNodeItem走査;
+        }
+        //上に移動
+        while(TreeNode.P is not null) {
+            var P = TreeNode.P;
+            if(P.L==TreeNode) {
+                if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+                    P.L=null;
+                TreeNode=P;
+                goto 右に移動;
+            }
+            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+                P.R=null;
+            TreeNode=P;
+        }
+        var Add数 = 0L;
+        for(var Node=RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem){
+            var Enumerable=setSelector(Node.Item);
+            var FirstOrDefault=Enumerable.FirstOrDefault();
+            if(FirstOrDefault is not null)
+                if(this.InternalIsAdded(FirstOrDefault)) 
+                    Add数++;
+        }
+        this._LongCount-=Remove数-Add数;
+        return (Remove数, Add数);
+    }
+    /// <summary>
     /// 自身をUpdateで書き換える。
     /// </summary>
     /// <param name="setSelector">置換する場合の式</param>
@@ -430,13 +485,12 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
             TreeNode=TreeNode.L;
             goto LinkedNodeItem走査;
         }
-    右に移動:
+        右に移動:
         if(TreeNode.R is not null) {
             TreeNode=TreeNode.R;
             goto LinkedNodeItem走査;
         }
         //上に移動
-        // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
         while(TreeNode.P is not null) {
             var P = TreeNode.P;
             if(P.L==TreeNode) {

@@ -114,7 +114,7 @@ public static class Generate {
                 var SQL = Reader.GetString(1);
                 Schema.CreateProcedure(Name,typeof(int),SQL);
                 count++;
-                break;
+                //break;
             }
         }
         Command.CommandText=information_schema.SQL_Synonym;
@@ -267,6 +267,10 @@ public static class Generate {
     }
     private static void Main() {
         const string SQLServerログイン = @"User ID=sa;Password=SQLSERVER711409;";
+        var a=new DateTime(2001,1,1);
+        var b=new DateTime(2001,1,2);
+        var r=Comparer<DateTime>.Default.Compare(a,b);
+
         {
             const string ホスト名= @"COFFEELAKE\MSSQLSERVER2022";
             const string SQLServer接続文字列 = @$"Data Source={ホスト名};Initial Catalog=master;Integrated Security=false;{SQLServerログイン}";

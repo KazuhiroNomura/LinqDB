@@ -7,6 +7,7 @@ using LinqDB.Sets.Exceptions;
 using static LinqDB.Helpers.CommonLibrary;
 using System.Collections.Generic;
 using System.Collections;
+using System.Numerics;
 using System.Xml.Linq;
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 // ReSharper disable RedundantAssignment
@@ -861,6 +862,14 @@ public static class ExtensionSet{
     /// <param name="source">最大値を確認する対象となる値の集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
+    //public static TSource Max<TSource>(this IEnumerable<TSource> source)where TSource:IComparisonOperators<TSource,TSource,bool>{
+    //    using var Enumerator = source.GetEnumerator();
+    //    if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+    //    var Result = Enumerator.Current;
+    //    while(Enumerator.MoveNext())
+    //        if(Result<Enumerator.Current)Result=Enumerator.Current;
+    //    return Result;
+    //}
     public static TSource Max<TSource>(this IEnumerable<TSource> source) {
         using var Enumerator = source.GetEnumerator();
         if(!Enumerator.MoveNext()) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
@@ -875,6 +884,13 @@ public static class ExtensionSet{
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
     /// <typeparam name="TSource">
     ///   <paramref name="source" /> の要素の型。</typeparam>
+    //public static TSource Min<TSource>(this IEnumerable<TSource> source)where TSource:IComparisonOperators<TSource,TSource,bool>{
+    //    if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+    //    var Result = Enumerator.Current;
+    //    while(Enumerator.MoveNext())
+    //        if(Result>Enumerator.Current)Result=Enumerator.Current;
+    //    return Result;
+    //}
     public static TSource Min<TSource>(this IEnumerable<TSource> source) {
         if(!PrivateMaxMin(source,out var Enumerator)) throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
         var Default =Comparer<TSource>.Default;
@@ -1136,6 +1152,19 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
+    //public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector)where TResult:IComparisonOperators<TResult,TResult,bool>{
+    //    using var Enumerator = source.GetEnumerator();
+    //    var Default =Comparer<TResult>.Default;
+    //    while(Enumerator.MoveNext()) {
+    //        var Item0 = selector(Enumerator.Current);
+    //        while(Enumerator.MoveNext()) {
+    //            var Item1 = selector(Enumerator.Current);
+    //            if(Item0<Item1)Item0=Item1;
+    //        }
+    //        return Item0;
+    //    }
+    //    throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+    //}
     public static TResult Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
         var Default =Comparer<TResult>.Default;
@@ -1157,20 +1186,33 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
-    public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
+    public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct,IComparisonOperators<TResult,TResult,bool>{
         using var Enumerator = source.GetEnumerator();
-        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
             while(Enumerator.MoveNext()) {
                 var Item1 = selector(Enumerator.Current);
-                if(Item1.HasValue&&Default.Compare(Item0.Value,Item1.Value)<0)Item0=Item1;
+                if(Item0<Item1)Item0=Item1;
             }
             return Item0;
         }
         return default;
     }
+    //public static TResult? Max<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
+    //    using var Enumerator = source.GetEnumerator();
+    //    var Default =Comparer<TResult>.Default;
+    //    while(Enumerator.MoveNext()) {
+    //        var Item0 = selector(Enumerator.Current);
+    //        if(!Item0.HasValue) continue;
+    //        while(Enumerator.MoveNext()) {
+    //            var Item1 = selector(Enumerator.Current);
+    //            if(Item1.HasValue&&Default.Compare(Item0.Value,Item1.Value)<0)Item0=Item1;
+    //        }
+    //        return Item0;
+    //    }
+    //    return default;
+    //}
     /// <summary>ジェネリック 集合の各要素に対して変換関数を呼び出し、結果の最小値を返します。</summary>
     /// <returns>集合の最小値。</returns>
     /// <param name="source">最小値を確認する対象となる値の集合。</param>
@@ -1179,6 +1221,18 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返される値の型。</typeparam>
+    //public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector)where TResult:IComparisonOperators<TResult,TResult,bool>{
+    //    using var Enumerator = source.GetEnumerator();
+    //    while(Enumerator.MoveNext()) {
+    //        var Item0 = selector(Enumerator.Current);
+    //        while(Enumerator.MoveNext()) {
+    //            var Item1 = selector(Enumerator.Current);
+    //            if(Item0>Item1)Item0=Item1;
+    //        }
+    //        return Item0;
+    //    }
+    //    throw シーケンスに要素が含まれていません(MethodBase.GetCurrentMethod()!);
+    //}
     public static TResult Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult> selector) {
         using var Enumerator = source.GetEnumerator();
         var Default =Comparer<TResult>.Default;
@@ -1200,15 +1254,14 @@ public static class ExtensionSet{
     ///   <paramref name="source" /> の要素の型。</typeparam>
     /// <typeparam name="TResult">
     ///   <paramref name="selector" /> によって返されるTResult?の型。</typeparam>
-    public static TResult? Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct {
+    public static TResult? Min<TSource, TResult>(this IEnumerable<TSource> source,Func<TSource,TResult?> selector)where TResult:struct,IComparisonOperators<TResult,TResult,bool>{
         using var Enumerator = source.GetEnumerator();
-        var Default =Comparer<TResult>.Default;
         while(Enumerator.MoveNext()) {
             var Item0 = selector(Enumerator.Current);
             if(!Item0.HasValue) continue;
             while(Enumerator.MoveNext()) {
                 var Item1 = selector(Enumerator.Current);
-                if(Item1.HasValue&&Default.Compare(Item0.Value,Item1.Value)>0)
+                if(Item0>Item1)
                     Item0=Item1;
             }
             return Item0;

@@ -1252,12 +1252,12 @@ internal partial class 変換_TSqlFragmentからExpression{
             case SelectStatementSnippet y:return this.SelectStatementSnippet(y);
             default:{
                 //this.Statementの共通初期化();
-                var List_Expression=new List<e.Expression>();
-                if(x.WithCtesAndXmlNamespaces is not null) { 
-                    var WithCtesAndXmlNamespaces=this.WithCtesAndXmlNamespaces(x.WithCtesAndXmlNamespaces);
-                    List_Expression.Add(WithCtesAndXmlNamespaces);
+                e.ParameterExpression[]? Variables=null;
+                e.Expression? WithCtesAndXmlNamespaces=null;
+                if(x.WithCtesAndXmlNamespaces is not null){
+                    WithCtesAndXmlNamespaces=this.WithCtesAndXmlNamespaces(x.WithCtesAndXmlNamespaces);
+                    Variables=this.Variables.ToArray();//サブクエリで書き換えられる可能性
                 }
-                var Variables=this.Variables.ToArray();//サブクエリで書き換えられる可能性
                 //compute by句
                 foreach(var ComputeClause in x.ComputeClauses){
                     this.ComputeClause(ComputeClause);
@@ -1268,9 +1268,9 @@ internal partial class 変換_TSqlFragmentからExpression{
                     this.OptimizerHint(OptimizerHint);
                 }
                 var QueryExpression=this.QueryExpression(x.QueryExpression);
-                if(List_Expression.Count==0)return QueryExpression;
-                List_Expression.Add(QueryExpression);
-                return e.Expression.Block(Variables,List_Expression);
+                if(Variables is null)
+                    return QueryExpression;
+                return e.Expression.Block(Variables,WithCtesAndXmlNamespaces,QueryExpression);
             }
         }
     }
@@ -1340,7 +1340,27 @@ internal partial class 変換_TSqlFragmentからExpression{
     private e.Expression CreateOrAlterTriggerStatement(CreateOrAlterTriggerStatement x){
         throw this.単純NotSupportedException(x);
     }
-    private e.Expression TruncateTableStatement(TruncateTableStatement x){throw this.単純NotSupportedException(x);}
+    private e.Expression TruncateTableStatement(TruncateTableStatement x){
+        foreach(var CompressionPartitionRange in x.PartitionRanges){
+            var From=this.ScalarExpression(CompressionPartitionRange.From);
+            var To=this.ScalarExpression(CompressionPartitionRange.To);
+
+        }
+        var x_TableName=x.TableName;
+        var Schema=this.ContainerType.GetProperty(x_TableName.Name取得())!;
+        var Table=Schema.PropertyType.GetProperty(x_TableName.BaseIdentifier.Value);
+        var Set=e.Expression.Property(
+            e.Expression.Property(
+                this.Container,
+                Schema
+            ),
+            Table
+        );
+        return e.Expression.Call(
+            Set,
+            Set.Type.GetMethod(nameof(Set<int>.Clear))
+        );
+    }
     private e.Expression TryCatchStatement(TryCatchStatement x){
         var Statements=this.StatementList(x.TryStatements);
         var CatchStatements=this.StatementList(x.CatchStatements);

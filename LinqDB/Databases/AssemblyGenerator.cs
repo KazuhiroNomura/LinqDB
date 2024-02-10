@@ -613,7 +613,7 @@ public partial class AssemblyGenerator {
         foreach(var a in Schema.TableFunctions )this.DefineTableFunction (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.ScalarFunctions)this.DefineScalarFunction(a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.Procedures     )this.DefineProcedure     (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
-        foreach(var a in Schema.Sequences      )this.DefineSequence      (a,ModuleBuilder,Container_TypeBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
+        foreach(var a in Schema.Sequences      )this.DefineSequence      (a,ModuleBuilder,Schema_TypeBuilder,Schema_ctor_I,Schema_ToString_sb,Schema_ToString_I);
         foreach(var a in Schema.SynonymTables  )this.DefineSynonym       (a.Name,a.Table,Schema_TypeBuilder);
         foreach(var a in Schema.SynonymViews   )this.DefineSynonym       (a.Name,a.View,Schema_TypeBuilder);
         //foreach(var TableFunction in Schema.TableFunctions)
