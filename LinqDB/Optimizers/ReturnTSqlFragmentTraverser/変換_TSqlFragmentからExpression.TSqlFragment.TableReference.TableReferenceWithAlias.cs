@@ -8,7 +8,10 @@ using e = System.Linq.Expressions;
 using LinqDB.Helpers;
 using Expressions = System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using System.Xml.Linq;
+using LinqDB.Sets;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
 internal partial class 変換_TSqlFragmentからExpression{
@@ -17,16 +20,25 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// </summary>
     /// <param name="x"></param>
     /// <returns>(Expressions.Expression Expression(Table=>Table.Field),Expressions.ParameterExpression Parameter(Table=>))</returns>
-    private(e.Expression Set,e.ParameterExpression ss)NamedTableReference(NamedTableReference x){
-        ref var RefPeek=ref this.RefPeek;
-        var Dictionary_DatabaseSchemaTable_ColumnExpression=RefPeek.Dictionary_DatabaseSchemaTable_ColumnExpression;
-        var Dictionary_TableAlias_ColumnAliases=RefPeek.Dictionary_TableAlias_ColumnAliases;
-        var List_アスタリスクColumnAlias=RefPeek.List_アスタリスクColumnAlias;
-        var List_アスタリスクColumnExpression=RefPeek.List_アスタリスクColumnExpression;
-        //var Dictionary_With名_Set_ColumnAliases=this.Dictionary_With名_Set_ColumnAliases;
+    [SuppressMessage("ReSharper","JoinNullCheckWithUsage")]
+    private(e.Expression Set,e.ParameterExpression Element)NamedTableReference(NamedTableReference x){
         var SchemaObject=x.SchemaObject;
         Debug.Assert(SchemaObject is not null);
         var Table=SchemaObject.BaseIdentifier.Value;
+        ref var RefPeek=ref this.RefPeek;
+        if(RefPeek.Dictionary_DatabaseSchemaTable_SetElement.TryGetValue(Table,out var SetElement)){
+            //以下のような文でcを表す
+            //UPDATE c SET c.[Valid To] = 3
+            //FROM Dimension.City AS c
+            Debug.Assert(x.Alias is null);
+            return SetElement;
+        }
+        var Dictionary_DatabaseSchemaTable_ColumnExpression=RefPeek.Dictionary_DatabaseSchemaTable_ColumnExpression;
+        var Dictionary_TableAlias_ColumnAliases=RefPeek.Dictionary_TableAlias_ColumnAliases;
+        var Dictionary_DatabaseSchemaTable_SetElement=RefPeek.Dictionary_DatabaseSchemaTable_SetElement;
+        var List_アスタリスクColumnAlias=RefPeek.List_アスタリスクColumnAlias;
+        var List_アスタリスクColumnExpression=RefPeek.List_アスタリスクColumnExpression;
+        //var Dictionary_With名_Set_ColumnAliases=this.Dictionary_With名_Set_ColumnAliases;
         if(this.Dictionary_With名_Set_ColumnAliases.TryGetValue(Table,out var Set_Element_ColumnAliases)) {
             //var Set_Type=Set.Type;
             //var Element=e.Expression.Parameter(IEnumerable1のT(Set_ColumnAliases.Element.Type),Table);
@@ -42,7 +54,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,TableDot+ColumnAlias,Item);
                 ////Column
                 //DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,         ColumnAlias,Item);
-                DictionaryにKey0とKey1があればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,TableDot+ColumnAlias,ColumnAlias,Item);
+                DictionaryにKey0とKey1があればValueにnullを代入0(Dictionary_DatabaseSchemaTable_ColumnExpression,TableDot+ColumnAlias,ColumnAlias,Item);
             }
             return (Set_Element_ColumnAliases.Set,Set_Element_ColumnAliases.Element);
         } else {
@@ -67,34 +79,19 @@ internal partial class 変換_TSqlFragmentからExpression{
             }else{
                 //Schema_PropertyInfo=ContainerType.GetProperty(SchemaObject.SchemaIdentifier.Value,BindingFlags)!;
                 var Schema= SchemaObject.SchemaIdentifier.Value;
-                var Schema_PropertyInfo0=ContainerType.GetProperties(BindingFlags).Where(p => string.Equals(p.Name,Schema,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
+                var Schema_PropertyInfo0=ContainerType.GetProperties(BindingFlags).SingleOrDefault(p => string.Equals(p.Name,Schema,StringComparison.OrdinalIgnoreCase));
                 if(Schema_PropertyInfo0 is null){
                     throw new NotImplementedException($"{Schema}スキーマは定義されていなかった");
                 }
                 //Table_Property=Schema_PropertyInfo.PropertyType.GetProperty(Table,BindingFlags)!;
                 Schema_PropertyInfo=Schema_PropertyInfo0;
-                var Table_Property0=Schema_PropertyInfo.PropertyType.GetProperties(BindingFlags).Where(p=>string.Equals(p.Name,Table,StringComparison.OrdinalIgnoreCase)).SingleOrDefault();
-                if(Table_Property0 is null){
-                    //Trace.WriteLine(Table);
-                    //var Table_Type0=typeof(Set<int>);
-                    ////var T=IEnumerable1のT(Table_Type);
-                    //var Set0=e.Expression.New(
-                    //    Table_Type0.GetConstructor(Type.EmptyTypes)
-                    //);
-                    //var Element0=e.Expression.Parameter(typeof(int),Table);
-                    //Trace.WriteLine(Schema);
-                    //return(Set0,Element0);
+                var Table_Property0=Schema_PropertyInfo.PropertyType.GetProperties(BindingFlags).SingleOrDefault(p => string.Equals(p.Name,Table,StringComparison.OrdinalIgnoreCase));
+                if(Table_Property0 is null)
                     throw new KeyNotFoundException($"{Table}テーブルプロパティが定義されていなかった");
-                }
                 Table_Property=Table_Property0;
-                //if (x.Value=="objects$")
-                //{
-                //   // x.Value="(SELECT x.*,s.null_on_null_input from sys.all_objects x JOIN sys.system_sql_modules s on x.object_id=s.object_id)";
-                //}
-                //Debug.Assert(Table_Property is not null,$"{Table}テーブルプロパティが定義されていなかった");
                 Table_Type=Table_Property.PropertyType;
             }
-発見:
+            発見:
             var T=IEnumerable1のT(Table_Type);
             var ctor_Parameters=T.GetConstructors()[0].GetParameters();
             var ctor_Parameters_Length=ctor_Parameters.Length;
@@ -128,12 +125,12 @@ internal partial class 変換_TSqlFragmentからExpression{
                 Table=Table_Property.Name;
                 var Schema_Table=Schema_PropertyInfo.Name+'.'+Table;
                 var Database_Schema_Table=Database+'.'+Schema_Table;
-                ////Database.Schema.Table
-                //DictionaryにKeyがあればValueにnullを代入    (Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table,Element);
-                ////Schema.Table
-                //DictionaryにKeyがあればValueにnullを代入    (Dictionary_DatabaseSchemaTable_ColumnExpression,         Schema_Table,Element);
-                DictionaryにKey0とKey1があればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table,Schema_Table,Element);
+                ddd(Dictionary_DatabaseSchemaTable_ColumnExpression);
+                ddd(Dictionary_DatabaseSchemaTable_SetElement);
+                DictionaryにKey0とKey1があればValueにnullを代入0(Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table,Schema_Table,Element);
+                DictionaryにKey0とKey1があればValueにnullを代入1(Dictionary_DatabaseSchemaTable_SetElement,Database_Schema_Table,Schema_Table,(Set,Element));
             }
+            Dictionary_DatabaseSchemaTable_SetElement.Add(Table,(Set,Element));
             //Table
             DictionaryにKeyがあればValueにnullを代入        (Dictionary_DatabaseSchemaTable_ColumnExpression,                Table,Element);
             for(var a=0;a<ctor_Parameters_Length;a++){
@@ -142,33 +139,27 @@ internal partial class 変換_TSqlFragmentからExpression{
                 ColumnAliases[a]=ColumnAlias;
                 List_アスタリスクColumnAlias.Add(ColumnAlias);
                 List_アスタリスクColumnExpression.Add(Item);
-                if(x_Alias is null){
-                    ////Database.Schema.Table.Column
-                    //DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table_Dot+ColumnAlias,Item);
-                    ////Schema.Table.Column
-                    //DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,         Schema_Table_Dot+ColumnAlias,Item);
-                    DictionaryにKey0とKey1があればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table_Dot+ColumnAlias,Schema_Table_Dot+ColumnAlias,Item);
-                }
-                ////Table.Column
-                //DictionaryにKeyがあればValueにnullを代入    (Dictionary_DatabaseSchemaTable_ColumnExpression,                Table_Dot+ColumnAlias,Item);
-                ////Column
-                //DictionaryにKeyがあればValueにnullを代入    (Dictionary_DatabaseSchemaTable_ColumnExpression,                          ColumnAlias,Item);
-                DictionaryにKey0とKey1があればValueにnullを代入    (Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot+ColumnAlias,ColumnAlias,Item);
+                if(x_Alias is null)
+                    DictionaryにKey0とKey1があればValueにnullを代入0(Dictionary_DatabaseSchemaTable_ColumnExpression,Database_Schema_Table_Dot+ColumnAlias,Schema_Table_Dot+ColumnAlias,Item);
+                DictionaryにKey0とKey1があればValueにnullを代入0    (Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot+ColumnAlias,ColumnAlias,Item);
             }
             DictionaryのValueがnullのKeyをRemove            (Dictionary_DatabaseSchemaTable_ColumnExpression);
-            //if(x_Alias is null){
-            //    Table=Table_Property.Name;
-            //    var Schema_Table=Schema_PropertyInfo.Name+'.'+Table;
-            //    Schema_Table_Dot=Schema_Table+'.';
-            //    var Database_Schema_Table=Database+'.'+Schema_Table;
-            //    Database_Schema_Table_Dot=Database_Schema_Table+'.';
-            //    Dictionary_TableAlias_ColumnAliases.Remove(         Schema_Table);
-            //    Dictionary_TableAlias_ColumnAliases.Remove(Database_Schema_Table);
-            //}
-            //Dictionary_TableAlias_ColumnAliases.Remove(Table);
             return(Set,Element);
         }
+        static void DictionaryにKey0とKey1があればValueにnullを代入0(SortedDictionary<string,e.Expression?> Dictionary,string Key0,string Key1,e.Expression Value) {
+            DictionaryにKeyがあればValueにnullを代入(Dictionary,Key0,Value);
+            DictionaryにKeyがあればValueにnullを代入(Dictionary,Key1,Value);
+        }
+        static void DictionaryにKey0とKey1があればValueにnullを代入1(SortedDictionary<string,(e.Expression Set,e.ParameterExpression Element)> Dictionary,string Key0,string Key1,(e.Expression Set,e.ParameterExpression Element)Value) {
+            Dictionary.Add(Key0,Value);
+            Dictionary.Add(Key1,Value);
+        }
+        //static void DictionaryにDotKeyとKeyがあればValueにnullを代入(SortedDictionary<string,e.Expression?> Dictionary,string? Dot,string Key,e.Expression Value) {
+        //    if(Dot is not null) DictionaryにKeyがあればValueにnullを代入(Dictionary,Dot+Key,Value);
+        //    DictionaryにKeyがあればValueにnullを代入(Dictionary,Key,Value);
+        //}
     }
+    static void ddd<T>(SortedDictionary<string,T?> Dictionary){}
     private e.Expression OdbcQualifiedJoinTableReference(OdbcQualifiedJoinTableReference x){throw this.単純NotSupportedException(x);}
     private(e.Expression Set,e.ParameterExpression Element)TableReferenceWithAliasAndColumns(TableReferenceWithAliasAndColumns x)=>x switch{
         SchemaObjectFunctionTableReference y=>this.SchemaObjectFunctionTableReference(y),
@@ -513,14 +504,8 @@ internal partial class 変換_TSqlFragmentからExpression{
         var Dictionary_TableAlias_ColumnAliases = RefPeek.Dictionary_TableAlias_ColumnAliases;
         var List_アスタリスクColumnAlias = RefPeek.List_アスタリスクColumnAlias;
         var List_アスタリスクColumnExpression = RefPeek.List_アスタリスクColumnExpression;
-        //var x_Variable_Name=x.Variable.Name;
-        //var ctor_Parameters = T.GetConstructors()[0].GetParameters();
-        //var ctor_Parameters_Length = ctor_Parameters.Length;
         var x_Variable_Name = x.Variable.Name;
         var Set = PrivateFindVariable(this.List_定義型TableVariable,x_Variable_Name);
-        //var T = IEnumerable1のT(Set!.Type);
-        //var Element = e.Expression.Parameter(T,x.Variable.Name);
-        //return (Set, Element);
         var x_Alias = x.Alias;
         string? Table = null, Table_Dot = null;
         if(x_Alias is not null) {
@@ -541,10 +526,6 @@ internal partial class 変換_TSqlFragmentからExpression{
                 ColumnAliases[a]=ColumnAlias;
                 List_アスタリスクColumnAlias.Add(ColumnAlias);
                 List_アスタリスクColumnExpression.Add(Item);
-                ////Table.Column
-                //if(Table_Dot is not null)DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot+ColumnAlias,Item);
-                ////Column
-                //DictionaryにKeyがあればValueにnullを代入                         (Dictionary_DatabaseSchemaTable_ColumnExpression,          ColumnAlias,Item);
                 DictionaryにDotKeyとKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot,ColumnAlias,Item);
             }
             DictionaryのValueがnullのKeyをRemove(Dictionary_DatabaseSchemaTable_ColumnExpression);
@@ -553,7 +534,6 @@ internal partial class 変換_TSqlFragmentからExpression{
             foreach(var 匿名型TableVariable in this.List_匿名型TableVariable) {
                 if(匿名型TableVariable.Variable.Name!=x_Variable_Name)continue;
                 var ColumnAliases=匿名型TableVariable.Names;
-                //var Element=e.Expression.Parameter(IEnumerable1のT(Set.Type),Name);
                 var Table_Type = 匿名型TableVariable.Variable.Type;
                 var T = IEnumerable1のT(Table_Type);
                 var Element = e.Expression.Parameter(T,x_Variable_Name);
@@ -565,10 +545,6 @@ internal partial class 変換_TSqlFragmentからExpression{
                     var Item = ValueTuple_Item(ref ValueTuple,ref Item番号);
                     List_アスタリスクColumnAlias.Add(ColumnAlias);
                     List_アスタリスクColumnExpression.Add(Item);
-                    ////Table.Column
-                    //if(Table_Dot is not null)DictionaryにKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot+ColumnAlias,Item);
-                    ////Column
-                    //DictionaryにKeyがあればValueにnullを代入                         (Dictionary_DatabaseSchemaTable_ColumnExpression,          ColumnAlias,Item);
                     DictionaryにDotKeyとKeyがあればValueにnullを代入(Dictionary_DatabaseSchemaTable_ColumnExpression,Table_Dot,ColumnAlias,Item);
                 }
                 DictionaryのValueがnullのKeyをRemove(Dictionary_DatabaseSchemaTable_ColumnExpression);

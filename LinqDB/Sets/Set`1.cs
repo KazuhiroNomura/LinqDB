@@ -350,166 +350,204 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="Item">削除したい値</param>
     public void ConcurrentVoidRemove(T Item)=>this.InternalRemove(Item);
-    /// <summary>
-    /// 自身をJoinして書き換える。
-    /// </summary>
-    /// <param name="setSelector">置換する場合の式</param>
-    /// <returns></returns>
-    public (long Remove行数, long Add行数) UpdateWith(Func<T,IEnumerable<T>> setSelector) {
-        var TreeNode = this.TreeRoot;
-        var Remove数 = 0L;
-        LinkedNodeItemT? RemoveLinkedNodeItem = null;
-        LinkedNodeItem走査:
-        LinkedNodeT 前LinkedNodeItem = TreeNode;
-        var LinkedNodeItem = TreeNode._LinkedNodeItem;
-        while(LinkedNodeItem is not null) {
-            //predicateの違いだけ
-            var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
-            前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
-            LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
-            RemoveLinkedNodeItem=LinkedNodeItem;
-            Remove数++;
-            LinkedNodeItem=後LinkedNodeItem;
-        }
-        if(TreeNode.L is not null) {
-            TreeNode=TreeNode.L;
-            goto LinkedNodeItem走査;
-        }
-        右に移動:
-        if(TreeNode.R is not null) {
-            TreeNode=TreeNode.R;
-            goto LinkedNodeItem走査;
-        }
-        //上に移動
-        while(TreeNode.P is not null) {
-            var P = TreeNode.P;
-            if(P.L==TreeNode) {
-                if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                    P.L=null;
-                TreeNode=P;
-                goto 右に移動;
-            }
-            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                P.R=null;
-            TreeNode=P;
-        }
-        var Add数 = 0L;
-        for(var Node=RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem){
-            var Enumerable=setSelector(Node.Item);
-            var FirstOrDefault=Enumerable.FirstOrDefault();
+    private readonly Set<T> Delete=new();
+    private readonly Set<T> Insert=new();
+    public void UpdateWith(Func<T,IEnumerable<T>> setSelector){
+        var Delete=this.Delete;
+        var Insert=this.Insert;
+        Delete.Clear();
+        Insert.Clear();
+        foreach(var a in this){
+            var FirstOrDefault=setSelector(a).FirstOrDefault();
             if(FirstOrDefault is not null)
-                if(this.InternalIsAdded(FirstOrDefault)) 
-                    Add数++;
+                Insert.Add(FirstOrDefault);
+            else
+                Delete.Add(FirstOrDefault);
         }
-        this._LongCount-=Remove数-Add数;
-        return (Remove数, Add数);
+        foreach(var a in Delete) this.Remove(a);
+        foreach(var a in Insert) this.Add(a);
     }
-    /// <summary>
-    /// 自身をUpdateで書き換える。
-    /// </summary>
-    /// <param name="setSelector">置換する場合の式</param>
-    /// <param name="predicate">置換対象条件</param>
-    /// <returns></returns>
-    public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate) {
-        var TreeNode = this.TreeRoot;
-        var Remove数 = 0L;
-        LinkedNodeItemT? RemoveLinkedNodeItem = null;
-    LinkedNodeItem走査:
-        LinkedNodeT 前LinkedNodeItem = TreeNode;
-        var LinkedNodeItem = TreeNode._LinkedNodeItem;
-        while(LinkedNodeItem is not null) {
-            if(predicate(LinkedNodeItem.Item)) {
-                var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
-                前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
-                LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
-                RemoveLinkedNodeItem=LinkedNodeItem;
-                Remove数++;
-                LinkedNodeItem=後LinkedNodeItem;
-            } else {
-                前LinkedNodeItem=LinkedNodeItem;
-                LinkedNodeItem=LinkedNodeItem._LinkedNodeItem;
-            }
-        }
-        if(TreeNode.L is not null) {
-            TreeNode=TreeNode.L;
-            goto LinkedNodeItem走査;
-        }
-    右に移動:
-        if(TreeNode.R is not null) {
-            TreeNode=TreeNode.R;
-            goto LinkedNodeItem走査;
-        }
-        //上に移動
-        // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
-        while(TreeNode.P is not null) {
-            var P = TreeNode.P;
-            if(P.L==TreeNode) {
-                if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                    P.L=null;
-                TreeNode=P;
-                goto 右に移動;
-            }
-            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                P.R=null;
-            TreeNode=P;
-        }
-        var Add数 = 0L;
-        for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
-            if(this.InternalIsAdded(setSelector(Node.Item)))
-                Add数++;
-        this._LongCount-=Remove数-Add数;
-        return (Remove数, Add数);
+    public void UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate){
+        var Delete=this.Delete;
+        var Insert=this.Insert;
+        Delete.Clear();
+        Insert.Clear();
+        foreach(var a in this)
+            if(predicate(a))
+                Insert.Add(setSelector(a));
+            else
+                Delete.Add(a);
+        foreach(var a in Delete) this.Remove(a);
+        foreach(var a in Insert) this.Add(a);
     }
-    /// <summary>
-    /// 自身をUpdateで書き換える。
-    /// </summary>
-    /// <param name="setSelector">置換する場合の式</param>
-    /// <returns></returns>
-    public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector) {
-        var TreeNode = this.TreeRoot;
-        var Remove数 = 0L;
-        LinkedNodeItemT? RemoveLinkedNodeItem = null;
-    LinkedNodeItem走査:
-        LinkedNodeT 前LinkedNodeItem = TreeNode;
-        var LinkedNodeItem = TreeNode._LinkedNodeItem;
-        while(LinkedNodeItem is not null) {
-            //predicateの違いだけ
-            var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
-            前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
-            LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
-            RemoveLinkedNodeItem=LinkedNodeItem;
-            Remove数++;
-            LinkedNodeItem=後LinkedNodeItem;
-        }
-        if(TreeNode.L is not null) {
-            TreeNode=TreeNode.L;
-            goto LinkedNodeItem走査;
-        }
-        右に移動:
-        if(TreeNode.R is not null) {
-            TreeNode=TreeNode.R;
-            goto LinkedNodeItem走査;
-        }
-        //上に移動
-        while(TreeNode.P is not null) {
-            var P = TreeNode.P;
-            if(P.L==TreeNode) {
-                if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                    P.L=null;
-                TreeNode=P;
-                goto 右に移動;
-            }
-            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
-                P.R=null;
-            TreeNode=P;
-        }
-        var Add数 = 0L;
-        for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
-            if(this.InternalIsAdded(setSelector(Node.Item)))
-                Add数++;
-        this._LongCount-=Remove数-Add数;
-        return (Remove数, Add数);
+    public void UpdateWith(Func<T,T> setSelector){
+        var Insert=this.Insert;
+        Insert.Clear();
+        foreach(var a in this)
+            Insert.Add(setSelector(a));
+        this.Clear();
+        foreach(var a in Insert) this.Add(a);
     }
+    ///// <summary>
+    ///// 自身をJoinして書き換える。
+    ///// </summary>
+    ///// <param name="setSelector">置換する場合の式</param>
+    ///// <returns></returns>
+    //public (long Remove行数, long Add行数) UpdateWith(Func<T,IEnumerable<T>> setSelector) {
+    //    var TreeNode = this.TreeRoot;
+    //    var Remove数 = 0L;
+    //    LinkedNodeItemT? RemoveLinkedNodeItem = null;
+    //    LinkedNodeItem走査:
+    //    LinkedNodeT 前LinkedNodeItem = TreeNode;
+    //    var LinkedNodeItem = TreeNode._LinkedNodeItem;
+    //    while(LinkedNodeItem is not null) {
+    //        //predicateの違いだけ
+    //        var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
+    //        前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
+    //        LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
+    //        RemoveLinkedNodeItem=LinkedNodeItem;
+    //        Remove数++;
+    //        LinkedNodeItem=後LinkedNodeItem;
+    //    }
+    //    if(TreeNode.L is not null) {
+    //        TreeNode=TreeNode.L;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //    右に移動:
+    //    if(TreeNode.R is not null) {
+    //        TreeNode=TreeNode.R;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //    //上に移動
+    //    while(TreeNode.P is not null) {
+    //        var P = TreeNode.P;
+    //        if(P.L==TreeNode) {
+    //            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //                P.L=null;
+    //            TreeNode=P;
+    //            goto 右に移動;
+    //        }
+    //        if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //            P.R=null;
+    //        TreeNode=P;
+    //    }
+    //    var Add数 = 0L;
+    //    for(var Node=RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem){
+    //        var Enumerable=setSelector(Node.Item);
+    //        var FirstOrDefault=Enumerable.FirstOrDefault();
+    //        if(FirstOrDefault is not null)
+    //            if(this.InternalIsAdded(FirstOrDefault)) 
+    //                Add数++;
+    //    }
+    //    this._LongCount-=Remove数-Add数;
+    //    return (Remove数, Add数);
+    //}
+    ///// <summary>
+    ///// 自身をUpdateで書き換える。
+    ///// </summary>
+    ///// <param name="setSelector">置換する場合の式</param>
+    ///// <param name="predicate">置換対象条件</param>
+    ///// <returns></returns>
+    //public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate) {
+    //    var TreeNode = this.TreeRoot;
+    //    var Remove数 = 0L;
+    //    LinkedNodeItemT? RemoveLinkedNodeItem = null;
+    //LinkedNodeItem走査:
+    //    LinkedNodeT 前LinkedNodeItem = TreeNode;
+    //    var LinkedNodeItem = TreeNode._LinkedNodeItem;
+    //    while(LinkedNodeItem is not null) {
+    //        if(predicate(LinkedNodeItem.Item)) {
+    //            var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
+    //            前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
+    //            LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
+    //            RemoveLinkedNodeItem=LinkedNodeItem;
+    //            Remove数++;
+    //            LinkedNodeItem=後LinkedNodeItem;
+    //        } else {
+    //            前LinkedNodeItem=LinkedNodeItem;
+    //            LinkedNodeItem=LinkedNodeItem._LinkedNodeItem;
+    //        }
+    //    }
+    //    if(TreeNode.L is not null) {
+    //        TreeNode=TreeNode.L;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //右に移動:
+    //    if(TreeNode.R is not null) {
+    //        TreeNode=TreeNode.R;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //    //上に移動
+    //    // ReSharper disable once LoopVariableIsNeverChangedInsideLoop
+    //    while(TreeNode.P is not null) {
+    //        var P = TreeNode.P;
+    //        if(P.L==TreeNode) {
+    //            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //                P.L=null;
+    //            TreeNode=P;
+    //            goto 右に移動;
+    //        }
+    //        if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //            P.R=null;
+    //        TreeNode=P;
+    //    }
+    //    var Add数 = 0L;
+    //    for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
+    //        if(this.InternalIsAdded(setSelector(Node.Item)))
+    //            Add数++;
+    //    this._LongCount-=Remove数-Add数;
+    //    return (Remove数, Add数);
+    //}
+    ///// <summary>
+    ///// 自身をUpdateで書き換える。
+    ///// </summary>
+    ///// <param name="setSelector">置換する場合の式</param>
+    ///// <returns></returns>
+    //public (long Remove行数, long Add行数) UpdateWith(Func<T,T> setSelector) {
+    //    var TreeNode = this.TreeRoot;
+    //    var Remove数 = 0L;
+    //    LinkedNodeItemT? RemoveLinkedNodeItem = null;
+    //LinkedNodeItem走査:
+    //    LinkedNodeT 前LinkedNodeItem = TreeNode;
+    //    var LinkedNodeItem = TreeNode._LinkedNodeItem;
+    //    while(LinkedNodeItem is not null) {
+    //        //predicateの違いだけ
+    //        var 後LinkedNodeItem = LinkedNodeItem._LinkedNodeItem;
+    //        前LinkedNodeItem._LinkedNodeItem=後LinkedNodeItem;
+    //        LinkedNodeItem._LinkedNodeItem=RemoveLinkedNodeItem;
+    //        RemoveLinkedNodeItem=LinkedNodeItem;
+    //        Remove数++;
+    //        LinkedNodeItem=後LinkedNodeItem;
+    //    }
+    //    if(TreeNode.L is not null) {
+    //        TreeNode=TreeNode.L;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //    右に移動:
+    //    if(TreeNode.R is not null) {
+    //        TreeNode=TreeNode.R;
+    //        goto LinkedNodeItem走査;
+    //    }
+    //    //上に移動
+    //    while(TreeNode.P is not null) {
+    //        var P = TreeNode.P;
+    //        if(P.L==TreeNode) {
+    //            if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //                P.L=null;
+    //            TreeNode=P;
+    //            goto 右に移動;
+    //        }
+    //        if(TreeNode._LinkedNodeItem is null&&TreeNode.L is null&&TreeNode.R is null)
+    //            P.R=null;
+    //        TreeNode=P;
+    //    }
+    //    var Add数 = 0L;
+    //    for(var Node = RemoveLinkedNodeItem;Node is not null;Node=Node._LinkedNodeItem)
+    //        if(this.InternalIsAdded(setSelector(Node.Item)))
+    //            Add数++;
+    //    this._LongCount-=Remove数-Add数;
+    //    return (Remove数, Add数);
+    //}
     private static long PrivateDeleteWith(Func<T,bool> predicate,ref TreeNodeT? ref_TreeNode,int スレッド先頭,int スレッド末尾) {
         Debug.Assert(スレッド先頭<スレッド末尾);
         var TreeNode = ref_TreeNode;

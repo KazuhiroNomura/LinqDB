@@ -18,6 +18,7 @@ public static class ExtensionSet {
     }
 #endif
     private static readonly Set<int> _Int32 = default!;
+    private static readonly Set<double> _Double= default!;
     //ExtensionSet,Enumerable共通のインラインメソッド
     public static readonly MethodInfo Aggregate_func = M(() => _Int32.Aggregate((a,b) => 0));
     public static readonly MethodInfo Aggregate_seed_func = M(() => _Int32.Aggregate(0,(a,b) => 0));
@@ -122,7 +123,7 @@ public static class ExtensionSet {
     /// SelectMany_collectionSelector.Select_selector
     /// 最適化で消される対象
     /// </summary>
-    public static readonly MethodInfo SelectMany_collectionSelector_resultSelector = M(() => _Int32.SelectMany(p => _Int32,(p,q) => 0));        //変形で削除される
+    public static readonly MethodInfo SelectMany_collectionSelector_resultSelector = M(() => _Int32.SelectMany(p => _Double,(p,q) => 0));        //変形で削除される
     public static readonly MethodInfo Single = M(() => _Int32.Single());
     public static readonly MethodInfo SingleOrDefault = M(() => _Int32.SingleOrDefault());
     public static readonly MethodInfo SingleOrDefault_defaultValue = M(() => _Int32.SingleOrDefault(0));

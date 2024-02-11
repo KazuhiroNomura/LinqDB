@@ -16,7 +16,7 @@ internal partial class 変換_TSqlFragmentからExpression{
     private(string ParameterName,e.Expression NewValue)AssignmentSetClause(AssignmentSetClause x){
         //x.AssignmentKind=AssignmentKind.
         var Identifiers=x.Column.MultiPartIdentifier.Identifiers;
-        var ParameterName=this.Identifier(Identifiers[Identifiers.Count-1]);
+        var ParameterName=this.Identifier(Identifiers[^1]);
         //var Column=this.ColumnReferenceExpression(x.Column.MultiPartIdentifier.Identifiers);
         Debug.Assert(x.Variable is null);
         //var Variable=this.VariableReference(x.Variable);

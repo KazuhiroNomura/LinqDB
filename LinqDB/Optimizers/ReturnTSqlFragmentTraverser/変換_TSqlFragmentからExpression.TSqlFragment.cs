@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlTypes;
 using System.Reflection;
 using e = System.Linq.Expressions;
@@ -13,6 +14,7 @@ using LinqDB.Optimizers.ReturnExpressionTraverser;
 using LinqDB.Helpers;
 using Microsoft.Build.Execution;
 using System.Xml.Linq;
+using LinqDB.Databases;
 //using LinqDB.Reflection;
 namespace LinqDB.Optimizers.ReturnTSqlFragmentTraverser;
 using static Common;
@@ -596,66 +598,43 @@ internal partial class 変換_TSqlFragmentからExpression{
 
     private e.Expression QuerySpecification(QuerySpecification x) {
         var 作業配列 = this.作業配列;
-        //var StackSubquery単位の情報 = this._StackSubquery単位の情報;
         var x_SelectElements = x.SelectElements;
         ref var RefPeek = ref this.RefPeek;
-        //Debug.Assert(RefPeek0_Dictionary_DatabaseSchemaTable_ColumnExpression.Count==0);
-        //var RefPeek0_List_ColumnExpression = RefPeek0.List_ColumnExpression;
-        Type Element_Type;
+        Type SourceElement_Type;
         e.Expression Source;
-        e.ParameterExpression ss;
+        e.ParameterExpression SourceElement;
         if(x.FromClause is not null) {
-            (Source, ss)=this.FromClause(x.FromClause);
-            Element_Type=ss.Type;
+            (Source, SourceElement)=this.FromClause(x.FromClause);
+            SourceElement_Type=SourceElement.Type;
         } else {
             Source=e.Expression.Call(null,Reflection.Container.TABLE_DUM);
-            Element_Type=IEnumerable1のT(Source.Type);
-            ss=e.Expression.Parameter(Element_Type,"ss");
+            SourceElement_Type=IEnumerable1のT(Source.Type);
+            SourceElement=e.Expression.Parameter(SourceElement_Type,"ss");
         }
         if(x.WhereClause is not null) {
             var predicate_Body = this.WhereClause(x.WhereClause);
             Source=e.Expression.Call(
-                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,Element_Type),
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
                 Source,
-                e.Expression.Lambda(predicate_Body,作業配列.Parameters設定(ss))
+                e.Expression.Lambda(predicate_Body,作業配列.Parameters設定(SourceElement))
             );
         }
-        //Debug.Assert(StackSubquery単位の情報==this._StackSubquery単位の情報);
         var RefPeek_List_ColumnAlias = RefPeek.List_ColumnAlias;
         var RefPeek_List_ColumnExpression = RefPeek.List_ColumnExpression;
         RefPeek_List_ColumnAlias.Clear();
         RefPeek_List_ColumnExpression.Clear();
-        //Debug.Assert(RefPeek_List_ColumnAlias.Count==0);
-        //Debug.Assert(RefPeek_List_ColumnExpression.Count==0);
         if(x.GroupByClause is not null) {
-            //GroupBy(ss=>[keySelector_Body])
-            //RefPeek0_List_ColumnAlias.Clear();
-            //RefPeek0_List_ColumnAlias.Clear();
             var RefPeek_List_GroupByExpression = RefPeek.List_GroupByExpression;
             RefPeek_List_GroupByExpression.Clear();
             var keySelector_Body = this.GroupByClause(x.GroupByClause);
             var RefPeek_List_GroupByExpression_Count = RefPeek_List_GroupByExpression.Count;
             var Key = e.Expression.Parameter(keySelector_Body.Type,"Key");
-            //var Key_Argument = keySelector_Body.Arguments;
             var 変換_旧Expressionを新Expression1=this.変換_旧Expressionを新Expression1;
-
-            //{
-            //    Expression ValueTuple0=Key;
-            //    //Expression keySelector_Body1= keySelector_Body;
-            //    var Item番号0=1;
-            //    for(var a=0;a<RefPeek_List_GroupByExpression_Count;a++)
-            //        RefPeek_List_GroupByExpression[a]=変換_旧Expressionを新Expression1.実行(
-            //            keySelector_Body,
-            //            RefPeek_List_GroupByExpression[a],
-            //            ValueTuple_Item(ref ValueTuple0,ref Item番号0));
-            //    //Source.GroupBy(ss =>,(Key,Group) => Group.Sum(ge =>))
-            //    var Element_Type0=Source.Type.GetGenericArguments()[0];
-            //}
             var Group = e.Expression.Parameter(
-                作業配列.MakeGenericType(typeof(Sets.IEnumerable<>),Element_Type),
+                作業配列.MakeGenericType(typeof(Sets.IEnumerable<>),SourceElement_Type),
                 "Group"
             );
-            RefPeek.集約関数のParameter=ss;
+            RefPeek.集約関数のParameter=SourceElement;
             RefPeek.集約関数のSource=Group;
             Debug.Assert(RefPeek_List_ColumnAlias.Count==0);
             Debug.Assert(RefPeek_List_ColumnExpression.Count==0);                
@@ -663,7 +642,6 @@ internal partial class 変換_TSqlFragmentからExpression{
                 this.SelectElement(SelectElement);
             e.Expression resultSelector_Body= CommonLibrary.ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression);
             e.Expression ValueTuple = Key;
-            //Expression keySelector_Body1= keySelector_Body;
             var Item番号 = 1;
             for(var a = 0;a<RefPeek_List_GroupByExpression_Count;a++)
                 resultSelector_Body=変換_旧Expressionを新Expression1.実行(
@@ -672,11 +650,11 @@ internal partial class 変換_TSqlFragmentからExpression{
                     ValueTuple_Item(ref ValueTuple,ref Item番号)
                 );
             var GroupBy = e.Expression.Call(
-                作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,Element_Type,keySelector_Body.Type,resultSelector_Body.Type),
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.GroupBy_keySelector_resultSelector,SourceElement_Type,keySelector_Body.Type,resultSelector_Body.Type),
                 Source,
                 e.Expression.Lambda(
                     keySelector_Body,
-                    作業配列.Parameters設定(ss)
+                    作業配列.Parameters設定(SourceElement)
                 ),
                 e.Expression.Lambda(
                     resultSelector_Body,
@@ -703,18 +681,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 }
                 a++;
             }
-
-//                foreach(var SelectElement in x_SelectElements) {
-//                    if(判定_集約関数があるか.実行(SelectElement)) {
-//                        集約関数が有るか=true;
-//                        goto 集約関数が有る;
-//                    }
-//                }
-//                if(!集約関数が有るか&&判定_集約関数があるか.実行(x.HavingClause)) {
-//                    集約関数が有るか=true;
-//                }
-//集約関数が有る:
-            RefPeek.集約関数のParameter=ss;
+            RefPeek.集約関数のParameter=SourceElement;
             if(集約関数が有るか&&RefPeek.集約関数のSource is null) {
                 //GROUP BYがない集約関数を含む1行を返すSELECT
                 //MethodCallを分解するして最小の式に変換する
@@ -722,55 +689,35 @@ internal partial class 変換_TSqlFragmentからExpression{
                 //TABLE_DEE.Select(_=>new{f0=F.Sum(f=>f.c),f1=F.Sum(f.b))})
                 Debug.Assert(Source is not null);
                 RefPeek.集約関数のSource=Source;
-                Element_Type=typeof(Databases.AttributeEmpty);
-                ss=e.Expression.Parameter(
-                    Element_Type,
+                SourceElement_Type=typeof(Databases.AttributeEmpty);
+                SourceElement=e.Expression.Parameter(
+                    SourceElement_Type,
                     "_"
                 );
-                //TABLE_DEE.Select(ss=>selector_Body)
-                //(s=new Set<>();s.Add(selector_Body);s)
                 Source=TABLE_DEE;
             }
             if(x.HavingClause is not null) {
                 var predicate_Body = this.HavingClause(x.HavingClause);
                 Source=e.Expression.Call(
-                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,Element_Type),
+                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
                     Source,
                     e.Expression.Lambda(
                         predicate_Body,
-                        作業配列.Parameters設定(ss)
+                        作業配列.Parameters設定(SourceElement)
                     )
                 );
             }
-            //var List_ColumnExpression = RefPeek0.List_ColumnExpression;
-            //List_ColumnExpression.Clear();
-            //RefPeek0_List_ColumnAlias.Clear();
             Debug.Assert(RefPeek_List_ColumnAlias.Count==0);
             Debug.Assert(RefPeek_List_ColumnExpression.Count==0);
             foreach(var SelectElement in x_SelectElements)
                 this.SelectElement(SelectElement);
-            //if(RefPeek_List_ColumnAlias.Count==0){
-            //    //select @root_id = log_id from graph--代入としてのselect
-            //    return Expression.Block(RefPeek_List_ColumnExpression);
-            //} else {
-            //    var selector_Body = ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression,0);
-            //    var Result=Expression.Call(
-            //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,Element_Type,selector_Body.Type),
-            //        Source,
-            //        Expression.Lambda(
-            //            selector_Body,
-            //            作業配列.Parameters設定(ss)
-            //        )
-            //    );
-            //    return Result;
-            //}
             var selector_Body =CommonLibrary.ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression);
             var Result=e.Expression.Call(
-                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,Element_Type,selector_Body.Type),
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,selector_Body.Type),
                 Source,
                 e.Expression.Lambda(
                     selector_Body,
-                    作業配列.Parameters設定(ss)
+                    作業配列.Parameters設定(SourceElement)
                 )
             );
             return Result;
@@ -1804,6 +1751,12 @@ internal partial class 変換_TSqlFragmentからExpression{
         //OdbcQualifiedJoinTableReference y=>this.OdbcQualifiedJoinTableReference(y),
         _=>throw this.単純NotSupportedException(x)
     };
+    /// <summary>
+    /// Keyに対応するExpressionをAddする。Keyは[Schema].[Table].[Column],[Table].[Column],[Column]
+    /// </summary>
+    /// <param name="Dictionary"></param>
+    /// <param name="Key"></param>
+    /// <param name="Value"></param>
     private static void DictionaryにKeyがあればValueにnullを代入(SortedDictionary<string,e.Expression?> Dictionary,string Key,e.Expression Value){
         if(Dictionary.ContainsKey(Key))Dictionary[Key]=null;
         else Dictionary.Add(Key,Value);
@@ -1812,10 +1765,10 @@ internal partial class 変換_TSqlFragmentからExpression{
         if(Dot is not null) DictionaryにKeyがあればValueにnullを代入(Dictionary,Dot+Key,Value);
         DictionaryにKeyがあればValueにnullを代入(Dictionary,Key,Value);
     }
-    private static void DictionaryにKey0とKey1があればValueにnullを代入(SortedDictionary<string,e.Expression?> Dictionary,string Key0,string Key1,e.Expression Value) {
-        DictionaryにKeyがあればValueにnullを代入(Dictionary,Key0,Value);
-        DictionaryにKeyがあればValueにnullを代入(Dictionary,Key1,Value);
-    }
+    //private static void DictionaryにKey0とKey1があればValueにnullを代入(SortedDictionary<string,e.Expression?> Dictionary,string Key0,string Key1,e.Expression Value) {
+    //    DictionaryにKeyがあればValueにnullを代入(Dictionary,Key0,Value);
+    //    DictionaryにKeyがあればValueにnullを代入(Dictionary,Key1,Value);
+    //}
     private static void DictionaryのValueがnullのKeyをRemove(IDictionary<string,e.Expression?> RefPeek_Dictionary_DatabaseSchemaTable_ColumnExpression){
         foreach(var KV in RefPeek_Dictionary_DatabaseSchemaTable_ColumnExpression.ToList())
             if(KV.Value is null)
@@ -1894,7 +1847,7 @@ internal partial class 変換_TSqlFragmentからExpression{
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
-    private(e.Expression Set,e.ParameterExpression Element)QualifiedJoin(QualifiedJoin x){
+    private(e.Expression Set,e.ParameterExpression Element) QualifiedJoin(QualifiedJoin x){
         var Dictionary_DatabaseSchemaTable_ColumnExpression=this.RefPeek.Dictionary_DatabaseSchemaTable_ColumnExpression;
         //leftはleftが1行以上あるはず。だからSelectManyの外側に位置する
         //O.SelectMany(o=>I.Where(i=>o==i).Select(i=>new{o,i?.F1}))
@@ -1903,7 +1856,7 @@ internal partial class 変換_TSqlFragmentからExpression{
         //O.Join(I,o=>o,i=>i,(o,i)o=>I.Where(i=>o==i).SingleOrDefault().Select(i=>new{o,i?.F1}))
         TableReference FirstTableReference,SecondTableReference;
         var QualifiedJoinType=x.QualifiedJoinType;
-        switch(QualifiedJoinType) {
+        switch(QualifiedJoinType){
             case QualifiedJoinType.Inner:
                 FirstTableReference=x.FirstTableReference;
                 SecondTableReference=x.SecondTableReference;
@@ -1917,42 +1870,98 @@ internal partial class 変換_TSqlFragmentからExpression{
                 SecondTableReference=x.FirstTableReference;
                 break;
             case QualifiedJoinType.FullOuter:
-                FirstTableReference = x.FirstTableReference;
-                SecondTableReference = x.SecondTableReference;
+                FirstTableReference=x.FirstTableReference;
+                SecondTableReference=x.SecondTableReference;
                 break;
             default:
                 throw new NotSupportedException(QualifiedJoinType.ToString());
         }
         var c0=count++;
-        var(OuterSet,o)=this.TableReference(FirstTableReference);
+        var (OuterSet,o)=this.TableReference(FirstTableReference);
         var c1=count++;
         var TOuter=IEnumerable1のT(OuterSet.Type);
-        var(InnerSet,i)=this.TableReference(SecondTableReference);
+        var (InnerSet,i)=this.TableReference(SecondTableReference);
         var c2=count++;
         var TInner=IEnumerable1のT(InnerSet.Type);
         var 作業配列=this.作業配列;
+        var 変換_旧Parameterを新Expression=this.変換_旧Parameterを新Expression1;
         var ValueTuple2=作業配列.MakeGenericType(Reflection.ValueTuple.ValueTuple2,TOuter,TInner);
         var SearchCondition=this.BooleanExpression(x.SearchCondition);
-        var(OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
-            SearchCondition,new[]{o},new[]{i}
+        //var (OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+        //    SearchCondition,new[]{o},new[]{i}
+        //);
+        //if(OuterPredicate is not null){
+        //    OuterSet=e.Expression.Call(
+        //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,o.Type),
+        //        OuterSet,
+        //        e.Expression.Lambda(OuterPredicate,作業配列.Parameters設定(o))
+        //    );
+        //}
+        //if(InnerPredicate is not null){
+        //    InnerSet=e.Expression.Call(
+        //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,i.Type),
+        //        InnerSet,
+        //        e.Expression.Lambda(InnerPredicate,作業配列.Parameters設定(i))
+        //    );
+        //}
+        InnerSet=e.Expression.Call(
+            作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,i.Type),
+            InnerSet,
+            e.Expression.Lambda(SearchCondition,作業配列.Parameters設定(i))
         );
-        e.Expression プローブ,ビルド;
-        var 変換_旧Parameterを新Expression=this.変換_旧Parameterを新Expression1;
-        if(Listプローブビルド.Count==0){
-            if(OuterPredicate is not null){
-                OuterSet=e.Expression.Call(
-                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,o.Type),
-                    OuterSet,
-                    e.Expression.Lambda(OuterPredicate,作業配列.Parameters設定(o))
-                );
-            }
-            if(InnerPredicate is not null){
-                InnerSet=e.Expression.Call(
-                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,i.Type),
-                    InnerSet,
-                    e.Expression.Lambda(InnerPredicate,作業配列.Parameters設定(i))
-                );
-            }
+        if(QualifiedJoinType==QualifiedJoinType.LeftOuter||QualifiedJoinType==QualifiedJoinType.RightOuter) {
+            InnerSet=e.Expression.Call(
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.DefaultIfEmpty,i.Type),
+                InnerSet
+            );
+        //}else if(QualifiedJoinType==QualifiedJoinType.RightOuter){
+        //    OuterSet=e.Expression.Call(
+        //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.DefaultIfEmpty,o.Type),
+        //        OuterSet
+        //    );
+        }
+        var New2=作業配列.MakeValueTuple_ctor(Reflection.ValueTuple.ValueTuple2,TOuter,TInner);
+        var selector_Body=e.Expression.New(New2,作業配列.Expressions設定(o,i));
+        var selector=e.Expression.Lambda(selector_Body,作業配列.Parameters設定(i));
+        var SelectMany=作業配列.MakeGenericMethod(Reflection.ExtensionSet.SelectMany_selector,TOuter,ValueTuple2);
+        var Select=作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,TInner,selector_Body.Type);
+        var oi=e.Expression.Parameter(selector_Body.Type,$"j1{this.番号++}");
+        共通(Dictionary_DatabaseSchemaTable_ColumnExpression,変換_旧Parameterを新Expression,oi,o,nameof(ValueTuple<int,int>.Item1));
+        共通(Dictionary_DatabaseSchemaTable_ColumnExpression,変換_旧Parameterを新Expression,oi,i,nameof(ValueTuple<int,int>.Item2));
+        return(
+            e.Expression.Call(
+                SelectMany,
+                OuterSet,
+                e.Expression.Lambda(
+                    e.Expression.Call(Select,InnerSet,selector),
+                    作業配列.Parameters設定(o)
+                )
+            ),
+            oi
+        );
+        /*
+        var ValueTuple2=作業配列.MakeGenericType(Reflection.ValueTuple.ValueTuple2,TOuter,TInner);
+           var SearchCondition=this.BooleanExpression(x.SearchCondition);
+           var(OuterPredicate,InnerPredicate,Listプローブビルド)=this.取得_OuterPredicate_InnerPredicate_プローブビルド.実行(
+           SearchCondition,new[]{o},new[]{i}
+           );
+           e.Expression プローブ,ビルド;
+           var 変換_旧Parameterを新Expression=this.変換_旧Parameterを新Expression1;
+           if(OuterPredicate is not null){
+           OuterSet=e.Expression.Call(
+           作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,o.Type),
+           OuterSet,
+           e.Expression.Lambda(OuterPredicate,作業配列.Parameters設定(o))
+           );
+           }
+           if(InnerPredicate is not null){
+           InnerSet=e.Expression.Call(
+           作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,i.Type),
+           InnerSet,
+           e.Expression.Lambda(InnerPredicate,作業配列.Parameters設定(i))
+           );
+           }
+                   if(Listプローブビルド.Count==0){
             if(QualifiedJoinType==QualifiedJoinType.LeftOuter||QualifiedJoinType==QualifiedJoinType.RightOuter) {
                 InnerSet=e.Expression.Call(
                     作業配列.MakeGenericMethod(Reflection.ExtensionSet.DefaultIfEmpty,i.Type),
@@ -2007,6 +2016,7 @@ internal partial class 変換_TSqlFragmentからExpression{
                 oi
             );
         }
+        */
         //static void 共通(IDictionary<string,e.Expression?> Dictionary_DatabaseSchemaTable_ColumnExpression0,変換_旧Parameterを新Expression1 変換_旧Parameterを新Expression0,e.ParameterExpression oi0,e.ParameterExpression Parameter0,string Item){
         //    var 物理Expression=e.Expression.Field(oi0,Item);
         //    foreach(var KV in Dictionary_DatabaseSchemaTable_ColumnExpression0.ToList())
@@ -2129,150 +2139,184 @@ internal partial class 変換_TSqlFragmentからExpression{
         //RowsToCloseOff as rtco
         //on c.WWI_City_ID = rtco.WWI_City_ID
         //where  c.Valid_To = @EndOfTime
+        e.Expression? Source;
+        e.ParameterExpression? SourceElement;
+        Type SourceElement_Type;
         if(x.FromClause is not null){
-            var FromClause=this.FromClause(x.FromClause);
+            (Source, SourceElement)=this.FromClause(x.FromClause);
+            SourceElement_Type=SourceElement.Type;
+        } else {
+            Source=e.Expression.Call(null,Reflection.Container.TABLE_DUM);
+            SourceElement_Type=typeof(AttributeEmpty);
+            SourceElement=e.Expression.Parameter(SourceElement_Type,"ss");
         }
-        //Target.UpdateWith(t=>
-        //    Source.SelectMany(s=>predicate)
+        ref var RefPeek = ref this.RefPeek;
         var 作業配列 = this.作業配列;
         var(Target,TargetElement)=this.TableReference(x.Target);
         var TargetElement_Type=TargetElement.Type;
         var Tareget_ctor=TargetElement_Type.GetConstructors()[0];
         var ctor_Parameters=Tareget_ctor.GetParameters();
-        //var Arguments_Length=ctor_Parameters.Length;
-        //var Arguments=new e.Expression?[Arguments_Length];
-        ref var RefPeek = ref this.RefPeek;
-        Type SourceElement_Type;
-        e.Expression? Source=null;
-        e.ParameterExpression? SourceElement=null;
-        if(x.FromClause is not null) {
-            (Source, SourceElement)=this.FromClause(x.FromClause);
-            SourceElement_Type=SourceElement.Type;
-        //} else {
-        //    Source=e.Expression.Call(null,Reflection.Container.TABLE_DUM);
-        //    SourceElement_Type=IEnumerable1のT(Source.Type);
-        //    SourceElement=e.Expression.Parameter(SourceElement_Type,"ss");
-        }
-        e.Expression? predicate_Body=null;
-        var Parameters=this.作業配列.Parameters設定(TargetElement);
-        if(x.WhereClause is not null) {
-            predicate_Body = this.WhereClause(x.WhereClause);
-            Target=e.Expression.Call(
-                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,TargetElement_Type),
-                Source,
-                e.Expression.Lambda(predicate_Body,作業配列.Parameters設定(SourceElement))
-            );
-        }
-        var RefPeek_List_ColumnAlias = RefPeek.List_ColumnAlias;
-        var RefPeek_List_ColumnExpression = RefPeek.List_ColumnExpression;
-        RefPeek_List_ColumnAlias.Clear();
-        RefPeek_List_ColumnExpression.Clear();
-        //var selector_Body =CommonLibrary.ValueTupleでNewする(作業配列,RefPeek_List_ColumnExpression);
-        //var Result=e.Expression.Call(
-        //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,selector_Body.Type),
-        //    Source,
-        //    e.Expression.Lambda(
-        //        selector_Body,
-        //        作業配列.Parameters設定(SourceElement)
-        //    )
-        //);
-        //return Result;
-        //for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(SourceElement,ctor_Parameters[a].Name);
-        var Arguments_Length=ctor_Parameters.Length;
-        var Arguments=new e.Expression[Arguments_Length];
-        for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
-        foreach(var SetClause in x.SetClauses){
-            var(ParameterName,NewValue)=this.SetClause(SetClause);
-            var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
-            ref var Argument=ref Arguments[index];
-            Argument=Convert必要なら(NewValue,Argument.Type);
-        }
-        /*
-        var x_SetClauses=x.SetClauses;
-        var x_SetClauses_Count=x_SetClauses.Count;
-        var Expressions=new e.Expression[x_SetClauses_Count+1];
-        var Names=new string[x_SetClauses_Count+1];
-        Expressions[0]=Target;
-        if(x_SetClauses_Count>0){
-            var TOuter=TargetElement_Type;
-            for(var a=0;a<x_SetClauses_Count;a++){
-                var SetClause=x_SetClauses[a];
-                var (ParameterName,NewValue)=this.SetClause(SetClause);
-                var index=System.Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
-                var ParameterType=ctor_Parameters[index].ParameterType;
-                Arguments[index]=Convert必要なら(NewValue,ctor_Parameters[index].ParameterType);
-                var ValueTuple2=作業配列.MakeGenericType(Reflection.ValueTuple.ValueTuple2,TOuter,ParameterType);
-                var SelectMany_selector=作業配列.MakeGenericMethod(Reflection.ExtensionSet.SelectMany_selector,ParameterType,ValueTuple2);
-                var p=e.Expression.Parameter(ParameterType,ParameterName);
-                Expressions[a+1]=NewValue;
-                Names[a+1]=ParameterName;
-            }
-            e.Expression ValueTuple=CommonLibrary.ValueTupleでNewする(作業配列,Expressions);
-            var ValueTuple_Type=ValueTuple.Type;
-            for(var a=0;a<x_SetClauses_Count;a++){
-                var Expression=Expressions[a+1];
-                var ParameterName=Names[a+1];
-
-                //var index=System.Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
-                //var ParameterType=ctor_Parameters[index].ParameterType;
-                var ParameterType=IEnumerable1のT(Expression.Type);
-                var SelectMany_selector=作業配列.MakeGenericMethod(Reflection.ExtensionSet.SelectMany_selector,ParameterType,ValueTuple_Type);
-                var p=e.Expression.Parameter(ParameterType,ParameterName);
-                e.Expression SelectMany = e.Expression.Call(
-                    SelectMany_selector,
-                    Expression,
-                    e.Expression.Lambda(
-                        ValueTuple,
-                        p
-                    )
+        if(x.Target is NamedTableReference NamedTableReference){
+            if(RefPeek.Dictionary_DatabaseSchemaTable_SetElement.TryGetValue(NamedTableReference.SchemaObject.Name取得(),out var SetElement)){
+                throw new NotImplementedException();
+            } else{
+                var UpdateWith=Target.Type.GetMethods().Single(p=>{
+                    if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
+                    var Parameters0=p.GetParameters();
+                    if(Parameters0.Length!=1) return false;
+                    Debug.Assert(Parameters0.Length==1);
+                    var GenericArguments=Parameters0[0].ParameterType.GetGenericArguments();
+                    if(!GenericArguments[1].IsInterface)return false;
+                    return true;
+                });
+                var RefPeek_List_ColumnAlias=RefPeek.List_ColumnAlias;
+                var RefPeek_List_ColumnExpression=RefPeek.List_ColumnExpression;
+                RefPeek_List_ColumnAlias.Clear();
+                RefPeek_List_ColumnExpression.Clear();
+                var Arguments_Length=ctor_Parameters.Length;
+                var Arguments=new e.Expression[Arguments_Length];
+                for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
+                List<e.Expression> List_ColumnExpression;
+                var List_ColumnAlias=RefPeek.List_ColumnAlias;
+                if(List_ColumnAlias.Count==0){
+                    List_ColumnAlias=RefPeek.List_アスタリスクColumnAlias;
+                    List_ColumnExpression=RefPeek.List_アスタリスクColumnExpression;
+                } else{
+                    List_ColumnAlias=RefPeek.List_ColumnAlias;
+                    List_ColumnExpression=RefPeek.List_ColumnExpression;
+                }
+                foreach(var SetClause in x.SetClauses){
+                    var (ParameterName,NewValue)=this.SetClause(SetClause);
+                    var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
+                    Arguments[index]=Convert必要なら(List_ColumnExpression[List_ColumnAlias.IndexOf(ParameterName)],ctor_Parameters[index].ParameterType);
+                }
+                var New=e.Expression.New(Tareget_ctor,Arguments);
+                var Parameters=作業配列.Parameters設定(SourceElement);
+                var Select=e.Expression.Call(
+                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,New.Type),
+                    Source,
+                    e.Expression.Lambda(New,Parameters)
                 );
-                ValueTuple=SelectMany;
-            }
-            for(var a=0;a<Arguments_Length;a++)
-                if(Arguments[a] is null)
-                    Arguments[a]=e.Expression.Default(ctor_Parameters[a].ParameterType);
-            //var predicate=e.Expression.Lambda(Constant_true,Parameters);
-            //var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
-        }
-        */
-        var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
-        if(predicate_Body is not null){
-            return e.Expression.Call(
-                Target,
-                Target.Type.GetMethods().Single(p=>nameof(Set<int>.UpdateWith)==p.Name&&p.GetParameters().Length==2),
-                set,
-                e.Expression.Lambda(predicate_Body,Parameters)
-            );
-        } else{
-            //{
-            //    var IEnumerableT=作業配列.MakeGenericType(typeof(Sets.IEnumerable<>),TargetElement_Type);
-            //    var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,IEnumerableT);
-            //    var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
-            //    if(UpdateWith is not null){
-            //        return e.Expression.Call(
-            //            Target,
-            //            Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
-            //            set
-            //        );
-            //    }
-            //}
-            {
-                var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,TargetElement_Type);
-                var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
-                return e.Expression.Call(
+                if(x.WhereClause is not null) {
+                    var predicate_Body = this.WhereClause(x.WhereClause);
+                    Parameters[0]=SourceElement;
+                    Source=e.Expression.Call(
+                        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
+                        Source,
+                        e.Expression.Lambda(predicate_Body,Parameters)
+                    );
+                }
+                Parameters[0]=TargetElement;
+                var Call= e.Expression.Call(
                     Target,
-                    Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
-                    set
+                    UpdateWith,
+                    e.Expression.Lambda(Select,Parameters)
                 );
+                return Call;
+                //var SelectMany= e.Expression.Call(
+                //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.SelectMany_collectionSelector_resultSelector,TargetElement_Type,SourceElement_Type),
+                //    e.Expression.Lambda(Source,Parameters)
+                //);
             }
-            //var UpdateWith=Target.Type.GetMethods().First(p=>{
-            //    if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
-            //    var GetParameters=p.GetParameters();
-            //    if(GetParameters.Length!=2) return false;
-            //    if(GetParameters[1].ParameterType!=IEnumerableT) return false;
-            //    return true;
-            //});
+        } else{
+            throw new NotImplementedException();
         }
+        //if(x.WhereClause is not null) {
+        //    var predicate_Body = this.WhereClause(x.WhereClause);
+        //    Source=e.Expression.Call(
+        //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
+        //        Source,
+        //        e.Expression.Lambda(predicate_Body,作業配列.Parameters設定(SourceElement))
+        //    );
+        //}
+        //{
+        //    var RefPeek_List_ColumnAlias=RefPeek.List_ColumnAlias;
+        //    var RefPeek_List_ColumnExpression=RefPeek.List_ColumnExpression;
+        //    RefPeek_List_ColumnAlias.Clear();
+        //    RefPeek_List_ColumnExpression.Clear();
+        //    var Arguments_Length=ctor_Parameters.Length;
+        //    var Arguments=new e.Expression[Arguments_Length];
+        //    //for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
+        //    List<e.Expression> List_ColumnExpression;
+        //    var List_ColumnAlias=RefPeek.List_ColumnAlias;
+        //    if(List_ColumnAlias.Count==0){
+        //        List_ColumnAlias=RefPeek.List_アスタリスクColumnAlias;
+        //        List_ColumnExpression=RefPeek.List_アスタリスクColumnExpression;
+        //    } else{
+        //        List_ColumnAlias=RefPeek.List_ColumnAlias;
+        //        List_ColumnExpression=RefPeek.List_ColumnExpression;
+        //    }
+        //    foreach(var SetClause in x.SetClauses){
+        //        var (ParameterName,NewValue)=this.SetClause(SetClause);
+        //        var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
+        //        Arguments[index]=Convert必要なら(List_ColumnExpression[List_ColumnAlias.IndexOf(ParameterName)],ctor_Parameters[index].ParameterType);
+        //    }
+        //    if(x.WhereClause is not null){
+        //        var UpdateWith=Target.Type.GetMethods().Single(p=>{
+        //            if(nameof(Set<int>.UpdateWith)!=p.Name) return false;
+        //            var Parameters0=p.GetParameters();
+        //            if(Parameters0.Length!=1) return false;
+        //            Debug.Assert(Parameters0.Length==1);
+        //            var GenericArguments=Parameters0[0].ParameterType.GetGenericArguments();
+        //            if(!GenericArguments[1].IsInterface) return false;
+        //            return true;
+        //        });
+        //        var Parameters=作業配列.Parameters設定(TargetElement);
+        //        //var Where=e.Expression.Call(
+        //        //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
+        //        //    Source,
+        //        //    e.Expression.Lambda(predicate_Body,Parameters)
+        //        //);
+        //        //var Where=e.Expression.Call(
+        //        //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,TargetElement_Type),
+        //        //    Target,
+        //        //    e.Expression.Lambda(predicate_Body,Parameters)
+        //        //);
+        //        //RefPeek.Dictionary_DatabaseSchemaTable_SetElement
+        //        var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
+        //        var Select=e.Expression.Call(
+        //            作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,TargetElement_Type),
+        //            Source,
+        //            set
+        //        );
+        //        return e.Expression.Call(
+        //            Target,
+        //            UpdateWith,
+        //            e.Expression.Lambda(Source,Parameters)
+        //        );
+        //    } else{
+        //        //{
+        //        //    var IEnumerableT=作業配列.MakeGenericType(typeof(Sets.IEnumerable<>),TargetElement_Type);
+        //        //    var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,IEnumerableT);
+        //        //    var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
+        //        //    if(UpdateWith is not null){
+        //        //        return e.Expression.Call(
+        //        //            Target,
+        //        //            Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
+        //        //            set
+        //        //        );
+        //        //    }
+        //        //}
+        //        var Parameters=作業配列.Parameters設定(TargetElement);
+        //        var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
+        //        {
+        //            var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,TargetElement_Type);
+        //            var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
+        //            return e.Expression.Call(
+        //                Target,
+        //                Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
+        //                set
+        //            );
+        //        }
+        //        //var UpdateWith=Target.Type.GetMethods().First(p=>{
+        //        //    if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
+        //        //    var GetParameters=p.GetParameters();
+        //        //    if(GetParameters.Length!=2) return false;
+        //        //    if(GetParameters[1].ParameterType!=IEnumerableT) return false;
+        //        //    return true;
+        //        //});
+        //    }
+        //}
     }
     private (e.ParameterExpression Variable, string[] Names) Insert_VariableTableReference(VariableTableReference x) {
         //ref var RefPeek = ref this.RefPeek;

@@ -1586,7 +1586,7 @@ public abstract class VoidTSqlFragmentTraverser {
     /// <param name="x"></param>
     /// <returns></returns>
     protected virtual void RollbackTransactionStatement(RollbackTransactionStatement x) {
-        this.IdentifierOrValueExpression(x.Name);
+        if(x.Name is not null)this.IdentifierOrValueExpression(x.Name);
     }
     /// <summary>
     ///TransactionStatement:BeginEndBlockStatement:TSqlStatement:TSqlFragment

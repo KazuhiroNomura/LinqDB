@@ -768,6 +768,24 @@ internal partial class 変換_TSqlFragmentからExpression{
         throw this.単純NotSupportedException(x);
     }
     private e.Expression MergeStatement(MergeStatement x){
+        //MERGE Fact.Movement AS m
+        //    USING Integration.Movement_Staging AS ms
+        //    ON m.[WWI Stock Item Transaction ID] = ms.[WWI Stock Item Transaction ID]
+        //WHEN MATCHED THEN
+        //    UPDATE SET m.[Date Key] = ms.[Date Key],
+        //m.[Stock Item Key] = ms.[Stock Item Key],
+        //m.[Customer Key] = ms.[Customer Key],
+        //m.[Supplier Key] = ms.[Supplier Key],
+        //m.[Transaction Type Key] = ms.[Transaction Type Key],
+        //m.[WWI Invoice ID] = ms.[WWI Invoice ID],
+        //m.[WWI Purchase Order ID] = ms.[WWI Purchase Order ID],
+        //m.Quantity = ms.Quantity,
+        //m.[Lineage Key] = @LineageKey
+        //WHEN NOT MATCHED THEN
+        //INSERT ([Date Key], [Stock Item Key], [Customer Key], [Supplier Key], [Transaction Type Key],
+        //[WWI Stock Item Transaction ID], [WWI Invoice ID], [WWI Purchase Order ID], Quantity, [Lineage Key])
+        //VALUES (ms.[Date Key], ms.[Stock Item Key], ms.[Customer Key], ms.[Supplier Key], ms.[Transaction Type Key],
+        //    ms.[WWI Stock Item Transaction ID], ms.[WWI Invoice ID], ms.[WWI Purchase Order ID], ms.Quantity, @LineageKey);
         throw this.単純NotSupportedException(x);
     }
     private e.Expression MoveConversationStatement(MoveConversationStatement x){throw this.単純NotSupportedException(x);}

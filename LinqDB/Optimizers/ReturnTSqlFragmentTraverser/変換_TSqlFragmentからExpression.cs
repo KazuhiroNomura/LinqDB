@@ -337,15 +337,16 @@ internal partial class 変換_TSqlFragmentからExpression{
         /// </summary>
         public readonly List<e.Expression> List_GroupByExpression=new();
         /// <summary>
-        ///[[データベース.]スキーマ.]表名からExpressionを表す。
+        ///[[データベース.]スキーマ.]表名からSetExpressionを表す。
         /// </summary>
-        public readonly SortedDictionary<string,e.Expression?> Dictionary_DatabaseSchemaTable_TableExpression=new(StringComparer.OrdinalIgnoreCase);
+        public readonly SortedDictionary<string,(e.Expression Set,e.ParameterExpression Element)> Dictionary_DatabaseSchemaTable_SetElement = new(StringComparer.OrdinalIgnoreCase);
+        //public readonly SortedDictionary<string,e.Expression?> Dictionary_DatabaseSchemaTable_TableExpression=new(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         ///[[[データベース.]スキーマ.]表名.]列名からExpressionを表す。
         /// </summary>
         public readonly SortedDictionary<string,e.Expression?> Dictionary_DatabaseSchemaTable_ColumnExpression=new(StringComparer.OrdinalIgnoreCase);
         /// <summary>
-        ///[表名エイリアス].*から列名の集合を表す。
+        ///[表名エイリアス].*から列名の集合を表す。SelectStarExpressionで読み出しに使われる
         /// </summary>
         public readonly SortedDictionary<string,string[]> Dictionary_TableAlias_ColumnAliases=new(StringComparer.OrdinalIgnoreCase);
         /// <summary>
@@ -373,7 +374,8 @@ internal partial class 変換_TSqlFragmentからExpression{
         public e.Expression this[string Key]=>this.Dictionary_DatabaseSchemaTable_ColumnExpression[Key]!;
         public void Clear(){
             //this.List_TableExpression.Clear();
-            this.Dictionary_DatabaseSchemaTable_TableExpression.Clear();
+            //this.Dictionary_DatabaseSchemaTable_TableExpression.Clear();
+            this.Dictionary_DatabaseSchemaTable_SetElement.Clear();
             this.Dictionary_DatabaseSchemaTable_ColumnExpression.Clear();
             this.Dictionary_TableAlias_ColumnAliases.Clear();
             this.List_ColumnAlias.Clear();
@@ -420,6 +422,8 @@ internal partial class 変換_TSqlFragmentからExpression{
         }
         public ref Subquery単位の情報 RefPeek=>ref this.ArraySubquery単位の情報[this.index];
     }
+    public void Push()=>this._StackSubquery単位の情報.Push();
+    public void Pop()=>this._StackSubquery単位の情報.Pop();
     private readonly StackSubquery単位の情報 _StackSubquery単位の情報;
     private ref Subquery単位の情報 RefPeek=>ref this._StackSubquery単位の情報.RefPeek;
     /// <summary>

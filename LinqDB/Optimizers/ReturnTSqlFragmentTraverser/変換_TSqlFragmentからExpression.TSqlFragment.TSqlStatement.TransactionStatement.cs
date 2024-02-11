@@ -23,7 +23,19 @@ internal partial class 変換_TSqlFragmentからExpression{
         throw this.単純NotSupportedException(x);
     }
     private e.Expression RollbackTransactionStatement(RollbackTransactionStatement x){
-        throw this.単純NotSupportedException(x);
+        string Name;
+        if(x.Name is not null){
+            Name=x.Name.Value;
+            var a=x.Name.ValueExpression;
+            var b=x.Name.Identifier;
+        } else
+            Name="_";
+        var Variable=this.FindScalarVariable(Name);
+        var Transaction=e.Expression.Call(
+            Variable,
+            Variable.Type.GetMethod("Commit")!
+        );
+        return Transaction;
     }
     private e.Expression SaveTransactionStatement(SaveTransactionStatement x){
         throw this.単純NotSupportedException(x);
