@@ -1005,8 +1005,8 @@ public partial class AssemblyGenerator {
         var ListExpression=this.ListExpression;
         var Dictionary_View = this.Dictionary_View;
         foreach(var a in Schema.Views){
+            Optimizer.Disp作成(ContainerParameter,Dictionary_View[a],a.SQL);
             try{
-                Optimizer.Disp作成(ContainerParameter,Dictionary_View[a],a.SQL);
             } catch(Exception ex){
                 ListExpression.Add((対象:(object)a,発生したException:ex));
             }
@@ -1021,8 +1021,8 @@ public partial class AssemblyGenerator {
         }
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
         foreach(var a in Schema.ScalarFunctions){
+            Optimizer.Disp作成(ContainerParameter,Dictionary_ScalarFunction[a],a.SQL);
             try{
-                Optimizer.Disp作成(ContainerParameter,Dictionary_ScalarFunction[a],a.SQL);
             } catch(Exception ex){
                 ListExpression.Add((a,ex));
             }
@@ -1041,24 +1041,24 @@ public partial class AssemblyGenerator {
         var ListExpression=this.ListExpression;
         var Dictionary_View = this.Dictionary_View;
         foreach(var a in Schema.Views){
+            Optimizer.Impl作成(Dictionary_View[a],ContainerParameter);
             try{
-                Optimizer.Impl作成(Dictionary_View[a],ContainerParameter);
             } catch(Exception ex){
                 ListExpression.Add((a,ex));
             }
         }
         var Dictionary_TableFunction = this.Dictionary_TableFunction;
         foreach(var a in Schema.TableFunctions){
+            Optimizer.Impl作成(Dictionary_TableFunction[a],ContainerParameter);
             try{
-                Optimizer.Impl作成(Dictionary_TableFunction[a],ContainerParameter);
             } catch(Exception ex){
                 ListExpression.Add((a,ex));
             }
         }
         var Dictionary_ScalarFunction = this.Dictionary_ScalarFunction;
         foreach(var a in Schema.ScalarFunctions){
+            Optimizer.Impl作成(Dictionary_ScalarFunction[a],ContainerParameter);
             try{
-                Optimizer.Impl作成(Dictionary_ScalarFunction[a],ContainerParameter);
             } catch(Exception ex){
                 ListExpression.Add((a,ex));
             }

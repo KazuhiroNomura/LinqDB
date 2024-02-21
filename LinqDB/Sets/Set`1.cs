@@ -350,42 +350,61 @@ public class Set<T>:ImmutableSet<T>,ICollection<T>{
     /// </summary>
     /// <param name="Item">削除したい値</param>
     public void ConcurrentVoidRemove(T Item)=>this.InternalRemove(Item);
-    private readonly Set<T> Delete=new();
-    private readonly Set<T> Insert=new();
-    public void UpdateWith(Func<T,IEnumerable<T>> setSelector){
-        var Delete=this.Delete;
-        var Insert=this.Insert;
-        Delete.Clear();
-        Insert.Clear();
+    public void UpdateWith(Func<T,IEnumerable<T>> selector){
+        var Delete=new Set<T>();
+        var Insert=new Set<T>();
         foreach(var a in this){
-            var FirstOrDefault=setSelector(a).FirstOrDefault();
-            if(FirstOrDefault is not null)
+            var FirstOrDefault=selector(a).FirstOrDefault();
+            if(FirstOrDefault is not null){
+                Delete.Add(a);
                 Insert.Add(FirstOrDefault);
-            else
-                Delete.Add(FirstOrDefault);
+            }
         }
         foreach(var a in Delete) this.Remove(a);
         foreach(var a in Insert) this.Add(a);
     }
-    public void UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate){
-        var Delete=this.Delete;
-        var Insert=this.Insert;
-        Delete.Clear();
-        Insert.Clear();
+    public void UpdateWith(Func<T,T> setSelector){
+        var Insert=new Set<T>();
         foreach(var a in this)
-            if(predicate(a))
+            Insert.Add(setSelector(a));
+        this.変数Enumerator=Insert.変数Enumerator;
+        this._LongCount=Insert._LongCount;
+    }
+    public void UpdateWith(Func<T,T> setSelector,Func<T,bool> predicate){
+        var Delete=new Set<T>();
+        var Insert=new Set<T>();
+        foreach(var a in this)
+            if(predicate(a)){
                 Insert.Add(setSelector(a));
-            else
                 Delete.Add(a);
+            }
         foreach(var a in Delete) this.Remove(a);
         foreach(var a in Insert) this.Add(a);
     }
-    public void UpdateWith(Func<T,T> setSelector){
-        var Insert=this.Insert;
-        Insert.Clear();
-        foreach(var a in this)
-            Insert.Add(setSelector(a));
-        this.Clear();
+    public void MergeWith<TUsing>(Set<TUsing>Using, Func<T,TUsing,bool> On,Func<T,TUsing,T> UpdateSelector,Func<TUsing,T> InsertSelector){
+        //MERGE O AS o this
+        //USING I AS i inner
+        //ON o.F0 < i.F0
+        //WHEN MATCHED THEN
+        //    UPDATE SET o.F0=i.F0,o.F1=i.F1*i.F1*o.F1,
+        //WHEN NOT MATCHED THEN
+        //INSERT (F0)
+        //VALUES (i.F0);
+        var Delete=new Set<T>();
+        var Insert=new Set<T>();
+        foreach(var merge in this){
+            foreach(var @using in Using){
+                if(On(merge,@using)){
+                    var Update=UpdateSelector(merge,@using);
+                    if(Update is null) continue;
+                    Delete.Add(merge);
+                    Insert.Add(Update);
+                } else{
+                    Insert.Add(InsertSelector(@using));
+                }
+            }
+        }
+        foreach(var a in Delete) this.Remove(a);
         foreach(var a in Insert) this.Add(a);
     }
     ///// <summary>

@@ -786,6 +786,20 @@ internal partial class 変換_TSqlFragmentからExpression{
         //[WWI Stock Item Transaction ID], [WWI Invoice ID], [WWI Purchase Order ID], Quantity, [Lineage Key])
         //VALUES (ms.[Date Key], ms.[Stock Item Key], ms.[Customer Key], ms.[Supplier Key], ms.[Transaction Type Key],
         //    ms.[WWI Stock Item Transaction ID], ms.[WWI Invoice ID], ms.[WWI Purchase Order ID], ms.Quantity, @LineageKey);
+        //MERGE O AS o
+        //    USING I AS i
+        //    ON o.F0 < i.F0
+        //WHEN MATCHED THEN
+        //    UPDATE SET o.[Date Key] = i.[Date Key],
+        //WHEN NOT MATCHED THEN
+        //INSERT (F0)
+        //VALUES (i.F0);
+        //O.Merge(
+        //	o=>I,
+        //	(o,i)=>i.WWI Stock Item Transaction ID<o.WWI Stock Item Transaction ID
+        //	(o,i)=>new O()
+        //	()=>new O()
+        //)
         throw this.単純NotSupportedException(x);
     }
     private e.Expression MoveConversationStatement(MoveConversationStatement x){throw this.単純NotSupportedException(x);}

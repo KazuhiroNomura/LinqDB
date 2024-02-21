@@ -2156,167 +2156,59 @@ internal partial class 変換_TSqlFragmentからExpression{
         var TargetElement_Type=TargetElement.Type;
         var Tareget_ctor=TargetElement_Type.GetConstructors()[0];
         var ctor_Parameters=Tareget_ctor.GetParameters();
-        if(x.Target is NamedTableReference NamedTableReference){
-            if(RefPeek.Dictionary_DatabaseSchemaTable_SetElement.TryGetValue(NamedTableReference.SchemaObject.Name取得(),out var SetElement)){
-                throw new NotImplementedException();
-            } else{
-                var UpdateWith=Target.Type.GetMethods().Single(p=>{
-                    if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
-                    var Parameters0=p.GetParameters();
-                    if(Parameters0.Length!=1) return false;
-                    Debug.Assert(Parameters0.Length==1);
-                    var GenericArguments=Parameters0[0].ParameterType.GetGenericArguments();
-                    if(!GenericArguments[1].IsInterface)return false;
-                    return true;
-                });
-                var RefPeek_List_ColumnAlias=RefPeek.List_ColumnAlias;
-                var RefPeek_List_ColumnExpression=RefPeek.List_ColumnExpression;
-                RefPeek_List_ColumnAlias.Clear();
-                RefPeek_List_ColumnExpression.Clear();
-                var Arguments_Length=ctor_Parameters.Length;
-                var Arguments=new e.Expression[Arguments_Length];
-                for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
-                List<e.Expression> List_ColumnExpression;
-                var List_ColumnAlias=RefPeek.List_ColumnAlias;
-                if(List_ColumnAlias.Count==0){
-                    List_ColumnAlias=RefPeek.List_アスタリスクColumnAlias;
-                    List_ColumnExpression=RefPeek.List_アスタリスクColumnExpression;
-                } else{
-                    List_ColumnAlias=RefPeek.List_ColumnAlias;
-                    List_ColumnExpression=RefPeek.List_ColumnExpression;
-                }
-                foreach(var SetClause in x.SetClauses){
-                    var (ParameterName,NewValue)=this.SetClause(SetClause);
-                    var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
-                    Arguments[index]=Convert必要なら(List_ColumnExpression[List_ColumnAlias.IndexOf(ParameterName)],ctor_Parameters[index].ParameterType);
-                }
-                var New=e.Expression.New(Tareget_ctor,Arguments);
-                var Parameters=作業配列.Parameters設定(SourceElement);
-                var Select=e.Expression.Call(
-                    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,New.Type),
-                    Source,
-                    e.Expression.Lambda(New,Parameters)
-                );
-                if(x.WhereClause is not null) {
-                    var predicate_Body = this.WhereClause(x.WhereClause);
-                    Parameters[0]=SourceElement;
-                    Source=e.Expression.Call(
-                        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
-                        Source,
-                        e.Expression.Lambda(predicate_Body,Parameters)
-                    );
-                }
-                Parameters[0]=TargetElement;
-                var Call= e.Expression.Call(
-                    Target,
-                    UpdateWith,
-                    e.Expression.Lambda(Select,Parameters)
-                );
-                return Call;
-                //var SelectMany= e.Expression.Call(
-                //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.SelectMany_collectionSelector_resultSelector,TargetElement_Type,SourceElement_Type),
-                //    e.Expression.Lambda(Source,Parameters)
-                //);
-            }
+        var UpdateWith=Target.Type.GetMethods().Single(p=>{
+            if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
+            var Parameters0=p.GetParameters();
+            if(Parameters0.Length!=1) return false;
+            Debug.Assert(Parameters0.Length==1);
+            var GenericArguments=Parameters0[0].ParameterType.GetGenericArguments();
+            if(!GenericArguments[1].IsInterface)return false;
+            return true;
+        });
+        var RefPeek_List_ColumnAlias=RefPeek.List_ColumnAlias;
+        var RefPeek_List_ColumnExpression=RefPeek.List_ColumnExpression;
+        RefPeek_List_ColumnAlias.Clear();
+        RefPeek_List_ColumnExpression.Clear();
+        var Arguments_Length=ctor_Parameters.Length;
+        var Arguments=new e.Expression[Arguments_Length];
+        for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
+        List<e.Expression> List_ColumnExpression;
+        var List_ColumnAlias=RefPeek.List_ColumnAlias;
+        if(List_ColumnAlias.Count==0){
+            List_ColumnAlias=RefPeek.List_アスタリスクColumnAlias;
+            List_ColumnExpression=RefPeek.List_アスタリスクColumnExpression;
         } else{
-            throw new NotImplementedException();
+            List_ColumnAlias=RefPeek.List_ColumnAlias;
+            List_ColumnExpression=RefPeek.List_ColumnExpression;
         }
-        //if(x.WhereClause is not null) {
-        //    var predicate_Body = this.WhereClause(x.WhereClause);
-        //    Source=e.Expression.Call(
-        //        作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
-        //        Source,
-        //        e.Expression.Lambda(predicate_Body,作業配列.Parameters設定(SourceElement))
-        //    );
-        //}
-        //{
-        //    var RefPeek_List_ColumnAlias=RefPeek.List_ColumnAlias;
-        //    var RefPeek_List_ColumnExpression=RefPeek.List_ColumnExpression;
-        //    RefPeek_List_ColumnAlias.Clear();
-        //    RefPeek_List_ColumnExpression.Clear();
-        //    var Arguments_Length=ctor_Parameters.Length;
-        //    var Arguments=new e.Expression[Arguments_Length];
-        //    //for(var a=0;a<Arguments_Length;a++)Arguments[a]=e.Expression.PropertyOrField(TargetElement,ctor_Parameters[a].Name);
-        //    List<e.Expression> List_ColumnExpression;
-        //    var List_ColumnAlias=RefPeek.List_ColumnAlias;
-        //    if(List_ColumnAlias.Count==0){
-        //        List_ColumnAlias=RefPeek.List_アスタリスクColumnAlias;
-        //        List_ColumnExpression=RefPeek.List_アスタリスクColumnExpression;
-        //    } else{
-        //        List_ColumnAlias=RefPeek.List_ColumnAlias;
-        //        List_ColumnExpression=RefPeek.List_ColumnExpression;
-        //    }
-        //    foreach(var SetClause in x.SetClauses){
-        //        var (ParameterName,NewValue)=this.SetClause(SetClause);
-        //        var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
-        //        Arguments[index]=Convert必要なら(List_ColumnExpression[List_ColumnAlias.IndexOf(ParameterName)],ctor_Parameters[index].ParameterType);
-        //    }
-        //    if(x.WhereClause is not null){
-        //        var UpdateWith=Target.Type.GetMethods().Single(p=>{
-        //            if(nameof(Set<int>.UpdateWith)!=p.Name) return false;
-        //            var Parameters0=p.GetParameters();
-        //            if(Parameters0.Length!=1) return false;
-        //            Debug.Assert(Parameters0.Length==1);
-        //            var GenericArguments=Parameters0[0].ParameterType.GetGenericArguments();
-        //            if(!GenericArguments[1].IsInterface) return false;
-        //            return true;
-        //        });
-        //        var Parameters=作業配列.Parameters設定(TargetElement);
-        //        //var Where=e.Expression.Call(
-        //        //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
-        //        //    Source,
-        //        //    e.Expression.Lambda(predicate_Body,Parameters)
-        //        //);
-        //        //var Where=e.Expression.Call(
-        //        //    作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,TargetElement_Type),
-        //        //    Target,
-        //        //    e.Expression.Lambda(predicate_Body,Parameters)
-        //        //);
-        //        //RefPeek.Dictionary_DatabaseSchemaTable_SetElement
-        //        var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
-        //        var Select=e.Expression.Call(
-        //            作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,TargetElement_Type),
-        //            Source,
-        //            set
-        //        );
-        //        return e.Expression.Call(
-        //            Target,
-        //            UpdateWith,
-        //            e.Expression.Lambda(Source,Parameters)
-        //        );
-        //    } else{
-        //        //{
-        //        //    var IEnumerableT=作業配列.MakeGenericType(typeof(Sets.IEnumerable<>),TargetElement_Type);
-        //        //    var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,IEnumerableT);
-        //        //    var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
-        //        //    if(UpdateWith is not null){
-        //        //        return e.Expression.Call(
-        //        //            Target,
-        //        //            Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
-        //        //            set
-        //        //        );
-        //        //    }
-        //        //}
-        //        var Parameters=作業配列.Parameters設定(TargetElement);
-        //        var set=e.Expression.Lambda(e.Expression.New(Tareget_ctor,Arguments!),Parameters);
-        //        {
-        //            var Func=作業配列.MakeGenericType(typeof(Func<,>),TargetElement_Type,TargetElement_Type);
-        //            var UpdateWith=Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func));
-        //            return e.Expression.Call(
-        //                Target,
-        //                Target.Type.GetMethod(nameof(Set<int>.UpdateWith),作業配列.Types設定(Func)),
-        //                set
-        //            );
-        //        }
-        //        //var UpdateWith=Target.Type.GetMethods().First(p=>{
-        //        //    if(nameof(Set<int>.UpdateWith)!=p.Name)return false;
-        //        //    var GetParameters=p.GetParameters();
-        //        //    if(GetParameters.Length!=2) return false;
-        //        //    if(GetParameters[1].ParameterType!=IEnumerableT) return false;
-        //        //    return true;
-        //        //});
-        //    }
-        //}
+        foreach(var SetClause in x.SetClauses){
+            var (ParameterName,NewValue)=this.SetClause(SetClause);
+            var index=Array.FindIndex(ctor_Parameters,p=>p.Name==ParameterName);
+            Arguments[index]=Convert必要なら(List_ColumnExpression[List_ColumnAlias.IndexOf(ParameterName)],ctor_Parameters[index].ParameterType);
+        }
+        var New=e.Expression.New(Tareget_ctor,Arguments);
+        var Parameters=作業配列.Parameters設定(SourceElement);
+        var Select=e.Expression.Call(
+            作業配列.MakeGenericMethod(Reflection.ExtensionSet.Select_selector,SourceElement_Type,New.Type),
+            Source,
+            e.Expression.Lambda(New,Parameters)
+        );
+        if(x.WhereClause is not null) {
+            var predicate_Body = this.WhereClause(x.WhereClause);
+            Parameters[0]=SourceElement;
+            Source=e.Expression.Call(
+                作業配列.MakeGenericMethod(Reflection.ExtensionSet.Where,SourceElement_Type),
+                Source,
+                e.Expression.Lambda(predicate_Body,Parameters)
+            );
+        }
+        Parameters[0]=TargetElement;
+        var Call= e.Expression.Call(
+            Target,
+            UpdateWith,
+            e.Expression.Lambda(Select,Parameters)
+        );
+        return Call;
     }
     private (e.ParameterExpression Variable, string[] Names) Insert_VariableTableReference(VariableTableReference x) {
         //ref var RefPeek = ref this.RefPeek;

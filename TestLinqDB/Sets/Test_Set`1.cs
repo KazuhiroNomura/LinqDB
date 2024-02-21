@@ -312,9 +312,10 @@ public class Test_Set1{
     }
     [Fact]
     public void UpdateWith(){
-        var d=new Set<Int>{1,2};
-        d.UpdateWith(p=>p+1,p=>p==2);
-        Assert.Equal(d,new Set<Int>{1,3});
+        var expected=new Set<Int>{1,2};
+        expected.UpdateWith(p=>p+1,p=>p==2);
+        var actual=new Set<Int>{1,3};
+        Assert.Equal(expected,actual);
     }
     [Fact]
     public void DeleteWith(){

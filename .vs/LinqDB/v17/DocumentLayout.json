@@ -1,0 +1,1365 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\GitHub\\LinqDB\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\sets\\set\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\sets\\set\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|d:\\github\\linqdb\\testlinqdb\\sets\\test_set\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|solutionrelative:testlinqdb\\sets\\test_set\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|d:\\github\\linqdb\\testlinqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u5C40\u6240parameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|solutionrelative:testlinqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u5C40\u6240parameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\sets\\immutableset\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\sets\\immutableset\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}|TestWideWorldImportersDW\\TestWideWorldImportersDW.csproj|d:\\github\\linqdb\\testwideworldimportersdw\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F9BB88D-33F7-42BF-A309-EE8A6258CA8A}|TestWideWorldImportersDW\\TestWideWorldImportersDW.csproj|solutionrelative:testwideworldimportersdw\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tsqlstatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tsqlstatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.booleanexpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.booleanexpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.tablereferencewithalias.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.tablereferencewithalias.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\optimizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\optimizer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tsqlstatement.transactionstatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tsqlstatement.transactionstatement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.definesequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.definesequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|d:\\github\\linqdb\\generatedatabase\\generate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|solutionrelative:generatedatabase\\generate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\sets\\extensionset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\sets\\extensionset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.tablereferencewithalias.tablereferencewithaliasandcolumns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.tablereference.tablereferencewithalias.tablereferencewithaliasandcolumns.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.setclause.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.setclause.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.join.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.join.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\voidtsqlfragmenttraverser\\voidtsqlfragmenttraverser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\voidtsqlfragmenttraverser\\voidtsqlfragmenttraverser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\product\\sqlserver\\information_schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\product\\sqlserver\\information_schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\product\\information_schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\product\\information_schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment_queryspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment_queryspecification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.calltarget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.calltarget.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.scalarexpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.scalarexpression.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}|TestWideWorldImporters\\TestWideWorldImporters.csproj|d:\\github\\linqdb\\testwideworldimporters\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{85E72F03-3A8F-4EE5-AF3C-C4ABCFA90D98}|TestWideWorldImporters\\TestWideWorldImporters.csproj|solutionrelative:testwideworldimporters\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\reflection\\extensionenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\reflection\\extensionenumerable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\container\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\container\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\container.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\container.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|d:\\github\\linqdb\\testlinqdb\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9C144205-1B32-4F7F-8507-71653455E70E}|TestLinqDB\\TestLinqDB.csproj|solutionrelative:testlinqdb\\transaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.multipartidentifier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u304B\u3089expression.tsqlfragment.multipartidentifier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returntsqlfragmenttraverser\\extension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returntsqlfragmenttraverser\\extension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\product\\sqlserver\\methods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\product\\sqlserver\\methods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\product\\sqlserver\\reflection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\product\\sqlserver\\reflection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\product\\sqlserver\\throw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\product\\sqlserver\\throw.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\reflection\\exception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\reflection\\exception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\attributes\\sequenceattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\attributes\\sequenceattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\helpers\\ilgenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\helpers\\ilgenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\voidexpressiontraverser\\a\u4F5C\u6210_il.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\voidexpressiontraverser\\a\u4F5C\u6210_il.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\voidexpressiontraverser\\\u4F5C\u6210_dynamicassembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\voidexpressiontraverser\\\u4F5C\u6210_dynamicassembly.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\voidexpressiontraverser\\voidexpressiontraverser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\voidexpressiontraverser\\voidexpressiontraverser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}|TestLinqDBExe\\TestLinqDBExe.csproj|d:\\github\\linqdb\\testlinqdbexe\\testlinqdbexe.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{D142DCCE-ADD1-452B-BC0B-BA7BFEAEAF7C}|TestLinqDBExe\\TestLinqDBExe.csproj|solutionrelative:testlinqdbexe\\testlinqdbexe.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|d:\\github\\linqdb\\generatedatabase\\vm\\container.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|solutionrelative:generatedatabase\\vm\\container.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|d:\\github\\linqdb\\generatedatabase\\vm\\schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|solutionrelative:generatedatabase\\vm\\schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\dom\\view_tablefunction_information.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\dom\\view_tablefunction_information.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|d:\\github\\linqdb\\gui\\vm\\schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|solutionrelative:gui\\vm\\schema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\dom\\ischema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\dom\\ischema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\system.data.linqdbclient\\linqdbcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\system.data.linqdbclient\\linqdbcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\remote\\clients\\client\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\remote\\clients\\client\u00601.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\voidtsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u6B63\u898F\u5316.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\voidtsqlfragmenttraverser\\\u5909\u63DB_tsqlfragment\u6B63\u898F\u5316.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.defineprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.defineprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.definescalarfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.definescalarfunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\attributes\\tableattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\attributes\\tableattribute.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.definetablefunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.definetablefunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\assemblygenerator.defineview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\assemblygenerator.defineview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u5C40\u6240parameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u5C40\u6240parameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u8DE8\u304Eparameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\optimizers\\returnexpressiontraverser\\\u5909\u63DB_\u8DE8\u304Eparameter\u306E\u5148\u884C\u8A55\u4FA1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|d:\\github\\linqdb\\gui\\vm\\sequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|solutionrelative:gui\\vm\\sequence.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\dom\\itable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\dom\\itable.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|d:\\github\\linqdb\\generatedatabase\\vm\\procedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8C83078B-90CA-4E48-AA2D-F8A14979121B}|GenerateDatabase\\GenerateDatabase.csproj|solutionrelative:generatedatabase\\vm\\procedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|d:\\github\\linqdb\\gui\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|solutionrelative:gui\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\dom\\irelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\dom\\irelation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|d:\\github\\linqdb\\gui\\vm\\trigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|solutionrelative:gui\\vm\\trigger.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|d:\\github\\linqdb\\gui\\vm\\tablefunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{075FC115-CBC0-4FD1-8E1D-AEF4EF11DBD1}|GUI\\GUI.csproj|solutionrelative:gui\\vm\\tablefunction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\databases\\dom\\iprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\databases\\dom\\iprocedure.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\reflection\\datetimeoffset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\reflection\\datetimeoffset.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\reflection\\datetime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\reflection\\datetime.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\serializers\\messagepack\\extension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\serializers\\messagepack\\extension.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\serializers\\utf8json\\formatters\\others\\object.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\serializers\\utf8json\\formatters\\others\\object.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|d:\\github\\linqdb\\linqdb\\system.data.linqdbclient\\linqdbdatareader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D3CA8754-57E7-45BE-A760-87E53266A8E1}|LinqDB\\LinqDB.csproj|solutionrelative:linqdb\\system.data.linqdbclient\\linqdbdatareader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 21,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:145:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:140:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:139:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{809f6ff3-8092-454a-8003-6d4091f9b5bb}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:12:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:13:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:14:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:11:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:143:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:144:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b892fa32-9231-5753-be68-387ff5027090}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ImmutableSet\u00601.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\ImmutableSet\u00601.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Sets\\ImmutableSet\u00601.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\ImmutableSet\u00601.cs",
+              "RelativeToolTip": "LinqDB\\Sets\\ImmutableSet\u00601.cs",
+              "ViewState": "AQIAAGMCAAAAAAAAAAAAwI4CAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-21T07:57:27.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestLinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeDocumentMoniker": "TestLinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestLinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeToolTip": "TestLinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ViewState": "AQIAAIAFAAAAAAAAAAAqwKwFAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-21T07:47:55.986Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.cs",
+              "ViewState": "AQIAAFQIAAAAAAAAAAD4v28IAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T06:41:09.631Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Test_Set\u00601.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestLinqDB\\Sets\\Test_Set\u00601.cs",
+              "RelativeDocumentMoniker": "TestLinqDB\\Sets\\Test_Set\u00601.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestLinqDB\\Sets\\Test_Set\u00601.cs",
+              "RelativeToolTip": "TestLinqDB\\Sets\\Test_Set\u00601.cs",
+              "ViewState": "AQIAACEBAAAAAAAAAAAkwDsBAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-21T07:41:04.432Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.cs",
+              "ViewState": "AQIAAIQAAAAAAAAAAAAEwKAAAAAEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T09:39:23.765Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestWideWorldImportersDW\\Program.cs",
+              "RelativeDocumentMoniker": "TestWideWorldImportersDW\\Program.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestWideWorldImportersDW\\Program.cs",
+              "RelativeToolTip": "TestWideWorldImportersDW\\Program.cs",
+              "ViewState": "AQIAALUGAAAAAAAAAAAkwM4GAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-11T05:41:18.144Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.cs",
+              "ViewState": "AQIAAP4CAAAAAAAAAAA2wBwDAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T00:43:19.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.BooleanExpression.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.BooleanExpression.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.BooleanExpression.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.BooleanExpression.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.BooleanExpression.cs",
+              "ViewState": "AQIAAPwAAAAAAAAAAAAEwBgBAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T13:53:20.747Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAAAEwCYAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T00:48:56.881Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Optimizer.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\Optimizer.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\Optimizer.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\Optimizer.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\Optimizer.cs",
+              "ViewState": "AQIAAMQAAAAAAAAAAADwv+IAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T00:43:19.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AssemblyGenerator.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.cs",
+              "ViewState": "AQIAAAUEAAAAAAAAAAAAABQEAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T11:11:59.546Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.TransactionStatement.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.TransactionStatement.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.TransactionStatement.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.TransactionStatement.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TSqlStatement.TransactionStatement.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T15:52:12.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Generate.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GenerateDatabase\\Generate.cs",
+              "RelativeDocumentMoniker": "GenerateDatabase\\Generate.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GenerateDatabase\\Generate.cs",
+              "RelativeToolTip": "GenerateDatabase\\Generate.cs",
+              "ViewState": "AQIAAAIBAAAAAAAAAAAEwB4BAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T00:43:19.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.SetClause.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.SetClause.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.SetClause.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.SetClause.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.SetClause.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwBkAAAAuAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T15:51:15.971Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.cs",
+              "ViewState": "AQIAAIcBAAAAAAAAAAAawKIBAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T00:43:19.192Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.TableReference.TableReferenceWithAlias.TableReferenceWithAliasAndColumns.cs",
+              "ViewState": "AQIAALkAAAAAAAAAAAAWwNcAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T01:20:49.491Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "VoidTSqlFragmentTraverser.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\VoidTSqlFragmentTraverser.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\VoidTSqlFragmentTraverser.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\VoidTSqlFragmentTraverser.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\VoidTSqlFragmentTraverser.cs",
+              "ViewState": "AQIAABoGAAAAAAAAAAArwDQGAAAeAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:40:30.792Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "information_schema.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\information_schema.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Product\\information_schema.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\information_schema.cs",
+              "RelativeToolTip": "LinqDB\\Product\\information_schema.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T12:20:40.487Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "\u5909\u63DB_TSqlFragment_QuerySpecification.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment_QuerySpecification.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment_QuerySpecification.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment_QuerySpecification.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment_QuerySpecification.cs",
+              "ViewState": "AQIAAMsAAAAAAAAAAAAEwOcAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T09:39:23.738Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.CallTarget.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.CallTarget.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.CallTarget.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.CallTarget.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.CallTarget.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAASwCMAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T16:05:14.665Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.ScalarExpression.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.ScalarExpression.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.ScalarExpression.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.ScalarExpression.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.ScalarExpression.cs",
+              "ViewState": "AQIAACUAAAAAAAAAAAApwEIAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:06:41.996Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "Common.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\Common.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\Common.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\Common.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\Common.cs",
+              "ViewState": "AQIAAGwAAAAAAAAAAAArwIsAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T11:55:14.838Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "ExtensionEnumerable.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\ExtensionEnumerable.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Reflection\\ExtensionEnumerable.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\ExtensionEnumerable.cs",
+              "RelativeToolTip": "LinqDB\\Reflection\\ExtensionEnumerable.cs",
+              "ViewState": "AQIAADwAAAAAAAAAAAArwF8AAABNAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T05:15:28.936Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestWideWorldImporters\\Program.cs",
+              "RelativeDocumentMoniker": "TestWideWorldImporters\\Program.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestWideWorldImporters\\Program.cs",
+              "RelativeToolTip": "TestWideWorldImporters\\Program.cs",
+              "ViewState": "AQIAAKQIAAAAAAAAAAAawMMIAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T05:51:17.922Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Container.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Container.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Container.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Container.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Container.cs",
+              "ViewState": "AQIAAM4AAAAAAAAAAAAjwPIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T10:23:25.304Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Container\u00601.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Container\u00601.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Container\u00601.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Container\u00601.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Container\u00601.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T16:17:36.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "Transaction.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestLinqDB\\Transaction.cs",
+              "RelativeDocumentMoniker": "TestLinqDB\\Transaction.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestLinqDB\\Transaction.cs",
+              "RelativeToolTip": "TestLinqDB\\Transaction.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAtwCEAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T23:17:59.178Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.MultiPartIdentifier.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.MultiPartIdentifier.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.MultiPartIdentifier.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.MultiPartIdentifier.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u304B\u3089Expression.TSqlFragment.MultiPartIdentifier.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAA6AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T12:30:38.268Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Extension.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\Extension.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\Extension.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\Extension.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnTSqlFragmentTraverser\\Extension.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T14:10:29.711Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "Methods.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Methods.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Product\\SQLServer\\Methods.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Methods.cs",
+              "RelativeToolTip": "LinqDB\\Product\\SQLServer\\Methods.cs",
+              "ViewState": "AQIAAIwBAAAAAAAAAAAMwKgBAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:17:56.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "Exception.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\Exception.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Reflection\\Exception.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\Exception.cs",
+              "RelativeToolTip": "LinqDB\\Reflection\\Exception.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T11:05:04.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "Throw.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Throw.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Product\\SQLServer\\Throw.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Throw.cs",
+              "RelativeToolTip": "LinqDB\\Product\\SQLServer\\Throw.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T11:21:32.872Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "Reflection.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Reflection.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Product\\SQLServer\\Reflection.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\Reflection.cs",
+              "RelativeToolTip": "LinqDB\\Product\\SQLServer\\Reflection.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:29:49.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "\u5909\u63DB_Stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_Stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_Stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_Stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_Stopwatch\u306B\u57CB\u3081\u8FBC\u3080.cs",
+              "ViewState": "AQIAABoAAAAAAAAAAAASwDcAAAATAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T11:03:41.799Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "SequenceAttribute.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Attributes\\SequenceAttribute.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Attributes\\SequenceAttribute.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Attributes\\SequenceAttribute.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Attributes\\SequenceAttribute.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAkAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T10:20:40.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "ILGenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Helpers\\ILGenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Helpers\\ILGenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Helpers\\ILGenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs",
+              "RelativeToolTip": "LinqDB\\Helpers\\ILGenerator\u62E1\u5F35\u30E1\u30BD\u30C3\u30C9.cs",
+              "ViewState": "AQIAABsCAAAAAAAAAAASwD0CAAA/AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T05:46:09.306Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "A\u4F5C\u6210_IL.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\A\u4F5C\u6210_IL.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\VoidExpressionTraverser\\A\u4F5C\u6210_IL.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\A\u4F5C\u6210_IL.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\VoidExpressionTraverser\\A\u4F5C\u6210_IL.cs",
+              "ViewState": "AQIAAFsHAAAAAAAAAAD4v3kHAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T09:42:39.502Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "\u4F5C\u6210_DynamicAssembly.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\\u4F5C\u6210_DynamicAssembly.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\VoidExpressionTraverser\\\u4F5C\u6210_DynamicAssembly.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\\u4F5C\u6210_DynamicAssembly.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\VoidExpressionTraverser\\\u4F5C\u6210_DynamicAssembly.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAD4v0wAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-08T11:46:44.988Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "VoidExpressionTraverser.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\VoidExpressionTraverser.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\VoidExpressionTraverser\\VoidExpressionTraverser.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidExpressionTraverser\\VoidExpressionTraverser.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\VoidExpressionTraverser\\VoidExpressionTraverser.cs",
+              "ViewState": "AQIAAG8AAAAAAAAAAAAEwIsAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-08T18:46:47.997Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "TestLinqDBExe.csproj",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\TestLinqDBExe\\TestLinqDBExe.csproj",
+              "RelativeDocumentMoniker": "TestLinqDBExe\\TestLinqDBExe.csproj",
+              "ToolTip": "D:\\GitHub\\LinqDB\\TestLinqDBExe\\TestLinqDBExe.csproj",
+              "RelativeToolTip": "TestLinqDBExe\\TestLinqDBExe.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-02-08T20:16:34.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "Container.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Container.cs",
+              "RelativeDocumentMoniker": "GenerateDatabase\\VM\\Container.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Container.cs",
+              "RelativeToolTip": "GenerateDatabase\\VM\\Container.cs",
+              "ViewState": "AQIAAEYAAAAAAAAAAAAewGQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:41:18.379Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "Schema.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Schema.cs",
+              "RelativeDocumentMoniker": "GenerateDatabase\\VM\\Schema.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Schema.cs",
+              "RelativeToolTip": "GenerateDatabase\\VM\\Schema.cs",
+              "ViewState": "AQIAACQAAAAAAAAAAAArwEAAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:39:08.849Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "View_TableFunction_Information.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\View_TableFunction_Information.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Dom\\View_TableFunction_Information.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\View_TableFunction_Information.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Dom\\View_TableFunction_Information.cs",
+              "ViewState": "AQIAABgAAAAAAAAAAAAEwDcAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:12:40.189Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "LinqDBCommand.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\System.Data.LinqDBClient\\LinqDBCommand.cs",
+              "RelativeDocumentMoniker": "LinqDB\\System.Data.LinqDBClient\\LinqDBCommand.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\System.Data.LinqDBClient\\LinqDBCommand.cs",
+              "RelativeToolTip": "LinqDB\\System.Data.LinqDBClient\\LinqDBCommand.cs",
+              "ViewState": "AQIAAAoAAAAAAAAAAIAzwBwAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:37:47.897Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "Schema.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GUI\\VM\\Schema.cs",
+              "RelativeDocumentMoniker": "GUI\\VM\\Schema.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GUI\\VM\\Schema.cs",
+              "RelativeToolTip": "GUI\\VM\\Schema.cs",
+              "ViewState": "AQIAABYAAAAAAAAAAAA3wDIAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-08T08:25:56.592Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "Client\u00601.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Remote\\Clients\\Client\u00601.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Remote\\Clients\\Client\u00601.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Remote\\Clients\\Client\u00601.cs",
+              "RelativeToolTip": "LinqDB\\Remote\\Clients\\Client\u00601.cs",
+              "ViewState": "AQIAADAAAAAAAAAAAAASwEkAAAAXAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:35:30.713Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "ISchema.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\ISchema.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Dom\\ISchema.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\ISchema.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Dom\\ISchema.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:24:21.67Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "\u5909\u63DB_TSqlFragment\u6B63\u898F\u5316.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u6B63\u898F\u5316.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u6B63\u898F\u5316.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u6B63\u898F\u5316.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\VoidTSqlFragmentTraverser\\\u5909\u63DB_TSqlFragment\u6B63\u898F\u5316.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAqwCYAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T13:21:50.976Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "AssemblyGenerator.DefineScalarFunction.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineScalarFunction.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.DefineScalarFunction.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineScalarFunction.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.DefineScalarFunction.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAG0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:53:06.981Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "TableAttribute.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Attributes\\TableAttribute.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Attributes\\TableAttribute.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Attributes\\TableAttribute.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Attributes\\TableAttribute.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T10:12:59.222Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "AssemblyGenerator.DefineTableFunction.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineTableFunction.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.DefineTableFunction.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineTableFunction.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.DefineTableFunction.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAArwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T10:15:10.688Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "AssemblyGenerator.DefineView.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineView.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.DefineView.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineView.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.DefineView.cs",
+              "ViewState": "AQIAAE8AAAAAAAAAAAArwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:12:27.084Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u5C40\u6240Parameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ViewState": "AQIAAH0BAAAAAAAAAAArwJwBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T09:41:46.518Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "\u5909\u63DB_\u8DE8\u304EParameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u8DE8\u304EParameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u8DE8\u304EParameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u8DE8\u304EParameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u8DE8\u304EParameter\u306E\u5148\u884C\u8A55\u4FA1.cs",
+              "ViewState": "AQIAAGMAAAAAAAAAAIA6wIIAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T09:41:42.703Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "Sequence.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GUI\\VM\\Sequence.cs",
+              "RelativeDocumentMoniker": "GUI\\VM\\Sequence.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GUI\\VM\\Sequence.cs",
+              "RelativeToolTip": "GUI\\VM\\Sequence.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:28:14.265Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "IRelation.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\IRelation.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Dom\\IRelation.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\IRelation.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Dom\\IRelation.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:31:47.681Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "ITable.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\ITable.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Dom\\ITable.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\ITable.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Dom\\ITable.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:59:29.205Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GUI\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs",
+              "RelativeDocumentMoniker": "GUI\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GUI\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs",
+              "RelativeToolTip": "GUI\\\u30C6\u30FC\u30D6\u30EB\u30B9\u30AD\u30FC\u30DE\u7DE8\u96C6.xaml.cs",
+              "ViewState": "AQIAAHUBAAAAAAAAAAAawJQBAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:32:09.519Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "Procedure.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Procedure.cs",
+              "RelativeDocumentMoniker": "GenerateDatabase\\VM\\Procedure.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GenerateDatabase\\VM\\Procedure.cs",
+              "RelativeToolTip": "GenerateDatabase\\VM\\Procedure.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:37:32.762Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "Trigger.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GUI\\VM\\Trigger.cs",
+              "RelativeDocumentMoniker": "GUI\\VM\\Trigger.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GUI\\VM\\Trigger.cs",
+              "RelativeToolTip": "GUI\\VM\\Trigger.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:30:51.823Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "TableFunction.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\GUI\\VM\\TableFunction.cs",
+              "RelativeDocumentMoniker": "GUI\\VM\\TableFunction.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\GUI\\VM\\TableFunction.cs",
+              "RelativeToolTip": "GUI\\VM\\TableFunction.cs",
+              "ViewState": "AQIAAAIAAAAAAAAAAAAawAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:30:40.307Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "IProcedure.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\IProcedure.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\Dom\\IProcedure.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\Dom\\IProcedure.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\Dom\\IProcedure.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAYAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:26:20.817Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "DateTimeOffset.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\DateTimeOffset.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Reflection\\DateTimeOffset.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\DateTimeOffset.cs",
+              "RelativeToolTip": "LinqDB\\Reflection\\DateTimeOffset.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:19:22.643Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "Object.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Serializers\\Utf8Json\\Formatters\\Others\\Object.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Serializers\\Utf8Json\\Formatters\\Others\\Object.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Serializers\\Utf8Json\\Formatters\\Others\\Object.cs",
+              "RelativeToolTip": "LinqDB\\Serializers\\Utf8Json\\Formatters\\Others\\Object.cs",
+              "ViewState": "AQIAAEAAAAAAAAAAAAAMwFwAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:17:08.92Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "Extension.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Serializers\\MessagePack\\Extension.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Serializers\\MessagePack\\Extension.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Serializers\\MessagePack\\Extension.cs",
+              "RelativeToolTip": "LinqDB\\Serializers\\MessagePack\\Extension.cs",
+              "ViewState": "AQIAAKwAAAAAAAAAAIAwwMgAAAAUAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:17:29.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "LinqDBDataReader.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\System.Data.LinqDBClient\\LinqDBDataReader.cs",
+              "RelativeDocumentMoniker": "LinqDB\\System.Data.LinqDBClient\\LinqDBDataReader.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\System.Data.LinqDBClient\\LinqDBDataReader.cs",
+              "RelativeToolTip": "LinqDB\\System.Data.LinqDBClient\\LinqDBDataReader.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAABCAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:13:31.882Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "68bc5b8e-adf0-4b55-8256-c3681fca98bd",
+        "Display": 0,
+        "X": 1177,
+        "Y": 816,
+        "Width": 1396,
+        "Height": 577,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{588470cc-84f8-4a57-9ac4-86bca0625ff4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Set\u00601.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\Set\u00601.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Sets\\Set\u00601.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\Set\u00601.cs",
+              "RelativeToolTip": "LinqDB\\Sets\\Set\u00601.cs",
+              "ViewState": "AQIAAGUBAAAAAAAAAAAowHsBAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-11T13:53:32.406Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.Join.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.Join.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.Join.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.Join.cs",
+              "RelativeToolTip": "LinqDB\\Optimizers\\ReturnExpressionTraverser\\\u5909\u63DB_\u30E1\u30BD\u30C3\u30C9\u6B63\u898F\u5316_\u53D6\u5F97\u30A4\u30F3\u30E9\u30A4\u30F3\u4E0D\u53EF\u80FD\u5B9A\u6570.Join.cs",
+              "ViewState": "AQIAADgAAAAAAAAAAAAiwCsAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-11T05:41:18.187Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AssemblyGenerator.DefineSequence.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineSequence.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.DefineSequence.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineSequence.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.DefineSequence.cs",
+              "ViewState": "AQIAABAAAAAAAAAAAAAiwCYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-09T14:40:27.159Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "1379cf03-0ef2-4c6d-b0c2-84234517b88b",
+        "Display": 0,
+        "X": 494,
+        "Y": 532,
+        "Width": 1074,
+        "Height": 874,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "information_schema.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\information_schema.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Product\\SQLServer\\information_schema.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Product\\SQLServer\\information_schema.cs",
+              "RelativeToolTip": "LinqDB\\Product\\SQLServer\\information_schema.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAD4vy0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T08:20:11.798Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "146b8a6d-0a7e-4a6a-8e82-c473cf00395b",
+        "Display": 0,
+        "X": 1459,
+        "Y": 733,
+        "Width": 1074,
+        "Height": 687,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "AssemblyGenerator.DefineProcedure.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineProcedure.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Databases\\AssemblyGenerator.DefineProcedure.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Databases\\AssemblyGenerator.DefineProcedure.cs",
+              "RelativeToolTip": "LinqDB\\Databases\\AssemblyGenerator.DefineProcedure.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAABvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T12:33:11.464Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "DateTime.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\DateTime.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Reflection\\DateTime.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Reflection\\DateTime.cs",
+              "RelativeToolTip": "LinqDB\\Reflection\\DateTime.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-07T07:17:41.543Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "FloatingWindowState": {
+        "Id": "7e2faae7-71af-44f7-af5c-0c4d7996a7e5",
+        "Display": 0,
+        "X": 458,
+        "Y": 692,
+        "Width": 1071,
+        "Height": 693,
+        "WindowState": 0
+      },
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ExtensionSet.cs",
+              "DocumentMoniker": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\ExtensionSet.cs",
+              "RelativeDocumentMoniker": "LinqDB\\Sets\\ExtensionSet.cs",
+              "ToolTip": "D:\\GitHub\\LinqDB\\LinqDB\\Sets\\ExtensionSet.cs",
+              "RelativeToolTip": "LinqDB\\Sets\\ExtensionSet.cs",
+              "ViewState": "AQIAAFsGAAAAAAAAAAAmwG0GAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-10T05:14:35.276Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
